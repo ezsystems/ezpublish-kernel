@@ -138,28 +138,6 @@ class Type extends FieldType
         return array( "link" => $value->link, "text" => $value->text );
     }
     
-    /**
-     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
-     *
-     * @param mixed $validatorConfirguration
-     *
-     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
-     */
-    public function validateValidatorConfiguration( $validatorConfiguration ){
-        return array();
-    }
-
-    /**
-     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
-     *
-     * @param mixed $fieldSettings
-     *
-     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
-     */
-    public function validateFieldSettings( $fieldSettings ) {
-        return array();
-    }  
-    
      /**
      * Converts a $value to a persistence value.
      *
