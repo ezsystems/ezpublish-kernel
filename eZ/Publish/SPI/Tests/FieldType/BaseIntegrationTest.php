@@ -384,41 +384,7 @@ abstract class BaseIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testCreateContent
-     */
-    public function testCopyField( $content )
-    {
-        $handler        = $this->getCustomHandler();
-        $contentHandler = $handler->contentHandler();
-
-        $copied = $contentHandler->copy( self::$contentId, self::$contentVersion );
-
-        $this->assertNotSame(
-            $content->versionInfo->contentId,
-            $copied->versionInfo->contentId
-        );
-
-        return $contentHandler->load(
-            $copied->versionInfo->contentId,
-            $copied->versionInfo->versionNo
-        );
-    }
-
-    /**
-     * @depends testCopyField
-     */
-    public function testCopiedFieldType( $content )
-    {
-        $this->assertSame(
-            $this->getTypeName(),
-            $content->fields[1]->type
-        );
-
-        return $content->fields[1];
-    }
-
-    /**
-     * @depends testCopyField
+     * @depends testUpdateField
      * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testDeleteField( $content )
