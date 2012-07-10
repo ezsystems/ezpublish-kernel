@@ -71,7 +71,7 @@ class Type extends FieldType
         {
             throw new InvalidArgumentType(
                 '$inputValue',
-                'eZ\\Publish\\Core\\Repository\\FieldType\\Author\\Value',
+                'eZ\\Publish\\Core\\FieldType\\Author\\Value',
                 $inputValue
             );
         }
@@ -80,7 +80,7 @@ class Type extends FieldType
         {
             throw new InvalidArgumentType(
                 '$inputValue->authors',
-                'eZ\\Publish\\Core\\Repository\\FieldType\\Author\\AuthorCollection',
+                'eZ\\Publish\\Core\\FieldType\\Author\\AuthorCollection',
                 $inputValue->authors
             );
         }

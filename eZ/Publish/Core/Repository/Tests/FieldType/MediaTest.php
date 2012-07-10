@@ -106,7 +106,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
-        $refMethod->invoke( $ft, $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
+        $refMethod->invoke( $ft, $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Value' ) );
     }
 
     /**
@@ -134,7 +134,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
     {
         $ft = new MediaType( $this->repository );
         $value = $ft->buildValue( $this->mediaPath );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Media\\Value', $value );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\FieldType\\Media\\Value', $value );
         self::assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\IO\\BinaryFile', $value->file );
         self::assertSame( $this->mediaFileInfo->getBasename(), $value->originalFilename );
         self::assertSame( $value->originalFilename, $value->file->originalFile );

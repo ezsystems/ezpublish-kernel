@@ -117,6 +117,6 @@ class HandlerTest extends PHPUnit_Framework_TestCase
      */
     public function getInputParserMock()
     {
-        return $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Input\\Parser' );
+        return $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser' );
     }
 }

@@ -23,7 +23,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $this->assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\FieldType\\Validator",
+            "eZ\\Publish\\Core\\FieldType\\Validator",
             new FloatValueValidator
         );
     }

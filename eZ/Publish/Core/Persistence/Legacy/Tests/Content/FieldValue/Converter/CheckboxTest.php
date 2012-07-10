@@ -118,7 +118,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
 
         $this->converter->toFieldDefinition( $storageDef, $fieldDef );
         self::assertSame( $defaultBool, $fieldDef->defaultValue->data );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertSame(
             array( 'defaultValue' => $defaultBool ),
             $fieldDef->fieldTypeConstraints->fieldSettings->getArrayCopy()

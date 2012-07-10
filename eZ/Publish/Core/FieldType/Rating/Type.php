@@ -71,7 +71,7 @@ class Type extends FieldType
         {
             throw new InvalidArgumentType(
                 '$inputValue',
-                'eZ\\Publish\\Core\\Repository\\FieldType\\Rating\\Value',
+                'eZ\\Publish\\Core\\FieldType\\Rating\\Value',
                 $inputValue
             );
         }

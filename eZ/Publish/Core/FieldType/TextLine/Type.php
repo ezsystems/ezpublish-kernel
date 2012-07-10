@@ -96,7 +96,7 @@ class Type extends FieldType
         {
             throw new InvalidArgumentType(
                 '$inputValue',
-                'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\Value',
+                'eZ\\Publish\\Core\\FieldType\\TextLine\\Value',
                 $inputValue
             );
         }

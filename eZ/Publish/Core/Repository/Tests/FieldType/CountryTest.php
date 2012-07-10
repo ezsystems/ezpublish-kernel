@@ -172,7 +172,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructorCorrectValues( $value )
     {
-        $this->assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Country\\Value", $this->ft->buildValue( $value ) );
+        $this->assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\Country\\Value", $this->ft->buildValue( $value ) );
     }
 
     public function providerForConstructorOK()
@@ -208,7 +208,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructorWrongValues( $value )
     {
-        $this->assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Country\\Value", $this->ft->buildValue( $value ) );
+        $this->assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\Country\\Value", $this->ft->buildValue( $value ) );
     }
 
     public function providerForConstructorKO()

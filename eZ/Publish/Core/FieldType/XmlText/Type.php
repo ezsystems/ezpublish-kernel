@@ -109,7 +109,7 @@ EOF;
         {
             throw new InvalidArgumentType(
                 '$inputValue',
-                'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Value',
+                'eZ\\Publish\\Core\\FieldType\\XmlText\\Value',
                 $inputValue
             );
         }
@@ -158,7 +158,7 @@ EOF;
     protected function convertValueToRawValue( Value $value, Field $field )
     {
         // we don't convert Raw to Raw, right ?
-        // if ( get_class( $value ) === 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Value' )
+        // if ( get_class( $value ) === 'eZ\\Publish\\Core\\FieldType\\XmlText\\Value' )
         //    return $value;
 
         $handler = $value->getInputHandler( $value );

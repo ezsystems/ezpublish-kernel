@@ -100,7 +100,7 @@ class Type extends FieldType
         {
             throw new InvalidArgumentType(
                 '$inputValue',
-                'eZ\\Publish\\Core\\Repository\\FieldType\\Country\\Value',
+                'eZ\\Publish\\Core\\FieldType\\Country\\Value',
                 $inputValue
             );
         }
