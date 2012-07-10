@@ -8,10 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Author\Type as AuthorType,
-    eZ\Publish\Core\Repository\FieldType\Author\Value as AuthorValue,
-    eZ\Publish\Core\Repository\FieldType\Author\Author,
-    eZ\Publish\Core\Repository\FieldType\Author\AuthorCollection,
+use eZ\Publish\Core\FieldType\Author\Type as AuthorType,
+    eZ\Publish\Core\FieldType\Author\Value as AuthorValue,
+    eZ\Publish\Core\FieldType\Author\Author,
+    eZ\Publish\Core\FieldType\Author\AuthorCollection,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -22,7 +22,7 @@ use eZ\Publish\Core\Repository\FieldType\Author\Type as AuthorType,
 class AuthorTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\Repository\FieldType\Author\Author[]
+     * @var \eZ\Publish\Core\FieldType\Author\Author[]
      */
     private $authors;
 
@@ -43,7 +43,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\FieldType\FieldType::allowedValidators
      */
     public function testAuthorSupportedValidators()
     {
@@ -52,7 +52,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Author\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testAcceptValueInvalidType()
@@ -62,7 +62,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Author\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testAcceptValueInvalidFormat()
@@ -74,7 +74,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Author\Type::acceptValue
      */
     public function testAcceptValueValidFormat()
     {
@@ -88,7 +88,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\Author\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
     {
@@ -98,7 +98,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\Author\Value::__construct
      */
     public function testBuildFieldValueWithParam()
     {
@@ -108,7 +108,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Value::__toString
+     * @covers \eZ\Publish\Core\FieldType\Author\Value::__toString
      */
     public function testFieldValueToString()
     {
@@ -124,7 +124,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Value::getTitle
+     * @covers \eZ\Publish\Core\FieldType\Author\Value::getTitle
      */
     public function testFieldValueTitle()
     {
@@ -133,7 +133,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Author\AuthorCollection::offsetSet
+     * @covers \eZ\Publish\Core\FieldType\Author\AuthorCollection::offsetSet
      */
     public function testAddAuthor()
     {

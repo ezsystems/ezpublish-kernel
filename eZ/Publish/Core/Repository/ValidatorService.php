@@ -29,7 +29,7 @@ class ValidatorService
     /**
      * Holds concrete validator objects, indexed by their FQN
      *
-     * @var \eZ\Publish\Core\Repository\FieldType\Validator[]
+     * @var \eZ\Publish\Core\FieldType\Validator[]
      */
     protected $validators = array();
 
@@ -38,7 +38,7 @@ class ValidatorService
      *
      * @param string $identifier
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Validator
+     * @return \eZ\Publish\Core\FieldType\Validator
      */
     public function getValidator( $identifier )
     {

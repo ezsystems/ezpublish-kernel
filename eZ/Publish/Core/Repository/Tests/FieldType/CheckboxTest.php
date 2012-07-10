@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Checkbox\Type as Checkbox,
-    eZ\Publish\Core\Repository\FieldType\Checkbox\Value as CheckboxValue,
+use eZ\Publish\Core\FieldType\Checkbox\Type as Checkbox,
+    eZ\Publish\Core\FieldType\Checkbox\Value as CheckboxValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -18,7 +18,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\FieldType\FieldType::allowedValidators
      */
     public function testCheckboxSupportedValidators()
     {
@@ -33,7 +33,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::getSettingsSchema
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
      */
     public function testCheckboxAllowedSettings()
     {
@@ -48,7 +48,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Checkbox\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      * @group ezboolean
@@ -63,7 +63,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Checkbox\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      * @group ezboolean
@@ -80,7 +80,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Checkbox\Type::acceptValue
      */
     public function testAcceptValueValidFormat()
     {
@@ -96,7 +96,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::toPersistenceValue
+     * @covers \eZ\Publish\Core\FieldType\Checkbox\Type::toPersistenceValue
      */
     public function testToPersistenceValue()
     {
@@ -110,7 +110,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\Checkbox\Value::__construct
      */
     public function testBuildFieldValueWithParam()
     {
@@ -122,7 +122,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\Checkbox\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
     {
@@ -133,7 +133,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Value::__toString
+     * @covers \eZ\Publish\Core\FieldType\Checkbox\Value::__toString
      */
     public function testFieldValueToString()
     {

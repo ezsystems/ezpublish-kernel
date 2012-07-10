@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use eZ\Publish\Core\Repository\FieldType\Media\Type as MediaType,
-    eZ\Publish\Core\Repository\FieldType\Media\Value as MediaTypeValue,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings,
+use eZ\Publish\Core\FieldType\Media\Type as MediaType,
+    eZ\Publish\Core\FieldType\Media\Value as MediaTypeValue,
+    eZ\Publish\Core\FieldType\FieldSettings,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,

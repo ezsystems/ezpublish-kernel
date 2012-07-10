@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Rating\Type as Rating,
-    eZ\Publish\Core\Repository\FieldType\Rating\Value as RatingValue,
+use eZ\Publish\Core\FieldType\Rating\Type as Rating,
+    eZ\Publish\Core\FieldType\Rating\Value as RatingValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -17,7 +17,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\FieldType\FieldType::allowedValidators
      */
     public function testRatingSupportedValidators()
     {
@@ -29,7 +29,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Rating\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      */
@@ -46,7 +46,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Rating\Type::acceptValue
      */
     public function testAcceptValueValidFormat()
     {
@@ -61,7 +61,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Type::toPersistenceValue
+     * @covers \eZ\Publish\Core\FieldType\Rating\Type::toPersistenceValue
      */
     public function testToPersistenceValue()
     {
@@ -74,7 +74,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\Rating\Value::__construct
      */
     public function testBuildFieldValueWithParamFalse()
     {
@@ -84,7 +84,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\Rating\Value::__construct
      */
     public function testBuildFieldValueWithParamTrue()
     {
@@ -94,7 +94,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\Rating\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
     {
@@ -104,7 +104,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Value::__toString
+     * @covers \eZ\Publish\Core\FieldType\Rating\Value::__toString
      */
     public function testFieldValueToStringFalse()
     {
@@ -122,7 +122,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Value::__toString
+     * @covers \eZ\Publish\Core\FieldType\Rating\Value::__toString
      */
     public function testFieldValueToStringTrue()
     {

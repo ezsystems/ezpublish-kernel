@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Float\Type as Float,
-    eZ\Publish\Core\Repository\FieldType\Float\Value as FloatValue,
+use eZ\Publish\Core\FieldType\Float\Type as Float,
+    eZ\Publish\Core\FieldType\Float\Value as FloatValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -17,7 +17,7 @@ class FloatTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\FieldType\FieldType::allowedValidators
      */
     public function testFloatSupportedValidators()
     {
@@ -30,7 +30,7 @@ class FloatTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Float\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Float\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      */
@@ -45,7 +45,7 @@ class FloatTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Float\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Float\Type::acceptValue
      */
     public function testAcceptValueValidFormat()
     {
@@ -60,7 +60,7 @@ class FloatTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Float\Type::toPersistenceValue
+     * @covers \eZ\Publish\Core\FieldType\Float\Type::toPersistenceValue
      */
     public function testToPersistenceValue()
     {
@@ -73,7 +73,7 @@ class FloatTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Float\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\Float\Value::__construct
      */
     public function testBuildFieldValueWithParam()
     {
@@ -83,7 +83,7 @@ class FloatTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Float\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\Float\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
     {
@@ -93,7 +93,7 @@ class FloatTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Float\Value::__toString
+     * @covers \eZ\Publish\Core\FieldType\Float\Value::__toString
      */
     public function testFieldValueToString()
     {

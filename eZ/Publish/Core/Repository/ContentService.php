@@ -37,8 +37,8 @@ use eZ\Publish\API\Repository\ContentService as ContentServiceInterface,
     eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct,
     eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct,
     eZ\Publish\Core\Repository\Values\Content\TranslationValues,
-    eZ\Publish\Core\Repository\FieldType\FieldType,
-    eZ\Publish\Core\Repository\FieldType\Value,
+    eZ\Publish\Core\FieldType\FieldType,
+    eZ\Publish\Core\FieldType\Value,
     eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo,
     eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo,
     eZ\Publish\SPI\Persistence\Content\Version as SPIVersion,
@@ -1493,10 +1493,10 @@ class ContentService implements ContentServiceInterface
      * Instantiates a FieldType\Value object by using FieldType\Type->buildValue().
      *
      * @todo Add to API or remove!
-     * @uses \eZ\Publish\Core\Repository\FieldTypeService::buildFieldType
+     * @uses \eZ\Publish\Core\FieldTypeService::buildFieldType
      * @param string $type
      * @param mixed $plainValue
-     * @return \eZ\Publish\Core\Repository\FieldType\Value
+     * @return \eZ\Publish\Core\FieldType\Value
      */
     public function newFieldTypeValue( $type, $plainValue )
     {

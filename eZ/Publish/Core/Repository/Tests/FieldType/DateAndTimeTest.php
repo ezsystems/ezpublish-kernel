@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\DateAndTime\Type as DateAndTime,
-    eZ\Publish\Core\Repository\FieldType\DateAndTime\Value as DateAndTimeValue,
+use eZ\Publish\Core\FieldType\DateAndTime\Type as DateAndTime,
+    eZ\Publish\Core\FieldType\DateAndTime\Value as DateAndTimeValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject,
     DateTime;
@@ -19,7 +19,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\FieldType\FieldType::allowedValidators
      */
     public function testDateAndTimeSupportedValidators()
     {
@@ -34,7 +34,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::getSettingsSchema
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
      */
     public function testDateAndTimeAllowedSettings()
     {
@@ -53,7 +53,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::getDefaultDefaultValue
+     * @covers \eZ\Publish\Core\FieldType\DateAndTime\Type::getDefaultDefaultValue
      */
     public function testDefaultValue()
     {
@@ -68,7 +68,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\DateAndTime\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      * @group dateTime
@@ -83,7 +83,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\DateAndTime\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      * @group dateTime
@@ -102,7 +102,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\DateAndTime\Type::acceptValue
      */
     public function testAcceptValueValidFormat()
     {
@@ -118,7 +118,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::toPersistenceValue
+     * @covers \eZ\Publish\Core\FieldType\DateAndTime\Type::toPersistenceValue
      */
     public function testToPersistenceValue()
     {
@@ -133,7 +133,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\DateAndTime\Value::__construct
      */
     public function testBuildFieldValueWithParam()
     {
@@ -145,7 +145,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\DateAndTime\Value::__construct
      */
     public function testBuildFieldValueWithStringParam()
     {
@@ -157,7 +157,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\DateAndTime\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
     {
@@ -169,7 +169,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Value::__toString
+     * @covers \eZ\Publish\Core\FieldType\DateAndTime\Value::__toString
      */
     public function testFieldValueToString()
     {

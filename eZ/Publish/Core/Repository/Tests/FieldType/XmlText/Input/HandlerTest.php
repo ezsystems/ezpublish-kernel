@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Input;
 
-use eZ\Publish\Core\Repository\FieldType\XmlText\Input\Handler as InputHandler,
+use eZ\Publish\Core\FieldType\XmlText\Input\Handler as InputHandler,
     eZ\Publish\API\Repository\Values\Content\Relation,
     PHPUnit_Framework_TestCase,
     DOMDocument;
@@ -112,8 +112,8 @@ class HandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Returns a mock object for {@see \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser}
-     * @return \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser
+     * Returns a mock object for {@see \eZ\Publish\Core\FieldType\XmlText\Input\Parser}
+     * @return \eZ\Publish\Core\FieldType\XmlText\Input\Parser
      */
     public function getInputParserMock()
     {

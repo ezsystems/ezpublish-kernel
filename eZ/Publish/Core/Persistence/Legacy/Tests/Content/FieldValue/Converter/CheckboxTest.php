@@ -8,14 +8,14 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use eZ\Publish\Core\Repository\FieldType\Checkbox\Value as CheckboxValue,
+use eZ\Publish\Core\FieldType\Checkbox\Value as CheckboxValue,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Checkbox as CheckboxConverter,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings,
+    eZ\Publish\Core\FieldType\FieldSettings,
     PHPUnit_Framework_TestCase;
 
 /**

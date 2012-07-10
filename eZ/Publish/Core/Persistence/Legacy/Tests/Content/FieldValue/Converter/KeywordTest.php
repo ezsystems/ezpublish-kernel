@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use eZ\Publish\Core\Repository\FieldType\Keyword\Value as KeywordValue,
+use eZ\Publish\Core\FieldType\Keyword\Value as KeywordValue,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,

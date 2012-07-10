@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\ValueObject,
-    eZ\Publish\Core\Repository\FieldType\Value;
+    eZ\Publish\Core\FieldType\Value;
 
 /**
  */

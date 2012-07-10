@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Integer\Type as Integer,
-    eZ\Publish\Core\Repository\FieldType\Integer\Value as IntegerValue,
+use eZ\Publish\Core\FieldType\Integer\Type as Integer,
+    eZ\Publish\Core\FieldType\Integer\Value as IntegerValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -17,7 +17,7 @@ class IntegerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\FieldType\FieldType::allowedValidators
      */
     public function testIntegerSupportedValidators()
     {
@@ -30,7 +30,7 @@ class IntegerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Integer\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      */
@@ -45,7 +45,7 @@ class IntegerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Integer\Type::acceptValue
      */
     public function testAcceptValueValidFormat()
     {
@@ -60,7 +60,7 @@ class IntegerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\Type::toPersistenceValue
+     * @covers \eZ\Publish\Core\FieldType\Integer\Type::toPersistenceValue
      */
     public function testToPersistenceValue()
     {
@@ -74,7 +74,7 @@ class IntegerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\Integer\Value::__construct
      */
     public function testBuildFieldValueWithParam()
     {
@@ -84,7 +84,7 @@ class IntegerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\Integer\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
     {
@@ -94,7 +94,7 @@ class IntegerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\Value::__toString
+     * @covers \eZ\Publish\Core\FieldType\Integer\Value::__toString
      */
     public function testFieldValueToString()
     {

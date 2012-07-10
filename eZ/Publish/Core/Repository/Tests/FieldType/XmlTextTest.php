@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\XmlText\Type as XmlTextType,
-    eZ\Publish\Core\Repository\FieldType\XmlText\Value as XmlTextValue,
+use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType,
+    eZ\Publish\Core\FieldType\XmlText\Value as XmlTextValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject,
     ReflectionProperty,
@@ -23,7 +23,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::getSettingsSchema
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
      */
     public function testAllowedSettings()
     {
@@ -40,7 +40,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\XmlText\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\XmlText\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testAcceptValueInvalidType()
@@ -50,7 +50,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\XmlText\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\XmlText\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @dataProvider providerForTestAcceptValueInvalidFormat
      */
@@ -67,7 +67,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Author\Type::acceptValue
      * @dataProvider providerForTestAcceptValueValidFormat
      */
     public function testAcceptValueValidFormat( $text, $format )
@@ -83,7 +83,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\XmlText\Type::toPersistenceValue
+     * @covers \eZ\Publish\Core\FieldType\XmlText\Type::toPersistenceValue
      */
     public function testToPersistenceValue()
     {

@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Url\Type as Url,
-    eZ\Publish\Core\Repository\FieldType\Url\Value as UrlValue,
+use eZ\Publish\Core\FieldType\Url\Type as Url,
+    eZ\Publish\Core\FieldType\Url\Value as UrlValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -17,7 +17,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\FieldType\FieldType::allowedValidators
      */
     public function testUrlSupportedValidators()
     {
@@ -26,7 +26,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Url\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Url\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      */
@@ -41,7 +41,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Url\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Url\Type::acceptValue
      */
     public function testAcceptValueValidFormat()
     {
@@ -56,7 +56,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Url\Type::toPersistenceValue
+     * @covers \eZ\Publish\Core\FieldType\Url\Type::toPersistenceValue
      */
     public function testToPersistenceValue()
     {
@@ -69,7 +69,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Url\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\Url\Value::__construct
      */
     public function testBuildFieldValueWithParam()
     {
@@ -80,7 +80,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Url\Value::__toString
+     * @covers \eZ\Publish\Core\FieldType\Url\Value::__toString
      */
     public function testFieldValueToString()
     {

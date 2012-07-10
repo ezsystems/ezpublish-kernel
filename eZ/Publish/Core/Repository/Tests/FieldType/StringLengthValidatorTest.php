@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue,
-    eZ\Publish\Core\Repository\FieldType\Validator\StringLengthValidator,
+use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue,
+    eZ\Publish\Core\FieldType\Validator\StringLengthValidator,
     PHPUnit_Framework_TestCase;
 
 class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
@@ -33,8 +33,8 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group validator
-     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::initializeWithConstraints
-     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::getValidatorConstraints
+     * @covers \eZ\Publish\Core\FieldType\Validator::initializeWithConstraints
+     * @covers \eZ\Publish\Core\FieldType\Validator::getValidatorConstraints
      */
     public function testInitializeConstraints()
     {
@@ -54,8 +54,8 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group validator
-     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::initializeWithConstraints
-     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::__get
+     * @covers \eZ\Publish\Core\FieldType\Validator::initializeWithConstraints
+     * @covers \eZ\Publish\Core\FieldType\Validator::__get
      */
     public function testConstraintsInitializeGet()
     {
@@ -76,8 +76,8 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group validator
-     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::__set
-     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::__get
+     * @covers \eZ\Publish\Core\FieldType\Validator::__set
+     * @covers \eZ\Publish\Core\FieldType\Validator::__get
      */
     public function testConstraintsSetGet()
     {
@@ -97,7 +97,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group validator
-     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::initializeWithConstraints
+     * @covers \eZ\Publish\Core\FieldType\Validator::initializeWithConstraints
      * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function testInitializeBadConstraint()
@@ -116,7 +116,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group validator
-     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::__set
+     * @covers \eZ\Publish\Core\FieldType\Validator::__set
      * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function testSetBadConstraint()
@@ -130,7 +130,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group validator
-     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::__get
+     * @covers \eZ\Publish\Core\FieldType\Validator::__get
      * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function testGetBadConstraint()
@@ -145,8 +145,8 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group validator
      * @dataProvider providerForValidateOK
-     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\StringLengthValidator::validate
-     * @covers \eZ\Publish\Core\Repository\FieldType\Validator::getMessage
+     * @covers \eZ\Publish\Core\FieldType\TextLine\StringLengthValidator::validate
+     * @covers \eZ\Publish\Core\FieldType\Validator::getMessage
      */
     public function testValidateCorrectValues( $value )
     {
@@ -172,7 +172,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group validator
      * @dataProvider providerForValidateKO
-     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\StringLengthValidator::validate
+     * @covers \eZ\Publish\Core\FieldType\TextLine\StringLengthValidator::validate
      */
     public function testValidateWrongValues( $value, $message )
     {

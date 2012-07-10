@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Media\Type as MediaType,
-    eZ\Publish\Core\Repository\FieldType\Media\Value as MediaValue,
-    eZ\Publish\Core\Repository\FieldType\Media\Handler as MediaHandler,
+use eZ\Publish\Core\FieldType\Media\Type as MediaType,
+    eZ\Publish\Core\FieldType\Media\Value as MediaValue,
+    eZ\Publish\Core\FieldType\Media\Handler as MediaHandler,
     eZ\Publish\Core\Repository\Repository,
     eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
     eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,
@@ -48,7 +48,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\FieldType\FieldType::allowedValidators
      */
     public function testMediaSupportedValidators()
     {
@@ -63,7 +63,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::getSettingsSchema
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
      */
     public function testMediaAllowedSettings()
     {
@@ -78,7 +78,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Media\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      * @group ezmedia
@@ -95,7 +95,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Media\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      * @group ezmedia
@@ -112,7 +112,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Media\Type::acceptValue
      */
     public function testAcceptValueValidFormat()
     {
@@ -128,7 +128,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\Media\Value::__construct
      */
     public function testBuildFieldValueFromString()
     {
@@ -143,7 +143,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Value::__toString
+     * @covers \eZ\Publish\Core\FieldType\Media\Value::__toString
      */
     public function testFieldValueToString()
     {
@@ -157,7 +157,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group ezmedia
-     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Value::__get
+     * @covers \eZ\Publish\Core\FieldType\Media\Value::__get
      */
     public function testVirtualLegacyProperty()
     {
@@ -170,7 +170,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Value::__get
+     * @covers \eZ\Publish\Core\FieldType\Media\Value::__get
      * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function testInvalidVirtualProperty()

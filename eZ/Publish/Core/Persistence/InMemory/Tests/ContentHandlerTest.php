@@ -20,7 +20,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\API\Repository\Values\Content\Relation,
-    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue;
+    eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 
 /**
  * Test case for ContentHandler using in memory storage.

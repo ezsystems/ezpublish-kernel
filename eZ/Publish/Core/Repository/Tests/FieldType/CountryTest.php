@@ -8,15 +8,15 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Country\Type as Country,
-    eZ\Publish\Core\Repository\FieldType\Country\Value as CountryValue,
+use eZ\Publish\Core\FieldType\Country\Type as Country,
+    eZ\Publish\Core\FieldType\Country\Value as CountryValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
 class CountryTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\Repository\FieldType\Country\Type
+     * @var \eZ\Publish\Core\FieldType\Country\Type
      */
     protected $ft;
 
@@ -66,7 +66,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\FieldType\FieldType::allowedValidators
      */
     public function testCountrySupportedValidators()
     {
@@ -75,7 +75,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Country\Type::acceptValue
      */
     public function testAcceptValueValidFormatSingle()
     {
@@ -89,7 +89,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Country\Type::acceptValue
      */
     public function testAcceptValueValidFormatMultiple()
     {
@@ -103,7 +103,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Type::toPersistenceValue
+     * @covers \eZ\Publish\Core\FieldType\Country\Type::toPersistenceValue
      */
     public function testToPersistenceValue()
     {
@@ -115,7 +115,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\Country\Value::__construct
      */
     public function testBuildFieldValueWithParam()
     {
@@ -147,7 +147,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Value::__toString
+     * @covers \eZ\Publish\Core\FieldType\Country\Value::__toString
      */
     public function testFieldValueToString()
     {
@@ -168,7 +168,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @dataProvider providerForConstructorOK
-     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Type::buildValue
+     * @covers \eZ\Publish\Core\FieldType\Country\Type::buildValue
      */
     public function testConstructorCorrectValues( $value )
     {
@@ -202,9 +202,9 @@ class CountryTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @dataProvider providerForConstructorKO
-     * @expectedException \eZ\Publish\Core\Repository\FieldType\Country\Exception\InvalidValue
+     * @expectedException \eZ\Publish\Core\FieldType\Country\Exception\InvalidValue
      * @expectedExceptionMessage is not a valid value country identifier
-     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Type::buildValue
+     * @covers \eZ\Publish\Core\FieldType\Country\Type::buildValue
      */
     public function testConstructorWrongValues( $value )
     {

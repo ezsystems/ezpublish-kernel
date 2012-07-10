@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
     eZ\Publish\SPI\Persistence\Handler,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Repository\FieldType;
+    eZ\Publish\Core\FieldType;
 
 /**
  * An implementation of this class provides access to FieldTypes

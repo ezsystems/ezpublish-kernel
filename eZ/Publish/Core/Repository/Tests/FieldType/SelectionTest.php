@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\Selection\Type as Selection,
-    eZ\Publish\Core\Repository\FieldType\Selection\Value as SelectionValue,
+use eZ\Publish\Core\FieldType\Selection\Type as Selection,
+    eZ\Publish\Core\FieldType\Selection\Value as SelectionValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -18,7 +18,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\FieldType\FieldType::allowedValidators
      */
     public function testSelectionSupportedValidators()
     {
@@ -32,7 +32,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Selection\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testAcceptValueInvalidFormat()
@@ -49,7 +49,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Selection\Type::acceptValue
      */
     public function testAcceptValueValidStringFormat()
     {
@@ -65,7 +65,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Selection\Type::acceptValue
      */
     public function testAcceptValueValidArrayFormat()
     {
@@ -81,7 +81,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Type::toPersistenceValue
+     * @covers \eZ\Publish\Core\FieldType\Selection\Type::toPersistenceValue
      */
     public function testToPersistenceValue()
     {
@@ -96,7 +96,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\Selection\Value::__construct
      */
     public function testBuildFieldValueWithParam()
     {
@@ -108,7 +108,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\Selection\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
     {
@@ -119,7 +119,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Value::__toString
+     * @covers \eZ\Publish\Core\FieldType\Selection\Value::__toString
      */
     public function testFieldValueToString()
     {

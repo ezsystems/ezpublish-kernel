@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Input\Parser;
 
-use eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser\OnlineEditor as Parser,
-    eZ\Publish\Core\Repository\FieldType\XmlText\Schema,
+use eZ\Publish\Core\FieldType\XmlText\Input\Parser\OnlineEditor as Parser,
+    eZ\Publish\Core\FieldType\XmlText\Schema,
     PHPUnit_Framework_TestCase,
     DOMDocument;
 
@@ -42,7 +42,7 @@ class OnlineEditorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @var \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser
+     * @var \eZ\Publish\Core\FieldType\XmlText\Input\Parser
      */
     private $parser;
 }

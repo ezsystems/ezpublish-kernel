@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\BinaryFile\Type as BinaryFileType,
-    eZ\Publish\Core\Repository\FieldType\BinaryFile\Value as BinaryFileValue,
-    eZ\Publish\Core\Repository\FieldType\BinaryFile\Handler as BinaryFileHandler,
+use eZ\Publish\Core\FieldType\BinaryFile\Type as BinaryFileType,
+    eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue,
+    eZ\Publish\Core\FieldType\BinaryFile\Handler as BinaryFileHandler,
     eZ\Publish\Core\Repository\Repository,
     eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
     eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,
@@ -48,7 +48,7 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group binaryFile
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\FieldType\FieldType::allowedValidators
      */
     public function testBinaryFileSupportedValidators()
     {
@@ -61,7 +61,7 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\BinaryFile\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      * @group binaryFile
@@ -78,7 +78,7 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\BinaryFile\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      * @group binaryFile
@@ -95,7 +95,7 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group binaryFile
-     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\BinaryFile\Type::acceptValue
      */
     public function testAcceptValueValidFormat()
     {
@@ -112,7 +112,7 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group binaryFile
-     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Value::__toString
+     * @covers \eZ\Publish\Core\FieldType\BinaryFile\Value::__toString
      */
     public function testFieldValueToString()
     {
@@ -126,7 +126,7 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group binaryFile
-     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Value::__get
+     * @covers \eZ\Publish\Core\FieldType\BinaryFile\Value::__get
      */
     public function testVirtualLegacyProperty()
     {
@@ -141,7 +141,7 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group binaryFile
-     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Value::__get
+     * @covers \eZ\Publish\Core\FieldType\BinaryFile\Value::__get
      * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function testInvalidVirtualProperty()

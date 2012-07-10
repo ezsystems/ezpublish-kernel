@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\BinaryFile\Handler as BinaryFileHandler,
+use eZ\Publish\Core\FieldType\BinaryFile\Handler as BinaryFileHandler,
     splFileInfo,
     eZ\Publish\Core\Repository\Repository,
     eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
@@ -16,7 +16,7 @@ use eZ\Publish\Core\Repository\FieldType\BinaryFile\Handler as BinaryFileHandler
     PHPUnit_Framework_TestCase;
 
 /**
- * Test case for {@link \eZ\Publish\Core\Repository\FieldType\BinaryFile\Handler}
+ * Test case for {@link \eZ\Publish\Core\FieldType\BinaryFile\Handler}
  */
 class BinaryFileHandlerTest extends PHPUnit_Framework_TestCase
 {
@@ -34,7 +34,7 @@ class BinaryFileHandlerTest extends PHPUnit_Framework_TestCase
 
     /**
      * Binary file handler object
-     * @var \eZ\Publish\Core\Repository\FieldType\BinaryFile\Handler
+     * @var \eZ\Publish\Core\FieldType\BinaryFile\Handler
      */
     protected $handler;
 
@@ -50,7 +50,7 @@ class BinaryFileHandlerTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group binaryFile
-     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Handler::createFromLocalPath
+     * @covers \eZ\Publish\Core\FieldType\BinaryFile\Handler::createFromLocalPath
      */
     public function testCreateFromLocalPath()
     {

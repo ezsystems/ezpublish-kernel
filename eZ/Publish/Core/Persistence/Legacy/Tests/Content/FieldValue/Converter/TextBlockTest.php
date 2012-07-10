@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use eZ\Publish\Core\Repository\FieldType\TextBlock\Value as TextBlockValue,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings,
+use eZ\Publish\Core\FieldType\TextBlock\Value as TextBlockValue,
+    eZ\Publish\Core\FieldType\FieldSettings,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,

@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use eZ\Publish\Core\Repository\FieldType\XmlText\Value as XmlTextValue,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings,
+use eZ\Publish\Core\FieldType\XmlText\Value as XmlTextValue,
+    eZ\Publish\Core\FieldType\FieldSettings,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
@@ -33,7 +33,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
     protected $converter;
 
     /**
-     * @var \eZ\Publish\Core\Repository\FieldType\Author\Author[]
+     * @var \eZ\Publish\Core\FieldType\Author\Author[]
      */
     private $authors;
 

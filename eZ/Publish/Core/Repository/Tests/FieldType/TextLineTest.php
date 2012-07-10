@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
-use eZ\Publish\Core\Repository\FieldType\TextLine\Type as TextLine,
-    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue,
+use eZ\Publish\Core\FieldType\TextLine\Type as TextLine,
+    eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -18,7 +18,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\FieldType\FieldType::allowedValidators
      */
     public function testTextLineSupportedValidators()
     {
@@ -33,7 +33,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \eZ\Publish\Core\Repository\FieldType\FieldType::getSettingsSchema
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
      */
     public function testTextLineAllowedSettings()
     {
@@ -46,7 +46,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\TextLine\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group fieldType
      * @group textLine
@@ -63,7 +63,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\TextLine\Type::acceptValue
      */
     public function testAcceptValueValidFormat()
     {
@@ -79,7 +79,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Type::toPersistenceValue
+     * @covers \eZ\Publish\Core\FieldType\TextLine\Type::toPersistenceValue
      */
     public function testToPersistenceValue()
     {
@@ -94,7 +94,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\TextLine\Value::__construct
      */
     public function testBuildFieldValueWithParam()
     {
@@ -106,7 +106,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Value::__construct
+     * @covers \eZ\Publish\Core\FieldType\TextLine\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
     {
@@ -117,7 +117,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Value::__toString
+     * @covers \eZ\Publish\Core\FieldType\TextLine\Value::__toString
      */
     public function testFieldValueToString()
     {

@@ -1,21 +1,21 @@
 parameters:
-    ezpublish.fieldType.ezauthor.class: eZ\Publish\Core\Repository\FieldType\Author\Type
-    ezpublish.fieldType.ezbinaryfile.class: eZ\Publish\Core\Repository\FieldType\BinaryFile\Type
-    ezpublish.fieldType.ezboolean.class: eZ\Publish\Core\Repository\FieldType\Checkbox\Type
-    ezpublish.fieldType.ezdatetime.class: eZ\Publish\Core\Repository\FieldType\DateAndTime\Type
-    ezpublish.fieldType.ezfloat.class: eZ\Publish\Core\Repository\FieldType\Float\Type
-    ezpublish.fieldType.ezinteger.class: eZ\Publish\Core\Repository\FieldType\Integer\Type
-    #ezpublish.fieldType.ezimage.class: eZ\Publish\Core\Repository\FieldType\Image\Type
-    ezpublish.fieldType.ezkeyword.class: eZ\Publish\Core\Repository\FieldType\Keyword\Type
-    ezpublish.fieldType.ezmedia.class: eZ\Publish\Core\Repository\FieldType\Media\Type
-    ezpublish.fieldType.ezsrrating.class: eZ\Publish\Core\Repository\FieldType\Rating\Type
-    ezpublish.fieldType.ezselection.class: eZ\Publish\Core\Repository\FieldType\Selection\Type
-    ezpublish.fieldType.eztext.class: eZ\Publish\Core\Repository\FieldType\TextBlock\Type
-    ezpublish.fieldType.ezstring.class: eZ\Publish\Core\Repository\FieldType\TextLine\Type
-    ezpublish.fieldType.ezurl.class: eZ\Publish\Core\Repository\FieldType\Url\Type
-    ezpublish.fieldType.ezxmltext.class: eZ\Publish\Core\Repository\FieldType\XmlText\Type
-    ezpublish.fieldType.ezxmltext.simplifiedInputParser.class: eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser\Simplified
-    ezpublish.fieldType.ezxmltext.xmlSchema.class: eZ\Publish\Core\Repository\FieldType\XmlText\Schema
+    ezpublish.fieldType.ezauthor.class: eZ\Publish\Core\FieldType\Author\Type
+    ezpublish.fieldType.ezbinaryfile.class: eZ\Publish\Core\FieldType\BinaryFile\Type
+    ezpublish.fieldType.ezboolean.class: eZ\Publish\Core\FieldType\Checkbox\Type
+    ezpublish.fieldType.ezdatetime.class: eZ\Publish\Core\FieldType\DateAndTime\Type
+    ezpublish.fieldType.ezfloat.class: eZ\Publish\Core\FieldType\Float\Type
+    ezpublish.fieldType.ezinteger.class: eZ\Publish\Core\FieldType\Integer\Type
+    #ezpublish.fieldType.ezimage.class: eZ\Publish\Core\FieldType\Image\Type
+    ezpublish.fieldType.ezkeyword.class: eZ\Publish\Core\FieldType\Keyword\Type
+    ezpublish.fieldType.ezmedia.class: eZ\Publish\Core\FieldType\Media\Type
+    ezpublish.fieldType.ezsrrating.class: eZ\Publish\Core\FieldType\Rating\Type
+    ezpublish.fieldType.ezselection.class: eZ\Publish\Core\FieldType\Selection\Type
+    ezpublish.fieldType.eztext.class: eZ\Publish\Core\FieldType\TextBlock\Type
+    ezpublish.fieldType.ezstring.class: eZ\Publish\Core\FieldType\TextLine\Type
+    ezpublish.fieldType.ezurl.class: eZ\Publish\Core\FieldType\Url\Type
+    ezpublish.fieldType.ezxmltext.class: eZ\Publish\Core\FieldType\XmlText\Type
+    ezpublish.fieldType.ezxmltext.simplifiedInputParser.class: eZ\Publish\Core\FieldType\XmlText\Input\Parser\Simplified
+    ezpublish.fieldType.ezxmltext.xmlSchema.class: eZ\Publish\Core\FieldType\XmlText\Schema
     ezpublish.fieldType.ezxmltext.xmlSchema.options: []
     # ezpublish.fieldType.ezxmltext.xmlSchema.options:
     #    customAttributes:
@@ -27,7 +27,7 @@ parameters:
     #     customTags:
     #         underline:
     #             isInline: true
-    ezpublish.fieldType.ezcountry.class: eZ\Publish\Core\Repository\FieldType\Country\Type
+    ezpublish.fieldType.ezcountry.class: eZ\Publish\Core\FieldType\Country\Type
 
 services:
     ezpublish.fieldType.ezauthor:

@@ -11,7 +11,7 @@ namespace eZ\Publish\SPI\FieldType;
 
 use eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\Core\Repository\FieldType\Validator,
+    eZ\Publish\Core\FieldType\Validator,
     eZ\Publish\API\Repository\Values\ContentType\Validator as APIValidator,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
@@ -111,7 +111,7 @@ interface FieldType
      * Build a FiledType\Value object with the provided $plainValue as value.
      *
      * @param mixed $plainValue
-     * @return \eZ\Publish\Core\Repository\FieldType\Value
+     * @return \eZ\Publish\Core\FieldType\Value
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function buildValue( $plainValue );

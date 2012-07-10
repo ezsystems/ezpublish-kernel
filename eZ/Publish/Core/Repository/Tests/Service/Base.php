@@ -34,19 +34,19 @@ abstract class Base extends PHPUnit_Framework_TestCase
         $serviceSettings = array(
             'contentType' => array(
                 'field_type' => array(
-                    'ezauthor' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Author\Type(); },
-                    'ezdatetime' => function(){ return new \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type(); },
-                    'ezfloat' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Float\Type(); },
-                    'ezinteger' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Integer\Type(); },
-                    'ezkeyword' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Keyword\Type(); },
-                    'eztext' => function(){ return new \eZ\Publish\Core\Repository\FieldType\TextBlock\Type(); },
-                    'ezstring' => function(){ return new \eZ\Publish\Core\Repository\FieldType\TextLine\Type(); },
-                    'ezimage' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Integer\Type(); },
-                    'ezuser' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Integer\Type(); },
-                    'ezurl' => function(){ return new \eZ\Publish\Core\Repository\FieldType\Url\Type(); },
-                    'ezxmltext' => function(){ return new \eZ\Publish\Core\Repository\FieldType\XmlText\Type(
-                        new \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser\Simplified(
-                            new \eZ\Publish\Core\Repository\FieldType\XmlText\Schema
+                    'ezauthor' => function(){ return new \eZ\Publish\Core\FieldType\Author\Type(); },
+                    'ezdatetime' => function(){ return new \eZ\Publish\Core\FieldType\DateAndTime\Type(); },
+                    'ezfloat' => function(){ return new \eZ\Publish\Core\FieldType\Float\Type(); },
+                    'ezinteger' => function(){ return new \eZ\Publish\Core\FieldType\Integer\Type(); },
+                    'ezkeyword' => function(){ return new \eZ\Publish\Core\FieldType\Keyword\Type(); },
+                    'eztext' => function(){ return new \eZ\Publish\Core\FieldType\TextBlock\Type(); },
+                    'ezstring' => function(){ return new \eZ\Publish\Core\FieldType\TextLine\Type(); },
+                    'ezimage' => function(){ return new \eZ\Publish\Core\FieldType\Integer\Type(); },
+                    'ezuser' => function(){ return new \eZ\Publish\Core\FieldType\Integer\Type(); },
+                    'ezurl' => function(){ return new \eZ\Publish\Core\FieldType\Url\Type(); },
+                    'ezxmltext' => function(){ return new \eZ\Publish\Core\FieldType\XmlText\Type(
+                        new \eZ\Publish\Core\FieldType\XmlText\Input\Parser\Simplified(
+                            new \eZ\Publish\Core\FieldType\XmlText\Schema
                         )
                     ); },
                 ),
