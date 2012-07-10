@@ -297,8 +297,10 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     /**
      * @depends testCreateContent
      */
-    public function testPublishContent( $draft )
+    public function testPublishContent()
     {
+        $draft = $this->testCreateContent();
+
         if ( $draft->getVersionInfo()->status !== Repository\Values\Content\VersionInfo::STATUS_DRAFT )
         {
             $this->markTestSkipped( "Provided content object is not a draft." );
@@ -315,7 +317,6 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testPublishedFieldType( $content )
     {
-        var_dump( $content );
         foreach ( $content->fields as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
