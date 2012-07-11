@@ -8,25 +8,11 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Keyword\KeywordStorage;
-use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\Core\FieldType\StorageGateway;
 
-abstract class Gateway
+abstract class Gateway extends StorageGateway
 {
-    /**
-     * Returns the active connection
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
-     * @throws \RuntimeException if no connection has been set, yet.
-     */
-    protected function getConnection()
-    {
-        if ( $this->dbHandler === null )
-        {
-            throw new \RuntimeException( "Missing database connection." );
-        }
-        return $this->dbHandler;
-    }
-
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()
      */

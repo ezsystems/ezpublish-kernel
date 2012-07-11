@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Keyword;
 use eZ\Publish\SPI\FieldType\FieldStorage,
-    eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
+    eZ\Publish\Core\FieldType\GatewayBasedStorage,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
     LogicException,
@@ -22,49 +22,8 @@ use eZ\Publish\SPI\FieldType\FieldStorage,
  * $field->value->externalData. $field->value->data is simply empty, because no
  * internal data is store.
  */
-class KeywordStorage implements FieldStorage
+class KeywordStorage extends GatewayBasedStorage
 {
-    /**
-     * Gateways
-     *
-     * @var \eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway[]
-     */
-    protected $gateways;
-
-    /**
-     * SPI Persistence handler
-     *
-     * @var \eZ\Publish\SPI\Persistence\Handler
-     */
-    protected $persistenceHandler;
-
-    /**
-     * Construct from gateways
-     *
-     * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
-     * @param \eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway[] $gateways
-     */
-    public function __construct( PersistenceHandler $persistenceHandler, array $gateways )
-    {
-        $this->persistenceHandler = $persistenceHandler;
-        foreach ( $gateways as $identifier => $gateway )
-        {
-            $this->addGateway( $identifier, $gateway );
-        }
-    }
-
-    /**
-     * Add gateway
-     *
-     * @param string $identifier
-     * @param \eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway $gateway
-     * @return void
-     */
-    public function addGateway( $identifier, KeywordStorage\Gateway $gateway )
-    {
-        $this->gateways[$identifier] = $gateway;
-    }
-
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage
      */
@@ -142,24 +101,5 @@ class KeywordStorage implements FieldStorage
     public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
     {
         return null;
-    }
-
-    /**
-     * Get gateway for given context
-     *
-     * @param array $context
-     * @return UserStorage\Gateway
-     */
-    protected function getGateway( array $context )
-    {
-        if ( !isset( $this->gateways[$context['identifier']] ) )
-        {
-            throw new \OutOfBoundsException( "No gateway for ${context['identifier']} available." );
-        }
-
-        $gateway = $this->gateways[$context['identifier']];
-        $gateway->setConnection( $context['connection'] );
-
-        return $gateway;
     }
 }

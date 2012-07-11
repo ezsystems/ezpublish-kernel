@@ -8,17 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\User\UserStorage;
+use eZ\Publish\Core\FieldType\StorageGateway;
 
-abstract class Gateway
+abstract class Gateway extends StorageGateway
 {
-    /**
-     * Set dbHandler for gateway
-     *
-     * @param mixed $dbHandler
-     * @return void
-     */
-    abstract public function setConnection( $dbHandler );
-
     /**
      * Get field data
      *

@@ -36,6 +36,21 @@ class LegacyStorage extends Gateway
     }
 
     /**
+     * Returns the active connection
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @throws \RuntimeException if no connection has been set, yet.
+     */
+    protected function getConnection()
+    {
+        if ( $this->dbHandler === null )
+        {
+            throw new \RuntimeException( "Missing database connection." );
+        }
+        return $this->dbHandler;
+    }
+
+    /**
      * Stores the keyword list from $field->value->externalData
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field

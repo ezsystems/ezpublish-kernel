@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\User;
 use eZ\Publish\SPI\FieldType\FieldStorage,
+    eZ\Publish\Core\FieldType\GatewayBasedStorage,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field;
 
@@ -38,41 +39,8 @@ use eZ\Publish\SPI\FieldType\FieldStorage,
  *  - last_visit
  *  - login_count
  */
-class UserStorage implements FieldStorage
+class UserStorage extends GatewayBasedStorage
 {
-    /**
-     * Gateways
-     *
-     * @var UserStorage\Gateway[]
-     */
-    protected $gateways;
-
-    /**
-     * Construct from gateways
-     *
-     * @param array $gateways
-     * @return void
-     */
-    public function __construct( array $gateways )
-    {
-        foreach ( $gateways as $identifier => $gateway )
-        {
-            $this->addGateway( $identifier, $gateway );
-        }
-    }
-
-    /**
-     * Add gateway
-     *
-     * @param string $identifier
-     * @param UserStorage\Gateway $gateway
-     * @return void
-     */
-    public function addGateway( $identifier, UserStorage\Gateway $gateway )
-    {
-        $this->gateways[$identifier] = $gateway;
-    }
-
     /**
      * Allows custom field types to store data in an external source (e.g. another DB table).
      *
@@ -170,24 +138,5 @@ class UserStorage implements FieldStorage
         // @TODO: How to call this function? Yet undefined.
         echo __METHOD__, PHP_EOL;
         var_dump( func_get_args() );
-    }
-
-    /**
-     * Get gateway for given context
-     *
-     * @param array $context
-     * @return UserStorage\Gateway
-     */
-    protected function getGateway( array $context )
-    {
-        if ( !isset( $this->gateways[$context['identifier']] ) )
-        {
-            throw new \OutOfBoundsException( "No gateway for ${context['identifier']} available." );
-        }
-
-        $gateway = $this->gateways[$context['identifier']];
-        $gateway->setConnection( $context['connection'] );
-
-        return $gateway;
     }
 }
