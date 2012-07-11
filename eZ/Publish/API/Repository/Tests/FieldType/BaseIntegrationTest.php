@@ -551,7 +551,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
         $repository       = $this->getRepository();
         $fieldTypeService = $repository->getFieldTypeService();
-        $fieldType        = $fieldTypeService()->getFieldType( $this->getTypeName() );
+        $fieldType        = $fieldTypeService->getFieldType( $this->getTypeName() );
 
         $this->assertEquals(
             $expocted,
