@@ -31,7 +31,7 @@ class RepositoryTest extends BaseServiceTest
         if ( isset( $_ENV['legacyKernel'] ) )
         {
             $serviceSettings['legacy'] = array(
-                'legacy_root_dir'   => getcwd(),
+                'legacy_root_dir'   => $_ENV['legacyPath'],
                 'kernel_handler'    => $this->getMock( 'ezpKernelHandler' )
             );
         }
