@@ -16,7 +16,6 @@ use eZ\Publish\Core\Base\ClassLoader,
     eZ\Publish\Legacy\Kernel as LegacyKernel,
     eZ\Publish\Legacy\Kernel\CLIHandler as LegacyKernelCLI;
 
-// Setup autoloaders
 if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
 {
     throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
@@ -28,29 +27,33 @@ if ( !file_exists( $autoloadFile ) )
     throw new \RuntimeException( 'Install dependencies with composer to run the test suites' );
 include $autoloadFile;
 
-// Autoloader for eZ Publish legacy
-if ( !isset( $settings['base']['Legacy']['RootPath'] ) )
+$dependencies = array();
+
+// Bootstrap eZ Publish legacy kernel if configured
+if ( isset( $settings['base']['Legacy']['RootPath'] ) )
 {
-    throw new \RuntimeException( 'Please define your eZ Publish legacy root path in config.php' );
+    $legacyPath = $settings['base']['Legacy']['RootPath'];
+
+    // Deactivate eZComponents loading from legacy autoload.php as they are already loaded with Composer
+    if ( !defined( 'EZCBASE_ENABLED' ) )
+        define( 'EZCBASE_ENABLED', false );
+    require "$legacyPath/autoload.php";
+
+    $legacyKernel = new LegacyKernel( new LegacyKernelCLI, $legacyPath, __DIR__ );
+    // Avoid "Fatal error" text from legacy kernel if not called
+    $legacyKernel->runCallback(
+        function ()
+        {
+            eZExecution::setCleanExit();
+        }
+    );
+
+    // Exposing in env variables in order be able to use them in test cases.
+    $_ENV['legacyKernel'] = $legacyKernel;
+    $_ENV['legacyPath'] = $legacyPath;
+
+    $dependencies['@legacyKernel'] = $legacyKernel;
 }
-$legacyPath = $settings['base']['Legacy']['RootPath'];
-
-// Deactivate eZComponents loading from legacy autoload.php as they are already loaded with Composer
-if ( !defined( 'EZCBASE_ENABLED' ) )
-    define( 'EZCBASE_ENABLED', false );
-require "$legacyPath/autoload.php";
-
-$legacyKernel = new LegacyKernel( new LegacyKernelCLI, $legacyPath, __DIR__ );
-// Avoid "Fatal error" text from legacy kernel if not called
-$legacyKernel->runCallback(
-    function ()
-    {
-        eZExecution::setCleanExit();
-    }
-);
-// Exposing in env variables in order be able to use them in test cases.
-$_ENV['legacyKernel'] = $legacyKernel;
-$_ENV['legacyPath'] = $legacyPath;
 
 $configManager = new ConfigurationManager(
     $settings,
@@ -75,10 +78,9 @@ $configManager->setGlobalDirs( $paths, 'modules' );*/
 $loader = new ClassLoader( array() );
 $sc = new ServiceContainer(
     $configManager->getConfiguration('service')->getAll(),
-    array(
+    $dependencies + array(
          '$classLoader' => $loader,
          '$configurationManager' => $configManager,
-         '@legacyKernel' => $legacyKernel
     )
 );
 

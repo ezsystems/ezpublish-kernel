@@ -27,10 +27,14 @@ class RepositoryTest extends BaseServiceTest
      */
     protected function getRepository( array $serviceSettings )
     {
-        $serviceSettings['legacy'] = array(
-            'legacy_root_dir'   => getcwd(),
-            'kernel_handler'    => $this->getMock( 'ezpKernelHandler' )
-        );
+        $serviceSettings = array();
+        if ( isset( $_ENV['legacyKernel'] ) )
+        {
+            $serviceSettings['legacy'] = array(
+                'legacy_root_dir'   => $_ENV['legacyPath'],
+                'kernel_handler'    => $this->getMock( 'ezpKernelHandler' )
+            );
+        }
 
         return new Repository(
             $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Handler' ),
@@ -58,6 +62,9 @@ class RepositoryTest extends BaseServiceTest
      */
     public function testGetLegacyKernel()
     {
+        if ( !isset( $_ENV['legacyKernel'] ) )
+            self::markTestSkipped( 'Legacy kernel is needed to run this tests.' );
+
         $legacyKernel = $this->repository->getLegacyKernel();
         self::assertInstanceOf( 'eZ\\Publish\\Legacy\\Kernel', $legacyKernel );
         // Now checks that legacy kernel is built only once
@@ -70,6 +77,9 @@ class RepositoryTest extends BaseServiceTest
      */
     public function testGetLegacyKernelFail()
     {
+        if ( !isset( $_ENV['legacyKernel'] ) )
+            self::markTestSkipped( 'Legacy kernel is needed to run this tests.' );
+
         $refRepository = new \ReflectionObject( $this->repository );
         $refServiceSettings = $refRepository->getProperty( 'serviceSettings' );
         $refServiceSettings->setAccessible( true );
@@ -86,6 +96,9 @@ class RepositoryTest extends BaseServiceTest
      */
     public function testGetLegacyKernelFailNoHandler()
     {
+        if ( !isset( $_ENV['legacyKernel'] ) )
+            self::markTestSkipped( 'Legacy kernel is needed to run this tests.' );
+
         $refRepository = new \ReflectionObject( $this->repository );
         $refServiceSettings = $refRepository->getProperty( 'serviceSettings' );
         $refServiceSettings->setAccessible( true );
@@ -102,6 +115,9 @@ class RepositoryTest extends BaseServiceTest
      */
     public function testSetLegacyKernel()
     {
+        if ( !isset( $_ENV['legacyKernel'] ) )
+            self::markTestSkipped( 'Legacy kernel is needed to run this tests.' );
+
         $legacyKernelMock = $this->getLegacyKernelMock();
         $this->repository->setLegacyKernel( $legacyKernelMock );
         self::assertSame( $legacyKernelMock, $this->repository->getLegacyKernel() );
