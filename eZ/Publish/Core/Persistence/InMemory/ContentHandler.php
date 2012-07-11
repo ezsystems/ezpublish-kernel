@@ -29,20 +29,20 @@ use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandlerInterface,
 class ContentHandler implements ContentHandlerInterface
 {
     /**
-     * @var Handler
+     * @var \eZ\Publish\Core\Persistence\InMemory\Handler
      */
     protected $handler;
 
     /**
-     * @var Backend
+     * @var \eZ\Publish\Core\Persistence\InMemory\Backend
      */
     protected $backend;
 
     /**
      * Setups current handler instance with reference to Handler object that created it.
      *
-     * @param Handler $handler
-     * @param Backend $backend The storage engine backend
+     * @param \eZ\Publish\Core\Persistence\InMemory\Handler $handler
+     * @param \eZ\Publish\Core\Persistence\InMemory\Backend $backend The storage engine backend
      */
     public function __construct( Handler $handler, Backend $backend )
     {
@@ -51,7 +51,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Handler
+     * @see \eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function create( CreateStruct $content )
     {
@@ -129,7 +129,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Handler
+     * @see \eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function createDraftFromVersion( $contentId, $srcVersion, $userId )
     {
@@ -287,7 +287,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Handler
+     * @see \eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function load( $id, $version, $translations = null )
     {
@@ -382,7 +382,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Handler
+     * @see \eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function setStatus( $contentId, $status, $version )
     {
@@ -396,7 +396,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Handler
+     * @see \eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function setObjectState( $contentId, $stateGroup, $state )
     {
@@ -404,7 +404,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Handler
+     * @see \eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function getObjectState( $contentId, $stateGroup )
     {
@@ -412,7 +412,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Handler
+     * @see \eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function updateMetadata( $contentId, MetadataUpdateStruct $content )
     {
@@ -432,7 +432,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Handler
+     * @see \eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function updateContent( $contentId, $versionNo, UpdateStruct $content )
     {
@@ -551,7 +551,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Handler
+     * @see \eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function trash( $contentId )
     {
@@ -559,7 +559,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Handler
+     * @see \eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function untrash( $contentId )
     {
@@ -567,7 +567,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Handler
+     * @see \eZ\Publish\SPI\Persistence\Content\Handler
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no version found
      */
     public function listVersions( $contentId )
