@@ -24,8 +24,8 @@ class Type extends FieldType
 {
     protected $validatorConfigurationSchema = array(
         "StringLengthValidator" => array(
-            "minStringLength" => array( "type" => int, "default" => 0 ),
-            "maxStringLength" => array( "type" => int, "default" => 100 )
+            "minStringLength" => array( "type" => "int", "default" => 0 ),
+            "maxStringLength" => array( "type" => "int", "default" => 100 )
         )
     );
 
