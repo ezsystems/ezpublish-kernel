@@ -9,10 +9,11 @@
 
 namespace eZ\Publish\Core\FieldType\Media;
 use eZ\Publish\Core\FieldType\FieldType,
-    ez\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\API\Repository\Repository,
+    eZ\Publish\Core\Repository\ValidatorService,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\API\Repository\FieldTypeTools,
+    eZ\Publish\API\Repository\IOService,
     eZ\Publish\API\Repository\Values\IO\BinaryFile;
 
 /**
@@ -65,13 +66,14 @@ class Type extends FieldType
     /**
      * Constructs field type object, initializing internal data structures.
      *
-     * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\Core\Repository\ValidatorService $validatorService
+     * @param \eZ\Publish\API\Repository\FieldTypeTools $fieldTypeTools
+     * @param \eZ\Publish\API\Repository\IOService $IOService
      */
-    public function __construct( Repository $repository, ValidatorService $validatorService )
+    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools, IOService $IOService )
     {
-        $this->IOService = $repository->getIOService();
-        $this->validatorService = $validatorService;
+        parent::__construct( $validatorService, $fieldTypeTools );
+        $this->IOService = $IOService;
     }
 
     /**
