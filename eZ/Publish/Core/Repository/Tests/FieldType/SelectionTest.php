@@ -22,7 +22,7 @@ class SelectionTest extends FieldType
      */
     public function testSelectionSupportedValidators()
     {
-        $ft = new Selection();
+        $ft = new Selection( $this->validatorService, $this->fieldTypeTools );;
         self::assertEmpty(
             $ft->getValidatorConfigurationSchema(),
             "The set of allowed validators does not match what is expected."
@@ -37,7 +37,7 @@ class SelectionTest extends FieldType
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new Selection();
+        $ft = new Selection( $this->validatorService, $this->fieldTypeTools );;
         $invalidValue = new SelectionValue;
         $invalidValue->selection = "This should be an array instead!";
         $ref = new ReflectionObject( $ft );
@@ -53,7 +53,7 @@ class SelectionTest extends FieldType
      */
     public function testAcceptValueValidStringFormat()
     {
-        $ft = new Selection();
+        $ft = new Selection( $this->validatorService, $this->fieldTypeTools );;
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -69,7 +69,7 @@ class SelectionTest extends FieldType
      */
     public function testAcceptValueValidArrayFormat()
     {
-        $ft = new Selection();
+        $ft = new Selection( $this->validatorService, $this->fieldTypeTools );;
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -86,7 +86,7 @@ class SelectionTest extends FieldType
     public function testToPersistenceValue()
     {
         $string = "Choice1";
-        $ft = new Selection();
+        $ft = new Selection( $this->validatorService, $this->fieldTypeTools );;
         $fieldValue = $ft->toPersistenceValue( new SelectionValue( (array)$string ) );
 
         self::assertSame( array( $string ), $fieldValue->data );

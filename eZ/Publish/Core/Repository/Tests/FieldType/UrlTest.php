@@ -21,7 +21,7 @@ class UrlTest extends FieldType
      */
     public function testUrlSupportedValidators()
     {
-        $ft = new Url();
+        $ft = new Url( $this->validatorService, $this->fieldTypeTools );;
         self::assertSame( array(), $ft->getValidatorConfigurationSchema(), "The set of allowed validators does not match what is expected." );
     }
 
@@ -32,7 +32,7 @@ class UrlTest extends FieldType
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new Url();
+        $ft = new Url( $this->validatorService, $this->fieldTypeTools );;
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -45,7 +45,7 @@ class UrlTest extends FieldType
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new Url();
+        $ft = new Url( $this->validatorService, $this->fieldTypeTools );;
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -61,7 +61,7 @@ class UrlTest extends FieldType
     public function testToPersistenceValue()
     {
         $link = "http://ez.no/";
-        $ft = new Url();
+        $ft = new Url( $this->validatorService, $this->fieldTypeTools );;
         $fieldValue = $ft->toPersistenceValue( new UrlValue( $link ) );
 
         self::assertSame( array( "link" => $link, "text" => null ), $fieldValue->data );

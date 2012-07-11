@@ -41,7 +41,10 @@ class BinaryFileHandlerTest extends FieldType
     protected function setUp()
     {
         parent::setUp();
-        $repository = new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler() );
+        $repository = new Repository(
+            new InMemoryPersistenceHandler( $this->validatorService, $this->fieldTypeTools ),
+            new InMemoryIOHandler()
+        );
         $this->imagePath = __DIR__ . '/squirrel-developers.jpg';
         $this->imageFileInfo = new splFileInfo( $this->imagePath );
         $this->handler = new BinaryFileHandler( $repository->getIOService() );

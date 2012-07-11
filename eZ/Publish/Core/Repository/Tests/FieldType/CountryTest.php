@@ -22,7 +22,10 @@ class CountryTest extends FieldType
 
     public function setUp()
     {
+        parent::setUp();
         $this->ft = new Country(
+            $this->validatorService,
+            $this->fieldTypeTools,
             array(
                 "BE" => array(
                     "Name" => "Belgium",

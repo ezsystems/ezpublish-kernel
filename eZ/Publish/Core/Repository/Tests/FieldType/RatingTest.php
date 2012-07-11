@@ -21,7 +21,7 @@ class RatingTest extends FieldType
      */
     public function testRatingSupportedValidators()
     {
-        $ft = new Rating();
+        $ft = new Rating( $this->validatorService, $this->fieldTypeTools );;
         self::assertEmpty(
             $ft->getValidatorConfigurationSchema(),
             "The set of allowed validators does not match what is expected."
@@ -35,7 +35,7 @@ class RatingTest extends FieldType
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new Rating();
+        $ft = new Rating( $this->validatorService, $this->fieldTypeTools );;
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -50,7 +50,7 @@ class RatingTest extends FieldType
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new Rating();
+        $ft = new Rating( $this->validatorService, $this->fieldTypeTools );;
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -66,7 +66,7 @@ class RatingTest extends FieldType
     public function testToPersistenceValue()
     {
         $rating = false;
-        $ft = new Rating();
+        $ft = new Rating( $this->validatorService, $this->fieldTypeTools );;
         $fieldValue = $ft->toPersistenceValue( $fv = new RatingValue( $rating ) );
 
         self::assertSame( $rating, $fieldValue->data );

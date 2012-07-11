@@ -23,7 +23,7 @@ class DateAndTimeTest extends FieldType
      */
     public function testDateAndTimeSupportedValidators()
     {
-        $ft = new DateAndTime();
+        $ft = new DateAndTime( $this->validatorService, $this->fieldTypeTools );
         self::assertSame(
             array(),
             $ft->getValidatorConfigurationSchema(),
@@ -38,7 +38,7 @@ class DateAndTimeTest extends FieldType
      */
     public function testDateAndTimeAllowedSettings()
     {
-        $ft = new DateAndTime();
+        $ft = new DateAndTime( $this->validatorService, $this->fieldTypeTools );
         self::assertSame(
             array(
                 'useSeconds' => false,
@@ -57,7 +57,7 @@ class DateAndTimeTest extends FieldType
      */
     public function testDefaultValue()
     {
-        $ft = new DateAndTime();
+        $ft = new DateAndTime( $this->validatorService, $this->fieldTypeTools );
         $value = $ft->getDefaultDefaultValue();
         self::assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\DateAndTime\\Value',
@@ -75,7 +75,7 @@ class DateAndTimeTest extends FieldType
      */
     public function testAcceptInvalidValue()
     {
-        $ft = new DateAndTime();
+        $ft = new DateAndTime( $this->validatorService, $this->fieldTypeTools );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
@@ -90,7 +90,7 @@ class DateAndTimeTest extends FieldType
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new DateAndTime();
+        $ft = new DateAndTime( $this->validatorService, $this->fieldTypeTools );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
@@ -106,7 +106,7 @@ class DateAndTimeTest extends FieldType
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new DateAndTime();
+        $ft = new DateAndTime( $this->validatorService, $this->fieldTypeTools );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
@@ -122,7 +122,7 @@ class DateAndTimeTest extends FieldType
      */
     public function testToPersistenceValue()
     {
-        $ft = new DateAndTime();
+        $ft = new DateAndTime( $this->validatorService, $this->fieldTypeTools );
         $ts = 1048633200;
         $fieldValue = $ft->toPersistenceValue( new DateAndTimeValue( new DateTime( "@$ts" ) ) );
 

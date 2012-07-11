@@ -21,7 +21,7 @@ class FloatTest extends FieldType
      */
     public function testFloatSupportedValidators()
     {
-        $ft = new Float();
+        $ft = new Float( $this->validatorService, $this->fieldTypeTools );;
         self::assertSame(
             array( "FloatValueValidator" ),
             $ft->getValidatorConfigurationSchema(),
@@ -36,7 +36,7 @@ class FloatTest extends FieldType
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new Float();
+        $ft = new Float( $this->validatorService, $this->fieldTypeTools );;
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -49,7 +49,7 @@ class FloatTest extends FieldType
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new Float();
+        $ft = new Float( $this->validatorService, $this->fieldTypeTools );;
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -64,7 +64,7 @@ class FloatTest extends FieldType
      */
     public function testToPersistenceValue()
     {
-        $ft = new Float();
+        $ft = new Float( $this->validatorService, $this->fieldTypeTools );;
         $fieldValue = $ft->toPersistenceValue( new FloatValue( 42.42 ) );
 
         self::assertSame( 42.42, $fieldValue->data );

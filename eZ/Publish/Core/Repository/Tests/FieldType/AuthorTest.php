@@ -47,7 +47,7 @@ class AuthorTest extends FieldType
      */
     public function testAuthorSupportedValidators()
     {
-        $ft = new AuthorType;
+        $ft = new AuthorType( $this->validatorService, $this->fieldTypeTools );
         self::assertSame( array(), $ft->getValidatorConfigurationSchema(), "The set of allowed validators does not match what is expected." );
     }
 
@@ -57,7 +57,7 @@ class AuthorTest extends FieldType
      */
     public function testAcceptValueInvalidType()
     {
-        $ft = new AuthorType;
+        $ft = new AuthorType( $this->validatorService, $this->fieldTypeTools );
         $ft->acceptValue( $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Value' ) );
     }
 
@@ -67,7 +67,7 @@ class AuthorTest extends FieldType
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new AuthorType;
+        $ft = new AuthorType( $this->validatorService, $this->fieldTypeTools );
         $value = new AuthorValue;
         $value->authors = 'This is not a valid author collection';
         $ft->acceptValue( $value );
@@ -78,7 +78,7 @@ class AuthorTest extends FieldType
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new AuthorType;
+        $ft = new AuthorType( $this->validatorService, $this->fieldTypeTools );
         $author = new Author;
         $author->name = 'Boba Fett';
         $author->email = 'boba.fett@bountyhunters.com';

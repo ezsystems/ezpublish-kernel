@@ -42,7 +42,10 @@ class MediaHandlerTest extends FieldType
     protected function setUp()
     {
         parent::setUp();
-        $repository = new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler() );
+        $repository = new Repository(
+            new InMemoryPersistenceHandler( $this->validatorService, $this->fieldTypeTools ),
+            new InMemoryIOHandler()
+        );
         $this->mediaPath = __DIR__ . '/developer-got-hurt.m4v';
         $this->mediaFileInfo = new splFileInfo( $this->mediaPath );
         $this->handler = new MediaHandler( $repository->getIOService() );

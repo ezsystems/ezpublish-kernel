@@ -21,7 +21,7 @@ class IntegerTest extends FieldType
      */
     public function testIntegerSupportedValidators()
     {
-        $ft = new Integer();
+        $ft = new Integer( $this->validatorService, $this->fieldTypeTools );;
         self::assertSame(
             array( "IntegerValueValidator" ),
             $ft->getValidatorConfigurationSchema(),
@@ -36,7 +36,7 @@ class IntegerTest extends FieldType
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new Integer();
+        $ft = new Integer( $this->validatorService, $this->fieldTypeTools );;
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -49,7 +49,7 @@ class IntegerTest extends FieldType
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new Integer();
+        $ft = new Integer( $this->validatorService, $this->fieldTypeTools );;
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -65,7 +65,7 @@ class IntegerTest extends FieldType
     public function testToPersistenceValue()
     {
         $integer = 42;
-        $ft = new Integer();
+        $ft = new Integer( $this->validatorService, $this->fieldTypeTools );;
         $fieldValue = $ft->toPersistenceValue( new IntegerValue( $integer ) );
 
         self::assertSame( $integer, $fieldValue->data );

@@ -22,7 +22,7 @@ class CheckboxTest extends FieldType
      */
     public function testCheckboxSupportedValidators()
     {
-        $ft = new Checkbox();
+        $ft = new Checkbox( $this->validatorService, $this->fieldTypeTools );
         self::assertSame(
             array(),
             $ft->getValidatorConfigurationSchema(),
@@ -37,7 +37,7 @@ class CheckboxTest extends FieldType
      */
     public function testCheckboxAllowedSettings()
     {
-        $ft = new Checkbox();
+        $ft = new Checkbox( $this->validatorService, $this->fieldTypeTools );;
         self::assertSame(
             array(
                 'defaultValue' => false
@@ -55,7 +55,7 @@ class CheckboxTest extends FieldType
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new Checkbox();
+        $ft = new Checkbox( $this->validatorService, $this->fieldTypeTools );;
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
@@ -70,7 +70,7 @@ class CheckboxTest extends FieldType
      */
     public function testAcceptValueInvalidValue()
     {
-        $ft = new Checkbox();
+        $ft = new Checkbox( $this->validatorService, $this->fieldTypeTools );;
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
@@ -84,7 +84,7 @@ class CheckboxTest extends FieldType
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new Checkbox();
+        $ft = new Checkbox( $this->validatorService, $this->fieldTypeTools );;
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
@@ -100,7 +100,7 @@ class CheckboxTest extends FieldType
      */
     public function testToPersistenceValue()
     {
-        $ft = new Checkbox();
+        $ft = new Checkbox( $this->validatorService, $this->fieldTypeTools );;
         $fieldValue = $ft->toPersistenceValue( new CheckboxValue( true ) );
 
         self::assertSame( true, $fieldValue->data );

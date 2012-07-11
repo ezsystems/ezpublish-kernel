@@ -40,7 +40,10 @@ class BinaryFileTest extends FieldType
     protected function setUp()
     {
         parent::setUp();
-        $this->repository = new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler() );
+        $this->repository = new Repository(
+            new InMemoryPersistenceHandler( $this->validatorService, $this->fieldTypeTools ),
+            new InMemoryIOHandler()
+        );
         $this->imagePath = __DIR__ . '/squirrel-developers.jpg';
         $this->imageFileInfo = new FileInfo( $this->imagePath );
     }
@@ -52,7 +55,7 @@ class BinaryFileTest extends FieldType
      */
     public function testBinaryFileSupportedValidators()
     {
-        $ft = new BinaryFileType( $this->repository );
+        $ft = new BinaryFileType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
         self::assertSame(
             array( 'FileSizeValidator' ),
             $ft->getValidatorConfigurationSchema(),
@@ -68,7 +71,7 @@ class BinaryFileTest extends FieldType
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new BinaryFileType( ( $this->repository ) );
+        $ft = new BinaryFileType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
         $invalidValue = $ft->getDefaultDefaultValue();
         $invalidValue->file = 'This is definitely not a binary file !';
         $ref = new ReflectionObject( $ft );
@@ -85,7 +88,7 @@ class BinaryFileTest extends FieldType
      */
     public function testAcceptInvalidValue()
     {
-        $ft = new BinaryFileType( $this->repository );
+        $ft = new BinaryFileType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
@@ -99,7 +102,7 @@ class BinaryFileTest extends FieldType
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new BinaryFileType( $this->repository );
+        $ft = new BinaryFileType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
@@ -116,7 +119,7 @@ class BinaryFileTest extends FieldType
      */
     public function testFieldValueToString()
     {
-        $ft = new BinaryFileType( $this->repository );
+        $ft = new BinaryFileType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
         $value = $ft->buildValue( $this->imagePath );
         self::assertSame( $value->file->id, (string)$value );
     }
@@ -130,7 +133,7 @@ class BinaryFileTest extends FieldType
      */
     public function testVirtualLegacyProperty()
     {
-        $ft = new BinaryFileType( $this->repository );
+        $ft = new BinaryFileType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
         $value = $ft->buildValue( $this->imagePath );
         self::assertSame( basename( $value->file->id ), $value->filename );
         self::assertSame( $value->file->mimeType, $value->mimeType );
@@ -146,7 +149,7 @@ class BinaryFileTest extends FieldType
      */
     public function testInvalidVirtualProperty()
     {
-        $ft = new BinaryFileType( $this->repository );
+        $ft = new BinaryFileType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
         $value = $ft->buildValue( $this->imagePath );
         $value->nonExistingProperty;
     }

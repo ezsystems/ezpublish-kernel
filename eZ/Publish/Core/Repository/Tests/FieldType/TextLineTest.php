@@ -22,7 +22,7 @@ class TextLineTest extends FieldType
      */
     public function testTextLineSupportedValidators()
     {
-        $ft = new TextLine();
+        $ft = new TextLine( $this->validatorService, $this->fieldTypeTools );;
         self::assertSame(
             array( 'StringLengthValidator' ),
             $ft->getValidatorConfigurationSchema(),
@@ -37,7 +37,7 @@ class TextLineTest extends FieldType
      */
     public function testTextLineAllowedSettings()
     {
-        $ft = new TextLine();
+        $ft = new TextLine( $this->validatorService, $this->fieldTypeTools );;
         self::assertSame(
             array(),
             $ft->getSettingsSchema(),
@@ -53,7 +53,7 @@ class TextLineTest extends FieldType
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new TextLine();
+        $ft = new TextLine( $this->validatorService, $this->fieldTypeTools );;
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
@@ -67,7 +67,7 @@ class TextLineTest extends FieldType
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new TextLine();
+        $ft = new TextLine( $this->validatorService, $this->fieldTypeTools );;
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
@@ -84,7 +84,7 @@ class TextLineTest extends FieldType
     public function testToPersistenceValue()
     {
         $string = 'Test of FieldValue';
-        $ft = new TextLine();
+        $ft = new TextLine( $this->validatorService, $this->fieldTypeTools );;
         $fieldValue = $ft->toPersistenceValue( new TextLineValue( $string ) );
 
         self::assertSame( $string, $fieldValue->data );
