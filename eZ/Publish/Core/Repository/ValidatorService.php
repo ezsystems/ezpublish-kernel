@@ -17,14 +17,9 @@ namespace eZ\Publish\Core\Repository;
 class ValidatorService
 {
     /**
-     * The namespace under which concrete validator classes reside
+     * The namespace under which validator classes reside
      */
-    const CONCRETE_VALIDATOR_NAMESPACE = "eZ\\Publish\\Core\\FieldType\\Validator";
-
-    /**
-     * The namespace under which public domain validator classes reside
-     */
-    const PUBLIC_VALIDATOR_NAMESPACE = "eZ\\Publish\\Core\\Repository\\Values\\ContentType\\Validator";
+    const VALIDATOR_NAMESPACE = "eZ\\Publish\\Core\\FieldType\\Validator";
 
     /**
      * Holds concrete validator objects, indexed by their FQN
@@ -42,7 +37,7 @@ class ValidatorService
      */
     public function getValidator( $identifier )
     {
-        $validatorFQN = $this->getConcreteValidatorFQN( $identifier );
+        $validatorFQN = $this->getValidatorFQN( $identifier );
 
         if ( !isset( $this->validators[$validatorFQN] ) )
         {
@@ -68,26 +63,14 @@ class ValidatorService
     }
 
     /**
-     * Returns FQN of the public domain validator representation for the given validator identifier
-     *
-     * @param string $identifier
-     *
-     * @return string
-     */
-    protected function getPublicDomainValidatorFQN( $identifier )
-    {
-        return self::PUBLIC_VALIDATOR_NAMESPACE . "\\" . $identifier;
-    }
-
-    /**
      * Returns FQN of the concrete validator implementation for the given validator identifier
      *
      * @param string $identifier
      *
      * @return string
      */
-    protected function getConcreteValidatorFQN( $identifier )
+    protected function getValidatorFQN( $identifier )
     {
-        return self::CONCRETE_VALIDATOR_NAMESPACE . "\\" . $identifier;
+        return self::VALIDATOR_NAMESPACE . "\\" . $identifier;
     }
 }
