@@ -11,7 +11,7 @@ namespace eZ\Publish\SPI\Persistence\Content\Search;
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
- * Base class for document fields
+ * Base class for document field definitions
  */
 abstract class DocumentField extends ValueObject
 {
@@ -28,15 +28,6 @@ abstract class DocumentField extends ValueObject
      * @var string
      */
     protected $type;
-
-    /**
-     * Value of the document field.
-     *
-     * Might be about anything depending on the type of the document field.
-     *
-     * @var mixed
-     */
-    public $value;
 
     /**
      * Whether highlighting should be performed for this field on result documents

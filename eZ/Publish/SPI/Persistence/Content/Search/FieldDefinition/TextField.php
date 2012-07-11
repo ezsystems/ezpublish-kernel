@@ -1,25 +1,25 @@
 <?php
 /**
- * File containing the eZ\Publish\SPI\Persistence\Content\Search\DocumentField\CustomField class.
+ * File containing the eZ\Publish\SPI\Persistence\Content\Search\FieldDefinition\TextField class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Publish\SPI\Persistence\Content\Search\DocumentField;
+namespace eZ\Publish\SPI\Persistence\Content\Search\FieldDefinition;
 
-use eZ\Publish\SPI\Persistence\Content\Search\DocumentField;
+use eZ\Publish\SPI\Persistence\Content\Search\FieldDefinition;
 
 /**
- * Custom document field
+ * Text document field
  */
-class CustomField extends DocumentField
+class TextField extends FieldDefinition
 {
     /**
      * The type name of the facet. Has to be handled by the solr schema.
      *
      * @var string
      */
-    public $type;
+    protected $type = 'ez_text';
 }
 
