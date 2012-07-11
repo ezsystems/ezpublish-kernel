@@ -128,7 +128,7 @@ class UserIntergrationTest extends BaseIntegrationTest
         $expectedValues = array(
             'account_key' => null,
             'has_stored_login' => true,
-            'contentobject_id' => 226,
+            'contentobject_id' => self::$contentId,
             'login' => 'hans',
             'email' => 'hans@example.com',
             'password_hash' => '*',
@@ -184,7 +184,7 @@ class UserIntergrationTest extends BaseIntegrationTest
         $expectedValues = array(
             'account_key' => 'foobar',
             'has_stored_login' => true,
-            'contentobject_id' => 226,
+            'contentobject_id' => self::$contentId,
             'login' => 'hans',
             'email' => 'hans@example.com',
             'password_hash' => '*',
