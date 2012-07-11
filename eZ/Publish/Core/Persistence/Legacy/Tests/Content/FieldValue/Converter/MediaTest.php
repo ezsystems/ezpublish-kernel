@@ -18,6 +18,8 @@ use eZ\Publish\Core\FieldType\Media\Type as MediaType,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     eZ\Publish\Core\Repository\Repository,
+    eZ\Publish\Core\Repository\ValidatorService,
+    eZ\Publish\Core\Repository\FieldTypeTools,
     eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
     eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler;
 
@@ -49,7 +51,10 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $this->converter = new MediaTypeConverter;
         $this->mediaPath = 'eZ/Publish/Core/Repository/Tests/FieldType/developer-got-hurt.m4v';
 
-        $repository = new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler() );
+        $repository = new Repository(
+            new InMemoryPersistenceHandler( new ValidatorService, new FieldTypeTools ),
+            new InMemoryIOHandler()
+        );
         $mediaValue = new MediaTypeValue( $repository->getIOService(), $this->mediaPath );
         $this->persistenceMediaValue = new FieldValue;
         $this->persistenceMediaValue->data = $mediaValue;

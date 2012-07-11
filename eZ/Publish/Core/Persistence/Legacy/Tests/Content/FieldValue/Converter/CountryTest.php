@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 use eZ\Publish\Core\FieldType\Country\Value as CountryValue,
     eZ\Publish\Core\FieldType\Country\Type as CountryType,
     eZ\Publish\Core\FieldType\FieldSettings,
+    eZ\Publish\Core\Repository\ValidatorService,
+    eZ\Publish\Core\Repository\FieldTypeTools,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
@@ -40,6 +42,8 @@ class CountryTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->type = new CountryType(
+            new ValidatorService,
+            new FieldTypeTools,
             array(
                 "BE" => array(
                     "Name" => "Belgium",
