@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\InMemory;
 use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
+    eZ\Publish\API\Repository\FieldTypeTools,
+    eZ\Publish\Core\Repository\ValidatorService,
     eZ\Publish\Core\Base\Exceptions\MissingClass;
 
 /**
@@ -31,11 +33,24 @@ class Handler implements HandlerInterface
     protected $backend;
 
     /**
-     * Setup instance with an instance of Backend class
+     * @var \eZ\Publish\Core\Repository\ValidatorService
      */
-    public function __construct()
+    protected $validatorService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\FieldTypeTools
+     */
+    protected $fieldTypeTools;
+
+    /**
+     * Setup instance with an instance of Backend class
+     *
+     * @param \eZ\Publish\Core\Repository\ValidatorService $validatorService
+     * @param \eZ\Publish\API\Repository\FieldTypeTools $fieldTypeTools
+     */
+    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools )
     {
-        $this->backend = new Backend( json_decode( file_get_contents( __DIR__ . '/data.json' ), true ) );
+        $this->backend = new Backend( json_decode( file_get_contents( __DIR__ . '/data.json' ), true ), $validatorService, $fieldTypeTools );
     }
 
     /**

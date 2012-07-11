@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\Persistence\InMemory\Tests\InMemory;
 use PHPUnit_Framework_TestCase,
     ReflectionObject,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
+    eZ\Publish\Core\Repository\ValidatorService,
+    eZ\Publish\Core\Repository\FieldTypeTools,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Location,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
@@ -34,7 +36,11 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         parent::setUp();
 
         // Create a new backend from JSON data and empty Content data to make it clean
-        $this->backend = new Backend( json_decode( file_get_contents( str_replace( '/Tests/InMemory', '', __DIR__ ) . '/data.json' ), true ) );
+        $this->backend = new Backend(
+            json_decode( file_get_contents( str_replace( '/Tests/InMemory', '', __DIR__ ) . '/data.json' ), true ),
+            new ValidatorService,
+            new FieldTypeTools
+        );
         $this->insertCustomContent();
     }
 

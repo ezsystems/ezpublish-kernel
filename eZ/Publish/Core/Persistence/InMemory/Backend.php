@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\Persistence\InMemory;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
+    eZ\Publish\Core\Repository\ValidatorService,
+    eZ\Publish\API\Repository\FieldTypeTools,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
@@ -34,6 +36,16 @@ class Backend
     protected $data = array();
 
     /**
+     * @var \eZ\Publish\Core\Repository\ValidatorService
+     */
+    protected $validatorService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\FieldTypeTools
+     */
+    protected $fieldTypeTools;
+
+    /**
      * Construct backend and assign data
      *
      * Use:
@@ -46,10 +58,14 @@ class Backend
      *                                  needs to be handled in InMemory handlers by assigning keys like "_typeId" on
      *                                  Type\FieldDefintion hash values for instance. These will be stored and can be
      *                                  matched with find(), but will not be returned as part of VO so purely internal.
+     * @param \eZ\Publish\Core\Repository\ValidatorService $validatorService
+     * @param \eZ\Publish\API\Repository\FieldTypeTools $fieldTypeTools
      */
-    public function __construct( array $data )
+    public function __construct( array $data, ValidatorService $validatorService, FieldTypeTools $fieldTypeTools )
     {
         $this->data = $data + $this->data;
+        $this->validatorService = $validatorService;
+        $this->fieldTypeTools = $fieldTypeTools;
     }
 
     /**
@@ -438,7 +454,7 @@ class Backend
                     }
 
                     $fieldTypeeClassName = "$fieldTypeNS\\Type";
-                    $fieldType = new $fieldTypeeClassName;
+                    $fieldType = new $fieldTypeeClassName( $this->validatorService, $this->fieldTypeTools );
                     $value = $fieldType->toPersistenceValue( $fieldTypeValue );
                 }
                 else if ( $type === "Content\\Type\\FieldDefinition" && $prop === "fieldTypeConstraints" && !$data["fieldTypeConstraints"] instanceof FieldTypeConstraints )
