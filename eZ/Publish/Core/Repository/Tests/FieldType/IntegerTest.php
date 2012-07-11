@@ -17,14 +17,14 @@ class IntegerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\FieldType\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
      */
     public function testIntegerSupportedValidators()
     {
         $ft = new Integer();
         self::assertSame(
             array( "IntegerValueValidator" ),
-            $ft->allowedValidators(),
+            $ft->getValidatorConfigurationSchema(),
             "The set of allowed validators does not match what is expected."
         );
     }

@@ -43,12 +43,12 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
      */
     public function testAuthorSupportedValidators()
     {
         $ft = new AuthorType;
-        self::assertSame( array(), $ft->allowedValidators(), "The set of allowed validators does not match what is expected." );
+        self::assertSame( array(), $ft->getValidatorConfigurationSchema(), "The set of allowed validators does not match what is expected." );
     }
 
     /**

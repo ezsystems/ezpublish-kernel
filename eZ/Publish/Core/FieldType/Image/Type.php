@@ -20,9 +20,9 @@ use eZ\Publish\Core\FieldType\FieldType,
 class Type extends FieldType
 {
     /**
-     * @see eZ\Publish\Core\FieldType::$allowedValidators
+     * @see eZ\Publish\Core\FieldType::$validatorConfigurationSchema
      */
-    protected $allowedValidators = array(
+    protected $validatorConfigurationSchema = array(
         "FileSizeValidator"
     );
 

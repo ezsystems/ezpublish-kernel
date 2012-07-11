@@ -19,7 +19,7 @@ use eZ\Publish\Core\FieldType\FieldType,
  */
 class Type extends FieldType
 {
-    protected $allowedValidators = array(
+    protected $validatorConfigurationSchema = array(
         "FloatValueValidator"
     );
 

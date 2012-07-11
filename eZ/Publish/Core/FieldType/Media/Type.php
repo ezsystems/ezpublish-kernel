@@ -30,7 +30,7 @@ class Type extends FieldType
           TYPE_HTML5_VIDEO = 'html5_video',
           TYPE_HTML5_AUDIO = 'html5_audio';
 
-    protected $allowedValidators = array(
+    protected $validatorConfigurationSchema = array(
         "FileSizeValidator"
     );
 

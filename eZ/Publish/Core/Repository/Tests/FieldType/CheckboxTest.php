@@ -18,14 +18,14 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \eZ\Publish\Core\FieldType\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
      */
     public function testCheckboxSupportedValidators()
     {
         $ft = new Checkbox();
         self::assertSame(
             array(),
-            $ft->allowedValidators(),
+            $ft->getValidatorConfigurationSchema(),
             "The set of allowed validators does not match what is expected."
         );
     }

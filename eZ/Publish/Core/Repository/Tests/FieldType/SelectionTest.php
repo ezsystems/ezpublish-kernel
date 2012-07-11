@@ -18,13 +18,13 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \eZ\Publish\Core\FieldType\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
      */
     public function testSelectionSupportedValidators()
     {
         $ft = new Selection();
         self::assertEmpty(
-            $ft->allowedValidators(),
+            $ft->getValidatorConfigurationSchema(),
             "The set of allowed validators does not match what is expected."
         );
     }

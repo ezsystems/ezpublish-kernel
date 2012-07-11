@@ -18,14 +18,14 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \eZ\Publish\Core\FieldType\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
      */
     public function testTextLineSupportedValidators()
     {
         $ft = new TextLine();
         self::assertSame(
             array( 'StringLengthValidator' ),
-            $ft->allowedValidators(),
+            $ft->getValidatorConfigurationSchema(),
             "The set of allowed validators does not match what is expected."
         );
     }

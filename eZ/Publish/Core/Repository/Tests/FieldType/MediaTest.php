@@ -48,14 +48,14 @@ class MediaTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \eZ\Publish\Core\FieldType\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
      */
     public function testMediaSupportedValidators()
     {
         $ft = new MediaType( $this->repository );
         self::assertSame(
             array( 'FileSizeValidator' ),
-            $ft->allowedValidators(),
+            $ft->getValidatorConfigurationSchema(),
             "The set of allowed validators does not match what is expected."
         );
     }
