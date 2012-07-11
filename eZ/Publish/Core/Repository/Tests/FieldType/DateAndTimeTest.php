@@ -10,11 +10,11 @@
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\FieldType\DateAndTime\Type as DateAndTime,
     eZ\Publish\Core\FieldType\DateAndTime\Value as DateAndTimeValue,
-    PHPUnit_Framework_TestCase,
+    eZ\Publish\Core\Repository\Tests\FieldType,
     ReflectionObject,
     DateTime;
 
-class DateAndTimeTest extends PHPUnit_Framework_TestCase
+class DateAndTimeTest extends FieldType
 {
     /**
      * @group fieldType

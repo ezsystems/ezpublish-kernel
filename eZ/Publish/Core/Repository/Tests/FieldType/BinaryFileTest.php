@@ -14,11 +14,11 @@ use eZ\Publish\Core\FieldType\BinaryFile\Type as BinaryFileType,
     eZ\Publish\Core\Repository\Repository,
     eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
     eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,
+    eZ\Publish\Core\Repository\Tests\FieldType,
     SplFileInfo as FileInfo,
-    PHPUnit_Framework_TestCase,
     ReflectionObject;
 
-class BinaryFileTest extends PHPUnit_Framework_TestCase
+class BinaryFileTest extends FieldType
 {
     /**
      * Path to test image

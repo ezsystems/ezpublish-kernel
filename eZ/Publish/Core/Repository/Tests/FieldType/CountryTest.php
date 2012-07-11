@@ -10,10 +10,10 @@
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\FieldType\Country\Type as Country,
     eZ\Publish\Core\FieldType\Country\Value as CountryValue,
-    PHPUnit_Framework_TestCase,
+    eZ\Publish\Core\Repository\Tests\FieldType,
     ReflectionObject;
 
-class CountryTest extends PHPUnit_Framework_TestCase
+class CountryTest extends FieldType
 {
     /**
      * @var \eZ\Publish\Core\FieldType\Country\Type

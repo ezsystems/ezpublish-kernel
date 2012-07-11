@@ -12,14 +12,14 @@ use eZ\Publish\Core\FieldType\Author\Type as AuthorType,
     eZ\Publish\Core\FieldType\Author\Value as AuthorValue,
     eZ\Publish\Core\FieldType\Author\Author,
     eZ\Publish\Core\FieldType\Author\AuthorCollection,
-    PHPUnit_Framework_TestCase,
+    eZ\Publish\Core\Repository\Tests\FieldType,
     ReflectionObject;
 
 /**
  * @group fieldType
  * @group ezauthor
  */
-class AuthorTest extends PHPUnit_Framework_TestCase
+class AuthorTest extends FieldType
 {
     /**
      * @var \eZ\Publish\Core\FieldType\Author\Author[]

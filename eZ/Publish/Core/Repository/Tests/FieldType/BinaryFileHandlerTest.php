@@ -13,12 +13,12 @@ use eZ\Publish\Core\FieldType\BinaryFile\Handler as BinaryFileHandler,
     eZ\Publish\Core\Repository\Repository,
     eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
     eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,
-    PHPUnit_Framework_TestCase;
+    eZ\Publish\Core\Repository\Tests\FieldType;
 
 /**
  * Test case for {@link \eZ\Publish\Core\FieldType\BinaryFile\Handler}
  */
-class BinaryFileHandlerTest extends PHPUnit_Framework_TestCase
+class BinaryFileHandlerTest extends FieldType
 {
     /**
      * Path to test image

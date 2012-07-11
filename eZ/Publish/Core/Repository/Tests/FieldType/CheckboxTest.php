@@ -10,10 +10,10 @@
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\FieldType\Checkbox\Type as Checkbox,
     eZ\Publish\Core\FieldType\Checkbox\Value as CheckboxValue,
-    PHPUnit_Framework_TestCase,
+    eZ\Publish\Core\Repository\Tests\FieldType,
     ReflectionObject;
 
-class CheckboxTest extends PHPUnit_Framework_TestCase
+class CheckboxTest extends FieldType
 {
     /**
      * @group fieldType

@@ -14,12 +14,12 @@ use eZ\Publish\Core\FieldType\Media\Handler as MediaHandler,
     eZ\Publish\Core\Repository\Repository,
     eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
     eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,
-    PHPUnit_Framework_TestCase;
+    eZ\Publish\Core\Repository\Tests\FieldType;
 
 /**
  * Test case for {@link \eZ\Publish\Core\FieldType\Media\Handler}
  */
-class MediaHandlerTest extends PHPUnit_Framework_TestCase
+class MediaHandlerTest extends FieldType
 {
     /**
      * Path to test image

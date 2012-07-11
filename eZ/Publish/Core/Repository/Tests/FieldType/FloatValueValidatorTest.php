@@ -10,9 +10,9 @@
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\FieldType\Float\Value as FloatValue,
     eZ\Publish\Core\FieldType\Validator\FloatValueValidator,
-    PHPUnit_Framework_TestCase;
+    eZ\Publish\Core\Repository\Tests\FieldType;
 
-class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
+class FloatValueValidatorTest extends FieldType
 {
     /**
      * This test ensure an FloatValueValidator can be created

@@ -10,10 +10,10 @@
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\FieldType\Integer\Type as Integer,
     eZ\Publish\Core\FieldType\Integer\Value as IntegerValue,
-    PHPUnit_Framework_TestCase,
+    eZ\Publish\Core\Repository\Tests\FieldType,
     ReflectionObject;
 
-class IntegerTest extends PHPUnit_Framework_TestCase
+class IntegerTest extends FieldType
 {
     /**
      * @group fieldType

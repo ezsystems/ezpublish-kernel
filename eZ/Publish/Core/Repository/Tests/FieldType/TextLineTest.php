@@ -10,10 +10,10 @@
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\FieldType\TextLine\Type as TextLine,
     eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue,
-    PHPUnit_Framework_TestCase,
+    eZ\Publish\Core\Repository\Tests\FieldType,
     ReflectionObject;
 
-class TextLineTest extends PHPUnit_Framework_TestCase
+class TextLineTest extends FieldType
 {
     /**
      * @group fieldType

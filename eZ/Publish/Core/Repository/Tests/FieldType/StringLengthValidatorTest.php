@@ -10,9 +10,9 @@
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue,
     eZ\Publish\Core\FieldType\Validator\StringLengthValidator,
-    PHPUnit_Framework_TestCase;
+    eZ\Publish\Core\Repository\Tests\FieldType;
 
-class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
+class StringLengthValidatorTest extends FieldType
 {
     /**
      * This test ensure an StringLengthValidator can be created

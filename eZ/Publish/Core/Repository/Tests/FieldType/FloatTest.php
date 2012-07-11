@@ -10,10 +10,10 @@
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\FieldType\Float\Type as Float,
     eZ\Publish\Core\FieldType\Float\Value as FloatValue,
-    PHPUnit_Framework_TestCase,
+    eZ\Publish\Core\Repository\Tests\FieldType,
     ReflectionObject;
 
-class FloatTest extends PHPUnit_Framework_TestCase
+class FloatTest extends FieldType
 {
     /**
      * @group fieldType

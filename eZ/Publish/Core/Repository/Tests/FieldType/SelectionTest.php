@@ -10,10 +10,10 @@
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\FieldType\Selection\Type as Selection,
     eZ\Publish\Core\FieldType\Selection\Value as SelectionValue,
-    PHPUnit_Framework_TestCase,
+    eZ\Publish\Core\Repository\Tests\FieldType,
     ReflectionObject;
 
-class SelectionTest extends PHPUnit_Framework_TestCase
+class SelectionTest extends FieldType
 {
     /**
      * @group fieldType

@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType,
     eZ\Publish\Core\FieldType\XmlText\Value as XmlTextValue,
-    PHPUnit_Framework_TestCase,
+    eZ\Publish\Core\Repository\Tests\FieldType,
     ReflectionObject,
     ReflectionProperty,
     DOMDocument;
@@ -18,7 +18,7 @@ use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType,
 /**
  * @group fieldType
  */
-class XmlTextTypeTest extends PHPUnit_Framework_TestCase
+class XmlTextTypeTest extends FieldType
 {
     /**
      * @group fieldType

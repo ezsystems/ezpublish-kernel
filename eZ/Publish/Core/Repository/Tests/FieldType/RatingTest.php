@@ -10,10 +10,10 @@
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\FieldType\Rating\Type as Rating,
     eZ\Publish\Core\FieldType\Rating\Value as RatingValue,
-    PHPUnit_Framework_TestCase,
+    eZ\Publish\Core\Repository\Tests\FieldType,
     ReflectionObject;
 
-class RatingTest extends PHPUnit_Framework_TestCase
+class RatingTest extends FieldType
 {
     /**
      * @group fieldType

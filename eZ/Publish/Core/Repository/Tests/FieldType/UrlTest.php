@@ -10,10 +10,10 @@
 namespace eZ\Publish\Core\Repository\Tests\FieldType;
 use eZ\Publish\Core\FieldType\Url\Type as Url,
     eZ\Publish\Core\FieldType\Url\Value as UrlValue,
-    PHPUnit_Framework_TestCase,
+    eZ\Publish\Core\Repository\Tests\FieldType,
     ReflectionObject;
 
-class UrlTest extends PHPUnit_Framework_TestCase
+class UrlTest extends FieldType
 {
     /**
      * @group fieldType
