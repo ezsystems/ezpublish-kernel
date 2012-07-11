@@ -133,17 +133,7 @@ class User extends PseudoExternalStorage
      */
     public function handleCreate( FieldDefinition $fieldDefinition, Field $field, Content $content )
     {
-        $value = $this->defaultValues;
-        if ( is_array( $field->value ) )
-        {
-            $value = array_merge(
-                $this->defaultValues,
-                array_intersect_key( $field->value, $this->editable )
-            );
-        }
-
-        $this->fieldData[$content->id] = $value;
-        $this->handleLoad( $fieldDefinition, $field, $content );
+        $this->handleUpdate( $fieldDefinition, $field, $content );
     }
 
     /**
@@ -156,16 +146,22 @@ class User extends PseudoExternalStorage
      */
     public function handleUpdate( FieldDefinition $fieldDefinition, Field $field, Content $content )
     {
-        $value = $this->defaultValues;
-        if ( is_array( $field->value ) )
+        $storage = new Value();
+
+        foreach ( $this->defaultValues as $key => $default )
         {
-            $value = array_merge(
-                $this->defaultValues,
-                array_intersect_key( $field->value, $this->editable )
-            );
+            if ( !empty( $field->value->$key ) &&
+                 isset( $this->editable[$key] ) )
+            {
+                $storage->$key = $field->value->$key;
+            }
+            else
+            {
+                $storage->$key = $default;
+            }
         }
 
-        $this->fieldData[$content->id] = $value;
+        $this->fieldData[$content->id] = $storage;
         $this->handleLoad( $fieldDefinition, $field, $content );
     }
 
@@ -185,7 +181,7 @@ class User extends PseudoExternalStorage
         {
             if ( $field instanceof FieldStub )
             {
-                $field->setValue( $this->defaultValues );
+                $field->setValue( new Value( $this->defaultValues ) );
             }
             return;
         }
@@ -208,16 +204,16 @@ class User extends PseudoExternalStorage
      */
     protected function joinUserData( $data, $userData )
     {
-        $data['contentobjectId']   = $userData->id;
-        $data['hasStoredLogin']   = true;
-        $data['login']              = $userData->login;
-        $data['email']              = $userData->email;
-        $data['passwordHash']      = $userData->passwordHash;
-        $data['passwordHashType'] = $userData->hashAlgorithm;
-        $data['isEnabled']         = $userData->isEnabled;
-        $data['isLocked']          = $data['loginCount'] < $userData->maxLogin;
+        $data->contentobjectId  = $userData->id;
+        $data->hasStoredLogin   = true;
+        $data->login            = $userData->login;
+        $data->email            = $userData->email;
+        $data->passwordHash     = $userData->passwordHash;
+        $data->passwordHashType = $userData->hashAlgorithm;
+        $data->isEnabled        = $userData->isEnabled;
+        $data->isLocked         = $data->loginCount < $userData->maxLogin;
 
-        return new Value( $data );
+        return $data;
     }
 }
 

@@ -49,8 +49,8 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
             // The user field type does not have any special field definition
             // properties, so there is nothing to check for
             array( 'fieldTypeIdentifier', 'ezuser' ),
-            array( 'fieldSettings', null ),
-            array( 'validatorConfiguration', null ),
+            array( 'fieldSettings', array() ),
+            array( 'validatorConfiguration', array() ),
         );
     }
 
@@ -106,17 +106,17 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     public function getUpdateFieldData()
     {
-        return array(
-            'accountKey'        => 'foobar',
-            'login'              => 'change', // Change is intended to not get through
-            'email'              => 'change', // Change is intended to not get through
-            'passwordHash'      => 'change', // Change is intended to not get through
+        return new UserValue( array(
+            'accountKey'       => 'foobar',
+            'login'            => 'change', // Change is intended to not get through
+            'email'            => 'change', // Change is intended to not get through
+            'passwordHash'     => 'change', // Change is intended to not get through
             'passwordHashType' => 'change', // Change is intended to not get through
-            'lastVisit'         => 123456789,
-            'loginCount'        => 2300,
-            'isEnabled'         => 'changed', // Change is intended to not get through
-            'maxLogin'          => 'changed', // Change is intended to not get through
-        );
+            'lastVisit'        => 123456789,
+            'loginCount'       => 2300,
+            'isEnabled'        => 'changed', // Change is intended to not get through
+            'maxLogin'         => 'changed', // Change is intended to not get through
+        ) );
     }
 
     /**
@@ -222,7 +222,9 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
         // Create a new user instance.
         $user = $userService->createUser( $userCreate, array( $group ) );
 
-        return $user->content;
+        // Create draft from user content object
+        $contentService = $repository->getContentService();
+        return $contentService->createContentDraft( $user->content->contentInfo, $user->content->versionInfo );
     }
 }
 
