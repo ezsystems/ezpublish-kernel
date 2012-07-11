@@ -7,12 +7,12 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType;
+namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Integer\Value as IntegerValue,
     eZ\Publish\Core\FieldType\Validator\IntegerValueValidator,
     eZ\Publish\Core\Repository\Tests\FieldType;
 
-class IntegerValueValidatorTest extends FieldType
+class IntegerValueValidatorTest extends FieldTypeTest
 {
     /**
      * This test ensure an IntegerValueValidator can be created

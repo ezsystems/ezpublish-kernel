@@ -7,18 +7,18 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType;
+namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\BinaryFile\Type as BinaryFileType,
     eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue,
     eZ\Publish\Core\FieldType\BinaryFile\Handler as BinaryFileHandler,
     eZ\Publish\Core\Repository\Repository,
     eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
     eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,
-    eZ\Publish\Core\Repository\Tests\FieldType,
+    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     SplFileInfo as FileInfo,
     ReflectionObject;
 
-class BinaryFileTest extends FieldType
+class BinaryFileTest extends FieldTypeTest
 {
     /**
      * Path to test image

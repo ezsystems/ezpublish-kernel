@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType;
+namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Integer\Type as Integer,
     eZ\Publish\Core\FieldType\Integer\Value as IntegerValue,
-    eZ\Publish\Core\Repository\Tests\FieldType,
+    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
-class IntegerTest extends FieldType
+class IntegerTest extends FieldTypeTest
 {
     /**
      * @group fieldType

@@ -7,18 +7,18 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType;
+namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Media\Type as MediaType,
     eZ\Publish\Core\FieldType\Media\Value as MediaValue,
     eZ\Publish\Core\FieldType\Media\Handler as MediaHandler,
     eZ\Publish\Core\Repository\Repository,
     eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
     eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,
-    eZ\Publish\Core\Repository\Tests\FieldType,
+    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     SplFileInfo as FileInfo,
     ReflectionObject;
 
-class MediaTest extends FieldType
+class MediaTest extends FieldTypeTest
 {
     /**
      * Path to test media

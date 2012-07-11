@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType;
+namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Url\Type as Url,
     eZ\Publish\Core\FieldType\Url\Value as UrlValue,
-    eZ\Publish\Core\Repository\Tests\FieldType,
+    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
-class UrlTest extends FieldType
+class UrlTest extends FieldTypeTest
 {
     /**
      * @group fieldType

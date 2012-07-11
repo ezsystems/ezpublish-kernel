@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType;
+namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Checkbox\Type as Checkbox,
     eZ\Publish\Core\FieldType\Checkbox\Value as CheckboxValue,
-    eZ\Publish\Core\Repository\Tests\FieldType,
+    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
-class CheckboxTest extends FieldType
+class CheckboxTest extends FieldTypeTest
 {
     /**
      * @group fieldType

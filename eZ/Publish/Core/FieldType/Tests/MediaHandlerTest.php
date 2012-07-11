@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType;
+namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Media\Handler as MediaHandler,
     eZ\Publish\Core\FieldType\Media\Type as MediaType,
     splFileInfo,
@@ -19,7 +19,7 @@ use eZ\Publish\Core\FieldType\Media\Handler as MediaHandler,
 /**
  * Test case for {@link \eZ\Publish\Core\FieldType\Media\Handler}
  */
-class MediaHandlerTest extends FieldType
+class MediaHandlerTest extends FieldTypeTest
 {
     /**
      * Path to test image

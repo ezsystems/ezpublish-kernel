@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType;
+namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType,
     eZ\Publish\Core\FieldType\XmlText\Value as XmlTextValue,
-    eZ\Publish\Core\Repository\Tests\FieldType,
+    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject,
     ReflectionProperty,
     DOMDocument;
@@ -18,7 +18,7 @@ use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType,
 /**
  * @group fieldType
  */
-class XmlTextTypeTest extends FieldType
+class XmlTextTypeTest extends FieldTypeTest
 {
     /**
      * @group fieldType

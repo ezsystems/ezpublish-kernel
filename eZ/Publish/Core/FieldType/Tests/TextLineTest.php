@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType;
+namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\TextLine\Type as TextLine,
     eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue,
-    eZ\Publish\Core\Repository\Tests\FieldType,
+    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
-class TextLineTest extends FieldType
+class TextLineTest extends FieldTypeTest
 {
     /**
      * @group fieldType

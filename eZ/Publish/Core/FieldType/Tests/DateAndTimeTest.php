@@ -7,14 +7,14 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType;
+namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\DateAndTime\Type as DateAndTime,
     eZ\Publish\Core\FieldType\DateAndTime\Value as DateAndTimeValue,
-    eZ\Publish\Core\Repository\Tests\FieldType,
+    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject,
     DateTime;
 
-class DateAndTimeTest extends FieldType
+class DateAndTimeTest extends FieldTypeTest
 {
     /**
      * @group fieldType

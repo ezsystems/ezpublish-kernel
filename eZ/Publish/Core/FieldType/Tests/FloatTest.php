@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType;
+namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Float\Type as Float,
     eZ\Publish\Core\FieldType\Float\Value as FloatValue,
-    eZ\Publish\Core\Repository\Tests\FieldType,
+    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
-class FloatTest extends FieldType
+class FloatTest extends FieldTypeTest
 {
     /**
      * @group fieldType

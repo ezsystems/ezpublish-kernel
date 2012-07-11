@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType;
+namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Rating\Type as Rating,
     eZ\Publish\Core\FieldType\Rating\Value as RatingValue,
-    eZ\Publish\Core\Repository\Tests\FieldType,
+    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
-class RatingTest extends FieldType
+class RatingTest extends FieldTypeTest
 {
     /**
      * @group fieldType

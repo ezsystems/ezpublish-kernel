@@ -14,6 +14,9 @@
     <testsuite name="eZ\Publish\Core\Repository">
       <directory>eZ/Publish/Core/Repository/Tests</directory>
     </testsuite>
+    <testsuite name="eZ\Publish\Core\FieldType">
+      <directory>eZ/Publish/Core/FieldType/Tests</directory>
+    </testsuite>
     <testsuite name="eZ\Publish\Core\Persistence\InMemory">
       <directory>eZ/Publish/Core/Persistence/InMemory/Tests</directory>
     </testsuite>

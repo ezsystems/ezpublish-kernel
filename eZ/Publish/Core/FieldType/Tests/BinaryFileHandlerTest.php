@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType;
+namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\BinaryFile\Handler as BinaryFileHandler,
     splFileInfo,
     eZ\Publish\Core\Repository\Repository,
@@ -18,7 +18,7 @@ use eZ\Publish\Core\FieldType\BinaryFile\Handler as BinaryFileHandler,
 /**
  * Test case for {@link \eZ\Publish\Core\FieldType\BinaryFile\Handler}
  */
-class BinaryFileHandlerTest extends FieldType
+class BinaryFileHandlerTest extends FieldTypeTest
 {
     /**
      * Path to test image

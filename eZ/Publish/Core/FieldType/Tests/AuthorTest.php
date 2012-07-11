@@ -7,19 +7,19 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType;
+namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Author\Type as AuthorType,
     eZ\Publish\Core\FieldType\Author\Value as AuthorValue,
     eZ\Publish\Core\FieldType\Author\Author,
     eZ\Publish\Core\FieldType\Author\AuthorCollection,
-    eZ\Publish\Core\Repository\Tests\FieldType,
+    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
 /**
  * @group fieldType
  * @group ezauthor
  */
-class AuthorTest extends FieldType
+class AuthorTest extends FieldTypeTest
 {
     /**
      * @var \eZ\Publish\Core\FieldType\Author\Author[]
