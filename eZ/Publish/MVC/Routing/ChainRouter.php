@@ -204,6 +204,10 @@ class ChainRouter implements RouterInterface, WarmableInterface, RequestMatcherI
             if ( $siteAccessEvent->hasPathinfo() )
                 $pathinfo = $siteAccessEvent->getPathinfo();
 
+            // Storing the modified $pathinfo in 'semanticPathinfo' request attribute, to keep a trace of it.
+            // Routers implementing RequestMatcherInterface should thus use this attribute instead of the original pathinfo
+            $request->attributes->set( 'semanticPathinfo', $pathinfo );
+
             unset( $siteAccessEvent );
         }
 
@@ -211,6 +215,9 @@ class ChainRouter implements RouterInterface, WarmableInterface, RequestMatcherI
         {
             try
             {
+                if ( $router instanceof RequestMatcherInterface )
+                    return $router->matchRequest( $request );
+
                 return $router->match( $pathinfo );
             }
             catch ( ResourceNotFoundException $e )
