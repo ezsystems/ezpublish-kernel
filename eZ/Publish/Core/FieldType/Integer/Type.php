@@ -35,13 +35,6 @@ class Type extends FieldType
         )
     );
 
-    protected $settingsSchema = array(
-        "defaultValue" => array(
-            "type" => "int",
-            "default" => 0
-        )
-    );
-
     /**
      * Holds an instance of validator service
      *
@@ -221,52 +214,6 @@ class Type extends FieldType
                     null,
                     array(
                         "validator" => $validatorIdentifier
-                    )
-                );
-            }
-        }
-
-        return $validationErrors;
-    }
-
-    /**
-     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
-     *
-     * @param mixed $fieldSettings
-     *
-     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
-     */
-    public function validateFieldSettings( $fieldSettings )
-    {
-        $validationErrors = array();
-
-        foreach ( $fieldSettings as $name => $value )
-        {
-            if ( isset( $this->settingsSchema[$name] ) )
-            {
-                switch ( $name )
-                {
-                    case "defaultValue";
-                        if ( !ctype_digit( $value ) )
-                        {
-                            $validationErrors[] = new ValidationError(
-                                "Setting '%setting%' must be of integer type",
-                                null,
-                                array(
-                                    "setting" => $name
-                                )
-                            );
-                        }
-                        break;
-                }
-            }
-            else
-            {
-                $validationErrors[] = new ValidationError(
-                    "Setting '%setting%' is unknown",
-                    null,
-                    array(
-                        "setting" => $name
                     )
                 );
             }

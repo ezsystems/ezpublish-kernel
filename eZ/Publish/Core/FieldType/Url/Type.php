@@ -20,15 +20,6 @@ use eZ\Publish\Core\FieldType\FieldType,
 class Type extends FieldType
 {
     /**
-     * Settings schema for the URL FieldType
-     *
-     * @var string[]
-     */
-    protected $settingsSchema = array(
-        'defaultText' => ''
-    );
-
-    /**
      * Build a Value object of current FieldType
      *
      * Build a FieldType\Value object with the provided $link as value.
