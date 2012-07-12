@@ -68,7 +68,7 @@ abstract class Validator
      *
      * When no validation errors occurred, the returned array should be empty.
      *
-     * @return array
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
     public function getMessage()
     {
@@ -88,7 +88,10 @@ abstract class Validator
         // Reset errors
         $this->errors = array();
         // Set existing constraint values to false
-        foreach ( $this->constraints as $constraint => $value ) $this->constraints[$constraint] = false;
+        foreach ( $this->constraints as $constraint => $value )
+        {
+            $this->constraints[$constraint] = false;
+        }
         // Initialize constraints with new values
         foreach ( $constraints as $constraint => $value )
         {
@@ -112,7 +115,9 @@ abstract class Validator
     public function __get( $name )
     {
         if ( !isset( $this->constraints[$name] ) )
+        {
             throw new PropertyNotFound( "The constraint '{$name}' is not valid for this validator." );
+        }
 
         return $this->constraints[$name];
     }
@@ -128,7 +133,9 @@ abstract class Validator
     public function __set( $name, $value )
     {
         if ( !isset( $this->constraints[$name] ) )
+        {
             throw new PropertyNotFound( "The constraint '{$name}' is not valid for this validator." );
+        }
 
         $this->constraints[$name] = $value;
     }
