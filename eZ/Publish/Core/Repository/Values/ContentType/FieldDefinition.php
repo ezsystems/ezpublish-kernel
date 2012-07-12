@@ -52,7 +52,7 @@ class FieldDefinition extends APIFieldDefinition
     protected $fieldSettings;
 
     /**
-     * Holds collection of validators of this field definition supported by the field type
+     * Holds validator configuration of this field definition supported by the field type
      *
      * @var mixed
      */
@@ -121,8 +121,9 @@ class FieldDefinition extends APIFieldDefinition
     }
 
     /**
-     * this method returns the validators of this field definition supported by the field type
-     * @return \eZ\Publish\API\Repository\Values\ContentType\Validator[]
+     * this method returns the validator configuration of this field definition supported by the field type
+     *
+     * @return mixed
      */
     public function getValidatorConfiguration()
     {
@@ -131,6 +132,7 @@ class FieldDefinition extends APIFieldDefinition
 
     /**
      * this method returns settings for the field definition supported by the field type
+     *
      * @return array
      */
     public function getFieldSettings()
