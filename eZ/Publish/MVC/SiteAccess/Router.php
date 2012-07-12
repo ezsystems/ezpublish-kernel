@@ -69,11 +69,16 @@ class Router
      */
     public function match( $url )
     {
-        if ( isset( $_SERVER["SITEACCESS"] ) )
-            return $_SERVER["SITEACCESS"];
-
-        $urlElements = parse_url( $url );
         $siteaccess = new SiteAccess;
+
+        // First check environment variable
+        if ( isset( $_ENV['EZPUBLISH_SITEACCESS'] ) )
+        {
+            // TODO: Check siteaccess validity and throw \RuntimeException if invalid
+            $siteaccess->name = $_ENV['EZPUBLISH_SITEACCESS'];
+            $siteaccess->matchingType = 'env';
+            return $siteaccess;
+        }
 
         foreach ( $this->siteAccessesConfiguration as $matchingClass => $matchingConfiguration )
         {
