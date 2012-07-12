@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\FieldType\Validator;
 use eZ\Publish\Core\FieldType\Validator,
-eZ\Publish\API\Repository\Values\Translation\Message,
-eZ\Publish\Core\FieldType\Value as BaseValue;
+    eZ\Publish\Core\FieldType\ValidationError,
+    eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * Validator to validate ranges in float values.
@@ -34,7 +34,7 @@ class FloatValueValidator extends Validator
      * Will return true when all constraints are matched. If one or more
      * constraints fail, the method will return false.
      *
-     * When a check against aconstaint has failed, an entry will be added to the
+     * When a check against a constant has failed, an entry will be added to the
      * $errors array.
      *
      * @param \eZ\Publish\Core\FieldType\Float\Value $value
@@ -46,15 +46,25 @@ class FloatValueValidator extends Validator
 
         if ( $this->constraints['maxFloatValue'] !== false && $value->value > $this->constraints['maxFloatValue'] )
         {
-            $this->errors[] = new Message("The value cannot be higher than %size%.",
-                                          array('size' => $this->constraints['maxFloatValue']));
+            $this->errors[] = new ValidationError(
+                "The value cannot be higher than %size%.",
+                null,
+                array(
+                    "size" => $this->constraints['maxFloatValue']
+                )
+            );
             $isValid = false;
         }
 
         if ( $this->constraints['minFloatValue'] !== false && $value->value < $this->constraints['minFloatValue'] )
         {
-            $this->errors[] = new Message("The value cannot be lower than %size%.",
-                                          array('size' => $this->constraints['minFloatValue']));
+            $this->errors[] = new ValidationError(
+                "The value cannot be lower than %size%.",
+                null,
+                array(
+                    "size" => $this->constraints['minFloatValue']
+                )
+            );
             $isValid = false;
         }
 

@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Validator;
 use eZ\Publish\Core\FieldType\Validator,
-    eZ\Publish\API\Repository\Values\Translation\Plural,
+    eZ\Publish\Core\FieldType\ValidationError,
     eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
@@ -40,16 +40,24 @@ class StringLengthValidator extends Validator
 
         if ( $this->constraints['maxStringLength'] !== false && strlen( $value->text ) > $this->constraints['maxStringLength'] )
         {
-            $this->errors[] = new Plural("The string cannot exceed %size% character.",
-                                         "The string cannot exceed  %size%  characters.",
-                                         array('size' => $this->constraints['maxStringLength']));
+            $this->errors[] = new ValidationError(
+                "The string cannot exceed %size% character.",
+                "The string cannot exceed  %size%  characters.",
+                array(
+                    "size" => $this->constraints['maxStringLength']
+                )
+            );
             $isValid = false;
         }
         if ( $this->constraints['minStringLength'] !== false && strlen( $value->text ) < $this->constraints['minStringLength'] )
         {
-            $this->errors[] = new Plural("The string cannot be shorter than %size% character.",
-                                         "The string cannot be shorter %size%  characters.",
-                                         array('size' => $this->constraints['minStringLength']));
+            $this->errors[] = new ValidationError(
+                "The string cannot be shorter than %size% character.",
+                "The string cannot be shorter %size%  characters.",
+                array(
+                    "size" => $this->constraints['minStringLength']
+                )
+            );
             $isValid = false;
         }
 
