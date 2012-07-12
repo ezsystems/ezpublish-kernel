@@ -1263,7 +1263,7 @@ abstract class ContentTypeBase extends BaseServiceTest
                     ksort( $fieldDefinitionPropertyValue );
                     ksort( $propertyValue );
                     break;
-                case "validators":
+                case "validatorConfiguration":
                     $fieldDefinitionPropertyValue = (array)$fieldDefinition->$propertyName;
                     $propertyValue = (array)$propertyValue;
                     $sorter = function ( $a, $b )
