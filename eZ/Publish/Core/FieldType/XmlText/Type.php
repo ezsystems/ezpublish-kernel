@@ -17,13 +17,24 @@ use eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\SPI\FieldType\Event;
+    eZ\Publish\SPI\FieldType\Event,
+    eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * XmlBlock field type.
  */
 class Type extends FieldType
 {
+    /**
+     * Default preset of tags available in online editor
+     */
+    const TAG_PRESET_DEFAULT = 0;
+
+    /**
+     * Preset of tags for online editor intended for simple formatting options
+     */
+    const TAG_PRESET_SIMPLE_FORMATTING = 1;
+
     /**
      * List of settings available for this FieldType
      *
@@ -32,9 +43,18 @@ class Type extends FieldType
      * @var array
      */
     protected $settingsSchema = array(
-        'numRows' => 10,
-        'tagPreset' => null,
-        'defaultText' => '',
+        "numRows" => array(
+            "type" => "int",
+            "default" => 10
+        ),
+        "tagPreset" => array(
+            "type" => "choice",
+            "default" => self::TAG_PRESET_DEFAULT
+        ),
+        "defaultText" => array(
+            "type" => "string",
+            "default" => ""
+        ),
     );
 
     /**
@@ -214,5 +234,79 @@ EOF;
     public function isSearchable()
     {
         return true;
+    }
+
+    /**
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings( $fieldSettings )
+    {
+        $validationErrors = array();
+
+        foreach ( $fieldSettings as $name => $value )
+        {
+            if ( isset( $this->settingsSchema[$name] ) )
+            {
+                switch ( $name )
+                {
+                    case "numRows";
+                        if ( !is_integer( $value ) )
+                        {
+                            $validationErrors[] = new ValidationError(
+                                "Setting '%setting%' must be of integer type",
+                                null,
+                                array(
+                                    "setting" => $name
+                                )
+                            );
+                        }
+                        break;
+                    case "tagPreset";
+                        $definedTagPresets = array(
+                            self::TAG_PRESET_DEFAULT,
+                            self::TAG_PRESET_SIMPLE_FORMATTING
+                        );
+                        if ( !in_array( $value, $definedTagPresets ) )
+                        {
+                            $validationErrors[] = new ValidationError(
+                                "Setting '%setting%' is of unknown tag preset",
+                                null,
+                                array(
+                                    "setting" => $name
+                                )
+                            );
+                        }
+                        break;
+                    case "defaultValue";
+                        if ( !is_string( $value ) )
+                        {
+                            $validationErrors[] = new ValidationError(
+                                "Setting '%setting%' must be of string type",
+                                null,
+                                array(
+                                    "setting" => $name
+                                )
+                            );
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                $validationErrors[] = new ValidationError(
+                    "Setting '%setting%' is unknown",
+                    null,
+                    array(
+                        "setting" => $name
+                    )
+                );
+            }
+        }
+
+        return $validationErrors;
     }
 }

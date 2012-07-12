@@ -10,7 +10,10 @@
 namespace eZ\Publish\Core\FieldType\Float;
 use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+    eZ\Publish\Core\FieldType\ValidationError,
+    eZ\Publish\API\Repository\Values\Translation\Message,
+    eZ\Publish\API\Repository\Values\Translation\Plural;
 
 /**
  * Float field types
@@ -20,7 +23,12 @@ use eZ\Publish\Core\FieldType\FieldType,
 class Type extends FieldType
 {
     protected $validatorConfigurationSchema = array(
-        "FloatValueValidator"
+        "FloatValueValidator" => array(
+            array(
+                "minFloatValue" => false,
+                "maxFloatValue" => false
+            )
+        )
     );
 
     /**
@@ -144,5 +152,63 @@ class Type extends FieldType
     public function toHash( $value )
     {
         return $value->value;
+    }
+
+    /**
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $validatorConfiguration
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValidatorConfiguration( $validatorConfiguration )
+    {
+        $validationErrors = array();
+
+        foreach ( $validatorConfiguration as $validatorIdentifier => $parameters )
+        {
+            if ( isset( $this->validatorConfigurationSchema[$validatorIdentifier] ) )
+            {
+                foreach ( $parameters as $name => $value )
+                {
+                    switch ( $name )
+                    {
+                        case "minFloatValue";
+                        case "maxFloatValue";
+                            if ( !is_numeric( $value ) )
+                            {
+                                $validationErrors[] = new ValidationError(
+                                    "Validator parameter '%parameter%' must be of numeric type",
+                                    null,
+                                    array(
+                                        "parameter" => $name
+                                    )
+                                );
+                            }
+                            break;
+                        default:
+                            $validationErrors[] = new ValidationError(
+                                "Validator parameter '%parameter%' is unknown",
+                                null,
+                                array(
+                                    "parameter" => $name
+                                )
+                            );
+                    }
+                }
+            }
+            else
+            {
+                $validationErrors[] = new ValidationError(
+                    "Validator '%validator%' is unknown",
+                    null,
+                    array(
+                        "validator" => $validatorIdentifier
+                    )
+                );
+            }
+        }
+
+        return $validationErrors;
     }
 }

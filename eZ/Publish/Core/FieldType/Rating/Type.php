@@ -18,8 +18,6 @@ use eZ\Publish\Core\FieldType\FieldType,
  */
 class Type extends FieldType
 {
-    protected $settingsSchema = array();
-
     /**
      * Build a Value object of current FieldType
      *

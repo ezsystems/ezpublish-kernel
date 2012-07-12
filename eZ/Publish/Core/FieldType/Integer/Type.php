@@ -10,7 +10,10 @@
 namespace eZ\Publish\Core\FieldType\Integer;
 use eZ\Publish\Core\FieldType\FieldType,
     ez\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+    eZ\Publish\Core\FieldType\ValidationError,
+    eZ\Publish\API\Repository\Values\Translation\Message,
+    eZ\Publish\API\Repository\Values\Translation\Plural;
 
 /**
  * Integer field types
@@ -20,11 +23,23 @@ use eZ\Publish\Core\FieldType\FieldType,
 class Type extends FieldType
 {
     protected $validatorConfigurationSchema = array(
-        "IntegerValueValidator"
+        "IntegerValueValidator" => array(
+            "minIntegerValue" => array(
+                "type" => "int",
+                "default" => 0
+            ),
+            "maxIntegerValue" => array(
+                "type" => "int",
+                "default" => false
+            )
+        )
     );
 
     protected $settingsSchema = array(
-        'defaultValue' => 0
+        "defaultValue" => array(
+            "type" => "int",
+            "default" => 0
+        )
     );
 
     /**
@@ -154,5 +169,109 @@ class Type extends FieldType
     public function isSearchable()
     {
         return true;
+    }
+
+    /**
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $validatorConfiguration
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValidatorConfiguration( $validatorConfiguration )
+    {
+        $validationErrors = array();
+
+        foreach ( $validatorConfiguration as $validatorIdentifier => $parameters )
+        {
+            if ( isset( $this->validatorConfigurationSchema[$validatorIdentifier] ) )
+            {
+                foreach ( $parameters as $name => $value )
+                {
+                    switch ( $name )
+                    {
+                        case "minStringLength";
+                        case "maxStringLength";
+                            if ( !is_integer( $value ) )
+                            {
+                                $validationErrors[] = new ValidationError(
+                                    "Validator parameter '%parameter%' must be of integer type",
+                                    null,
+                                    array(
+                                        "parameter" => $name
+                                    )
+                                );
+                            }
+                            break;
+                        default:
+                            $validationErrors[] = new ValidationError(
+                                "Validator parameter '%parameter%' is unknown",
+                                null,
+                                array(
+                                    "parameter" => $name
+                                )
+                            );
+                    }
+                }
+            }
+            else
+            {
+                $validationErrors[] = new ValidationError(
+                    "Validator '%validator%' is unknown",
+                    null,
+                    array(
+                        "validator" => $validatorIdentifier
+                    )
+                );
+            }
+        }
+
+        return $validationErrors;
+    }
+
+    /**
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings( $fieldSettings )
+    {
+        $validationErrors = array();
+
+        foreach ( $fieldSettings as $name => $value )
+        {
+            if ( isset( $this->settingsSchema[$name] ) )
+            {
+                switch ( $name )
+                {
+                    case "defaultValue";
+                        if ( !ctype_digit( $value ) )
+                        {
+                            $validationErrors[] = new ValidationError(
+                                "Setting '%setting%' must be of integer type",
+                                null,
+                                array(
+                                    "setting" => $name
+                                )
+                            );
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                $validationErrors[] = new ValidationError(
+                    "Setting '%setting%' is unknown",
+                    null,
+                    array(
+                        "setting" => $name
+                    )
+                );
+            }
+        }
+
+        return $validationErrors;
     }
 }

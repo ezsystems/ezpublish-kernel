@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\Core\FieldType\TextBlock;
 use eZ\Publish\Core\FieldType\TextLine\Type as TextLine,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+    eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * The TextBlock field type.
@@ -18,7 +19,16 @@ use eZ\Publish\Core\FieldType\TextLine\Type as TextLine,
  */
 class Type extends TextLine
 {
-    protected $settingsSchema = array( "textRows" => array( 'type' => 'int', 'default' => 10 ) );
+    // @TODO remove extension of TextLine?
+
+    protected $settingsSchema = array(
+        "textRows" => array(
+            "type" => "int",
+            "default" => 10
+        )
+    );
+
+    protected $validatorConfigurationSchema = array();
 
     /**
      * Build a Value object of current FieldType
@@ -141,7 +151,40 @@ class Type extends TextLine
      */
     public function validateFieldSettings( $fieldSettings )
     {
-        //TODO: validate the field settings
-        return array();
+        $validationErrors = array();
+
+        foreach ( (array)$fieldSettings as $name => $value )
+        {
+            if ( isset( $this->settingsSchema[$name] ) )
+            {
+                switch ( $name )
+                {
+                    case "textRows";
+                        if ( !ctype_digit( $value ) )
+                        {
+                            $validationErrors[] = new ValidationError(
+                                "Setting '%setting%' must be of integer type",
+                                null,
+                                array(
+                                    "setting" => $name
+                                )
+                            );
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                $validationErrors[] = new ValidationError(
+                    "Setting '%setting%' is unknown",
+                    null,
+                    array(
+                        "setting" => $name
+                    )
+                );
+            }
+        }
+
+        return $validationErrors;
     }
 }

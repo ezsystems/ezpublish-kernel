@@ -10,7 +10,8 @@
 namespace eZ\Publish\Core\FieldType\DateAndTime;
 use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    DateTime;
+    DateTime,
+    eZ\Publish\Core\FieldType\ValidationError;
 
 class Type extends FieldType
 {
@@ -22,14 +23,23 @@ class Type extends FieldType
           DEFAULT_CURRENT_DATE_ADJUSTED = 2;
 
     protected $settingsSchema = array(
-        'useSeconds' => false,
+        "useSeconds" => array(
+            "type" => "bool",
+            "default" => false
+        ),
         // One of the DEFAULT_* class constants
-        'defaultType' => self::DEFAULT_EMPTY,
+        "defaultType" => array(
+            "type" => "choice",
+            "default" => self::DEFAULT_EMPTY
+        ),
         /*
          * @var \DateInterval
          * Used only if defaultValueType is set to DEFAULT_CURRENT_DATE_ADJUSTED
          */
-        'dateInterval' => null
+        "dateInterval" => array(
+            "type" => "date",
+            "default" => null
+        )
     );
 
     /**
@@ -146,5 +156,96 @@ class Type extends FieldType
     public function isSearchable()
     {
         return true;
+    }
+
+    /**
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings( $fieldSettings )
+    {
+        $validationErrors = array();
+
+        foreach ( $fieldSettings as $name => $value )
+        {
+            if ( isset( $this->settingsSchema[$name] ) )
+            {
+                switch ( $name )
+                {
+                    case "useSeconds";
+                        if ( !is_bool( $value ) )
+                        {
+                            $validationErrors[] = new ValidationError(
+                                "Setting '%setting%' must be of boolean type",
+                                null,
+                                array(
+                                    "setting" => $name
+                                )
+                            );
+                        }
+                        break;
+                    case "defaultType";
+                        $definedTypes = array(
+                            self::DEFAULT_EMPTY,
+                            self::DEFAULT_CURRENT_DATE,
+                            self::DEFAULT_CURRENT_DATE_ADJUSTED
+                        );
+                        if ( !in_array( $value, $definedTypes ) )
+                        {
+                            $validationErrors[] = new ValidationError(
+                                "Setting '%setting%' is of unknown type",
+                                null,
+                                array(
+                                    "setting" => $name
+                                )
+                            );
+                        }
+                        break;
+                    case "dateInterval";
+                        if ( isset( $value ) )
+                        {
+                            if ( isset( $fieldSettings["defaultType"] ) &&
+                                $fieldSettings["defaultType"] !== self::DEFAULT_CURRENT_DATE_ADJUSTED )
+                            {
+                                $validationErrors[] = new ValidationError(
+                                    "Setting '%setting%' can be used only when setting '%defaultType%' is set to '%DEFAULT_CURRENT_DATE_ADJUSTED%'",
+                                    null,
+                                    array(
+                                        "setting" => $name,
+                                        "defaultType" => "defaultType",
+                                        "DEFAULT_CURRENT_DATE_ADJUSTED" => "DEFAULT_CURRENT_DATE_ADJUSTED"
+                                    )
+                                );
+                            }
+                            elseif ( get_class( $value ) !== "DateInterval" )
+                            {
+                                $validationErrors[] = new ValidationError(
+                                    "Setting '%setting%' must be an instance of 'DateInterval' class",
+                                    null,
+                                    array(
+                                        "setting" => $name
+                                    )
+                                );
+                            }
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                $validationErrors[] = new ValidationError(
+                    "Setting '%setting%' is unknown",
+                    null,
+                    array(
+                        "setting" => $name
+                    )
+                );
+            }
+        }
+
+        return $validationErrors;
     }
 }

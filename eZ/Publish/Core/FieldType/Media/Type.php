@@ -40,7 +40,7 @@ class Type extends FieldType
      *   - flash
      *   - quick_time
      *   - real_player
-     *   - siverlight
+     *   - silverlight
      *   - windows_media_player
      *   - html5_video
      *   - html5_audio

@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\Core\FieldType\Checkbox;
 use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+    eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * Checkbox field type.
@@ -19,7 +20,10 @@ use eZ\Publish\Core\FieldType\FieldType,
 class Type extends FieldType
 {
     protected $settingsSchema = array(
-        'defaultValue' => false
+        "defaultValue" => array(
+            "type" => "bool",
+            "default" => false
+        )
     );
 
     /**
@@ -132,5 +136,51 @@ class Type extends FieldType
     public function isSearchable()
     {
         return true;
+    }
+
+    /**
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings( $fieldSettings )
+    {
+        $validationErrors = array();
+
+        foreach ( $fieldSettings as $name => $value )
+        {
+            if ( isset( $this->settingsSchema[$name] ) )
+            {
+                switch ( $name )
+                {
+                    case "defaultValue";
+                        if ( !is_bool( $value ) )
+                        {
+                            $validationErrors[] = new ValidationError(
+                                "Setting '%setting%' must be of boolean type",
+                                null,
+                                array(
+                                    "setting" => $name
+                                )
+                            );
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                $validationErrors[] = new ValidationError(
+                    "Setting '%setting%' is unknown",
+                    null,
+                    array(
+                        "setting" => $name
+                    )
+                );
+            }
+        }
+
+        return $validationErrors;
     }
 }

@@ -9,11 +9,12 @@
 
 namespace eZ\Publish\Core\FieldType\TextLine;
 use eZ\Publish\Core\FieldType\FieldType,
-ez\Publish\Core\Repository\ValidatorService,
-eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-eZ\Publish\API\Repository\Values\Content\Field,
-eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+    ez\Publish\Core\Repository\ValidatorService,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
+    eZ\Publish\API\Repository\Values\Content\Field,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * The TextLine field type.
@@ -24,8 +25,14 @@ class Type extends FieldType
 {
     protected $validatorConfigurationSchema = array(
         "StringLengthValidator" => array(
-            "minStringLength" => array( "type" => "int", "default" => 0 ),
-            "maxStringLength" => array( "type" => "int", "default" => 100 )
+            "minStringLength" => array(
+                "type" => "int",
+                "default" => 0
+            ),
+            "maxStringLength" => array(
+                "type" => "int",
+                "default" => null
+            )
         )
     );
 
@@ -147,13 +154,58 @@ class Type extends FieldType
     /**
      * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
      *
-     * @param mixed $validatorConfirguration
+     * @param mixed $validatorConfiguration
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
     public function validateValidatorConfiguration( $validatorConfiguration )
     {
-        //TODO: validate the field definition validator configuration
-        return array();
+        $validationErrors = array();
+
+        foreach ( (array)$validatorConfiguration as $validatorIdentifier => $parameters )
+        {
+            if ( isset( $this->validatorConfigurationSchema[$validatorIdentifier] ) )
+            {
+                foreach ( $parameters as $name => $value )
+                {
+                    switch ( $name )
+                    {
+                        case "minStringLength";
+                        case "maxStringLength";
+                            if ( !is_integer( $value ) )
+                            {
+                                $validationErrors[] = new ValidationError(
+                                    "Validator parameter '%parameter%' must be of integer type",
+                                    null,
+                                    array(
+                                        "parameter" => $name
+                                    )
+                                );
+                            }
+                            break;
+                        default:
+                            $validationErrors[] = new ValidationError(
+                                "Validator parameter '%parameter%' is unknown",
+                                null,
+                                array(
+                                    "parameter" => $name
+                                )
+                            );
+                    }
+                }
+            }
+            else
+            {
+                $validationErrors[] = new ValidationError(
+                    "Validator '%validator%' is unknown",
+                    null,
+                    array(
+                        "validator" => $validatorIdentifier
+                    )
+                );
+            }
+        }
+
+        return $validationErrors;
     }
 }
