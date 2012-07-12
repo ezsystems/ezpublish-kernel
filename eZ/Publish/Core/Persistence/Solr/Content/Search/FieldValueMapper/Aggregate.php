@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper,
-    eZ\Publish\SPI\Persistence\Content\Search\DocumentField,
+    eZ\Publish\SPI\Persistence\Content\Search\Field,
     eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
@@ -53,10 +53,10 @@ class Aggregate extends FieldValueMapper
     /**
      * Check if field can be mapped
      *
-     * @param DocumentField $field
+     * @param Field $field
      * @return void
      */
-    public function canMap( DocumentField $field )
+    public function canMap( Field $field )
     {
         return true;
     }
@@ -64,10 +64,10 @@ class Aggregate extends FieldValueMapper
     /**
      * Map field value to a proper Solr representation
      *
-     * @param DocumentField $field
+     * @param Field $field
      * @return void
      */
-    public function map( DocumentField $field )
+    public function map( Field $field )
     {
         foreach ( $this->mappers as $mapper )
         {

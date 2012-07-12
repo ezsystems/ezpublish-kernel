@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search;
 
-use eZ\Publish\SPI\Persistence\Content\Search\DocumentField;
+use eZ\Publish\SPI\Persistence\Content\Search\Field;
 
 /**
  * Maps raw document field values to something Solr can index.
@@ -19,17 +19,17 @@ abstract class FieldValueMapper
     /**
      * Check if field can be mapped
      *
-     * @param DocumentField $field
+     * @param Field $field
      * @return void
      */
-    abstract public function canMap( DocumentField $field );
+    abstract public function canMap( Field $field );
 
     /**
      * Map field value to a proper Solr representation
      *
-     * @param DocumentField $field
+     * @param Field $field
      * @return void
      */
-    abstract public function map( DocumentField $field );
+    abstract public function map( Field $field );
 }
 
