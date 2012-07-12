@@ -945,6 +945,7 @@ class ContentService implements ContentServiceInterface
                     continue;
                 }
 
+                /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
                 $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
                     $fieldDefinition->fieldTypeIdentifier
                 );
@@ -1538,7 +1539,6 @@ class ContentService implements ContentServiceInterface
             $fields[] = new Field(
                 array(
                     "id" => $spiField->id,
-                    //$this->newFieldTypeValue( $spiField->type, $spiField->value->data ),
                     "value" => $this->repository->getFieldTypeService()->buildFieldType(
                         $spiField->type
                     )->fromPersistenceValue( $spiField->value ),
