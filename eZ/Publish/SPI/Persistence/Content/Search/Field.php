@@ -20,7 +20,7 @@ class Field extends ValueObject
      *
      * @var string
      */
-    public $name;
+    protected $name;
 
     /**
      * Value of the document field.
@@ -29,6 +29,28 @@ class Field extends ValueObject
      *
      * @var mixed
      */
-    public $value;
+    protected $value;
+
+    /**
+     * Type of the search field
+     *
+     * @var FieldType
+     */
+    protected $type;
+
+    /**
+     * Construct from name and value
+     *
+     * @param string $name
+     * @param mixed $value
+     * @param FieldType $type
+     * @return void
+     */
+    public function __construct( $name, $value, FieldType $type )
+    {
+        $this->name  = $name;
+        $this->value = $value;
+        $this->type  = $type;
+    }
 }
 
