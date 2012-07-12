@@ -12,7 +12,8 @@ namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler,
-    eZ\Publish\SPI\Persistence\Content\Search\DocumentField,
+    eZ\Publish\SPI\Persistence\Content\Search\Field,
+    eZ\Publish\SPI\Persistence\Content\Search\FieldType,
     eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
@@ -178,12 +179,11 @@ class Native extends Gateway
     /**
      * Indexes a content object
      *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param eZ\Publish\SPI\Persistence\Content\Search\Field[] $document
      * @return void
      */
-    public function indexContent( Content $content )
+    public function indexContent( array $document )
     {
-        $document = $this->mapContent( $content );
         $update   = $this->createUpdate( $document );
         $result   = $this->client->request(
             'POST',
@@ -216,112 +216,6 @@ class Native extends Gateway
                 '<delete><query>*:*</query></delete>'
             )
         );
-    }
-
-    /**
-     * Map content to document.
-     *
-     * A document is an array of fields
-     *
-     * @param Content $content
-     * @return array
-     */
-    protected function mapContent( Content $content )
-    {
-        return array(
-            new DocumentField\StringField( array(
-                'name'  => 'id',
-                'value' => $content->contentInfo->id,
-            ) ),
-            new DocumentField\StringField( array(
-                'name'  => 'type',
-                'value' => $content->contentInfo->contentTypeId,
-            ) ),
-            new DocumentField\StringField( array(
-                'name'  => 'version',
-                'value' => $content->versionInfo->versionNo,
-            ) ),
-            new DocumentField\StringField( array(
-                'name'  => 'status',
-                'value' => $content->versionInfo->status,
-            ) ),
-            new DocumentField\StringField( array(
-                'name'  => 'name',
-                'value' => $content->contentInfo->name,
-            ) ),
-            new DocumentField\StringField( array(
-                'name'  => 'creator',
-                'value' => $content->versionInfo->creatorId,
-            ) ),
-            new DocumentField\StringField( array(
-                'name'  => 'section',
-                'value' => $content->contentInfo->sectionId,
-            ) ),
-            new DocumentField\StringField( array(
-                'name'  => 'remote_id',
-                'value' => $content->contentInfo->remoteId,
-            ) ),
-            new DocumentField\DateField( array(
-                'name'  => 'modified',
-                'value' => $content->contentInfo->modificationDate,
-            ) ),
-            new DocumentField\DateField( array(
-                'name'  => 'published',
-                'value' => $content->contentInfo->publicationDate,
-            ) ),
-            new DocumentField\StringField( array(
-                'name'  => 'path',
-                'value' => array_map(
-                    function ( $location )
-                    {
-                        return $location->pathString;
-                    },
-                    $content->locations
-                ),
-            ) ),
-            new DocumentField\StringField( array(
-                'name'  => 'location',
-                'value' => array_map(
-                    function ( $location )
-                    {
-                        return $location->id;
-                    },
-                    $content->locations
-                ),
-            ) ),
-            new DocumentField\IntegerField( array(
-                'name'  => 'depth',
-                'value' => array_map(
-                    function ( $location )
-                    {
-                        return $location->depth;
-                    },
-                    $content->locations
-                ),
-            ) ),
-            new DocumentField\StringField( array(
-                'name'  => 'location_parent',
-                'value' => array_map(
-                    function ( $location )
-                    {
-                        return $location->parentId;
-                    },
-                    $content->locations
-                ),
-            ) ),
-            new DocumentField\StringField( array(
-                'name'  => 'location_remote_id',
-                'value' => array_map(
-                    function ( $location )
-                    {
-                        return $location->remoteId;
-                    },
-                    $content->locations
-                ),
-            ) ),
-        );
-
-        // @TODO: Handle fields
     }
 
     /**
@@ -370,22 +264,23 @@ class Native extends Gateway
      * Only the field with the name ID remains untouched.
      *
      * @param string $name
-     * @param string $type
+     * @param FieldType $type
      * @return string
      */
-    protected function mapFieldType( $name, $type )
+    protected function mapFieldType( $name, FieldType $type )
     {
         if ( $name === "id" )
         {
             return $name;
         }
 
-        if ( isset( $this->fieldNameMapping[$type] ) )
+        $typeName = $type->type;
+        if ( isset( $this->fieldNameMapping[$typeName] ) )
         {
-            $type = $this->fieldNameMapping[$type];
+            $typeName = $this->fieldNameMapping[$typeName];
         }
 
-        return $name . '_' . $type;
+        return $name . '_' . $typeName;
     }
 }
 

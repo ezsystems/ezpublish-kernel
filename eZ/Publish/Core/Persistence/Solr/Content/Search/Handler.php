@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\Persistence\Solr\Content\Search;
 
 use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler,
+    eZ\Publish\SPI\Persistence\Content\Search\Field,
+    eZ\Publish\SPI\Persistence\Content\Search\FieldType,
     eZ\Publish\Core\Persistence\Solr\Exception,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler,
@@ -51,31 +53,22 @@ class Handler extends BaseSearchHandler
     protected $gateway;
 
     /**
-     * Content mapper
+     * Field registry
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
+     * @var \eZ\Publish\Core\Persistence\Solr\Content\FieldRegistry
      */
-    protected $contentMapper;
-
-    /**
-     * FieldHandler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\FieldHandler
-     */
-    protected $fieldHandler;
+    protected $fieldRegistry;
 
     /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway $gateway
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler $fieldHandler
      */
-    public function __construct( Gateway $gateway, ContentMapper $contentMapper, FieldHandler $fieldHandler )
+    public function __construct( Gateway $gateway, FieldRegistry $fieldRegistry )
     {
         $this->gateway       = $gateway;
-        $this->contentMapper = $contentMapper;
-        $this->fieldHandler  = $fieldHandler;
+        $this->fieldRegistry = $fieldRegistry;
     }
 
      /**
@@ -147,8 +140,131 @@ class Handler extends BaseSearchHandler
      */
     public function indexContent( Content $content )
     {
-        $this->gateway->indexContent( $content );
+        $document = $this->mapContent( $content );
+        $this->gateway->indexContent( $document );
     }
+
+    /**
+     * Map content to document.
+     *
+     * A document is an array of fields
+     *
+     * @param Content $content
+     * @return array
+     */
+    protected function mapContent( Content $content )
+    {
+        return array(
+            new Field(
+                'id',
+                $content->contentInfo->id,
+                new FieldType\StringField()
+            ),
+            new Field(
+                'type',
+                $content->contentInfo->contentTypeId,
+                new FieldType\StringField()
+            ),
+            new Field(
+                'version',
+                $content->versionInfo->versionNo,
+                new FieldType\StringField()
+            ),
+            new Field(
+                'status',
+                $content->versionInfo->status,
+                new FieldType\StringField()
+            ),
+            new Field(
+                'name',
+                $content->contentInfo->name,
+                new FieldType\StringField()
+            ),
+            new Field(
+                'creator',
+                $content->versionInfo->creatorId,
+                new FieldType\StringField()
+            ),
+            new Field(
+                'section',
+                $content->contentInfo->sectionId,
+                new FieldType\StringField()
+            ),
+            new Field(
+                'remote_id',
+                $content->contentInfo->remoteId,
+                new FieldType\StringField()
+            ),
+            new Field(
+                'modified',
+                $content->contentInfo->modificationDate,
+                new FieldType\DateField()
+            ),
+            new Field(
+                'published',
+                $content->contentInfo->publicationDate,
+                new FieldType\DateField()
+            ),
+            new Field(
+                'path',
+                array_map(
+                    function ( $location )
+                    {
+                        return $location->pathString;
+                    },
+                    $content->locations
+                ),
+                new FieldType\StringField()
+            ),
+            new Field(
+                'location',
+                array_map(
+                    function ( $location )
+                    {
+                        return $location->id;
+                    },
+                    $content->locations
+                ),
+                new FieldType\StringField()
+            ),
+            new Field(
+                'depth',
+                array_map(
+                    function ( $location )
+                    {
+                        return $location->depth;
+                    },
+                    $content->locations
+                ),
+                new FieldType\IntegerField()
+            ),
+            new Field(
+                'location_parent',
+                array_map(
+                    function ( $location )
+                    {
+                        return $location->parentId;
+                    },
+                    $content->locations
+                ),
+                new FieldType\StringField()
+            ),
+            new Field(
+                'location_remote_id',
+                array_map(
+                    function ( $location )
+                    {
+                        return $location->remoteId;
+                    },
+                    $content->locations
+                ),
+                new FieldType\StringField()
+            ),
+        );
+
+        // @TODO: Handle fields
+    }
+
 
     /**
      * Purges all contents from the index

@@ -46,12 +46,6 @@ class LegacySolr extends Legacy
 
     protected function getSearchHandler( $persistenceHandler )
     {
-        $contentMapperMethod = new \ReflectionMethod( $persistenceHandler, 'getContentMapper' );
-        $contentMapperMethod->setAccessible( true );
-
-        $fieldHandlerMethod = new \ReflectionMethod( $persistenceHandler, 'getFieldHandler' );
-        $fieldHandlerMethod->setAccessible( true );
-
         $searchHandler = new Solr\Content\Search\Handler(
             new Solr\Content\Search\Gateway\Native(
                 new Solr\Content\Search\Gateway\HttpClient\Stream( getenv( "solrServer" ) ),
@@ -89,8 +83,9 @@ class LegacySolr extends Legacy
                 ) ),
                 $persistenceHandler->contentHandler()
             ),
-            $contentMapperMethod->invoke( $persistenceHandler ),
-            $fieldHandlerMethod->invoke( $persistenceHandler )
+            new Solr\Content\Search\FieldRegistry( array(
+//                'string' => 
+            ) )
         );
 
         $this->indexAll( $persistenceHandler, $searchHandler );

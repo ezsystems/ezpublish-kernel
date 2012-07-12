@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search;
 
 use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+    eZ\Publish\API\Repository\Values\Content\Query;
 
 /**
  * The Content Search Gateway provides the implementation for one database to
@@ -18,12 +18,32 @@ use eZ\Publish\SPI\Persistence\Content,
  */
 abstract class Gateway
 {
+     /**
+     * finds content objects for the given query.
+     *
+     * @TODO define structs for the field filters
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
+     * @param array  $fieldFilters - a map of filters for the returned fields.
+     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     */
+    abstract public function findContent( Query $query, array $fieldFilters = array() );
+
     /**
      * Indexes a content object
      *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param eZ\Publish\SPI\Persistence\Content\Search\Field[] $document
      * @return void
      */
-    abstract public function indexContent( Content $content );
+    abstract public function indexContent( array $document );
+
+    /**
+     * Purges all contents from the index
+     *
+     * @return void
+     */
+    abstract public function purgeIndex();
 }
 
