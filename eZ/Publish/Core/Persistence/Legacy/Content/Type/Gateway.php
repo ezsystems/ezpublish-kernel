@@ -222,8 +222,6 @@ abstract class Gateway
     /**
      * Deletes a Type completely.
      *
-     * Does no delete the field definitions!
-     *
      * @param mixed $typeId
      * @param int $status
      * @return void
