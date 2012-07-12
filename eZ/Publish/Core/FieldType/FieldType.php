@@ -46,14 +46,14 @@ abstract class FieldType implements FieldTypeInterface
      * The key is the setting name, and the value is the default value for given
      * setting, set to null if no particular default should be set.
      *
-     * @var array
+     * @var mixed
      */
     protected $settingsSchema = array();
 
     /**
      * a two dimensional map with validator identifiers and parameters
      *
-     * @var array
+     * @var mixed
      */
     protected $validatorConfigurationSchema = array();
 
@@ -145,7 +145,7 @@ abstract class FieldType implements FieldTypeInterface
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
      * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field for which an action is performed
      *
-     * @return \eZ\Publish\SPI\FieldType\ValidatonError[]
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
     public function validate( FieldDefinition $fieldDefinition, $fieldValue )
     {
@@ -165,7 +165,7 @@ abstract class FieldType implements FieldTypeInterface
     /**
      * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
      *
-     * @param mixed $validatorConfirguration
+     * @param mixed $validatorConfiguration
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
