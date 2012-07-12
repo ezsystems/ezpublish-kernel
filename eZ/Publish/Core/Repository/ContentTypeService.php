@@ -45,6 +45,7 @@ use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    eZ\Publish\Core\Base\Exceptions\ContentTypeFieldDefinitionValidationException,
     DateTime;
 
 /**
@@ -442,6 +443,9 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * Builds SPIFieldDefinition object using API FieldDefinitionCreateStruct
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException if validator configuration or
+     *         field setting do not validate
+     *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
@@ -476,7 +480,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         );
         if ( !empty( $validationErrors ) )
         {
-            // @todo throw an exception
+            throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
         }
 
         $validationErrors = $fieldType->validateFieldSettings(
@@ -484,7 +488,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         );
         if ( !empty( $validationErrors ) )
         {
-            // @todo throw an exception
+            throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
         }
 
         $spiFieldDefinition->fieldTypeConstraints->validators =
@@ -502,6 +506,9 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * Builds SPIFieldDefinition object using API FieldDefinitionUpdateStruct
      * and API FieldDefinition
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException if validator configuration or
+     *         field setting do not validate
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
@@ -538,7 +545,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         );
         if ( !empty( $validationErrors ) )
         {
-            // @todo throw an exception
+            throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
         }
 
         $validationErrors = $fieldType->validateFieldSettings(
@@ -546,7 +553,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         );
         if ( !empty( $validationErrors ) )
         {
-            // @todo throw an exception
+            throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
         }
 
         $spiFieldDefinition->fieldTypeConstraints->validators =
