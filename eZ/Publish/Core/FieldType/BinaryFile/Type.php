@@ -15,9 +15,7 @@ use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\API\Repository\IOService,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\API\Repository\Values\IO\BinaryFile,
-    eZ\Publish\Core\FieldType\ValidationError,
-    eZ\Publish\API\Repository\Values\Translation\Message,
-    eZ\Publish\API\Repository\Values\Translation\Plural;
+    eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * The TextLine field type.

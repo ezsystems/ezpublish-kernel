@@ -11,9 +11,7 @@ namespace eZ\Publish\Core\FieldType\Integer;
 use eZ\Publish\Core\FieldType\FieldType,
     ez\Publish\Core\Repository\ValidatorService,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\Core\FieldType\ValidationError,
-    eZ\Publish\API\Repository\Values\Translation\Message,
-    eZ\Publish\API\Repository\Values\Translation\Plural;
+    eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * Integer field types
