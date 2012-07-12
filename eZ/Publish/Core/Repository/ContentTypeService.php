@@ -33,7 +33,6 @@ use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
     eZ\Publish\Core\Repository\Values\ContentType\ContentTypeCreateStruct,
     eZ\Publish\SPI\FieldType\FieldType,
     eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\Core\Repository\Values\ContentType\Validator,
     eZ\Publish\SPI\Persistence\Content\Type as SPIContentType,
     eZ\Publish\SPI\Persistence\Content\Type\CreateStruct as SPIContentTypeCreateStruct,
     eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct as SPIContentTypeUpdateStruct,
@@ -475,9 +474,18 @@ class ContentTypeService implements ContentTypeServiceInterface
         $validationErrors = $fieldType->validateValidatorConfiguration(
             $fieldDefinitionCreateStruct->validatorConfiguration
         );
+        if ( !empty( $validationErrors ) )
+        {
+            // @todo throw an exception
+        }
+
         $validationErrors = $fieldType->validateFieldSettings(
             $fieldDefinitionCreateStruct->fieldSettings
         );
+        if ( !empty( $validationErrors ) )
+        {
+            // @todo throw an exception
+        }
 
         $spiFieldDefinition->fieldTypeConstraints->validators =
             $fieldDefinitionCreateStruct->validatorConfiguration;
@@ -528,9 +536,18 @@ class ContentTypeService implements ContentTypeServiceInterface
         $validationErrors = $fieldType->validateValidatorConfiguration(
             $fieldDefinitionUpdateStruct->validatorConfiguration
         );
+        if ( !empty( $validationErrors ) )
+        {
+            // @todo throw an exception
+        }
+
         $validationErrors = $fieldType->validateFieldSettings(
             $fieldDefinitionUpdateStruct->fieldSettings
         );
+        if ( !empty( $validationErrors ) )
+        {
+            // @todo throw an exception
+        }
 
         $spiFieldDefinition->fieldTypeConstraints->validators =
             $fieldDefinitionUpdateStruct->validatorConfiguration;
