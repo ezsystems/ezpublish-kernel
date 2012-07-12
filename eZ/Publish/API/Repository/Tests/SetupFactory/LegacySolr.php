@@ -47,6 +47,34 @@ class LegacySolr extends Legacy
 
     protected function getSearchHandler( $persistenceHandler )
     {
+        $fieldRegistry = new Solr\Content\Search\FieldRegistry( array(
+            'ezstring'              => new FieldType\String\SearchField(),
+            // @TODO: Define proper types for these:
+            'ezuser'                => new FieldType\Unindexed(),
+            'eztext'                => new FieldType\Unindexed(),
+            'ezimage'               => new FieldType\Unindexed(),
+            'ezxmltext'             => new FieldType\Unindexed(),
+            'ezboolean'             => new FieldType\Unindexed(),
+            'ezkeyword'             => new FieldType\Unindexed(),
+            'ezdatetime'            => new FieldType\Unindexed(),
+            'ezinisetting'          => new FieldType\Unindexed(),
+            'ezpackage'             => new FieldType\Unindexed(),
+            'ezurl'                 => new FieldType\Unindexed(),
+            'ezobjectrelation'      => new FieldType\Unindexed(),
+            'ezprice'               => new FieldType\Unindexed(),
+            'ezmultioption'         => new FieldType\Unindexed(),
+            'ezauthor'              => new FieldType\Unindexed(),
+            'ezsrrating'            => new FieldType\Unindexed(),
+            'ezselection'           => new FieldType\Unindexed(),
+            'ezsubtreesubscription' => new FieldType\Unindexed(),
+            'ezobjectrelationlist'  => new FieldType\Unindexed(),
+            'ezemail'               => new FieldType\Unindexed(),
+            'ezoption'              => new FieldType\Unindexed(),
+            'ezgmaplocation'        => new FieldType\Unindexed(),
+            'ezbinaryfile'          => new FieldType\Unindexed(),
+            'ezmedia'               => new FieldType\Unindexed(),
+        ) );
+
         $searchHandler = new Solr\Content\Search\Handler(
             new Solr\Content\Search\Gateway\Native(
                 new Solr\Content\Search\Gateway\HttpClient\Stream( getenv( "solrServer" ) ),
@@ -68,6 +96,10 @@ class LegacySolr extends Legacy
                     new Solr\Content\Search\CriterionVisitor\DateMetadata\ModifiedBetween(),
                     new Solr\Content\Search\CriterionVisitor\DateMetadata\PublishedBetween(),
                     new Solr\Content\Search\CriterionVisitor\StatusIn(),
+                    new Solr\Content\Search\CriterionVisitor\FieldIn(
+                        $fieldRegistry,
+                        $persistenceHandler->contentTypeHandler()
+                    ),
                 ) ),
                 new Solr\Content\Search\SortClauseVisitor\Aggregate( array(
                     new Solr\Content\Search\SortClauseVisitor\ContentId(),
@@ -86,29 +118,7 @@ class LegacySolr extends Legacy
                 ) ),
                 $persistenceHandler->contentHandler()
             ),
-            new Solr\Content\Search\FieldRegistry( array(
-                'ezstring'              => new FieldType\String\SearchField(),
-                // @TODO: Define proper types for these:
-                'ezuser'                => new FieldType\Unindexed(),
-                'eztext'                => new FieldType\Unindexed(),
-                'ezimage'               => new FieldType\Unindexed(),
-                'ezxmltext'             => new FieldType\Unindexed(),
-                'ezboolean'             => new FieldType\Unindexed(),
-                'ezkeyword'             => new FieldType\Unindexed(),
-                'ezdatetime'            => new FieldType\Unindexed(),
-                'ezinisetting'          => new FieldType\Unindexed(),
-                'ezpackage'             => new FieldType\Unindexed(),
-                'ezurl'                 => new FieldType\Unindexed(),
-                'ezobjectrelation'      => new FieldType\Unindexed(),
-                'ezprice'               => new FieldType\Unindexed(),
-                'ezmultioption'         => new FieldType\Unindexed(),
-                'ezauthor'              => new FieldType\Unindexed(),
-                'ezsrrating'            => new FieldType\Unindexed(),
-                'ezselection'           => new FieldType\Unindexed(),
-                'ezsubtreesubscription' => new FieldType\Unindexed(),
-                'ezobjectrelationlist'  => new FieldType\Unindexed(),
-                'ezemail'               => new FieldType\Unindexed(),
-            ) ),
+            $fieldRegistry,
             $persistenceHandler->contentTypeHandler()
         );
 
