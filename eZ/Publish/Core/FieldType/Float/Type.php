@@ -24,10 +24,8 @@ class Type extends FieldType
 {
     protected $validatorConfigurationSchema = array(
         "FloatValueValidator" => array(
-            array(
-                "minFloatValue" => false,
-                "maxFloatValue" => false
-            )
+            "minFloatValue" => false,
+            "maxFloatValue" => false
         )
     );
 
