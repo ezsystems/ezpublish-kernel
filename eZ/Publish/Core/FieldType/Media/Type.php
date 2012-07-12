@@ -14,7 +14,8 @@ use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\API\Repository\FieldTypeTools,
     eZ\Publish\API\Repository\IOService,
-    eZ\Publish\API\Repository\Values\IO\BinaryFile;
+    eZ\Publish\API\Repository\Values\IO\BinaryFile,
+    eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * The TextLine field type.
@@ -32,7 +33,10 @@ class Type extends FieldType
           TYPE_HTML5_AUDIO = 'html5_audio';
 
     protected $validatorConfigurationSchema = array(
-        "FileSizeValidator"
+        "FileSizeValidator" => array(
+            "type" => "int",
+            'maxFileSize' => false
+        )
     );
 
     /*
@@ -178,5 +182,62 @@ class Type extends FieldType
     {
         throw new \Exception( "Not implemented yet" );
         return $value->value;
+    }
+
+    /**
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $validatorConfiguration
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValidatorConfiguration( $validatorConfiguration )
+    {
+        $validationErrors = array();
+
+        foreach ( $validatorConfiguration as $validatorIdentifier => $parameters )
+        {
+            if ( isset( $this->validatorConfigurationSchema[$validatorIdentifier] ) )
+            {
+                foreach ( $parameters as $name => $value )
+                {
+                    switch ( $name )
+                    {
+                        case "maxFileSize";
+                            if ( $value !== false && !is_integer( $value ) )
+                            {
+                                $validationErrors[] = new ValidationError(
+                                    "Validator parameter '%parameter%' must be of integer type",
+                                    null,
+                                    array(
+                                        "parameter" => $name
+                                    )
+                                );
+                            }
+                            break;
+                        default:
+                            $validationErrors[] = new ValidationError(
+                                "Validator parameter '%parameter%' is unknown",
+                                null,
+                                array(
+                                    "parameter" => $name
+                                )
+                            );
+                    }
+                }
+            }
+            else
+            {
+                $validationErrors[] = new ValidationError(
+                    "Validator '%validator%' is unknown",
+                    null,
+                    array(
+                        "validator" => $validatorIdentifier
+                    )
+                );
+            }
+        }
+
+        return $validationErrors;
     }
 }
