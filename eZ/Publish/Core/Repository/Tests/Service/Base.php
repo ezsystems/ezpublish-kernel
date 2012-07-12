@@ -32,54 +32,52 @@ abstract class Base extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $serviceSettings = array(
-            'contentType' => array(
-                'field_type' => array(
-                    'ezauthor' => function(){ return new \eZ\Publish\Core\FieldType\Author\Type(
-                        new \eZ\Publish\Core\Repository\ValidatorService(),
-                        new \eZ\Publish\Core\Repository\FieldTypeTools()
-                    ); },
-                    'ezdatetime' => function(){ return new \eZ\Publish\Core\FieldType\DateAndTime\Type(
-                        new \eZ\Publish\Core\Repository\ValidatorService(),
-                        new \eZ\Publish\Core\Repository\FieldTypeTools()
-                    ); },
-                    'ezfloat' => function(){ return new \eZ\Publish\Core\FieldType\Float\Type(
-                        new \eZ\Publish\Core\Repository\ValidatorService(),
-                        new \eZ\Publish\Core\Repository\FieldTypeTools()
-                    ); },
-                    'ezinteger' => function(){ return new \eZ\Publish\Core\FieldType\Integer\Type(
-                        new \eZ\Publish\Core\Repository\ValidatorService(),
-                        new \eZ\Publish\Core\Repository\FieldTypeTools()
-                    ); },
-                    'ezkeyword' => function(){ return new \eZ\Publish\Core\FieldType\Keyword\Type(
-                        new \eZ\Publish\Core\Repository\ValidatorService(),
-                        new \eZ\Publish\Core\Repository\FieldTypeTools()
-                    ); },
-                    'eztext' => function(){ return new \eZ\Publish\Core\FieldType\TextBlock\Type(
-                        new \eZ\Publish\Core\Repository\ValidatorService(),
-                        new \eZ\Publish\Core\Repository\FieldTypeTools()
-                    ); },
-                    'ezstring' => function(){ return new \eZ\Publish\Core\FieldType\TextLine\Type(
-                        new \eZ\Publish\Core\Repository\ValidatorService(),
-                        new \eZ\Publish\Core\Repository\FieldTypeTools()
-                    ); },
-                    'ezimage' => function(){ return new \eZ\Publish\Core\FieldType\Integer\Type(
-                        new \eZ\Publish\Core\Repository\ValidatorService(),
-                        new \eZ\Publish\Core\Repository\FieldTypeTools()
-                    ); },
-                    'ezuser' => function(){ return new \eZ\Publish\Core\FieldType\Integer\Type(
-                        new \eZ\Publish\Core\Repository\ValidatorService(),
-                        new \eZ\Publish\Core\Repository\FieldTypeTools()
-                    ); },
-                    'ezurl' => function(){ return new \eZ\Publish\Core\FieldType\Url\Type(
-                        new \eZ\Publish\Core\Repository\ValidatorService(),
-                        new \eZ\Publish\Core\Repository\FieldTypeTools()
-                    ); },
-                    'ezxmltext' => function(){ return new \eZ\Publish\Core\FieldType\XmlText\Type(
-                        new \eZ\Publish\Core\FieldType\XmlText\Input\Parser\Simplified(
-                            new \eZ\Publish\Core\FieldType\XmlText\Schema
-                        )
-                    ); },
-                ),
+            'fieldType' => array(
+                'ezauthor' => function(){ return new \eZ\Publish\Core\FieldType\Author\Type(
+                    new \eZ\Publish\Core\Repository\ValidatorService(),
+                    new \eZ\Publish\Core\Repository\FieldTypeTools()
+                ); },
+                'ezdatetime' => function(){ return new \eZ\Publish\Core\FieldType\DateAndTime\Type(
+                    new \eZ\Publish\Core\Repository\ValidatorService(),
+                    new \eZ\Publish\Core\Repository\FieldTypeTools()
+                ); },
+                'ezfloat' => function(){ return new \eZ\Publish\Core\FieldType\Float\Type(
+                    new \eZ\Publish\Core\Repository\ValidatorService(),
+                    new \eZ\Publish\Core\Repository\FieldTypeTools()
+                ); },
+                'ezinteger' => function(){ return new \eZ\Publish\Core\FieldType\Integer\Type(
+                    new \eZ\Publish\Core\Repository\ValidatorService(),
+                    new \eZ\Publish\Core\Repository\FieldTypeTools()
+                ); },
+                'ezkeyword' => function(){ return new \eZ\Publish\Core\FieldType\Keyword\Type(
+                    new \eZ\Publish\Core\Repository\ValidatorService(),
+                    new \eZ\Publish\Core\Repository\FieldTypeTools()
+                ); },
+                'eztext' => function(){ return new \eZ\Publish\Core\FieldType\TextBlock\Type(
+                    new \eZ\Publish\Core\Repository\ValidatorService(),
+                    new \eZ\Publish\Core\Repository\FieldTypeTools()
+                ); },
+                'ezstring' => function(){ return new \eZ\Publish\Core\FieldType\TextLine\Type(
+                    new \eZ\Publish\Core\Repository\ValidatorService(),
+                    new \eZ\Publish\Core\Repository\FieldTypeTools()
+                ); },
+                'ezimage' => function(){ return new \eZ\Publish\Core\FieldType\Integer\Type(
+                    new \eZ\Publish\Core\Repository\ValidatorService(),
+                    new \eZ\Publish\Core\Repository\FieldTypeTools()
+                ); },
+                'ezuser' => function(){ return new \eZ\Publish\Core\FieldType\Integer\Type(
+                    new \eZ\Publish\Core\Repository\ValidatorService(),
+                    new \eZ\Publish\Core\Repository\FieldTypeTools()
+                ); },
+                'ezurl' => function(){ return new \eZ\Publish\Core\FieldType\Url\Type(
+                    new \eZ\Publish\Core\Repository\ValidatorService(),
+                    new \eZ\Publish\Core\Repository\FieldTypeTools()
+                ); },
+                'ezxmltext' => function(){ return new \eZ\Publish\Core\FieldType\XmlText\Type(
+                    new \eZ\Publish\Core\FieldType\XmlText\Input\Parser\Simplified(
+                        new \eZ\Publish\Core\FieldType\XmlText\Schema
+                    )
+                ); },
             ),
         );
         $this->repository = static::getRepository( $serviceSettings );
