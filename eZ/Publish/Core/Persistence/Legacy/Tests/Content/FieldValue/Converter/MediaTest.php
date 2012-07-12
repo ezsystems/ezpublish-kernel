@@ -59,9 +59,6 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $this->persistenceMediaValue = new FieldValue;
         $this->persistenceMediaValue->data = $mediaValue;
         $this->persistenceMediaValue->sortKey = false;
-        $this->persistenceMediaValue->fieldSettings = new FieldSettings(
-            array( 'mediaType' => MediaType::TYPE_HTML5_VIDEO )
-        );
     }
 
     /**
@@ -93,7 +90,6 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
         self::assertNull( $fieldValue->data );
-        self::assertNull( $fieldValue->fieldSettings );
         self::assertNull( $fieldValue->sortKey );
     }
 
