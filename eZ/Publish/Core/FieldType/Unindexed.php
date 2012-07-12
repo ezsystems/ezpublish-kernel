@@ -1,23 +1,22 @@
 <?php
 /**
- * File containing the FieldType Indexable interface
+ * File containing the UserStorage class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\SPI\FieldType;
+namespace eZ\Publish\Core\FieldType;
 
-use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\FieldType\Indexable,
+    eZ\Publish\SPI\Persistence\Content\Search;
 
 /**
- * The field type interface which all field types have to implement to be
- * indexable by search backends.
- *
- * @package FieldTypeProviderInterface
+ * Indexable definition for string field type
  */
-interface Indexable
+class Unindexed implements Indexable
 {
     /**
      * Get index data for field for search backend
@@ -25,13 +24,19 @@ interface Indexable
      * @param Field $field
      * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
      */
-    public function getIndexData( Field $field );
+    public function getIndexData( Field $field )
+    {
+        return array();
+    }
 
     /**
      * Get index fied types for search backend
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Search\FieldType[]
      */
-    public function getIndexDefinition();
+    public function getIndexDefinition()
+    {
+        return array();
+    }
 }
 

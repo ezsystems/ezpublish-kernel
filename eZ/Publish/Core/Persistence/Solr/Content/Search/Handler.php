@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search;
 
 use eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler,
     eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler,
     eZ\Publish\SPI\Persistence\Content\Search\Field,
     eZ\Publish\SPI\Persistence\Content\Search\FieldType,
@@ -60,15 +61,23 @@ class Handler extends BaseSearchHandler
     protected $fieldRegistry;
 
     /**
+     * Content type handler
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
+     */
+    protected $contentTypeHandler;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway $gateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler $fieldHandler
      */
-    public function __construct( Gateway $gateway, FieldRegistry $fieldRegistry )
+    public function __construct( Gateway $gateway, FieldRegistry $fieldRegistry, ContentTypeHandler $contentTypeHandler )
     {
-        $this->gateway       = $gateway;
-        $this->fieldRegistry = $fieldRegistry;
+        $this->gateway            = $gateway;
+        $this->fieldRegistry      = $fieldRegistry;
+        $this->contentTypeHandler = $contentTypeHandler;
     }
 
      /**
@@ -154,7 +163,7 @@ class Handler extends BaseSearchHandler
      */
     protected function mapContent( Content $content )
     {
-        return array(
+        $document = array(
             new Field(
                 'id',
                 $content->contentInfo->id,
@@ -262,7 +271,32 @@ class Handler extends BaseSearchHandler
             ),
         );
 
-        // @TODO: Handle fields
+        $contentType = $this->contentTypeHandler->load( $content->contentInfo->contentTypeId );
+        $document[] = new Field(
+            'group',
+            $contentType->groupIds,
+            new FieldType\StringField()
+        );
+
+        foreach ( $content->fields as $field )
+        {
+            foreach ( $contentType->fieldDefinitions as $fieldDefinition )
+            {
+                if ( $fieldDefinition->id !== $field->fieldDefinitionId )
+                {
+                    continue;
+                }
+
+                $fieldType = $this->fieldRegistry->getType( $field->type );
+                $prefix    = $contentType->identifier . '/' . $fieldDefinition->identifier . '/';
+                foreach ( $fieldType->getIndexData( $field ) as $indexField )
+                {
+                    $document[] = new Field( $prefix . $indexField->name, $indexField->value, $indexField->type );
+                }
+            }
+        }
+
+        return $document;
     }
 
 

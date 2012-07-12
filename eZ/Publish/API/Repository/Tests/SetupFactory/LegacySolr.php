@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
-use eZ\Publish\Core\Persistence\Solr;
+use eZ\Publish\Core\Persistence\Solr,
+    eZ\Publish\Core\FieldType;
 
 /**
  * A Test Factory is used to setup the infrastructure for a tests, based on a
@@ -84,8 +85,29 @@ class LegacySolr extends Legacy
                 $persistenceHandler->contentHandler()
             ),
             new Solr\Content\Search\FieldRegistry( array(
-//                'string' => 
-            ) )
+                'ezstring'              => new FieldType\String\SearchField(),
+                // @TODO: Define proper types for these:
+                'ezuser'                => new FieldType\Unindexed(),
+                'eztext'                => new FieldType\Unindexed(),
+                'ezimage'               => new FieldType\Unindexed(),
+                'ezxmltext'             => new FieldType\Unindexed(),
+                'ezboolean'             => new FieldType\Unindexed(),
+                'ezkeyword'             => new FieldType\Unindexed(),
+                'ezdatetime'            => new FieldType\Unindexed(),
+                'ezinisetting'          => new FieldType\Unindexed(),
+                'ezpackage'             => new FieldType\Unindexed(),
+                'ezurl'                 => new FieldType\Unindexed(),
+                'ezobjectrelation'      => new FieldType\Unindexed(),
+                'ezprice'               => new FieldType\Unindexed(),
+                'ezmultioption'         => new FieldType\Unindexed(),
+                'ezauthor'              => new FieldType\Unindexed(),
+                'ezsrrating'            => new FieldType\Unindexed(),
+                'ezselection'           => new FieldType\Unindexed(),
+                'ezsubtreesubscription' => new FieldType\Unindexed(),
+                'ezobjectrelationlist'  => new FieldType\Unindexed(),
+                'ezemail'               => new FieldType\Unindexed(),
+            ) ),
+            $persistenceHandler->contentTypeHandler()
         );
 
         $this->indexAll( $persistenceHandler, $searchHandler );
