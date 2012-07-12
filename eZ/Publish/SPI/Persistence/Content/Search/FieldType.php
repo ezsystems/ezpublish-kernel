@@ -13,7 +13,7 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 /**
  * Base class for document field definitions
  */
-abstract class DocumentField extends ValueObject
+abstract class FieldType extends ValueObject
 {
     /**
      * Name of the document field. Will be used to query this field.
