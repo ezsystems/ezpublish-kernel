@@ -253,7 +253,7 @@ EOF;
             {
                 switch ( $name )
                 {
-                    case "numRows";
+                    case "numRows":
                         if ( !is_integer( $value ) )
                         {
                             $validationErrors[] = new ValidationError(
@@ -265,7 +265,7 @@ EOF;
                             );
                         }
                         break;
-                    case "tagPreset";
+                    case "tagPreset":
                         $definedTagPresets = array(
                             self::TAG_PRESET_DEFAULT,
                             self::TAG_PRESET_SIMPLE_FORMATTING
@@ -281,7 +281,7 @@ EOF;
                             );
                         }
                         break;
-                    case "defaultValue";
+                    case "defaultValue":
                         if ( !is_string( $value ) )
                         {
                             $validationErrors[] = new ValidationError(

@@ -175,7 +175,7 @@ class Type extends FieldType
             {
                 switch ( $name )
                 {
-                    case "useSeconds";
+                    case "useSeconds":
                         if ( !is_bool( $value ) )
                         {
                             $validationErrors[] = new ValidationError(
@@ -187,7 +187,7 @@ class Type extends FieldType
                             );
                         }
                         break;
-                    case "defaultType";
+                    case "defaultType":
                         $definedTypes = array(
                             self::DEFAULT_EMPTY,
                             self::DEFAULT_CURRENT_DATE,
@@ -204,7 +204,7 @@ class Type extends FieldType
                             );
                         }
                         break;
-                    case "dateInterval";
+                    case "dateInterval":
                         if ( isset( $value ) )
                         {
                             if ( isset( $fieldSettings["defaultType"] ) &&

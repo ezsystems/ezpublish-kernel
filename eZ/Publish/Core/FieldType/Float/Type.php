@@ -169,8 +169,8 @@ class Type extends FieldType
                 {
                     switch ( $name )
                     {
-                        case "minFloatValue";
-                        case "maxFloatValue";
+                        case "minFloatValue":
+                        case "maxFloatValue":
                             if ( !is_numeric( $value ) )
                             {
                                 $validationErrors[] = new ValidationError(

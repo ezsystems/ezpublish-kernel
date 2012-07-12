@@ -181,8 +181,8 @@ class Type extends FieldType
                 {
                     switch ( $name )
                     {
-                        case "minStringLength";
-                        case "maxStringLength";
+                        case "minStringLength":
+                        case "maxStringLength":
                             if ( !is_integer( $value ) )
                             {
                                 $validationErrors[] = new ValidationError(

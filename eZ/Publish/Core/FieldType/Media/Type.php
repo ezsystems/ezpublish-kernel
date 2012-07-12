@@ -203,7 +203,7 @@ class Type extends FieldType
                 {
                     switch ( $name )
                     {
-                        case "maxFileSize";
+                        case "maxFileSize":
                             if ( $value !== false && !is_integer( $value ) )
                             {
                                 $validationErrors[] = new ValidationError(

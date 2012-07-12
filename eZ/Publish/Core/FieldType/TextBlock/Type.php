@@ -159,8 +159,8 @@ class Type extends TextLine
             {
                 switch ( $name )
                 {
-                    case "textRows";
-                        if ( !ctype_digit( $value ) )
+                    case "textRows":
+                        if ( !is_integer( $value ) )
                         {
                             $validationErrors[] = new ValidationError(
                                 "Setting '%setting%' must be of integer type",
