@@ -105,9 +105,22 @@ class UrlIntergrationTest extends BaseIntegrationTest
      *
      * @return array
      */
-    public function getInitialFieldData()
+    public function getInitialExternalFieldData()
     {
         return 'http://example.com/sindelfingen';
+    }
+
+    /**
+     * Get initial field externals data
+     *
+     * @return array
+     */
+    public function getInitialFieldData()
+    {
+        return array(
+            'urlId' => null,
+            'text' => 'Some awesome website',
+        );
     }
 
     /**
@@ -122,12 +135,28 @@ class UrlIntergrationTest extends BaseIntegrationTest
     public function assertLoadedFieldDataCorrect( Field $field )
     {
         $this->assertEquals(
-            $this->getInitialFieldData(),
+            $this->getInitialExternalFieldData(),
             $field->value->externalData
         );
+
+        $internalData = $this->getInitialFieldData();
         $this->assertNotNull(
             $field->value->data['urlId']
         );
+        $this->assertEquals(
+            $internalData['text'],
+            $field->value->data['text']
+        );
+    }
+
+    /**
+     * Get update field externals data
+     *
+     * @return array
+     */
+    public function getUpdateExternalFieldData()
+    {
+        return 'http://example.com/hubba';
     }
 
     /**
@@ -137,7 +166,10 @@ class UrlIntergrationTest extends BaseIntegrationTest
      */
     public function getUpdateFieldData()
     {
-        return 'http://example.com/hubba';
+        return array(
+            'urlId' => null,
+            'text' => 'An even more awesome website'
+        );
     }
 
     /**
@@ -155,11 +187,17 @@ class UrlIntergrationTest extends BaseIntegrationTest
     public function assertUpdatedFieldDataCorrect( Field $field )
     {
         $this->assertEquals(
-            $this->getUpdateFieldData(),
+            $this->getUpdateExternalFieldData(),
             $field->value->externalData
         );
+
+        $internalData = $this->getUpdateFieldData();
         $this->assertNotNull(
             $field->value->data['urlId']
+        );
+        $this->assertEquals(
+            $internalData['text'],
+            $field->value->data['text']
         );
     }
 }

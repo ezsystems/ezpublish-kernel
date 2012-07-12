@@ -106,7 +106,7 @@ class UserIntergrationTest extends BaseIntegrationTest
      *
      * @return array
      */
-    public function getInitialFieldData()
+    public function getInitialExternalFieldData()
     {
         return array(
             'account_key' => null,
@@ -115,6 +115,16 @@ class UserIntergrationTest extends BaseIntegrationTest
             'login_count' => 0,
             'max_login'   => 1000,
         );
+    }
+
+    /**
+     * Get initial field externals data
+     *
+     * @return array
+     */
+    public function getInitialFieldData()
+    {
+        return null;
     }
 
     /**
@@ -155,7 +165,7 @@ class UserIntergrationTest extends BaseIntegrationTest
      *
      * @return array
      */
-    public function getUpdateFieldData()
+    public function getUpdateExternalFieldData()
     {
         return array(
             'account_key'        => 'foobar',
@@ -168,6 +178,16 @@ class UserIntergrationTest extends BaseIntegrationTest
             'is_enabled'         => 'changed', // Change is intended to not get through
             'max_login'          => 'changed', // Change is intended to not get through
         );
+    }
+
+    /**
+     * Get update field externals data
+     *
+     * @return array
+     */
+    public function getUpdateFieldData()
+    {
+        return null;
     }
 
     /**

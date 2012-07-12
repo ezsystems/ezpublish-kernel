@@ -89,6 +89,14 @@ abstract class BaseIntegrationTest extends TestCase
      *
      * @return mixed
      */
+    abstract public function getInitialExternalFieldData();
+
+    /**
+     * Returns the initial data to be stored in FieldValue->data when
+     * creating the content field of the FieldType under test
+     *
+     * @return mixed
+     */
     abstract public function getInitialFieldData();
 
     /**
@@ -101,6 +109,22 @@ abstract class BaseIntegrationTest extends TestCase
      * to the used SPI\Persistence implementation!
      */
     abstract public function assertLoadedFieldDataCorrect( Field $field );
+
+    /**
+     * Returns the data to be stored in FieldValue->externalData when updating
+     * the content field of the FieldType under test
+     *
+     * @return mixed
+     */
+    abstract public function getUpdateExternalFieldData();
+
+    /**
+     * Returns the data to be stored in FieldValue->data when updating the
+     * content field of the FieldType under test
+     *
+     * @return mixed
+     */
+    abstract public function getUpdateFieldData();
 
     /**
      * Asserts that the updated field data is loaded correct
@@ -280,8 +304,8 @@ abstract class BaseIntegrationTest extends TestCase
                     'languageCode'      => 'eng-GB',
                     'fieldDefinitionId' => $contentType->fieldDefinitions[1]->id,
                     'value'             => new Content\FieldValue( array(
-                        'data'         => null,
-                        'externalData' => $this->getInitialFieldData(),
+                        'data'         => $this->getInitialFieldData(),
+                        'externalData' => $this->getInitialExternalFieldData(),
                     ) ),
                 ) ),
             ),
@@ -348,7 +372,8 @@ abstract class BaseIntegrationTest extends TestCase
     {
         $handler = $this->getCustomHandler();
 
-        $field->value->externalData = $this->getUpdateFieldData();
+        $field->value->externalData = $this->getUpdateExternalFieldData();
+        $field->value->data = $this->getUpdateFieldData();
         $updateStruct = new \eZ\Publish\SPI\Persistence\Content\UpdateStruct( array(
             'creatorId' => 14,
             'modificationDate' => time(),

@@ -105,9 +105,19 @@ class KeywordIntergrationTest extends BaseIntegrationTest
      *
      * @return array
      */
-    public function getInitialFieldData()
+    public function getInitialExternalFieldData()
     {
         return array( 'foo', 'bar', 'sindelfingen' );
+    }
+
+    /**
+     * Get initial field data
+     *
+     * @return array
+     */
+    public function getInitialFieldData()
+    {
+        return null;
     }
 
     /**
@@ -122,9 +132,10 @@ class KeywordIntergrationTest extends BaseIntegrationTest
     public function assertLoadedFieldDataCorrect( Field $field )
     {
         $this->assertKeywordSetsEqual(
-            $this->getInitialFieldData(),
+            $this->getInitialExternalFieldData(),
             $field->value->externalData
         );
+        $this->assertNull( $field->value->data );
     }
 
     /**
@@ -168,9 +179,19 @@ class KeywordIntergrationTest extends BaseIntegrationTest
      *
      * @return array
      */
-    public function getUpdateFieldData()
+    public function getUpdateExternalFieldData()
     {
         return array( 'sindelfingen', 'baz' );
+    }
+
+    /**
+     * Get update field data
+     *
+     * @return array
+     */
+    public function getUpdateFieldData()
+    {
+        return null;
     }
 
     /**
@@ -188,9 +209,10 @@ class KeywordIntergrationTest extends BaseIntegrationTest
     public function assertUpdatedFieldDataCorrect( Field $field )
     {
         $this->assertKeywordSetsEqual(
-            $this->getUpdateFieldData(),
+            $this->getUpdateExternalFieldData(),
             $field->value->externalData
         );
+        $this->assertNull( $field->value->data );
     }
 }
 
