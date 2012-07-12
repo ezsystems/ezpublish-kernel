@@ -137,7 +137,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      *
      * @return array
      */
-    abstract public function getHashes();
+    abstract public function provideFromHashData();
 
     /**
      * Method called after content creation
@@ -543,7 +543,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
     /**
      * @depends testCreateContent
-     * @dataProvider getHashes
+     * @dataProvider provideFromHashData
      */
     public function testFromHash( $hash, $expected )
     {
@@ -554,7 +554,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $fieldType        = $fieldTypeService->getFieldType( $this->getTypeName() );
 
         $this->assertEquals(
-            $expocted,
+            $expected,
             $fieldType->fromHash( $hash )
         );
     }

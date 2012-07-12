@@ -119,20 +119,30 @@ class UrlFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     public function getToHashExpectation()
     {
-        return 'toBeDefined';
+        return array(
+            'link' => 'http://example.com',
+            'text' => 'Example'
+        );
     }
 
     /**
-     * Get hashes and their respective converted values
+     * Get expectations for the fromHash call on our field value
      *
      * This is a PHPUnit data provider
      *
      * @return array
      */
-    public function getHashes()
+    public function provideFromHashData()
     {
         return array(
-            array( 'toBeDefined', array() ),
+            array(
+                array( 'link' => 'http://example.com/sindelfingen' ),
+                new UrlValue( 'http://example.com/sindelfingen' )
+            ),
+            array(
+                array( 'link' => 'http://example.com/sindelfingen', 'text' => 'Foo' ),
+                new UrlValue( 'http://example.com/sindelfingen', 'Foo' )
+            )
         );
     }
 }

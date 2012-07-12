@@ -49,8 +49,8 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
             // The user field type does not have any special field definition
             // properties, so there is nothing to check for
             array( 'fieldTypeIdentifier', 'ezuser' ),
-            array( 'fieldSettings', array() ),
-            array( 'validatorConfiguration', array() ),
+            array( 'fieldSettings', null ),
+            array( 'validatorConfiguration', null ),
         );
     }
 
@@ -191,7 +191,7 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      *
      * @return array
      */
-    public function getHashes()
+    public function provideFromHashData()
     {
         return array(
             array( 'toBeDefined', array() ),
