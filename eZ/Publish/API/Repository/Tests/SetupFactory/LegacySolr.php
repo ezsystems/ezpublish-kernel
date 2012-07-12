@@ -69,6 +69,7 @@ class LegacySolr extends Legacy
                     new Solr\Content\Search\CriterionVisitor\StatusIn(),
                 ) ),
                 new Solr\Content\Search\SortClauseVisitor\Aggregate( array(
+                    new Solr\Content\Search\SortClauseVisitor\ContentId(),
                     new Solr\Content\Search\SortClauseVisitor\LocationPathString(),
                     new Solr\Content\Search\SortClauseVisitor\LocationDepth(),
                 ) ),

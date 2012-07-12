@@ -10,8 +10,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 14,
-        'title' => 'Administrator User',
+        'id' => 10,
+        'title' => 'Anonymous User',
       ),
        'score' => 1,
        'index' => NULL,
@@ -21,8 +21,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 12,
-        'title' => 'Administrator users',
+        'id' => 100,
+        'title' => 'Aliquam posuere',
       ),
        'score' => 1,
        'index' => NULL,
@@ -32,8 +32,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 10,
-        'title' => 'Anonymous User',
+        'id' => 101,
+        'title' => 'Books',
       ),
        'score' => 1,
        'index' => NULL,
@@ -43,8 +43,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 42,
-        'title' => 'Anonymous Users',
+        'id' => 102,
+        'title' => 'Aliquam pulvinar suscipit tellus',
       ),
        'score' => 1,
        'index' => NULL,
@@ -54,8 +54,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 11,
-        'title' => 'Members',
+        'id' => 103,
+        'title' => 'Customer Service',
       ),
        'score' => 1,
        'index' => NULL,
@@ -65,8 +65,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 13,
-        'title' => 'Editors',
+        'id' => 104,
+        'title' => 'Support Programs',
       ),
        'score' => 1,
        'index' => NULL,
@@ -76,8 +76,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 49,
-        'title' => 'Images',
+        'id' => 105,
+        'title' => 'Getting started',
       ),
        'score' => 1,
        'index' => NULL,
@@ -87,8 +87,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 41,
-        'title' => 'Media',
+        'id' => 106,
+        'title' => 'Tutorials for',
       ),
        'score' => 1,
        'index' => NULL,
@@ -98,8 +98,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 45,
-        'title' => 'Setup',
+        'id' => 107,
+        'title' => 'Get involved',
       ),
        'score' => 1,
        'index' => NULL,
@@ -109,8 +109,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 4,
-        'title' => 'Users',
+        'id' => 108,
+        'title' => 'How to use eZ Publish',
       ),
        'score' => 1,
        'index' => NULL,

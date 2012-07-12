@@ -10,8 +10,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 69,
-        'title' => 'OS Type I',
+        'id' => 67,
+        'title' => 'Products',
       ),
        'score' => 1,
        'index' => NULL,
@@ -32,8 +32,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 67,
-        'title' => 'Products',
+        'id' => 69,
+        'title' => 'OS Type I',
       ),
        'score' => 1,
        'index' => NULL,
@@ -43,25 +43,14 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 73,
-        'title' => 'CD/DVD Box III',
+        'id' => 70,
+        'title' => 'Boxes',
       ),
        'score' => 1,
        'index' => NULL,
        'highlight' => NULL,
     )),
     4 => 
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
-       'valueObject' => 
-      array (
-        'id' => 72,
-        'title' => 'CD/DVD Box II',
-      ),
-       'score' => 1,
-       'index' => NULL,
-       'highlight' => NULL,
-    )),
-    5 => 
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
@@ -72,12 +61,23 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'index' => NULL,
        'highlight' => NULL,
     )),
+    5 => 
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+       'valueObject' => 
+      array (
+        'id' => 72,
+        'title' => 'CD/DVD Box II',
+      ),
+       'score' => 1,
+       'index' => NULL,
+       'highlight' => NULL,
+    )),
     6 => 
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 74,
-        'title' => 'Products sheets',
+        'id' => 73,
+        'title' => 'CD/DVD Box III',
       ),
        'score' => 1,
        'index' => NULL,
@@ -87,8 +87,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 70,
-        'title' => 'Boxes',
+        'id' => 74,
+        'title' => 'Products sheets',
       ),
        'score' => 1,
        'index' => NULL,

@@ -10,8 +10,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 41,
-        'title' => 'Media',
+        'id' => 4,
+        'title' => 'Users',
       ),
        'score' => 4.4231763,
        'index' => NULL,
@@ -21,8 +21,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 45,
-        'title' => 'Setup',
+        'id' => 41,
+        'title' => 'Media',
       ),
        'score' => 4.4231763,
        'index' => NULL,
@@ -32,8 +32,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 4,
-        'title' => 'Users',
+        'id' => 45,
+        'title' => 'Setup',
       ),
        'score' => 4.4231763,
        'index' => NULL,

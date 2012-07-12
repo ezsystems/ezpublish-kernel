@@ -46,6 +46,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\ContentId(
                         array( 1, 4, 10 )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'ContentId.php',
             ),
@@ -61,6 +62,7 @@ class SearchServiceTest extends BaseTest
                             ),
                         )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'LogicalAnd.php',
             ),
@@ -76,6 +78,7 @@ class SearchServiceTest extends BaseTest
                             ),
                         )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'LogicalOr.php',
             ),
@@ -93,6 +96,7 @@ class SearchServiceTest extends BaseTest
                             ),
                         )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'LogicalNot.php',
             ),
@@ -101,6 +105,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\Subtree(
                         '/1/2/69/'
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'Subtree.php',
             ),
@@ -109,6 +114,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\ContentTypeId(
                         4
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'ContentTypeId.php',
             ),
@@ -117,6 +123,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\ContentTypeGroupId(
                         2
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'ContentTypeGroupId.php',
             ),
@@ -127,6 +134,7 @@ class SearchServiceTest extends BaseTest
                         Criterion\Operator::GT,
                         1311154214
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'DateMetadataGt.php',
             ),
@@ -137,6 +145,7 @@ class SearchServiceTest extends BaseTest
                         Criterion\Operator::GTE,
                         1311154214
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'DateMetadataGte.php',
             ),
@@ -147,6 +156,7 @@ class SearchServiceTest extends BaseTest
                         Criterion\Operator::LTE,
                         1311154215
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'DateMetadataLte.php',
             ),
@@ -157,6 +167,7 @@ class SearchServiceTest extends BaseTest
                         Criterion\Operator::IN,
                         array( 1311154214, 1311154215 )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'DateMetadataIn.php',
             ),
@@ -167,6 +178,7 @@ class SearchServiceTest extends BaseTest
                         Criterion\Operator::BETWEEN,
                         array( 1311154213, 1311154215 )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'DateMetadataBetween.php',
             ),
@@ -177,6 +189,7 @@ class SearchServiceTest extends BaseTest
                         Criterion\Operator::BETWEEN,
                         array( 1299780749, 1311154215 )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'DateMetadataCreated.php',
             ),
@@ -185,6 +198,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\LocationId(
                         array( 1, 2, 5 )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'LocationId.php',
             ),
@@ -193,6 +207,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\ParentLocationId(
                         array( 1 )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'ParentLocationId.php',
             ),
@@ -201,6 +216,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\RemoteId(
                         array( 'f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca' )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'RemoteId.php',
             ),
@@ -209,6 +225,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\LocationRemoteId(
                         array( '3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983' )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'LocationRemoteId.php',
             ),
@@ -217,6 +234,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\SectionId(
                         array( 2 )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'SectionId.php',
             ),
@@ -225,6 +243,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\Status(
                         array( Criterion\Status::STATUS_PUBLISHED )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'Status.php',
             ),
@@ -235,6 +254,7 @@ class SearchServiceTest extends BaseTest
                         Criterion\Operator::EQ,
                         'members'
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'Field.php',
             ),
@@ -245,6 +265,7 @@ class SearchServiceTest extends BaseTest
                         Criterion\Operator::IN,
                         array( 'members', 'anonymous users' )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'FieldIn.php',
             ),
@@ -255,6 +276,7 @@ class SearchServiceTest extends BaseTest
                         Criterion\Operator::BETWEEN,
                         array( 10000, 1000000 )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'FieldBetween.php',
             ),
@@ -274,6 +296,7 @@ class SearchServiceTest extends BaseTest
                             )
                         )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'FieldOr.php',
             ),
@@ -282,6 +305,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\FullText(
                         'applied webpage'
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'FullText.php',
             ),
@@ -290,6 +314,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\FullText(
                         'applie*'
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'FullTextWildcard.php',
             ),
@@ -455,6 +480,7 @@ class SearchServiceTest extends BaseTest
                     'facetBuilders' => array(
                         new FacetBuilder\ContentTypeFacetBuilder()
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . '/FacetContentType.php',
             ),
@@ -468,6 +494,7 @@ class SearchServiceTest extends BaseTest
                             'minCount' => 10,
                         ) )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . '/FacetContentTypeMinCount.php',
             ),
@@ -481,6 +508,7 @@ class SearchServiceTest extends BaseTest
                             'limit' => 5,
                         ) )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . '/FacetContentTypeMinLimit.php',
             ),
@@ -492,6 +520,7 @@ class SearchServiceTest extends BaseTest
                     'facetBuilders' => array(
                         new FacetBuilder\SectionFacetBuilder()
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . '/FacetSection.php',
             ),
@@ -503,6 +532,7 @@ class SearchServiceTest extends BaseTest
                     'facetBuilders' => array(
                         new FacetBuilder\UserFacetBuilder()
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . '/FacetUser.php',
             ),
@@ -514,6 +544,7 @@ class SearchServiceTest extends BaseTest
                     'facetBuilders' => array(
                         new FacetBuilder\TermFacetBuilder()
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . '/FacetTerm.php',
             ),
@@ -526,6 +557,7 @@ class SearchServiceTest extends BaseTest
                     'facetBuilders' => array(
                         new FacetBuilder\CriterionFacetBuilder()
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . '/FacetCriterion.php',
             ), // */
@@ -539,6 +571,7 @@ class SearchServiceTest extends BaseTest
                         new FacetBuilder\DateRangeFacetBuilder( array(
                         ) )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . '/FacetDateRange.php',
             ), // */
@@ -552,6 +585,7 @@ class SearchServiceTest extends BaseTest
                             'fieldPaths' => array( 'article/title' ),
                         ) )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . '/FacetFieldSimple.php',
             ),
@@ -566,6 +600,7 @@ class SearchServiceTest extends BaseTest
                             'regex'      => '(a|b|c)',
                         ) )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . '/FacetFieldRegexp.php',
             ),
@@ -581,6 +616,7 @@ class SearchServiceTest extends BaseTest
                             'sort'       => FacetBuilder\FieldFacetBuilder::TERM_DESC
                         ) )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . '/FacetFieldRegexpSortTerm.php',
             ),
@@ -596,6 +632,7 @@ class SearchServiceTest extends BaseTest
                             'sort'       => FacetBuilder\FieldFacetBuilder::COUNT_DESC
                         ) )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . '/FacetFieldRegexpSortCount.php',
             ),
@@ -610,6 +647,7 @@ class SearchServiceTest extends BaseTest
                             'fieldPath' => 'product/price',
                         ) )
                     ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . '/FacetFieldRegexpSortCount.php',
             ), // */

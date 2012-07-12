@@ -22,8 +22,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 69,
-        'title' => 'OS Type I',
+        'id' => 100,
+        'title' => 'Aliquam posuere',
       ),
        'score' => 1.2177235,
        'index' => NULL,
@@ -33,8 +33,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 68,
-        'title' => 'Software',
+        'id' => 101,
+        'title' => 'Books',
       ),
        'score' => 1.2177235,
        'index' => NULL,
@@ -44,8 +44,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 67,
-        'title' => 'Products',
+        'id' => 102,
+        'title' => 'Aliquam pulvinar suscipit tellus',
       ),
        'score' => 1.2177235,
        'index' => NULL,
@@ -55,8 +55,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 65,
-        'title' => 'Home',
+        'id' => 103,
+        'title' => 'Customer Service',
       ),
        'score' => 1.2177235,
        'index' => NULL,
@@ -66,8 +66,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 78,
-        'title' => 'Etiam posuere sodales arcu',
+        'id' => 104,
+        'title' => 'Support Programs',
       ),
        'score' => 1.2177235,
        'index' => NULL,
@@ -77,8 +77,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 77,
-        'title' => 'Fusce sagittis sagittis',
+        'id' => 105,
+        'title' => 'Getting started',
       ),
        'score' => 1.2177235,
        'index' => NULL,
@@ -88,8 +88,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 73,
-        'title' => 'CD/DVD Box III',
+        'id' => 106,
+        'title' => 'Tutorials for',
       ),
        'score' => 1.2177235,
        'index' => NULL,
@@ -99,8 +99,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 72,
-        'title' => 'CD/DVD Box II',
+        'id' => 107,
+        'title' => 'Get involved',
       ),
        'score' => 1.2177235,
        'index' => NULL,
@@ -110,8 +110,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 71,
-        'title' => 'CD/DVD Box I',
+        'id' => 108,
+        'title' => 'How to use eZ Publish',
       ),
        'score' => 1.2177235,
        'index' => NULL,
@@ -121,8 +121,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 74,
-        'title' => 'Products sheets',
+        'id' => 109,
+        'title' => 'graphics1',
       ),
        'score' => 1.2177235,
        'index' => NULL,
