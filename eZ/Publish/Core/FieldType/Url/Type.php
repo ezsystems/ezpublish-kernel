@@ -19,6 +19,11 @@ use eZ\Publish\Core\FieldType\FieldType,
  */
 class Type extends FieldType
 {
+    /**
+     * Settings schema for the URL FieldType
+     *
+     * @var string[]
+     */
     protected $settingsSchema = array(
         'defaultText' => ''
     );
