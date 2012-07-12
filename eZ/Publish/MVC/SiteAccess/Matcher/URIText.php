@@ -9,20 +9,19 @@
 
 namespace eZ\Publish\MVC\SiteAccess\Matcher;
 
-use eZ\Publish\MVC\SiteAccess\Matcher;
+use eZ\Publish\MVC\SiteAccess\Matcher,
+    eZ\Publish\MVC\Routing\SimplifiedRequest;
 
 class URIText extends Regex implements Matcher
 {
     /**
      * Constructor.
      *
-     * @param array $URIElements Elements of the URI as parsed by parse_url().
      * @param array $siteAccessesConfiguration SiteAccesses configuration.
      */
-    public function __construct( array $URIElements, array $siteAccessesConfiguration )
+    public function __construct( array $siteAccessesConfiguration )
     {
         parent::__construct(
-            isset( $URIElements["path"] ) ? $URIElements["path"] : "",
             "^/" .
             ( isset( $siteAccessesConfiguration["prefix"] ) ? preg_quote( $siteAccessesConfiguration["prefix"], "@" ) : "" ) .
             "(\w+)" .
@@ -34,5 +33,16 @@ class URIText extends Regex implements Matcher
     public function getName()
     {
         return 'uri:text';
+    }
+
+    /**
+     * Injects the request object to match against.
+     *
+     * @param \eZ\Publish\MVC\Routing\SimplifiedRequest $request
+     * @return void
+     */
+    public function setRequest( SimplifiedRequest $request )
+    {
+        $this->setMatchElement( $request->pathinfo );
     }
 }

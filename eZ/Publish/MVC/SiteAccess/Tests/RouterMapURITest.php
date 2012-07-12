@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\MVC\SiteAccess\Tests;
 
-use eZ\Publish\MVC\SiteAccess\Matcher\Map\URI as URIMapMatcher;
+use eZ\Publish\MVC\SiteAccess\Matcher\Map\URI as URIMapMatcher,
+    eZ\Publish\MVC\Routing\SimplifiedRequest;
 
 class RouterMapURITest extends \PHPUnit_Framework_TestCase
 {
@@ -21,9 +22,9 @@ class RouterMapURITest extends \PHPUnit_Framework_TestCase
      */
     public function testAnalyseURI( $uri, $expectedFixedUpURI )
     {
-        $matcher = new URIMapMatcher(
-            array( 'path' => $uri ),
-            array()
+        $matcher = new URIMapMatcher( array() );
+        $matcher->setRequest(
+            new SimplifiedRequest( array( 'pathinfo' => $uri ) )
         );
         $this->assertSame( $expectedFixedUpURI, $matcher->analyseURI( $uri ) );
     }
@@ -36,9 +37,9 @@ class RouterMapURITest extends \PHPUnit_Framework_TestCase
      */
     public function testAnalyseLink( $fullUri, $linkUri )
     {
-        $matcher = new URIMapMatcher(
-            array( 'path' => $fullUri ),
-            array()
+        $matcher = new URIMapMatcher( array() );
+        $matcher->setRequest(
+            new SimplifiedRequest( array( 'pathinfo' => $fullUri ) )
         );
         $this->assertSame( $fullUri, $matcher->analyseLink( $linkUri ) );
     }

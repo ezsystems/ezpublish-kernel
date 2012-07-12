@@ -184,12 +184,20 @@ class ChainRouter implements RouterInterface, WarmableInterface, RequestMatcherI
     {
         if ( !$request->attributes->has( 'siteaccess' ) )
         {
-            $request->attributes->add(
-                array(
-                     'siteaccess' => $this->siteAccessRouter->match(
-                         $request->getScheme() . '://' . $request->getHttpHost() . $request->getPathInfo()
+            $request->attributes->set(
+                 'siteaccess',
+                 $this->siteAccessRouter->match(
+                     new SimplifiedRequest(
+                         array(
+                              'scheme'      => $request->getScheme(),
+                              'host'        => $request->getHost(),
+                              'port'        => $request->getPort(),
+                              'pathinfo'    => $request->getPathInfo(),
+                              'queryParams' => $request->query->all(),
+                              'languages'   => $request->getLanguages()
+                         )
                      )
-                )
+                 )
             );
         }
 

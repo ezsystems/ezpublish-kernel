@@ -10,23 +10,34 @@
 namespace eZ\Publish\MVC\SiteAccess\Matcher\Map;
 
 use eZ\Publish\MVC\SiteAccess\Matcher,
-    eZ\Publish\MVC\SiteAccess\Matcher\Map;
+    eZ\Publish\MVC\SiteAccess\Matcher\Map,
+    eZ\Publish\MVC\Routing\SimplifiedRequest;
 
 class Host extends Map implements Matcher
 {
     /**
      * Constructor.
      *
-     * @param array $URIElements Elements of the URI as parsed by parse_url().
      * @param array $siteAccessesConfiguration SiteAccesses configuration.
      */
-    public function __construct( array $URIElements, array $siteAccessesConfiguration )
+    public function __construct( array $siteAccessesConfiguration )
     {
-        parent::__construct( $siteAccessesConfiguration, $URIElements["host"] );
+        parent::__construct( $siteAccessesConfiguration );
     }
 
     public function getName()
     {
         return 'host:map';
+    }
+
+    /**
+     * Injects the request object to match against.
+     *
+     * @param \eZ\Publish\MVC\Routing\SimplifiedRequest $request
+     * @return void
+     */
+    public function setRequest( SimplifiedRequest $request )
+    {
+        $this->setMapKey( $request->host );
     }
 }

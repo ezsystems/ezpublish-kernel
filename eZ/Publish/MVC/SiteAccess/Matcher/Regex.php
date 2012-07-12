@@ -37,13 +37,11 @@ abstract class Regex implements Matcher
     /**
      * Constructor.
      *
-     * @param string $element Element on which to perform the matching.
      * @param string $regex Regular Expression to use.
      * @param int $itemNumber Item number to pick in regex.
      */
-    public function __construct( $element, $regex, $itemNumber )
+    public function __construct( $regex, $itemNumber )
     {
-        $this->element = $element;
         $this->regex = $regex;
         $this->itemNumber = $itemNumber;
     }
@@ -62,5 +60,15 @@ abstract class Regex implements Matcher
         );
 
         return isset( $match[$this->itemNumber] ) ? $match[$this->itemNumber] : false;
+    }
+
+    /**
+     * Injects element to match against with the regexp
+     *
+     * @param $element
+     */
+    public function setMatchElement( $element )
+    {
+        $this->element = $element;
     }
 }

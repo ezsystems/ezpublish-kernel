@@ -8,7 +8,9 @@
  */
 
 namespace eZ\Publish\MVC\SiteAccess;
-use eZ\Publish\MVC\SiteAccess;
+
+use eZ\Publish\MVC\SiteAccess,
+    eZ\Publish\MVC\Routing\SimplifiedRequest;
 
 class Router
 {
@@ -61,13 +63,13 @@ class Router
     }
 
     /**
-     * Performs SiteAccess matching given the $url.
+     * Performs SiteAccess matching given the $request.
      *
-     * @param string $url
+     * @param \eZ\Publish\MVC\Routing\SimplifiedRequest $request
      *
      * @return string
      */
-    public function match( $url )
+    public function match( SimplifiedRequest $request )
     {
         $siteaccess = new SiteAccess;
 
@@ -87,7 +89,8 @@ class Router
             if ( $matchingClass[0] !== '\\' )
                 $matchingClass = __NAMESPACE__ . "\\Matcher\\$matchingClass";
 
-            $matcher = new $matchingClass( $urlElements, $matchingConfiguration );
+            $matcher = new $matchingClass( $matchingConfiguration );
+            $matcher->setRequest( $request );
 
             if ( ( $siteaccessName = $matcher->match() ) !== false )
             {
