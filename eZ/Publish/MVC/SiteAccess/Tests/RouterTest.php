@@ -58,6 +58,20 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $this->assertSame( $siteAccess, $sa->name );
     }
 
+    /**
+     * @depends testConstruct
+     * @covers \eZ\Publish\MVC\SiteAccess\Router::match
+     */
+    public function testMatchWithEnv( $router )
+    {
+        $_ENV['EZPUBLISH_SITEACCESS'] = 'foobar_sa';
+        $sa = $router->match( new SimplifiedRequest() );
+        $this->assertInstanceOf( 'eZ\\Publish\\MVC\\SiteAccess', $sa );
+        $this->assertSame( $_ENV['EZPUBLISH_SITEACCESS'], $sa->name );
+        $this->assertSame( 'env', $sa->matchingType );
+        unset( $_ENV['EZPUBLISH_SITEACCESS'] );
+    }
+
     public function matchProvider()
     {
         return array(
