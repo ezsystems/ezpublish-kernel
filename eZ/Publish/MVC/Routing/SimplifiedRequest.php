@@ -80,17 +80,7 @@ class SimplifiedRequest extends ValueObject
 
         if ( isset( $elements['query'] ) )
         {
-            $queryParams = array();
-            foreach ( explode( '&', $elements['query'] ) as $keyValue )
-            {
-                $pos = strpos( $keyValue, '=' );
-                if ( $pos !== false )
-                {
-                    $key = substr( $keyValue, 0, $pos );
-                    $value = substr( $keyValue, $pos + 1 );
-                    $queryParams[$key] = $value;
-                }
-            }
+            parse_str( $elements['query'], $queryParams );
             $elements['queryParams'] = $queryParams;
         }
 
