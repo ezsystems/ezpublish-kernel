@@ -137,37 +137,14 @@ class ChainRouter implements RouterInterface, WarmableInterface, RequestMatcherI
     }
 
     /**
-     * Loop against registered routers and tries to match $pathinfo
+     * Not supported. Please use matchRequest() instead.
      *
      * @param string $pathinfo
-     * @return array|void
-     * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException
-     * @throws \Symfony\Component\Routing\Exception\MethodNotAllowedException
+     * @throws \RuntimeException
      */
     public function match( $pathinfo )
     {
-        $httpMethodMismatch = null;
-
-        foreach ( $this->getAllRouters() as $router )
-        {
-            try
-            {
-                return $router->match( $pathinfo );
-            }
-            catch ( ResourceNotFoundException $e )
-            {
-                // Do nothing, just let the next router handle it.
-            }
-            catch ( MethodNotAllowedException $e )
-            {
-                // MethodNotAllowedException is a bit more specific, since the route has been matched, but HTTP method hasn't
-                // So we keep it in case no other router is able to match the same route with this method.
-                $httpMethodMismatch = $e;
-            }
-        }
-
-        // Finally throw a ResourceNotFoundException since the chain router couldn't find any valid router for current route
-        throw $httpMethodMismatch ?: new ResourceNotFoundException( "Couldn't find any router able to match '$pathinfo'" );
+        throw new \RuntimeException( "The ChainRouter doesn't support the match() method. Please use matchRequest() instead." );
     }
 
     /**
