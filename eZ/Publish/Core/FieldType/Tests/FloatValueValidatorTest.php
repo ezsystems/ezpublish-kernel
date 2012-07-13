@@ -10,10 +10,28 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Float\Value as FloatValue,
     eZ\Publish\Core\FieldType\Validator\FloatValueValidator,
-    eZ\Publish\Core\Repository\Tests\FieldType;
+    eZ\Publish\Core\Repository\Tests\FieldType,
+    eZ\Publish\API\Repository\Values\Translation\Message,
+    eZ\Publish\API\Repository\Values\Translation\Plural;
 
 class FloatValueValidatorTest extends FieldTypeTest
 {
+    /**
+     * @return float
+     */
+    protected function getMinFloatValue()
+    {
+        return 10/7;
+    }
+
+    /**
+     * @return float
+     */
+    protected function getMaxFloatValue()
+    {
+        return 11/7;
+    }
+
     /**
      * This test ensure an FloatValueValidator can be created
      *
@@ -155,23 +173,39 @@ class FloatValueValidatorTest extends FieldTypeTest
      * @dataProvider providerForValidateKO
      * @covers \eZ\Publish\Core\FieldType\Float\FloatValueValidator::validate
      */
-    public function testValidateWrongValues( $value, $message )
+    public function testValidateWrongValues( $value, $message, $values )
     {
         $validator = new FloatValueValidator;
-        $validator->minFloatValue = 10/7;
-        $validator->maxFloatValue = 11/7;
+        $validator->minFloatValue = $this->getMinFloatValue();
+        $validator->maxFloatValue = $this->getMaxFloatValue();
         $this->assertFalse( $validator->validate( new FloatValue( $value ) ) );
         $messages = $validator->getMessage();
-        $this->assertStringStartsWith( $message, $messages[0] );
+        $this->assertCount( 1, $messages );
+        $this->assertInstanceOf(
+            "eZ\\Publish\\SPI\\FieldType\\ValidationError",
+            $messages[0]
+        );
+        $this->assertInstanceOf(
+            "eZ\\Publish\\API\\Repository\\Values\\Translation\\Message",
+            $messages[0]->getTranslatableMessage()
+        );
+        $this->assertEquals(
+            $message,
+            $messages[0]->getTranslatableMessage()->message
+        );
+        $this->assertEquals(
+            $values,
+            $messages[0]->getTranslatableMessage()->values
+        );
     }
 
     public function providerForValidateKO()
     {
         return array(
-            array( -10/7, "The value can not be lower than" ),
-            array( 0, "The value can not be lower than" ),
-            array( 99/70, "The value can not be lower than" ),
-            array( 111/70, "The value can not be higher than" ),
+            array( -10/7, "The value can not be lower than %size%.", array( "size" => $this->getMinFloatValue() ) ),
+            array( 0, "The value can not be lower than %size%.", array( "size" => $this->getMinFloatValue() ) ),
+            array( 99/70, "The value can not be lower than %size%.", array( "size" => $this->getMinFloatValue() ) ),
+            array( 111/70, "The value can not be higher than %size%.", array( "size" => $this->getMaxFloatValue() ) ),
         );
     }
 }

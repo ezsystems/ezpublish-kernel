@@ -38,6 +38,7 @@ class FloatValueValidator extends Validator
      * $errors array.
      *
      * @param \eZ\Publish\Core\FieldType\Float\Value $value
+     *
      * @return bool
      */
     public function validate( BaseValue $value )
@@ -47,7 +48,7 @@ class FloatValueValidator extends Validator
         if ( $this->constraints['maxFloatValue'] !== false && $value->value > $this->constraints['maxFloatValue'] )
         {
             $this->errors[] = new ValidationError(
-                "The value cannot be higher than %size%.",
+                "The value can not be higher than %size%.",
                 null,
                 array(
                     "size" => $this->constraints['maxFloatValue']
@@ -59,7 +60,7 @@ class FloatValueValidator extends Validator
         if ( $this->constraints['minFloatValue'] !== false && $value->value < $this->constraints['minFloatValue'] )
         {
             $this->errors[] = new ValidationError(
-                "The value cannot be lower than %size%.",
+                "The value can not be lower than %size%.",
                 null,
                 array(
                     "size" => $this->constraints['minFloatValue']
