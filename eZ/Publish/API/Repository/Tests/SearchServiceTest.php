@@ -252,7 +252,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\Field(
                         'name',
                         Criterion\Operator::EQ,
-                        'members'
+                        'Members'
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
@@ -263,7 +263,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\Field(
                         'name',
                         Criterion\Operator::IN,
-                        array( 'members', 'anonymous users' )
+                        array( 'Members', 'Anonymous Users' )
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
