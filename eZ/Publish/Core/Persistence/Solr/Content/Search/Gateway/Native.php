@@ -18,6 +18,7 @@ use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway,
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query,
+    eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator,
     eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor,
     eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor,
     eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor,
@@ -72,26 +73,11 @@ class Native extends Gateway
     protected $contentHandler;
 
     /**
-     * Simple mapping for our internal field types
+     * Field name generator
      *
-     * We implement this mapping, because those dynamic fields are common to
-     * Solr configurations.
-     *
-     * @var array
+     * @var FieldNameGenerator
      */
-    protected $fieldNameMapping = array(
-        "ez_integer"  => "i",
-        "ez_string"   => "s",
-        "ez_long"     => "l",
-        "ez_text"     => "t",
-        "ez_html"     => "h",
-        "ez_boolean"  => "b",
-        "ez_float"    => "f",
-        "ez_double"   => "d",
-        "ez_date"     => "dt",
-        "ez_point"    => "p",
-        "ez_currency" => "c",
-    );
+    protected $nameGenerator;
 
     /**
      * Construct from HTTP client
@@ -104,7 +90,7 @@ class Native extends Gateway
      * @param ContentHandler $contentHandler
      * @return void
      */
-    public function __construct( HttpClient $client, CriterionVisitor $criterionVisitor, SortClauseVisitor $sortClauseVisitor, FacetBuilderVisitor $facetBuilderVisitor, FieldValueMapper $fieldValueMapper, ContentHandler $contentHandler )
+    public function __construct( HttpClient $client, CriterionVisitor $criterionVisitor, SortClauseVisitor $sortClauseVisitor, FacetBuilderVisitor $facetBuilderVisitor, FieldValueMapper $fieldValueMapper, ContentHandler $contentHandler, FieldNameGenerator $nameGenerator )
     {
         $this->client              = $client;
         $this->criterionVisitor    = $criterionVisitor;
@@ -112,6 +98,7 @@ class Native extends Gateway
         $this->facetBuilderVisitor = $facetBuilderVisitor;
         $this->fieldValueMapper    = $fieldValueMapper;
         $this->contentHandler      = $contentHandler;
+        $this->nameGenerator       = $nameGenerator;
     }
 
      /**
@@ -239,7 +226,7 @@ class Native extends Gateway
                 $xml->startElement( 'field' );
                 $xml->writeAttribute(
                     'name',
-                    $this->mapFieldType( $field->name, $field->type )
+                    $this->nameGenerator->getTypedName( $field->name, $field->type )
                 );
                 $xml->text( $value );
                 $xml->endElement();
@@ -250,37 +237,6 @@ class Native extends Gateway
         $xml->endElement();
 
         return $xml->outputMemory( true );
-    }
-
-    /**
-     * Map field type
-     *
-     * For Solr indexing the follwing scheme will always be used for names:
-     * {name}_{type}.
-     *
-     * Using dynamic fields this allows to define fields either depending on
-     * types, or names.
-     *
-     * Only the field with the name ID remains untouched.
-     *
-     * @param string $name
-     * @param FieldType $type
-     * @return string
-     */
-    protected function mapFieldType( $name, FieldType $type )
-    {
-        if ( $name === "id" )
-        {
-            return $name;
-        }
-
-        $typeName = $type->type;
-        if ( isset( $this->fieldNameMapping[$typeName] ) )
-        {
-            $typeName = $this->fieldNameMapping[$typeName];
-        }
-
-        return $name . '_' . $typeName;
     }
 }
 

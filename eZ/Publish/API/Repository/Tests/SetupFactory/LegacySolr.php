@@ -47,6 +47,7 @@ class LegacySolr extends Legacy
 
     protected function getSearchHandler( $persistenceHandler )
     {
+        $nameGenerator = new Solr\Content\Search\FieldNameGenerator();
         $fieldRegistry = new Solr\Content\Search\FieldRegistry( array(
             'ezstring'              => new FieldType\String\SearchField(),
             // @TODO: Define proper types for these:
@@ -98,7 +99,8 @@ class LegacySolr extends Legacy
                     new Solr\Content\Search\CriterionVisitor\StatusIn(),
                     new Solr\Content\Search\CriterionVisitor\FieldIn(
                         $fieldRegistry,
-                        $persistenceHandler->contentTypeHandler()
+                        $persistenceHandler->contentTypeHandler(),
+                        $nameGenerator
                     ),
                 ) ),
                 new Solr\Content\Search\SortClauseVisitor\Aggregate( array(
@@ -116,7 +118,8 @@ class LegacySolr extends Legacy
                     new Solr\Content\Search\FieldValueMapper\IntegerMapper(),
                     new Solr\Content\Search\FieldValueMapper\DateMapper(),
                 ) ),
-                $persistenceHandler->contentHandler()
+                $persistenceHandler->contentHandler(),
+                $nameGenerator
             ),
             $fieldRegistry,
             $persistenceHandler->contentTypeHandler()

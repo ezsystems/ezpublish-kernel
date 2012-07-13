@@ -13,6 +13,7 @@ use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator,
     eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler,
+    eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator,
     eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry;
 
 /**
@@ -35,6 +36,13 @@ class FieldIn extends CriterionVisitor
     protected $contentTypeHandler;
 
     /**
+     * Field name generator
+     *
+     * @var FieldNameGenerator
+     */
+    protected $nameGenerator;
+
+    /**
      * Available field types
      *
      * @var array
@@ -48,10 +56,11 @@ class FieldIn extends CriterionVisitor
      * @param ContentTypeHandler $contentTypeHandler
      * @return void
      */
-    public function __construct( FieldRegistry $fieldRegistry, ContentTypeHandler $contentTypeHandler )
+    public function __construct( FieldRegistry $fieldRegistry, ContentTypeHandler $contentTypeHandler, FieldNameGenerator $nameGenerator )
     {
         $this->fieldRegistry      = $fieldRegistry;
         $this->contentTypeHandler = $contentTypeHandler;
+        $this->nameGenerator      = $nameGenerator;
     }
 
     /**
@@ -72,13 +81,14 @@ class FieldIn extends CriterionVisitor
             {
                 foreach ( $contentType->fieldDefinitions as $fieldDefinition )
                 {
-                    // @TODO: Refactor to field registry, also used in:
-                    // Handler.php +290
                     $fieldType = $this->fieldRegistry->getType( $fieldDefinition->fieldType );
-                    $prefix    = $contentType->identifier . '/' . $fieldDefinition->identifier . '/';
                     foreach ( $fieldType->getIndexDefinition() as $name => $type )
                     {
-                        $this->fieldTypes[$fieldDefinition->identifier][$prefix . $name] = $type;
+                        $this->fieldTypes[$fieldDefinition->identifier][] =
+                            $this->nameGenerator->getTypedName(
+                                $this->nameGenerator->getName( $name, $fieldDefinition->identifier, $contentType->identifier ),
+                                $type
+                            );
                     }
                 }
             }
@@ -115,10 +125,9 @@ class FieldIn extends CriterionVisitor
         $queries = array();
         foreach ( $criterion->value as $value )
         {
-            foreach ( $fieldTypes[$criterion->target] as $name => $fieldType )
+            foreach ( $fieldTypes[$criterion->target] as $name )
             {
-                // @TODO: Fix & extract this (See Gateway\\Native)
-                $queries[] = $name . '_s:"' . $value . '"';
+                $queries[] = $name . ':"' . $value . '"';
             }
         }
 
