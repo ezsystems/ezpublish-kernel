@@ -50,11 +50,11 @@ class LegacySolr extends Legacy
         $nameGenerator = new Solr\Content\Search\FieldNameGenerator();
         $fieldRegistry = new Solr\Content\Search\FieldRegistry( array(
             'ezstring'              => new FieldType\String\SearchField(),
+            'eztext'                => new FieldType\String\SearchField(),
+            'ezxmltext'             => new FieldType\String\SearchField(),
             // @TODO: Define proper types for these:
             'ezuser'                => new FieldType\Unindexed(),
-            'eztext'                => new FieldType\Unindexed(),
             'ezimage'               => new FieldType\Unindexed(),
-            'ezxmltext'             => new FieldType\Unindexed(),
             'ezboolean'             => new FieldType\Unindexed(),
             'ezkeyword'             => new FieldType\Unindexed(),
             'ezdatetime'            => new FieldType\Unindexed(),
@@ -97,6 +97,7 @@ class LegacySolr extends Legacy
                     new Solr\Content\Search\CriterionVisitor\DateMetadata\ModifiedBetween(),
                     new Solr\Content\Search\CriterionVisitor\DateMetadata\PublishedBetween(),
                     new Solr\Content\Search\CriterionVisitor\StatusIn(),
+                    new Solr\Content\Search\CriterionVisitor\FullText(),
                     new Solr\Content\Search\CriterionVisitor\FieldIn(
                         $fieldRegistry,
                         $persistenceHandler->contentTypeHandler(),
@@ -114,6 +115,7 @@ class LegacySolr extends Legacy
                     new Solr\Content\Search\FacetBuilderVisitor\User(),
                 ) ),
                 new Solr\Content\Search\FieldValueMapper\Aggregate( array(
+                    new Solr\Content\Search\FieldValueMapper\IdentifierMapper(),
                     new Solr\Content\Search\FieldValueMapper\StringMapper(),
                     new Solr\Content\Search\FieldValueMapper\IntegerMapper(),
                     new Solr\Content\Search\FieldValueMapper\DateMapper(),
