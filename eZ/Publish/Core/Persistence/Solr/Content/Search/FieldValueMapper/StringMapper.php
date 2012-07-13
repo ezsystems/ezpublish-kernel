@@ -41,7 +41,7 @@ class StringMapper extends FieldValueMapper
     public function map( Field $field )
     {
         // Remove non-printables
-        return preg_replace( '/[\x00-\x09\x0B\x0C\x1E\x1F]/', '', $field->value );
+        return preg_replace( '([\x00-\x09\x0B\x0C\x1E\x1F]+)', '', $field->value );
     }
 }
 
