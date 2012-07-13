@@ -44,7 +44,7 @@ class IntegerValueValidator extends Validator
         if ( $this->constraints['maxIntegerValue'] !== false && $value->value > $this->constraints['maxIntegerValue'] )
         {
             $this->errors[] = new ValidationError(
-                "The value cannot be higher than %size%.",
+                "The value can not be higher than %size%.",
                 null,
                 array(
                     "size" => $this->constraints['maxIntegerValue']
@@ -56,7 +56,7 @@ class IntegerValueValidator extends Validator
         if ( $this->constraints['minIntegerValue'] !== false && $value->value < $this->constraints['minIntegerValue'] )
         {
             $this->errors[] = new ValidationError(
-                "The value cannot be lower than %size%.",
+                "The value can not be lower than %size%.",
                 null,
                 array(
                     "size" => $this->constraints['minIntegerValue']

@@ -15,6 +15,22 @@ use eZ\Publish\Core\FieldType\Integer\Value as IntegerValue,
 class IntegerValueValidatorTest extends FieldTypeTest
 {
     /**
+     * @return int
+     */
+    protected function getMinIntegerValue()
+    {
+        return 10;
+    }
+
+    /**
+     * @return int
+     */
+    protected function getMaxIntegerValue()
+    {
+        return 15;
+    }
+
+    /**
      * This test ensure an IntegerValueValidator can be created
      *
      * @group fieldType
@@ -157,22 +173,39 @@ class IntegerValueValidatorTest extends FieldTypeTest
      * @dataProvider providerForValidateKO
      * @covers \eZ\Publish\Core\FieldType\Integer\IntegerValueValidator::validate
      */
-    public function testValidateWrongValues( $value, $message )
+    public function testValidateWrongValues( $value, $message, $values )
     {
         $validator = new IntegerValueValidator;
-        $validator->minIntegerValue = 10;
-        $validator->maxIntegerValue = 15;
+        $validator->minIntegerValue = $this->getMinIntegerValue();
+        $validator->maxIntegerValue = $this->getMaxIntegerValue();
         $this->assertFalse( $validator->validate( new IntegerValue( $value ) ) );
-        $this->assertSame( array( $message ), $validator->getMessage() );
+        $messages = $validator->getMessage();
+        $this->assertCount( 1, $messages );
+        $this->assertInstanceOf(
+            "eZ\\Publish\\SPI\\FieldType\\ValidationError",
+            $messages[0]
+        );
+        $this->assertInstanceOf(
+            "eZ\\Publish\\API\\Repository\\Values\\Translation\\Message",
+            $messages[0]->getTranslatableMessage()
+        );
+        $this->assertEquals(
+            $message,
+            $messages[0]->getTranslatableMessage()->message
+        );
+        $this->assertEquals(
+            $values,
+            $messages[0]->getTranslatableMessage()->values
+        );
     }
 
     public function providerForValidateKO()
     {
         return array(
-            array( -12, "The value can not be lower than 10." ),
-            array( 0, "The value can not be lower than 10." ),
-            array( 9, "The value can not be lower than 10." ),
-            array( 16, "The value can not be higher than 15." ),
+            array( -12, "The value can not be lower than %size%.", array( "size" => $this->getMinIntegerValue() ) ),
+            array( 0, "The value can not be lower than %size%.", array( "size" => $this->getMinIntegerValue() ) ),
+            array( 9, "The value can not be lower than %size%.", array( "size" => $this->getMinIntegerValue() ) ),
+            array( 16, "The value can not be higher than %size%.", array( "size" => $this->getMaxIntegerValue() ) ),
         );
     }
 }

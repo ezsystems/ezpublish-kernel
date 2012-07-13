@@ -15,6 +15,22 @@ use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue,
 class StringLengthValidatorTest extends FieldTypeTest
 {
     /**
+     * @return int
+     */
+    protected function getMinStringLength()
+    {
+        return 5;
+    }
+
+    /**
+     * @return int
+     */
+    protected function getMaxStringLength()
+    {
+        return 10;
+    }
+
+    /**
      * This test ensure an StringLengthValidator can be created
      *
      * @group fieldType
@@ -153,22 +169,57 @@ class StringLengthValidatorTest extends FieldTypeTest
      * @dataProvider providerForValidateKO
      * @covers \eZ\Publish\Core\FieldType\TextLine\StringLengthValidator::validate
      */
-    public function testValidateWrongValues( $value, $message )
+    public function testValidateWrongValues( $value, $messageSingular, $messagePlural, $values )
     {
         $validator = new StringLengthValidator;
-        $validator->minStringLength = 5;
-        $validator->maxStringLength = 10;
+        $validator->minStringLength = $this->getMinStringLength();
+        $validator->maxStringLength = $this->getMaxStringLength();
         $this->assertFalse( $validator->validate( new TextLineValue( $value ) ) );
         $messages = $validator->getMessage();
-        $this->assertStringStartsWith( $message, $messages[0] );
+        $this->assertCount( 1, $messages );
+        $this->assertInstanceOf(
+            "eZ\\Publish\\SPI\\FieldType\\ValidationError",
+            $messages[0]
+        );
+        $this->assertInstanceOf(
+            "eZ\\Publish\\API\\Repository\\Values\\Translation\\Plural",
+            $messages[0]->getTranslatableMessage()
+        );
+        $this->assertEquals(
+            $messageSingular,
+            $messages[0]->getTranslatableMessage()->singular
+        );
+        $this->assertEquals(
+            $messagePlural,
+            $messages[0]->getTranslatableMessage()->plural
+        );
+        $this->assertEquals(
+            $values,
+            $messages[0]->getTranslatableMessage()->values
+        );
     }
 
     public function providerForValidateKO()
     {
         return array(
-            array( "", "The string can not be shorter than" ),
-            array( "Hi!", "The string can not be shorter than" ),
-            array( "0123456789!", "The string can not exceed" ),
+            array(
+                "",
+                "The string can not be shorter than %size% character.",
+                "The string can not be shorter than %size% characters.",
+                array( "size" => $this->getMinStringLength() )
+            ),
+            array(
+                "Hi!",
+                "The string can not be shorter than %size% character.",
+                "The string can not be shorter than %size% characters.",
+                array( "size" => $this->getMinStringLength() )
+            ),
+            array(
+                "0123456789!",
+                "The string can not exceed %size% character.",
+                "The string can not exceed %size% characters.",
+                array( "size" => $this->getMaxStringLength() )
+            ),
         );
     }
 }
