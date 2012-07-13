@@ -32,7 +32,7 @@ abstract class Map implements Matcher
      *
      * @param array $map Map used for matching.
      */
-    public function __construct( array $map)
+    public function __construct( array $map )
     {
         $this->map = $map;
     }
