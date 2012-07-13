@@ -41,6 +41,13 @@ class StorageHandlerTest extends TestCase
     protected $storageMock;
 
     /**
+     * Mock for versionInfo
+     *
+     * @var \eZ\Publish\Core\Repository\Values\Content\VersionInfo
+     */
+    protected $versionInfoMock;
+
+    /**
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler::storeFieldData
      */
@@ -52,6 +59,7 @@ class StorageHandlerTest extends TestCase
         $storageMock->expects( $this->once() )
             ->method( 'storeFieldData' )
             ->with(
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
                 $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ),
                 $this->equalTo( $this->getContextMock() )
             );
@@ -66,7 +74,7 @@ class StorageHandlerTest extends TestCase
         $field->value = new FieldValue();
 
         $handler = $this->getStorageHandler();
-        $handler->storeFieldData( $field );
+        $handler->storeFieldData( $this->getVersionInfoMock(), $field );
     }
 
     /**
@@ -84,6 +92,7 @@ class StorageHandlerTest extends TestCase
         $storageMock->expects( $this->once() )
             ->method( 'getFieldData' )
             ->with(
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
                 $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ),
                 $this->equalTo( $this->getContextMock() )
             );
@@ -98,7 +107,7 @@ class StorageHandlerTest extends TestCase
         $field->value = new FieldValue();
 
         $handler = $this->getStorageHandler();
-        $handler->getFieldData( $field );
+        $handler->getFieldData( $this->getVersionInfoMock(), $field );
     }
 
     /**
@@ -126,7 +135,7 @@ class StorageHandlerTest extends TestCase
         $field->value = new FieldValue();
 
         $handler = $this->getStorageHandler();
-        $handler->getFieldData( $field );
+        $handler->getFieldData( $this->getVersionInfoMock(), $field );
     }
 
     /**
@@ -211,6 +220,17 @@ class StorageHandlerTest extends TestCase
             );
         }
         return $this->storageMock;
+    }
+
+    protected function getVersionInfoMock()
+    {
+        if ( !isset( $this->versionInfoMock ) )
+        {
+            $this->versionInfoMock = $this->getMock(
+                'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'
+            );
+        }
+        return $this->versionInfoMock;
     }
 
     /**
