@@ -10,9 +10,10 @@
 namespace eZ\Publish\MVC\SiteAccess\Matcher;
 
 use eZ\Publish\MVC\SiteAccess\Matcher,
-    eZ\Publish\MVC\Routing\SimplifiedRequest;
+    eZ\Publish\MVC\Routing\SimplifiedRequest,
+    eZ\Publish\MVC\SiteAccess\URILexer;
 
-class URIElement implements Matcher
+class URIElement implements Matcher, URILexer
 {
     /**
      * @var \eZ\Publish\MVC\Routing\SimplifiedRequest
@@ -43,6 +44,23 @@ class URIElement implements Matcher
      */
     public function match()
     {
+        try
+        {
+            return implode( "_", $this->getURIElements() );
+        }
+        catch ( \LogicException $e )
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Returns URI elements as an array.
+     * @return array
+     * @throws \LogicException
+     */
+    protected function getURIElements()
+    {
         $elements = array_slice(
             explode( "/", $this->request->pathinfo ),
             1,
@@ -53,13 +71,13 @@ class URIElement implements Matcher
         foreach ( $elements as $element )
         {
             if ( $element === "" )
-                return false;
+                throw new \LogicException( 'One of the URI elements was empty' );
         }
 
         if ( count( $elements ) !== $this->elementNumber )
-            return false;
+            throw new \LogicException( 'The number of provided elements to consider is different than the number of elements found in the URI' );
 
-        return implode( "_", $elements );
+        return $elements;
     }
 
     public function getName()
@@ -76,5 +94,30 @@ class URIElement implements Matcher
     public function setRequest( SimplifiedRequest $request )
     {
         $this->request = $request;
+    }
+
+    /**
+     * Analyses $uri and removes the siteaccess part, if needed.
+     *
+     * @param string $uri The original URI
+     * @return string The modified URI
+     */
+    public function analyseURI( $uri )
+    {
+        $uriElements = implode( '/', $this->getURIElements() );
+        $uri = str_replace( "/$uriElements", '', $uri );
+        return $uri;
+    }
+
+    /**
+     * Analyses $linkUri when generating a link to a route, in order to have the siteaccess part back in the URI.
+     *
+     * @param string $linkUri
+     * @return string The modified link URI
+     */
+    public function analyseLink( $linkUri )
+    {
+        $uriElements = implode( '/', $this->getURIElements() );
+        return "/{$uriElements}{$linkUri}";
     }
 }

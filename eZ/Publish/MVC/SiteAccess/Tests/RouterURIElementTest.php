@@ -106,11 +106,49 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement::getName
      */
     public function testGetName()
     {
         $matcher = new URIElementMatcher( array(), array() );
         $this->assertSame( 'uri:element', $matcher->getName() );
+    }
+
+    /**
+     * @param $uri
+     * @param $expectedFixedUpURI
+     * @dataProvider analyseProvider
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement::analyseURI
+     */
+    public function testAnalyseURI( $uri, $expectedFixedUpURI )
+    {
+        $matcher = new URIElementMatcher( 1 );
+        $matcher->setRequest(
+            new SimplifiedRequest( array( 'pathinfo' => $uri ) )
+        );
+        $this->assertSame( $expectedFixedUpURI, $matcher->analyseURI( $uri ) );
+    }
+
+    /**
+     * @param $fullUri
+     * @param $linkUri
+     * @dataProvider analyseProvider
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement::analyseLink
+     */
+    public function testAnalyseLink( $fullUri, $linkUri )
+    {
+        $matcher = new URIElementMatcher( 1 );
+        $matcher->setRequest(
+            new SimplifiedRequest( array( 'pathinfo' => $fullUri ) )
+        );
+        $this->assertSame( $fullUri, $matcher->analyseLink( $linkUri ) );
+    }
+
+    public function analyseProvider()
+    {
+        return array(
+            array( '/my_siteaccess/foo/bar', '/foo/bar' ),
+            array( '/vive/le/sucre', '/le/sucre' )
+        );
     }
 }

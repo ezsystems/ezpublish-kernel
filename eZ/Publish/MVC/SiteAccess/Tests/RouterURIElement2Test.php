@@ -10,6 +10,7 @@
 namespace eZ\Publish\MVC\SiteAccess\Tests;
 use PHPUnit_Framework_TestCase,
     eZ\Publish\MVC\SiteAccess\Router,
+    eZ\Publish\MVC\SiteAccess\Matcher\URIElement as URIElementMatcher,
     eZ\Publish\MVC\Routing\SimplifiedRequest;
 
 class RouterURIElement2Test extends PHPUnit_Framework_TestCase
@@ -45,6 +46,8 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\Host::__construct
      * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement::__construct
      * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement::match
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement::setRequest
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement::getURIElements
      */
     public function testMatch( $request, $siteAccess, $router )
     {
@@ -101,6 +104,46 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
             array( SimplifiedRequest::fromUrl( "http://example.com:83/second_sa/" ), "second_sa" ),
             array( SimplifiedRequest::fromUrl( "http://first_siteaccess:82/second_sa/" ), "second_sa" ),
             array( SimplifiedRequest::fromUrl( "http://first_siteaccess:83/second_sa/" ), "second_sa" ),
+        );
+    }
+
+    /**
+     * @param $uri
+     * @param $expectedFixedUpURI
+     * @dataProvider analyseProvider
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement::analyseURI
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement::setRequest
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement::getURIElements
+     */
+    public function testAnalyseURI( $uri, $expectedFixedUpURI )
+    {
+        $matcher = new URIElementMatcher( 2 );
+        $matcher->setRequest(
+            new SimplifiedRequest( array( 'pathinfo' => $uri ) )
+        );
+        $this->assertSame( $expectedFixedUpURI, $matcher->analyseURI( $uri ) );
+    }
+
+    /**
+     * @param $fullUri
+     * @param $linkUri
+     * @dataProvider analyseProvider
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement::analyseLink
+     */
+    public function testAnalyseLink( $fullUri, $linkUri )
+    {
+        $matcher = new URIElementMatcher( 2 );
+        $matcher->setRequest(
+            new SimplifiedRequest( array( 'pathinfo' => $fullUri ) )
+        );
+        $this->assertSame( $fullUri, $matcher->analyseLink( $linkUri ) );
+    }
+
+    public function analyseProvider()
+    {
+        return array(
+            array( '/my/siteaccess/foo/bar', '/foo/bar' ),
+            array( '/vive/le/sucre/en-poudre', '/sucre/en-poudre' )
         );
     }
 }
