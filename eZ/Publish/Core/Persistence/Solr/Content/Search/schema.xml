@@ -90,6 +90,7 @@ should not remove or drastically change the existing definitions.
     <dynamicField name="*_c" type="currency" indexed="true" stored="true"/>
 
     <field name="text" type="text" indexed="true" stored="false"/>
+    <copyField source="*_t" dest="text" />
   </fields>
 
   <uniqueKey>id</uniqueKey>
