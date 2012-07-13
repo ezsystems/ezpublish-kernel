@@ -111,7 +111,10 @@ class MediaTest extends \PHPUnit_Framework_TestCase
                 'mediaType' => MediaType::TYPE_HTML5_VIDEO
             )
         );
-        $repository = new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler() );
+        $repository = new Repository(
+            new InMemoryPersistenceHandler( new ValidatorService, new FieldTypeTools ),
+            new InMemoryIOHandler()
+        );
         $fieldDef = new PersistenceFieldDefinition(
             array(
                 'fieldTypeConstraints' => $fieldTypeConstraints,
