@@ -10,8 +10,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 131,
-        'title' => 'New features',
+        'id' => 66,
+        'title' => 'rest_api',
       ),
        'score' => NULL,
        'index' => NULL,
@@ -21,8 +21,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 66,
-        'title' => 'rest_api',
+        'id' => 131,
+        'title' => 'New features',
       ),
        'score' => NULL,
        'index' => NULL,
