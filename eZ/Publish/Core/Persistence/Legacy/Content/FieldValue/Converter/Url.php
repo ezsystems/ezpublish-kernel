@@ -25,10 +25,12 @@ class Url implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataText = ( isset( $value->data['text'] )
+        $storageFieldValue->dataText = isset( $value->data['text'] )
             ? $value->data['text']
-            : null );
-        $storageFieldValue->dataInt = $value->data['urlId'];
+            : null;
+        $storageFieldValue->dataInt = isset( $value->data['urlId'] )
+            ? $value->data['urlId']
+            : null;
     }
 
     /**
