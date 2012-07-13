@@ -50,8 +50,11 @@ class RouterPortHostURITest extends PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map::__construct
      * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map::match
      * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\URI::__construct
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\URI::setRequest
      * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\Host::__construct
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\Host::setRequest
      * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\Port::__construct
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\Port::setRequest
      */
     public function testMatch( $request, $siteAccess, $router )
     {
