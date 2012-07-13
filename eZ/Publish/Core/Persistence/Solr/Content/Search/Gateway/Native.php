@@ -147,7 +147,7 @@ class Native extends Gateway
         {
             $searchHit = new SearchHit( array(
                 'score'       => $doc->score,
-                'valueObject' => $this->contentHandler->load( $doc->id, $doc->version_s )
+                'valueObject' => $this->contentHandler->load( $doc->id, $doc->version_id )
             ) );
             $result->searchHits[] = $searchHit;
         }

@@ -46,7 +46,7 @@ class SectionIn extends CriterionVisitor
                 array_map(
                     function( $value )
                     {
-                        return 'section_s:"' . $value . '"';
+                        return 'section_id:"' . $value . '"';
                     },
                     $criterion->value
                 )

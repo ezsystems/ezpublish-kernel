@@ -167,22 +167,22 @@ class Handler extends BaseSearchHandler
             new Field(
                 'id',
                 $content->contentInfo->id,
-                new FieldType\StringField()
+                new FieldType\IdentifierField()
             ),
             new Field(
                 'type',
                 $content->contentInfo->contentTypeId,
-                new FieldType\StringField()
+                new FieldType\IdentifierField()
             ),
             new Field(
                 'version',
                 $content->versionInfo->versionNo,
-                new FieldType\StringField()
+                new FieldType\IdentifierField()
             ),
             new Field(
                 'status',
                 $content->versionInfo->status,
-                new FieldType\StringField()
+                new FieldType\IdentifierField()
             ),
             new Field(
                 'name',
@@ -192,17 +192,17 @@ class Handler extends BaseSearchHandler
             new Field(
                 'creator',
                 $content->versionInfo->creatorId,
-                new FieldType\StringField()
+                new FieldType\IdentifierField()
             ),
             new Field(
                 'section',
                 $content->contentInfo->sectionId,
-                new FieldType\StringField()
+                new FieldType\IdentifierField()
             ),
             new Field(
                 'remote_id',
                 $content->contentInfo->remoteId,
-                new FieldType\StringField()
+                new FieldType\IdentifierField()
             ),
             new Field(
                 'modified',
@@ -223,7 +223,7 @@ class Handler extends BaseSearchHandler
                     },
                     $content->locations
                 ),
-                new FieldType\StringField()
+                new FieldType\IdentifierField()
             ),
             new Field(
                 'location',
@@ -234,7 +234,7 @@ class Handler extends BaseSearchHandler
                     },
                     $content->locations
                 ),
-                new FieldType\StringField()
+                new FieldType\IdentifierField()
             ),
             new Field(
                 'depth',
@@ -256,7 +256,7 @@ class Handler extends BaseSearchHandler
                     },
                     $content->locations
                 ),
-                new FieldType\StringField()
+                new FieldType\IdentifierField()
             ),
             new Field(
                 'location_remote_id',
@@ -267,7 +267,7 @@ class Handler extends BaseSearchHandler
                     },
                     $content->locations
                 ),
-                new FieldType\StringField()
+                new FieldType\IdentifierField()
             ),
         );
 
@@ -275,7 +275,7 @@ class Handler extends BaseSearchHandler
         $document[] = new Field(
             'group',
             $contentType->groupIds,
-            new FieldType\StringField()
+            new FieldType\IdentifierField()
         );
 
         foreach ( $content->fields as $field )

@@ -46,7 +46,7 @@ class StatusIn extends CriterionVisitor
                 array_map(
                     function( $value )
                     {
-                        return 'status_s:"' . $value . '"';
+                        return 'status_id:"' . $value . '"';
                     },
                     $criterion->value
                 )

@@ -46,7 +46,7 @@ class LocationIdIn extends CriterionVisitor
                 array_map(
                     function( $value )
                     {
-                        return 'location_s:"' . $value . '"';
+                        return 'location_id:"' . $value . '"';
                     },
                     $criterion->value
                 )
