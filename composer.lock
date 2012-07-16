@@ -1,6 +1,12 @@
 {
-    "hash": "d11a9003163e8098bc6069944749e33f",
+    "hash": "096ef99e116068bc020ea370e7485a04",
     "packages": [
+        {
+            "package": "Qafoo/RMF",
+            "version": "dev-master",
+            "source-reference": "852d993d45952dbc86e2bfd78addad540bd85998",
+            "commit-date": "1342375436"
+        },
         {
             "package": "doctrine/common",
             "version": "2.2.2"
@@ -56,6 +62,7 @@
         "zetacomponents/cache": 20,
         "zetacomponents/php-generator": 20,
         "zetacomponents/configuration": 20,
-        "zetacomponents/database": 20
+        "zetacomponents/database": 20,
+        "qafoo/rmf": 20
     }
 }
