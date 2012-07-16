@@ -26,10 +26,11 @@ return array(
                                      /*'Vendor\\SomeApp' => __DIR__ . '/Vendor/SomeApp'*/ ),
         ),
         // eZ Publish Legacy configuration
-        'Legacy' => array(
+        // Uncomment and configure if you need legacy kernel support.
+        /*'Legacy' => array(
             // Root path of eZ Publish legacy installation (must be absolute)
             'RootPath' => '/path/to/ezpublish_legacy'
-        ),
+        ),*/
         'Configuration' => array(
             // Disable cache, default false
             'UseCache' => false,

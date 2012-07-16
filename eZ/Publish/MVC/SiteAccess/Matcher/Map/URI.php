@@ -10,9 +10,10 @@
 namespace eZ\Publish\MVC\SiteAccess\Matcher\Map;
 
 use eZ\Publish\MVC\SiteAccess\Matcher,
-    eZ\Publish\MVC\SiteAccess\Matcher\Map;
+    eZ\Publish\MVC\SiteAccess\Matcher\Map,
+    eZ\Publish\MVC\SiteAccess\URIFixer;
 
-class URI extends Map implements Matcher
+class URI extends Map implements Matcher, URIFixer
 {
     /**
      * Constructor.
@@ -29,5 +30,32 @@ class URI extends Map implements Matcher
     public function getName()
     {
         return 'uri:map';
+    }
+
+    /**
+     * Fixes up $uri to remove the siteaccess part, if needed.
+     *
+     * @param string $uri The original URI
+     * @return string
+     */
+    public function fixupURI( $uri )
+    {
+        return str_replace( "/$this->key", '', $uri );
+    }
+
+    /**
+     * Fixes up $linkUri when generating a link to a route, in order to have the siteaccess part back in the URI.
+     *
+     * @param string $linkUri
+     * @return string
+     */
+    public function fixupLink( $linkUri )
+    {
+        if ( strpos( $linkUri, $this->key ) === false )
+        {
+            $linkUri = '/' . $this->key . $linkUri;
+        }
+
+        return $linkUri;
     }
 }
