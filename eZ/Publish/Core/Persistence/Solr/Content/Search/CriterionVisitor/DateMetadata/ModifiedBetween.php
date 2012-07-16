@@ -45,38 +45,17 @@ class ModifiedBetween extends DateMetadata
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        $startBrace = '[';
-        $startTime  = '*';
-        $endTime    = '*';
-        $endBrace   = ']';
+        $start = $criterion->value[0];
+        $end   = isset( $criterion->value[1] ) ? $criterion->value[1] : null;
 
-        switch ( $criterion->operator )
+        if ( ( $criterion->operator === Operator::LT ) ||
+             ( $criterion->operator === Operator::LTE ) )
         {
-            case Operator::GT:
-                $startBrace = '{';
-                $endBrace   = '}';
-                // Intentionally omitted break
-
-            case Operator::GTE:
-                $startTime = $this->getSolrTime( $criterion->value[0] );
-                break;
-
-            case Operator::LT:
-                $startBrace = '{';
-                $endBrace   = '}';
-                // Intentionally omitted break
-
-            case Operator::LTE:
-                $endTime = $this->getSolrTime( $criterion->value[0] );
-                break;
-
-            case Operator::BETWEEN:
-                $startTime = $this->getSolrTime( $criterion->value[0] );
-                $endTime   = $this->getSolrTime( $criterion->value[1] );
-                break;
+            $end = $start;
+            $start = null;
         }
 
-        return "modified_dt:$startBrace$startTime TO $endTime$endBrace";
+        return "modified_dt:" . $this->getRange( $criterion->operator, $start, $end );
     }
 }
 

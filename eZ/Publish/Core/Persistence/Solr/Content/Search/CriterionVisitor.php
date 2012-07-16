@@ -31,5 +31,61 @@ abstract class CriterionVisitor
      * @return void
      */
     abstract public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null );
+
+    /**
+     * Get Solr range
+     *
+     * Start and end are optional, depending on the respective operator. Pass
+     * null in this case. The operator may be one of:
+     *
+     * - case Operator::GT:
+     * - case Operator::GTE:
+     * - case Operator::LT:
+     * - case Operator::LTE:
+     * - case Operator::BETWEEN:
+     *
+     * @param mixed $operator
+     * @param mixed $start
+     * @param mixed $end
+     * @return void
+     */
+    protected function getRange( $operator, $start, $end )
+    {
+        $startBrace = '[';
+        $startValue = '*';
+        $endValue   = '*';
+        $endBrace   = ']';
+
+        switch ( $criterion->operator )
+        {
+            case Operator::GT:
+                $startBrace = '{';
+                $endBrace   = '}';
+                // Intentionally omitted break
+
+            case Operator::GTE:
+                $startValue = $start;
+                break;
+
+            case Operator::LT:
+                $startBrace = '{';
+                $endBrace   = '}';
+                // Intentionally omitted break
+
+            case Operator::LTE:
+                $endValue = $end;
+                break;
+
+            case Operator::BETWEEN:
+                $startValue = $start;
+                $endValue   = $end;
+                break;
+
+            default:
+                throw new \RuntimeException( "Unknown operator: $operator" );
+        }
+
+        return "$startBrace$startValue TO $endValue$endBrace";
+    }
 }
 
