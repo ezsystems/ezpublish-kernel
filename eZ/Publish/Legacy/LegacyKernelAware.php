@@ -22,12 +22,4 @@ interface LegacyKernelAware
      * @return void
      */
     public function setLegacyKernel( Kernel $legacyKernel );
-
-    /**
-     * Gets the legacy kernel instance.
-     *
-     * @abstract
-     * @return \eZ\Publish\Legacy\Kernel
-     */
-    public function getLegacyKernel();
 }

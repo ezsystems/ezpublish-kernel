@@ -558,7 +558,7 @@ class Repository implements RepositoryInterface, LegacyKernelAware
      * @return \eZ\Publish\Legacy\Kernel
      * @throws \eZ\Publish\Core\Base\Exceptions\BadConfiguration
      */
-    public function getLegacyKernel()
+    protected function getLegacyKernel()
     {
         if ( !isset( $this->serviceSettings['legacy']['kernel'] ) )
         {
