@@ -49,7 +49,7 @@ class FieldIn extends Field
 
         if ( !isset( $fieldTypes[$criterion->target] ) )
         {
-            return '()';
+            return '""';
         }
 
         $queries = array();
