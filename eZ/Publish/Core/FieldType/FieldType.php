@@ -140,7 +140,7 @@ abstract class FieldType implements FieldTypeInterface
     /**
      * Validates a field based on the validators in the field definition
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
      * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field for which an action is performed

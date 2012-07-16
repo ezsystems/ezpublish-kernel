@@ -28,6 +28,8 @@ class FieldTypeConstraints extends ValueObject
      * Collection is indexed by setting name.
      *
      * @see \eZ\Publish\Core\FieldType\FieldType::$fieldSettings
+     *
+     * @TODO Should not use Core class
      * @var \eZ\Publish\Core\FieldType\FieldSettings
      */
     public $fieldSettings;

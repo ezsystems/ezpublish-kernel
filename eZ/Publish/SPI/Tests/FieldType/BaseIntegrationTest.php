@@ -410,7 +410,7 @@ abstract class BaseIntegrationTest extends TestCase
 
     /**
      * @depends testUpdateField
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDeleteField( $content )
     {
