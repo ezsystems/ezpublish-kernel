@@ -102,6 +102,11 @@ class RepositoryStub implements Repository
     private $objectStateService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\FieldTypeServiceStub
+     */
+    private $fieldTypeService;
+
+    /**
      * @var integer
      */
     private $transactionDepth = 0;
@@ -492,7 +497,11 @@ class RepositoryStub implements Repository
      */
     public function getFieldTypeService()
     {
-        throw new \RuntimeException( '@TODO: Implement.' );
+        if ( null === $this->fieldTypeService )
+        {
+            $this->fieldTypeService = new FieldTypeServiceStub( $this );
+        }
+        return $this->fieldTypeService;
     }
 
     /**

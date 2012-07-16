@@ -10,6 +10,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 use eZ\Publish\API\Repository\FieldTypeService;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\FieldTypeService}
@@ -20,13 +21,25 @@ use eZ\Publish\API\Repository\FieldTypeService;
 class FieldTypeServiceStub implements FieldTypeService
 {
     /**
+     * Field types
+     *
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\FieldTypeStub[]
+     */
+    protected $fieldTypes = array();
+
+    public function __construct()
+    {
+        $this->fieldTypes['ezurl'] = new FieldTypeStub( 'ezurl' );
+    }
+
+    /**
      * Returns a list of all field types.
      *
      * @return \eZ\Publish\API\Repository\FieldType[]
      */
     public function getFieldTypes()
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        return array_values( $this->fieldTypes );
     }
 
     /**
@@ -39,7 +52,11 @@ class FieldTypeServiceStub implements FieldTypeService
      */
     public function getFieldType( $identifier )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        if ( !$this->hasFieldType( $identifier ) )
+        {
+            throw new NotFoundExceptionStub( 'What error code should be used?' );
+        }
+        return $this->fieldTypes[$identifier];
     }
 
     /**
@@ -50,6 +67,6 @@ class FieldTypeServiceStub implements FieldTypeService
      */
     public function hasFieldType( $identifier )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        return isset( $this->fieldTypes[$identifier] );
     }
 }
