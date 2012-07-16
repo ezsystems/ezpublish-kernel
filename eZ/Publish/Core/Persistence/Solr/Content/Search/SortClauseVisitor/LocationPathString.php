@@ -36,7 +36,7 @@ class LocationPathString extends SortClauseVisitor
      */
     public function visit( SortClause $sortClause )
     {
-        return 'path_s' . $this->getDirection( $sortClause );
+        return 'path_id' . $this->getDirection( $sortClause );
     }
 }
 
