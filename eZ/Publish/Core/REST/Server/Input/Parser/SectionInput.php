@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Input\Parser;
-use eZ\Publish\API\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\API\REST\Common\Exceptions;
+namespace eZ\Publish\Core\REST\Server\Input\Parser;
+use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use eZ\Publish\Core\REST\Common\Exceptions;
 
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 
@@ -22,7 +22,7 @@ class SectionInput extends Base
      * Parse input structure
      *
      * @param array $data
-     * @param \eZ\Publish\API\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      * @return \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )

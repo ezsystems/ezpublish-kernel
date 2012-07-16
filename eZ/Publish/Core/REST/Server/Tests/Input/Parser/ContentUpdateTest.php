@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Tests\Input\Parser;
+namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
-use eZ\Publish\API\REST\Server\Input\Parser\ContentUpdate;
-use eZ\Publish\API\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct;
+use eZ\Publish\Core\REST\Server\Input\Parser\ContentUpdate;
+use eZ\Publish\Core\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct;
 
 class ContentUpdateTest extends BaseTest
 {
@@ -103,7 +103,7 @@ class ContentUpdateTest extends BaseTest
 
     /**
      * @return void
-     * @expectedException eZ\Publish\API\REST\Common\Exceptions\Parser
+     * @expectedException eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing <Section> element in <ContentUpdate>.
      */
     public function testParseFailurMissingSection()
@@ -121,7 +121,7 @@ class ContentUpdateTest extends BaseTest
 
     /**
      * @return void
-     * @expectedException eZ\Publish\API\REST\Common\Exceptions\Parser
+     * @expectedException eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Invalid format for <Section> reference in <ContentUpdate>.
      */
     public function testParseFailureInvalidSectionHref()
@@ -139,7 +139,7 @@ class ContentUpdateTest extends BaseTest
 
     /**
      * @return void
-     * @expectedException eZ\Publish\API\REST\Common\Exceptions\Parser
+     * @expectedException eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing <Owner> element in <ContentUpdate>.
      */
     public function testParseFailureMissingOwner()
@@ -157,7 +157,7 @@ class ContentUpdateTest extends BaseTest
 
     /**
      * @return void
-     * @expectedException eZ\Publish\API\REST\Common\Exceptions\Parser
+     * @expectedException eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Invalid format for <Owner> reference in <ContentUpdate>.
      */
     public function testParseFailureInvalidOwnerHref()
@@ -174,7 +174,7 @@ class ContentUpdateTest extends BaseTest
     }
 
     /**
-     * @return \eZ\Publish\API\REST\Server\Input\Parser\ContentUpdate
+     * @return \eZ\Publish\Core\REST\Server\Input\Parser\ContentUpdate
      */
     protected function getContentUpdate()
     {

@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client\Tests\Input\Parser;
+namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
-use eZ\Publish\API\REST\Client\Input\Parser;
+use eZ\Publish\Core\REST\Client\Input\Parser;
 
 class InvalidArgumentExceptionTest extends BaseTest
 {
@@ -31,7 +31,7 @@ class InvalidArgumentExceptionTest extends BaseTest
     }
 
     /**
-     * @return eZ\Publish\API\REST\Client\Input\Parser\NotFoundException;
+     * @return eZ\Publish\Core\REST\Client\Input\Parser\NotFoundException;
      */
     protected function getParser()
     {

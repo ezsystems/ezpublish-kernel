@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client\Tests\HttpClient;
+namespace eZ\Publish\Core\REST\Client\Tests\HttpClient;
 
-use eZ\Publish\API\REST\Client\HttpClient\Stream;
-use eZ\Publish\API\REST\Client\HttpClient\ConnectionException;
+use eZ\Publish\Core\REST\Client\HttpClient\Stream;
+use eZ\Publish\Core\REST\Client\HttpClient\ConnectionException;
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 
 /**
@@ -22,7 +22,7 @@ use \eZ\Publish\API\Repository\Tests\BaseTest;
 class StreamTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\API\REST\Client\HttpClient\Stream
+     * @var \eZ\Publish\Core\REST\Client\HttpClient\Stream
      */
     protected $client;
 
@@ -70,7 +70,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Client\HttpClient\ConnectionException
+     * @expectedException \eZ\Publish\Core\REST\Client\HttpClient\ConnectionException
      */
     public function testConnectionException()
     {

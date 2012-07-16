@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client;
+namespace eZ\Publish\Core\REST\Client;
 
 use \eZ\Publish\API\Repository\Values\ValueObject;
 use \eZ\Publish\API\Repository\Values\Content\Content;
@@ -17,8 +17,8 @@ use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\Limitation;
 
-use \eZ\Publish\API\REST\Common;
-use \eZ\Publish\API\REST\Client\HttpClient\Authentication\IntegrationTestAuthenticator;
+use \eZ\Publish\Core\REST\Common;
+use \eZ\Publish\Core\REST\Client\HttpClient\Authentication\IntegrationTestAuthenticator;
 
 /**
  * REST Client Repository to be used in integration tests
@@ -39,14 +39,14 @@ class IntegrationTestRepository extends Repository implements Sessionable
     /**
      * Integration test authenticator
      *
-     * @var \eZ\Publish\API\REST\Client\HttpClient\Authentication\IntegrationTestAuthentication
+     * @var \eZ\Publish\Core\REST\Client\HttpClient\Authentication\IntegrationTestAuthentication
      */
     private $authenticator;
 
     /**
      * Client
      *
-     * @var \eZ\Publish\API\REST\Client\HttpClient
+     * @var \eZ\Publish\Core\REST\Client\HttpClient
      */
     private $client;
 
@@ -60,10 +60,10 @@ class IntegrationTestRepository extends Repository implements Sessionable
     /**
      * Instantiates the REST Client repository.
      *
-     * @param \eZ\Publish\API\REST\Client\HttpClient $client
-     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
-     * @param \eZ\Publish\API\REST\Client\HttpClient\Authentication\IntegrationTestAuthentication $authenticator
+     * @param \eZ\Publish\Core\REST\Client\HttpClient $client
+     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
+     * @param \eZ\Publish\Core\REST\Client\HttpClient\Authentication\IntegrationTestAuthentication $authenticator
      */
     public function __construct( HttpClient $client, Common\Input\Dispatcher $inputDispatcher, Common\Output\Visitor $outputVisitor, Common\UrlHandler $urlHandler, IntegrationTestAuthenticator $authenticator )
     {

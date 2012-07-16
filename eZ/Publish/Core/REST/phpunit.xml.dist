@@ -6,13 +6,13 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true">
     <testsuites>
-        <testsuite name="eZ\Publish\API\REST\Common">
+        <testsuite name="eZ\Publish\Core\REST\Common">
 			<directory>Common/Tests/</directory>
         </testsuite>
-        <testsuite name="eZ\Publish\API\REST\Server">
+        <testsuite name="eZ\Publish\Core\REST\Server">
 			<directory>Server/Tests/</directory>
         </testsuite>
-        <testsuite name="eZ\Publish\API\REST\Client">
+        <testsuite name="eZ\Publish\Core\REST\Client">
 			<directory>Client/Tests/</directory>
         </testsuite>
     </testsuites>

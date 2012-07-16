@@ -7,23 +7,23 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Input\Parser;
-use eZ\Publish\API\REST\Common\Input\Parser;
-use eZ\Publish\API\REST\Common\UrlHandler;
+namespace eZ\Publish\Core\REST\Server\Input\Parser;
+use eZ\Publish\Core\REST\Common\Input\Parser;
+use eZ\Publish\Core\REST\Common\UrlHandler;
 
 abstract class Base extends Parser
 {
     /**
      * URL handler
      *
-     * @var \eZ\Publish\API\REST\Common\UrlHandler
+     * @var \eZ\Publish\Core\REST\Common\UrlHandler
      */
     protected $urlHandler;
 
     /**
      * Creates a new parser.
      *
-     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
     public function __construct( UrlHandler $urlHandler )
     {

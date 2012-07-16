@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Values;
+namespace eZ\Publish\Core\REST\Server\Values;
 use \eZ\Publish\API\Repository\Values\ValueObject;
 
 /**

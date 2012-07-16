@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\View;
-use eZ\Publish\API\REST\Common;
+namespace eZ\Publish\Core\REST\Server\View;
+use eZ\Publish\Core\REST\Common;
 
 use Qafoo\RMF;
 
@@ -20,14 +20,14 @@ class Visitor extends RMF\View
     /**
      * JSON visitor
      *
-     * @var \eZ\Publish\API\REST\Common\Output\Visitor
+     * @var \eZ\Publish\Core\REST\Common\Output\Visitor
      */
     protected $visitor;
 
     /**
      * Construct
      *
-     * @param \eZ\Publish\API\REST\Common\Output\Visitor $visitor
+     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      */
     public function __construct( Common\Output\Visitor $visitor )
     {

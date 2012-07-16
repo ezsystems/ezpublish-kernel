@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Common\Output;
-use eZ\Publish\API\REST\Common\Message;
+namespace eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\Message;
 
 /**
  * Visitor for view models
@@ -32,7 +32,7 @@ class Visitor
     /**
      * Generator
      *
-     * @var \eZ\Publish\API\REST\Common\Output\Generator
+     * @var \eZ\Publish\Core\REST\Common\Output\Generator
      */
     protected $generator;
 
@@ -109,7 +109,7 @@ class Visitor
     /**
      * Construct from Generator and an array of concrete view model visitors
      *
-     * @param \eZ\Publish\API\REST\Common\Output\Generator $generator
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param array $visitors
      */
     public function __construct( Generator $generator, array $visitors )
@@ -125,7 +125,7 @@ class Visitor
      * Add a new visitor for the given class
      *
      * @param string $class
-     * @param \eZ\Publish\API\REST\Common\Output\ValueObjectVisitor $visitor
+     * @param \eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor $visitor
      */
     public function addVisitor( $class, ValueObjectVisitor $visitor )
     {
@@ -178,7 +178,7 @@ class Visitor
      * Visit struct returned by controllers
      *
      * @param mixed $data
-     * @return \eZ\Publish\API\REST\Common\Message
+     * @return \eZ\Publish\Core\REST\Common\Message
      */
     public function visit( $data )
     {
@@ -229,7 +229,7 @@ class Visitor
      *
      * @param string $type
      * @return string
-     * @see \eZ\Publish\API\REST\Common\Generator::getMediaType()
+     * @see \eZ\Publish\Core\REST\Common\Generator::getMediaType()
      */
     public function getMediaType( $type )
     {

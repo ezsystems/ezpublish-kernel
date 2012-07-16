@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client\HttpClient\Authentication;
-use eZ\Publish\API\REST\Client\HttpClient;
-use eZ\Publish\API\REST\Client\Sessionable;
-use eZ\Publish\API\REST\Common\Message;
+namespace eZ\Publish\Core\REST\Client\HttpClient\Authentication;
+use eZ\Publish\Core\REST\Client\HttpClient;
+use eZ\Publish\Core\REST\Client\Sessionable;
+use eZ\Publish\Core\REST\Common\Message;
 
 /**
  * Authenticator used in integration tests.
@@ -22,7 +22,7 @@ class IntegrationTestAuthenticator implements HttpClient, Sessionable
     /**
      * Inner HTTP client, performing the actual requests.
      *
-     * @var \eZ\Publish\API\REST\Client\HttpClient
+     * @var \eZ\Publish\Core\REST\Client\HttpClient
      */
     protected $innerClient;
 

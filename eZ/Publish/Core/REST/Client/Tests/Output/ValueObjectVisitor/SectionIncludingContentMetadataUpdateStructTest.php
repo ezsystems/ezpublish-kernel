@@ -7,12 +7,12 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client\Tests\Output\ValueObjectVisitor;
-use eZ\Publish\API\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
+namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
-use eZ\Publish\API\REST\Client\Output\ValueObjectVisitor;
-use eZ\Publish\API\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct;
-use eZ\Publish\API\REST\Common;
+use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct;
+use eZ\Publish\Core\REST\Common;
 
 class SectionIncludingContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
 {
@@ -194,7 +194,7 @@ class SectionIncludingContentMetadataUpdateStructTest extends ValueObjectVisitor
     }
 
     /**
-     * @return \eZ\Publish\API\REST\Client\Output\ValueObjectVisitor\Section
+     * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\Section
      */
     protected function getSectionIncludingContentMetadataUpdateStructVisitor()
     {

@@ -10,8 +10,8 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Authenticator;
-use eZ\Publish\API\REST\Server\Authenticator;
+namespace eZ\Publish\Core\REST\Server\Authenticator;
+use eZ\Publish\Core\REST\Server\Authenticator;
 use eZ\Publish\API\Repository\Repository;
 
 use Qafoo\RMF;

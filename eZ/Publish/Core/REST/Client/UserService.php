@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client;
+namespace eZ\Publish\Core\REST\Client;
 
 use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use \eZ\Publish\API\Repository\Values\User\User;
@@ -17,11 +17,11 @@ use \eZ\Publish\API\Repository\Values\User\UserGroup;
 use \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
 use \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 
-use \eZ\Publish\API\REST\Common\UrlHandler;
-use \eZ\Publish\API\REST\Common\Input;
-use \eZ\Publish\API\REST\Common\Output;
-use \eZ\Publish\API\REST\Common\Message;
-use \eZ\Publish\API\REST\Client\Sessionable;
+use \eZ\Publish\Core\REST\Common\UrlHandler;
+use \eZ\Publish\Core\REST\Common\Input;
+use \eZ\Publish\Core\REST\Common\Output;
+use \eZ\Publish\Core\REST\Common\Message;
+use \eZ\Publish\Core\REST\Client\Sessionable;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\UserService}
@@ -32,30 +32,30 @@ use \eZ\Publish\API\REST\Client\Sessionable;
 class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
 {
     /**
-     * @var \eZ\Publish\API\REST\Client\HttpClient
+     * @var \eZ\Publish\Core\REST\Client\HttpClient
      */
     private $client;
 
     /**
-     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
+     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
      */
     private $inputDispatcher;
 
     /**
-     * @var \eZ\Publish\API\REST\Common\Output\Visitor
+     * @var \eZ\Publish\Core\REST\Common\Output\Visitor
      */
     private $outputVisitor;
 
     /**
-     * @var \eZ\Publish\API\REST\Common\UrlHandler
+     * @var \eZ\Publish\Core\REST\Common\UrlHandler
      */
     private $urlHandler;
 
     /**
-     * @param \eZ\Publish\API\REST\Client\HttpClient $client
-     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
-     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Client\HttpClient $client
+     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
+     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
     public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
     {

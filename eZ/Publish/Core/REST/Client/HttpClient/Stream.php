@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client\HttpClient;
-use eZ\Publish\API\REST\Client\HttpClient;
-use eZ\Publish\API\REST\Common\Message;
+namespace eZ\Publish\Core\REST\Client\HttpClient;
+use eZ\Publish\Core\REST\Client\HttpClient;
+use eZ\Publish\Core\REST\Common\Message;
 
 /**
  * Simple PHP stream based HTTP client.

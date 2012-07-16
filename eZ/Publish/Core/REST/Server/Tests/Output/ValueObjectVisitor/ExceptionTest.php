@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Tests\Output\ValueObjectVisitor;
-use eZ\Publish\API\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
+namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
-use eZ\Publish\API\REST\Server\Output\ValueObjectVisitor;
-use eZ\Publish\API\REST\Common;
+use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Common;
 
 class ExceptionTest extends ValueObjectVisitorBaseTest
 {
@@ -165,7 +165,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * @return \eZ\Publish\API\REST\Server\Output\ValueObjectVisitor\Exception
+     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Exception
      */
     protected function getExceptionVisitor()
     {

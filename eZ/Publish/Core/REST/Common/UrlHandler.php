@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Common;
+namespace eZ\Publish\Core\REST\Common;
 
 /**
  * Interface for URL handlers

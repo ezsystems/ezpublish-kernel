@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Common\UrlHandler;
+namespace eZ\Publish\Core\REST\Common\UrlHandler;
 
-use eZ\Publish\API\REST\Common\UrlHandler;
-use eZ\Publish\API\REST\Common\Exceptions;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Exceptions;
 
 /**
  * Pattern based URL Handler pre-configured for eZ Publish

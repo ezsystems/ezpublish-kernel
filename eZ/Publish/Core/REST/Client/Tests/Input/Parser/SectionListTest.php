@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client\Tests\Input\Parser;
+namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
-use eZ\Publish\API\REST\Client\Input\Parser;
+use eZ\Publish\Core\REST\Client\Input\Parser;
 
 class SectionListTest extends BaseTest
 {
@@ -45,7 +45,7 @@ class SectionListTest extends BaseTest
     }
 
     /**
-     * @return eZ\Publish\API\REST\Client\Input\Parser\SectionList;
+     * @return eZ\Publish\Core\REST\Client\Input\Parser\SectionList;
      */
     protected function getParser()
     {

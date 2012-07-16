@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Tests;
+namespace eZ\Publish\Core\REST\Server\Tests;
 
 use \PHPUnit_Framework_TestCase;
 

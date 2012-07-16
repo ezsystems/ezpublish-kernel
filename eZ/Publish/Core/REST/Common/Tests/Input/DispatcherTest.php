@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Common\Tests\Input;
+namespace eZ\Publish\Core\REST\Common\Tests\Input;
 
-use eZ\Publish\API\REST\Common;
+use eZ\Publish\Core\REST\Common;
 
 /**
  * Test case for operations in the ContentTypeService using in memory storage.
@@ -20,7 +20,7 @@ use eZ\Publish\API\REST\Common;
 class DispatcherTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Exceptions\Parser
+     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      */
     public function testParseMissingContentType()
     {
@@ -33,7 +33,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Exceptions\Parser
+     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      */
     public function testParseInvalidContentType()
     {
@@ -50,7 +50,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Exceptions\Parser
+     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      */
     public function testParseMissingFormatHandler()
     {

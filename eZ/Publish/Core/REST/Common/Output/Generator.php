@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Common\Output;
+namespace eZ\Publish\Core\REST\Common\Output;
 
 /**
  * Output generator

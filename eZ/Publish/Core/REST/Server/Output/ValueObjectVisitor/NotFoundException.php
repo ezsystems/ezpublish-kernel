@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Output\ValueObjectVisitor;
+namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
 /**
  * NotFoundException value object visitor

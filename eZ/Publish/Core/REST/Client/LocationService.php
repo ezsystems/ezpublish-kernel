@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Publish\API\REST\Client;
+namespace eZ\Publish\Core\REST\Client;
 
 
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
@@ -14,11 +14,11 @@ use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
-use \eZ\Publish\API\REST\Common\UrlHandler;
-use \eZ\Publish\API\REST\Common\Input;
-use \eZ\Publish\API\REST\Common\Output;
-use \eZ\Publish\API\REST\Common\Message;
-use \eZ\Publish\API\REST\Client\Sessionable;
+use \eZ\Publish\Core\REST\Common\UrlHandler;
+use \eZ\Publish\Core\REST\Common\Input;
+use \eZ\Publish\Core\REST\Common\Output;
+use \eZ\Publish\Core\REST\Common\Message;
+use \eZ\Publish\Core\REST\Client\Sessionable;
 
 /**
  * Location service, used for complex subtree operations
@@ -30,30 +30,30 @@ use \eZ\Publish\API\REST\Client\Sessionable;
 class LocationService implements \eZ\Publish\API\Repository\LocationService, Sessionable
 {
     /**
-     * @var \eZ\Publish\API\REST\Client\HttpClient
+     * @var \eZ\Publish\Core\REST\Client\HttpClient
      */
     private $client;
 
     /**
-     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
+     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
      */
     private $inputDispatcher;
 
     /**
-     * @var \eZ\Publish\API\REST\Common\Output\Visitor
+     * @var \eZ\Publish\Core\REST\Common\Output\Visitor
      */
     private $outputVisitor;
 
     /**
-     * @var \eZ\Publish\API\REST\Common\UrlHandler
+     * @var \eZ\Publish\Core\REST\Common\UrlHandler
      */
     private $urlHandler;
 
     /**
-     * @param \eZ\Publish\API\REST\Client\HttpClient $client
-     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
-     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Client\HttpClient $client
+     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
+     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
     public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
     {

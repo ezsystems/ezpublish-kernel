@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Common\Tests\Output;
+namespace eZ\Publish\Core\REST\Common\Tests\Output;
 
-use eZ\Publish\API\REST\Common;
+use eZ\Publish\Core\REST\Common;
 
 /**
  * Test dummy class
@@ -215,7 +215,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\InvalidTypeException
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\InvalidTypeException
      */
     public function testVisitValueObjectInvalidType()
     {
@@ -226,7 +226,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\NoVisitorFoundException
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\NoVisitorFoundException
      */
     public function testVisitValueObjectNoMatch()
     {

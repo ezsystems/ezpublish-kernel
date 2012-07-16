@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client;
-use eZ\Publish\API\REST\Common\Message;
+namespace eZ\Publish\Core\REST\Client;
+use eZ\Publish\Core\REST\Common\Message;
 
 /**
  * Interface for Http Client implementations

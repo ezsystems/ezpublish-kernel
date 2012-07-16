@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Tests\View;
-use eZ\Publish\API\REST\Server\Tests\BaseTest;
+namespace eZ\Publish\Core\REST\Server\Tests\View;
+use eZ\Publish\Core\REST\Server\Tests\BaseTest;
 
-use eZ\Publish\API\REST\Server\View;
-use eZ\Publish\API\REST\Server\Values;
-use eZ\Publish\API\REST\Common\Output;
-use eZ\Publish\API\REST\Common\Message;
+use eZ\Publish\Core\REST\Server\View;
+use eZ\Publish\Core\REST\Server\Values;
+use eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\Message;
 
 use Qafoo\RMF;
 
@@ -55,7 +55,7 @@ class SectionListTest extends BaseTest
     }
 
     /**
-     * @return void eZ\Publish\API\REST\Common\Output\Visitor
+     * @return void eZ\Publish\Core\REST\Common\Output\Visitor
      */
     protected function getVisitorMock()
     {

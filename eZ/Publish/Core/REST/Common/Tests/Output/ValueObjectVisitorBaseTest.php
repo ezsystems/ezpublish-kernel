@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Common\Tests\Output;
-use eZ\Publish\API\REST\Server\Tests;
+namespace eZ\Publish\Core\REST\Common\Tests\Output;
+use eZ\Publish\Core\REST\Server\Tests;
 
-use eZ\Publish\API\REST\Common\Output\Generator;
+use eZ\Publish\Core\REST\Common\Output\Generator;
 
 abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
 {
@@ -20,12 +20,12 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     protected $visitorMock;
 
     /**
-     * @var \eZ\Publish\API\REST\Common\Output\Generator\Xml
+     * @var \eZ\Publish\Core\REST\Common\Output\Generator\Xml
      */
     protected $generator;
 
     /**
-     * @var \eZ\Publish\API\REST\Common\Input\ParsingDispatcher
+     * @var \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
      */
     protected function getVisitorMock()
     {
@@ -43,7 +43,7 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     }
 
     /**
-     * @return \eZ\Publish\API\REST\Common\Output\Generator\Xml
+     * @return \eZ\Publish\Core\REST\Common\Output\Generator\Xml
      */
     protected function getGenerator()
     {

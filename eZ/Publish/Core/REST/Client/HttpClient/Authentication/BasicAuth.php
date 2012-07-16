@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client\HttpClient\Authentication;
-use eZ\Publish\API\REST\Client\HttpClient;
-use eZ\Publish\API\REST\Common\Message;
+namespace eZ\Publish\Core\REST\Client\HttpClient\Authentication;
+use eZ\Publish\Core\REST\Client\HttpClient;
+use eZ\Publish\Core\REST\Common\Message;
 
 /**
  * Interface for Http Client implementations
@@ -19,7 +19,7 @@ class BasicAuth implements HttpClient
     /**
      * Inner HTTP client, performing the actual requests.
      *
-     * @var \eZ\Publish\API\REST\Client\HttpClient
+     * @var \eZ\Publish\Core\REST\Client\HttpClient
      */
     protected $innerClient;
 

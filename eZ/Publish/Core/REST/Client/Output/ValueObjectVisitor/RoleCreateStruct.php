@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client\Output\ValueObjectVisitor;
+namespace eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
 
-use eZ\Publish\API\REST\Common\Output\ValueObjectVisitor;
-use eZ\Publish\API\REST\Common\Output\Generator;
-use eZ\Publish\API\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Common\Output\Generator;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
  * Role value object visitor

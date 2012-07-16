@@ -10,7 +10,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Exceptions;
+namespace eZ\Publish\Core\REST\Server\Exceptions;
 
 /**
  * Exception thrown if authentication credentials were provided by the

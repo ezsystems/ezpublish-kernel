@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Tests\Authenticator;
-use eZ\Publish\API\REST\Server\Tests\BaseTest;
+namespace eZ\Publish\Core\REST\Server\Tests\Authenticator;
+use eZ\Publish\Core\REST\Server\Tests\BaseTest;
 
-use eZ\Publish\API\REST\Server\Authenticator\IntegrationTest;
+use eZ\Publish\Core\REST\Server\Authenticator\IntegrationTest;
 
 use Qafoo\RMF;
 

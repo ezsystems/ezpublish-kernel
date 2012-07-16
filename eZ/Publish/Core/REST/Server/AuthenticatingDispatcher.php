@@ -10,7 +10,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server;
+namespace eZ\Publish\Core\REST\Server;
 
 use Qafoo\RMF;
 
@@ -23,7 +23,7 @@ class AuthenticatingDispatcher extends RMF\Dispatcher\Simple
     /**
      * Authenticator
      *
-     * @var \eZ\Publish\API\REST\Server\Authenticator
+     * @var \eZ\Publish\Core\REST\Server\Authenticator
      */
     protected $authenticator;
 
@@ -32,7 +32,7 @@ class AuthenticatingDispatcher extends RMF\Dispatcher\Simple
      *
      * @param RMF\Router $router
      * @param RMF\View $view
-     * @param \eZ\Publish\API\REST\Server\Authenticator $authenticator
+     * @param \eZ\Publish\Core\REST\Server\Authenticator $authenticator
      */
     public function __construct( RMF\Router $router, RMF\View $view, Authenticator $authenticator )
     {

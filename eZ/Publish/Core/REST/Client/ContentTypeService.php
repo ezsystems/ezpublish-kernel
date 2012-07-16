@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Publish\API\REST\Client;
+namespace eZ\Publish\Core\REST\Client;
 
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
@@ -21,11 +21,11 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
-use \eZ\Publish\API\REST\Common\UrlHandler;
-use \eZ\Publish\API\REST\Common\Input;
-use \eZ\Publish\API\REST\Common\Output;
-use \eZ\Publish\API\REST\Common\Message;
-use \eZ\Publish\API\REST\Client\Sessionable;
+use \eZ\Publish\Core\REST\Common\UrlHandler;
+use \eZ\Publish\Core\REST\Common\Input;
+use \eZ\Publish\Core\REST\Common\Output;
+use \eZ\Publish\Core\REST\Common\Message;
+use \eZ\Publish\Core\REST\Client\Sessionable;
 
 /**
  * @example Examples/contenttype.php
@@ -35,35 +35,35 @@ use \eZ\Publish\API\REST\Client\Sessionable;
 class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeService, Sessionable
 {
     /**
-     * @var \eZ\Publish\API\REST\Client\ContentService
+     * @var \eZ\Publish\Core\REST\Client\ContentService
      */
     private $contentService;
 
     /**
-     * @var \eZ\Publish\API\REST\Client\HttpClient
+     * @var \eZ\Publish\Core\REST\Client\HttpClient
      */
     private $client;
 
     /**
-     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
+     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
      */
     private $inputDispatcher;
 
     /**
-     * @var \eZ\Publish\API\REST\Common\Output\Visitor
+     * @var \eZ\Publish\Core\REST\Common\Output\Visitor
      */
     private $outputVisitor;
 
     /**
-     * @var \eZ\Publish\API\REST\Common\UrlHandler
+     * @var \eZ\Publish\Core\REST\Common\UrlHandler
      */
     private $urlHandler;
 
     /**
-     * @param \eZ\Publish\API\REST\Client\HttpClient $client
-     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
-     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Client\HttpClient $client
+     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
+     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
     public function __construct( ContentService $contentService, HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
     {
@@ -119,7 +119,7 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
     /**
      * Sets the group internally
      *
-     * @param \eZ\Publish\API\REST\Client\Values\ContentType\ContentTypeGroup $group
+     * @param \eZ\Publish\Core\REST\Client\Values\ContentType\ContentTypeGroup $group
      * @return void
      */
     protected function setGroup( ContentTypeGroup $group )

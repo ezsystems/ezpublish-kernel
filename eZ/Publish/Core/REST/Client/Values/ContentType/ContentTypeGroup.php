@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client\Values\ContentType;
+namespace eZ\Publish\Core\REST\Client\Values\ContentType;
 
 class ContentTypeGroup extends \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
 {

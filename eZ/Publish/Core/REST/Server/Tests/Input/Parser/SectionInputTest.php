@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Tests\Input\Parser;
+namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
-use eZ\Publish\API\REST\Server\Input\Parser\SectionInput;
+use eZ\Publish\Core\REST\Server\Input\Parser\SectionInput;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 
 class SectionInputTest extends BaseTest
@@ -40,7 +40,7 @@ class SectionInputTest extends BaseTest
      * testParseExceptionOnMissingIdentifier
      *
      * @return void
-     * @expectedException \eZ\Publish\API\REST\Common\Exceptions\Parser
+     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'identifier' attribute for SectionInput.
      */
     public function testParseExceptionOnMissingIdentifier()
@@ -57,7 +57,7 @@ class SectionInputTest extends BaseTest
      * testParseExceptionOnMissingName
      *
      * @return void
-     * @expectedException \eZ\Publish\API\REST\Common\Exceptions\Parser
+     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'name' attribute for SectionInput.
      */
     public function testParseExceptionOnMissingName()
@@ -71,7 +71,7 @@ class SectionInputTest extends BaseTest
     }
 
     /**
-     * @return \eZ\Publish\API\REST\Server\Input\Parser\SectionInput
+     * @return \eZ\Publish\Core\REST\Server\Input\Parser\SectionInput
      */
     protected function getSectionInput()
     {

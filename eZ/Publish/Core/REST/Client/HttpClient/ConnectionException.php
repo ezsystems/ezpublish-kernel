@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client\HttpClient;
+namespace eZ\Publish\Core\REST\Client\HttpClient;
 
 /**
  * HTTPClient connection exception

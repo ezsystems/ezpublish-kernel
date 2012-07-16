@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Common\Input;
-use eZ\Publish\API\REST\Common\Message;
-use eZ\Publish\API\REST\Common\Exceptions;
+namespace eZ\Publish\Core\REST\Common\Input;
+use eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\REST\Common\Exceptions;
 
 /**
  * Parsing dispatcher
@@ -49,7 +49,7 @@ class ParsingDispatcher
      * Add another parser for the given Content Type
      *
      * @param string $contentType
-     * @param \eZ\Publish\API\REST\Common\Input\Parser $parser
+     * @param \eZ\Publish\Core\REST\Common\Input\Parser $parser
      */
     public function addParser( $contentType, Parser $parser )
     {

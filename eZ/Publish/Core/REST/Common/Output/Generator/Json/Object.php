@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Common\Output\Generator\Json;
+namespace eZ\Publish\Core\REST\Common\Output\Generator\Json;
 
 /**
  * Json object
@@ -20,7 +20,7 @@ class Object
     /**
      * Reference to the parent node
      *
-     * @var \eZ\Publish\API\REST\Common\Output\Generator\Json\Object
+     * @var \eZ\Publish\Core\REST\Common\Output\Generator\Json\Object
      */
     protected $_ref_parent;
 
@@ -37,7 +37,7 @@ class Object
     /**
      * Get Parent of current node
      *
-     * @return \eZ\Publish\API\REST\Common\Output\Generator\Json\Object
+     * @return \eZ\Publish\Core\REST\Common\Output\Generator\Json\Object
      */
     public function getParent()
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace eZ\Publish\API\REST\Client\Exceptions;
+namespace eZ\Publish\Core\REST\Client\Exceptions;
 
 /**
  * This Exception is thrown on a write attempt in a read only property in a value object.

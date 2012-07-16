@@ -1,5 +1,5 @@
 <?php
-namespace eZ\Publish\API\REST\Client\Values\ContentType;
+namespace eZ\Publish\Core\REST\Client\Values\ContentType;
 
 /**
  * This class represents a validatoor provided by a field type.

@@ -10,8 +10,8 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server;
-use eZ\Publish\API\REST\Common;
+namespace eZ\Publish\Core\REST\Server;
+use eZ\Publish\Core\REST\Common;
 
 use Qafoo\RMF;
 

@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Common\Tests\Output\Generator;
-use eZ\Publish\API\REST\Common\Tests\Output\GeneratorTest;
+namespace eZ\Publish\Core\REST\Common\Tests\Output\Generator;
+use eZ\Publish\Core\REST\Common\Tests\Output\GeneratorTest;
 
-use eZ\Publish\API\REST\Common;
+use eZ\Publish\Core\REST\Common;
 
 require_once __DIR__ . '/../GeneratorTest.php';
 

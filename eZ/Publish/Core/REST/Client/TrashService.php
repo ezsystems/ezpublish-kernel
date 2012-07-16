@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client;
+namespace eZ\Publish\Core\REST\Client;
 
 use \eZ\Publish\API\Repository\Values\Content\Query;
 use \eZ\Publish\API\Repository\Values\Content\Location;
@@ -15,11 +15,11 @@ use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\SearchResult;
 use \eZ\Publish\API\Repository\Values\Content\TrashItem;
 
-use \eZ\Publish\API\REST\Common\UrlHandler;
-use \eZ\Publish\API\REST\Common\Input;
-use \eZ\Publish\API\REST\Common\Output;
-use \eZ\Publish\API\REST\Common\Message;
-use \eZ\Publish\API\REST\Client\Sessionable;
+use \eZ\Publish\Core\REST\Common\UrlHandler;
+use \eZ\Publish\Core\REST\Common\Input;
+use \eZ\Publish\Core\REST\Common\Output;
+use \eZ\Publish\Core\REST\Common\Message;
+use \eZ\Publish\Core\REST\Client\Sessionable;
 
 /**
  * Trash service used for content/location trash handling.
@@ -29,35 +29,35 @@ use \eZ\Publish\API\REST\Client\Sessionable;
 class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionable
 {
     /**
-     * @var \eZ\Publish\API\REST\Client\LocationService
+     * @var \eZ\Publish\Core\REST\Client\LocationService
      */
     private $locationService;
 
     /**
-     * @var \eZ\Publish\API\REST\Client\HttpClient
+     * @var \eZ\Publish\Core\REST\Client\HttpClient
      */
     private $client;
 
     /**
-     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
+     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
      */
     private $inputDispatcher;
 
     /**
-     * @var \eZ\Publish\API\REST\Common\Output\Visitor
+     * @var \eZ\Publish\Core\REST\Common\Output\Visitor
      */
     private $outputVisitor;
 
     /**
-     * @var \eZ\Publish\API\REST\Common\UrlHandler
+     * @var \eZ\Publish\Core\REST\Common\UrlHandler
      */
     private $urlHandler;
 
     /**
-     * @param \eZ\Publish\API\REST\Client\HttpClient $client
-     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
-     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Client\HttpClient $client
+     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
+     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
     public function __construct( LocationService $locationService, HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
     {

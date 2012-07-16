@@ -7,12 +7,12 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client\Input\Parser;
+namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
-use eZ\Publish\API\REST\Common\Input\Parser;
-use eZ\Publish\API\REST\Common\Input\ParsingDispatcher;
+use eZ\Publish\Core\REST\Common\Input\Parser;
+use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 
-use eZ\Publish\API\REST\Client;
+use eZ\Publish\Core\REST\Client;
 
 /**
  * Parser for RoleList

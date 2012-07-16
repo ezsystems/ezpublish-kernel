@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Tests\Output\ValueObjectVisitor;
-use eZ\Publish\API\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
+namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
-use eZ\Publish\API\REST\Server\Output\ValueObjectVisitor;
-use eZ\Publish\API\REST\Server\Values\SectionList;
+use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Server\Values\SectionList;
 use eZ\Publish\API\Repository\Values\Content;
-use eZ\Publish\API\REST\Common;
+use eZ\Publish\Core\REST\Common;
 
 class SectionListTest extends ValueObjectVisitorBaseTest
 {
@@ -114,7 +114,7 @@ class SectionListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * @return \eZ\Publish\API\REST\Server\Output\ValueObjectVisitor\SectionList
+     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\SectionList
      */
     protected function getSectionListVisitor()
     {

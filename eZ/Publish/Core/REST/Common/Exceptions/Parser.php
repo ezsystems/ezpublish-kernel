@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Common\Exceptions;
+namespace eZ\Publish\Core\REST\Common\Exceptions;
 
 /**
  * Exception thrown if a parser discovers an error.

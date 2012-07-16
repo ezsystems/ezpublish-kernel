@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client\Tests\HttpClient\Authentication;
-use \eZ\Publish\API\REST\Client\HttpClient\Authentication\BasicAuth;
-use \eZ\Publish\API\REST\Common\Message;
+namespace eZ\Publish\Core\REST\Client\Tests\HttpClient\Authentication;
+use \eZ\Publish\Core\REST\Client\HttpClient\Authentication\BasicAuth;
+use \eZ\Publish\Core\REST\Common\Message;
 
 /**
  * Test case for Basic Auht HTTP Client.
@@ -91,7 +91,7 @@ class BasicAuthTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \eZ\Publish\API\REST\Client\HttpClient
+     * @return \eZ\Publish\Core\REST\Client\HttpClient
      */
     protected function getInnerHttpClientMock()
     {

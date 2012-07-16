@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client\Values\Content;
+namespace eZ\Publish\Core\REST\Client\Values\Content;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\Content\Location}

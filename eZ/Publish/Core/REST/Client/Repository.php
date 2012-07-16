@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client;
+namespace eZ\Publish\Core\REST\Client;
 
 use \eZ\Publish\API\Repository\Values\ValueObject;
 use \eZ\Publish\API\Repository\Values\Content\Content;
@@ -17,7 +17,7 @@ use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\Limitation;
 
-use \eZ\Publish\API\REST\Common;
+use \eZ\Publish\Core\REST\Common;
 
 /**
  * REST Client Repository
@@ -37,86 +37,86 @@ class Repository implements \eZ\Publish\API\Repository\Repository
     private $currentUser;
 
     /**
-     * @var \eZ\Publish\API\REST\Client\SectionService
+     * @var \eZ\Publish\Core\REST\Client\SectionService
      */
     private $sectionService;
 
     /**
-     * @var \eZ\Publish\API\REST\Client\LanguageService
+     * @var \eZ\Publish\Core\REST\Client\LanguageService
      */
     private $languageService;
 
     /**
-     * @var \eZ\Publish\API\REST\Client\UserService
+     * @var \eZ\Publish\Core\REST\Client\UserService
      */
     private $userService;
 
     /**
-     * @var \eZ\Publish\API\REST\Client\RoleService
+     * @var \eZ\Publish\Core\REST\Client\RoleService
      */
     private $roleService;
 
     /**
-     * @var \eZ\Publish\API\REST\Client\UrlAliasService
+     * @var \eZ\Publish\Core\REST\Client\UrlAliasService
      */
     private $urlAliasService;
 
     /**
-     * @var \eZ\Publish\API\REST\Client\ContentService
+     * @var \eZ\Publish\Core\REST\Client\ContentService
      */
     private $contentService;
 
     /**
-     * @var \eZ\Publish\API\REST\Client\ContentTypeService
+     * @var \eZ\Publish\Core\REST\Client\ContentTypeService
      */
     private $contentTypeService;
 
     /**
-     * @var \eZ\Publish\API\REST\Client\TrashService
+     * @var \eZ\Publish\Core\REST\Client\TrashService
      */
     private $trashService;
 
     /**
-     * @var \eZ\Publish\API\REST\Client\LocationService
+     * @var \eZ\Publish\Core\REST\Client\LocationService
      */
     private $locationService;
 
     /**
-     * @var \eZ\Publish\API\REST\Client\IOService
+     * @var \eZ\Publish\Core\REST\Client\IOService
      */
     private $ioService;
 
     /**
      * Client
      *
-     * @var \eZ\Publish\API\REST\Client\HttpClient
+     * @var \eZ\Publish\Core\REST\Client\HttpClient
      */
     private $client;
 
     /**
      * Input parsing dispatcher
      *
-     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
+     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
      */
     private $inputDispatcher;
 
     /**
-     * @var \eZ\Publish\API\REST\Common\Output\Visitor
+     * @var \eZ\Publish\Core\REST\Common\Output\Visitor
      */
     private $outputVisitor;
 
     /**
-     * @var \eZ\Publish\API\REST\Common\UrlHandler
+     * @var \eZ\Publish\Core\REST\Common\UrlHandler
      */
     private $urlHandler;
 
     /**
      * Instantiates the REST Client repository.
      *
-     * @param \eZ\Publish\API\REST\Client\HttpClient $client
-     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\API\REST\Common\Output\Visitor $outputVisitor
-     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Client\HttpClient $client
+     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
+     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
     public function __construct( HttpClient $client, Common\Input\Dispatcher $inputDispatcher, Common\Output\Visitor $outputVisitor, Common\UrlHandler $urlHandler )
     {

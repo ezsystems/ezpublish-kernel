@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Common\Output;
-use eZ\Publish\API\REST\Common\UrlHandler;
+namespace eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\UrlHandler;
 
 /**
  * Basic ValueObjectVisitor
@@ -18,14 +18,14 @@ abstract class ValueObjectVisitor
     /**
      * URL handler for URL generation
      *
-     * @var \eZ\Publish\API\REST\Common\UrlHandler
+     * @var \eZ\Publish\Core\REST\Common\UrlHandler
      */
     protected $urlHandler;
 
     /**
      * Construct from used URL handler
      *
-     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
     public function __construct( UrlHandler $urlHandler )
     {
@@ -35,8 +35,8 @@ abstract class ValueObjectVisitor
     /**
      * Visit struct returned by controllers
      *
-     * @param \eZ\Publish\API\REST\Common\Output\Visitor $visitor
-     * @param \eZ\Publish\API\REST\Common\Output\Generator $generator
+     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param mixed $data
      */
     abstract public function visit( Visitor $visitor, Generator $generator, $data );

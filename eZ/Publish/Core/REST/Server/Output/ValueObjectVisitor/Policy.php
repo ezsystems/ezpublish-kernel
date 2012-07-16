@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Output\ValueObjectVisitor;
+namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
-use eZ\Publish\API\REST\Common\Output\ValueObjectVisitor;
-use eZ\Publish\API\REST\Common\Output\Generator;
-use eZ\Publish\API\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Common\Output\Generator;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
  * Policy value object visitor
@@ -21,8 +21,8 @@ class Policy extends ValueObjectVisitor
     /**
      * Visit struct returned by controllers
      *
-     * @param \eZ\Publish\API\REST\Common\Output\Visitor $visitor
-     * @param \eZ\Publish\API\REST\Common\Output\Generator $generator
+     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param mixed $data
      */
     public function visit( Visitor $visitor, Generator $generator, $data )

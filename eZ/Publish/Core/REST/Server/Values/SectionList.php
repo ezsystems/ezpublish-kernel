@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Values;
+namespace eZ\Publish\Core\REST\Server\Values;
 
 /**
  * Section list view model

@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Common\Output\Generator;
-use eZ\Publish\API\REST\Common\Output\Generator;
+namespace eZ\Publish\Core\REST\Common\Output\Generator;
+use eZ\Publish\Core\REST\Common\Output\Generator;
 
 /**
  * Xml generator

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST;
+namespace eZ\Publish\Core\REST;
 
 /**
  * This file includes the configuration of the REST SDK client.

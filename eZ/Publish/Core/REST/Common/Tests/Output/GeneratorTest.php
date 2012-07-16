@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Common\Tests\Output;
+namespace eZ\Publish\Core\REST\Common\Tests\Output;
 
-use eZ\Publish\API\REST\Common;
+use eZ\Publish\Core\REST\Common;
 
 /**
  * Test case for operations in the ContentTypeService using in memory storage.
@@ -20,7 +20,7 @@ use eZ\Publish\API\REST\Common;
 abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
     public function testInvalidDocumentStart()
     {
@@ -42,7 +42,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
     public function testInvalidDocumentNameEnd()
     {
@@ -53,7 +53,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
     public function testInvalidOuterElementStart()
     {
@@ -63,7 +63,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
     public function testInvalidElementEnd()
     {
@@ -75,7 +75,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
     public function testGeneratorMultipleElements()
     {
@@ -90,7 +90,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
     public function testGeneratorMultipleStackedElements()
     {
@@ -107,7 +107,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
     public function testInvalidDocumentEnd()
     {
@@ -119,7 +119,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
     public function testInvalidAttributeOuterStart()
     {
@@ -129,7 +129,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
     public function testInvalidAttributeDocumentStart()
     {
@@ -140,7 +140,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
     public function testInvalidAttributeListStart()
     {
@@ -153,7 +153,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
     public function testInvalidValueElementOuterStart()
     {
@@ -163,7 +163,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
     public function testInvalidValueElementDocumentStart()
     {
@@ -174,7 +174,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
     public function testInvalidValueElementListStart()
     {
@@ -187,7 +187,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
     public function testInvalidListOuterStart()
     {
@@ -197,7 +197,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
     public function testInvalidListDocumentStart()
     {
@@ -208,7 +208,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\REST\Common\Output\Exceptions\OutputGeneratorException
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
     public function testInvalidListListStart()
     {

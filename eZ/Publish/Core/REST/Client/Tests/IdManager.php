@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client\Tests;
-use eZ\Publish\API\REST\Common;
+namespace eZ\Publish\Core\REST\Client\Tests;
+use eZ\Publish\Core\REST\Common;
 use eZ\Publish\API\Repository;
 
 /**
@@ -19,7 +19,7 @@ class IdManager
     /**
      * URL handler
      *
-     * @var \eZ\Publish\API\REST\Common\UrlHandler
+     * @var \eZ\Publish\Core\REST\Common\UrlHandler
      */
     protected $urlHandler;
 

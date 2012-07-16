@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Common\Output\Exceptions;
+namespace eZ\Publish\Core\REST\Common\Output\Exceptions;
 
 /**
  * No output visitor found exception

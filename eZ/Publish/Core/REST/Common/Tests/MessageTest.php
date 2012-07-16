@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Common\Tests;
+namespace eZ\Publish\Core\REST\Common\Tests;
 
-use eZ\Publish\API\REST\Common;
+use eZ\Publish\Core\REST\Common;
 
 /**
  * Test case for operations in the ContentTypeService using in memory storage.

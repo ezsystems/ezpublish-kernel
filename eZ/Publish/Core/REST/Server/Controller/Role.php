@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Controller;
-use eZ\Publish\API\REST\Common\UrlHandler;
-use eZ\Publish\API\REST\Common\Message;
-use eZ\Publish\API\REST\Common\Input;
-use eZ\Publish\API\REST\Server\Values;
+namespace eZ\Publish\Core\REST\Server\Controller;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\REST\Common\Input;
+use eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\RoleService;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
@@ -27,14 +27,14 @@ class Role
     /**
      * Input dispatcher
      *
-     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
+     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
      */
     protected $inputDispatcher;
 
     /**
      * URL handler
      *
-     * @var \eZ\Publish\API\REST\Common\UrlHandler
+     * @var \eZ\Publish\Core\REST\Common\UrlHandler
      */
     protected $urlHandler;
 
@@ -48,8 +48,8 @@ class Role
     /**
      * Construct controller
      *
-     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\RoleService $roleService
      */
     public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, RoleService $roleService )
@@ -63,7 +63,7 @@ class Role
      * Create new role
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\API\REST\Server\Values\CreatedRole
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedRole
      */
     public function createRole( RMF\Request $request )
     {
@@ -81,7 +81,7 @@ class Role
      * Load list of roles
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\API\REST\Server\Values\RoleList
+     * @return \eZ\Publish\Core\REST\Server\Values\RoleList
      */
     public function listRoles( RMF\Request $request )
     {
@@ -106,7 +106,7 @@ class Role
      * Load role by identifier
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\API\REST\Server\Values\RoleList
+     * @return \eZ\Publish\Core\REST\Server\Values\RoleList
      */
     public function loadRoleByIdentifier( RMF\Request $request )
     {

@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Input\Parser;
-use eZ\Publish\API\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\API\REST\Common\Exceptions;
+namespace eZ\Publish\Core\REST\Server\Input\Parser;
+use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use eZ\Publish\Core\REST\Common\Exceptions;
 
-use eZ\Publish\API\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct;
+use eZ\Publish\Core\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct;
 
 /**
  * Base class for input parser
@@ -22,8 +22,8 @@ class ContentUpdate extends Base
      * Parse input structure
      *
      * @param array $data
-     * @param \eZ\Publish\API\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\API\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct
+     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @return \eZ\Publish\Core\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {

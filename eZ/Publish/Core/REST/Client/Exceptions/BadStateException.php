@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client\Exceptions;
+namespace eZ\Publish\Core\REST\Client\Exceptions;
 
 
 /**

@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Client\Tests\Input\Parser;
-use eZ\Publish\API\REST\Server\Tests;
+namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
+use eZ\Publish\Core\REST\Server\Tests;
 
 abstract class BaseTest extends Tests\BaseTest
 {
     /**
-     * @var \eZ\Publish\API\REST\Common\Input\ParsingDispatcher
+     * @var \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
      */
     protected function getParsingDispatcherMock()
     {

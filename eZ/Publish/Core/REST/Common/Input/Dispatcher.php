@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Common\Input;
-use eZ\Publish\API\REST\Common\Message;
-use eZ\Publish\API\REST\Common\Exceptions;
+namespace eZ\Publish\Core\REST\Common\Input;
+use eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\REST\Common\Exceptions;
 
 /**
  * Input dispatcher
@@ -33,14 +33,14 @@ class Dispatcher
     protected $handlers = array();
 
     /**
-     * @var \eZ\Publish\API\REST\Common\Input\ParsingDispatcher
+     * @var \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
      */
     protected $parsingDispatcher;
 
     /**
      * Construct from optional parsers array
      *
-     * @param \eZ\Publish\API\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      * @param array $handlers
      */
     public function __construct( ParsingDispatcher $parsingDispatcher, array $handlers = array() )
@@ -56,7 +56,7 @@ class Dispatcher
      * Add another handler for the given Content Type
      *
      * @param string $type
-     * @param \eZ\Publish\API\REST\Common\Input\Handler $handler
+     * @param \eZ\Publish\Core\REST\Common\Input\Handler $handler
      */
     public function addHandler( $type, Handler $handler )
     {
@@ -66,7 +66,7 @@ class Dispatcher
     /**
      * Parse provided request
      *
-     * @param \eZ\Publish\API\REST\Common\Message $message
+     * @param \eZ\Publish\Core\REST\Common\Message $message
      * @return mixed
      */
     public function parse( Message $message )

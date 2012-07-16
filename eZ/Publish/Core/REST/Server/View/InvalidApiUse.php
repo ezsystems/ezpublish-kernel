@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\View;
-use eZ\Publish\API\REST\Server;
+namespace eZ\Publish\Core\REST\Server\View;
+use eZ\Publish\Core\REST\Server;
 
 use Qafoo\RMF;
 

@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Tests\Input\Parser;
-use eZ\Publish\API\REST\Common\UrlHandler;
+namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
+use eZ\Publish\Core\REST\Common\UrlHandler;
 
 /**
  * Base test for input parsers.
  */
-abstract class BaseTest extends \eZ\Publish\API\REST\Server\Tests\BaseTest
+abstract class BaseTest extends \eZ\Publish\Core\REST\Server\Tests\BaseTest
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -21,12 +21,12 @@ abstract class BaseTest extends \eZ\Publish\API\REST\Server\Tests\BaseTest
     protected $parsingDispatcherMock;
 
     /**
-     * @var \eZ\Publish\API\REST\Common\UrlHandler\eZPublish
+     * @var \eZ\Publish\Core\REST\Common\UrlHandler\eZPublish
      */
     protected $urlHandler;
 
     /**
-     * @return \eZ\Publish\API\REST\Common\Input\ParsingDispatcher
+     * @return \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
      */
     protected function getParsingDispatcherMock()
     {
@@ -44,7 +44,7 @@ abstract class BaseTest extends \eZ\Publish\API\REST\Server\Tests\BaseTest
     }
 
     /**
-     * @return \eZ\Publish\API\REST\Common\UrlHandler\eZPublish;
+     * @return \eZ\Publish\Core\REST\Common\UrlHandler\eZPublish;
      */
     protected function getUrlHandler()
     {

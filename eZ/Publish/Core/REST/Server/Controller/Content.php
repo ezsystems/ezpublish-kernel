@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Server\Controller;
-use eZ\Publish\API\REST\Common\UrlHandler;
-use eZ\Publish\API\REST\Common\Message;
-use eZ\Publish\API\REST\Common\Input;
-use eZ\Publish\API\REST\Server\Values;
+namespace eZ\Publish\Core\REST\Server\Controller;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\REST\Common\Input;
+use eZ\Publish\Core\REST\Server\Values;
 
 use \eZ\Publish\API\Repository\ContentService;
 use \eZ\Publish\API\Repository\SectionService;
@@ -28,14 +28,14 @@ class Content
     /**
      * Input dispatcher
      *
-     * @var \eZ\Publish\API\REST\Common\Input\Dispatcher
+     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
      */
     protected $inputDispatcher;
 
     /**
      * URL handler
      *
-     * @var \eZ\Publish\API\REST\Common\UrlHandler
+     * @var \eZ\Publish\Core\REST\Common\UrlHandler
      */
     protected $urlHandler;
 
@@ -56,8 +56,8 @@ class Content
     /**
      * Construct controller
      *
-     * @param \eZ\Publish\API\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
+     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\SectionService $sectionService
      */

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\REST\Common\Values;
+namespace eZ\Publish\Core\REST\Common\Values;
 
 /**
  * Extended ContentMetadataUpdateStruct that includes section information.
