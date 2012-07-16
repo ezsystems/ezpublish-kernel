@@ -13,29 +13,43 @@ use eZ\Publish\Core\FieldType\Rating\Type as Rating,
     eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
+/**
+ * @group fieldType
+ * @group ezsrrating
+ */
 class RatingTest extends FieldTypeTest
 {
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
      */
-    public function testRatingSupportedValidators()
+    public function testValidatorConfigurationSchema()
     {
-        $ft = new Rating( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Rating( $this->validatorService, $this->fieldTypeTools );
         self::assertEmpty(
             $ft->getValidatorConfigurationSchema(),
-            "The set of allowed validators does not match what is expected."
+            "The validator configuration schema does not match what is expected."
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
+     */
+    public function testSettingsSchema()
+    {
+        $ft = new Rating( $this->validatorService, $this->fieldTypeTools );
+        self::assertEmpty(
+            $ft->getSettingsSchema(),
+            "The settings schema does not match what is expected."
         );
     }
 
     /**
      * @covers \eZ\Publish\Core\FieldType\Rating\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @group fieldType
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new Rating( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Rating( $this->validatorService, $this->fieldTypeTools );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -45,12 +59,11 @@ class RatingTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Rating\Type::acceptValue
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new Rating( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Rating( $this->validatorService, $this->fieldTypeTools );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -60,20 +73,18 @@ class RatingTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Rating\Type::toPersistenceValue
      */
     public function testToPersistenceValue()
     {
         $rating = false;
-        $ft = new Rating( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Rating( $this->validatorService, $this->fieldTypeTools );
         $fieldValue = $ft->toPersistenceValue( $fv = new RatingValue( $rating ) );
 
         self::assertSame( $rating, $fieldValue->data );
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Rating\Value::__construct
      */
     public function testBuildFieldValueWithParamFalse()
@@ -83,7 +94,6 @@ class RatingTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Rating\Value::__construct
      */
     public function testBuildFieldValueWithParamTrue()
@@ -93,7 +103,6 @@ class RatingTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Rating\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
@@ -103,7 +112,6 @@ class RatingTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Rating\Value::__toString
      */
     public function testFieldValueToStringFalse()
@@ -121,7 +129,6 @@ class RatingTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Rating\Value::__toString
      */
     public function testFieldValueToStringTrue()

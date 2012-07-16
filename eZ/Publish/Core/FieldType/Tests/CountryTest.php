@@ -13,6 +13,10 @@ use eZ\Publish\Core\FieldType\Country\Type as Country,
     eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
+/**
+ * @group fieldType
+ * @group ezcountry
+ */
 class CountryTest extends FieldTypeTest
 {
     /**
@@ -68,16 +72,30 @@ class CountryTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
      */
-    public function testCountrySupportedValidators()
+    public function testValidatorConfigurationSchema()
     {
-        self::assertSame( array(), $this->ft->getValidatorConfigurationSchema(), "The set of allowed validators does not match what is expected." );
+        self::assertSame(
+            array(),
+            $this->ft->getValidatorConfigurationSchema(),
+            "The validator configuration schema does not match what is expected."
+        );
     }
 
     /**
-     * @group fieldType
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
+     */
+    public function testSettingsSchema()
+    {
+        self::assertSame(
+            array(),
+            $this->ft->getValidatorConfigurationSchema(),
+            "The settings schema does not match what is expected."
+        );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\FieldType\Country\Type::acceptValue
      */
     public function testAcceptValueValidFormatSingle()
@@ -91,7 +109,6 @@ class CountryTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Country\Type::acceptValue
      */
     public function testAcceptValueValidFormatMultiple()
@@ -105,7 +122,6 @@ class CountryTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Country\Type::toPersistenceValue
      */
     public function testToPersistenceValue()
@@ -117,7 +133,6 @@ class CountryTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Country\Value::__construct
      */
     public function testBuildFieldValueWithParam()
@@ -149,7 +164,6 @@ class CountryTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Country\Value::__toString
      */
     public function testFieldValueToString()
@@ -169,7 +183,6 @@ class CountryTest extends FieldTypeTest
     /**
      * Tests creating countries
      *
-     * @group fieldType
      * @dataProvider providerForConstructorOK
      * @covers \eZ\Publish\Core\FieldType\Country\Type::buildValue
      */
@@ -203,7 +216,6 @@ class CountryTest extends FieldTypeTest
     /**
      * Tests validating a wrong value
      *
-     * @group fieldType
      * @dataProvider providerForConstructorKO
      * @expectedException \eZ\Publish\Core\FieldType\Country\Exception\InvalidValue
      * @expectedExceptionMessage is not a valid value country identifier

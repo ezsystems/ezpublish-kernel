@@ -13,33 +13,43 @@ use eZ\Publish\Core\FieldType\TextLine\Type as TextLine,
     eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
+/**
+ * @group fieldType
+ * @group ezstring
+ */
 class TextLineTest extends FieldTypeTest
 {
     /**
-     * @group fieldType
-     * @group textLine
      * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
      */
-    public function testTextLineSupportedValidators()
+    public function testTextLineValidatorConfigurationSchema()
     {
         $ft = new TextLine( $this->validatorService, $this->fieldTypeTools );;
         self::assertSame(
-            array( 'StringLengthValidator' ),
+            array(
+                "StringLengthValidator" => array(
+                    "minStringLength" => array(
+                        "type" => "int",
+                        "default" => 0
+                    ),
+                    "maxStringLength" => array(
+                        "type" => "int",
+                        "default" => null
+                    )
+                )
+            ),
             $ft->getValidatorConfigurationSchema(),
-            "The set of allowed validators does not match what is expected."
+            "The validator configuration schema does not match what is expected."
         );
     }
 
     /**
-     * @group fieldType
-     * @group textLine
      * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
      */
     public function testTextLineAllowedSettings()
     {
         $ft = new TextLine( $this->validatorService, $this->fieldTypeTools );;
-        self::assertSame(
-            array(),
+        self::assertEmpty(
             $ft->getSettingsSchema(),
             "The set of allowed settings does not match what is expected."
         );
@@ -48,8 +58,6 @@ class TextLineTest extends FieldTypeTest
     /**
      * @covers \eZ\Publish\Core\FieldType\TextLine\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @group fieldType
-     * @group textLine
      */
     public function testAcceptValueInvalidFormat()
     {
@@ -61,8 +69,6 @@ class TextLineTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group textLine
      * @covers \eZ\Publish\Core\FieldType\TextLine\Type::acceptValue
      */
     public function testAcceptValueValidFormat()
@@ -77,8 +83,6 @@ class TextLineTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group textLine
      * @covers \eZ\Publish\Core\FieldType\TextLine\Type::toPersistenceValue
      */
     public function testToPersistenceValue()
@@ -92,8 +96,6 @@ class TextLineTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group textLine
      * @covers \eZ\Publish\Core\FieldType\TextLine\Value::__construct
      */
     public function testBuildFieldValueWithParam()
@@ -104,8 +106,6 @@ class TextLineTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group textLine
      * @covers \eZ\Publish\Core\FieldType\TextLine\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
@@ -115,8 +115,6 @@ class TextLineTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group textLine
      * @covers \eZ\Publish\Core\FieldType\TextLine\Value::__toString
      */
     public function testFieldValueToString()

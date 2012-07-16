@@ -18,6 +18,10 @@ use eZ\Publish\Core\FieldType\BinaryFile\Type as BinaryFileType,
     SplFileInfo as FileInfo,
     ReflectionObject;
 
+/**
+ * @group fieldType
+ * @group ezbinaryfile
+ */
 class BinaryFileTest extends FieldTypeTest
 {
     /**
@@ -49,25 +53,41 @@ class BinaryFileTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group binaryFile
      * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
      */
-    public function testBinaryFileSupportedValidators()
+    public function testValidatorConfigurationSchema()
     {
         $ft = new BinaryFileType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
         self::assertSame(
-            array( 'FileSizeValidator' ),
+            array(
+                "FileSizeValidator" => array(
+                    "maxFileSize" => array(
+                        "type" => "int",
+                        "default" => false
+                    )
+                )
+            ),
             $ft->getValidatorConfigurationSchema(),
             "The set of allowed validators does not match what is expected."
         );
     }
 
     /**
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
+     */
+    public function testSettingsSchema()
+    {
+        $ft = new BinaryFileType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
+        self::assertSame(
+            array(),
+            $ft->getSettingsSchema(),
+            "The settings schema does not match what is expected."
+        );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\FieldType\BinaryFile\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @group fieldType
-     * @group binaryFile
      */
     public function testAcceptValueInvalidFormat()
     {
@@ -83,8 +103,6 @@ class BinaryFileTest extends FieldTypeTest
     /**
      * @covers \eZ\Publish\Core\FieldType\BinaryFile\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @group fieldType
-     * @group binaryFile
      */
     public function testAcceptInvalidValue()
     {
@@ -96,8 +114,6 @@ class BinaryFileTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group binaryFile
      * @covers \eZ\Publish\Core\FieldType\BinaryFile\Type::acceptValue
      */
     public function testAcceptValueValidFormat()
@@ -111,10 +127,23 @@ class BinaryFileTest extends FieldTypeTest
         self::assertSame( $value, $refMethod->invoke( $ft, $value ) );
     }
 
+    /**
+     * @covers \eZ\Publish\Core\FieldType\BinaryFile\Type::toPersistenceValue
+     */
+    public function testToPersistenceValue()
+    {
+        $this->markTestIncomplete( "Test for \\eZ\\Publish\\Core\\FieldType\\BinaryFile\\Type::toPersistenceValue() is not implemented." );
+    }
 
     /**
-     * @group fieldType
-     * @group binaryFile
+     * @covers \eZ\Publish\Core\FieldType\BinaryFile\Type::fromPersistenceValue
+     */
+    public function testFromPersistenceValue()
+    {
+        $this->markTestIncomplete( "Test for \\eZ\\Publish\\Core\\FieldType\\BinaryFile\\Type::fromPersistenceValue() is not implemented." );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\FieldType\BinaryFile\Value::__toString
      */
     public function testFieldValueToString()
@@ -127,8 +156,6 @@ class BinaryFileTest extends FieldTypeTest
     /**
      * Tests legacy properties, not directly accessible from Value object
      *
-     * @group fieldType
-     * @group binaryFile
      * @covers \eZ\Publish\Core\FieldType\BinaryFile\Value::__get
      */
     public function testVirtualLegacyProperty()
@@ -142,8 +169,6 @@ class BinaryFileTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group binaryFile
      * @covers \eZ\Publish\Core\FieldType\BinaryFile\Value::__get
      * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */

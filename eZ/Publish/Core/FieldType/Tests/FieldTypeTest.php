@@ -13,9 +13,6 @@ use eZ\Publish\Core\Repository\ValidatorService,
     eZ\Publish\Core\Repository\FieldTypeTools,
     PHPUnit_Framework_TestCase;
 
-/**
- * @group fieldType
- */
 abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
 {
     /**

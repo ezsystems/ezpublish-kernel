@@ -13,31 +13,43 @@ use eZ\Publish\Core\FieldType\Selection\Type as Selection,
     eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
+/**
+ * @group fieldType
+ * @group ezselection
+ */
 class SelectionTest extends FieldTypeTest
 {
     /**
-     * @group fieldType
-     * @group selection
      * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
      */
-    public function testSelectionSupportedValidators()
+    public function testValidatorConfigurationSchema()
     {
-        $ft = new Selection( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Selection( $this->validatorService, $this->fieldTypeTools );
         self::assertEmpty(
             $ft->getValidatorConfigurationSchema(),
-            "The set of allowed validators does not match what is expected."
+            "The validator configuration schema does not match what is expected."
         );
     }
 
     /**
-     * @group fieldType
-     * @group selection
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
+     */
+    public function testSettingsSchema()
+    {
+        $ft = new Selection( $this->validatorService, $this->fieldTypeTools );
+        self::assertEmpty(
+            $ft->getSettingsSchema(),
+            "The settings schema does not match what is expected."
+        );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\FieldType\Selection\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new Selection( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Selection( $this->validatorService, $this->fieldTypeTools );
         $invalidValue = new SelectionValue;
         $invalidValue->selection = "This should be an array instead!";
         $ref = new ReflectionObject( $ft );
@@ -47,13 +59,11 @@ class SelectionTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group selection
      * @covers \eZ\Publish\Core\FieldType\Selection\Type::acceptValue
      */
     public function testAcceptValueValidStringFormat()
     {
-        $ft = new Selection( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Selection( $this->validatorService, $this->fieldTypeTools );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -63,13 +73,11 @@ class SelectionTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group selection
      * @covers \eZ\Publish\Core\FieldType\Selection\Type::acceptValue
      */
     public function testAcceptValueValidArrayFormat()
     {
-        $ft = new Selection( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Selection( $this->validatorService, $this->fieldTypeTools );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -79,14 +87,12 @@ class SelectionTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group selection
      * @covers \eZ\Publish\Core\FieldType\Selection\Type::toPersistenceValue
      */
     public function testToPersistenceValue()
     {
         $string = "Choice1";
-        $ft = new Selection( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Selection( $this->validatorService, $this->fieldTypeTools );
         $fieldValue = $ft->toPersistenceValue( new SelectionValue( (array)$string ) );
 
         self::assertSame( array( $string ), $fieldValue->data );
@@ -94,8 +100,6 @@ class SelectionTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group selection
      * @covers \eZ\Publish\Core\FieldType\Selection\Value::__construct
      */
     public function testBuildFieldValueWithParam()
@@ -106,8 +110,6 @@ class SelectionTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group selection
      * @covers \eZ\Publish\Core\FieldType\Selection\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
@@ -117,8 +119,6 @@ class SelectionTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group selection
      * @covers \eZ\Publish\Core\FieldType\Selection\Value::__toString
      */
     public function testFieldValueToString()

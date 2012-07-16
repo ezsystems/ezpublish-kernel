@@ -18,6 +18,9 @@ use eZ\Publish\Core\FieldType\Media\Handler as MediaHandler,
 
 /**
  * Test case for {@link \eZ\Publish\Core\FieldType\Media\Handler}
+ *
+ * @group fieldType
+ * @group ezmedia
  */
 class MediaHandlerTest extends FieldTypeTest
 {
@@ -52,8 +55,6 @@ class MediaHandlerTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group ezmedia
      * @covers \eZ\Publish\Core\FieldType\Media\Handler
      */
     public function testGetPluginsPageByType()

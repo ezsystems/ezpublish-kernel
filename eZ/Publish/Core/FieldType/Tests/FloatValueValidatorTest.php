@@ -14,6 +14,10 @@ use eZ\Publish\Core\FieldType\Float\Value as FloatValue,
     eZ\Publish\API\Repository\Values\Translation\Message,
     eZ\Publish\API\Repository\Values\Translation\Plural;
 
+/**
+ * @group fieldType
+ * @group validator
+ */
 class FloatValueValidatorTest extends FieldTypeTest
 {
     /**
@@ -34,9 +38,6 @@ class FloatValueValidatorTest extends FieldTypeTest
 
     /**
      * This test ensure an FloatValueValidator can be created
-     *
-     * @group fieldType
-     * @group validator
      */
     public function testConstructor()
     {
@@ -49,8 +50,6 @@ class FloatValueValidatorTest extends FieldTypeTest
     /**
      * Tests setting and getting constraints
      *
-     * @group fieldType
-     * @group validator
      * @covers \eZ\Publish\Core\FieldType\Validator::initializeWithConstraints
      * @covers \eZ\Publish\Core\FieldType\Validator::__get
      */
@@ -71,8 +70,6 @@ class FloatValueValidatorTest extends FieldTypeTest
     /**
      * Tests setting and getting constraints
      *
-     * @group fieldType
-     * @group validator
      * @covers \eZ\Publish\Core\FieldType\Validator::__set
      * @covers \eZ\Publish\Core\FieldType\Validator::__get
      */
@@ -92,8 +89,6 @@ class FloatValueValidatorTest extends FieldTypeTest
     /**
      * Tests initializing with a wrong constraint
      *
-     * @group fieldType
-     * @group validator
      * @covers \eZ\Publish\Core\FieldType\Validator::initializeWithConstraints
      * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
@@ -111,8 +106,6 @@ class FloatValueValidatorTest extends FieldTypeTest
     /**
      * Tests setting a wrong constraint
      *
-     * @group fieldType
-     * @group validator
      * @covers \eZ\Publish\Core\FieldType\Validator::__set
      * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
@@ -125,8 +118,6 @@ class FloatValueValidatorTest extends FieldTypeTest
     /**
      * Tests getting a wrong constraint
      *
-     * @group fieldType
-     * @group validator
      * @covers \eZ\Publish\Core\FieldType\Validator::__get
      * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
@@ -139,8 +130,6 @@ class FloatValueValidatorTest extends FieldTypeTest
     /**
      * Tests validating a correct value
      *
-     * @group fieldType
-     * @group validator
      * @dataProvider providerForValidateOK
      * @covers \eZ\Publish\Core\FieldType\Float\FloatValueValidator::validate
      * @covers \eZ\Publish\Core\FieldType\Validator::getMessage
@@ -168,8 +157,6 @@ class FloatValueValidatorTest extends FieldTypeTest
     /**
      * Tests validating a wrong value
      *
-     * @group fieldType
-     * @group validator
      * @dataProvider providerForValidateKO
      * @covers \eZ\Publish\Core\FieldType\Float\FloatValueValidator::validate
      */

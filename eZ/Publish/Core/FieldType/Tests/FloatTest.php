@@ -13,26 +13,46 @@ use eZ\Publish\Core\FieldType\Float\Type as Float,
     eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
+/**
+ * @group fieldType
+ * @group ezfloat
+ */
 class FloatTest extends FieldTypeTest
 {
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
      */
-    public function testFloatSupportedValidators()
+    public function testValidatorConfigurationSchema()
     {
-        $ft = new Float( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Float( $this->validatorService, $this->fieldTypeTools );
         self::assertSame(
-            array( "FloatValueValidator" ),
+            array(
+                "FloatValueValidator" => array(
+                    "minFloatValue" => false,
+                    "maxFloatValue" => false
+                )
+            ),
             $ft->getValidatorConfigurationSchema(),
             "The set of allowed validators does not match what is expected."
         );
     }
 
     /**
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
+     */
+    public function testCheckboxSettingsSchema()
+    {
+        $ft = new Float( $this->validatorService, $this->fieldTypeTools );
+        self::assertSame(
+            array(),
+            $ft->getSettingsSchema(),
+            "The settings schema does not match what is expected."
+        );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\FieldType\Float\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @group fieldType
      */
     public function testAcceptValueInvalidFormat()
     {
@@ -44,12 +64,11 @@ class FloatTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Float\Type::acceptValue
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new Float( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Float( $this->validatorService, $this->fieldTypeTools );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -59,12 +78,11 @@ class FloatTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Float\Type::toPersistenceValue
      */
     public function testToPersistenceValue()
     {
-        $ft = new Float( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Float( $this->validatorService, $this->fieldTypeTools );
         $fieldValue = $ft->toPersistenceValue( new FloatValue( 42.42 ) );
 
         self::assertSame( 42.42, $fieldValue->data );
@@ -72,7 +90,6 @@ class FloatTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Float\Value::__construct
      */
     public function testBuildFieldValueWithParam()
@@ -82,7 +99,6 @@ class FloatTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Float\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
@@ -92,7 +108,6 @@ class FloatTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Float\Value::__toString
      */
     public function testFieldValueToString()

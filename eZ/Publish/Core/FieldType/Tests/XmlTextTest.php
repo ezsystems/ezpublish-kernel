@@ -11,31 +11,69 @@ namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType,
     eZ\Publish\Core\FieldType\XmlText\Value as XmlTextValue,
     eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
-    ReflectionObject,
-    ReflectionProperty,
     DOMDocument;
 
 /**
  * @group fieldType
+ * @group ezxmltext
  */
 class XmlTextTypeTest extends FieldTypeTest
 {
     /**
-     * @group fieldType
-     * @group dateTime
+     * Normally this should be enough:
+     *
+     * $ft = new XmlTextType( $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XMLText\\Input\\Parser' ) );
+     *
+     * But there is a bug in PHPUnit when mocking an interface and calling the test in a certain way
+     * (eg. with --group switch), when invocationMocker is missing.
+     *
+     * Possibly described here:
+     * https://github.com/sebastianbergmann/phpunit-mock-objects/issues/26
+     */
+    protected function getFieldType()
+    {
+        return new XmlTextType(
+            new \eZ\Publish\Core\FieldType\XmlText\Input\Parser\Raw(
+                new \eZ\Publish\Core\FieldType\XmlText\Schema()
+            )
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
+     */
+    public function testValidatorConfigurationSchema()
+    {
+        $ft = $this->getFieldType();
+        self::assertEmpty(
+            $ft->getValidatorConfigurationSchema(),
+            "The validator configuration schema does not match what is expected."
+        );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
      */
-    public function testAllowedSettings()
+    public function testSettingsSchema()
     {
-        $ft = new XmlTextType( $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XMLText\\Input\\Parser' ) );
+        $ft = $this->getFieldType();
         self::assertSame(
             array(
-                'numRows' => 10,
-                'tagPreset' => null,
-                'defaultText' => ''
+                "numRows" => array(
+                    "type" => "int",
+                    "default" => 10
+                ),
+                "tagPreset" => array(
+                    "type" => "choice",
+                    "default" => XmlTextType::TAG_PRESET_DEFAULT
+                ),
+                "defaultText" => array(
+                    "type" => "string",
+                    "default" => ""
+                ),
             ),
             $ft->getSettingsSchema(),
-            "The set of allowed settings does not match what is expected."
+            "The settings schema does not match what is expected."
         );
     }
 
@@ -45,7 +83,7 @@ class XmlTextTypeTest extends FieldTypeTest
      */
     public function testAcceptValueInvalidType()
     {
-        $ft = new XmlTextType( $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XMLText\\Input\\Parser' ) );
+        $ft = $this->getFieldType();
         $ft->acceptValue( $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Value' ) );
     }
 
@@ -88,7 +126,7 @@ class XmlTextTypeTest extends FieldTypeTest
     public function testToPersistenceValue()
     {
         // @todo Do one per value class
-        $ft = new XmlTextType( $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XMLText\\Input\\Parser' ) );
+        $ft = $this->getFieldType();
         $value = $ft->buildValue( '', XmlTextValue::INPUT_FORMAT_PLAIN );
 
         $fieldValue = $ft->toPersistenceValue( $value );

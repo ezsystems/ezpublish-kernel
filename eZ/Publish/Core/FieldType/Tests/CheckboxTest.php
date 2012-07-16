@@ -13,49 +13,45 @@ use eZ\Publish\Core\FieldType\Checkbox\Type as Checkbox,
     eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
+/**
+ * @group fieldType
+ * @group ezboolean
+ */
 class CheckboxTest extends FieldTypeTest
 {
     /**
-     * @group fieldType
-     * @group ezboolean
      * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
      */
-    public function testCheckboxSupportedValidators()
+    public function testValidatorConfigurationSchema()
     {
         $ft = new Checkbox( $this->validatorService, $this->fieldTypeTools );
         self::assertSame(
             array(),
             $ft->getValidatorConfigurationSchema(),
-            "The set of allowed validators does not match what is expected."
+            "The validator configuration schema does not match what is expected."
         );
     }
 
     /**
-     * @group fieldType
-     * @group ezboolean
      * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
      */
-    public function testCheckboxAllowedSettings()
+    public function testSettingsSchema()
     {
-        $ft = new Checkbox( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Checkbox( $this->validatorService, $this->fieldTypeTools );
         self::assertSame(
-            array(
-                'defaultValue' => false
-            ),
+            array(),
             $ft->getSettingsSchema(),
-            "The set of allowed settings does not match what is expected."
+            "The settings schema does not match what is expected."
         );
     }
 
     /**
      * @covers \eZ\Publish\Core\FieldType\Checkbox\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @group fieldType
-     * @group ezboolean
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new Checkbox( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Checkbox( $this->validatorService, $this->fieldTypeTools );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
@@ -65,12 +61,10 @@ class CheckboxTest extends FieldTypeTest
     /**
      * @covers \eZ\Publish\Core\FieldType\Checkbox\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @group fieldType
-     * @group ezboolean
      */
     public function testAcceptValueInvalidValue()
     {
-        $ft = new Checkbox( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Checkbox( $this->validatorService, $this->fieldTypeTools );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
@@ -78,8 +72,6 @@ class CheckboxTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group ezboolean
      * @covers \eZ\Publish\Core\FieldType\Checkbox\Type::acceptValue
      */
     public function testAcceptValueValidFormat()
@@ -94,8 +86,6 @@ class CheckboxTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group ezboolean
      * @covers \eZ\Publish\Core\FieldType\Checkbox\Type::toPersistenceValue
      */
     public function testToPersistenceValue()
@@ -108,8 +98,6 @@ class CheckboxTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group ezboolean
      * @covers \eZ\Publish\Core\FieldType\Checkbox\Value::__construct
      */
     public function testBuildFieldValueWithParam()
@@ -120,8 +108,6 @@ class CheckboxTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group ezboolean
      * @covers \eZ\Publish\Core\FieldType\Checkbox\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
@@ -131,8 +117,6 @@ class CheckboxTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group ezboolean
      * @covers \eZ\Publish\Core\FieldType\Checkbox\Value::__toString
      */
     public function testFieldValueToString()

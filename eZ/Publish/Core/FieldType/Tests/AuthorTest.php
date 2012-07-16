@@ -45,10 +45,25 @@ class AuthorTest extends FieldTypeTest
     /**
      * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
      */
-    public function testAuthorSupportedValidators()
+    public function testValidatorConfigurationSchema()
     {
         $ft = new AuthorType( $this->validatorService, $this->fieldTypeTools );
-        self::assertSame( array(), $ft->getValidatorConfigurationSchema(), "The set of allowed validators does not match what is expected." );
+        self::assertEmpty(
+            $ft->getValidatorConfigurationSchema(),
+            "The validator configuration schema does not match what is expected."
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
+     */
+    public function testSettingsSchema()
+    {
+        $ft = new AuthorType( $this->validatorService, $this->fieldTypeTools );
+        self::assertEmpty(
+            $ft->getSettingsSchema(),
+            "The settings schema does not match what is expected."
+        );
     }
 
     /**
@@ -152,6 +167,9 @@ class AuthorTest extends FieldTypeTest
         self::assertSame( 3, count( $value->authors ) );
     }
 
+    /**
+     * @covers \eZ\Publish\Core\FieldType\Author\AuthorCollection::removeAuthorsById
+     */
     public function testRemoveAuthors()
     {
         $existingIds = array();
@@ -161,6 +179,7 @@ class AuthorTest extends FieldTypeTest
             if ( in_array( $id, $existingIds ) )
                 continue;
             $author->id = $id;
+            $existingIds[] = $id;
         }
 
         $value = new AuthorValue( $this->authors );

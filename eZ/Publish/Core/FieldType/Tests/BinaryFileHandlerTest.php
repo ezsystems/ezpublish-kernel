@@ -17,6 +17,9 @@ use eZ\Publish\Core\FieldType\BinaryFile\Handler as BinaryFileHandler,
 
 /**
  * Test case for {@link \eZ\Publish\Core\FieldType\BinaryFile\Handler}
+ *
+ * @group fieldType
+ * @group ezbinaryfile
  */
 class BinaryFileHandlerTest extends FieldTypeTest
 {
@@ -51,8 +54,6 @@ class BinaryFileHandlerTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group binaryFile
      * @covers \eZ\Publish\Core\FieldType\BinaryFile\Handler::createFromLocalPath
      */
     public function testCreateFromLocalPath()

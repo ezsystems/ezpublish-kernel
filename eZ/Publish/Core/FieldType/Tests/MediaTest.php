@@ -18,6 +18,10 @@ use eZ\Publish\Core\FieldType\Media\Type as MediaType,
     SplFileInfo as FileInfo,
     ReflectionObject;
 
+/**
+ * @group fieldType
+ * @group ezmedia
+ */
 class MediaTest extends FieldTypeTest
 {
     /**
@@ -49,42 +53,41 @@ class MediaTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group ezmedia
      * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
      */
-    public function testMediaSupportedValidators()
-    {
-        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
-        self::assertSame(
-            array( 'FileSizeValidator' ),
-            $ft->getValidatorConfigurationSchema(),
-            "The set of allowed validators does not match what is expected."
-        );
-    }
-
-    /**
-     * @group fieldType
-     * @group ezmedia
-     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
-     */
-    public function testMediaAllowedSettings()
+    public function testValidatorConfigurationSchema()
     {
         $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
         self::assertSame(
             array(
-                'mediaType' => 'html5_video'
+                "FileSizeValidator" => array(
+                    "type" => "int",
+                    'maxFileSize' => false
+                )
+            ),
+            $ft->getValidatorConfigurationSchema(),
+            "The validator configuration schema does not match what is expected."
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
+     */
+    public function testSettingsSchema()
+    {
+        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
+        self::assertSame(
+            array(
+                'mediaType' => MediaType::TYPE_HTML5_VIDEO
             ),
             $ft->getSettingsSchema(),
-            "The set of allowed settings does not match what is expected."
+            "The settings schema does not match what is expected."
         );
     }
 
     /**
      * @covers \eZ\Publish\Core\FieldType\Media\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @group fieldType
-     * @group ezmedia
      */
     public function testAcceptValueInvalidFormat()
     {
@@ -100,8 +103,6 @@ class MediaTest extends FieldTypeTest
     /**
      * @covers \eZ\Publish\Core\FieldType\Media\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @group fieldType
-     * @group ezmedia
      */
     public function testAcceptInvalidValue()
     {
@@ -113,8 +114,6 @@ class MediaTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group ezmedia
      * @covers \eZ\Publish\Core\FieldType\Media\Type::acceptValue
      */
     public function testAcceptValueValidFormat()
@@ -129,8 +128,6 @@ class MediaTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group ezmedia
      * @covers \eZ\Publish\Core\FieldType\Media\Value::__construct
      */
     public function testBuildFieldValueFromString()
@@ -144,8 +141,6 @@ class MediaTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group ezmedia
      * @covers \eZ\Publish\Core\FieldType\Media\Value::__toString
      */
     public function testFieldValueToString()
@@ -158,8 +153,6 @@ class MediaTest extends FieldTypeTest
     /**
      * Tests legacy properties, not directly accessible from Value object
      *
-     * @group fieldType
-     * @group ezmedia
      * @covers \eZ\Publish\Core\FieldType\Media\Value::__get
      */
     public function testVirtualLegacyProperty()
@@ -171,8 +164,6 @@ class MediaTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group ezmedia
      * @covers \eZ\Publish\Core\FieldType\Media\Value::__get
      * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */

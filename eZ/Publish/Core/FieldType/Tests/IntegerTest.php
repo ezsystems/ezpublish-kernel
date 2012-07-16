@@ -13,30 +13,55 @@ use eZ\Publish\Core\FieldType\Integer\Type as Integer,
     eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
+/**
+ * @group fieldType
+ * @group ezinteger
+ */
 class IntegerTest extends FieldTypeTest
 {
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
      */
-    public function testIntegerSupportedValidators()
+    public function testValidatorConfigurationSchema()
     {
-        $ft = new Integer( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Integer( $this->validatorService, $this->fieldTypeTools );
         self::assertSame(
-            array( "IntegerValueValidator" ),
+            array(
+                "IntegerValueValidator" => array(
+                    "minIntegerValue" => array(
+                        "type" => "int",
+                        "default" => 0
+                    ),
+                    "maxIntegerValue" => array(
+                        "type" => "int",
+                        "default" => false
+                    )
+                )
+            ),
             $ft->getValidatorConfigurationSchema(),
-            "The set of allowed validators does not match what is expected."
+            "The validator configuration schema does not match what is expected."
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
+     */
+    public function testSettingsSchema()
+    {
+        $ft = new Integer( $this->validatorService, $this->fieldTypeTools );
+        self::assertEmpty(
+            $ft->getSettingsSchema(),
+            "The settings schema does not match what is expected."
         );
     }
 
     /**
      * @covers \eZ\Publish\Core\FieldType\Integer\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @group fieldType
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new Integer( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Integer( $this->validatorService, $this->fieldTypeTools );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -44,12 +69,11 @@ class IntegerTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Integer\Type::acceptValue
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new Integer( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Integer( $this->validatorService, $this->fieldTypeTools );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -59,13 +83,12 @@ class IntegerTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Integer\Type::toPersistenceValue
      */
     public function testToPersistenceValue()
     {
         $integer = 42;
-        $ft = new Integer( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Integer( $this->validatorService, $this->fieldTypeTools );
         $fieldValue = $ft->toPersistenceValue( new IntegerValue( $integer ) );
 
         self::assertSame( $integer, $fieldValue->data );
@@ -73,7 +96,6 @@ class IntegerTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Integer\Value::__construct
      */
     public function testBuildFieldValueWithParam()
@@ -83,7 +105,6 @@ class IntegerTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Integer\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
@@ -93,7 +114,6 @@ class IntegerTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Integer\Value::__toString
      */
     public function testFieldValueToString()

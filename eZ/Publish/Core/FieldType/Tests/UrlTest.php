@@ -13,26 +13,43 @@ use eZ\Publish\Core\FieldType\Url\Type as Url,
     eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
+/**
+ * @group fieldType
+ * @group ezurl
+ */
 class UrlTest extends FieldTypeTest
 {
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
      */
-    public function testUrlSupportedValidators()
+    public function testValidatorConfigurationSchema()
     {
-        $ft = new Url( $this->validatorService, $this->fieldTypeTools );;
-        self::assertSame( array(), $ft->getValidatorConfigurationSchema(), "The set of allowed validators does not match what is expected." );
+        $ft = new Url( $this->validatorService, $this->fieldTypeTools );
+        self::assertEmpty(
+            $ft->getValidatorConfigurationSchema(),
+            "The validator configuration schema does not match what is expected."
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
+     */
+    public function testSettingsSchema()
+    {
+        $ft = new Url( $this->validatorService, $this->fieldTypeTools );
+        self::assertEmpty(
+            $ft->getSettingsSchema(),
+            "The settings schema does not match what is expected."
+        );
     }
 
     /**
      * @covers \eZ\Publish\Core\FieldType\Url\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @group fieldType
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new Url( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Url( $this->validatorService, $this->fieldTypeTools );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -40,12 +57,11 @@ class UrlTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Url\Type::acceptValue
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new Url( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Url( $this->validatorService, $this->fieldTypeTools );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -55,20 +71,27 @@ class UrlTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Url\Type::toPersistenceValue
      */
     public function testToPersistenceValue()
     {
         $link = "http://ez.no/";
-        $ft = new Url( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Url( $this->validatorService, $this->fieldTypeTools );
         $fieldValue = $ft->toPersistenceValue( new UrlValue( $link ) );
 
-        self::assertSame( array( "link" => $link, "text" => null ), $fieldValue->data );
+        self::assertSame( array( "urlId" => null, "text" => null ), $fieldValue->data );
+        self::assertSame( $link, $fieldValue->externalData );
     }
 
     /**
-     * @group fieldType
+     * @covers \eZ\Publish\Core\FieldType\Url\Type::fromPersistenceValue
+     */
+    public function testFromPersistenceValue()
+    {
+        $this->markTestIncomplete( "Test for \\eZ\\Publish\\Core\\FieldType\\Url\\Type::fromPersistenceValue() is not implemented." );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\FieldType\Url\Value::__construct
      */
     public function testBuildFieldValueWithParam()
@@ -79,7 +102,6 @@ class UrlTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\FieldType\Url\Value::__toString
      */
     public function testFieldValueToString()

@@ -12,6 +12,10 @@ use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue,
     eZ\Publish\Core\FieldType\Validator\StringLengthValidator,
     eZ\Publish\Core\Repository\Tests\FieldType;
 
+/**
+ * @group fieldType
+ * @group validator
+ */
 class StringLengthValidatorTest extends FieldTypeTest
 {
     /**
@@ -32,9 +36,6 @@ class StringLengthValidatorTest extends FieldTypeTest
 
     /**
      * This test ensure an StringLengthValidator can be created
-     *
-     * @group fieldType
-     * @group validator
      */
     public function testConstructor()
     {
@@ -47,8 +48,6 @@ class StringLengthValidatorTest extends FieldTypeTest
     /**
      * Tests setting and getting constraints
      *
-     * @group fieldType
-     * @group validator
      * @covers \eZ\Publish\Core\FieldType\Validator::initializeWithConstraints
      * @covers \eZ\Publish\Core\FieldType\Validator::__get
      */
@@ -69,8 +68,6 @@ class StringLengthValidatorTest extends FieldTypeTest
     /**
      * Tests setting and getting constraints
      *
-     * @group fieldType
-     * @group validator
      * @covers \eZ\Publish\Core\FieldType\Validator::__set
      * @covers \eZ\Publish\Core\FieldType\Validator::__get
      */
@@ -90,8 +87,6 @@ class StringLengthValidatorTest extends FieldTypeTest
     /**
      * Tests initializing with a wrong constraint
      *
-     * @group fieldType
-     * @group validator
      * @covers \eZ\Publish\Core\FieldType\Validator::initializeWithConstraints
      * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
@@ -109,8 +104,6 @@ class StringLengthValidatorTest extends FieldTypeTest
     /**
      * Tests setting a wrong constraint
      *
-     * @group fieldType
-     * @group validator
      * @covers \eZ\Publish\Core\FieldType\Validator::__set
      * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
@@ -123,8 +116,6 @@ class StringLengthValidatorTest extends FieldTypeTest
     /**
      * Tests getting a wrong constraint
      *
-     * @group fieldType
-     * @group validator
      * @covers \eZ\Publish\Core\FieldType\Validator::__get
      * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
@@ -137,8 +128,6 @@ class StringLengthValidatorTest extends FieldTypeTest
     /**
      * Tests validating a correct value
      *
-     * @group fieldType
-     * @group validator
      * @dataProvider providerForValidateOK
      * @covers \eZ\Publish\Core\FieldType\TextLine\StringLengthValidator::validate
      * @covers \eZ\Publish\Core\FieldType\Validator::getMessage
@@ -164,8 +153,6 @@ class StringLengthValidatorTest extends FieldTypeTest
     /**
      * Tests validating a wrong value
      *
-     * @group fieldType
-     * @group validator
      * @dataProvider providerForValidateKO
      * @covers \eZ\Publish\Core\FieldType\TextLine\StringLengthValidator::validate
      */

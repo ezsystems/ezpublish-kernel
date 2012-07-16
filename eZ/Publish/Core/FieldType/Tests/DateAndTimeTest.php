@@ -14,45 +14,52 @@ use eZ\Publish\Core\FieldType\DateAndTime\Type as DateAndTime,
     ReflectionObject,
     DateTime;
 
+/**
+ * @group fieldType
+ * @group ezdatetime
+ */
 class DateAndTimeTest extends FieldTypeTest
 {
     /**
-     * @group fieldType
-     * @group dateTime
      * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
      */
-    public function testDateAndTimeSupportedValidators()
+    public function testValidatorConfigurationSchema()
     {
         $ft = new DateAndTime( $this->validatorService, $this->fieldTypeTools );
         self::assertSame(
             array(),
             $ft->getValidatorConfigurationSchema(),
-            "The set of allowed validators does not match what is expected."
+            "The validator configuration schema does not match what is expected."
         );
     }
 
     /**
-     * @group fieldType
-     * @group dateTime
      * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
      */
-    public function testDateAndTimeAllowedSettings()
+    public function testSettingsSchema()
     {
         $ft = new DateAndTime( $this->validatorService, $this->fieldTypeTools );
         self::assertSame(
             array(
-                'useSeconds' => false,
-                'defaultType' => 0,
-                'dateInterval' => null
+                "useSeconds" => array(
+                    "type" => "bool",
+                    "default" => false
+                ),
+                "defaultType" => array(
+                    "type" => "choice",
+                    "default" => DateAndTime::DEFAULT_EMPTY
+                ),
+                "dateInterval" => array(
+                    "type" => "date",
+                    "default" => null
+                )
             ),
             $ft->getSettingsSchema(),
-            "The set of allowed settings does not match what is expected."
+            "The settings schema does not match what is expected."
         );
     }
 
     /**
-     * @group fieldType
-     * @group dateTime
      * @covers \eZ\Publish\Core\FieldType\DateAndTime\Type::getDefaultDefaultValue
      */
     public function testDefaultValue()
@@ -70,8 +77,6 @@ class DateAndTimeTest extends FieldTypeTest
     /**
      * @covers \eZ\Publish\Core\FieldType\DateAndTime\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @group fieldType
-     * @group dateTime
      */
     public function testAcceptInvalidValue()
     {
@@ -85,8 +90,6 @@ class DateAndTimeTest extends FieldTypeTest
     /**
      * @covers \eZ\Publish\Core\FieldType\DateAndTime\Type::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @group fieldType
-     * @group dateTime
      */
     public function testAcceptValueInvalidFormat()
     {
@@ -100,8 +103,6 @@ class DateAndTimeTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group dateTime
      * @covers \eZ\Publish\Core\FieldType\DateAndTime\Type::acceptValue
      */
     public function testAcceptValueValidFormat()
@@ -116,8 +117,6 @@ class DateAndTimeTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group dateTime
      * @covers \eZ\Publish\Core\FieldType\DateAndTime\Type::toPersistenceValue
      */
     public function testToPersistenceValue()
@@ -131,8 +130,6 @@ class DateAndTimeTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group dateTime
      * @covers \eZ\Publish\Core\FieldType\DateAndTime\Value::__construct
      */
     public function testBuildFieldValueWithParam()
@@ -143,8 +140,6 @@ class DateAndTimeTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group dateTime
      * @covers \eZ\Publish\Core\FieldType\DateAndTime\Value::__construct
      */
     public function testBuildFieldValueWithStringParam()
@@ -155,8 +150,6 @@ class DateAndTimeTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group dateTime
      * @covers \eZ\Publish\Core\FieldType\DateAndTime\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
@@ -167,8 +160,6 @@ class DateAndTimeTest extends FieldTypeTest
     }
 
     /**
-     * @group fieldType
-     * @group dateTime
      * @covers \eZ\Publish\Core\FieldType\DateAndTime\Value::__toString
      */
     public function testFieldValueToString()
