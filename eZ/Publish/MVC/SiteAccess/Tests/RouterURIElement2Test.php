@@ -9,7 +9,9 @@
 
 namespace eZ\Publish\MVC\SiteAccess\Tests;
 use PHPUnit_Framework_TestCase,
-    eZ\Publish\MVC\SiteAccess\Router;
+    eZ\Publish\MVC\SiteAccess\Router,
+    eZ\Publish\MVC\SiteAccess\Matcher\URIElement as URIElementMatcher,
+    eZ\Publish\MVC\Routing\SimplifiedRequest;
 
 class RouterURIElement2Test extends PHPUnit_Framework_TestCase
 {
@@ -44,10 +46,12 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\Host::__construct
      * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement::__construct
      * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement::match
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement::setRequest
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement::getURIElements
      */
-    public function testMatch( $url, $siteAccess, $router )
+    public function testMatch( $request, $siteAccess, $router )
     {
-        $sa = $router->match( $url );
+        $sa = $router->match( $request );
         $this->assertInstanceOf( 'eZ\\Publish\\MVC\\SiteAccess', $sa );
         $this->assertSame( $siteAccess, $sa->name );
     }
@@ -55,51 +59,91 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
     public function matchProvider()
     {
         return array(
-            array( "http://example.com", "default_sa" ),
-            array( "https://example.com", "default_sa" ),
-            array( "http://example.com/", "default_sa" ),
-            array( "https://example.com/", "default_sa" ),
-            array( "http://example.com//", "default_sa" ),
-            array( "https://example.com//", "default_sa" ),
-            array( "http://example.com:8080/", "default_sa" ),
-            array( "http://example.com/first_siteaccess/", "default_sa" ),
-            array( "http://example.com/?first_siteaccess", "default_sa" ),
-            array( "http://example.com/?first_sa", "default_sa" ),
-            array( "http://example.com/first_salt", "default_sa" ),
-            array( "http://example.com/first_sa.foo", "default_sa" ),
-            array( "http://example.com/test", "default_sa" ),
-            array( "http://example.com/test/foo/", "test_foo" ),
-            array( "http://example.com/test/foo/bar/", "test_foo" ),
-            array( "http://example.com/test/foo/bar/first_sa", "test_foo" ),
-            array( "http://example.com/default_sa", "default_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com" ), "default_sa" ),
+            array( SimplifiedRequest::fromUrl( "https://example.com" ), "default_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com/" ), "default_sa" ),
+            array( SimplifiedRequest::fromUrl( "https://example.com/" ), "default_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com//" ), "default_sa" ),
+            array( SimplifiedRequest::fromUrl( "https://example.com//" ), "default_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com:8080/" ), "default_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com/first_siteaccess/" ), "default_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com/?first_siteaccess" ), "default_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com/?first_sa" ), "default_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com/first_salt" ), "default_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com/first_sa.foo" ), "default_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com/test" ), "default_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com/test/foo/" ), "test_foo" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com/test/foo/bar/" ), "test_foo" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com/test/foo/bar/first_sa" ), "test_foo" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com/default_sa" ), "default_sa" ),
 
-            array( "http://example.com/first_sa", "first_sa" ),
-            array( "http://example.com/first_sa/", "first_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com/first_sa" ), "first_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com/first_sa/" ), "first_sa" ),
             // Double slashes shouldn't be considered as one
-            array( "http://example.com//first_sa//", "default_sa" ),
-            array( "http://example.com///first_sa///test", "default_sa" ),
-            array( "http://example.com//first_sa//foo/bar", "default_sa" ),
-            array( "http://first_siteaccess:82/foo//bar/", "first_sa" ),
-            array( "http://example.com/first_sa/foo", "first_sa_foo" ),
-            array( "http://example.com:82/first_sa/", "first_sa" ),
-            array( "http://third_siteaccess/first_sa/", "first_sa" ),
-            array( "http://first_sa/", "first_sa" ),
-            array( "https://first_sa/", "first_sa" ),
-            array( "http://first_sa:81/", "first_sa" ),
-            array( "http://first_siteaccess/", "first_sa" ),
-            array( "http://first_siteaccess:82/", "first_sa" ),
-            array( "http://first_siteaccess:83/", "first_sa" ),
-            array( "http://first_siteaccess/foo/", "first_sa" ),
-            array( "http://first_siteaccess:83/foo/baz/", "foo_baz" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com//first_sa//" ), "default_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com///first_sa///test" ), "default_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com//first_sa//foo/bar" ), "default_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://first_siteaccess:82/foo//bar/" ), "first_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com/first_sa/foo" ), "first_sa_foo" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com:82/first_sa/" ), "first_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://third_siteaccess/first_sa/" ), "first_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://first_sa/" ), "first_sa" ),
+            array( SimplifiedRequest::fromUrl( "https://first_sa/" ), "first_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://first_sa:81/" ), "first_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://first_siteaccess/" ), "first_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://first_siteaccess:82/" ), "first_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://first_siteaccess:83/" ), "first_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://first_siteaccess/foo/" ), "first_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://first_siteaccess:83/foo/baz/" ), "foo_baz" ),
 
-            array( "http://example.com/second_sa", "second_sa" ),
-            array( "http://example.com/second_sa/", "second_sa" ),
-            array( "http://example.com/second_sa?param1=foo", "second_sa" ),
-            array( "http://example.com/second_sa/foo/", "second_sa_foo" ),
-            array( "http://example.com:82/second_sa/", "second_sa" ),
-            array( "http://example.com:83/second_sa/", "second_sa" ),
-            array( "http://first_siteaccess:82/second_sa/", "second_sa" ),
-            array( "http://first_siteaccess:83/second_sa/", "second_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com/second_sa" ), "second_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com/second_sa/" ), "second_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com/second_sa?param1=foo" ), "second_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com/second_sa/foo/" ), "second_sa_foo" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com:82/second_sa/" ), "second_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://example.com:83/second_sa/" ), "second_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://first_siteaccess:82/second_sa/" ), "second_sa" ),
+            array( SimplifiedRequest::fromUrl( "http://first_siteaccess:83/second_sa/" ), "second_sa" ),
+        );
+    }
+
+    /**
+     * @param $uri
+     * @param $expectedFixedUpURI
+     * @dataProvider analyseProvider
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement::analyseURI
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement::setRequest
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement::getURIElements
+     */
+    public function testAnalyseURI( $uri, $expectedFixedUpURI )
+    {
+        $matcher = new URIElementMatcher( 2 );
+        $matcher->setRequest(
+            new SimplifiedRequest( array( 'pathinfo' => $uri ) )
+        );
+        $this->assertSame( $expectedFixedUpURI, $matcher->analyseURI( $uri ) );
+    }
+
+    /**
+     * @param $fullUri
+     * @param $linkUri
+     * @dataProvider analyseProvider
+     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\URIElement::analyseLink
+     */
+    public function testAnalyseLink( $fullUri, $linkUri )
+    {
+        $matcher = new URIElementMatcher( 2 );
+        $matcher->setRequest(
+            new SimplifiedRequest( array( 'pathinfo' => $fullUri ) )
+        );
+        $this->assertSame( $fullUri, $matcher->analyseLink( $linkUri ) );
+    }
+
+    public function analyseProvider()
+    {
+        return array(
+            array( '/my/siteaccess/foo/bar', '/foo/bar' ),
+            array( '/vive/le/sucre/en-poudre', '/sucre/en-poudre' )
         );
     }
 }

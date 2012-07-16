@@ -39,7 +39,8 @@ if ( isset( $settings['base']['Legacy']['RootPath'] ) )
         define( 'EZCBASE_ENABLED', false );
     require "$legacyPath/autoload.php";
 
-    $legacyKernel = new LegacyKernel( new LegacyKernelCLI, $legacyPath, __DIR__ );
+    $legacyKernel = new LegacyKernel( new LegacyKernelCLI, $legacyPath, getcwd() );
+    set_exception_handler( null );
     // Avoid "Fatal error" text from legacy kernel if not called
     $legacyKernel->runCallback(
         function ()

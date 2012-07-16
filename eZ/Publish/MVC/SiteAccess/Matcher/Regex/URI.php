@@ -10,20 +10,19 @@
 namespace eZ\Publish\MVC\SiteAccess\Matcher\Regex;
 
 use eZ\Publish\MVC\SiteAccess\Matcher,
-    eZ\Publish\MVC\SiteAccess\Matcher\Regex;
+    eZ\Publish\MVC\SiteAccess\Matcher\Regex,
+    eZ\Publish\MVC\Routing\SimplifiedRequest;
 
 class URI extends Regex implements Matcher
 {
     /**
      * Constructor.
      *
-     * @param array $URIElements Elements of the URI as parsed by parse_url().
      * @param array $siteAccessesConfiguration SiteAccesses configuration.
      */
-    public function __construct( array $URIElements, array $siteAccessesConfiguration )
+    public function __construct( array $siteAccessesConfiguration )
     {
         parent::__construct(
-            isset( $URIElements["path"] ) ? $URIElements["path"] : "",
             isset( $siteAccessesConfiguration["regex"] ) ? $siteAccessesConfiguration["regex"] : "",
             isset( $siteAccessesConfiguration["itemNumber"] ) ? (int)$siteAccessesConfiguration["itemNumber"] : 1
         );
@@ -32,5 +31,16 @@ class URI extends Regex implements Matcher
     public function getName()
     {
         return 'uri:regexp';
+    }
+
+    /**
+     * Injects the request object to match against.
+     *
+     * @param \eZ\Publish\MVC\Routing\SimplifiedRequest $request
+     * @return void
+     */
+    public function setRequest( SimplifiedRequest $request )
+    {
+        $this->setMatchElement( $request->pathinfo );
     }
 }

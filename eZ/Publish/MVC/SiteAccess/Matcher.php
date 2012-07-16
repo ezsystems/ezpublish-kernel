@@ -9,17 +9,30 @@
 
 namespace eZ\Publish\MVC\SiteAccess;
 
+use eZ\Publish\MVC\Routing\SimplifiedRequest;
+
+/**
+ * Interface for SiteAccess matchers.
+ */
 interface Matcher
 {
     /**
-     * Returns matching Siteaccess.
+     * Injects the request object to match against.
      *
-     * @return string|false Siteaccess matched of false
+     * @param \eZ\Publish\MVC\Routing\SimplifiedRequest $request
+     * @return void
+     */
+    public function setRequest( SimplifiedRequest $request );
+
+    /**
+     * Returns matched Siteaccess or false if no siteaccess could be matched.
+     *
+     * @return string|false
      */
     public function match();
 
     /**
-     * Returns the name of the matcher.
+     * Returns the matcher's name.
      * This information will be stored in the SiteAccess object itself to quickly be able to identify the matcher type.
      *
      * @return string

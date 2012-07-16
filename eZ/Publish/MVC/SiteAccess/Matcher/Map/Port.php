@@ -10,25 +10,41 @@
 namespace eZ\Publish\MVC\SiteAccess\Matcher\Map;
 
 use eZ\Publish\MVC\SiteAccess\Matcher,
-    eZ\Publish\MVC\SiteAccess\Matcher\Map;
+    eZ\Publish\MVC\SiteAccess\Matcher\Map,
+    eZ\Publish\MVC\Routing\SimplifiedRequest;
 
 class Port extends Map implements Matcher
 {
     /**
      * Constructor.
      *
-     * @param array $URIElements Elements of the URI as parsed by parse_url().
      * @param array $siteAccessesConfiguration SiteAccesses configuration.
      */
-    public function __construct( array $URIElements, array $siteAccessesConfiguration )
+    public function __construct( array $siteAccessesConfiguration )
     {
-        if ( isset( $URIElements["port"] ) )
+        parent::__construct( $siteAccessesConfiguration );
+    }
+
+    public function getName()
+    {
+        return 'port';
+    }
+
+    /**
+     * Injects the request object to match against.
+     *
+     * @param \eZ\Publish\MVC\Routing\SimplifiedRequest $request
+     * @return void
+     */
+    public function setRequest( SimplifiedRequest $request )
+    {
+        if ( !empty( $request->port ) )
         {
-            $key = $URIElements["port"];
+            $key = $request->port;
         }
         else
         {
-            switch ( $URIElements["scheme"] )
+            switch ( $request->scheme )
             {
                 case "https":
                     $key = 443;
@@ -40,11 +56,6 @@ class Port extends Map implements Matcher
             }
         }
 
-        parent::__construct( $siteAccessesConfiguration, $key );
-    }
-
-    public function getName()
-    {
-        return 'port';
+        $this->setMapKey( $key );
     }
 }

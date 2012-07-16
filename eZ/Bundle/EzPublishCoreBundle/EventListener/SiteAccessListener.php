@@ -11,7 +11,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use eZ\Publish\MVC\MVCEvents,
     eZ\Publish\MVC\Event\PostSiteAccessMatchEvent,
-    eZ\Publish\MVC\SiteAccess\URIFixer,
+    eZ\Publish\MVC\SiteAccess\URILexer,
     Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -29,10 +29,10 @@ class SiteAccessListener implements EventSubscriberInterface
     public function onSiteAccessMatch( PostSiteAccessMatchEvent $event )
     {
         $siteAccess = $event->getSiteAccess();
-        if ( $siteAccess->matcher instanceof URIFixer )
+        if ( $siteAccess->matcher instanceof URILexer )
         {
             $event->setPathinfo(
-                $siteAccess->matcher->fixupURI( $event->getRequest()->getPathInfo() )
+                $siteAccess->matcher->analyseURI( $event->getRequest()->getPathInfo() )
             );
         }
     }
