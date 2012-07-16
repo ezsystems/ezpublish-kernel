@@ -45,8 +45,8 @@ class ModifiedBetween extends DateMetadata
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        $start = $criterion->value[0];
-        $end   = isset( $criterion->value[1] ) ? $criterion->value[1] : null;
+        $start = $this->getSolrTime( $criterion->value[0] );
+        $end   = isset( $criterion->value[1] ) ? $this->getSolrTime( $criterion->value[1] ) : null;
 
         if ( ( $criterion->operator === Operator::LT ) ||
              ( $criterion->operator === Operator::LTE ) )
