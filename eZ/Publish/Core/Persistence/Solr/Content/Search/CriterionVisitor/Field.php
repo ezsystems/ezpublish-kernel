@@ -19,7 +19,7 @@ use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor,
 /**
  * Visits the Field criterion
  */
-class FieldIn extends CriterionVisitor
+abstract class Field extends CriterionVisitor
 {
     /**
      * Field registry
@@ -95,43 +95,6 @@ class FieldIn extends CriterionVisitor
         }
 
         return $this->fieldTypes;
-    }
-
-    /**
-     * CHeck if visitor is applicable to current criterion
-     *
-     * @param Criterion $criterion
-     * @return bool
-     */
-    public function canVisit( Criterion $criterion )
-    {
-        return
-            $criterion instanceof Criterion\Field &&
-            ( ( $criterion->operator ?: Operator::IN ) === Operator::IN ||
-              $criterion->operator === Operator::EQ );
-    }
-
-    /**
-     * Map field value to a proper Solr representation
-     *
-     * @param DocumentField $field
-     * @return void
-     */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
-    {
-        $fieldTypes = $this->getFieldTypes();
-        $criterion->value = (array) $criterion->value;
-
-        $queries = array();
-        foreach ( $criterion->value as $value )
-        {
-            foreach ( $fieldTypes[$criterion->target] as $name )
-            {
-                $queries[] = $name . ':"' . $value . '"';
-            }
-        }
-
-        return '(' . implode( ' OR ', $queries ) . ')';
     }
 }
 

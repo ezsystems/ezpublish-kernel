@@ -274,11 +274,22 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\Field(
                         'price',
                         Criterion\Operator::BETWEEN,
-                        array( 10000, 1000000 )
+                        array( 10, 1000 )
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'FieldBetween.php',
+            ),
+            array(
+                new Query( array(
+                    'criterion' => new Criterion\Field(
+                        'some_hopefully_unknown_field',
+                        Criterion\Operator::BETWEEN,
+                        array( 10, 1000 )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ) ),
+                $fixtureDir . 'FieldUnknown.php',
             ),
             array(
                 new Query( array(
@@ -287,12 +298,12 @@ class SearchServiceTest extends BaseTest
                             new Criterion\Field(
                                 'name',
                                 Criterion\Operator::EQ,
-                                'members'
+                                'Members'
                             ),
                             new Criterion\Field(
                                 'price',
                                 Criterion\Operator::BETWEEN,
-                                array( 10000, 1000000 )
+                                array( 10, 1000 )
                             )
                         )
                     ),

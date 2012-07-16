@@ -98,7 +98,12 @@ class LegacySolr extends Legacy
                     new Solr\Content\Search\CriterionVisitor\DateMetadata\PublishedBetween(),
                     new Solr\Content\Search\CriterionVisitor\StatusIn(),
                     new Solr\Content\Search\CriterionVisitor\FullText(),
-                    new Solr\Content\Search\CriterionVisitor\FieldIn(
+                    new Solr\Content\Search\CriterionVisitor\Field\FieldIn(
+                        $fieldRegistry,
+                        $persistenceHandler->contentTypeHandler(),
+                        $nameGenerator
+                    ),
+                    new Solr\Content\Search\CriterionVisitor\Field\FieldRange(
                         $fieldRegistry,
                         $persistenceHandler->contentTypeHandler(),
                         $nameGenerator
