@@ -156,19 +156,25 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue the value processed by the storage engine
      */
-    public function toPersistenceValue( $value ) {
+    public function toPersistenceValue( $value )
+    {
         if ( $value === null )
         {
-            return new FieldValue( array(
-                "data"         => array(),
-                "externalData" => null,
-                "sortKey"      => null,
-            ) );
+            return new FieldValue(
+                array(
+                    "data" => array(),
+                    "externalData" => null,
+                    "sortKey" => null,
+                )
+            );
         }
 
         return new FieldValue(
             array(
-                "data" => array('urlId' => null, 'text' => $value->text),
+                "data" => array(
+                    'urlId' => null,
+                    'text' => $value->text
+                ),
                 "externalData" => $value->link,
                 "sortKey" => $this->getSortInfo( $value ),
             )
@@ -184,8 +190,8 @@ class Type extends FieldType
      *
      * @return mixed
      */
-    public function fromPersistenceValue( FieldValue $fieldValue ) {
-        return new Value($fieldValue->externalData,$fieldValue->data['text']);
+    public function fromPersistenceValue( FieldValue $fieldValue )
+    {
+        return new Value( $fieldValue->externalData, $fieldValue->data['text'] );
     }
-
 }
