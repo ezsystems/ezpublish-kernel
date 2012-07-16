@@ -310,6 +310,18 @@ class Repository implements \eZ\Publish\API\Repository\Repository
     }
 
     /**
+     * Get Search Service
+     *
+     * Get search service that lets you find content objects
+     *
+     * @return \eZ\Publish\API\Repository\SearchService
+     */
+    public function getSearchService()
+    {
+        throw new \RuntimeException( '@TODO: Implememt.' );
+    }
+
+    /**
      * Get User Service
      *
      * Get service object to perform operations on Users and UserGroup
@@ -408,6 +420,16 @@ class Repository implements \eZ\Publish\API\Repository\Repository
     public function getObjectStateService()
     {
         throw new \RuntimeException( '@TODO: Implement' );
+    }
+
+    /**
+     * Get FieldTypeService
+     *
+     * @return \eZ\Publish\API\Repository\FieldTypeService
+     */
+    public function getFieldTypeService()
+    {
+        throw new \RuntimeException( '@TODO: Implement.' );
     }
 
     /**
