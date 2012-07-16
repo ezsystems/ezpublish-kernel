@@ -123,15 +123,15 @@ $valueObjectVisitors = array(
     '\\eZ\Publish\API\Repository\Exceptions\BadStateException'        => new Output\ValueObjectVisitor\BadStateException( $urlHandler,  true ),
     '\\Exception'                                                     => new Output\ValueObjectVisitor\Exception( $urlHandler,  true ),
 
-    '\\eZ\\Publish\\API\\REST\\Server\\Values\\SectionList'           => new Output\ValueObjectVisitor\SectionList( $urlHandler ),
-    '\\eZ\\Publish\\API\\REST\\Server\\Values\\CreatedSection'        => new Output\ValueObjectVisitor\CreatedSection( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\SectionList'           => new Output\ValueObjectVisitor\SectionList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedSection'        => new Output\ValueObjectVisitor\CreatedSection( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section'        => new Output\ValueObjectVisitor\Section( $urlHandler ),
 
-    '\\eZ\\Publish\\API\\REST\\Server\\Values\\ContentList'           => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentList'           => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo'    => new Output\ValueObjectVisitor\ContentInfo( $urlHandler ),
 
-    '\\eZ\\Publish\\API\\REST\\Server\\Values\\RoleList'              => new Output\ValueObjectVisitor\RoleList( $urlHandler ),
-    '\\eZ\\Publish\\API\\REST\\Server\\Values\\CreatedRole'           => new Output\ValueObjectVisitor\CreatedRole( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleList'              => new Output\ValueObjectVisitor\RoleList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedRole'           => new Output\ValueObjectVisitor\CreatedRole( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role'              => new Output\ValueObjectVisitor\Role( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy'            => new Output\ValueObjectVisitor\Policy( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation'        => new Output\ValueObjectVisitor\Limitation( $urlHandler ),

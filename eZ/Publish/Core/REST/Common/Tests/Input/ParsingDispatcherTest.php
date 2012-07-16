@@ -35,7 +35,7 @@ class ParsingDispatcherTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Common\Message();
 
-        $parser     = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Input\\Parser' );
+        $parser     = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Input\\Parser' );
         $dispatcher = new Common\Input\ParsingDispatcher( array(
             'text/html' => $parser,
         ) );
@@ -56,7 +56,7 @@ class ParsingDispatcherTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Common\Message();
 
-        $parser     = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Input\\Parser' );
+        $parser     = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Input\\Parser' );
         $dispatcher = new Common\Input\ParsingDispatcher( array(
             'text/html' => $parser,
         ) );

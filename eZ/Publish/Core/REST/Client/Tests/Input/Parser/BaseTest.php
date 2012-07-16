@@ -20,7 +20,7 @@ abstract class BaseTest extends Tests\BaseTest
         if ( !isset( $this->parsingDispatcherMock ) )
         {
             $this->parsingDispatcherMock = $this->getMock(
-                '\\eZ\\Publish\\API\\REST\\Common\\Input\\ParsingDispatcher',
+                '\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher',
                 array(),
                 array(),
                 '',

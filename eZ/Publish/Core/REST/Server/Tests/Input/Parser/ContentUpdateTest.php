@@ -28,7 +28,7 @@ class ContentUpdateTest extends BaseTest
         );
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\API\\REST\\Common\\Values\\SectionIncludingContentMetadataUpdateStruct',
+            'eZ\\Publish\\Core\\REST\\Common\\Values\\SectionIncludingContentMetadataUpdateStruct',
             $result
         );
 

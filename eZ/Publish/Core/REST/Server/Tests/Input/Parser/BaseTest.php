@@ -33,7 +33,7 @@ abstract class BaseTest extends \eZ\Publish\Core\REST\Server\Tests\BaseTest
         if ( !isset( $this->parsingDispatcherMock ) )
         {
             $this->parsingDispatcherMock = $this->getMock(
-                '\\eZ\\Publish\\API\\REST\\Common\\Input\\ParsingDispatcher',
+                '\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher',
                 array(),
                 array(),
                 '',

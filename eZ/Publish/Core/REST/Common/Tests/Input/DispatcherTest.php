@@ -26,7 +26,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     {
         $message = new Common\Message();
 
-        $parsingDispatcher = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Input\\ParsingDispatcher' );
+        $parsingDispatcher = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher' );
         $dispatcher = new Common\Input\Dispatcher( $parsingDispatcher );
 
         $dispatcher->parse( $message );
@@ -43,7 +43,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $parsingDispatcher = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Input\\ParsingDispatcher' );
+        $parsingDispatcher = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher' );
         $dispatcher = new Common\Input\Dispatcher( $parsingDispatcher );
 
         $dispatcher->parse( $message );
@@ -60,7 +60,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $parsingDispatcher = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Input\\ParsingDispatcher' );
+        $parsingDispatcher = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher' );
         $dispatcher = new Common\Input\Dispatcher( $parsingDispatcher );
 
         $dispatcher->parse( $message );
@@ -75,14 +75,14 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             'Hello world!'
         );
 
-        $parsingDispatcher = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Input\\ParsingDispatcher' );
+        $parsingDispatcher = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher' );
         $parsingDispatcher
             ->expects( $this->at( 0 ) )
             ->method( 'parse' )
             ->with( array( 42 ), 'text/html' )
             ->will( $this->returnValue( 23 ) );
 
-        $handler = $this->getMock( '\\eZ\\Publish\\API\\REST\\Common\\Input\\Handler' );
+        $handler = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Input\\Handler' );
         $handler
             ->expects( $this->at( 0 ) )
             ->method( 'convert' )

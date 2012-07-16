@@ -87,7 +87,7 @@ $repository = new Client\IntegrationTestRepository(
         array(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct'                  => new Client\Output\ValueObjectVisitor\SectionCreateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct'                  => new Client\Output\ValueObjectVisitor\SectionUpdateStruct( $urlHandler ),
-            '\\eZ\\Publish\\API\\REST\\Common\\Values\\SectionIncludingContentMetadataUpdateStruct' => new Client\Output\ValueObjectVisitor\SectionIncludingContentMetadataUpdateStruct( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Common\\Values\\SectionIncludingContentMetadataUpdateStruct' => new Client\Output\ValueObjectVisitor\SectionIncludingContentMetadataUpdateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleCreateStruct'                        => new Client\Output\ValueObjectVisitor\RoleCreateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleUpdateStruct'                        => new Client\Output\ValueObjectVisitor\RoleUpdateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\PolicyCreateStruct'                      => new Client\Output\ValueObjectVisitor\PolicyCreateStruct( $urlHandler ),

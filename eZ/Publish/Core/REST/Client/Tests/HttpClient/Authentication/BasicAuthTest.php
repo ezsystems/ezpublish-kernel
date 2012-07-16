@@ -98,7 +98,7 @@ class BasicAuthTest extends \PHPUnit_Framework_TestCase
         if ( !isset( $this->innerHttpClientMock ) )
         {
             $this->innerHttpClientMock = $this->getMock(
-                '\\eZ\\Publish\\API\\REST\\Client\\HttpClient',
+                '\\eZ\\Publish\\Core\\REST\\Client\\HttpClient',
                 array(),
                 array(),
                 '',
