@@ -77,7 +77,7 @@ class Aggregate extends FieldValueMapper
             }
         }
 
-        throw new NotImplementedException( "No mapper avialable for: " . get_class( $field ) );
+        throw new NotImplementedException( "No mapper avialable for: " . get_class( $field->type ) );
     }
 }
 
