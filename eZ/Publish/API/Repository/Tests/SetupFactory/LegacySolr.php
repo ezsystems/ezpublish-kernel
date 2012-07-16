@@ -52,6 +52,7 @@ class LegacySolr extends Legacy
             'ezstring'              => new FieldType\String\SearchField(),
             'eztext'                => new FieldType\String\SearchField(),
             'ezxmltext'             => new FieldType\String\SearchField(),
+            'ezprice'               => new FieldType\Price\SearchField(),
             // @TODO: Define proper types for these:
             'ezuser'                => new FieldType\Unindexed(),
             'ezimage'               => new FieldType\Unindexed(),
@@ -62,7 +63,6 @@ class LegacySolr extends Legacy
             'ezpackage'             => new FieldType\Unindexed(),
             'ezurl'                 => new FieldType\Unindexed(),
             'ezobjectrelation'      => new FieldType\Unindexed(),
-            'ezprice'               => new FieldType\Unindexed(),
             'ezmultioption'         => new FieldType\Unindexed(),
             'ezauthor'              => new FieldType\Unindexed(),
             'ezsrrating'            => new FieldType\Unindexed(),
@@ -124,6 +124,7 @@ class LegacySolr extends Legacy
                     new Solr\Content\Search\FieldValueMapper\StringMapper(),
                     new Solr\Content\Search\FieldValueMapper\IntegerMapper(),
                     new Solr\Content\Search\FieldValueMapper\DateMapper(),
+                    new Solr\Content\Search\FieldValueMapper\PriceMapper(),
                 ) ),
                 $persistenceHandler->contentHandler(),
                 $nameGenerator
