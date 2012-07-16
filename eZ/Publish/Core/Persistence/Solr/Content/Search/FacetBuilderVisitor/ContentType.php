@@ -26,7 +26,7 @@ class ContentType extends FacetBuilderVisitor
      */
     public function canMap( $field )
     {
-        return $field === 'type_s';
+        return $field === 'type_id';
     }
 
     /**
@@ -64,9 +64,9 @@ class ContentType extends FacetBuilderVisitor
     public function visit( FacetBuilder $facetBuilder )
     {
         return http_build_query( array(
-            'facet.field'             => 'type_s',
-            'f.type_s.facet.limit'    => $facetBuilder->limit,
-            'f.type_s.facet.mincount' => $facetBuilder->minCount,
+            'facet.field'             => 'type_id',
+            'f.type_id.facet.limit'    => $facetBuilder->limit,
+            'f.type_id.facet.mincount' => $facetBuilder->minCount,
         ) );
     }
 }

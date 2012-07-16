@@ -26,7 +26,7 @@ class Section extends FacetBuilderVisitor
      */
     public function canMap( $field )
     {
-        return $field === 'section_s';
+        return $field === 'section_id';
     }
 
     /**
@@ -64,9 +64,9 @@ class Section extends FacetBuilderVisitor
     public function visit( FacetBuilder $facetBuilder )
     {
         return http_build_query( array(
-            'facet.field'                => 'section_s',
-            'f.section_s.facet.limit'    => $facetBuilder->limit,
-            'f.section_s.facet.mincount' => $facetBuilder->minCount,
+            'facet.field'                => 'section_id',
+            'f.section_id.facet.limit'    => $facetBuilder->limit,
+            'f.section_id.facet.mincount' => $facetBuilder->minCount,
         ) );
     }
 }

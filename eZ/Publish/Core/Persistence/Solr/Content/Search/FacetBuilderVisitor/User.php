@@ -26,7 +26,7 @@ class User extends FacetBuilderVisitor
      */
     public function canMap( $field )
     {
-        return $field === 'creator_s';
+        return $field === 'creator_id';
     }
 
     /**
@@ -64,9 +64,9 @@ class User extends FacetBuilderVisitor
     public function visit( FacetBuilder $facetBuilder )
     {
         return http_build_query( array(
-            'facet.field'                => 'creator_s',
-            'f.creator_s.facet.limit'    => $facetBuilder->limit,
-            'f.creator_s.facet.mincount' => $facetBuilder->minCount,
+            'facet.field'                => 'creator_id',
+            'f.creator_id.facet.limit'    => $facetBuilder->limit,
+            'f.creator_id.facet.mincount' => $facetBuilder->minCount,
         ) );
     }
 }
