@@ -353,7 +353,7 @@ class ExceptionConversion extends Gateway
     {
         try
         {
-            return $this->innerGateway->insertFieldDefinition( $typeId, $status, $fieldDefinitionId, $storageFieldDef );
+            return $this->innerGateway->insertFieldDefinition( $typeId, $status, $fieldDefinition, $storageFieldDef );
         }
         catch ( \ezcDbException $e )
         {
