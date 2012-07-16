@@ -39,19 +39,12 @@ class BinaryFileStorage implements FieldStorage
      *   - identifier = 'LegacyStorage'
      *   - connection = {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler} object handler (for DB connection),
      *                  to be used accordingly to
-     * The context array provides some context for the field handler about the
-     * currently used storage engine.
-     * The array should at least define 2 keys :
-     *   - identifier (connection identifier)
-     *   - connection (the connection handler)
-     * For example, using Legacy storage engine, $context will be:
-     *   - identifier = 'LegacyStorage'
-     *   - connection = {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler} object handler (for DB connection),
-     *                  to be used accordingly to
      *                  {@link http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html ezcDatabase} usage
      *
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     *
      * @return void
      * @todo Check if it's insert or update query
      */
@@ -95,8 +88,10 @@ class BinaryFileStorage implements FieldStorage
      * This value holds the data as a {@link eZ\Publish\Core\FieldType\Value} based object,
      * according to the field type (e.g. for TextLine, it will be a {@link eZ\Publish\Core\FieldType\TextLine\Value} object).
      *
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     *
      * @return void
      */
     public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
@@ -125,8 +120,11 @@ class BinaryFileStorage implements FieldStorage
     }
 
     /**
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     *
+     * @return void
      */
     public function copyFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
@@ -134,8 +132,11 @@ class BinaryFileStorage implements FieldStorage
     }
 
     /**
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     *
+     * @return void
      */
     public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
     {
