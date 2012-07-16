@@ -514,6 +514,8 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
     /**
      * @depends testCreateContent
+     * @TODO: Requires correct registered FieldTypeService, needs to be
+     *        maintained!
      */
     public function testToHash()
     {
@@ -544,6 +546,8 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     /**
      * @depends testCreateContent
      * @dataProvider provideFromHashData
+     * @TODO: Requires correct registered FieldTypeService, needs to be
+     *        maintained!
      */
     public function testFromHash( $hash, $expected )
     {
