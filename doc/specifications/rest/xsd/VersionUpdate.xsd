@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:include schemaLocation="CommonDefinitions.xsd" />
+  <xsd:complexType name="versionUpdateType">
+    <xsd:all>
+      <xsd:element name="User" type="ref" minOccurs="0" />
+      <xsd:element name="modificationDate" type="xsd:dateTime"
+        minOccurs="0" />
+      <xsd:element name="fields">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="field" type="fieldInputValueType" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:element name="VersionUpdate" type="versionUpdateType"></xsd:element>
+</xsd:schema>

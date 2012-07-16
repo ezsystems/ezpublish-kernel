@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+  <xsd:complexType name="vnd.ez.api.Root">
+    <xsd:all>
+      <xsd:element name="content" type="ref" />
+      <xsd:element name="contentTypes" type="ref" />
+      <xsd:element name="users" type="ref"/>
+      <xsd:element name="roles" type="ref"/>
+      <xsd:element name="rootLocation" type="ref"/>
+      <xsd:element name="rootUserGroup" type="ref"/>
+      <xsd:element name="rootMediaFolder" type="ref"/>
+      <xsd:element name="trash" type="ref"/>
+      <xsd:element name="sections" type="ref"/>
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:element name="Root" type="vnd.ez.api.Root"/>
+</xsd:schema>

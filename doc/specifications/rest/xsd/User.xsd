@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:include schemaLocation="Content.xsd" />
+  <xsd:include schemaLocation="Version.xsd" />
+  <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+  <xsd:complexType name="vnd.ez.api.User">
+    <xsd:complexContent>
+      <xsd:extension base="contentInfoType">
+        <xsd:all>
+          <xsd:element name="login" type="xsd:string" />
+          <xsd:element name="email" type="xsd:string" />
+          <xsd:element name="enabled" type="xsd:boolean" />
+          <xsd:element name="Content" type="vnd.ez.api.Version+xml" />
+          <xsd:element name="Roles" type="ref" />
+          <xsd:element name="UserGroups" type="ref" />
+        </xsd:all>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="vnd.ez.api.UserList">
+    <xsd:complexContent>
+      <xsd:extension base="ref">
+        <xsd:all>
+          <xsd:eleemnt name="User" type="vnd.ez.api.User"
+            maxOccurs="unbounded" />
+        </xsd:all>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="vnd.ez.api.UserRefList">
+    <xsd:complexContent>
+      <xsd:extension base="ref">
+        <xsd:all>
+          <xsd:eleemnt name="User" type="ref"
+            maxOccurs="unbounded" />
+        </xsd:all>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="UserRefList" type="vnd.ez.api.UserRefList" />
+  <xsd:element name="UserList" type="vnd.ez.api.UserList" />
+  <xsd:element name="User" type="vnd.ez.api.User" />
+</xsd:schema>
+

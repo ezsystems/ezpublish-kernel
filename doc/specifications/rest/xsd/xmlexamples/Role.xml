@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:Role href="/user/roles/11" media-type="application/vnd.ez.api.Role+xml">
+  <identifier>NewRole</identifier>
+  <Policies href="/user/roles/11/policies" media-type="application/vnd.ez.api.PolicyList+xml"/>
+</p:Role>

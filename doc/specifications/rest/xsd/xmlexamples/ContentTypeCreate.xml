@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentTypeCreate>
+  <identifier>newContentType</identifier>
+  <names>
+    <value languageCode="eng-US">New Content Type</value>
+  </names>
+  <descriptions>
+    <value languageCode="eng-US">This is a description</value>
+  </descriptions>
+  <remoteId>remoteId-qwert548</remoteId>
+  <urlAliasSchema>&lt;title&gt;</urlAliasSchema>
+  <nameSchema>&lt;title&gt;</nameSchema>
+  <isContainer>true</isContainer>
+  <mainLanguageCode>eng-US</mainLanguageCode>
+  <defaultAlwaysAvailable>true</defaultAlwaysAvailable>
+  <defaultSortField>PATH</defaultSortField>
+  <defaultSortOrder>ASC</defaultSortOrder>
+  <FieldDefinitions>
+    <FieldDefinition>
+      <identifier>title</identifier>
+      <fieldType>ezstring</fieldType>
+      <fieldGroup>content</fieldGroup>
+      <position>1</position>
+      <isTranslatable>true</isTranslatable>
+      <isRequired>true</isRequired>
+      <isInfoCollector>false</isInfoCollector>
+      <defaultValue>New Title</defaultValue>
+      <isSearchable>true</isSearchable>
+      <names>
+        <value languageCode="eng-US">Title</value>
+      </names>
+      <descriptions>
+        <value languageCode="eng-US">This is the title</value>
+      </descriptions>
+    </FieldDefinition>
+   <FieldDefinition>
+      <identifier>summary</identifier>
+      <fieldType>ezxmltext</fieldType>
+      <fieldGroup>content</fieldGroup>
+      <position>2</position>
+      <isTranslatable>true</isTranslatable>
+      <isRequired>false</isRequired>
+      <isInfoCollector>false</isInfoCollector>
+      <defaultValue></defaultValue>
+      <isSearchable>true</isSearchable>
+      <names>
+        <value languageCode="eng-US">Summary</value>
+      </names>
+      <descriptions>
+        <value languageCode="eng-US">This is the summary</value>
+      </descriptions>
+    </FieldDefinition>
+   </FieldDefinitions>
+</ContentTypeCreate>

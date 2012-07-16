@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VersionList href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml">
+  <Version href="/content/objects/23/versions/1" media-type="application/vnd.ez.api.Version+xml">
+    <VersionInfo>
+      <id>12</id>
+      <versionNo>1</versionNo>
+      <status>ARCHIVED</status>
+      <modificationDate>2012-02-15T12:00:00</modificationDate>
+      <Creator href="/users/user/8" media-type="application/vnd.ez.api.User+xml" />
+      <creationDate>22012-02-15T12:00:00</creationDate>
+      <initialLanguageCode>eng-US</initialLanguageCode>
+      <names>
+        <value languageCode="eng-US">Name</value>
+      </names>
+      <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
+    </VersionInfo>
+  </Version>
+  <Version href="/content/objects/23/versions/2" media-type="application/vnd.ez.api.Version+xml">
+    <VersionInfo>
+      <id>22</id>
+      <versionNo>2</versionNo>
+      <status>PUBLISHED</status>
+      <modificationDate>2012-02-17T12:00:00</modificationDate>
+      <Creator href="/users/user/8" media-type="application/vnd.ez.api.User+xml" />
+      <creationDate>22012-02-17T12:00:00</creationDate>
+      <initialLanguageCode>eng-US</initialLanguageCode>
+      <names>
+        <value languageCode="eng-US">Name</value>
+      </names>
+      <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
+    </VersionInfo>
+  </Version>
+  <Version href="/content/objects/23/versions/3" media-type="application/vnd.ez.api.Version+xml">
+    <VersionInfo>
+      <id>44</id>
+      <versionNo>3</versionNo>
+      <status>DRAFT</status>
+      <modificationDate>2012-02-19T12:00:00</modificationDate>
+      <Creator href="/users/user/65" media-type="application/vnd.ez.api.User+xml" />
+      <creationDate>22012-02-19T12:00:00</creationDate>
+      <initialLanguageCode>fra-FR</initialLanguageCode>
+      <names>
+        <value languageCode="eng-US">Name</value>
+        <value languageCode="fra-FR">Nom</value>
+      </names>
+      <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
+    </VersionInfo>
+  </Version>
+  <Version href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml">
+    <VersionInfo>
+      <id>45</id>
+      <versionNo>4</versionNo>
+      <status>DRAFT</status>
+      <modificationDate>2012-02-20T12:00:00</modificationDate>
+      <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml" />
+      <creationDate>22012-02-20T12:00:00</creationDate>
+      <initialLanguageCode>ger-DE</initialLanguageCode>
+      <names>
+        <value languageCode="eng-US">Name</value>
+        <value languageCode="ger-DE">Name</value>
+      </names>
+      <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
+    </VersionInfo>
+  </Version>
+</VersionList>

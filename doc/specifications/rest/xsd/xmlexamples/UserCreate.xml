@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UserCreate>
+  <mainLanguageCode>eng-US</mainLanguageCode>
+  <remoteId>remoteId-qwert426</remoteId>
+  <login>john</login>
+  <email>john.doe@example.net</email>
+  <password>john-does-password</password>
+  <fields>
+    <field>
+      <fieldDefinitionIdentifer>first_name</fieldDefinitionIdentifer>
+      <languageCode>eng-US</languageCode>
+      <value>John</value>
+    </field>
+    <field>
+      <fieldDefinitionIdentifer>last_name</fieldDefinitionIdentifer>
+      <languageCode>eng-US</languageCode>
+      <value>Doe</value>
+    </field>
+  </fields>
+</UserCreate>

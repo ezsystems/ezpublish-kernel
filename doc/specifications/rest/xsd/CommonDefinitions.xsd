@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:complexType name="ref">
+    <xsd:annotation>
+      <xsd:documentation>
+        A base schema for referencing resources.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="href" type="xsd:string" />
+    <xsd:attribute name="media-type" type="xsd:string" />
+  </xsd:complexType>
+
+  <xsd:complexType name="vnd.ez.api.RefList">
+    <xsd:sequence>
+      <xsd:element name="ref" type="ref" maxOccurs="unbounded" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="controllerRef">
+    <xsd:annotation>
+      <xsd:documentation>
+        A base schema for referencing controllers and
+        methods
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="href" type="xsd:string" />
+    <xsd:attribute name="method" type="xsd:string" />
+  </xsd:complexType>
+
+  <xsd:complexType name="fieldInputValueType">
+    <xsd:annotation>
+      <xsd:documentation>
+        Schema for field inputs in content create and
+        update structures
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:all>
+      <xsd:element name="fieldDefinitionIdentifer" type="xsd:string" />
+      <xsd:element name="languageCode" type="xsd:string" />
+      <xsd:element name="value" type="xsd:anyType"/>
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="fieldValueType">
+    <xsd:all>
+      <xsd:element name="id" type="xsd:integer" />
+      <xsd:element name="fieldDefinitionIdentifer" type="xsd:string" />
+      <xsd:element name="languageCode" type="xsd:string" />
+      <xsd:element name="value" type="xsd:anyType"/>
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="multiLanguageValuesType">
+    <xsd:sequence>
+      <xsd:element name="value" minOccurs="1" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+              <xsd:attribute name="languageCode" type="xsd:string" />
+            </xsd:extension>
+          </xsd:simpleContent>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:simpleType name="sortFieldType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="PATH" />
+      <xsd:enumeration value="PUBLISHED" />
+      <xsd:enumeration value="MODIFIED" />
+      <xsd:enumeration value="SECTION" />
+      <xsd:enumeration value="DEPTH" />
+      <xsd:enumeration value="CLASS_IDENTIFIER" />
+      <xsd:enumeration value="CLASS_NAME" />
+      <xsd:enumeration value="PRIORITY" />
+      <xsd:enumeration value="NAME" />
+      <xsd:enumeration value="MODIFIED_SUBNODE" />
+      <xsd:enumeration value="NODE_ID" />
+      <xsd:enumeration value="CONTENTOBJECT_ID" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="versionStatus">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="DRAFT" />
+      <xsd:enumeration value="PUBLISHED" />
+      <xsd:enumeration value="ARCHIVED" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="contentTypeStatus">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="DRAFT" />
+      <xsd:enumeration value="DEFINED" />
+      <xsd:enumeration value="MODIFIED" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="sortOrderType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="ASC" />
+      <xsd:enumeration value="DESC" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="intList">
+    <xsd:list itemType="xsd:integer" />
+  </xsd:simpleType>
+  <xsd:simpleType name="dateList">
+    <xsd:list itemType="xsd:dateTime" />
+  </xsd:simpleType>
+  <xsd:simpleType name="stringList">
+    <xsd:list itemType="xsd:string" />
+  </xsd:simpleType>
+</xsd:schema>

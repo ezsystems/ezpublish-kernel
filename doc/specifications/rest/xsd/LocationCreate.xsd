@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+  <xsd:complexType name="vnd.ez.api.LocationCreate">
+    <xsd:all>
+      <xsd:element name="ParentLocation" type="ref">
+        <xsd:annotation>
+          <xsd:documentation>
+            The parent location where the new location
+            is created
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="priority" type="xsd:int" minOccurs="0" default="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            Location priority
+            Position of the
+            Location
+            among its siblings when sorted using priority
+            sort order.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="hidden" type="xsd:boolean"
+        minOccurs="0" default="false">
+        <xsd:annotation>
+          <xsd:documentation>
+            Indicates that the Location entity has
+            been
+            explicitly marked as hidden.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="remoteId" type="xsd:string"
+        minOccurs="0" />
+      <xsd:element name="sortField" type="sortFieldType" />
+      <xsd:element name="sortOrder" type="sortOrderType" />
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:element name="LocationCreate" type="vnd.ez.api.LocationCreate" />
+</xsd:schema>

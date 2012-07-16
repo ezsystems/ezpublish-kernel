@@ -1,0 +1,166 @@
+<?php
+/**
+ * File containing a test class
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
+namespace eZ\Publish\API\REST\Server\Tests\Output\ValueObjectVisitor;
+use eZ\Publish\API\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
+
+use eZ\Publish\API\REST\Server\Output\ValueObjectVisitor;
+use eZ\Publish\API\Repository\Values\Content;
+use eZ\Publish\API\REST\Common;
+
+class SectionTest extends ValueObjectVisitorBaseTest
+{
+    /**
+     * testVisit
+     *
+     * @return void
+     */
+    public function testVisit()
+    {
+        $visitor   = $this->getSectionVisitor();
+        $generator = $this->getGenerator();
+
+        $generator->startDocument( null );
+
+        $section = new Content\Section( array(
+            'id'         => 23,
+            'identifier' => 'some-section',
+            'name'       => 'Some Section',
+        ) );
+
+        $visitor->visit(
+            $this->getVisitorMock(),
+            $generator,
+            $section
+        );
+
+        $result = $generator->endDocument( null );
+
+        $this->assertNotNull( $result );
+
+        return $result;
+    }
+
+    /**
+     * testResultContainsSectionElement
+     *
+     * @param string $result
+     * @depends testVisit
+     */
+    public function testResultContainsSectionElement( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag'      => 'Section',
+                'children' => array(
+                    'less_than'    => 4,
+                    'greater_than' => 2,
+                )
+            ),
+            $result,
+            'Invalid <Section> element.',
+            false
+        );
+    }
+
+    /**
+     * testResultContainsSectionAttributes
+     *
+     * @param string $result
+     * @depends testVisit
+     */
+    public function testResultContainsSectionAttributes( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag'      => 'Section',
+                'attributes' => array(
+                    'media-type' => 'application/vnd.ez.api.Section+xml',
+                    'href'       => '/content/sections/23',
+                )
+            ),
+            $result,
+            'Invalid <Section> attributes.',
+            false
+        );
+    }
+
+    /**
+     * testResultContainsSectionIdValueElement
+     *
+     * @param string $result
+     * @return void
+     * @depends testVisit
+     */
+    public function testResultContainsSectionIdValueElement( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag'      => 'sectionId',
+                'content'  => '23',
+
+            ),
+            $result,
+            'Invalid <Section> attributes.',
+            false
+        );
+    }
+
+    /**
+     * testResultContainsIdentifierValueElement
+     *
+     * @param string $result
+     * @return void
+     * @depends testVisit
+     */
+    public function testResultContainsIdentifierValueElement( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag'      => 'identifier',
+                'content'  => 'some-section',
+
+            ),
+            $result,
+            'Invalid <Section> attributes.',
+            false
+        );
+    }
+
+    /**
+     * testResultContainsNameValueElement
+     *
+     * @param string $result
+     * @return void
+     * @depends testVisit
+     */
+    public function testResultContainsNameValueElement( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag'      => 'name',
+                'content'  => 'Some Section',
+
+            ),
+            $result,
+            'Invalid <Section> attributes.',
+            false
+        );
+    }
+
+    /**
+     * @return \eZ\Publish\API\REST\Server\Output\ValueObjectVisitor\Section
+     */
+    protected function getSectionVisitor()
+    {
+        return new ValueObjectVisitor\Section(
+            new Common\UrlHandler\eZPublish()
+        );
+    }
+}
