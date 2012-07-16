@@ -269,8 +269,9 @@ class ContentServiceTest extends BaseContentServiceTest
      * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationByRemoteId
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testCreateContentWithLocationCreateParameter()
+    public function testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately()
     {
         $repository = $this->getRepository();
 
@@ -279,44 +280,12 @@ class ContentServiceTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         $draft = $this->createContentDraftVersion1();
 
-        // This location will contain the above content object
+        // The location will not have been created, yet, so this throws an
+        // exception
         $location = $locationService->loadLocationByRemoteId(
             '0123456789abcdef0123456789abcdef'
         );
         /* END: Use Case */
-
-        $this->assertEquals( $draft->contentInfo, $location->getContentInfo() );
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
-     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
-     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationByRemoteId
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
-     */
-    public function testCreateContentWithLocationCreateParameterSetsMainLocationId()
-    {
-        $repository = $this->getRepository();
-
-        $locationService = $repository->getLocationService();
-
-        /* BEGIN: Use Case */
-        $draft = $this->createContentDraftVersion1();
-
-        // This location will contain the above content object
-        $location = $locationService->loadLocationByRemoteId(
-            '0123456789abcdef0123456789abcdef'
-        );
-
-        // These two values are equal
-        $locationId = $location->id;
-        $mainLocationId = $draft->contentInfo->mainLocationId;
-        /* END: Use Case */
-
-        $this->assertEquals( $mainLocationId, $locationId );
     }
 
     /**
@@ -325,7 +294,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
      */
     public function testCreateContentThrowsInvalidArgumentExceptionWithLocationCreateParameter()
     {
@@ -714,7 +683,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfo
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
      */
     public function testPublishVersion()
     {
@@ -802,6 +771,56 @@ class ContentServiceTest extends BaseContentServiceTest
         );
 
         $this->assertNotNull( $content->getVersionInfo()->modificationDate );
+    }
+
+    /**
+     * Test for the publishVersion() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     */
+    public function testPublishVersionCreatesLocationsDefinedOnCreate()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $content = $this->createContentVersion1();
+        /* END: Use Case */
+
+        $locationService = $repository->getLocationService();
+        $location = $locationService->loadLocationByRemoteId(
+            '0123456789abcdef0123456789abcdef'
+        );
+
+        $this->assertEquals(
+            $location->getContentInfo(),
+            $content->getVersionInfo()->getContentInfo()
+        );
+
+        return array( $content, $location );
+    }
+
+    /**
+     * Test for the publishVersion() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionCreatesLocationsDefinedOnCreate
+     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
+     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationByRemoteId
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     */
+    public function testCreateContentWithLocationCreateParameterSetsMainLocationId( array $testData )
+    {
+        list( $content, $location ) = $testData;
+
+        $this->assertEquals(
+            $content->getVersionInfo()->getContentInfo()->mainLocationId,
+            $location->id
+        );
     }
 
     /**
@@ -3188,7 +3207,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentThrowsNotFoundException
      */
     public function testCreateContentWithLocationCreateParameterInTransactionWithRollback()
@@ -3228,7 +3247,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentThrowsNotFoundException
      */
     public function testCreateContentWithLocationCreateParameterInTransactionWithCommit()
