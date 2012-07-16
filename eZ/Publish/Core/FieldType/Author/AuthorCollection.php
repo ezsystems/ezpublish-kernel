@@ -52,7 +52,7 @@ class AuthorCollection extends ArrayObject
         {
             throw new InvalidArgumentType(
                 '$value',
-                'eZ\Publish\Core\FieldType\Author\Author',
+                'eZ\\Publish\\Core\\FieldType\\Author\\Author',
                 $value
             );
         }
