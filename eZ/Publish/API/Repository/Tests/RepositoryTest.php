@@ -200,6 +200,22 @@ class RepositoryTest extends BaseTest
     }
 
     /**
+     * Test for the getFieldTypeService()
+     *
+     * @return void
+     * @group object-state
+     * @see \eZ\Publish\API\Repository\Repository::getFieldTypeService()
+     */
+    public function testGetFieldTypeService()
+    {
+        $repository = $this->getRepository();
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\FieldTypeService',
+            $repository->getFieldTypeService()
+        );
+    }
+
+    /**
      * Test for the getIOService() method.
      *
      * @return void
