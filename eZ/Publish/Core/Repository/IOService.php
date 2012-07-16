@@ -84,7 +84,7 @@ class IOService implements IOServiceInterface, LegacyKernelAware
      *
      * @return \eZ\Publish\Legacy\Kernel
      */
-    public function getLegacyKernel()
+    protected function getLegacyKernel()
     {
         return $this->legacyKernel;
     }
