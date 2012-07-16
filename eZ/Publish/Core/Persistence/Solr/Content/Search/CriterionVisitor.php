@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**
  * Visits the criterion tree into a Solr query
@@ -56,7 +57,7 @@ abstract class CriterionVisitor
         $endValue   = '*';
         $endBrace   = ']';
 
-        switch ( $criterion->operator )
+        switch ( $operator )
         {
             case Operator::GT:
                 $startBrace = '{';
