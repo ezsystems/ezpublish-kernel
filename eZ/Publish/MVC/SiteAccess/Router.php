@@ -74,10 +74,11 @@ class Router
         $siteaccess = new SiteAccess;
 
         // First check environment variable
-        if ( isset( $_ENV['EZPUBLISH_SITEACCESS'] ) )
+        $siteaccessEnvName = getenv( 'EZPUBLISH_SITEACCESS' );
+        if ( $siteaccessEnvName !== false )
         {
             // TODO: Check siteaccess validity and throw \RuntimeException if invalid
-            $siteaccess->name = $_ENV['EZPUBLISH_SITEACCESS'];
+            $siteaccess->name = $siteaccessEnvName;
             $siteaccess->matchingType = 'env';
             return $siteaccess;
         }
