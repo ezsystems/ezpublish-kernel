@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RoleAssignInput>
+  <Role href="/user/role/11" media-type="application/vnd.ez.api.RoleAssignInput+xml"/>
+  <limitation identifier="Section">
+    <values>1 4</values>
+  </limitation>
+</RoleAssignInput>

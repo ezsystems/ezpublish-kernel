@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UserUpdate>
+  <email>john.doe@mooglemail.com</email>
+  <fields>
+    <field>
+      <fieldDefinitionIdentifer>signature</fieldDefinitionIdentifer>
+      <languageCode>eng-US</languageCode>
+      <value>
+      John Doe
+      Example Systems
+      john.doe@mooglemail.com
+      skype: johndoe
+      </value>
+    </field>
+  </fields>
+</UserUpdate>

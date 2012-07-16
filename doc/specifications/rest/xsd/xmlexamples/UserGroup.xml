@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UserGroup href="/user/groups/1/5/65" id="65" media-type="application/vnd.ez.api.UserGroup+xml" remoteId="remoteId-qwert543">
+  <ContentType href="/content/types/5" media-type="application/vnd.ez.api.ContentType+xml" />
+  <name>UserGroup</name>
+  <Versions href="/content/objects/78/versions" media-type="application/vnd.ez.api.VersionList+xml" />
+  <Section href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
+  <MainLocation href="/content/locations/1/5/65" media-type="application/vnd.ez.api.Location+xml" />
+  <Locations href="/content/objects/78/locations" media-type="application/vnd.ez.api.LocationList+xml" />
+  <Owner href="/user/users/13" media-type="application/vnd.ez.api.User+xml" />
+  <publishDate>2012-02-31T16:00:00</publishDate>
+  <lastModificationDate>2012-02-31T16:00:00</lastModificationDate>
+  <mainLanguageCode>eng-UK</mainLanguageCode>
+  <alwaysAvailable>true</alwaysAvailable>
+  <Content>
+    <VersionInfo>
+      <id>123</id>
+      <versionNo>2</versionNo>
+      <status>PUBLISHED</status>
+      <modificationDate>2012-02-31T16:00:00</modificationDate>
+      <Creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+      <creationDate>2012-02-31T16:00:00</creationDate>
+      <initialLanguageCode>eng-UK</initialLanguageCode>
+      <Content href="/content/objects/78" media-type="application/vnd.ez.api.ContentInfo+xml" />
+    </VersionInfo>
+    <Fields>
+      <field>
+        <id>1234</id>
+        <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
+        <languageCode>eng-UK</languageCode>
+        <value>UserGroup</value>
+      </field>
+      <field>
+        <id>1235</id>
+        <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+        <languageCode>eng-UK</languageCode>
+        <value>This is the description of the user group</value>
+      </field>
+    </Fields>
+    <Relations />
+  </Content>
+  <ParentUserGroup href="/user/groups/1/5" media-type="application/vnd.ez.api.UserGroup+xml" minOccurs="0"/>
+  <SubGroups href="/user/groups/1/5/65/subgroups" media-type="application/vnd.ez.api.UserGroupList+xml"/>
+  <Users href="/user/groups/1/5/65/users" media-type="application/vnd.ez.api.UserList+xml"/>
+  <Roles href="/user/groups/1/5/65/roles" media-type="application/vnd.ez.api.RoleList+xml"/>
+</UserGroup>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+  <xsd:complexType name="vnd.ez.api.FieldDefinitionUpdate">
+    <xsd:all>
+      <xsd:element name="identifier" type="xsd:string" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            If set the identifier of a field
+            definition is changed
+           </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="fieldGroup" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>
+            If set the field group is changed
+           </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="position" type="xsd:int">
+        <xsd:annotation>
+          <xsd:documentation>
+            If set the the position of the field definition in
+            the content typr is changed
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="isTranslatable" type="xsd:boolean">
+        <xsd:annotation>
+          <xsd:documentation>
+            If set the translatable flag is set to this value
+              </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="isRequired" type="xsd:boolean">
+        <xsd:annotation>
+          <xsd:documentation>
+            If set the required flag is set to this value
+              </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="isInfoCollector" type="xsd:boolean">
+        <xsd:annotation>
+          <xsd:documentation>
+            If set the info collection flag is set to this value
+                </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="defaultValue" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>
+            If set the default value of the field is changed
+              </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="isSearchable" type="xsd:boolean">
+        <xsd:annotation>
+          <xsd:documentation>
+           If set the searchable flag is set to this value
+                 </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="names" type="multiLanguageValuesType" />
+      <xsd:element name="descriptions" type="multiLanguageValuesType" />
+    </xsd:all>
+  </xsd:complexType>
+  
+  <xsd:element name="FieldDefinitionInput" type="vnd.ez.api.FieldDefinitionUpdate" />
+</xsd:schema>

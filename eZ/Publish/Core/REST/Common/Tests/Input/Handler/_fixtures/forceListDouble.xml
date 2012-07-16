@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentList media-type="application/vnd.ez.api.ContentList+xml" href="/content/objects">
+  <ContentInfo media-type="application/vnd.ez.api.ContentInfo+xml" href="/content/contents/94" id="94">
+    <ContentType media-type="application/vnd.ez.api.ContentType+xml" href="/content/types/23"/>
+    <name>Support</name>
+  </ContentInfo>
+  <ContentInfo media-type="application/vnd.ez.api.ContentInfo+xml" href="/content/contents/94" id="95">
+    <ContentType media-type="application/vnd.ez.api.ContentType+xml" href="/content/types/23"/>
+    <name>Support 2</name>
+  </ContentInfo>
+</ContentList>

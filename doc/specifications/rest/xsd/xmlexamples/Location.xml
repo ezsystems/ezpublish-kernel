@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Location href="/content/locations/1/5/73/133" media-type="application/vnd.ez.api.Location+xml">
+  <id>133</id>
+  <priority>0</priority>
+  <hidden>false</hidden>
+  <invisible>false</invisible>
+  <ParentLocation href="/content/locations/1/5/73" media-type="application/vnd.ez.api.Location+xml"/>
+  <pathString>/1/5/73/133</pathString>
+  <subLocationModificationDate>2001-01-01T12:45:00</subLocationModificationDate>
+  <depth>4</depth>
+  <childCount>0</childCount>
+  <remoteId>remoteId-qwert567</remoteId>
+  <Content href="/content/objects/23" media-type="application/vnd.ez.api.Content+xml"/>
+  <sortField>PATH</sortField>
+  <sortOrder>ASC</sortOrder>
+</Location>

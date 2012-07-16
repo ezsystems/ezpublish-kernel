@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<User href="/user/users/99" id="99" media-type="application/vnd.ez.api.User+xml"
+  remoteId="remoteId-qwert426">
+  <ContentType href="/content/types/4" media-type="application/vnd.ez.api.ContentType+xml" />
+  <name>John</name>
+  <Versions href="/content/objects/79" media-type="application/vnd.ez.api.VersionList+xml" />
+  <Section href="/content/section/3" media-type="application/vnd.ez.api.Section+xml" />
+  <MainLocation href="/content/locations/1/5/65"
+    media-type="application/vnd.ez.api.Location+xml" />
+  <Locations href="/content/objects/79/locations" media-type="application/vnd.ez.api.LocationList+xml" />
+  <Owner href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
+  <publishDate>2001-04-01T12:00:00</publishDate>
+  <lastModificationDate>2001-04-01T12:00:00</lastModificationDate>
+  <mainLanguageCode>eng-US</mainLanguageCode>
+  <alwaysAvailable>true</alwaysAvailable>
+  <login>john</login>
+  <email>john.doe@example.net</email>
+  <enabled>true</enabled>
+  <Content>
+    <VersionInfo>
+      <id>1243</id>
+      <versionNo>1</versionNo>
+      <status>PUBLISHED</status>
+      <modificationDate>2001-04-01T12:00:00</modificationDate>
+      <Creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+      <creationDate>2001-04-01T12:00:00</creationDate>
+      <initialLanguageCode>eng-UK</initialLanguageCode>
+      <Content href="/content/objects/79" media-type="application/vnd.ez.api.ContentInfo+xml" />
+    </VersionInfo>
+    <fields>
+      <field>
+        <fieldDefinitionIdentifer>first_name</fieldDefinitionIdentifer>
+        <languageCode>eng-US</languageCode>
+        <value>John</value>
+      </field>
+      <field>
+        <fieldDefinitionIdentifer>last_name</fieldDefinitionIdentifer>
+        <languageCode>eng-US</languageCode>
+        <value>Doe</value>
+      </field>
+    </fields>
+  </Content>
+  <Roles href="/user/users/99/roles" media-type="application/vnd.ez.api.RoleAssignmentList+xml" />
+  <UserGroups href="/user/users/99/group" media-type="vns.ez.api.UserGroupRefList+xml" />
+</User>

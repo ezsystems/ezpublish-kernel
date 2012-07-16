@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Content href="/content/objects/23" id="23"
+  media-type="application/vnd.ez.api.Content+xml" remoteId="qwert123">
+  <ContentType href="/content/types/10" media-type="application/vnd.ez.api.ContentType+xml" />
+  <Name>Name</Name>
+  <Versions href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml" />
+  <CurrentVersion href="/content/objects/23/currentversion"
+    media-type="application/vnd.ez.api.Version+xml">
+    <Version href="/content/objects/23/versions/2" media-type="application/vnd.ez.api.Version+xml">
+      <VersionInfo>
+        <id>123</id>
+        <versionNo>2</versionNo>
+        <status>PUBLISHED</status>
+        <modificationDate>2001-12-31T12:00:00</modificationDate>
+        <creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+        <creationDate>2001-12-31T12:00:00</creationDate>
+        <initialLanguageCode>eng-UK</initialLanguageCode>
+        <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
+      </VersionInfo>
+      <Fields>
+        <field>
+          <id>1234</id>
+          <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+          <languageCode>eng-UK</languageCode>
+          <value>Title</value>
+        </field>
+        <field>
+          <id>1235</id>
+          <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
+          <languageCode>eng-UK</languageCode>
+          <value>This is a summary</value>
+        </field>
+      </Fields>
+      <Relations />
+    </Version>
+  </CurrentVersion>
+  <Section href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
+  <MainLocation href="/content/locations/1/4/65"
+    media-type="application/vnd.ez.api.Location+xml" />
+  <Locations href="/content/objects/23/locations" media-type="application/vnd.ez.api.LocationList+xml" />
+  <Owner href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+  <PublishDate>2001-12-31T12:00:00</PublishDate>
+  <LastModificationDate>2001-12-31T12:00:00</LastModificationDate>
+  <MainLanguageCode>eng-UK</MainLanguageCode>
+  <AlwaysAvailable>true</AlwaysAvailable>
+</Content>

@@ -1,4 +1,10 @@
 {
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "http://github.com/Qafoo/REST-Micro-Framework"
+        }
+    ],
     "require": {
         "symfony/symfony": "2.1.0-beta1",
         "twig/twig": "1.8.3",
@@ -6,7 +12,8 @@
         "zetacomponents/php-generator": "dev-master",
         "zetacomponents/configuration": "dev-master",
         "zetacomponents/database": "dev-master",
-        "zetacomponents/mail": "1.7"
+        "zetacomponents/mail": "1.7",
+        "Qafoo/RMF": "dev-master"
     },
     "autoload": {
         "psr-0": {
