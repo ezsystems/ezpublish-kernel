@@ -19,7 +19,7 @@ use eZ\Publish\MVC\MVCEvents,
  */
 class SiteAccessListener implements EventSubscriberInterface
 {
-    static function getSubscribedEvents()
+    public static function getSubscribedEvents()
     {
         return array(
             MVCEvents::SITEACCESS => array( 'onSiteAccessMatch', 255 )
@@ -29,9 +29,13 @@ class SiteAccessListener implements EventSubscriberInterface
     public function onSiteAccessMatch( PostSiteAccessMatchEvent $event )
     {
         $siteAccess = $event->getSiteAccess();
+        // Analyse the pathinfo if needed since it might contain the siteaccess (i.e. like in URI mode)
         if ( $siteAccess->matcher instanceof URILexer )
         {
-            $event->setPathinfo(
+            // Storing the modified pathinfo in 'semanticPathinfo' request attribute, to keep a trace of it.
+            // Routers implementing RequestMatcherInterface should thus use this attribute instead of the original pathinfo
+            $event->getRequest()->attributes->set(
+                'semanticPathinfo',
                 $siteAccess->matcher->analyseURI( $event->getRequest()->getPathInfo() )
             );
         }

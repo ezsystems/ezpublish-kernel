@@ -185,14 +185,6 @@ class ChainRouter implements RouterInterface, WarmableInterface, RequestMatcherI
         {
             $siteAccessEvent = new PostSiteAccessMatchEvent( $siteaccess, $request );
             $this->eventDispatcher->dispatch( MVCEvents::SITEACCESS, $siteAccessEvent );
-            // Fix up the pathinfo if necessary since it might contain the siteaccess (i.e. like in URI mode)
-            if ( $siteAccessEvent->hasPathinfo() )
-                $pathinfo = $siteAccessEvent->getPathinfo();
-
-            // Storing the modified $pathinfo in 'semanticPathinfo' request attribute, to keep a trace of it.
-            // Routers implementing RequestMatcherInterface should thus use this attribute instead of the original pathinfo
-            $request->attributes->set( 'semanticPathinfo', $pathinfo );
-
             unset( $siteAccessEvent );
         }
 
