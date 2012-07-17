@@ -67,11 +67,10 @@ class RepositoryTest extends BaseServiceTest
 
         $getLegacyKernelMethod = new \ReflectionMethod( $this->repository, 'getLegacyKernel' );
         $getLegacyKernelMethod->setAccessible( true );
-
-        $legacyKernel = $this->repository->getLegacyKernel();
+        $legacyKernel = $getLegacyKernelMethod->invoke( $this->repository );
         self::assertInstanceOf( 'eZ\\Publish\\Legacy\\Kernel', $legacyKernel );
         // Now checks that legacy kernel is built only once
-        self::assertSame( $legacyKernel, $this->repository->getLegacyKernel() );
+        self::assertSame( $legacyKernel, $getLegacyKernelMethod->invoke( $this->repository ) );
     }
 
     /**
@@ -90,10 +89,10 @@ class RepositoryTest extends BaseServiceTest
         $serviceSettings = $refServiceSettings->getValue( $this->repository );
         unset( $serviceSettings['legacy']['legacy_root_dir'] );
         $refServiceSettings->setValue( $this->repository, $serviceSettings );
+
         $getLegacyKernelMethod = $refRepository->getMethod( 'getLegacyKernel' );
         $getLegacyKernelMethod->setAccessible( true );
-
-        $this->repository->getLegacyKernel();
+        $getLegacyKernelMethod->invoke( $this->repository );
     }
 
     /**
@@ -112,10 +111,10 @@ class RepositoryTest extends BaseServiceTest
         $serviceSettings = $refServiceSettings->getValue( $this->repository );
         unset( $serviceSettings['legacy']['kernel_handler'] );
         $refServiceSettings->setValue( $this->repository, $serviceSettings );
+
         $getLegacyKernelMethod = $refRepository->getMethod( 'getLegacyKernel' );
         $getLegacyKernelMethod->setAccessible( true );
-
-        $this->repository->getLegacyKernel();
+        $getLegacyKernelMethod->invoke( $this->repository );
     }
 
     /**
@@ -132,6 +131,6 @@ class RepositoryTest extends BaseServiceTest
 
         $legacyKernelMock = $this->getLegacyKernelMock();
         $this->repository->setLegacyKernel( $legacyKernelMock );
-        self::assertSame( $legacyKernelMock, $this->repository->getLegacyKernel() );
+        self::assertSame( $legacyKernelMock, $getLegacyKernelMethod->invoke( $this->repository ) );
     }
 }
