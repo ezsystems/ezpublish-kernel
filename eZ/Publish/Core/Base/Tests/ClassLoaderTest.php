@@ -23,8 +23,8 @@ class ClassLoaderTest extends PHPUnit_Framework_TestCase
     {
         $loader = new ClassLoader(
             array(
-                'eZ' => 'eZ',
-                'xyz\\Pizza' => 'xyz/Pasta'
+                'eZ' => '',
+                'xyz\\Pizza' => 'vendor/'
             )
         );
 
@@ -32,8 +32,8 @@ class ClassLoaderTest extends PHPUnit_Framework_TestCase
         self::assertFalse( $loader->load( "\\eZ\\Pizza\\Box" ) );
         self::assertFalse( $loader->load( "xyz\\Pizza\\Box" ) );
         self::assertFalse( $loader->load( "\\xyz\\Pizza\\Box" ) );
-        self::assertNull( $loader->load( "NotHere\\Pizza\\Box" ) );// void
-        self::assertNull( $loader->load( "\\NotHere\\Pizza\\Box" ) );// void
+        self::assertFalse( $loader->load( "NotHere\\Pizza\\Box" ) );
+        self::assertFalse( $loader->load( "\\NotHere\\Pizza\\Box" ) );
     }
 
     /**
@@ -44,10 +44,9 @@ class ClassLoaderTest extends PHPUnit_Framework_TestCase
     {
         $loader = new ClassLoader(
             array(
-                'eZ' => 'eZ',
-                'xyz' => 'xyz/Pasta'
-            ),
-            ClassLoader::PSR_0_NO_FILECHECK
+                'eZ' => '',
+                'xyz' => 'vendor/'
+            )
         );
 
         include $loader->load( "eZ\\Will\\Fail", true );
@@ -56,54 +55,27 @@ class ClassLoaderTest extends PHPUnit_Framework_TestCase
     /**
      * @covers \eZ\Publish\Core\Base\ClassLoader::load
      */
-    public function testStrictMapping()
+    public function testMapping()
     {
         $loader = new ClassLoader(
             array(
-                'eZ' => 'eZ',
-                'xyz\\Pizza' => 'xyz/Pasta',
-                'xyz' => 'xyz/Pasta'
-            ),
-            ClassLoader::PSR_0_NO_FILECHECK | ClassLoader::PSR_0_STRICT_MODE
+                'eZ' => '/',
+                'xyz\\Pizza' => '/vendor/zzz/',
+                'xyz' => '/vendor/'
+            )
         );
 
-        self::assertEquals( 'eZ/Pizza/Box.php', $loader->load( "eZ\\Pizza\\Box", true ) );
-        self::assertEquals( 'eZ/Pizza/Box.php', $loader->load( "\\eZ\\Pizza\\Box", true ) );
-        self::assertEquals( 'eZ/Pizza/Paper_Box.php', $loader->load( "eZ\\Pizza\\Paper_Box", true ) );
+        self::assertEquals( '/eZ/Pizza/Box.php', $loader->load( "eZ\\Pizza\\Box", true ) );
+        self::assertEquals( '/eZ/Pizza/Box.php', $loader->load( "\\eZ\\Pizza\\Box", true ) );
+        self::assertEquals( '/eZ/Pizza/Paper/Box.php', $loader->load( "eZ\\Pizza\\Paper_Box", true ) );
+        self::assertEquals( '/eZ/Pizza_Paper/White/Box.php', $loader->load( "eZ\\Pizza_Paper\\White_Box", true ) );
 
-        self::assertEquals( 'xyz/Pasta/Box.php', $loader->load( "xyz\\Pizza\\Box", true ) );
-        self::assertEquals( 'xyz/Pasta/Box.php', $loader->load( "\\xyz\\Pizza\\Box", true ) );
-        self::assertEquals( 'xyz/Pasta/Paper_Box.php', $loader->load( "xyz\\Pizza\\Paper_Box", true ) );
+        self::assertEquals( '/vendor/zzz/xyz/Pizza/Box.php', $loader->load( "xyz\\Pizza\\Box", true ) );
+        self::assertEquals( '/vendor/zzz/xyz/Pizza/Box.php', $loader->load( "\\xyz\\Pizza\\Box", true ) );
+        self::assertEquals( '/vendor/zzz/xyz/Pizza/Paper/Box.php', $loader->load( "xyz\\Pizza\\Paper_Box", true ) );
 
-        self::assertEquals( 'xyz/Pasta/Bolognese/Box.php', $loader->load( "xyz\\Bolognese\\Box", true ) );
-        self::assertEquals( 'xyz/Pasta/Bolognese/Box.php', $loader->load( "\\xyz\\Bolognese\\Box", true ) );
-        self::assertEquals( 'xyz/Pasta/Bolognese/Paper_Box.php', $loader->load( "xyz\\Bolognese\\Paper_Box", true ) );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\Base\ClassLoader::load
-     */
-    public function testPearCompatMapping()
-    {
-        $loader = new ClassLoader(
-            array(
-                'eZ' => 'eZ',
-                'xyz\\Pizza' => 'xyz/Pasta',
-                'xyz' => 'xyz/Pasta'
-            ),
-            ClassLoader::PSR_0_NO_FILECHECK
-        );
-
-        self::assertEquals( 'eZ/Pizza/Box.php', $loader->load( "eZ\\Pizza\\Box", true ) );
-        self::assertEquals( 'eZ/Pizza/Box.php', $loader->load( "\\eZ\\Pizza\\Box", true ) );
-        self::assertEquals( 'eZ/Pizza/Paper/Box.php', $loader->load( "eZ\\Pizza\\Paper_Box", true ) );
-
-        self::assertEquals( 'xyz/Pasta/Box.php', $loader->load( "xyz\\Pizza\\Box", true ) );
-        self::assertEquals( 'xyz/Pasta/Box.php', $loader->load( "\\xyz\\Pizza\\Box", true ) );
-        self::assertEquals( 'xyz/Pasta/Paper/Box.php', $loader->load( "xyz\\Pizza\\Paper_Box", true ) );
-
-        self::assertEquals( 'xyz/Pasta/Bolognese/Box.php', $loader->load( "xyz\\Bolognese\\Box", true ) );
-        self::assertEquals( 'xyz/Pasta/Bolognese/Box.php', $loader->load( "\\xyz\\Bolognese\\Box", true ) );
-        self::assertEquals( 'xyz/Pasta/Bolognese/Paper/Box.php', $loader->load( "xyz\\Bolognese\\Paper_Box", true ) );
+        self::assertEquals( '/vendor/xyz/Bolognese/Box.php', $loader->load( "xyz\\Bolognese\\Box", true ) );
+        self::assertEquals( '/vendor/xyz/Bolognese/Box.php', $loader->load( "\\xyz\\Bolognese\\Box", true ) );
+        self::assertEquals( '/vendor/xyz/Bolognese/Paper/Box.php', $loader->load( "xyz\\Bolognese\\Paper_Box", true ) );
     }
 }
