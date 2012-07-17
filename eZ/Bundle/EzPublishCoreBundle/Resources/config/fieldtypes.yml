@@ -1,4 +1,7 @@
 parameters:
+    ezpublish.api.fieldTypeValidator.class: eZ\Publish\Core\Repository\ValidatorService
+    ezpublish.api.fieldTypeTools.class: eZ\Publish\Core\Repository\FieldTypeTools
+
     ezpublish.fieldType.ezauthor.class: eZ\Publish\Core\FieldType\Author\Type
     ezpublish.fieldType.ezbinaryfile.class: eZ\Publish\Core\FieldType\BinaryFile\Type
     ezpublish.fieldType.ezboolean.class: eZ\Publish\Core\FieldType\Checkbox\Type
@@ -30,82 +33,101 @@ parameters:
     ezpublish.fieldType.ezcountry.class: eZ\Publish\Core\FieldType\Country\Type
 
 services:
+    ezpublish.api.fieldTypeValidator:
+        class: %ezpublish.api.fieldTypeValidator.class%
+        public: false
+
+    ezpublish.api.fieldTypeTools:
+        class: %ezpublish.api.fieldTypeTools.class%
+        public: false
+
     ezpublish.fieldType.ezauthor:
         class: %ezpublish.fieldType.ezauthor.class%
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
         tags:
             - {name: ezpublish.fieldType, alias: ezauthor}
 
     ezpublish.fieldType.ezbinaryfile:
         class: %ezpublish.fieldType.ezbinaryfile.class%
-        arguments: [@ezpublish.api.repository]
+        arguments: [@ezpublish.api.repository, @ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
         tags:
             - {name: ezpublish.fieldType, alias: ezbinaryfile}
 
     ezpublish.fieldType.ezboolean:
         class: %ezpublish.fieldType.ezboolean.class%
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
         tags:
             - {name: ezpublish.fieldType, alias: ezboolean}
 
     ezpublish.fieldType.ezdatetime:
         class: %ezpublish.fieldType.ezdatetime.class%
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
         tags:
             - {name: ezpublish.fieldType, alias: ezdatetime}
 
     ezpublish.fieldType.ezfloat:
         class: %ezpublish.fieldType.ezfloat.class%
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
         tags:
             - {name: ezpublish.fieldType, alias: ezfloat}
 
     ezpublish.fieldType.ezinteger:
         class: %ezpublish.fieldType.ezinteger.class%
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
         tags:
             - {name: ezpublish.fieldType, alias: ezinteger}
 
     #ezpublish.fieldType.ezimage:
     #    class: %ezpublish.fieldType.ezimage.class%
-    #    parameters: [@ezpublish.api.repository]
+    #    parameters: [@ezpublish.api.repository, @ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
     #    tags:
     #        - {name: ezpublish.fieldType, alias: ezimage}
 
     ezpublish.fieldType.ezkeyword:
         class: %ezpublish.fieldType.ezkeyword.class%
+        arguments: [@ezpublish.api.fieldTypeValidator]
         tags:
             - {name: ezpublish.fieldType, alias: ezkeyword}
 
     ezpublish.fieldType.ezmedia:
         class: %ezpublish.fieldType.ezmedia.class%
-        arguments: [@ezpublish.api.repository]
+        arguments: [@ezpublish.api.repository, @ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
         tags:
             - {name: ezpublish.fieldType, alias: ezmedia}
 
     ezpublish.fieldType.ezsrrating:
         class: %ezpublish.fieldType.ezsrrating.class%
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
         tags:
             - {name: ezpublish.fieldType, alias: ezsrrating}
 
     ezpublish.fieldType.ezselection:
         class: %ezpublish.fieldType.ezselection.class%
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
         tags:
             - {name: ezpublish.fieldType, alias: ezselection}
 
     ezpublish.fieldType.eztext:
         class: %ezpublish.fieldType.eztext.class%
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
         tags:
             - {name: ezpublish.fieldType, alias: eztext}
 
     ezpublish.fieldType.ezstring:
         class: %ezpublish.fieldType.ezstring.class%
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
         tags:
             - {name: ezpublish.fieldType, alias: ezstring}
 
     ezpublish.fieldType.ezurl:
         class: %ezpublish.fieldType.ezurl.class%
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
         tags:
             - {name: ezpublish.fieldType, alias: ezurl}
 
     ezpublish.fieldType.ezxmltext:
         class: %ezpublish.fieldType.ezxmltext.class%
-        arguments: [@ezpublish.fieldType.ezxmltext.simplifiedInputParser]
+        arguments: [@ezpublish.fieldType.ezxmltext.simplifiedInputParser, @ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
         tags:
             - {name: ezpublish.fieldType, alias: ezxmltext}
 
