@@ -280,10 +280,10 @@ The input and output processing for the server and the client are configured in
 two different files. Both are, in their current state, for testing only.
 
 The test server is configured in
-``restapiv2/eZ/Publish/API/REST/Server/index.php``.  Details of the
+``eZ/Publish/Core/REST/Server/index.php``.  Details of the
 configuration can be found in the inline documentation.
 
-The test client is configured in ``restapiv2/eZ/Publish/API/REST/common.php``.
+The test client is configured in ``eZ/Publish/Core/REST/common.php``.
 Details can also be found in the inline documentation.
 
 You can find addtional details on extending throughout this document.
@@ -294,17 +294,11 @@ Running The Tests
 There are two sets of tests. The unit tests for the REST server and the
 integration tests, which may use the REST SDK and Server.
 
-Since the code is split across the ``research`` and the ``ezp-next``
-repositories it is necessary to cross-link some files. Please see the file
-``restapiv2/eZ/Publish/API/README.rst`` in the
-``https://github.com/ezsystems/research`` repository for details.
-
 The Unit Tests
 --------------
 
-The unit tests are currently originated in the
-``https://github.com/ezsystems/research`` repository under
-``restapiv2/eZ/Publish/API/REST`` and can be executed like::
+The unit tests are located at
+``eZ/Publish/Core/REST`` and can be executed like::
 
     phpunit -c phpunit.xml.dist
 
@@ -314,25 +308,15 @@ The Integration Tests
 The integration tests require a web server for REST server to run. You can
 either configure your webserver accordingly or use the PHP build-in webserver
 (available since 5.4). To use the build-in webserver go to
-``restapiv2/eZ/Publish/API/REST/Server`` in the
-``https://github.com/ezsystems/research`` repository and execute::
+``eZ/Publish/Core/REST/Server`` in the repository and execute::
 
     php -S localhost:8042 index.php
 
 To verify that the code works using XML and JSON as transport mechanism this
 transport mechanism can be configured using an environment variable. We
 prepared two PHPUnit XML configuration files for each variation. To execute the
-tests go to ``eZ/Publish/API/Repository/Tests`` in the
-``https://github.com/ezsystems/ezp-next`` repository and execute either of the
-following lines::
+tests go to ``eZ/Publish/API/Repository/Tests`` in the repository and execute
+either of the following lines::
 
     phpunit -c phpunit-rest-xml.xml
     phpunit -c phpunit-rest-json.xml
-
-
-..
-   Local Variables:
-   mode: rst
-   fill-column: 79
-   End: 
-   vim: et syn=rst tw=79
