@@ -46,7 +46,7 @@ $legacyHandler = new LegacyPersistenceHandler(
             'eztext' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
             'ezurl' => 'eZ\\Publish\\Core\\FieldType\\Url\\UrlStorage',
             'ezuser' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
-            'ezxmltext' => 'eZ\\Publish\\Core\\FieldType\\NullStorage'
+            'ezxmltext' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
 
             // @TODO: A bunch of faked external storages to get search tests
             // working
