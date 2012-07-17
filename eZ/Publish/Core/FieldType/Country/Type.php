@@ -12,7 +12,8 @@ use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\FieldType\Country\Exception\InvalidValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\API\Repository\FieldTypeTools;
+    eZ\Publish\API\Repository\FieldTypeTools,
+    eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * The Country field type.
@@ -21,6 +22,13 @@ use eZ\Publish\Core\FieldType\FieldType,
  */
 class Type extends FieldType
 {
+    protected $settingsSchema = array(
+        "isMultiple" => array(
+            "type" => "boolean",
+            "default" => false
+        )
+    );
+
     /**
      * @var array
      */
@@ -164,5 +172,51 @@ class Type extends FieldType
     public function isSearchable()
     {
         return true;
+    }
+
+    /**
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings( $fieldSettings )
+    {
+        $validationErrors = array();
+
+        foreach ( (array)$fieldSettings as $name => $value )
+        {
+            if ( isset( $this->settingsSchema[$name] ) )
+            {
+                switch ( $name )
+                {
+                    case "isMultiple":
+                        if ( !is_bool( $value ) )
+                        {
+                            $validationErrors[] = new ValidationError(
+                                "Setting '%setting%' must be of boolean type",
+                                null,
+                                array(
+                                    "setting" => $name
+                                )
+                            );
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                $validationErrors[] = new ValidationError(
+                    "Setting '%setting%' is unknown",
+                    null,
+                    array(
+                        "setting" => $name
+                    )
+                );
+            }
+        }
+
+        return $validationErrors;
     }
 }
