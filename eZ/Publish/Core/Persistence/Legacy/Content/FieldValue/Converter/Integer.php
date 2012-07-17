@@ -68,7 +68,7 @@ class Integer implements Converter
 
         // Defining dataInt4 which holds the validator state (min value/max value/minMax value)
         $storageDef->dataInt4 = $this->getStorageDefValidatorState( $storageDef->dataInt1, $storageDef->dataInt2 );
-        $storageDef->dataInt3 = $fieldDef->fieldTypeConstraints->fieldSettings['defaultValue'];
+        $storageDef->dataInt3 = $fieldDef->defaultValue->data;
     }
 
     /**
@@ -98,13 +98,7 @@ class Integer implements Converter
             }
         }
 
-        $defaultValue = isset( $storageDef->dataInt3 ) ? $storageDef->dataInt3 : 0;
-        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
-                'defaultValue' => $defaultValue
-            )
-        );
-        $fieldDef->defaultValue->data = $defaultValue;
+        $fieldDef->defaultValue->data = isset( $storageDef->dataInt3 ) ? $storageDef->dataInt3 : 0;
     }
 
     /**
