@@ -36,6 +36,13 @@ class SiteAccess
      */
     public $matcher;
 
+    public function __construct( $name = null, $matchingType = null, $matcher = null )
+    {
+        $this->name = $name;
+        $this->matchingType = $matchingType;
+        $this->matcher = $matcher;
+    }
+
     public function __toString()
     {
         return "$this->name (matched by '$this->matchingType')";
