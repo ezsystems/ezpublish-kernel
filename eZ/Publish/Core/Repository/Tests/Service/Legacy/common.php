@@ -45,22 +45,9 @@ if ( isset( $_ENV['legacyKernel'] ) )
     $dependencies['@legacyKernel'] = $_ENV['legacyKernel'];
 }
 
-// load configuration but force legacy handlers
+// load configuration uncached
 $configManager = new ConfigurationManager(
     array_merge_recursive( $settings, array(
-        'service' => array(
-            'repository' => array(
-                'arguments' => array(
-                    'persistence_handler' => '@persistence_handler_legacy',
-                    'io_handler' => '@io_handler_legacy'
-                )
-            ),
-            'persistence_handler_legacy' => array(
-                'arguments' => array(
-                    'config' => array( 'dsn' => $dsn )
-                )
-            )
-        ),
         'base' => array(
             'Configuration' => array(
                 'UseCache' => false
@@ -70,8 +57,13 @@ $configManager = new ConfigurationManager(
     $settings['base']['Configuration']['Paths']
 );
 
+// load service container & configuration, but force legacy handler
+$serviceSettings = $configManager->getConfiguration('service')->getAll();
+$serviceSettings['repository']['arguments']['persistence_handler'] = '@persistence_handler_legacy';
+$serviceSettings['repository']['arguments']['io_handler'] = '@io_handler_legacy';
+$serviceSettings['persistence_handler_legacy']['arguments']['config']['dsn'] = $dsn;
 $sc = new ServiceContainer(
-    $configManager->getConfiguration('service')->getAll(),
+    $serviceSettings,
     $dependencies
 );
 
