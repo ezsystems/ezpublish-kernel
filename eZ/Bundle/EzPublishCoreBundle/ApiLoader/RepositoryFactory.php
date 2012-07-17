@@ -47,7 +47,7 @@ class RepositoryFactory
             $persistenceHandler,
             $ioHandler,
             array(
-                 'contentType'      => $this->getContentTypeSettings()
+                'fieldType' => $this->fieldTypes
             )
         );
     }
@@ -66,17 +66,5 @@ class RepositoryFactory
         {
             return $container->get( $fieldTypeServiceId );
         };
-    }
-
-    /**
-     * Returns content type settings
-     *
-     * @return array
-     */
-    protected function getContentTypeSettings()
-    {
-        return array(
-            'field_type'        => $this->fieldTypes
-        );
     }
 }

@@ -86,7 +86,10 @@ class FieldHandlerTest extends TestCase
 
         $storageHandlerMock->expects( $this->exactly( 2 ) )
             ->method( 'storeFieldData' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) );
+            ->with(
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' )
+            );
 
         $fieldHandler->createNewFields( $this->getContentFixture() );
     }
@@ -103,7 +106,10 @@ class FieldHandlerTest extends TestCase
 
         $storageHandlerMock->expects( $this->exactly( 2 ) )
             ->method( 'getFieldData' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) );
+            ->with(
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' )
+            );
 
         $fieldHandler->loadExternalFieldData( $this->getContentFixture() );
     }
@@ -141,7 +147,10 @@ class FieldHandlerTest extends TestCase
         $storageHandlerMock = $this->getStorageHandlerMock();
         $storageHandlerMock->expects( $this->exactly( 2 ) )
             ->method( 'storeFieldData' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) );
+            ->with(
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' )
+            );
 
         $fieldHandler->updateFields(
             $this->getContentFixture(),
@@ -183,7 +192,10 @@ class FieldHandlerTest extends TestCase
         $storageHandlerMock = $this->getStorageHandlerMock();
         $storageHandlerMock->expects( $this->exactly( 2 ) )
             ->method( 'storeFieldData' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) );
+            ->with(
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' )
+            );
 
         $fieldHandler->updateFields(
             $this->getContentFixture(),

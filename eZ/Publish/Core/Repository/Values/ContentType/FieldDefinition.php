@@ -15,8 +15,8 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefi
  *
  * @property-read string[] $names calls getNames() or on access getName($language)
  * @property-read string[] $descriptions calls getDescriptions() or on access getDescription($language)
- * @property-read array $fieldSettings calls getFieldSettings()
- * @property-read \eZ\Publish\API\Repository\Values\ContentType\Validator[] $validators calls getValidators()
+ * @property-read mixed $fieldSettings calls getFieldSettings()
+ * @property-read mixed $validatorConfiguration calls getValidatorConfiguration()
  * @property-read mixed $id the id of the field definition
  * @property-read string $identifier the identifier of the field definition
  * @property-read string $fieldGroup the field group name
@@ -52,11 +52,11 @@ class FieldDefinition extends APIFieldDefinition
     protected $fieldSettings;
 
     /**
-     * Holds collection of validators of this field definition supported by the field type
+     * Holds validator configuration of this field definition supported by the field type
      *
-     * @var \eZ\Publish\API\Repository\Values\ContentType\Validator[]
+     * @var mixed
      */
-    protected $validators;
+    protected $validatorConfiguration;
 
     /**
      * This method returns the human readable name of this field in all provided languages
@@ -121,16 +121,18 @@ class FieldDefinition extends APIFieldDefinition
     }
 
     /**
-     * this method returns the validators of this field definition supported by the field type
-     * @return \eZ\Publish\API\Repository\Values\ContentType\Validator[]
+     * this method returns the validator configuration of this field definition supported by the field type
+     *
+     * @return mixed
      */
-    public function getValidators()
+    public function getValidatorConfiguration()
     {
-        return $this->validators;
+        return $this->validatorConfiguration;
     }
 
     /**
      * this method returns settings for the field definition supported by the field type
+     *
      * @return array
      */
     public function getFieldSettings()

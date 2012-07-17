@@ -8,10 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Service\InMemory;
-use eZ\Publish\Core\Repository\Tests\Service\ObjectStateBase as BaseObjectStateServiceTest,
-    eZ\Publish\Core\Repository\Repository,
-    eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
-    eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler;
+use eZ\Publish\Core\Repository\Tests\Service\ObjectStateBase as BaseObjectStateServiceTest;
 
 /**
  * Test case for object state Service using InMemory storage class
@@ -23,6 +20,6 @@ class ObjectStateTest extends BaseObjectStateServiceTest
         // Temporary hack for different language ids between in memory and legacy fixtures
         $this->defaultLanguageCode = 'eng-GB';
 
-        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler(), $serviceSettings );
+        return Utils::getRepository( $serviceSettings );
     }
 }

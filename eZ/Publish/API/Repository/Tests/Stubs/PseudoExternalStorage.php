@@ -18,7 +18,7 @@ use \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
  *
  * Implementations of this base class are used in order to fake the behavior of
  * externals storages (which are normally implemented on basis of the
- * SPI\FieldType\Storage and used by the SPI\Persistence implementations) in
+ * SPI\FieldType\FieldStorage and used by the SPI\Persistence implementations) in
  * the integration test suite for the public API.
  *
  * Namely, for each field type that has an external storage, an implementation

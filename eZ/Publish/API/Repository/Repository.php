@@ -167,11 +167,11 @@ interface Repository
     public function getRoleService();
 
     /**
-     * Get ValidatorService
+     * Get FieldTypeService
      *
-     * @return \eZ\Publish\API\Repository\ValidatorService
+     * @return \eZ\Publish\API\Repository\FieldTypeService
      */
-    public function getValidatorService();
+    public function getFieldTypeService();
 
     /**
      * Begin transaction

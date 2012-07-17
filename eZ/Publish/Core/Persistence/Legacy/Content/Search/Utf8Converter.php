@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
 
+use RuntimeException;
+
 /**
  * Class for converting UTF-8 charecters to their decimal code points and vice
  * versa.
@@ -106,7 +108,7 @@ class Utf8Converter
 
             if ( $charCode < 128 )
             {
-                throw new \RuntimeException( 'Illegal UTF-8 input character: ' . $char );
+                throw new RuntimeException( 'Illegal UTF-8 input character: ' . $char );
             }
         }
         // 16 bits, 3 chars
@@ -125,7 +127,7 @@ class Utf8Converter
 
             if ( $charCode < 2048 )
             {
-                throw new \RuntimeException( 'Illegal UTF-8 input character: ' . $char );
+                throw new RuntimeException( 'Illegal UTF-8 input character: ' . $char );
             }
         }
         // 21 bits, 4 chars
@@ -147,7 +149,7 @@ class Utf8Converter
 
             if ( $charCode < 65536 )
             {
-                throw new \RuntimeException( 'Illegal UTF-8 input character: ' . $char );
+                throw new RuntimeException( 'Illegal UTF-8 input character: ' . $char );
             }
         }
         // 26 bits, 5 chars
@@ -171,7 +173,7 @@ class Utf8Converter
 
             if ( $charCode < 2097152 )
             {
-                throw new \RuntimeException( 'Illegal UTF-8 input character: ' . $char );
+                throw new RuntimeException( 'Illegal UTF-8 input character: ' . $char );
             }
         }
         // 31 bits, 6 chars
@@ -197,7 +199,7 @@ class Utf8Converter
 
             if ( $charCode < 67108864 )
             {
-                throw new \RuntimeException( 'Illegal UTF-8 input character: ' . $char );
+                throw new RuntimeException( 'Illegal UTF-8 input character: ' . $char );
             }
         }
 

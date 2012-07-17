@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
 
+use RuntimeException;
+
 /**
  * Compiles the AST of parsed transformation rules into a set of PCRE replace
  * regular expressions.
@@ -81,7 +83,7 @@ class TransformationPcreCompiler
                 return $this->compileTransposeModulo( $rule );
 
             default:
-                throw new \RuntimeException( "Unknown rule type: " . $rule['type'] );
+                throw new RuntimeException( "Unknown rule type: " . $rule['type'] );
         }
     }
 
@@ -267,7 +269,7 @@ class TransformationPcreCompiler
                 return chr( hexdec( $char ) );
 
             default:
-                throw new \RuntimeException( "Invalid character definition: $char" );
+                throw new RuntimeException( "Invalid character definition: $char" );
         }
     }
 }

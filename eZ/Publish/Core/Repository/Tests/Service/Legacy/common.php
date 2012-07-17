@@ -19,32 +19,34 @@ use eZ\Publish\Core\Repository\Repository,
 $dsn = ( isset( $_ENV['DATABASE'] ) && $_ENV['DATABASE'] ) ? $_ENV['DATABASE'] : 'sqlite://:memory:';
 $db = preg_replace( '(^([a-z]+).*)', '\\1', $dsn );
 
+
+
 $legacyHandler = new LegacyPersistenceHandler(
     array(
         'dsn' => $dsn,
         'defer_type_update' => false,
         'external_storage' => array(
-            'ezauthor' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezbinaryfile' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\BinaryFileStorage',
-            'ezboolean' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezcountry' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezdatetime' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezemail' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezfloat' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            //'ezimage' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\ImageStorage',
-            'ezimage' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezinteger' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            //'ezkeyword' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\KeywordStorage',
-            'ezmedia' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\MediaStorage',
-            //'ezobjectrelationlist' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\ObjectRelationListStorage',
-            'ezpage' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezselection' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezstring' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezsrrating' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'eztext' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezurl' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\UrlStorage',
-            'ezuser' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezxmltext' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage'
+            'ezauthor' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
+            'ezbinaryfile' => 'eZ\\Publish\\Core\\FieldType\\BinaryFile\\BinaryFileStorage',
+            'ezboolean' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
+            'ezcountry' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
+            'ezdatetime' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
+            'ezemail' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
+            'ezfloat' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
+            //'ezimage' => 'eZ\\Publish\\Core\\FieldType\\Image\\ImageStorage',
+            'ezimage' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
+            'ezinteger' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
+            //'ezkeyword' => 'eZ\\Publish\\Core\\FieldType\\Keyword\\KeywordStorage',
+            'ezmedia' => 'eZ\\Publish\\Core\\FieldType\\Media\\MediaStorage',
+            //'ezobjectrelationlist' => 'eZ\\Publish\\Core\\FieldType\\Converter\\ObjectRelationListStorage',
+            'ezpage' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
+            'ezselection' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
+            'ezstring' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
+            'ezsrrating' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
+            'eztext' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
+            'ezurl' => 'eZ\\Publish\\Core\\FieldType\\Url\\UrlStorage',
+            'ezuser' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
+            'ezxmltext' => 'eZ\\Publish\\Core\\FieldType\\NullStorage'
         ),
         'field_converter' => array(
             'ezauthor' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextLine',
@@ -157,5 +159,55 @@ $legacyHandler = new LegacyPersistenceHandler(
             $handler->exec( $query );
         }
     }
+
+$serviceSettings = array(
+    'fieldType' => array(
+        'ezauthor' => function(){ return new \eZ\Publish\Core\FieldType\Author\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'ezdatetime' => function(){ return new \eZ\Publish\Core\FieldType\DateAndTime\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'ezfloat' => function(){ return new \eZ\Publish\Core\FieldType\Float\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'ezinteger' => function(){ return new \eZ\Publish\Core\FieldType\Integer\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'ezkeyword' => function(){ return new \eZ\Publish\Core\FieldType\Keyword\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'eztext' => function(){ return new \eZ\Publish\Core\FieldType\TextBlock\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'ezstring' => function(){ return new \eZ\Publish\Core\FieldType\TextLine\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'ezimage' => function(){ return new \eZ\Publish\Core\FieldType\Integer\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'ezuser' => function(){ return new \eZ\Publish\Core\FieldType\Integer\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'ezurl' => function(){ return new \eZ\Publish\Core\FieldType\Url\Type(
+            new \eZ\Publish\Core\Repository\ValidatorService(),
+            new \eZ\Publish\Core\Repository\FieldTypeTools()
+        ); },
+        'ezxmltext' => function(){ return new \eZ\Publish\Core\FieldType\XmlText\Type(
+            new \eZ\Publish\Core\FieldType\XmlText\Input\Parser\Simplified(
+                new \eZ\Publish\Core\FieldType\XmlText\Schema
+            )
+        ); },
+    )
+);
 
 return new Repository( $legacyHandler, new LegacyIoHandler(), ( isset( $serviceSettings ) ? $serviceSettings : array() ) );

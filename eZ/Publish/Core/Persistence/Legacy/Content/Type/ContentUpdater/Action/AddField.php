@@ -85,7 +85,7 @@ class AddField extends Action
             $storageValue
         );
 
-        $this->storageHandler->storeFieldData( $field );
+        $this->storageHandler->storeFieldData( $content->versionInfo, $field );
 
         $content->fields[] = $field;
     }

@@ -89,6 +89,13 @@ class ContentServiceStub implements ContentService
     private $fieldNextId = 0;
 
     /**
+     * Locations to be created on first publish of an object
+     *
+     * @var LocationCreateStruct[][]
+     */
+    private $locationsOnPublish = array();
+
+    /**
      * Instantiates a new content service stub.
      *
      * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
@@ -498,11 +505,27 @@ class ContentServiceStub implements ContentService
         $this->contentInfo[$contentInfo->id] = $contentInfo;
         $this->versionInfo[$versionInfo->id] = $versionInfo;
 
-        $this->index[$contentInfo->id]['versionId'][$versionInfo->id] = $versionInfo->id;
-        $this->index[$contentInfo->id]['contentId'][count( $this->content ) - 1] = count( $this->content ) - 1;
+        $this->locationsOnPublish[$contentInfo->id] = $locationCreateStructs;
+
+        return $content;
+    }
+
+    /**
+     * Creates locations on publish, which had been specified on content create
+     *
+     * @param ContentInfo $contentInfo
+     * @return void
+     */
+    private function createLocationsOnFirstPublish( ContentInfo $contentInfo )
+    {
+        if ( !isset( $this->locationsOnPublish[$contentInfo->id] ) )
+        {
+            // Already published
+            return;
+        }
 
         $locationService = $this->repository->getLocationService();
-        foreach ( $locationCreateStructs as $locationCreateStruct )
+        foreach ( $this->locationsOnPublish[$contentInfo->id] as $locationCreateStruct )
         {
             $locationService->createLocation(
                 $contentInfo,
@@ -510,7 +533,7 @@ class ContentServiceStub implements ContentService
             );
         }
 
-        return $content;
+        unset( $this->locationsOnPublish[$contentInfo->id] );
     }
 
     /**
@@ -889,6 +912,14 @@ class ContentServiceStub implements ContentService
 
         unset( $this->contentInfo[$contentInfo->id] );
 
+        // @HACK: See Asana TODO -- drafts and locations are not handled
+        // correctly
+        if ( ( $versionInfo->status === VersionInfo::STATUS_DRAFT ) &&
+             ( $versionInfo->versionNo === 1 ) )
+        {
+            return;
+        }
+
         // Delete all locations for the given $contentInfo
         $locations = $locationService->loadLocations( $contentInfo );
         foreach ( $locations as $location )
@@ -1191,6 +1222,9 @@ class ContentServiceStub implements ContentService
                 )
             );
         }
+
+        // Creates locations specified on content created, if necessary
+        $this->createLocationsOnFirstPublish( $publishedContentInfo );
 
         $this->contentInfo[$contentInfo->id] = $publishedContentInfo;
         $this->versionInfo[$versionInfo->id] = $publishedVersionInfo;

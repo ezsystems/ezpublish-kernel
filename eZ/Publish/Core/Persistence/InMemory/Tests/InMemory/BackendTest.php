@@ -10,7 +10,9 @@
 namespace eZ\Publish\Core\Persistence\InMemory\Tests\InMemory;
 use PHPUnit_Framework_TestCase,
     stdClass,
-    eZ\Publish\Core\Persistence\InMemory\Backend;
+    eZ\Publish\Core\Persistence\InMemory\Backend,
+    eZ\Publish\Core\Repository\ValidatorService,
+    eZ\Publish\Core\Repository\FieldTypeTools;
 
 /**
  * Test case for Handler using in memory storage.
@@ -33,7 +35,9 @@ class BackendTest extends PHPUnit_Framework_TestCase
             array(
                 'Content' => array(),
                 'Content\\ContentInfo' => array()
-            )
+            ),
+            new ValidatorService,
+            new FieldTypeTools
         );
     }
 

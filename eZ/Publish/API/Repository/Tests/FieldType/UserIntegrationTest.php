@@ -8,27 +8,14 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\API\Repository;
+use eZ\Publish\API\Repository,
+    eZ\Publish\Core\FieldType\User\Value as UserValue;
 
 /**
- * Integration test for legacy storage field types
- *
- * This abstract base test case is supposed to be the base for field type
- * integration tests. It basically calls all involved methods in the field type 
- * ``Converter`` and ``Storage`` implementations. Fo get it working implement
- * the abstract methods in a sensible way.
- *
- * The following actions are performed by this test using the custom field
- * type:
- *
- * - Create a new content type with the given field type
- * - Load create content type
- * - Create content object of new content type
- * - Load created content
- * - Copy created content
- * - Remove copied content
+ * Integration test for use field type
  *
  * @group integration
+ * @group field-type
  */
 class UserFieldTypeIntergrationTest extends BaseIntegrationTest
 {
@@ -63,7 +50,7 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
             // properties, so there is nothing to check for
             array( 'fieldTypeIdentifier', 'ezuser' ),
             array( 'fieldSettings', null ),
-            array( 'validators', null ),
+            array( 'validatorConfiguration', null ),
         );
     }
 
@@ -74,13 +61,13 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     public function getInitialFieldData()
     {
-        return array(
-            'account_key' => null,
-            'is_enabled'  => true,
-            'last_visit'  => null,
-            'login_count' => 0,
-            'max_login'   => 1000,
-        );
+        return new UserValue( array(
+            'accountKey' => null,
+            'isEnabled'  => true,
+            'lastVisit'  => null,
+            'loginCount' => 0,
+            'maxLogin'   => 1000,
+        ) );
     }
 
     /**
@@ -93,22 +80,22 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
     public function getExternalsFieldData()
     {
         return array(
-            array( 'account_key', null ),
-            array( 'has_stored_login', true ),
-            array( 'contentobject_id', 226 ),
+            array( 'accountKey', null ),
+            array( 'hasStoredLogin', true ),
+            array( 'contentobjectId', 226 ),
             array( 'login', 'hans' ),
             array( 'email', 'hans@example.com' ),
-            array( 'password_hash', '680869a9873105e365d39a6d14e68e46' ),
-            array( 'password_hash_type', 2 ),
-            array( 'is_logged_in', true ),
-            array( 'is_enabled', true ),
-            // @TODO: Fails because of max_login problem
-            array( 'is_locked', false ),
-            array( 'last_visit', null ),
-            array( 'login_count', null ),
+            array( 'passwordHash', '680869a9873105e365d39a6d14e68e46' ),
+            array( 'passwordHashType', 2 ),
+            array( 'isLoggedIn', true ),
+            array( 'isEnabled', true ),
+            // @TODO: Fails because of maxLogin problem
+            array( 'isLocked', false ),
+            array( 'lastVisit', null ),
+            array( 'loginCount', null ),
             // @TODO: Currently not editable through UserService, tests will
             // fail
-            array( 'max_login', 1000 ),
+            array( 'maxLogin', 1000 ),
         );
     }
 
@@ -119,17 +106,17 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     public function getUpdateFieldData()
     {
-        return array(
-            'account_key'        => 'foobar',
-            'login'              => 'change', // Change is intended to not get through
-            'email'              => 'change', // Change is intended to not get through
-            'password_hash'      => 'change', // Change is intended to not get through
-            'password_hash_type' => 'change', // Change is intended to not get through
-            'last_visit'         => 123456789,
-            'login_count'        => 2300,
-            'is_enabled'         => 'changed', // Change is intended to not get through
-            'max_login'          => 'changed', // Change is intended to not get through
-        );
+        return new UserValue( array(
+            'accountKey'       => 'foobar',
+            'login'            => 'change', // Change is intended to not get through
+            'email'            => 'change', // Change is intended to not get through
+            'passwordHash'     => 'change', // Change is intended to not get through
+            'passwordHashType' => 'change', // Change is intended to not get through
+            'lastVisit'        => 123456789,
+            'loginCount'       => 2300,
+            'isEnabled'        => 'changed', // Change is intended to not get through
+            'maxLogin'         => 'changed', // Change is intended to not get through
+        ) );
     }
 
     /**
@@ -142,22 +129,22 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
     public function getUpdatedExternalsFieldData()
     {
         return array(
-            array( 'account_key', 'foobar' ),
-            array( 'has_stored_login', true ),
-            array( 'contentobject_id', 226 ),
+            array( 'accountKey', 'foobar' ),
+            array( 'hasStoredLogin', true ),
+            array( 'contentobjectId', 226 ),
             array( 'login', 'hans' ),
             array( 'email', 'hans@example.com' ),
-            array( 'password_hash', '680869a9873105e365d39a6d14e68e46' ),
-            array( 'password_hash_type', 2 ),
-            array( 'is_logged_in', true ),
-            array( 'is_enabled', true ),
-            // @TODO: Fails because of max_login problem
-            array( 'is_locked', true ),
-            array( 'last_visit', 123456789 ),
-            array( 'login_count', 2300 ),
+            array( 'passwordHash', '680869a9873105e365d39a6d14e68e46' ),
+            array( 'passwordHashType', 2 ),
+            array( 'isLoggedIn', true ),
+            array( 'isEnabled', true ),
+            // @TODO: Fails because of maxLogin problem
+            array( 'isLocked', true ),
+            array( 'lastVisit', 123456789 ),
+            array( 'loginCount', 2300 ),
             // @TODO: Currently not editable through UserService, tests will
             // fail
-            array( 'max_login', 1000 ),
+            array( 'maxLogin', 1000 ),
         );
     }
 
@@ -171,19 +158,43 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
     public function getCopiedExternalsFieldData()
     {
         return array(
-            array( 'account_key', null ),
-            array( 'has_stored_login', false ),
-            array( 'contentobject_id', null ),
+            array( 'accountKey', null ),
+            array( 'hasStoredLogin', false ),
+            array( 'contentobjectId', null ),
             array( 'login', null ),
             array( 'email', null ),
-            array( 'password_hash', null ),
-            array( 'password_hash_type', null ),
-            array( 'is_logged_in', true ),
-            array( 'is_enabled', false ),
-            array( 'is_locked', false ),
-            array( 'last_visit', null ),
-            array( 'login_count', null ),
-            array( 'max_login', null ),
+            array( 'passwordHash', null ),
+            array( 'passwordHashType', null ),
+            array( 'isLoggedIn', true ),
+            array( 'isEnabled', false ),
+            array( 'isLocked', false ),
+            array( 'lastVisit', null ),
+            array( 'loginCount', null ),
+            array( 'maxLogin', null ),
+        );
+    }
+
+    /**
+     * Get expectation for the toHash call on our field value
+     *
+     * @return mixed
+     */
+    public function getToHashExpectation()
+    {
+        return 'toBeDefined';
+    }
+
+    /**
+     * Get hashes and their respective converted values
+     *
+     * This is a PHPUnit data provider
+     *
+     * @return array
+     */
+    public function provideFromHashData()
+    {
+        return array(
+            array( 'toBeDefined', array() ),
         );
     }
 
@@ -211,7 +222,9 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
         // Create a new user instance.
         $user = $userService->createUser( $userCreate, array( $group ) );
 
-        return $user->content;
+        // Create draft from user content object
+        $contentService = $repository->getContentService();
+        return $contentService->createContentDraft( $user->content->contentInfo, $user->content->versionInfo );
     }
 }
 

@@ -105,42 +105,12 @@ class FieldHandler
         // If the storage handler returns true, it means that $field value has been modified
         // So we need to update it in order to store those modifications
         // Field converter is called once again via the Mapper
-        if ( $this->storageHandler->storeFieldData( $field ) === true )
+        if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
         {
             $this->contentGateway->updateField(
                 $field,
                 $this->mapper->convertToStorageValue( $field )
             );
-        }
-    }
-
-    /**
-     * Copies fields in the database
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
-     * @return void
-     */
-    public function copyFields( Content $content )
-    {
-        foreach ( $content->fields as $field )
-        {
-            $field->versionNo = $content->versionInfo->versionNo;
-            $field->id = $this->contentGateway->insertNewField(
-                $content,
-                $field,
-                $this->mapper->convertToStorageValue( $field )
-            );
-
-            // If the storage handler returns true, it means that $field value has been modified
-            // So we need to update it in order to store those modifications
-            // Field converter is called once again via the Mapper
-            if ( $this->storageHandler->copyFieldData( $field ) === true )
-            {
-                $this->contentGateway->updateField(
-                    $field,
-                    $this->mapper->convertToStorageValue( $field )
-                );
-            }
         }
     }
 
@@ -154,7 +124,7 @@ class FieldHandler
     {
         foreach ( $content->fields as $field )
         {
-            $this->storageHandler->getFieldData( $field );
+            $this->storageHandler->getFieldData( $content->versionInfo, $field );
         }
     }
 
@@ -197,7 +167,7 @@ class FieldHandler
                 // If the storage handler returns true, it means that $field value has been modified
                 // So we need to update it in order to store those modifications
                 // Field converter is called once again via the Mapper
-                if ( $this->storageHandler->storeFieldData( $field ) === true )
+                if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
                 {
                     $this->contentGateway->updateField(
                         $field,

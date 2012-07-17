@@ -182,6 +182,22 @@ CREATE SEQUENCE ezuser_role_s
     MINVALUE 1
     CACHE 1;
 
+DROP SEQUENCE IF EXISTS ezkeyword_s;
+CREATE SEQUENCE ezkeyword_s
+    START 1
+    INCREMENT 1
+    MAXVALUE 9223372036854775807
+    MINVALUE 1
+    CACHE 1;
+
+DROP SEQUENCE IF EXISTS ezkeyword_attribute_link_s;
+CREATE SEQUENCE ezkeyword_s
+    START 1
+    INCREMENT 1
+    MAXVALUE 9223372036854775807
+    MINVALUE 1
+    CACHE 1;
+
 DROP TABLE IF EXISTS ezbinaryfile;
 CREATE TABLE ezbinaryfile (
     contentobject_attribute_id integer DEFAULT 0 NOT NULL,
@@ -610,6 +626,21 @@ CREATE TABLE ezuser_setting (
     user_id integer DEFAULT 0 NOT NULL
 );
 
+DROP TABLE IF EXISTS ezkeyword;
+CREATE TABLE ezkeyword (
+  class_id integer DEFAULT 0 NOT NULL,
+  id integer DEFAULT nextval('ezkeyword_s'::text) NOT NULL,
+  keyword character varying(255) DEFAULT NULL
+);
+
+DROP TABLE IF EXISTS ezkeyword_attribute_link;
+CREATE TABLE ezkeyword_attribute_link (
+  id integer nextval('ezkeyword_attribute_link_s'::text) NOT NULL,
+  keyword_id integer DEFAULT 0 NOT NULL,
+  objectattribute_id integer DEFAULT 0 NOT NULL
+);
+
+
 CREATE UNIQUE INDEX ezcobj_state_identifier ON ezcobj_state USING btree (group_id, identifier);
 
 CREATE INDEX ezcobj_state_lmask ON ezcobj_state USING btree (language_mask);
@@ -774,6 +805,13 @@ CREATE INDEX ezuser_role_contentobject_id ON ezuser_role USING btree (contentobj
 
 CREATE INDEX ezuser_role_role_id ON ezuser_role USING btree (role_id);
 
+CREATE INDEX ezkeyword_keyword ON ezkeyword USING btree (keyword);
+CREATE INDEX ezkeyword_id ON ezkeyword USING btree (keyword,id);
+
+CREATE INDEX ezkeyword_attr_link_keyword_id ON ezkeyword USING btree (keyword_id);
+CREATE INDEX ezkeyword_attr_link_kid_oaid ON ezkeyword USING btree (keyword_id,objectattribute_id);
+CREATE INDEX ezkeyword_attr_link_oaid ON ezkeyword USING btree (objectattribute_id);
+
 ALTER TABLE ONLY ezcobj_state
     ADD CONSTRAINT ezcobj_state_pkey PRIMARY KEY (id);
 
@@ -881,3 +919,9 @@ ALTER TABLE ONLY ezuser_role
 
 ALTER TABLE ONLY ezuser_setting
     ADD CONSTRAINT ezuser_setting_pkey PRIMARY KEY (user_id);
+
+ALTER TABLE ONLY ezkeyword
+    ADD CONSTRAINT ezkeyword_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY ezkeyword_attribute_link
+    ADD CONSTRAINT ezkeyword_attribute_link_pkey PRIMARY KEY (id);

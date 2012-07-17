@@ -146,7 +146,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                             'bool' => true,
                             'int' => 42,
                             'string' => 'Archer',
-                            'array' => array( 'ezfile' => 'eZ\\Publish\\Core\\Repository\\FieldType\\File', 'something' ),
+                            'array' => array( 'ezfile' => 'eZ\\Publish\\Core\\FieldType\\File', 'something' ),
                         )
                     ),
                 ),
@@ -379,7 +379,7 @@ class E
             throw new \Exception( "String was not 'Archer' value" );
         if ( $config['int'] !== 42 )
             throw new \Exception( "Int was not '42' value" );
-        if ( $config['array'] !== array( 'ezfile' => 'eZ\\Publish\\Core\\Repository\\FieldType\\File', 'something' ) )
+        if ( $config['array'] !== array( 'ezfile' => 'eZ\\Publish\\Core\\FieldType\\File', 'something' ) )
             throw new \Exception( "Array was not expected value" );
     }
 }

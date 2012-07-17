@@ -476,6 +476,7 @@ class Handler implements BaseContentTypeHandler
      * field (default) values.
      *
      * @param mixed $contentTypeId
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @return void
      */

@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use eZ\Publish\Core\Repository\FieldType\Selection\Value as SelectionValue,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings,
+use eZ\Publish\Core\FieldType\Selection\Value as SelectionValue,
+    eZ\Publish\Core\FieldType\FieldSettings,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
@@ -304,7 +304,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
             ),
             $fieldDef
         );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertTrue(
             $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"]
         );
@@ -336,7 +336,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
             ),
             $fieldDef
         );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertFalse(
             $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"]
         );

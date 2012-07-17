@@ -108,7 +108,7 @@ class Author implements Converter
      * Restores an author Value object from $xmlString
      *
      * @param string $xmlString XML String stored in storage engine
-     * @return \eZ\Publish\Core\Repository\FieldType\Author\Value
+     * @return \eZ\Publish\Core\FieldType\Author\Value
      */
     private function restoreValueFromXmlString( $xmlString )
     {

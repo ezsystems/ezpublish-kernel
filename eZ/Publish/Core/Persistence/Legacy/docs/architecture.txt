@@ -114,7 +114,7 @@ it, to be used for proper dependency injection. The corresponding interfaces /
 abstract base classes are:
 
 - ``…\Legacy\Content\FieldValue\Converter``
-- ``eZ\Publish\SPI\Persistence\Fields\Storage``
+- ``eZ\Publish\SPI\FieldType\FieldStorage``
 
 
 

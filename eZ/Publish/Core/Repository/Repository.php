@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Repository;
 use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\Logic,
     eZ\Publish\SPI\IO\Handler as IoHandler,
     eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
@@ -30,6 +29,7 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\Legacy\Kernel as LegacyKernel,
     eZ\Publish\Legacy\Kernel\Loader as LegacyKernelLoader,
     Exception,
+    LogicException,
     RuntimeException;
 
 /**
@@ -130,9 +130,16 @@ class Repository implements RepositoryInterface, LegacyKernelAware
     protected $objectStateService;
 
     /**
+     * Instance of field type service
+     *
+     * @var \eZ\Publish\API\Repository\FieldTypeService
+     */
+    protected $fieldTypeService;
+
+    /**
      * Instance of object state service
      *
-     * @var \eZ\Publish\API\Repository\ValidatorService
+     * @var \eZ\Publish\Core\Repository\ValidatorService
      */
     protected $validatorService;
 
@@ -168,7 +175,8 @@ class Repository implements RepositoryInterface, LegacyKernelAware
             'trash' => array(),
             'io' => array(),
             'objectState' => array(),
-            'legacy' => array()
+            'legacy' => array(),
+            'fieldType' => array(),
         );
 
         if ( $user !== null )
@@ -256,8 +264,8 @@ class Repository implements RepositoryInterface, LegacyKernelAware
             {
                 if ( !isset( $functions[$function][$limitationKey]['compare'] ) )
                 {
-                    throw new Logic(
-                        "\$definition[functions][{$function}][{$limitationKey}][compare]",
+                    throw new LogicException(
+                        "\$definition[functions][{$function}][{$limitationKey}][compare] logic error, " .
                         "could not find limitation compare function on {$className}::definition()"
                     );
                 }
@@ -265,8 +273,8 @@ class Repository implements RepositoryInterface, LegacyKernelAware
                 $limitationCompareFn = $functions[$function][$limitationKey]['compare'];
                 if ( !is_callable( $limitationCompareFn ) )
                 {
-                    throw new Logic(
-                        "\$definition[functions][{$function}][{$limitationKey}][compare]",
+                    throw new LogicException(
+                        "\$definition[functions][{$function}][{$limitationKey}][compare] logic error, " .
                         "compare function from {$className}::definition() is not callable"
                     );
                 }
@@ -477,16 +485,30 @@ class Repository implements RepositoryInterface, LegacyKernelAware
     }
 
     /**
+     * Get FieldTypeService
+     *
+     * @return \eZ\Publish\API\Repository\FieldTypeService
+     */
+    public function getFieldTypeService()
+    {
+        if ( $this->fieldTypeService !== null )
+            return $this->fieldTypeService;
+
+        $this->fieldTypeService = new FieldTypeService( $this, $this->persistenceHandler, $this->serviceSettings['fieldType'] );
+        return $this->fieldTypeService;
+    }
+
+    /**
      * Get ValidatorService
      *
-     * @return \eZ\Publish\API\Repository\ValidatorService
+     * @return \eZ\Publish\Core\Repository\ValidatorService
      */
     public function getValidatorService()
     {
         if ( $this->validatorService !== null )
             return $this->validatorService;
 
-        $this->validatorService = new ValidatorService( $this, $this->persistenceHandler, $this->serviceSettings['validator'] );
+        $this->validatorService = new ValidatorService();
         return $this->validatorService;
     }
 

@@ -13,8 +13,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\Repository\FieldType\Float\Value as FloatValue,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings;
+    eZ\Publish\Core\FieldType\Float\Value as FloatValue,
+    eZ\Publish\Core\FieldType\FieldSettings;
 
 class Float implements Converter
 {

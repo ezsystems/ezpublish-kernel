@@ -37,8 +37,8 @@ use eZ\Publish\API\Repository\ContentService as ContentServiceInterface,
     eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct,
     eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct,
     eZ\Publish\Core\Repository\Values\Content\TranslationValues,
-    eZ\Publish\Core\Repository\FieldType\FieldType,
-    eZ\Publish\Core\Repository\FieldType\Value,
+    eZ\Publish\Core\FieldType\FieldType,
+    eZ\Publish\Core\FieldType\Value,
     eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo,
     eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo,
     eZ\Publish\SPI\Persistence\Content\Version as SPIVersion,
@@ -486,7 +486,8 @@ class ContentService implements ContentServiceInterface
         $allFieldErrors = array();
         foreach ( $contentCreateStruct->contentType->getFieldDefinitions() as $fieldDefinition )
         {
-            $fieldType = $this->repository->getContentTypeService()->buildFieldType(
+            /** @var $fieldType \eZ\Publish\Core\FieldType\FieldType */
+            $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
                 $fieldDefinition->fieldTypeIdentifier
             );
 
@@ -513,7 +514,6 @@ class ContentService implements ContentServiceInterface
                 }
 
                 $fieldErrors = $fieldType->validate(
-                    $this->repository->getValidatorService(),
                     $fieldDefinition,
                     $fieldValue
                 );
@@ -945,7 +945,8 @@ class ContentService implements ContentServiceInterface
                     continue;
                 }
 
-                $fieldType = $this->repository->getContentTypeService()->buildFieldType(
+                /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
+                $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
                     $fieldDefinition->fieldTypeIdentifier
                 );
                 if ( isset( $fields[$fieldDefinition->identifier][$languageCode] ) )
@@ -968,7 +969,6 @@ class ContentService implements ContentServiceInterface
                 }
 
                 $fieldErrors = $fieldType->validate(
-                    $this->repository->getValidatorService(),
                     $fieldDefinition,
                     $fieldValue
                 );
@@ -1494,14 +1494,14 @@ class ContentService implements ContentServiceInterface
      * Instantiates a FieldType\Value object by using FieldType\Type->buildValue().
      *
      * @todo Add to API or remove!
-     * @uses \eZ\Publish\Core\Repository\ContentTypeService::buildFieldType
+     * @uses \eZ\Publish\Core\FieldTypeService::buildFieldType
      * @param string $type
      * @param mixed $plainValue
-     * @return \eZ\Publish\Core\Repository\FieldType\Value
+     * @return \eZ\Publish\Core\FieldType\Value
      */
     public function newFieldTypeValue( $type, $plainValue )
     {
-        return $this->repository->getContentTypeService()->buildFieldType( $type )->buildValue( $plainValue );
+        return $this->repository->getFieldTypeService()->buildFieldType( $type )->buildValue( $plainValue );
     }
 
     /**
@@ -1539,13 +1539,9 @@ class ContentService implements ContentServiceInterface
             $fields[] = new Field(
                 array(
                     "id" => $spiField->id,
-                    //$this->newFieldTypeValue( $spiField->type, $spiField->value->data ),
-                    "value" => $spiField->value->data,
-                    /*
-                    "value" => $this->repository->getContentTypeService()->buildFieldType(
+                    "value" => $this->repository->getFieldTypeService()->buildFieldType(
                         $spiField->type
                     )->fromPersistenceValue( $spiField->value ),
-                    */
                     "languageCode" => $spiField->languageCode,
                     "fieldDefIdentifier" => $this->persistenceHandler->contentTypeHandler()->getFieldDefinition(
                         $spiField->fieldDefinitionId,

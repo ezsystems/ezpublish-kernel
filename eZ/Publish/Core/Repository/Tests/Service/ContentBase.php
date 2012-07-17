@@ -3008,9 +3008,14 @@ abstract class ContentBase extends BaseServiceTest
         $fieldCreate->isInfoCollector = false;
         $fieldCreate->isSearchable = true;
         $fieldCreate->defaultValue = "";
-        $validator = new StringLengthValidator();
-        $validator->maxStringLength = 64;
-        $fieldCreate->validators = array( $validator );
+        //$validator = new StringLengthValidator();
+        //$validator->maxStringLength = 64;
+        //$fieldCreate->validatorConfiguration = array( $validator );
+        $fieldCreate->validatorConfiguration = array(
+            "StringLengthValidator" => array(
+                "maxStringLength" => 64
+            )
+        );
         //$fieldCreate->fieldSettings
         $typeCreateStruct->addFieldDefinition( $fieldCreate );
 

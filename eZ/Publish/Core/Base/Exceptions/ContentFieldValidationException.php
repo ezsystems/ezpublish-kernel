@@ -8,7 +8,6 @@
  */
 
 namespace eZ\Publish\Core\Base\Exceptions;
-
 use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException as APIContentFieldValidationException;
 
 /**
@@ -17,26 +16,15 @@ use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException as APIC
 class ContentFieldValidationException extends APIContentFieldValidationException
 {
     /**
-     * @todo error messages should be translatable
-     * Contains an array of field validation error messages indexed with FieldDefinition id and language code
+     * Contains an array of field ValidationError objects indexed with FieldDefinition id and language code
      *
      * Example:
      * <code>
-     * protected $fieldErrors = array(
-     *     "48" => array(
-     *         "eng-GB" => array(
-     *             "The file size can not exceed 4096 bytes."
-     *         )
-     *     ),
-     *    "256" => array(
-     *         "eng-US" => array(
-     *             "The string can not be shorter than 64 characters."
-     *         )
-     *     )
-     * );
+     *  $fieldErrors = $exception->getFieldErrors();
+     *  $fieldErrors["43"]["eng-GB"]->getTranslatableMessage();
      * </code>
      *
-     * @var array
+     * @var \eZ\Publish\Core\FieldType\ValidationError[]
      */
     protected $errors;
 
@@ -45,7 +33,7 @@ class ContentFieldValidationException extends APIContentFieldValidationException
      *
      * Also sets the given $fieldErrors to the internal property, retrievable by getFieldErrors()
      *
-     * @param array $errors
+     * @param \eZ\Publish\Core\FieldType\ValidationError[] $errors
      */
     public function __construct( array $errors )
     {
@@ -56,7 +44,7 @@ class ContentFieldValidationException extends APIContentFieldValidationException
     /**
      * Returns an array of field validation error messages
      *
-     * @return array
+     * @return \eZ\Publish\Core\FieldType\ValidationError[]
      */
     public function getFieldErrors()
     {

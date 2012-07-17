@@ -9,10 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service\InMemory;
 
-use PHPUnit_Extensions_PhptTestCase,
-    eZ\Publish\Core\Repository\Repository,
-    eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
-    eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler;
+use PHPUnit_Extensions_PhptTestCase;
 
 /**
  * Test case for IO file upload using InMemory storage class
@@ -28,6 +25,6 @@ class IOUploadPHPT extends PHPUnit_Extensions_PhptTestCase
     // can get ahold of Repository object
     public static function getRepository( array $serviceSettings )
     {
-        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler(), $serviceSettings );
+        return Utils::getRepository( $serviceSettings );
     }
 }

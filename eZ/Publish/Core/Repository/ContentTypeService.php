@@ -33,7 +33,6 @@ use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
     eZ\Publish\Core\Repository\Values\ContentType\ContentTypeCreateStruct,
     eZ\Publish\SPI\FieldType\FieldType,
     eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\Core\Repository\Values\ContentType\Validator,
     eZ\Publish\SPI\Persistence\Content\Type as SPIContentType,
     eZ\Publish\SPI\Persistence\Content\Type\CreateStruct as SPIContentTypeCreateStruct,
     eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct as SPIContentTypeUpdateStruct,
@@ -46,6 +45,7 @@ use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    eZ\Publish\Core\Base\Exceptions\ContentTypeFieldDefinitionValidationException,
     DateTime;
 
 /**
@@ -443,6 +443,9 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * Builds SPIFieldDefinition object using API FieldDefinitionCreateStruct
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException if validator configuration or
+     *         field setting do not validate
+     *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
@@ -467,13 +470,32 @@ class ContentTypeService implements ContentTypeServiceInterface
                 //"defaultValue"
             )
         );
-        $fieldType = $this->buildFieldType( $fieldDefinitionCreateStruct->fieldTypeIdentifier );
-        $this->fillFieldTypeConstraints(
-            $spiFieldDefinition->fieldTypeConstraints,
-            $fieldType,
-            $fieldDefinitionCreateStruct->validators,
+        /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
+        $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
+            $fieldDefinitionCreateStruct->fieldTypeIdentifier
+        );
+
+        $validationErrors = $fieldType->validateValidatorConfiguration(
+            $fieldDefinitionCreateStruct->validatorConfiguration
+        );
+        if ( !empty( $validationErrors ) )
+        {
+            throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
+        }
+
+        $validationErrors = $fieldType->validateFieldSettings(
             $fieldDefinitionCreateStruct->fieldSettings
         );
+        if ( !empty( $validationErrors ) )
+        {
+            throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
+        }
+
+        $spiFieldDefinition->fieldTypeConstraints->validators =
+            $fieldDefinitionCreateStruct->validatorConfiguration;
+        $spiFieldDefinition->fieldTypeConstraints->fieldSettings =
+            $fieldDefinitionCreateStruct->fieldSettings;
+
         isset( $fieldDefinitionCreateStruct->defaultValue ) ?
             $spiFieldDefinition->defaultValue->data = $fieldDefinitionCreateStruct->defaultValue :
             $spiFieldDefinition->defaultValue = $fieldType->toPersistenceValue( $fieldType->getDefaultDefaultValue() );
@@ -484,6 +506,9 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * Builds SPIFieldDefinition object using API FieldDefinitionUpdateStruct
      * and API FieldDefinition
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException if validator configuration or
+     *         field setting do not validate
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
@@ -510,72 +535,37 @@ class ContentTypeService implements ContentTypeServiceInterface
                 //"defaultValue"
             )
         );
-        $fieldType = $this->buildFieldType( $fieldDefinition->fieldTypeIdentifier );
-        $this->fillFieldTypeConstraints(
-            $spiFieldDefinition->fieldTypeConstraints,
-            $fieldType,
-            $fieldDefinitionUpdateStruct->validators,
+        /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
+        $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
+            $fieldDefinition->fieldTypeIdentifier
+        );
+
+        $validationErrors = $fieldType->validateValidatorConfiguration(
+            $fieldDefinitionUpdateStruct->validatorConfiguration
+        );
+        if ( !empty( $validationErrors ) )
+        {
+            throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
+        }
+
+        $validationErrors = $fieldType->validateFieldSettings(
             $fieldDefinitionUpdateStruct->fieldSettings
         );
+        if ( !empty( $validationErrors ) )
+        {
+            throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
+        }
+
+        $spiFieldDefinition->fieldTypeConstraints->validators =
+            $fieldDefinitionUpdateStruct->validatorConfiguration;
+        $spiFieldDefinition->fieldTypeConstraints->fieldSettings =
+            $fieldDefinitionUpdateStruct->fieldSettings;
+
         isset( $fieldDefinitionUpdateStruct->defaultValue ) ?
             $spiFieldDefinition->defaultValue->data = $fieldDefinitionUpdateStruct->defaultValue :
             $spiFieldDefinition->defaultValue = $fieldType->toPersistenceValue( $fieldType->getDefaultDefaultValue() );
 
         return $spiFieldDefinition;
-    }
-
-    /**
-     * Used by the FieldDefinition to populate the $fieldTypeConstraints field properties.
-     *
-     * If validator or setting is not allowed for a given field type, InvalidArgumentException
-     * will be thrown
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints $fieldTypeConstraints
-     * @param \eZ\Publish\SPI\FieldType\FieldType $fieldType
-     * @param \eZ\Publish\API\Repository\Values\ContentType\Validator[]|null $validatorss
-     * @param array|null $fieldSettings
-     *
-     * @return void
-     */
-    protected function fillFieldTypeConstraints(
-        FieldTypeConstraints $fieldTypeConstraints,
-        $fieldType,
-        $validators,
-        $fieldSettings
-    )
-    {
-        $allowedValidators = $fieldType->allowedValidators();
-        $validatorConstraints = array();
-        foreach ( (array)$validators as $validator )
-        {
-            if ( !in_array( $validator->identifier, $allowedValidators ) )
-            {
-                throw new InvalidArgumentException(
-                    "\$validator",
-                    "Validator '{$validator->identifier}' is not allowed: " . implode( ", ", $allowedValidators )
-                );
-            }
-            $validatorConstraints[$validator->identifier] = $validator->constraints;
-        }
-
-        $allowedSettings = $fieldType->allowedSettings();
-        $fieldSettingsConstraints = array();
-        foreach ( (array)$fieldSettings as $settingName => $settingValue )
-        {
-            if ( !array_key_exists( $settingName, $allowedSettings ) )
-            {
-                throw new InvalidArgumentException(
-                    "\$validator",
-                    "Field setting '{$settingName}' is not allowed: " . implode( ", ", $allowedSettings )
-                );
-            }
-            $fieldSettingsConstraints[$settingName] = $settingValue;
-        }
-
-        $fieldTypeConstraints->validators = $validatorConstraints;
-        $fieldTypeConstraints->fieldSettings = $fieldSettingsConstraints + $allowedSettings;
     }
 
     /**
@@ -639,10 +629,10 @@ class ContentTypeService implements ContentTypeServiceInterface
         $validators = array();
         foreach ( (array)$spiFieldDefinition->fieldTypeConstraints->validators as $identifier => $constraints )
         {
-            $validators[] = $this->repository->getValidatorService()->buildValidatorDomainObject(
+            $validators = $this->repository->getValidatorService()->getValidatorConfiguration(
                 $identifier,
                 (array)$constraints
-            );
+            ) + $validators;
         }
         $fieldDefinition = new FieldDefinition(
             array(
@@ -658,8 +648,8 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "isInfoCollector" => $spiFieldDefinition->isInfoCollector,
                 "defaultValue" => $spiFieldDefinition->defaultValue->data,
                 "isSearchable" => $spiFieldDefinition->isSearchable,
-                "fieldSettings" => (array)$spiFieldDefinition->fieldTypeConstraints->fieldSettings,// ?: null,
-                "validators" => $validators,// ?: null
+                "fieldSettings" => (array)$spiFieldDefinition->fieldTypeConstraints->fieldSettings,
+                "validatorConfiguration" => $validators,
             )
         );
 
@@ -1359,29 +1349,5 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function newFieldDefinitionUpdateStruct()
     {
         return new FieldDefinitionUpdateStruct;
-    }
-
-    /**
-     * Instantiates a FieldType\Type object
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $type not priorly setup
-     *         with settings injected to service
-     *
-     * @param string $type
-     * @return \eZ\Publish\SPI\FieldType\FieldType
-     */
-    public function buildFieldType( $type )
-    {
-        if ( !isset( $this->settings["field_type"][$type] ) )
-        {
-            throw new InvalidArgumentException(
-                '$type',
-                "Provided \$type is unknown: '{$type}', has: " . var_export( array_keys( $this->settings["field_type"] ), true )
-            );
-        }
-
-        /** @var $closure \Closure */
-        $closure = $this->settings["field_type"][$type];
-        return $closure();
     }
 }

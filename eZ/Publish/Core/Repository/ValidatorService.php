@@ -10,18 +10,21 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\ValidatorService as ValidatorServiceInterface;
-
 /**
  * @internal
  * @package eZ\Publish\Core\Repository
  */
-class ValidatorService implements ValidatorServiceInterface
+class ValidatorService
 {
+    /**
+     * The namespace under which validator classes reside
+     */
+    const VALIDATOR_NAMESPACE = "eZ\\Publish\\Core\\FieldType\\Validator";
+
     /**
      * Holds concrete validator objects, indexed by their FQN
      *
-     * @var \eZ\Publish\Core\Repository\FieldType\Validator[]
+     * @var \eZ\Publish\Core\FieldType\Validator[]
      */
     protected $validators = array();
 
@@ -30,11 +33,11 @@ class ValidatorService implements ValidatorServiceInterface
      *
      * @param string $identifier
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Validator
+     * @return \eZ\Publish\Core\FieldType\Validator
      */
     public function getValidator( $identifier )
     {
-        $validatorFQN = $this->getConcreteValidatorFQN( $identifier );
+        $validatorFQN = $this->getValidatorFQN( $identifier );
 
         if ( !isset( $this->validators[$validatorFQN] ) )
         {
@@ -45,30 +48,18 @@ class ValidatorService implements ValidatorServiceInterface
     }
 
     /**
-     * Returns public domain validator representation object from given validator identifier
+     * Returns validator configuration from given validator $identifier and $constraints
      *
      * @param string $identifier
      * @param array $constraints
      *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\Validator
+     * @return mixed
      */
-    public function buildValidatorDomainObject( $identifier, array $constraints )
+    public function getValidatorConfiguration( $identifier, array $constraints )
     {
-        $validatorFQN = $this->getPublicDomainValidatorFQN( $identifier );
-        $validator = new $validatorFQN( array( "constraints" => $constraints ) );
-        return $validator;
-    }
-
-    /**
-     * Returns FQN of the public domain validator representation for the given validator identifier
-     *
-     * @param string $identifier
-     *
-     * @return string
-     */
-    protected function getPublicDomainValidatorFQN( $identifier )
-    {
-        return self::PUBLIC_VALIDATOR_NAMESPACE . "\\" . $identifier;
+        return array(
+            $identifier => $constraints
+        );
     }
 
     /**
@@ -78,8 +69,8 @@ class ValidatorService implements ValidatorServiceInterface
      *
      * @return string
      */
-    protected function getConcreteValidatorFQN( $identifier )
+    protected function getValidatorFQN( $identifier )
     {
-        return self::CONCRETE_VALIDATOR_NAMESPACE . "\\" . $identifier;
+        return self::VALIDATOR_NAMESPACE . "\\" . $identifier;
     }
 }

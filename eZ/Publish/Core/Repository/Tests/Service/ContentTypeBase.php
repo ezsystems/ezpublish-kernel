@@ -865,7 +865,7 @@ abstract class ContentTypeBase extends BaseServiceTest
                 "isTranslatable" => null,
                 "isRequired" => null,
                 "isInfoCollector" => null,
-                "validators" => null,
+                "validatorConfiguration" => null,
                 "fieldSettings" => null,
                 "defaultValue" => null,
                 "isSearchable" => null
@@ -1255,15 +1255,15 @@ abstract class ContentTypeBase extends BaseServiceTest
             switch ( $propertyName )
             {
                 case "fieldSettings":
-                    $defaultSettings = $this->repository->getContentTypeService()->buildFieldType(
+                    $defaultSettings = $this->repository->getFieldTypeService()->buildFieldType(
                         $fieldDefinitionCreateStruct->fieldTypeIdentifier
-                    )->allowedSettings();
+                    )->getSettingsSchema();
                     $fieldDefinitionPropertyValue = (array)$fieldDefinition->$propertyName;
                     $propertyValue = (array)$propertyValue + $defaultSettings;
                     ksort( $fieldDefinitionPropertyValue );
                     ksort( $propertyValue );
                     break;
-                case "validators":
+                case "validatorConfiguration":
                     $fieldDefinitionPropertyValue = (array)$fieldDefinition->$propertyName;
                     $propertyValue = (array)$propertyValue;
                     $sorter = function ( $a, $b )
@@ -1563,7 +1563,7 @@ abstract class ContentTypeBase extends BaseServiceTest
             "names",
             "descriptions",
             "fieldSettings",
-            "validators",
+            "validatorConfiguration",
             "id",
             "identifier",
             "fieldGroup",
@@ -2783,9 +2783,14 @@ abstract class ContentTypeBase extends BaseServiceTest
         $fieldDefCreate->isRequired = true;
         $fieldDefCreate->isInfoCollector = false;
         $fieldDefCreate->defaultValue = "New tags text line";
-        $validator = new StringLengthValidator();
-        $validator->maxStringLength = 255;
-        $fieldDefCreate->validators = array( $validator );
+        //$validator = new StringLengthValidator();
+        //$validator->maxStringLength = 255;
+        //$fieldDefCreate->validators = array( $validator );
+        $fieldDefCreate->validatorConfiguration = array(
+            "StringLengthValidator" => array(
+                "maxStringLength" => 255
+            )
+        );
         $fieldDefCreate->fieldSettings = null;
         $fieldDefCreate->isSearchable = true;
 
@@ -2870,7 +2875,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $fieldDefCreate->isRequired = false;
         $fieldDefCreate->isInfoCollector = false;
         $fieldDefCreate->defaultValue = "";
-        $fieldDefCreate->validators = array();
+        $fieldDefCreate->validatorConfiguration = array();
         $fieldDefCreate->fieldSettings = array(
             'numRows' => 10,
             'tagPreset' => null,
@@ -3210,8 +3215,8 @@ abstract class ContentTypeBase extends BaseServiceTest
             "Field definition property 'fieldSettings' is not correctly updated"
         );
 
-        $expectedValidators = (array)$updateStruct->validators;
-        $actualValidators = (array)$updatedField->validators;
+        $expectedValidators = (array)$updateStruct->validatorConfiguration;
+        $actualValidators = (array)$updatedField->validatorConfiguration;
         $sorter = function ( $a, $b )
         {
             if ( $a->identifier == $b->identifier ) return 0;

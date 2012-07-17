@@ -8,10 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Service\InMemory;
-use eZ\Publish\Core\Repository\Tests\Service\LanguageBase as BaseLanguageServiceTest,
-    eZ\Publish\Core\Repository\Repository,
-    eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
-    eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler;
+use eZ\Publish\Core\Repository\Tests\Service\LanguageBase as BaseLanguageServiceTest;
 
 /**
  * Test case for Language Service using InMemory storage class
@@ -20,6 +17,6 @@ class LanguageTest extends BaseLanguageServiceTest
 {
     protected function getRepository( array $serviceSettings )
     {
-        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler(), $serviceSettings );
+        return Utils::getRepository( $serviceSettings );
     }
 }

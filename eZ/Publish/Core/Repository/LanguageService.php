@@ -22,7 +22,7 @@ use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface,
     eZ\Publish\API\Repository\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\Logic;
+    LogicException;
 
 /**
  * Language service, used for language operations
@@ -281,7 +281,7 @@ class LanguageService implements LanguageServiceInterface
         {
             $this->persistenceHandler->contentLanguageHandler()->delete( $loadedLanguage->id );
         }
-        catch ( Logic $e )
+        catch ( LogicException $e )
         {
             throw new InvalidArgumentException( "language", $e->getMessage(), $e );
         }

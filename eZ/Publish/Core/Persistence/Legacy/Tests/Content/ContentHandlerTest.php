@@ -1065,7 +1065,7 @@ class ContentHandlerTest extends TestCase
             )->will( $this->returnValue( 42 ) );
 
         $fieldHandlerMock->expects( $this->once() )
-            ->method( "copyFields" )
+            ->method( "createNewFields" )
             ->with(
                 $this->equalTo(
                     new Content(

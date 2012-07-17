@@ -651,3 +651,24 @@ CREATE TABLE `ezuservisit` (
       KEY `ezuservisit_co_visit_count` (`current_visit_timestamp`,`login_count`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `ezkeyword`;
+CREATE TABLE `ezkeyword` (
+  `class_id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `keyword` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ezkeyword_keyword` (`keyword`),
+  KEY `ezkeyword_keyword_id` (`keyword`,`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ezkeyword_attribute_link`;
+CREATE TABLE `ezkeyword_attribute_link` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `keyword_id` int(11) NOT NULL DEFAULT '0',
+  `objectattribute_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `ezkeyword_attr_link_keyword_id` (`keyword_id`),
+  KEY `ezkeyword_attr_link_kid_oaid` (`keyword_id`,`objectattribute_id`),
+  KEY `ezkeyword_attr_link_oaid` (`objectattribute_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
