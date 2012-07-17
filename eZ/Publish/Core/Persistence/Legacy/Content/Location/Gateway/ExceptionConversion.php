@@ -16,7 +16,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway,
 /**
  * Base class for location gateways.
  */
-class exceptionConversion extends Gateway
+class ExceptionConversion extends Gateway
 {
     /**
      * The wrapped gateway

@@ -15,7 +15,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway,
 /**
  * ObjectState Gateway
  */
-abstract class Gateway
+class ExceptionConversion extends Gateway
 {
     /**
      * The wrapped gateway

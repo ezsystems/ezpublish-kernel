@@ -405,7 +405,7 @@ class ExceptionConversion extends Gateway
     {
         try
         {
-            return $this->innerGateway->updateFieldDefinition( $typeId, $status, $fieldDefinitionId, $storageFieldDef );
+            return $this->innerGateway->updateFieldDefinition( $typeId, $status, $fieldDefinition, $storageFieldDef );
         }
         catch ( \ezcDbException $e )
         {

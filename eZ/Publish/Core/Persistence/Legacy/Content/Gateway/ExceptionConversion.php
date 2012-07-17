@@ -7,7 +7,6 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content;
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
