@@ -13,6 +13,7 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
 
     eZ\Publish\Core\Repository\Values\User\User,
     eZ\Publish\Core\Repository\Values\User\UserGroup,
+    eZ\Publish\Core\Repository\Values\Content\Content,
     eZ\Publish\Core\Repository\Values\Content\VersionInfo,
     eZ\Publish\Core\Repository\Values\Content\ContentInfo,
 
@@ -36,7 +37,6 @@ abstract class UserBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                'id' => null,
                 'login' => null,
                 'email' => null,
                 'passwordHash' => null,
@@ -48,13 +48,11 @@ abstract class UserBase extends BaseServiceTest
         );
 
         $group = new UserGroup();
-        self::assertEquals( null, $group->id );
         self::assertEquals( null, $group->parentId );
         self::assertEquals( null, $group->subGroupCount );
 
         $this->assertPropertiesCorrect(
             array(
-                'id' => null,
                 'parentId' => null,
                 'subGroupCount' => null
             ),
@@ -121,14 +119,14 @@ abstract class UserBase extends BaseServiceTest
         $value = isset( $user->notDefined );
         self::assertEquals( false, $value );
 
-        $value = isset( $user->id );
+        $value = isset( $user->login );
         self::assertEquals( true, $value );
 
         $userGroup = new UserGroup();
         $value = isset( $userGroup->notDefined );
         self::assertEquals( false, $value );
 
-        $value = isset( $userGroup->id );
+        $value = isset( $userGroup->parentId );
         self::assertEquals( true, $value );
     }
 
@@ -265,8 +263,13 @@ abstract class UserBase extends BaseServiceTest
 
         $parentGroup = new UserGroup(
             array(
-                "versionInfo" => new VersionInfo(
-                    array( "contentInfo" => new ContentInfo( array( "id" => PHP_INT_MAX ) ) )
+                'content' => new Content(
+                    array(
+                        "versionInfo" => new VersionInfo(
+                            array( "contentInfo" => new ContentInfo( array( "id" => PHP_INT_MAX ) ) )
+                        ),
+                        "internalFields" => array()
+                    )
                 )
             )
         );
@@ -304,8 +307,13 @@ abstract class UserBase extends BaseServiceTest
 
         $userGroup = new UserGroup(
             array(
-                "versionInfo" => new VersionInfo(
-                    array( "contentInfo" => new ContentInfo( array( "id" => PHP_INT_MAX ) ) )
+                'content' => new Content(
+                    array(
+                        "versionInfo" => new VersionInfo(
+                            array( "contentInfo" => new ContentInfo( array( "id" => PHP_INT_MAX ) ) )
+                        ),
+                        "internalFields" => array()
+                    )
                 )
             )
         );
@@ -341,15 +349,25 @@ abstract class UserBase extends BaseServiceTest
 
         $userGroupToMove = new UserGroup(
             array(
-                "versionInfo" => new VersionInfo(
-                    array( "contentInfo" => new ContentInfo( array( "id" => PHP_INT_MAX ) ) )
+                'content' => new Content(
+                    array(
+                        "versionInfo" => new VersionInfo(
+                            array( "contentInfo" => new ContentInfo( array( "id" => PHP_INT_MAX ) ) )
+                        ),
+                        "internalFields" => array()
+                    )
                 )
             )
         );
         $parentUserGroup = new UserGroup(
             array(
-                "versionInfo" => new VersionInfo(
-                    array( "contentInfo" => new ContentInfo( array( "id" => PHP_INT_MAX ) ) )
+                'content' => new Content(
+                    array(
+                        "versionInfo" => new VersionInfo(
+                            array( "contentInfo" => new ContentInfo( array( "id" => PHP_INT_MAX ) ) )
+                        ),
+                        "internalFields" => array()
+                    )
                 )
             )
         );
@@ -450,9 +468,14 @@ abstract class UserBase extends BaseServiceTest
 
         $parentGroup = new UserGroup(
             array(
-                "versionInfo" => new VersionInfo(
+                'content' => new Content(
                     array(
-                        "contentInfo" => new ContentInfo( array( 'id' => PHP_INT_MAX ) )
+                        "versionInfo" => new VersionInfo(
+                            array(
+                                "contentInfo" => new ContentInfo( array( 'id' => PHP_INT_MAX ) )
+                            )
+                        ),
+                        "internalFields" => array()
                     )
                 )
             )
@@ -655,7 +678,20 @@ abstract class UserBase extends BaseServiceTest
         $userUpdateStruct->contentUpdateStruct->setField( "first_name", null );
         $userUpdateStruct->contentUpdateStruct->setField( "last_name", null );
 
-        $user = new User( array( "versionInfo" => new VersionInfo( array( 'contentId' => PHP_INT_MAX ) ) ) );
+        $user = new User(
+            array(
+                'content' => new Content(
+                    array(
+                        "versionInfo" => new VersionInfo(
+                            array(
+                                "contentId" => PHP_INT_MAX
+                            )
+                        ),
+                        "internalFields" => array()
+                    )
+                )
+            )
+        );
 
         $userService->updateUser( $user, $userUpdateStruct );
     }
