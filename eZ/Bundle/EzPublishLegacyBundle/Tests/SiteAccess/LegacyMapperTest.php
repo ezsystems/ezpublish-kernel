@@ -50,7 +50,7 @@ class LegacyMapperTest extends LegacyBasedTestCase
                 new SiteAccess( 'foo', 'default' ),
                 array(
                     'name'      => 'foo',
-                    'type'      => eZSiteAccess::TYPE_DEFAULT,
+                    'type'      => 1,
                     'uri_part'  => array()
                 )
             ),
@@ -60,7 +60,7 @@ class LegacyMapperTest extends LegacyBasedTestCase
                 new SiteAccess( 'foo', 'env' ),
                 array(
                     'name'      => 'foo',
-                    'type'      => eZSiteAccess::TYPE_SERVER_VAR,
+                    'type'      => 7,
                     'uri_part'  => array()
                 )
             ),
@@ -70,7 +70,7 @@ class LegacyMapperTest extends LegacyBasedTestCase
                 new SiteAccess( 'foo', 'uri:map' ),
                 array(
                     'name'      => 'foo',
-                    'type'      => eZSiteAccess::TYPE_URI,
+                    'type'      => 2,
                     'uri_part'  => array()
                 )
             ),
@@ -80,7 +80,7 @@ class LegacyMapperTest extends LegacyBasedTestCase
                 new SiteAccess( 'foo', 'uri:map' ),
                 array(
                     'name'      => 'foo',
-                    'type'      => eZSiteAccess::TYPE_URI,
+                    'type'      => 2,
                     'uri_part'  => array( 'foo' )
                 )
             ),
@@ -90,7 +90,7 @@ class LegacyMapperTest extends LegacyBasedTestCase
                 new SiteAccess( 'foo', 'uri:element' ),
                 array(
                     'name'      => 'foo',
-                    'type'      => eZSiteAccess::TYPE_URI,
+                    'type'      => 2,
                     'uri_part'  => array()
                 )
             ),
@@ -100,7 +100,7 @@ class LegacyMapperTest extends LegacyBasedTestCase
                 new SiteAccess( 'foo', 'uri:element' ),
                 array(
                     'name'      => 'foo',
-                    'type'      => eZSiteAccess::TYPE_URI,
+                    'type'      => 2,
                     'uri_part'  => array( 'foo', 'bar' )
                 )
             ),
@@ -110,7 +110,7 @@ class LegacyMapperTest extends LegacyBasedTestCase
                 new SiteAccess( 'foo', 'uri:element' ),
                 array(
                     'name'      => 'foo',
-                    'type'      => eZSiteAccess::TYPE_URI,
+                    'type'      => 2,
                     'uri_part'  => array( 'foo', 'bar', 'baz' )
                 )
             ),
@@ -120,7 +120,7 @@ class LegacyMapperTest extends LegacyBasedTestCase
                 new SiteAccess( 'foo', 'uri:text' ),
                 array(
                     'name'      => 'foo',
-                    'type'      => eZSiteAccess::TYPE_URI,
+                    'type'      => 2,
                     'uri_part'  => array()
                 )
             ),
@@ -130,7 +130,7 @@ class LegacyMapperTest extends LegacyBasedTestCase
                 new SiteAccess( 'foo', 'uri:regexp' ),
                 array(
                     'name'      => 'foo',
-                    'type'      => eZSiteAccess::TYPE_URI,
+                    'type'      => 2,
                     'uri_part'  => array()
                 )
             ),
@@ -140,7 +140,7 @@ class LegacyMapperTest extends LegacyBasedTestCase
                 new SiteAccess( 'foo', 'host:map' ),
                 array(
                     'name'      => 'foo',
-                    'type'      => eZSiteAccess::TYPE_HTTP_HOST,
+                    'type'      => 4,
                     'uri_part'  => array()
                 )
             ),
@@ -150,7 +150,7 @@ class LegacyMapperTest extends LegacyBasedTestCase
                 new SiteAccess( 'foo', 'host:element' ),
                 array(
                     'name'      => 'foo',
-                    'type'      => eZSiteAccess::TYPE_HTTP_HOST,
+                    'type'      => 4,
                     'uri_part'  => array()
                 )
             ),
@@ -160,7 +160,7 @@ class LegacyMapperTest extends LegacyBasedTestCase
                 new SiteAccess( 'foo', 'host:text' ),
                 array(
                     'name'      => 'foo',
-                    'type'      => eZSiteAccess::TYPE_HTTP_HOST,
+                    'type'      => 4,
                     'uri_part'  => array()
                 )
             ),
@@ -170,7 +170,7 @@ class LegacyMapperTest extends LegacyBasedTestCase
                 new SiteAccess( 'foo', 'host:regexp' ),
                 array(
                     'name'      => 'foo',
-                    'type'      => eZSiteAccess::TYPE_HTTP_HOST,
+                    'type'      => 4,
                     'uri_part'  => array()
                 )
             ),
@@ -180,7 +180,7 @@ class LegacyMapperTest extends LegacyBasedTestCase
                 new SiteAccess( 'foo', 'port' ),
                 array(
                     'name'      => 'foo',
-                    'type'      => eZSiteAccess::TYPE_PORT,
+                    'type'      => 3,
                     'uri_part'  => array()
                 )
             ),
@@ -190,7 +190,7 @@ class LegacyMapperTest extends LegacyBasedTestCase
                 new SiteAccess( 'foo', 'custom_match' ),
                 array(
                     'name'      => 'foo',
-                    'type'      => eZSiteAccess::TYPE_CUSTOM,
+                    'type'      => 10,
                     'uri_part'  => array()
                 )
             ),
