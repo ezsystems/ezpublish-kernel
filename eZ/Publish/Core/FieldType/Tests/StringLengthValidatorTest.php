@@ -129,7 +129,7 @@ class StringLengthValidatorTest extends FieldTypeTest
      * Tests validating a correct value
      *
      * @dataProvider providerForValidateOK
-     * @covers \eZ\Publish\Core\FieldType\TextLine\StringLengthValidator::validate
+     * @covers \eZ\Publish\Core\FieldType\Validator\StringLengthValidator::validate
      * @covers \eZ\Publish\Core\FieldType\Validator::getMessage
      */
     public function testValidateCorrectValues( $value )
@@ -154,7 +154,7 @@ class StringLengthValidatorTest extends FieldTypeTest
      * Tests validating a wrong value
      *
      * @dataProvider providerForValidateKO
-     * @covers \eZ\Publish\Core\FieldType\TextLine\StringLengthValidator::validate
+     * @covers \eZ\Publish\Core\FieldType\Validator\StringLengthValidator::validate
      */
     public function testValidateWrongValues( $value, $messageSingular, $messagePlural, $values )
     {

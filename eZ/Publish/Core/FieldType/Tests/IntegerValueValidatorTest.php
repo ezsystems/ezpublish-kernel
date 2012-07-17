@@ -129,7 +129,7 @@ class IntegerValueValidatorTest extends FieldTypeTest
      * Tests validating a correct value
      *
      * @dataProvider providerForValidateOK
-     * @covers \eZ\Publish\Core\FieldType\Integer\IntegerValueValidator::validate
+     * @covers \eZ\Publish\Core\FieldType\Validator\IntegerValueValidator::validate
      * @covers \eZ\Publish\Core\FieldType\Validator::getMessage
      */
     public function testValidateCorrectValues( $value )
@@ -158,7 +158,7 @@ class IntegerValueValidatorTest extends FieldTypeTest
      * Tests validating a wrong value
      *
      * @dataProvider providerForValidateKO
-     * @covers \eZ\Publish\Core\FieldType\Integer\IntegerValueValidator::validate
+     * @covers \eZ\Publish\Core\FieldType\Validator\IntegerValueValidator::validate
      */
     public function testValidateWrongValues( $value, $message, $values )
     {
