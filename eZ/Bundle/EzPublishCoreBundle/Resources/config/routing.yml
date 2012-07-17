@@ -14,5 +14,6 @@ services:
 
     ezpublish.siteaccess_listener:
         class: %ezpublish.siteaccess_listener.class%
+        arguments: [@service_container]
         tags:
             - { name: kernel.event_subscriber }

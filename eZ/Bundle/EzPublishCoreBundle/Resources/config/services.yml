@@ -3,4 +3,5 @@ parameters:
     webroot_dir: %kernel.root_dir%/../web
 
 services:
-
+    ezpublish.siteaccess:
+        synthetic: true
