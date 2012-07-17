@@ -94,20 +94,21 @@ class Mapper
      * Creates a new version for the given $content
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
-     * @param int $versionNo
+     * @param mixed $versionNo
      * @param array $fields
      * @param string $initialLanguageCode
+     * @param mixed $userId
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
      * @todo: created, modified, initial_language_id, status, user_id?
      */
-    public function createVersionInfoForContent( Content $content, $versionNo, array $fields, $initialLanguageCode )
+    public function createVersionInfoForContent( Content $content, $versionNo, array $fields, $initialLanguageCode, $userId )
     {
         $versionInfo = new VersionInfo;
 
         $versionInfo->contentId = $content->contentInfo->id;
         $versionInfo->versionNo = $versionNo;
-        $versionInfo->creatorId = $content->contentInfo->ownerId;
+        $versionInfo->creatorId = $userId;
         $versionInfo->status = VersionInfo::STATUS_DRAFT;
         $versionInfo->initialLanguageCode = $initialLanguageCode;
         $versionInfo->creationDate = time();
@@ -302,7 +303,7 @@ class Mapper
                 $versionInfo->creationDate = (int)$row["ezcontentobject_version_created"];
                 $versionInfo->modificationDate = (int)$row["ezcontentobject_version_modified"];
                 $versionInfo->initialLanguageCode = $this->languageHandler->getById( $row["ezcontentobject_version_initial_language_id"] )->languageCode;
-                $versionInfo->languageIds = array();
+                $versionInfo->languageIds = $this->extractLanguageIdsFromMask( (int)$row["ezcontentobject_version_language_mask"] );//array();
                 $versionInfo->status = (int)$row["ezcontentobject_version_status"];
                 $versionInfo->names = array();
                 $versionInfoList[$versionId] = $versionInfo;
@@ -312,19 +313,32 @@ class Mapper
             {
                 $versionInfoList[$versionId]->names[$row['ezcontentobject_name_content_translation']] = $row['ezcontentobject_name_name'];
             }
-
-            if (
-                !in_array(
-                    $row['ezcontentobject_attribute_language_id'] & ~1,// lang_id can include always available flag, eg:
-                    $versionInfoList[$versionId]->languageIds          // eng-US can be either 2 or 3, see fixture data
-                )
-            )
-            {
-                $versionInfoList[$versionId]->languageIds[] =
-                    $row['ezcontentobject_attribute_language_id'] & ~1;
-            }
         }
         return array_values( $versionInfoList );
+    }
+
+    /**
+     * @todo use langmask handler for this
+     *
+     * @param $languageMask
+     *
+     * @return array
+     */
+    public function extractLanguageIdsFromMask( $languageMask )
+    {
+        $exp = 2;
+        $result = array();
+
+        // Decomposition of $languageMask into its binary components.
+        while ( $exp <= $languageMask )
+        {
+            if ( $languageMask & $exp )
+                $result[] = $exp;
+
+            $exp *= 2;
+        }
+
+        return $result;
     }
 
     /**

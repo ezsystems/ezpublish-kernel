@@ -31,11 +31,19 @@ abstract class Map implements Matcher
      * Constructor.
      *
      * @param array $map Map used for matching.
-     * @param string $key Key that will be used for matching against $map
      */
-    public function __construct( array $map, $key )
+    public function __construct( array $map )
     {
         $this->map = $map;
+    }
+
+    /**
+     * Injects the key that will be used for matching against the map configuration
+     *
+     * @param string $key
+     */
+    public function setMapKey( $key )
+    {
         $this->key = $key;
     }
 

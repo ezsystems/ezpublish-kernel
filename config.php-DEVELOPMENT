@@ -24,17 +24,13 @@ return array(
             // as well as router (key)
             'Repositories' => array( 'eZ\Publish' => __DIR__ . '/eZ/Publish',
                                      /*'Vendor\\SomeApp' => __DIR__ . '/Vendor/SomeApp'*/ ),
-            // Adding a class map (key is the class name Fully Qualified Name, aka FQN, value is the absolute file path)
-            // This is the way to go if you installed Zeta Components via Composer.
-            // The default implementation below assumes that you have installed everything like indicated in eZ Publish 5 INSTALL file:
-            // https://github.com/ezsystems/ezpublish5/blob/master/INSTALL.md
-            'ClassMap' => include __DIR__ . '/../../composer/autoload_classmap.php',
-            // Zeta Components autoloader:
-            // The location of eZ / Zeta Components ezcBase needed for auto loading ezc stuff
-            // It will then need Zeta Components to be accessible in the include path (i.e. install via PEAR)
-            // Uncomment the following line if you want to use ezcBase autoloader. DON'T UNCOMMENT IF YOU INSTALLED ZETA WITH COMPOSER!
-            //'ezcBase' => 'ezc/Base/base.php',
         ),
+        // eZ Publish Legacy configuration
+        // Uncomment and configure if you need legacy kernel support.
+        /*'Legacy' => array(
+            // Root path of eZ Publish legacy installation (must be absolute)
+            'RootPath' => '/path/to/ezpublish_legacy'
+        ),*/
         'Configuration' => array(
             // Disable cache, default false
             'UseCache' => false,

@@ -23,7 +23,7 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\SPI\Persistence\Content\Search\Result as SPISearchResult,
     eZ\Publish\API\Repository\Exceptions\NotFoundException,
     eZ\Publish\API\Repository\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Repository\FieldType\TextLine\StringLengthValidator;
+    eZ\Publish\Core\Repository\Values\ContentType\Validator\StringLengthValidator;
 
 /**
  * Test case for Content service
@@ -56,8 +56,8 @@ abstract class ContentBase extends BaseServiceTest
             "currentVersionNo" => 1,
             "published" => true,
             "ownerId" => 14,
-            "modificationDate" => new \DateTime( "@1033917596" ),
-            "publishedDate" => new \DateTime( "@1033917596" ),
+            "modificationDate" => $this->getDateTime( 1033917596 ),
+            "publishedDate" => $this->getDateTime( 1033917596 ),
             "alwaysAvailable" => true,
             "remoteId" => "f5c88a2209584891056f987fd965b0ba",
             "mainLanguageCode" => "eng-US",
@@ -78,9 +78,9 @@ abstract class ContentBase extends BaseServiceTest
         $values = array(
             "id" => 4,
             "versionNo" => 1,
-            "modificationDate" => new \DateTime( "@0" ),
+            "modificationDate" => $this->getDateTime( 0 ),
             "creatorId" => 14,
-            "creationDate" => new \DateTime( "@0" ),
+            "creationDate" => $this->getDateTime( 0 ),
             "status" => VersionInfo::STATUS_PUBLISHED,
             "initialLanguageCode" => "eng-US",
             "languageCodes" => array( "eng-US" ),
@@ -91,6 +91,7 @@ abstract class ContentBase extends BaseServiceTest
         if ( $draft )
         {
             $values["id"] = 675;
+            $values["creatorId"] = $this->repository->getCurrentUser()->id;
             $values["versionNo"] = 2;
             $values["status"] = VersionInfo::STATUS_DRAFT;
             unset( $values["modificationDate"] );
@@ -825,7 +826,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentCreate->setField( "test_required_empty", "value for field definition with empty default value" );
         $contentCreate->setField( "test_translatable", "and thumbs opposable", "eng-US" );
         $contentCreate->sectionId = 1;
-        $contentCreate->ownerId = 14;
+        $contentCreate->ownerId = $this->repository->getCurrentUser()->id;
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
 
@@ -934,8 +935,8 @@ abstract class ContentBase extends BaseServiceTest
                 "currentVersionNo" => 1,
                 "published" => false,
                 "ownerId" => $contentCreate->ownerId,
-                "modificationDate" => new \DateTime( "@0" ),
-                "publishedDate" => new \DateTime( "@0" ),
+                "modificationDate" => $this->getDateTime( 0 ),
+                "publishedDate" => $this->getDateTime( 0 ),
                 "alwaysAvailable" => $contentCreate->alwaysAvailable,
                 "remoteId" => $contentCreate->remoteId,
                 "mainLanguageCode" => $contentCreate->mainLanguageCode,
@@ -986,8 +987,8 @@ abstract class ContentBase extends BaseServiceTest
         foreach ( $contentDraft->versionInfo->languageCodes as $languageCode )
             $this->assertTrue( in_array( $languageCode, $languageCodes ) );
         $this->assertNotNull( $contentDraft->versionInfo->id );
-        $this->assertGreaterThanOrEqual( new \DateTime( "@{$time}" ), $contentDraft->versionInfo->creationDate );
-        $this->assertGreaterThanOrEqual( new \DateTime( "@{$time}" ), $contentDraft->versionInfo->modificationDate );
+        $this->assertGreaterThanOrEqual( $this->getDateTime( $time ), $contentDraft->versionInfo->creationDate );
+        $this->assertGreaterThanOrEqual( $this->getDateTime( $time ), $contentDraft->versionInfo->modificationDate );
     }
 
     /**
@@ -1132,7 +1133,6 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @todo expectedExceptionCode
      *
      * @return array
      */
@@ -1161,7 +1161,6 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @todo expectedExceptionCode
      *
      * @return array
      */
@@ -1191,7 +1190,6 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @todo expectedExceptionCode
      *
      * @return array
      */
@@ -1222,7 +1220,6 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @todo expectedExceptionCode
      *
      * @return array
      */
@@ -1253,11 +1250,10 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @todo expectedExceptionCode
      *
      * @return array
      */
-    public function testCreateContentThrowsContentFieldValidationRequiredFieldDefaultValueEmpty()
+    public function testCreateContentThrowsContentValidationRequiredFieldDefaultValueEmpty()
     {
         $testContentType = $this->createTestContentType();
 
@@ -1281,7 +1277,6 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
-     * @todo expectedExceptionCode
      */
     public function testCreateContentThrowsContentFieldValidationException()
     {
@@ -1305,16 +1300,6 @@ abstract class ContentBase extends BaseServiceTest
         // field definition's string length validator
         $contentService->createContent( $contentCreate );
         /* END: Use Case */
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
-     */
-    public function testCreateContentThrowsContentValidationException()
-    {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
     }
 
     /**
@@ -1377,8 +1362,8 @@ abstract class ContentBase extends BaseServiceTest
         $time = time();
         $contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
         $contentMetadataUpdateStruct->ownerId = 10;
-        $contentMetadataUpdateStruct->publishedDate = new \DateTime( "@{$time}" );
-        $contentMetadataUpdateStruct->modificationDate = new \DateTime( "@{$time}" );
+        $contentMetadataUpdateStruct->publishedDate = $this->getDateTime( $time );
+        $contentMetadataUpdateStruct->modificationDate = $this->getDateTime( $time );
         $contentMetadataUpdateStruct->mainLanguageCode = "eng-GB";
         $contentMetadataUpdateStruct->alwaysAvailable = false;
         $contentMetadataUpdateStruct->remoteId = "the-all-new-remoteid";
@@ -1565,13 +1550,6 @@ abstract class ContentBase extends BaseServiceTest
         /** @var $contentDraft \eZ\Publish\API\Repository\Values\Content\Content */
         $contentDraft = $data['previous'];
 
-        // @todo
-        /*$this->assertEquals(
-            $contentDraft->getVersionInfo()->languageCodes,
-            $updatedContentDraft->getVersionInfo()->languageCodes,
-            "Language codes in updated content draft do not match previous language codes"
-        );*/
-
         // Check field values
         $structFields = array();
         foreach ( $contentUpdate->fields as $field )
@@ -1658,7 +1636,6 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
-     * @todo expectedExceptionCode
      */
     public function testUpdateContentThrowsContentFieldValidationException()
     {
@@ -1691,7 +1668,6 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @todo expectedExceptionCode
      */
     public function testUpdateContentThrowsContentValidationExceptionRequiredFieldEmpty()
     {
@@ -1719,7 +1695,6 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @todo expectedExceptionCode
      */
     public function testUpdateContentThrowsContentValidationExceptionFieldInUnexistingLanguage()
     {
@@ -1748,7 +1723,6 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @todo expectedExceptionCode
      */
     public function testUpdateContentThrowsContentValidationExceptionFieldDefinitionUnexisting()
     {
@@ -1777,7 +1751,6 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @todo expectedExceptionCode
      */
     public function testUpdateContentThrowsContentValidationExceptionMultipleTranslatableField()
     {
@@ -1807,7 +1780,6 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @todo expectedExceptionCode
      */
     public function testUpdateContentThrowsContentValidationExceptionMultipleUntranslatableField()
     {
@@ -1837,7 +1809,6 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @todo expectedExceptionCode
      *
      * @return array
      */
@@ -1962,11 +1933,11 @@ abstract class ContentBase extends BaseServiceTest
 
         $this->assertContentValues( $data["draftContent"], null, true );
         $this->assertGreaterThanOrEqual(
-            new \DateTime( "@{$time}" ),
+            $this->getDateTime( $time ),
             $draftContent->getVersionInfo()->creationDate
         );
         $this->assertGreaterThanOrEqual(
-            new \DateTime( "@{$time}" ),
+            $this->getDateTime( $time ),
             $draftContent->getVersionInfo()->modificationDate
         );
     }
@@ -2038,7 +2009,6 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testCreateContentDraftWithThirdArgument()
     {
-        $this->markTestSkipped( "Test for ContentService::createContentDraft() is skipped because Image converter (user class contains image type field) is not implemented." );
         $time = time();
 
         /* BEGIN: Use Case */
@@ -2119,14 +2089,43 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentDrafts()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentDrafts() is not implemented." );
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
-        $content = $contentService->loadContentDrafts();
 
+        /* BEGIN: Use Case */
+        // Remote ids of the "Users" user group of a eZ Publish demo installation.
+        $usersUserGroupRemoteId = 'f5c88a2209584891056f987fd965b0ba';
+        $membersUserGroupRemoteId = '5f7f0bdb3381d6a461d8c29ff53d908f';
 
+        // "Users" user group content object
+        $usersUserGroupContentInfo = $contentService->loadContentInfoByRemoteId( $usersUserGroupRemoteId );
+        $membersUserGroupContentInfo = $contentService->loadContentInfoByRemoteId( $membersUserGroupRemoteId );
 
+        // Create some drafts
+        $contentService->createContentDraft( $usersUserGroupContentInfo );
+        $contentService->createContentDraft( $membersUserGroupContentInfo );
+
+        // Now $contentDrafts should contain two drafted versions
+        $draftedVersions = $contentService->loadContentDrafts();
         /* END: Use Case */
+
+        $actual = array(
+            $draftedVersions[0]->status,
+            $draftedVersions[0]->getContentInfo()->remoteId,
+            $draftedVersions[1]->status,
+            $draftedVersions[1]->getContentInfo()->remoteId,
+        );
+        sort( $actual, SORT_STRING );
+
+        $this->assertEquals(
+            array(
+                VersionInfo::STATUS_DRAFT,
+                VersionInfo::STATUS_DRAFT,
+                $membersUserGroupRemoteId,
+                $usersUserGroupRemoteId,
+            ),
+            $actual
+        );
     }
 
     /**
@@ -2136,7 +2135,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentDraftsWithFirstArgument()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentDrafts() is not implemented." );
+
     }
 
     /**
@@ -2241,11 +2240,11 @@ abstract class ContentBase extends BaseServiceTest
             $versions[1]
         );
         $this->assertGreaterThanOrEqual(
-            new \DateTime( "@{$time}" ),
+            $this->getDateTime( $time ),
             $versions[1]->creationDate
         );
         $this->assertGreaterThanOrEqual(
-            new \DateTime( "@{$time}" ),
+            $this->getDateTime( $time ),
             $versions[1]->modificationDate
         );
     }
@@ -2993,8 +2992,8 @@ abstract class ContentBase extends BaseServiceTest
         $typeCreateStruct->names = array( "eng-US" => "Test type name" );
         $typeCreateStruct->descriptions = array( "eng-GB" => "Test type description" );
         $typeCreateStruct->remoteId = "test-type-remoteid";
-        $typeCreateStruct->creatorId = 23;
-        $typeCreateStruct->creationDate = new \DateTime();
+        $typeCreateStruct->creatorId = $this->repository->getCurrentUser()->id;
+        $typeCreateStruct->creationDate = $this->getDateTime( 0 );
         $typeCreateStruct->mainLanguageCode = "eng-GB";
         $typeCreateStruct->nameSchema = "<name>";
         $typeCreateStruct->urlAliasSchema = "<name>";
@@ -3009,15 +3008,14 @@ abstract class ContentBase extends BaseServiceTest
         $fieldCreate->isInfoCollector = false;
         $fieldCreate->isSearchable = true;
         $fieldCreate->defaultValue = "";
-        $validator = new StringLengthValidator();
-        $validator->initializeWithConstraints(
-            array(
-                "maxStringLength" => 64,
-                "minStringLength" => 0
+        //$validator = new StringLengthValidator();
+        //$validator->maxStringLength = 64;
+        //$fieldCreate->validatorConfiguration = array( $validator );
+        $fieldCreate->validatorConfiguration = array(
+            "StringLengthValidator" => array(
+                "maxStringLength" => 64
             )
         );
-        $fieldCreate->validators = array( $validator );
-        //$fieldCreate->validators
         //$fieldCreate->fieldSettings
         $typeCreateStruct->addFieldDefinition( $fieldCreate );
 

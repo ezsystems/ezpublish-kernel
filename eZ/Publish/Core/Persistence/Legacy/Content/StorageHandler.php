@@ -8,7 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
-use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 /**
  * Handler for external storages
@@ -44,38 +45,29 @@ class StorageHandler
     /**
      * Stores data from $field in its corresponding external storage
      *
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param Field $field
      * @return void
      */
-    public function storeFieldData( Field $field )
+    public function storeFieldData( VersionInfo $versionInfo, Field $field )
     {
-        return $this->storageRegistry->getStorage( $field->type )->storeFieldData( $field, $this->context );
+        return $this->storageRegistry->getStorage( $field->type )->storeFieldData( $versionInfo, $field, $this->context );
     }
 
     /**
      * Fetches external data for $field from its corresponding external storage
      *
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param Field $field
      * @return void
      */
-    public function getFieldData( Field $field )
+    public function getFieldData( VersionInfo $versionInfo, Field $field )
     {
         $storage = $this->storageRegistry->getStorage( $field->type );
         if ( $storage->hasFieldData() )
         {
-            $storage->getFieldData( $field, $this->context );
+            $storage->getFieldData( $versionInfo, $field, $this->context );
         }
-    }
-
-    /**
-     * Stores data from $field in its corresponding external storage
-     *
-     * @param Field $field
-     * @return void
-     */
-    public function copyFieldData( Field $field )
-    {
-        return $this->storageRegistry->getStorage( $field->type )->copyFieldData( $field, $this->context );
     }
 
     /**

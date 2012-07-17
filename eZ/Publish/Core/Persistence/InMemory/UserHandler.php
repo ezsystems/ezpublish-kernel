@@ -16,9 +16,9 @@ use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\Logic,
     eZ\Publish\Core\Persistence\InMemory\Handler,
-    eZ\Publish\Core\Persistence\InMemory\Backend;
+    eZ\Publish\Core\Persistence\InMemory\Backend,
+    LogicException;
 
 /**
  * Storage Engine handler for user module
@@ -26,20 +26,20 @@ use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
 class UserHandler implements UserHandlerInterface
 {
     /**
-     * @var Handler
+     * @var \eZ\Publish\Core\Persistence\InMemory\Handler
      */
     protected $handler;
 
     /**
-     * @var Backend
+     * @var \eZ\Publish\Core\Persistence\InMemory\Backend
      */
     protected $backend;
 
     /**
      * Setups current handler instance with reference to Handler object that created it.
      *
-     * @param Handler $handler
-     * @param Backend $backend The storage engine backend
+     * @param \eZ\Publish\Core\Persistence\InMemory\Handler $handler
+     * @param \eZ\Publish\Core\Persistence\InMemory\Backend $backend The storage engine backend
      */
     public function __construct( Handler $handler, Backend $backend )
     {
@@ -55,7 +55,7 @@ class UserHandler implements UserHandlerInterface
      *
      * @param \eZ\Publish\SPI\Persistence\User $user
      * @return \eZ\Publish\SPI\Persistence\User
-     * @throws \eZ\Publish\Core\Base\Exceptions\Logic If no id was provided or if it already exists
+     * @throws LogicException If no id was provided or if it already exists
      */
     public function create( User $user )
     {
@@ -398,7 +398,7 @@ class UserHandler implements UserHandlerInterface
                 );
 
                 if ( isset( $list[1] ) )
-                    throw new Logic( 'content tree', 'there is more then one item with parentId:' . $parentId );
+                    throw new LogicException( "'content tree' logic error, there is more than one item with parentId: $parentId" );
                 if ( $list )
                     $this->getPermissionsForObject( $list[0], 3, $policies );
             }
@@ -474,7 +474,7 @@ class UserHandler implements UserHandlerInterface
 
         // @todo Use eZ Publish settings for this, and maybe a better exception
         if ( $content->contentTypeId != 3 )
-            throw new NotFound( 3, $groupId );
+            throw new NotFound( "Content with TypeId:3", $groupId );
 
         $role = $this->loadRole( $roleId );
         if ( in_array( $groupId, $role->groupIds ) )

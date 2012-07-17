@@ -13,8 +13,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\Repository\FieldType\TextBlock\Value as TextBlockValue,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings;
+    eZ\Publish\Core\FieldType\TextBlock\Value as TextBlockValue,
+    eZ\Publish\Core\FieldType\FieldSettings;
 
 class TextBlock implements Converter
 {
@@ -51,7 +51,7 @@ class TextBlock implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->fieldSettings['textColumns'];
+        $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->fieldSettings["textRows"];
     }
 
     /**
@@ -64,7 +64,7 @@ class TextBlock implements Converter
     {
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                'textColumns' => $storageDef->dataInt1
+                "textRows" => $storageDef->dataInt1
             )
         );
         $fieldDef->defaultValue->data = "";

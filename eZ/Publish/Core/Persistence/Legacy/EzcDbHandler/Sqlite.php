@@ -33,7 +33,7 @@ class Sqlite extends EzcDbHandler
      */
     public function getAutoIncrementValue( $table, $column )
     {
-        if ( ( $table === 'ezcontentobject_attribute' ) && (  $column === 'id' ) )
+        if ( ( $table === "ezcontentobject_attribute" ) && ( $column === "id" ) )
         {
             // This is a @HACK -- since this table has a multi-column key with
             // auto-increment, which is not easy to simulate in SQLite. This
@@ -47,7 +47,7 @@ class Sqlite extends EzcDbHandler
             return $this->lastInsertedIds["ezcontentobject_attribute.id"];
         }
 
-        if ( ( $table === 'ezcontentclass' ) && (  $column === 'id' ) )
+        if ( ( $table === "ezcontentclass" ) && ( $column === "id" ) )
         {
             // This is a @HACK -- since this table has a multi-column key with
             // auto-increment, which is not easy to simulate in SQLite. This
@@ -59,6 +59,20 @@ class Sqlite extends EzcDbHandler
 
             $this->lastInsertedIds["ezcontentclass.id"] = (int)$statement->fetchColumn() + 1;
             return $this->lastInsertedIds["ezcontentclass.id"];
+        }
+
+        if ( ( $table === "ezcontentclass_attribute" ) && ( $column === "id" ) )
+        {
+            // This is a @HACK -- since this table has a multi-column key with
+            // auto-increment, which is not easy to simulate in SQLite. This
+            // solves it for now.
+            $q = $this->ezcDbHandler->createSelectQuery();
+            $q->select( $q->expr->max( "id" ) )->from( "ezcontentclass_attribute" );
+            $statement = $q->prepare();
+            $statement->execute();
+
+            $this->lastInsertedIds["ezcontentclass_attribute.id"] = (int)$statement->fetchColumn() + 1;
+            return $this->lastInsertedIds["ezcontentclass_attribute.id"];
         }
 
         return parent::getAutoIncrementValue( $table, $column );
@@ -80,12 +94,17 @@ class Sqlite extends EzcDbHandler
 
     public function getSequenceName( $table, $column )
     {
-        if ( ( $table === 'ezcontentclass' ) && (  $column === 'id' ) )
+        if ( ( $table === "ezcontentobject_attribute" ) && (  $column === "id" ) )
         {
             return "{$table}.{$column}";
         }
 
-        if ( ( $table === 'ezcontentobject_attribute' ) && (  $column === 'id' ) )
+        if ( ( $table === "ezcontentclass" ) && ( $column === "id" ) )
+        {
+            return "{$table}.{$column}";
+        }
+
+        if ( ( $table === "ezcontentclass_attribute" ) && (  $column === "id" ) )
         {
             return "{$table}.{$column}";
         }

@@ -592,7 +592,7 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testLoadPoliciesByUserId()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
+        //self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $roleService = $this->repository->getRoleService();
 
         $policies = $roleService->loadPoliciesByUserId( 10 );
@@ -676,7 +676,7 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testAssignRoleToUser()
     {
-        self::markTestSkipped( "@todo: enable" );
+        self::markTestSkipped( "@todo: breaks with InMemory storage because assigning to user is not supported" );
         $roleService = $this->repository->getRoleService();
 
         $role = $roleService->loadRole( 2 );
@@ -695,7 +695,7 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testUnassignRoleFromUser()
     {
-        self::markTestSkipped( "@todo: enable" );
+        self::markTestSkipped( "@todo: breaks with InMemory storage because unassigning from user is not supported" );
         $roleService = $this->repository->getRoleService();
 
         $role = $roleService->loadRole( 2 );
@@ -719,7 +719,7 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testUnassignRoleFromUserThrowsInvalidArgumentException()
     {
-        self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
+        //self::markTestSkipped( "@todo: enable, depends on missing FieldType classes" );
         $roleService = $this->repository->getRoleService();
 
         $role = $roleService->loadRole( 2 );
@@ -755,7 +755,7 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testGetRoleAssignmentsForUser()
     {
-        self::markTestSkipped( "@todo: enable" );
+        self::markTestSkipped( "@todo: breaks with InMemory storage because assigning to user is not supported" );
         $roleService = $this->repository->getRoleService();
 
         $user = $this->repository->getUserService()->loadUser( 14 );

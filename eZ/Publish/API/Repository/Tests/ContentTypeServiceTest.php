@@ -15,8 +15,6 @@ use \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use \eZ\Publish\API\Repository\Exceptions;
 use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\StringLengthValidatorStub;
-
 /**
  * Test case for operations in the ContentTypeService using in memory storage.
  *
@@ -610,7 +608,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'isTranslatable' => null,
                 'isRequired' => null,
                 'isInfoCollector' => null,
-                'validators' => null,
+                'validatorConfiguration' => null,
                 'fieldSettings' => null,
                 'defaultValue' => null,
                 'isSearchable' => null,
@@ -689,8 +687,17 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $titleFieldCreate->isTranslatable = true;
         $titleFieldCreate->isRequired = true;
         $titleFieldCreate->isInfoCollector = false;
-        $titleFieldCreate->validators = array(
-            new StringLengthValidatorStub(),
+        $titleFieldCreate->validatorConfiguration = array(
+            'stringLength' => array(
+                'minStringLength' => array(
+                    'type'    => 'int',
+                    'default' => 0,
+                ),
+                'maxStringLength' => array(
+                    'type'    => 'int',
+                    'default' => null,
+                )
+            )
         );
         $titleFieldCreate->fieldSettings = array(
             'textblockheight' => 10
@@ -715,8 +722,17 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $bodyFieldCreate->isTranslatable = true;
         $bodyFieldCreate->isRequired = true;
         $bodyFieldCreate->isInfoCollector = false;
-        $bodyFieldCreate->validators = array(
-            new StringLengthValidatorStub(),
+        $bodyFieldCreate->validatorConfiguration = array(
+            'stringLength' => array(
+                'minStringLength' => array(
+                    'type'    => 'int',
+                    'default' => 0,
+                ),
+                'maxStringLength' => array(
+                    'type'    => 'int',
+                    'default' => null,
+                )
+            )
         );
         $bodyFieldCreate->fieldSettings = array(
             'textblockheight' => 80
@@ -1207,8 +1223,17 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $fieldDefCreate->isTranslatable = true;
         $fieldDefCreate->isRequired = true;
         $fieldDefCreate->isInfoCollector = false;
-        $fieldDefCreate->validators = array(
-            new StringLengthValidatorStub(),
+        $fieldDefCreate->validatorConfiguration = array(
+            'stringLength' => array(
+                'minStringLength' => array(
+                    'type'    => 'int',
+                    'default' => 0,
+                ),
+                'maxStringLength' => array(
+                    'type'    => 'int',
+                    'default' => null,
+                )
+            )
         );
         $fieldDefCreate->fieldSettings = array(
             'textblockheight' => 10
@@ -1424,7 +1449,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $bodyUpdateStruct->isTranslatable = false;
         $bodyUpdateStruct->isRequired = false;
         $bodyUpdateStruct->isInfoCollector = true;
-        $bodyUpdateStruct->validators = array();
+        $bodyUpdateStruct->validatorConfiguration = array();
         $bodyUpdateStruct->fieldSettings = array(
             'textblockheight' => 60
         );
@@ -1475,7 +1500,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'isTranslatable' => $updateStruct->isTranslatable,
                 'isRequired' => $updateStruct->isRequired,
                 'isInfoCollector' => $updateStruct->isInfoCollector,
-                'validators' => $updateStruct->validators,
+                'validatorConfiguration' => $updateStruct->validatorConfiguration,
                 'defaultValue' => $originalField->defaultValue,
                 'isSearchable' => $updateStruct->isSearchable,
             ),
@@ -1678,7 +1703,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                             ),
                             'fieldSettings' => array(
                             ),
-                            'validators' => array(
+                            'validatorConfiguration' => array(
                             ),
                         )
                     ),
@@ -1702,7 +1727,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                             ),
                             'fieldSettings' => array(
                             ),
-                            'validators' => array(
+                            'validatorConfiguration' => array(
                             ),
                         )
                     ),
@@ -2165,7 +2190,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                     'isTranslatable',
                     'isRequired',
                     'isInfoCollector',
-                    'validators',
+                    'validatorConfiguration',
                     'defaultValue',
                     'isSearchable',
                 )

@@ -41,6 +41,7 @@ class Controller extends BaseController
         if ( !isset( $this->legacyKernelClosure ) )
             $this->legacyKernelClosure = $this->get( 'ezpublish_legacy.kernel' );
 
-        return $this->legacyKernelClosure();
+        $legacyKernelClosure = $this->legacyKernelClosure;
+        return $legacyKernelClosure();
     }
 }

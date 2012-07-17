@@ -79,53 +79,38 @@ class FieldHandler
     {
         foreach ( $content->fields as $field )
         {
-            $field->versionNo = $content->versionInfo->versionNo;
-            $field->id = $this->contentGateway->insertNewField(
-                $content,
-                $field,
-                $this->mapper->convertToStorageValue( $field )
-            );
-
-            // If the storage handler returns true, it means that $field value has been modified
-            // So we need to update it in order to store those modifications
-            // Field converter is called once again via the Mapper
-            if ( $this->storageHandler->storeFieldData( $field ) === true )
-            {
-                $this->contentGateway->updateField(
-                    $field,
-                    $this->mapper->convertToStorageValue( $field )
-                );
-            }
+            $this->createNewField( $field, $content );
         }
     }
 
     /**
-     * Copies fields in the database
+     * Creates a new field in the database
      *
+     * Used by self::createNewFields() and self::updateFields()
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param \eZ\Publish\SPI\Persistence\Content $content
-     * @return void
+     *
+     * return void
      */
-    public function copyFields( Content $content )
+    protected function createNewField( Field $field, Content $content )
     {
-        foreach ( $content->fields as $field )
+        $field->versionNo = $content->versionInfo->versionNo;
+        $field->id = $this->contentGateway->insertNewField(
+            $content,
+            $field,
+            $this->mapper->convertToStorageValue( $field )
+        );
+
+        // If the storage handler returns true, it means that $field value has been modified
+        // So we need to update it in order to store those modifications
+        // Field converter is called once again via the Mapper
+        if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
         {
-            $field->versionNo = $content->versionInfo->versionNo;
-            $field->id = $this->contentGateway->insertNewField(
-                $content,
+            $this->contentGateway->updateField(
                 $field,
                 $this->mapper->convertToStorageValue( $field )
             );
-
-            // If the storage handler returns true, it means that $field value has been modified
-            // So we need to update it in order to store those modifications
-            // Field converter is called once again via the Mapper
-            if ( $this->storageHandler->copyFieldData( $field ) === true )
-            {
-                $this->contentGateway->updateField(
-                    $field,
-                    $this->mapper->convertToStorageValue( $field )
-                );
-            }
         }
     }
 
@@ -139,54 +124,60 @@ class FieldHandler
     {
         foreach ( $content->fields as $field )
         {
-            $this->storageHandler->getFieldData( $field );
+            $this->storageHandler->getFieldData( $content->versionInfo, $field );
         }
     }
 
     /**
      * Updates the fields in for content identified by $contentId and $versionNo in the database in respect to $updateStruct
      *
-     * @param int $contentId
-     * @param int $versionNo
+     * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $updateStruct
+     *
      * @return void
      */
-    public function updateFields( $contentId, $versionNo, UpdateStruct $updateStruct )
+    public function updateFields( $content, UpdateStruct $updateStruct )
     {
         foreach ( $updateStruct->fields as $field )
         {
-            $field->versionNo = $versionNo;
-
-            if (
-                $this->typeGateway->isFieldTranslatable(
-                    $field->fieldDefinitionId,
-                    0
-                )
-            )
+            $field->versionNo = $content->versionInfo->versionNo;
+            if ( isset( $field->id ) )
             {
-                $this->contentGateway->updateField(
-                    $field,
-                    $this->mapper->convertToStorageValue( $field )
-                );
+                if (
+                    $this->typeGateway->isFieldTranslatable(
+                        $field->fieldDefinitionId,
+                        0
+                    )
+                )
+                {
+                    $this->contentGateway->updateField(
+                        $field,
+                        $this->mapper->convertToStorageValue( $field )
+                    );
+                }
+                else
+                {
+                    $this->contentGateway->updateNonTranslatableField(
+                        $field,
+                        $this->mapper->convertToStorageValue( $field ),
+                        $content->contentInfo->id
+                    );
+                }
+
+                // If the storage handler returns true, it means that $field value has been modified
+                // So we need to update it in order to store those modifications
+                // Field converter is called once again via the Mapper
+                if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
+                {
+                    $this->contentGateway->updateField(
+                        $field,
+                        $this->mapper->convertToStorageValue( $field )
+                    );
+                }
             }
             else
             {
-                $this->contentGateway->updateNonTranslatableField(
-                    $field,
-                    $this->mapper->convertToStorageValue( $field ),
-                    $contentId
-                );
-            }
-
-            // If the storage handler returns true, it means that $field value has been modified
-            // So we need to update it in order to store those modifications
-            // Field converter is called once again via the Mapper
-            if ( $this->storageHandler->storeFieldData( $field ) === true )
-            {
-                $this->contentGateway->updateField(
-                    $field,
-                    $this->mapper->convertToStorageValue( $field )
-                );
+                $this->createNewField( $field, $content );
             }
         }
     }

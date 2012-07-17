@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
 use eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryHandler,
+    eZ\Publish\Core\Repository\ValidatorService,
+    eZ\Publish\Core\Repository\FieldTypeTools,
     PHPUnit_Framework_TestCase;
 
 /**
@@ -29,7 +31,7 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
         parent::setUp();
 
         // Get in-memory Handler instance
-        $this->persistenceHandler = new InMemoryHandler();
+        $this->persistenceHandler = new InMemoryHandler( new ValidatorService, new FieldTypeTools );
     }
 
     /**

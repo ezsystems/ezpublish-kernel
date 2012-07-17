@@ -1,0 +1,68 @@
+{
+    "hash": "096ef99e116068bc020ea370e7485a04",
+    "packages": [
+        {
+            "package": "Qafoo/RMF",
+            "version": "dev-master",
+            "source-reference": "852d993d45952dbc86e2bfd78addad540bd85998",
+            "commit-date": "1342375436"
+        },
+        {
+            "package": "doctrine/common",
+            "version": "2.2.2"
+        },
+        {
+            "package": "symfony/symfony",
+            "version": "v2.1.0-BETA1"
+        },
+        {
+            "package": "twig/twig",
+            "version": "v1.8.3"
+        },
+        {
+            "package": "zetacomponents/base",
+            "version": "1.8"
+        },
+        {
+            "package": "zetacomponents/cache",
+            "version": "dev-master",
+            "source-reference": "34fa794d0b5aeef67fee609c52c5d24fa4604bbd",
+            "commit-date": "1337594129"
+        },
+        {
+            "package": "zetacomponents/configuration",
+            "version": "dev-master",
+            "source-reference": "10ae09f42768d4657b2d1a66226ee63cbd8754b2",
+            "commit-date": "1337594132"
+        },
+        {
+            "package": "zetacomponents/database",
+            "version": "dev-master",
+            "source-reference": "0e8ddef8ce616bc18365efa2eef2161de3d7f74f",
+            "commit-date": "1337594140"
+        },
+        {
+            "package": "zetacomponents/mail",
+            "version": "1.7"
+        },
+        {
+            "package": "zetacomponents/php-generator",
+            "version": "dev-master",
+            "source-reference": "b51935ec5b763e5bad2182d810e1b752fcc83903",
+            "commit-date": "1337594190"
+        }
+    ],
+    "packages-dev": null,
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "symfony/symfony": 10,
+        "zetacomponents/cache": 20,
+        "zetacomponents/php-generator": 20,
+        "zetacomponents/configuration": 20,
+        "zetacomponents/database": 20,
+        "qafoo/rmf": 20
+    }
+}

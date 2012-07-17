@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PolicyList href="/user/roles/11/policies" media-type="application/vnd.ez.api.PolicyList">
+  <Policy href="/user/roles/11/policies/45" media-type="application/vnd.ez.api.Policy+xml">
+    <id>45</id>
+    <module>content</module>
+    <function>create</function>
+    <limitations>
+      <limitation identifier="Class">
+        <values>
+          <ref href="/content/types/10" media-type="application/vnd.ez.api.ContentType+xml" />
+          <ref href="/content/types/11" media-type="application/vnd.ez.api.ContentType+xml" />
+          <ref href="/content/types/12" media-type="application/vnd.ez.api.ContentType+xml" />
+        </values>
+      </limitation>
+      <limitation identifier="ParentClass">
+        <values>
+          <ref href="/content/types/4" media-type="application/vnd.ez.api.ContentType+xml" />
+        </values>
+      </limitation>
+    </limitations>
+  </Policy>
+  <Policy href="/user/roles/11/policies/49" media-type="application/vnd.ez.api.Policy+xml">
+    <id>45</id>
+    <module>content</module>
+    <function>read</function>
+    <limitations>
+      <limitation identifier="Section">
+        <values>
+          <ref href="/content/sections/1" media-type="application/vnd.ez.api.Section+xml" />
+          <ref href="/content/sections/2" media-type="application/vnd.ez.api.Section+xml" />
+          <ref href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
+        </values>
+      </limitation>
+    </limitations>
+  </Policy>
+</PolicyList>

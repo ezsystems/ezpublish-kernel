@@ -8,3 +8,5 @@ ezc
 /nbproject/private/
 doc/apidoc/
 docblox.xml
+composer.phar
+/vendor/

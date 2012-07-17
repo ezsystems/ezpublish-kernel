@@ -45,11 +45,12 @@ interface Handler
      * version of the referred Content from it.
      *
      * @param mixed $contentId
-     * @param int $srcVersion
+     * @param mixed $srcVersion
+     * @param mixed $userId
+     *
      * @return \eZ\Publish\SPI\Persistence\Content
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException Thrown if $contentId and/or $srcVersion are invalid
      */
-    public function createDraftFromVersion( $contentId, $srcVersion );
+    public function createDraftFromVersion( $contentId, $srcVersion, $userId );
 
     /**
      * Returns the raw data of a content object identified by $id, in a struct.

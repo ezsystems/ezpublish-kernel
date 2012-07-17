@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Repository;
 use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\Logic,
     eZ\Publish\SPI\IO\Handler as IoHandler,
     eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
@@ -26,13 +25,18 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\Core\Repository\ObjectStateService,
     eZ\Publish\API\Repository\Values\ValueObject,
     eZ\Publish\API\Repository\Values\User\User,
+    eZ\Publish\Legacy\LegacyKernelAware,
+    eZ\Publish\Legacy\Kernel as LegacyKernel,
+    eZ\Publish\Legacy\Kernel\Loader as LegacyKernelLoader,
+    Exception,
+    LogicException,
     RuntimeException;
 
 /**
  * Repository class
  * @package eZ\Publish\Core\Repository
  */
-class Repository implements RepositoryInterface
+class Repository implements RepositoryInterface, LegacyKernelAware
 {
     /**
      * Repository Handler object
@@ -133,6 +137,20 @@ class Repository implements RepositoryInterface
     protected $objectStateService;
 
     /**
+     * Instance of field type service
+     *
+     * @var \eZ\Publish\API\Repository\FieldTypeService
+     */
+    protected $fieldTypeService;
+
+    /**
+     * Instance of object state service
+     *
+     * @var \eZ\Publish\Core\Repository\ValidatorService
+     */
+    protected $validatorService;
+
+    /**
      * Service settings, first level key is service name
      *
      * @var array
@@ -165,6 +183,8 @@ class Repository implements RepositoryInterface
             'io' => array(),
             'objectState' => array(),
             'search' => array(),
+            'legacy' => array(),
+            'fieldType' => array(),
         );
 
         if ( $user !== null )
@@ -252,8 +272,8 @@ class Repository implements RepositoryInterface
             {
                 if ( !isset( $functions[$function][$limitationKey]['compare'] ) )
                 {
-                    throw new Logic(
-                        "\$definition[functions][{$function}][{$limitationKey}][compare]",
+                    throw new LogicException(
+                        "\$definition[functions][{$function}][{$limitationKey}][compare] logic error, " .
                         "could not find limitation compare function on {$className}::definition()"
                     );
                 }
@@ -261,8 +281,8 @@ class Repository implements RepositoryInterface
                 $limitationCompareFn = $functions[$function][$limitationKey]['compare'];
                 if ( !is_callable( $limitationCompareFn ) )
                 {
-                    throw new Logic(
-                        "\$definition[functions][{$function}][{$limitationKey}][compare]",
+                    throw new LogicException(
+                        "\$definition[functions][{$function}][{$limitationKey}][compare] logic error, " .
                         "compare function from {$className}::definition() is not callable"
                     );
                 }
@@ -381,6 +401,18 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Get Search Service
+     *
+     * Get search service that lets you find content objects
+     *
+     * @return \eZ\Publish\API\Repository\SearchService
+     */
+    public function getSearchService()
+    {
+        throw new \Exception("@todo SearchService Not Implemented");
+    }
+
+    /**
      * Get User Service
      *
      * Get service object to perform operations on Users and UserGroup
@@ -475,6 +507,34 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Get FieldTypeService
+     *
+     * @return \eZ\Publish\API\Repository\FieldTypeService
+     */
+    public function getFieldTypeService()
+    {
+        if ( $this->fieldTypeService !== null )
+            return $this->fieldTypeService;
+
+        $this->fieldTypeService = new FieldTypeService( $this, $this->persistenceHandler, $this->serviceSettings['fieldType'] );
+        return $this->fieldTypeService;
+    }
+
+    /**
+     * Get ValidatorService
+     *
+     * @return \eZ\Publish\Core\Repository\ValidatorService
+     */
+    public function getValidatorService()
+    {
+        if ( $this->validatorService !== null )
+            return $this->validatorService;
+
+        $this->validatorService = new ValidatorService();
+        return $this->validatorService;
+    }
+
+    /**
      * Begin transaction
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,
@@ -494,7 +554,14 @@ class Repository implements RepositoryInterface
      */
     public function commit()
     {
-        $this->persistenceHandler->commit();
+        try
+        {
+            $this->persistenceHandler->commit();
+        }
+        catch ( Exception $e )
+        {
+            throw new RuntimeException( $e->getMessage(), 0, $e );
+        }
     }
 
     /**
@@ -506,6 +573,68 @@ class Repository implements RepositoryInterface
      */
     public function rollback()
     {
-        $this->persistenceHandler->rollback();
+        try
+        {
+            $this->persistenceHandler->rollback();
+        }
+        catch ( Exception $e )
+        {
+            throw new RuntimeException( $e->getMessage(), 0, $e );
+        }
+    }
+
+    /**
+     * Injects the legacy kernel instance.
+     *
+     * @param \eZ\Publish\Legacy\Kernel $legacyKernel
+     * @return void
+     */
+    public function setLegacyKernel( LegacyKernel $legacyKernel )
+    {
+        $this->serviceSettings['legacy']['kernel'] = $legacyKernel;
+        if ( $this->ioHandler instanceof LegacyKernelAware )
+            $this->ioHandler->setLegacyKernel( $legacyKernel );
+    }
+
+    /**
+     * Gets the legacy kernel instance.
+     *
+     * @return \eZ\Publish\Legacy\Kernel
+     * @throws \eZ\Publish\Core\Base\Exceptions\BadConfiguration
+     */
+    protected function getLegacyKernel()
+    {
+        if ( !isset( $this->serviceSettings['legacy']['kernel'] ) )
+        {
+            if ( !isset( $this->serviceSettings['legacy']['legacy_root_dir'] ) )
+            {
+                throw new BadConfiguration(
+                    "serviceSettings['legacy']['legacy_root_dir']",
+                    "You need to provide the path to eZ Publish legacy to be able to use the legacy kernel"
+                );
+            }
+
+            $originalRootDir = isset( $this->serviceSettings['legacy']['webroot_dir'] ) ? $this->serviceSettings['legacy']['webroot_dir'] : getcwd();
+            if ( !isset( $this->serviceSettings['legacy']['kernel_loader'] ) )
+            {
+                $this->serviceSettings['legacy']['kernel_loader'] = new LegacyKernelLoader(
+                    $this->serviceSettings['legacy']['legacy_root_dir'],
+                    $originalRootDir
+                );
+            }
+
+            if ( !isset( $this->serviceSettings['legacy']['kernel_handler'] ) )
+            {
+                throw new BadConfiguration(
+                    "serviceSettings['legacy']['kernel_handler']",
+                    "You need to provide a legacy kernel handler"
+                );
+            }
+
+            $kernelClosure = $this->serviceSettings['legacy']['kernel_loader']->buildLegacyKernel( $this->serviceSettings['legacy']['kernel_handler'] );
+            $this->setLegacyKernel( $kernelClosure() );
+        }
+
+        return $this->serviceSettings['legacy']['kernel'];
     }
 }

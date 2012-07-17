@@ -13,7 +13,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\Repository\FieldType\Keyword\Value as KeywordValue;
+    eZ\Publish\Core\FieldType\Keyword\Value as KeywordValue;
 
 class Keyword implements Converter
 {

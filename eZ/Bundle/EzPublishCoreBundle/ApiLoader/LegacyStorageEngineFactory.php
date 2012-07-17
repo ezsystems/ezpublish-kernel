@@ -42,7 +42,7 @@ class LegacyStorageEngineFactory
 
     /**
      * Registers an external storage handler for a field type.
-     * $className must implement \eZ\Publish\SPI\Persistence\Fields\Storage interface.
+     * $className must implement \eZ\Publish\SPI\FieldType\FieldStorage interface.
      *
      * @param string $typeIdentifier Field type identifier the handler will be used for
      * @param $className FQN of the external storage handler class

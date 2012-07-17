@@ -118,6 +118,9 @@ class LocationServiceStub implements LocationService
         $data['pathString'] = $parentLocation->pathString . $data['id'] . '/';
         $data['depth'] = substr_count( $data['pathString'], '/' ) - 2;
         $data['childCount'] = 0;
+        $data['invisible'] = $locationCreateStruct->hidden;
+        // @TODO: Do parent locations need update?
+        $data['modifiedSubLocationDate'] = new \DateTime();
 
         $location = new LocationStub( $data );
         $this->locations[$location->id] = $location;
@@ -423,7 +426,8 @@ class LocationServiceStub implements LocationService
             {
                 if ( $a->priority == $b->priority )
                 {
-                    return 0;
+                    // Sort by ID for same priorities
+                    return ( $a->id < $b->id ) ? -1 : 1;
                 }
                 return ( $a->priority < $b->priority ) ? -1 : 1;
             }
@@ -447,11 +451,13 @@ class LocationServiceStub implements LocationService
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
-        $parentLocation1 = $this->loadLocation( $location1->parentLocationId );
-        $parentLocation2 = $this->loadLocation( $location2->parentLocationId );
+        // Although the method is named swapLocation(), this method should
+        // actually swap the content nodes. This is intentionally.
+        $contentInfo1 = $location1->getContentInfo();
+        $contentInfo2 = $location2->getContentInfo();
 
-        $this->moveSubtree( $location1, $parentLocation2 );
-        $this->moveSubtree( $location2, $parentLocation1 );
+        $location1->__setContentInfo( $contentInfo2 );
+        $location2->__setContentInfo( $contentInfo1 );
     }
 
     /**
@@ -590,7 +596,7 @@ class LocationServiceStub implements LocationService
     /**
      * Returns if a location for the given $contentInfo exists.
      *
-     * @param \eZ\Publish\Core\Repository\Values\Content\ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @return boolean
      */
     protected function hasLocation( ContentInfo $contentInfo )
@@ -801,7 +807,6 @@ class LocationServiceStub implements LocationService
     {
         if ( $newParentlocation )
         {
-            $location->contentInfo->__setMainLocationId( $newParentlocation->contentInfo->mainLocationId );
             $location->__setParentLocationId( $newParentlocation->id );
         }
 
@@ -810,6 +815,13 @@ class LocationServiceStub implements LocationService
         $this->locations[$location->parentLocationId]->__setChildCount(
             $this->locations[$location->parentLocationId]->childCount + 1
         );
+
+        // If the main location of the restored content is also trashed /
+        // deleted
+        if ( !isset( $this->locations[$location->getContentInfo()->mainLocationId] ) )
+        {
+            $location->getContentInfo()->__setMainLocationId( $location->id );
+        }
 
         $this->repository->getUrlAliasService()->_createAliasesForLocation( $location );
 

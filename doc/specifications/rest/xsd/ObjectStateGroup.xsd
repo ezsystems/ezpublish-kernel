@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:include schemaLocation="CommonDefinitions.xsd" />
+  <xsd:complexType name="vnd.ez.api.ObjectStateGroup">
+    <xsd:complexContent>
+      <xsd:extension base="ref">
+        <xsd:all>
+          <xsd:element name="id" type="xsd:int">
+          </xsd:element>
+          <xsd:element name="identifier" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                Readable string identifier of a group
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="defaultLanguageCode" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                the default language code
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="languageCodes" type="xsd:string"
+            minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation>
+                Comma separated List of language codes
+                present in names and descriptions
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="names" type="multiLanguageValuesType" />
+          <xsd:element name="descriptions" type="multiLanguageValuesType" />
+        </xsd:all>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="vnd.ez.api.ObjectStateGroupList">
+    <xsd:complexContent>
+      <xsd:extension base="ref">
+        <xsd:sequence>
+          <xsd:element name="ObjectStateGroup" type="vnd.ez.api.ObjectStateGroup"
+            maxOccurs="unbounded"></xsd:element>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="vnd.ez.api.ObjectStateGroupCreate">
+    <xsd:all>
+      <xsd:element name="identifier" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>
+            Readable string identifier of a group
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="defaultLanguageCode" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>
+            the default language code
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="names" type="multiLanguageValuesType" />
+      <xsd:element name="descriptions" type="multiLanguageValuesType" minOccurs="0"/>
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:complexType name="vnd.ez.api.ObjectStateGroupUpdate">
+    <xsd:all>
+      <xsd:element name="identifier" type="xsd:string" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            Readable string identifier of a group
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="defaultLanguageCode" type="xsd:string" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            the default language code
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="names" type="multiLanguageValuesType" minOccurs="0"/>
+      <xsd:element name="descriptions" type="multiLanguageValuesType" minOccurs="0" />
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:element name="ObjectStateGroupCreate" type="vnd.ez.api.ObjectStateGroupCreate" />
+  <xsd:element name="ObjectStateGroupUpdate" type="vnd.ez.api.ObjectStateGroupUpdate" />
+  <xsd:element name="ObjectStateGroup" type="vnd.ez.api.ObjectStateGroup" />
+  <xsd:element name="ObjectStateGroupList" type="vnd.ez.api.ObjectStateGroupList" />
+</xsd:schema>

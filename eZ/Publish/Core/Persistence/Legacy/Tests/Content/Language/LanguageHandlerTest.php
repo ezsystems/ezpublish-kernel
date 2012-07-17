@@ -271,7 +271,7 @@ class LanguageHandlerTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::delete
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\Logic
+     * @expectedException LogicException
      */
     public function testDeleteFail()
     {

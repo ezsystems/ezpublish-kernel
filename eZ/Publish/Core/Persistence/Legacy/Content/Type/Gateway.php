@@ -140,6 +140,7 @@ abstract class Gateway
      * @param int $status
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
+     *
      * @return mixed Field definition ID
      */
     abstract public function insertFieldDefinition(
@@ -220,8 +221,6 @@ abstract class Gateway
 
     /**
      * Deletes a Type completely.
-     *
-     * Does no delete the field definitions!
      *
      * @param mixed $typeId
      * @param int $status

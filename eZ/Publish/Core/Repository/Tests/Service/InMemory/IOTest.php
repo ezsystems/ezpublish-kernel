@@ -9,10 +9,6 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service\InMemory;
 use eZ\Publish\Core\Repository\Tests\Service\IOBase as BaseIOServiceTest,
-    eZ\Publish\Core\Repository\Repository,
-    eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
-    eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,
-
     eZ\Publish\Core\Repository\Tests\Service\InMemory\IOUploadPHPT;
 
 /**
@@ -30,6 +26,6 @@ class IOTest extends BaseIOServiceTest
 
     protected function getRepository( array $serviceSettings )
     {
-        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler(), $serviceSettings );
+        return Utils::getRepository( $serviceSettings );
     }
 }

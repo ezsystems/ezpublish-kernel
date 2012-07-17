@@ -14,10 +14,10 @@ class FieldTypeConstraints extends ValueObject
 {
     /**
      * Array of validators.
-     * Key is the FQN fo the validator class.
-     * Value is a hash like described in {@link \eZ\Publish\Core\Repository\FieldType\Validator::$constraints}
+     * Key is the FQN for the validator class.
+     * Value is a hash like described in {@link \eZ\Publish\Core\FieldType\Validator::$constraints}
      *
-     * @see \eZ\Publish\Core\Repository\FieldType\Validator::$constraints
+     * @see \eZ\Publish\Core\FieldType\Validator::$constraints
      * @var array
      */
     public $validators;
@@ -27,8 +27,10 @@ class FieldTypeConstraints extends ValueObject
      * and set in {@link \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition}.
      * Collection is indexed by setting name.
      *
-     * @see \eZ\Publish\Core\Repository\FieldType\FieldType::$fieldSettings
-     * @var \eZ\Publish\Core\Repository\FieldType\FieldSettings
+     * @see \eZ\Publish\Core\FieldType\FieldType::$fieldSettings
+     *
+     * @TODO Should not use Core class
+     * @var \eZ\Publish\Core\FieldType\FieldSettings
      */
     public $fieldSettings;
 }

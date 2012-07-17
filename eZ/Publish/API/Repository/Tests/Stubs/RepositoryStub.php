@@ -102,6 +102,11 @@ class RepositoryStub implements Repository
     private $objectStateService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\FieldTypeServiceStub
+     */
+    private $fieldTypeService;
+
+    /**
      * @var integer
      */
     private $transactionDepth = 0;
@@ -386,6 +391,18 @@ class RepositoryStub implements Repository
     }
 
     /**
+     * Get Search Service
+     *
+     * Get search service that lets you find content objects
+     *
+     * @return \eZ\Publish\API\Repository\SearchService
+     */
+    public function getSearchService()
+    {
+        throw new \RuntimeException( '@TODO: Implememt.' );
+    }
+
+    /**
      * Get User Service
      *
      * Get service object to perform operations on Users and UserGroup
@@ -471,6 +488,20 @@ class RepositoryStub implements Repository
             $this->objectStateService = new ObjectStateServiceStub( $this );
         }
         return $this->objectStateService;
+    }
+
+    /**
+     * Get FieldTypeService
+     *
+     * @return \eZ\Publish\API\Repository\FieldTypeService
+     */
+    public function getFieldTypeService()
+    {
+        if ( null === $this->fieldTypeService )
+        {
+            $this->fieldTypeService = new FieldTypeServiceStub( $this );
+        }
+        return $this->fieldTypeService;
     }
 
     /**

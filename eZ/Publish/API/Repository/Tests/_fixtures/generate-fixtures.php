@@ -156,7 +156,7 @@ function getContentTypeFieldDefinition( array $fixture )
             'names' => $names,
             'descriptions' => $description,
             'fieldSettings' => array(),
-            'validators' => array(),
+            'validatorConfiguration' => array(),
         );
 
         $nextFieldId = max( $nextFieldId, $data['id'] );
@@ -187,9 +187,23 @@ function generateSectionFixture( array $fixture )
         $nextId = max( $nextId, $data['id'] );
     }
 
+    $assignedContents = array();
+
+    foreach ( getFixtureTable( 'ezcontentobject', $fixture ) as $data )
+    {
+        $sectionId = (int) $data['section_id'];
+
+        if ( !isset( $assignedContents[$sectionId] ) )
+        {
+            $assignedContents[$sectionId] = array();
+        }
+        $assignedContents[$sectionId][(int) $data['id']] = true;
+    }
+
     return generateReturnArray(
         generateValueObjects( '\eZ\Publish\API\Repository\Values\Content\Section', $sections ),
         generateMapping( $identifiers ),
+        generateMapping( $assignedContents ),
         $nextId
     );
 }
@@ -424,7 +438,7 @@ function generateLocationFixture( array $fixture )
             ) ),
             'parentLocationId' => $data['parent_node_id'],
             'pathString' => $data['path_string'],
-            'modifiedSubLocationDate' => $data['modified_subnode'],
+            'modifiedSubLocationDate' => 'new \\DateTime( "@' . $data['modified_subnode'] . '" )',
             'depth' => $data['depth'],
             'sortField' => $data['sort_field'],
             'sortOrder' => $data['sort_order'],

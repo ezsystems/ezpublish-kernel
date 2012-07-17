@@ -33,11 +33,6 @@ class TrashServiceStub implements TrashService
     private $trashItems = array();
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location[][]
-     */
-    private $locations = array();
-
-    /**
      * @var \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub
      */
     private $repository;
@@ -75,7 +70,7 @@ class TrashServiceStub implements TrashService
         {
             throw new NotFoundExceptionStub( 'What error code should be used?' );
         }
-        if ( false === $this->repository->canUser( 'content', 'edit', $this->locations[$trashItemId][$trashItemId] ) )
+        if ( false === $this->repository->canUser( 'content', 'edit', $this->trashItems[$trashItemId]->location ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
@@ -100,13 +95,25 @@ class TrashServiceStub implements TrashService
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
 
-        $this->locations[$location->id] = array();
+        // Trash all children
         foreach ( $this->locationService->__trashLocation( $location ) as $trashedLocation )
         {
-            $this->locations[$location->id][$trashedLocation->id] = $trashedLocation;
+            $this->trashItems[$trashedLocation->id] = $this->trashItemFromLocation( $trashedLocation );
         }
 
-        $this->trashItems[$location->id] = new TrashItemStub(
+        $this->trashItems[$location->id] = $this->trashItemFromLocation( $location );
+        return $this->trashItems[$location->id];
+    }
+
+    /**
+     * Creates a TrashItem for the given $location.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
+     */
+    protected function trashItemFromLocation( Location $location )
+    {
+        return new TrashItemStub(
             array(
                 'id' => $location->id,
                 'childCount' => $location->childCount,
@@ -124,8 +131,6 @@ class TrashServiceStub implements TrashService
                 'location' => $location
             )
         );
-
-        return $this->trashItems[$location->id];
     }
 
     /**
@@ -148,18 +153,9 @@ class TrashServiceStub implements TrashService
         }
 
         $location = $this->locationService->__recoverLocation(
-            $this->locations[$trashItem->id][$trashItem->id],
+            $trashItem->location,
             $newParentLocation
         );
-
-        unset( $this->locations[$trashItem->id][$trashItem->id] );
-
-        foreach ( $this->locations[$trashItem->id] as $childLocation )
-        {
-            $childLocation->contentInfo->__setMainLocationId( $location->contentInfo->mainLocationId );
-
-            $this->locationService->__recoverLocation( $childLocation );
-        }
 
         unset(
             $this->trashItems[$trashItem->id],
@@ -185,7 +181,6 @@ class TrashServiceStub implements TrashService
         }
 
         $this->trashItems = array();
-        $this->locations = array();
     }
 
     /**
@@ -221,30 +216,11 @@ class TrashServiceStub implements TrashService
      */
     public function findTrashItems( Query $query )
     {
-        $contentService = $this->repository->getContentService();
-
-        $trashItems = array();
-        $searchResult = $contentService->findContent( $query, array() );
-
-        /* @var $item \eZ\Publish\API\Repository\Values\Content\Content */
-        foreach ( $searchResult->items as $item )
-        {
-            $locationId = $item->contentInfo->mainLocationId;
-            foreach ( $this->locations as $trashItemId => $locations )
-            {
-                if ( false === isset( $locations[$locationId] ) )
-                {
-                    continue;
-                }
-                $trashItems[$trashItemId] = $this->trashItems[$trashItemId];
-            }
-        }
-
         return new SearchResult(
             array(
                 'query' => $query,
-                'count' => count( $trashItems ),
-                'items' => array_values( $trashItems ),
+                'count' => count( $this->trashItems ),
+                'items' => array_values( $this->trashItems ),
             )
         );
     }

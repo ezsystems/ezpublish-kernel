@@ -22,14 +22,6 @@ class SiteAccess
     public $name;
 
     /**
-     * Alias of the siteaccess.
-     * Most likely the same than $name, but it's also possible to give an alias.
-     *
-     * @var string
-     */
-    public $alias;
-
-    /**
      * The matching type that has been used to discover the siteaccess.
      * Contains the matcher class FQN, or 'default' if fell back to the default siteaccess.
      *
@@ -43,4 +35,9 @@ class SiteAccess
      * @var \eZ\Publish\MVC\SiteAccess\Matcher
      */
     public $matcher;
+
+    public function __toString()
+    {
+        return "$this->name (matched by '$this->matchingType')";
+    }
 }

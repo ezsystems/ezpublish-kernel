@@ -8,12 +8,13 @@
  */
 
 namespace eZ\Publish\Legacy;
-use \ezpKernel;
+use \ezpKernel,
+    \ezpKernelHandler;
 
 /**
  * Class wrapping the legacy kernel
  */
-final class Kernel extends ezpKernel
+class Kernel extends ezpKernel
 {
     /**
      * Legacy root directory
@@ -29,13 +30,13 @@ final class Kernel extends ezpKernel
      */
     private $webrootDir;
 
-    public function __construct( $legacyRootDir, $webrootDir )
+    public function __construct( ezpKernelHandler $kernelHandler, $legacyRootDir, $webrootDir )
     {
         $this->legacyRootDir = $legacyRootDir;
         $this->webrootDir = $webrootDir;
 
         $this->enterLegacyRootDir();
-        parent::__construct();
+        parent::__construct( $kernelHandler );
         $this->leaveLegacyRootDir();
         $this->setUseExceptions( true );
     }
@@ -53,7 +54,7 @@ final class Kernel extends ezpKernel
     /**
      * Leaves the legacy root dir and switches back to the initial webroot dir.
      */
-    protected function leaveLegacyRootDir()
+    public function leaveLegacyRootDir()
     {
         if ( getcwd() == $this->legacyRootDir )
             chdir( $this->webrootDir );
@@ -73,15 +74,19 @@ final class Kernel extends ezpKernel
     }
 
     /**
-     * Runs a callback function (closure) in the legacy environment.
+     * Runs a callback function in the legacy kernel environment.
+     * This is useful to run eZ Publish 4.x code from a non-related context (like eZ Publish 5)
      *
-     * @param closure $callback
-     * @return mixed Depends on $callback's returned value
+     * @param \Closure $callback
+     * @param bool $postReinitialize Default is true.
+     *                               If set to false, the kernel environment will not be reinitialized.
+     *                               This can be useful to optimize several calls to the kernel within the same context.
+     * @return mixed The result of the callback
      */
-    public function runCallback( $callback )
+    public function runCallback( \Closure $callback, $postReinitialize = true )
     {
         $this->enterLegacyRootDir();
-        $return = parent::runCallback( $callback );
+        $return = parent::runCallback( $callback, $postReinitialize );
         $this->leaveLegacyRootDir();
         return $return;
     }

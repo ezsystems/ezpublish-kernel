@@ -11,7 +11,8 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
     eZ\Publish\API\Repository\Values\Content\Query,
-    ezcQuerySelect;
+    ezcQuerySelect,
+    RuntimeException;
 
 /**
  * Converter manager for sort clauses
@@ -67,7 +68,7 @@ class SortClauseConverter
                 }
             }
 
-            throw new \RuntimeException( 'No handler available for sort clause: ' . get_class( $sortClause ) );
+            throw new RuntimeException( 'No handler available for sort clause: ' . get_class( $sortClause ) );
         }
     }
 
@@ -91,7 +92,7 @@ class SortClauseConverter
                 }
             }
 
-            throw new \RuntimeException( 'No handler available for sort clause: ' . get_class( $sortClause ) );
+            throw new RuntimeException( 'No handler available for sort clause: ' . get_class( $sortClause ) );
         }
     }
 

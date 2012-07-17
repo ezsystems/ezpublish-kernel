@@ -80,12 +80,14 @@ abstract class ContentInfo extends ValueObject
 
     /**
      * Content modification date
+     *
      * @var \DateTime
      */
     protected $modificationDate;
 
     /**
-     * Content protectedation date
+     * Content publication date
+     *
      * @var \DateTime
      */
     protected $publishedDate;

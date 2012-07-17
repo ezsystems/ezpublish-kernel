@@ -26,7 +26,8 @@ use eZ\Publish\API\Repository\TrashService as TrashServiceInterface,
 
     eZ\Publish\API\Repository\Values\Content\SearchResult,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+    eZ\Publish\API\Repository\Values\Content\Query\SortClause,
+    DateTime;
 
 /**
  * Trash service, used for managing trashed content
@@ -241,7 +242,7 @@ class TrashService implements TrashServiceInterface
                 'remoteId' => $spiTrashItem->remoteId,
                 'parentLocationId' => (int) $spiTrashItem->parentId,
                 'pathString' => $spiTrashItem->pathString,
-                'modifiedSubLocationDate' => new \DateTime( '@' . (int) $spiTrashItem->modifiedSubLocation ),
+                'modifiedSubLocationDate' => $this->getDateTime( $spiTrashItem->modifiedSubLocation ),
                 'depth' => (int) $spiTrashItem->depth,
                 'sortField' => (int) $spiTrashItem->sortField,
                 'sortOrder' => (int) $spiTrashItem->sortOrder,
@@ -249,5 +250,19 @@ class TrashService implements TrashServiceInterface
                 'childCount' => 0
             )
         );
+    }
+
+    /**
+     *
+     *
+     * @param int|null $timestamp
+     *
+     * @return \DateTime|null
+     */
+    protected function getDateTime( $timestamp )
+    {
+        $dateTime = new DateTime();
+        $dateTime->setTimestamp( $timestamp );
+        return $dateTime;
     }
 }

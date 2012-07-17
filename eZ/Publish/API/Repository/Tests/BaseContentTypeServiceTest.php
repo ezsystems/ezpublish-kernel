@@ -10,7 +10,6 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use \eZ\Publish\API\Repository\Values\Content\Location;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\StringLengthValidatorStub;
 
 /**
  * Base class for content type specific tests.
@@ -68,8 +67,17 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         $titleFieldCreate->isTranslatable = true;
         $titleFieldCreate->isRequired = true;
         $titleFieldCreate->isInfoCollector = false;
-        $titleFieldCreate->validators = array(
-            new StringLengthValidatorStub(),
+        $titleFieldCreate->validatorConfiguration = array(
+            'stringLength' => array(
+                'minStringLength' => array(
+                    'type'    => 'int',
+                    'default' => 0,
+                ),
+                'maxStringLength' => array(
+                    'type'    => 'int',
+                    'default' => null,
+                )
+            )
         );
         $titleFieldCreate->fieldSettings = array(
             'textblockheight' => 10
@@ -94,8 +102,17 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         $bodyFieldCreate->isTranslatable = true;
         $bodyFieldCreate->isRequired = true;
         $bodyFieldCreate->isInfoCollector = false;
-        $bodyFieldCreate->validators = array(
-            new StringLengthValidatorStub(),
+        $bodyFieldCreate->validatorConfiguration = array(
+            'stringLength' => array(
+                'minStringLength' => array(
+                    'type'    => 'int',
+                    'default' => 0,
+                ),
+                'maxStringLength' => array(
+                    'type'    => 'int',
+                    'default' => null,
+                )
+            )
         );
         $bodyFieldCreate->fieldSettings = array(
             'textblockheight' => 80

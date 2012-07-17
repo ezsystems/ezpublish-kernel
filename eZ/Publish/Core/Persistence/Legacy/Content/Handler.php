@@ -127,7 +127,8 @@ class Handler implements BaseContentHandler
             $content,
             $versionNo,
             $struct->fields,
-            $content->contentInfo->mainLanguageCode
+            $content->contentInfo->mainLanguageCode,
+            $struct->ownerId
         );
         $content->versionInfo->creationDate = $struct->modified;
         $content->versionInfo->modificationDate = $struct->modified;
@@ -137,14 +138,7 @@ class Handler implements BaseContentHandler
         $content->fields = $struct->fields;
         $content->versionInfo->names = $struct->name;
 
-        if ( $copy )
-        {
-            $this->fieldHandler->copyFields( $content );
-        }
-        else
-        {
-            $this->fieldHandler->createNewFields( $content );
-        }
+        $this->fieldHandler->createNewFields( $content );
 
         // Create node assignments
         foreach ( $struct->locations as $location )
@@ -179,6 +173,7 @@ class Handler implements BaseContentHandler
      * - Create location nodes based on the node assignments
      * - Update the content object using the provided metadata update struct
      * - Update the node assignments
+     * - Update location nodes of the content with the new published version
      * - Set content and version status to published
      *
      * @param int $contentId
@@ -189,11 +184,20 @@ class Handler implements BaseContentHandler
      */
     public function publish( $contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct )
     {
+        // Archive currently published version
+        $contentInfo = $this->loadContentInfo( $contentId );
+        if ( $contentInfo->currentVersionNo != $versionNo )
+        {
+            $this->setStatus( $contentId, VersionInfo::STATUS_ARCHIVED, $contentInfo->currentVersionNo );
+        }
+
         $this->contentGateway->updateContent( $contentId, $metaDataUpdateStruct );
         $this->locationGateway->createLocationsFromNodeAssignments(
             $contentId,
             $versionNo
         );
+
+        $this->locationGateway->updateLocationsContentVersionNo( $contentId, $versionNo );
         $this->setStatus( $contentId, VersionInfo::STATUS_PUBLISHED, $versionNo );
 
         return $this->load( $contentId, $versionNo );
@@ -209,11 +213,13 @@ class Handler implements BaseContentHandler
      * also be an entry in the `eznode_assignment` created for the draft. This
      * is ignored in this implementation.
      *
-     * @param int $contentId
-     * @param int $srcVersion
+     * @param mixed $contentId
+     * @param mixed $srcVersion
+     * @param mixed $userId
+     *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function createDraftFromVersion( $contentId, $srcVersion )
+    public function createDraftFromVersion( $contentId, $srcVersion, $userId )
     {
         $content = $this->load( $contentId, $srcVersion );
 
@@ -224,7 +230,8 @@ class Handler implements BaseContentHandler
             $content,
             $this->contentGateway->getLastVersionNumber( $contentId ) + 1,
             $fields,
-            $content->versionInfo->initialLanguageCode
+            $content->versionInfo->initialLanguageCode,
+            $userId
         );
         $content->versionInfo->id = $this->contentGateway->insertVersion(
             $content->versionInfo,
@@ -362,19 +369,22 @@ class Handler implements BaseContentHandler
      *
      * @param int $contentId
      * @param int $versionNo
-     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $content
+     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $updateStruct
+     *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function updateContent( $contentId, $versionNo, UpdateStruct $content )
+    public function updateContent( $contentId, $versionNo, UpdateStruct $updateStruct )
     {
-        $this->contentGateway->updateVersion( $contentId, $versionNo, $content );
-        $this->fieldHandler->updateFields( $contentId, $versionNo, $content );
-        foreach ( $content->name as $language => $name )
+        $content = $this->load( $contentId, $versionNo );
+        $this->contentGateway->updateVersion( $contentId, $versionNo, $updateStruct );
+        $this->fieldHandler->updateFields( $content, $updateStruct );
+        foreach ( $updateStruct->name as $language => $name )
         {
             $this->contentGateway->setName(
                 $contentId,
                 $versionNo,
-                $name, $language
+                $name,
+                $language
             );
         }
 
@@ -494,7 +504,7 @@ class Handler implements BaseContentHandler
                     $versionContent->contentInfo->isAlwaysAvailable
                 );
 
-                $this->fieldHandler->copyFields( $versionContent );
+                $this->fieldHandler->createNewFields( $versionContent );
 
                 // Create name
                 foreach ( $versionContent->versionInfo->names as $language => $name )

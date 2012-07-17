@@ -105,6 +105,16 @@ abstract class Gateway
     abstract public function createLocationsFromNodeAssignments( $contentId, $versionNo );
 
     /**
+     * Updates all Locations of content identified with $contentId with $versionNo
+     *
+     * @param mixed $contentId
+     * @param mixed $versionNo
+     *
+     * @return void
+     */
+    abstract public function updateLocationsContentVersionNo( $contentId, $versionNo );
+
+    /**
      * Sets a location to be hidden, and it self + all children to invisible.
      *
      * @param string $pathString

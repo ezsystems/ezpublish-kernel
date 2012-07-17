@@ -10,7 +10,8 @@
 namespace eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor,
+    RuntimeException;
 
 /**
  * Configurator for the Handler
@@ -46,7 +47,7 @@ class Configurator
     {
         if ( !isset( $this->config['dsn'] ) )
         {
-            throw new \RuntimeException( 'Missing "dsn" config value.' );
+            throw new RuntimeException( 'Missing "dsn" config value.' );
         }
         return $this->config['dsn'];
     }
@@ -70,9 +71,9 @@ class Configurator
      */
     public function configureExternalStorages( StorageRegistry $registry )
     {
-        if ( isset( $this->config['external_storages'] ) )
+        if ( isset( $this->config['external_storage'] ) )
         {
-            foreach ( $this->config['external_storages'] as $typeName => $class )
+            foreach ( $this->config['external_storage'] as $typeName => $class )
             {
                 $registry->register( $typeName, new $class() );
             }

@@ -56,6 +56,7 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @group content-type
+     * @group field-type
      * @see \eZ\Publish\API\Repository\Repository::getContentTypeService()
      *
      */
@@ -195,6 +196,22 @@ class RepositoryTest extends BaseTest
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\ObjectStateService',
             $repository->getObjectStateService()
+        );
+    }
+
+    /**
+     * Test for the getFieldTypeService()
+     *
+     * @return void
+     * @group object-state
+     * @see \eZ\Publish\API\Repository\Repository::getFieldTypeService()
+     */
+    public function testGetFieldTypeService()
+    {
+        $repository = $this->getRepository();
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\FieldTypeService',
+            $repository->getFieldTypeService()
         );
     }
 

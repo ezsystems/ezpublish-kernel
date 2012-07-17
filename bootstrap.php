@@ -12,27 +12,49 @@
 
 use eZ\Publish\Core\Base\ClassLoader,
     eZ\Publish\Core\Base\ConfigurationManager,
-    eZ\Publish\Core\Base\ServiceContainer;
+    eZ\Publish\Core\Base\ServiceContainer,
+    eZ\Publish\Legacy\Kernel as LegacyKernel,
+    eZ\Publish\Legacy\Kernel\CLIHandler as LegacyKernelCLI;
 
-// Setup autoloaders
 if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
 {
-    die( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
+    throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
 }
 
-require __DIR__ . '/eZ/Publish/Core/Base/ClassLoader.php';
-$loader = new ClassLoader( $settings['base']['ClassLoader']['Repositories'] );
-if ( isset( $settings['base']['ClassLoader']['ClassMap'] ) )
-    $loader->registerClassMap( $settings['base']['ClassLoader']['ClassMap'] );
-spl_autoload_register( array( $loader, 'load' ) );
+// Generic composer autoloader
+$autoloadFile = __DIR__ . '/vendor/autoload.php';
+if ( !file_exists( $autoloadFile ) )
+    throw new \RuntimeException( 'Install dependencies with composer to run the test suites' );
+include $autoloadFile;
 
-// Zeta Components, if using ezcBase loader
-if ( isset( $settings['base']['ClassLoader']['ezcBase'] ) )
+$dependencies = array();
+
+// Bootstrap eZ Publish legacy kernel if configured
+if ( isset( $settings['base']['Legacy']['RootPath'] ) )
 {
-    require $settings['base']['ClassLoader']['ezcBase'];
-    spl_autoload_register( array( 'ezcBase', 'autoload' ) );
-}
+    $legacyPath = $settings['base']['Legacy']['RootPath'];
 
+    // Deactivate eZComponents loading from legacy autoload.php as they are already loaded with Composer
+    if ( !defined( 'EZCBASE_ENABLED' ) )
+        define( 'EZCBASE_ENABLED', false );
+    require "$legacyPath/autoload.php";
+
+    $legacyKernel = new LegacyKernel( new LegacyKernelCLI, $legacyPath, getcwd() );
+    set_exception_handler( null );
+    // Avoid "Fatal error" text from legacy kernel if not called
+    $legacyKernel->runCallback(
+        function ()
+        {
+            eZExecution::setCleanExit();
+        }
+    );
+
+    // Exposing in env variables in order be able to use them in test cases.
+    $_ENV['legacyKernel'] = $legacyKernel;
+    $_ENV['legacyPath'] = $legacyPath;
+
+    $dependencies['@legacyKernel'] = $legacyKernel;
+}
 
 $configManager = new ConfigurationManager(
     $settings,
@@ -54,11 +76,12 @@ foreach ( $settings['base']['ClassLoader']['Repositories'] as $ns => $nsPath )
 
 $configManager->setGlobalDirs( $paths, 'modules' );*/
 
+$loader = new ClassLoader( array() );
 $sc = new ServiceContainer(
     $configManager->getConfiguration('service')->getAll(),
-    array(
-        '$classLoader' => $loader,
-        '$configurationManager' => $configManager,
+    $dependencies + array(
+         '$classLoader' => $loader,
+         '$configurationManager' => $configManager,
     )
 );
 

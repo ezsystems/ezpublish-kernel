@@ -47,7 +47,7 @@ class URLWildcardServiceAuthorizationTest extends \eZ\Publish\API\Repository\Tes
      *
      * @return void
      * @see \eZ\Publish\API\Repository\URLWildcardService::remove()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testRemove
      */
     public function testRemoveThrowsUnauthorizedException()

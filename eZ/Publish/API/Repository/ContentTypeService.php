@@ -308,7 +308,7 @@ interface ContentTypeService
     public function newContentTypeCreateStruct( $identifier );
 
     /**
-     * instanciates a new content type update struct
+     * Instantiates a new content type update struct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct
      */
@@ -337,15 +337,4 @@ interface ContentTypeService
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct
      */
     public function newFieldDefinitionUpdateStruct();
-
-    /**
-     * Instantiates a FieldType\Type object
-     *
-     * @todo Add to API or remove!
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $type not priorly setup with settings injected to service
-     *
-     * @param string $type
-     * @return \eZ\Publish\SPI\FieldType\FieldType
-     */
-    public function buildFieldType( $type );
 }

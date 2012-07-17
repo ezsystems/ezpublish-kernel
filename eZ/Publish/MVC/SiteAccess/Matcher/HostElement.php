@@ -9,16 +9,15 @@
 
 namespace eZ\Publish\MVC\SiteAccess\Matcher;
 
-use eZ\Publish\MVC\SiteAccess\Matcher;
+use eZ\Publish\MVC\SiteAccess\Matcher,
+    eZ\Publish\MVC\Routing\SimplifiedRequest;
 
 class HostElement implements Matcher
 {
     /**
-     * Host of the URI as returned by parse_url().
-     *
-     * @var string
+     * @var \eZ\Publish\MVC\Routing\SimplifiedRequest
      */
-    private $host;
+    private $request;
 
     /**
      * Number of elements to take into account.
@@ -30,12 +29,10 @@ class HostElement implements Matcher
     /**
      * Constructor.
      *
-     * @param array $URIElements Elements of the URI as parsed by parse_url().
      * @param int $elementNumber Number of elements to take into account.
      */
-    public function __construct( array $URIElements, $elementNumber )
+    public function __construct( $elementNumber )
     {
-        $this->host = $URIElements["host"];
         $this->elementNumber = (int)$elementNumber;
     }
 
@@ -46,7 +43,7 @@ class HostElement implements Matcher
      */
     public function match()
     {
-        $elements = explode( ".", $this->host );
+        $elements = explode( ".", $this->request->host );
 
         return isset( $elements[$this->elementNumber - 1] ) ? $elements[$this->elementNumber - 1] : false;
     }
@@ -54,5 +51,16 @@ class HostElement implements Matcher
     public function getName()
     {
         return 'host:element';
+    }
+
+    /**
+     * Injects the request object to match against.
+     *
+     * @param \eZ\Publish\MVC\Routing\SimplifiedRequest $request
+     * @return void
+     */
+    public function setRequest( SimplifiedRequest $request )
+    {
+        $this->request = $request;
     }
 }

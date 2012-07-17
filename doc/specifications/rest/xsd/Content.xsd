@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:include schemaLocation="Version.xsd" />
+  <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+  <xsd:complexType name="embeddedVersionType">
+    <xsd:complexContent>
+      <xsd:extension base="ref">
+        <xsd:all>
+          <xsd:element name="Version" minOccurs="0" type="versionType" />
+        </xsd:all>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="contentInfoType">
+    <xsd:complexContent>
+      <xsd:extension base="ref">
+        <xsd:sequence>
+          <xsd:element name="ContentType" type="ref" />
+          <xsd:element name="name" type="xsd:string" />
+          <xsd:element name="Versions" type="ref" />
+          <xsd:element name="Section" type="ref" />
+          <xsd:element name="MainLocation" type="ref" minOccurs="0" />
+          <xsd:element name="Locations" type="ref" minOccurs="0" />
+          <xsd:element name="Owner" type="ref" />
+          <xsd:element name="publishDate" type="xsd:dateTime"
+            minOccurs="0" />
+          <xsd:element name="lastModificationDate" type="xsd:dateTime" />
+          <xsd:element name="mainLanguageCode" type="xsd:string" />
+          <xsd:element name="alwaysAvailable" type="xsd:boolean" />
+        </xsd:sequence>
+        <xsd:attribute name="id" type="xsd:string" />
+        <xsd:attribute name="remoteId" type="xsd:string" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="vnd.ez.api.ContentInfo">
+    <xsd:complexContent>      
+      <xsd:extension base="contentInfoType">
+        <xsd:all>
+          <xsd:element name="CurrentVersion" type="ref" />
+        </xsd:all>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="vnd.ez.api.Content">
+    <xsd:complexContent>      
+      <xsd:extension base="contentInfoType">
+        <xsd:all>
+          <xsd:element name="CurrentVersion" type="embeddedVersionType" />
+        </xsd:all>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:element name="ContentInfo" type="vnd.ez.api.ContentInfo" />
+  <xsd:element name="Content" type="vnd.ez.api.Content" />
+</xsd:schema>
+

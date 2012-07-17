@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue;
+    eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 
 /**
  * Test case for SearchHandler using in memory storage.

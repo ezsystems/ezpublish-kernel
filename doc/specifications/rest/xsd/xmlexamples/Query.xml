@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Query>
+  <Criteria>
+    <AND>
+      <ContentTypeIdentifierCriterion>article</ContentTypeIdentifierCriterion>
+      <FieldCritierion>
+        <operator>EQ</operator>
+        <target>title</target>
+        <value>Title</value>
+      </FieldCritierion>
+    </AND>
+  </Criteria>
+  <limit>10</limit>
+  <offset>0</offset>
+  <SortClauses>
+    <SortClause>
+      <SortField>NAME</SortField>
+    </SortClause>
+  </SortClauses>
+</Query>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:include schemaLocation="CommonDefinitions.xsd" />
+  <xsd:include schemaLocation="Content.xsd" />
+  <xsd:simpleType name="fieldOperatorType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="IN" />
+      <xsd:enumeration value="LIKE" />
+      <xsd:enumeration value="EQ" />
+      <xsd:enumeration value="LT" />
+      <xsd:enumeration value="LTE" />
+      <xsd:enumeration value="GT" />
+      <xsd:enumeration value="GTE" />
+      <xsd:enumeration value="BETWEEN" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="dateOperatorType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="EQ" />
+      <xsd:enumeration value="LT" />
+      <xsd:enumeration value="LTE" />
+      <xsd:enumeration value="GT" />
+      <xsd:enumeration value="GTE" />
+      <xsd:enumeration value="BETWEEN" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="dateMetaDataType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="CREATED" />
+      <xsd:enumeration value="MODIFIED" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="urlAliasOperatorType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="EQ" />
+      <xsd:enumeration value="IN" />
+      <xsd:enumeration value="LIKE" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="userMetaDataType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="CREATOR" />
+      <xsd:enumeration value="MODIFIER" />
+      <xsd:enumeration value="OWNER" />
+      <xsd:enumeration value="GROUP" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="sortClauseEnumType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="PATH" />
+      <xsd:enumeration value="PATHSTRING" />
+      <xsd:enumeration value="MODIFIED" />
+      <xsd:enumeration value="CREATED" />
+      <xsd:enumeration value="SECTIONIDENTIFER" />
+      <xsd:enumeration value="SECTIONID" />
+      <xsd:enumeration value="FIELD" />
+      <xsd:enumeration value="PRIORITY" />
+      <xsd:enumeration value="NAME" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="fieldCriterionType">
+    <xsd:all>
+      <xsd:element name="target" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>
+            The identifier of the field i.e identifier
+            of the corresponding field
+            definition 
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="operator" type="fieldOperatorType" />
+      <xsd:element name="value" type="xsd:anyType" />
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="dateCriterionType">
+    <xsd:all>
+      <xsd:element name="target" type="dateMetaDataType">
+      </xsd:element>
+      <xsd:element name="operator" type="dateOperatorType" />
+      <xsd:element name="value" type="dateList" />
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="urlaliasCriterionType">
+    <xsd:all>
+      <xsd:element name="operator" type="urlAliasOperatorType" />
+      <xsd:element name="value" type="stringList" />
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="userMetaDataCriterionType">
+    <xsd:all>
+      <xsd:element name="target" type="userMetaDataType">
+      </xsd:element>
+      <xsd:element name="value" type="dateList" />
+    </xsd:all>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="criterionType">
+    <xsd:choice minOccurs="1" maxOccurs="unbounded">
+      <xsd:element name="AND" type="criterionType" />
+      <xsd:element name="OR" type="criterionType" />
+      <xsd:element name="NOT" type="criterionType" />
+      <xsd:element name="ContentIdCriterion" type="intList" />
+      <xsd:element name="ContentRemoteIdCriterion" type="stringList" />
+      <xsd:element name="ContentTypeGroupIdCriterion" type="xsd:int" />
+      <xsd:element name="ContentTypeIdCriterion" type="xsd:int" />
+      <xsd:element name="ContentTypeIdentifierCriterion"
+        type="xsd:string" />
+      <xsd:element name="FieldCritierion" type="fieldCriterionType" />
+      <xsd:element name="DateMetaDataCritierion" type="dateCriterionType" />
+      <xsd:element name="FullTextCriterion" type="xsd:string" />
+      <xsd:element name="LocationIdCriterion" type="intList" />
+      <xsd:element name="LocationRemoteIdCriterion" type="stringList" />
+      <xsd:element name="ParentLocationIdCriterion" type="intList" />
+      <xsd:element name="ParentLocationRemoteIdCriterion"
+        type="stringList" />
+      <xsd:element name="SectionIdCriterion" type="xsd:int" />
+      <xsd:element name="SectionIdentifierCriterion" type="xsd:string" />
+      <xsd:element name="VersionStatusCriterion" type="versionStatus" />
+      <xsd:element name="SubtreeCriterion" type="stringList" />
+      <xsd:element name="URLAliasCriterion" type="urlaliasCriterionType" />
+      <xsd:element name="UserMetaDataCriterion" type="userMetaDataCriterionType" />
+    </xsd:choice>
+  </xsd:complexType>
+
+  <xsd:complexType name="sortClauseType">
+    <xsd:sequence>
+      <xsd:element name="SortClause">
+        <xsd:complexType>
+          <xsd:all>
+            <xsd:element name="SortField" type="sortClauseEnumType" />
+            <xsd:element name="TargetData" type="xsd:anyType"
+              minOccurs="0" />
+          </xsd:all>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="queryType">
+    <xsd:all>
+      <xsd:element name="Criteria" type="criterionType" />
+      <xsd:element name="limit" type="xsd:int" />
+      <xsd:element name="offset" type="xsd:int" />
+      <xsd:element name="SortClauses" type="sortClauseType" />
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="resultType">
+    <xsd:complexContent>
+      <xsd:extension base="ref">
+        <xsd:sequence>
+          <xsd:element name="count" type="xsd:int"
+            minOccurs="1" maxOccurs="1" />
+          <xsd:element name="Content" type="vnd.ez.api.Content"
+            maxOccurs="unbounded" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="viewInputType">
+    <xsd:all>
+      <xsd:element name="identifier" type="xsd:string" minOccurs="0" />
+      <xsd:element name="public" type="xsd:boolean" default="false"/>
+      <xsd:element name="Query" type="queryType" />
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="viewType">
+    <xsd:complexContent>
+      <xsd:extension base="ref">
+        <xsd:all>
+          <xsd:element name="identifier" type="xsd:string" />
+          <xsd:element name="User" type="ref"/>
+          <xsd:element name="public" type="xsd:boolean"/>
+          <xsd:element name="Query" type="queryType" />
+          <xsd:element name="Result" type="resultType" />
+        </xsd:all>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ViewInput" type="viewInputType" />
+  <xsd:element name="View" type="viewType" />
+</xsd:schema>

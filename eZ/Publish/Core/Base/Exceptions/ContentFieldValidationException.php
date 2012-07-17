@@ -8,7 +8,6 @@
  */
 
 namespace eZ\Publish\Core\Base\Exceptions;
-
 use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException as APIContentFieldValidationException;
 
 /**
@@ -17,11 +16,38 @@ use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException as APIC
 class ContentFieldValidationException extends APIContentFieldValidationException
 {
     /**
+     * Contains an array of field ValidationError objects indexed with FieldDefinition id and language code
      *
-     * @return array
+     * Example:
+     * <code>
+     *  $fieldErrors = $exception->getFieldErrors();
+     *  $fieldErrors["43"]["eng-GB"]->getTranslatableMessage();
+     * </code>
+     *
+     * @var \eZ\Publish\Core\FieldType\ValidationError[]
      */
-    public function getFieldExceptions()
+    protected $errors;
+
+    /**
+     * Generates: Content fields did not validate
+     *
+     * Also sets the given $fieldErrors to the internal property, retrievable by getFieldErrors()
+     *
+     * @param \eZ\Publish\Core\FieldType\ValidationError[] $errors
+     */
+    public function __construct( array $errors )
     {
-        // @todo Implement or remove
+        $this->errors = $errors;
+        parent::__construct( "Content fields did not validate" );
+    }
+
+    /**
+     * Returns an array of field validation error messages
+     *
+     * @return \eZ\Publish\Core\FieldType\ValidationError[]
+     */
+    public function getFieldErrors()
+    {
+        return $this->errors;
     }
 }

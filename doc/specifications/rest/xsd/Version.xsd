@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:include schemaLocation="VersionInfo.xsd" />
+  <xsd:include schemaLocation="Relation.xsd" />
+  <xsd:complexType name="vnd.ez.api.Version">
+    <xsd:complexContent>
+      <xsd:extension base="ref">
+        <xsd:all>
+          <xsd:element name="VersionInfo" type="versionInfoType" />
+          <xsd:element name="Fields" minOccurs="0">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="field" type="fieldValueType"
+                  minOccurs="1" maxOccurs="unbounded" />
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="Relations" minOccurs="0">
+            <xsd:complexType>
+              <xsd:complexContent>
+                <xsd:extension base="ref">
+                  <xsd:sequence>
+                    <xsd:element name="Relation" type="vnd.ez.api.Relation"
+                      minOccurs="0" maxOccurs="unbounded" />
+                  </xsd:sequence>
+                </xsd:extension>
+              </xsd:complexContent>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:all>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Version" type="vnd.ez.api.Version"></xsd:element>
+</xsd:schema>

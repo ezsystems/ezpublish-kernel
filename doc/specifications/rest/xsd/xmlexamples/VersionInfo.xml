@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:VersionInfo xmlns:p="http://ez.no/API/Values" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ez.no/API/Values ../VersionInfo.xsd ">
+  <id>0</id>
+  <versionNo>0</versionNo>
+  <status>DRAFT</status>
+  <modificationDate>2001-12-31T12:00:00</modificationDate>
+  <Creator href="" media-type=""/>
+  <creationDate>2001-12-31T12:00:00</creationDate>
+  <initialLanguageCode>initialLanguageCode</initialLanguageCode>
+  <languageCodes>array()</languageCodes>
+  <names>
+    <value languageCode="">value</value>
+  </names>
+  <Content href="" media-type=""/>
+</p:VersionInfo>

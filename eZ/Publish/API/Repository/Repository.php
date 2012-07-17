@@ -112,6 +112,15 @@ interface Repository
     public function getSectionService();
 
     /**
+     * Get Search Service
+     *
+     * Get search service that lets you find content objects
+     *
+     * @return \eZ\Publish\API\Repository\SearchService
+     */
+    public function getSearchService();
+
+    /**
      * Get User Service
      *
      * Get service object to perform operations on Users and UserGroup
@@ -163,6 +172,13 @@ interface Repository
      * @return \eZ\Publish\API\Repository\SearchService
      */
     public function getSearchService();
+
+    /**
+     * Get FieldTypeService
+     *
+     * @return \eZ\Publish\API\Repository\FieldTypeService
+     */
+    public function getFieldTypeService();
 
     /**
      * Begin transaction

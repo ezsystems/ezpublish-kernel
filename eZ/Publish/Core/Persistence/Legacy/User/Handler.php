@@ -14,7 +14,6 @@ use eZ\Publish\SPI\Persistence\User,
     eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
     eZ\Publish\SPI\Persistence\User\Policy,
     eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway as RoleGateway,
-    RuntimeException,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**

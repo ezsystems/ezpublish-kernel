@@ -12,9 +12,29 @@ use eZ\Publish\API\Repository\Tests,
     eZ\Publish\API\Repository;
 
 /**
- * Integration test for the legacy storage
+ * Integration test for legacy storage field types
+ *
+ * This abstract base test case is supposed to be the base for field type
+ * integration tests. It basically calls all involved methods in the field type
+ * ``Converter`` and ``Storage`` implementations. Fo get it working implement
+ * the abstract methods in a sensible way.
+ *
+ * The following actions are performed by this test using the custom field
+ * type:
+ *
+ * - Create a new content type with the given field type
+ * - Load created content type
+ * - Create content object of new content type
+ * - Load created content
+ * - Publish created content
+ * - Update content
+ * - Copy created content
+ * - Remove copied content
+ * - Test toHash
+ * - Test fromHash
  *
  * @group integration
+ * @group field-type
  */
 abstract class BaseIntegrationTest extends Tests\BaseTest
 {
@@ -104,10 +124,29 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     abstract public function getCopiedExternalsFieldData();
 
     /**
+     * Get expectation for the toHash call on our field value
+     *
+     * @return mixed
+     */
+    abstract public function getToHashExpectation();
+
+    /**
+     * Get hashes and their respective converted values
+     *
+     * This is a PHPUnit data provider
+     *
+     * @return array
+     */
+    abstract public function provideFromHashData();
+
+    /**
      * Method called after content creation
      *
-     * Useful, if additional stuff should be executed (like creating the actual 
+     * Useful, if additional stuff should be executed (like creating the actual
      * user).
+     *
+     * We cannot just overwrite the testCreateContent method, since this messes
+     * up PHPUnits @depends sorting of tests, so everything will be skipped.
      *
      * @param Repository\Repository $repository
      * @param Repository\Values\Content\Content $content
@@ -132,7 +171,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $createStruct->mainLanguageCode = 'eng-GB';
         $createStruct->remoteId     = $this->getTypeName();
         $createStruct->names        = array( 'eng-GB' => 'Test' );
-        $createStruct->creatorId    = 14;
+        $createStruct->creatorId    = 10;
         $createStruct->creationDate = new \DateTime();
 
         $nameFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
@@ -217,7 +256,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     public function testCreateContent()
     {
         // @Hack: This is required to make it possible to overwrite this
-        // method, while maintaing the execution order. PHPUnit does not manage 
+        // method, while maintaing the execution order. PHPUnit does not manage
         // to sort tests properly, otherwise.
         if ( method_exists( $this, 'createContentOverwrite' ) )
         {
@@ -244,7 +283,41 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testCreatedFieldType( $content )
     {
-        foreach ( $content->fields as $field )
+        foreach ( $content->getFields() as $field )
+        {
+            if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
+            {
+                return $field;
+            }
+        }
+
+        $this->fail( "Custom field not found." );
+    }
+
+    /**
+     * @depends testCreateContent
+     */
+    public function testPublishContent()
+    {
+        $draft = $this->testCreateContent();
+
+        if ( $draft->getVersionInfo()->status !== Repository\Values\Content\VersionInfo::STATUS_DRAFT )
+        {
+            $this->markTestSkipped( "Provided content object is not a draft." );
+        }
+
+        $repository     = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        return $contentService->publishVersion( $draft->getVersionInfo() );
+    }
+
+    /**
+     * @depends testPublishContent
+     */
+    public function testPublishedFieldType( $content )
+    {
+        foreach ( $content->getFields() as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
             {
@@ -272,7 +345,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testLoadFieldType( $content )
     {
-        foreach ( $content->fields as $field )
+        foreach ( $content->getFields() as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
             {
@@ -289,14 +362,19 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testLoadExternalData( $name, $value, $field )
     {
-        if ( !array_key_exists( $name, $field->value ) )
+        if ( !$field->value instanceof \eZ\Publish\Core\FieldType\Value )
+        {
+            $this->markTestSkipped( "You can only test field value values if the field value extends from \\eZ\\Publish\\Core\\FieldType\\Value." );
+        }
+
+        if ( !isset( $field->value ) )
         {
             $this->fail( "Property $name not avialable." );
         }
 
         $this->assertEquals(
             $value,
-            $field->value[$name]
+            $field->value->$name
         );
     }
 
@@ -305,7 +383,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testUpdateField()
     {
-        $content = $this->testCreateContent();
+        $content = $this->testPublishContent();
 
         $repository     = $this->getRepository();
         $contentService = $repository->getContentService();
@@ -323,7 +401,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testUpdateFieldType( $content )
     {
-        foreach ( $content->fields as $field )
+        foreach ( $content->getFields() as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
             {
@@ -340,14 +418,19 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testUpdateExternalData( $name, $value, $field )
     {
-        if ( !array_key_exists( $name, $field->value ) )
+        if ( !$field->value instanceof \eZ\Publish\Core\FieldType\Value )
+        {
+            $this->markTestSkipped( "You can only test field value values if the field value extends from \\eZ\\Publish\\Core\\FieldType\\Value." );
+        }
+
+        if ( !isset( $field->value ) )
         {
             $this->fail( "Property $name not avialable." );
         }
 
         $this->assertEquals(
             $value,
-            $field->value[$name]
+            $field->value->$name
         );
     }
 
@@ -368,8 +451,8 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $copied = $contentService->copyContent( $content->contentInfo, $locationCreate );
 
         $this->assertNotSame(
-            $content->versionInfo->contentId,
-            $copied->versionInfo->contentId
+            $content->contentInfo->id,
+            $copied->contentInfo->id
         );
 
         return $contentService->loadContent( $copied->id );
@@ -380,7 +463,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testCopiedFieldType( $content )
     {
-        foreach ( $content->fields as $field )
+        foreach ( $content->getFields() as $field )
         {
             if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
             {
@@ -397,14 +480,19 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testCopiedExternalData( $name, $value, $field )
     {
-        if ( !array_key_exists( $name, $field->value ) )
+        if ( !$field->value instanceof \eZ\Publish\Core\FieldType\Value )
+        {
+            $this->markTestSkipped( "You can only test field value values if the field value extends from \\eZ\\Publish\\Core\\FieldType\\Value." );
+        }
+
+        if ( !isset( $field->value ) )
         {
             $this->fail( "Property $name not avialable." );
         }
 
         $this->assertEquals(
             $value,
-            $field->value[$name]
+            $field->value->$name
         );
     }
 
@@ -412,9 +500,9 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      * @depends testCopyField
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testDeleteField( $content )
+    public function testDeleteContent( $content )
     {
-        $content = $this->testCreateContent();
+        $content = $this->testPublishContent();
 
         $repository     = $this->getRepository();
         $contentService = $repository->getContentService();
@@ -422,6 +510,57 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $contentService->deleteContent( $content->contentInfo );
 
         $contentService->loadContent( $content->contentInfo->id );
+    }
+
+    /**
+     * @depends testCreateContent
+     * @TODO: Requires correct registered FieldTypeService, needs to be
+     *        maintained!
+     */
+    public function testToHash()
+    {
+        $content = $this->testCreateContent();
+
+        $repository         = $this->getRepository();
+        $contentService     = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $fieldTypeService   = $repository->getFieldTypeService();
+
+        $contentType = $contentTypeService->loadContentType( $content->contentTypeId );
+
+        foreach ( $content->getFields() as $field )
+        {
+            if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
+            {
+                $fieldDefinition = $contentType->getFieldDefinition( $field->fieldDefIdentifier );
+                $fieldType       = $fieldTypeService->getFieldType( $fieldDefinition->fieldTypeIdentifier );
+
+                $this->assertEquals(
+                    $this->getToHashExpectation(),
+                    $fieldType->toHash( $field->value )
+                );
+            }
+        }
+    }
+
+    /**
+     * @depends testCreateContent
+     * @dataProvider provideFromHashData
+     * @TODO: Requires correct registered FieldTypeService, needs to be
+     *        maintained!
+     */
+    public function testFromHash( $hash, $expected )
+    {
+        $content = $this->testCreateContent();
+
+        $repository       = $this->getRepository();
+        $fieldTypeService = $repository->getFieldTypeService();
+        $fieldType        = $fieldTypeService->getFieldType( $this->getTypeName() );
+
+        $this->assertEquals(
+            $expected,
+            $fieldType->fromHash( $hash )
+        );
     }
 
     /**

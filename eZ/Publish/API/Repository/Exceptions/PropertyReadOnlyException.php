@@ -9,15 +9,14 @@
 
 namespace eZ\Publish\API\Repository\Exceptions;
 
-use RuntimeException,
-    Exception;
+use Exception;
 
 /**
  * This Exception is thrown on a write attempt in a read only property in a value object.
  *
  * @package eZ\Publish\API\Repository\Exceptions
  */
-class PropertyReadOnlyException extends RuntimeException
+class PropertyReadOnlyException extends Exception
 {
     /**
      * Generates: Property '{$propertyName}' is readonly[ on class '{$className}']

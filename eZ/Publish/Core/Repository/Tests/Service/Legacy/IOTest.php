@@ -17,6 +17,18 @@ use eZ\Publish\Core\Repository\Tests\Service\IOBase as BaseIOServiceTest,
  */
 class IOTest extends BaseIOServiceTest
 {
+    protected function tearDown()
+    {
+        $legacyKernel = $_ENV['legacyKernel'];
+        $legacyKernel->enterLegacyRootDir();
+        if ( file_exists( 'var/test' ) )
+        {
+            \ezcBaseFile::removeRecursive( 'var/test' );
+        }
+        $legacyKernel->leaveLegacyRootDir();
+        parent::tearDown();
+    }
+
     /**
      * @return \PHPUnit_Extensions_PhptTestCase
      */
@@ -32,7 +44,16 @@ class IOTest extends BaseIOServiceTest
 
         try
         {
-            return include 'common.php';
+            if ( !isset( $_ENV['legacyKernel'] ) )
+            {
+                self::markTestSkipped(
+                    'Legacy kernel is needed to run these tests. Please ensure that "legacyKernel" environment variable is properly set with a eZ\\Publish\\Legacy\\Kernel instance'
+                );
+            }
+
+            $repository = include 'common.php';
+            $repository->setLegacyKernel( $_ENV['legacyKernel'] );
+            return $repository;
         }
         catch ( \Exception $e )
         {

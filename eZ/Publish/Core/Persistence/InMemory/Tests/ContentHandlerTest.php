@@ -20,7 +20,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\API\Repository\Values\Content\Relation,
-    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue;
+    eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 
 /**
  * Test case for ContentHandler using in memory storage.
@@ -459,7 +459,7 @@ class ContentHandlerTest extends HandlerTest
         $content = $contentHandler->copy( 1, 1 );
         $this->contentToDelete[] = $content;
 
-        $draft = $contentHandler->createDraftFromVersion( $content->contentInfo->id, 1 );
+        $draft = $contentHandler->createDraftFromVersion( $content->contentInfo->id, 1, 10 );
 
         self::assertSame( $content->contentInfo->currentVersionNo + 1, $draft->versionInfo->versionNo );
         self::assertGreaterThanOrEqual( $time, $draft->versionInfo->creationDate );

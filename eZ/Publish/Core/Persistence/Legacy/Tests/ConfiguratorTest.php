@@ -118,7 +118,7 @@ class ConfiguratorTest extends TestCase
     {
         $storageRegistry = new Content\StorageRegistry();
         $storageMock = $this->getMock(
-            'eZ\\Publish\\SPI\\Persistence\\Fields\\Storage',
+            'eZ\\Publish\\SPI\\FieldType\\FieldStorage',
             array(),
             array(),
             'SomeFanvyStorageMockClass',
@@ -126,7 +126,7 @@ class ConfiguratorTest extends TestCase
         );
 
         $config = array(
-            'external_storages' => array(
+            'external_storage' => array(
                 'foo' => 'SomeFanvyStorageMockClass',
                 'bar' => 'SomeFanvyStorageMockClass',
             ),

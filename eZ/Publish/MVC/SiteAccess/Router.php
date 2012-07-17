@@ -8,7 +8,9 @@
  */
 
 namespace eZ\Publish\MVC\SiteAccess;
-use eZ\Publish\MVC\SiteAccess;
+
+use eZ\Publish\MVC\SiteAccess,
+    eZ\Publish\MVC\Routing\SimplifiedRequest;
 
 class Router
 {
@@ -61,19 +63,25 @@ class Router
     }
 
     /**
-     * Performs SiteAccess matching given the $url.
+     * Performs SiteAccess matching given the $request.
      *
-     * @param string $url
+     * @param \eZ\Publish\MVC\Routing\SimplifiedRequest $request
      *
      * @return string
      */
-    public function match( $url )
+    public function match( SimplifiedRequest $request )
     {
-        if ( isset( $_SERVER["SITEACCESS"] ) )
-            return $_SERVER["SITEACCESS"];
-
-        $urlElements = parse_url( $url );
         $siteaccess = new SiteAccess;
+
+        // First check environment variable
+        $siteaccessEnvName = getenv( 'EZPUBLISH_SITEACCESS' );
+        if ( $siteaccessEnvName !== false )
+        {
+            // TODO: Check siteaccess validity and throw \RuntimeException if invalid
+            $siteaccess->name = $siteaccessEnvName;
+            $siteaccess->matchingType = 'env';
+            return $siteaccess;
+        }
 
         foreach ( $this->siteAccessesConfiguration as $matchingClass => $matchingConfiguration )
         {
@@ -82,7 +90,8 @@ class Router
             if ( $matchingClass[0] !== '\\' )
                 $matchingClass = __NAMESPACE__ . "\\Matcher\\$matchingClass";
 
-            $matcher = new $matchingClass( $urlElements, $matchingConfiguration );
+            $matcher = new $matchingClass( $matchingConfiguration );
+            $matcher->setRequest( $request );
 
             if ( ( $siteaccessName = $matcher->match() ) !== false )
             {

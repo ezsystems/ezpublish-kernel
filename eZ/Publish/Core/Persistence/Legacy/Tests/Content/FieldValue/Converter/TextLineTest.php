@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings,
+use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue,
+    eZ\Publish\Core\FieldType\FieldSettings,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
@@ -83,7 +83,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
         $defaultValue->data = $defaultText;
         $fieldTypeConstraints = new FieldTypeConstraints;
         $fieldTypeConstraints->validators = array(
-            TextLineConverter::STRING_LENGTH_VALIDATOR_FQN => array( 'maxStringLength' => 100 )
+            TextLineConverter::STRING_LENGTH_VALIDATOR_IDENTIFIER => array( 'maxStringLength' => 100 )
         );
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
@@ -99,7 +99,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
 
         $this->converter->toStorageFieldDefinition( $fieldDef, $storageFieldDef );
         self::assertSame(
-            $fieldDef->fieldTypeConstraints->validators[TextLineConverter::STRING_LENGTH_VALIDATOR_FQN],
+            $fieldDef->fieldTypeConstraints->validators[TextLineConverter::STRING_LENGTH_VALIDATOR_IDENTIFIER],
             array( 'maxStringLength' => $storageFieldDef->dataInt1 )
         );
         self::assertSame(
@@ -157,7 +157,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
         $this->converter->toFieldDefinition( $storageDef, $fieldDef );
         self::assertSame(
             array(
-                TextLineConverter::STRING_LENGTH_VALIDATOR_FQN => array( 'maxStringLength' => 100 )
+                TextLineConverter::STRING_LENGTH_VALIDATOR_IDENTIFIER => array( 'maxStringLength' => 100 )
             ),
             $fieldDef->fieldTypeConstraints->validators
         );

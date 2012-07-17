@@ -18,9 +18,12 @@ use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\MVC\SiteAccess;
-use eZ\Publish\MVC\SiteAccess\URIFixer;
 use eZ\Publish\MVC\SiteAccess\Router as SiteAccessRouter;
+use eZ\Publish\MVC\Event\PostSiteAccessMatchEvent;
+use eZ\Publish\MVC\MVCEvents;
+use eZ\Publish\MVC\Routing\SimplifiedRequest;
 
 /**
  * The ChainRouter is an aggregation of valid routers and allows URL matching against multiple routers.
@@ -55,10 +58,16 @@ class ChainRouter implements RouterInterface, WarmableInterface, RequestMatcherI
      */
     protected $siteAccessRouter;
 
-    public function __construct( RequestContext $context = null, SiteAccessRouter $siteAccessRouter )
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    public function __construct( SiteAccessRouter $siteAccessRouter, EventDispatcherInterface $eventDispatcher, RequestContext $context = null )
     {
         $this->context = $context ?: new RequestContext();
         $this->siteAccessRouter = $siteAccessRouter;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -128,37 +137,14 @@ class ChainRouter implements RouterInterface, WarmableInterface, RequestMatcherI
     }
 
     /**
-     * Loop against registered routers and tries to match $pathinfo
+     * Not supported. Please use matchRequest() instead.
      *
      * @param string $pathinfo
-     * @return array|void
-     * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException
-     * @throws \Symfony\Component\Routing\Exception\MethodNotAllowedException
+     * @throws \RuntimeException
      */
     public function match( $pathinfo )
     {
-        $httpMethodMismatch = null;
-
-        foreach ( $this->getAllRouters() as $router )
-        {
-            try
-            {
-                return $router->match( $pathinfo );
-            }
-            catch ( ResourceNotFoundException $e )
-            {
-                // Do nothing, just let the next router handle it.
-            }
-            catch ( MethodNotAllowedException $e )
-            {
-                // MethodNotAllowedException is a bit more specific, since the route has been matched, but HTTP method hasn't
-                // So we keep it in case no other router is able to match the same route with this method.
-                $httpMethodMismatch = $e;
-            }
-        }
-
-        // Finally throw a ResourceNotFoundException since the chain router couldn't find any valid router for current route
-        throw $httpMethodMismatch ?: new ResourceNotFoundException( "Couldn't find any router able to match '$pathinfo'" );
+        throw new \RuntimeException( "The ChainRouter doesn't support the match() method. Please use matchRequest() instead." );
     }
 
     /**
@@ -175,12 +161,20 @@ class ChainRouter implements RouterInterface, WarmableInterface, RequestMatcherI
     {
         if ( !$request->attributes->has( 'siteaccess' ) )
         {
-            $request->attributes->add(
-                array(
-                     'siteaccess' => $this->siteAccessRouter->match(
-                         $request->getScheme() . '://' . $request->getHttpHost() . $request->getPathInfo()
+            $request->attributes->set(
+                 'siteaccess',
+                 $this->siteAccessRouter->match(
+                     new SimplifiedRequest(
+                         array(
+                              'scheme'      => $request->getScheme(),
+                              'host'        => $request->getHost(),
+                              'port'        => $request->getPort(),
+                              'pathinfo'    => $request->getPathInfo(),
+                              'queryParams' => $request->query->all(),
+                              'languages'   => $request->getLanguages()
+                         )
                      )
-                )
+                 )
             );
         }
 
@@ -189,17 +183,26 @@ class ChainRouter implements RouterInterface, WarmableInterface, RequestMatcherI
         $siteaccess = $request->attributes->get( 'siteaccess' );
         if ( $siteaccess instanceof SiteAccess )
         {
+            $siteAccessEvent = new PostSiteAccessMatchEvent( $siteaccess, $request );
+            $this->eventDispatcher->dispatch( MVCEvents::SITEACCESS, $siteAccessEvent );
             // Fix up the pathinfo if necessary since it might contain the siteaccess (i.e. like in URI mode)
-            if ( $siteaccess->matcher instanceof URIFixer )
-            {
-                $pathinfo = $siteaccess->matcher->fixupURI( $pathinfo );
-            }
+            if ( $siteAccessEvent->hasPathinfo() )
+                $pathinfo = $siteAccessEvent->getPathinfo();
+
+            // Storing the modified $pathinfo in 'semanticPathinfo' request attribute, to keep a trace of it.
+            // Routers implementing RequestMatcherInterface should thus use this attribute instead of the original pathinfo
+            $request->attributes->set( 'semanticPathinfo', $pathinfo );
+
+            unset( $siteAccessEvent );
         }
 
         foreach ( $this->getAllRouters() as $router )
         {
             try
             {
+                if ( $router instanceof RequestMatcherInterface )
+                    return $router->matchRequest( $request );
+
                 return $router->match( $pathinfo );
             }
             catch ( ResourceNotFoundException $e )

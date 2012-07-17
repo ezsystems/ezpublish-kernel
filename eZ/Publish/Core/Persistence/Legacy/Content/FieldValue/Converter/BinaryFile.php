@@ -16,7 +16,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
 
 class BinaryFile implements Converter
 {
-    const FILESIZE_VALIDATOR_FQN = 'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator';
+    const FILESIZE_VALIDATOR_IDENTIFIER = "FileSizeValidator";
 
     /**
      * Converts data from $value to $storageFieldValue.
@@ -33,8 +33,8 @@ class BinaryFile implements Converter
     /**
      * Converts data from $value to $fieldValue
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $fieldValue
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
@@ -49,9 +49,9 @@ class BinaryFile implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::FILESIZE_VALIDATOR_FQN]['maxFileSize'] ) )
+        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::FILESIZE_VALIDATOR_IDENTIFIER]['maxFileSize'] ) )
         {
-            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::FILESIZE_VALIDATOR_FQN]['maxFileSize'];
+            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::FILESIZE_VALIDATOR_IDENTIFIER]['maxFileSize'];
         }
     }
 
@@ -66,7 +66,7 @@ class BinaryFile implements Converter
         if ( !empty( $storageDef->dataInt1 ) )
         {
             $fieldDef->fieldTypeConstraints->validators = array(
-                self::FILESIZE_VALIDATOR_FQN => array( 'maxFileSize' => $storageDef->dataInt1 )
+                self::FILESIZE_VALIDATOR_IDENTIFIER => array( 'maxFileSize' => $storageDef->dataInt1 )
             );
         }
     }

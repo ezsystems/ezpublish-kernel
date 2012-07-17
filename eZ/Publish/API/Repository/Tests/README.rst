@@ -25,12 +25,14 @@ run of the suite.
 Database Back End
 -----------------
 
-To run the test suite agains the real world implementation, use the alternatice
-``phpunit-legacy.xml`` as the configuration for PHPUnit. Beware, that you need
-to have set the correct path to include the Apache Zeta Components in
-``config.php``. After that, use the following command to run the tests::
+To run the test suite against the real world implementation, use the alternative
+``phpunit-legacy.xml`` as the configuration for PHPUnit.
+Beware that you need to have set the correct path to your eZ Publish Legacy instance
+(from ``ezpublish5-integration`` branch) in ``config.php``.
+
+After that, use the following command to run the tests::
 
     phpunit -c phpunit-legacy.xml
 
-Any problems occuring during the run should be issues in the Public API
+Any problems occurring during the run should be issues in the Public API
 implementation, as long as `Memory Back End`_ runs correctly.
