@@ -401,18 +401,6 @@ class Repository implements RepositoryInterface, LegacyKernelAware
     }
 
     /**
-     * Get Search Service
-     *
-     * Get search service that lets you find content objects
-     *
-     * @return \eZ\Publish\API\Repository\SearchService
-     */
-    public function getSearchService()
-    {
-        throw new \Exception("@todo SearchService Not Implemented");
-    }
-
-    /**
      * Get User Service
      *
      * Get service object to perform operations on Users and UserGroup

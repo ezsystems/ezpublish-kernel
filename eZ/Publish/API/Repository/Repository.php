@@ -167,13 +167,6 @@ interface Repository
     public function getRoleService();
 
     /**
-     * Get SearchService
-     *
-     * @return \eZ\Publish\API\Repository\SearchService
-     */
-    public function getSearchService();
-
-    /**
      * Get FieldTypeService
      *
      * @return \eZ\Publish\API\Repository\FieldTypeService
