@@ -118,7 +118,7 @@ class Role
     }
 
     /**
-     * Updates a section
+     * Updates a role
      *
      * @param RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\User\Role
@@ -139,10 +139,25 @@ class Role
     }
 
     /**
+     * Loads the policies for the role
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\PolicyList
+     */
+    public function loadPolicies( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'policies', $request->path );
+
+        $loadedRole = $this->roleService->loadRole( $values['role'] );
+
+        return new Values\PolicyList( $loadedRole->id, $loadedRole->getPolicies() );
+    }
+
+    /**
      * Adds a policy to role
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\API\Repository\Values\User\Role
+     * @return \eZ\Publish\API\Repository\Values\User\Policy
      */
     public function addPolicy( RMF\Request $request )
     {
@@ -169,6 +184,37 @@ class Role
         }
 
         return $policyToReturn;
+    }
+
+    /**
+     * Updates a policy
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\API\Repository\Values\User\Policy
+     */
+    public function updatePolicy( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'policy', $request->path );
+        $updateStruct = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            )
+        );
+
+        $role = $this->roleService->loadRole( $values['role'] );
+        foreach ( $role->getPolicies() as $policy )
+        {
+            if ( $policy->id == $values['policy'] )
+            {
+                return $this->roleService->updatePolicy(
+                    $policy,
+                    $updateStruct
+                );
+            }
+        }
+
+        return null;
     }
 
     /**

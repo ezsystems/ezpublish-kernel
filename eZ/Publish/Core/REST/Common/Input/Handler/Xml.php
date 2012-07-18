@@ -34,6 +34,12 @@ class Xml extends Handler
         'RoleList' => array(
             'Role',
         ),
+        'PolicyList' => array(
+            'Policy',
+        ),
+        'limitations' => array(
+            'limitation'
+        ),
     );
 
     /**

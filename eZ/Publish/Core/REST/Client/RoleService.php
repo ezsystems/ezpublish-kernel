@@ -271,7 +271,17 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function updatePolicy( APIPolicy $policy, APIPolicyUpdateStruct $policyUpdateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $inputMessage = $this->outputVisitor->visit( $policyUpdateStruct );
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Policy' );
+        $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
+
+        $result = $this->client->request(
+            'POST',
+            $policy->roleId . '/policies/' . $policy->id,
+            $inputMessage
+        );
+
+        return $this->inputDispatcher->parse( $result );
     }
 
     /**
@@ -293,7 +303,33 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
                 array( 'Accept' => $this->outputVisitor->getMediaType( 'Role' ) )
             )
         );
-        return $this->inputDispatcher->parse( $response );
+
+        $loadedRole = $this->inputDispatcher->parse( $response );
+        if ( !$loadedRole instanceof Role )
+            return $loadedRole;
+
+        $response = $this->client->request(
+            'GET',
+            $loadedRole->id . '/policies',
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'PolicyList' ) )
+            )
+        );
+
+        $policies = $this->inputDispatcher->parse( $response );
+        if ( !is_array( $policies ) )
+            return $policies;
+
+        return new Role(
+            array(
+                'id' => $loadedRole->id,
+                'identifier' => $loadedRole->identifier,
+                'mainLanguageCode' => $loadedRole->mainLanguageCode,
+                'names' => $loadedRole->getNames(),
+                'descriptions' => $loadedRole->getDescriptions()
+            ),
+            $policies
+        );
     }
 
     /**
@@ -498,7 +534,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function newPolicyUpdateStruct()
     {
-        throw new \Exception( "@TODO: Implement." );
+        return new PolicyUpdateStruct();
     }
 
     /**
