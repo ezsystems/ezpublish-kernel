@@ -307,6 +307,30 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
+     * @depends testCreateContentType
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
+     */
+    public function testCreateContentTypeFailsWithInvalidFieldSettings()
+    {
+        $this->createContentType(
+            $this->getInvalidFieldSettings(),
+            $this->getValidValidatorConfiguration()
+        );
+    }
+
+    /**
+     * @depends testCreateContentType
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
+     */
+    public function testCreateContentTypeFailsWithInvalidValidatorConfiguration()
+    {
+        $this->createContentType(
+            $this->getValidFieldSettings(),
+            $this->getInvalidValidatorConfiguration()
+        );
+    }
+
+    /**
      * @depends testLoadContentTypeField
      */
     public function testCreateContent()

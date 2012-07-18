@@ -200,7 +200,7 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
     /**
      * Asserts the the field data was loaded correctly.
      *
-     * Asserts that the data provided by {@link getValidUpdateFieldData()}
+     * Asserts that the data provided by {@link getValidCreationFieldData()};
      * was copied and loaded correctly.
      *
      * @param Field $field
