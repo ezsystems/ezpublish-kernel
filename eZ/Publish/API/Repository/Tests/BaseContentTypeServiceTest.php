@@ -52,7 +52,7 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         $typeCreate->creationDate = new \DateTime();
 
         $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'title', 'string'
+            'title', 'ezstring'
         );
         $titleFieldCreate->names = array(
             'eng-US' => 'Title',

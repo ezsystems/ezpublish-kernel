@@ -13,7 +13,7 @@ use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\API\Repository\FieldTypeTools,
-    eZ\Publish\API\Repository\IOService,
+    eZ\Publish\API\Repository\Repository,
     eZ\Publish\API\Repository\Values\IO\BinaryFile,
     eZ\Publish\Core\FieldType\ValidationError;
 
@@ -72,12 +72,12 @@ class Type extends FieldType
      *
      * @param \eZ\Publish\Core\Repository\ValidatorService $validatorService
      * @param \eZ\Publish\API\Repository\FieldTypeTools $fieldTypeTools
-     * @param \eZ\Publish\API\Repository\IOService $IOService
+     * @param \eZ\Publish\API\Repository\Repository $repository
      */
-    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools, IOService $IOService )
+    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools, Repository $repository )
     {
         parent::__construct( $validatorService, $fieldTypeTools );
-        $this->IOService = $IOService;
+        $this->IOService = $repository->getIOService();
     }
 
     /**

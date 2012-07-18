@@ -27,22 +27,6 @@ class Type extends FieldType
         )
     );
 
-    /**
-     * Holds an instance of validator service
-     *
-     * @var \eZ\Publish\Core\Repository\ValidatorService
-     */
-    protected $validatorService;
-
-    /**
-     * Constructs field type object, initializing internal data structures.
-     *
-     * @param \eZ\Publish\Core\Repository\ValidatorService $validatorService
-     */
-    public function __construct( ValidatorService $validatorService )
-    {
-        $this->validatorService = $validatorService;
-    }
 
     /**
      * Build a Value object of current FieldType
