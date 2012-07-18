@@ -218,7 +218,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
             ),
         );
         $fieldDefCreate->fieldSettings = array(
-            'textblockheight' => 10
+            'textRows' => 10
         );
         $fieldDefCreate->isSearchable = true;
 
@@ -303,7 +303,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $bodyUpdateStruct->isInfoCollector = true;
         $bodyUpdateStruct->validatorConfiguration = array();
         $bodyUpdateStruct->fieldSettings = array(
-            'textblockheight' => 60
+            'textRows' => 60
         );
         $bodyUpdateStruct->isSearchable = false;
 

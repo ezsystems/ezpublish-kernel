@@ -694,7 +694,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             ),
         );
         $titleFieldCreate->fieldSettings = array(
-            'textblockheight' => 10
+            'textRows' => 10
         );
         $titleFieldCreate->isSearchable = true;
 
@@ -723,7 +723,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             ),
         );
         $bodyFieldCreate->fieldSettings = array(
-            'textblockheight' => 80
+            'textRows' => 80
         );
         $bodyFieldCreate->isSearchable = true;
 
@@ -1218,7 +1218,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             ),
         );
         $fieldDefCreate->fieldSettings = array(
-            'textblockheight' => 10
+            'textRows' => 10
         );
         $fieldDefCreate->isSearchable = true;
 
@@ -1433,7 +1433,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $bodyUpdateStruct->isInfoCollector = true;
         $bodyUpdateStruct->validatorConfiguration = array();
         $bodyUpdateStruct->fieldSettings = array(
-            'textblockheight' => 60
+            'textRows' => 60
         );
         $bodyUpdateStruct->isSearchable = false;
 

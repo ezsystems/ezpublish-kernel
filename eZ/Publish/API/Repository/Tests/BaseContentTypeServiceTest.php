@@ -74,7 +74,7 @@ abstract class BaseContentTypeServiceTest extends BaseTest
             ),
         );
         $titleFieldCreate->fieldSettings = array(
-            'textblockheight' => 10
+            'textRows' => 23
         );
         $titleFieldCreate->isSearchable = true;
 
@@ -96,14 +96,9 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         $bodyFieldCreate->isTranslatable = true;
         $bodyFieldCreate->isRequired = true;
         $bodyFieldCreate->isInfoCollector = false;
-        $bodyFieldCreate->validatorConfiguration = array(
-            'StringLengthValidator' => array(
-                'minStringLength' => 0,
-                'maxStringLength' => 0,
-            ),
-        );
+        $bodyFieldCreate->validatorConfiguration = array();
         $bodyFieldCreate->fieldSettings = array(
-            'textblockheight' => 80
+            'textRows' => 80
         );
         $bodyFieldCreate->isSearchable = true;
 
