@@ -15,7 +15,6 @@ use Symfony\Component\EventDispatcher\Event,
 
 /**
  * This event is triggered after SiteAccess matching process and allows further control on it and the associated request.
- * Call setPathinfo() if you need to alter the request pathinfo after the siteaccess matching process (i.e. siteaccess in URI)
  */
 class PostSiteAccessMatchEvent extends Event
 {
@@ -28,11 +27,6 @@ class PostSiteAccessMatchEvent extends Event
      * @var \Symfony\Component\HttpFoundation\Request
      */
     private $request;
-
-    /**
-     * @var string
-     */
-    private $fixedUpPathinfo;
 
     public function __construct( SiteAccess $siteAccess, Request $request )
     {
@@ -56,36 +50,5 @@ class PostSiteAccessMatchEvent extends Event
     public function getSiteAccess()
     {
         return $this->siteAccess;
-    }
-
-    /**
-     * Sets the fixed up path info.
-     * Use this method if you need to alter the request pathinfo after the siteaccess matching process (i.e. siteaccess in URI)
-     *
-     * @param string $fixedUpPathinfo
-     */
-    public function setPathinfo( $fixedUpPathinfo )
-    {
-        $this->fixedUpPathinfo = $fixedUpPathinfo;
-    }
-
-    /**
-     * Returns the fixed up pathinfo
-     *
-     * @return string
-     */
-    public function getPathinfo()
-    {
-        return $this->fixedUpPathinfo;
-    }
-
-    /**
-     * Returns whether a fixed up pathinfo has been set.
-     *
-     * @return bool
-     */
-    public function hasPathinfo()
-    {
-        return isset( $this->fixedUpPathinfo );
     }
 }

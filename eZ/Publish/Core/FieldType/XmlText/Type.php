@@ -50,11 +50,7 @@ class Type extends FieldType
         "tagPreset" => array(
             "type" => "choice",
             "default" => self::TAG_PRESET_DEFAULT
-        ),
-        "defaultText" => array(
-            "type" => "string",
-            "default" => ""
-        ),
+        )
     );
 
     /**
@@ -274,18 +270,6 @@ EOF;
                         {
                             $validationErrors[] = new ValidationError(
                                 "Setting '%setting%' is of unknown tag preset",
-                                null,
-                                array(
-                                    "setting" => $name
-                                )
-                            );
-                        }
-                        break;
-                    case "defaultValue":
-                        if ( !is_string( $value ) )
-                        {
-                            $validationErrors[] = new ValidationError(
-                                "Setting '%setting%' must be of string type",
                                 null,
                                 array(
                                     "setting" => $name

@@ -17,25 +17,11 @@ use eZ\Publish\API\Repository\Values\User\UserGroup as APIUserGroup;
 class UserGroup extends APIUserGroup
 {
     /**
-     * Version info for the user
+     * Internal content representation
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
+     * @var \eZ\Publish\API\Repository\Values\Content\Content
      */
-    protected $versionInfo;
-
-    /**
-     * Fields that this user has
-     *
-     * @var \eZ\Publish\API\Repository\Values\Content\Field[]
-     */
-    protected $fields = array();
-
-    /**
-     * Relations from this user to other content
-     *
-     * @var \eZ\Publish\API\Repository\Values\Content\Relation[]
-     */
-    protected $relations = array();
+    protected $content;
 
     /**
      * returns the VersionInfo for this version
@@ -44,7 +30,7 @@ class UserGroup extends APIUserGroup
      */
     public function getVersionInfo()
     {
-        return $this->versionInfo;
+        return $this->content->getVersionInfo();
     }
 
     /**
@@ -61,21 +47,7 @@ class UserGroup extends APIUserGroup
      */
     public function getFieldValue( $fieldDefIdentifier, $languageCode = null )
     {
-        $contentInfo = $this->getVersionInfo()->getContentInfo();
-        $contentType = $contentInfo->getContentType();
-        $isTranslatable = $contentType->getFieldDefinition( $fieldDefIdentifier )->isTranslatable;
-
-        $languageCodeToUse = $contentInfo->mainLanguageCode;
-        if ( $isTranslatable && $languageCode !== null )
-            $languageCodeToUse = $languageCode;
-
-        foreach ( $this->fields as $field )
-        {
-            if ( $field->fieldDefIdentifier === $fieldDefIdentifier && $field->languageCode === $languageCodeToUse )
-                return $field->value;
-        }
-
-        return null;
+        return $this->content->getFieldValue( $fieldDefIdentifier, $languageCode );
     }
 
     /**
@@ -85,7 +57,7 @@ class UserGroup extends APIUserGroup
      */
     public function getRelations()
     {
-        return $this->relations;
+        return $this->content->getRelations();
     }
 
     /**
@@ -95,7 +67,7 @@ class UserGroup extends APIUserGroup
      */
     public function getFields()
     {
-        return $this->fields;
+        return $this->content->getFields();
     }
 
     /**
@@ -109,23 +81,7 @@ class UserGroup extends APIUserGroup
      */
     public function getFieldsByLanguage( $languageCode = null )
     {
-        $contentInfo = $this->getVersionInfo()->getContentInfo();
-        $contentType = $contentInfo->getContentType();
-
-        $languageCodeToUse = $contentInfo->mainLanguageCode;
-        if ( $languageCode !== null )
-            $languageCodeToUse = $languageCode;
-
-        $fieldsToReturn = array();
-
-        foreach ( $this->fields as $field )
-        {
-            $isTranslatable = $contentType->getFieldDefinition( $field->fieldDefIdentifier )->isTranslatable;
-            if ( !$isTranslatable || $field->languageCode === $languageCodeToUse )
-                $fieldsToReturn[] = $field;
-        }
-
-        return $fieldsToReturn;
+        return $this->content->getFieldsByLanguage( $languageCode );
     }
 
     /**
@@ -140,22 +96,32 @@ class UserGroup extends APIUserGroup
         switch ( $property )
         {
             case 'contentInfo':
-                return $this->versionInfo->getContentInfo();
+                return $this->getVersionInfo()->getContentInfo();
 
             case 'contentType':
-                return $this->versionInfo->getContentInfo()->getContentType();
+                return $this->getVersionInfo()->getContentInfo()->getContentType();
 
             case 'id':
-                if ( empty( $this->versionInfo ) )
+                $versionInfo = $this->getVersionInfo();
+                if ( empty( $versionInfo ) )
                     return null;
-                return $this->versionInfo->getContentInfo()->id;
+                return $versionInfo->getContentInfo()->id;
+
+            case 'versionInfo':
+                return $this->getVersionInfo();
+
+            case 'fields':
+                return $this->getFields();
+
+            case 'relations':
+                return $this->getRelations();
         }
 
         return parent::__get( $property );
     }
 
     /**
-     * Magic isset for singaling existence of convenience properties
+     * Magic isset for signaling existence of convenience properties
      *
      * @param string $property
      *
@@ -170,6 +136,15 @@ class UserGroup extends APIUserGroup
             return true;
 
         if ( $property === 'id' )
+            return true;
+
+        if ( $property === 'versionInfo' )
+            return true;
+
+        if ( $property === 'fields' )
+            return true;
+
+        if ( $property === 'relations' )
             return true;
 
         return parent::__isset( $property );

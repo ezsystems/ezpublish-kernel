@@ -10,8 +10,12 @@
 namespace eZ\Publish\Legacy\Kernel;
 
 use eZ\Publish\Legacy\Kernel as LegacyKernel,
+    eZ\Publish\MVC\SiteAccess,
     \ezpKernelHandler,
-    \ezpKernelWeb;
+    \ezpKernelWeb,
+    \eZSiteAccess,
+    \eZURI,
+    Symfony\Component\HttpFoundation\Request;
 
 /**
  * Legacy kernel loader
@@ -61,19 +65,30 @@ class Loader
     /**
      * Builds up the legacy kernel web handler and encapsulates it inside a closure, allowing lazy loading.
      *
+     * @param \Symfony\Component\HttpFoundation\Request $request Current web request
      * @return \Closure
      */
-    public function buildLegacyKernelHandlerWeb()
+    public function buildLegacyKernelHandlerWeb( Request $request )
     {
         $legacyRootDir = $this->legacyRootDir;
         $webrootDir = $this->webrootDir;
-        return function () use ( $legacyRootDir, $webrootDir )
+        return function () use ( $legacyRootDir, $webrootDir, $request )
         {
             static $webHandler;
             if ( !$webHandler instanceof ezpKernelWeb )
             {
                 chdir( $legacyRootDir );
-                $webHandler = new ezpKernelWeb();
+                $settings = array();
+                if ( $request->attributes->has( 'legacySiteaccess' ) )
+                    $settings['siteaccess'] = $request->attributes->get( 'legacySiteaccess' );
+
+                $webHandler = new ezpKernelWeb( $settings );
+                eZURI::instance()->setURIString(
+                    $request->attributes->get(
+                        'semanticPathinfo',
+                        $request->getPathinfo()
+                    )
+                );
                 chdir( $webrootDir );
             }
 

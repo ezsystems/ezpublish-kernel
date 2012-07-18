@@ -67,10 +67,6 @@ class XmlTextTypeTest extends FieldTypeTest
                     "type" => "choice",
                     "default" => XmlTextType::TAG_PRESET_DEFAULT
                 ),
-                "defaultText" => array(
-                    "type" => "string",
-                    "default" => ""
-                ),
             ),
             $ft->getSettingsSchema(),
             "The settings schema does not match what is expected."

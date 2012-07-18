@@ -1,5 +1,5 @@
 {
-    "hash": "096ef99e116068bc020ea370e7485a04",
+    "hash": "7e0fa11beaaf9e7dc68ff2c2d7c3812a",
     "packages": [
         {
             "package": "Qafoo/RMF",
@@ -9,11 +9,13 @@
         },
         {
             "package": "doctrine/common",
-            "version": "2.2.2"
+            "version": "2.3.x-dev",
+            "source-reference": "15b04ec520ccded3dc0eba65b12a69ff1931360f",
+            "commit-date": "1342443556"
         },
         {
             "package": "symfony/symfony",
-            "version": "v2.1.0-BETA1"
+            "version": "v2.1.0-BETA3"
         },
         {
             "package": "twig/twig",
@@ -21,7 +23,9 @@
         },
         {
             "package": "zetacomponents/base",
-            "version": "1.8"
+            "version": "dev-master",
+            "source-reference": "642f63a8a72c32996f1aaf8a317fdf746bc32ce7",
+            "commit-date": "1337599296"
         },
         {
             "package": "zetacomponents/cache",
@@ -56,7 +60,7 @@
     "aliases": [
 
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
         "symfony/symfony": 10,
         "zetacomponents/cache": 20,

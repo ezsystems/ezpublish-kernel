@@ -873,9 +873,7 @@ class UserService implements UserServiceInterface
 
         return new UserGroup(
             array(
-                'versionInfo' => $content->getVersionInfo(),
-                'fields' => $content->getFields(),
-                'relations' => $content->getRelations(),
+                'content' => $content,
                 'parentId' => $mainLocation ? $mainLocation->parentLocationId : null,
                 'subGroupCount' => $subGroupCount
             )
@@ -897,9 +895,7 @@ class UserService implements UserServiceInterface
 
         return new User(
             array(
-                'versionInfo' => $content->getVersionInfo(),
-                'fields' => $content->getFields(),
-                'relations' => $content->getRelations(),
+                'content' => $content,
                 'login' => $spiUser->login,
                 'email' => $spiUser->email,
                 'passwordHash' => $spiUser->passwordHash,

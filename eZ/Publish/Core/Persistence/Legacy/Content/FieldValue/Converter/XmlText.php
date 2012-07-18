@@ -50,6 +50,7 @@ class XmlText implements Converter
     {
         $storageDefinition->dataInt1 = $fieldDefinition->fieldTypeConstraints->fieldSettings['numRows'];
         $storageDefinition->dataText2 = $fieldDefinition->fieldTypeConstraints->fieldSettings['tagPreset'];
+        $storageDefinition->dataText1 = $fieldDefinition->defaultValue->data;
     }
 
     /**
@@ -63,8 +64,7 @@ class XmlText implements Converter
         $fieldDefinition->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
                 'numRows' => $storageDefinition->dataInt1,
-                'tagPreset' => $storageDefinition->dataText2,
-                'defaultText' => $storageDefinition->dataText1
+                'tagPreset' => $storageDefinition->dataText2
             )
         );
         $fieldDefinition->defaultValue->data = isset( $storageDefinition->dataText1 ) ? $storageDefinition->dataText1 : '';

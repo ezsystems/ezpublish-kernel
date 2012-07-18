@@ -48,15 +48,12 @@ class Country implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        $fieldSettings = $fieldDef->fieldTypeConstraints->fieldSettings;
-
-        if ( isset( $fieldSettings["isMultiple"] ) )
-            $storageDef->dataInt1 = (int)$fieldSettings["isMultiple"];
-
-        if ( !empty( $fieldSettings["defaultValue"] ) )
+        if ( isset( $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"] ) )
         {
-            $storageDef->dataText5 = $fieldSettings["defaultValue"]->data;
+            $storageDef->dataInt1 = (int)$fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"];
         }
+
+        $storageDef->dataText5 = $fieldDef->defaultValue->data;
     }
 
     /**
@@ -69,10 +66,11 @@ class Country implements Converter
     {
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false,
-                "default" => !empty( $storageDef->dataText5 ) ? $storageDef->dataText5 : null,
+                "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false
             )
         );
+
+        $fieldDef->defaultValue->data = isset( $storageDef->dataText5 ) ? $storageDef->dataText5 : null;
     }
 
     /**

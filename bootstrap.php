@@ -21,24 +21,31 @@ if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
     throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
 }
 
-// Generic composer autoloader
-$autoloadFile = __DIR__ . '/vendor/autoload.php';
-if ( !file_exists( $autoloadFile ) )
-    throw new \RuntimeException( 'Install dependencies with composer to run the test suites' );
-include $autoloadFile;
+// Auto-detect eZ Publish 5.x context with eZ Publish 4.x available.
+$baseDir = __DIR__;
+if ( stripos( __DIR__, '/vendor/ezsystems/ezpublish' ) !== false )
+{
+    $baseDir = str_replace( '/vendor/ezsystems/ezpublish', '', __DIR__ );
+    $legacyPath = $baseDir . '/app/ezpublish_legacy';
+}
 
-$dependencies = array();
+// Setup class loader using composer maps
+if ( !file_exists( "{$baseDir}/vendor/composer/autoload_namespaces.php" ) )
+{
+    throw new \RuntimeException( 'Install dependencies with composer to run the test suites' );
+}
+
+require __DIR__ . '/eZ/Publish/Core/Base/ClassLoader.php';
+$classLoader = new ClassLoader(
+    include "{$baseDir}/vendor/composer/autoload_namespaces.php",
+    include "{$baseDir}/vendor/composer/autoload_classmap.php"
+);
+spl_autoload_register( array( $classLoader, 'load' ) );
 
 // Bootstrap eZ Publish legacy kernel if configured
-if ( isset( $settings['base']['Legacy']['RootPath'] ) )
+$dependencies = array();
+if ( isset( $legacyPath ) )
 {
-    $legacyPath = $settings['base']['Legacy']['RootPath'];
-
-    // Deactivate eZComponents loading from legacy autoload.php as they are already loaded with Composer
-    if ( !defined( 'EZCBASE_ENABLED' ) )
-        define( 'EZCBASE_ENABLED', false );
-    require "$legacyPath/autoload.php";
-
     $legacyKernel = new LegacyKernel( new LegacyKernelCLI, $legacyPath, getcwd() );
     set_exception_handler( null );
     // Avoid "Fatal error" text from legacy kernel if not called
@@ -61,28 +68,9 @@ $configManager = new ConfigurationManager(
     $settings['base']['Configuration']['Paths']
 );
 
-// Access matching before we get active modules or opposite?
-// anyway access matching should use event filters hence be optional.
-
-// Setup configuration for modules
-/*$paths = array();
-foreach ( $settings['base']['ClassLoader']['Repositories'] as $ns => $nsPath )
-{
-    foreach ( glob( "{$nsPath}/*", GLOB_ONLYDIR ) as $path )//@todo Take from configuration
-    {
-        $paths[] = "{$path}/settings/";
-    }
-}
-
-$configManager->setGlobalDirs( $paths, 'modules' );*/
-
-$loader = new ClassLoader( array() );
 $sc = new ServiceContainer(
     $configManager->getConfiguration('service')->getAll(),
-    $dependencies + array(
-         '$classLoader' => $loader,
-         '$configurationManager' => $configManager,
-    )
+    $dependencies
 );
 
 return $sc;

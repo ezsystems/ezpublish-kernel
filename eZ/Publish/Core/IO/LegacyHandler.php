@@ -224,41 +224,40 @@ class LegacyHandler implements IoHandlerInterface, LegacyKernelAware
             throw new NotFoundException( 'BinaryFile', $path );
         }
 
-        return $this->legacyKernel->runCallback(
+        $metaData = $this->legacyKernel->runCallback(
             function () use ( $path )
             {
                 $clusterFile = eZClusterFileHandler::instance( $path );
-
-                $metaData = $clusterFile->metaData;
-
-                $file = new BinaryFile();
-                $file->path = $path;
-
-                $file->mtime = new DateTime();
-                $file->mtime->setTimestamp( $metaData['mtime'] );
-
-                // Setting the same timestamp as mtime, since ctime is not supported in Legacy
-                $file->ctime = clone $file->mtime;
-
-                $file->size = $metaData['size'];
-
-                // will only work with some ClusterFileHandlers (DB based ones, not with FS ones)
-                if ( isset( $metaData['datatype'] ) )
-                {
-                    $file->mimeType = $metaData['datatype'];
-                }
-                else
-                {
-                    $file->mimeType = self::getMimeTypeFromPath( $path );
-                }
-
-                $file->uri = $file->path;
-                $file->originalFile = basename( $file->path );
-
-                return $file;
+                return $clusterFile->metaData;
             },
             false
         );
+
+        $file = new BinaryFile();
+        $file->path = $path;
+
+        $file->mtime = new DateTime();
+        $file->mtime->setTimestamp( $metaData['mtime'] );
+
+        // Setting the same timestamp as mtime, since ctime is not supported in Legacy
+        $file->ctime = clone $file->mtime;
+
+        $file->size = $metaData['size'];
+
+        // will only work with some ClusterFileHandlers (DB based ones, not with FS ones)
+        if ( isset( $metaData['datatype'] ) )
+        {
+            $file->mimeType = $metaData['datatype'];
+        }
+        else
+        {
+            $file->mimeType = self::getMimeTypeFromPath( $path );
+        }
+
+        $file->uri = $file->path;
+        $file->originalFile = basename( $file->path );
+
+        return $file;
     }
 
     /**

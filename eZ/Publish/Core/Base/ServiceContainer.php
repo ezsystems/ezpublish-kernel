@@ -40,9 +40,9 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
  *
  *     [repository]
  *     class=eZ\Publish\Core\Base\Repository
- *     arguments[persistence_handler]=@inmemory_persistence_handler
+ *     arguments[persistence_handler]=@persistence_handler_inmemory
  *
- *     [inmemory_persistence_handler]
+ *     [persistence_handler_inmemory]
  *     class=eZ\Publish\Core\Persistence\InMemory\Handler
  *
  *     # @see \eZ\Publish\Core\settings\service.ini For more options and examples.

@@ -131,7 +131,7 @@ class FloatValueValidatorTest extends FieldTypeTest
      * Tests validating a correct value
      *
      * @dataProvider providerForValidateOK
-     * @covers \eZ\Publish\Core\FieldType\Float\FloatValueValidator::validate
+     * @covers \eZ\Publish\Core\FieldType\Validator\FloatValueValidator::validate
      * @covers \eZ\Publish\Core\FieldType\Validator::getMessage
      */
     public function testValidateCorrectValues( $value )
@@ -158,7 +158,7 @@ class FloatValueValidatorTest extends FieldTypeTest
      * Tests validating a wrong value
      *
      * @dataProvider providerForValidateKO
-     * @covers \eZ\Publish\Core\FieldType\Float\FloatValueValidator::validate
+     * @covers \eZ\Publish\Core\FieldType\Validator\FloatValueValidator::validate
      */
     public function testValidateWrongValues( $value, $message, $values )
     {

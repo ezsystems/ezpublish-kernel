@@ -7,6 +7,7 @@ parameters:
     ezpublish_legacy.kernel_handler.web.class: ezpKernelWeb
     ezpublish_legacy.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\LegacyKernelController
     ezpublish_legacy.router.class: eZ\Bundle\EzPublishLegacyBundle\Routing\FallbackRouter
+    ezpublish_legacy.siteaccess_listener.class: eZ\Bundle\EzPublishLegacyBundle\SiteAccess\LegacyMapper
 
 services:
     ezpublish_legacy.kernel:
@@ -28,6 +29,7 @@ services:
         class: %ezpublish_legacy.kernel_handler.web.class%
         factory_service: ezpublish_legacy.kernel.lazy_loader
         factory_method: buildLegacyKernelHandlerWeb
+        arguments: [@request=]
 
     ezpublish_legacy.kernel_handler:
         alias: ezpublish_legacy.kernel_handler.web
@@ -40,3 +42,8 @@ services:
         class: %ezpublish_legacy.router.class%
         tags:
             - {name: router, priority: -255}
+
+    ezpublish_legacy.siteaccess_listener:
+        class: %ezpublish_legacy.siteaccess_listener.class%
+        tags:
+            - { name: kernel.event_subscriber }
