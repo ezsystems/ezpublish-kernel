@@ -2,6 +2,8 @@ parameters:
     ezpublish.twig.extension.content.class: eZ\Publish\MVC\Templating\Twig\Extension\ContentExtension
     ezpublish.twig.content_helper.resources: [content_fields.html.twig]
 
+    ezpublish.view_manager.class: eZ\Publish\MVC\View\Manager
+
 services:
     ezpublish.twig.extension.content:
         class: %ezpublish.twig.extension.content.class%
@@ -9,3 +11,7 @@ services:
         public: false
         tags:
             - {name: twig.extension}
+
+    ezpublish.view_manager:
+        class: %ezpublish.view_manager.class%
+        arguments: [@templating, @?logger]
