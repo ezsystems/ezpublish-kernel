@@ -82,6 +82,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
             ),
         );
         $this->repository = static::getRepository( $serviceSettings );
+        $this->repository->setCurrentUser( $this->getStubbedUser( 14 ) );
     }
 
     /**
