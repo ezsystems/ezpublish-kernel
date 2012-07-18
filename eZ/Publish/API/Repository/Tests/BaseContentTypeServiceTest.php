@@ -81,7 +81,7 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         $typeCreate->addFieldDefinition( $titleFieldCreate );
 
         $bodyFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'body', 'text'
+            'body', 'eztext'
         );
         $bodyFieldCreate->names = array(
             'eng-US' => 'Body',
