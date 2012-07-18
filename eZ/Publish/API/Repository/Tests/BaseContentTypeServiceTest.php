@@ -69,15 +69,9 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         $titleFieldCreate->isInfoCollector = false;
         $titleFieldCreate->validatorConfiguration = array(
             'StringLengthValidator' => array(
-                'minStringLength' => array(
-                    'type'    => 'int',
-                    'default' => 0,
-                ),
-                'maxStringLength' => array(
-                    'type'    => 'int',
-                    'default' => null,
-                )
-            )
+                'minStringLength' => 0,
+                'maxStringLength' => 0,
+            ),
         );
         $titleFieldCreate->fieldSettings = array(
             'textblockheight' => 10
@@ -104,15 +98,9 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         $bodyFieldCreate->isInfoCollector = false;
         $bodyFieldCreate->validatorConfiguration = array(
             'StringLengthValidator' => array(
-                'minStringLength' => array(
-                    'type'    => 'int',
-                    'default' => 0,
-                ),
-                'maxStringLength' => array(
-                    'type'    => 'int',
-                    'default' => null,
-                )
-            )
+                'minStringLength' => 0,
+                'maxStringLength' => 0,
+            ),
         );
         $bodyFieldCreate->fieldSettings = array(
             'textblockheight' => 80

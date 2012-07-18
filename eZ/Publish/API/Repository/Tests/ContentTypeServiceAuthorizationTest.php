@@ -213,15 +213,9 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $fieldDefCreate->isInfoCollector = false;
         $fieldDefCreate->validatorConfiguration = array(
             'StringLengthValidator' => array(
-                'minStringLength' => array(
-                    'type'    => 'int',
-                    'default' => 0,
-                ),
-                'maxStringLength' => array(
-                    'type'    => 'int',
-                    'default' => null,
-                )
-            )
+                'minStringLength' => 0,
+                'maxStringLength' => 0,
+            ),
         );
         $fieldDefCreate->fieldSettings = array(
             'textblockheight' => 10
