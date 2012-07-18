@@ -233,6 +233,7 @@ CREATE TABLE ezcobj_state_group_language (
     contentobject_state_group_id integer NOT NULL DEFAULT 0,
     description text NOT NULL,
     language_id integer NOT NULL DEFAULT 0,
+    real_language_id integer NOT NULL DEFAULT 0,
     name character varying(45) NOT NULL DEFAULT ''::character varying
 );
 
@@ -819,7 +820,7 @@ ALTER TABLE ONLY ezcobj_state_group
     ADD CONSTRAINT ezcobj_state_group_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY ezcobj_state_group_language
-    ADD CONSTRAINT ezcobj_state_group_language_pkey PRIMARY KEY (contentobject_state_group_id, language_id);
+    ADD CONSTRAINT ezcobj_state_group_language_pkey PRIMARY KEY (contentobject_state_group_id, real_language_id);
 
 ALTER TABLE ONLY ezcobj_state_language
     ADD CONSTRAINT ezcobj_state_language_pkey PRIMARY KEY (contentobject_state_id, language_id);

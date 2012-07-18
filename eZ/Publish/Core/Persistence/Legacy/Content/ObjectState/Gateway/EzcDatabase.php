@@ -633,6 +633,7 @@ class EzcDatabase extends Gateway
             // Object state group language
             $this->dbHandler->aliasedColumn( $query, 'description', 'ezcobj_state_group_language' ),
             $this->dbHandler->aliasedColumn( $query, 'language_id', 'ezcobj_state_group_language' ),
+            $this->dbHandler->aliasedColumn( $query, 'real_language_id', 'ezcobj_state_group_language' ),
             $this->dbHandler->aliasedColumn( $query, 'name', 'ezcobj_state_group_language' )
         )->from(
             $this->dbHandler->quoteTable( 'ezcobj_state_group' )
@@ -711,6 +712,10 @@ class EzcDatabase extends Gateway
     {
         foreach ( $objectStateGroup->languageCodes as $languageCode )
         {
+            $languageId = $this->maskGenerator->generateLanguageIndicator(
+                $languageCode, $languageCode === $objectStateGroup->defaultLanguage
+            );
+
             $query = $this->dbHandler->createInsertQuery();
             $query->insertInto(
                 $this->dbHandler->quoteTable( 'ezcobj_state_group_language' )
@@ -725,12 +730,10 @@ class EzcDatabase extends Gateway
                 $query->bindValue( $objectStateGroup->name[$languageCode] )
             )->set(
                 $this->dbHandler->quoteColumn( 'language_id' ),
-                $query->bindValue(
-                    $this->maskGenerator->generateLanguageIndicator(
-                        $languageCode, $languageCode === $objectStateGroup->defaultLanguage
-                    ),
-                    null, \PDO::PARAM_INT
-                )
+                $query->bindValue( $languageId, null, \PDO::PARAM_INT )
+            )->set(
+                $this->dbHandler->quoteColumn( 'real_language_id' ),
+                $query->bindValue( $languageId & ~1, null, \PDO::PARAM_INT )
             );
 
             $query->prepare()->execute();

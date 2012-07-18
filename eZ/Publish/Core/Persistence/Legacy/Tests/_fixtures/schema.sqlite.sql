@@ -24,8 +24,9 @@ CREATE TABLE 'ezcobj_state_group_language' (
 	'contentobject_state_group_id' integer NOT NULL DEFAULT 0,
 	'description' text NOT NULL,
 	'language_id' integer NOT NULL DEFAULT 0,
+	'real_language_id' integer NOT NULL DEFAULT 0,
 	'name' text(45) NOT NULL DEFAULT '',
-	PRIMARY KEY ( contentobject_state_group_id, language_id )
+	PRIMARY KEY ( contentobject_state_group_id, real_language_id )
 );
 CREATE TABLE 'ezcobj_state_language' (
 	'contentobject_state_id' integer NOT NULL DEFAULT 0,

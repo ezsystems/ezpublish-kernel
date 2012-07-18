@@ -158,6 +158,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_group_language_mask' => 3,
                     'ezcobj_state_group_language_description' => '',
                     'ezcobj_state_group_language_language_id' => 3,
+                    'ezcobj_state_group_language_real_language_id' => 2,
                     'ezcobj_state_group_language_name' => 'Lock'
                 )
             ),
@@ -185,6 +186,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                         'ezcobj_state_group_language_mask' => 3,
                         'ezcobj_state_group_language_description' => '',
                         'ezcobj_state_group_language_language_id' => 3,
+                        'ezcobj_state_group_language_real_language_id' => 2,
                         'ezcobj_state_group_language_name' => 'Lock'
                     )
                  )
@@ -395,6 +397,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_group_language_mask' => 5,
                     'ezcobj_state_group_language_description' => 'Test group description',
                     'ezcobj_state_group_language_language_id' => 5,
+                    'ezcobj_state_group_language_real_language_id' => 4,
                     'ezcobj_state_group_language_name' => 'Test group'
                 )
             ),
@@ -425,6 +428,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_group_language_mask' => 5,
                     'ezcobj_state_group_language_description' => 'Test group description',
                     'ezcobj_state_group_language_language_id' => 5,
+                    'ezcobj_state_group_language_real_language_id' => 4,
                     'ezcobj_state_group_language_name' => 'Test group'
                 )
             ),

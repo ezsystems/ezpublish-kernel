@@ -15,6 +15,7 @@ return array(
             'contentobject_state_group_id' => 2,
             'description' => '',
             'language_id' => 3,
+            'real_language_id' => 2,
             'name' => 'Lock'
         ),
     ),
