@@ -116,7 +116,7 @@ class Mapper
         foreach ( $data as $groupTranslation )
         {
             $languageCode = $this->languageHandler->getById(
-                $groupTranslation['ezcobj_state_group_language_language_id'] & ~1
+                $groupTranslation['ezcobj_state_group_language_real_language_id']
             )->languageCode;
 
             $objectStateGroup->languageCodes[] = $languageCode;

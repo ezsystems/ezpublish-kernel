@@ -30,7 +30,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
     /**
      * Field registry mock
      *
-     * @var \eZ\Publish\SPI\Persistence\Content\FieldValue\Converter\Registry
+     * @var \eZ\Publish\SPI\Persistence\Content\FieldValue\ConverterRegistry
      */
     protected $fieldRegistry;
 
@@ -239,14 +239,16 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
     /**
      * Returns a field registry mock object
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue\Converter\Registry
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected function getFieldRegistry()
     {
         if ( !isset( $this->fieldRegistry ) )
         {
             $this->fieldRegistry = $this->getMock(
-                '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Registry'
+                '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\ConverterRegistry',
+                array(),
+                array( array() )
             );
         }
         return $this->fieldRegistry;

@@ -10,3 +10,4 @@ doc/apidoc/
 docblox.xml
 composer.phar
 /vendor/
+var/

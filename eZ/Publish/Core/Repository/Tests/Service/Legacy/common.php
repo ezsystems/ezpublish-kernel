@@ -8,7 +8,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Legacy;
 use eZ\Publish\Core\Base\ConfigurationManager,
     eZ\Publish\Core\Base\ServiceContainer,
-    ReflectionMethod;
+    ReflectionProperty;
 
 /**
  * Common init code for legacy service tests, returns repository
@@ -62,19 +62,14 @@ $serviceSettings = $configManager->getConfiguration('service')->getAll();
 $serviceSettings['repository']['arguments']['persistence_handler'] = '@persistence_handler_legacy';
 $serviceSettings['repository']['arguments']['io_handler'] = '@io_handler_legacy';
 $serviceSettings['persistence_handler_legacy']['arguments']['config']['dsn'] = $dsn;
+$serviceSettings['legacy_db_handler']['arguments']['dsn'] = $dsn;
 $sc = new ServiceContainer(
     $serviceSettings,
     $dependencies
 );
 
-
-$legacyHandler = $sc->get( 'persistence_handler_legacy' );
-
-// Get access to ezc DB handler
-$refGetDatabase = new ReflectionMethod( $legacyHandler, 'getDatabase' );
-$refGetDatabase->setAccessible( true );
-$handler = $refGetDatabase->invoke( $legacyHandler );
-
+// Get ezc DB handler
+$handler = $sc->get( 'legacy_db_handler' );
 
 // Insert Schema
 $schema = $legacyHandlerDir . '/Legacy/Tests/_fixtures/schema.' . $db . '.sql';

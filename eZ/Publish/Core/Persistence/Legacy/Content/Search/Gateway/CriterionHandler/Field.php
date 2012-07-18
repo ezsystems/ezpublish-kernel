@@ -12,7 +12,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     ezcQuerySelect,
     RuntimeException;
@@ -32,16 +32,15 @@ class Field extends CriterionHandler
     /**
      * Field converter registry
      *
-     * @var Converter\Registry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected $fieldConverterRegistry;
 
     /**
      * Construct from handler handler
      *
-     * @param EzcDbHandler $dbHandler
-     * @param Converter\Registry $fieldConverterRegistry
-     * @return void
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $fieldConverterRegistry
      */
     public function __construct( EzcDbHandler $dbHandler, Registry $fieldConverterRegistry )
     {

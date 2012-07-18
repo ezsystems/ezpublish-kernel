@@ -229,6 +229,7 @@ class MapperTest extends TestCase
                 'ezcobj_state_group_language_mask' => 3,
                 'ezcobj_state_group_language_description' => '',
                 'ezcobj_state_group_language_language_id' => 3,
+                'ezcobj_state_group_language_real_language_id' => 2,
                 'ezcobj_state_group_language_name' => 'Lock'
             )
         );

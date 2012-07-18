@@ -24,7 +24,7 @@ class NotFound extends NotFoundException
     {
         parent::__construct(
             'eZ\\Publish\\SPI\\Persistence\\Content\\FieldValue\\Converter\\*',
-            sprintf( 'FieldValue Converter for type "%s" not found.', $typeName )
+            $typeName
         );
     }
 }

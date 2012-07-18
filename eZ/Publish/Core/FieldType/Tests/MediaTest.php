@@ -57,7 +57,7 @@ class MediaTest extends FieldTypeTest
      */
     public function testValidatorConfigurationSchema()
     {
-        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
+        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository );
         self::assertSame(
             array(
                 "FileSizeValidator" => array(
@@ -75,7 +75,7 @@ class MediaTest extends FieldTypeTest
      */
     public function testSettingsSchema()
     {
-        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
+        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository );
         self::assertSame(
             array(
                 'mediaType' => MediaType::TYPE_HTML5_VIDEO
@@ -91,7 +91,7 @@ class MediaTest extends FieldTypeTest
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
+        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository );
         $invalidValue = $ft->getDefaultDefaultValue();
         $invalidValue->file = 'This is definitely not a binary file !';
         $ref = new ReflectionObject( $ft );
@@ -106,7 +106,7 @@ class MediaTest extends FieldTypeTest
      */
     public function testAcceptInvalidValue()
     {
-        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
+        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
@@ -118,7 +118,7 @@ class MediaTest extends FieldTypeTest
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
+        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );
         $refMethod->setAccessible( true );
@@ -132,7 +132,7 @@ class MediaTest extends FieldTypeTest
      */
     public function testBuildFieldValueFromString()
     {
-        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
+        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository );
         $value = $ft->buildValue( $this->mediaPath );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\FieldType\\Media\\Value', $value );
         self::assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\IO\\BinaryFile', $value->file );
@@ -145,7 +145,7 @@ class MediaTest extends FieldTypeTest
      */
     public function testFieldValueToString()
     {
-        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
+        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository );
         $value = $ft->buildValue( $this->mediaPath );
         self::assertSame( $value->file->id, (string)$value );
     }
@@ -157,7 +157,7 @@ class MediaTest extends FieldTypeTest
      */
     public function testVirtualLegacyProperty()
     {
-        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
+        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository );
         $value = $ft->buildValue( $this->mediaPath );
         self::assertSame( basename( $value->file->id ), $value->filename );
         self::assertSame( $value->file->mimeType, $value->mimeType );
@@ -169,7 +169,7 @@ class MediaTest extends FieldTypeTest
      */
     public function testInvalidVirtualProperty()
     {
-        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository->getIOService() );
+        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository );
         $value = $ft->buildValue( $this->mediaPath );
         $value->nonExistingProperty;
     }

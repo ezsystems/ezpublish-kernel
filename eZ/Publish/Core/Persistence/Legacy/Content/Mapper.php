@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Relation,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as LanguageHandler,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\Content\VersionInfo;
@@ -28,7 +28,7 @@ class Mapper
     /**
      * FieldValue converter registry
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected $converterRegistry;
 
@@ -50,7 +50,7 @@ class Mapper
      * Creates a new mapper.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry $converterRegistry
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $converterRegistry
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler $languageHandler
      */
     public function __construct( LocationMapper $locationMapper, Registry $converterRegistry, LanguageHandler $languageHandler )

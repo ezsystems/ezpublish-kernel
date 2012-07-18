@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 use eZ\Publish\API\Repository,
-    eZ\Publish\Core\FieldType\User\Value as UserValue;
+    eZ\Publish\Core\FieldType\User\Value as UserValue,
+    eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type
@@ -37,21 +38,47 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field definition data values
+     * Get a valid $fieldSettings value
      *
-     * This is a PHPUnit data provider
-     *
-     * @return array
+     * @return mixed
+     * @TODO Implement correctly
      */
-    public function getFieldDefinitionData()
+    public function getValidFieldSettings()
     {
-        return array(
-            // The user field type does not have any special field definition
-            // properties, so there is nothing to check for
-            array( 'fieldTypeIdentifier', 'ezuser' ),
-            array( 'fieldSettings', null ),
-            array( 'validatorConfiguration', null ),
-        );
+        return null;
+    }
+
+    /**
+     * Get a valid $validatorConfiguration
+     *
+     * @return mixed
+     * @TODO Implement correctly
+     */
+    public function getValidValidatorConfiguration()
+    {
+        return null;
+    }
+
+    /**
+     * Get $fieldSettings value not accepted by the field type
+     *
+     * @return mixed
+     * @TODO Implement correctly
+     */
+    public function getInvalidFieldSettings()
+    {
+        return false;
+    }
+
+    /**
+     * Get $validatorConfiguration not accepted by the field type
+     *
+     * @return mixed
+     * @TODO Implement correctly
+     */
+    public function getInvalidValidatorConfiguration()
+    {
+        return false;
     }
 
     /**
@@ -59,7 +86,7 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      *
      * @return array
      */
-    public function getInitialFieldData()
+    public function getValidCreationFieldData()
     {
         return new UserValue( array(
             'accountKey' => null,
@@ -71,31 +98,43 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get externals field data values
+     * Asserts that the field data was loaded correctly.
      *
-     * This is a PHPUnit data provider
+     * Asserts that the data provided by {@link getValidCreationFieldData()}
+     * was stored and loaded correctly.
      *
-     * @return array
+     * @param Field $field
+     * @return void
      */
-    public function getExternalsFieldData()
+    public function assertFieldDataLoadedCorrect( Field $field )
     {
-        return array(
-            array( 'accountKey', null ),
-            array( 'hasStoredLogin', true ),
-            array( 'contentobjectId', 226 ),
-            array( 'login', 'hans' ),
-            array( 'email', 'hans@example.com' ),
-            array( 'passwordHash', '680869a9873105e365d39a6d14e68e46' ),
-            array( 'passwordHashType', 2 ),
-            array( 'isLoggedIn', true ),
-            array( 'isEnabled', true ),
+        $this->assertInstanceOf(
+            'eZ\Publish\Core\FieldType\User\Value',
+            $field->value
+        );
+
+        $expectedData = array(
+            'accountKey' => null,
+            'hasStoredLogin' => true,
+            'contentobjectId' => 226,
+            'login' => 'hans',
+            'email' => 'hans@example.com',
+            'passwordHash' => '680869a9873105e365d39a6d14e68e46',
+            'passwordHashType' => 2,
+            'isLoggedIn' => true,
+            'isEnabled' => true,
             // @TODO: Fails because of maxLogin problem
-            array( 'isLocked', false ),
-            array( 'lastVisit', null ),
-            array( 'loginCount', null ),
+            'isLocked' => false,
+            'lastVisit' => null,
+            'loginCount' => null,
             // @TODO: Currently not editable through UserService, tests will
             // fail
-            array( 'maxLogin', 1000 ),
+            'maxLogin' => 1000,
+        );
+
+        $this->assertPropertiesCorrect(
+            $expectedData,
+            $field->value
         );
     }
 
@@ -104,7 +143,7 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      *
      * @return array
      */
-    public function getUpdateFieldData()
+    public function getValidUpdateFieldData()
     {
         return new UserValue( array(
             'accountKey'       => 'foobar',
@@ -126,52 +165,74 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      *
      * @return array
      */
-    public function getUpdatedExternalsFieldData()
+    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
     {
-        return array(
-            array( 'accountKey', 'foobar' ),
-            array( 'hasStoredLogin', true ),
-            array( 'contentobjectId', 226 ),
-            array( 'login', 'hans' ),
-            array( 'email', 'hans@example.com' ),
-            array( 'passwordHash', '680869a9873105e365d39a6d14e68e46' ),
-            array( 'passwordHashType', 2 ),
-            array( 'isLoggedIn', true ),
-            array( 'isEnabled', true ),
+        $this->assertInstanceOf(
+            'eZ\Publish\Core\FieldType\User\Value',
+            $field->value
+        );
+
+        $expectedData = array(
+            'accountKey' => 'foobar',
+            'hasStoredLogin' => true,
+            'contentobjectId' => 226,
+            'login' => 'hans',
+            'email' => 'hans@example.com',
+            'passwordHash' => '680869a9873105e365d39a6d14e68e46',
+            'passwordHashType' => 2,
+            'isLoggedIn' => true,
+            'isEnabled' => true,
             // @TODO: Fails because of maxLogin problem
-            array( 'isLocked', true ),
-            array( 'lastVisit', 123456789 ),
-            array( 'loginCount', 2300 ),
+            'isLocked' => true,
+            'lastVisit' => 123456789,
+            'loginCount' => 2300,
             // @TODO: Currently not editable through UserService, tests will
             // fail
-            array( 'maxLogin', 1000 ),
+            'maxLogin' => 1000,
+        );
+
+        $this->assertPropertiesCorrect(
+            $expectedData,
+            $field->value
         );
     }
 
     /**
-     * Get externals copied field data values
+     * Asserts the the field data was loaded correctly.
      *
-     * This is a PHPUnit data provider
+     * Asserts that the data provided by {@link getValidCreationFieldData()};
+     * was copied and loaded correctly.
      *
-     * @return array
+     * @param Field $field
      */
-    public function getCopiedExternalsFieldData()
+    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
     {
-        return array(
-            array( 'accountKey', null ),
-            array( 'hasStoredLogin', false ),
-            array( 'contentobjectId', null ),
-            array( 'login', null ),
-            array( 'email', null ),
-            array( 'passwordHash', null ),
-            array( 'passwordHashType', null ),
-            array( 'isLoggedIn', true ),
-            array( 'isEnabled', false ),
-            array( 'isLocked', false ),
-            array( 'lastVisit', null ),
-            array( 'loginCount', null ),
-            array( 'maxLogin', null ),
+        $this->assertInstanceOf(
+            'eZ\Publish\Core\FieldType\User\Value',
+            $field->value
         );
+
+        $expectedData = array(
+            'accountKey' => null,
+            'hasStoredLogin' => false,
+            'contentobjectId' => null,
+            'login' => null,
+            'email' => null,
+            'passwordHash' => null,
+            'passwordHashType' => null,
+            'isLoggedIn' => true,
+            'isEnabled' => false,
+            'isLocked' => false,
+            'lastVisit' => null,
+            'loginCount' => null,
+            'maxLogin' => null,
+        );
+
+        $this->assertPropertiesCorrect(
+            $expectedData,
+            $field->value
+        );
+        return ;
     }
 
     /**

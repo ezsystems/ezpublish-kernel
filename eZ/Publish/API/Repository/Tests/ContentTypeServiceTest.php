@@ -688,19 +688,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $titleFieldCreate->isRequired = true;
         $titleFieldCreate->isInfoCollector = false;
         $titleFieldCreate->validatorConfiguration = array(
-            'stringLength' => array(
-                'minStringLength' => array(
-                    'type'    => 'int',
-                    'default' => 0,
-                ),
-                'maxStringLength' => array(
-                    'type'    => 'int',
-                    'default' => null,
-                )
-            )
+            'StringLengthValidator' => array(
+                'minStringLength' => 0,
+                'maxStringLength' => 0,
+            ),
         );
         $titleFieldCreate->fieldSettings = array(
-            'textblockheight' => 10
+            'textRows' => 10
         );
         $titleFieldCreate->isSearchable = true;
 
@@ -723,19 +717,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $bodyFieldCreate->isRequired = true;
         $bodyFieldCreate->isInfoCollector = false;
         $bodyFieldCreate->validatorConfiguration = array(
-            'stringLength' => array(
-                'minStringLength' => array(
-                    'type'    => 'int',
-                    'default' => 0,
-                ),
-                'maxStringLength' => array(
-                    'type'    => 'int',
-                    'default' => null,
-                )
-            )
+            'StringLengthValidator' => array(
+                'minStringLength' => 0,
+                'maxStringLength' => 0,
+            ),
         );
         $bodyFieldCreate->fieldSettings = array(
-            'textblockheight' => 80
+            'textRows' => 80
         );
         $bodyFieldCreate->isSearchable = true;
 
@@ -1224,19 +1212,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $fieldDefCreate->isRequired = true;
         $fieldDefCreate->isInfoCollector = false;
         $fieldDefCreate->validatorConfiguration = array(
-            'stringLength' => array(
-                'minStringLength' => array(
-                    'type'    => 'int',
-                    'default' => 0,
-                ),
-                'maxStringLength' => array(
-                    'type'    => 'int',
-                    'default' => null,
-                )
-            )
+            'StringLengthValidator' => array(
+                'minStringLength' => 0,
+                'maxStringLength' => 0,
+            ),
         );
         $fieldDefCreate->fieldSettings = array(
-            'textblockheight' => 10
+            'textRows' => 10
         );
         $fieldDefCreate->isSearchable = true;
 
@@ -1451,7 +1433,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $bodyUpdateStruct->isInfoCollector = true;
         $bodyUpdateStruct->validatorConfiguration = array();
         $bodyUpdateStruct->fieldSettings = array(
-            'textblockheight' => 60
+            'textRows' => 60
         );
         $bodyUpdateStruct->isSearchable = false;
 

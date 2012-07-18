@@ -52,7 +52,7 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         $typeCreate->creationDate = new \DateTime();
 
         $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'title', 'string'
+            'title', 'ezstring'
         );
         $titleFieldCreate->names = array(
             'eng-US' => 'Title',
@@ -68,26 +68,20 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         $titleFieldCreate->isRequired = true;
         $titleFieldCreate->isInfoCollector = false;
         $titleFieldCreate->validatorConfiguration = array(
-            'stringLength' => array(
-                'minStringLength' => array(
-                    'type'    => 'int',
-                    'default' => 0,
-                ),
-                'maxStringLength' => array(
-                    'type'    => 'int',
-                    'default' => null,
-                )
-            )
+            'StringLengthValidator' => array(
+                'minStringLength' => 0,
+                'maxStringLength' => 0,
+            ),
         );
         $titleFieldCreate->fieldSettings = array(
-            'textblockheight' => 10
+            'textRows' => 23
         );
         $titleFieldCreate->isSearchable = true;
 
         $typeCreate->addFieldDefinition( $titleFieldCreate );
 
         $bodyFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'body', 'text'
+            'body', 'eztext'
         );
         $bodyFieldCreate->names = array(
             'eng-US' => 'Body',
@@ -102,20 +96,9 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         $bodyFieldCreate->isTranslatable = true;
         $bodyFieldCreate->isRequired = true;
         $bodyFieldCreate->isInfoCollector = false;
-        $bodyFieldCreate->validatorConfiguration = array(
-            'stringLength' => array(
-                'minStringLength' => array(
-                    'type'    => 'int',
-                    'default' => 0,
-                ),
-                'maxStringLength' => array(
-                    'type'    => 'int',
-                    'default' => null,
-                )
-            )
-        );
+        $bodyFieldCreate->validatorConfiguration = array();
         $bodyFieldCreate->fieldSettings = array(
-            'textblockheight' => 80
+            'textRows' => 80
         );
         $bodyFieldCreate->isSearchable = true;
 

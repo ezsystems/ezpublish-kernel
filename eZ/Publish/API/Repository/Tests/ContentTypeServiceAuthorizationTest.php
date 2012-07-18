@@ -212,19 +212,13 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $fieldDefCreate->isRequired = true;
         $fieldDefCreate->isInfoCollector = false;
         $fieldDefCreate->validatorConfiguration = array(
-            'stringLength' => array(
-                'minStringLength' => array(
-                    'type'    => 'int',
-                    'default' => 0,
-                ),
-                'maxStringLength' => array(
-                    'type'    => 'int',
-                    'default' => null,
-                )
-            )
+            'StringLengthValidator' => array(
+                'minStringLength' => 0,
+                'maxStringLength' => 0,
+            ),
         );
         $fieldDefCreate->fieldSettings = array(
-            'textblockheight' => 10
+            'textRows' => 10
         );
         $fieldDefCreate->isSearchable = true;
 
@@ -309,7 +303,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $bodyUpdateStruct->isInfoCollector = true;
         $bodyUpdateStruct->validatorConfiguration = array();
         $bodyUpdateStruct->fieldSettings = array(
-            'textblockheight' => 60
+            'textRows' => 60
         );
         $bodyUpdateStruct->isSearchable = false;
 

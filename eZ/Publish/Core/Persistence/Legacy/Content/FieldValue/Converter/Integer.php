@@ -25,6 +25,19 @@ class Integer implements Converter
     const HAS_MAX_VALUE = 2;
 
     /**
+     * Factory for current class
+     *
+     * @note Class should instead be configured as service if it gains dependencies.
+     *
+     * @static
+     * @return Integer
+     */
+    public static function create()
+    {
+        return new self;
+    }
+
+    /**
      * Converts data from $value to $storageFieldValue
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value

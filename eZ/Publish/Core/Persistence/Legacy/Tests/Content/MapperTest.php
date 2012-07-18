@@ -12,7 +12,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\API\Repository\Values\Content\Relation as RelationValue,
     eZ\Publish\SPI\Persistence\Content,
@@ -41,7 +41,7 @@ class MapperTest extends TestCase
     /**
      * Value converter registry mock
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected $valueConverterRegistryMock;
 
@@ -244,8 +244,7 @@ class MapperTest extends TestCase
                 )
             )->will( $this->returnValue( new StorageFieldValue() ) );
 
-        $reg = new Registry();
-        $reg->register( 'some-type', $convMock );
+        $reg = new Registry( array( 'some-type' => $convMock ) );
 
         $field = new Field();
         $field->type = 'some-type';
@@ -284,15 +283,16 @@ class MapperTest extends TestCase
                 )
             );
 
-        $reg = new Registry();
-        $reg->register( 'ezauthor', $convMock );
-        $reg->register( 'ezstring', $convMock );
-        $reg->register( 'ezxmltext', $convMock );
-        $reg->register( 'ezboolean', $convMock );
-        $reg->register( 'ezimage', $convMock );
-        $reg->register( 'ezdatetime', $convMock );
-        $reg->register( 'ezkeyword', $convMock );
-        $reg->register( 'ezsrrating', $convMock );
+        $reg = new Registry( array(
+            'ezauthor' => $convMock,
+            'ezstring' => $convMock,
+            'ezxmltext' => $convMock,
+            'ezboolean' => $convMock,
+            'ezimage' => $convMock,
+            'ezdatetime' => $convMock,
+            'ezkeyword' => $convMock,
+            'ezsrrating' => $convMock
+         ) );
 
         $rowsFixture = $this->getContentExtractFixture();
 
@@ -325,10 +325,11 @@ class MapperTest extends TestCase
             ->method( 'toFieldValue' )
             ->will( $this->returnValue( new FieldValue() ) );
 
-        $reg = new Registry();
-        $reg->register( 'ezstring', $convMock );
-        $reg->register( 'ezxmltext', $convMock );
-        $reg->register( 'ezdatetime', $convMock );
+        $reg = new Registry( array(
+            'ezstring' => $convMock,
+            'ezxmltext'=>  $convMock,
+            'ezdatetime' => $convMock,
+         ) );
 
         $rowsFixture = $this->getMultipleVersionsExtractFixture();
 
@@ -718,14 +719,16 @@ class MapperTest extends TestCase
     /**
      * Returns a FieldValue converter registry mock
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected function getValueConverterRegistryMock()
     {
         if ( !isset( $this->valueConverterRegistryMock ) )
         {
             $this->valueConverterRegistryMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Registry'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\ConverterRegistry',
+                array(),
+                array( array() )
             );
         }
         return $this->valueConverterRegistryMock;

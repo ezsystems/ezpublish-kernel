@@ -43,8 +43,9 @@ CREATE TABLE ezcobj_state_group_language (
   contentobject_state_group_id int(11) NOT NULL DEFAULT 0,
   description longtext NOT NULL,
   language_id int(11) NOT NULL DEFAULT 0,
+  real_language_id int(11) NOT NULL DEFAULT 0,
   name varchar(45) NOT NULL DEFAULT '',
-  PRIMARY KEY ( contentobject_state_group_id, language_id )
+  PRIMARY KEY ( contentobject_state_group_id, real_language_id )
 ) ENGINE=InnoDB;
 
 

@@ -95,7 +95,7 @@ class FieldTypeStub implements FieldType
      *
      * <code>
      *  array(
-     *      'stringLength' => array(
+     *      'StringLengthValidator' => array(
      *          'minStringLength' => array(
      *              'type'    => 'int',
      *              'default' => 0,

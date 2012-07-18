@@ -31,7 +31,7 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
     /**
      * FieldValue converter registry mock
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected $converterRegistryMock;
 
@@ -244,14 +244,16 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a FieldValue Converter registry mock
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected function getConverterRegistryMock()
     {
         if ( !isset( $this->converterRegistryMock ) )
         {
             $this->converterRegistryMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Registry'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\ConverterRegistry',
+                array(),
+                array( array() )
             );
         }
         return $this->converterRegistryMock;

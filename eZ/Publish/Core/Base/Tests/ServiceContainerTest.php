@@ -109,7 +109,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
         self::assertEquals( '__', $a->string );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\B', $a->b );
         self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\C', $a->c );
-        self::assertEquals( '', $a->c->string );// This will change if factory support is re added
+        self::assertEquals( 'BS', $a->c->string );
     }
 
     /**

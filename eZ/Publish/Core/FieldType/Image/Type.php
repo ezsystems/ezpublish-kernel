@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\FieldType\Image;
 use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\Repository\ValidatorService,
     eZ\Publish\API\Repository\Repository,
+    eZ\Publish\API\Repository\FieldTypeTools,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\API\Repository\Values\IO\BinaryFile,
     eZ\Publish\Core\FieldType\ValidationError;
@@ -45,13 +46,14 @@ class Type extends FieldType
     /**
      * Constructs field type object, initializing internal data structures.
      *
-     * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\Core\Repository\ValidatorService $validatorService
+     * @param FieldTypeTools $fieldTypeTools
+     * @param \eZ\Publish\API\Repository\Repository $repository
      */
-    public function __construct( Repository $repository, ValidatorService $validatorService )
+    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools, Repository $repository )
     {
+        parent::__construct( $validatorService, $fieldTypeTools );
         $this->IOService = $repository->getIOService();
-        $this->validatorService = $validatorService;
     }
 
     /**
