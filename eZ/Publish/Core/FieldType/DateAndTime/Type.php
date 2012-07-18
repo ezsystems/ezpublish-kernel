@@ -113,6 +113,8 @@ class Type extends FieldType
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
+     * @param \eZ\Publish\Core\FieldType\DateAndTime\Value $value
+     *
      * @return array
      */
     protected function getSortInfo( $value )
@@ -145,7 +147,9 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
-        return $value->value->getTimestamp();
+        if ( $value->value instanceof DateTime )
+            return $value->value->getTimestamp();
+        return 0;
     }
 
     /**
