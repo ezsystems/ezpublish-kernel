@@ -12,6 +12,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry,
 
     // Needed for $sortOrder and $sortField properties
     eZ\Publish\SPI\Persistence\Content\Location,
@@ -354,8 +355,7 @@ class MapperTest extends TestCase
                 )
             );
 
-        $converterRegistry = new Converter\Registry();
-        $converterRegistry->register( 'some_type', $converterMock );
+        $converterRegistry = new ConverterRegistry( array( 'some_type' => $converterMock  ) );
 
         $mapper = new Mapper( $converterRegistry );
 
@@ -388,8 +388,7 @@ class MapperTest extends TestCase
                 )
             );
 
-        $converterRegistry = new Converter\Registry();
-        $converterRegistry->register( 'some_type', $converterMock );
+        $converterRegistry = new ConverterRegistry( array( 'some_type' => $converterMock  ) );
 
         $mapper = new Mapper( $converterRegistry );
 
@@ -434,12 +433,14 @@ class MapperTest extends TestCase
     /**
      * Returns a converter registry mock
      *
-     * @return eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
+     * @return eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected function getConverterRegistryMock()
     {
         return $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Registry'
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\ConverterRegistry',
+            array(),
+            array( array() )
         );
     }
 

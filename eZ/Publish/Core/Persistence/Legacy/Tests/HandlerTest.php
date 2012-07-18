@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\Core\Base\ConfigurationManager,
+    eZ\Publish\Core\Base\ServiceContainer,
     eZ\Publish\Core\Persistence\Legacy\Handler;
 
 /**
@@ -88,7 +90,7 @@ class HandlerTest extends TestCase
         $registry = $handler->getFieldValueConverterRegistry();
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Registry',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\ConverterRegistry',
             $registry
         );
     }
@@ -327,11 +329,37 @@ class HandlerTest extends TestCase
      */
     protected function getHandlerFixture()
     {
-        return new Handler(
-            array(
-                'dsn' => $this->getDsn(),
-            )
+        // Auto-detect eZ Publish 5.x context with eZ Publish 4.x available.
+        $baseDir = '';
+        if ( stripos( __DIR__, '/vendor/ezsystems/ezpublish' ) !== false )
+        {
+            $baseDir = 'vendor/ezsystems/ezpublish/';
+        }
+
+        // get configuration config
+        if ( !( $settings = include ( $baseDir . 'config.php' ) ) )
+        {
+            throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
+        }
+
+        // load configuration uncached
+        $configManager = new ConfigurationManager(
+            array_merge_recursive( $settings, array(
+                'base' => array(
+                    'Configuration' => array(
+                        'UseCache' => false
+                    )
+                )
+            ) ),
+            $settings['base']['Configuration']['Paths']
         );
+
+        $sc = new ServiceContainer(
+            $configManager->getConfiguration('service')->getAll(),
+            array()
+        );
+
+        return $sc->get( 'persistence_handler_legacy' );
     }
 
     /**
@@ -340,13 +368,13 @@ class HandlerTest extends TestCase
      */
     public function testDatabaseInstance()
     {
-        $method = new \ReflectionMethod(
+        $method = new \ReflectionProperty(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Handler',
-            'getDatabase'
+            'dbHandler'
         );
         $method->setAccessible( true );
 
-        $dbHandler = $method->invoke( $this->getHandlerFixture() );
+        $dbHandler = $method->getValue( $this->getHandlerFixture() );
         $className = get_class( $this->getDatabaseHandler() );
 
         $this->assertTrue( $dbHandler instanceof $className, get_class( $dbHandler ) . " not of type $className." );

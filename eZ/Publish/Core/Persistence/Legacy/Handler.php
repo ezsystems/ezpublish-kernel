@@ -33,6 +33,8 @@ use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\Core\Persistence\Legacy\User,
     eZ\Publish\Core\Persistence\Legacy\User\Mapper as UserMapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as ConverterRegistry,
     ezcDbTransactionException,
     RuntimeException;
 
@@ -57,20 +59,6 @@ class Handler implements HandlerInterface
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
     protected $contentMapper;
-
-    /**
-     * Field value converter registry
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
-     */
-    protected $fieldValueConverterRegistry;
-
-    /**
-     * Storage registry
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
-     */
-    protected $storageRegistry;
 
     /**
      * Storage handler
@@ -206,16 +194,37 @@ class Handler implements HandlerInterface
     protected $languageMaskGenerator;
 
     /**
-     * Configurator
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Configurator
-     */
-    protected $configurator;
-
-    /**
      * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected $dbHandler;
+
+    /**
+     * Field value converter registry
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
+     */
+    protected $converterRegistry;
+
+    /**
+     * Storage registry
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
+     */
+    protected $storageRegistry;
+
+    /**
+     * Transform Processor
+     *
+     * @var Content\Search\TransformationProcessor
+     */
+    protected $transformationProcessor;
+
+    /**
+     * General configuration
+     *
+     * @var array
+     */
+    protected $config;
 
     /**
      * Creates a new repository handler.
@@ -248,7 +257,8 @@ class Handler implements HandlerInterface
      * The DSN (data source name) defines which database to use. It's format is
      * defined by the Apache Zeta Components Database component. Examples are:
      *
-     * - mysql://root:secret@localhost/ezp
+     * - mysql://root:secret
+     * @localhost/ezp
      *   for the MySQL database "ezp" on localhost, which will be accessed
      *   using user "root" with password "secret"
      * - sqlite://:memory:
@@ -286,27 +296,25 @@ class Handler implements HandlerInterface
      * {@link \eZ\Publish\Core\Persistence\Legacy\Converter\Search\TransformationProcessor}
      * and then used for normalization in the full text search.
      *
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @param Content\FieldValue\ConverterRegistry $converterRegistry
+     * @param Content\StorageRegistry $storageRegistry
+     * @param Content\Search\TransformationProcessor $transformationProcessor
      * @param array $config
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler|null $dbHandler Optional injection of db handler
      */
-    public function __construct( array $config, EzcDbHandler $dbHandler = null )
+    public function __construct(
+        EzcDbHandler $dbHandler,
+        ConverterRegistry $converterRegistry,
+        StorageRegistry $storageRegistry,
+        TransformationProcessor $transformationProcessor,
+        array $config = array()
+    )
     {
-        $this->configurator = new Configurator( $config );
         $this->dbHandler = $dbHandler;
-    }
-
-    /**
-     * Returns the Zeta Database handler
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
-     */
-    protected function getDatabase()
-    {
-        if ( !isset( $this->dbHandler ) )
-        {
-            $this->dbHandler = EzcDbHandler::create( $this->configurator->getDsn() );
-        }
-        return $this->dbHandler;
+        $this->converterRegistry = $converterRegistry;
+        $this->storageRegistry = $storageRegistry;
+        $this->transformationProcessor = $transformationProcessor;
+        $this->config = $config;
     }
 
     /**
@@ -339,7 +347,7 @@ class Handler implements HandlerInterface
         {
             $this->contentMapper = new ContentMapper(
                 $this->getLocationMapper(),
-                $this->getFieldValueConverterRegistry(),
+                $this->converterRegistry,
                 $this->contentLanguageHandler()
             );
         }
@@ -357,8 +365,8 @@ class Handler implements HandlerInterface
         {
             $this->contentGateway = new Content\Gateway\ExceptionConversion(
                 new Content\Gateway\EzcDatabase(
-                    $this->getDatabase(),
-                    new Content\Gateway\EzcDatabase\QueryBuilder( $this->getDatabase() ),
+                    $this->dbHandler,
+                    new Content\Gateway\EzcDatabase\QueryBuilder( $this->dbHandler ),
                     $this->contentLanguageHandler(),
                     $this->getLanguageMaskGenerator()
                 )
@@ -405,21 +413,12 @@ class Handler implements HandlerInterface
     /**
      * Returns the field value converter registry
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     public function getFieldValueConverterRegistry()
     {
-        if ( !isset( $this->fieldValueConverterRegistry ) )
-        {
-            $this->fieldValueConverterRegistry =
-                new Content\FieldValue\Converter\Registry();
-            $this->configurator->configureFieldConverter(
-                $this->fieldValueConverterRegistry
-            );
-        }
-        return $this->fieldValueConverterRegistry;
+        return $this->converterRegistry;
     }
-
     /**
      * Returns the storage registry
      *
@@ -427,13 +426,6 @@ class Handler implements HandlerInterface
      */
     public function getStorageRegistry()
     {
-        if ( !isset( $this->storageRegistry ) )
-        {
-            $this->storageRegistry = new StorageRegistry();
-            $this->configurator->configureExternalStorages(
-                $this->storageRegistry
-            );
-        }
         return $this->storageRegistry;
     }
 
@@ -447,36 +439,11 @@ class Handler implements HandlerInterface
         if ( !isset( $this->storageHandler ) )
         {
             $this->storageHandler = new StorageHandler(
-                $this->getStorageRegistry(),
+                $this->storageRegistry,
                 $this->getContentGateway()->getContext()
             );
         }
         return $this->storageHandler;
-    }
-
-    /**
-     * Get a transformation processor for full text search normalization
-     *
-     * @return TransformationProcessor
-     */
-    protected function getTransformationProcessor()
-    {
-        $processor = new TransformationProcessor(
-            new TransformationParser(),
-            new TransformationPcreCompiler(
-                new Utf8Converter()
-            )
-        );
-
-        // @TODO: How do we get the path to the currently used transformation
-        // files?
-        $path = '.';
-        foreach ( glob( $path . '/*.tr' ) as $file )
-        {
-            $processor->loadRules( $file );
-        }
-
-        return $processor;
     }
 
     /**
@@ -486,7 +453,7 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->searchHandler ) )
         {
-            $db = $this->getDatabase();
+            $db = $this->dbHandler;
             $this->searchHandler = new Content\Search\Handler(
                 new Content\Search\Gateway\ExceptionConversion(
                     new Content\Search\Gateway\EzcDatabase(
@@ -509,11 +476,11 @@ class Handler implements HandlerInterface
                                 new CriterionHandler\Status( $db ),
                                 new CriterionHandler\FullText(
                                     $db,
-                                    $this->getTransformationProcessor()
+                                    $this->transformationProcessor
                                 ),
                                 new CriterionHandler\Field(
                                     $db,
-                                    $this->getFieldValueConverterRegistry()
+                                    $this->converterRegistry
                                 ),
                             )
                         ),
@@ -530,7 +497,7 @@ class Handler implements HandlerInterface
                                 new SortClauseHandler\Field( $db ),
                             )
                         ),
-                        new Content\Gateway\EzcDatabase\QueryBuilder( $this->getDatabase() ),
+                        new Content\Gateway\EzcDatabase\QueryBuilder( $this->dbHandler ),
                         $this->contentLanguageHandler(),
                         $this->getLanguageMaskGenerator()
                     )
@@ -551,7 +518,7 @@ class Handler implements HandlerInterface
         {
             $this->contentTypeHandler = new TypeHandler(
                 $this->getContentTypeGateway(),
-                new TypeMapper( $this->getFieldValueConverterRegistry() ),
+                new TypeMapper( $this->converterRegistry ),
                 $this->getTypeUpdateHandler()
             );
         }
@@ -567,7 +534,7 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->typeUpdateHandler ) )
         {
-            if ( $this->configurator->shouldDeferTypeUpdates() )
+            if ( isset( $this->config['defer_type_update'] ) && $this->config['defer_type_update'] )
             {
                 $this->typeUpdateHandler = new Type\Update\Handler\DeferredLegacy(
                     $this->getContentGateway()
@@ -580,7 +547,7 @@ class Handler implements HandlerInterface
                     new Type\ContentUpdater(
                         $this->searchHandler(),
                         $this->getContentGateway(),
-                        $this->getFieldValueConverterRegistry(),
+                        $this->converterRegistry,
                         $this->getStorageHandler()
                     )
                 );
@@ -600,7 +567,7 @@ class Handler implements HandlerInterface
         {
             $this->contentTypeGateway = new Type\Gateway\ExceptionConversion(
                 new Type\Gateway\EzcDatabase(
-                    $this->getDatabase(),
+                    $this->dbHandler,
                     $this->getLanguageMaskGenerator()
                 )
             );
@@ -618,7 +585,7 @@ class Handler implements HandlerInterface
             $this->languageHandler = new Content\Language\CachingHandler(
                 new Content\Language\Handler(
                     new Content\Language\Gateway\ExceptionConversion(
-                        new Content\Language\Gateway\EzcDatabase( $this->getDatabase() )
+                        new Content\Language\Gateway\EzcDatabase( $this->dbHandler )
                     ),
                     new LanguageMapper()
                 ),
@@ -669,7 +636,7 @@ class Handler implements HandlerInterface
         if ( !isset( $this->locationGateway ) )
         {
             $this->locationGateway = new Content\Location\Gateway\ExceptionConversion(
-                new Content\Location\Gateway\EzcDatabase( $this->getDatabase() )
+                new Content\Location\Gateway\EzcDatabase( $this->dbHandler )
             );
         }
         return $this->locationGateway;
@@ -715,7 +682,7 @@ class Handler implements HandlerInterface
         {
             $this->objectStateGateway = new Content\ObjectState\Gateway\ExceptionConversion(
                 new Content\ObjectState\Gateway\EzcDatabase(
-                    $this->getDatabase(),
+                    $this->dbHandler,
                     $this->getLanguageMaskGenerator()
                 )
             );
@@ -748,9 +715,9 @@ class Handler implements HandlerInterface
         {
             $this->userHandler = new User\Handler(
                 new User\Gateway\ExceptionConversion(
-                    new User\Gateway\EzcDatabase( $this->getDatabase() )
+                    new User\Gateway\EzcDatabase( $this->dbHandler )
                 ),
-                new User\Role\Gateway\EzcDatabase( $this->getDatabase() ),
+                new User\Role\Gateway\EzcDatabase( $this->dbHandler ),
                 new UserMapper()
             );
         }
@@ -766,7 +733,7 @@ class Handler implements HandlerInterface
         {
             $this->sectionHandler = new Content\Section\Handler(
                 new Content\Section\Gateway\ExceptionConversion(
-                    new Content\Section\Gateway\EzcDatabase( $this->getDatabase() )
+                    new Content\Section\Gateway\EzcDatabase( $this->dbHandler )
                 )
             );
         }
@@ -798,7 +765,7 @@ class Handler implements HandlerInterface
      */
     public function beginTransaction()
     {
-        $this->getDatabase()->beginTransaction();
+        $this->dbHandler->beginTransaction();
     }
 
     /**
@@ -812,7 +779,7 @@ class Handler implements HandlerInterface
     {
         try
         {
-            $this->getDatabase()->commit();
+            $this->dbHandler->commit();
         }
         catch ( ezcDbTransactionException $e )
         {
@@ -831,7 +798,7 @@ class Handler implements HandlerInterface
     {
         try
         {
-            $this->getDatabase()->rollback();
+            $this->dbHandler->rollback();
         }
         catch ( ezcDbTransactionException $e )
         {

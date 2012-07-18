@@ -29,7 +29,7 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     /**
      * Field registry mock
      *
-     * @var \eZ\Publish\SPI\Persistence\Content\FieldValue\Converter\Registry
+     * @var \eZ\Publish\SPI\Persistence\Content\FieldValue\ConverterRegistry
      */
     protected $fieldRegistry;
 
@@ -154,7 +154,9 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
                         new Content\Search\Gateway\CriterionHandler\Field(
                             $this->getDatabaseHandler(),
                             $this->fieldRegistry = $this->getMock(
-                                '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Registry'
+                                '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\ConverterRegistry',
+                                array(),
+                                array( array() )
                             )
                         ),
                     )

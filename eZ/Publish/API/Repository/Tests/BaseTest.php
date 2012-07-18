@@ -58,9 +58,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         {
             $this->markTestSkipped(
                 'Cannot create a repository with predefined user. ' .
-                'Check the UserService or RoleService implmenentation. ' .
+                'Check the UserService or RoleService implementation. ' .
                  PHP_EOL . PHP_EOL.
-                'Exception trace: ' .
+                'Exception trace: ' . $e->getMessage() . "\n" .
                 $e->getTraceAsString()
             );
         }

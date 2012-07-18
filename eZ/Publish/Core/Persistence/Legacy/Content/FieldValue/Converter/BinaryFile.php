@@ -19,6 +19,19 @@ class BinaryFile implements Converter
     const FILESIZE_VALIDATOR_IDENTIFIER = "FileSizeValidator";
 
     /**
+     * Factory for current class
+     *
+     * @note Class should instead be configured as service if it gains dependencies.
+     *
+     * @static
+     * @return BinaryFile
+     */
+    public static function create()
+    {
+        return new self;
+    }
+
+    /**
      * Converts data from $value to $storageFieldValue.
      * Nothing has to be stored for eZBinaryFile, as everything has to be stored in an external table.
      *

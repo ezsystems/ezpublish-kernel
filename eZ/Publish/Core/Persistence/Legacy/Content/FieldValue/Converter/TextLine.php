@@ -21,6 +21,19 @@ class TextLine implements Converter
     const STRING_LENGTH_VALIDATOR_IDENTIFIER = "StringLengthValidator";
 
     /**
+     * Factory for current class
+     *
+     * @note Class should instead be configured as service if it gains dependencies.
+     *
+     * @static
+     * @return TextLine
+     */
+    public static function create()
+    {
+        return new self;
+    }
+
+    /**
      * Converts data from $value to $storageFieldValue
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value

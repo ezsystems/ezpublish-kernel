@@ -47,10 +47,18 @@ class TransformationProcessor
      *
      * @return void
      */
-    public function __construct( TransformationParser $parser, TransformationPcreCompiler $compiler )
+    public function __construct(
+        TransformationParser $parser,
+        TransformationPcreCompiler $compiler,
+        array $rules = array()
+    )
     {
         $this->parser = $parser;
         $this->compiler = $compiler;
+        foreach( $rules as $file )
+        {
+            $this->loadRules( $file );
+        }
     }
 
     /**

@@ -25,28 +25,40 @@ class StorageRegistry
     protected $storageMap = array();
 
     /**
-     * Register a storage
+     * Create field storage registry with converter map
      *
-     * @param string $typeName
-     * @param \eZ\Publish\SPI\FieldType\FieldStorage $storage
-     * @return void
+     * @param array $storageMap A map where key is field type key and value is a callable
+     *                         factory to get FieldStorage OR FieldStorage instance
      */
-    public function register( $typeName, FieldStorage $storage )
+    public function __construct( array $storageMap )
     {
-        $this->storageMap[$typeName] = $storage;
+        $this->storageMap = $storageMap;
     }
 
     /**
      * Returns the storage for $typeName
      *
      * @param string $typeName
+     *
+     * @throws \RuntimeException When type is neither FieldStorage instance or callable factory
+     *
      * @return \eZ\Publish\SPI\FieldType\FieldStorage
      */
     public function getStorage( $typeName )
     {
         if ( !isset( $this->storageMap[$typeName] ) )
         {
-            $this->register( $typeName, new NullStorage );
+            $this->storageMap[$typeName] = new NullStorage;
+        }
+        else if ( !$this->storageMap[$typeName] instanceof FieldStorage )
+        {
+            if ( !is_callable( $this->storageMap[$typeName] ) )
+            {
+                throw new \RuntimeException( "FieldStorage '$typeName' is neither callable or instance" );
+            }
+
+            $factory = $this->storageMap[$typeName];
+            $this->storageMap[$typeName] = call_user_func( $factory );
         }
         return $this->storageMap[$typeName];
     }

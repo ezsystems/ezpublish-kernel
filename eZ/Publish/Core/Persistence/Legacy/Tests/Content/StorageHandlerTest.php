@@ -200,7 +200,9 @@ class StorageHandlerTest extends TestCase
         if ( !isset( $this->storageRegistryMock ) )
         {
             $this->storageRegistryMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageRegistry'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageRegistry',
+                array(),
+                array( array() )
             );
         }
         return $this->storageRegistryMock;
