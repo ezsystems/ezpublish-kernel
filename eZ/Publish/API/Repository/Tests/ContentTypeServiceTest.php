@@ -688,7 +688,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $titleFieldCreate->isRequired = true;
         $titleFieldCreate->isInfoCollector = false;
         $titleFieldCreate->validatorConfiguration = array(
-            'stringLength' => array(
+            'StringLengthValidator' => array(
                 'minStringLength' => array(
                     'type'    => 'int',
                     'default' => 0,
@@ -723,7 +723,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $bodyFieldCreate->isRequired = true;
         $bodyFieldCreate->isInfoCollector = false;
         $bodyFieldCreate->validatorConfiguration = array(
-            'stringLength' => array(
+            'StringLengthValidator' => array(
                 'minStringLength' => array(
                     'type'    => 'int',
                     'default' => 0,
@@ -1224,7 +1224,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $fieldDefCreate->isRequired = true;
         $fieldDefCreate->isInfoCollector = false;
         $fieldDefCreate->validatorConfiguration = array(
-            'stringLength' => array(
+            'StringLengthValidator' => array(
                 'minStringLength' => array(
                     'type'    => 'int',
                     'default' => 0,

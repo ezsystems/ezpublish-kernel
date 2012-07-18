@@ -212,7 +212,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $fieldDefCreate->isRequired = true;
         $fieldDefCreate->isInfoCollector = false;
         $fieldDefCreate->validatorConfiguration = array(
-            'stringLength' => array(
+            'StringLengthValidator' => array(
                 'minStringLength' => array(
                     'type'    => 'int',
                     'default' => 0,
