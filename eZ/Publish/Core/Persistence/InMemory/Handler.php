@@ -33,16 +33,6 @@ class Handler implements HandlerInterface
     protected $backend;
 
     /**
-     * @var \eZ\Publish\Core\Repository\ValidatorService
-     */
-    protected $validatorService;
-
-    /**
-     * @var \eZ\Publish\API\Repository\FieldTypeTools
-     */
-    protected $fieldTypeTools;
-
-    /**
      * Setup instance with an instance of Backend class
      *
      * @param \eZ\Publish\Core\Repository\ValidatorService $validatorService
