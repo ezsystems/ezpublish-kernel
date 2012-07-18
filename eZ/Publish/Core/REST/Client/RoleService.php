@@ -125,8 +125,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
             return $createdRole;
 
         $createdPolicies = array();
-        $policyCreateStructs = $roleCreateStruct->getPolicies();
-        foreach ( $policyCreateStructs as $policyCreateStruct )
+        foreach ( $roleCreateStruct->getPolicies() as $policyCreateStruct )
         {
             $inputMessage = $this->outputVisitor->visit( $policyCreateStruct );
             $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Policy' );
@@ -153,7 +152,6 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
             );
 
             $createdPolicy = new Policy( $createdPolicyArray );
-
             $createdPolicies[] = $createdPolicy;
         }
 
@@ -255,7 +253,22 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function removePolicy( APIRole $role, APIPolicy $policy )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'DELETE',
+            $role->id . '/policies/' . $policy->id,
+            new Message(
+                // TODO: What media-type should we set here? Actually, it should be
+                // all expected exceptions + none? Or is "Section" correct,
+                // since this is what is to be expected by the resource
+                // identified by the URL?
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'Policy' ) )
+            )
+        );
+
+        if ( !empty( $response->body ) )
+            $this->inputDispatcher->parse( $response );
+
+        return $this->loadRole( $role->id );
     }
 
     /**

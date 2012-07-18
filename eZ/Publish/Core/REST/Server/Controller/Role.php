@@ -231,6 +231,31 @@ class Role
     }
 
     /**
+     * Delete a policy from role
+     *
+     * @param RMF\Request $request
+     */
+    public function deletePolicy( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'policy', $request->path );
+
+        $role = $this->roleService->loadRole( $values['role'] );
+
+        $policy = null;
+        foreach ( $role->getPolicies() as $rolePolicy )
+        {
+            if ( $rolePolicy->id == $values['policy'] )
+            {
+                $policy = $rolePolicy;
+                break;
+            }
+        }
+
+        if ( $policy !== null )
+            $this->roleService->removePolicy( $role, $policy );
+    }
+
+    /**
      * Maps a RoleCreateStruct to a RoleUpdateStruct.
      *
      * Needed since both structs are encoded into the same media type on input.

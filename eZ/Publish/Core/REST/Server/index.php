@@ -193,6 +193,7 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^/user/roles/[0-9]+/policies/[0-9]+$)' => array(
             'PATCH'  => array( $roleController, 'updatePolicy' ),
+            'DELETE' => array( $roleController, 'deletePolicy' ),
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(
