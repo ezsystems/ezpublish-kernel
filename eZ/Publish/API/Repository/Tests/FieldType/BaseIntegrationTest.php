@@ -9,7 +9,9 @@
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 use eZ\Publish\API\Repository\Tests,
-    eZ\Publish\API\Repository;
+    eZ\Publish\API\Repository,
+    eZ\Publish\API\Repository\Values\Content\Field,
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 
 /**
  * Integration test for legacy storage field types
@@ -46,27 +48,6 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     protected $customFieldIdentifier = "data";
 
     /**
-     * Id of test content type
-     *
-     * @var string
-     */
-    protected static $contentTypeId;
-
-    /**
-     * Id of test content
-     *
-     * @var string
-     */
-    protected static $contentId;
-
-    /**
-     * Current version of test content
-     *
-     * @var string
-     */
-    protected static $contentVersion;
-
-    /**
      * Get name of tested field tyoe
      *
      * @return string
@@ -74,54 +55,77 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     abstract public function getTypeName();
 
     /**
-     * Get field definition data values
+     * Get a valid $fieldSettings value
      *
-     * This is a PHPUnit data provider
-     *
-     * @return array
+     * @return mixed
      */
-    abstract public function getFieldDefinitionData();
+    abstract public function getValidFieldSettings();
 
     /**
-     * Get initial field externals data
+     * Get a valid $validatorConfiguration
      *
-     * @return array
+     * @return mixed
      */
-    abstract public function getInitialFieldData();
+    abstract public function getValidValidatorConfiguration();
 
     /**
-     * Get externals field data values
+     * Get $fieldSettings value not accepted by the field type
      *
-     * This is a PHPUnit data provider
-     *
-     * @return array
+     * @return mixed
      */
-    abstract public function getExternalsFieldData();
+    abstract public function getInvalidFieldSettings();
+
+    /**
+     * Get $validatorConfiguration not accepted by the field type
+     *
+     * @return mixed
+     */
+    abstract public function getInvalidValidatorConfiguration();
+
+    /**
+     * Get initial field data for valid object creation
+     *
+     * @return mixed
+     */
+    abstract public function getValidCreationFieldData();
+
+    /**
+     * Asserts that the field data was loaded correctly.
+     *
+     * Asserts that the data provided by {@link getValidCreationFieldData()}
+     * was stored and loaded correctly.
+     *
+     * @param Field $field
+     * @return void
+     */
+    abstract public function assertFieldDataLoadedCorrect( Field $field );
 
     /**
      * Get update field externals data
      *
-     * @return array
+     * @return mixed
      */
-    abstract public function getUpdateFieldData();
+    abstract public function getValidUpdateFieldData();
 
     /**
-     * Get externals updated field data values
+     * Asserts the the field data was loaded correctly.
      *
-     * This is a PHPUnit data provider
+     * Asserts that the data provided by {@link getValidUpdateFieldData()}
+     * was stored and loaded correctly.
      *
-     * @return array
+     * @param Field $field
      */
-    abstract public function getUpdatedExternalsFieldData();
+    abstract public function assertUpdatedFieldDataLoadedCorrect( Field $field );
 
     /**
-     * Get externals copied field data values
+     * Asserts the the field data was loaded correctly.
      *
-     * This is a PHPUnit data provider
+     * Asserts that the data provided by {@link getValidCreationFieldData()}
+     * was copied and loaded correctly.
      *
-     * @return array
+     * @param Field $field
      */
-    abstract public function getCopiedExternalsFieldData();
+    abstract public function assertCopiedFieldDataLoadedCorrectly( Field $field );
 
     /**
      * Get expectation for the toHash call on our field value
@@ -139,6 +143,15 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     abstract public function provideFromHashData();
 
+    /**
+     * Marks FieldType integration tests skipped against memory stub
+     *
+     * Since the FieldType integration tests rely on multiple factors which are
+     * hard to mimic by the memory stub, these can only be run against a real
+     * core implementation with a real persistence back end.
+     *
+     * @return void
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -174,6 +187,27 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testCreateContentType()
     {
+
+        $contentType = $this->createContentType(
+            $this->getValidFieldSettings(),
+            $this->getValidValidatorConfiguration()
+        );
+
+        $this->assertNotNull( $contentType->id );
+
+        return $contentType;
+    }
+
+    /**
+     * Creates a content type under test with $fieldSettings and
+     * $validatorConfiguration
+     *
+     * @param mixed $fieldSettings
+     * @param mixed $validatorConfiguration
+     * @return \eZ\Publish\API\Repository\Values\ContentType
+     */
+    protected function createContentType( $fieldSettings, $validatorConfiguration )
+    {
         $repository         = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
@@ -200,6 +234,11 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $dataFieldCreate->names      = array( 'eng-GB' => 'Title' );
         $dataFieldCreate->fieldGroup = 'main';
         $dataFieldCreate->position   = 2;
+
+        // Custom settings
+        $dataFieldCreate->fieldSettings = $fieldSettings;
+        $dataFieldCreate->validatorConfiguration = $validatorConfiguration;
+
         $createStruct->addFieldDefinition( $dataFieldCreate );
 
         $contentGroup     = $contentTypeService->loadContentTypeGroupByIdentifier( 'Content' );
@@ -207,8 +246,6 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
         $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
         $contentType = $contentTypeService->loadContentType( $contentTypeDraft->id );
-
-        $this->assertNotNull( $contentType->id );
 
         return $contentType;
     }
@@ -252,13 +289,20 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
     /**
      * @depends testLoadContentTypeFieldType
-     * @dataProvider getFieldDefinitionData
      */
-    public function testLoadContentTypeFieldData( $name, $value, $field )
+    public function testLoadContentTypeFieldData( FieldDefinition $fieldDefinition )
     {
         $this->assertEquals(
-            $value,
-            $field->$name
+            $this->getTypeName(),
+            $fieldDefinition->fieldTypeIdentifier
+        );
+        $this->assertEquals(
+            $this->getValidFieldSettings(),
+            $fieldDefinition->fieldSettings
+        );
+        $this->assertEquals(
+            $this->getValidValidatorConfiguration(),
+            $fieldDefinition->validatorConfiguration
         );
     }
 
@@ -282,7 +326,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
         $createStruct = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
         $createStruct->setField( 'name', 'Test object' );
-        $createStruct->setField( 'data', $this->getInitialFieldData() );
+        $createStruct->setField( 'data', $this->getValidCreationFieldData() );
 
         $createStruct->remoteId = 'abcdef0123456789abcdef0123456789';
         $createStruct->alwaysAvailable = true;
@@ -370,24 +414,10 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
     /**
      * @depends testLoadFieldType
-     * @dataProvider getExternalsFieldData
      */
-    public function testLoadExternalData( $name, $value, $field )
+    public function testLoadExternalData( Field $field )
     {
-        if ( !$field->value instanceof \eZ\Publish\Core\FieldType\Value )
-        {
-            $this->markTestSkipped( "You can only test field value values if the field value extends from \\eZ\\Publish\\Core\\FieldType\\Value." );
-        }
-
-        if ( !isset( $field->value ) )
-        {
-            $this->fail( "Property $name not avialable." );
-        }
-
-        $this->assertEquals(
-            $value,
-            $field->value->$name
-        );
+        $this->assertFieldDataLoadedCorrect( $field );
     }
 
     /**
@@ -403,7 +433,10 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $draft = $contentService->createContentDraft( $content->contentInfo );
 
         $updateStruct = $contentService->newContentUpdateStruct();
-        $updateStruct->setField( $this->customFieldIdentifier, $this->getUpdateFieldData() );
+        $updateStruct->setField(
+            $this->customFieldIdentifier,
+            $this->getValidUpdateFieldData()
+        );
 
         return $contentService->updateContent( $draft->versionInfo, $updateStruct );
     }
@@ -411,7 +444,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     /**
      * @depends testUpdateField
      */
-    public function testUpdateFieldType( $content )
+    public function testUpdateTypeFieldStillAvailable( $content )
     {
         foreach ( $content->getFields() as $field )
         {
@@ -425,25 +458,11 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @depends testUpdateFieldType
-     * @dataProvider getUpdatedExternalsFieldData
+     * @depends testUpdateTypeFieldStillAvailable
      */
-    public function testUpdateExternalData( $name, $value, $field )
+    public function testUpdateExternalData( Field $field )
     {
-        if ( !$field->value instanceof \eZ\Publish\Core\FieldType\Value )
-        {
-            $this->markTestSkipped( "You can only test field value values if the field value extends from \\eZ\\Publish\\Core\\FieldType\\Value." );
-        }
-
-        if ( !isset( $field->value ) )
-        {
-            $this->fail( "Property $name not avialable." );
-        }
-
-        $this->assertEquals(
-            $value,
-            $field->value->$name
-        );
+        $this->assertUpdatedFieldDataLoadedCorrect( $field );
     }
 
     /**
@@ -488,24 +507,10 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
     /**
      * @depends testCopiedFieldType
-     * @dataProvider getCopiedExternalsFieldData
      */
-    public function testCopiedExternalData( $name, $value, $field )
+    public function testCopiedExternalData( Field $field )
     {
-        if ( !$field->value instanceof \eZ\Publish\Core\FieldType\Value )
-        {
-            $this->markTestSkipped( "You can only test field value values if the field value extends from \\eZ\\Publish\\Core\\FieldType\\Value." );
-        }
-
-        if ( !isset( $field->value ) )
-        {
-            $this->fail( "Property $name not avialable." );
-        }
-
-        $this->assertEquals(
-            $value,
-            $field->value->$name
-        );
+        $this->assertCopiedFieldDataLoadedCorrectly( $field );
     }
 
     /**

@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 use eZ\Publish\API\Repository,
-    eZ\Publish\Core\FieldType\Url\Value as UrlValue;
+    eZ\Publish\Core\FieldType\Url\Value as UrlValue,
+    eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * Integration test for use field type
@@ -30,45 +31,82 @@ class UrlFieldTypeIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field definition data values
+     * Get a valid $fieldSettings value
      *
-     * This is a PHPUnit data provider
-     *
-     * @return array
+     * @return mixed
+     * @TODO Implement correctly
      */
-    public function getFieldDefinitionData()
+    public function getValidFieldSettings()
     {
-        return array(
-            // The url field type does not have any special field definition
-            // properties, so there is nothing to check for
-            array( 'fieldTypeIdentifier', 'ezurl' ),
-            array( 'fieldSettings', null ),
-            array( 'validatorConfiguration', null ),
-        );
+        return null;
     }
 
     /**
-     * Get initial field externals data
+     * Get a valid $validatorConfiguration
      *
-     * @return array
+     * @return mixed
+     * @TODO Implement correctly
      */
-    public function getInitialFieldData()
+    public function getValidValidatorConfiguration()
+    {
+        return null;
+    }
+
+    /**
+     * Get $fieldSettings value not accepted by the field type
+     *
+     * @return mixed
+     * @TODO Implement correctly
+     */
+    public function getInvalidFieldSettings()
+    {
+        return false;
+    }
+
+    /**
+     * Get $validatorConfiguration not accepted by the field type
+     *
+     * @return mixed
+     * @TODO Implement correctly
+     */
+    public function getInvalidValidatorConfiguration()
+    {
+        return false;
+    }
+
+    /**
+     * Get initial field data for valid object creation
+     *
+     * @return mixed
+     */
+    public function getValidCreationFieldData()
     {
         return new UrlValue( 'http://example.com', 'Example' );
     }
 
     /**
-     * Get externals field data values
+     * Asserts that the field data was loaded correctly.
      *
-     * This is a PHPUnit data provider
+     * Asserts that the data provided by {@link getValidCreationFieldData()}
+     * was stored and loaded correctly.
      *
-     * @return array
+     * @param Field $field
+     * @return void
      */
-    public function getExternalsFieldData()
+    public function assertFieldDataLoadedCorrect( Field $field)
     {
-        return array(
-            array( 'link', 'http://example.com' ),
-            array( 'text', 'Example' ),
+        $this->assertInstanceOf(
+            'eZ\\Publish\\Core\\FieldType\\Url\\Value',
+            $field->value
+        );
+
+        $expectedData = array(
+            'link' => 'http://example.com',
+            'text' => 'Example',
+        );
+        $this->assertPropertiesCorrect(
+            $expectedData,
+            $field->value
         );
     }
 
@@ -77,7 +115,7 @@ class UrlFieldTypeIntergrationTest extends BaseIntegrationTest
      *
      * @return array
      */
-    public function getUpdateFieldData()
+    public function getValidUpdateFieldData()
     {
         return new UrlValue( 'http://example.com/2', 'Example  2' );
     }
@@ -89,26 +127,45 @@ class UrlFieldTypeIntergrationTest extends BaseIntegrationTest
      *
      * @return array
      */
-    public function getUpdatedExternalsFieldData()
+    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
     {
-        return array(
-            array( 'link', 'http://example.com/2' ),
-            array( 'text', 'Example  2' ),
+        $this->assertInstanceOf(
+            'eZ\\Publish\\Core\\FieldType\\Url\\Value',
+            $field->value
+        );
+
+        $expectedData = array(
+            'link' => 'http://example.com/2',
+            'text' => 'Example  2',
+        );
+        $this->assertPropertiesCorrect(
+            $expectedData,
+            $field->value
         );
     }
 
     /**
-     * Get externals copied field data values
+     * Asserts the the field data was loaded correctly.
      *
-     * This is a PHPUnit data provider
+     * Asserts that the data provided by {@link getValidCreationFieldData()}
+     * was copied and loaded correctly.
      *
-     * @return array
+     * @param Field $field
      */
-    public function getCopiedExternalsFieldData()
+    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
     {
-        return array(
-            array( 'link', 'http://example.com' ),
-            array( 'text', 'Example' ),
+        $this->assertInstanceOf(
+            'eZ\\Publish\\Core\\FieldType\\Url\\Value',
+            $field->value
+        );
+
+        $expectedData = array(
+            'link' => 'http://example.com',
+            'text' => 'Example',
+        );
+        $this->assertPropertiesCorrect(
+            $expectedData,
+            $field->value
         );
     }
 
