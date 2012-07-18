@@ -62,6 +62,7 @@ $serviceSettings = $configManager->getConfiguration('service')->getAll();
 $serviceSettings['repository']['arguments']['persistence_handler'] = '@persistence_handler_legacy';
 $serviceSettings['repository']['arguments']['io_handler'] = '@io_handler_legacy';
 $serviceSettings['persistence_handler_legacy']['arguments']['config']['dsn'] = $dsn;
+$serviceSettings['legacy_db_handler']['arguments']['dsn'] = $dsn;
 $sc = new ServiceContainer(
     $serviceSettings,
     $dependencies
