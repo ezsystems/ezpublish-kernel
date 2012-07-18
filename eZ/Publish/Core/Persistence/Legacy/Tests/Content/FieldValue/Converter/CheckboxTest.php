@@ -81,22 +81,15 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
         $storageFieldDef = new StorageFieldDefinition;
         $defaultValue = new FieldValue;
         $defaultValue->data = $defaultBool;
-        $fieldTypeConstraints = new FieldTypeConstraints;
-        $fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
-                'defaultValue' => $defaultBool
-            )
-        );
         $fieldDef = new PersistenceFieldDefinition(
             array(
-                'fieldTypeConstraints' => $fieldTypeConstraints,
                 'defaultValue' => $defaultValue
             )
         );
 
         $this->converter->toStorageFieldDefinition( $fieldDef, $storageFieldDef );
         self::assertSame(
-            (int)$fieldDef->fieldTypeConstraints->fieldSettings['defaultValue'],
+            (int)$fieldDef->defaultValue->data,
             $storageFieldDef->dataInt3
         );
     }
@@ -118,10 +111,6 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
 
         $this->converter->toFieldDefinition( $storageDef, $fieldDef );
         self::assertSame( $defaultBool, $fieldDef->defaultValue->data );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
-        self::assertSame(
-            array( 'defaultValue' => $defaultBool ),
-            $fieldDef->fieldTypeConstraints->fieldSettings->getArrayCopy()
-        );
+        self::assertNull( $fieldDef->fieldTypeConstraints->fieldSettings );
     }
 }

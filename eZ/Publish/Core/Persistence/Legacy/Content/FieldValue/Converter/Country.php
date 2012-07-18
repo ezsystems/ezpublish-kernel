@@ -83,7 +83,7 @@ class Country implements Converter
             )
         );
 
-        $fieldDef->defaultValue->data = isset( $storageDef->dataText5 ) ? $storageDef->dataText5 : null;
+        $fieldDef->defaultValue->data = !empty( $storageDef->dataText5 ) ? $storageDef->dataText5 : null;
     }
 
     /**
