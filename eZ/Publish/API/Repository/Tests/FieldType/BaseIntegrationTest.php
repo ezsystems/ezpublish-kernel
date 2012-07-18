@@ -139,6 +139,18 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     abstract public function provideFromHashData();
 
+    protected function setUp()
+    {
+        parent::setUp();
+
+        if ( $this->getRepository() instanceof \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub )
+        {
+            $this->markTestSkipped(
+                'FieldType integration tests cannot be run against memory stub.'
+            );
+        }
+    }
+
     /**
      * Method called after content creation
      *
