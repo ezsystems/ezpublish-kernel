@@ -139,6 +139,19 @@ class Role
     }
 
     /**
+     * Delete a role by ID
+     *
+     * @param RMF\Request $request
+     */
+    public function deleteRole( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'role', $request->path );
+        return $this->roleService->deleteRole(
+            $this->roleService->loadRole( $values['role'] )
+        );
+    }
+
+    /**
      * Loads the policies for the role
      *
      * @param RMF\Request $request

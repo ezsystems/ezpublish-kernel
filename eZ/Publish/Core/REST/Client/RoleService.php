@@ -385,7 +385,24 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function deleteRole( APIRole $role )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'DELETE',
+            $role->id,
+            new Message(
+                // TODO: What media-type should we set here? Actually, it should be
+                // all expected exceptions + none? Or is "Section" correct,
+                // since this is what is to be expected by the resource
+                // identified by the URL?
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'Role' ) )
+            )
+        );
+
+        $result = null;
+        if ( !empty( $response->body ) )
+        {
+            $result = $this->inputDispatcher->parse( $response );
+        }
+        return $result;
     }
 
     /**

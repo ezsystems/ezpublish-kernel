@@ -185,6 +185,7 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/user/roles/[0-9]+$)' => array(
             'GET'    => array( $roleController, 'loadRole' ),
             'PATCH'  => array( $roleController, 'updateRole' ),
+            'DELETE' => array( $roleController, 'deleteRole' ),
         ),
         '(^/user/roles/[0-9]+/policies$)' => array(
             'GET'  => array( $roleController, 'loadPolicies' ),
