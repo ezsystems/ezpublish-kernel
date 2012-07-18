@@ -185,7 +185,7 @@ $dispatcher = new AuthenticatingDispatcher(
             'PATCH'  => array( $roleController, 'updateRole' ),
         ),
         '(^/user/roles/[0-9]+/policies$)' => array(
-            'PATCH'  => array( $roleController, 'addPolicy' ),
+            'POST' => array( $roleController, 'addPolicy' ),
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(
