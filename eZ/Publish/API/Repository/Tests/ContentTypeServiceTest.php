@@ -2651,6 +2651,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             'title', 'ezstring'
         );
         $titleFieldCreate->names = array( 'eng-GB' => 'Title' );
+        $typeCreate->addFieldDefinition( $titleFieldCreate );
 
         $groups = array(
             $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )
