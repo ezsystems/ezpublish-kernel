@@ -37,6 +37,8 @@ class NotFoundExceptionExceptionTest extends ExceptionTest
     }
 
     /**
+     * Get the exception
+     *
      * @return \Exception
      */
     protected function getException()
@@ -45,6 +47,8 @@ class NotFoundExceptionExceptionTest extends ExceptionTest
     }
 
     /**
+     * Get the exception visitor
+     *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Exception
      */
     protected function getExceptionVisitor()
