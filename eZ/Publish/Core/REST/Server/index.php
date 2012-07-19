@@ -188,8 +188,9 @@ $dispatcher = new AuthenticatingDispatcher(
             'DELETE' => array( $roleController, 'deleteRole' ),
         ),
         '(^/user/roles/[0-9]+/policies$)' => array(
-            'GET'  => array( $roleController, 'loadPolicies' ),
-            'POST' => array( $roleController, 'addPolicy' ),
+            'GET'    => array( $roleController, 'loadPolicies' ),
+            'POST'   => array( $roleController, 'addPolicy' ),
+            'DELETE' => array( $roleController, 'deletePolicies' ),
         ),
         '(^/user/roles/[0-9]+/policies/[0-9]+$)' => array(
             'PATCH'  => array( $roleController, 'updatePolicy' ),
