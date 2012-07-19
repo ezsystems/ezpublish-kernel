@@ -58,11 +58,11 @@ class ContentView
      */
     public function __construct( $templateIdentifier, array $parameters = array() )
     {
-        if ( !is_string( $templateIdentifier ) || !$templateIdentifier instanceof \Closure )
+        if ( !is_string( $templateIdentifier ) && !$templateIdentifier instanceof \Closure )
             throw new InvalidArgumentType( 'templateIdentifier', 'string or \Closure', $templateIdentifier );
 
         $this->templateIdentifier = $templateIdentifier;
-        $this->parameters = array();
+        $this->parameters = $parameters;
     }
 
     /**

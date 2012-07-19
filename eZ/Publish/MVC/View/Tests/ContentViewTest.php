@@ -1,0 +1,74 @@
+<?php
+/**
+ * File containing the ContentViewTest class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
+namespace eZ\Publish\MVC\View\Tests;
+
+use eZ\Publish\MVC\View\ContentView;
+
+/**
+ * @group mvc
+ */
+class ContentViewTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @dataProvider constructProvider
+     * @covers \eZ\Publish\MVC\View\ContentView::__construct
+     * @covers \eZ\Publish\MVC\View\ContentView::getTemplateIdentifier
+     * @covers \eZ\Publish\MVC\View\ContentView::getParameters
+     */
+    public function testConstruct( $templateIdentifier, array $params )
+    {
+        $contentView = new ContentView( $templateIdentifier, $params );
+        self::assertSame( $templateIdentifier, $contentView->getTemplateIdentifier() );
+        self::assertSame( $params, $contentView->getParameters() );
+    }
+
+    public function constructProvider()
+    {
+        return array(
+            array( 'some:valid:identifier', array( 'foo' => 'bar' ) ),
+            array( 'another::identifier', array() ),
+            array( 'oops:i_did_it:again', array( 'singer' => 'Britney Spears' ) ),
+            array( function () { return true; }, array() ),
+            array( function () { return true; }, array( 'truc' => 'muche' ) ),
+        );
+    }
+
+    /**
+     * @dataProvider constructFailProvider
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
+     * @covers \eZ\Publish\MVC\View\ContentView::__construct
+     */
+    public function testConstructFail( $templateIdentifier )
+    {
+        new ContentView( $templateIdentifier );
+    }
+
+    public function constructFailProvider()
+    {
+        return array(
+            array( 123 ),
+            array( new \stdClass ),
+            array( array( 1, 2, 3 ) ),
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\MVC\View\ContentView::__construct
+     * @covers \eZ\Publish\MVC\View\ContentView::setParameters
+     * @covers \eZ\Publish\MVC\View\ContentView::getParameters
+     */
+    public function testGetSetParameters()
+    {
+        $params = array( 'bar' => 'baz', 'fruit' => 'apple' );
+        $contentView = new ContentView( 'foo' );
+        $contentView->setParameters( $params );
+        self::assertSame( $params, $contentView->getParameters() );
+    }
+}
