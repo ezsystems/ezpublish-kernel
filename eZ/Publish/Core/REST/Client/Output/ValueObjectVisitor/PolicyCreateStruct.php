@@ -43,7 +43,7 @@ class PolicyCreateStruct extends ValueObjectVisitor
             $generator->startElement( 'limitations' );
             $generator->startList( 'limitations' );
 
-            foreach ( $data->getLimitations() as $limitation )
+            foreach ( $limitations as $limitation )
             {
                 $visitor->visitValueObject( $limitation );
             }

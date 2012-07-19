@@ -15,17 +15,23 @@ use eZ\Publish\Core\REST\Common\Output\Generator;
 abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * Visitor mock
+     *
+     * @var \eZ\Publish\Core\REST\Common\Output\Visitor
      */
     protected $visitorMock;
 
     /**
+     * Output generator
+     *
      * @var \eZ\Publish\Core\REST\Common\Output\Generator\Xml
      */
     protected $generator;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
+     * Gets the visitor mock
+     *
+     * @return \eZ\Publish\Core\REST\Common\Output\Visitor
      */
     protected function getVisitorMock()
     {
@@ -43,6 +49,8 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     }
 
     /**
+     * Gets the output generator
+     *
      * @return \eZ\Publish\Core\REST\Common\Output\Generator\Xml
      */
     protected function getGenerator()
