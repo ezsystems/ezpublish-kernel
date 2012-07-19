@@ -27,8 +27,14 @@ class StorageRegistry
     /**
      * Create field storage registry with converter map
      *
-     * @param array $storageMap A map where key is field type key and value is a callable
-     *                         factory to get FieldStorage OR FieldStorage instance
+     * In $storageMap a mapping of field type names to object / callable is
+     * expected, in case of callable factory it should return the storage object.
+     * The object is used to store/restore/delete/… data in external storage
+     * (e.g.another database or a web service). The storage object must comply to
+     * the {@link \eZ\Publish\SPI\FieldType\FieldStorage} interface.
+     *
+     * @param array $storageMap A map where key is field type name, and value is
+     *              a callable factory to get FieldStorage OR FieldStorage object
      */
     public function __construct( array $storageMap )
     {

@@ -40,9 +40,6 @@ use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
 
 /**
  * The repository handler for the legacy storage engine
- *
- * @todo If possible, the handler should not receive the DSN but the database
- *       connection instead, so that the implementation becomes fully testable.
  */
 class Handler implements HandlerInterface
 {
@@ -229,78 +226,16 @@ class Handler implements HandlerInterface
     /**
      * Creates a new repository handler.
      *
-     * The $config parameter expects an array of configuration values as
-     * follows:
-     *
-     * <code>
-     * array(
-     *  'dsn' =>'<database_type>://<user>:<password>@<host>/<database_name>',
-     *  'defer_type_update' => <true|false>,
-     *  'external_storages' => array(
-     *      '<type_name1>' => '<storage_class_1>',
-     *      '<type_name2>' => '<storage_class_2>',
-     *      // ...
-     *  ),
-     *  'field_converters' => array(
-     *      '<type_name1>' => '<converter_class_1>',
-     *      '<type_name2>' => '<converter_class_2>',
-     *      // ...
-     *  ),
-     *  'transformation_rule_files' => array(
-     *      '<full_file_path_1>',
-     *      '<full_file_path_2>',
-     *      // ...
-     *  )
-     * )
-     * </code>
-     *
-     * The DSN (data source name) defines which database to use. It's format is
-     * defined by the Apache Zeta Components Database component. Examples are:
-     *
-     * - mysql://root:secret
-     * @localhost/ezp
-     *   for the MySQL database "ezp" on localhost, which will be accessed
-     *   using user "root" with password "secret"
-     * - sqlite://:memory:
-     *   for a SQLite in memory database (used e.g. for unit tests)
-     *
-     * This config setting is not needed if $dbHandler is provided.
-     * For further information on the database setup, please refer to
-     * {@see http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html#handler-usage}
-     *
-     * The flag 'defer_type_update' defines if content types should be
-     * published immediatly (false), when the
-     * {@link \eZ\Publish\SPI\Persistence\Content\Type\Handler::publish()} method is
-     * called, or if a background process should be triggered (true), which is
-     * then executed by the old eZ Publish core.
-     *
-     * In 'external_storages' a mapping of field type names to classes is
-     * expected. The referred class is instantiated and the resulting object is
-     * used to store/restore/delete/… data in external storages (e.g. another
-     * database or a web service). The classes must comply to the
-     * {@link \eZ\Publish\SPI\FieldType\FieldStorage} interface. Note that due to the
-     * configuration mechanism and missing proper DI, the classes may not
-     * expect any constructor parameters!
-     *
-     * The 'field_converter' configuration array consists of another mapping of
-     * field type names to classes. Each of the classes is instantiated and
-     * used to convert content fields and content type field definitions to the
-     * legacy storage engine. The given class names must derive the
-     * {@link \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter}
-     * class. As for 'external_storage' classes, none of the classes may expect
-     * parameters in its constructor, due to missing proper DI.
-     *
-     * Through the 'transformation_rule_files' array, a list of files with
-     * full text transformation rules is given. These files are read by an
-     * instance of
-     * {@link \eZ\Publish\Core\Persistence\Legacy\Converter\Search\TransformationProcessor}
-     * and then used for normalization in the full text search.
-     *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
-     * @param Content\FieldValue\ConverterRegistry $converterRegistry
-     * @param Content\StorageRegistry $storageRegistry
-     * @param Content\Search\TransformationProcessor $transformationProcessor
-     * @param array $config
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler The database handler
+     * @param Content\FieldValue\ConverterRegistry $converterRegistry Should contain Field Type converters
+     * @param Content\StorageRegistry $storageRegistry Should contain Field Type external storage handlers
+     * @param Content\Search\TransformationProcessor $transformationProcessor Search Text Transformation processor
+     * @param array $config List of optional configuration flags:
+     *                      The flag 'defer_type_update' defines if content types should be
+     *                      published immediatly (false), when the
+     *                      {@link \eZ\Publish\SPI\Persistence\Content\Type\Handler::publish()} method
+     *                      is called, or if a background process should be triggered (true), which
+     *                      is then executed by the old eZ Publish core.
      */
     public function __construct(
         EzcDbHandler $dbHandler,

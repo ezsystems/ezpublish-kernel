@@ -43,9 +43,18 @@ class TransformationProcessor
     protected $compiledRules = null;
 
     /**
-     * Construct
+     * Construct instance of TransformationProcessor
      *
-     * @return void
+     * Through the $rules array, a list of files with full text
+     * transformation rules is given. These files are parsed by
+     * {@link \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationParser}
+     * and then used for normalization in the full text search.
+     *
+     * @param TransformationParser $parser
+     * @param TransformationPcreCompiler $compiler
+     * @param array $rules
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor
      */
     public function __construct(
         TransformationParser $parser,

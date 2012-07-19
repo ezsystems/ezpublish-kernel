@@ -23,8 +23,16 @@ class ConverterRegistry
     /**
      * Create converter registry with converter map
      *
-     * @param array $converterMap A map where key is field type key and value is a callable
-     *                            factory to get Converter OR Converter instance
+     * In $converterMap a array consists of a mapping of field
+     * type names to object / callable is expected, in case of callable
+     * factory converter object should be returned on execution. The object
+     * is used to convert content fields and content type field definitions
+     * to the legacy storage engine. The given class names must derive the
+     * {@link \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter}
+     * interface.
+     *
+     * @param array $converterMap A map where key is field type name, and value
+     *              is a callable factory to get Converter OR Converter object
      */
     public function __construct( array $converterMap )
     {
