@@ -28,8 +28,14 @@ class FloatTest extends FieldTypeTest
         self::assertSame(
             array(
                 "FloatValueValidator" => array(
-                    "minFloatValue" => false,
-                    "maxFloatValue" => false
+                    "minFloatValue" => array(
+                        "type" => "float",
+                        "default" => false
+                    ),
+                    "maxFloatValue" => array(
+                        "type" => "float",
+                        "default" => false
+                    )
                 )
             ),
             $ft->getValidatorConfigurationSchema(),

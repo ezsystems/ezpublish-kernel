@@ -11,19 +11,19 @@ namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input\Parser;
 
-class SectionListTest extends BaseTest
+class PolicyListTest extends BaseTest
 {
     /**
-     * Tests the parsing of role list
+     * Tests the parsing of policy list
      */
     public function testParse()
     {
-        $sectionParser = $this->getParser();
+        $policyListParser = $this->getParser();
 
         $inputArray = array(
-            'Section'  => array(
-                array( '_media-type' => 'application/vnd.ez.api.Section+xml' ),
-                array( '_media-type' => 'application/vnd.ez.api.Section+xml' ),
+            'Policy'  => array(
+                array( '_media-type' => 'application/vnd.ez.api.Policy+xml' ),
+                array( '_media-type' => 'application/vnd.ez.api.Policy+xml' ),
             ),
         );
 
@@ -31,12 +31,12 @@ class SectionListTest extends BaseTest
             ->expects( $this->exactly( 2 ) )
             ->method( 'parse' )
             ->with(
-                array( '_media-type' => 'application/vnd.ez.api.Section+xml' ),
-                'application/vnd.ez.api.Section+xml'
+                array( '_media-type' => 'application/vnd.ez.api.Policy+xml' ),
+                'application/vnd.ez.api.Policy+xml'
             )
             ->will( $this->returnValue( 'foo' ) );
 
-        $result = $sectionParser->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $policyListParser->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertEquals(
             array( 'foo', 'foo' ),
@@ -45,12 +45,12 @@ class SectionListTest extends BaseTest
     }
 
     /**
-     * Gets the section list parser
+     * Gets the policy list parser
      *
-     * @return \eZ\Publish\Core\REST\Client\Input\Parser\SectionList;
+     * @return \eZ\Publish\Core\REST\Client\Input\Parser\PolicyList;
      */
     protected function getParser()
     {
-        return new Parser\SectionList();
+        return new Parser\PolicyList();
     }
 }

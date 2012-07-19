@@ -50,7 +50,7 @@ return array(
             // Paths and scopes to read ini settings from
             'Paths' => array(
                  'base' => array( 'settings/' ),
-                 'modules' => array( 'eZ/Publish/Core/settings/' ),
+                 'modules' => array( __DIR__ . '/eZ/Publish/Core/settings/' ),
                  'access' => array(),
                  'global' => array( 'settings/override/' ),
             ),

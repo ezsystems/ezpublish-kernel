@@ -14,7 +14,8 @@ use eZ\Publish\Core\REST\Client\Input\Parser;
 class InvalidArgumentExceptionTest extends BaseTest
 {
     /**
-     * @return void
+     * Tests parsing of InvalidArgumentException error message
+     *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage Section with ID "23" not found.
      */
@@ -27,11 +28,13 @@ class InvalidArgumentExceptionTest extends BaseTest
             'errorCode'        => '406',
         );
 
-        $result = $parser->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $parser->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
     /**
-     * @return eZ\Publish\Core\REST\Client\Input\Parser\NotFoundException;
+     * Gets the error message parser
+     *
+     * @return \eZ\Publish\Core\REST\Client\Input\Parser\ErrorMessage
      */
     protected function getParser()
     {

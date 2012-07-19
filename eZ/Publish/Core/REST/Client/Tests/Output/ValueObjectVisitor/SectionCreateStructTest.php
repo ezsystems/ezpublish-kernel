@@ -17,9 +17,9 @@ use eZ\Publish\Core\REST\Common;
 class SectionCreateStructTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * testVisit
+     * Tests the SectionCreateStruct visitor
      *
-     * @return void
+     * @return string
      */
     public function testVisit()
     {
@@ -28,7 +28,7 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $sectionCreatestruct = new Content\SectionCreateStruct( array(
+        $sectionCreateStruct = new Content\SectionCreateStruct( array(
             'identifier' => 'some-section',
             'name'       => 'Some Section',
         ) );
@@ -36,7 +36,7 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
-            $sectionCreatestruct
+            $sectionCreateStruct
         );
 
         $result = $generator->endDocument( null );
@@ -47,12 +47,12 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * testResultContainsSectionElement
+     * Tests that the result contains SectionInput element
      *
      * @param string $result
      * @depends testVisit
      */
-    public function testResultContainsSectionElement( $result )
+    public function testResultContainsSectionInputElement( $result )
     {
         $this->assertTag(
             array(
@@ -69,12 +69,12 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * testResultContainsSectionAttributes
+     * Tests that the result contains SectionInput attributes
      *
      * @param string $result
      * @depends testVisit
      */
-    public function testResultContainsSectionAttributes( $result )
+    public function testResultContainsSectionInputAttributes( $result )
     {
         $this->assertTag(
             array(
@@ -90,10 +90,9 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * testResultContainsIdentifierValueElement
+     * Tests that the result contains identifier value element
      *
      * @param string $result
-     * @return void
      * @depends testVisit
      */
     public function testResultContainsIdentifierValueElement( $result )
@@ -105,16 +104,15 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
 
             ),
             $result,
-            'Invalid <SectionInput> attributes.',
+            'Invalid or non-existing <SectionInput> identifier value element.',
             false
         );
     }
 
     /**
-     * testResultContainsNameValueElement
+     * Tests that the result contains name value element
      *
      * @param string $result
-     * @return void
      * @depends testVisit
      */
     public function testResultContainsNameValueElement( $result )
@@ -126,13 +124,15 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
 
             ),
             $result,
-            'Invalid <SectionInput> attributes.',
+            'Invalid or non-existing <SectionInput> name value element.',
             false
         );
     }
 
     /**
-     * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\Section
+     * Gets the SectionCreateStruct visitor
+     *
+     * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\SectionCreateStruct
      */
     protected function getSectionCreateStructVisitor()
     {

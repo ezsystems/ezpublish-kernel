@@ -75,6 +75,7 @@ $inputDispatcher = new Common\Input\Dispatcher(
         'application/vnd.ez.api.SectionInput'  => new Input\Parser\SectionInput( $urlHandler ),
         'application/vnd.ez.api.ContentUpdate' => new Input\Parser\ContentUpdate( $urlHandler ),
         'application/vnd.ez.api.PolicyCreate'  => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService() ),
+        'application/vnd.ez.api.PolicyUpdate'  => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService() ),
     ) ),
     $handler
 );
@@ -134,6 +135,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedRole'           => new Output\ValueObjectVisitor\CreatedRole( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role'              => new Output\ValueObjectVisitor\Role( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy'            => new Output\ValueObjectVisitor\Policy( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PolicyList'           => new Output\ValueObjectVisitor\PolicyList( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation'        => new Output\ValueObjectVisitor\Limitation( $urlHandler ),
 );
 
@@ -183,9 +185,16 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/user/roles/[0-9]+$)' => array(
             'GET'    => array( $roleController, 'loadRole' ),
             'PATCH'  => array( $roleController, 'updateRole' ),
+            'DELETE' => array( $roleController, 'deleteRole' ),
         ),
         '(^/user/roles/[0-9]+/policies$)' => array(
-            'PATCH'  => array( $roleController, 'addPolicy' ),
+            'GET'    => array( $roleController, 'loadPolicies' ),
+            'POST'   => array( $roleController, 'addPolicy' ),
+            'DELETE' => array( $roleController, 'deletePolicies' ),
+        ),
+        '(^/user/roles/[0-9]+/policies/[0-9]+$)' => array(
+            'PATCH'  => array( $roleController, 'updatePolicy' ),
+            'DELETE' => array( $roleController, 'deletePolicy' ),
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(

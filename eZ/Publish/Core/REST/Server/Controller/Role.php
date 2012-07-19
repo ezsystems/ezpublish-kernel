@@ -118,7 +118,7 @@ class Role
     }
 
     /**
-     * Updates a section
+     * Updates a role
      *
      * @param RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\User\Role
@@ -139,10 +139,55 @@ class Role
     }
 
     /**
+     * Delete a role by ID
+     *
+     * @param RMF\Request $request
+     */
+    public function deleteRole( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'role', $request->path );
+        return $this->roleService->deleteRole(
+            $this->roleService->loadRole( $values['role'] )
+        );
+    }
+
+    /**
+     * Loads the policies for the role
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\PolicyList
+     */
+    public function loadPolicies( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'policies', $request->path );
+
+        $loadedRole = $this->roleService->loadRole( $values['role'] );
+
+        return new Values\PolicyList( $loadedRole->id, $loadedRole->getPolicies() );
+    }
+
+    /**
+     * Deletes all policies from a role
+     *
+     * @param RMF\Request $request
+     */
+    public function deletePolicies( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'policies', $request->path );
+
+        $loadedRole = $this->roleService->loadRole( $values['role'] );
+
+        foreach ( $loadedRole->getPolicies() as $rolePolicy )
+        {
+            $this->roleService->removePolicy( $loadedRole, $rolePolicy );
+        }
+    }
+
+    /**
      * Adds a policy to role
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\API\Repository\Values\User\Role
+     * @return \eZ\Publish\API\Repository\Values\User\Policy
      */
     public function addPolicy( RMF\Request $request )
     {
@@ -169,6 +214,62 @@ class Role
         }
 
         return $policyToReturn;
+    }
+
+    /**
+     * Updates a policy
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\API\Repository\Values\User\Policy
+     */
+    public function updatePolicy( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'policy', $request->path );
+        $updateStruct = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            )
+        );
+
+        $role = $this->roleService->loadRole( $values['role'] );
+        foreach ( $role->getPolicies() as $policy )
+        {
+            if ( $policy->id == $values['policy'] )
+            {
+                return $this->roleService->updatePolicy(
+                    $policy,
+                    $updateStruct
+                );
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Delete a policy from role
+     *
+     * @param RMF\Request $request
+     */
+    public function deletePolicy( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'policy', $request->path );
+
+        $role = $this->roleService->loadRole( $values['role'] );
+
+        $policy = null;
+        foreach ( $role->getPolicies() as $rolePolicy )
+        {
+            if ( $rolePolicy->id == $values['policy'] )
+            {
+                $policy = $rolePolicy;
+                break;
+            }
+        }
+
+        if ( $policy !== null )
+            $this->roleService->removePolicy( $role, $policy );
     }
 
     /**

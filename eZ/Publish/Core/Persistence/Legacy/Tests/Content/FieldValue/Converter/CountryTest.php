@@ -107,8 +107,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
         $fieldTypeConstraints = new FieldTypeConstraints;
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                "isMultiple" => true,
-                "defaultValue" => $defaultValue,
+                "isMultiple" => true
             )
         );
 
@@ -117,6 +116,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
             new PersistenceFieldDefinition(
                 array(
                     "fieldTypeConstraints" => $fieldTypeConstraints,
+                    "defaultValue" => $defaultValue,
                 )
             ),
             $storageFieldDef
@@ -187,7 +187,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
         );
         self::assertEquals(
             $this->type->buildValue( array( "BE", "FR" ) ),
-            $fieldDef->fieldTypeConstraints->fieldSettings["default"]
+            $fieldDef->defaultValue->data
         );
     }
 
@@ -214,7 +214,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
             $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"]
         );
         self::assertNull(
-            $fieldDef->fieldTypeConstraints->fieldSettings["default"]
+            $fieldDef->defaultValue->data
         );
     }
 }

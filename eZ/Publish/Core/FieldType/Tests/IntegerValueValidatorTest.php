@@ -66,6 +66,27 @@ class IntegerValueValidatorTest extends FieldTypeTest
     }
 
     /**
+     * Test getting constraints schema
+     *
+     * @covers \eZ\Publish\Core\FieldType\Validator::getConstraintsSchema
+     */
+    public function testGetConstraintsSchema()
+    {
+        $constraintsSchema = array(
+            "minIntegerValue" => array(
+                "type" => "int",
+                "default" => 0
+            ),
+            "maxIntegerValue" => array(
+                "type" => "int",
+                "default" => false
+            )
+        );
+        $validator = new IntegerValueValidator;
+        $this->assertSame( $constraintsSchema, $validator->getConstraintsSchema() );
+    }
+
+    /**
      * Tests setting and getting constraints
      *
      * @covers \eZ\Publish\Core\FieldType\Validator::__set
@@ -193,6 +214,167 @@ class IntegerValueValidatorTest extends FieldTypeTest
             array( 0, "The value can not be lower than %size%.", array( "size" => $this->getMinIntegerValue() ) ),
             array( 9, "The value can not be lower than %size%.", array( "size" => $this->getMinIntegerValue() ) ),
             array( 16, "The value can not be higher than %size%.", array( "size" => $this->getMaxIntegerValue() ) ),
+        );
+    }
+
+    /**
+     * Tests validation of constraints
+     *
+     * @dataProvider providerForValidateConstraintsOK
+     * @covers \eZ\Publish\Core\FieldType\Validator\FileSizeValidator::validateConstraints
+     */
+    public function testValidateConstraintsCorrectValues( $constraints )
+    {
+        $validator = new IntegerValueValidator;
+
+        $this->assertEmpty(
+            $validator->validateConstraints( $constraints )
+        );
+    }
+
+    public function providerForValidateConstraintsOK()
+    {
+        return array(
+            array(
+                array(),
+                array(
+                    "minIntegerValue" => 5,
+                ),
+                array(
+                    "maxIntegerValue" => 2,
+                ),
+                array(
+                    "minIntegerValue" => false,
+                    "maxIntegerValue" => false
+                ),
+                array(
+                    "minIntegerValue" => -5,
+                    "maxIntegerValue" => false
+                ),
+                array(
+                    "minIntegerValue" => false,
+                    "maxIntegerValue" => 12
+                ),
+                array(
+                    "minIntegerValue" => 6,
+                    "maxIntegerValue" => 8
+                ),
+            ),
+        );
+    }
+
+    /**
+     * Tests validation of constraints
+     *
+     * @dataProvider providerForValidateConstraintsKO
+     * @covers \eZ\Publish\Core\FieldType\Validator\FileSizeValidator::validateConstraints
+     */
+    public function testValidateConstraintsWrongValues( $constraints, $expectedMessages, $values )
+    {
+        $validator = new IntegerValueValidator;
+        $messages = $validator->validateConstraints( $constraints );
+
+        foreach ( $expectedMessages as $index => $expectedMessage )
+        {
+            $this->assertInstanceOf(
+                "eZ\\Publish\\API\\Repository\\Values\\Translation\\Message",
+                $messages[0]->getTranslatableMessage()
+            );
+            $this->assertEquals(
+                $expectedMessage,
+                $messages[$index]->getTranslatableMessage()->message
+            );
+            $this->assertEquals(
+                $values[$index],
+                $messages[$index]->getTranslatableMessage()->values
+            );
+        }
+    }
+
+    public function providerForValidateConstraintsKO()
+    {
+        return array(
+            array(
+                array(
+                    "minIntegerValue" => true
+                ),
+                array( "Validator parameter '%parameter%' value must be of integer type" ),
+                array(
+                    array( "parameter" => "minIntegerValue" ),
+                )
+            ),
+            array(
+                array(
+                    "minIntegerValue" => "five thousand bytes"
+                ),
+                array( "Validator parameter '%parameter%' value must be of integer type" ),
+                array(
+                    array( "parameter" => "minIntegerValue" ),
+                )
+            ),
+            array(
+                array(
+                    "minIntegerValue" => "five thousand bytes",
+                    "maxIntegerValue" => 1234
+                ),
+                array( "Validator parameter '%parameter%' value must be of integer type" ),
+                array(
+                    array( "parameter" => "minIntegerValue" ),
+                )
+            ),
+            array(
+                array(
+                    "maxIntegerValue" => new \DateTime(),
+                    "minIntegerValue" => 1234
+                ),
+                array( "Validator parameter '%parameter%' value must be of integer type" ),
+                array(
+                    array( "parameter" => "maxIntegerValue" ),
+                )
+            ),
+            array(
+                array(
+                    "minIntegerValue" => true,
+                    "maxIntegerValue" => 1234
+                ),
+                array( "Validator parameter '%parameter%' value must be of integer type" ),
+                array(
+                    array( "parameter" => "minIntegerValue" ),
+                )
+            ),
+            array(
+                array(
+                    "minIntegerValue" => "five thousand bytes",
+                    "maxIntegerValue" => "ten billion bytes"
+                ),
+                array(
+                    "Validator parameter '%parameter%' value must be of integer type",
+                    "Validator parameter '%parameter%' value must be of integer type"
+                ),
+                array(
+                    array( "parameter" => "minIntegerValue" ),
+                    array( "parameter" => "maxIntegerValue" ),
+                )
+            ),
+            array(
+                array(
+                    "brljix" => 12345
+                ),
+                array( "Validator parameter '%parameter%' is unknown" ),
+                array(
+                    array( "parameter" => "brljix" ),
+                )
+            ),
+            array(
+                array(
+                    "minIntegerValue" => 12345,
+                    "brljix" => 12345
+                ),
+                array( "Validator parameter '%parameter%' is unknown" ),
+                array(
+                    array( "parameter" => "brljix" ),
+                )
+            ),
         );
     }
 }

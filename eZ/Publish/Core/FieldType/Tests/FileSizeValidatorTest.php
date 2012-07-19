@@ -57,6 +57,23 @@ class FileSizeValidatorTest extends FieldTypeTest
     }
 
     /**
+     * Test getting constraints schema
+     *
+     * @covers \eZ\Publish\Core\FieldType\Validator::getConstraintsSchema
+     */
+    public function testGetConstraintsSchema()
+    {
+        $constraintsSchema = array(
+            "maxFileSize" => array(
+                "type" => "int",
+                "default" => false
+            )
+        );
+        $validator = new FileSizeValidator;
+        $this->assertSame( $constraintsSchema, $validator->getConstraintsSchema() );
+    }
+
+    /**
      * Tests setting and getting constraints
      *
      * @group bla
@@ -196,6 +213,85 @@ class FileSizeValidatorTest extends FieldTypeTest
                     "The file size cannot exceed %size% bytes."
                 ),
                 array( "size" => $this->getMaxFileSize() )
+            ),
+        );
+    }
+
+    /**
+     * Tests validation of constraints
+     *
+     * @dataProvider providerForValidateConstraintsOK
+     * @covers \eZ\Publish\Core\FieldType\Validator\FileSizeValidator::validateConstraints
+     */
+    public function testValidateConstraintsCorrectValues( $constraints )
+    {
+        $validator = new FileSizeValidator;
+
+        $this->assertEmpty(
+            $validator->validateConstraints( $constraints )
+        );
+    }
+
+    public function providerForValidateConstraintsOK()
+    {
+        return array(
+            array(
+                array(),
+                array( "maxFileSize" => false ),
+                array( "maxFileSize" => 0 ),
+                array( "maxFileSize" => -5 ),
+                array( "maxFileSize" => 4096 ),
+            ),
+        );
+    }
+
+    /**
+     * Tests validation of constraints
+     *
+     * @dataProvider providerForValidateConstraintsKO
+     * @covers \eZ\Publish\Core\FieldType\Validator\FileSizeValidator::validateConstraints
+     */
+    public function testValidateConstraintsWrongValues( $constraints, $expectedMessages, $values )
+    {
+        $validator = new FileSizeValidator;
+        $messages = $validator->validateConstraints( $constraints );
+
+        $this->assertInstanceOf(
+            "eZ\\Publish\\API\\Repository\\Values\\Translation\\Message",
+            $messages[0]->getTranslatableMessage()
+        );
+        $this->assertEquals(
+            $expectedMessages[0],
+            $messages[0]->getTranslatableMessage()->message
+        );
+        $this->assertEquals(
+            $values,
+            $messages[0]->getTranslatableMessage()->values
+        );
+    }
+
+    public function providerForValidateConstraintsKO()
+    {
+        return array(
+            array(
+                array( "maxFileSize" => true ),
+                array( "Validator parameter '%parameter%' value must be of integer type" ),
+                array( "parameter" => "maxFileSize" )
+            ),
+            array(
+                array( "maxFileSize" => "five thousand bytes" ),
+                array( "Validator parameter '%parameter%' value must be of integer type" ),
+                array( "parameter" => "maxFileSize" )
+            ),
+            array(
+                array( "maxFileSize" => new \DateTime() ),
+                array( "Validator parameter '%parameter%' value must be of integer type" ),
+                array( "parameter" => "maxFileSize" )
+            ),
+            array(
+                array( "brljix" => 12345 ),
+                array( "Validator parameter '%parameter%' is unknown" ),
+                array( "parameter" => "brljix" )
             ),
         );
     }

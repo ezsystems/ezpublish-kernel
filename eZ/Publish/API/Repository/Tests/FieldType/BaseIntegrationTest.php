@@ -101,7 +101,30 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     abstract public function assertFieldDataLoadedCorrect( Field $field );
 
     /**
-     * Get update field externals data
+     * Get field data which will result in errors during creation
+     *
+     * This is a PHPUnit data provider.
+     *
+     * The returned records must contain of an error producing data value and
+     * the expected exception class (from the API or SPI, not implementation
+     * specific!) as the second element. For example:
+     *
+     * <code>
+     * array(
+     *      array(
+     *          new DoomedValue( true ),
+     *          'eZ\\Publish\\API\\Repository\\Exceptions\\ContentValidationException'
+     *      ),
+     *      // ...
+     * );
+     * </code>
+     *
+     * @return array[]
+     */
+    abstract public function provideInvalidCreationFieldData();
+
+    /**
+     * Get valid field data for updating content
      *
      * @return mixed
      */
@@ -118,6 +141,29 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     abstract public function assertUpdatedFieldDataLoadedCorrect( Field $field );
 
     /**
+     * Get field data which will result in errors during update
+     *
+     * This is a PHPUnit data provider.
+     *
+     * The returned records must contain of an error producing data value and
+     * the expected exception class (from the API or SPI, not implementation
+     * specific!) as the second element. For example:
+     *
+     * <code>
+     * array(
+     *      array(
+     *          new DoomedValue( true ),
+     *          'eZ\\Publish\\API\\Repository\\Exceptions\\ContentValidationException'
+     *      ),
+     *      // ...
+     * );
+     * </code>
+     *
+     * @return array[]
+     */
+    abstract public function provideInvalidUpdateFieldData();
+
+    /**
      * Asserts the the field data was loaded correctly.
      *
      * Asserts that the data provided by {@link getValidCreationFieldData()}
@@ -128,16 +174,44 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     abstract public function assertCopiedFieldDataLoadedCorrectly( Field $field );
 
     /**
-     * Get expectation for the toHash call on our field value
+     * Get data to test to hash method
      *
-     * @return mixed
+     * This is a PHPUnit data provider
+     *
+     * The returned records must have the the original value assigned to the
+     * first index and the expected hash result to the second. For example:
+     *
+     * <code>
+     * array(
+     *      array(
+     *          new MyValue( true ),
+     *          array( 'myValue' => true ),
+     *      ),
+     *      // ...
+     * );
+     * </code>
+     *
+     * @return array
      */
-    abstract public function getToHashExpectation();
+    abstract public function provideToHashData();
 
     /**
      * Get hashes and their respective converted values
      *
      * This is a PHPUnit data provider
+     *
+     * The returned records must have the the input hash assigned to the
+     * first index and the expected value result to the second. For example:
+     *
+     * <code>
+     * array(
+     *      array(
+     *          array( 'myValue' => true ),
+     *          new MyValue( true ),
+     *      ),
+     *      // ...
+     * );
+     * </code>
      *
      * @return array
      */
@@ -156,12 +230,14 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     {
         parent::setUp();
 
+        /*
         if ( $this->getRepository() instanceof \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub )
         {
             $this->markTestSkipped(
                 'FieldType integration tests cannot be run against memory stub.'
             );
         }
+        */
     }
 
     /**
@@ -183,7 +259,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      */
     public function testCreateContentType()
     {
@@ -262,7 +338,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @depends testCreateContentType
+     * @dep_ends testCreateContentType
      */
     public function testLoadContentTypeField()
     {
@@ -307,7 +383,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @depends testCreateContentType
+     * @dep_ends testCreateContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
      */
     public function testCreateContentTypeFailsWithInvalidFieldSettings()
@@ -319,7 +395,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @depends testCreateContentType
+     * @dep_ends testCreateContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
      */
     public function testCreateContentTypeFailsWithInvalidValidatorConfiguration()
@@ -331,18 +407,21 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @depends testLoadContentTypeField
+     * @dep_ends testLoadContentTypeField
      */
     public function testCreateContent()
     {
-        // @Hack: This is required to make it possible to overwrite this
-        // method, while maintaing the execution order. PHPUnit does not manage
-        // to sort tests properly, otherwise.
-        if ( method_exists( $this, 'createContentOverwrite' ) )
-        {
-            return $this->createContentOverwrite();
-        }
+        return $this->createContent( $this->getValidCreationFieldData() );
+    }
 
+    /**
+     * Creates content with $fieldData
+     *
+     * @param mixed $fieldData
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected function createContent( $fieldData )
+    {
         $contentType = $this->testCreateContentType();
 
         $repository     = $this->getRepository();
@@ -350,7 +429,10 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
         $createStruct = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
         $createStruct->setField( 'name', 'Test object' );
-        $createStruct->setField( 'data', $this->getValidCreationFieldData() );
+        $createStruct->setField(
+            'data',
+            $fieldData
+        );
 
         $createStruct->remoteId = 'abcdef0123456789abcdef0123456789';
         $createStruct->alwaysAvailable = true;
@@ -375,7 +457,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @depends testCreateContent
+     * @dep_ends testCreateContent
      */
     public function testPublishContent()
     {
@@ -409,7 +491,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @depends testCreateContent
+     * @dep_ends testCreateContent
      */
     public function testLoadField()
     {
@@ -445,9 +527,20 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @depends testLoadFieldType
+     * @dep_ends testLoadFieldType
      */
     public function testUpdateField()
+    {
+        return $this->updateContent( $this->getValidUpdateFieldData() );
+    }
+
+    /**
+     * Updates the standard published content object with $fieldData
+     *
+     * @param mixed $fieldData
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    public function updateContent( $fieldData )
     {
         $content = $this->testPublishContent();
 
@@ -459,7 +552,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $updateStruct = $contentService->newContentUpdateStruct();
         $updateStruct->setField(
             $this->customFieldIdentifier,
-            $this->getValidUpdateFieldData()
+            $fieldData
         );
 
         return $contentService->updateContent( $draft->versionInfo, $updateStruct );
@@ -484,7 +577,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     /**
      * @depends testUpdateTypeFieldStillAvailable
      */
-    public function testUpdateExternalData( Field $field )
+    public function testUpdatedDataCorrect( Field $field )
     {
         $this->assertUpdatedFieldDataLoadedCorrect( $field );
     }
@@ -554,34 +647,68 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @depends testCreateContent
-     * @TODO: Requires correct registered FieldTypeService, needs to be
-     *        maintained!
+     * Tests failing content creation
+     *
+     * @param mixed $failingValue
+     * @param string $expectedException
+     * @dataProvider provideInvalidCreationFieldData
+     * @return void
      */
-    public function testToHash()
+    public function testCreateContentFails( $failingValue, $expectedException )
     {
-        $content = $this->testCreateContent();
-
-        $repository         = $this->getRepository();
-        $contentService     = $repository->getContentService();
-        $contentTypeService = $repository->getContentTypeService();
-        $fieldTypeService   = $repository->getFieldTypeService();
-
-        $contentType = $contentTypeService->loadContentType( $content->contentTypeId );
-
-        foreach ( $content->getFields() as $field )
+        try
         {
-            if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
-            {
-                $fieldDefinition = $contentType->getFieldDefinition( $field->fieldDefIdentifier );
-                $fieldType       = $fieldTypeService->getFieldType( $fieldDefinition->fieldTypeIdentifier );
+            $this->createContent( $failingValue );
 
-                $this->assertEquals(
-                    $this->getToHashExpectation(),
-                    $fieldType->toHash( $field->value )
-                );
-            }
+            $this->fail( 'Expected exception not thrown.' );
         }
+        catch ( \Exception $e )
+        {
+            $this->assertInstanceOf(
+                $expectedException,
+                $e
+            );
+        }
+    }
+
+    /**
+     * Tests failing content update
+     *
+     * @param mixed $failingValue
+     * @param string $expectedException
+     * @dataProvider provideInvalidUpdateFieldData
+     * @return void
+     */
+    public function testUpdateContentFails( $failingValue, $expectedException )
+    {
+        try
+        {
+            $this->updateContent( $failingValue );
+
+            $this->fail( 'Expected exception not thrown.' );
+        }
+        catch ( \Exception $e )
+        {
+            $this->assertInstanceOf(
+                $expectedException,
+                $e
+            );
+        }
+    }
+
+    /**
+     * @dataProvider provideToHashData
+     */
+    public function testToHash( $value, $expectedHash )
+    {
+        $repository       = $this->getRepository();
+        $fieldTypeService = $repository->getFieldTypeService();
+        $fieldType = $fieldTypeService->getFieldType( $this->getTypeName() );
+
+        $this->assertEquals(
+            $expectedHash,
+            $fieldType->toHash( $value )
+        );
     }
 
     /**
@@ -590,16 +717,14 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      * @TODO: Requires correct registered FieldTypeService, needs to be
      *        maintained!
      */
-    public function testFromHash( $hash, $expected )
+    public function testFromHash( $hash, $expectedValue )
     {
-        $content = $this->testCreateContent();
-
         $repository       = $this->getRepository();
         $fieldTypeService = $repository->getFieldTypeService();
         $fieldType        = $fieldTypeService->getFieldType( $this->getTypeName() );
 
         $this->assertEquals(
-            $expected,
+            $expectedValue,
             $fieldType->fromHash( $hash )
         );
     }

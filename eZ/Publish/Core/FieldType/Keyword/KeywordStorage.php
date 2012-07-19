@@ -34,27 +34,10 @@ class KeywordStorage extends GatewayBasedStorage
             return;
         }
 
-        $contentTypeID = $this->getContentTypeID( $versionInfo );
-
         $gateway = $this->getGateway( $context );
-        return $gateway->storeFieldData( $field, $contentTypeID );
-    }
 
-    /**
-     * Returns the content type ID for $fieldDefinitionId
-     *
-     * @param string $typeIdentifier
-     * @return mixed
-     */
-    protected function getContentTypeID( VersionInfo $versionInfo )
-    {
-        $contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo(
-            $versionInfo->contentId
-        );
-        $contentType = $this->persistenceHandler->contentTypeHandler()->load(
-            $contentInfo->contentTypeId
-        );
-        return $contentType->id;
+        $contentTypeID = $gateway->getContentTypeID( $versionInfo );
+        return $gateway->storeFieldData( $field, $contentTypeID );
     }
 
     /**

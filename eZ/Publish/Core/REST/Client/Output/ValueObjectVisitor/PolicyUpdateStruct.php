@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the policy create struct ValueObjectVisitor class
+ * File containing the policy update struct ValueObjectVisitor class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -14,9 +14,9 @@ use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
- * Policy create struct value object visitor
+ * Policy update struct value object visitor
  */
-class PolicyCreateStruct extends ValueObjectVisitor
+class PolicyUpdateStruct extends ValueObjectVisitor
 {
     /**
      * Visit struct returned by controllers
@@ -28,14 +28,8 @@ class PolicyCreateStruct extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'PolicyCreate' );
-        $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'PolicyCreate' ) );
-
-        $generator->startValueElement( 'module', $data->module );
-        $generator->endValueElement( 'module' );
-
-        $generator->startValueElement( 'function', $data->function );
-        $generator->endValueElement( 'function' );
+        $generator->startElement( 'PolicyUpdate' );
+        $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'PolicyUpdate' ) );
 
         $limitations = $data->getLimitations();
         if ( !empty( $limitations ) )
@@ -52,6 +46,6 @@ class PolicyCreateStruct extends ValueObjectVisitor
             $generator->endElement( 'limitations' );
         }
 
-        $generator->endElement( 'PolicyCreate' );
+        $generator->endElement( 'PolicyUpdate' );
     }
 }

@@ -23,6 +23,47 @@ class FileSizeValidator extends Validator
         'maxFileSize' => false
     );
 
+    protected $constraintsSchema = array(
+        "maxFileSize" => array(
+            "type" => "int",
+            "default" => false
+        )
+    );
+
+    public function validateConstraints( $constraints )
+    {
+        $validationErrors = array();
+
+        foreach ( $constraints as $name => $value )
+        {
+            switch ( $name )
+            {
+                case "maxFileSize":
+                    if ( $value !== false && !is_integer( $value ) )
+                    {
+                        $validationErrors[] = new ValidationError(
+                            "Validator parameter '%parameter%' value must be of integer type",
+                            null,
+                            array(
+                                "parameter" => $name
+                            )
+                        );
+                    }
+                    break;
+                default:
+                    $validationErrors[] = new ValidationError(
+                        "Validator parameter '%parameter%' is unknown",
+                        null,
+                        array(
+                            "parameter" => $name
+                        )
+                    );
+            }
+        }
+
+        return $validationErrors;
+    }
+
     /**
      * Checks if $value->file has the appropriate size
      *

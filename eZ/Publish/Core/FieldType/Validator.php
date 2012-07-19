@@ -47,6 +47,51 @@ abstract class Validator
     protected $constraints = array();
 
     /**
+     * A one dimensional map with validator parameters
+     *
+     * @var mixed
+     */
+    protected $constraintsSchema = array();
+
+    /**
+     * Returns a schema for supported validator configurations.
+     *
+     * This implementation returns a three dimensional map containing for each validator configuration
+     * referenced by identifier a map of supported parameters which are defined by a type and a default value
+     * (see example).
+     * Example:
+     * <code>
+     *  array(
+     *      'stringLength' => array(
+     *          'minStringLength' => array(
+     *              'type'    => 'int',
+     *              'default' => 0,
+     *          ),
+     *          'maxStringLength' => array(
+     *              'type'    => 'int'
+     *              'default' => null,
+     *          )
+     *      ),
+     *  );
+     * </code>
+     * The validator identifier is mapped to a Validator class which can be retrieved via the
+     * ValidatorService.
+     */
+    public function getConstraintsSchema()
+    {
+        return $this->constraintsSchema;
+    }
+
+    /**
+     * @abstract
+     *
+     * @param mixed $constraints
+     *
+     * @return mixed
+     */
+    abstract public function validateConstraints( $constraints );
+
+    /**
      * Perform validation on $value.
      *
      * Will return true when all constraints are matched. If one or more
@@ -83,7 +128,7 @@ abstract class Validator
      * @param array $constraints
      * @return void
      */
-    public final function initializeWithConstraints( array $constraints )
+    public function initializeWithConstraints( array $constraints )
     {
         // Reset errors
         $this->errors = array();

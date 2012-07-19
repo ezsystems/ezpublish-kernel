@@ -14,7 +14,8 @@ use eZ\Publish\Core\REST\Client\Input\Parser;
 class NotFoundExceptionTest extends BaseTest
 {
     /**
-     * @return void
+     * Tests parsing of NotFoundException
+     *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @expectedExceptionMessage Section with ID "23" not found.
      */
@@ -27,11 +28,13 @@ class NotFoundExceptionTest extends BaseTest
             'errorCode'        => '404',
         );
 
-        $result = $parser->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $parser->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
     /**
-     * @return eZ\Publish\Core\REST\Client\Input\Parser\NotFoundException;
+     * Gets the parser for error message
+     *
+     * @return \eZ\Publish\Core\REST\Client\Input\Parser\ErrorMessage;
      */
     protected function getParser()
     {

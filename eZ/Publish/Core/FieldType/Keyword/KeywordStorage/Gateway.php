@@ -25,5 +25,13 @@ abstract class Gateway extends StorageGateway
      * @return void
      */
     abstract public function getFieldData( Field $field );
+
+    /**
+     * Retrieve the ContentType ID for the given $field
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @return mixed
+     */
+    abstract public function getContentTypeID( Field $field );
 }
 

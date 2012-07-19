@@ -112,7 +112,7 @@ class Value extends BaseValue
      */
     public function __toString()
     {
-        return $this->login;
+        return (string) $this->login;
     }
 }
 

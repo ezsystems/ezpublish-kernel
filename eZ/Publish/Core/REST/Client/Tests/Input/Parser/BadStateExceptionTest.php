@@ -14,7 +14,8 @@ use eZ\Publish\Core\REST\Client\Input\Parser;
 class BadStateExceptionTest extends BaseTest
 {
     /**
-     * @return void
+     * Tests the parsing of BadStateException
+     *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @expectedExceptionMessage Section with ID "23" not found.
      */
@@ -27,11 +28,13 @@ class BadStateExceptionTest extends BaseTest
             'errorCode'        => '409',
         );
 
-        $result = $parser->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $parser->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
     /**
-     * @return eZ\Publish\Core\REST\Client\Input\Parser\BadStateException;
+     * Gets the error message parser
+     *
+     * @return \eZ\Publish\Core\REST\Client\Input\Parser\ErrorMessage
      */
     protected function getParser()
     {
