@@ -152,11 +152,7 @@ class ClassLoader
      */
     protected static function getEzpLegacyClassMap( $legacyDir )
     {
-        if ( file_exists( "{$legacyDir}/autoload/ezp_kernel.php" ) )
-            $ezpKernelClasses = require "{$legacyDir}/autoload/ezp_kernel.php";
-        else
-            $ezpKernelClasses = array();
-
+        $ezpKernelClasses = require "{$legacyDir}/autoload/ezp_kernel.php";
         if ( file_exists( "{$legacyDir}/var/autoload/ezp_extension.php" ) )
             $ezpExtensionClasses = require "{$legacyDir}/var/autoload/ezp_extension.php";
         else
