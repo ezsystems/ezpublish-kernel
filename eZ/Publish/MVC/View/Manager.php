@@ -68,7 +68,7 @@ class Manager
     public function getAllViewProviders()
     {
         if ( empty( $this->sortedViewProviders ) )
-            $this->sortedViewProviders = $this->sortedViewProviders;
+            $this->sortedViewProviders = $this->sortViewProviders();
 
         return $this->sortedViewProviders;
     }
@@ -82,7 +82,7 @@ class Manager
     protected function sortViewProviders()
     {
         $sortedViewProviders = array();
-        krsort( $this->routers );
+        krsort( $this->viewProviders );
 
         foreach ( $this->viewProviders as $viewProviders )
         {
