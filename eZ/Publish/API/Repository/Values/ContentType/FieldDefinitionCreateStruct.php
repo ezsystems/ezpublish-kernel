@@ -87,7 +87,7 @@ class FieldDefinitionCreateStruct extends ValueObject
     /**
      * The validator configuration supported by the field type
      *
-     * @var \mixed
+     * @var mixed
      */
     public $validatorConfiguration;
 

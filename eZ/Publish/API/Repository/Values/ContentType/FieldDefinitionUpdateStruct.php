@@ -73,14 +73,14 @@ class FieldDefinitionUpdateStruct extends ValueObject
     public $isInfoCollector;
 
     /**
-     * If set this validator configuration supported by the field type replaces the exisitng one
+     * If set this validator configuration supported by the field type replaces the existing one
      *
      * @var mixed
      */
     public $validatorConfiguration;
 
     /**
-     * If set this settings supported by the field type replaces the exisitng ones
+     * If set this settings supported by the field type replaces the existing ones
      *
      * @var mixed
      */
