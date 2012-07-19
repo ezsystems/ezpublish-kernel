@@ -209,6 +209,19 @@ abstract class FieldType implements FieldTypeInterface
      */
     public function validateFieldSettings( $fieldSettings )
     {
+        if ( !empty( $fieldSettings ) )
+        {
+            return array(
+                new ValidationError(
+                    "FieldType '%fieldType%' does not accept settings",
+                    null,
+                    array(
+                        "fieldType" => $this->getFieldTypeIdentifier()
+                    )
+                )
+            );
+        }
+
         return array();
     }
 
