@@ -14,7 +14,9 @@ use eZ\Publish\Core\REST\Client\Input\Parser;
 class SectionTest extends BaseTest
 {
     /**
-     * @return void
+     * Tests the section parser
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
     public function testParse()
     {
@@ -34,7 +36,9 @@ class SectionTest extends BaseTest
     }
 
     /**
-     * @return void
+     * Tests that the resulting role is in fact an instance of Section class
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Section $result
      * @depends testParse
      */
     public function testResultIsSection( $result )
@@ -46,7 +50,9 @@ class SectionTest extends BaseTest
     }
 
     /**
-     * @return void
+     * Tests if resulting section contains the ID
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Section $result
      * @depends testParse
      */
     public function testResultContainsId( $result )
@@ -58,7 +64,9 @@ class SectionTest extends BaseTest
     }
 
     /**
-     * @return void
+     * Tests if resulting section contains the identifier
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Section $result
      * @depends testParse
      */
     public function testResultContainsIdentifier( $result )
@@ -70,7 +78,9 @@ class SectionTest extends BaseTest
     }
 
     /**
-     * @return void
+     * Tests if resulting section contains the name
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Section $result
      * @depends testParse
      */
     public function testResultContainsName( $result )
@@ -82,7 +92,9 @@ class SectionTest extends BaseTest
     }
 
     /**
-     * @return eZ\Publish\Core\REST\Client\Input\Parser\Section;
+     * Gets the section parser
+     *
+     * @return \eZ\Publish\Core\REST\Client\Input\Parser\Section;
      */
     protected function getParser()
     {
