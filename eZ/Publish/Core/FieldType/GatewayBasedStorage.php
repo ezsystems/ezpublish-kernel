@@ -35,21 +35,12 @@ abstract class GatewayBasedStorage implements FieldStorage
     protected $gateways;
 
     /**
-     * SPI Persistence handler
-     *
-     * @var \eZ\Publish\SPI\Persistence\Handler
-     */
-    protected $persistenceHandler;
-
-    /**
      * Construct from gateways
      *
-     * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\Core\FieldType\StorageGateway[] $gateways
      */
-    public function __construct( PersistenceHandler $persistenceHandler, array $gateways )
+    public function __construct( array $gateways )
     {
-        $this->persistenceHandler = $persistenceHandler;
         foreach ( $gateways as $identifier => $gateway )
         {
             $this->addGateway( $identifier, $gateway );
@@ -85,15 +76,5 @@ abstract class GatewayBasedStorage implements FieldStorage
         $gateway->setConnection( $context['connection'] );
 
         return $gateway;
-    }
-
-    /**
-     * Returns the SPI persistence handler
-     *
-     * @return \eZ\Publish\SPI\Persistence\Handler
-     */
-    protected function getPersistenceHandler()
-    {
-        return $this->persistenceHandler;
     }
 }

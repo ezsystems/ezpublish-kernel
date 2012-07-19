@@ -83,6 +83,17 @@ class LegacyStorage extends Gateway
     }
 
     /**
+     * Retrieve the ContentType ID for the given $field
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @return mixed
+     */
+    public function getContentTypeID( Field $field )
+    {
+        return $this->loadContentTypeID( $field->fieldDefinitionId );
+    }
+
+    /**
      * Returns a list of keywords assigned to $fieldId
      *
      * @param mixed $fieldId
@@ -120,10 +131,9 @@ class LegacyStorage extends Gateway
      * Retrieves the content type ID for the given $fieldDefinitionId
      *
      * @param mixed $fieldDefinitionId
-     * @return void
-     * @TODO This should actually be done through SPI in order to allow caching
+     * @return mixed
      */
-    protected function getContentTypeId( $fieldDefinitionId )
+    protected function loadContentTypeID( $fieldDefinitionId )
     {
         $dbHandler = $this->getConnection();
 
@@ -140,7 +150,12 @@ class LegacyStorage extends Gateway
         $row = $statement->fetch( \PDO::FETCH_ASSOC );
 
         if ( $row === false )
-            throw new Logic( 'Content Type ID cannot be retrieved based on the field definition ID' );
+            throw new \RuntimeException(
+                sprintf(
+                    'Content Type ID cannot be retrieved based on the field definition ID "%s"',
+                    $fieldDefinitionId
+                )
+            );
 
         return $row['contentclass_id'];
     }
