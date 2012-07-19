@@ -329,15 +329,8 @@ class HandlerTest extends TestCase
      */
     protected function getHandlerFixture()
     {
-        // Auto-detect eZ Publish 5.x context with eZ Publish 4.x available.
-        $baseDir = '';
-        if ( stripos( __DIR__, '/vendor/ezsystems/ezpublish' ) !== false )
-        {
-            $baseDir = 'vendor/ezsystems/ezpublish/';
-        }
-
         // get configuration config
-        if ( !( $settings = include ( $baseDir . 'config.php' ) ) )
+        if ( !( $settings = include 'config.php' ) )
         {
             throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
         }
