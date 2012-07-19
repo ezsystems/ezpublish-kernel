@@ -20,17 +20,8 @@ use eZ\Publish\Core\FieldType\FieldType,
  */
 class Type extends FieldType
 {
-    protected $validatorConfigurationSchema = array(
-        "IntegerValueValidator" => array(
-            "minIntegerValue" => array(
-                "type" => "int",
-                "default" => 0
-            ),
-            "maxIntegerValue" => array(
-                "type" => "int",
-                "default" => false
-            )
-        )
+    protected $allowedValidators = array(
+        "IntegerValueValidator"
     );
 
     /**
@@ -143,63 +134,5 @@ class Type extends FieldType
     public function isSearchable()
     {
         return true;
-    }
-
-    /**
-     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
-     *
-     * @param mixed $validatorConfiguration
-     *
-     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
-     */
-    public function validateValidatorConfiguration( $validatorConfiguration )
-    {
-        $validationErrors = array();
-
-        foreach ( $validatorConfiguration as $validatorIdentifier => $parameters )
-        {
-            if ( isset( $this->validatorConfigurationSchema[$validatorIdentifier] ) )
-            {
-                foreach ( $parameters as $name => $value )
-                {
-                    switch ( $name )
-                    {
-                        case "minStringLength":
-                        case "maxStringLength":
-                            if ( !is_integer( $value ) )
-                            {
-                                $validationErrors[] = new ValidationError(
-                                    "Validator parameter '%parameter%' must be of integer type",
-                                    null,
-                                    array(
-                                        "parameter" => $name
-                                    )
-                                );
-                            }
-                            break;
-                        default:
-                            $validationErrors[] = new ValidationError(
-                                "Validator parameter '%parameter%' is unknown",
-                                null,
-                                array(
-                                    "parameter" => $name
-                                )
-                            );
-                    }
-                }
-            }
-            else
-            {
-                $validationErrors[] = new ValidationError(
-                    "Validator '%validator%' is unknown",
-                    null,
-                    array(
-                        "validator" => $validatorIdentifier
-                    )
-                );
-            }
-        }
-
-        return $validationErrors;
     }
 }

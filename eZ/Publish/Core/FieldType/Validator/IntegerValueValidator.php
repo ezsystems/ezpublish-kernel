@@ -25,6 +25,51 @@ class IntegerValueValidator extends Validator
         'maxIntegerValue' => false
     );
 
+    protected $constraintsSchema = array(
+        "minIntegerValue" => array(
+            "type" => "int",
+            "default" => 0
+        ),
+        "maxIntegerValue" => array(
+            "type" => "int",
+            "default" => false
+        )
+    );
+
+    public function validateConstraints( $constraints )
+    {
+        $validationErrors = array();
+        foreach ( $constraints as $name => $value )
+        {
+            switch ( $name )
+            {
+                case "minIntegerValue":
+                case "maxIntegerValue":
+                    if ( $value !== false && !is_integer( $value ) )
+                    {
+                        $validationErrors[] = new ValidationError(
+                            "Validator parameter '%parameter%' value must be of integer type",
+                            null,
+                            array(
+                                "parameter" => $name
+                            )
+                        );
+                    }
+                    break;
+                default:
+                    $validationErrors[] = new ValidationError(
+                        "Validator parameter '%parameter%' is unknown",
+                        null,
+                        array(
+                            "parameter" => $name
+                        )
+                    );
+            }
+        }
+
+        return $validationErrors;
+    }
+
     /**
      * Perform validation on $value.
      *

@@ -25,6 +25,51 @@ class StringLengthValidator extends Validator
         "minStringLength" => false
     );
 
+    protected $constraintsSchema = array(
+        "minStringLength" => array(
+            "type" => "int",
+            "default" => 0
+        ),
+        "maxStringLength" => array(
+            "type" => "int",
+            "default" => null
+        )
+    );
+
+    public function validateConstraints( $constraints )
+    {
+        $validationErrors = array();
+        foreach ( $constraints as $name => $value )
+        {
+            switch ( $name )
+            {
+                case "minStringLength":
+                case "maxStringLength":
+                    if ( $value !== false && !is_integer( $value ) )
+                    {
+                        $validationErrors[] = new ValidationError(
+                            "Validator parameter '%parameter%' value must be of integer type",
+                            null,
+                            array(
+                                "parameter" => $name
+                            )
+                        );
+                    }
+                    break;
+                default:
+                    $validationErrors[] = new ValidationError(
+                        "Validator parameter '%parameter%' is unknown",
+                        null,
+                        array(
+                            "parameter" => $name
+                        )
+                    );
+            }
+        }
+
+        return $validationErrors;
+    }
+
     /**
      * Checks if the string $value is in desired range.
      *

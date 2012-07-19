@@ -28,6 +28,52 @@ class FloatValueValidator extends Validator
         'maxFloatValue' => false
     );
 
+    protected $constraintsSchema = array(
+        "minFloatValue" => array(
+            "type" => "float",
+            "default" => false
+        ),
+        "maxFloatValue" => array(
+            "type" => "float",
+            "default" => false
+        )
+    );
+
+    public function validateConstraints( $constraints )
+    {
+        $validationErrors = array();
+
+        foreach ( $constraints as $name => $value )
+        {
+            switch ( $name )
+            {
+                case "minFloatValue":
+                case "maxFloatValue":
+                    if ( $value !== false && !is_numeric( $value ) )
+                    {
+                        $validationErrors[] = new ValidationError(
+                            "Validator parameter '%parameter%' value must be of numeric type",
+                            null,
+                            array(
+                                "parameter" => $name
+                            )
+                        );
+                    }
+                    break;
+                default:
+                    $validationErrors[] = new ValidationError(
+                        "Validator parameter '%parameter%' is unknown",
+                        null,
+                        array(
+                            "parameter" => $name
+                        )
+                    );
+            }
+        }
+
+        return $validationErrors;
+    }
+
     /**
      * Perform validation on $value.
      *

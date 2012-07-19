@@ -163,7 +163,7 @@ class Type extends TextLine
                         if ( !is_integer( $value ) )
                         {
                             $validationErrors[] = new ValidationError(
-                                "Setting '%setting%' must be of integer type",
+                                "Setting '%setting%' value must be of integer type",
                                 null,
                                 array(
                                     "setting" => $name
