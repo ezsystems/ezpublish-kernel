@@ -1035,8 +1035,13 @@ class ContentService implements ContentServiceInterface
      */
     public function publishVersion( APIVersionInfo $versionInfo )
     {
+        $loadedVersionInfo = $this->loadVersionInfo(
+            $versionInfo->contentInfo->id,
+            $versionInfo->versionNo
+        );
+
         $this->repository->beginTransaction();
-        $content = $this->internalPublishVersion( $versionInfo );
+        $content = $this->internalPublishVersion( $loadedVersionInfo );
         $this->repository->commit();
 
         return $content;
@@ -1056,7 +1061,9 @@ class ContentService implements ContentServiceInterface
     protected function internalPublishVersion( APIVersionInfo $versionInfo, $publicationDate = null )
     {
         if ( $versionInfo->status !== APIVersionInfo::STATUS_DRAFT )
+        {
             throw new BadStateException( "versionInfo", "only versions in draft status can be published" );
+        }
 
         $metadataUpdateStruct = new SPIMetadataUpdateStruct();
         $metadataUpdateStruct->publicationDate = isset( $publicationDate ) ? $publicationDate : time();
