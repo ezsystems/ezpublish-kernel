@@ -139,6 +139,38 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
     }
 
     /**
+     * Get field data which will result in errors during creation
+     *
+     * This is a PHPUnit data provider.
+     *
+     * The returned records must contain of an error producing data value and
+     * the expected exception class (from the API or SPI, not implementation
+     * specific!) as the second element. For example:
+     *
+     * <code>
+     * array(
+     *      array(
+     *          new DoomedValue( true ),
+     *          'eZ\\Publish\\API\\Repository\\Exceptions\\ContentValidationException'
+     *      ),
+     *      // ...
+     * );
+     * </code>
+     *
+     * @return array[]
+     */
+    public function provideInvalidCreationFieldData()
+    {
+        return array(
+            array(
+                null,
+                'eZ\\Publish\\API\\Repository\\Exceptions\\ContentValidationException'
+            ),
+            // TODO: Define more failure cases ...
+        );
+    }
+
+    /**
      * Get update field externals data
      *
      * @return array
@@ -198,6 +230,38 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
     }
 
     /**
+     * Get field data which will result in errors during update
+     *
+     * This is a PHPUnit data provider.
+     *
+     * The returned records must contain of an error producing data value and
+     * the expected exception class (from the API or SPI, not implementation
+     * specific!) as the second element. For example:
+     *
+     * <code>
+     * array(
+     *      array(
+     *          new DoomedValue( true ),
+     *          'eZ\\Publish\\API\\Repository\\Exceptions\\ContentValidationException'
+     *      ),
+     *      // ...
+     * );
+     * </code>
+     *
+     * @return array[]
+     */
+    public function provideInvalidUpdateFieldData()
+    {
+        return array(
+            array(
+                null,
+                'eZ\\Publish\\API\\Repository\\Exceptions\\ContentValidationException'
+            ),
+            // TODO: Define more failure cases ...
+        );
+    }
+
+    /**
      * Asserts the the field data was loaded correctly.
      *
      * Asserts that the data provided by {@link getValidCreationFieldData()};
@@ -236,19 +300,49 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get expectation for the toHash call on our field value
+     * Get data to test to hash method
      *
-     * @return mixed
+     * This is a PHPUnit data provider
+     *
+     * The returned records must have the the original value assigned to the
+     * first index and the expected hash result to the second. For example:
+     *
+     * <code>
+     * array(
+     *      array(
+     *          new MyValue( true ),
+     *          array( 'myValue' => true ),
+     *      ),
+     *      // ...
+     * );
+     * </code>
+     *
+     * @return array
      */
-    public function getToHashExpectation()
+    public function provideToHashData()
     {
-        return 'toBeDefined';
+        return array(
+            array( new UserValue(), 'toBeDefined' )
+        );
     }
 
     /**
      * Get hashes and their respective converted values
      *
      * This is a PHPUnit data provider
+     *
+     * The returned records must have the the input hash assigned to the
+     * first index and the expected value result to the second. For example:
+     *
+     * <code>
+     * array(
+     *      array(
+     *          array( 'myValue' => true ),
+     *          new MyValue( true ),
+     *      ),
+     *      // ...
+     * );
+     * </code>
      *
      * @return array
      */
@@ -259,7 +353,13 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
         );
     }
 
-    public function createContentOverwrite()
+    /**
+     * Overwrite normal content creation
+     *
+     * @param mixed $fieldData
+     * @return void
+     */
+    protected function createContent( $fieldData )
     {
         $repository  = $this->getRepository();
         $userService = $repository->getUserService();

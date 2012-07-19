@@ -111,6 +111,41 @@ class UrlFieldTypeIntergrationTest extends BaseIntegrationTest
     }
 
     /**
+     * Get field data which will result in errors during creation
+     *
+     * This is a PHPUnit data provider.
+     *
+     * The returned records must contain of an error producing data value and
+     * the expected exception class (from the API or SPI, not implementation
+     * specific!) as the second element. For example:
+     *
+     * <code>
+     * array(
+     *      array(
+     *          new DoomedValue( true ),
+     *          'eZ\\Publish\\API\\Repository\\Exceptions\\ContentValidationException'
+     *      ),
+     *      // ...
+     * );
+     * </code>
+     *
+     * @return array[]
+     */
+    public function provideInvalidCreationFieldData()
+    {
+        return array(
+            array(
+                new UrlValue( 23 ),
+                'eZ\\Publish\\API\\Repository\\Exceptions\\ContentValidationException',
+            ),
+            array(
+                new UrlValue( 'http://example.com', 23 ),
+                'eZ\\Publish\\API\\Repository\\Exceptions\\ContentValidationException',
+            ),
+        );
+    }
+
+    /**
      * Get update field externals data
      *
      * @return array
@@ -145,6 +180,32 @@ class UrlFieldTypeIntergrationTest extends BaseIntegrationTest
     }
 
     /**
+     * Get field data which will result in errors during update
+     *
+     * This is a PHPUnit data provider.
+     *
+     * The returned records must contain of an error producing data value and
+     * the expected exception class (from the API or SPI, not implementation
+     * specific!) as the second element. For example:
+     *
+     * <code>
+     * array(
+     *      array(
+     *          new DoomedValue( true ),
+     *          'eZ\\Publish\\API\\Repository\\Exceptions\\ContentValidationException'
+     *      ),
+     *      // ...
+     * );
+     * </code>
+     *
+     * @return array[]
+     */
+    public function provideInvalidUpdateFieldData()
+    {
+        return $this->provideInvalidCreationFieldData();
+    }
+
+    /**
      * Asserts the the field data was loaded correctly.
      *
      * Asserts that the data provided by {@link getValidCreationFieldData()}
@@ -170,15 +231,41 @@ class UrlFieldTypeIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get expectation for the toHash call on our field value
+     * Get data to test to hash method
      *
-     * @return mixed
+     * This is a PHPUnit data provider
+     *
+     * The returned records must have the the original value assigned to the
+     * first index and the expected hash result to the second. For example:
+     *
+     * <code>
+     * array(
+     *      array(
+     *          new MyValue( true ),
+     *          array( 'myValue' => true ),
+     *      ),
+     *      // ...
+     * );
+     * </code>
+     *
+     * @return array
      */
-    public function getToHashExpectation()
+    public function provideToHashData()
     {
         return array(
-            'link' => 'http://example.com',
-            'text' => 'Example'
+            array(
+                new UrlValue( 'http://example.com' ),
+                array(
+                    'link' => 'http://example.com',
+                )
+            ),
+            array(
+                new UrlValue( 'http://example.com', 'Link text' ),
+                array(
+                    'link' => 'http://example.com',
+                    'text' => 'Link text',
+                )
+            ),
         );
     }
 
