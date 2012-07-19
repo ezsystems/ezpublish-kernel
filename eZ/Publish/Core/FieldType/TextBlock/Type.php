@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\TextBlock;
-use eZ\Publish\Core\FieldType\TextLine\Type as TextLine,
+use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\Core\FieldType\ValidationError;
 
@@ -17,7 +17,7 @@ use eZ\Publish\Core\FieldType\TextLine\Type as TextLine,
  *
  * Represents a larger body of text, such as text areas.
  */
-class Type extends TextLine
+class Type extends FieldType
 {
     // @TODO remove extension of TextLine?
 
