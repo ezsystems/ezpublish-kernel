@@ -61,8 +61,10 @@ class MediaTest extends FieldTypeTest
         self::assertSame(
             array(
                 "FileSizeValidator" => array(
-                    "type" => "int",
-                    'maxFileSize' => false
+                    "maxFileSize" => array(
+                        "type" => "int",
+                        "default" => false
+                    )
                 )
             ),
             $ft->getValidatorConfigurationSchema(),
