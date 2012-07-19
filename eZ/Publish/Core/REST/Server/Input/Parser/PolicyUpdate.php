@@ -1,62 +1,98 @@
 <?php
 /**
- * File containing the Policy parser class
+ * File containing the Parser class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Client\Input\Parser;
-
-use eZ\Publish\Core\REST\Common\Input\Parser;
+namespace eZ\Publish\Core\REST\Server\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Exceptions;
+use eZ\Publish\API\Repository\RoleService;
 
-use eZ\Publish\Core\REST\Client;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 
 /**
- * Parser for Policy
+ * Base class for input parser
  */
-class Policy extends Parser
+class PolicyUpdate extends Base
 {
+    /**
+     * Role service
+     *
+     * @var RoleService
+     */
+    protected $roleService;
+
+    /**
+     * Construct from role service
+     *
+     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\API\Repository\RoleService $roleService
+     */
+    public function __construct( UrlHandler $urlHandler, RoleService $roleService )
+    {
+        parent::__construct( $urlHandler );
+        $this->roleService = $roleService;
+    }
+
     /**
      * Parse input structure
      *
      * @param array $data
-     * @param ParsingDispatcher $parsingDispatcher
-     * @return ValueObject
-     * @todo Error handling
+     * @param \eZ\Publish\API\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @return \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
-        $limitations = array();
+        $policyUpdate = $this->roleService->newPolicyUpdateStruct();
 
         if ( array_key_exists( 'limitations', $data ) )
         {
+            if ( !is_array( $data['limitations'] ) )
+            {
+                throw new Exceptions\Parser( "Invalid format for 'limitations' in PolicyCreate." );
+            }
+
+            if ( !isset( $data['limitations']['limitation'] ) || !is_array( $data['limitations']['limitation'] ) )
+            {
+                throw new Exceptions\Parser( "Invalid format for 'limitation' in PolicyCreate." );
+            }
+
             foreach ( $data['limitations']['limitation'] as $limitation )
             {
+                if ( !array_key_exists( '_identifier', $limitation ) )
+                {
+                    throw new Exceptions\Parser( "Missing '_identifier' attribute for 'limitation' in PolicyCreate." );
+                }
+
                 $limitationObject = $this->getLimitationByIdentifier( $limitation['_identifier'] );
+
+                if ( !isset( $limitation['values']['ref'] ) || !is_array( $limitation['values']['ref'] ) )
+                {
+                    throw new Exceptions\Parser( "Invalid format for limitation values in PolicyCreate." );
+                }
 
                 $limitationValues = array();
                 foreach ( $limitation['values']['ref'] as $limitationValue )
                 {
+                    if ( !array_key_exists( '_href', $limitationValue ) )
+                    {
+                        throw new Exceptions\Parser( "Invalid format for limitation values in PolicyCreate." );
+                    }
+
                     $limitationValues[] = $limitationValue['_href'];
                 }
 
                 $limitationObject->limitationValues = $limitationValues;
-                $limitations[] = $limitationObject;
+                $policyUpdate->addLimitation( $limitationObject );
             }
         }
 
-        return new Client\Values\User\Policy(
-            array(
-                'id' => $data['id'],
-                'module' => $data['module'],
-                'function' => $data['function'],
-                'limitations' => $limitations
-            )
-        );
+        return $policyUpdate;
     }
 
     /**
@@ -112,3 +148,4 @@ class Policy extends Parser
         return new \eZ\Publish\API\Repository\Values\User\Limitation\CustomLimitation( $identifier );
     }
 }
+

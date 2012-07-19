@@ -1664,62 +1664,135 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'defaultAlwaysAvailable' => true,
                 'defaultSortField' => 1,
                 'defaultSortOrder' => 1,
-                'fieldDefinitions' => array(
-                    6 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
-                        array(
-                            'id' => 6,
-                            'identifier' => 'name',
-                            'fieldGroup' => '',
-                            'position' => 1,
-                            'fieldTypeIdentifier' => 'ezstring',
-                            'isTranslatable' => true,
-                            'isRequired' => true,
-                            'isInfoCollector' => false,
-                            'isSearchable' => true,
-                            'defaultValue' => null,
-                            'names' => array(
-                                'eng-US' => 'Name',
-                            ),
-                            'descriptions' => array(
-                                0 => '',
-                            ),
-                            'fieldSettings' => array(
-                            ),
-                            'validatorConfiguration' => array(
-                            ),
-                        )
-                    ),
-                    7 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
-                        array(
-                            'id' => 7,
-                            'identifier' => 'description',
-                            'fieldGroup' => '',
-                            'position' => 2,
-                            'fieldTypeIdentifier' => 'ezstring',
-                            'isTranslatable' => true,
-                            'isRequired' => false,
-                            'isInfoCollector' => false,
-                            'isSearchable' => true,
-                            'defaultValue' => null,
-                            'names' => array(
-                                'eng-US' => 'Description',
-                            ),
-                            'descriptions' => array(
-                                0 => '',
-                            ),
-                            'fieldSettings' => array(
-                            ),
-                            'validatorConfiguration' => array(
-                            ),
-                        )
-                    ),
-                ),
                 'contentTypeGroups' => array(
                     0 => $contentTypeService->loadContentTypeGroup( $this->generateId( 'typegroup', 2 ) )
                 ),
             ),
             $userGroupType
         );
+
+        return $userGroupType->fieldDefinitions;
+    }
+
+    /**
+     * Test for the loadContentType() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentType()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeStructValues
+     */
+    public function testLoadContentTypeFieldDefinitions( array $fieldDefinitions )
+    {
+        $expectedFieldDefinitions = array(
+            'name' => array(
+                'identifier' => 'name',
+                'fieldGroup' => '',
+                'position' => 1,
+                'fieldTypeIdentifier' => 'ezstring',
+                'isTranslatable' => true,
+                'isRequired' => true,
+                'isInfoCollector' => false,
+                'isSearchable' => true,
+                'defaultValue' => null,
+                'names' => array(
+                    'eng-US' => 'Name',
+                ),
+                'descriptions' => array(
+                    0 => '',
+                ),
+                'fieldSettings' => array(
+                ),
+                'validatorConfiguration' => array(
+                ),
+            ),
+            'description' => array(
+                'identifier' => 'description',
+                'fieldGroup' => '',
+                'position' => 2,
+                'fieldTypeIdentifier' => 'ezstring',
+                'isTranslatable' => true,
+                'isRequired' => false,
+                'isInfoCollector' => false,
+                'isSearchable' => true,
+                'defaultValue' => null,
+                'names' => array(
+                    'eng-US' => 'Description',
+                ),
+                'descriptions' => array(
+                    0 => '',
+                ),
+                'fieldSettings' => array(
+                ),
+                'validatorConfiguration' => array(
+                ),
+            )
+        );
+
+        foreach ( $fieldDefinitions as $index => $fieldDefinition )
+        {
+            $this->assertInstanceOf(
+                'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition',
+                $fieldDefinition
+            );
+
+            $this->assertNotNull( $fieldDefinition->id );
+
+            if ( !isset( $expectedFieldDefinitions[$fieldDefinition->identifier] ) )
+            {
+                $this->fail(
+                    sprintf(
+                        'Unexpected FieldDefinition loaded: "%s" (%s)',
+                        $fieldDefinition->identifier,
+                        $fieldDefinition->id
+                    )
+                );
+            }
+
+            $this->assertPropertiesCorrect(
+                $expectedFieldDefinitions[$fieldDefinition->identifier],
+                $fieldDefinition
+            );
+            unset( $expectedFieldDefinitions[$fieldDefinition->identifier] );
+            unset( $fieldDefinitions[$index] );
+        }
+
+        if ( 0 !== count( $expectedFieldDefinitions ) )
+        {
+            $this->fail(
+                sprintf(
+                    'Missing expected FieldDefinitions: %s',
+                    implode(
+                        ',',
+                        array_map(
+                            function ( $fieldDefArray )
+                            {
+                                return $fieldDefArray['identifier'];
+                            },
+                            $expectedFieldDefinitions
+                        )
+                    )
+                )
+            );
+        }
+
+        if ( 0 !== count( $fieldDefinitions ) )
+        {
+            $this->fail(
+                sprintf(
+                    'Loaded unexpected FieldDefinitions: %s',
+                    implode(
+                        ',',
+                        array_map(
+                            function ( $fieldDefinition )
+                            {
+                                return $fieldDefinition->identifier;
+                            },
+                            $fieldDefinitions
+                        )
+                    )
+                )
+            );
+        }
     }
 
     /**
@@ -2004,6 +2077,10 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      */
     public function testCreateContentTypeDraftThrowsBadStateException()
     {
+        $this->markTestIncomplete(
+            'Behavior to test is: If a draft *by a different user* exists, throw BadState. Cannot be tested on current fixture, since additional, previledged user is missing.'
+        );
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -2651,6 +2728,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             'title', 'ezstring'
         );
         $titleFieldCreate->names = array( 'eng-GB' => 'Title' );
+        $typeCreate->addFieldDefinition( $titleFieldCreate );
 
         $groups = array(
             $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )

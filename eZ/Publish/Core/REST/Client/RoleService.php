@@ -11,9 +11,9 @@ namespace eZ\Publish\Core\REST\Client;
 
 use \eZ\Publish\API\Repository\Values\Content\Content;
 use \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
-use \eZ\Publish\API\Repository\Values\User\Policy;
+use \eZ\Publish\API\Repository\Values\User\Policy as APIPolicy;
 use \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
-use \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
+use \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct;
 use \eZ\Publish\API\Repository\Values\User\Role as APIRole;
 use \eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
 use \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
@@ -21,7 +21,9 @@ use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\UserGroup;
 
 use \eZ\Publish\Core\REST\Client\Values\User\PolicyCreateStruct;
+use \eZ\Publish\Core\REST\Client\Values\User\PolicyUpdateStruct;
 use \eZ\Publish\Core\REST\Client\Values\User\Role;
+use \eZ\Publish\Core\REST\Client\Values\User\Policy;
 
 use \eZ\Publish\Core\REST\Common\UrlHandler;
 use \eZ\Publish\Core\REST\Common\Input;
@@ -116,7 +118,53 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
             $inputMessage
         );
 
-        return $this->inputDispatcher->parse( $result );
+        // If error occurred (in which case the return value is not role value object)
+        // do not add policies if any, only return received response
+        $createdRole = $this->inputDispatcher->parse( $result );
+        if ( !$createdRole instanceof APIRole )
+            return $createdRole;
+
+        $createdPolicies = array();
+        foreach ( $roleCreateStruct->getPolicies() as $policyCreateStruct )
+        {
+            $inputMessage = $this->outputVisitor->visit( $policyCreateStruct );
+            $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Policy' );
+
+            $result = $this->client->request(
+                'POST',
+                $createdRole->id . '/policies',
+                $inputMessage
+            );
+
+            $createdPolicy = $this->inputDispatcher->parse( $result );
+
+            // Same case with creating role, if error occurred
+            // return the response
+            if ( !$createdPolicy instanceof Policy )
+                return $createdPolicy;
+
+            // @todo Workaround for missing roleId in Policy XSD definition
+            $createdPolicyArray = array(
+                'id' => $createdPolicy->id,
+                'roleId' => $createdRole->id,
+                'module' => $createdPolicy->module,
+                'function' => $createdPolicy->function
+            );
+
+            $createdPolicy = new Policy( $createdPolicyArray );
+            $createdPolicies[] = $createdPolicy;
+        }
+
+        return new Role(
+            array(
+                'id' => $createdRole->id,
+                'identifier' => $createdRole->identifier,
+                'mainLanguageCode' => $createdRole->mainLanguageCode,
+                'names' => $createdRole->getNames(),
+                'descriptions' => $createdRole->getDescriptions()
+            ),
+            $createdPolicies
+        );
     }
 
     /**
@@ -159,7 +207,6 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
     {
         $inputMessage = $this->outputVisitor->visit( $policyCreateStruct );
         $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Policy' );
-        $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
 
         $result = $this->client->request(
             'POST',
@@ -168,6 +215,16 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
         );
 
         $createdPolicy = $this->inputDispatcher->parse( $result );
+
+        // @todo Workaround for missing roleId in Policy XSD definition
+        $createdPolicyArray = array(
+            'id' => $createdPolicy->id,
+            'roleId' => $role->id,
+            'module' => $createdPolicy->module,
+            'function' => $createdPolicy->function
+        );
+
+        $createdPolicy = new Policy( $createdPolicyArray );
 
         $existingPolicies = $role->getPolicies();
         $existingPolicies[] = $createdPolicy;
@@ -194,9 +251,24 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role the updated role
      */
-    public function removePolicy( APIRole $role, Policy $policy )
+    public function removePolicy( APIRole $role, APIPolicy $policy )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'DELETE',
+            $role->id . '/policies/' . $policy->id,
+            new Message(
+                // TODO: What media-type should we set here? Actually, it should be
+                // all expected exceptions + none? Or is "Section" correct,
+                // since this is what is to be expected by the resource
+                // identified by the URL?
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'Policy' ) )
+            )
+        );
+
+        if ( !empty( $response->body ) )
+            $this->inputDispatcher->parse( $response );
+
+        return $this->loadRole( $role->id );
     }
 
     /**
@@ -210,9 +282,19 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy
      */
-    public function updatePolicy( Policy $policy, PolicyUpdateStruct $policyUpdateStruct )
+    public function updatePolicy( APIPolicy $policy, APIPolicyUpdateStruct $policyUpdateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $inputMessage = $this->outputVisitor->visit( $policyUpdateStruct );
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Policy' );
+        $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
+
+        $result = $this->client->request(
+            'POST',
+            $policy->roleId . '/policies/' . $policy->id,
+            $inputMessage
+        );
+
+        return $this->inputDispatcher->parse( $result );
     }
 
     /**
@@ -234,7 +316,33 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
                 array( 'Accept' => $this->outputVisitor->getMediaType( 'Role' ) )
             )
         );
-        return $this->inputDispatcher->parse( $response );
+
+        $loadedRole = $this->inputDispatcher->parse( $response );
+        if ( !$loadedRole instanceof Role )
+            return $loadedRole;
+
+        $response = $this->client->request(
+            'GET',
+            $loadedRole->id . '/policies',
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'PolicyList' ) )
+            )
+        );
+
+        $policies = $this->inputDispatcher->parse( $response );
+        if ( !is_array( $policies ) )
+            return $policies;
+
+        return new Role(
+            array(
+                'id' => $loadedRole->id,
+                'identifier' => $loadedRole->identifier,
+                'mainLanguageCode' => $loadedRole->mainLanguageCode,
+                'names' => $loadedRole->getNames(),
+                'descriptions' => $loadedRole->getDescriptions()
+            ),
+            $policies
+        );
     }
 
     /**
@@ -290,7 +398,24 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function deleteRole( APIRole $role )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'DELETE',
+            $role->id,
+            new Message(
+                // TODO: What media-type should we set here? Actually, it should be
+                // all expected exceptions + none? Or is "Section" correct,
+                // since this is what is to be expected by the resource
+                // identified by the URL?
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'Role' ) )
+            )
+        );
+
+        $result = null;
+        if ( !empty( $response->body ) )
+        {
+            $result = $this->inputDispatcher->parse( $response );
+        }
+        return $result;
     }
 
     /**
@@ -439,7 +564,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function newPolicyUpdateStruct()
     {
-        throw new \Exception( "@TODO: Implement." );
+        return new PolicyUpdateStruct();
     }
 
     /**

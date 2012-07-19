@@ -217,7 +217,7 @@ abstract class BaseContentServiceTest extends BaseTest
         );
 
         $contentUpdate = $contentService->newContentUpdateStruct();
-        foreach ( $draftVersion2->fields as $field )
+        foreach ( $draftVersion2->getFields() as $field )
         {
             $contentUpdate->setField( $field->fieldDefIdentifier, $field->value, $field->languageCode );
         }

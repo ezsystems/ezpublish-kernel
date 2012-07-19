@@ -60,6 +60,7 @@ $repository = new Client\IntegrationTestRepository(
                 'application/vnd.ez.api.RoleList'     => new Client\Input\Parser\RoleList(),
                 'application/vnd.ez.api.Role'         => new Client\Input\Parser\Role(),
                 'application/vnd.ez.api.Policy'       => new Client\Input\Parser\Policy(),
+                'application/vnd.ez.api.PolicyList'   => new Client\Input\Parser\PolicyList(),
             )
         ),
         array(
@@ -92,6 +93,7 @@ $repository = new Client\IntegrationTestRepository(
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleUpdateStruct'                        => new Client\Output\ValueObjectVisitor\RoleUpdateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\PolicyCreateStruct'                      => new Client\Output\ValueObjectVisitor\PolicyCreateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation'                              => new Client\Output\ValueObjectVisitor\Limitation( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\PolicyUpdateStruct'                      => new Client\Output\ValueObjectVisitor\PolicyUpdateStruct( $urlHandler ),
         )
     ),
     $urlHandler,
