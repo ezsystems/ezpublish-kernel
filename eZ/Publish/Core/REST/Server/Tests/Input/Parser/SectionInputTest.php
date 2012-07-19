@@ -15,9 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 class SectionInputTest extends BaseTest
 {
     /**
-     * testParse
-     *
-     * @return void
+     * Tests the SectionInput parser
      */
     public function testParse()
     {
@@ -37,9 +35,8 @@ class SectionInputTest extends BaseTest
     }
 
     /**
-     * testParseExceptionOnMissingIdentifier
+     * Test SectionInput parser throwing exception on missing identifier
      *
-     * @return void
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'identifier' attribute for SectionInput.
      */
@@ -50,13 +47,12 @@ class SectionInputTest extends BaseTest
         );
 
         $sectionInput = $this->getSectionInput();
-        $result = $sectionInput->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $sectionInput->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
     /**
-     * testParseExceptionOnMissingName
+     * Test SectionInput parser throwing exception on missing name
      *
-     * @return void
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'name' attribute for SectionInput.
      */
@@ -67,10 +63,12 @@ class SectionInputTest extends BaseTest
         );
 
         $sectionInput = $this->getSectionInput();
-        $result = $sectionInput->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $sectionInput->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
     /**
+     * Returns the section input parser
+     *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\SectionInput
      */
     protected function getSectionInput()

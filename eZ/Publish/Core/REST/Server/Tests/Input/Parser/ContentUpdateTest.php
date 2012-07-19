@@ -15,7 +15,9 @@ use eZ\Publish\Core\REST\Common\Values\SectionIncludingContentMetadataUpdateStru
 class ContentUpdateTest extends BaseTest
 {
     /**
-     * @return void
+     * Test the parser for SectionIncludingContentMetadataUpdateStruct
+     *
+     * @return \eZ\Publish\Core\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct
      */
     public function testParseValid()
     {
@@ -36,8 +38,9 @@ class ContentUpdateTest extends BaseTest
     }
 
     /**
-     * @param SectionIncludingContentMetadataUpdateStruct $result
-     * @return void
+     * Test for valid section ID value in result
+     *
+     * @param \eZ\Publish\Core\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct $result
      * @depends testParseValid
      */
     public function testParserResultSection( SectionIncludingContentMetadataUpdateStruct $result )
@@ -49,8 +52,9 @@ class ContentUpdateTest extends BaseTest
     }
 
     /**
-     * @param SectionIncludingContentMetadataUpdateStruct $result
-     * @return void
+     * Test for valid owner ID value in result
+     *
+     * @param \eZ\Publish\Core\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct $result
      * @depends testParseValid
      */
     public function testParserResultOwner( SectionIncludingContentMetadataUpdateStruct $result )
@@ -62,7 +66,7 @@ class ContentUpdateTest extends BaseTest
     }
 
     /**
-     * @return void
+     * Test for null section ID value in result
      * @depends testParseValid
      */
     public function testParseValidSectionNull()
@@ -82,7 +86,7 @@ class ContentUpdateTest extends BaseTest
     }
 
     /**
-     * @return void
+     * Test for null owner ID value in result
      * @depends testParseValid
      */
     public function testParseValidOwnerNull()
@@ -102,25 +106,27 @@ class ContentUpdateTest extends BaseTest
     }
 
     /**
-     * @return void
+     * Test for missing Section element throws exception
+     *
      * @expectedException eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing <Section> element in <ContentUpdate>.
      */
-    public function testParseFailurMissingSection()
+    public function testParseFailureMissingSection()
     {
         $inputArray = $this->getValidInputData();
         unset( $inputArray['Section'] );
 
         $contentUpdateParser = $this->getContentUpdate();
 
-        $result = $contentUpdateParser->parse(
+        $contentUpdateParser->parse(
             $inputArray,
             $this->getParsingDispatcherMock()
         );
     }
 
     /**
-     * @return void
+     * Test for invalid Section _href attribute throws exception
+     *
      * @expectedException eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Invalid format for <Section> reference in <ContentUpdate>.
      */
@@ -131,14 +137,15 @@ class ContentUpdateTest extends BaseTest
 
         $contentUpdateParser = $this->getContentUpdate();
 
-        $result = $contentUpdateParser->parse(
+        $contentUpdateParser->parse(
             $inputArray,
             $this->getParsingDispatcherMock()
         );
     }
 
     /**
-     * @return void
+     * Test for missing Owner element throws exception
+     *
      * @expectedException eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing <Owner> element in <ContentUpdate>.
      */
@@ -149,14 +156,15 @@ class ContentUpdateTest extends BaseTest
 
         $contentUpdateParser = $this->getContentUpdate();
 
-        $result = $contentUpdateParser->parse(
+        $contentUpdateParser->parse(
             $inputArray,
             $this->getParsingDispatcherMock()
         );
     }
 
     /**
-     * @return void
+     * Test for invalid Owner _href attribute throws exception
+     *
      * @expectedException eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Invalid format for <Owner> reference in <ContentUpdate>.
      */
@@ -167,13 +175,15 @@ class ContentUpdateTest extends BaseTest
 
         $contentUpdateParser = $this->getContentUpdate();
 
-        $result = $contentUpdateParser->parse(
+        $contentUpdateParser->parse(
             $inputArray,
             $this->getParsingDispatcherMock()
         );
     }
 
     /**
+     * Returns the ContentUpdate parser
+     *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ContentUpdate
      */
     protected function getContentUpdate()

@@ -30,7 +30,7 @@ class PolicyUpdate extends Base
     /**
      * Construct from role service
      *
-     * @param \eZ\Publish\API\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\RoleService $roleService
      */
     public function __construct( UrlHandler $urlHandler, RoleService $roleService )
@@ -43,7 +43,7 @@ class PolicyUpdate extends Base
      * Parse input structure
      *
      * @param array $data
-     * @param \eZ\Publish\API\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      * @return \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
