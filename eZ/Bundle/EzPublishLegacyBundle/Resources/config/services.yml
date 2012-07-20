@@ -29,7 +29,7 @@ services:
         class: %ezpublish_legacy.kernel_handler.web.class%
         factory_service: ezpublish_legacy.kernel.lazy_loader
         factory_method: buildLegacyKernelHandlerWeb
-        arguments: [@request=]
+        arguments: [@service_container]
 
     ezpublish_legacy.kernel_handler:
         alias: ezpublish_legacy.kernel_handler.web
