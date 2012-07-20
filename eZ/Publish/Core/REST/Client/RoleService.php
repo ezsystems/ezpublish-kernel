@@ -20,6 +20,9 @@ use \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\UserGroup;
 
+use \eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
+use \eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
+
 use \eZ\Publish\Core\REST\Client\Values\User\PolicyCreateStruct;
 use \eZ\Publish\Core\REST\Client\Values\User\PolicyUpdateStruct;
 use \eZ\Publish\Core\REST\Client\Values\User\Role;
@@ -515,7 +518,31 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function getRoleAssignmentsForUser( User $user )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $this->urlHandler->generate( 'userRoleAssignments' ),
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'RoleAssignmentList' ) )
+            )
+        );
+
+        $roleAssignments = $this->inputDispatcher->parse( $response );
+        if ( !is_array( $roleAssignments ) )
+            return $roleAssignments;
+
+        $userRoleAssignments = array();
+        foreach ( $roleAssignments as $roleAssignment )
+        {
+            $userRoleAssignments[] = new UserRoleAssignment(
+                array(
+                    'limitation' => $roleAssignment->getRoleLimitation(),
+                    'role' => $roleAssignment->getRole(),
+                    'user' => $user
+                )
+            );
+        }
+
+        return $userRoleAssignments;
     }
 
     /**
@@ -529,7 +556,29 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function getRoleAssignmentsForUserGroup( UserGroup $userGroup )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $this->urlHandler->generate( 'groupRoleAssignments' ),
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'RoleAssignmentList' ) )
+            )
+        );
+
+        $roleAssignments = $this->inputDispatcher->parse( $response );
+
+        $userGroupRoleAssignments = array();
+        foreach ( $roleAssignments as $roleAssignment )
+        {
+            $userGroupRoleAssignments[] = new UserGroupRoleAssignment(
+                array(
+                    'limitation' => $roleAssignment->getRoleLimitation(),
+                    'role' => $roleAssignment->getRole(),
+                    'userGroup' => $userGroup
+                )
+            );
+        }
+
+        return $userGroupRoleAssignments;
     }
 
     /**

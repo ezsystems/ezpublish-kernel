@@ -137,6 +137,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy'            => new Output\ValueObjectVisitor\Policy( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PolicyList'           => new Output\ValueObjectVisitor\PolicyList( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation'        => new Output\ValueObjectVisitor\Limitation( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleAssignmentList'   => new Output\ValueObjectVisitor\RoleAssignmentList( $urlHandler ),
 );
 
 /*
@@ -195,6 +196,12 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/user/roles/[0-9]+/policies/[0-9]+$)' => array(
             'PATCH'  => array( $roleController, 'updatePolicy' ),
             'DELETE' => array( $roleController, 'deletePolicy' ),
+        ),
+        '(^/user/users/[0-9]+/roles$)' => array(
+            'GET'  => array( $roleController, 'loadRoleAssignmentsForUser' ),
+        ),
+        '(^/user/groups/[0-9/]+/roles$)' => array(
+            'GET'  => array( $roleController, 'loadRoleAssignmentsForUserGroup' ),
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(

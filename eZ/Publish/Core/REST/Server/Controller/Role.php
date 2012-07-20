@@ -273,6 +273,40 @@ class Role
     }
 
     /**
+     * Load role assignments for user
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\RoleAssignmentList
+     */
+    public function loadRoleAssignmentsForUser( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'userRoleAssignments', $request->path );
+
+        $roleAssignments = $this->roleService->getRoleAssignmentsForUser( $values['user'] );
+
+        return new Values\RoleAssignmentList( $roleAssignments, $values['user'] );
+    }
+
+    /**
+     * Load role assignments for user group
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\RoleAssignmentList
+     */
+    public function loadRoleAssignmentsForUserGroup( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'groupRoleAssignments', $request->path );
+
+        $roleAssignments = $this->roleService->getRoleAssignmentsForUserGroup( $values['group'] );
+
+        return new Values\RoleAssignmentList(
+            $roleAssignments,
+            array_pop( trim( $values['group'], '/' ) ),
+            true
+        );
+    }
+
+    /**
      * Maps a RoleCreateStruct to a RoleUpdateStruct.
      *
      * Needed since both structs are encoded into the same media type on input.

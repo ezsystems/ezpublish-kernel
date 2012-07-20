@@ -52,15 +52,18 @@ $repository = new Client\IntegrationTestRepository(
         // should be used to process the given mime type.
         new Common\Input\ParsingDispatcher(
             array(
-                'application/vnd.ez.api.ContentList'  => new Client\Input\Parser\ContentList(),
-                'application/vnd.ez.api.ContentInfo'  => new Client\Input\Parser\ContentInfo(),
-                'application/vnd.ez.api.SectionList'  => new Client\Input\Parser\SectionList(),
-                'application/vnd.ez.api.Section'      => new Client\Input\Parser\Section(),
-                'application/vnd.ez.api.ErrorMessage' => new Client\Input\Parser\ErrorMessage(),
-                'application/vnd.ez.api.RoleList'     => new Client\Input\Parser\RoleList(),
-                'application/vnd.ez.api.Role'         => new Client\Input\Parser\Role(),
-                'application/vnd.ez.api.Policy'       => new Client\Input\Parser\Policy(),
-                'application/vnd.ez.api.PolicyList'   => new Client\Input\Parser\PolicyList(),
+                'application/vnd.ez.api.ContentList'        => new Client\Input\Parser\ContentList(),
+                'application/vnd.ez.api.ContentInfo'        => new Client\Input\Parser\ContentInfo(),
+                'application/vnd.ez.api.SectionList'        => new Client\Input\Parser\SectionList(),
+                'application/vnd.ez.api.Section'            => new Client\Input\Parser\Section(),
+                'application/vnd.ez.api.ErrorMessage'       => new Client\Input\Parser\ErrorMessage(),
+                'application/vnd.ez.api.RoleList'           => new Client\Input\Parser\RoleList(),
+                'application/vnd.ez.api.Role'               => new Client\Input\Parser\Role(),
+                'application/vnd.ez.api.Policy'             => new Client\Input\Parser\Policy(),
+                'application/vnd.ez.api.limitation'         => new Client\Input\Parser\Limitation(),
+                'application/vnd.ez.api.PolicyList'         => new Client\Input\Parser\PolicyList(),
+                'application/vnd.ez.api.RoleAssignmentList' => new Client\Input\Parser\RoleAssignmentList(),
+                'application/vnd.ez.api.RoleAssignment'     => new Client\Input\Parser\RoleAssignment(),
             )
         ),
         array(
