@@ -81,7 +81,7 @@ class Type extends FieldType
             throw new InvalidArgumentType(
                 '$inputValue',
                 'eZ\\Publish\\Core\\FieldType\\TextLine\\Value',
-            $inputValue
+                $inputValue
             );
         }
 
@@ -90,7 +90,7 @@ class Type extends FieldType
             throw new InvalidArgumentType(
                 '$inputValue->text',
                 'string',
-            $inputValue->text
+                $inputValue->text
             );
         }
 
