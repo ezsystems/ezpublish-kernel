@@ -1035,7 +1035,7 @@ class ContentService implements ContentServiceInterface
      */
     public function publishVersion( APIVersionInfo $versionInfo )
     {
-        $loadedVersionInfo = $this->loadVersionInfo(
+        $loadedVersionInfo = $this->loadVersionInfoById(
             $versionInfo->contentInfo->id,
             $versionInfo->versionNo
         );
