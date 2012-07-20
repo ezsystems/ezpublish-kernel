@@ -148,9 +148,9 @@ class LegacySolr extends Legacy
 
         // @TODO: Is there a nicer way to get access to all content objects? We 
         // require this to run a full index here.
-        $getDatabaseMethod = new \ReflectionMethod( $persistenceHandler, 'getDatabase' );
-        $getDatabaseMethod->setAccessible( true );
-        $db = $getDatabaseMethod->invoke( $persistenceHandler );
+        $dbHandlerProperty = new \ReflectionProperty( $persistenceHandler, 'dbHandler' );
+        $dbHandlerProperty->setAccessible( true );
+        $db = $dbHandlerProperty->getValue( $persistenceHandler );
 
         $query = $db->createSelectQuery()
             ->select( 'id', 'current_version' )
