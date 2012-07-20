@@ -76,6 +76,7 @@ $inputDispatcher = new Common\Input\Dispatcher(
         'application/vnd.ez.api.ContentUpdate' => new Input\Parser\ContentUpdate( $urlHandler ),
         'application/vnd.ez.api.PolicyCreate'  => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService() ),
         'application/vnd.ez.api.PolicyUpdate'  => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService() ),
+        'application/vnd.ez.api.limitation'    => new Input\Parser\Limitation( $urlHandler ),
     ) ),
     $handler
 );

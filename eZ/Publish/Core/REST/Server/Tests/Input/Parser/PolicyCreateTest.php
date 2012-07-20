@@ -15,7 +15,7 @@ class PolicyCreateTest extends BaseTest
 {
     /**
      * Tests the PolicyCreate parser
-     * @todo Test for PolicyCreateStruct limitations
+     * @todo test with limitations
      */
     public function testParse()
     {
@@ -71,7 +71,7 @@ class PolicyCreateTest extends BaseTest
     public function testParseExceptionOnMissingFunction()
     {
         $inputArray = array(
-            'module' => 'delete'
+            'module' => 'content'
         );
 
         $policyCreate = $this->getPolicyCreate();
