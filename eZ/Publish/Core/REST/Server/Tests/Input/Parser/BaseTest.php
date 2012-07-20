@@ -16,7 +16,7 @@ use eZ\Publish\Core\REST\Common\UrlHandler;
 abstract class BaseTest extends \eZ\Publish\Core\REST\Server\Tests\BaseTest
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
      */
     protected $parsingDispatcherMock;
 
@@ -31,6 +31,8 @@ abstract class BaseTest extends \eZ\Publish\Core\REST\Server\Tests\BaseTest
     protected $repository;
 
     /**
+     * Get the parsing dispatcher
+     *
      * @return \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
      */
     protected function getParsingDispatcherMock()
@@ -49,6 +51,8 @@ abstract class BaseTest extends \eZ\Publish\Core\REST\Server\Tests\BaseTest
     }
 
     /**
+     * Get the URL handler
+     *
      * @return \eZ\Publish\Core\REST\Common\UrlHandler\eZPublish;
      */
     protected function getUrlHandler()
@@ -60,6 +64,11 @@ abstract class BaseTest extends \eZ\Publish\Core\REST\Server\Tests\BaseTest
         return $this->urlHandler;
     }
 
+    /**
+     * Get InMemory repository implementation
+     *
+     * @return \eZ\Publish\API\Repository\Repository
+     */
     protected function getRepository()
     {
         if ( !isset( $this->repository ) )
