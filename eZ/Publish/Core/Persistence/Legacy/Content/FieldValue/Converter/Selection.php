@@ -60,6 +60,9 @@ class Selection implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
+        // Refactor out non-working code
+        return $fieldValue;
+
         $fieldValue->data = array_values(
             array_intersect_key(
                 $fieldValue->fieldSettings["options"] ?: array(),
