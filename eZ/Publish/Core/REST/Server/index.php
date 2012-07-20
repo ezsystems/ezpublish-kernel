@@ -72,7 +72,7 @@ $urlHandler = new Common\UrlHandler\eZPublish();
 $inputDispatcher = new Common\Input\Dispatcher(
     new Common\Input\ParsingDispatcher( array(
         'application/vnd.ez.api.RoleInput'     => new Input\Parser\RoleInput( $urlHandler, $repository->getRoleService() ),
-        'application/vnd.ez.api.SectionInput'  => new Input\Parser\SectionInput( $urlHandler ),
+        'application/vnd.ez.api.SectionInput'  => new Input\Parser\SectionInput( $urlHandler, $repository->getSectionService() ),
         'application/vnd.ez.api.ContentUpdate' => new Input\Parser\ContentUpdate( $urlHandler ),
         'application/vnd.ez.api.PolicyCreate'  => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService() ),
         'application/vnd.ez.api.PolicyUpdate'  => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService() ),
@@ -188,8 +188,9 @@ $dispatcher = new AuthenticatingDispatcher(
             'DELETE' => array( $roleController, 'deleteRole' ),
         ),
         '(^/user/roles/[0-9]+/policies$)' => array(
-            'GET'  => array( $roleController, 'loadPolicies' ),
-            'POST' => array( $roleController, 'addPolicy' ),
+            'GET'    => array( $roleController, 'loadPolicies' ),
+            'POST'   => array( $roleController, 'addPolicy' ),
+            'DELETE' => array( $roleController, 'deletePolicies' ),
         ),
         '(^/user/roles/[0-9]+/policies/[0-9]+$)' => array(
             'PATCH'  => array( $roleController, 'updatePolicy' ),

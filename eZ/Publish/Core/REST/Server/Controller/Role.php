@@ -167,6 +167,23 @@ class Role
     }
 
     /**
+     * Deletes all policies from a role
+     *
+     * @param RMF\Request $request
+     */
+    public function deletePolicies( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'policies', $request->path );
+
+        $loadedRole = $this->roleService->loadRole( $values['role'] );
+
+        foreach ( $loadedRole->getPolicies() as $rolePolicy )
+        {
+            $this->roleService->removePolicy( $loadedRole, $rolePolicy );
+        }
+    }
+
+    /**
      * Adds a policy to role
      *
      * @param RMF\Request $request

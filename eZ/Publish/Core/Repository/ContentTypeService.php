@@ -1012,11 +1012,12 @@ class ContentTypeService implements ContentTypeServiceInterface
             $contentType->id,
             SPIContentType::STATUS_DEFINED
         );
+        $this->publishContentTypeDraft(
+            $this->buildContentTypeDraftDomainObject( $spiContentType )
+        );
         $this->repository->commit();
 
-        return $this->buildContentTypeDomainObject(
-            $spiContentType
-        );
+        return $this->loadContentType( $spiContentType->id );
     }
 
     /**

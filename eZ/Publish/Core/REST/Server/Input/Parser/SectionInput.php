@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\API\Repository\SectionService;
 use eZ\Publish\Core\REST\Common\Exceptions;
 
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
@@ -18,6 +20,25 @@ use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
  */
 class SectionInput extends Base
 {
+    /**
+     * Section service
+     *
+     * @var \eZ\Publish\API\Repository\SectionService
+     */
+    protected $sectionService;
+
+    /**
+     * Construct from section service
+     *
+     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\API\Repository\SectionService $sectionService
+     */
+    public function __construct( UrlHandler $urlHandler, SectionService $sectionService )
+    {
+        parent::__construct( $urlHandler );
+        $this->sectionService = $sectionService;
+    }
+
     /**
      * Parse input structure
      *
@@ -36,10 +57,11 @@ class SectionInput extends Base
             throw new Exceptions\Parser( "Missing 'identifier' attribute for SectionInput." );
         }
 
-        return new SectionCreateStruct( array(
-            'name'       => $data["name"],
-            'identifier' => $data["identifier"],
-        ) );
+        $sectionCreate = $this->sectionService->newSectionCreateStruct();
+        $sectionCreate->name = $data['name'];
+        $sectionCreate->identifier = $data['identifier'];
+
+        return $sectionCreate;
     }
 }
 

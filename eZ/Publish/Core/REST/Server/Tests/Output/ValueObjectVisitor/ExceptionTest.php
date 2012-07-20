@@ -24,9 +24,9 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
     protected $visitor;
 
     /**
-     * testVisit
+     * Test the Exception visitor
      *
-     * @return void
+     * @return string
      */
     public function testVisit()
     {
@@ -51,7 +51,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * testResultContainsExceptionElement
+     * Test if result contains ErrorMessage element and error code
      *
      * @param string $result
      * @depends testVisit
@@ -73,7 +73,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * testResultContainsExceptionElement
+     * Test if result contains ErrorMessage element
      *
      * @param string $result
      * @depends testVisit
@@ -95,7 +95,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * testResultContainsExceptionElement
+     * Test if result contains ErrorMessage element and description
      *
      * @param string $result
      * @depends testVisit
@@ -116,7 +116,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * testResultContainsExceptionAttributes
+     * Test if ErrorMessage element contains required attributes
      *
      * @param string $result
      * @depends testVisit
@@ -157,6 +157,8 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
+     * Gets the exception
+     *
      * @return \Exception
      */
     protected function getException()
@@ -165,6 +167,8 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
+     * Gets the exception visitor
+     *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Exception
      */
     protected function getExceptionVisitor()

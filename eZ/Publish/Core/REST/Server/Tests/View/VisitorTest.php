@@ -17,7 +17,7 @@ use eZ\Publish\Core\REST\Common\Message;
 
 use Qafoo\RMF;
 
-class SectionListTest extends BaseTest
+class VisitorTest extends BaseTest
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -55,7 +55,7 @@ class SectionListTest extends BaseTest
     }
 
     /**
-     * @return void eZ\Publish\Core\REST\Common\Output\Visitor
+     * @return \eZ\Publish\Core\REST\Common\Output\Visitor
      */
     protected function getVisitorMock()
     {

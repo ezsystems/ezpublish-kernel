@@ -35,19 +35,31 @@ class ClassLoader
     protected $classMap;
 
     /**
+     * @var null|string
+     */
+    protected $legacyDir;
+
+    /**
+     * @var array
+     */
+    protected $legacyClassMap;
+
+    /**
      * Construct a loader instance
      *
      * @param array $paths Containing class/namespace prefix as key and sub path as value
      * @param array $classMap
+     * @param string|null $legacyDir
      */
-    public function __construct( array $paths, array $classMap = array() )
+    public function __construct( array $paths, array $classMap = array(), $legacyDir = null )
     {
         $this->paths = $paths;
         $this->classMap = $classMap;
+        $this->legacyDir = $legacyDir;
     }
 
     /**
-     * Load classes/interfaces following PSR-0 naming
+     * Load classes/interfaces following PSR-0 naming and class map
      *
      * @param string $className
      * @param bool $returnFileName For testing, returns file name instead of loading it
@@ -62,17 +74,21 @@ class ClassLoader
         // Try to match against the class map
         if ( isset( $this->classMap[$className] ) )
         {
+            if ( $returnFileName )
+                return $this->classMap[$className];
+
             require $this->classMap[$className];
             return true;
         }
 
+        // Try to match against PSR-0 namespace map
         $pearMode = stripos( $className, '_' ) !== false;
         foreach ( $this->paths as $prefix => $path )
         {
             if ( strpos( $className, $prefix ) !== 0 )
                 continue;
 
-            if ( $pearMode ) // PEAR compat code
+            if ( $pearMode ) // PSR-0 PEAR compatibility mode
             {
                 $lastNsPos = strripos( $className, '\\' );
                 $fileName = $path;
@@ -87,7 +103,7 @@ class ClassLoader
                 // Replacing '_' to '/' in className part and append '.php'
                 $fileName .= str_replace( '_', DIRECTORY_SEPARATOR, substr( $className, $lastNsPos + 1 ) ) . '.php';
             }
-            else // Strict PSR code
+            else // PSR-0 NS strict mode
             {
                 $fileName = $path .
                     str_replace( '\\', DIRECTORY_SEPARATOR, $className ) .
@@ -103,6 +119,55 @@ class ClassLoader
             require $fileName;
             return true;
         }
+
+        // If legacy dir is provided, then try to load using legacy class map
+        if ( $this->legacyDir !== null )
+        {
+            // Lazy load legacy class map
+            if ( $this->legacyClassMap === null )
+            {
+                $this->legacyClassMap = self::getEzpLegacyClassMap( $this->legacyDir );
+            }
+
+            // Load legacy class if it exists
+            if ( isset( $this->legacyClassMap[$className] ) )
+            {
+                if ( $returnFileName )
+                    return $this->legacyDir . '/' . $this->legacyClassMap[$className];
+
+                require $this->legacyDir . '/' . $this->legacyClassMap[$className];
+                return true;
+            }
+        }
+
         return false;
+    }
+
+    /**
+     * Merges all eZ Publish 4.x autoload files and return result
+     *
+     * @param string $legacyDir
+     *
+     * @return array
+     */
+    protected static function getEzpLegacyClassMap( $legacyDir )
+    {
+        $ezpKernelClasses = require "{$legacyDir}/autoload/ezp_kernel.php";
+        if ( file_exists( "{$legacyDir}/var/autoload/ezp_extension.php" ) )
+            $ezpExtensionClasses = require "{$legacyDir}/var/autoload/ezp_extension.php";
+        else
+            $ezpExtensionClasses = array();
+
+        if ( file_exists( "{$legacyDir}/var/autoload/ezp_tests.php" ) )
+            $ezpTestClasses = require "{$legacyDir}/var/autoload/ezp_tests.php";
+        else
+            $ezpTestClasses = array();
+
+        if ( file_exists( "{$legacyDir}/var/autoload/ezp_override.php" ) )
+            $ezpKernelOverrideClasses = require "{$legacyDir}/var/autoload/ezp_override.php";
+        else
+            $ezpKernelOverrideClasses = array();
+
+        return $ezpKernelOverrideClasses + $ezpTestClasses + $ezpExtensionClasses + $ezpKernelClasses;
     }
 }

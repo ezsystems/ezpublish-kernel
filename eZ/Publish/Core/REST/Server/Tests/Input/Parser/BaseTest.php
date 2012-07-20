@@ -26,6 +26,11 @@ abstract class BaseTest extends \eZ\Publish\Core\REST\Server\Tests\BaseTest
     protected $urlHandler;
 
     /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    protected $repository;
+
+    /**
      * @return \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
      */
     protected function getParsingDispatcherMock()
@@ -53,5 +58,15 @@ abstract class BaseTest extends \eZ\Publish\Core\REST\Server\Tests\BaseTest
             $this->urlHandler = new UrlHandler\eZPublish;
         }
         return $this->urlHandler;
+    }
+
+    protected function getRepository()
+    {
+        if ( !isset( $this->repository ) )
+        {
+            $setupFactory = new \eZ\Publish\API\Repository\Tests\SetupFactory\Memory();
+            $this->repository = $setupFactory->getRepository();
+        }
+        return $this->repository;
     }
 }

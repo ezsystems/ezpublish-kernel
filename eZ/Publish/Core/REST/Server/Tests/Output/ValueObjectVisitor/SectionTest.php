@@ -17,9 +17,9 @@ use eZ\Publish\Core\REST\Common;
 class SectionTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * testVisit
+     * Test the Section visitor
      *
-     * @return void
+     * @return string
      */
     public function testVisit()
     {
@@ -48,7 +48,7 @@ class SectionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * testResultContainsSectionElement
+     * Test if result contains Section element
      *
      * @param string $result
      * @depends testVisit
@@ -70,7 +70,7 @@ class SectionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * testResultContainsSectionAttributes
+     * Test if result contains Section element attributes
      *
      * @param string $result
      * @depends testVisit
@@ -92,10 +92,9 @@ class SectionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * testResultContainsSectionIdValueElement
+     * Test if result contains sectionId value element
      *
      * @param string $result
-     * @return void
      * @depends testVisit
      */
     public function testResultContainsSectionIdValueElement( $result )
@@ -113,10 +112,9 @@ class SectionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * testResultContainsIdentifierValueElement
+     * Test if result contains identifier value element
      *
      * @param string $result
-     * @return void
      * @depends testVisit
      */
     public function testResultContainsIdentifierValueElement( $result )
@@ -134,10 +132,9 @@ class SectionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * testResultContainsNameValueElement
+     * Test if result contains name value element
      *
      * @param string $result
-     * @return void
      * @depends testVisit
      */
     public function testResultContainsNameValueElement( $result )
@@ -155,6 +152,8 @@ class SectionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
+     * Get the Section visitor
+     *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Section
      */
     protected function getSectionVisitor()

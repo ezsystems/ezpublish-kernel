@@ -23,7 +23,7 @@ class RoleInput extends Base
     /**
      * Role service
      *
-     * @var RoleService
+     * @var \eZ\Publish\API\Repository\RoleService
      */
     protected $roleService;
 

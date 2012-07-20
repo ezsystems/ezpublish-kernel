@@ -51,11 +51,11 @@ abstract class FieldType implements FieldTypeInterface
     protected $settingsSchema = array();
 
     /**
-     * a two dimensional map with validator identifiers and parameters
+     * An array of validator identifiers which are allowed for this FieldType
      *
-     * @var mixed
+     * @var string[]
      */
-    protected $validatorConfigurationSchema = array();
+    protected $allowedValidators = array();
 
     /**
      * Tool object for field types
@@ -111,7 +111,7 @@ abstract class FieldType implements FieldTypeInterface
      * Returns a schema for supported validator configurations.
      *
      * This implementation returns a three dimensional map containing for each validator configuration
-     * referenced by identifier a map of supported parameters which are difined by a type and a default value
+     * referenced by identifier a map of supported parameters which are defined by a type and a default value
      * (see example).
      * Example:
      * <code>
@@ -130,11 +130,17 @@ abstract class FieldType implements FieldTypeInterface
      * </code>
      * The validator identifier is mapped to a Validator class which can be retrieved via the
      * ValidatorService.
-     *
      */
     public function getValidatorConfigurationSchema()
     {
-        return $this->validatorConfigurationSchema;
+        $validatorConfigurationSchema = array();
+        foreach ( $this->allowedValidators as $validatorIdentifier )
+        {
+            $validator = $this->validatorService->getValidator( $validatorIdentifier );
+            $validatorConfigurationSchema[$validatorIdentifier] = $validator->getConstraintsSchema();
+        }
+
+        return $validatorConfigurationSchema;
     }
 
     /**
@@ -171,7 +177,27 @@ abstract class FieldType implements FieldTypeInterface
      */
     public function validateValidatorConfiguration( $validatorConfiguration )
     {
-        return array();
+        $validationErrors = array();
+        foreach ( (array)$validatorConfiguration as $validatorIdentifier => $constraints )
+        {
+            if ( in_array( $validatorIdentifier, $this->allowedValidators ) )
+            {
+                $validator = $this->validatorService->getValidator( $validatorIdentifier );
+                $validationErrors += $validator->validateConstraints( $constraints );
+            }
+            else
+            {
+                $validationErrors[] = new ValidationError(
+                    "Validator '%validator%' is unknown",
+                    null,
+                    array(
+                        "validator" => $validatorIdentifier
+                    )
+                );
+            }
+        }
+
+        return $validationErrors;
     }
 
     /**
@@ -183,6 +209,19 @@ abstract class FieldType implements FieldTypeInterface
      */
     public function validateFieldSettings( $fieldSettings )
     {
+        if ( !empty( $fieldSettings ) )
+        {
+            return array(
+                new ValidationError(
+                    "FieldType '%fieldType%' does not accept settings",
+                    null,
+                    array(
+                        "fieldType" => $this->getFieldTypeIdentifier()
+                    )
+                )
+            );
+        }
+
         return array();
     }
 

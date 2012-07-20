@@ -183,7 +183,7 @@ class Type extends FieldType
                         if ( !is_bool( $value ) )
                         {
                             $validationErrors[] = new ValidationError(
-                                "Setting '%setting%' must be of boolean type",
+                                "Setting '%setting%' value must be of boolean type",
                                 null,
                                 array(
                                     "setting" => $name
@@ -227,7 +227,7 @@ class Type extends FieldType
                             elseif ( get_class( $value ) !== "DateInterval" )
                             {
                                 $validationErrors[] = new ValidationError(
-                                    "Setting '%setting%' must be an instance of 'DateInterval' class",
+                                    "Setting '%setting%' value must be an instance of 'DateInterval' class",
                                     null,
                                     array(
                                         "setting" => $name

@@ -2208,6 +2208,8 @@ Get Sections
 :Resource: /content/sections
 :Method: GET
 :Description: Returns a list of all sections
+:Parameters:
+    :identifer: only the section with the given identifier is returned.
 :Headers:
     :Accept:
          :application/vnd.ez.api.SectionList+xml:  if set the section list is returned in xml format (see Section_)
@@ -2361,7 +2363,10 @@ Delete Section
 :Resource: /content/sections/<ID>
 :Method: DELETE
 :Description: the given section is deleted
-:Parameters:
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ErrorMessage+xml:  if set in the case of an error the error message is returned in xml format (see ErrorMessage_)
+         :application/vnd.ez.api.ErrorMessage+json:  if set in the case of an error the error message is returned in json format (see ErrorMessage_)
 :Response: 
 
 .. code:: http

@@ -36,9 +36,7 @@ class LegacyTest extends BaseHandlerTest
             );
         }
 
-        $handler = new Legacy();
-        $handler->setLegacyKernel( $_ENV['legacyKernel'] );
-        return $handler;
+        return new Legacy( $_ENV['legacyKernel'] );
     }
 
     public function setUp()

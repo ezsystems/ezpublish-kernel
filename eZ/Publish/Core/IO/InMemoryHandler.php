@@ -35,15 +35,9 @@ class InMemoryHandler implements IoHandlerInterface
      */
     private $data;
 
-    /**
-     * File data resources (handles)
-     * @var resource[]
-     */
-    private $resources = array();
-
-    public function __construct()
+    public function __construct( array $storage = array() )
     {
-        $this->storage = array();
+        $this->storage = $storage;
     }
 
     /**

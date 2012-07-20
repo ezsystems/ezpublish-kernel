@@ -66,6 +66,27 @@ class StringLengthValidatorTest extends FieldTypeTest
     }
 
     /**
+     * Test getting constraints schema
+     *
+     * @covers \eZ\Publish\Core\FieldType\Validator::getConstraintsSchema
+     */
+    public function testGetConstraintsSchema()
+    {
+        $constraintsSchema = array(
+            "minStringLength" => array(
+                "type" => "int",
+                "default" => 0
+            ),
+            "maxStringLength" => array(
+                "type" => "int",
+                "default" => null
+            )
+        );
+        $validator = new StringLengthValidator;
+        $this->assertSame( $constraintsSchema, $validator->getConstraintsSchema() );
+    }
+
+    /**
      * Tests setting and getting constraints
      *
      * @covers \eZ\Publish\Core\FieldType\Validator::__set
@@ -206,6 +227,167 @@ class StringLengthValidatorTest extends FieldTypeTest
                 "The string can not exceed %size% character.",
                 "The string can not exceed %size% characters.",
                 array( "size" => $this->getMaxStringLength() )
+            ),
+        );
+    }
+
+    /**
+     * Tests validation of constraints
+     *
+     * @dataProvider providerForValidateConstraintsOK
+     * @covers \eZ\Publish\Core\FieldType\Validator\FileSizeValidator::validateConstraints
+     */
+    public function testValidateConstraintsCorrectValues( $constraints )
+    {
+        $validator = new StringLengthValidator;
+
+        $this->assertEmpty(
+            $validator->validateConstraints( $constraints )
+        );
+    }
+
+    public function providerForValidateConstraintsOK()
+    {
+        return array(
+            array(
+                array(),
+                array(
+                    "minStringLength" => 5,
+                ),
+                array(
+                    "maxStringLength" => 2,
+                ),
+                array(
+                    "minStringLength" => false,
+                    "maxStringLength" => false
+                ),
+                array(
+                    "minStringLength" => -5,
+                    "maxStringLength" => false
+                ),
+                array(
+                    "minStringLength" => false,
+                    "maxStringLength" => 12
+                ),
+                array(
+                    "minStringLength" => 6,
+                    "maxStringLength" => 8
+                ),
+            ),
+        );
+    }
+
+    /**
+     * Tests validation of constraints
+     *
+     * @dataProvider providerForValidateConstraintsKO
+     * @covers \eZ\Publish\Core\FieldType\Validator\FileSizeValidator::validateConstraints
+     */
+    public function testValidateConstraintsWrongValues( $constraints, $expectedMessages, $values )
+    {
+        $validator = new StringLengthValidator;
+        $messages = $validator->validateConstraints( $constraints );
+
+        foreach ( $expectedMessages as $index => $expectedMessage )
+        {
+            $this->assertInstanceOf(
+                "eZ\\Publish\\API\\Repository\\Values\\Translation\\Message",
+                $messages[0]->getTranslatableMessage()
+            );
+            $this->assertEquals(
+                $expectedMessage,
+                $messages[$index]->getTranslatableMessage()->message
+            );
+            $this->assertEquals(
+                $values[$index],
+                $messages[$index]->getTranslatableMessage()->values
+            );
+        }
+    }
+
+    public function providerForValidateConstraintsKO()
+    {
+        return array(
+            array(
+                array(
+                    "minStringLength" => true
+                ),
+                array( "Validator parameter '%parameter%' value must be of integer type" ),
+                array(
+                    array( "parameter" => "minStringLength" ),
+                )
+            ),
+            array(
+                array(
+                    "minStringLength" => "five thousand characters"
+                ),
+                array( "Validator parameter '%parameter%' value must be of integer type" ),
+                array(
+                    array( "parameter" => "minStringLength" ),
+                )
+            ),
+            array(
+                array(
+                    "minStringLength" => "five thousand characters",
+                    "maxStringLength" => 1234
+                ),
+                array( "Validator parameter '%parameter%' value must be of integer type" ),
+                array(
+                    array( "parameter" => "minStringLength" ),
+                )
+            ),
+            array(
+                array(
+                    "maxStringLength" => new \DateTime(),
+                    "minStringLength" => 1234
+                ),
+                array( "Validator parameter '%parameter%' value must be of integer type" ),
+                array(
+                    array( "parameter" => "maxStringLength" ),
+                )
+            ),
+            array(
+                array(
+                    "minStringLength" => true,
+                    "maxStringLength" => 1234
+                ),
+                array( "Validator parameter '%parameter%' value must be of integer type" ),
+                array(
+                    array( "parameter" => "minStringLength" ),
+                )
+            ),
+            array(
+                array(
+                    "minStringLength" => "five thousand characters",
+                    "maxStringLength" => "ten billion characters"
+                ),
+                array(
+                    "Validator parameter '%parameter%' value must be of integer type",
+                    "Validator parameter '%parameter%' value must be of integer type"
+                ),
+                array(
+                    array( "parameter" => "minStringLength" ),
+                    array( "parameter" => "maxStringLength" ),
+                )
+            ),
+            array(
+                array(
+                    "brljix" => 12345
+                ),
+                array( "Validator parameter '%parameter%' is unknown" ),
+                array(
+                    array( "parameter" => "brljix" ),
+                )
+            ),
+            array(
+                array(
+                    "minStringLength" => 12345,
+                    "brljix" => 12345
+                ),
+                array( "Validator parameter '%parameter%' is unknown" ),
+                array(
+                    array( "parameter" => "brljix" ),
+                )
             ),
         );
     }

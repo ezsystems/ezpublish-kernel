@@ -18,9 +18,9 @@ use eZ\Publish\Core\REST\Common;
 class SectionListTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * testVisit
+     * Test the SectionList visitor
      *
-     * @return void
+     * @return string
      */
     public function testVisit()
     {
@@ -45,7 +45,7 @@ class SectionListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * testResultContainsSectionListElement
+     * Test if result contains SectionList element
      *
      * @param string $result
      * @depends testVisit
@@ -63,7 +63,7 @@ class SectionListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * testResultContainsSectionListAttributes
+     * Test if result contains SectionList element attributes
      *
      * @param string $result
      * @depends testVisit
@@ -85,10 +85,7 @@ class SectionListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * testSectionListVisitsChildren
-     *
-     * @param mixed $result
-     * @return void
+     * Test if SectionList visitor visits the children
      */
     public function testSectionListVisitsChildren()
     {
@@ -114,6 +111,8 @@ class SectionListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
+     * Get the SectionList visitor
+     *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\SectionList
      */
     protected function getSectionListVisitor()

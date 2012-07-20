@@ -13,7 +13,16 @@ use eZ\Publish\Core\REST\Server\Tests;
 abstract class BaseTest extends Tests\BaseTest
 {
     /**
+     * Mock for parsing dispatcher
+     *
      * @var \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
+     */
+    protected $parsingDispatcherMock;
+
+    /**
+     * Returns the parsing dispatcher mock
+     *
+     * @return \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
      */
     protected function getParsingDispatcherMock()
     {

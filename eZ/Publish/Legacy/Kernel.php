@@ -28,12 +28,17 @@ class Kernel extends ezpKernel
      *
      * @var string
      */
-    private $webrootDir;
+    private $webRootDir;
 
-    public function __construct( ezpKernelHandler $kernelHandler, $legacyRootDir, $webrootDir )
+    /**
+     * @param \ezpKernelHandler $kernelHandler
+     * @param string $legacyRootDir Must be a absolute dir
+     * @param string $webRootDir Must be a absolute dir
+     */
+    public function __construct( ezpKernelHandler $kernelHandler, $legacyRootDir, $webRootDir )
     {
         $this->legacyRootDir = $legacyRootDir;
-        $this->webrootDir = $webrootDir;
+        $this->webRootDir = $webRootDir;
 
         $this->enterLegacyRootDir();
         parent::__construct( $kernelHandler );
@@ -47,8 +52,7 @@ class Kernel extends ezpKernel
      */
     public function enterLegacyRootDir()
     {
-        if ( getcwd() != $this->legacyRootDir )
-            chdir( $this->legacyRootDir );
+        chdir( $this->legacyRootDir );
     }
 
     /**
@@ -56,8 +60,7 @@ class Kernel extends ezpKernel
      */
     public function leaveLegacyRootDir()
     {
-        if ( getcwd() == $this->legacyRootDir )
-            chdir( $this->webrootDir );
+        chdir( $this->webRootDir );
     }
 
     /**

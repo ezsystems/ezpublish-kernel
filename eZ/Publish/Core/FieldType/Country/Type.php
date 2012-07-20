@@ -206,7 +206,7 @@ class Type extends FieldType
                         if ( !is_bool( $value ) )
                         {
                             $validationErrors[] = new ValidationError(
-                                "Setting '%setting%' must be of boolean type",
+                                "Setting '%setting%' value must be of boolean type",
                                 null,
                                 array(
                                     "setting" => $name

@@ -23,10 +23,11 @@ if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
 
 // Auto-detect eZ Publish 5.x context with eZ Publish 4.x available.
 $baseDir = __DIR__;
+$legacyDir = null;
 if ( stripos( __DIR__, '/vendor/ezsystems/ezpublish' ) !== false )
 {
     $baseDir = str_replace( '/vendor/ezsystems/ezpublish', '', __DIR__ );
-    $legacyPath = $baseDir . '/app/ezpublish_legacy';
+    $legacyDir = $baseDir . '/app/ezpublish_legacy';
 }
 
 // Setup class loader using composer maps
@@ -38,15 +39,16 @@ if ( !file_exists( "{$baseDir}/vendor/composer/autoload_namespaces.php" ) )
 require __DIR__ . '/eZ/Publish/Core/Base/ClassLoader.php';
 $classLoader = new ClassLoader(
     include "{$baseDir}/vendor/composer/autoload_namespaces.php",
-    include "{$baseDir}/vendor/composer/autoload_classmap.php"
+    include "{$baseDir}/vendor/composer/autoload_classmap.php",
+    $legacyDir
 );
 spl_autoload_register( array( $classLoader, 'load' ) );
 
 // Bootstrap eZ Publish legacy kernel if configured
 $dependencies = array();
-if ( isset( $legacyPath ) )
+if ( $legacyDir )
 {
-    $legacyKernel = new LegacyKernel( new LegacyKernelCLI, $legacyPath, getcwd() );
+    $legacyKernel = new LegacyKernel( new LegacyKernelCLI, $legacyDir, getcwd() );
     set_exception_handler( null );
     // Avoid "Fatal error" text from legacy kernel if not called
     $legacyKernel->runCallback(
@@ -58,7 +60,7 @@ if ( isset( $legacyPath ) )
 
     // Exposing in env variables in order be able to use them in test cases.
     $_ENV['legacyKernel'] = $legacyKernel;
-    $_ENV['legacyPath'] = $legacyPath;
+    $_ENV['legacyPath'] = $legacyDir;
 
     $dependencies['@legacyKernel'] = $legacyKernel;
 }
