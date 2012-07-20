@@ -14,7 +14,6 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\Core\Repository\Values\User\User,
     eZ\Publish\Core\Repository\Values\Content\VersionInfo,
     eZ\Publish\Core\Repository\Values\Content\ContentInfo,
-    eZ\Publish\Core\Repository\Values\ContentType\Validator\StringLengthValidator,
     eZ\Publish\API\Repository\Exceptions;
 
 /**
@@ -1094,7 +1093,11 @@ abstract class ContentTypeBase extends BaseServiceTest
         $titleFieldCreate->isInfoCollector = false;
         $titleFieldCreate->isSearchable = true;
         $titleFieldCreate->defaultValue = "New text line";
-        //$titleFieldCreate->validators
+        $titleFieldCreate->validatorConfiguration = array(
+            "StringLengthValidator" => array(
+                "maxStringLength" => 128
+            )
+        );
         //$titleFieldCreate->fieldSettings
         $typeCreateStruct->addFieldDefinition( $titleFieldCreate );
 
@@ -1117,8 +1120,10 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyFieldCreate->isInfoCollector = false;
         $bodyFieldCreate->isSearchable = true;
         $bodyFieldCreate->defaultValue = "";
-        //$bodyFieldCreate->validators
-        //$bodyFieldCreate->fieldSettings
+        //$bodyFieldCreate->validatorConfiguration
+        $bodyFieldCreate->fieldSettings = array(
+            "textRows" => 20
+        );
         $typeCreateStruct->addFieldDefinition( $bodyFieldCreate );
 
         $groups = $this->createGroups();
@@ -1258,7 +1263,7 @@ abstract class ContentTypeBase extends BaseServiceTest
                     $defaultSettings = $this->repository->getFieldTypeService()->buildFieldType(
                         $fieldDefinitionCreateStruct->fieldTypeIdentifier
                     )->getSettingsSchema();
-                    $fieldDefinitionPropertyValue = (array)$fieldDefinition->$propertyName;
+                    $fieldDefinitionPropertyValue = (array)$fieldDefinition->$propertyName + $defaultSettings;
                     $propertyValue = (array)$propertyValue + $defaultSettings;
                     ksort( $fieldDefinitionPropertyValue );
                     ksort( $propertyValue );
@@ -2783,9 +2788,6 @@ abstract class ContentTypeBase extends BaseServiceTest
         $fieldDefCreate->isRequired = true;
         $fieldDefCreate->isInfoCollector = false;
         $fieldDefCreate->defaultValue = "New tags text line";
-        //$validator = new StringLengthValidator();
-        //$validator->maxStringLength = 255;
-        //$fieldDefCreate->validators = array( $validator );
         $fieldDefCreate->validatorConfiguration = array(
             "StringLengthValidator" => array(
                 "maxStringLength" => 255
@@ -2879,7 +2881,6 @@ abstract class ContentTypeBase extends BaseServiceTest
         $fieldDefCreate->fieldSettings = array(
             'numRows' => 10,
             'tagPreset' => null,
-            'defaultText' => '',
         );
         $fieldDefCreate->isSearchable = true;
 
