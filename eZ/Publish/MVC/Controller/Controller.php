@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC;
+namespace eZ\Publish\MVC\Controller;
 
 use Symfony\Component\Templating\EngineInterface,
     Symfony\Component\HttpKernel\Log\LoggerInterface,

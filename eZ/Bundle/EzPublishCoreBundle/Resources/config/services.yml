@@ -2,7 +2,7 @@ parameters:
     # Kernel related params
     webroot_dir: %kernel.root_dir%/../web
 
-    ezpublish.controller.base.class: eZ\Publish\MVC\Controller
+    ezpublish.controller.base.class: eZ\Publish\MVC\Controller\Controller
     ezpublish.controller.content.view.class: eZ\Publish\MVC\Controller\Content\ViewController
 
 services:
