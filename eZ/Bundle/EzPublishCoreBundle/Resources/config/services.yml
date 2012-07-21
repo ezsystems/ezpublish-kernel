@@ -2,6 +2,23 @@ parameters:
     # Kernel related params
     webroot_dir: %kernel.root_dir%/../web
 
+    ezpublish.controller.base.class: eZ\Publish\MVC\Controller
+    ezpublish.controller.content.view.class: eZ\Publish\MVC\Controller\Content\ViewController
+
 services:
+    # Siteaccess is injected in the container at runtime
     ezpublish.siteaccess:
         synthetic: true
+
+    ezpublish.controller.base:
+        class: %ezpublish.controller.base.class%
+        abstract: true
+        calls:
+            - [ setTemplateEngine, [@templating] ]
+            - [ setLogger, [@?logger] ]
+
+    ezpublish.controller.content.view:
+        class: %ezpublish.controller.content.view.class%
+        arguments: [@ezpublish.api.repository, @ezpublish.view_manager, @request]
+        parent: ezpublish.controller.base
+        scope: request
