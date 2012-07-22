@@ -17,7 +17,7 @@ use \eZ\Publish\API\Repository\Values;
  *
  * @see \eZ\Publish\API\Repository\Values\User\RoleAssignment
  */
-class RoleAssignment extends \eZ\Publish\API\Repository\Values\User\RoleAssignment
+class RoleAssignment extends Values\User\RoleAssignment
 {
     /**
      * the limitation of this role assignment

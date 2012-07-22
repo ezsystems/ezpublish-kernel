@@ -71,12 +71,13 @@ $urlHandler = new Common\UrlHandler\eZPublish();
 
 $inputDispatcher = new Common\Input\Dispatcher(
     new Common\Input\ParsingDispatcher( array(
-        'application/vnd.ez.api.RoleInput'     => new Input\Parser\RoleInput( $urlHandler, $repository->getRoleService() ),
-        'application/vnd.ez.api.SectionInput'  => new Input\Parser\SectionInput( $urlHandler, $repository->getSectionService() ),
-        'application/vnd.ez.api.ContentUpdate' => new Input\Parser\ContentUpdate( $urlHandler ),
-        'application/vnd.ez.api.PolicyCreate'  => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService() ),
-        'application/vnd.ez.api.PolicyUpdate'  => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService() ),
-        'application/vnd.ez.api.limitation'    => new Input\Parser\Limitation( $urlHandler ),
+        'application/vnd.ez.api.RoleInput'       => new Input\Parser\RoleInput( $urlHandler, $repository->getRoleService() ),
+        'application/vnd.ez.api.SectionInput'    => new Input\Parser\SectionInput( $urlHandler, $repository->getSectionService() ),
+        'application/vnd.ez.api.ContentUpdate'   => new Input\Parser\ContentUpdate( $urlHandler ),
+        'application/vnd.ez.api.PolicyCreate'    => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService() ),
+        'application/vnd.ez.api.PolicyUpdate'    => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService() ),
+        'application/vnd.ez.api.limitation'      => new Input\Parser\Limitation( $urlHandler ),
+        'application/vnd.ez.api.RoleAssignInput' => new Input\Parser\RoleAssignInput( $urlHandler ),
     ) ),
     $handler
 );
@@ -104,7 +105,8 @@ $contentController = new Controller\Content(
 $roleController = new Controller\Role(
     $inputDispatcher,
     $urlHandler,
-    $repository->getRoleService()
+    $repository->getRoleService(),
+    $repository->getUserService()
 );
 
 /*
@@ -200,9 +202,11 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^/user/users/[0-9]+/roles$)' => array(
             'GET'  => array( $roleController, 'loadRoleAssignmentsForUser' ),
+            'POST'  => array( $roleController, 'assignRoleToUser' ),
         ),
         '(^/user/groups/[0-9/]+/roles$)' => array(
             'GET'  => array( $roleController, 'loadRoleAssignmentsForUserGroup' ),
+            'POST'  => array( $roleController, 'assignRoleToUserGroup' ),
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(

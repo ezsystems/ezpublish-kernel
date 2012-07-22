@@ -27,6 +27,7 @@ use \eZ\Publish\Core\REST\Client\Values\User\PolicyCreateStruct;
 use \eZ\Publish\Core\REST\Client\Values\User\PolicyUpdateStruct;
 use \eZ\Publish\Core\REST\Client\Values\User\Role;
 use \eZ\Publish\Core\REST\Client\Values\User\Policy;
+use \eZ\Publish\Core\REST\Client\Values\User\RoleAssignment;
 
 use \eZ\Publish\Core\REST\Common\UrlHandler;
 use \eZ\Publish\Core\REST\Common\Input;
@@ -427,7 +428,23 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function assignRoleToUserGroup( APIRole $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $roleAssignment = new RoleAssignment(
+            array(
+                'role' => $role,
+                'limitation' => $roleLimitation
+            )
+        );
+
+        $inputMessage = $this->outputVisitor->visit( $roleAssignment );
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'RoleAssignmentList' );
+
+        $result = $this->client->request(
+            'POST',
+            $this->urlHandler->generate( 'groupRoleAssignments', array( 'group' => $userGroup->id ) ),
+            $inputMessage
+        );
+
+        $this->inputDispatcher->parse( $result );
     }
 
     /**
@@ -457,7 +474,23 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function assignRoleToUser( APIRole $role, User $user, RoleLimitation $roleLimitation = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $roleAssignment = new RoleAssignment(
+            array(
+                'role' => $role,
+                'limitation' => $roleLimitation
+            )
+        );
+
+        $inputMessage = $this->outputVisitor->visit( $roleAssignment );
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'RoleAssignmentList' );
+
+        $result = $this->client->request(
+            'POST',
+            $this->urlHandler->generate( 'userRoleAssignments', array( 'user' => $user->id ) ),
+            $inputMessage
+        );
+
+        $this->inputDispatcher->parse( $result );
     }
 
     /**
