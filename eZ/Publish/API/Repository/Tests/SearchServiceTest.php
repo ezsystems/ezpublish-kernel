@@ -344,6 +344,38 @@ class SearchServiceTest extends BaseTest
         $this->assertQueryFixture( $query, $fixture );
     }
 
+    public function testFindSingle()
+    {
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $content = $searchService->findSingle(
+            new Criterion\ContentId(
+                array( 4 )
+            )
+        );
+
+        $this->assertEquals(
+            4,
+            $content->id
+        );
+    }
+
+    /**
+     * @expectedException \OutOfBoundsException
+     */
+    public function testFindSingleFailMultiple()
+    {
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $content = $searchService->findSingle(
+            new Criterion\ContentId(
+                array( 4, 10 )
+            )
+        );
+    }
+
     public function getSortedSearches()
     {
         $fixtureDir = $this->getFixtureDir();

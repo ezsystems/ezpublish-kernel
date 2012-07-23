@@ -1519,11 +1519,15 @@ class ContentService implements ContentServiceInterface
     /**
      * Builds a Content domain object from value object returned from persistence
      *
+     * @TODO: Made public, since the search service also needs access to this
+     * method. Should be refactored into its own class together with the other
+     * build* method.
+     *
      * @param \eZ\Publish\SPI\Persistence\Content $spiContent
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\Content
      */
-    protected function buildContentDomainObject( SPIContent $spiContent )
+    public function buildContentDomainObject( SPIContent $spiContent )
     {
         return new Content(
             array(
@@ -1569,11 +1573,15 @@ class ContentService implements ContentServiceInterface
     /**
      * Builds a ContentInfo domain object from value object returned from persistence
      *
+     * @TODO: Made public, since the search service also needs access to this
+     * method. Should be refactored into its own class together with the other
+     * build* method.
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $spiContentInfo
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\ContentInfo
      */
-    protected function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo )
+    public function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo )
     {
         // @todo: $mainLocationId should have been removed through SPI refactoring?
         $spiContent = $this->persistenceHandler->contentHandler()->load(

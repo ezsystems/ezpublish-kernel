@@ -119,7 +119,7 @@ class Handler extends BaseSearchHandler
 
         if ( $result->totalCount !== 1 )
         {
-            throw new Exception\InvalidObjectCount(
+            throw new \OutOfBoundsException(
                 'Expected exactly one object to be found -- found ' . $result->totalCount . '.'
             );
         }
