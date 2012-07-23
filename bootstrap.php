@@ -24,10 +24,10 @@ if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
 // Auto-detect eZ Publish 5.x context with eZ Publish 4.x available.
 $baseDir = __DIR__;
 $legacyDir = null;
-if ( stripos( __DIR__, '/vendor/ezsystems/ezpublish' ) !== false )
+if ( file_exists( "{$baseDir}/vendor/ezsystems/ezpublish-legacy" ) )
 {
-    $baseDir = str_replace( '/vendor/ezsystems/ezpublish', '', __DIR__ );
-    $legacyDir = $baseDir . '/app/ezpublish_legacy';
+//    $baseDir = str_replace( '/vendor/ezsystems/ezpublish', '', __DIR__ );
+    $legacyDir = "{$baseDir}/vendor/ezsystems/ezpublish-legacy";
 }
 
 // Setup class loader using composer maps
@@ -46,7 +46,7 @@ spl_autoload_register( array( $classLoader, 'load' ) );
 
 // Bootstrap eZ Publish legacy kernel if configured
 $dependencies = array();
-if ( $legacyDir || file_exists( 'vendor/ezsystems/ezpublish-legacy' ) )
+if ( $legacyDir )
 {
     $legacyKernel = new LegacyKernel( new LegacyKernelCLI, $legacyDir, getcwd() );
     set_exception_handler( null );
