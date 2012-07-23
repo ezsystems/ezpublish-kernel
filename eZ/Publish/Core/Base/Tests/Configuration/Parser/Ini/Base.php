@@ -183,14 +183,14 @@ conditions[routes][content][item][controller]=%contentItem-controller::doList
 [contentItem:controller]
 class=eZ\\Publish\\Core\\ContentItemController
 
-[controller]
+[LocationItem:contentItem:controller]
 public=true
 regex[]=?<name>\w+
 regex[]=?P<name>\w+
-regex[]=?\'name\'\w+
-regex[]=(?<name>\w+)
-regex[]=(?P<name>\w+)
-regex[]=(?\'name\'\w+)
+#regex[]=?\'name\'\w+
+#regex[]=(?<name>\w+)
+#regex[]=(?P<name>\w+)
+#regex[]=(?\'name\'\w+)
 regex[]=content/location/?<name>\w+
 regex[]=content/location/{?<name>\w+}
 ';
@@ -215,15 +215,15 @@ regex[]=content/location/{?<name>\w+}
                 )
             ),
             'contentItem:controller' => array( 'class' => 'eZ\\Publish\\Core\\ContentItemController' ),
-            'controller' => array(
+            'LocationItem:contentItem:controller' => array(
                 'public' => true,
                 'regex' => array(
                     '?<name>\w+',
                     '?P<name>\w+',
-                    '?name\w+',
-                    '?<name>\w+',
-                    '?P<name>\w+',
-                    '?name\w+',
+                    //'?\'name\'\w+',
+                    //'(?<name>\w+)',
+                    //'(?P<name>\w+)',
+                    //'(?\'name\'\w+)',
                     'content/location/?<name>\w+',
                     'content/location/{?<name>\w+}',
                 ),
