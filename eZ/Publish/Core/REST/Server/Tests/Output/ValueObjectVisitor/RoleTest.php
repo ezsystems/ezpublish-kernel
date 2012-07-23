@@ -11,33 +11,34 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
-use eZ\Publish\API\Repository\Values\Content;
+use eZ\Publish\Core\Repository\Values\User;
 use eZ\Publish\Core\REST\Common;
 
-class SectionTest extends ValueObjectVisitorBaseTest
+class RoleTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the Section visitor
+     * Test the Role visitor
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getSectionVisitor();
+        $visitor   = $this->getRoleVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
 
-        $section = new Content\Section( array(
-            'id'         => 23,
-            'identifier' => 'some-section',
-            'name'       => 'Some Section',
-        ) );
+        $role = new User\Role(
+            array(
+                'id'         => 42,
+                'identifier' => 'some-role'
+            )
+        );
 
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
-            $section
+            $role
         );
 
         $result = $generator->endDocument( null );
@@ -48,65 +49,44 @@ class SectionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains Section element
+     * Test if result contains Role element
      *
      * @param string $result
      * @depends testVisit
      */
-    public function testResultContainsSectionElement( $result )
+    public function testResultContainsRoleElement( $result )
     {
         $this->assertTag(
             array(
-                'tag'      => 'Section',
+                'tag'      => 'Role',
                 'children' => array(
-                    'less_than'    => 4,
-                    'greater_than' => 2,
+                    'count' => 2
                 )
             ),
             $result,
-            'Invalid <Section> element.',
+            'Invalid <Role> element.',
             false
         );
     }
 
     /**
-     * Test if result contains Section element attributes
+     * Test if result contains Role element attributes
      *
      * @param string $result
      * @depends testVisit
      */
-    public function testResultContainsSectionAttributes( $result )
+    public function testResultContainsRoleAttributes( $result )
     {
         $this->assertTag(
             array(
-                'tag'      => 'Section',
+                'tag'      => 'Role',
                 'attributes' => array(
-                    'media-type' => 'application/vnd.ez.api.Section+xml',
-                    'href'       => '/content/sections/23',
+                    'media-type' => 'application/vnd.ez.api.Role+xml',
+                    'href'       => '/user/roles/42',
                 )
             ),
             $result,
-            'Invalid <Section> attributes.',
-            false
-        );
-    }
-
-    /**
-     * Test if result contains sectionId value element
-     *
-     * @param string $result
-     * @depends testVisit
-     */
-    public function testResultContainsSectionIdValueElement( $result )
-    {
-        $this->assertTag(
-            array(
-                'tag'      => 'sectionId',
-                'content'  => '23',
-
-            ),
-            $result,
-            'Invalid or non-existing <Section> sectionId value element.',
+            'Invalid <Role> attributes.',
             false
         );
     }
@@ -122,43 +102,62 @@ class SectionTest extends ValueObjectVisitorBaseTest
         $this->assertTag(
             array(
                 'tag'      => 'identifier',
-                'content'  => 'some-section',
-
+                'content'  => 'some-role'
             ),
             $result,
-            'Invalid or non-existing <Section> identifier value element.',
+            'Invalid or non-existing <Role> identifier value element.',
             false
         );
     }
 
     /**
-     * Test if result contains name value element
+     * Test if result contains PolicyList element
      *
      * @param string $result
      * @depends testVisit
      */
-    public function testResultContainsNameValueElement( $result )
+    public function testResultContainsPolicyListElement( $result )
     {
         $this->assertTag(
             array(
-                'tag'      => 'name',
-                'content'  => 'Some Section',
-
+                'tag'      => 'PolicyList'
             ),
             $result,
-            'Invalid or non-existing <Section> name value element.',
+            'Invalid <PolicyList> element.',
             false
         );
     }
 
     /**
-     * Get the Section visitor
+     * Test if result contains PolicyList element attributes
      *
-     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Section
+     * @param string $result
+     * @depends testVisit
      */
-    protected function getSectionVisitor()
+    public function testResultContainsPolicyListAttributes( $result )
     {
-        return new ValueObjectVisitor\Section(
+        $this->assertTag(
+            array(
+                'tag'      => 'PolicyList',
+                'attributes' => array(
+                    'media-type' => 'application/vnd.ez.api.PolicyList+xml',
+                    'href'       => '/user/roles/42/policies',
+                )
+            ),
+            $result,
+            'Invalid <PolicyList> attributes.',
+            false
+        );
+    }
+
+    /**
+     * Get the Role visitor
+     *
+     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Role
+     */
+    protected function getRoleVisitor()
+    {
+        return new ValueObjectVisitor\Role(
             new Common\UrlHandler\eZPublish()
         );
     }

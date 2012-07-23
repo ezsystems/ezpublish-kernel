@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\RoleService;
+use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 
@@ -46,17 +47,26 @@ class Role
     protected $roleService;
 
     /**
+     * User service
+     *
+     * @var \eZ\Publish\API\Repository\UserService
+     */
+    protected $userService;
+
+    /**
      * Construct controller
      *
      * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\RoleService $roleService
+     * @param \eZ\Publish\API\Repository\UserService $userService
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, RoleService $roleService )
+    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, RoleService $roleService, UserService $userService )
     {
         $this->inputDispatcher = $inputDispatcher;
         $this->urlHandler      = $urlHandler;
         $this->roleService     = $roleService;
+        $this->userService     = $userService;
     }
 
     /**
@@ -270,6 +280,98 @@ class Role
 
         if ( $policy !== null )
             $this->roleService->removePolicy( $role, $policy );
+    }
+
+    /**
+     * Assigns role to user
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\RoleAssignmentList
+     */
+    public function assignRoleToUser( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'userRoleAssignments', $request->path );
+
+        $roleAssignment = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            )
+        );
+
+        $user = $this->userService->loadUser( $values['user'] );
+        $role = $this->roleService->loadRole( $roleAssignment->roleId );
+
+        $this->roleService->assignRoleToUser( $role, $user, $roleAssignment->limitation );
+
+        $roleAssignments = $this->roleService->getRoleAssignmentsForUser( $user );
+        return new Values\RoleAssignmentList( $roleAssignments, $values['user'] );
+    }
+
+    /**
+     * Assigns role to user group
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\RoleAssignmentList
+     */
+    public function assignRoleToUserGroup( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'userGroupRoleAssignments', $request->path );
+
+        $roleAssignment = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            )
+        );
+
+        $userGroup = $this->userService->loadUserGroup( array_pop( explode( '/', $values['group'] ) ) );
+        $role = $this->roleService->loadRole( $roleAssignment->roleId );
+
+        $this->roleService->assignRoleToUserGroup( $role, $userGroup, $roleAssignment->limitation );
+
+        $roleAssignments = $this->roleService->getRoleAssignmentsForUserGroup( $userGroup );
+        return new Values\RoleAssignmentList(
+            $roleAssignments,
+            $userGroup->id,
+            true
+        );
+    }
+
+    /**
+     * Load role assignments for user
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\RoleAssignmentList
+     */
+    public function loadRoleAssignmentsForUser( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'userRoleAssignments', $request->path );
+
+        $user = $this->userService->loadUser( $values['user'] );
+
+        $roleAssignments = $this->roleService->getRoleAssignmentsForUser( $user );
+        return new Values\RoleAssignmentList( $roleAssignments, $user->id );
+    }
+
+    /**
+     * Load role assignments for user group
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\RoleAssignmentList
+     */
+    public function loadRoleAssignmentsForUserGroup( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'groupRoleAssignments', $request->path );
+
+        $userGroup = $this->userService->loadUserGroup( array_pop( explode( '/', trim( $values['group'], '/' ) ) ) );
+
+        $roleAssignments = $this->roleService->getRoleAssignmentsForUserGroup( $userGroup );
+        return new Values\RoleAssignmentList(
+            $roleAssignments,
+            $userGroup->id,
+            true
+        );
     }
 
     /**
