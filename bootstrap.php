@@ -26,7 +26,6 @@ $baseDir = __DIR__;
 $legacyDir = null;
 if ( file_exists( "{$baseDir}/vendor/ezsystems/ezpublish-legacy" ) )
 {
-//    $baseDir = str_replace( '/vendor/ezsystems/ezpublish', '', __DIR__ );
     $legacyDir = "{$baseDir}/vendor/ezsystems/ezpublish-legacy";
 }
 
