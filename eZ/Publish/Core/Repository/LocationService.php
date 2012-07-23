@@ -158,6 +158,7 @@ class LocationService implements LocationServiceInterface
             )
         );
 
+        throw new \RuntimeException( "@TODO: Use search service directly here. Old search handler API has been changed." );
         $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
 
         if ( $searchResult->count == 0 )
@@ -200,6 +201,7 @@ class LocationService implements LocationServiceInterface
             )
         );
 
+        throw new \RuntimeException( "@TODO: Use search service directly here. Old search handler API has been changed." );
         $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
         if ( $searchResult->count == 0 )
             throw new BadStateException( "contentInfo", 'content info has no published versions yet' );
@@ -245,6 +247,7 @@ class LocationService implements LocationServiceInterface
             )
         );
 
+        throw new \RuntimeException( "@TODO: Use search service directly here. Old search handler API has been changed." );
         $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
         if ( $searchResult->count == 0 )
             throw new BadStateException( "contentInfo", 'content info has no published versions yet' );
@@ -341,6 +344,7 @@ class LocationService implements LocationServiceInterface
         if ( $sortField !== null )
             $sortClause = array( $this->getSortClauseBySortField( $sortField, $sortOrder ) );
 
+        throw new \RuntimeException( "@TODO: Use search service directly here. Old search handler API has been changed." );
         return $this->persistenceHandler->searchHandler()->find(
             $searchCriterion,
             $offset >= 0 ? (int) $offset : 0,

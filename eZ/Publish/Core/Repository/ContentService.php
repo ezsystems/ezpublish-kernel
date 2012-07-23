@@ -148,6 +148,7 @@ class ContentService implements ContentServiceInterface
     {
         try
         {
+            throw new \RuntimeException( "@TODO: Use search service directly here. Old search handler API has been changed." );
             $spiContent = $this->persistenceHandler->searchHandler()->findSingle(
                 new CriterionRemoteId( $remoteId )
             );
@@ -351,6 +352,7 @@ class ContentService implements ContentServiceInterface
     {
         try
         {
+            throw new \RuntimeException( "@TODO: Use search service directly here. Old search handler API has been changed." );
             $spiContent = $this->persistenceHandler->searchHandler()
                 ->findSingle( new CriterionRemoteId( $remoteId ) );
         }
@@ -417,6 +419,7 @@ class ContentService implements ContentServiceInterface
         {
             try
             {
+                throw new \RuntimeException( "@TODO: Use search service directly here. Old search handler API has been changed." );
                 $this->persistenceHandler->searchHandler()->findSingle(
                     new CriterionRemoteId(
                         $contentCreateStruct->remoteId
@@ -683,6 +686,7 @@ class ContentService implements ContentServiceInterface
             {
                 try
                 {
+                    throw new \RuntimeException( "@TODO: Use search service directly here. Old search handler API has been changed." );
                     $spiContent = $this->persistenceHandler->searchHandler()->findSingle(
                         new CriterionRemoteId( $contentMetadataUpdateStruct->remoteId )
                     );
@@ -1207,6 +1211,7 @@ class ContentService implements ContentServiceInterface
      */
     public function findContent( Query $query, array $fieldFilters, $filterOnUserPermissions = true )
     {
+        throw new \RuntimeException( "@TODO: Just dispatch to search service." );
         $spiSearchResult = $this->persistenceHandler->searchHandler()->find(
             $query->criterion,
             $query->offset,
