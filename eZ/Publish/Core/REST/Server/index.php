@@ -204,9 +204,15 @@ $dispatcher = new AuthenticatingDispatcher(
             'GET'  => array( $roleController, 'loadRoleAssignmentsForUser' ),
             'POST'  => array( $roleController, 'assignRoleToUser' ),
         ),
+        '(^/user/users/[0-9]+/roles/[0-9]+$)' => array(
+            'DELETE'  => array( $roleController, 'unassignRoleFromUser' ),
+        ),
         '(^/user/groups/[0-9/]+/roles$)' => array(
             'GET'  => array( $roleController, 'loadRoleAssignmentsForUserGroup' ),
             'POST'  => array( $roleController, 'assignRoleToUserGroup' ),
+        '(^/user/groups/[0-9/]+/roles/[0-9]+$)' => array(
+            'DELETE'  => array( $roleController, 'unassignRoleFromUserGroup' ),
+        ),
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(

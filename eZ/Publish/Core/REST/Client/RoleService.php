@@ -458,7 +458,26 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function unassignRoleFromUserGroup( APIRole $role, UserGroup $userGroup )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $values = $this->urlHandler->parse( 'group', $userGroup->id );
+        $userGroupId = $values['group'];
+
+        $values = $this->urlHandler->parse( 'role', $role->id );
+        $roleId = $values['role'];
+
+        $response = $this->client->request(
+            'DELETE',
+            $this->urlHandler->generate( 'groupRoleAssignment', array( 'group' => $userGroupId, 'role' => $roleId ) ),
+            new Message(
+                // TODO: What media-type should we set here? Actually, it should be
+                // all expected exceptions + none? Or is "Section" correct,
+                // since this is what is to be expected by the resource
+                // identified by the URL?
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'RoleAssignmentList' ) )
+            )
+        );
+
+        if ( !empty( $response->body ) )
+            $this->inputDispatcher->parse( $response );
     }
 
     /**
@@ -504,7 +523,26 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function unassignRoleFromUser( APIRole $role, User $user )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $values = $this->urlHandler->parse( 'user', $user->id );
+        $userId = $values['user'];
+
+        $values = $this->urlHandler->parse( 'role', $role->id );
+        $roleId = $values['role'];
+
+        $response = $this->client->request(
+            'DELETE',
+            $this->urlHandler->generate( 'userRoleAssignment', array( 'user' => $userId, 'role' => $roleId ) ),
+            new Message(
+                // TODO: What media-type should we set here? Actually, it should be
+                // all expected exceptions + none? Or is "Section" correct,
+                // since this is what is to be expected by the resource
+                // identified by the URL?
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'RoleAssignmentList' ) )
+            )
+        );
+
+        if ( !empty( $response->body ) )
+            $this->inputDispatcher->parse( $response );
     }
 
     /**

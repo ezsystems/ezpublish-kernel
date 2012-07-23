@@ -305,7 +305,7 @@ class Role
         $this->roleService->assignRoleToUser( $role, $user, $roleAssignment->limitation );
 
         $roleAssignments = $this->roleService->getRoleAssignmentsForUser( $user );
-        return new Values\RoleAssignmentList( $roleAssignments, $values['user'] );
+        return new Values\RoleAssignmentList( $roleAssignments, $user->id );
     }
 
     /**
@@ -331,11 +331,45 @@ class Role
         $this->roleService->assignRoleToUserGroup( $role, $userGroup, $roleAssignment->limitation );
 
         $roleAssignments = $this->roleService->getRoleAssignmentsForUserGroup( $userGroup );
-        return new Values\RoleAssignmentList(
-            $roleAssignments,
-            $userGroup->id,
-            true
-        );
+        return new Values\RoleAssignmentList( $roleAssignments, $userGroup->id, true );
+    }
+
+    /**
+     * Un-assigns role from user
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\RoleAssignmentList
+     */
+    public function unassignRoleFromUser( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'userRoleAssignment', $request->path );
+
+        $user = $this->userService->loadUser( $values['user'] );
+        $role = $this->roleService->loadRole( $values['role'] );
+
+        $this->roleService->unassignRoleFromUser( $role, $user );
+
+        $roleAssignments = $this->roleService->getRoleAssignmentsForUser( $user );
+        return new Values\RoleAssignmentList( $roleAssignments, $user->id );
+    }
+
+    /**
+     * Un-assigns role from user group
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\RoleAssignmentList
+     */
+    public function unassignRoleFromUserGroup( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'groupRoleAssignment', $request->path );
+
+        $userGroup = $this->userService->loadUserGroup( array_pop( explode( '/', $values['group'] ) ) );
+        $role = $this->roleService->loadRole( $values['role'] );
+
+        $this->roleService->unassignRoleFromUserGroup( $role, $userGroup );
+
+        $roleAssignments = $this->roleService->getRoleAssignmentsForUserGroup( $userGroup );
+        return new Values\RoleAssignmentList( $roleAssignments, $userGroup->id, true );
     }
 
     /**
@@ -367,11 +401,7 @@ class Role
         $userGroup = $this->userService->loadUserGroup( array_pop( explode( '/', trim( $values['group'], '/' ) ) ) );
 
         $roleAssignments = $this->roleService->getRoleAssignmentsForUserGroup( $userGroup );
-        return new Values\RoleAssignmentList(
-            $roleAssignments,
-            $userGroup->id,
-            true
-        );
+        return new Values\RoleAssignmentList( $roleAssignments, $userGroup->id, true );
     }
 
     /**
