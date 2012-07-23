@@ -7,7 +7,7 @@
     ],
     "require": {
         "symfony/symfony": "2.1.0-beta3",
-        "twig/twig": "1.8.3",
+        "twig/twig": "1.9.1",
         "zetacomponents/cache": "dev-master",
         "zetacomponents/php-generator": "dev-master",
         "zetacomponents/configuration": "dev-master",
