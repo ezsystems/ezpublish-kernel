@@ -46,7 +46,7 @@ spl_autoload_register( array( $classLoader, 'load' ) );
 
 // Bootstrap eZ Publish legacy kernel if configured
 $dependencies = array();
-if ( $legacyDir )
+if ( $legacyDir || file_exists( 'vendor/ezsystems/ezpublish-legacy' ) )
 {
     $legacyKernel = new LegacyKernel( new LegacyKernelCLI, $legacyDir, getcwd() );
     set_exception_handler( null );
