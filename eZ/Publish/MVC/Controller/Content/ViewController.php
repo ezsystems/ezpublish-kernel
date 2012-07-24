@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\MVC\Controller\Content;
 
-use eZ\Publish\MVC\Controller,
+use eZ\Publish\MVC\Controller\Controller,
     eZ\Publish\API\Repository\Repository,
     eZ\Publish\MVC\View\Manager as ViewManager,
     Symfony\Component\HttpFoundation\Request,
@@ -49,16 +49,18 @@ class ViewController extends Controller
      */
     public function viewLocationAction( $locationId, $viewMode )
     {
+        // Assume that location is cached by the repository
+        $location = $this->repository->getLocationService()->loadLocation( $locationId );
+
         $response = new Response();
         $response->setPublic();
         // TODO: Use a dedicated etag generator, generating a hash instead of plain text
         $response->setEtag( "ezpublish-location-$locationId-$viewMode" );
+        $response->setLastModified( $location->getContentInfo()->modificationDate );
         if ( $response->isNotModified( $this->request ) )
         {
             return $response;
         }
-
-        $location = $this->repository->getLocationService()->loadLocation( $locationId );
 
         // TODO: Use the view manager to generate the response content
         $generationDate = new \DateTime;
