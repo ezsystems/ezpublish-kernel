@@ -8,7 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Relation;
-use eZ\Publish\Core\Repository\FieldType\Value as BaseValue;
+use eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
+    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
+    eZ\Publish\Core\Repository\Values\Content\Relation;
 
 /**
  * Value for TextLine field type
@@ -18,16 +20,16 @@ class Value extends BaseValue
     /**
      * Text content
      *
-     * @var string
+     * @var \eZ\Publish\Core\Repository\Values\Content\Relation
      */
-    public $text;
+    public $relation;
 
     /**
      * Construct a new Value object and initialize it $text
      *
-     * @param string $text
+     * @param \eZ\Publish\Core\Repository\Values\Content\ContentInfo $destinationContent
      */
-    public function __construct( $text = '' )
+    public function __construct( ContentInfo $destinationContent )
     {
         $this->text = $text;
     }
@@ -37,6 +39,6 @@ class Value extends BaseValue
      */
     public function __toString()
     {
-        return (string)$this->text;
+        return (string)$this->relation->;
     }
 }

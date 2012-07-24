@@ -7,8 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\FieldType\Relation;
-use eZ\Publish\Core\Repository\FieldType\FieldType,
+namespace eZ\Publish\Core\FieldType\FieldType\Relation;
+use eZ\Publish\Core\FieldType\FieldType,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
@@ -18,8 +19,12 @@ use eZ\Publish\Core\Repository\FieldType\FieldType,
  */
 class Type extends FieldType
 {
-    protected $allowedValidators = array(
-        'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\StringLengthValidator'
+    const SELECTION_BROWSE = 1;
+    const SELECTION_DROPDOWN = 2;
+
+    protected $allowedSettings = array(
+        'selection_method' => self::SELECTION_BROWSE, // browse,
+        'default_selection' => false,
     );
 
     /**
@@ -27,13 +32,14 @@ class Type extends FieldType
      *
      * Build a FiledType\Value object with the provided $text as value.
      *
-     * @param string $text
+     * @param mixed $contentId
      * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function buildValue( $text )
+    public function buildValue( /*$fromContentId, $toContentId*/ )
     {
-        return new Value( $text );
+        throw new \Exception( "Not implemented yet " );
+        // return new Value( $text );
     }
 
     /**
@@ -43,7 +49,7 @@ class Type extends FieldType
      */
     public function getFieldTypeIdentifier()
     {
-        return "ezstring";
+        return "ezobjectrelation";
     }
 
     /**
@@ -98,7 +104,7 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
-        return array( 'sort_key_string' => $value->text );
+        return $value->text;
     }
 
     /**
@@ -133,5 +139,18 @@ class Type extends FieldType
     public function isSearchable()
     {
         return true;
+    }
+
+    /**
+     * Events handler (prePublish, postPublish, preCreate, postCreate)
+     *
+     * @param string $event - prePublish, postPublish, preCreate, postCreate
+     * @param InternalRepository $repository
+     * @param $fieldDef - the field definition of the field
+     * @param $field - the field for which an action is performed
+     */
+    public function handleEvent( $event, /*InternalRepository*/ $repository, VersionInfo $versionInfo, FieldDefinition $fieldDef, Field  $field )
+    {
+
     }
 }
