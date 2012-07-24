@@ -15,7 +15,8 @@ use eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\SPI\FieldType\Event;
+    eZ\Publish\SPI\FieldType\Event,
+    eZ\Publish\Core\FieldType\Value;
 
 /**
  * The field type interface which all field types have to implement.
@@ -25,7 +26,7 @@ use eZ\Publish\API\Repository\Values\Content\Field,
 interface FieldType
 {
     /**
-     * Return the field type identifier for this field type
+     * Returns the field type identifier for this field type
      *
      * @return string
      * @TODO Expose to Public API.
@@ -48,7 +49,7 @@ interface FieldType
      * Explanation: There are no possible generic schemas for defining settings
      * input, which is why no schema for the return value of this method is
      * defined. It is up to the implementor to define and document a schema for
-     * the return value and document it. In addition, it is necessary that all
+     * the return value. In addition, it is necessary that all
      * consumers of this interface (e.g. Public API, REST API, GUIs, ...)
      * provide plugin mechanisms to hook adapters for the specific FieldType
      * into. These adapters then need to be either shipped with the FieldType
@@ -70,7 +71,7 @@ interface FieldType
      * Explanation: There are no possible generic schemas for defining settings
      * input, which is why no schema for the return value of this method is
      * defined. It is up to the implementor to define and document a schema for
-     * the return value and document it. In addition, it is necessary that all
+     * the return value. In addition, it is necessary that all
      * consumers of this interface (e.g. Public API, REST API, GUIs, ...)
      * provide plugin mechanisms to hook adapters for the specific FieldType
      * into. These adapters then need to be either shipped with the FieldType
@@ -104,9 +105,7 @@ interface FieldType
     public function getValidatorConfigurationSchema();
 
     /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FiledType\Value object with the provided $plainValue as value.
+     * Build a FieldType\Value object with the provided $plainValue as value.
      *
      * @TODO Should not use Core class
      * @param mixed $plainValue
@@ -163,7 +162,7 @@ interface FieldType
     public function getDefaultDefaultValue();
 
     /**
-     * Checks the type and structure of the $Value.
+     * Checks the type and structure of the $inputValue.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
@@ -179,7 +178,7 @@ interface FieldType
      *
      * @param mixed $hash
      *
-     * @return mixed
+     * @return \eZ\Publish\Core\FieldType\Value
      * @TODO Expose to Public API.
      * @TODO May support different formats, but best practice is only 1
      */
@@ -188,13 +187,13 @@ interface FieldType
     /**
      * Converts a Value to a hash
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType $value
      *
      * @return mixed
      * @TODO Expose to Public API.
      * @TODO May support different formats, but best practice is only 1
      */
-    public function toHash( $value );
+    public function toHash( Value $value );
 
     /**
      * Converts a $value to a persistence value.
