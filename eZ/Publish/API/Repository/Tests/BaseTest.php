@@ -77,7 +77,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     {
         try
         {
-            parent::runTest();
+            return parent::runTest();
         }
         catch ( \Exception $e )
         {
