@@ -11,7 +11,7 @@ namespace eZ\Publish\API\Repository\Values\User\Limitation;
 
 use eZ\Publish\API\Repository\Values\User\Limitation;
 
-class LocationLimitation extends Limitation
+abstract class LocationLimitation extends Limitation
 {
     /**
      * @see \eZ\Publish\API\Repository\Values\User\Limitation::getIdentifier()

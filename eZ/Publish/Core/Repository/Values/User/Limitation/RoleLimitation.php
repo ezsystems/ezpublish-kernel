@@ -11,31 +11,28 @@ namespace eZ\Publish\Core\Repository\Values\User\Limitation;
 
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation as APIRoleLimitation;
 
-class RoleLimitation extends APIRoleLimitation
+/**
+ * RoleLimitation is a helper class to get the actual RoleLimitations
+ */
+abstract class RoleLimitation extends APIRoleLimitation
 {
     /**
+     * @static
      *
-     * the custom limitation name
-     * @var string
-     */
-    private $name;
-
-    /**
-     * constructs a role limitation for the given limitation name
-     * @param string $name
-     */
-    public function __construct( $name )
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * Returns the limitation identifier
+     * @param string $name Name of the role limitation, one of:
+     *                     Section
+     *                     Subtree
      *
-     * @return string
+     * @throws \LogicException
+     * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation
      */
-    public function getIdentifier()
+    final public static function createRoleLimitation( $name )
     {
-        return $this->name;
+        $className = __NAMESPACE__ . '\\' . $name;
+        if ( class_exists( $className ) && $className instanceof APIRoleLimitation )
+            return new $className;
+
+        throw new \LogicException( "Could not find Role limitation: {$name}" );
+
     }
 }

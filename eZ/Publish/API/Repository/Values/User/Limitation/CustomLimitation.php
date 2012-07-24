@@ -11,7 +11,7 @@ namespace eZ\Publish\API\Repository\Values\User\Limitation;
 
 use eZ\Publish\API\Repository\Values\User\Limitation;
 
-class CustomLimitation extends Limitation
+abstract class CustomLimitation extends Limitation
 {
     /**
      *

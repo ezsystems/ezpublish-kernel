@@ -11,15 +11,13 @@ namespace eZ\Publish\API\Repository\Values\User\Limitation;
 
 use eZ\Publish\API\Repository\Values\User\Limitation;
 
-class SubtreeLimitation extends RoleLimitation
+abstract class SubtreeLimitation extends RoleLimitation
 {
     /**
-     * @see \eZ\Publish\API\Repository\Values\User\Limitation::getIdentifier()
-     *
-     * @return string
+     * Constructs a role limitation with the subtree name
      */
-    public function getIdentifier()
+    public function __construct()
     {
-        return Limitation::SUBTREE;
+        parent::__construct( Limitation::SUBTREE );
     }
 }

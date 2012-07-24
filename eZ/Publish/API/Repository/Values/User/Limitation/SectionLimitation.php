@@ -11,15 +11,13 @@ namespace eZ\Publish\API\Repository\Values\User\Limitation;
 
 use eZ\Publish\API\Repository\Values\User\Limitation;
 
-class SectionLimitation extends RoleLimitation
+abstract class SectionLimitation extends RoleLimitation
 {
     /**
-     * @see \eZ\Publish\API\Repository\Values\User\Limitation::getIdentifier()
-     *
-     * @return string
+     * Constructs a role limitation with the section name
      */
-    public function getIdentifier()
+    public function __construct()
     {
-        return Limitation::SECTION;
+        parent::__construct( Limitation::SECTION );
     }
 }
