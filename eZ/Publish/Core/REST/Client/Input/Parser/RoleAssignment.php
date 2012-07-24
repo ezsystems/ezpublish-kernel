@@ -34,7 +34,7 @@ class RoleAssignment extends Parser
         if ( array_key_exists( 'limitation', $data ) )
         {
             $limitation = $parsingDispatcher->parse( $data['limitation'], $data['limitation']['_media-type'] );
-            $roleLimitation = new RoleLimitation( $limitation->getIdentifier() );
+            $roleLimitation = RoleLimitation::createRoleLimitation( $limitation->getIdentifier() );
             $roleLimitation->limitationValues = $limitation->limitationValues;
         }
 

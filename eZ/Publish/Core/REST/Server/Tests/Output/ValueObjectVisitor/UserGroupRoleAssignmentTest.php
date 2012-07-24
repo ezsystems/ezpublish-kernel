@@ -166,7 +166,7 @@ class UserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $limitation = new User\Limitation\RoleLimitation( 'Class' );
+        $limitation = User\Limitation\RoleLimitation::createRoleLimitation( 'Section' );
         $limitation->limitationValues = array( 1, 2, 3 );
 
         $userGroupRoleAssignment = new User\UserGroupRoleAssignment(
