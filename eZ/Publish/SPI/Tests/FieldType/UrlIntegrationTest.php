@@ -58,7 +58,6 @@ class UrlIntergrationTest extends BaseIntegrationTest
         $handler->getStorageRegistry()->register(
             'ezurl',
             new FieldType\Url\UrlStorage(
-                $handler,
                 array(
                     'LegacyStorage' => new FieldType\Url\UrlStorage\Gateway\LegacyStorage(),
                 )

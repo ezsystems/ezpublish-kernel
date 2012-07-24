@@ -59,7 +59,6 @@ class UserIntergrationTest extends BaseIntegrationTest
         $handler->getStorageRegistry()->register(
             'ezuser',
             new FieldType\User\UserStorage(
-                $handler,
                 array(
                     'LegacyStorage' => new FieldType\User\UserStorage\Gateway\LegacyStorage(),
                 )

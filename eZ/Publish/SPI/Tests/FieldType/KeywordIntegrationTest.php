@@ -58,7 +58,6 @@ class KeywordIntergrationTest extends BaseIntegrationTest
         $handler->getStorageRegistry()->register(
             'ezkeyword',
             new FieldType\Keyword\KeywordStorage(
-                $handler,
                 array(
                     'LegacyStorage' => new FieldType\Keyword\KeywordStorage\Gateway\LegacyStorage(),
                 )

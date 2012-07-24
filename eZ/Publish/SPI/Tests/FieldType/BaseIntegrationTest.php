@@ -11,7 +11,9 @@ namespace eZ\Publish\SPI\Tests\FieldType;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy,
     eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Field;
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 
 /**
  * Integration test for the legacy storage
@@ -435,15 +437,22 @@ abstract class BaseIntegrationTest extends TestCase
     protected function getHandler()
     {
         return new Legacy\Handler(
-            array(
-                'external_storage' => array(
-                    'ezstring' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
-                ),
-                'field_converter' => array(
-                    'ezstring' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextLine',
+            self::$setUp,
+            new ConverterRegistry(
+                array(
+                    'ezstring' => new Legacy\Content\FieldValue\Converter\TextLine(),
                 )
             ),
-            self::$setUp
+            new StorageRegistry(
+                array()
+            ),
+            $this->getMock(
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Search\\TransformationProcessor',
+                array(),
+                array(),
+                '',
+                false
+            )
         );
     }
 
