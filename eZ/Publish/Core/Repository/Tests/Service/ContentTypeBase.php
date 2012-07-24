@@ -2458,7 +2458,6 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::copyContentType
      *
      * @return array
-     * @todo change user
      */
     public function testCopyContentTypeWithSecondArgument()
     {
@@ -2466,6 +2465,7 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         /* BEGIN: Use Case */
         $user = $this->getStubbedUser( 4096 );
+        $this->repository->setCurrentUser( $user );
         $contentTypeService = $this->repository->getContentTypeService();
 
         $commentType = $contentTypeService->loadContentTypeByIdentifier( "comment" );
@@ -2525,7 +2525,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $this->assertGreaterThanOrEqual( $time, $copiedType->modificationDate->getTimestamp() );
         $this->assertEquals( $userId, $copiedType->creatorId );
         $this->assertEquals( $userId, $copiedType->modifierId );
-        $this->assertEquals( ContentType::STATUS_DRAFT, $copiedType->status );
+        $this->assertEquals( ContentType::STATUS_DEFINED, $copiedType->status );
     }
 
     /**

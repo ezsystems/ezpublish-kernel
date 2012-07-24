@@ -750,6 +750,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param int $contentTypeId
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     * @todo Use another excpetion when user of draft is someone else
      */
     public function loadContentTypeDraft( $contentTypeId )
     {
@@ -765,7 +766,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ( $spiContentType->modifierId != $this->repository->getCurrentUser()->id )
         {
-            throw new NotFoundException( "ContentType", $contentTypeId );
+            throw new NotFoundException( "ContentType owned by someone else", $contentTypeId );
         }
 
         return $this->buildContentTypeDraftDomainObject(
