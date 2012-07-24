@@ -41,11 +41,11 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         $typeCreate->nameSchema = 'name|scheme';
         $typeCreate->names = array(
             'eng-US' => 'Blog post',
-            'de-DE' => 'Blog-Eintrag',
+            'ger-DE' => 'Blog-Eintrag',
         );
         $typeCreate->descriptions = array(
             'eng-US' => 'A blog post',
-            'de-DE' => 'Ein Blog-Eintrag',
+            'ger-DE' => 'Ein Blog-Eintrag',
         );
         // $creatorId contains the ID of user 23
         $typeCreate->creatorId = $creatorId;
@@ -56,11 +56,11 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         );
         $titleFieldCreate->names = array(
             'eng-US' => 'Title',
-            'de-DE' => 'Titel',
+            'ger-DE' => 'Titel',
         );
         $titleFieldCreate->descriptions = array(
             'eng-US' => 'Title of the blog post',
-            'de-DE' => 'Titel des Blog-Eintrages',
+            'ger-DE' => 'Titel des Blog-Eintrages',
         );
         $titleFieldCreate->fieldGroup = 'blog-content';
         $titleFieldCreate->position = 1;
@@ -83,11 +83,11 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         );
         $bodyFieldCreate->names = array(
             'eng-US' => 'Body',
-            'de-DE' => 'Textkörper',
+            'ger-DE' => 'Textkörper',
         );
         $bodyFieldCreate->descriptions = array(
             'eng-US' => 'Body of the blog post',
-            'de-DE' => 'Textkörper des Blog-Eintrages',
+            'ger-DE' => 'Textkörper des Blog-Eintrages',
         );
         $bodyFieldCreate->fieldGroup = 'blog-content';
         $bodyFieldCreate->position = 2;
