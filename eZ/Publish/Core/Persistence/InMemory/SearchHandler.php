@@ -13,7 +13,8 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandlerInterface,
-    eZ\Publish\SPI\Persistence\Content\Search\Result,
+    eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
@@ -136,15 +137,25 @@ class SearchHandler extends SearchHandlerInterface
             }
         }
 
-        $result = new Result();
-        $result->count = count( $resultList );
+        $result = new SearchResult();
+        $result->totalCount = count( $resultList );
 
         if ( empty( $resultList ) || ( $query->limit === null && $query->offset === 0 ) )
-            $result->content = $resultList;
+            $result->searchHits = $resultList;
         else if ( $query->limit === null )
-             $result->content = array_slice( $resultList, $query->offset );
+             $result->searchHits = array_slice( $resultList, $query->offset );
         else
-            $result->content = array_slice( $resultList, $query->offset, $query->limit );
+            $result->searchHits = array_slice( $resultList, $query->offset, $query->limit );
+
+        $result->searchHits = array_map(
+            function ( $content )
+            {
+                return new SearchHit( array(
+                    'valueObject' => $content,
+                ) );
+            },
+            $result->searchHits
+        );
 
         return $result;
     }
@@ -168,10 +179,10 @@ class SearchHandler extends SearchHandlerInterface
             'criterion' => $criterion,
         ) ) );
 
-        if ( !$list->count )
+        if ( !$list->totalCount )
             throw new NotFound( 'Content', var_export( $criterion, true ) );
 
-        return $list->content[0];
+        return $list->searchHits[0]->valueObject;
     }
 
     /**

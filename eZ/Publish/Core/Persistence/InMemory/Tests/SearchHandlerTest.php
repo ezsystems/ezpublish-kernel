@@ -12,6 +12,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
@@ -86,6 +87,27 @@ class SearchHandlerTest extends HandlerTest
         }
         unset( $this->contentId );
         parent::tearDown();
+    }
+
+    /**
+     * Test findContent function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\SearchHandler::findContent
+     */
+    public function testFindContent()
+    {
+        $result = $this->persistenceHandler->searchHandler()->findContent( new Query( array(
+            'criterion' => new ContentId( $this->content->contentInfo->id ),
+        ) ) );
+
+        $this->assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchResult', $result );
+        $this->assertEquals( 1, $result->totalCount );
+        $this->assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchHit', $result->searchHits[0] );
+
+        $content = $result->searchHits[0]->valueObject;
+        $this->assertEquals( 14, $content->contentInfo->ownerId );
+        $this->assertEquals( array( 'eng-GB' => 'test' ), $content->versionInfo->names );
+        $this->assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo", $content->versionInfo );
     }
 
     /**
