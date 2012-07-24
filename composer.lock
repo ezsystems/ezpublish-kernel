@@ -1,74 +1,7 @@
 {
-    "hash": "2104e9e73308a1948754cd7087013d08",
+    "hash": "7728c6e9c0fd71eee4b01fb7378bc330",
     "packages": [
-        {
-            "package": "Qafoo/RMF",
-            "version": "dev-master",
-            "source-reference": "852d993d45952dbc86e2bfd78addad540bd85998",
-            "commit-date": "1342375436"
-        },
-        {
-            "package": "doctrine/common",
-            "version": "2.3.x-dev",
-            "source-reference": "b0ed9cc35ec28b7cd23d3d001e6fd4c7b5092926",
-            "commit-date": "1343082138"
-        },
-        {
-            "package": "ezsystems/ezpublish-legacy",
-            "version": "dev-ezpublish5-integration",
-            "source-reference": "4299b41bd3e6955c852fafc5891ce35b584e19c4",
-            "commit-date": "1343037693"
-        },
-        {
-            "package": "symfony/symfony",
-            "version": "v2.1.0-BETA4"
-        },
-        {
-            "package": "twig/twig",
-            "version": "dev-master",
-            "alias-pretty-version": "1.9.x-dev",
-            "alias-version": "1.9.9999999.9999999-dev"
-        },
-        {
-            "package": "twig/twig",
-            "version": "dev-master",
-            "source-reference": "657de7bdeb680815e0df95f63da9f81e1533d2ea",
-            "commit-date": "1342953178"
-        },
-        {
-            "package": "zetacomponents/base",
-            "version": "dev-master",
-            "source-reference": "642f63a8a72c32996f1aaf8a317fdf746bc32ce7",
-            "commit-date": "1337599296"
-        },
-        {
-            "package": "zetacomponents/cache",
-            "version": "dev-master",
-            "source-reference": "34fa794d0b5aeef67fee609c52c5d24fa4604bbd",
-            "commit-date": "1337594129"
-        },
-        {
-            "package": "zetacomponents/configuration",
-            "version": "dev-master",
-            "source-reference": "10ae09f42768d4657b2d1a66226ee63cbd8754b2",
-            "commit-date": "1337594132"
-        },
-        {
-            "package": "zetacomponents/database",
-            "version": "dev-master",
-            "source-reference": "0e8ddef8ce616bc18365efa2eef2161de3d7f74f",
-            "commit-date": "1337594140"
-        },
-        {
-            "package": "zetacomponents/mail",
-            "version": "1.7"
-        },
-        {
-            "package": "zetacomponents/php-generator",
-            "version": "dev-master",
-            "source-reference": "b51935ec5b763e5bad2182d810e1b752fcc83903",
-            "commit-date": "1337594190"
-        }
+
     ],
     "packages-dev": null,
     "aliases": [
