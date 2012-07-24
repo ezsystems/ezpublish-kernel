@@ -1,5 +1,5 @@
 {
-    "hash": "7e0fa11beaaf9e7dc68ff2c2d7c3812a",
+    "hash": "cb49c8f4c0d02806f4e459f910e396bc",
     "packages": [
         {
             "package": "Qafoo/RMF",
@@ -14,12 +14,18 @@
             "commit-date": "1342443556"
         },
         {
+            "package": "ezsystems/ezpublish-legacy",
+            "version": "dev-ezpublish5-integration",
+            "source-reference": "4299b41bd3e6955c852fafc5891ce35b584e19c4",
+            "commit-date": "1343037693"
+        },
+        {
             "package": "symfony/symfony",
             "version": "v2.1.0-BETA3"
         },
         {
             "package": "twig/twig",
-            "version": "v1.8.3"
+            "version": "v1.9.1"
         },
         {
             "package": "zetacomponents/base",
@@ -67,6 +73,7 @@
         "zetacomponents/php-generator": 20,
         "zetacomponents/configuration": 20,
         "zetacomponents/database": 20,
-        "qafoo/rmf": 20
+        "qafoo/rmf": 20,
+        "ezsystems/ezpublish-legacy": 20
     }
 }

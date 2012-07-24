@@ -3,6 +3,10 @@
         {
             "type": "vcs",
             "url": "http://github.com/Qafoo/REST-Micro-Framework"
+        },
+        {
+            "type": "vcs",
+            "url": "git://github.com/ezsystems/ezpublish.git"
         }
     ],
     "require": {
@@ -13,12 +17,16 @@
         "zetacomponents/configuration": "dev-master",
         "zetacomponents/database": "dev-master",
         "zetacomponents/mail": "1.7",
-        "Qafoo/RMF": "dev-master"
+        "Qafoo/RMF": "dev-master",
+        "ezsystems/ezpublish-legacy": "dev-ezpublish5-integration"
     },
     "autoload": {
         "psr-0": {
             "eZ": ""
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "config": {
+        "process-timeout": 3000
+    }
 }
