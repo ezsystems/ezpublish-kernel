@@ -20,8 +20,8 @@ use \eZ\Publish\API\Repository\Values\Content\Query;
  */
 interface SearchService {
 
-     /**
-     * finds content objects for the given query.
+    /**
+     * Finds content objects for the given query.
      *
      * @TODO define structs for the field filters
      *

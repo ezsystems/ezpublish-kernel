@@ -2558,6 +2558,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testFindContentBehaviour()
     {
+        self::markTestIncomplete( "Move to Search Service tests" );
         $contentService = $this->repository->getContentService();
 
         $refObject = new \ReflectionObject( $contentService );
@@ -2602,6 +2603,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testFindContent()
     {
+        self::markTestIncomplete( "Move to Search Service tests" );
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
         $query = new Query(
@@ -2639,6 +2641,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testFindContentWithLanguageFilter()
     {
+        self::markTestIncomplete( "Move to Search Service tests" );
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
         $query = new Query(
@@ -2677,6 +2680,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testFindSingle()
     {
+        self::markTestIncomplete( "Move to Search Service tests" );
         $contentServiceMock = $this->getPartlyMockedService(
             array( "findContent" )
         );
@@ -2731,6 +2735,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testFindSingleThrowsNotFoundException()
     {
+        self::markTestIncomplete( "Move to Search Service tests" );
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
         $query = new Query(
@@ -2769,6 +2774,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testFindSingleThrowsInvalidArgumentException()
     {
+        self::markTestIncomplete( "Move to Search Service tests" );
         /* BEGIN: Use Case */
         /*$contentService = $this->repository->getContentService();
         $query = new Query(

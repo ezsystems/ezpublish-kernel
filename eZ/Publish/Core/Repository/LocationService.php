@@ -151,25 +151,27 @@ class LocationService implements LocationServiceInterface
         if ( !is_string( $remoteId ) )
             throw new InvalidArgumentValue( "remoteId", $remoteId );
 
-        $searchCriterion = new CriterionLogicalAnd(
+        $query = new Query(
             array(
-                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
-                new CriterionLocationRemoteId( $remoteId )
+                'criterion' => new CriterionLogicalAnd(
+                    array(
+                        new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+                        new CriterionLocationRemoteId( $remoteId )
+                    )
+                )
             )
         );
 
-        throw new \RuntimeException( "@TODO: Use search service directly here. Old search handler API has been changed." );
-        $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
-
-        if ( $searchResult->count == 0 )
+        $searchResult = $this->persistenceHandler->searchHandler()->findContent( $query );
+        if ( $searchResult->totalCount == 0 )
             throw new NotFoundException( "location", $remoteId );
 
-        if ( $searchResult->count > 1 )
+        if ( $searchResult->totalCount > 1 )
             throw new BadStateException( "remoteId", "more than one location with specified remote ID found" );
 
-        if ( is_array( $searchResult->content[0]->locations ) )
+        if ( is_array( $searchResult->searchHits[0]->valueObject->locations ) )
         {
-            foreach ( $searchResult->content[0]->locations as $spiLocation )
+            foreach ( $searchResult->searchHits[0]->valueObject->locations as $spiLocation )
             {
                 if ( $spiLocation->remoteId === $remoteId )
                     return $this->buildDomainLocationObject( $spiLocation );
@@ -194,20 +196,25 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $contentInfo->id ) )
             throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
 
-        $searchCriterion = new CriterionLogicalAnd(
+        $query = new Query(
             array(
-                new CriterionContentId( $contentInfo->id ),
-                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+                'criterion' => new CriterionLogicalAnd(
+                    array(
+                        new CriterionContentId( $contentInfo->id ),
+                        new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+                    )
+                )
             )
         );
 
-        throw new \RuntimeException( "@TODO: Use search service directly here. Old search handler API has been changed." );
-        $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
-        if ( $searchResult->count == 0 )
+        $searchResult = $this->persistenceHandler->searchHandler()->findContent( $query );
+        if ( $searchResult->totalCount == 0 )
             throw new BadStateException( "contentInfo", 'content info has no published versions yet' );
+        if ( $searchResult->totalCount > 1 )
+            throw new BadStateException( "contentInfo", 'several content info exists for id:' . $contentInfo->id );
 
-        $spiLocations = $searchResult->content[0]->locations;
-        if ( !is_array( $spiLocations ) || empty( $spiLocations ) )
+        $spiLocations = $searchResult->searchHits[0]->valueObject->locations;
+        if ( empty( $spiLocations ) || !is_array( $spiLocations ) )
             return null;
 
         foreach ( $spiLocations as $spiLocation )
@@ -240,19 +247,24 @@ class LocationService implements LocationServiceInterface
         if ( $rootLocation !== null && !is_string( $rootLocation->pathString ) )
             throw new InvalidArgumentValue( "pathString", $rootLocation->pathString, "Location" );
 
-        $searchCriterion = new CriterionLogicalAnd(
+        $query = new Query(
             array(
-                new CriterionContentId( $contentInfo->id ),
-                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+                'criterion' => new CriterionLogicalAnd(
+                    array(
+                        new CriterionContentId( $contentInfo->id ),
+                        new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+                    )
+                )
             )
         );
 
-        throw new \RuntimeException( "@TODO: Use search service directly here. Old search handler API has been changed." );
-        $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
-        if ( $searchResult->count == 0 )
+        $searchResult = $this->persistenceHandler->searchHandler()->findContent( $query );
+        if ( $searchResult->totalCount == 0 )
             throw new BadStateException( "contentInfo", 'content info has no published versions yet' );
+        if ( $searchResult->totalCount > 1 )
+            throw new BadStateException( "contentInfo", 'several content info exists for id:' . $contentInfo->id );
 
-        $spiLocations = $searchResult->content[0]->locations;
+        $spiLocations = $searchResult->searchHits[0]->valueObject->locations;
         if ( !is_array( $spiLocations ) || empty( $spiLocations ) )
             return array();
 
@@ -301,15 +313,15 @@ class LocationService implements LocationServiceInterface
             $limit
         );
 
-        if ( $searchResult->count == 0 )
+        if ( $searchResult->totalCount == 0 )
             return array();
 
         $childLocations = array();
-        foreach ( $searchResult->content as $spiContent )
+        foreach ( $searchResult->searchHits as $spiSearchHit )
         {
-            if ( is_array( $spiContent->locations ) )
+            if ( is_array( $spiSearchHit->valueObject->locations ) )
             {
-                foreach ( $spiContent->locations as $spiLocation )
+                foreach ( $spiSearchHit->valueObject->locations as $spiLocation )
                 {
                     if ( $spiLocation->parentId == $location->id )
                         $childLocations[] = $this->buildDomainLocationObject( $spiLocation );
@@ -329,28 +341,27 @@ class LocationService implements LocationServiceInterface
      * @param int $offset
      * @param int $limit
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\Search\Result
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
     protected function searchChildrenLocations( $parentLocationId, $sortField = null, $sortOrder = APILocation::SORT_ORDER_ASC, $offset = 0, $limit = -1 )
     {
-        $searchCriterion = new CriterionLogicalAnd(
+        $query = new Query(
             array(
-                new CriterionParentLocationId( $parentLocationId ),
-                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+                'criterion' => new CriterionLogicalAnd(
+                    array(
+                        new CriterionParentLocationId( $parentLocationId ),
+                        new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+                    )
+                ),
+                'offset' => ( $offset >= 0 ? (int) $offset : 0 ),
+                'limit' => ( $limit  >= 0 ? (int) $limit  : null )
             )
         );
 
-        $sortClause = null;
         if ( $sortField !== null )
-            $sortClause = array( $this->getSortClauseBySortField( $sortField, $sortOrder ) );
+            $query->sortClauses = array( $this->getSortClauseBySortField( $sortField, $sortOrder ) );
 
-        throw new \RuntimeException( "@TODO: Use search service directly here. Old search handler API has been changed." );
-        return $this->persistenceHandler->searchHandler()->find(
-            $searchCriterion,
-            $offset >= 0 ? (int) $offset : 0,
-            $limit  >= 0 ? (int) $limit  : null,
-            $sortClause
-        );
+        return $this->persistenceHandler->searchHandler()->findContent( $query );
     }
 
     /**
@@ -675,7 +686,7 @@ class LocationService implements LocationServiceInterface
                 'depth' => (int) $spiLocation->depth,
                 'sortField' => (int) $spiLocation->sortField,
                 'sortOrder' => (int) $spiLocation->sortOrder,
-                'childCount' => $childrenLocations->count
+                'childCount' => $childrenLocations->totalCount
             )
         );
     }

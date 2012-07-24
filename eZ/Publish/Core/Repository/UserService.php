@@ -21,7 +21,8 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupCreateStruct,
     eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct,
     eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\API\Repository\Values\Content\Content,
+    eZ\Publish\API\Repository\Values\Content\Content as APIContent,
+    eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo,
 
     eZ\Publish\SPI\Persistence\Handler,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
@@ -179,13 +180,13 @@ class UserService implements UserServiceInterface
             $mainGroupLocation->sortField,
             $mainGroupLocation->sortOrder
         );
-        if ( $searchResult->count == 0 )
+        if ( $searchResult->totalCount == 0 )
             return array();
 
         $subUserGroups = array();
-        foreach ( $searchResult->items as $resultItem )
+        foreach ( $searchResult->searchHits as $searchHit )
         {
-            $subUserGroups[] = $this->buildDomainUserGroupObject( $resultItem );
+            $subUserGroups[] = $this->buildDomainUserGroupObject( $searchHit->valueObject );
         }
 
         return $subUserGroups;
@@ -200,7 +201,7 @@ class UserService implements UserServiceInterface
      * @param int $offset
      * @param int $limit
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
     protected function searchSubGroups( $locationId, $sortField = null, $sortOrder = Location::SORT_ORDER_ASC, $offset = 0, $limit = -1 )
     {
@@ -223,7 +224,7 @@ class UserService implements UserServiceInterface
 
         $searchQuery->sortClauses = $sortClause;
 
-        return $this->repository->getContentService()->findContent( $searchQuery, array() );
+        return $this->repository->getSearchService()->findContent( $searchQuery, array() );
     }
 
     /**
@@ -711,12 +712,12 @@ class UserService implements UserServiceInterface
             )
         );
 
-        $searchResult = $this->repository->getContentService()->findContent( $searchQuery, array() );
+        $searchResult = $this->repository->getSearchService()->findContent( $searchQuery, array() );
 
         $userGroups = array();
-        foreach ( $searchResult->items as $resultItem )
+        foreach ( $searchResult->searchHits as $resultItem )
         {
-            $userGroups = $this->buildDomainUserGroupObject( $resultItem );
+            $userGroups = $this->buildDomainUserGroupObject( $resultItem->valueObject );
         }
 
         return $userGroups;
@@ -759,15 +760,14 @@ class UserService implements UserServiceInterface
             $this->getSortClauseBySortField( $mainGroupLocation->sortField, $mainGroupLocation->sortOrder )
         );
 
-        $searchResult = $this->repository->getContentService()->findContent( $searchQuery, array() );
+        $searchResult = $this->repository->getSearchService()->findContent( $searchQuery, array() );
 
         $users = array();
-        foreach ( $searchResult->items as $resultItem )
+        foreach ( $searchResult->searchHits as $resultItem )
         {
-            /** @var $resultItem \eZ\Publish\API\Repository\Values\Content\Content */
-            $spiUser = $this->persistenceHandler->userHandler()->load( $resultItem->getVersionInfo()->getContentInfo()->id );
+            $spiUser = $this->persistenceHandler->userHandler()->load( $resultItem->valueObject->id );
 
-            $users[] = $this->buildDomainUserObject( $spiUser, $resultItem );
+            $users[] = $this->buildDomainUserObject( $spiUser, $resultItem->valueObject );
         }
 
         return $users;
@@ -859,7 +859,7 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      */
-    protected function buildDomainUserGroupObject( Content $content )
+    protected function buildDomainUserGroupObject( APIContent $content )
     {
         $contentInfo = $content->getVersionInfo()->getContentInfo();
         $mainLocation = $this->repository->getLocationService()->loadMainLocation( $contentInfo );
@@ -868,7 +868,7 @@ class UserService implements UserServiceInterface
         if ( $mainLocation !== null )
         {
             $subGroups = $this->searchSubGroups( $mainLocation->id, null, Location::SORT_ORDER_ASC, 0, 0 );
-            $subGroupCount = $subGroups->count;
+            $subGroupCount = $subGroups->totalCount;
         }
 
         return new UserGroup(
@@ -888,7 +888,7 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    protected function buildDomainUserObject( SPIUser $spiUser, Content $content = null )
+    protected function buildDomainUserObject( SPIUser $spiUser, APIContent $content = null )
     {
         if ( $content === null )
             $content = $this->repository->getContentService()->loadContent( $spiUser->id );

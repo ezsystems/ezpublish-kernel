@@ -73,8 +73,8 @@ class SearchService implements SearchServiceInterface
         $result = $this->persistenceHandler->searchHandler()->findContent( $query, $fieldFilters );
         foreach ( $result->searchHits as $hit )
         {
-            $hit->valueObject = $this->repository->getContentService()->buildContentInfoDomainObject(
-                $hit->valueObject->contentInfo
+            $hit->valueObject = $this->repository->getContentService()->buildContentDomainObject(
+                $hit->valueObject
             );
         }
 
