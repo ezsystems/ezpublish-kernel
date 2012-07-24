@@ -213,16 +213,16 @@ abstract class RoleBase extends BaseServiceTest
     {
         $roleService = $this->repository->getRoleService();
 
-        $limitation1 = new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
+        $limitation1 = new \eZ\Publish\Core\Repository\Values\User\Limitation\ContentTypeLimitation();
         $limitation1->limitationValues = array( '12', '13', '14' );
 
-        $limitation2 = new \eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation();
+        $limitation2 = new \eZ\Publish\Core\Repository\Values\User\Limitation\SectionLimitation();
         $limitation2->limitationValues = array( '5', '6' );
 
-        $limitation3 = new \eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation();
+        $limitation3 = new \eZ\Publish\Core\Repository\Values\User\Limitation\OwnerLimitation();
         $limitation3->limitationValues = array( '1' );
 
-        $limitation4 = new \eZ\Publish\API\Repository\Values\User\Limitation\UserGroupLimitation();
+        $limitation4 = new \eZ\Publish\Core\Repository\Values\User\Limitation\UserGroupLimitation();
         $limitation4->limitationValues = array( '1', '2' );
 
         $policyCreateStruct1 = $roleService->newPolicyCreateStruct( 'content', 'read' );
@@ -399,10 +399,10 @@ abstract class RoleBase extends BaseServiceTest
         $role = $roleService->loadRole( 1 );
         $policyCount = count( $role->getPolicies() );
 
-        $limitation1 = new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
+        $limitation1 = new \eZ\Publish\Core\Repository\Values\User\Limitation\ContentTypeLimitation();
         $limitation1->limitationValues = array( '12', '13', '14' );
 
-        $limitation2 = new \eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation();
+        $limitation2 = new \eZ\Publish\Core\Repository\Values\User\Limitation\SectionLimitation();
         $limitation2->limitationValues = array( '5', '6' );
 
         $policyCreateStruct = $roleService->newPolicyCreateStruct( 'content', 'read' );
@@ -453,7 +453,7 @@ abstract class RoleBase extends BaseServiceTest
         $policies = $role->getPolicies();
         $policy = $policies[2];
 
-        $limitation = new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
+        $limitation = new \eZ\Publish\Core\Repository\Values\User\Limitation\ContentTypeLimitation();
         $limitation->limitationValues = array( '12', '13', '14' );
 
         $policyUpdateStruct = $roleService->newPolicyUpdateStruct();
