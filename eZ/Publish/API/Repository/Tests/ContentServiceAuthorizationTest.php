@@ -1167,6 +1167,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testFindContentWithUserPermissionFilter()
     {
+        self::markTestIncomplete( "Search have been moved to SearchService" );
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -1207,6 +1208,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testFindSingleWithUserPermissionFilter()
     {
+        self::markTestIncomplete( "Search have been moved to SearchService" );
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -1245,6 +1247,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testFindSingleThrowsNotFoundExceptionWithUserPermissionFilter()
     {
+        self::markTestIncomplete( "Search have been moved to SearchService" );
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */

@@ -2480,6 +2480,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testFindContent()
     {
+        self::markTestIncomplete( "Search have been moved to SearchService" );
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -2535,6 +2536,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testFindContentWithLanguageFilter()
     {
+        self::markTestIncomplete( "Search have been moved to SearchService" );
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -2576,6 +2578,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testFindSingle()
     {
+        self::markTestIncomplete( "Search have been moved to SearchService" );
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -2625,6 +2628,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testFindSingleWithLanguageFilter()
     {
+        self::markTestIncomplete( "Search have been moved to SearchService" );
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -2668,6 +2672,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testFindSingleThrowsNotFoundException()
     {
+        self::markTestIncomplete( "Search have been moved to SearchService" );
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -2704,6 +2709,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testFindSingleThrowsInvalidArgumentException()
     {
+        self::markTestIncomplete( "Search have been moved to SearchService" );
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
