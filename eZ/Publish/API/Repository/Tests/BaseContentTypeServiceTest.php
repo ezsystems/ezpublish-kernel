@@ -73,9 +73,7 @@ abstract class BaseContentTypeServiceTest extends BaseTest
                 'maxStringLength' => 0,
             ),
         );
-        $titleFieldCreate->fieldSettings = array(
-            'textRows' => 23
-        );
+        $titleFieldCreate->fieldSettings = array();
         $titleFieldCreate->isSearchable = true;
 
         $typeCreate->addFieldDefinition( $titleFieldCreate );

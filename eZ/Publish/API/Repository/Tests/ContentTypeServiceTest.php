@@ -693,9 +693,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'maxStringLength' => 0,
             ),
         );
-        $titleFieldCreate->fieldSettings = array(
-            'textRows' => 10
-        );
+        $titleFieldCreate->fieldSettings = array();
         $titleFieldCreate->isSearchable = true;
 
         $typeCreate->addFieldDefinition( $titleFieldCreate );
@@ -722,9 +720,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'maxStringLength' => 0,
             ),
         );
-        $bodyFieldCreate->fieldSettings = array(
-            'textRows' => 80
-        );
+        $bodyFieldCreate->fieldSettings = array();
         $bodyFieldCreate->isSearchable = true;
 
         $typeCreate->addFieldDefinition( $bodyFieldCreate );
@@ -1217,9 +1213,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'maxStringLength' => 0,
             ),
         );
-        $fieldDefCreate->fieldSettings = array(
-            'textRows' => 10
-        );
+        $fieldDefCreate->fieldSettings = array();
         $fieldDefCreate->isSearchable = true;
 
         $contentTypeService->addFieldDefinition( $contentTypeDraft, $fieldDefCreate );
