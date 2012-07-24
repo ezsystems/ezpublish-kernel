@@ -1,4 +1,9 @@
 {
+    "name": "ezsystems/ezpublish-api",
+    "description": "eZ Publish API and kernel. This is the heart of eZ Publish 5.",
+    "version": "5.0-dev",
+    "homepage": "http://share.ez.no",
+    "licence": "GPL-2.0",
     "repositories": [
         {
             "type": "vcs",
@@ -10,8 +15,8 @@
         }
     ],
     "require": {
-        "symfony/symfony": "2.1.0-beta3",
-        "twig/twig": "1.9.1",
+        "php": ">5.3.3",
+        "symfony/symfony": "2.1.0-beta4",
         "zetacomponents/cache": "dev-master",
         "zetacomponents/php-generator": "dev-master",
         "zetacomponents/configuration": "dev-master",
