@@ -1,5 +1,5 @@
 {
-    "name": "ezsystems/ezpublish-api",
+    "name": "ezsystems/ezpublish",
     "description": "eZ Publish API and kernel. This is the heart of eZ Publish 5.",
     "version": "5.0-dev",
     "homepage": "http://share.ez.no",
