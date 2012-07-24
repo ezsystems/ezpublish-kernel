@@ -28,7 +28,7 @@ class LimitationTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $contentTypeLimitation = new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
+        $contentTypeLimitation = new \eZ\Publish\Core\Repository\Values\User\Limitation\ContentTypeLimitation();
         $contentTypeLimitation->limitationValues = array( 1, 2, 3 );
 
         $visitor->visit(
