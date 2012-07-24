@@ -8,6 +8,7 @@ parameters:
     ezpublish_legacy.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\LegacyKernelController
     ezpublish_legacy.router.class: eZ\Bundle\EzPublishLegacyBundle\Routing\FallbackRouter
     ezpublish_legacy.siteaccess_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess
+    ezpublish_legacy.session_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Session
 
 services:
     ezpublish_legacy.kernel:
@@ -45,6 +46,12 @@ services:
 
     ezpublish_legacy.siteaccess_mapper:
         class: %ezpublish_legacy.siteaccess_mapper.class%
+        arguments: [@service_container]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish_legacy.session_mapper:
+        class: %ezpublish_legacy.session_mapper.class%
         arguments: [@service_container]
         tags:
             - { name: kernel.event_subscriber }
