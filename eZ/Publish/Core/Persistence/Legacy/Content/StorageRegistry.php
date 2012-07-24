@@ -38,7 +38,22 @@ class StorageRegistry
      */
     public function __construct( array $storageMap )
     {
-        $this->storageMap = $storageMap;
+        foreach ( $storageMap as $typeName => $storage )
+        {
+            $this->register( $typeName, $storage );
+        }
+    }
+
+    /**
+     * Register $storage for $typeName
+     *
+     * @param string $typeName
+     * @param mixed $storage Callable or FieldStorage
+     * @return void
+     */
+    public function register( $typeName, $storage )
+    {
+        $this->storageMap[$typeName] = $storage;
     }
 
     /**
