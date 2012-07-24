@@ -11,13 +11,16 @@ namespace eZ\Publish\Legacy\Kernel;
 
 use eZ\Publish\Legacy\Kernel as LegacyKernel,
     eZ\Publish\MVC\SiteAccess,
+    eZ\Publish\MVC\MVCEvents,
+    eZ\Publish\MVC\Event\PreBuildKernelWebHandlerEvent,
     \ezpKernelHandler,
     \ezpKernelWeb,
     \eZSiteAccess,
     \eZURI,
     Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\DependencyInjection\Exception\InactiveScopeException,
-    Symfony\Component\HttpKernel\Log\LoggerInterface;
+    Symfony\Component\HttpKernel\Log\LoggerInterface,
+    Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * Legacy kernel loader
@@ -76,7 +79,7 @@ class Loader
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      * @return \Closure|void
      */
-    public function buildLegacyKernelHandlerWeb( ContainerInterface $container )
+    public function buildLegacyKernelHandlerWeb( ContainerInterface $container, array $defaultLegacyOptions = array() )
     {
         $legacyRootDir = $this->legacyRootDir;
         $webrootDir = $this->webrootDir;
@@ -96,15 +99,24 @@ class Loader
             return;
         }
 
-        return function () use ( $legacyRootDir, $webrootDir, $request )
+        $eventDispatcher = $container->get( 'event_dispatcher' );
+        $legacyParameters = new ParameterBag( $defaultLegacyOptions );
+
+        return function () use ( $legacyRootDir, $webrootDir, $request, $eventDispatcher, $legacyParameters )
         {
             static $webHandler;
             if ( !$webHandler instanceof ezpKernelWeb )
             {
                 chdir( $legacyRootDir );
-                $settings = array();
-                if ( $request->attributes->has( 'legacySiteaccess' ) )
-                    $settings['siteaccess'] = $request->attributes->get( 'legacySiteaccess' );
+
+                $buildEvent = new PreBuildKernelWebHandlerEvent(
+                    $legacyParameters, $request
+                );
+                $eventDispatcher->dispatch(
+                    MVCEvents::BUILD_KERNEL_WEB_HANDLER, $buildEvent
+                );
+
+                $settings = $legacyParameters->all();
 
                 $webHandler = new ezpKernelWeb( $settings );
                 eZURI::instance()->setURIString(

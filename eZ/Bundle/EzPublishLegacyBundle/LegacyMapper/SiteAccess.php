@@ -1,39 +1,51 @@
 <?php
 /**
- * File containing the LegacyMapper class.
+ * File containing the SiteAccess class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishLegacyBundle\SiteAccess;
+namespace eZ\Bundle\EzPublishLegacyBundle\LegacyMapper;
 
 use eZ\Publish\MVC\MVCEvents,
-    eZ\Publish\MVC\Event\PostSiteAccessMatchEvent,
+    eZ\Publish\MVC\Event\PreBuildKernelWebHandlerEvent,
+    \eZSiteAccess,
     Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    \eZSiteAccess;
+    Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Maps the siteAccess object to the legacy access array.
+ * Maps the SiteAccess object to the legacy parameters
  */
-class LegacyMapper implements EventSubscriberInterface
+class SiteAccess implements EventSubscriberInterface
 {
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    private $container;
+
+    public function __construct( ContainerInterface $container )
+    {
+        $this->container = $container;
+    }
+
+
     public static function getSubscribedEvents()
     {
         return array(
-            MVCEvents::SITEACCESS => array( 'onSiteAccessMatch', 128 )
+            MVCEvents::BUILD_KERNEL_WEB_HANDLER => array( 'onBuildKernelWebHandler', 128 )
         );
     }
 
     /**
-     * Maps matched siteaccess to the legacy access array
+     * Maps matched siteaccess to the legacy parameters
      *
      * @param \eZ\Publish\MVC\Event\PostSiteAccessMatchEvent $event
      */
-    public function onSiteAccessMatch( PostSiteAccessMatchEvent $event )
+    public function onBuildKernelWebHandler( PreBuildKernelWebHandlerEvent $event )
     {
-        $siteAccess = $event->getSiteAccess();
+        $siteAccess = $this->container->get( 'ezpublish.siteaccess' );
         $request = $event->getRequest();
         $uriPart = array();
 
@@ -80,12 +92,12 @@ class LegacyMapper implements EventSubscriberInterface
             $uriPart = array_diff( $aPathinfo, $aSemanticPathinfo );
         }
 
-        $request->attributes->set(
-            'legacySiteaccess',
+        $event->getParameters()->set(
+            'siteaccess',
             array(
-                'name'      => $siteAccess->name,
-                'type'      => $legacyAccessType,
-                'uri_part'  => $uriPart
+                'name' => $siteAccess->name,
+                'type' => $legacyAccessType,
+                'uri_part' => $uriPart
             )
         );
     }
