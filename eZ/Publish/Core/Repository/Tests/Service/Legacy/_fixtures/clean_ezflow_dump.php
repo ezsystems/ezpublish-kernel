@@ -13092,7 +13092,7 @@ array (
     'description' => '',
     'language_id' => '3',
     'name' => 'Lock',
-    'real_language_id' => '0',
+    'real_language_id' => '2',
   ),
 ),
 'ezcobj_state' => 
