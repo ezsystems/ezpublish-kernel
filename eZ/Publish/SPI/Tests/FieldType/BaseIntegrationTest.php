@@ -331,6 +331,9 @@ abstract class BaseIntegrationTest extends TestCase
         return $content->fields[1];
     }
 
+    /**
+     * @depends testCreateContent
+     */
     public function testLoadField()
     {
         $handler = $this->getCustomHandler();
