@@ -100,26 +100,20 @@ class UrlIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get initial field externals data
+     * Get initial field value
      *
-     * @return array
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function getInitialExternalFieldData()
+    public function getInitialValue()
     {
-        return 'http://example.com/sindelfingen';
-    }
-
-    /**
-     * Get initial field externals data
-     *
-     * @return array
-     */
-    public function getInitialFieldData()
-    {
-        return array(
-            'urlId' => null,
-            'text' => 'Some awesome website',
-        );
+        return new Content\FieldValue( array(
+            'data'         => array(
+                'urlId' => null,
+                'text'  => 'Some awesome website',
+            ),
+            'externalData' => 'http://example.com/sindelfingen',
+            'sortKey'      => null,
+        ) );
     }
 
     /**
@@ -133,42 +127,38 @@ class UrlIntergrationTest extends BaseIntegrationTest
      */
     public function assertLoadedFieldDataCorrect( Field $field )
     {
+        $expected = $this->getInitialValue();
         $this->assertEquals(
-            $this->getInitialExternalFieldData(),
+            $expected->externalData,
             $field->value->externalData
         );
 
-        $internalData = $this->getInitialFieldData();
         $this->assertNotNull(
             $field->value->data['urlId']
         );
         $this->assertEquals(
-            $internalData['text'],
+            $expected->data['text'],
             $field->value->data['text']
         );
     }
 
     /**
-     * Get update field externals data
+     * Get update field value.
      *
-     * @return array
-     */
-    public function getUpdateExternalFieldData()
-    {
-        return 'http://example.com/hubba';
-    }
-
-    /**
-     * Get update field externals data
+     * Use to update the field
      *
-     * @return array
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function getUpdateFieldData()
+    public function getUpdatedValue()
     {
-        return array(
-            'urlId' => null,
-            'text' => 'An even more awesome website'
-        );
+        return new Content\FieldValue( array(
+            'data'         => array(
+                'urlId' => null,
+                'text' => 'An even more awesome website',
+            ),
+            'externalData' => 'http://example.com/hubba',
+            'sortKey'      => null,
+        ) );
     }
 
     /**
@@ -185,17 +175,17 @@ class UrlIntergrationTest extends BaseIntegrationTest
      */
     public function assertUpdatedFieldDataCorrect( Field $field )
     {
+        $expected = $this->getUpdatedValue();
         $this->assertEquals(
-            $this->getUpdateExternalFieldData(),
+            $expected->externalData,
             $field->value->externalData
         );
 
-        $internalData = $this->getUpdateFieldData();
         $this->assertNotNull(
             $field->value->data['urlId']
         );
         $this->assertEquals(
-            $internalData['text'],
+            $expected->data['text'],
             $field->value->data['text']
         );
     }

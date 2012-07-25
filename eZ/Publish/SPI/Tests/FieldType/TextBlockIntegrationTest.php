@@ -100,23 +100,17 @@ class TextBlockIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get initial field externals data
+     * Get initial field value
      *
-     * @return array
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function getInitialExternalFieldData()
+    public function getInitialValue()
     {
-        return null;
-    }
-
-    /**
-     * Get initial field externals data
-     *
-     * @return array
-     */
-    public function getInitialFieldData()
-    {
-        return "Some longish text…";
+        return new Content\FieldValue( array(
+            'data'         => 'Some longish text…',
+            'externalData' => null,
+            'sortKey'      => null,
+        ) );
     }
 
     /**
@@ -131,34 +125,25 @@ class TextBlockIntergrationTest extends BaseIntegrationTest
     public function assertLoadedFieldDataCorrect( Field $field )
     {
         $this->assertEquals(
-            $this->getInitialExternalFieldData(),
-            $field->value->externalData
-        );
-
-        $this->assertEquals(
-            $this->getInitialFieldData(),
-            $field->value->data
+            $this->getInitialValue(),
+            $field->value
         );
     }
 
     /**
-     * Get update field externals data
+     * Get update field value.
      *
-     * @return array
-     */
-    public function getUpdateExternalFieldData()
-    {
-        return null;
-    }
-
-    /**
-     * Get update field externals data
+     * Use to update the field
      *
-     * @return array
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function getUpdateFieldData()
+    public function getUpdatedValue()
     {
-        return "A different longish text now…";
+        return new Content\FieldValue( array(
+            'data'         => 'A different longish text now…',
+            'externalData' => null,
+            'sortKey'      => null,
+        ) );
     }
 
     /**
@@ -176,13 +161,8 @@ class TextBlockIntergrationTest extends BaseIntegrationTest
     public function assertUpdatedFieldDataCorrect( Field $field )
     {
         $this->assertEquals(
-            $this->getUpdateExternalFieldData(),
-            $field->value->externalData
-        );
-
-        $this->assertEquals(
-            $this->getUpdateFieldData(),
-            $field->value->data
+            $this->getUpdatedValue(),
+            $field->value
         );
     }
 }

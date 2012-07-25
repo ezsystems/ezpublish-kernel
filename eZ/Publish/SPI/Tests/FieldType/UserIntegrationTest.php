@@ -101,29 +101,23 @@ class UserIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get initial field externals data
+     * Get initial field value
      *
-     * @return array
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function getInitialExternalFieldData()
+    public function getInitialValue()
     {
-        return array(
-            'account_key' => null,
-            'is_enabled'  => true,
-            'last_visit'  => null,
-            'login_count' => 0,
-            'max_login'   => 1000,
-        );
-    }
-
-    /**
-     * Get initial field externals data
-     *
-     * @return array
-     */
-    public function getInitialFieldData()
-    {
-        return null;
+        return new Content\FieldValue( array(
+            'data'         => null,
+            'externalData' => array(
+                'account_key' => null,
+                'is_enabled'  => true,
+                'last_visit'  => null,
+                'login_count' => 0,
+                'max_login'   => 1000,
+            ),
+            'sortKey'      => 'user',
+        ) );
     }
 
     /**
@@ -160,33 +154,29 @@ class UserIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get update field externals data
+     * Get update field value.
      *
-     * @return array
-     */
-    public function getUpdateExternalFieldData()
-    {
-        return array(
-            'account_key'        => 'foobar',
-            'login'              => 'change', // Change is intended to not get through
-            'email'              => 'change', // Change is intended to not get through
-            'password_hash'      => 'change', // Change is intended to not get through
-            'password_hash_type' => 'change', // Change is intended to not get through
-            'last_visit'         => 123456789,
-            'login_count'        => 2300,
-            'is_enabled'         => 'changed', // Change is intended to not get through
-            'max_login'          => 'changed', // Change is intended to not get through
-        );
-    }
-
-    /**
-     * Get update field externals data
+     * Use to update the field
      *
-     * @return array
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function getUpdateFieldData()
+    public function getUpdatedValue()
     {
-        return null;
+        return new Content\FieldValue( array(
+            'data'         => null,
+            'externalData' => array(
+                'account_key'        => 'foobar',
+                'login'              => 'change', // Change is intended to not get through
+                'email'              => 'change', // Change is intended to not get through
+                'password_hash'      => 'change', // Change is intended to not get through
+                'password_hash_type' => 'change', // Change is intended to not get through
+                'last_visit'         => 123456789,
+                'login_count'        => 2300,
+                'is_enabled'         => 'changed', // Change is intended to not get through
+                'max_login'          => 'changed', // Change is intended to not get through
+            ),
+            'sortKey'      => 'user',
+        ) );
     }
 
     /**

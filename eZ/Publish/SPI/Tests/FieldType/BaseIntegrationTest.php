@@ -86,20 +86,11 @@ abstract class BaseIntegrationTest extends TestCase
     abstract public function getFieldDefinitionData();
 
     /**
-     * Returns the initial data to be stored in FieldValue->externalData when
-     * creating the content field of the FieldType under test
+     * Get initial field value
      *
-     * @return mixed
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    abstract public function getInitialExternalFieldData();
-
-    /**
-     * Returns the initial data to be stored in FieldValue->data when
-     * creating the content field of the FieldType under test
-     *
-     * @return mixed
-     */
-    abstract public function getInitialFieldData();
+    abstract public function getInitialValue();
 
     /**
      * Asserts that the loaded field data is correct
@@ -113,20 +104,13 @@ abstract class BaseIntegrationTest extends TestCase
     abstract public function assertLoadedFieldDataCorrect( Field $field );
 
     /**
-     * Returns the data to be stored in FieldValue->externalData when updating
-     * the content field of the FieldType under test
+     * Get update field value.
      *
-     * @return mixed
-     */
-    abstract public function getUpdateExternalFieldData();
-
-    /**
-     * Returns the data to be stored in FieldValue->data when updating the
-     * content field of the FieldType under test
+     * Use to update the field
      *
-     * @return mixed
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    abstract public function getUpdateFieldData();
+    abstract public function getUpdatedValue();
 
     /**
      * Asserts that the updated field data is loaded correct
@@ -298,17 +282,14 @@ abstract class BaseIntegrationTest extends TestCase
                     'fieldDefinitionId' => $contentType->fieldDefinitions[0]->id,
                     'value'             => new Content\FieldValue( array(
                         'data'    => 'This is just a test object',
-                        'sortKey' => array( 'sort_key_string' => 'This is just a test object' ),
+                        'sortKey' => 'this is just a test object',
                     ) ),
                 ) ),
                 new Content\Field( array(
                     'type'              => $this->getTypeName(),
                     'languageCode'      => 'eng-GB',
                     'fieldDefinitionId' => $contentType->fieldDefinitions[1]->id,
-                    'value'             => new Content\FieldValue( array(
-                        'data'         => $this->getInitialFieldData(),
-                        'externalData' => $this->getInitialExternalFieldData(),
-                    ) ),
+                    'value'             => $this->getInitialValue(),
                 ) ),
             ),
         ) );
@@ -374,8 +355,7 @@ abstract class BaseIntegrationTest extends TestCase
     {
         $handler = $this->getCustomHandler();
 
-        $field->value->externalData = $this->getUpdateExternalFieldData();
-        $field->value->data = $this->getUpdateFieldData();
+        $field->value = $this->getUpdatedValue();
         $updateStruct = new \eZ\Publish\SPI\Persistence\Content\UpdateStruct( array(
             'creatorId' => 14,
             'modificationDate' => time(),
