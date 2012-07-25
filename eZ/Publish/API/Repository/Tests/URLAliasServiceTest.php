@@ -263,7 +263,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         // Throws InvalidArgumentException, since this path already exists for the
         // language
         $createdUrlAlias = $urlAliasService->createUrlAlias(
-            $location, '/Support', 'eng-US'
+            $location, '/Design/Plain-site', 'eng-US'
         );
         /* END: Use Case */
     }
@@ -435,7 +435,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         // Throws InvalidArgumentException, since this path already exists for the
         // language
         $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
-            '/My-new-Site', '/Support', 'eng-US'
+            '/My-new-Site', '/Design/Plain-site', 'eng-US'
         );
         /* END: Use Case */
     }
