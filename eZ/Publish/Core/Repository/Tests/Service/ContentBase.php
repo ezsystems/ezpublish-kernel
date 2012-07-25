@@ -76,7 +76,7 @@ abstract class ContentBase extends BaseServiceTest
     {
         // Legacy fixture content 4 current version (1) values
         $values = array(
-            "id" => 4,
+            //"id" => 4,
             "versionNo" => 1,
             "modificationDate" => $this->getDateTime( 0 ),
             "creatorId" => 14,
@@ -90,7 +90,7 @@ abstract class ContentBase extends BaseServiceTest
 
         if ( $draft )
         {
-            $values["id"] = 675;
+            //$values["id"] = 675;
             $values["creatorId"] = $this->repository->getCurrentUser()->id;
             $values["versionNo"] = 2;
             $values["status"] = VersionInfo::STATUS_DRAFT;
@@ -123,47 +123,6 @@ abstract class ContentBase extends BaseServiceTest
         {
             if ( !empty( $languages ) && !in_array( $languageCode, $languages ) ) continue;
             $returnArray = array_merge_recursive( $returnArray, $languageFieldValues );
-        }
-        return $returnArray;
-    }
-
-    /**
-     *
-     *
-     * @param array $languages
-     * @param bool $draft
-     *
-     * @return mixed
-     */
-    protected function getFieldsExpectedValues( array $languages = null, $draft = false )
-    {
-        // Legacy fixture content ID=4 fields
-        $fields = array(
-            "eng-US" => array(
-                new Field(
-                    array(
-                        "id" => $draft ? 1332 : 7,
-                        "fieldDefIdentifier" => "description",
-                        "value" => "Main group",
-                        "languageCode" => "eng-US"
-                    )
-                ),
-                new Field(
-                    array(
-                        "id" => $draft ? 1333 : 8,
-                        "fieldDefIdentifier" => "name",
-                        "value" => "Users",
-                        "languageCode" => "eng-US"
-                    )
-                )
-            )
-        );
-
-        $returnArray = array();
-        foreach ( $fields as $languageCode => $languageFields )
-        {
-            if ( !empty( $languages ) && !in_array( $languageCode, $languages ) ) continue;
-            $returnArray = array_merge( $returnArray, $languageFields );
         }
         return $returnArray;
     }
@@ -509,7 +468,6 @@ abstract class ContentBase extends BaseServiceTest
         $versionInfoValues = $this->getVersionInfoExpectedValues( $draft );
         $contentInfoValues = $this->getContentInfoExpectedValues();
         $fieldValuesValues = $this->getFieldValuesExpectedValues( $languages );
-        $fieldsValues = $this->getFieldsExpectedValues( $languages, $draft );
 
         $this->assertPropertiesCorrect(
             $versionInfoValues,
@@ -524,13 +482,6 @@ abstract class ContentBase extends BaseServiceTest
         $this->assertEquals(
             $fieldValuesValues,
             $content->fields
-        );
-
-        $fields = $content->getFields();
-        usort( $fields, function( $a, $b ) { return strcmp( $a->id, $b->id ); } );
-        $this->assertEquals(
-            $fieldsValues,
-            $fields
         );
 
         // @todo assert relations
@@ -2089,8 +2040,12 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentDrafts()
     {
-        /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
+
+        // delete existing drafts before we begin
+        $draftedVersions = $contentService->loadContentDrafts();
+        foreach ( $draftedVersions as $draftedVersion )
+            $contentService->deleteVersion( $draftedVersion );
 
         /* BEGIN: Use Case */
         // Remote ids of the "Users" user group of a eZ Publish demo installation.
@@ -2111,18 +2066,19 @@ abstract class ContentBase extends BaseServiceTest
 
         $actual = array(
             $draftedVersions[0]->status,
-            $draftedVersions[0]->getContentInfo()->remoteId,
             $draftedVersions[1]->status,
+            count( $draftedVersions ),
+            $draftedVersions[0]->getContentInfo()->remoteId,
             $draftedVersions[1]->getContentInfo()->remoteId,
         );
-        sort( $actual, SORT_STRING );
 
         $this->assertEquals(
             array(
                 VersionInfo::STATUS_DRAFT,
                 VersionInfo::STATUS_DRAFT,
-                $membersUserGroupRemoteId,
+                2,
                 $usersUserGroupRemoteId,
+                $membersUserGroupRemoteId
             ),
             $actual
         );
