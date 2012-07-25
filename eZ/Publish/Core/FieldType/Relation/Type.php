@@ -98,7 +98,7 @@ class Type extends FieldType
         {
             throw new InvalidArgumentType(
                 '$inputValue->destinationContent',
-                '\eZ\Publish\Core\Repository\Values\Content\ContentInfo',
+                '\\eZ\Publish\\Core\\Repository\\Values\\Content\\ContentInfo',
                 $inputValue->destinationContent
             );
         }
