@@ -1085,7 +1085,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $objectCount = $objectStateService->getContentCount( $notLockedObjectState );
         /* END: Use Case */
 
-        $this->assertEquals( 184, $objectCount );
+        $this->assertEquals( 18, $objectCount );
     }
 
     /**
@@ -1116,7 +1116,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         // All objects transfered
         $this->assertEquals(
-            184,
+            18,
             $objectStateService->getContentCount( $lockedObjectState )
         );
     }
