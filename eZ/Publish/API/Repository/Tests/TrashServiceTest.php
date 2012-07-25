@@ -346,9 +346,9 @@ class TrashServiceTest extends BaseTrashServiceTest
                 'hidden' => false,
                 'invisible' => $trashItem->invisible,
                 'pathString' => $newParentLocation->pathString . $this->parseId( 'location', $location->id ) . "/",
-                'priority' => 4,
-                'sortField' => Location::SORT_FIELD_PUBLISHED,
-                'sortOrder' => Location::SORT_ORDER_DESC,
+                'priority' => 0,
+                'sortField' => Location::SORT_FIELD_NAME,
+                'sortOrder' => Location::SORT_ORDER_ASC,
             ),
             $location
         );
@@ -435,7 +435,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* END: Use Case */
 
         $this->assertEquals(
-            $childCount,
+            $childCount + 1,
             $locationService->loadLocation( $homeLocationId )->childCount
         );
     }
