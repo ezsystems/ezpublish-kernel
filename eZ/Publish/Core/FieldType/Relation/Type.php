@@ -108,8 +108,8 @@ class Type extends FieldType
 
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
+     * For this FieldType, the related object's name is returned:
      *
-     * @todo String normalization should occur here.
      * @return array
      */
     protected function getSortInfo( $value )
