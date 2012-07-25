@@ -42,6 +42,10 @@ class SessionSetDynamicNameListener implements EventSubscriberInterface
 
     public function onSiteAccessMatch( PostSiteAccessMatchEvent $event )
     {
+        if ( !$this->container->has( 'session' ) )
+        {
+            return;
+        }
         $siteAccess = $event->getSiteAccess();
         $session = $this->container->get( 'session' );
         $sessionName = $session->getName();
