@@ -230,14 +230,12 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     {
         parent::setUp();
 
-        /*
         if ( $this->getRepository() instanceof \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub )
         {
             $this->markTestSkipped(
                 'FieldType integration tests cannot be run against memory stub.'
             );
         }
-        */
     }
 
     /**
