@@ -109,6 +109,12 @@ $roleController = new Controller\Role(
     $repository->getUserService()
 );
 
+$locationController = new Controller\Location(
+    $inputDispatcher,
+    $urlHandler,
+    $repository->getLocationService()
+);
+
 /*
  * Visitors are used to transform the Value Objects returned by the Public API
  * into the output format requested by the client. In some cases, it is
