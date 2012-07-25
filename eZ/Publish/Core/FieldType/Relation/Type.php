@@ -16,7 +16,10 @@ use eZ\Publish\Core\FieldType\FieldType,
 /**
  * The Relation field type.
  *
- * This field type represents a simple string.
+ * This field type represents a relation to a content.
+ *
+ * hash format ({@see fromhash()}, {¨@see toHash()}):
+ * array( 'destinationContentId' => (int)$destinationContentId );
  */
 class Type extends FieldType
 {
