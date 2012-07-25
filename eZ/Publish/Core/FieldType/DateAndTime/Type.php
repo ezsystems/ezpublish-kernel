@@ -145,7 +145,7 @@ class Type extends FieldType
      *
      * @return mixed
      */
-    public function toHash( $value )
+    public function toHash( Value $value )
     {
         if ( $value->value instanceof DateTime )
             return $value->value->getTimestamp();

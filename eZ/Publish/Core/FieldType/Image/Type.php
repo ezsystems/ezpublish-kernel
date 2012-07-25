@@ -147,7 +147,7 @@ class Type extends FieldType
      *
      * @return mixed
      */
-    public function toHash( $value )
+    public function toHash( Value $value )
     {
         throw new \Exception( "Not implemented yet" );
         return $value->value;
