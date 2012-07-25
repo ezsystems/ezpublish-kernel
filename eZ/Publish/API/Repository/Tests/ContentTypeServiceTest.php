@@ -2134,10 +2134,10 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'user' );
 
         // This call will fail with a "BadStateException" because there is at
-        // least on content object of type "article" in an eZ Publish demo
+        // least on content object of type "user" in an eZ Publish demo
         $contentTypeService->deleteContentType( $contentType );
         /* END: Use Case */
     }
