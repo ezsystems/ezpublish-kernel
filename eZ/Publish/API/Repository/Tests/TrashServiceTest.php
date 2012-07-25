@@ -158,15 +158,15 @@ class TrashServiceTest extends BaseTrashServiceTest
         $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
-        $homeLocationId = $this->generateId( 'location', 2 );
+        $baseLocationId = $this->generateId( 'location', 1 );
 
-        $childCount = $locationService->loadLocation( $homeLocationId )->childCount;
+        $childCount = $locationService->loadLocation( $baseLocationId )->childCount;
 
         $this->createTrashItem();
 
         $this->assertEquals(
             $childCount - 1,
-            $locationService->loadLocation( $homeLocationId )->childCount
+            $locationService->loadLocation( $baseLocationId )->childCount
         );
     }
 
@@ -315,7 +315,8 @@ class TrashServiceTest extends BaseTrashServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\TrashService::recover($trashItem, $newParentLocation)
-     * @d epends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
+     * @todo Fix naming
      */
     public function testRecoverWithLocationCreateStructParameter()
     {
@@ -473,8 +474,8 @@ class TrashServiceTest extends BaseTrashServiceTest
             $searchResult
         );
 
-        // 23 trashed locations from the sub tree
-        $this->assertEquals( 23, $searchResult->count );
+        // 4 trashed locations from the sub tree
+        $this->assertEquals( 4, $searchResult->count );
     }
 
     /**
@@ -523,16 +524,16 @@ class TrashServiceTest extends BaseTrashServiceTest
         $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
-        $supportLocationId = $this->generateId( 'location', 96 );
+        $demoDesignLocationId = $this->generateId( 'location', 56 );
         /* BEGIN: Use Case */
-        // $supportLocationId is the ID of the "Support" location in an eZ
+        // $demoDesignLocationId is the ID of the "Demo Design" location in an eZ
         // Publish demo installation
 
         $trashItem = $this->createTrashItem();
 
         // Trash one more location
         $trashService->trash(
-            $locationService->loadLocation( $supportLocationId )
+            $locationService->loadLocation( $demoDesignLocationId )
         );
 
         // Empty the trash
@@ -546,7 +547,7 @@ class TrashServiceTest extends BaseTrashServiceTest
             )
         );
 
-        // Load all trashed locations, should only contain the support location
+        // Load all trashed locations, should only contain the Demo Design location
         $searchResult = $trashService->findTrashItems( $query );
         /* END: Use Case */
 
@@ -558,9 +559,9 @@ class TrashServiceTest extends BaseTrashServiceTest
             $searchResult->items
         );
 
-        $this->assertEquals( 33, $searchResult->count );
+        $this->assertEquals( 4, $searchResult->count );
         $this->assertTrue(
-            array_search( $supportLocationId, $foundIds ) !== false
+            array_search( $demoDesignLocationId, $foundIds ) !== false
         );
     }
 
