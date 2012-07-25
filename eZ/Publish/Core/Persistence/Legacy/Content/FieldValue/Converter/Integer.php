@@ -92,12 +92,12 @@ class Integer implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
+        $fieldDef->fieldTypeConstraints->validators = array(
+            self::FLOAT_VALIDATOR_IDENTIFIER => array( 'minIntegerValue' => false, 'maxIntegerValue' => false )
+        );
+
         if ( $storageDef->dataInt4 !== self::NO_MIN_MAX_VALUE )
         {
-            $fieldDef->fieldTypeConstraints->validators = array(
-                self::FLOAT_VALIDATOR_IDENTIFIER => array( 'minIntegerValue' => false, 'maxIntegerValue' => false )
-            );
-
             if ( !empty( $storageDef->dataInt1 ) )
             {
                 $fieldDef->fieldTypeConstraints

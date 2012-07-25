@@ -92,6 +92,12 @@ class IntegerIntergrationTest extends BaseIntegrationTest
             // properties
             array( 'fieldType', 'ezint' ),
             array( 'fieldTypeConstraints', new Content\FieldTypeConstraints( array(
+                'validators' => array(
+                    'IntegerValueValidator' => array(
+                        'minIntegerValue' => false,
+                        'maxIntegerValue' => false,
+                    ),
+                ),
             ) ) ),
         );
     }
