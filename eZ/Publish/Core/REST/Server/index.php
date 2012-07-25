@@ -196,6 +196,9 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/content/locations/[0-9/]+$)' => array(
             'GET'    => array( $locationController, 'loadLocation' ),
         ),
+        '(^/content/locations/[0-9/]+/children$)' => array(
+            'GET'    => array( $locationController, 'loadLocationChildren' ),
+        ),
         '(^/user/roles$)' => array(
             'GET' => array( $roleController, 'listRoles' ),
             'POST' => array( $roleController, 'createRole' ),

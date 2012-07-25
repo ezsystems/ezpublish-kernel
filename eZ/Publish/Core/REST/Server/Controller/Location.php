@@ -118,7 +118,28 @@ class Location
             $this->locationService->loadLocations(
                 $this->contentService->loadContentInfo( $values['object'] )
             ),
-            $values['object']
+            $request->path
+        );
+    }
+
+    /**
+     * Loads child locations of a location
+     *
+     * @param \Qafoo\RMF\Request $request
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     */
+    public function loadLocationChildren( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'locationChildren', $request->path );
+
+        $locationId = explode( '/', $values['location'] );
+        $locationId = implode( '', array_slice( $locationId, 0, count( $locationId ) - 1 ) );
+
+        return new Values\LocationList(
+            $this->locationService->loadLocationChildren(
+                $this->locationService->loadLocation( $locationId )
+            ),
+            $request->path
         );
     }
 }

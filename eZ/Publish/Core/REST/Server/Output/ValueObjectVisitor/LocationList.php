@@ -30,10 +30,7 @@ class LocationList extends ValueObjectVisitor
         $generator->startElement( 'LocationList' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'LocationList' ) );
 
-        $generator->startAttribute(
-            'href',
-            $this->urlHandler->generate( 'objectLocations', array( 'object' => $data->contentId ) )
-        );
+        $generator->startAttribute( 'href', $data->path );
         $generator->endAttribute( 'href' );
 
         $generator->startList( 'Location' );

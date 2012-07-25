@@ -28,7 +28,7 @@ class LocationListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $locationList = new LocationList( array(), 42 );
+        $locationList = new LocationList( array(), '/content/objects/42/locations' );
 
         $visitor->visit(
             $this->getVisitorMock(),

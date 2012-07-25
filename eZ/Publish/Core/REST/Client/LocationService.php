@@ -235,7 +235,15 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      */
     public function loadLocationChildren( Location $location, $offset = 0, $limit = -1 )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $location->id . '/children',
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'LocationList' ) )
+            )
+        );
+
+        return $this->inputDispatcher->parse( $response );
     }
 
     /**

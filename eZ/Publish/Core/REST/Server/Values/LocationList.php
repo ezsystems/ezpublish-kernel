@@ -22,22 +22,22 @@ class LocationList
     public $locations;
 
     /**
-     * ID of content this locations belong to
+     * Path used to load this list of locations
      *
-     * @var mixed
+     * @var string
      */
-    public $contentId;
+    public $path;
 
     /**
      * Construct
      *
      * @param array $locations
-     * @param mixed $contentId
+     * @param string $path
      */
-    public function __construct( array $locations, $contentId )
+    public function __construct( array $locations, $path )
     {
         $this->locations = $locations;
-        $this->contentId = $contentId;
+        $this->path = $path;
     }
 }
 
