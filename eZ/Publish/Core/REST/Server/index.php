@@ -79,6 +79,7 @@ $inputDispatcher = new Common\Input\Dispatcher(
         'application/vnd.ez.api.limitation'      => new Input\Parser\Limitation( $urlHandler ),
         'application/vnd.ez.api.RoleAssignInput' => new Input\Parser\RoleAssignInput( $urlHandler ),
         'application/vnd.ez.api.LocationCreate'  => new Input\Parser\LocationCreate( $urlHandler, $repository->getLocationService() ),
+        'application/vnd.ez.api.LocationUpdate'  => new Input\Parser\LocationUpdate( $urlHandler, $repository->getLocationService() ),
     ) ),
     $handler
 );
@@ -195,6 +196,7 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^/content/locations/[0-9/]+$)' => array(
             'GET'    => array( $locationController, 'loadLocation' ),
+            'PATCH'  => array( $locationController, 'updateLocation' ),
         ),
         '(^/content/locations/[0-9/]+/children$)' => array(
             'GET'    => array( $locationController, 'loadLocationChildren' ),

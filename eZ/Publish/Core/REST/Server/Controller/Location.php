@@ -142,4 +142,28 @@ class Location
             $request->path
         );
     }
+
+    /**
+     * Updates a location
+     *
+     * @param \Qafoo\RMF\Request $request
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     */
+    public function updateLocation( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'location', $request->path );
+
+        $locationId = explode( '/', $values['location'] );
+        $locationId = implode( '', array_slice( $locationId, 0, count( $locationId ) - 1 ) );
+
+        return $this->locationService->updateLocation(
+            $this->locationService->loadLocation( $locationId ),
+            $this->inputDispatcher->parse(
+                new Message(
+                    array( 'Content-Type', $request->contentType ),
+                    $request->body
+                )
+            )
+        );
+    }
 }

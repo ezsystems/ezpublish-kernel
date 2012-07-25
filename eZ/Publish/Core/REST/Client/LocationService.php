@@ -179,7 +179,17 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      */
     public function updateLocation( Location $location, LocationUpdateStruct $locationUpdateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $inputMessage = $this->outputVisitor->visit( $locationUpdateStruct );
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Location' );
+        $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
+
+        $result = $this->client->request(
+            'POST',
+            $location->id,
+            $inputMessage
+        );
+
+        return $this->inputDispatcher->parse( $result );
     }
 
     /**
