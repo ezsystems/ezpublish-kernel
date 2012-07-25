@@ -65,6 +65,7 @@ $repository = new Client\IntegrationTestRepository(
                 'application/vnd.ez.api.RoleAssignmentList' => new Client\Input\Parser\RoleAssignmentList(),
                 'application/vnd.ez.api.RoleAssignment'     => new Client\Input\Parser\RoleAssignment(),
                 'application/vnd.ez.api.Location'           => new Client\Input\Parser\Location(),
+                'application/vnd.ez.api.LocationList'       => new Client\Input\Parser\LocationList(),
             )
         ),
         array(

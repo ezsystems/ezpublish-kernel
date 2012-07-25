@@ -208,11 +208,19 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\Location $rootLocation
      *
-     * @return array An array of {@link Location}
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
      */
     public function loadLocations( ContentInfo $contentInfo, Location $rootLocation = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $contentInfo->id . '/locations',
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'LocationList' ) )
+            )
+        );
+
+        return $this->inputDispatcher->parse( $response );
     }
 
     /**

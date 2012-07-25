@@ -103,4 +103,22 @@ class Location
 
         return $this->locationService->loadLocation( $locationId );
     }
+
+    /**
+     * Loads all locations for content object
+     *
+     * @param \Qafoo\RMF\Request $request
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     */
+    public function loadLocationsForContent( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'objectLocations', $request->path );
+
+        return new Values\LocationList(
+            $this->locationService->loadLocations(
+                $this->contentService->loadContentInfo( $values['object'] )
+            ),
+            $values['object']
+        );
+    }
 }
