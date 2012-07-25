@@ -123,7 +123,7 @@ class Type extends FieldType
         if ( $value->value instanceof DateTime )
             $timestamp = $value->value->getTimestamp();
 
-        return array( 'sort_key_int' => $timestamp );
+        return $timestamp;
     }
 
     /**

@@ -94,7 +94,7 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
-        return array( 'sort_key_int' => (int)$value->bool );
+        return (int) $value->bool;
     }
 
     /**

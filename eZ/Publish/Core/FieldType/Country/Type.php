@@ -135,9 +135,7 @@ class Type extends FieldType
 
         sort( $countries );
 
-        return array(
-            'sort_key_string' => implode( ",", $countries )
-        );
+        return implode( ",", $countries );
     }
 
     /**
