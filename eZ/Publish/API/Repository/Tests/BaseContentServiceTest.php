@@ -178,7 +178,7 @@ abstract class BaseContentServiceTest extends BaseTest
 
         $contentUpdate->setField( 'name', 'An awesome multi-lang forum²' );
 
-        $contentUpdate->setField( 'name', 'An awesome multi-lang form²³', 'eng-GB' );
+        $contentUpdate->setField( 'name', 'An awesome multi-lang forum²³', 'eng-GB' );
 
         $draft = $contentService->updateContent(
             $draft->getVersionInfo(),

@@ -43,7 +43,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // Create a content type
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
 
         $contentService = $repository->getContentService();
 
@@ -235,10 +235,10 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentTypeService = $repository->getContentTypeService();
         $contentService = $repository->getContentService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
 
         $contentCreate1 = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
-        $contentCreate1->setField( 'title', 'An awesome story about eZ Publish' );
+        $contentCreate1->setField( 'name', 'An awesome Sidelfingen forum' );
 
         $contentCreate1->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate1->alwaysAvailable = true;
@@ -246,7 +246,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentService->createContent( $contentCreate1 );
 
         $contentCreate2 = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreate2->setField( 'title', 'Another awesome story about eZ Publish' );
+        $contentCreate2->setField( 'name', 'An awesome Bielefeld forum' );
 
         $contentCreate2->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate2->alwaysAvailable = false;
@@ -300,16 +300,16 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $parentLocationId = $this->generateId( 'location', 167 );
+        $parentLocationId = $this->generateId( 'location', 56 );
         /* BEGIN: Use Case */
-        // $parentLocationId is the location id of the "Home > Demo Design" node
+        // $parentLocationId is a valid location ID
 
         $contentService = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
         $locationService = $repository->getLocationService();
 
         // Load content type
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
 
         // Configure new locations
         $locationCreate1 = $locationService->newLocationCreateStruct( $parentLocationId );
@@ -331,7 +331,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // Configure new content object
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
 
-        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+        $contentCreate->setField( 'name', 'A awesome Sindelfingen forum' );
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
 
@@ -890,7 +890,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $this->assertEquals(
             array(
-                'fieldCount' => 4,
+                'fieldCount' => 2,
                 'relationCount' => 0
             ),
             array(
@@ -1158,7 +1158,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'id' => 0,
                     'value' => null,
                     'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'body'
+                    'fieldDefIdentifier' => 'description'
                 )
             ),
             new Field(
@@ -1166,55 +1166,23 @@ class ContentServiceTest extends BaseContentServiceTest
                     'id' => 0,
                     'value' => null,
                     'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'body'
+                    'fieldDefIdentifier' => 'description'
                 )
             ),
             new Field(
                 array(
                     'id' => 0,
-                    'value' => null,
+                    'value' => 'An awesome forum²³',
                     'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'index_title'
+                    'fieldDefIdentifier' => 'name'
                 )
             ),
             new Field(
                 array(
                     'id' => 0,
-                    'value' => null,
+                    'value' => 'An awesome forum²',
                     'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'index_title'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => null,
-                    'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'tags'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => null,
-                    'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'tags'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => 'An awesome²³ story about ezp.',
-                    'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'title'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => 'An awesome² story about ezp.',
-                    'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'title'
+                    'fieldDefIdentifier' => 'name'
                 )
             ),
         );
@@ -1274,7 +1242,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // Now create an update struct and modify some fields
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdateStruct->setField( 'name', 'An awesome² Sindelfingen forum' );
 
         // Don't set this, then the above call without languageCode will fail
         //$contentUpdateStruct->initialLanguageCode = 'eng-US';
@@ -1742,7 +1710,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $contentService = $repository->getContentService();
 
-        // "Media" article content object
+        // "Media" content object
         $mediaContentInfo = $contentService->loadContentInfoByRemoteId( $mediaRemoteId );
 
         // Create a content draft
@@ -1931,17 +1899,17 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id' => 0,
-                    'value' => 'Sindelfingen forum²³',
+                    'value' => null,
                     'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'name'
+                    'fieldDefIdentifier' => 'description'
                 )
             ),
             new Field(
                 array(
                     'id' => 0,
-                    'value' => null,
+                    'value' => 'Sindelfingen forum²³',
                     'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'description'
+                    'fieldDefIdentifier' => 'name'
                 )
             ),
         );
@@ -2020,31 +1988,15 @@ class ContentServiceTest extends BaseContentServiceTest
                     'id' => 0,
                     'value' => null,
                     'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'body'
+                    'fieldDefIdentifier' => 'description'
                 )
             ),
             new Field(
                 array(
                     'id' => 0,
-                    'value' => 'British index title...',
+                    'value' => 'Sindelfingen forum²',
                     'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'index_title'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => null,
-                    'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'tags'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => 'An awesome² story about ezp.',
-                    'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'title'
+                    'fieldDefIdentifier' => 'name'
                 )
             ),
         );
@@ -2058,6 +2010,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages, $versionNo)
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfo
+     * @todo Fix method name to be more descriptive
      */
     public function testLoadContentByContentInfoWithThirdParameter()
     {
@@ -2077,7 +2030,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertEquals(
-            'An awesome story about eZ Publish',
+            'An awesome forum',
             $contentReloaded->getFieldValue( 'name' )
         );
     }
@@ -2398,10 +2351,11 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::copyContent($contentInfo, $destinationLocationCreateStruct, $versionInfo)
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCopyContent
+     * @todo Fix to more descriptive name
      */
     public function testCopyContentWithThirdParameter()
     {
-        $parentLocationId = $this->generateId( 'location', 167 );
+        $parentLocationId = $this->generateId( 'location', 56 );
 
         $repository = $this->getRepository();
 
@@ -2470,7 +2424,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $query = new Query();
         $query->criterion = new Criterion\LogicalAnd(
             array(
-                new Criterion\Field( 'body', Criterion\Operator::LIKE, '*eZ Publish*' )
+                new Criterion\Field( 'title', Criterion\Operator::LIKE, '*eZ Publish*' )
             )
         );
 
@@ -2531,7 +2485,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $query = new Query();
         $query->criterion = new Criterion\LogicalAnd(
             array(
-                new Criterion\Field( 'title', Criterion\Operator::LIKE, '*awesome² story about*' )
+                new Criterion\Field( 'name', Criterion\Operator::LIKE, '*multi-lang forum²*' )
             )
         );
 
@@ -2704,7 +2658,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $query = new Query();
         $query->criterion = new Criterion\LogicalAnd(
             array(
-                new Criterion\Field( 'title', Criterion\Operator::LIKE, '*ez*' )
+                new Criterion\Field( 'name', Criterion\Operator::LIKE, '*a*' )
             )
         );
 
@@ -3951,10 +3905,10 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertAliasesCorrect(
             array(
-                '/Demo Design/An-awesome-story-about-eZ-Publish' => array(
+                '/Design/eZ-publish/An-awesome-forum' => array(
                     'type' => URLAlias::LOCATION,
                     'destination' => $location,
-                    'path' => '/Demo Design/An-awesome-story-about-eZ-Publish',
+                    'path' => '/Design/eZ-publish/An-awesome-forum',
                     'languageCodes' => array( 'eng-US' ),
                     'isHistory' => false,
                     'isCustom' => false,
@@ -3992,28 +3946,28 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertAliasesCorrect(
             array(
-                '/Demo Design/An-awesome-story-about-eZ-Publish' => array(
+                '/Design/eZ-publish/An-awesome-forum' => array(
                     'type' => URLAlias::LOCATION,
                     'destination' => $location,
-                    'path' => '/Demo Design/An-awesome-story-about-eZ-Publish',
+                    'path' => '/Design/eZ-publish/An-awesome-forum',
                     'languageCodes' => array( 'eng-US' ),
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
                 ),
-                '/Demo Design/An-awesome²-story-about-ezp.' => array(
+                '/Design/eZ-publish/An-awesome-forum²' => array(
                     'type' => URLAlias::LOCATION,
                     'destination' => $location,
-                    'path' => '/Demo Design/An-awesome²-story-about-ezp.',
+                    'path' => '/Design/eZ-publish/An-awesome-forum²',
                     'languageCodes' => array( 'eng-US' ),
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
                 ),
-                '/Demo Design/An-awesome²³-story-about-ezp.' => array(
+                '/Design/eZ-publish/An-awesome-forum²³' => array(
                     'type' => URLAlias::LOCATION,
                     'destination' => $location,
-                    'path' => '/Demo Design/An-awesome²³-story-about-ezp.',
+                    'path' => '/Design/eZ-publish/An-awesome-forum²³',
                     'languageCodes' => array( 'eng-GB' ),
                     'isHistory' => false,
                     'isCustom' => false,
@@ -4263,7 +4217,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'id' => 0,
                     'value' => null,
                     'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'body'
+                    'fieldDefIdentifier' => 'description'
                 )
             ),
             new Field(
@@ -4271,55 +4225,23 @@ class ContentServiceTest extends BaseContentServiceTest
                     'id' => 0,
                     'value' => null,
                     'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'body'
+                    'fieldDefIdentifier' => 'description'
                 )
             ),
             new Field(
                 array(
                     'id' => 0,
-                    'value' => 'British index title...',
+                    'value' => 'An awesome multi-lang forum²',
                     'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'index_title'
+                    'fieldDefIdentifier' => 'name'
                 )
             ),
             new Field(
                 array(
                     'id' => 0,
-                    'value' => 'American index title...',
+                    'value' => 'An awesome multi-lang forum²³',
                     'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'index_title'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => null,
-                    'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'tags'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => null,
-                    'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'tags'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => 'An awesome² story about ezp.',
-                    'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'title'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => 'An awesome²³ story about ezp.',
-                    'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'title'
+                    'fieldDefIdentifier' => 'name'
                 )
             ),
         );
