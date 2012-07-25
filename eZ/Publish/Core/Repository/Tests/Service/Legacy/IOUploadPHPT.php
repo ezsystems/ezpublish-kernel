@@ -23,8 +23,8 @@ class IOUploadPHPT extends PHPUnit_Extensions_PhptTestCase
 
     // this method needs to be public static so upload.phpt test
     // can get ahold of Repository object
-    public static function getRepository( array $serviceSettings )
+    public static function getRepository()
     {
-        return include 'common.php';
+        return Utils::getRepository();
     }
 }

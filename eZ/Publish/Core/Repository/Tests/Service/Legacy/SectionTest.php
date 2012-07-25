@@ -15,11 +15,11 @@ use eZ\Publish\Core\Repository\Tests\Service\SectionBase as BaseSectionServiceTe
  */
 class SectionTest extends BaseSectionServiceTest
 {
-    protected function getRepository( array $serviceSettings )
+    protected function getRepository()
     {
         try
         {
-            return include 'common.php';
+            return Utils::getRepository();
         }
         catch ( \Exception $e )
         {

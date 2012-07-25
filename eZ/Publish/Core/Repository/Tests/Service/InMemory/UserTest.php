@@ -15,8 +15,8 @@ use eZ\Publish\Core\Repository\Tests\Service\UserBase as BaseUserServiceTest;
  */
 class UserTest extends BaseUserServiceTest
 {
-    protected function getRepository( array $serviceSettings )
+    protected function getRepository()
     {
-        return Utils::getRepository( $serviceSettings );
+        return Utils::getRepository();
     }
 }

@@ -37,11 +37,8 @@ class IOTest extends BaseIOServiceTest
         return new IOUploadPHPT();
     }
 
-    protected function getRepository( array $serviceSettings )
+    protected function getRepository()
     {
-        if ( !class_exists( 'eZClusterFileHandler' ) )
-            $this->markTestSkipped( 'Cluster files could not be loaded' );
-
         try
         {
             if ( !isset( $_ENV['legacyKernel'] ) )
@@ -51,9 +48,7 @@ class IOTest extends BaseIOServiceTest
                 );
             }
 
-            $repository = include 'common.php';
-            $repository->setLegacyKernel( $_ENV['legacyKernel'] );
-            return $repository;
+            return Utils::getRepository();
         }
         catch ( \Exception $e )
         {
