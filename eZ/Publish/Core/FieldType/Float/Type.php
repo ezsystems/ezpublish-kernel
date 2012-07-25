@@ -122,7 +122,7 @@ class Type extends FieldType
      *
      * @return mixed
      */
-    public function toHash( Value $value )
+    public function toHash( $value )
     {
         return $value->value;
     }

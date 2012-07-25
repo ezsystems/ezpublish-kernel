@@ -102,7 +102,7 @@ class Type extends FieldType
      * @return mixed
      * @TODO: Implement.
      */
-    public function toHash( Value $value )
+    public function toHash( $value )
     {
     }
 

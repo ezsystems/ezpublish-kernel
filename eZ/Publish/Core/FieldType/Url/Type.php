@@ -129,7 +129,7 @@ class Type extends FieldType
      *
      * @return mixed
      */
-    public function toHash( Value $value )
+    public function toHash( $value )
     {
         return array( "link" => $value->link, "text" => $value->text );
     }
@@ -148,7 +148,7 @@ class Type extends FieldType
      * The $externalData property in the FieldValue is used for storing data externally by the
      * FieldStorage interface method storeFieldData.
      *
-     * The FieldValue::sortKey is build by the field type for using by sort operations.
+     * The FieldValuer::sortKey is build by the field type for using by sort operations.
      *
      * @see \eZ\Publish\SPI\Persistence\Content\FieldValue
      *
