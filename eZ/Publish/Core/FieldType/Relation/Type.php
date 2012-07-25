@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\FieldType\FieldType\Relation;
 use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
@@ -30,16 +31,22 @@ class Type extends FieldType
     /**
      * Build a Value object of current FieldType
      *
-     * Build a FiledType\Value object with the provided $text as value.
+     * Build a FiledType\Value object with the provided $destinationContentInfo as value.
      *
-     * @param mixed $contentId
-     * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value
+     * @param \eZ\Publish\Core\Repository\Values\Content\ContentInfo $destinationContentInfo
+     * @return \eZ\Publish\Core\Repository\FieldType\Relation\Value
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function buildValue( /*$fromContentId, $toContentId*/ )
+    public function buildValue( $destinationContentInfo )
     {
-        throw new \Exception( "Not implemented yet " );
-        // return new Value( $text );
+        if ( !$destinationContentInfo instanceof ContentInfo )
+            throw new InvalidArgumentType(
+                '$destinationContentInfo',
+                'eZ\\Publish\\Core\\Repository\\Values\\Content\\ContentInfo',
+                $destinationContentInfo
+            );
+
+        return new Value( $destinationContentInfo );
     }
 
     /**
@@ -56,11 +63,11 @@ class Type extends FieldType
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value
+     * @return \eZ\Publish\Core\Repository\FieldType\Relation\Value
      */
     public function getDefaultDefaultValue()
     {
-        return new Value( '' );
+        return new Value();
     }
 
     /**
@@ -79,17 +86,17 @@ class Type extends FieldType
         {
             throw new InvalidArgumentType(
                 '$inputValue',
-                'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\Value',
+                'eZ\\Publish\\Core\\Repository\\FieldType\\Relation\\Value',
                 $inputValue
             );
         }
 
-        if ( !is_string( $inputValue->text ) )
+        if ( !$inputValue->destinationContent instanceof ContentInfo ) )
         {
             throw new InvalidArgumentType(
-                '$inputValue->text',
-                'string',
-                $inputValue->text
+                '$inputValue->destinationContent',
+                '\eZ\Publish\Core\Repository\Values\Content\ContentInfo',
+                $inputValue->destinationContent
             );
         }
 
@@ -104,7 +111,7 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
-        return $value->text;
+        return (string)$value;
     }
 
     /**
@@ -112,23 +119,23 @@ class Type extends FieldType
      *
      * @param mixed $hash
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value $value
+     * @return \eZ\Publish\Core\Repository\FieldType\Relation\Value $value
      */
     public function fromHash( $hash )
     {
-        return new Value( $hash );
+        return new Value( $hash['destinationContentId'] );
     }
 
     /**
      * Converts a $Value to a hash
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\TextLine\Value $value
+     * @param \eZ\Publish\Core\Repository\FieldType\Relation\Value $value
      *
      * @return mixed
      */
     public function toHash( $value )
     {
-        return $value->text;
+        return array( 'destinationContentId' => $value->destinationContent->contentId );
     }
 
     /**
@@ -139,6 +146,39 @@ class Type extends FieldType
     public function isSearchable()
     {
         return true;
+    }
+
+    /**
+     * Converts a $value to a persistence value
+     *
+     * @param mixed $value
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
+     */
+    public function toPersistenceValue( $value )
+    {
+        // @todo Evaluate if creating the sortKey in every case is really needed
+        //       Couldn't this be retrieved with a method, which would initialize
+        //       that info on request only?
+        return new FieldValue(
+            array(
+                "data" => $this->toHash( $value ),
+                "externalData" => $this->toHash( $value ),
+                "sortKey" => null,
+            )
+        );
+    }
+
+    /**
+     * @see \eZ\Publish\Core\FieldType
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
+     *
+     * @return mixed
+     */
+    public function fromPersistenceValue( FieldValue $fieldValue )
+    {
+        return $this->fromHash( $fieldValue->data );
     }
 
     /**

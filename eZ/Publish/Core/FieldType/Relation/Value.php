@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\FieldType\Relation;
-use eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
+use eZ\Publish\Core\FieldType\Value as BaseValue,
     eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 
 /**
