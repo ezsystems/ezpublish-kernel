@@ -25,9 +25,6 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\Core\Repository\ObjectStateService,
     eZ\Publish\API\Repository\Values\ValueObject,
     eZ\Publish\API\Repository\Values\User\User,
-    eZ\Publish\Legacy\LegacyKernelAware,
-    eZ\Publish\Legacy\Kernel as LegacyKernel,
-    eZ\Publish\Legacy\Kernel\Loader as LegacyKernelLoader,
     Exception,
     LogicException,
     RuntimeException;
@@ -36,7 +33,7 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
  * Repository class
  * @package eZ\Publish\Core\Repository
  */
-class Repository implements RepositoryInterface, LegacyKernelAware
+class Repository implements RepositoryInterface
 {
     /**
      * Repository Handler object
@@ -183,7 +180,6 @@ class Repository implements RepositoryInterface, LegacyKernelAware
             'io' => array(),
             'objectState' => array(),
             'search' => array(),
-            'legacy' => array(),
             'fieldType' => array(),
         );
 
@@ -569,60 +565,5 @@ class Repository implements RepositoryInterface, LegacyKernelAware
         {
             throw new RuntimeException( $e->getMessage(), 0, $e );
         }
-    }
-
-    /**
-     * Injects the legacy kernel instance.
-     *
-     * @param \eZ\Publish\Legacy\Kernel $legacyKernel
-     * @return void
-     */
-    public function setLegacyKernel( LegacyKernel $legacyKernel )
-    {
-        $this->serviceSettings['legacy']['kernel'] = $legacyKernel;
-        if ( $this->ioHandler instanceof LegacyKernelAware )
-            $this->ioHandler->setLegacyKernel( $legacyKernel );
-    }
-
-    /**
-     * Gets the legacy kernel instance.
-     *
-     * @return \eZ\Publish\Legacy\Kernel
-     * @throws \eZ\Publish\Core\Base\Exceptions\BadConfiguration
-     */
-    protected function getLegacyKernel()
-    {
-        if ( !isset( $this->serviceSettings['legacy']['kernel'] ) )
-        {
-            if ( !isset( $this->serviceSettings['legacy']['legacy_root_dir'] ) )
-            {
-                throw new BadConfiguration(
-                    "serviceSettings['legacy']['legacy_root_dir']",
-                    "You need to provide the path to eZ Publish legacy to be able to use the legacy kernel"
-                );
-            }
-
-            $originalRootDir = isset( $this->serviceSettings['legacy']['webroot_dir'] ) ? $this->serviceSettings['legacy']['webroot_dir'] : getcwd();
-            if ( !isset( $this->serviceSettings['legacy']['kernel_loader'] ) )
-            {
-                $this->serviceSettings['legacy']['kernel_loader'] = new LegacyKernelLoader(
-                    $this->serviceSettings['legacy']['legacy_root_dir'],
-                    $originalRootDir
-                );
-            }
-
-            if ( !isset( $this->serviceSettings['legacy']['kernel_handler'] ) )
-            {
-                throw new BadConfiguration(
-                    "serviceSettings['legacy']['kernel_handler']",
-                    "You need to provide a legacy kernel handler"
-                );
-            }
-
-            $kernelClosure = $this->serviceSettings['legacy']['kernel_loader']->buildLegacyKernel( $this->serviceSettings['legacy']['kernel_handler'] );
-            $this->setLegacyKernel( $kernelClosure() );
-        }
-
-        return $this->serviceSettings['legacy']['kernel'];
     }
 }
