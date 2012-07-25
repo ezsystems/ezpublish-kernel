@@ -101,7 +101,13 @@ abstract class BaseIntegrationTest extends TestCase
      * also needs to be asserted. Make sure you implement this method agnostic
      * to the used SPI\Persistence implementation!
      */
-    abstract public function assertLoadedFieldDataCorrect( Field $field );
+    public function assertLoadedFieldDataCorrect( Field $field )
+    {
+        $this->assertEquals(
+            $this->getInitialValue(),
+            $field->value
+        );
+    }
 
     /**
      * Get update field value.
@@ -124,7 +130,13 @@ abstract class BaseIntegrationTest extends TestCase
      *
      * @return void
      */
-    abstract public function assertUpdatedFieldDataCorrect( Field $field );
+    public function assertUpdatedFieldDataCorrect( Field $field )
+    {
+        $this->assertEquals(
+            $this->getUpdatedValue(),
+            $field->value
+        );
+    }
 
     /**
      * Method called after content creation

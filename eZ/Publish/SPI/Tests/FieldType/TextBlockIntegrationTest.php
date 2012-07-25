@@ -114,23 +114,6 @@ class TextBlockIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Asserts that the loaded field data is correct
-     *
-     * Performs assertions on the loaded field, mainly checking that the
-     * $field->value->externalData is loaded correctly. If the loading of
-     * external data manipulates other aspects of $field, their correctness
-     * also needs to be asserted. Make sure you implement this method agnostic
-     * to the used SPI\Persistence implementation!
-     */
-    public function assertLoadedFieldDataCorrect( Field $field )
-    {
-        $this->assertEquals(
-            $this->getInitialValue(),
-            $field->value
-        );
-    }
-
-    /**
      * Get update field value.
      *
      * Use to update the field
@@ -144,26 +127,6 @@ class TextBlockIntergrationTest extends BaseIntegrationTest
             'externalData' => null,
             'sortKey'      => null,
         ) );
-    }
-
-    /**
-     * Asserts that the updated field data is loaded correct
-     *
-     * Performs assertions on the loaded field after it has been updated,
-     * mainly checking that the $field->value->externalData is loaded
-     * correctly. If the loading of external data manipulates other aspects of
-     * $field, their correctness also needs to be asserted. Make sure you
-     * implement this method agnostic to the used SPI\Persistence
-     * implementation!
-     *
-     * @return void
-     */
-    public function assertUpdatedFieldDataCorrect( Field $field )
-    {
-        $this->assertEquals(
-            $this->getUpdatedValue(),
-            $field->value
-        );
     }
 }
 
