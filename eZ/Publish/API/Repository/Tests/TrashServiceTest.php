@@ -231,8 +231,6 @@ class TrashServiceTest extends BaseTrashServiceTest
      */
     public function testRecover()
     {
-        $this->markTestIncomplete( 'Fix URLAlias generation (generate NOOP if parent alias is missing).' );
-
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
@@ -347,7 +345,7 @@ class TrashServiceTest extends BaseTrashServiceTest
                 'depth' => $newParentLocation->depth + 1,
                 'hidden' => false,
                 'invisible' => $trashItem->invisible,
-                'pathString' => "/1/2/" . $this->parseId( 'location', $location->id ) . "/",
+                'pathString' => $newParentLocation->pathString . $this->parseId( 'location', $location->id ) . "/",
                 'priority' => 4,
                 'sortField' => Location::SORT_FIELD_PUBLISHED,
                 'sortOrder' => Location::SORT_ORDER_DESC,
