@@ -14,7 +14,7 @@ use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
 /**
  * Base test case for database related tests
  */
-class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
     /**
      * DSN used for the DB backend
