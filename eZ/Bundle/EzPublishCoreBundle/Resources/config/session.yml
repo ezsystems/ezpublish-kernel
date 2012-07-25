@@ -1,5 +1,6 @@
 parameters:
     ezpublish.session_set_dynamic_name_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\SessionSetDynamicNameListener
+    ezpublish.session.attribute_bag.storage_key: "_ezpublish"
 
 services:
     ezpublish.session_set_dynamic_name_listener:
@@ -8,3 +9,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    session.attribute_bag:
+        class: %session.attribute_bag.class%
+        arguments: [%ezpublish.session.attribute_bag.storage_key%]

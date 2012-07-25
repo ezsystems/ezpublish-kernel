@@ -49,6 +49,7 @@ class Session implements EventSubscriberInterface
         $sessionInfos['configured'] = false;
         $sessionInfos['started'] = false;
         $sessionInfos['name'] = false;
+        $sessionInfos['namespace'] = false;
         if ( $this->container->has( 'session' ) )
         {
             $sessionInfos['configured'] = true;
@@ -56,6 +57,9 @@ class Session implements EventSubscriberInterface
             $session = $this->container->get( 'session' );
             $sessionInfos['name'] = $session->getName();
             $sessionInfos['started'] = $session->isStarted();
+            $sessionInfos['namespace'] = $this->container->getParameter(
+                'ezpublish.session.attribute_bag.storage_key'
+            );
         }
 
         $event->getParameters()->set( 'session', $sessionInfos );
