@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\DateAndTime;
 use eZ\Publish\Core\FieldType\FieldType,
+    eZ\Publish\Core\FieldType\Value,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     DateTime,
     eZ\Publish\Core\FieldType\ValidationError;
