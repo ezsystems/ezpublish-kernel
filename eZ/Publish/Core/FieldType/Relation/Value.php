@@ -24,13 +24,12 @@ class Value extends BaseValue
     public $destinationContent;
 
     /**
-     * Construct a new Value object and initialize it $text
+     * Construct a new Value object and initialize it $destinationContent
      *
      * @param \eZ\Publish\Core\Repository\Values\Content\ContentInfo $destinationContent Content the relation is to
      */
-    public function __construct( ContentInfo $destinationContent )
+    public function __construct( $destinationContent = null )
     {
-        // @todo type check ?
         $this->destinationContent = $destinationContent;
     }
 
@@ -40,6 +39,6 @@ class Value extends BaseValue
      */
     public function __toString()
     {
-        return $this->destinationContent->name;
+        return $this->destinationContent instanceof ContentInfo ? (string)$this->destinationContent->name : '';
     }
 }
