@@ -4004,7 +4004,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $contentUpdate = $contentService->newContentUpdateStruct();
         $contentUpdate->initialLanguageCode = 'eng-US';
-        $contentUpdate->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdate->setField( 'name', 'Amazing Bielefeld forum' );
 
         $draftVersion2 = $contentService->updateContent(
             $draftVersion2->getVersionInfo(),
@@ -4024,20 +4024,20 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertAliasesCorrect(
             array(
-                '/Demo Design/An-awesome-story-about-eZ-Publish' => array(
+                '/Design/eZ-publish/An-awesome-forum' => array(
                     'type' => URLAlias::LOCATION,
                     'destination' => $location,
-                    'path' => '/Demo Design/An-awesome-story-about-eZ-Publish',
+                    'path' => '/Design/eZ-publish/An-awesome-forum',
                     'languageCodes' => array( 'eng-US' ),
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
                     'alwaysAvailable' => true,
                 ),
-                '/Demo Design/An-awesome²-story-about-ezp.' => array(
+                '/Design/eZ-publish/Amazing-Bielefeld-forum' => array(
                     'type' => URLAlias::LOCATION,
                     'destination' => $location,
-                    'path' => '/Demo Design/An-awesome²-story-about-ezp.',
+                    'path' => '/Design/eZ-publish/Amazing-Bielefeld-forum',
                     'languageCodes' => array( 'eng-US' ),
                     'isHistory' => false,
                     'isCustom' => false,
