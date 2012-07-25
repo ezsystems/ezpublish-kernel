@@ -39,7 +39,7 @@ class Country implements Converter
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
         $storageFieldValue->dataText = $value->data;
-        $storageFieldValue->sortKeyString = $value->sortKey['sort_key_string'];
+        $storageFieldValue->sortKeyString = $value->sortKey;
     }
 
     /**

@@ -46,7 +46,7 @@ class Integer implements Converter
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
         $storageFieldValue->dataInt = $value->data;
-        $storageFieldValue->sortKeyInt = $value->sortKey['sort_key_int'];
+        $storageFieldValue->sortKeyInt = $value->sortKey;
     }
 
     /**
@@ -58,7 +58,7 @@ class Integer implements Converter
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
         $fieldValue->data = $value->dataInt;
-        $fieldValue->sortKey = array( 'sort_key_int' => $value->sortKeyInt );
+        $fieldValue->sortKey = $value->sortKeyInt;
     }
 
     /**

@@ -49,7 +49,7 @@ class DateAndTime implements Converter
         if ( $value->data instanceof DateTime )
             $storageFieldValue->dataInt = $value->data->getTimestamp();
 
-        $storageFieldValue->sortKeyInt = $value->sortKey['sort_key_int'];
+        $storageFieldValue->sortKeyInt = $value->sortKey;
     }
 
     /**
@@ -64,7 +64,7 @@ class DateAndTime implements Converter
         $date->setTimestamp( $value->dataInt );
 
         $fieldValue->data = $date;
-        $fieldValue->sortKey = array( 'sort_key_int' => $value->sortKeyInt );
+        $fieldValue->sortKey = $value->sortKeyInt;
     }
 
     /**
