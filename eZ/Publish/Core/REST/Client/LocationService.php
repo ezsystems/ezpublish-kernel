@@ -130,7 +130,15 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      */
     public function loadLocation( $locationId )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $locationId,
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'Location' ) )
+            )
+        );
+
+        return $this->inputDispatcher->parse( $response );
     }
 
     /**

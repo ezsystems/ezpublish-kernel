@@ -87,4 +87,20 @@ class Location
         $contentInfo = $this->contentService->loadContentInfo( $values['object'] );
         return $this->locationService->createLocation( $contentInfo, $locationCreateStruct );
     }
+
+    /**
+     * Loads a location
+     *
+     * @param \Qafoo\RMF\Request $request
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     */
+    public function loadLocation( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'location', $request->path );
+
+        $locationId = explode( '/', $values['location'] );
+        $locationId = implode( '', array_slice( $locationId, 0, count( $locationId ) - 1 ) );
+
+        return $this->locationService->loadLocation( $locationId );
+    }
 }
