@@ -103,11 +103,19 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $locationCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created Location
-     *
      */
     public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $inputMessage = $this->outputVisitor->visit( $locationCreateStruct );
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Location' );
+
+        $result = $this->client->request(
+            'POST',
+            $contentInfo->id,
+            $inputMessage
+        );
+
+        return $this->inputDispatcher->parse( $result );
     }
 
     /**

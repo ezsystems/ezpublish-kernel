@@ -64,6 +64,7 @@ $repository = new Client\IntegrationTestRepository(
                 'application/vnd.ez.api.PolicyList'         => new Client\Input\Parser\PolicyList(),
                 'application/vnd.ez.api.RoleAssignmentList' => new Client\Input\Parser\RoleAssignmentList(),
                 'application/vnd.ez.api.RoleAssignment'     => new Client\Input\Parser\RoleAssignment(),
+                'application/vnd.ez.api.Location'           => new Client\Input\Parser\Location(),
             )
         ),
         array(
@@ -89,14 +90,15 @@ $repository = new Client\IntegrationTestRepository(
         // value object (or its parent class(es)) to the respective visitor
         // implementation instance.
         array(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct'                  => new Client\Output\ValueObjectVisitor\SectionCreateStruct( $urlHandler ),
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct'                  => new Client\Output\ValueObjectVisitor\SectionUpdateStruct( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct'                   => new Client\Output\ValueObjectVisitor\SectionCreateStruct( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct'                   => new Client\Output\ValueObjectVisitor\SectionUpdateStruct( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Common\\Values\\SectionIncludingContentMetadataUpdateStruct' => new Client\Output\ValueObjectVisitor\SectionIncludingContentMetadataUpdateStruct( $urlHandler ),
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleCreateStruct'                        => new Client\Output\ValueObjectVisitor\RoleCreateStruct( $urlHandler ),
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleUpdateStruct'                        => new Client\Output\ValueObjectVisitor\RoleUpdateStruct( $urlHandler ),
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\PolicyCreateStruct'                      => new Client\Output\ValueObjectVisitor\PolicyCreateStruct( $urlHandler ),
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation'                              => new Client\Output\ValueObjectVisitor\Limitation( $urlHandler ),
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\PolicyUpdateStruct'                      => new Client\Output\ValueObjectVisitor\PolicyUpdateStruct( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleCreateStruct'                         => new Client\Output\ValueObjectVisitor\RoleCreateStruct( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleUpdateStruct'                         => new Client\Output\ValueObjectVisitor\RoleUpdateStruct( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\PolicyCreateStruct'                       => new Client\Output\ValueObjectVisitor\PolicyCreateStruct( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation'                               => new Client\Output\ValueObjectVisitor\Limitation( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\PolicyUpdateStruct'                       => new Client\Output\ValueObjectVisitor\PolicyUpdateStruct( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\LocationCreateStruct'                     => new Client\Output\ValueObjectVisitor\LocationCreateStruct( $urlHandler ),
         )
     ),
     $urlHandler,

@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\ContentService;
 
 use Qafoo\RMF;
 
@@ -44,16 +45,46 @@ class Location
     protected $locationService;
 
     /**
+     * Content service
+     *
+     * @var \eZ\Publish\API\Repository\ContentService
+     */
+    protected $contentService;
+
+    /**
      * Construct controller
      *
      * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\LocationService $locationService
+     * @param \eZ\Publish\API\Repository\ContentService $contentService
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, LocationService $locationService )
+    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, LocationService $locationService, ContentService $contentService )
     {
         $this->inputDispatcher = $inputDispatcher;
         $this->urlHandler      = $urlHandler;
-        $this->locationService     = $locationService;
+        $this->locationService = $locationService;
+        $this->contentService  = $contentService;
+    }
+
+    /**
+     * Creates a new location for the given content object
+     *
+     * @param \Qafoo\RMF\Request $request
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     */
+    public function createLocation( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'objectLocations', $request->path );
+
+        $locationCreateStruct = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type', $request->contentType ),
+                $request->body
+            )
+        );
+
+        $contentInfo = $this->contentService->loadContentInfo( $values['object'] );
+        return $this->locationService->createLocation( $contentInfo, $locationCreateStruct );
     }
 }

@@ -78,6 +78,7 @@ $inputDispatcher = new Common\Input\Dispatcher(
         'application/vnd.ez.api.PolicyUpdate'    => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService() ),
         'application/vnd.ez.api.limitation'      => new Input\Parser\Limitation( $urlHandler ),
         'application/vnd.ez.api.RoleAssignInput' => new Input\Parser\RoleAssignInput( $urlHandler ),
+        'application/vnd.ez.api.LocationCreate'  => new Input\Parser\LocationCreate( $urlHandler, $repository->getLocationService() ),
     ) ),
     $handler
 );
@@ -112,7 +113,8 @@ $roleController = new Controller\Role(
 $locationController = new Controller\Location(
     $inputDispatcher,
     $urlHandler,
-    $repository->getLocationService()
+    $repository->getLocationService(),
+    $repository->getContentService()
 );
 
 /*
@@ -147,6 +149,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PolicyList'           => new Output\ValueObjectVisitor\PolicyList( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation'        => new Output\ValueObjectVisitor\Limitation( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleAssignmentList'   => new Output\ValueObjectVisitor\RoleAssignmentList( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location'       => new Output\ValueObjectVisitor\Location( $urlHandler ),
 );
 
 /*
@@ -184,6 +187,9 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^/content/objects/[0-9]+$)' => array(
             'PATCH' => array( $contentController, 'updateContentMetadata' ),
+        ),
+        '(^/content/objects/[0-9]+/locations$)' => array(
+            'POST' => array( $locationController, 'createLocation' ),
         ),
         '(^/user/roles$)' => array(
             'GET' => array( $roleController, 'listRoles' ),
