@@ -68,8 +68,7 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      *
      * Only for testing
      *
-     * @param mixed tringid
-     * @return void
+     * @param mixed $id
      * @private
      */
     public function setSession( $id )
@@ -107,49 +106,6 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      *
      */
     public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
-    {
-        throw new \Exception( "@TODO: Implement." );
-    }
-
-    /**
-     * Checks if the given $remoteId is already taken by another Location.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     *         if the remoteId exists already.
-     * @param string $remoteId
-     * @return void
-     */
-    protected function checkRemoteIdNotTaken( $remoteId )
-    {
-        throw new \Exception( "@TODO: Implement." );
-    }
-
-    /**
-     * Checks that the given $contentInfo does not occur in the tree starting
-     * at $location.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     *         if the content is in the tree of $location.
-     * @param ContentInfo $contentInfo
-     * @param Location $location
-     * @return void
-     */
-    protected function checkContentNotInTree( ContentInfo $contentInfo, Location $location )
-    {
-        throw new \Exception( "@TODO: Implement." );
-    }
-
-    /**
-     * Checks that the given $contentInfo does not occur in the tree starting
-     * at $location.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     *         if the content is in the tree of $location.
-     * @param ContentInfo $contentInfo
-     * @param Location $location
-     * @return void
-     */
-    protected function checkContentNotInPath( ContentInfo $contentInfo, Location $location )
     {
         throw new \Exception( "@TODO: Implement." );
     }
@@ -206,28 +162,6 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      * @return \eZ\Publish\API\Repository\Values\Content\Location the updated Location
      */
     public function updateLocation( Location $location, LocationUpdateStruct $locationUpdateStruct )
-    {
-        throw new \Exception( "@TODO: Implement." );
-    }
-
-    /**
-     * Checks that the remote ID used in $locationUpdateStruct does not exist
-     *
-     * @param LocationUpdateStruct $locationUpdateStruct
-     * @return void
-     */
-    protected function checkRemoteIdNotExist( LocationUpdateStruct $locationUpdateStruct )
-    {
-        throw new \Exception( "@TODO: Implement." );
-    }
-
-    /**
-     * Returns the data of the given $location as an array
-     *
-     * @param Location $location
-     * @return array
-     */
-    protected function locationToArray( Location $location )
     {
         throw new \Exception( "@TODO: Implement." );
     }
@@ -308,17 +242,6 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
     }
 
     /**
-     * Marks the sub-tree starting at $location invisible
-     *
-     * @param Location $location
-     * @return void
-     */
-    protected function markInvisible( Location $location )
-    {
-        throw new \Exception( "@TODO: Implement." );
-    }
-
-    /**
      * Unhides the $location.
      *
      * This method and marks visible all descendants of $locations
@@ -336,19 +259,6 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
     }
 
     /**
-     * Marks the subtree indicated by $location as visible.
-     *
-     * The process stops, when a hidden location is found in the subtree.
-     *
-     * @param mixed $location
-     * @return void
-     */
-    protected function markVisible( $location )
-    {
-        throw new \Exception( "@TODO: Implement." );
-    }
-
-    /**
      * Deletes $location and all its descendants.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user is not allowed to delete this location or a descendant
@@ -356,17 +266,6 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      */
     public function deleteLocation( Location $location )
-    {
-        throw new \Exception( "@TODO: Implement." );
-    }
-
-    /**
-     * Returns if a location for the given $contentInfo exists.
-     *
-     * @param \eZ\Publish\Core\Repository\Values\Content\ContentInfo $contentInfo
-     * @return boolean
-     */
-    protected function hasLocation( ContentInfo $contentInfo )
     {
         throw new \Exception( "@TODO: Implement." );
     }
@@ -408,4 +307,3 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
         throw new \Exception( "@TODO: Implement." );
     }
 }
-
