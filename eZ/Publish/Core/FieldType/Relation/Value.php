@@ -9,36 +9,37 @@
 
 namespace eZ\Publish\Core\Repository\FieldType\Relation;
 use eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
-    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
-    eZ\Publish\Core\Repository\Values\Content\Relation;
+    eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 
 /**
- * Value for TextLine field type
+ * Value for Relation field type
  */
 class Value extends BaseValue
 {
     /**
-     * Text content
+     * Related content
      *
-     * @var \eZ\Publish\Core\Repository\Values\Content\Relation
+     * @var \eZ\Publish\Core\Repository\Values\Content\ContentInfo
      */
-    public $relation;
+    public $destinationContent;
 
     /**
      * Construct a new Value object and initialize it $text
      *
-     * @param \eZ\Publish\Core\Repository\Values\Content\ContentInfo $destinationContent
+     * @param \eZ\Publish\Core\Repository\Values\Content\ContentInfo $destinationContent Content the relation is to
      */
     public function __construct( ContentInfo $destinationContent )
     {
-        $this->text = $text;
+        // @todo type check ?
+        $this->destinationContent = $destinationContent;
     }
 
     /**
+     * Returns the related content's name
      * @see \eZ\Publish\Core\Repository\FieldType\Value
      */
     public function __toString()
     {
-        return (string)$this->relation->;
+        return $this->destinationContent->name;
     }
 }
