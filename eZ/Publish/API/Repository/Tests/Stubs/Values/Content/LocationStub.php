@@ -226,4 +226,15 @@ class LocationStub extends Location
     {
         $this->depth = $depth;
     }
+
+    /**
+     * FOR TEST USE ONLY!
+     *
+     * @param string $pathString
+     * @return void
+     */
+    public function __setPathString( $pathString )
+    {
+        $this->pathString = $pathString;
+    }
 }

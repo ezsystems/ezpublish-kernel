@@ -811,7 +811,12 @@ class LocationServiceStub implements LocationService
         }
 
         $location->__setChildCount( 0 );
-        $location->__setDepth( $this->locations[$location->parentLocationId]->depth + 1 );
+        $location->__setDepth(
+            $this->locations[$location->parentLocationId]->depth + 1
+        );
+        $location->__setPathString(
+            $this->locations[$location->parentLocationId]->pathString . $location->id . "/"
+        );
 
         $this->locations[$location->parentLocationId]->__setChildCount(
             $this->locations[$location->parentLocationId]->childCount + 1
