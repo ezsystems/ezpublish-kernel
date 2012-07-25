@@ -285,7 +285,7 @@ abstract class BaseIntegrationTest extends TestCase
                 'remoteId' => 'sindelfingen',
             ) ) ),
             'initialLanguageId' => 2,
-            'remoteId'          => 'sindelfingen',
+            'remoteId'          => microtime(),
             'modified'          => time(),
             'fields'            => array(
                 new Content\Field( array(
