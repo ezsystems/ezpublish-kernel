@@ -322,7 +322,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             $userGroup,
             new SubtreeLimitation(
                 array(
-                    'limitationValues' => array( '/1/43/' )
+                    'limitationValues' => array( '/1/48/' )
                 )
             )
         );
