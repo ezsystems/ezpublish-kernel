@@ -92,6 +92,12 @@ class FloatIntergrationTest extends BaseIntegrationTest
             // properties
             array( 'fieldType', 'ezfloat' ),
             array( 'fieldTypeConstraints', new Content\FieldTypeConstraints( array(
+                'validators' => array(
+                    'FloatValueValidator' => array(
+                        'minFloatValue' => false,
+                        'maxFloatValue' => false,
+                    ),
+                ),
             ) ) ),
         );
     }

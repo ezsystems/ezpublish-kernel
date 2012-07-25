@@ -92,6 +92,10 @@ class Float implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
+        $fieldDef->fieldTypeConstraints->validators = array(
+            self::FLOAT_VALIDATOR_IDENTIFIER => array( 'minFloatValue' => false, 'maxFloatValue' => false )
+        );
+
         if ( $storageDef->dataFloat4 !== self::NO_MIN_MAX_VALUE )
         {
             if ( !empty( $storageDef->dataFloat1 ) )
