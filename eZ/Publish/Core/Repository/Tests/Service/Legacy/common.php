@@ -5,6 +5,12 @@
  * @version //autogentag//
  */
 
+/*
+ * ATTENTION: All changes to this file must be synced to
+ * eZ\Publish\API\Repository\Tests\SetupFactory\Legacy
+ *
+ */
+
 namespace eZ\Publish\Core\Repository\Tests\Service\Legacy;
 use eZ\Publish\Core\Base\ConfigurationManager,
     eZ\Publish\Core\Base\ServiceContainer,
