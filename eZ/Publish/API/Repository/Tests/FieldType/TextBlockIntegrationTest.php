@@ -34,7 +34,6 @@ class TextBlockFieldTypeIntergrationTest extends BaseIntegrationTest
      * Get a valid $fieldSettings value
      *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getValidFieldSettings()
     {
@@ -47,7 +46,6 @@ class TextBlockFieldTypeIntergrationTest extends BaseIntegrationTest
      * Get a valid $validatorConfiguration
      *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getValidValidatorConfiguration()
     {
@@ -58,19 +56,18 @@ class TextBlockFieldTypeIntergrationTest extends BaseIntegrationTest
      * Get $fieldSettings value not accepted by the field type
      *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getInvalidFieldSettings()
     {
-        $this->markTestSkipped( "There are no invalid field settings" );
-        return false;
+        return array(
+            'somethingUnknown' => 0,
+        );
     }
 
     /**
      * Get $validatorConfiguration not accepted by the field type
      *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getInvalidValidatorConfiguration()
     {
