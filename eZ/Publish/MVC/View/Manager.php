@@ -136,7 +136,13 @@ class Manager
             $view = $viewProvider->getViewForLocation( $location, $viewType );
             if ( $view instanceof ContentView )
             {
-                return $this->renderContentView( $view, array( 'location' => $location ) );
+                return $this->renderContentView(
+                    $view,
+                    array(
+                         'location' => $location,
+                         'content' => $content
+                    )
+                );
             }
         }
 

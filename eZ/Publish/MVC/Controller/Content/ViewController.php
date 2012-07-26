@@ -62,13 +62,14 @@ class ViewController extends Controller
             return $response;
         }
 
-        // TODO: Use the view manager to generate the response content
-        $generationDate = new \DateTime;
         $response->setContent(
-            "Location #$locationId ($viewMode view mode).
-            Path string is {$location->pathString}.
-            Content name is {$location->getContentInfo()->name}
-            Response generated at {$generationDate->format( 'Y-m-d H:i:s' )}"
+            $this->viewManager->renderLocation(
+                $location,
+                $this
+                    ->repository
+                    ->getContentService()
+                    ->loadContentByContentInfo( $location->getContentInfo() )
+            )
         );
 
         return $response;
