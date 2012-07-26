@@ -732,12 +732,19 @@ class SearchServiceTest extends BaseTest
 
         if ( !is_file( $fixture ) )
         {
-            file_put_contents(
-                $record = $fixture . '.recording',
-                "<?php\n\nreturn " . var_export( $result, true ) . ";\n\n"
-            );
-            // @TODO: Print result in a readable way here?
-            $this->markTestIncomplete( "No fixture available. Result recorded at $record. Result: \n" . $this->printResult( $result ) );
+            if ( isset( $_ENV['ez_tests_record'] ) )
+            {
+                file_put_contents(
+                    $record = $fixture . '.recording',
+                    "<?php\n\nreturn " . var_export( $result, true ) . ";\n\n"
+                );
+                $this->markTestIncomplete( "No fixture available. Set \$_ENV['ez_tests_record'] to generate it." );
+            }
+            else
+            {
+                // @TODO: Print result in a readable way here?
+                $this->markTestIncomplete( "No fixture available. Result recorded at $record. Result: \n" . $this->printResult( $result ) );
+            }
         }
 
         $this->assertEquals(
