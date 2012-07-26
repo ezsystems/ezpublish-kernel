@@ -2141,10 +2141,6 @@ abstract class ContentTypeBase extends BaseServiceTest
         $publishedType = $this->createPublishedContentType();
         // Create draft for current user
         $this->repository->getContentTypeService()->createContentTypeDraft( $publishedType );
-        // Change user
-        $this->repository->setCurrentUser(
-            $this->getStubbedUser( 4096 )
-        );
 
         /* BEGIN: Use case */
         // $publishedType contains a ContentType object

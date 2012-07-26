@@ -814,19 +814,15 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         try
         {
-            $spiContentType = $this->persistenceHandler->contentTypeHandler()->load(
+            $this->persistenceHandler->contentTypeHandler()->load(
                 $contentType->id,
                 SPIContentType::STATUS_DRAFT
             );
-            $currentUser = $this->repository->getCurrentUser();
 
-            if ( $spiContentType->modifierId !== $currentUser->id )
-            {
-                throw new BadStateException(
-                    "\$contentType",
-                    "Modifier of draft (id={$spiContentType->modifierId}) is not the same user as current user (id={$currentUser->id})"
-                );
-            }
+            throw new BadStateException(
+                "\$contentType",
+                "Draft of the ContentType already exists"
+            );
         }
         catch ( APINotFoundException $e )
         {
