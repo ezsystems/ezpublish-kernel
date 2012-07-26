@@ -356,6 +356,33 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     }
 
     /**
+     * Issue with PHP_MAX_INT limit overflow in databases
+     *
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase::find
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::find
+     */
+    public function testFindWithNullLimit()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\ContentId( 10 ),
+            'offset'    => 0,
+            'limit'     => null,
+        ) ) );
+
+        $this->assertEquals(
+            1,
+            $result->totalCount
+        );
+        $this->assertEquals(
+            1,
+            count( $result->searchHits )
+        );
+    }
+
+    /**
      * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase::find
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::find

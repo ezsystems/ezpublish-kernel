@@ -24,6 +24,12 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway,
 class EzcDatabase extends Gateway
 {
     /**
+     * 2^30, since PHP_INT_MAX can cause overflows in DB systems, if PHP is run
+     * on 64 bit systems
+     */
+    const MAX_LIMIT = 1073741824;
+
+    /**
      * Database handler
      *
      * @var EzcDbHandler
@@ -100,7 +106,7 @@ class EzcDatabase extends Gateway
      */
     public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, array $translations = null )
     {
-        $limit = $limit !== null ? $limit : PHP_INT_MAX;
+        $limit = $limit !== null ? $limit : self::MAX_LIMIT;
 
         // Get full object count
         $query = $this->handler->createSelectQuery();
