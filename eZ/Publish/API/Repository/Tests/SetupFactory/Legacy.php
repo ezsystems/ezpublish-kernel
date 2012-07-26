@@ -40,7 +40,7 @@ class Legacy extends SetupFactory
      *
      * @var ServiceContainer
      */
-    protected $serviceContainer;
+    protected static $serviceContainer;
 
     /**
      * Global settings of eZ Publish setup
@@ -207,13 +207,13 @@ class Legacy extends SetupFactory
      */
     protected function initializeSchema()
     {
-        // if ( !self::$schemaInitialized )
-        // {
+        if ( !self::$schemaInitialized )
+        {
             $dbHandler = $this->getDatabaseHandler();
             $statements = $this->getSchemaStatemets();
 
             $this->applyStatements( $statements );
-        // }
+        }
 
         self::$schemaInitialized = true;
     }
@@ -330,7 +330,7 @@ class Legacy extends SetupFactory
      */
     protected function getServiceContainer()
     {
-        if ( !isset( $this->serviceContainer ) )
+        if ( !isset( self::$serviceContainer ) )
         {
             $configManager = $this->getConfigurationManager();
 
@@ -341,12 +341,12 @@ class Legacy extends SetupFactory
             $serviceSettings['persistence_handler_legacy']['arguments']['config']['dsn'] = self::$dsn;
             $serviceSettings['legacy_db_handler']['arguments']['dsn'] = self::$dsn;
 
-            $this->serviceContainer = new ServiceContainer(
+            self::$serviceContainer = new ServiceContainer(
                 $serviceSettings,
                 $this->getDependencyConfiguration()
             );
         }
 
-        return $this->serviceContainer;
+        return self::$serviceContainer;
     }
 }
