@@ -55,12 +55,12 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     {
         $value = new FieldValue;
         $value->data = $this->date;
-        $value->sortKey = array( 'sort_key_int' => $this->date->getTimestamp() );
+        $value->sortKey = $this->date->getTimestamp();
         $storageFieldValue = new StorageFieldValue;
 
         $this->converter->toStorageValue( $value, $storageFieldValue );
         self::assertSame( $value->data->getTimestamp(), $storageFieldValue->dataInt );
-        self::assertSame( $value->sortKey['sort_key_int'], $storageFieldValue->sortKeyInt );
+        self::assertSame( $value->sortKey, $storageFieldValue->sortKeyInt );
         self::assertSame( '', $storageFieldValue->sortKeyString );
     }
 
@@ -80,7 +80,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
         self::assertInstanceOf( 'DateTime', $fieldValue->data );
         self::assertSame( $storageFieldValue->dataInt, $fieldValue->data->getTimestamp() );
-        self::assertSame( $storageFieldValue->sortKeyInt, $fieldValue->sortKey['sort_key_int'] );
+        self::assertSame( $storageFieldValue->sortKeyInt, $fieldValue->sortKey );
     }
 
     /**
