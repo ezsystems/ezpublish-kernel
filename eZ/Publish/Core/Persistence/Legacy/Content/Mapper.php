@@ -17,7 +17,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as LanguageHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
@@ -78,7 +78,7 @@ class Mapper
         $contentInfo->ownerId = $struct->ownerId;
         $contentInfo->isAlwaysAvailable = $struct->alwaysAvailable;
         $contentInfo->remoteId = $struct->remoteId;
-        $contentInfo->mainLanguageCode = $this->languageHandler->getById( $struct->initialLanguageId )->languageCode;
+        $contentInfo->mainLanguageCode = $this->languageHandler->load( $struct->initialLanguageId )->languageCode;
         // For drafts published and modified timestamps should be 0
         $contentInfo->publicationDate = 0;
         $contentInfo->modificationDate = 0;
@@ -302,7 +302,7 @@ class Mapper
                 $versionInfo->creatorId = (int)$row["ezcontentobject_version_creator_id"];
                 $versionInfo->creationDate = (int)$row["ezcontentobject_version_created"];
                 $versionInfo->modificationDate = (int)$row["ezcontentobject_version_modified"];
-                $versionInfo->initialLanguageCode = $this->languageHandler->getById( $row["ezcontentobject_version_initial_language_id"] )->languageCode;
+                $versionInfo->initialLanguageCode = $this->languageHandler->load( $row["ezcontentobject_version_initial_language_id"] )->languageCode;
                 $versionInfo->languageIds = $this->extractLanguageIdsFromMask( (int)$row["ezcontentobject_version_language_mask"] );//array();
                 $versionInfo->status = (int)$row["ezcontentobject_version_status"];
                 $versionInfo->names = array();
@@ -404,7 +404,7 @@ class Mapper
         $struct->locations = array();
         $struct->alwaysAvailable = $content->contentInfo->isAlwaysAvailable;
         $struct->remoteId = md5( uniqid( get_class( $this ), true ) );
-        $struct->initialLanguageId = $this->languageHandler->getByLocale( $content->versionInfo->initialLanguageCode )->id;
+        $struct->initialLanguageId = $this->languageHandler->loadByLanguageCode( $content->versionInfo->initialLanguageCode )->id;
         $struct->modified = time();
 
         foreach ( $content->fields as $field )

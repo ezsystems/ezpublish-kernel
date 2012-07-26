@@ -16,6 +16,7 @@ use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as TypeHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as TypeMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\BasicLookup as BasicLanguageLookup,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler as TrashHandler,
@@ -339,7 +340,7 @@ class Handler implements HandlerInterface
         if ( !isset( $this->languageMaskGenerator ) )
         {
             $this->languageMaskGenerator = new Content\Language\MaskGenerator(
-                $this->contentLanguageHandler()
+                new BasicLanguageLookup( $this->contentLanguageHandler() )
             );
         }
         return $this->languageMaskGenerator;
@@ -518,6 +519,9 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->languageHandler ) )
         {
+            /**
+             * Caching language handler, not suitable for testing
+             *
             $this->languageHandler = new Content\Language\CachingHandler(
                 new Content\Language\Handler(
                     new Content\Language\Gateway\ExceptionConversion(
@@ -526,6 +530,14 @@ class Handler implements HandlerInterface
                     new LanguageMapper()
                 ),
                 $this->getLanguageCache()
+            );
+            */
+
+            $this->languageHandler = new Content\Language\Handler(
+                new Content\Language\Gateway\ExceptionConversion(
+                    new Content\Language\Gateway\EzcDatabase( $this->dbHandler )
+                ),
+                new LanguageMapper()
             );
         }
         return $this->languageHandler;
