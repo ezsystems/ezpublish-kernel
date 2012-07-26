@@ -106,7 +106,7 @@ class CheckboxIntergrationTest extends BaseIntegrationTest
         return new Content\FieldValue( array(
             'data'         => true,
             'externalData' => null,
-            'sortKey'      => null,
+            'sortKey'      => 1,
         ) );
     }
 
@@ -122,7 +122,7 @@ class CheckboxIntergrationTest extends BaseIntegrationTest
         return new Content\FieldValue( array(
             'data'         => false,
             'externalData' => null,
-            'sortKey'      => null,
+            'sortKey'      => 0,
         ) );
     }
 }
