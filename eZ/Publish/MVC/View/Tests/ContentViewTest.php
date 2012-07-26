@@ -71,4 +71,56 @@ class ContentViewTest extends \PHPUnit_Framework_TestCase
         $contentView->setParameters( $params );
         self::assertSame( $params, $contentView->getParameters() );
     }
+
+    /**
+     * @covers \eZ\Publish\MVC\View\ContentView::__construct
+     * @covers \eZ\Publish\MVC\View\ContentView::setParameters
+     * @covers \eZ\Publish\MVC\View\ContentView::getParameters
+     */
+    public function testAddParameters()
+    {
+        $params = array( 'bar' => 'baz', 'fruit' => 'apple' );
+        $contentView = new ContentView( 'foo', $params );
+
+        $additionalParams = array( 'truc' => 'muche', 'laurel' => 'hardy' );
+        $contentView->addParameters( $additionalParams );
+        self::assertSame( $params + $additionalParams, $contentView->getParameters() );
+    }
+
+    /**
+     * @covers \eZ\Publish\MVC\View\ContentView::__construct
+     * @covers \eZ\Publish\MVC\View\ContentView::setParameters
+     * @covers \eZ\Publish\MVC\View\ContentView::getParameters
+     */
+    public function testHasParameter()
+    {
+        $contentView = new ContentView( __METHOD__, array( 'foo' => 'bar' ) );
+        self::assertTrue( $contentView->hasParameter( 'foo' ) );
+        self::assertFalse( $contentView->hasParameter( 'nonExistent' ) );
+        return $contentView;
+    }
+
+    /**
+     * @depends testHasParameter
+     * @covers \eZ\Publish\MVC\View\ContentView::__construct
+     * @covers \eZ\Publish\MVC\View\ContentView::setParameters
+     * @covers \eZ\Publish\MVC\View\ContentView::getParameters
+     */
+    public function testGetParameter( ContentView $contentView )
+    {
+        self::assertSame( 'bar', $contentView->getParameter( 'foo' ) );
+        return $contentView;
+    }
+
+    /**
+     * @depends testGetParameter
+     * @expectedException \InvalidArgumentException
+     * @covers \eZ\Publish\MVC\View\ContentView::__construct
+     * @covers \eZ\Publish\MVC\View\ContentView::setParameters
+     * @covers \eZ\Publish\MVC\View\ContentView::getParameters
+     */
+    public function testGetParameterFail( ContentView $contentView )
+    {
+        $contentView->getParameter( 'nonExistent' );
+    }
 }

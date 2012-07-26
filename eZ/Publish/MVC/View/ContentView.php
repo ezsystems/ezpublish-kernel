@@ -74,11 +74,48 @@ class ContentView
     }
 
     /**
+     * Adds a hash of parameters to the existing parameters
+     *
+     * @param array $parameters
+     */
+    public function addParameters( array $parameters )
+    {
+        $this->parameters += $parameters;
+    }
+
+    /**
      * @return array
      */
     public function getParameters()
     {
         return $this->parameters;
+    }
+
+    /**
+     * Checks if $parameterName exists
+     *
+     * @param string $parameterName
+     * @return bool
+     */
+    public function hasParameter( $parameterName )
+    {
+        return isset( $this->parameters[$parameterName] );
+    }
+
+    /**
+     * Returns parameter value by $parameterName.
+     * Throws an \InvalidArgumentException if $parameterName is not set.
+     *
+     * @param string $parameterName
+     * @return mixed
+     * @throws \InvalidArgumentException
+     */
+    public function getParameter( $parameterName )
+    {
+        if ( $this->hasParameter( $parameterName ) )
+            return $this->parameters[$parameterName];
+
+        throw new \InvalidArgumentException( "Parameter '$parameterName' is not set." );
     }
 
     /**
