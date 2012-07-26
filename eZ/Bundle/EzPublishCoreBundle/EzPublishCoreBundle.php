@@ -14,6 +14,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterStorageEn
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\TwigTweaksPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ContentViewPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -27,5 +28,6 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new RegisterStorageEnginePass );
         $container->addCompilerPass( new LegacyStorageEnginePass );
         $container->addCompilerPass( new TwigTweaksPass );
+        $container->addCompilerPass( new ContentViewPass );
     }
 }
