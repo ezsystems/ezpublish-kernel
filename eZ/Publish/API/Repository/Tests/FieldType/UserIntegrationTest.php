@@ -41,7 +41,6 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      * Get a valid $fieldSettings value
      *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getValidFieldSettings()
     {
@@ -52,7 +51,6 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      * Get a valid $validatorConfiguration
      *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getValidValidatorConfiguration()
     {
@@ -63,7 +61,6 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      * Get $fieldSettings value not accepted by the field type
      *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getInvalidFieldSettings()
     {
@@ -75,7 +72,6 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      * Get $validatorConfiguration not accepted by the field type
      *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getInvalidValidatorConfiguration()
     {
