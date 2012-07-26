@@ -76,4 +76,3 @@ class eZPublish extends Pattern
         'userRoleAssignment'   => '/user/users/{user}/roles/{role}',
     );
 }
-

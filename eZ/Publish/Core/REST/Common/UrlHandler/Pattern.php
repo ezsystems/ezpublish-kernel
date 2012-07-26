@@ -166,4 +166,3 @@ class Pattern implements UrlHandler
         return $url;
     }
 }
-

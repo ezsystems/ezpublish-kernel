@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the a test class
+ * File containing the PatternTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -12,14 +12,13 @@ namespace eZ\Publish\Core\REST\Common\Tests\UrlHandler;
 use eZ\Publish\Core\REST\Common;
 
 /**
- * Test case for operations in the ContentTypeService using in memory storage.
- *
- * @see eZ\Publish\API\Repository\ContentTypeService
- * @group integration
+ * Test for Pattern based url handler
  */
 class PatternTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Tests parsing unknown URL type
+     *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage No URL for type 'unknown' available.
      */
@@ -30,6 +29,8 @@ class PatternTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests parsing invalid pattern
+     *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage Invalid pattern part: '{broken'.
      */
@@ -42,6 +43,8 @@ class PatternTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests parsing when pattern does not match
+     *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage URL '/bar' did not match (^/foo/(?P<foo>[^/]+)$)S.
      */
@@ -54,6 +57,8 @@ class PatternTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test parsing when pattern does not match the end of the URL
+     *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage URL '/foo/23/bar' did not match (^/foo/(?P<foo>[^/]+)$)S.
      */
@@ -65,6 +70,11 @@ class PatternTest extends \PHPUnit_Framework_TestCase
         $urlHandler->parse( 'pattern', '/foo/23/bar' );
     }
 
+    /**
+     * Data provider
+     *
+     * @return array
+     */
     public static function getParseValues()
     {
         return array(
@@ -87,6 +97,8 @@ class PatternTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test parsing URL
+     *
      * @dataProvider getParseValues
      */
     public function testParseUrl( $type, $url, $values )
@@ -100,6 +112,8 @@ class PatternTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test generating unknown URL type
+     *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage No URL for type 'unknown' available.
      */
@@ -110,22 +124,26 @@ class PatternTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test generating URL with missing value
+     *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage No value provided for 'unkown'.
+     * @expectedExceptionMessage No value provided for 'unknown'.
      */
     public function testGenerateMissingValue()
     {
         $urlHandler = new Common\UrlHandler\Pattern( array(
-            'pattern' => '/foo/{unkown}',
+            'pattern' => '/foo/{unknown}',
         ) );
         $urlHandler->generate( 'pattern', array() );
     }
 
     /**
+     * Test generating URL with extra value
+     *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage Unused values in values array: 'bar'.
      */
-    public function testGenerateSuperflousValue()
+    public function testGenerateSuperfluousValue()
     {
         $urlHandler = new Common\UrlHandler\Pattern( array(
             'pattern' => '/foo/{foo}',
@@ -137,6 +155,8 @@ class PatternTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Data provider
+     *
      * @dataProvider getParseValues
      */
     public function testGenerateUrl( $type, $url, $values )
@@ -149,6 +169,11 @@ class PatternTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Returns the URL handler
+     *
+     * @return \eZ\Publish\Core\REST\Common\UrlHandler\Pattern
+     */
     protected function getWorkingUrlHandler()
     {
         return new Common\UrlHandler\Pattern( array(
@@ -157,4 +182,3 @@ class PatternTest extends \PHPUnit_Framework_TestCase
         ) );
     }
 }
-

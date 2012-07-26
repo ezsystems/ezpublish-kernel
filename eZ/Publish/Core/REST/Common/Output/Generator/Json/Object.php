@@ -44,4 +44,3 @@ class Object
         return $this->_ref_parent;
     }
 }
-

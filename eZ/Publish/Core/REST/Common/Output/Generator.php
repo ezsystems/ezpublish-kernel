@@ -316,4 +316,3 @@ abstract class Generator
         }
     }
 }
-
