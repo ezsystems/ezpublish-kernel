@@ -43,12 +43,12 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     {
         $value = new FieldValue;
         $value->data = true;
-        $value->sortKey = array( 'sort_key_int' => 1 );
+        $value->sortKey = 1;
         $storageFieldValue = new StorageFieldValue;
 
         $this->converter->toStorageValue( $value, $storageFieldValue );
         self::assertSame( (int)$value->data, $storageFieldValue->dataInt );
-        self::assertSame( $value->sortKey['sort_key_int'], $storageFieldValue->sortKeyInt );
+        self::assertSame( $value->sortKey, $storageFieldValue->sortKeyInt );
         self::assertSame( '', $storageFieldValue->sortKeyString );
     }
 
@@ -67,7 +67,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
         self::assertSame( (bool)$storageFieldValue->dataInt, $fieldValue->data );
-        self::assertSame( $storageFieldValue->sortKeyInt, $fieldValue->sortKey['sort_key_int'] );
+        self::assertSame( $storageFieldValue->sortKeyInt, $fieldValue->sortKey );
     }
 
     /**
