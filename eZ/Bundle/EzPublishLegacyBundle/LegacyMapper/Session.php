@@ -45,11 +45,12 @@ class Session implements EventSubscriberInterface
      */
     public function onBuildKernelWebHandler( PreBuildKernelWebHandlerEvent $event )
     {
-        $sessionInfos = array();
-        $sessionInfos['configured'] = false;
-        $sessionInfos['started'] = false;
-        $sessionInfos['name'] = false;
-        $sessionInfos['namespace'] = false;
+        $sessionInfos = array(
+            'configured' => false,
+            'started' => false,
+            'name' => false,
+            'namespace' => false
+        );
         if ( $this->container->has( 'session' ) )
         {
             $sessionInfos['configured'] = true;
