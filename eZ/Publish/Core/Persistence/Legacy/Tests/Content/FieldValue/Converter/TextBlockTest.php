@@ -53,12 +53,12 @@ EOT;
     {
         $value = new FieldValue;
         $value->data = $this->longText;
-        $value->sortKey = array( 'sort_key_string' => 'Now that we know who you are' );
+        $value->sortKey = 'Now that we know who you are';
         $storageFieldValue = new StorageFieldValue;
 
         $this->converter->toStorageValue( $value, $storageFieldValue );
         self::assertSame( $value->data, $storageFieldValue->dataText );
-        self::assertSame( $value->sortKey['sort_key_string'], $storageFieldValue->sortKeyString );
+        self::assertSame( $value->sortKey, $storageFieldValue->sortKeyString );
         self::assertSame( 0, $storageFieldValue->sortKeyInt );
     }
 
@@ -76,7 +76,7 @@ EOT;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
         self::assertSame( $storageFieldValue->dataText, $fieldValue->data );
-        self::assertSame( $storageFieldValue->sortKeyString, $fieldValue->sortKey['sort_key_string'] );
+        self::assertSame( $storageFieldValue->sortKeyString, $fieldValue->sortKey );
     }
 
     /**
