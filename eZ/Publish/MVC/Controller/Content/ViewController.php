@@ -47,7 +47,7 @@ class ViewController extends Controller
      * @param string $viewMode
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewLocationAction( $locationId, $viewMode )
+    public function viewLocation( $locationId, $viewMode )
     {
         // Assume that location is cached by the repository
         $location = $this->repository->getLocationService()->loadLocation( $locationId );

@@ -2,5 +2,5 @@
 _ezpublishLocation:
     pattern: /content/location/{locationId}/{viewMode}
     defaults:
-        _controller: ezpublish.controller.content.view:viewLocationAction
+        _controller: ezpublish.controller.content.view:viewLocation
         viewMode: full
