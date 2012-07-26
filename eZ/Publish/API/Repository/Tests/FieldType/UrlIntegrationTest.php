@@ -38,7 +38,7 @@ class UrlFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return null;
+        return array();
     }
 
     /**
@@ -49,7 +49,7 @@ class UrlFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return null;
+        return array();
     }
 
     /**
@@ -60,6 +60,7 @@ class UrlFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
+        $this->markTestSkipped( "There are no invalid field settings" );
         return false;
     }
 
@@ -136,11 +137,11 @@ class UrlFieldTypeIntergrationTest extends BaseIntegrationTest
         return array(
             array(
                 new UrlValue( 23 ),
-                'eZ\\Publish\\API\\Repository\\Exceptions\\ContentValidationException',
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
             array(
                 new UrlValue( 'http://example.com', 23 ),
-                'eZ\\Publish\\API\\Repository\\Exceptions\\ContentValidationException',
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
         );
     }
@@ -257,6 +258,7 @@ class UrlFieldTypeIntergrationTest extends BaseIntegrationTest
                 new UrlValue( 'http://example.com' ),
                 array(
                     'link' => 'http://example.com',
+                    'text' => null,
                 )
             ),
             array(
