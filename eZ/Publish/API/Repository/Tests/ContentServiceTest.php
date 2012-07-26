@@ -34,6 +34,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @see \eZ\Publish\API\Repository\ContentService::newContentCreateStruct()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
+     * @group user
      */
     public function testNewContentCreateStruct()
     {
@@ -59,6 +60,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentCreateStruct
+     * @group user
      */
     public function testCreateContent()
     {

@@ -24,6 +24,7 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @group content
+     * @group user
      * @see \eZ\Publish\API\Repository\Repository::getContentService()
      */
     public function testGetContentService()
@@ -57,6 +58,7 @@ class RepositoryTest extends BaseTest
      * @return void
      * @group content-type
      * @group field-type
+     * @group user
      * @see \eZ\Publish\API\Repository\Repository::getContentTypeService()
      *
      */
