@@ -95,7 +95,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
         $viewProvider
             ->expects( $this->once() )
             ->method( 'getViewForContent' )
-            ->with( $contentInfo )
+            ->with( $contentInfo, 'customViewType' )
             ->will(
                 $this->returnValue(
                     new ContentView( $templateIdentifier, $params )
@@ -112,7 +112,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $expectedTemplateResult ) )
         ;
 
-        self::assertSame( $expectedTemplateResult, $this->viewManager->renderContent( $content ) );
+        self::assertSame( $expectedTemplateResult, $this->viewManager->renderContent( $content, 'customViewType' ) );
     }
 
     /**
@@ -184,7 +184,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
         $viewProvider
             ->expects( $this->once() )
             ->method( 'getViewForLocation' )
-            ->with( $location )
+            ->with( $location, 'customViewType' )
             ->will(
             $this->returnValue(
                 new ContentView( $templateIdentifier, $params )

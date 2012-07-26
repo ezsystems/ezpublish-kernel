@@ -18,6 +18,9 @@ use eZ\Publish\MVC\View\ContentViewProvider,
 
 class Manager
 {
+    const VIEW_TYPE_FULL = 'full',
+          VIEW_TYPE_LINE = 'line';
+
     /**
      * @var \Symfony\Component\Templating\EngineInterface
      */
@@ -93,18 +96,20 @@ class Manager
     }
 
     /**
-     * Renders $content by selecting the right template
+     * Renders $content by selecting the right template.
+     * $content will be injected in the selected template.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     * @return string
+     * @param string $viewType Variation of display for your content. Default is 'full'.
      * @throws \RuntimeException
+     * @return string
      */
-    public function renderContent( Content $content )
+    public function renderContent( Content $content, $viewType = self::VIEW_TYPE_FULL )
     {
         $contentInfo = $content->getVersionInfo()->getContentInfo();
         foreach ( $this->getAllViewProviders() as $viewProvider )
         {
-            $view = $viewProvider->getViewForContent( $contentInfo );
+            $view = $viewProvider->getViewForContent( $contentInfo, $viewType );
             if ( $view instanceof ContentView )
             {
                 return $this->renderContentView( $view, array( 'content' => $content ) );
@@ -115,17 +120,20 @@ class Manager
     }
 
     /**
-     * Renders $location by selecting the right template
+     * Renders $location by selecting the right template for $viewType.
+     * $content and $location will be injected in the selected template.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @return string
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param string $viewType Variation of display for your content. Default is 'full'.
      * @throws \RuntimeException
+     * @return string
      */
-    public function renderLocation( Location $location )
+    public function renderLocation( Location $location, Content $content, $viewType = self::VIEW_TYPE_FULL )
     {
         foreach ( $this->getAllViewProviders() as $viewProvider )
         {
-            $view = $viewProvider->getViewForLocation( $location );
+            $view = $viewProvider->getViewForLocation( $location, $viewType );
             if ( $view instanceof ContentView )
             {
                 return $this->renderContentView( $view, array( 'location' => $location ) );
