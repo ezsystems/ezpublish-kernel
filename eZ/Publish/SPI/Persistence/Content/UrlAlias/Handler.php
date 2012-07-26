@@ -68,8 +68,6 @@ interface Handler
      * @param string|null $languageName
      * @param boolean $alwaysAvailable
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given language
-     *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
     public function createGlobalUrlAlias( $resource, $path, $forwarding = false, $languageName = null, $alwaysAvailable = false );

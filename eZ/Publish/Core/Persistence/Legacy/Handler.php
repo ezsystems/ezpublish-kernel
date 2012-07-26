@@ -30,8 +30,11 @@ use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler as UrlAliasHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper as UrlAliasMapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase as UrlAliasGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler as UrlWildcardHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper as UrlWildcardMapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase as UrlWildcardGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\Core\Persistence\Legacy\User,
@@ -199,6 +202,20 @@ class Handler implements HandlerInterface
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler
      */
     protected $urlAliasHandler;
+
+    /**
+     * UrlAlias gateway
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway
+     */
+    protected $urlAliasGateway;
+
+    /**
+     * UrlAlias mapper
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper
+     */
+    protected $urlAliasMapper;
 
     /**
      * UrlWildcard handler
@@ -731,14 +748,46 @@ class Handler implements HandlerInterface
         if ( !isset( $this->urlAliasHandler ) )
         {
             $this->urlAliasHandler = new UrlAliasHandler(
-                $this->getLocationGateway(),
-                $this->getLocationMapper(),
+                $this->getUrlAliasGateway(),
+                $this->getUrlAliasMapper(),
                 $this->contentLanguageHandler(),
                 $this->getLanguageMaskGenerator()
             );
         }
 
         return $this->urlAliasHandler;
+    }
+
+    /**
+     * Returns a UrlAlias gateway
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase
+     */
+    protected function getUrlAliasGateway()
+    {
+        if ( !isset( $this->urlAliasGateway ) )
+        {
+            $this->urlAliasGateway = new UrlAliasGateway(
+                $this->dbHandler,
+                $this->contentLanguageHandler(),
+                $this->getLanguageMaskGenerator()
+            );
+        }
+        return $this->urlAliasGateway;
+    }
+
+    /**
+     * Returns a UrlAlias mapper
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper
+     */
+    protected function getUrlAliasMapper()
+    {
+        if ( !isset( $this->urlAliasMapper ) )
+        {
+            $this->urlAliasMapper = new UrlAliasMapper();
+        }
+        return $this->urlAliasMapper;
     }
 
     /**
@@ -758,7 +807,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * Returns a location gateway
+     * Returns a UrlWildcard gateway
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase
      */
@@ -766,13 +815,13 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->urlWildcardGateway ) )
         {
-            $this->urlWildcardGateway = new Content\UrlWildcard\Gateway\EzcDatabase( $this->getDatabase() );
+            $this->urlWildcardGateway = new UrlWildcardGateway( $this->dbHandler );
         }
         return $this->urlWildcardGateway;
     }
 
     /**
-     * Returns a location mapper
+     * Returns a UrlWildcard mapper
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper
      */

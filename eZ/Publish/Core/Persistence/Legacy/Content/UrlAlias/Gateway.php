@@ -37,15 +37,27 @@ abstract class Gateway
     abstract public function isRootEntry( $id );
 
     /**
+     * Updates single row data matched by composite primary key
      *
+     * Use optional parameter $languageMaskMatch to additionally limit the query match with languages
      *
      * @param mixed $parentId
      * @param string $textMD5
-     * @param array $values
+     * @param array $values associative array with column names as keys and column values as values
+     * @param int|null $languageMaskMatch bit mask of language id's @todo check
      *
      * @return void
      */
-    abstract public function updateRow( $parentId, $textMD5, array $values );
+    abstract public function updateRow( $parentId, $textMD5, array $values, $languageMaskMatch = null );
+
+    /**
+     *
+     * @param mixed $parentId
+     * @param string $textMD5
+     *
+     * @return void
+     */
+    abstract public function updateToNopRow( $parentId, $textMD5 );
 
     /**
      *
@@ -65,9 +77,17 @@ abstract class Gateway
     abstract public function insertNopRow( $parentId, $pathElement );
 
     /**
-     * Loads row data by composite key
+     * Updates single row data matched by composite primary key
      *
-     * Composite key for "ezurlalias_ml" table consists of "parent" and "text_md5" columns
+     * @param mixed $parentId
+     * @param string $textMD5
+     *
+     * @return void
+     */
+    abstract public function deleteRow( $parentId, $textMD5 );
+
+    /**
+     * Loads single row data matched by composite primary key
      *
      * @param mixed $parentId
      * @param string $textMD5
@@ -140,7 +160,7 @@ abstract class Gateway
     /**
      * Loads basic URL alias data
      *
-     * Note that columns for end URL part row are not aliased
+     * Note: columns for end URL part row are not aliased
      *
      * @param string[] $urlElements URL string broken into array of URL parts
      * @param string[] $languageCodes Languages to match against
@@ -148,6 +168,8 @@ abstract class Gateway
      * @return array
      */
     abstract public function loadBasicUrlAliasData( array $urlElements, array $languageCodes );
+
+    abstract public function getLocationUrlAliasLanguageCodes( array $actions, array $languageCodes );
 
     /**
      *
@@ -157,4 +179,25 @@ abstract class Gateway
      * @return int
      */
     abstract public function getDestinationIdByAction( $action );
+
+    /**
+     *
+     *
+     * @param mixed $parentId
+     * @param string $textMD5
+     * @param integer $languageId
+     *
+     * @return void
+     */
+    abstract public function removeTranslation( $parentId, $textMD5, $languageId );
+
+    /**
+     *
+     *
+     * @param string $actionName
+     * @param string $actionValue
+     *
+     * @return void
+     */
+    abstract public function removeByAction( $actionName, $actionValue );
 }

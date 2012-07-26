@@ -116,6 +116,22 @@ class Handler implements HandlerInterface
     }
 
     /**
+     * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
+     */
+    public function urlAliasHandler()
+    {
+        //@todo implement
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
+     */
+    public function urlWildcardHandler()
+    {
+        //@todo implement
+    }
+
+    /**
      */
     public function beginTransaction()
     {

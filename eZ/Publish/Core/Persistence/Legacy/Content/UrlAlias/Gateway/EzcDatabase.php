@@ -68,14 +68,14 @@ class EzcDatabase extends Gateway
     protected $languageMaskGenerator;
 
     /**
-     * Creates a new EzcDatabase Section Gateway
+     * Creates a new EzcDatabase UrlAlias Gateway
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler $languageHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
     public function __construct (
-        EzcDbHandler$dbHandler,
+        EzcDbHandler $dbHandler,
         CachingHandler $languageHandler,
         LanguageMaskGenerator $languageMaskGenerator )
     {
@@ -147,6 +147,10 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Check if entry is special root entry (nodeId=2)
+     *
+     * Such entry will have parentId=0 and text=''
+     *
      * @param mixed $id
      *
      * @return boolean
@@ -217,7 +221,8 @@ class EzcDatabase extends Gateway
                     $query->expr->bitAnd(
                         $this->dbHandler->quoteColumn( "lang_mask" ),
                         $query->bindValue( $languageId, null, \PDO::PARAM_STR )
-                    ), 0
+                    ),
+                    0
                 ),
                 $query->expr->lOr(
                     $query->expr->neq(
@@ -319,15 +324,18 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Updates single row data matched by composite primary key
      *
+     * Use optional parameter $languageMaskMatch to additionally limit the query match with languages
      *
      * @param mixed $parentId
      * @param string $textMD5
-     * @param array $values
+     * @param array $values associative array with column names as keys and column values as values
+     * @param int|null $languageMaskMatch bit mask of language id's @todo check
      *
      * @return void
      */
-    public function updateRow( $parentId, $textMD5, array $values )
+    public function updateRow( $parentId, $textMD5, array $values, $languageMaskMatch = null )
     {
         $query = $this->dbHandler->createUpdateQuery();
         $query->update( $this->dbHandler->quoteColumn( "ezurlalias_ml" ) );
@@ -345,6 +353,37 @@ class EzcDatabase extends Gateway
             )
         );
         $query->prepare()->execute();
+    }
+
+    public function updateReusableRow( $parentId, $textMD5 )
+    {
+        $values = array();
+        $this->updateRow(
+            $parentId,
+            $textMD5,
+            $values
+        );
+    }
+
+    /**
+     *
+     * @param mixed $parentId
+     * @param string $textMD5
+     *
+     * @return void
+     */
+    public function updateToNopRow( $parentId, $textMD5 )
+    {
+        $this->updateRow(
+            $parentId,
+            $textMD5,
+            array(
+                "lang_mask" => 1,
+                "action" => "nop:",
+                "action_type" => "nop",
+                "is_alias" => 0
+            )
+        );
     }
 
     /**
@@ -375,9 +414,13 @@ class EzcDatabase extends Gateway
         if ( !isset( $values["action_type"] ) )
         {
             if ( preg_match( "#^(.+):#", $values["action"], $matches ) )
+            {
                 $values["action_type"] = $matches[1];
+            }
             else
+            {
                 $values["action_type"] = "nop";
+            }
         }
         if ( $values["is_alias"] ) $values["is_original"] = 1;
         if ( $values["action"] === "nop:" ) $values["is_original"] = 0;
@@ -445,6 +488,19 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Deletes single row data matched by composite primary key
+     *
+     * @param mixed $parentId
+     * @param string $textMD5
+     *
+     * @return void
+     */
+    public function deleteRow( $parentId, $textMD5 )
+    {
+
+    }
+
+    /**
      *
      *
      * @return mixed
@@ -470,11 +526,12 @@ class EzcDatabase extends Gateway
      */
     protected function loadSystemByAction( $action )
     {
+        unset($action);
         return array();
     }
 
     /**
-     * Loads single row data by composite primary key
+     * Loads single row data matched by composite primary key
      *
      * @param mixed $parentId
      * @param string $textMD5
@@ -520,41 +577,6 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     *
-     *
-     * @param $action
-     *
-     * @return array
-     */
-    protected function translateActionToDestination( $action )
-    {
-        $destination = false;
-
-        if ( preg_match( "#^([a-zA-Z0-9_]+):(.+)?$#", $action, $matches ) )
-        {
-            $typeString = $matches[1];
-            $arguments = isset( $matches[2] ) ? $matches[2] : false;
-
-            switch ( $typeString )
-            {
-                case "eznode":
-                    $destination = is_numeric( $arguments ) ? $arguments : false;
-                    break;
-
-                case "module":
-                    $destination = $arguments;
-                    break;
-
-                case "nop":
-                    $destination = "/";
-                    break;
-            }
-        }
-
-        return $destination;
-    }
-
-    /**
      * @param string $text
      *
      * @return string
@@ -579,21 +601,27 @@ class EzcDatabase extends Gateway
     public function loadBasicUrlAliasData( array $urlElements, array $languageCodes )
     {
         $query = $this->dbHandler->createSelectQuery();
-        $lastTableName = "ezurlalias_ml" . count( $urlElements ) - 1;
+        $lastTableName = "ezurlalias_ml" . ( count( $urlElements ) - 1 );
+        $languageMask = $this->generateLanguageMask( $languageCodes, true );
+
         $query->select(
             $this->dbHandler->quoteColumn( "id", $lastTableName ),
             $this->dbHandler->quoteColumn( "link", $lastTableName ),
             $this->dbHandler->quoteColumn( "is_alias", $lastTableName ),
             $this->dbHandler->quoteColumn( "alias_redirects", $lastTableName ),
             $this->dbHandler->quoteColumn( "action", $lastTableName ),
-            $this->dbHandler->quoteColumn( "is_original", $lastTableName )
+            $this->dbHandler->quoteColumn( "is_original", $lastTableName ),
+            $this->dbHandler->quoteColumn( "lang_mask", $lastTableName ),
+            $this->dbHandler->quoteColumn( "parent", $lastTableName ),
+            $this->dbHandler->quoteColumn( "text_md5", $lastTableName )
         );
         foreach ( $urlElements as $index => $urlElement )
         {
             $tableName = "ezurlalias_ml{$index}";
 
             $query->select(
-                $this->dbHandler->aliasedColumn( $query, "text", $tableName )
+                $this->dbHandler->aliasedColumn( $query, "text", $tableName ),
+                $this->dbHandler->aliasedColumn( $query, "action", $tableName )
             )->from(
                 $query->alias( "ezurlalias_ml", $tableName )
             )->where(
@@ -601,7 +629,7 @@ class EzcDatabase extends Gateway
                     $query->expr->gt(
                         $query->expr->bitAnd(
                             $this->dbHandler->quoteColumn( "lang_mask", $tableName ),
-                            $this->generateLanguageMask( $languageCodes, true )
+                            $languageMask
                         ),
                         $query->bindValue( 0, null, \PDO::PARAM_INT )
                     ),
@@ -612,9 +640,9 @@ class EzcDatabase extends Gateway
                     $query->expr->eq(
                         $this->dbHandler->quoteColumn( "parent", $tableName ),
                         // root entry has parent column set to 0
-                        $index === 0 ?
-                            $query->bindValue( 0, null, \PDO::PARAM_INT ) :
-                            $this->dbHandler->quoteColumn( "parent", $previousTableName )
+                        isset( $previousTableName )
+                            ? $this->dbHandler->quoteColumn( "id", $previousTableName )
+                            : $query->bindValue( 0, null, \PDO::PARAM_INT )
                     )
                 )
             );
@@ -625,8 +653,88 @@ class EzcDatabase extends Gateway
 
         $statement = $query->prepare();
         $statement->execute();
+        $row = $statement->fetch( \PDO::FETCH_ASSOC );
 
-        return $statement->fetch( \PDO::FETCH_ASSOC );
+        if ( !empty( $row ) )
+        {
+            // Note: this will only be sufficient for UrlAlias::LOCATION and UrlAlias::RESOURCE type URLs, as these
+            // can have only one language per alias. If URL alias is of type UrlAlias::LOCATION additional query will
+            // be needed to determine all the languages that it is available in. This is done from Handler.
+            // @todo maybe add always available language indicator
+            $row["language_codes"] = array();
+            foreach ( $this->languageMaskGenerator->extractLanguageIdsFromMask( $row["lang_mask"] ) as $languageId )
+            {
+                $row["language_codes"][] = $this->languageHandler->getById( $languageId )->languageCode;
+            }
+        }
+
+        return $row;
+    }
+
+    /**
+     * This method is used when URL alias is of type UrlAlias::LOCATION in order to determine all the languages
+     * that it is available in.
+     *
+     * @throws \RuntimeException If path is incomplete or broken
+     *
+     * @param array $actions
+     * @param array $languageCodes
+     *
+     * @return array
+     */
+    public function getLocationUrlAliasLanguageCodes( array $actions, array $languageCodes )
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $this->dbHandler->quoteColumn( "action" ),
+            $this->dbHandler->quoteColumn( "lang_mask" )
+        )->from(
+            $this->dbHandler->quoteTable( "ezurlalias_ml" )
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->in(
+                    $this->dbHandler->quoteColumn( "action" ),
+                    $actions
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "is_original" ),
+                    $query->bindValue( 1, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "is_alias" ),
+                    $query->bindValue( 0, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
+
+        $actionMap = array();
+        foreach ( $rows as $row )
+        {
+            if ( !isset( $actionMap[$row["action"]] ) )
+            {
+                $actionMap[$row["action"]] = array();
+            }
+            $actionMap[$row["action"]][] = $row["lang_mask"] & ~1;
+        }
+
+        if ( count( $actionMap ) !== count( $actions ) )
+        {
+            throw new \RuntimeException( "Path is incomplete or broken, can not determine languages for UrlAlias: " . __METHOD__ );
+        }
+
+        $languageMaskSum = array_sum( array_unique( array_pop( $actionMap ) ) );
+        $languageCodes = array();
+        foreach ( $this->languageMaskGenerator->extractLanguageIdsFromMask( $languageMaskSum ) as $languageId )
+        {
+            $languageCodes[] = $this->languageHandler->getById( $languageId )->languageCode;
+        }
+
+        return $languageCodes;
     }
 
     /**
@@ -673,10 +781,13 @@ class EzcDatabase extends Gateway
      * @param boolean $alwaysAvailable
      *
      * @return int
+     *
+     * @todo move to lang mask generator
      */
     protected function generateLanguageMask( array $languageCodes, $alwaysAvailable )
     {
         $languages = array();
+
         foreach ( $languageCodes as $languageCode )
         {
             $languages[$languageCode] = true;
@@ -686,6 +797,7 @@ class EzcDatabase extends Gateway
         {
             $languages['always-available'] = true;
         }
+
         return $this->languageMaskGenerator->generateLanguageMask( $languages );
     }
 
@@ -743,6 +855,7 @@ class EzcDatabase extends Gateway
         $score = 1;
         $mask   = (int)$mask;
         krsort( $prioritizedLanguages );
+
         foreach ( $prioritizedLanguages as $language )
         {
             $id = (int)$language->id;
@@ -752,6 +865,7 @@ class EzcDatabase extends Gateway
             }
             ++$score;
         }
+
         if ( count( $scores ) > 0 )
         {
             return max( $scores );
@@ -766,7 +880,7 @@ class EzcDatabase extends Gateway
      * @param mixed $id
      * @param string[] $prioritizedLanguageCodes
      *
-     * @return string
+     * @return string|null path found or null if path is not found
      */
     public function getPath( $id, array $prioritizedLanguageCodes )
     {
@@ -799,7 +913,11 @@ class EzcDatabase extends Gateway
             $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
             if ( count( $rows ) == 0 )
             {
-                break;
+                // Normally this should never happen
+                // @todo remove throw when tested
+                $path = join( "/", $pathData );
+                throw new \RuntimeException( "Path ({$path}...) is broken, last id is '{$id}': " . __METHOD__ );
+                //break;
             }
             $row = $this->choosePrioritizedRow( $rows, $prioritizedLanguages );
             if ( !$row )
@@ -811,5 +929,51 @@ class EzcDatabase extends Gateway
         }
 
         return join( "/", $pathData );
+    }
+
+    /**
+     *
+     *
+     * @param mixed $parentId
+     * @param string $textMD5
+     * @param integer $languageId
+     *
+     * @return void
+     */
+    public function removeTranslation( $parentId, $textMD5, $languageId )
+    {
+        $row = $this->loadRow( $parentId, $textMD5, $languageId );
+        if ( !empty( $row ) )
+        {
+            if ( (int)$row["lang_mask"] & ( $languageId | 1 ) )
+            {
+                $childRows = array();
+                foreach ( $childRows as $childRow )
+                {
+                    $this->updateToNopRow( $childRow["parent"], $childRow["text_md5"] );
+                }
+            }
+
+            $this->updateRow(
+                $parentId,
+                $textMD5,
+                array( "lang_mask" => (int)$row["lang_mask"] & ~1 )
+            );
+
+            $this->deleteRow( $parentId, $textMD5 );
+        }
+    }
+
+    /**
+     *
+     *
+     * @param string $actionName
+     * @param string $actionValue
+     *
+     * @return void
+     */
+    public function removeByAction( $actionName, $actionValue )
+    {
+
     }
 }

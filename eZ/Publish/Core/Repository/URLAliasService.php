@@ -81,15 +81,35 @@ class URLAliasService implements URLAliasServiceInterface
         $path = $this->cleanUrl( $path );
         $path = $this->addPathPrefix( $path );
 
-        $spiUrlAlias = $this->persistenceHandler->urlAliasHandler()->createCustomUrlAlias(
-            $location->id,
+        $this->repository->beginTransaction();
+        $spiUrlAlias = $this->internalCreateUrlAlias( $location->id, $path, $languageCode, $forward, $alwaysAvailable );
+        $this->repository->commit();
+
+        return $this->buildUrlAliasDomainObject( $spiUrlAlias );
+    }
+
+    /**
+     * Internal method for creating URL alias
+     *
+     * Reused by self::createUrlAlias and self::createGlobalUrlAlias if $resource is "eznode"
+     *
+     * @param $locationId
+     * @param $path
+     * @param $languageCode
+     * @param $forward
+     * @param $alwaysAvailable
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
+     */
+    public function internalCreateUrlAlias( $locationId, $path, $languageCode, $forward, $alwaysAvailable )
+    {
+        return $this->persistenceHandler->urlAliasHandler()->createCustomUrlAlias(
+            $locationId,
             $path,
             $forward,
             $languageCode,
             $alwaysAvailable
         );
-
-        return $this->buildUrlAliasDomainObject( $spiUrlAlias );
     }
 
      /**
@@ -102,26 +122,38 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * $alwaysAvailable makes the alias available in all languages.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
+     *
      * @param string $resource
      * @param string $path
      * @param boolean $forward
      * @param string $languageCode
      * @param boolean $alwaysAvailable
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
-     *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
     public function createGlobalUrlAlias( $resource, $path, $languageCode, $forward = false, $alwaysAvailable = false )
     {
-        if ( !$this->isResourceValid( $resource ) )
+        if ( !preg_match( "#^([a-zA-Z0-9_]+):(.+)$#", $resource, $matches ) )
         {
-            throw new InvalidArgumentException( "\$resource", "Resource is not valid" );
+            throw new InvalidArgumentException( "\$resource", "argument is not valid" );
         }
 
         $path = $this->cleanUrl( $path );
         $path = $this->addPathPrefix( $path );
 
+        if ( $matches[1] === "eznode" )
+        {
+            return $this->internalCreateUrlAlias(
+                $matches[2],
+                $path,
+                $languageCode,
+                $forward,
+                $alwaysAvailable
+            );
+        }
+
+        $this->repository->beginTransaction();
         $spiUrlAlias = $this->persistenceHandler->urlAliasHandler()->createGlobalUrlAlias(
             $resource,
             $path,
@@ -129,6 +161,7 @@ class URLAliasService implements URLAliasServiceInterface
             $languageCode,
             $alwaysAvailable
         );
+        $this->repository->beginTransaction();
 
         return $this->buildUrlAliasDomainObject( $spiUrlAlias );
     }
@@ -148,10 +181,14 @@ class URLAliasService implements URLAliasServiceInterface
     public function listLocationAliases( Location $location, $custom = true, $languageCode = null )
     {
         if ( isset( $languageCode ) )
+        {
             $prioritizedLanguageCodes = array( $languageCode );
+        }
         else
+        {
             // @todo get from settings
             $prioritizedLanguageCodes = array( $languageCode );
+        }
 
         $spiUrlAliasList = $this->persistenceHandler->urlAliasHandler()->listURLAliasesForLocation(
             $location->id,
@@ -211,20 +248,24 @@ class URLAliasService implements URLAliasServiceInterface
         $url = $this->addPathPrefix( $url );
 
         if ( isset( $languageCode ) )
+        {
             $prioritizedLanguageCodes = array( $languageCode );
+        }
         else
+        {
             //@TODO: get prioritized languages from ini
             $prioritizedLanguageCodes = array( $languageCode );
+        }
 
         $spiUrlAlias = $this->persistenceHandler->urlAliasHandler()->lookup(
             $url,
             $prioritizedLanguageCodes
         );
 
-        if ( !in_array( $languageCode, $spiUrlAlias->languageCodes ) && !$spiUrlAlias->alwaysAvailable )
+        if ( !$spiUrlAlias->alwaysAvailable && !in_array( $languageCode, $spiUrlAlias->languageCodes ) )
         {
             throw new NotFoundException(
-                $url,
+                "URLAlias",
                 $url
             );
         }
@@ -275,7 +316,7 @@ class URLAliasService implements URLAliasServiceInterface
     }
 
     /**
-     *
+     * Checks if resource string format is valid
      *
      * @param string $resource
      *

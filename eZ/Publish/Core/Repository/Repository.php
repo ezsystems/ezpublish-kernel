@@ -23,6 +23,8 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\Core\Repository\UserService,
     eZ\Publish\Core\Repository\IOService,
     eZ\Publish\Core\Repository\ObjectStateService,
+    eZ\Publish\Core\Repository\URLAliasService,
+    eZ\Publish\Core\Repository\URLWildcardService,
     eZ\Publish\API\Repository\Values\ValueObject,
     eZ\Publish\API\Repository\Values\User\User,
     eZ\Publish\Legacy\LegacyKernelAware,
@@ -144,6 +146,20 @@ class Repository implements RepositoryInterface, LegacyKernelAware
     protected $validatorService;
 
     /**
+     * Instance of URL alias service
+     *
+     * @var \eZ\Publish\Core\Repository\UrlAliasService
+     */
+    protected $urlAliasService;
+
+    /**
+     * Instance of URL wildcard service
+     *
+     * @var \eZ\Publish\Core\Repository\URLWildcardService
+     */
+    protected $urlWildcardService;
+
+    /**
      * Service settings, first level key is service name
      *
      * @var array
@@ -177,6 +193,8 @@ class Repository implements RepositoryInterface, LegacyKernelAware
             'objectState' => array(),
             'legacy' => array(),
             'fieldType' => array(),
+            'urlAlias' => array(),
+            'urlWildcard' => array(),
         );
 
         if ( $user !== null )
@@ -427,7 +445,11 @@ class Repository implements RepositoryInterface, LegacyKernelAware
      */
     public function getURLAliasService()
     {
-        throw new \Exception("@todo URLAliasService Not Implemented");
+        if ( $this->urlAliasService !== null )
+            return $this->urlAliasService;
+
+        $this->urlAliasService = new URLAliasService( $this, $this->persistenceHandler, $this->serviceSettings['urlAlias'] );
+        return $this->urlAliasService;
     }
 
     /**
@@ -437,7 +459,11 @@ class Repository implements RepositoryInterface, LegacyKernelAware
      */
     public function getURLWildcardService()
     {
-        throw new \Exception("@todo URLWildcardService Not Implemented");
+        if ( $this->urlWildcardService !== null )
+            return $this->urlWildcardService;
+
+        $this->urlWildcardService = new URLWildcardService( $this, $this->persistenceHandler, $this->serviceSettings['urlWildcard'] );
+        return $this->urlWildcardService;
     }
 
     /**
