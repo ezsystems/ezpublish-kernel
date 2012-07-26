@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Client\Exceptions;
 
-
 /**
  * Exception thrown if an unsupported method is called.
  */

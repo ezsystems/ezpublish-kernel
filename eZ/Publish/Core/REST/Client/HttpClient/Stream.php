@@ -67,8 +67,8 @@ class Stream implements HttpClient
      *
      * @param string $method
      * @param string $path
-     * @param Message $message
-     * @return Message
+     * @param \eZ\Publish\Core\REST\Common\Message $message
+     * @return \eZ\Publish\Core\REST\Common\Message
      */
     public function request( $method, $path, Message $message = null )
     {

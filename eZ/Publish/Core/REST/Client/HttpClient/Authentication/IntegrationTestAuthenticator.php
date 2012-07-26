@@ -43,10 +43,8 @@ class IntegrationTestAuthenticator implements HttpClient, Sessionable
     /**
      * Creates a new Integration Test Authenticator
      *
-     * @param HttpClient $innerClient
-     * @param string $username
-     * @param string $password
-     * @return void
+     * @param \eZ\Publish\Core\REST\Client\HttpClient $innerClient
+     * @param mixed $userId
      */
     public function __construct( HttpClient $innerClient, $userId = 14 )
     {
@@ -63,8 +61,8 @@ class IntegrationTestAuthenticator implements HttpClient, Sessionable
      *
      * @param string $method
      * @param string $path
-     * @param Message $message
-     * @return Message
+     * @param \eZ\Publish\Core\REST\Common\Message $message
+     * @return \eZ\Publish\Core\REST\Common\Message
      */
     public function request( $method, $path, Message $message = null )
     {
@@ -84,7 +82,6 @@ class IntegrationTestAuthenticator implements HttpClient, Sessionable
      * Sets the user ID submitted to the server.
      *
      * @param mixed $userId
-     * @return void
      */
     public function setUserId( $userId )
     {
@@ -95,7 +92,6 @@ class IntegrationTestAuthenticator implements HttpClient, Sessionable
      * Set the session ID to use
      *
      * @param string $id
-     * @return void
      */
     public function setSession( $id )
     {

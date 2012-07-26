@@ -23,10 +23,9 @@ class LocationCreateStruct extends ValueObjectVisitor
     /**
      * Visit struct returned by controllers
      *
-     * @param Visitor $visitor
-     * @param Generator $generator
+     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param mixed $data
-     * @return void
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {

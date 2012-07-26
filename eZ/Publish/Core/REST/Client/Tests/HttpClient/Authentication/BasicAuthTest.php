@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing a test class.
+ * File containing BasicAuthTest test class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -12,7 +12,7 @@ use \eZ\Publish\Core\REST\Client\HttpClient\Authentication\BasicAuth;
 use \eZ\Publish\Core\REST\Common\Message;
 
 /**
- * Test case for Basic Auht HTTP Client.
+ * Test case for Basic Auth HTTP Client.
  */
 class BasicAuthTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +24,7 @@ class BasicAuthTest extends \PHPUnit_Framework_TestCase
     protected $innerHttpClientMock;
 
     /**
-     * @return void
+     * Tests authentication without message
      */
     public function testAuthWithoutMessage()
     {
@@ -51,7 +51,7 @@ class BasicAuthTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
+     * Tests authentication with message
      */
     public function testAuthWithMessage()
     {
@@ -91,6 +91,8 @@ class BasicAuthTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Gets the inner HTTP client mock
+     *
      * @return \eZ\Publish\Core\REST\Client\HttpClient
      */
     protected function getInnerHttpClientMock()

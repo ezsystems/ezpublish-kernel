@@ -15,7 +15,7 @@ use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Client;
 
 /**
- * Parser for RoleList
+ * Parser for Role
  */
 class Role extends Parser
 {
@@ -23,8 +23,8 @@ class Role extends Parser
      * Parse input structure
      *
      * @param array $data
-     * @param ParsingDispatcher $parsingDispatcher
-     * @return ValueObject
+     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @return \eZ\Publish\API\Repository\Values\User\Role
      * @todo Error handling
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )

@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\REST\Client\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 
-use eZ\Publish\API\Repository\Values\Content as APIContent;
+use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 use eZ\Publish\Core\Repository\Values\Content;
 
 /**
@@ -24,8 +24,8 @@ class Location extends Parser
      * Parse input structure
      *
      * @param array $data
-     * @param ParsingDispatcher $parsingDispatcher
-     * @return ValueObject
+     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
      * @todo Error handling
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )

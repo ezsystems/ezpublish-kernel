@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing a test class
+ * File containing a SectionIncludingContentMetadataUpdateStructTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -17,7 +17,9 @@ use eZ\Publish\Core\REST\Common;
 class SectionIncludingContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * @return void
+     * Test the SectionIncludingContentMetadataUpdateStructTest visitor
+     *
+     * @return string
      */
     public function testVisitComplete()
     {
@@ -44,6 +46,8 @@ class SectionIncludingContentMetadataUpdateStructTest extends ValueObjectVisitor
     }
 
     /**
+     * Tests that result contains ContentUpdate element
+     *
      * @param string $result
      * @depends testVisitComplete
      */
@@ -64,6 +68,8 @@ class SectionIncludingContentMetadataUpdateStructTest extends ValueObjectVisitor
     }
 
     /**
+     * Tests that result contains Section element
+     *
      * @param string $result
      * @depends testVisitComplete
      */
@@ -84,6 +90,8 @@ class SectionIncludingContentMetadataUpdateStructTest extends ValueObjectVisitor
     }
 
     /**
+     * Tests Owner element attributes
+     *
      * @param string $result
      * @depends testVisitComplete
      */
@@ -104,7 +112,7 @@ class SectionIncludingContentMetadataUpdateStructTest extends ValueObjectVisitor
     }
 
     /**
-     * @return void
+     * Tests attributes for Section element
      */
     public function testVisitNoSectionUpdate()
     {
@@ -142,7 +150,7 @@ class SectionIncludingContentMetadataUpdateStructTest extends ValueObjectVisitor
     }
 
     /**
-     * @return void
+     * Tests the Owner element attributes
      */
     public function testVisitNoOwnerUpdate()
     {
@@ -194,7 +202,7 @@ class SectionIncludingContentMetadataUpdateStructTest extends ValueObjectVisitor
     }
 
     /**
-     * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\Section
+     * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\SectionIncludingContentMetadataUpdateStruct
      */
     protected function getSectionIncludingContentMetadataUpdateStructVisitor()
     {
