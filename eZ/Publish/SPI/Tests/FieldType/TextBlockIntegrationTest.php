@@ -109,7 +109,7 @@ class TextBlockIntergrationTest extends BaseIntegrationTest
         return new Content\FieldValue( array(
             'data'         => 'Some longish text…',
             'externalData' => null,
-            'sortKey'      => null,
+            'sortKey'      => 'some longish text',
         ) );
     }
 
@@ -125,7 +125,7 @@ class TextBlockIntergrationTest extends BaseIntegrationTest
         return new Content\FieldValue( array(
             'data'         => 'A different longish text now…',
             'externalData' => null,
-            'sortKey'      => null,
+            'sortKey'      => 'a different longish text now',
         ) );
     }
 }
