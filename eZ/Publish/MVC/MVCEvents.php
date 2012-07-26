@@ -18,4 +18,13 @@ final class MVCEvents
      * The event listener method receives a \eZ\Publish\MVC\Event\PostSiteAccessMatchEvent
      */
     const SITEACCESS = 'ezpublish.siteaccess';
+
+    /**
+     * The PRE_CONTENT_VIEW event occurs right before a view is rendered for a content, via the content view controller.
+     * This event is triggered by the view manager and allows you to inject additional parameters to the content view template.
+     *
+     * The event listener method receives a \eZ\Publish\MVC\Event\PreContentViewEvent
+     * @see eZ\Publish\MVC\View\Manager
+     */
+    const PRE_CONTENT_VIEW = 'ezpublish.pre_content_view';
 }

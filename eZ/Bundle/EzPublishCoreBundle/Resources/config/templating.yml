@@ -14,4 +14,4 @@ services:
 
     ezpublish.view_manager:
         class: %ezpublish.view_manager.class%
-        arguments: [@templating, @?logger]
+        arguments: [@templating, @event_dispatcher, @?logger]

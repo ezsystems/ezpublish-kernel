@@ -13,8 +13,11 @@ use eZ\Publish\MVC\View\ContentViewProvider,
     eZ\Publish\MVC\View\ContentView,
     eZ\Publish\API\Repository\Values\Content\Content,
     eZ\Publish\API\Repository\Values\Content\Location,
+    eZ\Publish\MVC\MVCEvents,
+    eZ\Publish\MVC\Event\PreContentViewEvent,
     Symfony\Component\Templating\EngineInterface,
-    Symfony\Component\HttpKernel\Log\LoggerInterface;
+    Symfony\Component\HttpKernel\Log\LoggerInterface,
+    Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Manager
 {
@@ -43,9 +46,15 @@ class Manager
      */
     protected $sortedViewProviders;
 
-    public function __construct( EngineInterface $templateEngine, LoggerInterface $logger = null )
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    public function __construct( EngineInterface $templateEngine, EventDispatcherInterface $eventDispatcher, LoggerInterface $logger = null )
     {
         $this->templateEngine = $templateEngine;
+        $this->eventDispatcher = $eventDispatcher;
         $this->logger = $logger;
     }
 
@@ -159,8 +168,14 @@ class Manager
      */
     protected function renderContentView( ContentView $view, array $defaultParams = array() )
     {
+        $view->addParameters( $defaultParams );
+        $this->eventDispatcher->dispatch(
+            MVCEvents::PRE_CONTENT_VIEW,
+            new PreContentViewEvent( $view )
+        );
+
         $templateIdentifier = $view->getTemplateIdentifier();
-        $params = $view->getParameters() + $defaultParams;
+        $params = $view->getParameters();
         if ( $templateIdentifier instanceof \Closure )
             return $templateIdentifier( $params );
 
