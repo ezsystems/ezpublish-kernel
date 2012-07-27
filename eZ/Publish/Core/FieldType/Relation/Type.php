@@ -39,24 +39,25 @@ class Type extends FieldType
     );
 
     /**
-     * Build a Value object of current FieldType
+     * Build a Relation\Value object with the provided $destinationContentInfo->id as value.
      *
-     * Build a FiledType\Value object with the provided $destinationContentInfo as value.
-     *
-     * @param \eZ\Publish\Core\Repository\Values\Content\ContentInfo $destinationContentInfo
+     * @param \eZ\Publish\Core\Repository\Values\Content\ContentInfo|int|string $destinationContent
+     *        Either a ContentInfo object, or a content id
      * @return \eZ\Publish\Core\Repository\FieldType\Relation\Value
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function buildValue( $destinationContentInfo )
+    public function buildValue( $destinationContent )
     {
-        if ( !$destinationContentInfo instanceof ContentInfo )
-            throw new InvalidArgumentType(
-                '$destinationContentInfo',
-                'eZ\\Publish\\Core\\Repository\\Values\\Content\\ContentInfo',
-                $destinationContentInfo
-            );
+        if ( $destinationContent instanceof ContentInfo )
+            return new Value( $destinationContent->id );
+        elseif ( is_integer( $destinationContent ) || is_string( $destinationContent ) )
+            return new Value( $destinationContent );
 
-        return new Value( $destinationContentInfo );
+        throw new InvalidArgumentType(
+            '$destinationContentInfo',
+            'eZ\\Publish\\Core\\Repository\\Values\\Content\\ContentInfo',
+            $destinationContentInfo
+        );
     }
 
     /**
@@ -101,12 +102,12 @@ class Type extends FieldType
             );
         }
 
-        if ( !$inputValue->destinationContent instanceof ContentInfo )
+        if ( !is_integer( $inputValue->destinationContentId ) && !is_string( $inputValue->destinationContentId ) )
         {
-            throw new InvalidArgumentType(
-                '$inputValue->destinationContent',
-                '\\eZ\Publish\\Core\\Repository\\Values\\Content\\ContentInfo',
-                $inputValue->destinationContent
+           throw new InvalidArgumentType(
+                '$inputValue->destinationContentId',
+                'string|int',
+                $inputValue->destinationContentId
             );
         }
 
@@ -145,7 +146,7 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
-        return array( 'destinationContentId' => $value->destinationContent->contentId );
+        return array( 'destinationContentId' => $value->destinationContentId );
     }
 
     /**
@@ -167,9 +168,6 @@ class Type extends FieldType
      */
     public function toPersistenceValue( $value )
     {
-        // @todo Evaluate if creating the sortKey in every case is really needed
-        //       Couldn't this be retrieved with a method, which would initialize
-        //       that info on request only?
         return new FieldValue(
             array(
                 "data" => $this->toHash( $value ),
