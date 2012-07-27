@@ -49,7 +49,9 @@ class Session implements EventSubscriberInterface
             'configured' => false,
             'started' => false,
             'name' => false,
-            'namespace' => false
+            'namespace' => false,
+            'has_previous' => false,
+            'storage' => false,
         );
         if ( $this->container->has( 'session' ) )
         {
@@ -61,6 +63,8 @@ class Session implements EventSubscriberInterface
             $sessionInfos['namespace'] = $this->container->getParameter(
                 'ezpublish.session.attribute_bag.storage_key'
             );
+            $sessionInfos['has_previous'] = $event->getRequest()->hasPreviousSession();
+            $sessionInfos['storage'] = $this->container->get( 'session.storage' );
         }
 
         $event->getParameters()->set( 'session', $sessionInfos );
