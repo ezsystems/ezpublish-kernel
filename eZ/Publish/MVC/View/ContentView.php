@@ -38,7 +38,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
  * }
  * </code>
  */
-class ContentView
+class ContentView implements ContentViewInterface
 {
     /**
      * @var string|\Closure

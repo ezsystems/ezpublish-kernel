@@ -10,7 +10,7 @@
 namespace eZ\Publish\MVC\View;
 
 use eZ\Publish\MVC\View\ContentViewProvider,
-    eZ\Publish\MVC\View\ContentView,
+    eZ\Publish\MVC\View\ContentViewInterface,
     eZ\Publish\API\Repository\Values\Content\Content,
     eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\MVC\MVCEvents,
@@ -119,7 +119,7 @@ class Manager
         foreach ( $this->getAllViewProviders() as $viewProvider )
         {
             $view = $viewProvider->getViewForContent( $contentInfo, $viewType );
-            if ( $view instanceof ContentView )
+            if ( $view instanceof ContentViewInterface )
             {
                 return $this->renderContentView( $view, array( 'content' => $content ) );
             }
@@ -143,7 +143,7 @@ class Manager
         foreach ( $this->getAllViewProviders() as $viewProvider )
         {
             $view = $viewProvider->getViewForLocation( $location, $viewType );
-            if ( $view instanceof ContentView )
+            if ( $view instanceof ContentViewInterface )
             {
                 return $this->renderContentView(
                     $view,
@@ -162,11 +162,11 @@ class Manager
      * Renders passed ContentView object via the template engine.
      * If $view's template identifier is a closure, then it is called directly and the result is returned as is.
      *
-     * @param \eZ\Publish\MVC\View\ContentView $view
+     * @param \eZ\Publish\MVC\View\ContentViewInterface $view
      * @param array $defaultParams
      * @return string
      */
-    protected function renderContentView( ContentView $view, array $defaultParams = array() )
+    protected function renderContentView( ContentViewInterface $view, array $defaultParams = array() )
     {
         $view->addParameters( $defaultParams );
         $this->eventDispatcher->dispatch(
