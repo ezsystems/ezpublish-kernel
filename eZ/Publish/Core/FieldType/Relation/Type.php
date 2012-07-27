@@ -7,11 +7,12 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\FieldType\Relation;
+namespace eZ\Publish\Core\FieldType\Relation;
 use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Repository\Values\Content\ContentInfo,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+    eZ\Publish\SPI\FieldType\Event;
 
 /**
  * The Relation field type.
@@ -26,9 +27,15 @@ class Type extends FieldType
     const SELECTION_BROWSE = 1;
     const SELECTION_DROPDOWN = 2;
 
-    protected $allowedSettings = array(
-        'selection_method' => self::SELECTION_BROWSE, // browse,
-        'default_selection' => false,
+    protected $settingsSchema = array(
+        'selectionMethod' => array(
+            'type' => 'int',
+            'default' => self::SELECTION_BROWSE,
+        ),
+        'selectionRoot' => array(
+            'type' => 'string', // @todo is this correct ? This would be a Location ID... can we use "mixed" here ?
+            'default' => '',
+        ),
     );
 
     /**
@@ -94,7 +101,7 @@ class Type extends FieldType
             );
         }
 
-        if ( !$inputValue->destinationContent instanceof ContentInfo ) )
+        if ( !$inputValue->destinationContent instanceof ContentInfo )
         {
             throw new InvalidArgumentType(
                 '$inputValue->destinationContent',
@@ -192,7 +199,7 @@ class Type extends FieldType
      * @param $fieldDef - the field definition of the field
      * @param $field - the field for which an action is performed
      */
-    public function handleEvent( $event, /*InternalRepository*/ $repository, VersionInfo $versionInfo, FieldDefinition $fieldDef, Field  $field )
+    public function handleEvent( Event $event )
     {
 
     }
