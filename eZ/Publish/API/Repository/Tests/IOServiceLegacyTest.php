@@ -19,6 +19,8 @@ class IOServiceLegacyTest extends IOServiceTest
 {
     protected function getRepository()
     {
+        $this->markTestIncomplete( 'Core repository implementation does not have the setLegacyKernel() method.' );
+
         if ( !isset( $_ENV['legacyKernel'] ) )
             self::markTestSkipped( 'Legacy kernel is needed to run this test.' );
 
