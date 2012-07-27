@@ -54,12 +54,15 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     public function testToStorageValue()
     {
         $value = new FieldValue;
-        $value->data = $this->date;
+        $value->data = array(
+            'timestamp' => $this->date->getTimestamp(),
+            'rfc850'    => $this->date->format( \DateTime::RFC850  ),
+        );
         $value->sortKey = $this->date->getTimestamp();
         $storageFieldValue = new StorageFieldValue;
 
         $this->converter->toStorageValue( $value, $storageFieldValue );
-        self::assertSame( $value->data->getTimestamp(), $storageFieldValue->dataInt );
+        self::assertSame( $value->data['timestamp'], $storageFieldValue->dataInt );
         self::assertSame( $value->sortKey, $storageFieldValue->sortKeyInt );
         self::assertSame( '', $storageFieldValue->sortKeyString );
     }
@@ -78,8 +81,14 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( 'DateTime', $fieldValue->data );
-        self::assertSame( $storageFieldValue->dataInt, $fieldValue->data->getTimestamp() );
+        self::assertSame(
+            array(
+                'rfc850'    => null,
+                'timestamp' => 1048633200,
+            ),
+            $fieldValue->data
+        );
+        self::assertSame( $storageFieldValue->dataInt, $fieldValue->data['timestamp'] );
         self::assertSame( $storageFieldValue->sortKeyInt, $fieldValue->sortKey );
     }
 
