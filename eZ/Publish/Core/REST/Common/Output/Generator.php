@@ -77,21 +77,21 @@ abstract class Generator
     }
 
     /**
-     * Start element
+     * Start object element
      *
      * @param string $name
      * @param string $mediaTypeName
      */
-    abstract public function startElement( $name, $mediaTypeName = null );
+    abstract public function startObjectElement( $name, $mediaTypeName = null );
 
     /**
-     * Check start element
+     * Check start object element
      *
      * @param mixed $data
      */
-    protected function checkStartElement( $data )
+    protected function checkStartObjectElement( $data )
     {
-        $this->checkStart( 'element', $data, array( 'document', 'element', 'list' ) );
+        $this->checkStart( 'objectElement', $data, array( 'document', 'objectElement', 'list' ) );
 
         $last = count( $this->stack ) - 2;
         if ( $this->stack[$last][0] !== 'list' )
@@ -108,20 +108,20 @@ abstract class Generator
     }
 
     /**
-     * End element
+     * End object element
      *
      * @param string $name
      */
-    abstract public function endElement( $name );
+    abstract public function endObjectElement( $name );
 
     /**
-     * Check end element
+     * Check end object element
      *
      * @param mixed $data
      */
-    protected function checkEndElement( $data )
+    protected function checkEndObjectElement( $data )
     {
-        $this->checkEnd( 'element', $data );
+        $this->checkEnd( 'objectElement', $data );
     }
 
     /**
@@ -139,7 +139,7 @@ abstract class Generator
      */
     protected function checkStartValueElement( $data )
     {
-        $this->checkStart( 'valueElement', $data, array( 'element' ) );
+        $this->checkStart( 'valueElement', $data, array( 'objectElement' ) );
     }
 
     /**
@@ -173,7 +173,7 @@ abstract class Generator
      */
     protected function checkStartList( $data )
     {
-        $this->checkStart( 'list', $data, array( 'element' ) );
+        $this->checkStart( 'list', $data, array( 'objectElement' ) );
     }
 
     /**
@@ -208,7 +208,7 @@ abstract class Generator
      */
     protected function checkStartAttribute( $data )
     {
-        $this->checkStart( 'attribute', $data, array( 'element' ) );
+        $this->checkStart( 'attribute', $data, array( 'objectElement' ) );
     }
 
     /**

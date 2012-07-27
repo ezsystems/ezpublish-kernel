@@ -27,7 +27,7 @@ class Role extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'Role' );
+        $generator->startObjectElement( 'Role' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Role' ) );
 
         $generator->startAttribute(
@@ -39,14 +39,14 @@ class Role extends ValueObjectVisitor
         $generator->startValueElement( 'identifier', $data->identifier );
         $generator->endValueElement( 'identifier' );
 
-        $generator->startElement( 'PolicyList' );
+        $generator->startObjectElement( 'PolicyList' );
         $generator->startAttribute(
             'href',
             $this->urlHandler->generate( 'policies', array( 'role' => $data->id ) )
         );
         $generator->endAttribute( 'href' );
-        $generator->endElement( 'PolicyList' );
+        $generator->endObjectElement( 'PolicyList' );
 
-        $generator->endElement( 'Role' );
+        $generator->endObjectElement( 'Role' );
     }
 }

@@ -29,13 +29,13 @@ class LocationCreateStruct extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'LocationCreate' );
+        $generator->startObjectElement( 'LocationCreate' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'LocationCreate' ) );
 
-        $generator->startElement( 'ParentLocation', 'Location' );
+        $generator->startObjectElement( 'ParentLocation', 'Location' );
         $generator->startAttribute( 'href', $data->parentLocationId );
         $generator->endAttribute( 'href' );
-        $generator->endElement( 'ParentLocation' );
+        $generator->endObjectElement( 'ParentLocation' );
 
         $generator->startValueElement( 'priority', $data->priority );
         $generator->endValueElement( 'priority' );
@@ -49,7 +49,7 @@ class LocationCreateStruct extends ValueObjectVisitor
         $generator->startValueElement( 'sortOrder', $data->sortOrder == Location::SORT_ORDER_ASC ? 'ASC' : 'DESC' );
         $generator->endValueElement( 'sortOrder' );
 
-        $generator->endElement( 'LocationCreate' );
+        $generator->endObjectElement( 'LocationCreate' );
     }
 
     /**

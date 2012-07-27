@@ -29,7 +29,7 @@ class Location extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'Location' );
+        $generator->startObjectElement( 'Location' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Location' ) );
 
         $generator->startAttribute(
@@ -50,7 +50,7 @@ class Location extends ValueObjectVisitor
         $generator->startValueElement( 'invisible', $data->invisible ? 'true' : 'false' );
         $generator->endValueElement( 'invisible' );
 
-        $generator->startElement( 'ParentLocation', 'Location' );
+        $generator->startObjectElement( 'ParentLocation', 'Location' );
         $generator->startAttribute(
             'href',
             $this->urlHandler->generate( 'location', array(
@@ -58,7 +58,7 @@ class Location extends ValueObjectVisitor
             )
         );
         $generator->endAttribute( 'href' );
-        $generator->endElement( 'ParentLocation' );
+        $generator->endObjectElement( 'ParentLocation' );
 
         $generator->startValueElement( 'pathString', $data->pathString );
         $generator->endValueElement( 'pathString' );
@@ -76,10 +76,10 @@ class Location extends ValueObjectVisitor
         $generator->startValueElement( 'remoteId', $data->remoteId );
         $generator->endValueElement( 'remoteId' );
 
-        $generator->startElement( 'Content' );
+        $generator->startObjectElement( 'Content' );
         $generator->startAttribute( 'href', $this->urlHandler->generate( 'object', array( 'object' => $data->contentId ) ) );
         $generator->endAttribute( 'href' );
-        $generator->endElement( 'Content' );
+        $generator->endObjectElement( 'Content' );
 
         $generator->startValueElement( 'sortField', $this->getSortFieldName( $data->sortField ) );
         $generator->endValueElement( 'sortField' );
@@ -87,7 +87,7 @@ class Location extends ValueObjectVisitor
         $generator->startValueElement( 'sortOrder', $data->sortOrder == APILocation::SORT_ORDER_ASC ? 'ASC' : 'DESC' );
         $generator->endValueElement( 'sortOrder' );
 
-        $generator->endElement( 'Location' );
+        $generator->endObjectElement( 'Location' );
     }
 
     /**

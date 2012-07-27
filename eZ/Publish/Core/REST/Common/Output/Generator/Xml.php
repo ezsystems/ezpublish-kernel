@@ -54,14 +54,14 @@ class Xml extends Generator
     }
 
     /**
-     * Start element
+     * Start object element
      *
      * @param string $name
      * @param string $mediaTypeName
      */
-    public function startElement( $name, $mediaTypeName = null )
+    public function startObjectElement( $name, $mediaTypeName = null )
     {
-        $this->checkStartElement( $name );
+        $this->checkStartObjectElement( $name );
 
         $mediaTypeName = $mediaTypeName ?: $name;
 
@@ -72,13 +72,13 @@ class Xml extends Generator
     }
 
     /**
-     * End element
+     * End object element
      *
      * @param string $name
      */
-    public function endElement( $name )
+    public function endObjectElement( $name )
     {
-        $this->checkEndElement( $name );
+        $this->checkEndObjectElement( $name );
 
         $this->xmlWriter->endElement();
     }

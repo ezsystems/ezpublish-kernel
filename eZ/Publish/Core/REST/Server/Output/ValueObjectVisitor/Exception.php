@@ -100,7 +100,7 @@ class Exception extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'ErrorMessage' );
+        $generator->startObjectElement( 'ErrorMessage' );
 
         $statusCode = $this->getStatus();
         $visitor->setStatus( $statusCode );
@@ -127,7 +127,7 @@ class Exception extends ValueObjectVisitor
             $generator->endValueElement( 'line' );
         }
 
-        $generator->endElement( 'ErrorMessage' );
+        $generator->endObjectElement( 'ErrorMessage' );
     }
 }
 

@@ -27,7 +27,7 @@ class RoleAssignmentList extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'RoleAssignmentList' );
+        $generator->startObjectElement( 'RoleAssignmentList' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'RoleAssignmentList' ) );
 
         $generator->startAttribute(
@@ -45,7 +45,7 @@ class RoleAssignmentList extends ValueObjectVisitor
         }
         $generator->endList( 'RoleAssignment' );
 
-        $generator->endElement( 'RoleAssignmentList' );
+        $generator->endObjectElement( 'RoleAssignmentList' );
     }
 }
 

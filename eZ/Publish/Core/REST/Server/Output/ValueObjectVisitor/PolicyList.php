@@ -27,7 +27,7 @@ class PolicyList extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'PolicyList' );
+        $generator->startObjectElement( 'PolicyList' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'PolicyList' ) );
 
         $generator->startAttribute(
@@ -43,7 +43,7 @@ class PolicyList extends ValueObjectVisitor
         }
         $generator->endList( 'Policy' );
 
-        $generator->endElement( 'PolicyList' );
+        $generator->endObjectElement( 'PolicyList' );
     }
 }
 

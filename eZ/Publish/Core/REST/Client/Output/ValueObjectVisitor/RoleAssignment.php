@@ -27,10 +27,10 @@ class RoleAssignment extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'RoleAssignInput' );
+        $generator->startObjectElement( 'RoleAssignInput' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'RoleAssignInput' ) );
 
-        $generator->startElement( 'Role' );
+        $generator->startObjectElement( 'Role' );
 
         $generator->startAttribute(
             'href',
@@ -38,7 +38,7 @@ class RoleAssignment extends ValueObjectVisitor
         );
         $generator->endAttribute( 'href' );
 
-        $generator->endElement( 'Role' );
+        $generator->endObjectElement( 'Role' );
 
         $roleLimitation = $data->getRoleLimitation();
         if ( $roleLimitation !== null )
@@ -46,6 +46,6 @@ class RoleAssignment extends ValueObjectVisitor
             $visitor->visitValueObject( $roleLimitation );
         }
 
-        $generator->endElement( 'RoleAssignInput' );
+        $generator->endObjectElement( 'RoleAssignInput' );
     }
 }

@@ -27,7 +27,7 @@ class SectionCreateStruct extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'SectionInput' );
+        $generator->startObjectElement( 'SectionInput' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'SectionInput' ) );
 
         $generator->startValueElement( 'identifier', $data->identifier );
@@ -36,6 +36,6 @@ class SectionCreateStruct extends ValueObjectVisitor
         $generator->startValueElement( 'name', $data->name );
         $generator->endValueElement( 'name' );
 
-        $generator->endElement( 'SectionInput' );
+        $generator->endObjectElement( 'SectionInput' );
     }
 }

@@ -27,7 +27,7 @@ class LocationList extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'LocationList' );
+        $generator->startObjectElement( 'LocationList' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'LocationList' ) );
 
         $generator->startAttribute( 'href', $data->path );
@@ -37,18 +37,18 @@ class LocationList extends ValueObjectVisitor
 
         foreach ( $data->locations as $location )
         {
-            $generator->startElement( 'Location' );
+            $generator->startObjectElement( 'Location' );
             $generator->startAttribute(
                 'href',
                 $this->urlHandler->generate( 'location', array( 'location' => trim( $location->pathString, '/' ) ) )
             );
             $generator->endAttribute( 'href' );
-            $generator->endElement( 'Location' );
+            $generator->endObjectElement( 'Location' );
         }
 
         $generator->endList( 'Location' );
 
-        $generator->endElement( 'LocationList' );
+        $generator->endObjectElement( 'LocationList' );
     }
 }
 

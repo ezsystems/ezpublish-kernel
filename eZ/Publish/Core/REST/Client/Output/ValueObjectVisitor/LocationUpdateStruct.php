@@ -29,7 +29,7 @@ class LocationUpdateStruct extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'LocationUpdate' );
+        $generator->startObjectElement( 'LocationUpdate' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'LocationUpdate' ) );
 
         $generator->startValueElement( 'priority', $data->priority );
@@ -44,7 +44,7 @@ class LocationUpdateStruct extends ValueObjectVisitor
         $generator->startValueElement( 'sortOrder', $data->sortOrder == Location::SORT_ORDER_ASC ? 'ASC' : 'DESC' );
         $generator->endValueElement( 'sortOrder' );
 
-        $generator->endElement( 'LocationUpdate' );
+        $generator->endObjectElement( 'LocationUpdate' );
     }
 
     /**

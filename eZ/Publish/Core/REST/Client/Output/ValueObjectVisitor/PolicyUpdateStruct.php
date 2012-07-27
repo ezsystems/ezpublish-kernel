@@ -27,13 +27,13 @@ class PolicyUpdateStruct extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'PolicyUpdate' );
+        $generator->startObjectElement( 'PolicyUpdate' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'PolicyUpdate' ) );
 
         $limitations = $data->getLimitations();
         if ( !empty( $limitations ) )
         {
-            $generator->startElement( 'limitations' );
+            $generator->startObjectElement( 'limitations' );
             $generator->startList( 'limitations' );
 
             foreach ( $limitations as $limitation )
@@ -42,9 +42,9 @@ class PolicyUpdateStruct extends ValueObjectVisitor
             }
 
             $generator->endList( 'limitations' );
-            $generator->endElement( 'limitations' );
+            $generator->endObjectElement( 'limitations' );
         }
 
-        $generator->endElement( 'PolicyUpdate' );
+        $generator->endObjectElement( 'PolicyUpdate' );
     }
 }

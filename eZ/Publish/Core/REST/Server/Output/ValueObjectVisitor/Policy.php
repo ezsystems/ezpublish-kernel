@@ -27,7 +27,7 @@ class Policy extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'Policy' );
+        $generator->startObjectElement( 'Policy' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Policy' ) );
 
         $generator->startAttribute(
@@ -48,7 +48,7 @@ class Policy extends ValueObjectVisitor
         $limitations = $data->getLimitations();
         if ( !empty( $limitations ) )
         {
-            $generator->startElement( 'limitations' );
+            $generator->startObjectElement( 'limitations' );
             $generator->startList( 'limitations' );
 
             foreach ( $limitations as $limitation )
@@ -57,9 +57,9 @@ class Policy extends ValueObjectVisitor
             }
 
             $generator->endList( 'limitations' );
-            $generator->endElement( 'limitations' );
+            $generator->endObjectElement( 'limitations' );
         }
 
-        $generator->endElement( 'Policy' );
+        $generator->endObjectElement( 'Policy' );
     }
 }

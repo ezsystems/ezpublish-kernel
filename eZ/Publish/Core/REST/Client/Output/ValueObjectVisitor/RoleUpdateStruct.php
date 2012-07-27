@@ -27,12 +27,12 @@ class RoleUpdateStruct extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'RoleInput' );
+        $generator->startObjectElement( 'RoleInput' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'RoleInput' ) );
 
         $generator->startValueElement( 'identifier', $data->identifier );
         $generator->endValueElement( 'identifier' );
 
-        $generator->endElement( 'RoleInput' );
+        $generator->endObjectElement( 'RoleInput' );
     }
 }

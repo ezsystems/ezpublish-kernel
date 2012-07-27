@@ -56,7 +56,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $generator = new Common\Output\Generator\Xml();
 
-        $generator->startElement( 'element' );
+        $generator->startObjectElement( 'element' );
     }
 
     /**
@@ -67,8 +67,8 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
         $generator = new Common\Output\Generator\Xml();
 
         $generator->startDocument( 'test' );
-        $generator->startElement( 'element' );
-        $generator->endElement( 'invalid' );
+        $generator->startObjectElement( 'element' );
+        $generator->endObjectElement( 'invalid' );
     }
 
     /**
@@ -80,10 +80,10 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         $generator->startDocument( 'test' );
 
-        $generator->startElement( 'element' );
-        $generator->endElement( 'element' );
+        $generator->startObjectElement( 'element' );
+        $generator->endObjectElement( 'element' );
 
-        $generator->startElement( 'element' );
+        $generator->startObjectElement( 'element' );
     }
 
     /**
@@ -95,12 +95,12 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         $generator->startDocument( 'test' );
 
-        $generator->startElement( 'element' );
+        $generator->startObjectElement( 'element' );
 
-        $generator->startElement( 'stacked' );
-        $generator->endElement( 'stacked' );
+        $generator->startObjectElement( 'stacked' );
+        $generator->endObjectElement( 'stacked' );
 
-        $generator->startElement( 'stacked' );
+        $generator->startObjectElement( 'stacked' );
     }
 
     /**
@@ -111,7 +111,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
         $generator = new Common\Output\Generator\Xml();
 
         $generator->startDocument( 'test' );
-        $generator->startElement( 'element' );
+        $generator->startObjectElement( 'element' );
         $generator->endDocument( 'test' );
     }
 
@@ -144,7 +144,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
         $generator = new Common\Output\Generator\Xml();
 
         $generator->startDocument( 'test' );
-        $generator->startElement( 'element' );
+        $generator->startObjectElement( 'element' );
         $generator->startList( 'list' );
         $generator->startAttribute( 'attribute', 'value' );
     }
@@ -178,7 +178,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
         $generator = new Common\Output\Generator\Xml();
 
         $generator->startDocument( 'test' );
-        $generator->startElement( 'element' );
+        $generator->startObjectElement( 'element' );
         $generator->startList( 'list' );
         $generator->startValueElement( 'attribute', 'value' );
     }
@@ -212,7 +212,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
         $generator = new Common\Output\Generator\Xml();
 
         $generator->startDocument( 'test' );
-        $generator->startElement( 'element' );
+        $generator->startObjectElement( 'element' );
         $generator->startList( 'list' );
         $generator->startList( 'attribute', 'value' );
     }

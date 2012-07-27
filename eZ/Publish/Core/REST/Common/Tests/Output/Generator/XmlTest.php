@@ -37,8 +37,8 @@ class XmlTest extends GeneratorTest
 
         $generator->startDocument( 'test' );
 
-        $generator->startElement( 'element' );
-        $generator->endElement( 'element' );
+        $generator->startObjectElement( 'element' );
+        $generator->endObjectElement( 'element' );
 
         $this->assertSame(
             file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
@@ -52,8 +52,8 @@ class XmlTest extends GeneratorTest
 
         $generator->startDocument( 'test' );
 
-        $generator->startElement( 'element', 'User' );
-        $generator->endElement( 'element' );
+        $generator->startObjectElement( 'element', 'User' );
+        $generator->endObjectElement( 'element' );
 
         $this->assertSame(
             file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
@@ -67,12 +67,12 @@ class XmlTest extends GeneratorTest
 
         $generator->startDocument( 'test' );
 
-        $generator->startElement( 'element' );
+        $generator->startObjectElement( 'element' );
 
-        $generator->startElement( 'stacked' );
-        $generator->endElement( 'stacked' );
+        $generator->startObjectElement( 'stacked' );
+        $generator->endObjectElement( 'stacked' );
 
-        $generator->endElement( 'element' );
+        $generator->endObjectElement( 'element' );
 
         $this->assertSame(
             file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
@@ -86,12 +86,12 @@ class XmlTest extends GeneratorTest
 
         $generator->startDocument( 'test' );
 
-        $generator->startElement( 'element' );
+        $generator->startObjectElement( 'element' );
 
         $generator->startAttribute( 'attribute', 'value' );
         $generator->endAttribute( 'attribute' );
 
-        $generator->endElement( 'element' );
+        $generator->endObjectElement( 'element' );
 
         $this->assertSame(
             file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
@@ -105,7 +105,7 @@ class XmlTest extends GeneratorTest
 
         $generator->startDocument( 'test' );
 
-        $generator->startElement( 'element' );
+        $generator->startObjectElement( 'element' );
 
         $generator->startAttribute( 'attribute1', 'value' );
         $generator->endAttribute( 'attribute1' );
@@ -113,7 +113,7 @@ class XmlTest extends GeneratorTest
         $generator->startAttribute( 'attribute2', 'value' );
         $generator->endAttribute( 'attribute2' );
 
-        $generator->endElement( 'element' );
+        $generator->endObjectElement( 'element' );
 
         $this->assertSame(
             file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
@@ -127,12 +127,12 @@ class XmlTest extends GeneratorTest
 
         $generator->startDocument( 'test' );
 
-        $generator->startElement( 'element' );
+        $generator->startObjectElement( 'element' );
 
         $generator->startValueElement( 'value', '42' );
         $generator->endValueElement( 'value' );
 
-        $generator->endElement( 'element' );
+        $generator->endObjectElement( 'element' );
 
         $this->assertSame(
             file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
@@ -146,19 +146,19 @@ class XmlTest extends GeneratorTest
 
         $generator->startDocument( 'test' );
 
-        $generator->startElement( 'elementList' );
+        $generator->startObjectElement( 'elementList' );
 
         $generator->startList( 'elements' );
 
-        $generator->startElement( 'element' );
-        $generator->endElement( 'element' );
+        $generator->startObjectElement( 'element' );
+        $generator->endObjectElement( 'element' );
 
-        $generator->startElement( 'element' );
-        $generator->endElement( 'element' );
+        $generator->startObjectElement( 'element' );
+        $generator->endObjectElement( 'element' );
 
         $generator->endList( 'elements' );
 
-        $generator->endElement( 'elementList' );
+        $generator->endObjectElement( 'elementList' );
 
         $this->assertSame(
             file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),

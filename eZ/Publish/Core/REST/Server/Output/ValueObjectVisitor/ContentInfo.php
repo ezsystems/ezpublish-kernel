@@ -27,7 +27,7 @@ class ContentInfo extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'ContentInfo' );
+        $generator->startObjectElement( 'ContentInfo' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'ContentInfo' ) );
 
         $generator->startAttribute(
@@ -39,18 +39,18 @@ class ContentInfo extends ValueObjectVisitor
         $generator->startAttribute( 'id', $data->id );
         $generator->endAttribute( 'id' );
 
-        $generator->startElement( 'ContentType' );
+        $generator->startObjectElement( 'ContentType' );
         $generator->startAttribute(
             'href',
             $this->urlHandler->generate( 'type', array( 'type' => $data->getContentType()->id ) )
         );
         $generator->endAttribute( 'href' );
-        $generator->endElement( 'ContentType' );
+        $generator->endObjectElement( 'ContentType' );
 
         $generator->startValueElement( 'name', $data->name );
         $generator->endValueElement( 'name' );
 
-        $generator->endElement( 'ContentInfo' );
+        $generator->endObjectElement( 'ContentInfo' );
     }
 }
 

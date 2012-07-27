@@ -27,10 +27,10 @@ class SectionIncludingContentMetadataUpdateStruct extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'ContentUpdate' );
+        $generator->startObjectElement( 'ContentUpdate' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'ContentUpdate' ) );
 
-        $generator->startElement( 'Section' );
+        $generator->startObjectElement( 'Section' );
 
         if ( $data->sectionId !== null )
         {
@@ -40,9 +40,9 @@ class SectionIncludingContentMetadataUpdateStruct extends ValueObjectVisitor
             );
             $generator->endAttribute( 'href' );
         }
-        $generator->endElement( 'Section' );
+        $generator->endObjectElement( 'Section' );
 
-        $generator->startElement( 'Owner', 'User' );
+        $generator->startObjectElement( 'Owner', 'User' );
         if ( $data->ownerId !== null )
         {
             $generator->startAttribute(
@@ -51,10 +51,10 @@ class SectionIncludingContentMetadataUpdateStruct extends ValueObjectVisitor
             );
             $generator->endAttribute( 'href' );
         }
-        $generator->endElement( 'Owner' );
+        $generator->endObjectElement( 'Owner' );
 
         // TODO: Add missing elements
 
-        $generator->endElement( 'ContentUpdate' );
+        $generator->endObjectElement( 'ContentUpdate' );
     }
 }
