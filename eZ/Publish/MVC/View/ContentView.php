@@ -56,9 +56,9 @@ class ContentView implements ContentViewInterface
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
      */
-    public function __construct( $templateIdentifier, array $parameters = array() )
+    public function __construct( $templateIdentifier = null, array $parameters = array() )
     {
-        if ( !is_string( $templateIdentifier ) && !$templateIdentifier instanceof \Closure )
+        if ( isset( $templateIdentifier ) && !is_string( $templateIdentifier ) && !$templateIdentifier instanceof \Closure )
             throw new InvalidArgumentType( 'templateIdentifier', 'string or \Closure', $templateIdentifier );
 
         $this->templateIdentifier = $templateIdentifier;
