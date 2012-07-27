@@ -96,7 +96,9 @@ class TextBlockFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return false;
+        return array(
+            'unkknown' => array( 'value' => 23 )
+        );
     }
 
     /**

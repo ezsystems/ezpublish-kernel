@@ -57,8 +57,9 @@ class UrlFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        $this->markTestSkipped( "There are no invalid field settings" );
-        return false;
+        return array(
+            'somethingUnknown' => 0,
+        );
     }
 
     /**
@@ -88,7 +89,9 @@ class UrlFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return false;
+        return array(
+            'unkknown' => array( 'value' => 23 )
+        );
     }
 
     /**
