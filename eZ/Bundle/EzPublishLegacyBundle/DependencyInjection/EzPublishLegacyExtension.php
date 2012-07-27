@@ -44,6 +44,9 @@ class EzPublishLegacyExtension extends Extension
 
             // Templating
             $loader->load( 'templating.yml' );
+
+            // View
+            $loader->load( 'view.yml' );
         }
     }
 }
