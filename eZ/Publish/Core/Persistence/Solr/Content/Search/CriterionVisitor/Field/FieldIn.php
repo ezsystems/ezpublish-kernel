@@ -39,7 +39,8 @@ class FieldIn extends Field
     /**
      * Map field value to a proper Solr representation
      *
-     * @param DocumentField $field
+     * @param Criterion $criterion
+     * @param CriterionVisitor $subVisitor
      * @return void
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
