@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\FieldType\Relation;
+namespace eZ\Publish\Core\FieldType\Relation;
 use eZ\Publish\Core\FieldType\Value as BaseValue,
     eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 
