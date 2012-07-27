@@ -55,6 +55,13 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     abstract public function getTypeName();
 
     /**
+     * Get expected settings schema
+     *
+     * @return array
+     */
+    abstract public function getSettingsSchema();
+
+    /**
      * Get a valid $fieldSettings value
      *
      * @return mixed
@@ -62,18 +69,25 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     abstract public function getValidFieldSettings();
 
     /**
-     * Get a valid $validatorConfiguration
-     *
-     * @return mixed
-     */
-    abstract public function getValidValidatorConfiguration();
-
-    /**
      * Get $fieldSettings value not accepted by the field type
      *
      * @return mixed
      */
     abstract public function getInvalidFieldSettings();
+
+    /**
+     * Get expected validator schema
+     *
+     * @return array
+     */
+    abstract public function getValidatorSchema();
+
+    /**
+     * Get a valid $validatorConfiguration
+     *
+     * @return mixed
+     */
+    abstract public function getValidValidatorConfiguration();
 
     /**
      * Get $validatorConfiguration not accepted by the field type
@@ -361,6 +375,18 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         return $contentType->fieldDefinitions[1];
     }
 
+    public function testSettingsSchema()
+    {
+        $repository       = $this->getRepository();
+        $fieldTypeService = $repository->getFieldTypeService();
+        $fieldType = $fieldTypeService->getFieldType( $this->getTypeName() );
+
+        $this->assertEquals(
+            $this->getSettingsSchema(),
+            $fieldType->getSettingsSchema()
+        );
+    }
+
     /**
      * @depends testLoadContentTypeFieldType
      */
@@ -389,6 +415,18 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $this->createContentType(
             $this->getInvalidFieldSettings(),
             $this->getValidValidatorConfiguration()
+        );
+    }
+
+    public function testValidatorSchema()
+    {
+        $repository       = $this->getRepository();
+        $fieldTypeService = $repository->getFieldTypeService();
+        $fieldType = $fieldTypeService->getFieldType( $this->getTypeName() );
+
+        $this->assertEquals(
+            $this->getValidatorSchema(),
+            $fieldType->getValidatorConfigurationSchema()
         );
     }
 
