@@ -92,7 +92,7 @@ class FloatTest extends FieldTypeTest
         $fieldValue = $ft->toPersistenceValue( new FloatValue( 42.42 ) );
 
         self::assertSame( 42.42, $fieldValue->data );
-        self::assertSame( array( "sort_key_string" => "", "sort_key_int" => 0 ), $fieldValue->sortKey );
+        self::assertSame( false, $fieldValue->sortKey );
     }
 
     /**
