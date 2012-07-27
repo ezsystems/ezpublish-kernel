@@ -161,6 +161,8 @@ class EzcDatabase extends Gateway
         $query->select(
             $this->dbHandler->quoteColumn( "text" ),
             $this->dbHandler->quoteColumn( "parent" )
+        )->from(
+            $this->dbHandler->quoteTable( "ezurlalias_ml" )
         )->where(
             $query->expr->eq(
                 $this->dbHandler->quoteColumn( "id" ),
@@ -408,7 +410,7 @@ class EzcDatabase extends Gateway
         }
         if ( !isset( $values["id"] ) ) $values["id"] = $this->getNewId();
         if ( !isset( $values["link"] ) ) $values["link"] = $values["id"];
-        if ( !isset( $values["is_original"] ) ) $values["is_original"] = ( $values["id"] = $values["link"] ? 1 : 0 );
+        if ( !isset( $values["is_original"] ) ) $values["is_original"] = ( $values["id"] == $values["link"] ? 1 : 0 );
         if ( !isset( $values["is_alias"] ) ) $values["is_alias"] = 0;
         if ( !isset( $values["alias_redirects"] ) ) $values["alias_redirects"] = 0;
         if ( !isset( $values["action_type"] ) )
@@ -744,7 +746,7 @@ class EzcDatabase extends Gateway
      *
      * @return int
      */
-    public function getDestinationIdByAction( $action )
+    public function loadLocationEntryIdByAction( $action )
     {
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
@@ -772,6 +774,87 @@ class EzcDatabase extends Gateway
         $statement->execute();
 
         return $statement->fetchColumn();
+    }
+
+    /**
+     *
+     *
+     * @param string $action
+     *
+     * @return array
+     */
+    public function loadLocationEntryByAction( $action )
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $this->dbHandler->quoteColumn( "id" ),
+            $this->dbHandler->quoteColumn( "parent" )
+        )->from(
+            $this->dbHandler->quoteTable( "ezurlalias_ml" )
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "action" ),
+                    $query->bindValue( $action, null, \PDO::PARAM_STR )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "is_original" ),
+                    $query->bindValue( 1, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "is_alias" ),
+                    $query->bindValue( 0, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetch( \PDO::FETCH_ASSOC );
+    }
+
+    /**
+     *
+     *
+     * @param mixed $parentId
+     * @param string $action
+     *
+     * @return array
+     */
+    public function loadLocationEntryByParentIdAndAction( $parentId, $action )
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $this->dbHandler->quoteColumn( "id" ),
+            $this->dbHandler->quoteColumn( "parent" )
+        )->from(
+            $this->dbHandler->quoteTable( "ezurlalias_ml" )
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "action" ),
+                    $query->bindValue( $action, null, \PDO::PARAM_STR )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "parent" ),
+                    $query->bindValue( $parentId, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "is_original" ),
+                    $query->bindValue( 1, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "is_alias" ),
+                    $query->bindValue( 0, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetch( \PDO::FETCH_ASSOC );
     }
 
     /**

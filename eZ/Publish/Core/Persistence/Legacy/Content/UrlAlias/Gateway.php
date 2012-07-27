@@ -178,7 +178,26 @@ abstract class Gateway
      *
      * @return int
      */
-    abstract public function getDestinationIdByAction( $action );
+    abstract public function loadLocationEntryIdByAction( $action );
+
+    /**
+     *
+     *
+     * @param string $action
+     *
+     * @return array
+     */
+    abstract public function loadLocationEntryByAction( $action );
+
+    /**
+     *
+     *
+     * @param mixed $parentId
+     * @param string $action
+     *
+     * @return array
+     */
+    abstract public function loadLocationEntryByParentIdAndAction( $parentId, $action );
 
     /**
      *

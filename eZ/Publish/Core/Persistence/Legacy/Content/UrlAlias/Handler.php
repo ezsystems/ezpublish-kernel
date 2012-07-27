@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as BaseUrlAliasHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway,
     eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as LanguageCachingHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     eZ\Publish\SPI\Persistence\Content\UrlAlias,
@@ -43,6 +44,13 @@ class Handler implements BaseUrlAliasHandler
     protected $mapper;
 
     /**
+     * Location handler.
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
+     */
+    public $locationGateway;
+
+    /**
      * Caching language handler
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
@@ -61,7 +69,7 @@ class Handler implements BaseUrlAliasHandler
      *
      * @var array
      */
-    protected $reservedNames;
+    protected $reservedNames = array();
 
     /**
      * Creates a new UrlWildcard Handler
@@ -74,11 +82,13 @@ class Handler implements BaseUrlAliasHandler
     public function __construct(
         Gateway $gateway,
         Mapper $mapper,
+        LocationGateway $locationGateway,
         LanguageCachingHandler $languageHandler,
         LanguageMaskGenerator $languageMaskGenerator )
     {
         $this->gateway = $gateway;
         $this->mapper = $mapper;
+        $this->locationGateway = $locationGateway;
         $this->languageHandler = $languageHandler;
         $this->languageMaskGenerator = $languageMaskGenerator;
     }
@@ -100,13 +110,11 @@ class Handler implements BaseUrlAliasHandler
      */
     public function publishUrlAliasForLocation( $locationId, $name, $languageCode, $alwaysAvailable = false )
     {
-        $action = "eznode:" . $locationId;
-        $row = $this->gateway->loadRowByAction( $action );
-        $parentId = empty( $row ) ? 0 : $row["parent"];
-        $uniqueCounter = $this->getUniqueCounterValue( $name, $parentId );
-        $name = $this->convertToAlias( $name, "location_" . $locationId );// @todo here be URL transformation
-        $languageId = $this->languageHandler->getByLocale( $languageCode )->id;
+        $parentLocationData = $this->locationGateway->getBasicNodeData( $locationId );
+        $parentAction = "eznode:" . $parentLocationData["parent_node_id"];
+        $parentId = $this->gateway->loadLocationEntryIdByAction( $parentAction );
 
+        // Handling special case
         // If last (next to topmost) entry parent is special root entry we handle topmost entry as first level entry
         // That is why we need to reset $parentId to 0 and empty $createdPath
         if ( $parentId != 0 && $this->gateway->isRootEntry( $parentId ) )
@@ -114,18 +122,29 @@ class Handler implements BaseUrlAliasHandler
             $parentId = 0;
         }
 
-        // Exiting with break;
+        $uniqueCounter = $this->getUniqueCounterValue( $name, $parentId );
+        $name = $this->convertToAlias( $name, "location_" . $locationId );// @todo here be URL transformation
+        $languageId = $this->languageHandler->getByLocale( $languageCode )->id;
+        $action = "eznode:" . $locationId;
+
+        // Exiting the loop with break;
         while ( true )
         {
             $newText = $name . ( $uniqueCounter > 1 ? $uniqueCounter : "" );
             $newTextMD5 = $this->getHash( $newText );
+            // Try to load existing entry
             $row = $this->gateway->loadRow( $parentId, $newTextMD5 );
 
-            // If nothing was returned we need to see if insert is needed or system row can be reused
+            // If nothing was returned insert new entry
             if ( empty( $row ) )
             {
-                // Set common values for two cases below
+                // Check for existing active location entry on this level and reuse it's id
+                $existingLocationEntry = $this->gateway->loadLocationEntryByParentIdAndAction( $parentId, $action );
+                $existingLocationEntryId = !empty( $existingLocationEntry ) ? $existingLocationEntry["id"] : null;
                 $data = array(
+                    "id" => $existingLocationEntryId,
+                    "link" => $existingLocationEntryId,
+                    "parent" => $parentId,
                     "action" => $action,
                     // Set mask to language with always available bit
                     "lang_mask" => $languageId | (int)$alwaysAvailable,
@@ -133,41 +152,24 @@ class Handler implements BaseUrlAliasHandler
                     "text_md5" => $newTextMD5,
                 );
 
-                // First check for system entry on this level
-                $systemAliasRow = $this->gateway->loadRowByAction( $action );
-
-                if ( empty( $systemAliasRow ) )
-                {
-                    // There is no system entry on this level, insert new row
-                    $newElementId = $this->gateway->insertRow( $data );
-                }
-                else
-                {
-                    // System entry on this level exists, reuse it
-                    $newElementId = $systemAliasRow["id"];
-                    $this->gateway->updateRow(
-                        $parentId,
-                        $newTextMD5,
-                        $data + array(
-                            "id" => $newElementId,
-                            "link" => $newElementId
-                        )
-                    );
-                }
+                $newElementId = $this->gateway->insertRow( $data );
 
                 break;
             }
 
-            // Row exists, check if it is reusable
+            // Row exists, check if it is reusable. There are 3 cases:
+            // 1 - NOP
+            // 2 - maybe history, needs to be further checked
+            // 3 - history
             if ( $row["action"] == "nop:" || $row["action"] == $action || $row["is_original"] == 0 )
             {
-                // Check for existing system entry on this level, if it's id differs from reusable entry id then
-                // reusable entry is history and should be updated with the system entry id
+                // Check for existing location entry on this level, if it's id differs from reusable entry id then
+                // reusable entry is history and should be updated with the location entry id
                 // Same id for location entries are needed to choose most prioritized row when translating URL
-                // Note: system entry will be moved to history or downgraded later
-                $systemAliasRow = $this->gateway->loadRowByAction( $action );
-                $newElementId = ( !empty( $systemAliasRow ) && $systemAliasRow["id"] != $row["id"] )
-                    ? $systemAliasRow["id"]
+                // Note: location entry will be moved to history or downgraded later
+                $existingLocationEntry = $this->gateway->loadLocationEntryByParentIdAndAction( $parentId, $action );
+                $newElementId = ( !empty( $existingLocationEntry ) && $existingLocationEntry["id"] != $row["id"] )
+                    ? $existingLocationEntry["id"]
                     : $row["id"];
                 $data = array(
                     "action" => $action,
@@ -498,7 +500,7 @@ class Handler implements BaseUrlAliasHandler
 
                 $destination = $this->gateway->getPath(
                     $forwardToAction
-                        ? $this->gateway->getDestinationIdByAction( $data["action"] )
+                        ? $this->gateway->loadLocationEntryIdByAction( $data["action"] )
                         : $data["link"],
                     $prioritizedLanguageCodes
                 );

@@ -750,6 +750,7 @@ class Handler implements HandlerInterface
             $this->urlAliasHandler = new UrlAliasHandler(
                 $this->getUrlAliasGateway(),
                 $this->getUrlAliasMapper(),
+                $this->getLocationGateway(),
                 $this->contentLanguageHandler(),
                 $this->getLanguageMaskGenerator()
             );
