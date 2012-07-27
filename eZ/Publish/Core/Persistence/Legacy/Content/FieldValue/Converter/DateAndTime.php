@@ -47,7 +47,7 @@ class DateAndTime implements Converter
     {
         // @TODO: One should additionally store the timezone here. This could
         // be done in a backwards compatible way, I think…
-        $storageFieldValue->dataInt    = $value->data;
+        $storageFieldValue->dataInt    = $value->data['timestamp'];
         $storageFieldValue->sortKeyInt = $value->sortKey;
     }
 
@@ -59,7 +59,10 @@ class DateAndTime implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data    = $value->dataInt;
+        $fieldValue->data    = array(
+            'rfc850'    => null,
+            'timestamp' => $value->dataInt,
+        );
         $fieldValue->sortKey = $value->sortKeyInt;
     }
 

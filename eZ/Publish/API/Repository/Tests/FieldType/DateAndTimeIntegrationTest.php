@@ -310,7 +310,10 @@ class DateAndTimeFieldTypeIntergrationTest extends BaseIntegrationTest
         return array(
             array(
                 new DateAndTimeValue( '@123456' ),
-                123456,
+                array(
+                    'timestamp' => 123456,
+                    'rfc850'    => 'Friday, 02-Jan-70 10:17:36 GMT+0000',
+                ),
             ),
         );
     }
@@ -326,7 +329,10 @@ class DateAndTimeFieldTypeIntergrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                123456,
+                array(
+                    'timestamp' => 123456,
+                    'rfc850'    => 'Friday, 02-Jan-70 10:17:36 GMT+0000',
+                ),
                 new DateAndTimeValue( '@123456' )
             ),
         );

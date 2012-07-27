@@ -109,7 +109,10 @@ class DateAndTimeIntergrationTest extends BaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue( array(
-            'data'         => 123456,
+            'data'         => array(
+                'timestamp' => 123456,
+                'rfc850'    => null,
+            ),
             'externalData' => null,
             'sortKey'      => 42,
         ) );
@@ -125,7 +128,10 @@ class DateAndTimeIntergrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue( array(
-            'data'         => 12345678,
+            'data'         => array(
+                'timestamp' => 12345678,
+                'rfc850'    => null,
+            ),
             'externalData' => null,
             'sortKey'      => 23,
         ) );
