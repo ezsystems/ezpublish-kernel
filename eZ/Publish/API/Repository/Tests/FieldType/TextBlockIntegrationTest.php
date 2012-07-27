@@ -31,6 +31,21 @@ class TextBlockFieldTypeIntergrationTest extends BaseIntegrationTest
     }
 
     /**
+     * Get expected settings schema
+     *
+     * @return array
+     */
+    public function getSettingsSchema()
+    {
+        return array(
+            'textRows' => array(
+                'type'    => 'int',
+                'default' => 10,
+            ),
+        );
+    }
+
+    /**
      * Get a valid $fieldSettings value
      *
      * @return mixed
@@ -43,16 +58,6 @@ class TextBlockFieldTypeIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get a valid $validatorConfiguration
-     *
-     * @return mixed
-     */
-    public function getValidValidatorConfiguration()
-    {
-        return array();
-    }
-
-    /**
      * Get $fieldSettings value not accepted by the field type
      *
      * @return mixed
@@ -62,6 +67,26 @@ class TextBlockFieldTypeIntergrationTest extends BaseIntegrationTest
         return array(
             'somethingUnknown' => 0,
         );
+    }
+
+    /**
+     * Get expected validator schema
+     *
+     * @return array
+     */
+    public function getValidatorSchema()
+    {
+        return array();
+    }
+
+    /**
+     * Get a valid $validatorConfiguration
+     *
+     * @return mixed
+     */
+    public function getValidValidatorConfiguration()
+    {
+        return array();
     }
 
     /**

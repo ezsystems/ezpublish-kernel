@@ -38,21 +38,21 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get a valid $fieldSettings value
+     * Get expected settings schema
      *
-     * @return mixed
+     * @return array
      */
-    public function getValidFieldSettings()
+    public function getSettingsSchema()
     {
         return array();
     }
 
     /**
-     * Get a valid $validatorConfiguration
+     * Get a valid $fieldSettings value
      *
      * @return mixed
      */
-    public function getValidValidatorConfiguration()
+    public function getValidFieldSettings()
     {
         return array();
     }
@@ -66,6 +66,26 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
     {
         $this->markTestSkipped( "There are no invalid field settings" );
         return false;
+    }
+
+    /**
+     * Get expected validator schema
+     *
+     * @return array
+     */
+    public function getValidatorSchema()
+    {
+        return array();
+    }
+
+    /**
+     * Get a valid $validatorConfiguration
+     *
+     * @return mixed
+     */
+    public function getValidValidatorConfiguration()
+    {
+        return array();
     }
 
     /**
