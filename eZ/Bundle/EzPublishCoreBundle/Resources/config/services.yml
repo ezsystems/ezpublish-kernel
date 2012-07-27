@@ -14,12 +14,11 @@ services:
         class: %ezpublish.controller.base.class%
         abstract: true
         calls:
-            - [ setTemplateEngine, [@templating] ]
-            - [ setLogger, [@?logger] ]
+            - [ setContainer, [@service_container] ]
 
     ezpublish.controller.content.view:
         class: %ezpublish.controller.content.view.class%
-        arguments: [@ezpublish.api.repository, @ezpublish.view_manager, @request]
+        arguments: [@ezpublish.view_manager]
         parent: ezpublish.controller.base
         scope: request
 

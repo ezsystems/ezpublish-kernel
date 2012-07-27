@@ -18,25 +18,13 @@ use eZ\Publish\MVC\Controller\Controller,
 class ViewController extends Controller
 {
     /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    private $repository;
-
-    /**
      * @var \eZ\Publish\MVC\View\Manager
      */
     private $viewManager;
 
-    /**
-     * @var \Symfony\Component\HttpFoundation\Request
-     */
-    private $request;
-
-    public function __construct( Repository $repository, ViewManager $viewManager, Request $request )
+    public function __construct( ViewManager $viewManager )
     {
-        $this->repository = $repository;
         $this->viewManager = $viewManager;
-        $this->request = $request;
     }
 
     /**
@@ -50,14 +38,15 @@ class ViewController extends Controller
     public function viewLocation( $locationId, $viewMode )
     {
         // Assume that location is cached by the repository
-        $location = $this->repository->getLocationService()->loadLocation( $locationId );
+        $repository = $this->getRepository();
+        $location = $repository->getLocationService()->loadLocation( $locationId );
 
         $response = new Response();
         $response->setPublic();
         // TODO: Use a dedicated etag generator, generating a hash instead of plain text
         $response->setEtag( "ezpublish-location-$locationId-$viewMode" );
         $response->setLastModified( $location->getContentInfo()->modificationDate );
-        if ( $response->isNotModified( $this->request ) )
+        if ( $response->isNotModified( $this->getRequest() ) )
         {
             return $response;
         }
@@ -65,8 +54,7 @@ class ViewController extends Controller
         $response->setContent(
             $this->viewManager->renderLocation(
                 $location,
-                $this
-                    ->repository
+                $repository
                     ->getContentService()
                     ->loadContentByContentInfo( $location->getContentInfo() )
             )

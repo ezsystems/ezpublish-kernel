@@ -26,11 +26,23 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
      */
     protected $templateEngineMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $containerMock;
+
     protected function setUp()
     {
         $this->templateEngineMock = $this->getMock( 'Symfony\\Component\\Templating\\EngineInterface' );
+        $this->containerMock = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
         $this->controller = $this->getMockForAbstractClass( 'eZ\\Publish\\MVC\\Controller\\Controller' );
-        $this->controller->setTemplateEngine( $this->templateEngineMock );
+        $this->controller->setContainer( $this->containerMock );
+        $this->containerMock
+            ->expects( $this->any() )
+            ->method( 'get' )
+            ->with( 'templating' )
+            ->will( $this->returnValue( $this->templateEngineMock ) )
+        ;
     }
     /**
      * @covers \eZ\Publish\MVC\Controller::setTemplateEngine

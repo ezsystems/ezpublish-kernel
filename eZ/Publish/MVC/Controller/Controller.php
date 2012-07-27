@@ -9,36 +9,13 @@
 
 namespace eZ\Publish\MVC\Controller;
 
-use Symfony\Component\Templating\EngineInterface,
-    Symfony\Component\HttpKernel\Log\LoggerInterface,
+use Symfony\Component\DependencyInjection\ContainerAware,
+    Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Routing\RouterInterface,
     Symfony\Component\HttpFoundation\Response;
 
-abstract class Controller
+abstract class Controller extends ContainerAware
 {
-    /**
-     * @var Symfony\Component\Templating\EngineInterface
-     */
-    protected $templateEngine;
-
-    /**
-     * @var Symfony\Component\HttpKernel\Log\LoggerInterface
-     */
-    protected $logger;
-
-    public function setTemplateEngine( EngineInterface $templateEngine )
-    {
-        $this->templateEngine = $templateEngine;
-    }
-
-    /**
-     * @param \Symfony\Component\HttpKernel\Log\LoggerInterface $logger
-     */
-    public function setLogger( LoggerInterface $logger = null )
-    {
-        $this->logger = $logger;
-    }
-
     /**
      * Renders a view.
      *
@@ -54,7 +31,39 @@ abstract class Controller
             $response = new Response();
         }
 
-        $response->setContent( $this->templateEngine->render( $view, $parameters ) );
+        $response->setContent( $this->getTemplateEngine()->render( $view, $parameters ) );
         return $response;
+    }
+
+    /**
+     * @return \Symfony\Component\Templating\EngineInterface
+     */
+    public function getTemplateEngine()
+    {
+        return $this->container->get( 'templating' );
+    }
+
+    /**
+     * @return \Symfony\Component\HttpKernel\Log\LoggerInterface\null
+     */
+    public function getLogger()
+    {
+        return $this->container->get( 'logger', ContainerInterface::NULL_ON_INVALID_REFERENCE );
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository
+     */
+    public function getRepository()
+    {
+        return $this->container->get( 'ezpublish.api.repository' );
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Request
+     */
+    public function getRequest()
+    {
+        return $this->container->get( 'request' );
     }
 }
