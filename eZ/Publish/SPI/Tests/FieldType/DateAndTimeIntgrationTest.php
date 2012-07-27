@@ -109,7 +109,7 @@ class DateAndTimeIntergrationTest extends BaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue( array(
-            'data'         => new \DateTime( '15.04.1981 8:12' ),
+            'data'         => 123456,
             'externalData' => null,
             'sortKey'      => 42,
         ) );
@@ -125,7 +125,7 @@ class DateAndTimeIntergrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue( array(
-            'data'         => new \DateTime( '11.11.1982 16:16' ),
+            'data'         => 12345678,
             'externalData' => null,
             'sortKey'      => 23,
         ) );
