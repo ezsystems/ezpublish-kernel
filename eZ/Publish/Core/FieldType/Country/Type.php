@@ -176,7 +176,7 @@ class Type extends FieldType
      * Get index data for field data for search backend
      *
      * @param mixed $value
-     * @return \eZ\Publish\SPI\Persistence\Content\Search\DocumentField[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
      */
     public function getIndexData( $value )
     {
