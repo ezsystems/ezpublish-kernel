@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Relation\Type as RelationType,
-    eZ\Publish\Core\FieldType\Relation\Value as RelationValue,
+use eZ\Publish\Core\FieldType\Relation\Type as Relation,
+    eZ\Publish\Core\FieldType\Relation\Value,
     eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
@@ -21,12 +21,11 @@ class RelationTest extends FieldTypeTest
      */
     public function testValidatorConfigurationSchema()
     {
-        self::markTestIncomplete();
-        /*$ft = new Url( $this->validatorService, $this->fieldTypeTools );
+        $ft = new Relation( $this->validatorService, $this->fieldTypeTools );
         self::assertEmpty(
             $ft->getValidatorConfigurationSchema(),
             "The validator configuration schema does not match what is expected."
-        );*/
+        );
     }
 
     /**
@@ -34,12 +33,12 @@ class RelationTest extends FieldTypeTest
      */
     public function testSettingsSchema()
     {
-        $ft = new RelationType( $this->validatorService, $this->fieldTypeTools );
+        $ft = new Relation( $this->validatorService, $this->fieldTypeTools );
         self::assertSame(
             array(
                     'selectionMethod' => array(
                     'type' => 'int',
-                    'default' => RelationType::SELECTION_BROWSE,
+                    'default' => Relation::SELECTION_BROWSE,
                 ),
                     'selectionRoot' => array(
                     'type' => 'string',
@@ -57,12 +56,11 @@ class RelationTest extends FieldTypeTest
      */
     public function testAcceptValueInvalidFormat()
     {
-        /*$ft = new Url( $this->validatorService, $this->fieldTypeTools );
+        $ft = new Relation( $this->validatorService, $this->fieldTypeTools );
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
-        $refMethod->invoke( $ft, new UrlValue( 42 ) );*/
-        self::markTestIncomplete( __METHOD__ . " is not implemented" );
+        $refMethod->invoke( $ft, new Value( 42 ) );
     }
 
     /**
