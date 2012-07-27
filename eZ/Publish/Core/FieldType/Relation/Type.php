@@ -24,16 +24,16 @@ use eZ\Publish\Core\FieldType\FieldType,
  */
 class Type extends FieldType
 {
-    const SELECTION_BROWSE = 1;
-    const SELECTION_DROPDOWN = 2;
+    const SELECTION_BROWSE = 0,
+          SELECTION_DROPDOWN = 1;
 
     protected $settingsSchema = array(
         'selectionMethod' => array(
-            'type' => 'int',
+            'type' => 'choice',
             'default' => self::SELECTION_BROWSE,
         ),
         'selectionRoot' => array(
-            'type' => 'string', // @todo is this correct ? This would be a Location ID... can we use "mixed" here ?
+            'type' => 'string',
             'default' => '',
         ),
     );
