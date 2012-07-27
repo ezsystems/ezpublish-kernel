@@ -178,6 +178,13 @@ abstract class FieldType implements FieldTypeInterface
     public function validateValidatorConfiguration( $validatorConfiguration )
     {
         $validationErrors = array();
+
+        // @TODO: Is it supposed to be handled this way?
+        if ( $validatorConfiguration === false )
+        {
+            return $validationErrors;
+        }
+
         foreach ( (array)$validatorConfiguration as $validatorIdentifier => $constraints )
         {
             if ( in_array( $validatorIdentifier, $this->allowedValidators ) )
