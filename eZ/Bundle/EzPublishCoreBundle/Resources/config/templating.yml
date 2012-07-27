@@ -1,10 +1,33 @@
 parameters:
+    twig.loader.chain.class: Twig_Loader_Chain
+    twig.loader.string.class: Twig_Loader_String
+
     ezpublish.twig.extension.content.class: eZ\Publish\MVC\Templating\Twig\Extension\ContentExtension
     ezpublish.twig.content_helper.resources: [content_fields.html.twig]
 
     ezpublish.view_manager.class: eZ\Publish\MVC\View\Manager
 
 services:
+    # Redefining twig loader to use the chain loader instead of only the file system loader.
+    # This allows to add additional loading logic
+    # Loaders can be registered by identifying with twig.loader tag.
+    twig.loader.chain:
+        class: %twig.loader.chain.class%
+
+    twig.loader:
+        alias: twig.loader.chain
+
+    twig.loader.filesystem:
+        class: %twig.loader.class%
+        arguments: [@templating.locator, @templating.name_parser]
+        tags:
+            - {name: twig.loader}
+
+    twig.loader.string:
+        class: %twig.loader.string.class%
+        tags:
+            - {name: twig.loader}
+
     ezpublish.twig.extension.content:
         class: %ezpublish.twig.extension.content.class%
         arguments: [%ezpublish.twig.content_helper.resources%]
