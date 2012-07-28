@@ -94,7 +94,7 @@ services:
 
     ezpublish.fieldType.ezkeyword:
         class: %ezpublish.fieldType.ezkeyword.class%
-        arguments: [@ezpublish.api.fieldTypeValidator]
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
         tags:
             - {name: ezpublish.fieldType, alias: ezkeyword}
 
