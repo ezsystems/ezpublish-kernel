@@ -53,7 +53,7 @@ services:
 
     ezpublish.fieldType.ezbinaryfile:
         class: %ezpublish.fieldType.ezbinaryfile.class%
-        arguments: [@ezpublish.api.repository, @ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools, @ezpublish.api.repository]
         tags:
             - {name: ezpublish.fieldType, alias: ezbinaryfile}
 
@@ -106,7 +106,7 @@ services:
 
     ezpublish.fieldType.ezmedia:
         class: %ezpublish.fieldType.ezmedia.class%
-        arguments: [@ezpublish.api.repository, @ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools, @ezpublish.api.repository]
         tags:
             - {name: ezpublish.fieldType, alias: ezmedia}
 
@@ -153,7 +153,7 @@ services:
 
     ezpublish.fieldType.ezxmltext:
         class: %ezpublish.fieldType.ezxmltext.class%
-        arguments: [@ezpublish.fieldType.ezxmltext.simplifiedInputParser, @ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
+        arguments: [@ezpublish.fieldType.ezxmltext.simplifiedInputParser]
         tags:
             - {name: ezpublish.fieldType, alias: ezxmltext}
 
