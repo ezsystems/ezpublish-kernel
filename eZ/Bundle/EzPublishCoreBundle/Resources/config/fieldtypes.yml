@@ -40,11 +40,9 @@ parameters:
 services:
     ezpublish.api.fieldTypeValidator:
         class: %ezpublish.api.fieldTypeValidator.class%
-        public: false
 
     ezpublish.api.fieldTypeTools:
         class: %ezpublish.api.fieldTypeTools.class%
-        public: false
 
     ezpublish.fieldType:
         class: %ezpublish.fieldType.class%
