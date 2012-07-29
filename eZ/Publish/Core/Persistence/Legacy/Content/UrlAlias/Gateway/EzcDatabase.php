@@ -11,8 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     eZ\Publish\SPI\Persistence\Content\UrlAlias,
     ezcQuery,
@@ -56,7 +55,7 @@ class EzcDatabase extends Gateway
     /**
      * Caching language handler
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
      */
     protected $languageHandler;
 
@@ -71,12 +70,12 @@ class EzcDatabase extends Gateway
      * Creates a new EzcDatabase UrlAlias Gateway
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler $languageHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler $languageHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
     public function __construct (
         EzcDbHandler $dbHandler,
-        CachingHandler $languageHandler,
+        LanguageHandler $languageHandler,
         LanguageMaskGenerator $languageMaskGenerator )
     {
         $this->dbHandler = $dbHandler;
@@ -139,7 +138,7 @@ class EzcDatabase extends Gateway
             $row["always_available"] = (bool)( $row["lang_mask"] & 1 );
             foreach ( $this->languageMaskGenerator->extractLanguageIdsFromMask( $row["lang_mask"] ) as $languageId )
             {
-                $row["language_codes"][] = $this->languageHandler->getById( $languageId )->languageCode;
+                $row["language_codes"][] = $this->languageHandler->load( $languageId )->languageCode;
             }
         }
 
@@ -666,7 +665,7 @@ class EzcDatabase extends Gateway
             $row["language_codes"] = array();
             foreach ( $this->languageMaskGenerator->extractLanguageIdsFromMask( $row["lang_mask"] ) as $languageId )
             {
-                $row["language_codes"][] = $this->languageHandler->getById( $languageId )->languageCode;
+                $row["language_codes"][] = $this->languageHandler->load( $languageId )->languageCode;
             }
         }
 
@@ -733,7 +732,7 @@ class EzcDatabase extends Gateway
         $languageCodes = array();
         foreach ( $this->languageMaskGenerator->extractLanguageIdsFromMask( $languageMaskSum ) as $languageId )
         {
-            $languageCodes[] = $this->languageHandler->getById( $languageId )->languageCode;
+            $languageCodes[] = $this->languageHandler->load( $languageId )->languageCode;
         }
 
         return $languageCodes;
@@ -971,7 +970,7 @@ class EzcDatabase extends Gateway
         $prioritizedLanguages = array();
         foreach ( $prioritizedLanguageCodes as $languageCode )
         {
-            $prioritizedLanguages[] = $this->languageHandler->getByLocale( $languageCode );
+            $prioritizedLanguages[] = $this->languageHandler->loadByLanguageCode( $languageCode );
         }
 
         while ( $id != 0 )

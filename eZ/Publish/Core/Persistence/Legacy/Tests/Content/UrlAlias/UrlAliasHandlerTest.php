@@ -15,10 +15,10 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase as LocationGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as LanguageCachingHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache as LanguageCache,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase as LanguageGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache as LanguageCache,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as LanguageCachingHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     eZ\Publish\SPI\Persistence\Content\UrlAlias;
 
@@ -1089,16 +1089,17 @@ class UrlAliasHandlerTest extends TestCase
     protected function getHandler()
     {
         $this->dbHandler = $this->getDatabaseHandler();
-        $languageHandler = new LanguageCachingHandler(
-            new LanguageHandler(
-                new LanguageGateway(
-                    $this->getDatabaseHandler()
-                ),
-                new LanguageMapper()
+        $languageHandler = new LanguageHandler(
+            new LanguageGateway(
+                $this->getDatabaseHandler()
             ),
+            new LanguageMapper()
+        );
+        $cachingLanguageHandler = new LanguageCachingHandler(
+            $languageHandler,
             new LanguageCache()
         );
-        $languageMaskGenerator = new LanguageMaskGenerator( $languageHandler );
+        $languageMaskGenerator = new LanguageMaskGenerator( $cachingLanguageHandler );
         $gateway = new EzcDatabase(
             $this->dbHandler,
             $languageHandler,

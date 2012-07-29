@@ -13,7 +13,7 @@ use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as BaseUrlAliasHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway,
     eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as LanguageCachingHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     eZ\Publish\SPI\Persistence\Content\UrlAlias,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
@@ -76,14 +76,15 @@ class Handler implements BaseUrlAliasHandler
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway $gateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper $mapper
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler $languageHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $locationGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler $languageHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
     public function __construct(
         Gateway $gateway,
         Mapper $mapper,
         LocationGateway $locationGateway,
-        LanguageCachingHandler $languageHandler,
+        LanguageHandler $languageHandler,
         LanguageMaskGenerator $languageMaskGenerator )
     {
         $this->gateway = $gateway;
@@ -124,7 +125,7 @@ class Handler implements BaseUrlAliasHandler
 
         $uniqueCounter = $this->getUniqueCounterValue( $name, $parentId );
         $name = $this->convertToAlias( $name, "location_" . $locationId );// @todo here be URL transformation
-        $languageId = $this->languageHandler->getByLocale( $languageCode )->id;
+        $languageId = $this->languageHandler->loadByLanguageCode( $languageCode )->id;
         $action = "eznode:" . $locationId;
 
         // Exiting the loop with break;
@@ -209,7 +210,7 @@ class Handler implements BaseUrlAliasHandler
         $data["is_alias"] = false;
         foreach ( $this->languageMaskGenerator->extractLanguageIdsFromMask( $data["lang_mask"] ) as $languageId )
         {
-            $data["language_codes"][] = $this->languageHandler->getById( $languageId )->languageCode;
+            $data["language_codes"][] = $this->languageHandler->load( $languageId )->languageCode;
         }
 
         return $data;

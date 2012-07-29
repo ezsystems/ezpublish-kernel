@@ -236,19 +236,20 @@ class EzcDatabaseTest extends TestCase
     {
         if ( !isset( $this->gateway ) )
         {
-            $languageHandler = new LanguageCachingHandler(
-                new LanguageHandler(
-                    new LanguageGateway(
-                        $this->getDatabaseHandler()
-                    ),
-                    new LanguageMapper()
+            $languageHandler = new LanguageHandler(
+                new LanguageGateway(
+                    $this->getDatabaseHandler()
                 ),
+                new LanguageMapper()
+            );
+            $cachingLanguageHandler = new LanguageCachingHandler(
+                $languageHandler,
                 new LanguageCache()
             );
             $this->gateway = new EzcDatabase(
                 $this->getDatabaseHandler(),
                 $languageHandler,
-                new LanguageMaskGenerator( $languageHandler )
+                new LanguageMaskGenerator( $cachingLanguageHandler )
             );
         }
         return $this->gateway;
