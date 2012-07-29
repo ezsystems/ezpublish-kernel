@@ -107,7 +107,13 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
-        return new Value( $hash );
+        return new Value( array_map(
+            function ( $author )
+            {
+                return new Author( $author );
+            },
+            $hash
+        ) );
     }
 
     /**
@@ -119,7 +125,13 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
-        return $value->authors;
+        return array_map(
+            function ( $author )
+            {
+                return (array) $author;
+            },
+            $value->authors->getArrayCopy()
+        );
     }
 
     /**
@@ -130,5 +142,16 @@ class Type extends FieldType
     public function isSearchable()
     {
         return true;
+    }
+
+    /**
+     * Get index data for field data for search backend
+     *
+     * @param mixed $value
+     * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
+     */
+    public function getIndexData( $value )
+    {
+        throw new \RuntimeExcepion( '@TODO: Implement' );
     }
 }

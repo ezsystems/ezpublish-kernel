@@ -104,7 +104,7 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
-        return array('sort_key_string' => '');
+        return false;
     }
 
     /**
@@ -134,7 +134,7 @@ class Type extends FieldType
         return array( "link" => $value->link, "text" => $value->text );
     }
 
-     /**
+    /**
      * Converts a $value to a persistence value.
      *
      * In this method the field type puts the data which is stored in the field of content in the repository

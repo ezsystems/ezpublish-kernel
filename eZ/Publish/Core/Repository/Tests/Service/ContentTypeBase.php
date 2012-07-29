@@ -2141,10 +2141,6 @@ abstract class ContentTypeBase extends BaseServiceTest
         $publishedType = $this->createPublishedContentType();
         // Create draft for current user
         $this->repository->getContentTypeService()->createContentTypeDraft( $publishedType );
-        // Change user
-        $this->repository->setCurrentUser(
-            $this->getStubbedUser( 4096 )
-        );
 
         /* BEGIN: Use case */
         // $publishedType contains a ContentType object
@@ -2458,7 +2454,6 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::copyContentType
      *
      * @return array
-     * @todo change user
      */
     public function testCopyContentTypeWithSecondArgument()
     {
@@ -2466,6 +2461,7 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         /* BEGIN: Use Case */
         $user = $this->getStubbedUser( 4096 );
+        $this->repository->setCurrentUser( $user );
         $contentTypeService = $this->repository->getContentTypeService();
 
         $commentType = $contentTypeService->loadContentTypeByIdentifier( "comment" );
@@ -2525,7 +2521,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $this->assertGreaterThanOrEqual( $time, $copiedType->modificationDate->getTimestamp() );
         $this->assertEquals( $userId, $copiedType->creatorId );
         $this->assertEquals( $userId, $copiedType->modifierId );
-        $this->assertEquals( ContentType::STATUS_DRAFT, $copiedType->status );
+        $this->assertEquals( ContentType::STATUS_DEFINED, $copiedType->status );
     }
 
     /**

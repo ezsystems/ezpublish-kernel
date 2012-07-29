@@ -94,7 +94,7 @@ class CheckboxTest extends FieldTypeTest
         $fieldValue = $ft->toPersistenceValue( new CheckboxValue( true ) );
 
         self::assertSame( true, $fieldValue->data );
-        self::assertSame( array( 'sort_key_int' => 1 ), $fieldValue->sortKey );
+        self::assertSame( 1, $fieldValue->sortKey );
     }
 
     /**

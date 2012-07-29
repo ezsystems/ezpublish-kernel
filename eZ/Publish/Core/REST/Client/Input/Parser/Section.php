@@ -15,7 +15,7 @@ use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\API\Repository\Values;
 
 /**
- * Parser for SectionList
+ * Parser for Section
  */
 class Section extends Parser
 {
@@ -23,8 +23,8 @@ class Section extends Parser
      * Parse input structure
      *
      * @param array $data
-     * @param ParsingDispatcher $parsingDispatcher
-     * @return ValueObject
+     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @return \eZ\Publish\API\Repository\Values\Content\Section
      * @todo Error handling
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )

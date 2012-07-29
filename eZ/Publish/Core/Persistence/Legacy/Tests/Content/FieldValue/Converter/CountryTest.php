@@ -71,7 +71,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
     {
         $value = new FieldValue;
         $value->data = "BE,FR";
-        $value->sortKey = array( "sort_key_string" => "belgium,france" );
+        $value->sortKey = "belgium,france";
         $storageFieldValue = new StorageFieldValue;
 
         $this->converter->toStorageValue( $value, $storageFieldValue );

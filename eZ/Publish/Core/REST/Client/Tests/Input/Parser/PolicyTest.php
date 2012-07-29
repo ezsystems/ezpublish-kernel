@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing a test class
+ * File containing a PolicyTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -26,42 +26,6 @@ class PolicyTest extends BaseTest
             'id' => '42',
             'module' => 'content',
             'function' => 'delete',
-            'limitations' => array(
-                'limitation' => array(
-                    array(
-                        '_identifier' => 'Class',
-                        'values' => array(
-                            'ref' => array(
-                                array(
-                                    '_href' => 1
-                                ),
-                                array(
-                                    '_href' => 2
-                                ),
-                                array(
-                                    '_href' => 3
-                                )
-                            )
-                        )
-                    ),
-                    array(
-                        '_identifier' => 'Section',
-                        'values' => array(
-                            'ref' => array(
-                                array(
-                                    '_href' => 4
-                                ),
-                                array(
-                                    '_href' => 5
-                                ),
-                                array(
-                                    '_href' => 6
-                                )
-                            )
-                        )
-                    )
-                )
-            )
         );
 
         $result = $policyParser->parse( $inputArray, $this->getParsingDispatcherMock() );
@@ -124,29 +88,6 @@ class PolicyTest extends BaseTest
         $this->assertEquals(
             'delete',
             $result->function
-        );
-    }
-
-    /**
-     * Tests that the resulting policy contains limitations
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $result
-     * @depends testParse
-     */
-    public function testResultContainsLimitations( $result )
-    {
-        $contentTypeLimitation = new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
-        $contentTypeLimitation->limitationValues = array( 1, 2, 3 );
-
-        $sectionLimitation = new \eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation();
-        $sectionLimitation->limitationValues = array( 4, 5, 6 );
-
-        $this->assertEquals(
-            array(
-                $contentTypeLimitation,
-                $sectionLimitation
-            ),
-            $result->limitations
         );
     }
 

@@ -51,7 +51,7 @@ interface ContentService
      *
      * To load fields use loadContent
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the content in the given location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the content
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content with the given remote id does not exist
      *
      * @param string $remoteId
@@ -310,38 +310,6 @@ interface ContentService
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
     public function copyContent( ContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, VersionInfo $versionInfo = null);
-
-    /**
-     * @deprecated use search service instead
-     * finds content objects for the given query.
-     *
-     * @TODO define structs for the field filters
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array  $fieldFilters - a map of filters for the returned fields.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
-     * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
-     */
-    public function findContent( Query $query, array $fieldFilters, $filterOnUserPermissions = true );
-
-    /**
-     * @deprecated use search service instead
-     * Performs a query for a single content object
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the query would return more than one result
-     *
-     * @TODO define structs for the field filters
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array  $fieldFilters - a map of filters for the returned fields.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
-     * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    public function findSingle( Query $query, array $fieldFilters, $filterOnUserPermissions = true );
 
     /**
      * load all outgoing relations for the given version

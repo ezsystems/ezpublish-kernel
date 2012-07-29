@@ -231,3 +231,4 @@ interface FieldType
      */
     public function fromPersistenceValue( FieldValue $fieldValue );
 }
+

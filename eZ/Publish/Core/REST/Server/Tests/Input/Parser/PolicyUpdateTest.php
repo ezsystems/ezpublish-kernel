@@ -15,47 +15,11 @@ class PolicyUpdateTest extends BaseTest
 {
     /**
      * Tests the PolicyUpdate parser
+     * @todo test with limitations
      */
     public function testParse()
     {
-        $inputArray = array(
-            'limitations' => array(
-                'limitation' => array(
-                    array(
-                        '_identifier' => 'Class',
-                        'values' => array(
-                            'ref' => array(
-                                array(
-                                    '_href' => 1
-                                ),
-                                array(
-                                    '_href' => 2
-                                ),
-                                array(
-                                    '_href' => 3
-                                )
-                            )
-                        )
-                    ),
-                    array(
-                        '_identifier' => 'Section',
-                        'values' => array(
-                            'ref' => array(
-                                array(
-                                    '_href' => 4
-                                ),
-                                array(
-                                    '_href' => 5
-                                ),
-                                array(
-                                    '_href' => 6
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        );
+        $inputArray = array();
 
         $policyUpdate = $this->getPolicyUpdate();
         $result = $policyUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );

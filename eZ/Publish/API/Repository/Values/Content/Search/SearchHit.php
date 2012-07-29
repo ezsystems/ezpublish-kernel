@@ -9,11 +9,13 @@
 
 namespace eZ\Publish\API\Repository\Values\Content\Search;
 
+use eZ\Publish\API\Repository\Values\ValueObject;
+
 /**
  * This class represents a SearchHit matching the query
  *
  */
-class SearchHit {
+class SearchHit extends ValueObject {
     /**
      * The value found by the search
      *

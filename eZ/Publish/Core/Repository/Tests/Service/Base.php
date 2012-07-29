@@ -32,56 +32,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $serviceSettings = array(
-            'fieldType' => array(
-                'ezauthor' => function(){ return new \eZ\Publish\Core\FieldType\Author\Type(
-                    new \eZ\Publish\Core\Repository\ValidatorService(),
-                    new \eZ\Publish\Core\Repository\FieldTypeTools()
-                ); },
-                'ezdatetime' => function(){ return new \eZ\Publish\Core\FieldType\DateAndTime\Type(
-                    new \eZ\Publish\Core\Repository\ValidatorService(),
-                    new \eZ\Publish\Core\Repository\FieldTypeTools()
-                ); },
-                'ezfloat' => function(){ return new \eZ\Publish\Core\FieldType\Float\Type(
-                    new \eZ\Publish\Core\Repository\ValidatorService(),
-                    new \eZ\Publish\Core\Repository\FieldTypeTools()
-                ); },
-                'ezinteger' => function(){ return new \eZ\Publish\Core\FieldType\Integer\Type(
-                    new \eZ\Publish\Core\Repository\ValidatorService(),
-                    new \eZ\Publish\Core\Repository\FieldTypeTools()
-                ); },
-                'ezkeyword' => function(){ return new \eZ\Publish\Core\FieldType\Keyword\Type(
-                    new \eZ\Publish\Core\Repository\ValidatorService(),
-                    new \eZ\Publish\Core\Repository\FieldTypeTools()
-                ); },
-                'eztext' => function(){ return new \eZ\Publish\Core\FieldType\TextBlock\Type(
-                    new \eZ\Publish\Core\Repository\ValidatorService(),
-                    new \eZ\Publish\Core\Repository\FieldTypeTools()
-                ); },
-                'ezstring' => function(){ return new \eZ\Publish\Core\FieldType\TextLine\Type(
-                    new \eZ\Publish\Core\Repository\ValidatorService(),
-                    new \eZ\Publish\Core\Repository\FieldTypeTools()
-                ); },
-                'ezimage' => function(){ return new \eZ\Publish\Core\FieldType\Integer\Type(
-                    new \eZ\Publish\Core\Repository\ValidatorService(),
-                    new \eZ\Publish\Core\Repository\FieldTypeTools()
-                ); },
-                'ezuser' => function(){ return new \eZ\Publish\Core\FieldType\Integer\Type(
-                    new \eZ\Publish\Core\Repository\ValidatorService(),
-                    new \eZ\Publish\Core\Repository\FieldTypeTools()
-                ); },
-                'ezurl' => function(){ return new \eZ\Publish\Core\FieldType\Url\Type(
-                    new \eZ\Publish\Core\Repository\ValidatorService(),
-                    new \eZ\Publish\Core\Repository\FieldTypeTools()
-                ); },
-                'ezxmltext' => function(){ return new \eZ\Publish\Core\FieldType\XmlText\Type(
-                    new \eZ\Publish\Core\FieldType\XmlText\Input\Parser\Simplified(
-                        new \eZ\Publish\Core\FieldType\XmlText\Schema
-                    )
-                ); },
-            ),
-        );
-        $this->repository = static::getRepository( $serviceSettings );
+        $this->repository = static::getRepository();
         $this->repository->setCurrentUser( $this->getStubbedUser( 14 ) );
     }
 
@@ -160,10 +111,9 @@ abstract class Base extends PHPUnit_Framework_TestCase
      *
      * Makes it possible to inject different Io / Persistence handlers
      *
-     * @param array $serviceSettings Array with settings that are passed to Services
      * @return \eZ\Publish\Core\Repository\Repository
      */
-    abstract protected function getRepository( array $serviceSettings );
+    abstract protected function getRepository();
 
     /**
      * Asserts that properties given in $expectedValues are correctly set in

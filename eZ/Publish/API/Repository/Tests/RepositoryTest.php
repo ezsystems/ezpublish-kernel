@@ -24,6 +24,7 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @group content
+     * @group user
      * @see \eZ\Publish\API\Repository\Repository::getContentService()
      */
     public function testGetContentService()
@@ -57,6 +58,7 @@ class RepositoryTest extends BaseTest
      * @return void
      * @group content-type
      * @group field-type
+     * @group user
      * @see \eZ\Publish\API\Repository\Repository::getContentTypeService()
      *
      */
@@ -228,6 +230,22 @@ class RepositoryTest extends BaseTest
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\IOService',
             $repository->getIOService()
+        );
+    }
+
+    /**
+     * Test for the getSearchService() method.
+     *
+     * @return void
+     * @group search
+     * @see \eZ\Publish\API\Repository\Repository::getSearchService()
+     */
+    public function testGetSearchService()
+    {
+        $repository = $this->getRepository();
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\SearchService',
+            $repository->getSearchService()
         );
     }
 

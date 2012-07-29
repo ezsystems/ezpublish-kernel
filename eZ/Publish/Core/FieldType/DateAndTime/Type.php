@@ -123,7 +123,7 @@ class Type extends FieldType
         if ( $value->value instanceof DateTime )
             $timestamp = $value->value->getTimestamp();
 
-        return array( 'sort_key_int' => $timestamp );
+        return $timestamp;
     }
 
     /**
@@ -135,7 +135,12 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
-        return new Value( "@$hash" );
+        if ( isset( $hash['rfc850'] ) && $hash['rfc850'] )
+        {
+            return new Value( $hash['rfc850'] );
+        }
+
+        return new Value( "@" . $hash['timestamp'] );
     }
 
     /**
@@ -148,8 +153,17 @@ class Type extends FieldType
     public function toHash( $value )
     {
         if ( $value->value instanceof DateTime )
-            return $value->value->getTimestamp();
-        return 0;
+        {
+            return array(
+                'timestamp' => $value->value->getTimestamp(),
+                'rfc850'    => $value->value->format( \DateTime::RFC850  ),
+            );
+        }
+
+        return array(
+            'timestamp' => 0,
+            'rfc850'    => null,
+        );
     }
 
     /**

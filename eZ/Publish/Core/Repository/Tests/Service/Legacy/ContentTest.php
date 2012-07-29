@@ -15,8 +15,8 @@ use eZ\Publish\Core\Repository\Tests\Service\ContentBase as BaseContentServiceTe
  */
 class ContentTest extends BaseContentServiceTest
 {
-    protected function getRepository( array $serviceSettings )
+    protected function getRepository()
     {
-        return include 'common.php';
+        return Utils::getRepository();
     }
 }

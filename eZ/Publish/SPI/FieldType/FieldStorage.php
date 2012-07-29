@@ -104,9 +104,11 @@ interface FieldStorage
     public function hasFieldData();
 
     /**
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * Get index data for external data for search backend
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
      */
     public function getIndexData( VersionInfo $versionInfo, Field $field, array $context );
 }

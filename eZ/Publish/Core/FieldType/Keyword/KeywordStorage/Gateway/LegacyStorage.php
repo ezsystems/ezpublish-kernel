@@ -141,7 +141,7 @@ class LegacyStorage extends Gateway
         $query->select( 'contentclass_id' )
             ->from( $dbHandler->quoteTable( 'ezcontentclass_attribute' ) )
             ->where(
-                $query->expr->eq( 'id', $field->fieldDefinitionId )
+                $query->expr->eq( 'id', $fieldDefinitionId )
             );
 
         $statement = $query->prepare();

@@ -71,11 +71,15 @@ $urlHandler = new Common\UrlHandler\eZPublish();
 
 $inputDispatcher = new Common\Input\Dispatcher(
     new Common\Input\ParsingDispatcher( array(
-        'application/vnd.ez.api.RoleInput'     => new Input\Parser\RoleInput( $urlHandler, $repository->getRoleService() ),
-        'application/vnd.ez.api.SectionInput'  => new Input\Parser\SectionInput( $urlHandler, $repository->getSectionService() ),
-        'application/vnd.ez.api.ContentUpdate' => new Input\Parser\ContentUpdate( $urlHandler ),
-        'application/vnd.ez.api.PolicyCreate'  => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService() ),
-        'application/vnd.ez.api.PolicyUpdate'  => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService() ),
+        'application/vnd.ez.api.RoleInput'       => new Input\Parser\RoleInput( $urlHandler, $repository->getRoleService() ),
+        'application/vnd.ez.api.SectionInput'    => new Input\Parser\SectionInput( $urlHandler, $repository->getSectionService() ),
+        'application/vnd.ez.api.ContentUpdate'   => new Input\Parser\ContentUpdate( $urlHandler ),
+        'application/vnd.ez.api.PolicyCreate'    => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService() ),
+        'application/vnd.ez.api.PolicyUpdate'    => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService() ),
+        'application/vnd.ez.api.limitation'      => new Input\Parser\Limitation( $urlHandler ),
+        'application/vnd.ez.api.RoleAssignInput' => new Input\Parser\RoleAssignInput( $urlHandler ),
+        'application/vnd.ez.api.LocationCreate'  => new Input\Parser\LocationCreate( $urlHandler, $repository->getLocationService() ),
+        'application/vnd.ez.api.LocationUpdate'  => new Input\Parser\LocationUpdate( $urlHandler, $repository->getLocationService() ),
     ) ),
     $handler
 );
@@ -103,7 +107,15 @@ $contentController = new Controller\Content(
 $roleController = new Controller\Role(
     $inputDispatcher,
     $urlHandler,
-    $repository->getRoleService()
+    $repository->getRoleService(),
+    $repository->getUserService()
+);
+
+$locationController = new Controller\Location(
+    $inputDispatcher,
+    $urlHandler,
+    $repository->getLocationService(),
+    $repository->getContentService()
 );
 
 /*
@@ -124,19 +136,22 @@ $valueObjectVisitors = array(
     '\\eZ\Publish\API\Repository\Exceptions\BadStateException'        => new Output\ValueObjectVisitor\BadStateException( $urlHandler,  true ),
     '\\Exception'                                                     => new Output\ValueObjectVisitor\Exception( $urlHandler,  true ),
 
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\SectionList'           => new Output\ValueObjectVisitor\SectionList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedSection'        => new Output\ValueObjectVisitor\CreatedSection( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\SectionList'          => new Output\ValueObjectVisitor\SectionList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedSection'       => new Output\ValueObjectVisitor\CreatedSection( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section'        => new Output\ValueObjectVisitor\Section( $urlHandler ),
 
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentList'           => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentList'          => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo'    => new Output\ValueObjectVisitor\ContentInfo( $urlHandler ),
 
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleList'              => new Output\ValueObjectVisitor\RoleList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedRole'           => new Output\ValueObjectVisitor\CreatedRole( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleList'             => new Output\ValueObjectVisitor\RoleList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedRole'          => new Output\ValueObjectVisitor\CreatedRole( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role'              => new Output\ValueObjectVisitor\Role( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy'            => new Output\ValueObjectVisitor\Policy( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PolicyList'           => new Output\ValueObjectVisitor\PolicyList( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation'        => new Output\ValueObjectVisitor\Limitation( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleAssignmentList'   => new Output\ValueObjectVisitor\RoleAssignmentList( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location'       => new Output\ValueObjectVisitor\Location( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\LocationList'         => new Output\ValueObjectVisitor\LocationList( $urlHandler ),
 );
 
 /*
@@ -175,6 +190,17 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/content/objects/[0-9]+$)' => array(
             'PATCH' => array( $contentController, 'updateContentMetadata' ),
         ),
+        '(^/content/objects/[0-9]+/locations$)' => array(
+            'GET' => array( $locationController, 'loadLocationsForContent' ),
+            'POST' => array( $locationController, 'createLocation' ),
+        ),
+        '(^/content/locations/[0-9/]+$)' => array(
+            'GET'    => array( $locationController, 'loadLocation' ),
+            'PATCH'  => array( $locationController, 'updateLocation' ),
+        ),
+        '(^/content/locations/[0-9/]+/children$)' => array(
+            'GET'    => array( $locationController, 'loadLocationChildren' ),
+        ),
         '(^/user/roles$)' => array(
             'GET' => array( $roleController, 'listRoles' ),
             'POST' => array( $roleController, 'createRole' ),
@@ -195,6 +221,20 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/user/roles/[0-9]+/policies/[0-9]+$)' => array(
             'PATCH'  => array( $roleController, 'updatePolicy' ),
             'DELETE' => array( $roleController, 'deletePolicy' ),
+        ),
+        '(^/user/users/[0-9]+/roles$)' => array(
+            'GET'  => array( $roleController, 'loadRoleAssignmentsForUser' ),
+            'POST'  => array( $roleController, 'assignRoleToUser' ),
+        ),
+        '(^/user/users/[0-9]+/roles/[0-9]+$)' => array(
+            'DELETE'  => array( $roleController, 'unassignRoleFromUser' ),
+        ),
+        '(^/user/groups/[0-9/]+/roles$)' => array(
+            'GET'  => array( $roleController, 'loadRoleAssignmentsForUserGroup' ),
+            'POST'  => array( $roleController, 'assignRoleToUserGroup' ),
+        '(^/user/groups/[0-9/]+/roles/[0-9]+$)' => array(
+            'DELETE'  => array( $roleController, 'unassignRoleFromUserGroup' ),
+        ),
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(

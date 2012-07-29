@@ -11,11 +11,16 @@ namespace eZ\Publish\Legacy\Kernel;
 
 use eZ\Publish\Legacy\Kernel as LegacyKernel,
     eZ\Publish\MVC\SiteAccess,
+    eZ\Publish\MVC\MVCEvents,
+    eZ\Publish\MVC\Event\PreBuildKernelWebHandlerEvent,
     \ezpKernelHandler,
     \ezpKernelWeb,
     \eZSiteAccess,
     \eZURI,
-    Symfony\Component\HttpFoundation\Request;
+    Symfony\Component\DependencyInjection\ContainerInterface,
+    Symfony\Component\DependencyInjection\Exception\InactiveScopeException,
+    Symfony\Component\HttpKernel\Log\LoggerInterface,
+    Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * Legacy kernel loader
@@ -32,10 +37,16 @@ class Loader
      */
     protected $webrootDir;
 
-    public function __construct( $legacyRootDir, $webrootDir )
+    /**
+     * @var \Symfony\Component\HttpKernel\Log\LoggerInterface
+     */
+    protected $logger;
+
+    public function __construct( $legacyRootDir, $webrootDir, LoggerInterface $logger = null )
     {
         $this->legacyRootDir = $legacyRootDir;
         $this->webrootDir = $webrootDir;
+        $this->logger = $logger;
     }
 
     /**
@@ -65,22 +76,47 @@ class Loader
     /**
      * Builds up the legacy kernel web handler and encapsulates it inside a closure, allowing lazy loading.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request Current web request
-     * @return \Closure
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @return \Closure|void
      */
-    public function buildLegacyKernelHandlerWeb( Request $request )
+    public function buildLegacyKernelHandlerWeb( ContainerInterface $container, array $defaultLegacyOptions = array() )
     {
         $legacyRootDir = $this->legacyRootDir;
         $webrootDir = $this->webrootDir;
-        return function () use ( $legacyRootDir, $webrootDir, $request )
+        try
+        {
+            // Getting the request through the container since this service is in the "request" scope and we are not in this scope yet.
+            // Moreover, while clearing/warming up caches with app/console we might get an InactiveScopeException
+            // since the "request" scope is only active via web.
+            $request = $container->get( 'request' );
+        }
+        catch ( InactiveScopeException $e )
+        {
+            // Not in web mode. We have nothing to do here.
+            if ( isset( $this->logger ) )
+                $this->logger->info( 'Trying to get the request in non-web context (warming up caches?), aborting', array( __METHOD__ ) );
+
+            return;
+        }
+
+        $eventDispatcher = $container->get( 'event_dispatcher' );
+        $legacyParameters = new ParameterBag( $defaultLegacyOptions );
+
+        return function () use ( $legacyRootDir, $webrootDir, $request, $eventDispatcher, $legacyParameters )
         {
             static $webHandler;
             if ( !$webHandler instanceof ezpKernelWeb )
             {
                 chdir( $legacyRootDir );
-                $settings = array();
-                if ( $request->attributes->has( 'legacySiteaccess' ) )
-                    $settings['siteaccess'] = $request->attributes->get( 'legacySiteaccess' );
+
+                $buildEvent = new PreBuildKernelWebHandlerEvent(
+                    $legacyParameters, $request
+                );
+                $eventDispatcher->dispatch(
+                    MVCEvents::BUILD_KERNEL_WEB_HANDLER, $buildEvent
+                );
+
+                $settings = $legacyParameters->all();
 
                 $webHandler = new ezpKernelWeb( $settings );
                 eZURI::instance()->setURIString(

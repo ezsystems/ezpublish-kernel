@@ -40,10 +40,9 @@ class BasicAuth implements HttpClient
     /**
      * Creates a new Basic Auth HTTP client
      *
-     * @param HttpClient $innerClient
+     * @param \eZ\Publish\Core\REST\Client\HttpClient $innerClient
      * @param string $username
      * @param string $password
-     * @return void
      */
     public function __construct( HttpClient $innerClient, $username, $password )
     {
@@ -61,8 +60,8 @@ class BasicAuth implements HttpClient
      *
      * @param string $method
      * @param string $path
-     * @param Message $message
-     * @return Message
+     * @param \eZ\Publish\Core\REST\Common\Message $message
+     * @return \eZ\Publish\Core\REST\Common\Message
      */
     public function request( $method, $path, Message $message = null )
     {

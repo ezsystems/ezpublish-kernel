@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class
+ * File contains: eZ\Publish\SPI\Tests\FieldType\UrlIntegrationTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -18,7 +18,7 @@ use eZ\Publish\Core\Persistence\Legacy,
  * Integration test for legacy storage field types
  *
  * This abstract base test case is supposed to be the base for field type
- * integration tests. It basically calls all involved methods in the field type 
+ * integration tests. It basically calls all involved methods in the field type
  * ``Converter`` and ``Storage`` implementations. Fo get it working implement
  * the abstract methods in a sensible way.
  *
@@ -34,7 +34,7 @@ use eZ\Publish\Core\Persistence\Legacy,
  *
  * @group integration
  */
-class UrlIntergrationTest extends BaseIntegrationTest
+class UrlIntegrationTest extends BaseIntegrationTest
 {
     /**
      * Get name of tested field tyoe
@@ -58,7 +58,6 @@ class UrlIntergrationTest extends BaseIntegrationTest
         $handler->getStorageRegistry()->register(
             'ezurl',
             new FieldType\Url\UrlStorage(
-                $handler,
                 array(
                     'LegacyStorage' => new FieldType\Url\UrlStorage\Gateway\LegacyStorage(),
                 )
@@ -101,26 +100,20 @@ class UrlIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get initial field externals data
+     * Get initial field value
      *
-     * @return array
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function getInitialExternalFieldData()
+    public function getInitialValue()
     {
-        return 'http://example.com/sindelfingen';
-    }
-
-    /**
-     * Get initial field externals data
-     *
-     * @return array
-     */
-    public function getInitialFieldData()
-    {
-        return array(
-            'urlId' => null,
-            'text' => 'Some awesome website',
-        );
+        return new Content\FieldValue( array(
+            'data'         => array(
+                'urlId' => null,
+                'text'  => 'Some awesome website',
+            ),
+            'externalData' => 'http://example.com/sindelfingen',
+            'sortKey'      => null,
+        ) );
     }
 
     /**
@@ -134,42 +127,38 @@ class UrlIntergrationTest extends BaseIntegrationTest
      */
     public function assertLoadedFieldDataCorrect( Field $field )
     {
+        $expected = $this->getInitialValue();
         $this->assertEquals(
-            $this->getInitialExternalFieldData(),
+            $expected->externalData,
             $field->value->externalData
         );
 
-        $internalData = $this->getInitialFieldData();
         $this->assertNotNull(
             $field->value->data['urlId']
         );
         $this->assertEquals(
-            $internalData['text'],
+            $expected->data['text'],
             $field->value->data['text']
         );
     }
 
     /**
-     * Get update field externals data
+     * Get update field value.
      *
-     * @return array
-     */
-    public function getUpdateExternalFieldData()
-    {
-        return 'http://example.com/hubba';
-    }
-
-    /**
-     * Get update field externals data
+     * Use to update the field
      *
-     * @return array
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function getUpdateFieldData()
+    public function getUpdatedValue()
     {
-        return array(
-            'urlId' => null,
-            'text' => 'An even more awesome website'
-        );
+        return new Content\FieldValue( array(
+            'data'         => array(
+                'urlId' => null,
+                'text' => 'An even more awesome website',
+            ),
+            'externalData' => 'http://example.com/hubba',
+            'sortKey'      => null,
+        ) );
     }
 
     /**
@@ -186,17 +175,17 @@ class UrlIntergrationTest extends BaseIntegrationTest
      */
     public function assertUpdatedFieldDataCorrect( Field $field )
     {
+        $expected = $this->getUpdatedValue();
         $this->assertEquals(
-            $this->getUpdateExternalFieldData(),
+            $expected->externalData,
             $field->value->externalData
         );
 
-        $internalData = $this->getUpdateFieldData();
         $this->assertNotNull(
             $field->value->data['urlId']
         );
         $this->assertEquals(
-            $internalData['text'],
+            $expected->data['text'],
             $field->value->data['text']
         );
     }

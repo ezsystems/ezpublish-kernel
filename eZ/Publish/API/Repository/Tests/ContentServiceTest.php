@@ -34,6 +34,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @see \eZ\Publish\API\Repository\ContentService::newContentCreateStruct()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
+     * @group user
      */
     public function testNewContentCreateStruct()
     {
@@ -43,7 +44,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // Create a content type
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
 
         $contentService = $repository->getContentService();
 
@@ -59,6 +60,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentCreateStruct
+     * @group user
      */
     public function testCreateContent()
     {
@@ -72,12 +74,12 @@ class ContentServiceTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
 
         $contentService = $repository->getContentService();
 
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
-        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+        $contentCreate->setField( 'name', 'My awesome forum' );
 
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
@@ -117,7 +119,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCreateContentSetsExpectedContentType( $content )
     {
-        $this->assertEquals( 'article_subpage', $content->contentType->identifier );
+        $this->assertEquals( 'forum', $content->contentType->identifier );
     }
 
     /**
@@ -235,10 +237,10 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentTypeService = $repository->getContentTypeService();
         $contentService = $repository->getContentService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
 
         $contentCreate1 = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
-        $contentCreate1->setField( 'title', 'An awesome story about eZ Publish' );
+        $contentCreate1->setField( 'name', 'An awesome Sidelfingen forum' );
 
         $contentCreate1->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate1->alwaysAvailable = true;
@@ -246,7 +248,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentService->createContent( $contentCreate1 );
 
         $contentCreate2 = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreate2->setField( 'title', 'Another awesome story about eZ Publish' );
+        $contentCreate2->setField( 'name', 'An awesome Bielefeld forum' );
 
         $contentCreate2->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate2->alwaysAvailable = false;
@@ -300,16 +302,16 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $parentLocationId = $this->generateId( 'location', 167 );
+        $parentLocationId = $this->generateId( 'location', 56 );
         /* BEGIN: Use Case */
-        // $parentLocationId is the location id of the "Home > Community" node
+        // $parentLocationId is a valid location ID
 
         $contentService = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
         $locationService = $repository->getLocationService();
 
         // Load content type
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
 
         // Configure new locations
         $locationCreate1 = $locationService->newLocationCreateStruct( $parentLocationId );
@@ -331,7 +333,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // Configure new content object
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
 
-        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+        $contentCreate->setField( 'name', 'A awesome Sindelfingen forum' );
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
 
@@ -890,7 +892,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $this->assertEquals(
             array(
-                'fieldCount' => 4,
+                'fieldCount' => 2,
                 'relationCount' => 0
             ),
             array(
@@ -1158,7 +1160,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'id' => 0,
                     'value' => null,
                     'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'body'
+                    'fieldDefIdentifier' => 'description'
                 )
             ),
             new Field(
@@ -1166,55 +1168,23 @@ class ContentServiceTest extends BaseContentServiceTest
                     'id' => 0,
                     'value' => null,
                     'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'body'
+                    'fieldDefIdentifier' => 'description'
                 )
             ),
             new Field(
                 array(
                     'id' => 0,
-                    'value' => null,
+                    'value' => 'An awesome forum²³',
                     'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'index_title'
+                    'fieldDefIdentifier' => 'name'
                 )
             ),
             new Field(
                 array(
                     'id' => 0,
-                    'value' => null,
+                    'value' => 'An awesome forum²',
                     'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'index_title'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => null,
-                    'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'tags'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => null,
-                    'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'tags'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => 'An awesome²³ story about ezp.',
-                    'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'title'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => 'An awesome² story about ezp.',
-                    'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'title'
+                    'fieldDefIdentifier' => 'name'
                 )
             ),
         );
@@ -1274,7 +1244,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // Now create an update struct and modify some fields
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdateStruct->setField( 'name', 'An awesome² Sindelfingen forum' );
 
         // Don't set this, then the above call without languageCode will fail
         //$contentUpdateStruct->initialLanguageCode = 'eng-US';
@@ -1596,17 +1566,17 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentService = $repository->getContentService();
 
         /* BEGIN: Use Case */
-        // RemoteId of the "Support" page of an eZ Publish demo installation
-        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+        // RemoteId of the "Media" page of an eZ Publish demo installation
+        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
 
         $content = $this->createContentVersion1();
 
         // Creates a metadata update struct
         $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
-        $metadataUpdate->remoteId = $supportRemoteId;
+        $metadataUpdate->remoteId = $mediaRemoteId;
 
         // This call will fail with an "InvalidArgumentException", because the
-        // specified remoteId is already used by the "Support" page.
+        // specified remoteId is already used by the "Media" page.
         $contentService->updateContentMetadata(
             $content->contentInfo,
             $metadataUpdate
@@ -1677,22 +1647,22 @@ class ContentServiceTest extends BaseContentServiceTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        // Remote ids of the "Support" and the "Community" page of a eZ Publish
-        // demo installation.
-        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
-        $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
+        // Remote ids of the "Media" and the "eZ Publish Demo Design ..." page
+        // of a eZ Publish demo installation.
+        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
+        $demoDesignRemoteId = '8b8b22fe3c6061ed500fbd2b377b885f';
 
         $contentService = $repository->getContentService();
 
-        // "Support" article content object
-        $supportContentInfo = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+        // "Media" content object
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( $mediaRemoteId );
 
-        // "Community" article content object
-        $communityContentInfo = $contentService->loadContentInfoByRemoteId( $communityRemoteId );
+        // "eZ Publish Demo Design ..." content object
+        $demoDesignContentInfo = $contentService->loadContentInfoByRemoteId( $demoDesignRemoteId );
 
         // Create some drafts
-        $contentService->createContentDraft( $supportContentInfo );
-        $contentService->createContentDraft( $communityContentInfo );
+        $contentService->createContentDraft( $mediaContentInfo );
+        $contentService->createContentDraft( $demoDesignContentInfo );
 
         // Now $contentDrafts should contain two drafted versions
         $draftedVersions = $contentService->loadContentDrafts();
@@ -1710,8 +1680,8 @@ class ContentServiceTest extends BaseContentServiceTest
             array(
                 VersionInfo::STATUS_DRAFT,
                 VersionInfo::STATUS_DRAFT,
-                $communityRemoteId,
-                $supportRemoteId,
+                $demoDesignRemoteId,
+                $mediaRemoteId,
             ),
             $actual
         );
@@ -1737,16 +1707,16 @@ class ContentServiceTest extends BaseContentServiceTest
         // Set new editor as user
         $repository->setCurrentUser( $user );
 
-        // Remote id of the "Support" page in an eZ Publish demo installation.
-        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+        // Remote id of the "Media" content object in an eZ Publish demo installation.
+        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
 
         $contentService = $repository->getContentService();
 
-        // "Support" article content object
-        $supportContentInfo = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+        // "Media" content object
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( $mediaRemoteId );
 
         // Create a content draft
-        $contentService->createContentDraft( $supportContentInfo );
+        $contentService->createContentDraft( $mediaContentInfo );
 
         // Reset to previous current user
         $repository->setCurrentUser( $oldCurrentUser );
@@ -1761,7 +1731,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals(
             array(
                 VersionInfo::STATUS_DRAFT,
-                $supportRemoteId,
+                $mediaRemoteId,
             ),
             array(
                 $newCurrentUserDrafts[0]->status,
@@ -1877,17 +1847,15 @@ class ContentServiceTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
 
         $contentService = $repository->getContentService();
 
         $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
 
-        $contentCreateStruct->setField( 'title', 'An awesome² story about ezp.' );
-        $contentCreateStruct->setField( 'index_title', 'American index title...' );
+        $contentCreateStruct->setField( 'name', 'Sindelfingen forum²' );
 
-        $contentCreateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-GB' );
-        $contentCreateStruct->setField( 'index_title', 'British index title...', 'eng-GB' );
+        $contentCreateStruct->setField( 'name', 'Sindelfingen forum²³', 'eng-GB' );
 
         $contentCreateStruct->remoteId = 'abcdef0123456789abcdef0123456789';
         // $sectionId contains the ID of section 1
@@ -1935,31 +1903,15 @@ class ContentServiceTest extends BaseContentServiceTest
                     'id' => 0,
                     'value' => null,
                     'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'body'
+                    'fieldDefIdentifier' => 'description'
                 )
             ),
             new Field(
                 array(
                     'id' => 0,
-                    'value' => 'British index title...',
+                    'value' => 'Sindelfingen forum²³',
                     'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'index_title'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => null,
-                    'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'tags'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => 'An awesome²³ story about ezp.',
-                    'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'title'
+                    'fieldDefIdentifier' => 'name'
                 )
             ),
         );
@@ -1982,17 +1934,15 @@ class ContentServiceTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
 
         $contentService = $repository->getContentService();
 
         $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
 
-        $contentCreateStruct->setField( 'title', 'An awesome² story about ezp.' );
-        $contentCreateStruct->setField( 'index_title', 'British index title...' );
+        $contentCreateStruct->setField( 'name', 'Sindelfingen forum²' );
 
-        $contentCreateStruct->setField( 'title', 'An awesome²³ story about ezp.', 'eng-GB' );
-        $contentCreateStruct->setField( 'index_title', 'American index title...', 'eng-GB' );
+        $contentCreateStruct->setField( 'name', 'Sindelfingen forum²³', 'eng-GB' );
 
         $contentCreateStruct->remoteId = 'abcdef0123456789abcdef0123456789';
         // $sectionId contains the ID of section 1
@@ -2040,31 +1990,15 @@ class ContentServiceTest extends BaseContentServiceTest
                     'id' => 0,
                     'value' => null,
                     'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'body'
+                    'fieldDefIdentifier' => 'description'
                 )
             ),
             new Field(
                 array(
                     'id' => 0,
-                    'value' => 'British index title...',
+                    'value' => 'Sindelfingen forum²',
                     'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'index_title'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => null,
-                    'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'tags'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => 'An awesome² story about ezp.',
-                    'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'title'
+                    'fieldDefIdentifier' => 'name'
                 )
             ),
         );
@@ -2078,6 +2012,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages, $versionNo)
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfo
+     * @todo Fix method name to be more descriptive
      */
     public function testLoadContentByContentInfoWithThirdParameter()
     {
@@ -2097,8 +2032,8 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertEquals(
-            'An awesome story about eZ Publish',
-            $contentReloaded->getFieldValue( 'title' )
+            'An awesome forum',
+            $contentReloaded->getFieldValue( 'name' )
         );
     }
 
@@ -2361,7 +2296,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testCopyContent()
     {
-        $parentLocationId = $this->generateId( 'location', 167 );
+        $parentLocationId = $this->generateId( 'location', 56 );
 
         $repository = $this->getRepository();
 
@@ -2418,10 +2353,11 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::copyContent($contentInfo, $destinationLocationCreateStruct, $versionInfo)
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCopyContent
+     * @todo Fix to more descriptive name
      */
     public function testCopyContentWithThirdParameter()
     {
-        $parentLocationId = $this->generateId( 'location', 167 );
+        $parentLocationId = $this->generateId( 'location', 56 );
 
         $repository = $this->getRepository();
 
@@ -2480,6 +2416,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testFindContent()
     {
+        self::markTestIncomplete( "Search have been moved to SearchService" );
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -2489,7 +2426,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $query = new Query();
         $query->criterion = new Criterion\LogicalAnd(
             array(
-                new Criterion\Field( 'body', Criterion\Operator::LIKE, '*eZ Publish*' )
+                new Criterion\Field( 'title', Criterion\Operator::LIKE, '*eZ Publish*' )
             )
         );
 
@@ -2535,6 +2472,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testFindContentWithLanguageFilter()
     {
+        self::markTestIncomplete( "Search have been moved to SearchService" );
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -2549,7 +2487,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $query = new Query();
         $query->criterion = new Criterion\LogicalAnd(
             array(
-                new Criterion\Field( 'title', Criterion\Operator::LIKE, '*awesome² story about*' )
+                new Criterion\Field( 'name', Criterion\Operator::LIKE, '*multi-lang forum²*' )
             )
         );
 
@@ -2576,6 +2514,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testFindSingle()
     {
+        self::markTestIncomplete( "Search have been moved to SearchService" );
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -2585,7 +2524,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $query = new Query();
         $query->criterion = new Criterion\LogicalAnd(
             array(
-                new Criterion\Field( 'body', Criterion\Operator::LIKE, '*eZ Systems*' )
+                new Criterion\Field( 'title', Criterion\Operator::LIKE, '*Demo Design*' )
             )
         );
 
@@ -2612,7 +2551,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testFindSingleResultContainsExpectedProperties( $content )
     {
-        $this->assertRegExp( '(eZ Systems)i', $content->getFieldValue( 'body', 'eng-US' ) );
+        $this->assertRegExp( '(Demo Design)i', $content->getFieldValue( 'title', 'eng-US' ) );
     }
 
     /**
@@ -2625,6 +2564,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testFindSingleWithLanguageFilter()
     {
+        self::markTestIncomplete( "Search have been moved to SearchService" );
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -2639,7 +2579,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $query = new Query();
         $query->criterion = new Criterion\LogicalAnd(
             array(
-                new Criterion\Field( 'title', Criterion\Operator::LIKE, '*awesome² story about*' )
+                new Criterion\Field( 'name', Criterion\Operator::LIKE, '*multi-lang*' )
             )
         );
 
@@ -2668,6 +2608,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testFindSingleThrowsNotFoundException()
     {
+        self::markTestIncomplete( "Search have been moved to SearchService" );
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -2704,6 +2645,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testFindSingleThrowsInvalidArgumentException()
     {
+        self::markTestIncomplete( "Search have been moved to SearchService" );
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -2718,7 +2660,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $query = new Query();
         $query->criterion = new Criterion\LogicalAnd(
             array(
-                new Criterion\Field( 'title', Criterion\Operator::LIKE, '*ez*' )
+                new Criterion\Field( 'name', Criterion\Operator::LIKE, '*a*' )
             )
         );
 
@@ -2742,17 +2684,17 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentService = $repository->getContentService();
 
         /* BEGIN: Use Case */
-        // RemoteId of the "Support" page of an eZ Publish demo installation
-        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+        // RemoteId of the "Media" content of an eZ Publish demo installation
+        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
 
         $draft = $this->createContentDraftVersion1();
 
-        $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+        $media = $contentService->loadContentInfoByRemoteId( $mediaRemoteId );
 
-        // Create relation between new content object and "Support" page
+        // Create relation between new content object and "Media" page
         $relation = $contentService->addRelation(
             $draft->getVersionInfo(),
-            $support
+            $media
         );
         /* END: Use Case */
 
@@ -2796,7 +2738,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 'type' => Relation::COMMON,
                 'sourceFieldDefinitionIdentifier' => null,
                 'sourceContentInfo' => 'abcdef0123456789abcdef0123456789',
-                'destinationContentInfo' => 'affc99e41128c1475fa4f23dafb7159b',
+                'destinationContentInfo' => 'a6e35cbcb7cd6ae4b691f3eee30cd262',
             ),
             array(
                 'type' => $relations[0]->type,
@@ -2822,18 +2764,18 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentService = $repository->getContentService();
 
         /* BEGIN: Use Case */
-        // RemoteId of the "Support" page of an eZ Publish demo installation
-        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+        // RemoteId of the "Media" page of an eZ Publish demo installation
+        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
 
         $content = $this->createContentVersion1();
 
-        $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+        $media = $contentService->loadContentInfoByRemoteId( $mediaRemoteId );
 
         // This call will fail with a "BadStateException", because content is
         // published and not a draft.
         $contentService->addRelation(
             $content->getVersionInfo(),
-            $support
+            $media
         );
         /* END: Use Case */
     }
@@ -2852,27 +2794,27 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentService = $repository->getContentService();
 
         /* BEGIN: Use Case */
-        // Remote ids of the "Support" and the "Community" page of a eZ Publish
-        // demo installation.
-        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
-        $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
+        // Remote ids of the "Media" and the "eZ Publish Demo Design ..." page
+        // of a eZ Publish demo installation.
+        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
+        $demoDesignRemoteId = '8b8b22fe3c6061ed500fbd2b377b885f';
 
         $draft = $this->createContentDraftVersion1();
 
         // Load other content objects
-        $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
-        $community = $contentService->loadContentInfoByRemoteId( $communityRemoteId );
+        $media = $contentService->loadContentInfoByRemoteId( $mediaRemoteId );
+        $demoDesign = $contentService->loadContentInfoByRemoteId( $demoDesignRemoteId );
 
-        // Create relation between new content object and "Support" page
+        // Create relation between new content object and "Media" page
         $contentService->addRelation(
             $draft->getVersionInfo(),
-            $support
+            $media
         );
 
-        // Create another relation with the "Community" page
+        // Create another relation with the "Demo Design" page
         $contentService->addRelation(
             $draft->getVersionInfo(),
-            $community
+            $demoDesign
         );
 
         // Load all relations
@@ -2890,11 +2832,11 @@ class ContentServiceTest extends BaseContentServiceTest
             array(
                 array(
                     'sourceContentInfo' => 'abcdef0123456789abcdef0123456789',
-                    'destinationContentInfo' => 'affc99e41128c1475fa4f23dafb7159b',
+                    'destinationContentInfo' => 'a6e35cbcb7cd6ae4b691f3eee30cd262',
                 ),
                 array(
                     'sourceContentInfo' => 'abcdef0123456789abcdef0123456789',
-                    'destinationContentInfo' => '378acc2bc7a52400701956047a2f7d45',
+                    'destinationContentInfo' => '8b8b22fe3c6061ed500fbd2b377b885f',
                 )
             ),
             array(
@@ -2924,30 +2866,30 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentService = $repository->getContentService();
 
         /* BEGIN: Use Case */
-        // Remote ids of the "Support" and the "Community" page of a eZ Publish
-        // demo installation.
-        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
-        $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
+        // Remote ids of the "Media" and the "eZ Publish Demo Design ..." page
+        // of a eZ Publish demo installation.
+        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
+        $demoDesignRemoteId = '8b8b22fe3c6061ed500fbd2b377b885f';
 
         $content = $this->createContentVersion1();
 
         // Create some drafts
-        $supportDraft = $contentService->createContentDraft(
-            $contentService->loadContentInfoByRemoteId( $supportRemoteId )
+        $mediaDraft = $contentService->createContentDraft(
+            $contentService->loadContentInfoByRemoteId( $mediaRemoteId )
         );
-        $communityDraft = $contentService->createContentDraft(
-            $contentService->loadContentInfoByRemoteId( $communityRemoteId )
+        $demoDesignDraft = $contentService->createContentDraft(
+            $contentService->loadContentInfoByRemoteId( $demoDesignRemoteId )
         );
 
-        // Create relation between new content object and "Support" page
+        // Create relation between new content object and "Media" page
         $contentService->addRelation(
-            $supportDraft->getVersionInfo(),
+            $mediaDraft->getVersionInfo(),
             $content->contentInfo
         );
 
-        // Create another relation with the "Community" page
+        // Create another relation with the "Demo Design" page
         $contentService->addRelation(
-            $communityDraft->getVersionInfo(),
+            $demoDesignDraft->getVersionInfo(),
             $content->contentInfo
         );
 
@@ -2965,11 +2907,11 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals(
             array(
                 array(
-                    'sourceContentInfo' => 'affc99e41128c1475fa4f23dafb7159b',
+                    'sourceContentInfo' => 'a6e35cbcb7cd6ae4b691f3eee30cd262',
                     'destinationContentInfo' => 'abcdef0123456789abcdef0123456789',
                 ),
                 array(
-                    'sourceContentInfo' => '378acc2bc7a52400701956047a2f7d45',
+                    'sourceContentInfo' => '8b8b22fe3c6061ed500fbd2b377b885f',
                     'destinationContentInfo' => 'abcdef0123456789abcdef0123456789',
                 )
             ),
@@ -3000,22 +2942,22 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentService = $repository->getContentService();
 
         /* BEGIN: Use Case */
-        // Remote ids of the "Support" and the "Community" page of a eZ Publish
+        // Remote ids of the "Media" and the "Demo Design" page of a eZ Publish
         // demo installation.
-        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
-        $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
+        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
+        $demoDesignRemoteId = '8b8b22fe3c6061ed500fbd2b377b885f';
 
         $draft = $this->createContentDraftVersion1();
 
-        $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
-        $community = $contentService->loadContentInfoByRemoteId( $communityRemoteId );
+        $media = $contentService->loadContentInfoByRemoteId( $mediaRemoteId );
+        $demoDesign = $contentService->loadContentInfoByRemoteId( $demoDesignRemoteId );
 
         // Establish some relations
-        $contentService->addRelation( $draft->getVersionInfo(), $support );
-        $contentService->addRelation( $draft->getVersionInfo(), $community );
+        $contentService->addRelation( $draft->getVersionInfo(), $media );
+        $contentService->addRelation( $draft->getVersionInfo(), $demoDesign );
 
         // Delete one of the currently created relations
-        $contentService->deleteRelation( $draft->getVersionInfo(), $support );
+        $contentService->deleteRelation( $draft->getVersionInfo(), $media );
 
         // The relations array now contains only one element
         $relations = $contentService->loadRelations( $draft->getVersionInfo() );
@@ -3039,19 +2981,19 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentService = $repository->getContentService();
 
         /* BEGIN: Use Case */
-        // RemoteId of the "Support" page of an eZ Publish demo installation
-        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+        // RemoteId of the "Media" page of an eZ Publish demo installation
+        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
 
         $content = $this->createContentVersion1();
 
         // Load the destination object
-        $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+        $media = $contentService->loadContentInfoByRemoteId( $mediaRemoteId );
 
         // Create a new draft
         $draftVersion2 = $contentService->createContentDraft( $content->contentInfo );
 
         // Add a relation
-        $contentService->addRelation( $draftVersion2->getVersionInfo(), $support );
+        $contentService->addRelation( $draftVersion2->getVersionInfo(), $media );
 
         // Publish new version
         $contentVersion2 = $contentService->publishVersion(
@@ -3062,7 +3004,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // published and not a draft.
         $contentService->deleteRelation(
             $contentVersion2->getVersionInfo(),
-            $support
+            $media
         );
         /* END: Use Case */
     }
@@ -3082,19 +3024,19 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentService = $repository->getContentService();
 
         /* BEGIN: Use Case */
-        // RemoteId of the "Support" page of an eZ Publish demo installation
-        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+        // RemoteId of the "Media" page of an eZ Publish demo installation
+        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
 
         $draft = $this->createContentDraftVersion1();
 
         // Load the destination object
-        $support = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+        $media = $contentService->loadContentInfoByRemoteId( $mediaRemoteId );
 
         // This call will fail with a "InvalidArgumentException", because no
-        // relation exists between $draft and $support.
+        // relation exists between $draft and $media.
         $contentService->deleteRelation(
             $draft->getVersionInfo(),
-            $support
+            $media
         );
         /* END: Use Case */
     }
@@ -3124,11 +3066,11 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a transaction
         $repository->beginTransaction();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
 
         // Get a content create struct and set mandatory properties
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
-        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+        $contentCreate->setField( 'name', 'Sindelfingen forum' );
 
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
@@ -3179,11 +3121,11 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a transaction
         $repository->beginTransaction();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
 
         // Get a content create struct and set mandatory properties
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
-        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+        $contentCreate->setField( 'name', 'Sindelfingen forum' );
 
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
@@ -3965,10 +3907,10 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertAliasesCorrect(
             array(
-                '/Community/An-awesome-story-about-eZ-Publish' => array(
+                '/Design/eZ-publish/An-awesome-forum' => array(
                     'type' => URLAlias::LOCATION,
                     'destination' => $location,
-                    'path' => '/Community/An-awesome-story-about-eZ-Publish',
+                    'path' => '/Design/eZ-publish/An-awesome-forum',
                     'languageCodes' => array( 'eng-US' ),
                     'isHistory' => false,
                     'isCustom' => false,
@@ -4006,28 +3948,28 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertAliasesCorrect(
             array(
-                '/Community/An-awesome-story-about-eZ-Publish' => array(
+                '/Design/eZ-publish/An-awesome-forum' => array(
                     'type' => URLAlias::LOCATION,
                     'destination' => $location,
-                    'path' => '/Community/An-awesome-story-about-eZ-Publish',
+                    'path' => '/Design/eZ-publish/An-awesome-forum',
                     'languageCodes' => array( 'eng-US' ),
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
                 ),
-                '/Community/An-awesome²-story-about-ezp.' => array(
+                '/Design/eZ-publish/An-awesome-forum²' => array(
                     'type' => URLAlias::LOCATION,
                     'destination' => $location,
-                    'path' => '/Community/An-awesome²-story-about-ezp.',
+                    'path' => '/Design/eZ-publish/An-awesome-forum²',
                     'languageCodes' => array( 'eng-US' ),
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
                 ),
-                '/Community/An-awesome²³-story-about-ezp.' => array(
+                '/Design/eZ-publish/An-awesome-forum²³' => array(
                     'type' => URLAlias::LOCATION,
                     'destination' => $location,
-                    'path' => '/Community/An-awesome²³-story-about-ezp.',
+                    'path' => '/Design/eZ-publish/An-awesome-forum²³',
                     'languageCodes' => array( 'eng-GB' ),
                     'isHistory' => false,
                     'isCustom' => false,
@@ -4064,7 +4006,7 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $contentUpdate = $contentService->newContentUpdateStruct();
         $contentUpdate->initialLanguageCode = 'eng-US';
-        $contentUpdate->setField( 'title', 'An awesome² story about ezp.' );
+        $contentUpdate->setField( 'name', 'Amazing Bielefeld forum' );
 
         $draftVersion2 = $contentService->updateContent(
             $draftVersion2->getVersionInfo(),
@@ -4084,20 +4026,20 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertAliasesCorrect(
             array(
-                '/Community/An-awesome-story-about-eZ-Publish' => array(
+                '/Design/eZ-publish/An-awesome-forum' => array(
                     'type' => URLAlias::LOCATION,
                     'destination' => $location,
-                    'path' => '/Community/An-awesome-story-about-eZ-Publish',
+                    'path' => '/Design/eZ-publish/An-awesome-forum',
                     'languageCodes' => array( 'eng-US' ),
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
                     'alwaysAvailable' => true,
                 ),
-                '/Community/An-awesome²-story-about-ezp.' => array(
+                '/Design/eZ-publish/Amazing-Bielefeld-forum' => array(
                     'type' => URLAlias::LOCATION,
                     'destination' => $location,
-                    'path' => '/Community/An-awesome²-story-about-ezp.',
+                    'path' => '/Design/eZ-publish/Amazing-Bielefeld-forum',
                     'languageCodes' => array( 'eng-US' ),
                     'isHistory' => false,
                     'isCustom' => false,
@@ -4277,7 +4219,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'id' => 0,
                     'value' => null,
                     'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'body'
+                    'fieldDefIdentifier' => 'description'
                 )
             ),
             new Field(
@@ -4285,55 +4227,23 @@ class ContentServiceTest extends BaseContentServiceTest
                     'id' => 0,
                     'value' => null,
                     'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'body'
+                    'fieldDefIdentifier' => 'description'
                 )
             ),
             new Field(
                 array(
                     'id' => 0,
-                    'value' => 'British index title...',
+                    'value' => 'An awesome multi-lang forum²',
                     'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'index_title'
+                    'fieldDefIdentifier' => 'name'
                 )
             ),
             new Field(
                 array(
                     'id' => 0,
-                    'value' => 'American index title...',
+                    'value' => 'An awesome multi-lang forum²³',
                     'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'index_title'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => null,
-                    'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'tags'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => null,
-                    'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'tags'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => 'An awesome² story about ezp.',
-                    'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'title'
-                )
-            ),
-            new Field(
-                array(
-                    'id' => 0,
-                    'value' => 'An awesome²³ story about ezp.',
-                    'languageCode' => 'eng-GB',
-                    'fieldDefIdentifier' => 'title'
+                    'fieldDefIdentifier' => 'name'
                 )
             ),
         );

@@ -349,6 +349,7 @@ class LanguageServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\LanguageService::loadLanguages()
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
+     * @todo Enhance to check for language codes and properties?
      */
     public function testLoadLanguages()
     {
@@ -378,7 +379,8 @@ class LanguageServiceTest extends BaseTest
         }
         /* END: Use Case */
 
-        $this->assertEquals( 4, count( $languages ) );
+        // eng-US, eng-GB, ger-DE + 2 newly created
+        $this->assertEquals( 5, count( $languages ) );
     }
 
     /**
@@ -407,6 +409,9 @@ class LanguageServiceTest extends BaseTest
     public function testDeleteLanguage()
     {
         $repository = $this->getRepository();
+        $languageService = $repository->getContentLanguageService();
+
+        $beforeCount = count( $languageService->loadLanguages() );
 
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
@@ -422,7 +427,8 @@ class LanguageServiceTest extends BaseTest
         $languageService->deleteLanguage( $language );
         /* END: Use Case */
 
-        $this->assertEquals( 2, count( $languageService->loadLanguages() ) );
+        // +1 -1
+        $this->assertEquals( $beforeCount, count( $languageService->loadLanguages() ) );
     }
 
     /**

@@ -19,11 +19,7 @@ class EzcTest extends Base
     public function getParser()
     {
         return new IniParser(
-            array(
-                'base' => array(
-                    'Configuration' => array( 'IniParserStrict' => false )
-                )
-            )
+            array( 'IniParserStrict' => false )
         );
     }
 }

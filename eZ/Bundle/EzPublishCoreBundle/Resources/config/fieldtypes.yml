@@ -2,20 +2,25 @@ parameters:
     ezpublish.api.fieldTypeValidator.class: eZ\Publish\Core\Repository\ValidatorService
     ezpublish.api.fieldTypeTools.class: eZ\Publish\Core\Repository\FieldTypeTools
 
+    ezpublish.fieldType.class: eZ\Publish\Core\FieldType\FieldType
     ezpublish.fieldType.ezauthor.class: eZ\Publish\Core\FieldType\Author\Type
     ezpublish.fieldType.ezbinaryfile.class: eZ\Publish\Core\FieldType\BinaryFile\Type
+    ezpublish.fieldType.ezbinaryfile.externalStorage.class: eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage
     ezpublish.fieldType.ezboolean.class: eZ\Publish\Core\FieldType\Checkbox\Type
     ezpublish.fieldType.ezdatetime.class: eZ\Publish\Core\FieldType\DateAndTime\Type
     ezpublish.fieldType.ezfloat.class: eZ\Publish\Core\FieldType\Float\Type
     ezpublish.fieldType.ezinteger.class: eZ\Publish\Core\FieldType\Integer\Type
     #ezpublish.fieldType.ezimage.class: eZ\Publish\Core\FieldType\Image\Type
     ezpublish.fieldType.ezkeyword.class: eZ\Publish\Core\FieldType\Keyword\Type
+    ezpublish.fieldType.ezkeyword.externalStorage.class: eZ\Publish\Core\FieldType\Keyword\KeywordStorage
     ezpublish.fieldType.ezmedia.class: eZ\Publish\Core\FieldType\Media\Type
+    ezpublish.fieldType.ezmedia.externalStorage.class: eZ\Publish\Core\FieldType\Media\MediaStorage
     ezpublish.fieldType.ezsrrating.class: eZ\Publish\Core\FieldType\Rating\Type
     ezpublish.fieldType.ezselection.class: eZ\Publish\Core\FieldType\Selection\Type
     ezpublish.fieldType.eztext.class: eZ\Publish\Core\FieldType\TextBlock\Type
     ezpublish.fieldType.ezstring.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezurl.class: eZ\Publish\Core\FieldType\Url\Type
+    ezpublish.fieldType.ezurl.externalStorage.class: eZ\Publish\Core\FieldType\Url\UrlStorage
     ezpublish.fieldType.ezxmltext.class: eZ\Publish\Core\FieldType\XmlText\Type
     ezpublish.fieldType.ezxmltext.simplifiedInputParser.class: eZ\Publish\Core\FieldType\XmlText\Input\Parser\Simplified
     ezpublish.fieldType.ezxmltext.xmlSchema.class: eZ\Publish\Core\FieldType\XmlText\Schema
@@ -35,99 +40,127 @@ parameters:
 services:
     ezpublish.api.fieldTypeValidator:
         class: %ezpublish.api.fieldTypeValidator.class%
-        public: false
 
     ezpublish.api.fieldTypeTools:
         class: %ezpublish.api.fieldTypeTools.class%
-        public: false
+
+    ezpublish.fieldType:
+        class: %ezpublish.fieldType.class%
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
+        abstract: true
 
     ezpublish.fieldType.ezauthor:
         class: %ezpublish.fieldType.ezauthor.class%
-        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
+        parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezauthor}
 
     ezpublish.fieldType.ezbinaryfile:
         class: %ezpublish.fieldType.ezbinaryfile.class%
-        arguments: [@ezpublish.api.repository, @ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
+        parent: ezpublish.fieldType
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools, @ezpublish.api.repository]
         tags:
             - {name: ezpublish.fieldType, alias: ezbinaryfile}
 
+    ezpublish.fieldType.ezbinaryfile.externalStorage:
+        class: %ezpublish.fieldType.ezbinaryfile.externalStorage.class%
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezbinaryfile}
+
     ezpublish.fieldType.ezboolean:
         class: %ezpublish.fieldType.ezboolean.class%
-        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
+        parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezboolean}
 
     ezpublish.fieldType.ezdatetime:
         class: %ezpublish.fieldType.ezdatetime.class%
-        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
+        parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezdatetime}
 
     ezpublish.fieldType.ezfloat:
         class: %ezpublish.fieldType.ezfloat.class%
-        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
+        parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezfloat}
 
     ezpublish.fieldType.ezinteger:
         class: %ezpublish.fieldType.ezinteger.class%
-        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
+        parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezinteger}
 
     #ezpublish.fieldType.ezimage:
     #    class: %ezpublish.fieldType.ezimage.class%
+    #    parent: ezpublish.fieldType
     #    parameters: [@ezpublish.api.repository, @ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
     #    tags:
     #        - {name: ezpublish.fieldType, alias: ezimage}
 
     ezpublish.fieldType.ezkeyword:
         class: %ezpublish.fieldType.ezkeyword.class%
-        arguments: [@ezpublish.api.fieldTypeValidator]
+        parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezkeyword}
 
+    ezpublish.fieldType.ezkeyword.externalStorage:
+        class: %ezpublish.fieldType.ezkeyword.externalStorage.class%
+        arguments: [[]]
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezkeyword}
+
     ezpublish.fieldType.ezmedia:
         class: %ezpublish.fieldType.ezmedia.class%
-        arguments: [@ezpublish.api.repository, @ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
+        parent: ezpublish.fieldType
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools, @ezpublish.api.repository]
         tags:
             - {name: ezpublish.fieldType, alias: ezmedia}
 
+    ezpublish.fieldType.ezmedia.externalStorage:
+        class: %ezpublish.fieldType.ezmedia.externalStorage.class%
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezmedia}
+
     ezpublish.fieldType.ezsrrating:
         class: %ezpublish.fieldType.ezsrrating.class%
-        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
+        parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezsrrating}
 
     ezpublish.fieldType.ezselection:
         class: %ezpublish.fieldType.ezselection.class%
-        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
+        parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezselection}
 
     ezpublish.fieldType.eztext:
         class: %ezpublish.fieldType.eztext.class%
-        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
+        parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: eztext}
 
     ezpublish.fieldType.ezstring:
         class: %ezpublish.fieldType.ezstring.class%
-        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
+        parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezstring}
 
     ezpublish.fieldType.ezurl:
         class: %ezpublish.fieldType.ezurl.class%
-        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
+        parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezurl}
 
+    ezpublish.fieldType.ezurl.externalStorage:
+        class: %ezpublish.fieldType.ezurl.externalStorage.class%
+        arguments: [[]]
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezurl}
+
     ezpublish.fieldType.ezxmltext:
         class: %ezpublish.fieldType.ezxmltext.class%
-        arguments: [@ezpublish.fieldType.ezxmltext.simplifiedInputParser, @ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
+        arguments: [@ezpublish.fieldType.ezxmltext.simplifiedInputParser]
         tags:
             - {name: ezpublish.fieldType, alias: ezxmltext}
 
@@ -143,3 +176,4 @@ services:
         arguments:
             - %ezpublish.fieldType.ezxmltext.xmlSchema.options%
         public: false
+

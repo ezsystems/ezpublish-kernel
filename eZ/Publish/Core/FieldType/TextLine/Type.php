@@ -105,7 +105,7 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
-        return array( 'sort_key_string' => $value->text );
+        return $value->text;
     }
 
     /**

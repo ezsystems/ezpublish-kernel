@@ -106,7 +106,7 @@ class SectionTest extends ValueObjectVisitorBaseTest
 
             ),
             $result,
-            'Invalid <Section> attributes.',
+            'Invalid or non-existing <Section> sectionId value element.',
             false
         );
     }
@@ -126,7 +126,7 @@ class SectionTest extends ValueObjectVisitorBaseTest
 
             ),
             $result,
-            'Invalid <Section> attributes.',
+            'Invalid or non-existing <Section> identifier value element.',
             false
         );
     }
@@ -146,7 +146,7 @@ class SectionTest extends ValueObjectVisitorBaseTest
 
             ),
             $result,
-            'Invalid <Section> attributes.',
+            'Invalid or non-existing <Section> name value element.',
             false
         );
     }

@@ -106,6 +106,13 @@ class TransformationProcessor
 
         foreach ( $ruleNames as $ruleName )
         {
+            if ( !isset( $this->compiledRules[$ruleName] ) )
+            {
+                // Just continue on unknow rules, or should we throw an error
+                // here?
+                continue;
+            }
+
             foreach ( $this->compiledRules[$ruleName] as $rule )
             {
                 $string = preg_replace_callback(

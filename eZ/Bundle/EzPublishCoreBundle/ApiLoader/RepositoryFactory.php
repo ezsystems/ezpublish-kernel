@@ -28,6 +28,13 @@ class RepositoryFactory
      */
     protected $fieldTypes;
 
+    /**
+     * Collection of external storage handlers for field types that need them
+     *
+     * @var \Closure[]
+     */
+    protected $externalStorages = array();
+
     public function __construct( ContainerInterface $container )
     {
         $this->container = $container;
@@ -66,5 +73,15 @@ class RepositoryFactory
         {
             return $container->get( $fieldTypeServiceId );
         };
+    }
+
+    /**
+     * Returns registered external storage handlers for field types (as closures to be lazy loaded in the public API)
+     *
+     * @return \Closure[]
+     */
+    public function getExternalStorageHandlers()
+    {
+        return $this->externalStorages;
     }
 }

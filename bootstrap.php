@@ -24,10 +24,9 @@ if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
 // Auto-detect eZ Publish 5.x context with eZ Publish 4.x available.
 $baseDir = __DIR__;
 $legacyDir = null;
-if ( stripos( __DIR__, '/vendor/ezsystems/ezpublish' ) !== false )
+if ( file_exists( "{$baseDir}/vendor/ezsystems/ezpublish-legacy" ) )
 {
-    $baseDir = str_replace( '/vendor/ezsystems/ezpublish', '', __DIR__ );
-    $legacyDir = $baseDir . '/app/ezpublish_legacy';
+    $legacyDir = "{$baseDir}/vendor/ezsystems/ezpublish-legacy";
 }
 
 // Setup class loader using composer maps

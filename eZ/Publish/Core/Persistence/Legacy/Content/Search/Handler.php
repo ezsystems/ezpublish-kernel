@@ -11,11 +11,14 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
 
 use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler,
-    eZ\Publish\SPI\Persistence\Content\Search\Result,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\Core\Persistence\Legacy\Exception,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler;
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler,
+    eZ\Publish\API\Repository\Exceptions\NotImplementedException,
+    eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Query;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -75,65 +78,86 @@ class Handler extends BaseSearchHandler
         $this->fieldHandler = $fieldHandler;
     }
 
-    /**
-     * Returns a list of object satisfying the $criterion.
+     /**
+     * finds content objects for the given query.
      *
-     * Optionally a translation filter may be specified. If specified only the
-     * translations with the listed language codes will be retrieved. If not,
-     * all translations will be retrieved.
+     * @TODO define structs for the field filters
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param int $offset
-     * @param int|null $limit
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
-     * @param string[] $translations
-     * @return eZ\Publish\SPI\Persistence\Content\Search\Result
+     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
+     * @param array  $fieldFilters - a map of filters for the returned fields.
+     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, $translations = null )
+    public function findContent( Query $query, array $fieldFilters = array() )
     {
-        $data = $this->gateway->find( $criterion, $offset, $limit, $sort, $translations );
+        $start = microtime( true );
 
-        $result = new Result();
-        $result->count = $data['count'];
-        $result->content = $this->contentMapper->extractContentFromRows(
-            $data['rows']
-        );
-
-        foreach ( $result->content as $content )
+        if ( count( $query->facetBuilders ) )
         {
+            throw new NotImplementedException( "Facettes are not supported by the legacy search engine." );
+        }
+
+        $data  = $this->gateway->find( $query->criterion, $query->offset, $query->limit, $query->sortClauses, null );
+
+        $result = new SearchResult();
+        $result->time       = microtime( true ) - $start;
+        $result->totalCount = $data['count'];
+
+        foreach ( $this->contentMapper->extractContentFromRows( $data['rows'] ) as $content ) {
             $this->fieldHandler->loadExternalFieldData( $content );
+            $searchHit = new SearchHit();
+            $searchHit->valueObject = $content;
+
+            $result->searchHits[] = $searchHit;
         }
 
         return $result;
     }
 
     /**
-     * Returns a single Content object found.
+     * Performs a query for a single content object
      *
-     * Performs a {@link find()} query to find a single object. You need to
-     * ensure, that your $criterion ensure that only a single object can be
-     * retrieved.
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
-     * Optionally a translation filter may be specified. If specified only the
-     * translations with the listed language codes will be retrieved. If not,
-     * all translations will be retrieved.
+     * @TODO define structs for the field filters
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param array  $fieldFilters - a map of filters for the returned fields.
+     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
-     * @param Criterion $criterion
-     * @param string[] $translations
-     * @return \eZ\Publish\SPI\Persistence\Content
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function findSingle( Criterion $criterion, $translations = null )
+    public function findSingle( Criterion $criterion, array $fieldFilters = array() )
     {
-        $result = $this->find( $criterion, 0, 1, null, $translations );
+        $query = new Query();
+        $query->criterion = $criterion;
+        $query->offset    = 0;
+        $query->limit     = 1;
+        $result = $this->findContent( $query, $fieldFilters );
 
-        if ( $result->count !== 1 )
+        if ( $result->totalCount !== 1 )
         {
             throw new Exception\InvalidObjectCount(
-                'Expected exactly one object to be found -- found ' . $result->count . '.'
+                'Expected exactly one object to be found -- found ' . $result->totalCount . '.'
             );
         }
 
-        return reset( $result->content );
+        $first = reset( $result->searchHits );
+        return $first->valueObject;
+    }
+
+    /**
+     * Suggests a list of values for the given prefix
+     *
+     * @param string $prefix
+     * @param string[] $fieldpath
+     * @param int $limit
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
+     */
+    public function suggest( $prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null )
+    {
+        throw new NotImplementedException( "Suggestions are not supported by legacy search engine." );
     }
 
     /**

@@ -29,7 +29,7 @@ class Value extends BaseValue
      */
     public function __construct( array $authors = array() )
     {
-        $this->authors = new AuthorCollection( $this, $authors );
+        $this->authors = new AuthorCollection( $authors );
     }
 
     /**

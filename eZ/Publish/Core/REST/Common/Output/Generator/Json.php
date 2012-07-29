@@ -207,4 +207,3 @@ class Json extends Generator
         return $this->generateMediaType( $name, 'json' );
     }
 }
-

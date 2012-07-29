@@ -38,47 +38,67 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get a valid $fieldSettings value
+     * Get expected settings schema
      *
-     * @return mixed
-     * @TODO Implement correctly
+     * @return array
      */
-    public function getValidFieldSettings()
+    public function getSettingsSchema()
     {
-        return null;
+        return array();
     }
 
     /**
-     * Get a valid $validatorConfiguration
+     * Get a valid $fieldSettings value
      *
      * @return mixed
-     * @TODO Implement correctly
      */
-    public function getValidValidatorConfiguration()
+    public function getValidFieldSettings()
     {
-        return null;
+        return array();
     }
 
     /**
      * Get $fieldSettings value not accepted by the field type
      *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getInvalidFieldSettings()
     {
-        return false;
+        return array(
+            'somethingUnknown' => 0,
+        );
+    }
+
+    /**
+     * Get expected validator schema
+     *
+     * @return array
+     */
+    public function getValidatorSchema()
+    {
+        return array();
+    }
+
+    /**
+     * Get a valid $validatorConfiguration
+     *
+     * @return mixed
+     */
+    public function getValidValidatorConfiguration()
+    {
+        return array();
     }
 
     /**
      * Get $validatorConfiguration not accepted by the field type
      *
      * @return mixed
-     * @TODO Implement correctly
      */
     public function getInvalidValidatorConfiguration()
     {
-        return false;
+        return array(
+            'unkknown' => array( 'value' => 23 )
+        );
     }
 
     /**

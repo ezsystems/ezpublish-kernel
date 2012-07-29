@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ContentTypeServiceTest class
+ * File containing the StreamTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -14,10 +14,7 @@ use eZ\Publish\Core\REST\Client\HttpClient\ConnectionException;
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 
 /**
- * Test case for operations in the ContentTypeService using in memory storage.
- *
- * @see eZ\Publish\API\Repository\ContentTypeService
- * @group integration
+ * Test case for stream HTTP client.
  */
 class StreamTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,6 +23,9 @@ class StreamTest extends \PHPUnit_Framework_TestCase
      */
     protected $client;
 
+    /**
+     * Sets up the testing environment
+     */
     public function setUp()
     {
         $this->client = new Stream( 'http://localhost:8042' );
@@ -40,6 +40,9 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * Tests the response status
+     */
     public function testResponseStatus()
     {
         $response = $this->client->request( 'GET', '/' );
@@ -47,6 +50,9 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         $this->assertSame( 200, $response->headers['status'] );
     }
 
+    /**
+     * Tests that the response body is not empty
+     */
     public function testResponseNonEmptyBody()
     {
         $response = $this->client->request( 'GET', '/' );
@@ -54,6 +60,9 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse( empty( $response->body ) );
     }
 
+    /**
+     * Tests presence of response headers
+     */
     public function testResponseHeadersArray()
     {
         $response = $this->client->request( 'GET', '/' );
@@ -61,6 +70,9 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue( is_array( $response->headers ) );
     }
 
+    /**
+     * Test presence of X-Powered-By header
+     */
     public function testResponseXPoweredByHeader()
     {
         $response = $this->client->request( 'GET', '/' );
@@ -70,12 +82,13 @@ class StreamTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests that ConnectionException is thrown
+     *
      * @expectedException \eZ\Publish\Core\REST\Client\HttpClient\ConnectionException
      */
     public function testConnectionException()
     {
         $client = new Stream( 'http://localhost:54321' );
-        $response = $client->request( 'GET', '/' );
+        $client->request( 'GET', '/' );
     }
 }
-

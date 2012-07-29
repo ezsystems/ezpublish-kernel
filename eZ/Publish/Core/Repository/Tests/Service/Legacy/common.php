@@ -5,6 +5,12 @@
  * @version //autogentag//
  */
 
+/*
+ * ATTENTION: All changes to this file must be synced to
+ * eZ\Publish\API\Repository\Tests\SetupFactory\Legacy
+ *
+ */
+
 namespace eZ\Publish\Core\Repository\Tests\Service\Legacy;
 use eZ\Publish\Core\Base\ConfigurationManager,
     eZ\Publish\Core\Base\ServiceContainer,
@@ -82,7 +88,6 @@ foreach ( $queries as $query )
 
 // Insert some default data
 $data = require __DIR__ . '/_fixtures/full_dump.php';
-//$data = require __DIR__ . '/_fixtures/mini_dump.php';
 foreach ( $data as $table => $rows )
 {
     // Check that at least one row exists

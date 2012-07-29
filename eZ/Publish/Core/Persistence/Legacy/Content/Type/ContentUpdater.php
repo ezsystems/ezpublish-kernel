@@ -9,13 +9,14 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 use eZ\Publish\Core\Persistence\Legacy\Content,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler as SearchHandler,
+    eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater,
     eZ\Publish\SPI\Persistence\Content\Type,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
+    eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
@@ -156,6 +157,16 @@ class ContentUpdater
      */
     protected function loadContentObjects( $contentTypeId )
     {
-        return $this->searchHandler->find( new Criterion\ContentTypeId( $contentTypeId ) );
+        $result = $this->searchHandler->findContent( new Query( array(
+            'criterion' => new Criterion\ContentTypeId( $contentTypeId )
+        ) ) );
+
+        $content = array();
+        foreach ( $result->searchHits as $hit )
+        {
+            $content[] = $hit->valueObject;
+        }
+
+        return $content;
     }
 }

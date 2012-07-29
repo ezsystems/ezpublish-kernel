@@ -30,6 +30,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeGroupCreateStruct()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @group user
      */
     public function testNewContentTypeGroupCreateStruct()
     {
@@ -76,6 +77,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeGroup()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewContentTypeGroupCreateStruct
+     * @group user
      */
     public function testCreateContentTypeGroup()
     {
@@ -159,6 +161,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeGroup()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
+     * @group user
      */
     public function testLoadContentTypeGroup()
     {
@@ -225,6 +228,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeGroupByIdentifier()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @group user
      */
     public function testLoadContentTypeGroupByIdentifier()
     {
@@ -513,6 +517,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeCreateStruct()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @group user
      */
     public function testNewContentTypeCreateStruct()
     {
@@ -568,6 +573,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::newFieldDefinitionCreateStruct()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @group user
      */
     public function testNewFieldDefinitionCreateStruct()
     {
@@ -647,6 +653,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewContentTypeCreateStruct
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewFieldDefinitionCreateStruct
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeGroupByIdentifier
+     * @group user
      */
     public function testCreateContentType()
     {
@@ -693,9 +700,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'maxStringLength' => 0,
             ),
         );
-        $titleFieldCreate->fieldSettings = array(
-            'textRows' => 10
-        );
+        $titleFieldCreate->fieldSettings = array();
         $titleFieldCreate->isSearchable = true;
 
         $typeCreate->addFieldDefinition( $titleFieldCreate );
@@ -722,9 +727,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'maxStringLength' => 0,
             ),
         );
-        $bodyFieldCreate->fieldSettings = array(
-            'textRows' => 80
-        );
+        $bodyFieldCreate->fieldSettings = array();
         $bodyFieldCreate->isSearchable = true;
 
         $typeCreate->addFieldDefinition( $bodyFieldCreate );
@@ -1217,9 +1220,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'maxStringLength' => 0,
             ),
         );
-        $fieldDefCreate->fieldSettings = array(
-            'textRows' => 10
-        );
+        $fieldDefCreate->fieldSettings = array();
         $fieldDefCreate->isSearchable = true;
 
         $contentTypeService->addFieldDefinition( $contentTypeDraft, $fieldDefCreate );
@@ -1612,6 +1613,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentType()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
+     * @group user
      */
     public function testLoadContentType()
     {
@@ -1822,6 +1824,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeByIdentifier()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentType
+     * @group user
      */
     public function testLoadContentTypeByIdentifier()
     {
@@ -2140,10 +2143,10 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'user' );
 
         // This call will fail with a "BadStateException" because there is at
-        // least on content object of type "article" in an eZ Publish demo
+        // least on content object of type "user" in an eZ Publish demo
         $contentTypeService->deleteContentType( $contentType );
         /* END: Use Case */
     }

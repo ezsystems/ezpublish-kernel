@@ -125,8 +125,14 @@ class DateAndTimeTest extends FieldTypeTest
         $ts = 1048633200;
         $fieldValue = $ft->toPersistenceValue( new DateAndTimeValue( new DateTime( "@$ts" ) ) );
 
-        self::assertSame( $ts, $fieldValue->data );
-        self::assertSame( array( 'sort_key_int' => $ts ), $fieldValue->sortKey );
+        self::assertSame(
+            array(
+                'timestamp' => 1048633200,
+                'rfc850'    => 'Tuesday, 25-Mar-03 23:00:00 GMT+0000',
+            ),
+            $fieldValue->data
+        );
+        self::assertSame( $ts, $fieldValue->sortKey );
     }
 
     /**

@@ -93,10 +93,7 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
-        return array(
-            "sort_key_string" => "",
-            "sort_key_int" => 0
-        );
+        return false;
     }
 
     /**
@@ -131,5 +128,16 @@ class Type extends FieldType
     public function isSearchable()
     {
         return true;
+    }
+
+    /**
+     * Get index data for field data for search backend
+     *
+     * @param mixed $value
+     * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
+     */
+    public function getIndexData( $value )
+    {
+        throw new \RuntimeExcepion( '@TODO: Implement' );
     }
 }

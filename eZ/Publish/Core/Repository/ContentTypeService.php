@@ -750,6 +750,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param int $contentTypeId
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     * @todo Use another excpetion when user of draft is someone else
      */
     public function loadContentTypeDraft( $contentTypeId )
     {
@@ -765,7 +766,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ( $spiContentType->modifierId != $this->repository->getCurrentUser()->id )
         {
-            throw new NotFoundException( "ContentType", $contentTypeId );
+            throw new NotFoundException( "ContentType owned by someone else", $contentTypeId );
         }
 
         return $this->buildContentTypeDraftDomainObject(
@@ -813,19 +814,15 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         try
         {
-            $spiContentType = $this->persistenceHandler->contentTypeHandler()->load(
+            $this->persistenceHandler->contentTypeHandler()->load(
                 $contentType->id,
                 SPIContentType::STATUS_DRAFT
             );
-            $currentUser = $this->repository->getCurrentUser();
 
-            if ( $spiContentType->modifierId !== $currentUser->id )
-            {
-                throw new BadStateException(
-                    "\$contentType",
-                    "Modifier of draft (id={$spiContentType->modifierId}) is not the same user as current user (id={$currentUser->id})"
-                );
-            }
+            throw new BadStateException(
+                "\$contentType",
+                "Draft of the ContentType already exists"
+            );
         }
         catch ( APINotFoundException $e )
         {

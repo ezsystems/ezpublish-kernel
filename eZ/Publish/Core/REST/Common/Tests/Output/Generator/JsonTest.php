@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ContentTypeServiceTest class
+ * File containing the JsonTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -15,10 +15,7 @@ use eZ\Publish\Core\REST\Common;
 require_once __DIR__ . '/../GeneratorTest.php';
 
 /**
- * Test case for operations in the ContentTypeService using in memory storage.
- *
- * @see eZ\Publish\API\Repository\ContentTypeService
- * @group integration
+ * Json output generator test class
  */
 class JsonTest extends GeneratorTest
 {
@@ -179,4 +176,3 @@ class JsonTest extends GeneratorTest
         );
     }
 }
-

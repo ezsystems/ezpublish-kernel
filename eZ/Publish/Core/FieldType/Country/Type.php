@@ -135,9 +135,7 @@ class Type extends FieldType
 
         sort( $countries );
 
-        return array(
-            'sort_key_string' => implode( ",", $countries )
-        );
+        return implode( ",", $countries );
     }
 
     /**
@@ -172,6 +170,17 @@ class Type extends FieldType
     public function isSearchable()
     {
         return true;
+    }
+
+    /**
+     * Get index data for field data for search backend
+     *
+     * @param mixed $value
+     * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
+     */
+    public function getIndexData( $value )
+    {
+        throw new \RuntimeExcepion( '@TODO: Implement' );
     }
 
     /**

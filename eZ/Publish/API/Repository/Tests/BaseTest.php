@@ -60,9 +60,35 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
                 'Cannot create a repository with predefined user. ' .
                 'Check the UserService or RoleService implementation. ' .
                  PHP_EOL . PHP_EOL.
-                'Exception trace: ' . $e->getMessage() . "\n" .
-                $e->getTraceAsString()
+                'Exception: ' . $e
             );
+        }
+    }
+
+    /**
+     * Catch TODO exceptions and converts them to incomplete tests markers
+     *
+     * This is only a temporary solution to better distinguish errors and
+     * missing implementations.
+     *
+     * @return void
+     */
+    protected function runTest()
+    {
+        try
+        {
+            return parent::runTest();
+        }
+        catch ( \Exception $e )
+        {
+            if ( stripos( $e->getMessage(), 'todo' ) !== false )
+            {
+                $this->markTestIncomplete( 'Missing implementation: ' . $e->getMessage() );
+            }
+            else
+            {
+                throw $e;
+            }
         }
     }
 
@@ -296,7 +322,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             $userGroup,
             new SubtreeLimitation(
                 array(
-                    'limitationValues' => array( '/1/43/' )
+                    'limitationValues' => array( '/1/48/' )
                 )
             )
         );

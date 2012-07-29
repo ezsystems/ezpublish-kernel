@@ -17,6 +17,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\SPI\Persistence\Content\Language,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
+    eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\SPI\Persistence;
 
 /**
@@ -318,11 +319,13 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find( new Criterion\ContentId( 10 ) );
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\ContentId( 10 )
+        ) ) );
 
         $this->assertEquals(
             1,
-            $result->count
+            $result->totalCount
         );
     }
 
@@ -336,15 +339,46 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find( new Criterion\ContentId( 10 ), 0, 0 );
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\ContentId( 10 ),
+            'offset'    => 0,
+            'limit'     => 0,
+        ) ) );
 
         $this->assertEquals(
             1,
-            $result->count
+            $result->totalCount
         );
         $this->assertEquals(
             array(),
-            $result->content
+            $result->searchHits
+        );
+    }
+
+    /**
+     * Issue with PHP_MAX_INT limit overflow in databases
+     *
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase::find
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::find
+     */
+    public function testFindWithNullLimit()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\ContentId( 10 ),
+            'offset'    => 0,
+            'limit'     => null,
+        ) ) );
+
+        $this->assertEquals(
+            1,
+            $result->totalCount
+        );
+        $this->assertEquals(
+            1,
+            count( $result->searchHits )
         );
     }
 
@@ -355,19 +389,20 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
      */
     public function testFindWithExistingLanguageFields()
     {
+        $this->markTestSkipped( "Translation filters are currently not supported by new search API." );
+
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\ContentId( 11 ),
-            0,
-            null,
-            null,
-            array( 'eng-US' )
-        );
+        $result = $locator->findContent( new Query( array(
+            'criterion'    => new Criterion\ContentId( 11 ),
+            'offset'       => 0,
+            'limit'        => null,
+            'translations' => array( 'eng-US' )
+        ) ) );
 
         $this->assertEquals(
             1,
-            $result->count
+            $result->totalCount
         );
     }
 
@@ -378,19 +413,20 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
      */
     public function testFindWithMissingLanguageFields()
     {
+        $this->markTestSkipped( "Translation filters are currently not supported by new search API." );
+
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\ContentId( 4 ),
-            0,
-            null,
-            null,
-            array( 'eng-GB' )
-        );
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\ContentId( 4 ),
+            'offset'       => 0,
+            'limit'        => null,
+            'translations' => array( 'eng-GB' )
+        ) ) );
 
         $this->assertEquals(
             0,
-            $result->count
+            $result->totalCount
         );
     }
 
@@ -438,18 +474,18 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\ContentId(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\ContentId(
                 array( 1, 4, 10 )
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 4, 10 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -463,14 +499,14 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\ContentId(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\ContentId(
                 array( 1, 4, 10 )
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
-        $this->assertSame( 2, $result->count );
+        $this->assertSame( 2, $result->totalCount );
     }
 
     /**
@@ -482,8 +518,8 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\LogicalAnd(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\LogicalAnd(
                 array(
                     new Criterion\ContentId(
                         array( 1, 4, 10 )
@@ -493,14 +529,14 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
                     ),
                 )
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 4 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -514,8 +550,8 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\LogicalOr(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\LogicalOr(
                 array(
                     new Criterion\ContentId(
                         array( 1, 4, 10 )
@@ -525,14 +561,14 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
                     ),
                 )
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 4, 10, 12 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -546,8 +582,8 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\LogicalAnd(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\LogicalAnd(
                 array(
                     new Criterion\ContentId(
                         array( 1, 4, 10 )
@@ -559,14 +595,14 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
                     ),
                 )
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 4 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -580,20 +616,20 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\Subtree(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\Subtree(
                 array(
                     '/1/2/69/',
                 )
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 67, 68, 69, 70, 71, 72, 73, 74 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -607,18 +643,18 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\Subtree(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\Subtree(
                 '/1/2/69/'
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 67, 68, 69, 70, 71, 72, 73, 74 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -632,18 +668,18 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\ContentTypeId(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\ContentTypeId(
                 4
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 10, 14 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -657,18 +693,18 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\ContentTypeGroupId(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\ContentTypeGroupId(
                 2
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 4, 11, 12, 13, 42, 225, 10, 14 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -682,20 +718,20 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\DateMetadata(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\DateMetadata(
                 Criterion\DateMetadata::MODIFIED,
                 Criterion\Operator::GT,
                 1311154214
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 11, 225 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -709,20 +745,20 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\DateMetadata(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\DateMetadata(
                 Criterion\DateMetadata::MODIFIED,
                 Criterion\Operator::GTE,
                 1311154214
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 11, 14, 225 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -736,20 +772,20 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\DateMetadata(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\DateMetadata(
                 Criterion\DateMetadata::MODIFIED,
                 Criterion\Operator::IN,
                 array( 1311154214, 1311154215 )
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 11, 14, 225 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -763,20 +799,20 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\DateMetadata(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\DateMetadata(
                 Criterion\DateMetadata::MODIFIED,
                 Criterion\Operator::BETWEEN,
                 array( 1311154213, 1311154215 )
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 11, 14, 225 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -790,20 +826,20 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\DateMetadata(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\DateMetadata(
                 Criterion\DateMetadata::CREATED,
                 Criterion\Operator::BETWEEN,
                 array( 1299780749, 1311154215 )
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 131, 66, 225 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -817,18 +853,18 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\LocationId(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\LocationId(
                 array( 1, 2, 5 )
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 4, 65 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -842,18 +878,18 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\ParentLocationId(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\ParentLocationId(
                 array( 1 )
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 4, 41, 45, 56, 65 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -867,18 +903,18 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\RemoteId(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\RemoteId(
                 array( 'f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca' )
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 4, 10 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -892,18 +928,18 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\LocationRemoteId(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\LocationRemoteId(
                 array( '3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983' )
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 4, 65 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -917,18 +953,18 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\SectionId(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\SectionId(
                 array( 2 )
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 42 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -942,18 +978,18 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\Status(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\Status(
                 array( Criterion\Status::STATUS_PUBLISHED )
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -979,20 +1015,20 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
             ->with( 'ezstring' )
             ->will( $this->returnValue( $converter ) );
 
-        $result = $locator->find(
-            new Criterion\Field(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\Field(
                 'name',
                 Criterion\Operator::EQ,
                 'members'
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 11 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -1018,20 +1054,20 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
             ->with( 'ezstring' )
             ->will( $this->returnValue( $converter ) );
 
-        $result = $locator->find(
-            new Criterion\Field(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\Field(
                 'name',
                 Criterion\Operator::IN,
                 array( 'members', 'anonymous users' )
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 11, 42 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -1057,20 +1093,20 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
             ->with( 'ezprice' )
             ->will( $this->returnValue( $converter ) );
 
-        $result = $locator->find(
-            new Criterion\Field(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\Field(
                 'price',
                 Criterion\Operator::BETWEEN,
                 array( 10000, 1000000 )
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 69, 71 ,72 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -1108,8 +1144,8 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
             ->with( 'ezprice' )
             ->will( $this->returnValue( $converter ) );
 
-        $result = $locator->find(
-            new Criterion\LogicalOr(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\LogicalOr(
                 array(
                     new Criterion\Field(
                         'name',
@@ -1123,14 +1159,14 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
                     )
                 )
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 11, 69, 71 ,72 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -1144,18 +1180,18 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\FullText(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\FullText(
                 'applied webpage'
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 191 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -1169,18 +1205,18 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\FullText(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\FullText(
                 'applie*'
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array( 191 ),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -1198,18 +1234,18 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
-        $result = $locator->find(
-            new Criterion\FullText(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\FullText(
                 'applie*'
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array(),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -1223,18 +1259,18 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\FullText(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\FullText(
                 'the'
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             array(),
             array_map(
-                function ( $content ) { return $content->contentInfo->id; },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -1252,22 +1288,19 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
-        $result = $locator->find(
-            new Criterion\FullText(
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\FullText(
                 'the'
             ),
-            0, 10, null
-        );
+            'limit' => 10,
+        ) ) );
 
         $this->assertEquals(
             10,
             count(
                 array_map(
-                    function ( $content )
-                    {
-                        return $content->contentInfo->id;
-                    },
-                    $result->content
+                    function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                    $result->searchHits
                 )
             )
         );

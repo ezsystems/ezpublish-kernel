@@ -26,8 +26,7 @@ class IdManager
     /**
      * Creates a new ID manager based on $urlHandler
      *
-     * @param Common\UrlHandler $urlHandler
-     * @return void
+     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
     public function __construct( Common\UrlHandler $urlHandler )
     {

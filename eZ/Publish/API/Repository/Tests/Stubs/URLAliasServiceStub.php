@@ -338,16 +338,22 @@ class URLAliasServiceStub implements URLAliasService
     {
         $locationService = $this->repository->getLocationService();
 
-        $parentAliases = $this->listLocationAliases(
-            $locationService->loadLocation( $location->parentLocationId ),
-            false
-        );
+        $parentPath = '';
 
-        $parentAlias = $this->guessCorrectParent( $parentAliases, $languageCode );
+        // 1 is the root location, which simply does not have aliases
+        if ( $location->parentLocationId !== 1 )
+        {
+            $parentAliases = $this->listLocationAliases(
+                $locationService->loadLocation( $location->parentLocationId ),
+                false
+            );
 
+            $parentAlias = $this->guessCorrectParent( $parentAliases, $languageCode );
 
-        $parentAlias = reset( $parentAliases );
-        return $parentAlias->path . '/' . $this->generateAliasName( $name );
+            $parentPath = $parentAlias->path;
+        }
+
+        return $parentPath . '/' . $this->generateAliasName( $name );
     }
 
     /**

@@ -11,7 +11,9 @@ namespace eZ\Publish\SPI\Tests\FieldType;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy,
     eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Field;
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 
 /**
  * Integration test for the legacy storage
@@ -84,20 +86,11 @@ abstract class BaseIntegrationTest extends TestCase
     abstract public function getFieldDefinitionData();
 
     /**
-     * Returns the initial data to be stored in FieldValue->externalData when
-     * creating the content field of the FieldType under test
+     * Get initial field value
      *
-     * @return mixed
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    abstract public function getInitialExternalFieldData();
-
-    /**
-     * Returns the initial data to be stored in FieldValue->data when
-     * creating the content field of the FieldType under test
-     *
-     * @return mixed
-     */
-    abstract public function getInitialFieldData();
+    abstract public function getInitialValue();
 
     /**
      * Asserts that the loaded field data is correct
@@ -108,23 +101,22 @@ abstract class BaseIntegrationTest extends TestCase
      * also needs to be asserted. Make sure you implement this method agnostic
      * to the used SPI\Persistence implementation!
      */
-    abstract public function assertLoadedFieldDataCorrect( Field $field );
+    public function assertLoadedFieldDataCorrect( Field $field )
+    {
+        $this->assertEquals(
+            $this->getInitialValue(),
+            $field->value
+        );
+    }
 
     /**
-     * Returns the data to be stored in FieldValue->externalData when updating
-     * the content field of the FieldType under test
+     * Get update field value.
      *
-     * @return mixed
-     */
-    abstract public function getUpdateExternalFieldData();
-
-    /**
-     * Returns the data to be stored in FieldValue->data when updating the
-     * content field of the FieldType under test
+     * Use to update the field
      *
-     * @return mixed
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    abstract public function getUpdateFieldData();
+    abstract public function getUpdatedValue();
 
     /**
      * Asserts that the updated field data is loaded correct
@@ -138,7 +130,13 @@ abstract class BaseIntegrationTest extends TestCase
      *
      * @return void
      */
-    abstract public function assertUpdatedFieldDataCorrect( Field $field );
+    public function assertUpdatedFieldDataCorrect( Field $field )
+    {
+        $this->assertEquals(
+            $this->getUpdatedValue(),
+            $field->value
+        );
+    }
 
     /**
      * Method called after content creation
@@ -287,7 +285,7 @@ abstract class BaseIntegrationTest extends TestCase
                 'remoteId' => 'sindelfingen',
             ) ) ),
             'initialLanguageId' => 2,
-            'remoteId'          => 'sindelfingen',
+            'remoteId'          => microtime(),
             'modified'          => time(),
             'fields'            => array(
                 new Content\Field( array(
@@ -296,17 +294,14 @@ abstract class BaseIntegrationTest extends TestCase
                     'fieldDefinitionId' => $contentType->fieldDefinitions[0]->id,
                     'value'             => new Content\FieldValue( array(
                         'data'    => 'This is just a test object',
-                        'sortKey' => array( 'sort_key_string' => 'This is just a test object' ),
+                        'sortKey' => 'this is just a test object',
                     ) ),
                 ) ),
                 new Content\Field( array(
                     'type'              => $this->getTypeName(),
                     'languageCode'      => 'eng-GB',
                     'fieldDefinitionId' => $contentType->fieldDefinitions[1]->id,
-                    'value'             => new Content\FieldValue( array(
-                        'data'         => $this->getInitialFieldData(),
-                        'externalData' => $this->getInitialExternalFieldData(),
-                    ) ),
+                    'value'             => $this->getInitialValue(),
                 ) ),
             ),
         ) );
@@ -336,6 +331,9 @@ abstract class BaseIntegrationTest extends TestCase
         return $content->fields[1];
     }
 
+    /**
+     * @depends testCreateContent
+     */
     public function testLoadField()
     {
         $handler = $this->getCustomHandler();
@@ -372,8 +370,7 @@ abstract class BaseIntegrationTest extends TestCase
     {
         $handler = $this->getCustomHandler();
 
-        $field->value->externalData = $this->getUpdateExternalFieldData();
-        $field->value->data = $this->getUpdateFieldData();
+        $field->value = $this->getUpdatedValue();
         $updateStruct = new \eZ\Publish\SPI\Persistence\Content\UpdateStruct( array(
             'creatorId' => 14,
             'modificationDate' => time(),
@@ -435,25 +432,22 @@ abstract class BaseIntegrationTest extends TestCase
     protected function getHandler()
     {
         return new Legacy\Handler(
-            array(
-                'external_storage' => array(
-                    'ezstring' => 'eZ\\Publish\\Core\\FieldType\\NullStorage',
-                ),
-                'field_converter' => array(
-                    'ezstring' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextLine',
+            self::$setUp,
+            new ConverterRegistry(
+                array(
+                    'ezstring' => new Legacy\Content\FieldValue\Converter\TextLine(),
                 )
             ),
-            self::$setUp
+            new StorageRegistry(
+                array()
+            ),
+            $this->getMock(
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Search\\TransformationProcessor',
+                array(),
+                array(),
+                '',
+                false
+            )
         );
-    }
-
-    /**
-     * Returns the test suite with all tests declared in this class.
-     *
-     * @return \PHPUnit_Framework_TestSuite
-     */
-    public static function suite()
-    {
-        return new \PHPUnit_Framework_TestSuite( get_called_class() );
     }
 }

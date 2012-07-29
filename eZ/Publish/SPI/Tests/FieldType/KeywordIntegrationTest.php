@@ -58,7 +58,6 @@ class KeywordIntergrationTest extends BaseIntegrationTest
         $handler->getStorageRegistry()->register(
             'ezkeyword',
             new FieldType\Keyword\KeywordStorage(
-                $handler,
                 array(
                     'LegacyStorage' => new FieldType\Keyword\KeywordStorage\Gateway\LegacyStorage(),
                 )
@@ -101,23 +100,17 @@ class KeywordIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get initial field externals data
+     * Get initial field value
      *
-     * @return array
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function getInitialExternalFieldData()
+    public function getInitialValue()
     {
-        return array( 'foo', 'bar', 'sindelfingen' );
-    }
-
-    /**
-     * Get initial field data
-     *
-     * @return array
-     */
-    public function getInitialFieldData()
-    {
-        return null;
+        return new Content\FieldValue( array(
+            'data'         => null,
+            'externalData' => array( 'foo', 'bar', 'sindelfingen' ),
+            'sortKey'      => null,
+        ) );
     }
 
     /**
@@ -132,10 +125,12 @@ class KeywordIntergrationTest extends BaseIntegrationTest
     public function assertLoadedFieldDataCorrect( Field $field )
     {
         $this->assertKeywordSetsEqual(
-            $this->getInitialExternalFieldData(),
+            $this->getInitialValue()->externalData,
             $field->value->externalData
         );
+
         $this->assertNull( $field->value->data );
+        $this->assertNull( $field->value->sortKey );
     }
 
     /**
@@ -175,23 +170,19 @@ class KeywordIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get update field externals data
+     * Get update field value.
      *
-     * @return array
-     */
-    public function getUpdateExternalFieldData()
-    {
-        return array( 'sindelfingen', 'baz' );
-    }
-
-    /**
-     * Get update field data
+     * Use to update the field
      *
-     * @return array
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function getUpdateFieldData()
+    public function getUpdatedValue()
     {
-        return null;
+        return new Content\FieldValue( array(
+            'data'         => null,
+            'externalData' => array( 'sindelfingen', 'baz' ),
+            'sortKey'      => null,
+        ) );
     }
 
     /**
@@ -209,10 +200,12 @@ class KeywordIntergrationTest extends BaseIntegrationTest
     public function assertUpdatedFieldDataCorrect( Field $field )
     {
         $this->assertKeywordSetsEqual(
-            $this->getUpdateExternalFieldData(),
+            $this->getUpdatedValue()->externalData,
             $field->value->externalData
         );
+
         $this->assertNull( $field->value->data );
+        $this->assertNull( $field->value->sortKey );
     }
 }
 

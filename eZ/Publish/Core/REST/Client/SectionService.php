@@ -269,12 +269,8 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
             )
         );
 
-        $result = null;
         if ( !empty( $response->body ) )
-        {
-            $result = $this->inputDispatcher->parse( $response );
-        }
-        return $result;
+            $this->inputDispatcher->parse( $response );
     }
 
     /**

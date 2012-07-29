@@ -92,7 +92,7 @@ class IntegerTest extends FieldTypeTest
         $fieldValue = $ft->toPersistenceValue( new IntegerValue( $integer ) );
 
         self::assertSame( $integer, $fieldValue->data );
-        self::assertSame( array( "sort_key_int" => $integer ), $fieldValue->sortKey );
+        self::assertSame( $integer, $fieldValue->sortKey );
     }
 
     /**

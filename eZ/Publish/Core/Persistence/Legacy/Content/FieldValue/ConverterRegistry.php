@@ -18,7 +18,7 @@ class ConverterRegistry
      *
      * @var array
      */
-    protected $converterMap;
+    protected $converterMap = array();
 
     /**
      * Create converter registry with converter map
@@ -37,6 +37,18 @@ class ConverterRegistry
     public function __construct( array $converterMap )
     {
         $this->converterMap = $converterMap;
+    }
+
+    /**
+     * Register a $converter for $typeName
+     *
+     * @param string $typeName
+     * @param mixed $converter Callable or converter instance
+     * @return void
+     */
+    public function register( $typeName, $converter )
+    {
+        $this->converterMap[$typeName] = $converter;
     }
 
     /**

@@ -15,11 +15,11 @@ use eZ\Publish\Core\Repository\Tests\Service\RoleBase as BaseRoleServiceTest;
  */
 class RoleTest extends BaseRoleServiceTest
 {
-    protected function getRepository( array $serviceSettings )
+    protected function getRepository()
     {
         try
         {
-            return include 'common.php';
+            return Utils::getRepository();
         }
         catch ( \Exception $e )
         {

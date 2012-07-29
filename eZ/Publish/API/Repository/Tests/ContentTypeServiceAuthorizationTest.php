@@ -41,7 +41,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         // $creatorId is the ID of user 23
         $groupCreate->creatorId = $creatorId;
         $groupCreate->creationDate = new \DateTime();
-        $groupCreate->mainLanguageCode = 'de-DE';
+        $groupCreate->mainLanguageCode = 'ger-DE';
         $groupCreate->names = array( 'eng-GB' => 'A name.' );
         $groupCreate->descriptions = array( 'eng-GB' => 'A description.' );
 
@@ -153,18 +153,18 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $typeUpdate->urlAliasSchema = 'url@alias|scheme';
         $typeUpdate->nameSchema = '@name@scheme@';
         $typeUpdate->isContainer = true;
-        $typeUpdate->mainLanguageCode = 'de-DE';
+        $typeUpdate->mainLanguageCode = 'ger-DE';
         $typeUpdate->defaultAlwaysAvailable = false;
         // $modifierId is the ID of user 42
         $typeUpdate->modifierId = $modifierId;
         $typeUpdate->modificationDate = new \DateTime();
         $typeUpdate->names = array(
             'eng-GB' => 'News article',
-            'de-DE' => 'Nachrichten-Artikel',
+            'ger-DE' => 'Nachrichten-Artikel',
         );
         $typeUpdate->descriptions = array(
             'eng-GB' => 'A news article',
-            'de-DE' => 'Ein Nachrichten-Artikel',
+            'ger-DE' => 'Ein Nachrichten-Artikel',
         );
 
         // Load the user service
@@ -200,11 +200,11 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         );
         $fieldDefCreate->names = array(
             'eng-GB' => 'Tags',
-            'de-DE' => 'Schlagworte',
+            'ger-DE' => 'Schlagworte',
         );
         $fieldDefCreate->descriptions = array(
             'eng-GB' => 'Tags of the blog post',
-            'de-DE' => 'Schlagworte des Blog-Eintrages',
+            'ger-DE' => 'Schlagworte des Blog-Eintrages',
         );
         $fieldDefCreate->fieldGroup = 'blog-meta';
         $fieldDefCreate->position = 1;
@@ -290,11 +290,11 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $bodyUpdateStruct->identifier = 'blog-body';
         $bodyUpdateStruct->names = array(
             'eng-GB' => 'Blog post body',
-            'de-DE' => 'Blog-Eintrags-Textkörper',
+            'ger-DE' => 'Blog-Eintrags-Textkörper',
         );
         $bodyUpdateStruct->descriptions = array(
             'eng-GB' => 'Blog post body of the blog post',
-            'de-DE' => 'Blog-Eintrags-Textkörper des Blog-Eintrages',
+            'ger-DE' => 'Blog-Eintrags-Textkörper des Blog-Eintrages',
         );
         $bodyUpdateStruct->fieldGroup = 'updated-blog-content';
         $bodyUpdateStruct->position = 3;

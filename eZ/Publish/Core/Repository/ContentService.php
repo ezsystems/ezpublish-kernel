@@ -136,32 +136,16 @@ class ContentService implements ContentServiceInterface
      *
      * To load fields use loadContent
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the content in the given location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the content
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content with the given remote id does not exist
      *
      * @param string $remoteId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     * @todo implement contentHandler::loadContentInfoByRemoteId?
      */
     public function loadContentInfoByRemoteId( $remoteId )
     {
-        try
-        {
-            $spiContent = $this->persistenceHandler->searchHandler()->findSingle(
-                new CriterionRemoteId( $remoteId )
-            );
-        }
-        catch ( APINotFoundException $e )
-        {
-            throw new NotFoundException(
-                "Content",
-                $remoteId,
-                $e
-            );
-        }
-
-        return $this->buildContentInfoDomainObject( $spiContent->contentInfo );
+        return $this->repository->getSearchService()->findSingle( new CriterionRemoteId( $remoteId ) )->contentInfo;
     }
 
     /**
@@ -349,32 +333,12 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null )
     {
-        try
-        {
-            $spiContent = $this->persistenceHandler->searchHandler()
-                ->findSingle( new CriterionRemoteId( $remoteId ) );
-        }
-        catch ( APINotFoundException $e )
-        {
-            throw new NotFoundException(
-                "Content",
-                $remoteId,
-                $e
-            );
-        }
+        $content = $this->repository->getSearchService()->findSingle( new CriterionRemoteId( $remoteId ) );
 
-        if ( $versionNo === null )
-        {
-            $versionNo = $spiContent->contentInfo->currentVersionNo;
-        }
+        if ( $languages === null && $versionNo === null )
+            return $content;
 
-        $spiContent = $this->persistenceHandler->contentHandler()->load(
-            $spiContent->contentInfo->id,
-            $versionNo,
-            $languages
-        );
-
-        return $this->buildContentDomainObject( $spiContent );
+        return $this->loadContent( $content->id, $languages, $versionNo );
     }
 
     /**
@@ -417,11 +381,7 @@ class ContentService implements ContentServiceInterface
         {
             try
             {
-                $this->persistenceHandler->searchHandler()->findSingle(
-                    new CriterionRemoteId(
-                        $contentCreateStruct->remoteId
-                    )
-                );
+                $this->loadContentByRemoteId( $contentCreateStruct->remoteId );
 
                 throw new InvalidArgumentException(
                     "\$contentCreateStruct",
@@ -683,11 +643,9 @@ class ContentService implements ContentServiceInterface
             {
                 try
                 {
-                    $spiContent = $this->persistenceHandler->searchHandler()->findSingle(
-                        new CriterionRemoteId( $contentMetadataUpdateStruct->remoteId )
-                    );
+                    $existingContent = $this->loadContentByRemoteId( $contentMetadataUpdateStruct->remoteId );
 
-                    if ( $spiContent->contentInfo->id !== $contentInfo->id )
+                    if ( $existingContent->id !== $contentInfo->id )
                         throw new InvalidArgumentException(
                             "\$contentMetadataUpdateStruct",
                             "Another content with remoteId '{$contentMetadataUpdateStruct->remoteId}' exists"
@@ -1193,76 +1151,6 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * finds content objects for the given query.
-     *
-     * @TODO define structs for the field filters
-     * @todo move to search service
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array  $fieldFilters - a map of filters for the returned fields.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
-     * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
-     */
-    public function findContent( Query $query, array $fieldFilters, $filterOnUserPermissions = true )
-    {
-        $spiSearchResult = $this->persistenceHandler->searchHandler()->find(
-            $query->criterion,
-            $query->offset,
-            $query->limit,
-            $query->sortClauses,
-            isset( $fieldFilters["languages"] ) ? $fieldFilters["languages"] : null
-        );
-
-        $contentItems = array();
-        foreach ( $spiSearchResult->content as $spiContent )
-        {
-            $contentItems[] = $this->buildContentDomainObject( $spiContent );
-        }
-
-        return new SearchResult(
-            array(
-                'query' => clone $query,
-                'count' => $spiSearchResult->count,
-                'items' => $contentItems
-            )
-        );
-    }
-
-    /**
-     * Performs a query for a single content object
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the query would return more than one result
-     *
-     * @TODO define structs for the field filters
-     * @todo move to search service
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array  $fieldFilters - a map of filters for the returned fields.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
-     * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    public function findSingle( Query $query, array $fieldFilters, $filterOnUserPermissions = true )
-    {
-        // @todo: Fallback-ing to self::findContent() until exceptions are defined for SearchHandler::findSingle()
-        $searchResult = $this->findContent( $query, $fieldFilters, $filterOnUserPermissions );
-
-        if ( $searchResult->count === 0 )
-        {
-            throw new NotFoundException( "Content", "Search with given \$query found nothing" );
-        }
-        elseif ( $searchResult->count > 1 )
-        {
-            throw new InvalidArgumentException( "\$query", "Search with given \$query returned more than one result" );
-        }
-
-        return reset( $searchResult->items );
-    }
-
-    /**
      * load all outgoing relations for the given version
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read this version
@@ -1514,11 +1402,15 @@ class ContentService implements ContentServiceInterface
     /**
      * Builds a Content domain object from value object returned from persistence
      *
+     * @TODO: Made public, since the search service also needs access to this
+     * method. Should be refactored into its own class together with the other
+     * build* method.
+     *
      * @param \eZ\Publish\SPI\Persistence\Content $spiContent
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\Content
      */
-    protected function buildContentDomainObject( SPIContent $spiContent )
+    public function buildContentDomainObject( SPIContent $spiContent )
     {
         return new Content(
             array(
@@ -1564,11 +1456,15 @@ class ContentService implements ContentServiceInterface
     /**
      * Builds a ContentInfo domain object from value object returned from persistence
      *
+     * @TODO: Made public, since the search service also needs access to this
+     * method. Should be refactored into its own class together with the other
+     * build* method.
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $spiContentInfo
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\ContentInfo
      */
-    protected function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo )
+    public function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo )
     {
         // @todo: $mainLocationId should have been removed through SPI refactoring?
         $spiContent = $this->persistenceHandler->contentHandler()->load(

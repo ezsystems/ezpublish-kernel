@@ -32,4 +32,3 @@ interface UrlHandler
      */
     public function generate( $type, array $values = array() );
 }
-

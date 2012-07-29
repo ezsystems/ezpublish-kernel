@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Client\Exceptions;
 
-
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Exceptions\UnauthorizedException}
  * interface.

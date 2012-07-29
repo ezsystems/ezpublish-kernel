@@ -20,10 +20,14 @@ use \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\UserGroup;
 
+use \eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
+use \eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
+
 use \eZ\Publish\Core\REST\Client\Values\User\PolicyCreateStruct;
 use \eZ\Publish\Core\REST\Client\Values\User\PolicyUpdateStruct;
 use \eZ\Publish\Core\REST\Client\Values\User\Role;
 use \eZ\Publish\Core\REST\Client\Values\User\Policy;
+use \eZ\Publish\Core\REST\Client\Values\User\RoleAssignment;
 
 use \eZ\Publish\Core\REST\Common\UrlHandler;
 use \eZ\Publish\Core\REST\Common\Input;
@@ -118,11 +122,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
             $inputMessage
         );
 
-        // If error occurred (in which case the return value is not role value object)
-        // do not add policies if any, only return received response
         $createdRole = $this->inputDispatcher->parse( $result );
-        if ( !$createdRole instanceof APIRole )
-            return $createdRole;
 
         $createdPolicies = array();
         foreach ( $roleCreateStruct->getPolicies() as $policyCreateStruct )
@@ -137,11 +137,6 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
             );
 
             $createdPolicy = $this->inputDispatcher->parse( $result );
-
-            // Same case with creating role, if error occurred
-            // return the response
-            if ( !$createdPolicy instanceof Policy )
-                return $createdPolicy;
 
             // @todo Workaround for missing roleId in Policy XSD definition
             $createdPolicyArray = array(
@@ -318,9 +313,6 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
         );
 
         $loadedRole = $this->inputDispatcher->parse( $response );
-        if ( !$loadedRole instanceof Role )
-            return $loadedRole;
-
         $response = $this->client->request(
             'GET',
             $loadedRole->id . '/policies',
@@ -330,9 +322,6 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
         );
 
         $policies = $this->inputDispatcher->parse( $response );
-        if ( !is_array( $policies ) )
-            return $policies;
-
         return new Role(
             array(
                 'id' => $loadedRole->id,
@@ -410,12 +399,8 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
             )
         );
 
-        $result = null;
         if ( !empty( $response->body ) )
-        {
-            $result = $this->inputDispatcher->parse( $response );
-        }
-        return $result;
+            $this->inputDispatcher->parse( $response );
     }
 
     /**
@@ -443,7 +428,23 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function assignRoleToUserGroup( APIRole $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $roleAssignment = new RoleAssignment(
+            array(
+                'role' => $role,
+                'limitation' => $roleLimitation
+            )
+        );
+
+        $inputMessage = $this->outputVisitor->visit( $roleAssignment );
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'RoleAssignmentList' );
+
+        $result = $this->client->request(
+            'POST',
+            $this->urlHandler->generate( 'groupRoleAssignments', array( 'group' => $userGroup->id ) ),
+            $inputMessage
+        );
+
+        $this->inputDispatcher->parse( $result );
     }
 
     /**
@@ -457,7 +458,26 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function unassignRoleFromUserGroup( APIRole $role, UserGroup $userGroup )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $values = $this->urlHandler->parse( 'group', $userGroup->id );
+        $userGroupId = $values['group'];
+
+        $values = $this->urlHandler->parse( 'role', $role->id );
+        $roleId = $values['role'];
+
+        $response = $this->client->request(
+            'DELETE',
+            $this->urlHandler->generate( 'groupRoleAssignment', array( 'group' => $userGroupId, 'role' => $roleId ) ),
+            new Message(
+                // TODO: What media-type should we set here? Actually, it should be
+                // all expected exceptions + none? Or is "Section" correct,
+                // since this is what is to be expected by the resource
+                // identified by the URL?
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'RoleAssignmentList' ) )
+            )
+        );
+
+        if ( !empty( $response->body ) )
+            $this->inputDispatcher->parse( $response );
     }
 
     /**
@@ -473,7 +493,23 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function assignRoleToUser( APIRole $role, User $user, RoleLimitation $roleLimitation = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $roleAssignment = new RoleAssignment(
+            array(
+                'role' => $role,
+                'limitation' => $roleLimitation
+            )
+        );
+
+        $inputMessage = $this->outputVisitor->visit( $roleAssignment );
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'RoleAssignmentList' );
+
+        $result = $this->client->request(
+            'POST',
+            $this->urlHandler->generate( 'userRoleAssignments', array( 'user' => $user->id ) ),
+            $inputMessage
+        );
+
+        $this->inputDispatcher->parse( $result );
     }
 
     /**
@@ -487,7 +523,26 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function unassignRoleFromUser( APIRole $role, User $user )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $values = $this->urlHandler->parse( 'user', $user->id );
+        $userId = $values['user'];
+
+        $values = $this->urlHandler->parse( 'role', $role->id );
+        $roleId = $values['role'];
+
+        $response = $this->client->request(
+            'DELETE',
+            $this->urlHandler->generate( 'userRoleAssignment', array( 'user' => $userId, 'role' => $roleId ) ),
+            new Message(
+                // TODO: What media-type should we set here? Actually, it should be
+                // all expected exceptions + none? Or is "Section" correct,
+                // since this is what is to be expected by the resource
+                // identified by the URL?
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'RoleAssignmentList' ) )
+            )
+        );
+
+        if ( !empty( $response->body ) )
+            $this->inputDispatcher->parse( $response );
     }
 
     /**
@@ -515,7 +570,29 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function getRoleAssignmentsForUser( User $user )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $this->urlHandler->generate( 'userRoleAssignments' ),
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'RoleAssignmentList' ) )
+            )
+        );
+
+        $roleAssignments = $this->inputDispatcher->parse( $response );
+
+        $userRoleAssignments = array();
+        foreach ( $roleAssignments as $roleAssignment )
+        {
+            $userRoleAssignments[] = new UserRoleAssignment(
+                array(
+                    'limitation' => $roleAssignment->getRoleLimitation(),
+                    'role' => $roleAssignment->getRole(),
+                    'user' => $user
+                )
+            );
+        }
+
+        return $userRoleAssignments;
     }
 
     /**
@@ -529,7 +606,29 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function getRoleAssignmentsForUserGroup( UserGroup $userGroup )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $this->urlHandler->generate( 'groupRoleAssignments' ),
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'RoleAssignmentList' ) )
+            )
+        );
+
+        $roleAssignments = $this->inputDispatcher->parse( $response );
+
+        $userGroupRoleAssignments = array();
+        foreach ( $roleAssignments as $roleAssignment )
+        {
+            $userGroupRoleAssignments[] = new UserGroupRoleAssignment(
+                array(
+                    'limitation' => $roleAssignment->getRoleLimitation(),
+                    'role' => $roleAssignment->getRole(),
+                    'userGroup' => $userGroup
+                )
+            );
+        }
+
+        return $userGroupRoleAssignments;
     }
 
     /**

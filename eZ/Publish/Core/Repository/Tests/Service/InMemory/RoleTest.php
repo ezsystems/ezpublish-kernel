@@ -15,8 +15,8 @@ use eZ\Publish\Core\Repository\Tests\Service\RoleBase as BaseRoleServiceTest;
  */
 class RoleTest extends BaseRoleServiceTest
 {
-    protected function getRepository( array $serviceSettings )
+    protected function getRepository()
     {
-        return Utils::getRepository( $serviceSettings );
+        return Utils::getRepository();
     }
 }

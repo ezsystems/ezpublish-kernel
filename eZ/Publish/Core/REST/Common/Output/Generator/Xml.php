@@ -166,4 +166,3 @@ class Xml extends Generator
         return $this->generateMediaType( $name, 'xml' );
     }
 }
-
