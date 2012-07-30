@@ -294,7 +294,7 @@ class Handler implements BaseUrlAliasHandler
         $pathElements = explode( "/", $path );
         // Pop and store topmost path element, it is handled separately later
         $topElement = array_pop( $pathElements );
-        $languageId = $this->languageHandler->getByLocale( $languageCode )->id;
+        $languageId = $this->languageHandler->loadByLanguageCode( $languageCode )->id;
         $createdPath = array();
         $parentId = 0;
 
