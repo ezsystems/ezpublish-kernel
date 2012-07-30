@@ -18,8 +18,8 @@ use eZ\Publish\Core\Repository\Tests\Service\UrlWildcardBase as BaseUrlWildcardT
  */
 class UrlWildcardTest extends BaseUrlWildcardTest
 {
-    protected function getRepository( array $serviceSettings )
+    protected function getRepository()
     {
-        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler(), $serviceSettings );
+        return Utils::getRepository();
     }
 }

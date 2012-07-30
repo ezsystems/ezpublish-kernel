@@ -16,15 +16,8 @@ use eZ\Publish\Core\Repository\Tests\Service\UrlAliasBase as BaseUrlAliasTest;
  */
 class UrlAliasTest extends BaseUrlAliasTest
 {
-    protected function getRepository( array $serviceSettings )
+    protected function getRepository()
     {
-        try
-        {
-            return include 'common.php';
-        }
-        catch ( \Exception $e )
-        {
-            $this->markTestIncomplete(  $e->getMessage() );
-        }
+        return Utils::getRepository();
     }
 }
