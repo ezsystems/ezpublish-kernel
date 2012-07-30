@@ -195,7 +195,7 @@ class Json extends Generator
         $object = new Json\Object( $this->json );
         foreach ( $attributes as $attributeName => $attributeValue )
         {
-            $object->{'_' . $attributeValue} = $attributeValue;
+            $object->{'_' . $attributeName} = $attributeValue;
         }
         $object->{'#text'} = $value;
 
