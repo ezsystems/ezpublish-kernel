@@ -198,10 +198,10 @@ class MapperTest extends LanguageAwareTestCase
     {
         $objectState = new ObjectState();
         $objectState->identifier = 'not_locked';
-        $objectState->defaultLanguage = 'eng-GB';
-        $objectState->languageCodes = array( 'eng-GB' );
-        $objectState->name = array( 'eng-GB' => 'Not locked' );
-        $objectState->description = array( 'eng-GB' => '' );
+        $objectState->defaultLanguage = 'eng-US';
+        $objectState->languageCodes = array( 'eng-US' );
+        $objectState->name = array( 'eng-US' => 'Not locked' );
+        $objectState->description = array( 'eng-US' => '' );
 
         return $objectState;
     }
@@ -215,10 +215,10 @@ class MapperTest extends LanguageAwareTestCase
     {
         $group = new Group();
         $group->identifier = 'ez_lock';
-        $group->defaultLanguage = 'eng-GB';
-        $group->languageCodes = array( 'eng-GB' );
-        $group->name = array( 'eng-GB' => 'Lock' );
-        $group->description = array( 'eng-GB' => '' );
+        $group->defaultLanguage = 'eng-US';
+        $group->languageCodes = array( 'eng-US' );
+        $group->name = array( 'eng-US' => 'Lock' );
+        $group->description = array( 'eng-US' => '' );
 
         return $group;
     }
@@ -232,10 +232,10 @@ class MapperTest extends LanguageAwareTestCase
     {
         $inputStruct = new InputStruct();
 
-        $inputStruct->defaultLanguage = 'eng-GB';
+        $inputStruct->defaultLanguage = 'eng-US';
         $inputStruct->identifier = 'not_locked';
-        $inputStruct->name = array( 'eng-GB' => 'Not locked' );
-        $inputStruct->description = array( 'eng-GB' => '' );
+        $inputStruct->name = array( 'eng-US' => 'Not locked' );
+        $inputStruct->description = array( 'eng-US' => '' );
 
         return $inputStruct;
     }
@@ -249,10 +249,10 @@ class MapperTest extends LanguageAwareTestCase
     {
         $inputStruct = new InputStruct();
 
-        $inputStruct->defaultLanguage = 'eng-GB';
+        $inputStruct->defaultLanguage = 'eng-US';
         $inputStruct->identifier = 'ez_lock';
-        $inputStruct->name = array( 'eng-GB' => 'Lock' );
-        $inputStruct->description = array( 'eng-GB' => '' );
+        $inputStruct->name = array( 'eng-US' => 'Lock' );
+        $inputStruct->description = array( 'eng-US' => '' );
 
         return $inputStruct;
     }

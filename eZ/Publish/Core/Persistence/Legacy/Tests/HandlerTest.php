@@ -203,10 +203,6 @@ class HandlerTest extends TestCase
             'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler',
             $contentLanguageHandler
         );
-        $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
-            $contentLanguageHandler
-        );
     }
 
     /**

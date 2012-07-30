@@ -71,20 +71,6 @@ class MapperTest extends LanguageAwareTestCase
         $struct = $this->getCreateStructFixture();
 
         $mapper = $this->getMapper();
-        $this->languageHandler
-            ->expects( $this->once() )
-            ->method( 'getById' )
-            ->with( '2' )
-            ->will(
-                $this->returnValue(
-                    new Language(
-                        array(
-                            'id' => 2,
-                            'languageCode' => 'eng-GB',
-                        )
-                    )
-                )
-            );
         $content = $mapper->createContentFromCreateStruct( $struct );
 
         self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' , $content );
@@ -95,7 +81,7 @@ class MapperTest extends LanguageAwareTestCase
             array( 'sectionId', 'ownerId', 'remoteId' )
         );
         self::assertSame( $struct->typeId, $content->contentInfo->contentTypeId );
-        self::assertSame( 'eng-GB', $content->contentInfo->mainLanguageCode );
+        self::assertSame( 'eng-US', $content->contentInfo->mainLanguageCode );
         self::assertSame( $struct->alwaysAvailable, $content->contentInfo->isAlwaysAvailable );
         self::assertSame( 0, $content->contentInfo->publicationDate );
         self::assertSame( 0, $content->contentInfo->modificationDate );
@@ -143,20 +129,7 @@ class MapperTest extends LanguageAwareTestCase
         $time = time();
 
         $mapper = $this->getMapper();
-        $this->languageHandler
-            ->expects( $this->once() )
-            ->method( 'loadByLanguageCode' )
-            ->with( 'eng-GB' )
-            ->will(
-                $this->returnValue(
-                    new Language(
-                        array(
-                            'id' => 2,
-                            'languageCode' => 'eng-GB',
-                        )
-                    )
-                )
-            );
+
         $versionInfo = $mapper->createVersionInfoForContent(
             $content,
             1,
@@ -173,7 +146,7 @@ class MapperTest extends LanguageAwareTestCase
                 'status' => 0,
                 'contentId' => 2342,
                 'initialLanguageCode' => 'eng-GB',
-                'languageIds' => array( 2 ),
+                'languageIds' => array( 4 ),
             ),
             $versionInfo
         );
@@ -361,20 +334,6 @@ class MapperTest extends LanguageAwareTestCase
     {
         $time = time();
         $mapper = $this->getMapper();
-        $this->languageHandler
-            ->expects( $this->once() )
-            ->method( 'getByLocale' )
-            ->with( 'eng-US' )
-            ->will(
-                $this->returnValue(
-                    new Language(
-                        array(
-                            'id' => 2,
-                            'languageCode' => 'eng-US',
-                        )
-                    )
-                )
-            );
 
         $content = $this->getContentExtractReference();
 
@@ -481,7 +440,7 @@ class MapperTest extends LanguageAwareTestCase
         $mapper = new Mapper(
             $this->getLocationMapperMock(),
             $this->getValueConverterRegistryMock(),
-            $this->getLanguageHandlerMock()
+            $this->getLanguageHandler()
         );
         self::assertEquals( $contentInfoReference, $mapper->extractContentInfoFromRow( $fixtures, $prefix) );
     }
@@ -519,7 +478,7 @@ class MapperTest extends LanguageAwareTestCase
         $mapper = new Mapper(
             $this->getLocationMapperMock(),
             $this->getValueConverterRegistryMock(),
-            $this->getLanguageHandlerMock()
+            $this->getLanguageHandler()
         );
 
         $versionInfo = $mapper->extractVersionInfoFromRow( $fixtures, $prefix );
@@ -528,7 +487,11 @@ class MapperTest extends LanguageAwareTestCase
             switch ( $property )
             {
                 default:
-                    self::assertSame( $value, $versionInfo->$property );
+                    self::assertSame(
+                        $value, 
+                        $versionInfo->$property,
+                        "Property '$property' incorrect."
+                    );
             }
         }
     }
@@ -624,27 +587,27 @@ class MapperTest extends LanguageAwareTestCase
 
         $version = new RestrictedVersion();
         $version->id = 675;
-        $version->name = array( "eng-US" => "Something" );
+        $version->name = array( "eng-GB" => "Something" );
         $version->versionNo = 1;
         $version->modified = 1313047907;
         $version->creatorId = 14;
         $version->created = 1313047865;
         $version->status = 3;
         $version->contentId = 226;
-        $version->languageIds = array( 'eng-US' );
+        $version->languageIds = array( 'eng-GB' );
 
         $versions[] = $version;
 
         $version = new RestrictedVersion();
         $version->id = 676;
-        $version->name = array( "eng-US" => "Something" );
+        $version->name = array( "eng-GB" => "Something" );
         $version->versionNo = 2;
         $version->modified = 1313061404;
         $version->creatorId = 14;
         $version->created = 1313061317;
         $version->status = 1;
         $version->contentId = 226;
-        $version->languageIds = array( 'eng-US' );
+        $version->languageIds = array( 'eng-GB' );
 
         $versions[] = $version;
 

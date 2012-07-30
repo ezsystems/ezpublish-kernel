@@ -40,33 +40,7 @@ abstract class LanguageAwareTestCase extends TestCase
     {
         if ( !isset( $this->languageHandler ) )
         {
-            $this->languageHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
-            $this->languageHandler->expects( $this->any() )
-                ->method( 'load' )
-                ->will(
-                    $this->returnValue(
-                        new Language(
-                            array(
-                                'id' => 2,
-                                'languageCode' => 'eng-GB',
-                                'name' => 'British english'
-                            )
-                        )
-                    )
-                );
-            $this->languageHandler->expects( $this->any() )
-                ->method( 'loadByLanguageCode' )
-                ->will(
-                    $this->returnValue(
-                        new Language(
-                            array(
-                                'id' => 2,
-                                'languageCode' => 'eng-GB',
-                                'name' => 'British english'
-                            )
-                        )
-                    )
-                );
+            $this->languageHandler = new LanguageHandlerMock();
         }
         return $this->languageHandler;
     }

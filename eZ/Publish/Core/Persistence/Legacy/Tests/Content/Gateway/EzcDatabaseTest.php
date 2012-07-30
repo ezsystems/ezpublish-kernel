@@ -192,20 +192,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $version = $this->getVersionFixture();
 
         $gateway = $this->getDatabaseGateway();
-        $this->languageHandler
-            ->expects( $this->once() )
-            ->method( 'loadByLanguageCode' )
-            ->with( 'eng-GB' )
-            ->will(
-                $this->returnValue(
-                    new Language(
-                        array(
-                            'id' => 2,
-                            'languageCode' => 'eng-GB',
-                        )
-                    )
-                )
-            );
         $gateway->insertVersion( $version, array(), true );
 
         $this->assertQueryResult(
@@ -219,7 +205,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'workflow_event_pos' => '0',
                     'version' => '1',
                     'language_mask' => '1',
-                    'initial_language_id' => '2',
+                    'initial_language_id' => '4',
                     // Not needed, according to field mapping document
                     // 'user_id',
                 )
@@ -249,20 +235,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     public function testSetStatus()
     {
         $gateway = $this->getDatabaseGateway();
-        $this->languageHandler
-            ->expects( $this->once() )
-            ->method( 'loadByLanguageCode' )
-            ->with( 'eng-GB' )
-            ->will(
-                $this->returnValue(
-                    new Language(
-                        array(
-                            'id' => 2,
-                            'languageCode' => 'eng-GB',
-                        )
-                    )
-                )
-            );
 
         // insert content
         $struct = $this->getCreateStructFixture();
@@ -302,20 +274,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     public function testSetStatusPublished()
     {
         $gateway = $this->getDatabaseGateway();
-        $this->languageHandler
-            ->expects( $this->once() )
-            ->method( 'loadByLanguageCode' )
-            ->with( 'eng-GB' )
-            ->will(
-                $this->returnValue(
-                    new Language(
-                        array(
-                            'id' => 2,
-                            'languageCode' => 'eng-GB',
-                        )
-                    )
-                )
-            );
 
         // insert content
         $struct = $this->getCreateStructFixture();
@@ -746,20 +704,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getDatabaseGateway();
-
-        $this->languageHandler
-            ->expects( $this->any() )
-            ->method( 'getById' )
-            ->will(
-                $this->returnValue(
-                    new Language(
-                        array(
-                            'id' => 4,
-                            'languageCode' => 'eng-US',
-                        )
-                    )
-                )
-            );
         $res = $gateway->load( 226, 2 );
 
         $this->assertValuesInRows(
@@ -811,19 +755,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getDatabaseGateway();
-        $this->languageHandler
-            ->expects( $this->any() )
-            ->method( 'getById' )
-            ->will(
-                $this->returnValue(
-                    new Language(
-                        array(
-                            'id' => 4,
-                            'languageCode' => 'eng-US',
-                        )
-                    )
-                )
-            );
 
         $res = $gateway->load( 226, 2 );
 
@@ -847,19 +778,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getDatabaseGateway();
-        $this->languageHandler
-            ->expects( $this->any() )
-            ->method( 'getById' )
-            ->will(
-                $this->returnValue(
-                    new Language(
-                        array(
-                            'id' => 2,
-                            'languageCode' => 'eng-GB',
-                        )
-                    )
-                )
-            );
         $res = $gateway->load( 226, 2, array( 'eng-GB' ) );
 
         $this->assertValuesInRows(
@@ -1251,25 +1169,11 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getDatabaseGateway();
-        $this->languageHandler
-            ->expects( $this->once() )
-            ->method( 'getByLocale' )
-            ->with( 'eng-US' )
-            ->will(
-                $this->returnValue(
-                    new Language(
-                        array(
-                            'id' => 2,
-                            'languageCode' => 'eng-US',
-                        )
-                    )
-                )
-            );
 
-        $gateway->setName( 14, 2, "Hello world!", 'eng-US' );
+        $gateway->setName( 14, 2, "Hello world!", 'eng-GB' );
 
         $this->assertQueryResult(
-            array( array( 'eng-US', 2, 14, 2, 'Hello world!', 'eng-US' ) ),
+            array( array( 'eng-GB', 2, 14, 4, 'Hello world!', 'eng-GB' ) ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( '*' )
@@ -1375,19 +1279,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getDatabaseGateway();
-        $this->languageHandler
-            ->expects( $this->any() )
-            ->method( 'getById' )
-            ->will(
-                $this->returnValue(
-                    new Language(
-                        array(
-                            'id' => 4,
-                            'languageCode' => 'eng-US',
-                        )
-                    )
-                )
-            );
 
         $this->assertEquals(
             $gateway->loadLatestPublishedData( 10 ),
