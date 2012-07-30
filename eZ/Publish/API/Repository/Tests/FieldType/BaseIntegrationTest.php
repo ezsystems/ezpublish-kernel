@@ -698,6 +698,10 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
             $this->fail( 'Expected exception not thrown.' );
         }
+        catch ( \PHPUnit_Framework_AssertionFailedError $e )
+        {
+            throw $e;
+        }
         catch ( \Exception $e )
         {
             $this->assertInstanceOf(
@@ -722,6 +726,10 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
             $this->updateContent( $failingValue );
 
             $this->fail( 'Expected exception not thrown.' );
+        }
+        catch ( \PHPUnit_Framework_AssertionFailedError $e )
+        {
+            throw $e;
         }
         catch ( \Exception $e )
         {
