@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache,
-    eZ\Publish\SPI\Persistence\Content\Language;
+    eZ\Publish\SPI\Persistence\Content\Language,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 
 /**
  * Test case for Language aware classes
@@ -18,47 +18,72 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
 abstract class LanguageAwareTestCase extends TestCase
 {
     /**
-     * Returns the Language Lookup mock
+     * Language handler
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Lookup
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingLanguageHandler
      */
-    protected function getLanguageLookupMock()
+    protected $languageHandler;
+
+    /**
+     * Language mask generator
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
+     */
+    protected $languageMaskGenerator;
+
+    /**
+     * Returns a language handler mock
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
+     */
+    protected function getLanguageHandler()
     {
-        $langLookup = $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Lookup'
-        );
+        if ( !isset( $this->languageHandler ) )
+        {
+            $this->languageHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
+            $this->languageHandler->expects( $this->any() )
+                ->method( 'load' )
+                ->will(
+                    $this->returnValue(
+                        new Language(
+                            array(
+                                'id' => 2,
+                                'languageCode' => 'eng-GB',
+                                'name' => 'British english'
+                            )
+                        )
+                    )
+                );
+            $this->languageHandler->expects( $this->any() )
+                ->method( 'loadByLanguageCode' )
+                ->will(
+                    $this->returnValue(
+                        new Language(
+                            array(
+                                'id' => 2,
+                                'languageCode' => 'eng-GB',
+                                'name' => 'British english'
+                            )
+                        )
+                    )
+                );
+        }
+        return $this->languageHandler;
+    }
 
-        $cache = new Cache();
-
-        $languageUs = new Language();
-        $languageUs->id = 2;
-        $languageUs->languageCode = 'eng-US';
-
-        $cache->store( $languageUs );
-
-        $languageGb = new Language();
-        $languageGb->id = 4;
-        $languageGb->languageCode = 'eng-GB';
-
-        $cache->store( $languageGb );
-
-        $langLookup->expects( $this->any() )
-            ->method( 'getById' )
-            ->will( $this->returnCallback(
-                function ( $id ) use ( $cache )
-                {
-                    return $cache->getById( $id );
-                }
-        ) );
-        $langLookup->expects( $this->any() )
-            ->method( 'getByLocale' )
-            ->will( $this->returnCallback(
-                function ( $languageCode ) use ( $cache )
-                {
-                    return $cache->getByLocale( $languageCode );
-                }
-        ) );
-
-        return $langLookup;
+    /**
+     * Returns a language mask generator
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
+     */
+    protected function getLanguageMaskGenerator()
+    {
+        if ( !isset( $this->languageMaskGenerator ) )
+        {
+            $this->languageMaskGenerator = new LanguageMaskGenerator(
+                $this->getLanguageHandler()
+            );
+        }
+        return $this->languageMaskGenerator;
     }
 }

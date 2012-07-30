@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper,
     eZ\Publish\SPI\Persistence\Content\ObjectState,
     eZ\Publish\SPI\Persistence\Content\ObjectState\Group,
@@ -18,15 +18,8 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
 /**
  * Test case for Mapper
  */
-class MapperTest extends TestCase
+class MapperTest extends LanguageAwareTestCase
 {
-    /**
-     * Language handler mock
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
-     */
-    protected $languageHandler;
-
     /**
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateFromData
@@ -149,47 +142,8 @@ class MapperTest extends TestCase
     protected function getMapper()
     {
         return new Mapper(
-            $this->getLanguageHandlerMock()
+            $this->getLanguageHandler()
         );
-    }
-
-    /**
-     * Returns a language handler mock
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
-     */
-    protected function getLanguageHandlerMock()
-    {
-        if ( !isset( $this->languageHandler ) )
-        {
-            $innerLanguageHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
-
-            $this->languageHandler = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
-                array( 'getById' ),
-                array(
-                    $innerLanguageHandler,
-                    $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Cache' )
-                )
-            );
-
-            $this->languageHandler
-                ->expects( $this->any() )
-                ->method( 'getById' )
-                ->with( '2' )
-                ->will(
-                    $this->returnValue(
-                        new Language(
-                            array(
-                                'id' => 2,
-                                'languageCode' => 'eng-GB',
-                            )
-                        )
-                    )
-                );
-        }
-
-        return $this->languageHandler;
     }
 
     /**

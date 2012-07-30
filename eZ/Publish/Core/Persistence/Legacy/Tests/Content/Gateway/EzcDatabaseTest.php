@@ -38,20 +38,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     protected $databaseGateway;
 
     /**
-     * Language mask generator
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
-     */
-    protected $languageMaskGenerator;
-
-    /**
-     * Language handler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingLanguageHandler
-     */
-    protected $languageHandler;
-
-    /**
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::__construct
      */
@@ -208,7 +194,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $gateway = $this->getDatabaseGateway();
         $this->languageHandler
             ->expects( $this->once() )
-            ->method( 'getByLocale' )
+            ->method( 'loadByLanguageCode' )
             ->with( 'eng-GB' )
             ->will(
                 $this->returnValue(
@@ -265,7 +251,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $gateway = $this->getDatabaseGateway();
         $this->languageHandler
             ->expects( $this->once() )
-            ->method( 'getByLocale' )
+            ->method( 'loadByLanguageCode' )
             ->with( 'eng-GB' )
             ->will(
                 $this->returnValue(
@@ -318,7 +304,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $gateway = $this->getDatabaseGateway();
         $this->languageHandler
             ->expects( $this->once() )
-            ->method( 'getByLocale' )
+            ->method( 'loadByLanguageCode' )
             ->with( 'eng-GB' )
             ->will(
                 $this->returnValue(
@@ -1836,91 +1822,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             );
         }
         return $this->databaseGateway;
-    }
-
-    /**
-     * Returns a language mask generator
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
-     */
-    protected function getLanguageMaskGenerator()
-    {
-        if ( !isset( $this->languageMaskGenerator ) )
-        {
-            $this->languageMaskGenerator = new LanguageMaskGenerator(
-                $this->getLanguageLookupMock()
-            );
-        }
-        return $this->languageMaskGenerator;
-    }
-
-    /**
-     * Returns a language mask generator
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
-     */
-    protected function getLanguageHandler()
-    {
-        if ( !isset( $this->languageHandler ) )
-        {
-            $innerLanguageHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
-            $innerLanguageHandler->expects( $this->any() )
-                ->method( 'loadAll' )
-                ->will(
-                    $this->returnValue(
-                        array(
-                            new Language( array(
-                                'id' => 2,
-                                'languageCode' => 'eng-GB',
-                                'name' => 'British english'
-                            ) ),
-                            new Language( array(
-                                'id' => 4,
-                                'languageCode' => 'eng-US',
-                                'name' => 'US english'
-                            ) ),
-                            new Language( array(
-                                'id' => 8,
-                                'languageCode' => 'fre-FR',
-                                'name' => 'Français franchouillard'
-                            ) )
-                        )
-                    )
-                );
-            $this->languageHandler = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
-                array( 'getByLocale', 'getById' ),
-                array(
-                    $innerLanguageHandler,
-                    $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Cache' )
-                )
-            );
-        }
-        return $this->languageHandler;
-    }
-
-    /**
-     * Returns a language cache mock
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache
-     */
-    protected function getLanguageCacheMock()
-    {
-        $language = new Language();
-        $language->id = 4;
-
-        $languageCache = $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Cache',
-            array(),
-            array(),
-            '',
-            false
-        );
-        $languageCache->expects( $this->any() )
-            ->method( 'getByLocale' )
-            ->will( $this->returnValue( $language ) );
-
-        return $languageCache;
     }
 
     /**

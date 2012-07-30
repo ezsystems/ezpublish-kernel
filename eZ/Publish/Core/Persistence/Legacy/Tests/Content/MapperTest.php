@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
@@ -29,7 +29,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
 /**
  * Test case for Mapper
  */
-class MapperTest extends TestCase
+class MapperTest extends LanguageAwareTestCase
 {
     /**
      * Location mapper mock
@@ -44,13 +44,6 @@ class MapperTest extends TestCase
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected $valueConverterRegistryMock;
-
-    /**
-     * Language handler mock
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
-     */
-    protected $languageHandler;
 
     /**
      * @return void
@@ -250,7 +243,7 @@ class MapperTest extends TestCase
         $field->type = 'some-type';
         $field->value = new FieldValue();
 
-        $mapper = new Mapper( $this->getLocationMapperMock(), $reg, $this->getLanguageHandlerMock() );
+        $mapper = new Mapper( $this->getLocationMapperMock(), $reg, $this->getLanguageHandler() );
         $res = $mapper->convertToStorageValue( $field );
 
         $this->assertInstanceOf(
@@ -296,7 +289,7 @@ class MapperTest extends TestCase
 
         $rowsFixture = $this->getContentExtractFixture();
 
-        $mapper = new Mapper( new LocationMapper(), $reg, $this->getLanguageHandlerMock() );
+        $mapper = new Mapper( new LocationMapper(), $reg, $this->getLanguageHandler() );
         $result = $mapper->extractContentFromRows( $rowsFixture );
 
         $this->assertEquals(
@@ -333,7 +326,7 @@ class MapperTest extends TestCase
 
         $rowsFixture = $this->getMultipleVersionsExtractFixture();
 
-        $mapper = new Mapper( $locationMapperMock, $reg, $this->getLanguageHandlerMock() );
+        $mapper = new Mapper( $locationMapperMock, $reg, $this->getLanguageHandler() );
         $result = $mapper->extractContentFromRows( $rowsFixture );
 
         $this->assertEquals(
@@ -692,7 +685,7 @@ class MapperTest extends TestCase
         return new Mapper(
             $this->getLocationMapperMock(),
             $this->getValueConverterRegistryMock(),
-            $this->getLanguageHandlerMock()
+            $this->getLanguageHandler()
         );
     }
 
@@ -735,51 +728,6 @@ class MapperTest extends TestCase
     }
 
     /**
-     * Returns a language handler mock
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
-     */
-    protected function getLanguageHandlerMock()
-    {
-        if ( !isset( $this->languageHandler ) )
-        {
-            $innerLanguageHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
-            $innerLanguageHandler->expects( $this->any() )
-                ->method( 'loadAll' )
-                ->will(
-                    $this->returnValue(
-                        array(
-                            new Language( array(
-                                'id' => 2,
-                                'languageCode' => 'eng-GB',
-                                'name' => 'British english'
-                            ) ),
-                            new Language( array(
-                                'id' => 4,
-                                'languageCode' => 'eng-US',
-                                'name' => 'US english'
-                            ) ),
-                            new Language( array(
-                                'id' => 8,
-                                'languageCode' => 'fre-FR',
-                                'name' => 'Français franchouillard'
-                            ) )
-                        )
-                    )
-                );
-            $this->languageHandler = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
-                array( 'getByLocale', 'getById', 'loadByLanguageCode' ),
-                array(
-                    $innerLanguageHandler,
-                    $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Cache' )
-                )
-            );
-        }
-        return $this->languageHandler;
-    }
-
-    /**
      * Returns a eZ\Publish\SPI\Persistence\Content\CreateStruct fixture
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct
@@ -795,6 +743,69 @@ class MapperTest extends TestCase
         $struct->type = RelationValue::COMMON;
 
         return $struct;
+    }
+
+    /**
+     * Returns a language handler mock
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
+     */
+    protected function getLanguageHandler()
+    {
+        $languages = array(
+            new Language(
+                array(
+                    'id' => 2,
+                    'languageCode' => 'eng-US',
+                    'name' => 'US english'
+                )
+            ),
+            new Language(
+                array(
+                    'id' => 4,
+                    'languageCode' => 'eng-GB',
+                    'name' => 'British english'
+                )
+            )
+        );
+
+        if ( !isset( $this->languageHandler ) )
+        {
+            $this->languageHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
+            $this->languageHandler->expects( $this->any() )
+                ->method( 'load' )
+                ->will(
+                    $this->returnCallback(
+                        function ( $id ) use ( $languages )
+                        {
+                            foreach ( $languages as $language )
+                            {
+                                if ( $language->id == $id )
+                                {
+                                    return $language;
+                                }
+                            }
+                        }
+                    )
+                );
+            $this->languageHandler->expects( $this->any() )
+                ->method( 'loadByLanguageCode' )
+                ->will(
+                    $this->returnCallback(
+                        function ( $languageCode ) use ( $languages )
+                        {
+                            foreach ( $languages as $language )
+                            {
+                                if ( $language->languageCode == $languageCode )
+                                {
+                                    return $language;
+                                }
+                            }
+                        }
+                    )
+                );
+        }
+        return $this->languageHandler;
     }
 
     /**
