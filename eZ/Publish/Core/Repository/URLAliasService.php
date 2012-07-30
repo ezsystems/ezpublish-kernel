@@ -55,7 +55,9 @@ class URLAliasService implements URLAliasServiceInterface
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
         $this->settings = $settings + array(
-
+            "prioritizedLanguageList" => array(
+                "eng-US"
+            )
         );
     }
 
@@ -254,7 +256,7 @@ class URLAliasService implements URLAliasServiceInterface
         else
         {
             //@TODO: get prioritized languages from ini
-            $prioritizedLanguageCodes = array( $languageCode );
+            $prioritizedLanguageCodes = $this->settings["prioritizedLanguageList"];
         }
 
         $spiUrlAlias = $this->persistenceHandler->urlAliasHandler()->lookup(
