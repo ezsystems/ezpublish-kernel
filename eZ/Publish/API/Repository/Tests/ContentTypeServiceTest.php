@@ -1057,7 +1057,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
-        $modifierId = $this->generateId( 'user', 42 );
+        $modifierId = $this->generateId( 'user', 14 );
         /* BEGIN: Use Case */
         $contentTypeDraft = $this->createContentTypeDraft();
 
@@ -2791,6 +2791,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             'title', 'ezstring'
         );
         $titleFieldCreate->names = array( 'eng-GB' => 'Title' );
+        $typeCreate->addFieldDefinition( $titleFieldCreate );
 
         $groups = array(
             $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )

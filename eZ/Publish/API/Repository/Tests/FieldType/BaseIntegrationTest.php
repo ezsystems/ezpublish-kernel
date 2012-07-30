@@ -305,7 +305,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $createStruct->mainLanguageCode = 'eng-GB';
         $createStruct->remoteId     = $this->getTypeName();
         $createStruct->names        = array( 'eng-GB' => 'Test' );
-        $createStruct->creatorId    = 10;
+        $createStruct->creatorId    = 14;
         $createStruct->creationDate = new \DateTime();
 
         $nameFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(

@@ -25,7 +25,7 @@ abstract class BaseContentTypeServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $creatorId = $this->generateId( 'user', 23 );
+        $creatorId = $this->generateId( 'user', 14 );
         /* BEGIN: Inline */
         $contentTypeService = $repository->getContentTypeService();
 
