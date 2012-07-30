@@ -97,6 +97,8 @@ interface Handler
     /**
      * Looks up a url alias for the given url
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
      * @param $url
      * @param string[] $prioritizedLanguageCodes
      *
