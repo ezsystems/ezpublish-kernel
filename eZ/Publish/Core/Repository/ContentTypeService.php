@@ -335,8 +335,11 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * The content type is created in the state STATUS_DRAFT.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the identifier or remoteId in the content type create struct already exists
-     *         or there is a duplicate field identifier
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException In case when
+     *         - array of content type groups does not contain at least one content type group
+     *         - identifier or remoteId in the content type create struct already exists
+     *         - there is a duplicate field identifier in the content type create struct
+     *         - content type create struct does not contain at least one field definition create struct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $contentTypeGroups Required array of {@link ContentTypeGroup} to link type with (must contain one)
@@ -385,18 +388,52 @@ class ContentTypeService implements ContentTypeServiceInterface
             // Do nothing
         }
 
+        if ( count( $contentTypeCreateStruct->fieldDefinitions ) === 0 )
+        {
+            throw new InvalidArgumentException(
+                "\$contentTypeCreateStruct",
+                "Argument must contain at least one FieldDefinitionCreateStruct"
+            );
+        }
+
+        $fieldDefinitionIdentifierCache = array();
+        foreach ( $contentTypeCreateStruct->fieldDefinitions as $fieldDefinitionCreateStruct )
+        {
+            if ( !isset( $fieldDefinitionIdentifierCache[$fieldDefinitionCreateStruct->identifier] ) )
+            {
+                $fieldDefinitionIdentifierCache[$fieldDefinitionCreateStruct->identifier] = true;
+            }
+            else
+            {
+                throw new InvalidArgumentException(
+                    "\$contentTypeCreateStruct",
+                    "Argument contains duplicate field definition identifier '{$fieldDefinitionCreateStruct->identifier}'"
+                );
+            }
+        }
+
         if ( $contentTypeCreateStruct->creatorId === null )
+        {
             $userId = $this->repository->getCurrentUser()->id;
+        }
         else
+        {
             $userId = $contentTypeCreateStruct->creatorId;
+        }
 
         if ( $contentTypeCreateStruct->creationDate === null )
+        {
             $timestamp = time();
+        }
         else
+        {
             $timestamp = $contentTypeCreateStruct->creationDate->getTimestamp();
+        }
 
         if ( $contentTypeCreateStruct->remoteId === null )
+        {
             $contentTypeCreateStruct->remoteId = md5( uniqid( get_class( $contentTypeCreateStruct ), true ) );
+        }
 
         $initialLanguageId = $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
             $contentTypeCreateStruct->mainLanguageCode
