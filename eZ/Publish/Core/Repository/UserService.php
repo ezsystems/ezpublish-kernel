@@ -839,7 +839,10 @@ class UserService implements UserServiceInterface
      */
     public function newUserUpdateStruct()
     {
-        return new UserUpdateStruct();
+        $userUpdateStruct = new UserUpdateStruct();
+        $userUpdateStruct->contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
+
+        return $userUpdateStruct;
     }
 
     /**
