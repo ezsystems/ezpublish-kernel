@@ -1083,12 +1083,12 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertEquals(
-            $mediaContentInfo,
-            $locationService->loadLocation( $demoDesignLocationId )->getContentInfo()
+            $mediaContentInfo->id,
+            $locationService->loadLocation( $demoDesignLocationId )->getContentInfo()->id
         );
         $this->assertEquals(
-            $demoDesignContentInfo,
-            $locationService->loadLocation( $mediaLocationId )->getContentInfo()
+            $demoDesignContentInfo->id,
+            $locationService->loadLocation( $mediaLocationId )->getContentInfo()->id
         );
     }
 
