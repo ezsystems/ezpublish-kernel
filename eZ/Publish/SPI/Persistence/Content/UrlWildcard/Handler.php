@@ -22,11 +22,11 @@ interface Handler
      *
      * @param string $sourceUrl
      * @param string $destinationUrl
-     * @param boolean $foreward
+     * @param boolean $forward
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard
      */
-    public function create($sourceUrl, $destinationUrl, $foreward = false);
+    public function create( $sourceUrl, $destinationUrl, $forward = false );
 
     /**
      *
@@ -36,7 +36,7 @@ interface Handler
      *
      * @param mixed $id
      */
-    public function remove($id);
+    public function remove( $id );
 
     /**
      *
@@ -48,7 +48,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard
      */
-    public function load($id);
+    public function load( $id );
 
     /**
      * loads all url wild card (paged)
@@ -58,7 +58,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard[]
      */
-    public function loadAll($offset = 0, $limit = -1);
+    public function loadAll( $offset = 0, $limit = -1 );
 
 
 

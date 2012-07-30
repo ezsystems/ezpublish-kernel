@@ -319,6 +319,39 @@ class HandlerTest extends TestCase
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::urlAliasHandler
+     * @return void
+     */
+    public function testUrlAliasHandler()
+    {
+        $handler = $this->getHandlerFixture();
+        $urlAliasHandler = $handler->urlAliasHandler();
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler',
+            $urlAliasHandler
+        );
+        $this->assertInstanceOf(
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\Handler',
+            $urlAliasHandler
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::urlAliasHandler
+     * @return void
+     */
+    public function testUrlAliasHandlerTwice()
+    {
+        $handler = $this->getHandlerFixture();
+
+        $this->assertSame(
+            $handler->urlAliasHandler(),
+            $handler->urlAliasHandler()
+        );
+    }
+
+    /**
      * Returns the Handler
      *
      * @return Handler
