@@ -717,7 +717,7 @@ class UserService implements UserServiceInterface
         $userGroups = array();
         foreach ( $searchResult->searchHits as $resultItem )
         {
-            $userGroups = $this->buildDomainUserGroupObject( $resultItem->valueObject );
+            $userGroups[] = $this->buildDomainUserGroupObject( $resultItem->valueObject );
         }
 
         return $userGroups;
