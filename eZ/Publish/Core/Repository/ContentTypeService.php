@@ -232,12 +232,18 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         if ( $contentTypeGroupUpdateStruct->modificationDate !== null )
+        {
             $modifiedTimestamp = $contentTypeGroupUpdateStruct->modificationDate->getTimestamp();
+        }
         else
+        {
             $modifiedTimestamp = time();
+        }
 
         if ( $contentTypeGroupUpdateStruct->modifierId === null )
+        {
             $contentTypeGroupUpdateStruct->modifierId = $this->repository->getCurrentUser()->id;
+        }
 
         $spiGroupUpdateStruct = new SPIContentTypeGroupUpdateStruct(
             array(
@@ -1008,9 +1014,6 @@ class ContentTypeService implements ContentTypeServiceInterface
             $user->id,
             $contentType->id,
             SPIContentType::STATUS_DEFINED
-        );
-        $this->publishContentTypeDraft(
-            $this->buildContentTypeDraftDomainObject( $spiContentType )
         );
         $this->repository->commit();
 
