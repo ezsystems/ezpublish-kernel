@@ -1134,25 +1134,7 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testUpdateContentSetsExpectedFields( $content )
     {
-        $actual = array();
-        foreach ( $content->getFields() as $field )
-        {
-            $actual[] = new Field(
-                array(
-                    'id' => 0,
-                    'value' => $field->value,
-                    'languageCode' => $field->languageCode,
-                    'fieldDefIdentifier' => $field->fieldDefIdentifier
-                )
-            );
-        }
-        usort( $actual, function ( $field1, $field2 ) {
-            if ( 0 === ( $return = strcasecmp( $field1->fieldDefIdentifier, $field2->fieldDefIdentifier ) ) )
-            {
-                return strcasecmp( $field1->languageCode, $field2->languageCode );
-            }
-            return $return;
-        } );
+        $actual = $this->normalizeFields( $content->getFields() );
 
         $expected = array(
             new Field(
@@ -1174,7 +1156,7 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id' => 0,
-                    'value' => 'An awesome forum²³',
+                    'value' => true,
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'name'
                 )
@@ -1182,7 +1164,7 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id' => 0,
-                    'value' => 'An awesome forum²',
+                    'value' => true,
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'name'
                 )
@@ -1883,7 +1865,7 @@ class ContentServiceTest extends BaseContentServiceTest
             $actual[] = new Field(
                 array(
                     'id' => 0,
-                    'value' => $field->value,
+                    'value' => ( $field->value !== null ? true : null ), // Actual value tested by FieldType integration tests
                     'languageCode' => $field->languageCode,
                     'fieldDefIdentifier' => $field->fieldDefIdentifier
                 )
@@ -1909,7 +1891,7 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id' => 0,
-                    'value' => 'Sindelfingen forum²³',
+                    'value' => true,
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'name'
                 )
@@ -1964,25 +1946,7 @@ class ContentServiceTest extends BaseContentServiceTest
         );
         /* END: Use Case */
 
-        $actual = array();
-        foreach ( $reloadedContent->getFields() as $field )
-        {
-            $actual[] = new Field(
-                array(
-                    'id' => 0,
-                    'value' => $field->value,
-                    'languageCode' => $field->languageCode,
-                    'fieldDefIdentifier' => $field->fieldDefIdentifier
-                )
-            );
-        }
-        usort( $actual, function ( $field1, $field2 ) {
-            if ( 0 === ( $return = strcasecmp( $field1->fieldDefIdentifier, $field2->fieldDefIdentifier ) ) )
-            {
-                return strcasecmp( $field1->languageCode, $field2->languageCode );
-            }
-            return $return;
-        } );
+        $actual = $this->normalizeFields( $reloadedContent->getFields() );
 
         $expected = array(
             new Field(
@@ -1996,7 +1960,7 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id' => 0,
-                    'value' => 'Sindelfingen forum²',
+                    'value' => true,
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'name'
                 )
@@ -2032,8 +1996,8 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertEquals(
-            'An awesome forum',
-            $contentReloaded->getFieldValue( 'name' )
+            1,
+            $contentReloaded->getVersionInfo()->versionNo
         );
     }
 
@@ -4140,7 +4104,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $actual = $this->normalizeFields( $fields );
 
         $expected = array();
-        foreach ( $this->createFieldsFixture() as $field )
+        foreach ( $this->normalizeFields( $this->createFieldsFixture() ) as $field )
         {
             if ( $field->languageCode !== $languageCode )
             {
@@ -4156,7 +4120,9 @@ class ContentServiceTest extends BaseContentServiceTest
      * This method normalizes a set of fields and returns a normalized set.
      *
      * Normalization means it resets the storage specific field id to zero and
-     * it sorts the field by their identifier and their language code.
+     * it sorts the field by their identifier and their language code. In
+     * addition, the field value is removed, since this one depends on the
+     * specific FieldType, which is tested in a dedicated integration test.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Field[] $fields
      * @return \eZ\Publish\API\Repository\Values\Content\Field[]
@@ -4169,7 +4135,7 @@ class ContentServiceTest extends BaseContentServiceTest
             $normalized[] = new Field(
                 array(
                     'id' => 0,
-                    'value' => $field->value,
+                    'value' => ( $field->value !== null ? true : null ),
                     'languageCode' => $field->languageCode,
                     'fieldDefIdentifier' => $field->fieldDefIdentifier
                 )
