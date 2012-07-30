@@ -1505,8 +1505,12 @@ class ContentService implements ContentServiceInterface
                 "currentVersionNo" => $spiContentInfo->currentVersionNo,
                 "published" => $spiContentInfo->isPublished,
                 "ownerId" => $spiContentInfo->ownerId,
-                "modificationDate" => $this->getDateTime( $spiContentInfo->modificationDate ),
-                "publishedDate" => $this->getDateTime( $spiContentInfo->publicationDate ),
+                "modificationDate" => $spiContentInfo->modificationDate == 0
+                    ? null
+                    : $this->getDateTime( $spiContentInfo->modificationDate ),
+                "publishedDate" => $spiContentInfo->publicationDate == 0
+                    ? null
+                    : $this->getDateTime( $spiContentInfo->publicationDate ),
                 "alwaysAvailable" => $spiContentInfo->isAlwaysAvailable,
                 "remoteId" => $spiContentInfo->remoteId,
                 "mainLanguageCode" => $spiContentInfo->mainLanguageCode,
