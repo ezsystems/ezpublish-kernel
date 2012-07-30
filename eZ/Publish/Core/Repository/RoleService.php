@@ -92,13 +92,13 @@ class RoleService implements RoleServiceInterface
         if ( !is_string( $roleCreateStruct->identifier ) || empty( $roleCreateStruct->identifier ) )
             throw new InvalidArgumentValue( "identifier", $roleCreateStruct->identifier, "RoleCreateStruct" );
 
-        if ( !is_string( $roleCreateStruct->mainLanguageCode ) || empty( $roleCreateStruct->mainLanguageCode ) )
+        if ( $roleCreateStruct->mainLanguageCode !== null && ( !is_string( $roleCreateStruct->mainLanguageCode ) || empty( $roleCreateStruct->mainLanguageCode ) ) )
             throw new InvalidArgumentValue( "mainLanguageCode", $roleCreateStruct->mainLanguageCode, "RoleCreateStruct" );
 
-        if ( !is_array( $roleCreateStruct->names ) || empty( $roleCreateStruct->names ) )
+        if ( $roleCreateStruct->names !== null && ( !is_array( $roleCreateStruct->names ) || empty( $roleCreateStruct->names ) ) )
             throw new InvalidArgumentValue( "names", $roleCreateStruct->names, "RoleCreateStruct" );
 
-        if ( !is_array( $roleCreateStruct->descriptions ) || empty( $roleCreateStruct->descriptions ) )
+        if ( $roleCreateStruct->descriptions !== null && ( !is_array( $roleCreateStruct->descriptions ) || empty( $roleCreateStruct->descriptions ) ) )
             throw new InvalidArgumentValue( "descriptions", $roleCreateStruct->descriptions, "RoleCreateStruct" );
 
         try
