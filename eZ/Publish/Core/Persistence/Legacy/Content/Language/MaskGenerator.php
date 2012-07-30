@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
 
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as BaseLanguageHandler;
+
 /**
  * Language MaskGenerator
  */
@@ -26,7 +28,7 @@ class MaskGenerator
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      */
-    public function __construct( Handler $languageHandler )
+    public function __construct( BaseLanguageHandler $languageHandler )
     {
         $this->languageHandler = $languageHandler;
     }
