@@ -9,8 +9,8 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\LegacyMapper;
 
-use eZ\Publish\MVC\MVCEvents,
-    eZ\Publish\MVC\Event\PreBuildKernelWebHandlerEvent,
+use eZ\Publish\Legacy\LegacyEvents,
+    eZ\Publish\Legacy\Event\PreBuildKernelWebHandlerEvent,
     Symfony\Component\EventDispatcher\EventSubscriberInterface,
     Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -33,7 +33,7 @@ class Session implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            MVCEvents::BUILD_KERNEL_WEB_HANDLER => array( 'onBuildKernelWebHandler', 128 )
+            LegacyEvents::PRE_BUILD_LEGACY_KERNEL_WEB => array( 'onBuildKernelWebHandler', 128 )
         );
     }
 
@@ -41,7 +41,7 @@ class Session implements EventSubscriberInterface
      * Adds the session settings to the parameters that will be injected
      * into the legacy kernel
      *
-     * @param \eZ\Publish\MVC\Event\PreBuildKernelWebHandlerEvent $event
+     * @param \eZ\Publish\Legacy\Event\PreBuildKernelWebHandlerEvent $event
      */
     public function onBuildKernelWebHandler( PreBuildKernelWebHandlerEvent $event )
     {

@@ -9,8 +9,8 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\LegacyMapper;
 
-use eZ\Publish\MVC\MVCEvents,
-    eZ\Publish\MVC\Event\PreBuildKernelWebHandlerEvent,
+use eZ\Publish\Legacy\LegacyEvents,
+    eZ\Publish\Legacy\Event\PreBuildKernelWebHandlerEvent,
     \eZSiteAccess,
     Symfony\Component\EventDispatcher\EventSubscriberInterface,
     Symfony\Component\DependencyInjection\ContainerInterface;
@@ -34,14 +34,15 @@ class SiteAccess implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            MVCEvents::BUILD_KERNEL_WEB_HANDLER => array( 'onBuildKernelWebHandler', 128 )
+            LegacyEvents::PRE_BUILD_LEGACY_KERNEL_WEB => array( 'onBuildKernelWebHandler', 128 )
         );
     }
 
     /**
      * Maps matched siteaccess to the legacy parameters
      *
-     * @param \eZ\Publish\MVC\Event\PostSiteAccessMatchEvent $event
+     * @param \eZ\Publish\Legacy\Event\PreBuildKernelWebHandlerEvent $event
+     * @return void
      */
     public function onBuildKernelWebHandler( PreBuildKernelWebHandlerEvent $event )
     {

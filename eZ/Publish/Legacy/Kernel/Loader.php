@@ -11,8 +11,8 @@ namespace eZ\Publish\Legacy\Kernel;
 
 use eZ\Publish\Legacy\Kernel as LegacyKernel,
     eZ\Publish\MVC\SiteAccess,
-    eZ\Publish\MVC\MVCEvents,
-    eZ\Publish\MVC\Event\PreBuildKernelWebHandlerEvent,
+    eZ\Publish\Legacy\LegacyEvents,
+    eZ\Publish\Legacy\Event\PreBuildKernelWebHandlerEvent,
     \ezpKernelHandler,
     \ezpKernelWeb,
     \eZSiteAccess,
@@ -77,6 +77,7 @@ class Loader
      * Builds up the legacy kernel web handler and encapsulates it inside a closure, allowing lazy loading.
      *
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param array $defaultLegacyOptions
      * @return \Closure|void
      */
     public function buildLegacyKernelHandlerWeb( ContainerInterface $container, array $defaultLegacyOptions = array() )
@@ -113,7 +114,7 @@ class Loader
                     $legacyParameters, $request
                 );
                 $eventDispatcher->dispatch(
-                    MVCEvents::BUILD_KERNEL_WEB_HANDLER, $buildEvent
+                    LegacyEvents::PRE_BUILD_LEGACY_KERNEL_WEB, $buildEvent
                 );
 
                 $settings = $legacyParameters->all();

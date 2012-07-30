@@ -27,14 +27,4 @@ final class MVCEvents
      * @see eZ\Publish\MVC\View\Manager
      */
     const PRE_CONTENT_VIEW = 'ezpublish.pre_content_view';
-
-    /*
-     * The BUILD_KERNEL_WEB_HANDLER occurs right before the build of the legacy
-     * kernel web handler. This event allows to inject parameters into the web
-     * handler.
-     *
-     * The event listener method receives a
-     * \eZ\Publish\MVC\Event\PreBuildKernelWebHandlerEvent
-     */
-    const BUILD_KERNEL_WEB_HANDLER = 'ezpublish.build_kernel_web_handler';
 }
