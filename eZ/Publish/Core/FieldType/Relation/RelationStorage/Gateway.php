@@ -33,4 +33,13 @@ abstract class Gateway extends StorageGateway
      * @return void
      */
     abstract public function getFieldData( Field $field );
+
+    /**
+     * Deletes stored external data
+     *
+     * @param array $fieldId Array of field Ids
+     * @param array $context
+     * @return boolean
+     */
+    abstract public function deleteFieldData( array $fieldId, array $context );
 }

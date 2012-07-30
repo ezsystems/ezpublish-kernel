@@ -102,7 +102,6 @@ class LegacyStorage extends Gateway
         else
             $urlId = $this->insert( $versionInfo, $field );*/
 
-        // Signals that the Value has been modified and that an update is to be performed
         return false;
     }
 
@@ -116,103 +115,11 @@ class LegacyStorage extends Gateway
     }
 
     /**
-     * Fetches a row in ezurl table referenced by its $id
-     *
-     * @param mixed $id
-     * @return null|array Hash with columns as keys or null if no entry can be found
+     * @see \eZ\Publish\SPI\FieldType\Relation\RelationStorage\Gateway
      */
-    private function fetchById( $id )
+    public function deleteFieldData( array $fieldId, array $context )
     {
-        /*$dbHandler = $this->getConnection();
+        echo "\nCalled ".__METHOD__.". Arguments\n" . print_r( func_get_args(), true ) . "\n";
 
-        $q = $dbHandler->createSelectQuery();
-        $e = $q->expr;
-        $q->select( "*" )
-            ->from( $dbHandler->quoteTable( self::TABLE ) )
-            ->where(
-                $e->eq( "id", $q->bindValue( $id, null, \PDO::PARAM_INT ) )
-            );
-
-        $statement = $q->prepare();
-        $statement->execute();
-
-        $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
-        if ( count( $rows ) )
-        {
-            return $rows[0];
-        }
-
-        return false;*/
-        throw new \Exception( __METHOD__ . " not implemented yet " );
-
-    }
-
-    /**
-     * Fetches a row in ezurl table referenced by $link
-     *
-     * @param string $link
-     * @return null|array Hash with columns as keys or null if no entry can be found
-     */
-    private function fetchByLink( $link )
-    {
-        /*$dbHandler = $this->getConnection();
-
-        $q = $dbHandler->createSelectQuery();
-        $e = $q->expr;
-        $q->select( "*" )
-            ->from( $dbHandler->quoteTable( self::URL_TABLE ) )
-            ->where(
-                $e->eq( "url", $q->bindValue( $link ) )
-            );
-
-        $statement = $q->prepare();
-        $statement->execute();
-
-        $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
-        if ( count( $rows ) )
-        {
-            return $rows[0];
-        }
-
-        return false;*/
-        throw new \Exception( __METHOD__ . " not implemented yet " );
-    }
-
-    /**
-     * Inserts a new entry in ezurl table with $field value data
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
-     * @return mixed
-     */
-    private function insert( VersionInfo $versionInfo, Field $field )
-    {
-        /*$dbHandler = $this->getConnection();
-
-        $time = time();
-
-        $q = $dbHandler->createInsertQuery();
-        $q->insertInto(
-            $dbHandler->quoteTable( self::TABLE )
-        )->set(
-            $dbHandler->quoteColumn( "created" ),
-            $q->bindValue( $time, null, \PDO::PARAM_INT )
-        )->set(
-            $dbHandler->quoteColumn( "modified" ),
-            $q->bindValue( $time, null, \PDO::PARAM_INT )
-        )->set(
-            $dbHandler->quoteColumn( "original_url_md5" ),
-            $q->bindValue( md5( $field->value->externalData ) )
-        )->set(
-            $dbHandler->quoteColumn( "url" ),
-            $q->bindValue( $field->value->externalData )
-        );
-
-        $q->prepare()->execute();
-
-        return $dbHandler->lastInsertId(
-            $dbHandler->getSequenceName( self::URL_TABLE, "id" )
-        );*/
-        throw new \Exception( __METHOD__ . " not implemented yet " );
     }
 }

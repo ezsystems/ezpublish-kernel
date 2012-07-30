@@ -33,9 +33,7 @@ class RelationStorage extends GatewayBasedStorage
 
     /**
      * Populates $field value property based on the external data.
-     * $field->value is a {@link eZ\Publish\SPI\Persistence\Content\FieldValue} object.
-     * This value holds the data as a {@link eZ\Publish\Core\FieldType\Value} based object,
-     * according to the field type (e.g. for TextLine, it will be a {@link eZ\Publish\Core\FieldType\TextLine\Value} object).
+     * We don't need to query storage for this, as identical data is stored in data & externalData
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
@@ -43,8 +41,7 @@ class RelationStorage extends GatewayBasedStorage
      */
     public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
-        $gateway = $this->getGateway( $context );
-        return $gateway->getFieldData( $field );
+        $field->value->externalData = $field->value->data;
     }
 
     /**
@@ -55,7 +52,7 @@ class RelationStorage extends GatewayBasedStorage
     public function deleteFieldData( array $fieldId, array $context )
     {
         $gateway = $this->getGateway( $context );
-        return $gateway->deleteFieldData();
+        return $gateway->deleteFieldData( $fieldId, $context );
     }
 
     /**
