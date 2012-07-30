@@ -861,8 +861,11 @@ class UserService implements UserServiceInterface
      */
     protected function buildDomainUserGroupObject( APIContent $content )
     {
+        $locationService = $this->repository->getLocationService();
+
         $contentInfo = $content->getVersionInfo()->getContentInfo();
-        $mainLocation = $this->repository->getLocationService()->loadMainLocation( $contentInfo );
+        $mainLocation = $locationService->loadMainLocation( $contentInfo );
+        $parentLocation = $locationService->loadLocation( $mainLocation->parentLocationId );
 
         $subGroupCount = 0;
         if ( $mainLocation !== null )
@@ -874,7 +877,7 @@ class UserService implements UserServiceInterface
         return new UserGroup(
             array(
                 'content' => $content,
-                'parentId' => $mainLocation ? $mainLocation->parentLocationId : null,
+                'parentId' => $parentLocation ? $parentLocation->contentId : null,
                 'subGroupCount' => $subGroupCount
             )
         );
