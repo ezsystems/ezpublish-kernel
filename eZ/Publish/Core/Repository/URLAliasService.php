@@ -242,7 +242,7 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function lookUp( $url, $languageCode = null )
+    public function lookup( $url, $languageCode = null )
     {
         $url = $this->cleanUrl( $url );
         $url = $this->addPathPrefix( $url );
@@ -261,14 +261,6 @@ class URLAliasService implements URLAliasServiceInterface
             $url,
             $prioritizedLanguageCodes
         );
-
-        if ( !$spiUrlAlias->alwaysAvailable && !in_array( $languageCode, $spiUrlAlias->languageCodes ) )
-        {
-            throw new NotFoundException(
-                "URLAlias",
-                $url
-            );
-        }
 
         return $this->buildUrlAliasDomainObject( $spiUrlAlias );
     }
