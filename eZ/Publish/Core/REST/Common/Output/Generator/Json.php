@@ -193,9 +193,9 @@ class Json extends Generator
         $this->checkStartHashValueElement( $name );
 
         $object = new Json\Object( $this->json );
-        foreach ( $attributes as $attributeKey => $attributeValue )
+        foreach ( $attributes as $attributeName => $attributeValue )
         {
-            $object->{'_' . $attributeKey} = $attributeValue;
+            $object->{'_' . $attributeValue} = $attributeValue;
         }
         $object->{'#text'} = $value;
 
