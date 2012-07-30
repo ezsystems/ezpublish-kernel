@@ -657,14 +657,13 @@ class LocationService implements LocationServiceInterface
      */
     protected function buildDomainLocationObject( SPILocation $spiLocation )
     {
-        if ( $spiLocation->id === 1 )// Workaround for missing ContentInfo on root location
+        if ( $spiLocation->id == 1 )// Workaround for missing ContentInfo on root location
             $contentInfo = new ContentInfo(
                 array(
                     'id' => 0,
                     'name' => 'Top Level Nodes',
                     'sectionId' => 1,
-                    'mainLocationId' => 1,
-                    'contentTypeId' => 1
+                    'mainLocationId' => 1
                 )
             );
         else
