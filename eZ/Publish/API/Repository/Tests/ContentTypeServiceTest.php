@@ -384,6 +384,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
+        $modifierId = $this->generateId( 'user', 42 );
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
 
@@ -392,7 +393,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $groupUpdate = $contentTypeService->newContentTypeGroupUpdateStruct();
 
         $groupUpdate->identifier = 'Teardown';
-        $groupUpdate->modifierId = $this->generateId( 'user', 42 );
+        $groupUpdate->modifierId = $modifierId;
         $groupUpdate->modificationDate = new \DateTime();
         $groupUpdate->mainLanguageCode = 'eng-GB';
 
