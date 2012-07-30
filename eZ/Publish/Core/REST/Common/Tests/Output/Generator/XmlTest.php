@@ -166,6 +166,28 @@ class XmlTest extends GeneratorTest
         );
     }
 
+    public function testGeneratorHashElement()
+    {
+        $generator = new Common\Output\Generator\Xml();
+
+        $generator->startDocument( 'test' );
+
+        $generator->startHashElement( 'elements' );
+
+        $generator->startHashValueElement( 'element', 'element value 1', array( 'attribute' => 'attribute value 1' ) );
+        $generator->endHashValueElement( 'element' );
+
+        $generator->startHashValueElement( 'element', 'element value 2', array( 'attribute' => 'attribute value 2' ) );
+        $generator->endHashValueElement( 'element' );
+
+        $generator->endHashElement( 'elements' );
+
+        $this->assertSame(
+            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
+            $generator->endDocument( 'test' )
+        );
+    }
+
     public function testGetMediaType()
     {
         $generator = new Common\Output\Generator\Xml();

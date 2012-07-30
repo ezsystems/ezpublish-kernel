@@ -166,6 +166,28 @@ class JsonTest extends GeneratorTest
         );
     }
 
+    public function testGeneratorHashElement()
+    {
+        $generator = new Common\Output\Generator\Json();
+
+        $generator->startDocument( 'test' );
+
+        $generator->startHashElement( 'elements' );
+
+        $generator->startHashValueElement( 'element', 'element value 1', array( 'attribute' => 'attribute value 1' ) );
+        $generator->endHashValueElement( 'element' );
+
+        $generator->startHashValueElement( 'element', 'element value 2', array( 'attribute' => 'attribute value 2' ) );
+        $generator->endHashValueElement( 'element' );
+
+        $generator->endHashElement( 'elements' );
+
+        $this->assertSame(
+            '{"elements":{"element":[{"_attribute":"attribute value 1","#text":"element value 1"},{"_attribute":"attribute value 2","#text":"element value 2"}]}}',
+            $generator->endDocument( 'test' )
+        );
+    }
+
     public function testGetMediaType()
     {
         $generator = new Common\Output\Generator\Json();

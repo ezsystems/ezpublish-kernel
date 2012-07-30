@@ -124,6 +124,41 @@ class Json extends Generator
     }
 
     /**
+     * Start hash element
+     *
+     * @param string $name
+     */
+    public function startHashElement( $name )
+    {
+        $this->checkStartHashElement( $name );
+
+        $object = new Json\Object( $this->json );
+
+        if ( $this->json instanceof Json\ArrayObject )
+        {
+            $this->json[] = $object;
+            $this->json = $object;
+        }
+        else
+        {
+            $this->json->$name = $object;
+            $this->json = $object;
+        }
+    }
+
+    /**
+     * End hash element
+     *
+     * @param string $name
+     */
+    public function endHashElement( $name )
+    {
+        $this->checkEndHashElement( $name );
+
+        $this->json = $this->json->getParent();
+    }
+
+    /**
      * Start value element
      *
      * @param string $name
@@ -144,6 +179,40 @@ class Json extends Generator
     public function endValueElement( $name )
     {
         $this->checkEndValueElement( $name );
+    }
+
+    /**
+     * Start hash value element
+     *
+     * @param string $name
+     * @param string $value
+     * @param array $attributes
+     */
+    public function startHashValueElement( $name, $value, $attributes = array() )
+    {
+        $this->checkStartHashValueElement( $name );
+
+        $object = new Json\Object( $this->json );
+        foreach ( $attributes as $attributeKey => $attributeValue )
+        {
+            $object->{'_' . $attributeKey} = $attributeValue;
+        }
+        $object->{'#text'} = $value;
+
+        if ( !isset( $this->json->$name ) )
+            $this->json->$name = new Json\ArrayObject( $this->json->getParent() );
+
+        $this->json->$name->append( $object );
+    }
+
+    /**
+     * End hash value element
+     *
+     * @param string $name
+     */
+    public function endHashValueElement( $name )
+    {
+        $this->checkEndHashValueElement( $name );
     }
 
     /**
