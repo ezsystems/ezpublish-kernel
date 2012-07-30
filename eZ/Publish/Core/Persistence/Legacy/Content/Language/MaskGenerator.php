@@ -8,7 +8,6 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
-use eZ\Publish\SPI\Persistence\Content\Language\Handler;
 
 /**
  * Language MaskGenerator
