@@ -90,7 +90,11 @@ class Legacy extends SetupFactory
         $this->initializeSchema();
         $this->insertData();
 
-        return $this->getServiceContainer()->getRepository();
+        $repository = $this->getServiceContainer()->getRepository();
+        $repository->setCurrentUser(
+            $repository->getUserService()->loadUser( 14 )
+        );
+        return $repository;
     }
 
     /**
