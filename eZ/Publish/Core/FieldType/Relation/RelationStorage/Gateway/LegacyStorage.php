@@ -10,14 +10,15 @@
 namespace eZ\Publish\Core\FieldType\Relation\RelationStorage\Gateway;
 use eZ\Publish\Core\FieldType\Relation\RelationStorage\Gateway,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field;
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\API\Repository\Values\Content\Relation as APIRelationValue;
 
 /**
  *
  */
 class LegacyStorage extends Gateway
 {
-    const URL_TABLE = "ezcontentobject_link";
+    const TABLE = "ezcontentobject_link";
 
     /**
      * Connection
@@ -68,28 +69,50 @@ class LegacyStorage extends Gateway
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field )
     {
-        /*$dbHandler = $this->getConnection();
+        $dbHandler = $this->getConnection();
 
-        if ( ( $row = $this->fetchByLink( $field->value->externalData ) ) !== false )
+        // insert relation to ezcontentobject_link
+        $q = $dbHandler->createInsertQuery();
+        $q->insertInto(
+            $dbHandler->quoteTable( self::TABLE )
+        )->set(
+            $dbHandler->quoteColumn( "contentclassattribute_id" ),
+            $q->bindValue( $field->fieldDefinitionId, null, \PDO::PARAM_INT )
+        )->set(
+            $dbHandler->quoteColumn( "from_contentobject_id" ),
+            $q->bindValue( $versionInfo->contentId, null, \PDO::PARAM_INT )
+        )->set(
+            $dbHandler->quoteColumn( "from_contentobject_version" ),
+            $q->bindValue( $versionInfo->versionNo, null, \PDO::PARAM_INT )
+        )->set(
+            $dbHandler->quoteColumn( "op_code" ),
+            $q->bindValue( 0, null, \PDO::PARAM_INT )
+        )->set(
+            $dbHandler->quoteColumn( "relation_type" ),
+            $q->bindValue( APIRelationValue::FIELD, null, \PDO::PARAM_INT )
+        )->set(
+            $dbHandler->quoteColumn( "to_contentobject_id" ),
+            $q->bindValue( $field->value->externalData['destinationContentId'], null, \PDO::PARAM_INT )
+        );
+
+        $q->prepare()->execute();
+
+        /*if ( ( $row = $this->fetchByLink( $field->value->externalData['destinationContentId'] ) ) !== false )
             $urlId = $row["id"];
         else
-            $urlId = $this->insert( $versionInfo, $field );
-
-        $field->value->data["urlId"] = $urlId;
+            $urlId = $this->insert( $versionInfo, $field );*/
 
         // Signals that the Value has been modified and that an update is to be performed
-        return true;*/
-        throw new Exception( __METHOD__ . " not implemented yet " );
+        return false;
     }
 
     /**
-     * @see \eZ\Publish\SPI\FieldType\Url\UrlStorage\Gateway
+     * @see \eZ\Publish\SPI\FieldType\Relation\RelationStorage\Gateway
      */
     public function getFieldData( Field $field )
     {
-        /*$url = $this->fetchById( $field->value->data["urlId"] );
-        $field->value->externalData = $url["url"];*/
-        throw new Exception( __METHOD__ . " not implemented yet " );
+        // @todo This is a bit ugly but it should do for now. A roundtrip to the DB isn't really needed here.
+        $field->value->externalData = $field->value->data;
     }
 
     /**
@@ -105,7 +128,7 @@ class LegacyStorage extends Gateway
         $q = $dbHandler->createSelectQuery();
         $e = $q->expr;
         $q->select( "*" )
-            ->from( $dbHandler->quoteTable( self::URL_TABLE ) )
+            ->from( $dbHandler->quoteTable( self::TABLE ) )
             ->where(
                 $e->eq( "id", $q->bindValue( $id, null, \PDO::PARAM_INT ) )
             );
@@ -120,7 +143,7 @@ class LegacyStorage extends Gateway
         }
 
         return false;*/
-        throw new Exception( __METHOD__ . " not implemented yet " );
+        throw new \Exception( __METHOD__ . " not implemented yet " );
 
     }
 
@@ -152,7 +175,7 @@ class LegacyStorage extends Gateway
         }
 
         return false;*/
-        throw new Exception( __METHOD__ . " not implemented yet " );
+        throw new \Exception( __METHOD__ . " not implemented yet " );
     }
 
     /**
@@ -170,7 +193,7 @@ class LegacyStorage extends Gateway
 
         $q = $dbHandler->createInsertQuery();
         $q->insertInto(
-            $dbHandler->quoteTable( self::URL_TABLE )
+            $dbHandler->quoteTable( self::TABLE )
         )->set(
             $dbHandler->quoteColumn( "created" ),
             $q->bindValue( $time, null, \PDO::PARAM_INT )
@@ -190,6 +213,6 @@ class LegacyStorage extends Gateway
         return $dbHandler->lastInsertId(
             $dbHandler->getSequenceName( self::URL_TABLE, "id" )
         );*/
-        throw new Exception( __METHOD__ . " not implemented yet " );
+        throw new \Exception( __METHOD__ . " not implemented yet " );
     }
 }

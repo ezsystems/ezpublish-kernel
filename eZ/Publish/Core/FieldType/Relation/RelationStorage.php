@@ -54,6 +54,8 @@ class RelationStorage extends GatewayBasedStorage
      */
     public function deleteFieldData( array $fieldId, array $context )
     {
+        $gateway = $this->getGateway( $context );
+        return $gateway->deleteFieldData();
     }
 
     /**

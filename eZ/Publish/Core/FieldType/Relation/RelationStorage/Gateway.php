@@ -18,7 +18,7 @@ use eZ\Publish\Core\FieldType\StorageGateway,
 abstract class Gateway extends StorageGateway
 {
     /**
-     * Stores a URL based on the given field data
+     * Stores a Relation based on the given field data
      *
      * @param VersionInfo $versionInfo
      * @param Field $field

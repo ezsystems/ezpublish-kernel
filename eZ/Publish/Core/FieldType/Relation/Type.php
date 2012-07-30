@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Relation;
 use eZ\Publish\Core\FieldType\FieldType,
+    eZ\Publish\Core\FieldType\ValidationError,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Repository\Values\Content\ContentInfo,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
@@ -37,6 +38,47 @@ class Type extends FieldType
             'default' => '',
         ),
     );
+
+    /**
+     * @see \eZ\Publish\Core\FieldType\FieldType::validateFieldSettings()
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings( $fieldSettings )
+    {
+        $validationResult = array();
+
+        foreach( array_keys( $fieldSettings ) as $setting )
+        {
+            if ( !in_array( $setting, array_keys( $this->settingsSchema ) ) )
+            {
+                $validationResult[] = new ValidationError(
+                    "Unknown setting %setting%",
+                    null,
+                    array( 'setting' => $setting )
+                );
+            }
+        }
+        if ( $fieldSettings['selectionMethod'] != self::SELECTION_BROWSE && $fieldSettings['selectionMethod'] != self::SELECTION_DROPDOWN )
+        {
+            $validationResult[] = new ValidationError(
+                "Setting selection method must be either %selection_browse% or %selection_dropdown%",
+                null,
+                array( 'selection_browse' => self::SELECTION_BROWSE, 'selection_dropdown' => self::SELECTION_DROPDOWN )
+            );
+        }
+
+        if ( !is_string( $fieldSettings['selectionRoot'] ) && !is_numeric( $fieldSettings['selectionRoot'] ) )
+        {
+            $validationResult[] = new ValidationError(
+                "Setting selection root must be either a string or numeric integer"
+            );
+        }
+
+        return $validationResult;
+    }
 
     /**
      * Build a Relation\Value object with the provided $destinationContentInfo->id as value.
