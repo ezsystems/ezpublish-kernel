@@ -473,7 +473,11 @@ class ContentService implements ContentServiceInterface
                 }
                 catch ( APIInvalidArgumentException $e )
                 {
-                    throw new ContentValidationException( "Required field '{$fieldDefinition->identifier}' value is empty" );
+                    throw new ContentValidationException(
+                        "Required field '{$fieldDefinition->identifier}' value is empty",
+                        0,
+                        $e
+                    );
                 }
 
                 // ... && !$fieldType->hasContent( $fieldValue )
@@ -929,7 +933,11 @@ class ContentService implements ContentServiceInterface
                     }
                     catch ( APIInvalidArgumentException $e )
                     {
-                        throw new ContentValidationException( "Required field '{$fieldDefinition->identifier}' value is empty" );
+                        throw new ContentValidationException(
+                            "Required field '{$fieldDefinition->identifier}' value is empty",
+                            0,
+                            $e
+                        );
                     }
                 }
                 else
