@@ -109,5 +109,5 @@ interface URLAliasService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function lookUp( $url, $languageCode = null );
+    public function lookup( $url, $languageCode = null );
 }
