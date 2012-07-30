@@ -46,6 +46,7 @@ use eZ\Publish\API\Repository\ContentService as ContentServiceInterface,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    eZ\Publish\API\Repository\Exceptions\InvalidArgumentException as APIInvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\ContentValidationException,
     eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException,
@@ -466,7 +467,15 @@ class ContentService implements ContentServiceInterface
                     $fieldValue = $fieldType->buildValue( $fieldDefinition->defaultValue );
                 }
 
-                $fieldValue = $fieldType->acceptValue( $fieldValue );
+                try
+                {
+                    $fieldValue = $fieldType->acceptValue( $fieldValue );
+                }
+                catch ( APIInvalidArgumentException $e )
+                {
+                    throw new ContentValidationException( "Required field '{$fieldDefinition->identifier}' value is empty" );
+                }
+
                 // ... && !$fieldType->hasContent( $fieldValue )
                 if ( $fieldDefinition->isRequired && (string)$fieldValue === "" )
                 {
@@ -910,11 +919,18 @@ class ContentService implements ContentServiceInterface
                 if ( isset( $fields[$fieldDefinition->identifier][$languageCode] ) )
                 {
                     $field = $fields[$fieldDefinition->identifier][$languageCode];
-                    $fieldValue = $fieldType->acceptValue(
-                        $field->value instanceof Value ?
-                            $field->value :
-                            $fieldType->buildValue( $field->value )
-                    );
+                    try
+                    {
+                        $fieldValue = $fieldType->acceptValue(
+                            $field->value instanceof Value ?
+                                $field->value :
+                                $fieldType->buildValue( $field->value )
+                        );
+                    }
+                    catch ( APIInvalidArgumentException $e )
+                    {
+                        throw new ContentValidationException( "Required field '{$fieldDefinition->identifier}' value is empty" );
+                    }
                 }
                 else
                 {
