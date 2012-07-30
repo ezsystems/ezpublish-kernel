@@ -242,14 +242,10 @@ class EzcDatabaseTest extends TestCase
                 ),
                 new LanguageMapper()
             );
-            $cachingLanguageHandler = new LanguageCachingHandler(
-                $languageHandler,
-                new LanguageCache()
-            );
             $this->gateway = new EzcDatabase(
                 $this->getDatabaseHandler(),
                 $languageHandler,
-                new LanguageMaskGenerator( $cachingLanguageHandler )
+                new LanguageMaskGenerator( $languageHandler )
             );
         }
         return $this->gateway;

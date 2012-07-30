@@ -1095,11 +1095,7 @@ class UrlAliasHandlerTest extends TestCase
             ),
             new LanguageMapper()
         );
-        $cachingLanguageHandler = new LanguageCachingHandler(
-            $languageHandler,
-            new LanguageCache()
-        );
-        $languageMaskGenerator = new LanguageMaskGenerator( $cachingLanguageHandler );
+        $languageMaskGenerator = new LanguageMaskGenerator( $languageHandler );
         $gateway = new EzcDatabase(
             $this->dbHandler,
             $languageHandler,
