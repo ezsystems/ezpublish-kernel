@@ -373,7 +373,7 @@ class LocationServiceTest extends BaseTest
                 'parentLocationId' => $this->generateId( 'location', 1 ),
                 'pathString' => '/1/5/',
                 // @todo: Fix date handling in tests
-                'modifiedSubLocationDate' => new \DateTime( "@1343140542" ),
+                'modifiedSubLocationDate' => $this->getRepository()->createDateTime( 1343140542 ),
                 'depth' => 1,
                 'sortField' => 1,
                 'sortOrder' => 1,

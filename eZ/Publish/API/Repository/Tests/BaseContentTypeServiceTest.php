@@ -49,7 +49,7 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         );
         // $creatorId contains the ID of user 23
         $typeCreate->creatorId = $creatorId;
-        $typeCreate->creationDate = new \DateTime();
+        $typeCreate->creationDate = $this->getRepository()->createDateTime();
 
         $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
             'title', 'ezstring'

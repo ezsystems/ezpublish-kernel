@@ -140,7 +140,7 @@ class DateAndTimeFieldTypeIntergrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'value' => new \DateTime( "@123456" ),
+            'value' => $this->getRepository()->createDateTime( "@123456" ),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -214,7 +214,7 @@ class DateAndTimeFieldTypeIntergrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'value' => new \DateTime( "@12345678" ),
+            'value' => $this->getRepository()->createDateTime( "@12345678" ),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -277,7 +277,7 @@ class DateAndTimeFieldTypeIntergrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'value' => new \DateTime( "@123456" ),
+            'value' => $this->getRepository()->createDateTime( "@123456" ),
         );
         $this->assertPropertiesCorrect(
             $expectedData,

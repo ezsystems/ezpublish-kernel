@@ -306,7 +306,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $createStruct->remoteId     = $this->getTypeName();
         $createStruct->names        = array( 'eng-GB' => 'Test' );
         $createStruct->creatorId    = 14;
-        $createStruct->creationDate = new \DateTime();
+        $createStruct->creationDate = $this->getRepository()->createDateTime();
 
         $nameFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
             'name', 'ezstring'

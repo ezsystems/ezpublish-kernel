@@ -632,8 +632,8 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $metadataUpdate->remoteId = 'aaaabbbbccccddddeeeeffff11112222';
         $metadataUpdate->mainLanguageCode = 'eng-US';
         $metadataUpdate->alwaysAvailable = false;
-        $metadataUpdate->publishedDate = new \DateTime( '1984/01/01' );
-        $metadataUpdate->modificationDate = new \DateTime( '1984/01/01' );
+        $metadataUpdate->publishedDate = $this->getRepository()->createDateTime();
+        $metadataUpdate->modificationDate = $this->getRepository()->createDateTime();
 
         // This call will fail with a "UnauthorizedException"
         $contentService->updateContentMetadata(

@@ -1480,8 +1480,8 @@ class ContentServiceTest extends BaseContentServiceTest
         $metadataUpdate->remoteId = 'aaaabbbbccccddddeeeeffff11112222';
         $metadataUpdate->mainLanguageCode = 'eng-GB';
         $metadataUpdate->alwaysAvailable = false;
-        $metadataUpdate->publishedDate = new \DateTime( '1984/01/01' );
-        $metadataUpdate->modificationDate = new \DateTime( '1984/01/01' );
+        $metadataUpdate->publishedDate = $this->getRepository()->createDateTime( 441759600 ); // 1984/01/01
+        $metadataUpdate->modificationDate = $this->getRepository()->createDateTime( 441759600 ); // 1984/01/01
 
         // Update the metadata of the published content object
         $content = $contentService->updateContentMetadata(
@@ -1518,10 +1518,10 @@ class ContentServiceTest extends BaseContentServiceTest
                 'alwaysAvailable' => false,
                 'currentVersionNo' => 1,
                 'mainLanguageCode' => 'eng-GB',
-                'modificationDate' => new \DateTime( '1984/01/01' ),
+                'modificationDate' => $this->getRepository()->createDateTime( 441759600 ),
                 'ownerId' => $this->getRepository()->getCurrentUser()->id,
                 'published' => true,
-                'publishedDate' => new \DateTime( '1984/01/01' ),
+                'publishedDate' => $this->getRepository()->createDateTime( 441759600 ),
             ),
             array(
                 'remoteId' => $contentInfo->remoteId,

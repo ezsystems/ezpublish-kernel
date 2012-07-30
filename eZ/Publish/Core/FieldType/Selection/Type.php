@@ -23,7 +23,7 @@ class Type extends FieldType
      *
      * Build a FiledType\Value object with the provided $selection as value.
      *
-     * @param string|string[] $selection
+     * @param int[] $selection
      * @return \eZ\Publish\Core\FieldType\Selection\Value
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
@@ -89,7 +89,6 @@ class Type extends FieldType
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
-     * @todo String normalization should occur here.
      * @return array
      */
     protected function getSortInfo( $value )

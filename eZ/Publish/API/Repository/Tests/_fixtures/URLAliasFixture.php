@@ -30,9 +30,8 @@ return array(
                 "forward" => true,
             )
         ),
-        /**
-         * FIXME: Location for this URLAlias not found in dump.
-         *
+        /*
+         * FIXME: Location for this alias not found in dump
         38 => new \eZ\Publish\API\Repository\Values\Content\URLAlias(
             array(
                 "id" => 38,
