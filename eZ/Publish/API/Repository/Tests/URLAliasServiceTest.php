@@ -283,7 +283,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $urlAliasService = $repository->getURLAliasService();
 
         $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
-            '/Home/My-Site', '/Home/My-New-Site', 'eng-US'
+            'module:content/search?SearchText=eZ', 'Home/My-New-Site', 'eng-US'
         );
         /* END: Use Case */
 
@@ -306,8 +306,8 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $this->assertPropertiesCorrect(
             array(
                 'type' => URLAlias::RESOURCE,
-                'destination' => '/Home/My-Site',
-                'path' => '/Home/My-New-Site',
+                'destination' => 'module:content/search?SearchText=eZ',
+                'path' => 'Home/My-New-Site',
                 'languageCodes' => array( 'eng-US' ),
                 'alwaysAvailable' => false,
                 'isHistory' => false,
@@ -333,7 +333,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $urlAliasService = $repository->getURLAliasService();
 
         $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
-            '/Home/My-Site', '/Home/My-New-Site', 'eng-US', true
+            'module:content/search?SearchText=eZ', 'Home/My-New-Site', 'eng-US', true
         );
         /* END: Use Case */
 
@@ -356,8 +356,8 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $this->assertPropertiesCorrect(
             array(
                 'type' => URLAlias::RESOURCE,
-                'destination' => '/Home/My-Site',
-                'path' => '/Home/My-New-Site',
+                'destination' => 'module:content/search?SearchText=eZ',
+                'path' => 'Home/My-New-Site',
                 'languageCodes' => array( 'eng-US' ),
                 'alwaysAvailable' => false,
                 'isHistory' => false,
@@ -383,7 +383,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $urlAliasService = $repository->getURLAliasService();
 
         $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
-            '/Home/My-Site', '/Home/My-New-Site', 'eng-US', false, true
+            'module:content/search?SearchText=eZ', 'Home/My-New-Site', 'eng-US', false, true
         );
         /* END: Use Case */
 
@@ -406,8 +406,8 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $this->assertPropertiesCorrect(
             array(
                 'type' => URLAlias::RESOURCE,
-                'destination' => '/Home/My-Site',
-                'path' => '/Home/My-New-Site',
+                'destination' => 'module:content/search?SearchText=eZ',
+                'path' => 'Home/My-New-Site',
                 'languageCodes' => array( 'eng-US' ),
                 'alwaysAvailable' => true,
                 'isHistory' => false,
@@ -435,7 +435,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         // Throws InvalidArgumentException, since this path already exists for the
         // language
         $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
-            '/My-new-Site', '/Design/Plain-site', 'eng-US'
+            'module:content/search?SearchText=eZ', 'Design/Plain-site', 'eng-US'
         );
         /* END: Use Case */
     }
