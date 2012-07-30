@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler;
 
 /**
  * Language MaskGenerator
@@ -17,18 +18,18 @@ class MaskGenerator
     /**
      * Language lookup
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Lookup
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
      */
-    protected $languageLookup;
+    protected $languageHandler;
 
     /**
      * Creates a new Language MaskGenerator
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\Lookup $languageLookup
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      */
-    public function __construct( Lookup $languageLookup )
+    public function __construct( Handler $languageHandler )
     {
-        $this->languageLookup = $languageLookup;
+        $this->languageHandler = $languageHandler;
     }
 
     /**
@@ -48,7 +49,7 @@ class MaskGenerator
 
         foreach ( $languages as $language => $value )
         {
-            $mask |= $this->languageLookup->getByLocale( $language )->id;
+            $mask |= $this->languageHandler->loadByLanguageCode( $language )->id;
         }
 
         return $mask;
@@ -63,7 +64,7 @@ class MaskGenerator
      */
     public function generateLanguageIndicator( $languageCode, $alwaysAvailable )
     {
-        return $this->languageLookup->getByLocale( $languageCode )->id
+        return $this->languageHandler->loadByLanguageCode( $languageCode )->id
             | ( $alwaysAvailable ? 1 : 0 );
     }
 

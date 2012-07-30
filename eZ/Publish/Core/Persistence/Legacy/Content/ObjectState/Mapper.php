@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState;
 use eZ\Publish\SPI\Persistence\Content\ObjectState,
     eZ\Publish\SPI\Persistence\Content\ObjectState\Group,
     eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as LanguageHandler;
+    eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 
 /**
  * Mapper for ObjectState and object state Group objects
@@ -29,7 +29,7 @@ class Mapper
     /**
      * Creates a new mapper.
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler $languageHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      */
     public function __construct( LanguageHandler $languageHandler )
     {
@@ -51,7 +51,7 @@ class Mapper
         $objectState->groupId = (int) $data[0]['ezcobj_state_group_id'];
         $objectState->identifier = $data[0]['ezcobj_state_identifier'];
         $objectState->priority = (int) $data[0]['ezcobj_state_priority'];
-        $objectState->defaultLanguage = $this->languageHandler->getById(
+        $objectState->defaultLanguage = $this->languageHandler->load(
             $data[0]['ezcobj_state_default_language_id']
         )->languageCode;
 
@@ -61,7 +61,7 @@ class Mapper
 
         foreach ( $data as $stateTranslation )
         {
-            $languageCode = $this->languageHandler->getById(
+            $languageCode = $this->languageHandler->load(
                 $stateTranslation['ezcobj_state_language_language_id'] & ~1
             )->languageCode;
 
@@ -105,7 +105,7 @@ class Mapper
 
         $objectStateGroup->id = (int) $data[0]['ezcobj_state_group_id'];
         $objectStateGroup->identifier = $data[0]['ezcobj_state_group_identifier'];
-        $objectStateGroup->defaultLanguage = $this->languageHandler->getById(
+        $objectStateGroup->defaultLanguage = $this->languageHandler->load(
             $data[0]['ezcobj_state_group_default_language_id']
         )->languageCode;
 
@@ -115,7 +115,7 @@ class Mapper
 
         foreach ( $data as $groupTranslation )
         {
-            $languageCode = $this->languageHandler->getById(
+            $languageCode = $this->languageHandler->load(
                 $groupTranslation['ezcobj_state_group_language_real_language_id']
             )->languageCode;
 

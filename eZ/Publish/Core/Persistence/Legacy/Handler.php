@@ -340,7 +340,7 @@ class Handler implements HandlerInterface
         if ( !isset( $this->languageMaskGenerator ) )
         {
             $this->languageMaskGenerator = new Content\Language\MaskGenerator(
-                new BasicLanguageLookup( $this->contentLanguageHandler() )
+                $this->contentLanguageHandler()
             );
         }
         return $this->languageMaskGenerator;
