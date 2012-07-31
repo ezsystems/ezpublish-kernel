@@ -1207,8 +1207,7 @@ class ContentService implements ContentServiceInterface
     /**
      * Loads all incoming relations for a content object.
      *
-     * The relations come only
-     * from published versions of the source content objects
+     * The relations come only from published versions of the source content objects
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read this version
      *
@@ -1238,11 +1237,11 @@ class ContentService implements ContentServiceInterface
     /**
      * Adds a relation of type common.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
-     *
      * The source of the relation is the content and version
      * referenced by $versionInfo.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit this version
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent the destination of the relation
@@ -1252,10 +1251,12 @@ class ContentService implements ContentServiceInterface
     public function addRelation( APIVersionInfo $sourceVersion, APIContentInfo $destinationContent )
     {
         if ( $sourceVersion->status !== APIVersionInfo::STATUS_DRAFT )
+        {
             throw new BadStateException(
                 "\$sourceVersion",
-                "relations of type common can only be added to versions of status draft"
+                "Relations of type common can only be added to versions of status draft"
             );
+        }
 
         $sourceContentInfo = $sourceVersion->getContentInfo();
 
@@ -1286,13 +1287,15 @@ class ContentService implements ContentServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent
      */
-    public function deleteRelation( APIVersionInfo $sourceVersion, APIContentInfo $destinationContent)
+    public function deleteRelation( APIVersionInfo $sourceVersion, APIContentInfo $destinationContent )
     {
         if ( $sourceVersion->status !== APIVersionInfo::STATUS_DRAFT )
+        {
             throw new BadStateException(
                 "\$sourceVersion",
-                "relations of type common can only be removed from versions of status draft"
+                "Relations of type common can only be removed from versions of status draft"
             );
+        }
 
         $spiRelations = $this->persistenceHandler->contentHandler()->loadRelations(
             $sourceVersion->getContentInfo()->id,
@@ -1301,10 +1304,12 @@ class ContentService implements ContentServiceInterface
         );
 
         if ( count( $spiRelations ) == 0 )
+        {
             throw new InvalidArgumentException(
                 "\$sourceVersion",
-                "there are no relations of type COMMON for the given destination"
+                "There are no relations of type COMMON for the given destination"
             );
+        }
 
         // there should be only one relation of type COMMON for each destination,
         // but in case there were ever more then one, we will remove them all
@@ -1312,7 +1317,10 @@ class ContentService implements ContentServiceInterface
         $this->repository->beginTransaction();
         foreach ( $spiRelations as $spiRelation )
         {
-            $this->persistenceHandler->contentHandler()->removeRelation( $spiRelation->id );
+            if ( $spiRelation->destinationContentId == $destinationContent->id )
+            {
+                $this->persistenceHandler->contentHandler()->removeRelation( $spiRelation->id );
+            }
         }
         $this->repository->commit();
     }
@@ -1436,12 +1444,12 @@ class ContentService implements ContentServiceInterface
      */
     public function buildContentDomainObject( SPIContent $spiContent )
     {
+        $versionInfo = $this->buildVersionInfoDomainObject( $spiContent->versionInfo );
         return new Content(
             array(
                 "internalFields" => $this->buildDomainFields( $spiContent->fields ),
-                // @TODO: implement loadRelations()
-                //"relations" => $this->loadRelations( $versionInfo ),
-                "versionInfo" => $this->buildVersionInfoDomainObject( $spiContent->versionInfo )
+                "versionInfo" => $versionInfo,
+                "relations" => $this->loadRelations( $versionInfo ),
             )
         );
     }
