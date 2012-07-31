@@ -3031,17 +3031,26 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a transaction
         $repository->beginTransaction();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
+        try
+        {
+            $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
 
-        // Get a content create struct and set mandatory properties
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
-        $contentCreate->setField( 'name', 'Sindelfingen forum' );
+            // Get a content create struct and set mandatory properties
+            $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
+            $contentCreate->setField( 'name', 'Sindelfingen forum' );
 
-        $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
-        $contentCreate->alwaysAvailable = true;
+            $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
+            $contentCreate->alwaysAvailable = true;
 
-        // Create a new content object
-        $contentId = $contentService->createContent( $contentCreate )->id;
+            // Create a new content object
+            $contentId = $contentService->createContent( $contentCreate )->id;
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -3086,20 +3095,29 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a transaction
         $repository->beginTransaction();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
+        try
+        {
+            $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
 
-        // Get a content create struct and set mandatory properties
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
-        $contentCreate->setField( 'name', 'Sindelfingen forum' );
+            // Get a content create struct and set mandatory properties
+            $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
+            $contentCreate->setField( 'name', 'Sindelfingen forum' );
 
-        $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
-        $contentCreate->alwaysAvailable = true;
+            $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
+            $contentCreate->alwaysAvailable = true;
 
-        // Create a new content object
-        $contentId = $contentService->createContent( $contentCreate )->id;
+            // Create a new content object
+            $contentId = $contentService->createContent( $contentCreate )->id;
 
-        // Rollback all changes
-        $repository->commit();
+            // Commit changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load the new content object
         $content = $contentService->loadContent( $contentId );
@@ -3127,7 +3145,16 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a transaction
         $repository->beginTransaction();
 
-        $draft = $this->createContentDraftVersion1();
+        try
+        {
+            $draft = $this->createContentDraftVersion1();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         $contentId = $draft->id;
 
@@ -3167,12 +3194,21 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a transaction
         $repository->beginTransaction();
 
-        $draft = $this->createContentDraftVersion1();
+        try
+        {
+            $draft = $this->createContentDraftVersion1();
 
-        $contentId = $draft->id;
+            $contentId = $draft->id;
 
-        // Roleback the transaction
-        $repository->commit();
+            // Roleback the transaction
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load the new content object
         $content = $contentService->loadContent( $contentId );
@@ -3207,11 +3243,20 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Create a new draft
-        $drafted = $contentService->createContentDraft( $content->contentInfo );
+        try
+        {
+            // Create a new draft
+            $drafted = $contentService->createContentDraft( $content->contentInfo );
 
-        // Store version number for later reuse
-        $versionNo = $drafted->versionInfo->versionNo;
+            // Store version number for later reuse
+            $versionNo = $drafted->versionInfo->versionNo;
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback
         $repository->rollback();
@@ -3256,14 +3301,23 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Create a new draft
-        $drafted = $contentService->createContentDraft( $content->contentInfo );
+        try
+        {
+            // Create a new draft
+            $drafted = $contentService->createContentDraft( $content->contentInfo );
 
-        // Store version number for later reuse
-        $versionNo = $drafted->versionInfo->versionNo;
+            // Store version number for later reuse
+            $versionNo = $drafted->versionInfo->versionNo;
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         $content = $contentService->loadContent( $contentId, null, $versionNo );
         /* END: Use Case */
@@ -3300,14 +3354,22 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        $draftVersion = $contentService->createContentDraft( $content->contentInfo )->getVersionInfo();
+        try
+        {
+            $draftVersion = $contentService->createContentDraft( $content->contentInfo )->getVersionInfo();
 
-        // Publish a new version
-        $content = $contentService->publishVersion( $draftVersion );
+            // Publish a new version
+            $content = $contentService->publishVersion( $draftVersion );
 
-
-        // Store version number for later reuse
-        $versionNo = $content->versionInfo->versionNo;
+            // Store version number for later reuse
+            $versionNo = $content->versionInfo->versionNo;
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback
         $repository->rollback();
@@ -3352,16 +3414,25 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Publish a new version
-        $content = $contentService->publishVersion(
-            $contentService->createContentDraft( $template->contentInfo )->getVersionInfo()
-        );
+        try
+        {
+            // Publish a new version
+            $content = $contentService->publishVersion(
+                $contentService->createContentDraft( $template->contentInfo )->getVersionInfo()
+            );
 
-        // Store version number for later reuse
-        $versionNo = $content->versionInfo->versionNo;
+            // Store version number for later reuse
+            $versionNo = $content->versionInfo->versionNo;
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load current version info
         $versionInfo = $contentService->loadVersionInfo( $content->contentInfo );
@@ -3403,14 +3474,23 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a transaction
         $repository->beginTransaction();
 
-        // Update the group name
-        $draft = $contentService->updateContent(
-            $draft->getVersionInfo(),
-            $contentUpdate
-        );
+        try
+        {
+            // Update the group name
+            $draft = $contentService->updateContent(
+                $draft->getVersionInfo(),
+                $contentUpdate
+            );
 
-        // Publish updated version
-        $contentService->publishVersion( $draft->getVersionInfo() );
+            // Publish updated version
+            $contentService->publishVersion( $draft->getVersionInfo() );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes.
         $repository->rollback();
@@ -3455,17 +3535,26 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a transaction
         $repository->beginTransaction();
 
-        // Update the group name
-        $draft = $contentService->updateContent(
-            $draft->getVersionInfo(),
-            $contentUpdate
-        );
+        try
+        {
+            // Update the group name
+            $draft = $contentService->updateContent(
+                $draft->getVersionInfo(),
+                $contentUpdate
+            );
 
-        // Publish updated version
-        $contentService->publishVersion( $draft->getVersionInfo() );
+            // Publish updated version
+            $contentService->publishVersion( $draft->getVersionInfo() );
 
-        // Commit all changes.
-        $repository->commit();
+            // Commit all changes.
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Name is now "Administrators"
         $name = $contentService->loadContent( $contentId )->getFieldValue( 'name', 'eng-US' );
@@ -3503,15 +3592,24 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a transaction
         $repository->beginTransaction();
 
-        // Get metadata update struct and change remoteId
-        $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
-        $metadataUpdate->remoteId = md5( microtime( true ) );
+        try
+        {
+            // Get metadata update struct and change remoteId
+            $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
+            $metadataUpdate->remoteId = md5( microtime( true ) );
 
-        // Update the metadata of the published content object
-        $contentService->updateContentMetadata(
-            $contentInfo,
-            $metadataUpdate
-        );
+            // Update the metadata of the published content object
+            $contentService->updateContentMetadata(
+                $contentInfo,
+                $metadataUpdate
+            );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes.
         $repository->rollback();
@@ -3552,18 +3650,27 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a transaction
         $repository->beginTransaction();
 
-        // Get metadata update struct and change remoteId
-        $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
-        $metadataUpdate->remoteId = md5( microtime( true ) );
+        try
+        {
+            // Get metadata update struct and change remoteId
+            $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
+            $metadataUpdate->remoteId = md5( microtime( true ) );
 
-        // Update the metadata of the published content object
-        $contentService->updateContentMetadata(
-            $contentInfo,
-            $metadataUpdate
-        );
+            // Update the metadata of the published content object
+            $contentService->updateContentMetadata(
+                $contentInfo,
+                $metadataUpdate
+            );
 
-        // Commit all changes.
-        $repository->commit();
+            // Commit all changes.
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load current remoteId
         $remoteIdReloaded = $contentService->loadContentInfo( $contentId )->remoteId;
@@ -3596,12 +3703,21 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Create a new draft
-        $draft = $contentService->createContentDraft(
-            $contentService->loadContentInfo( $contentId )
-        );
+        try
+        {
+            // Create a new draft
+            $draft = $contentService->createContentDraft(
+                $contentService->loadContentInfo( $contentId )
+            );
 
-        $contentService->deleteVersion( $draft->getVersionInfo() );
+            $contentService->deleteVersion( $draft->getVersionInfo() );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes.
         $repository->rollback();
@@ -3637,15 +3753,24 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Create a new draft
-        $draft = $contentService->createContentDraft(
-            $contentService->loadContentInfo( $contentId )
-        );
+        try
+        {
+            // Create a new draft
+            $draft = $contentService->createContentDraft(
+                $contentService->loadContentInfo( $contentId )
+            );
 
-        $contentService->deleteVersion( $draft->getVersionInfo() );
+            $contentService->deleteVersion( $draft->getVersionInfo() );
 
-        // Commit all changes.
-        $repository->commit();
+            // Commit all changes.
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // This array will contain no element
         $drafts = $contentService->loadContentDrafts();
@@ -3681,8 +3806,17 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Delete content object
-        $contentService->deleteContent( $contentInfo );
+        try
+        {
+            // Delete content object
+            $contentService->deleteContent( $contentInfo );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -3721,12 +3855,22 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Delete content object
-        $contentService->deleteContent( $contentInfo );
+        try
+        {
+            // Delete content object
+            $contentService->deleteContent( $contentInfo );
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
+        // Deleted content info is not found anymore
         try
         {
             $contentService->loadContentInfo( $contentId );
@@ -3775,11 +3919,20 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Copy content with all versions and drafts
-        $contentService->copyContent(
-            $content->contentInfo,
-            $locationCreate
-        );
+        try
+        {
+            // Copy content with all versions and drafts
+            $contentService->copyContent(
+                $content->contentInfo,
+                $locationCreate
+            );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -3828,14 +3981,23 @@ class ContentServiceTest extends BaseContentServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Copy content with all versions and drafts
-        $contentCopied = $contentService->copyContent(
-            $content->contentInfo,
-            $locationCreate
-        );
+        try
+        {
+            // Copy content with all versions and drafts
+            $contentCopied = $contentService->copyContent(
+                $content->contentInfo,
+                $locationCreate
+            );
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // This will contain the admin user and the new child location
         $locations = $locationService->loadLocationChildren(

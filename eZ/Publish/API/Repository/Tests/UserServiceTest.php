@@ -350,18 +350,27 @@ class UserServiceTest extends BaseTest
 
         $repository->beginTransaction();
 
-        // Load main group
-        $parentUserGroup = $userService->loadUserGroup( $mainGroupId );
+        try
+        {
+            // Load main group
+            $parentUserGroup = $userService->loadUserGroup( $mainGroupId );
 
-        // Instantiate a new create struct
-        $userGroupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
-        $userGroupCreate->setField( 'name', 'Example Group' );
+            // Instantiate a new create struct
+            $userGroupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
+            $userGroupCreate->setField( 'name', 'Example Group' );
 
-        // Create the new user group
-        $createdUserGroupId = $userService->createUserGroup(
-            $userGroupCreate,
-            $parentUserGroup
-        )->id;
+            // Create the new user group
+            $createdUserGroupId = $userService->createUserGroup(
+                $userGroupCreate,
+                $parentUserGroup
+            )->id;
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         $repository->rollback();
 
@@ -883,7 +892,16 @@ class UserServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $repository->beginTransaction();
 
-        $user = $this->createUserVersion1();
+        try
+        {
+            $user = $this->createUserVersion1();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         $repository->rollback();
 

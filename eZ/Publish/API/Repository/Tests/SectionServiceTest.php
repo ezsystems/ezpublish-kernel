@@ -697,13 +697,22 @@ class SectionServiceTest extends BaseTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Get a create struct and set some properties
-        $sectionCreate = $sectionService->newSectionCreateStruct();
-        $sectionCreate->name = 'Test Section';
-        $sectionCreate->identifier = 'uniqueKey';
+        try
+        {
+            // Get a create struct and set some properties
+            $sectionCreate = $sectionService->newSectionCreateStruct();
+            $sectionCreate->name = 'Test Section';
+            $sectionCreate->identifier = 'uniqueKey';
 
-        // Create a new section
-        $sectionService->createSection( $sectionCreate );
+            // Create a new section
+            $sectionService->createSection( $sectionCreate );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -741,16 +750,25 @@ class SectionServiceTest extends BaseTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Get a create struct and set some properties
-        $sectionCreate = $sectionService->newSectionCreateStruct();
-        $sectionCreate->name = 'Test Section';
-        $sectionCreate->identifier = 'uniqueKey';
+        try
+        {
+            // Get a create struct and set some properties
+            $sectionCreate = $sectionService->newSectionCreateStruct();
+            $sectionCreate->name = 'Test Section';
+            $sectionCreate->identifier = 'uniqueKey';
 
-        // Create a new section
-        $sectionService->createSection( $sectionCreate );
+            // Create a new section
+            $sectionService->createSection( $sectionCreate );
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load new section
         $section = $sectionService->loadSectionByIdentifier( 'uniqueKey' );
@@ -778,15 +796,24 @@ class SectionServiceTest extends BaseTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Load standard section
-        $section = $sectionService->loadSectionByIdentifier( 'standard' );
+        try
+        {
+            // Load standard section
+            $section = $sectionService->loadSectionByIdentifier( 'standard' );
 
-        // Get an update struct and change section name
-        $sectionUpdate = $sectionService->newSectionUpdateStruct();
-        $sectionUpdate->name = 'My Standard';
+            // Get an update struct and change section name
+            $sectionUpdate = $sectionService->newSectionUpdateStruct();
+            $sectionUpdate->name = 'My Standard';
 
-        // Update section
-        $sectionService->updateSection( $section, $sectionUpdate );
+            // Update section
+            $sectionService->updateSection( $section, $sectionUpdate );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -817,18 +844,27 @@ class SectionServiceTest extends BaseTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Load standard section
-        $section = $sectionService->loadSectionByIdentifier( 'standard' );
+        try
+        {
+            // Load standard section
+            $section = $sectionService->loadSectionByIdentifier( 'standard' );
 
-        // Get an update struct and change section name
-        $sectionUpdate = $sectionService->newSectionUpdateStruct();
-        $sectionUpdate->name = 'My Standard';
+            // Get an update struct and change section name
+            $sectionUpdate = $sectionService->newSectionUpdateStruct();
+            $sectionUpdate->name = 'My Standard';
 
-        // Update section
-        $sectionService->updateSection( $section, $sectionUpdate );
+            // Update section
+            $sectionService->updateSection( $section, $sectionUpdate );
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load updated section, name will now be "My Standard"
         $updatedStandard = $sectionService->loadSectionByIdentifier( 'standard' );

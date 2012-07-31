@@ -535,14 +535,23 @@ class LanguageServiceTest extends BaseTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Get create struct and set properties
-        $languageCreate = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled = true;
-        $languageCreate->name = 'English (New Zealand)';
-        $languageCreate->languageCode = 'eng-NZ';
+        try
+        {
+            // Get create struct and set properties
+            $languageCreate = $languageService->newLanguageCreateStruct();
+            $languageCreate->enabled = true;
+            $languageCreate->name = 'English (New Zealand)';
+            $languageCreate->languageCode = 'eng-NZ';
 
-        // Create new language
-        $languageService->createLanguage( $languageCreate );
+            // Create new language
+            $languageService->createLanguage( $languageCreate );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -579,17 +588,26 @@ class LanguageServiceTest extends BaseTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Get create struct and set properties
-        $languageCreate = $languageService->newLanguageCreateStruct();
-        $languageCreate->enabled = true;
-        $languageCreate->name = 'English (New Zealand)';
-        $languageCreate->languageCode = 'eng-NZ';
+        try
+        {
+            // Get create struct and set properties
+            $languageCreate = $languageService->newLanguageCreateStruct();
+            $languageCreate->enabled = true;
+            $languageCreate->name = 'English (New Zealand)';
+            $languageCreate->languageCode = 'eng-NZ';
 
-        // Create new language
-        $languageService->createLanguage( $languageCreate );
+            // Create new language
+            $languageService->createLanguage( $languageCreate );
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load new language
         $language = $languageService->loadLanguage( 'eng-NZ' );
@@ -616,11 +634,20 @@ class LanguageServiceTest extends BaseTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Load an existing language
-        $language = $languageService->loadLanguage( 'eng-US' );
+        try
+        {
+            // Load an existing language
+            $language = $languageService->loadLanguage( 'eng-US' );
 
-        // Update the language name
-        $languageService->updateLanguageName( $language, 'My English' );
+            // Update the language name
+            $languageService->updateLanguageName( $language, 'My English' );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -650,14 +677,23 @@ class LanguageServiceTest extends BaseTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Load an existing language
-        $language = $languageService->loadLanguage( 'eng-US' );
+        try
+        {
+            // Load an existing language
+            $language = $languageService->loadLanguage( 'eng-US' );
 
-        // Update the language name
-        $languageService->updateLanguageName( $language, 'My English' );
+            // Update the language name
+            $languageService->updateLanguageName( $language, 'My English' );
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load updated version, name will be "My English"
         $updatedLanguage = $languageService->loadLanguage( 'eng-US' );

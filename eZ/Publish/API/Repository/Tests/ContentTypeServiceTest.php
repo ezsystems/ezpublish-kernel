@@ -2474,8 +2474,17 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Create the new content type group
-        $groupId = $contentTypeService->createContentTypeGroup( $groupCreate )->id;
+        try
+        {
+            // Create the new content type group
+            $groupId = $contentTypeService->createContentTypeGroup( $groupCreate )->id;
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -2517,11 +2526,20 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Create the new content type group
-        $groupId = $contentTypeService->createContentTypeGroup( $groupCreate )->id;
+        try
+        {
+            // Create the new content type group
+            $groupId = $contentTypeService->createContentTypeGroup( $groupCreate )->id;
 
-        // Rollback all changes
-        $repository->commit();
+            // Rollback all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load created content type group
         $group = $contentTypeService->loadContentTypeGroup( $groupId );
@@ -2556,8 +2574,17 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Apply update to group
-        $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
+        try
+        {
+            // Apply update to group
+            $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -2595,11 +2622,20 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Apply update to group
-        $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
+        try
+        {
+            // Apply update to group
+            $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load updated group by it's new identifier "Teardown"
         $updatedGroup = $contentTypeService->loadContentTypeGroupByIdentifier(
@@ -2634,11 +2670,20 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Create the new group
-        $group = $contentTypeService->createContentTypeGroup( $groupCreate );
+        try
+        {
+            // Create the new group
+            $group = $contentTypeService->createContentTypeGroup( $groupCreate );
 
-        // Delete the currently created group
-        $contentTypeService->deleteContentTypeGroup( $group );
+            // Delete the currently created group
+            $contentTypeService->deleteContentTypeGroup( $group );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -2681,14 +2726,23 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Create the new group
-        $group = $contentTypeService->createContentTypeGroup( $groupCreate );
+        try
+        {
+            // Create the new group
+            $group = $contentTypeService->createContentTypeGroup( $groupCreate );
 
-        // Delete the currently created group
-        $contentTypeService->deleteContentTypeGroup( $group );
+            // Delete the currently created group
+            $contentTypeService->deleteContentTypeGroup( $group );
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         try
         {
@@ -2723,29 +2777,38 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Get create struct and set some properties
-        $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
-        $typeCreate->mainLanguageCode = 'eng-GB';
-        $typeCreate->names = array( 'eng-GB' => 'Blog post' );
+        try
+        {
+            // Get create struct and set some properties
+            $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
+            $typeCreate->mainLanguageCode = 'eng-GB';
+            $typeCreate->names = array( 'eng-GB' => 'Blog post' );
 
-        $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'title', 'ezstring'
-        );
-        $titleFieldCreate->names = array( 'eng-GB' => 'Title' );
-        $typeCreate->addFieldDefinition( $titleFieldCreate );
+            $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+                'title', 'ezstring'
+            );
+            $titleFieldCreate->names = array( 'eng-GB' => 'Title' );
+            $typeCreate->addFieldDefinition( $titleFieldCreate );
 
-        $groups = array(
-            $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )
-        );
+            $groups = array(
+                $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )
+            );
 
-        // Create content type
-        $contentTypeDraft = $contentTypeService->createContentType(
-            $typeCreate,
-            $groups
-        );
+            // Create content type
+            $contentTypeDraft = $contentTypeService->createContentType(
+                $typeCreate,
+                $groups
+            );
 
-        // Publish the content type draft
-        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+            // Publish the content type draft
+            $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes.
         $repository->rollback();
@@ -2783,32 +2846,41 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Get create struct and set some properties
-        $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
-        $typeCreate->mainLanguageCode = 'eng-GB';
-        $typeCreate->names = array( 'eng-GB' => 'Blog post' );
+        try
+        {
+            // Get create struct and set some properties
+            $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
+            $typeCreate->mainLanguageCode = 'eng-GB';
+            $typeCreate->names = array( 'eng-GB' => 'Blog post' );
 
-        $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'title', 'ezstring'
-        );
-        $titleFieldCreate->names = array( 'eng-GB' => 'Title' );
-        $typeCreate->addFieldDefinition( $titleFieldCreate );
+            $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+                'title', 'ezstring'
+            );
+            $titleFieldCreate->names = array( 'eng-GB' => 'Title' );
+            $typeCreate->addFieldDefinition( $titleFieldCreate );
 
-        $groups = array(
-            $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )
-        );
+            $groups = array(
+                $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )
+            );
 
-        // Create content type
-        $contentTypeDraft = $contentTypeService->createContentType(
-            $typeCreate,
-            $groups
-        );
+            // Create content type
+            $contentTypeDraft = $contentTypeService->createContentType(
+                $typeCreate,
+                $groups
+            );
 
-        // Publish the content type draft
-        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+            // Publish the content type draft
+            $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
 
-        // Commit all changes.
-        $repository->commit();
+            // Commit all changes.
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load the newly created content type
         $contentType = $contentTypeService->loadContentTypeByIdentifier( 'blog-post' );
@@ -2840,8 +2912,17 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Complete copy of the content type
-        $copiedType = $contentTypeService->copyContentType( $contentType );
+        try
+        {
+            // Complete copy of the content type
+            $copiedType = $contentTypeService->copyContentType( $contentType );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -2883,11 +2964,20 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Complete copy of the content type
-        $contentTypeId = $contentTypeService->copyContentType( $contentType )->id;
+        try
+        {
+            // Complete copy of the content type
+            $contentTypeId = $contentTypeService->copyContentType( $contentType )->id;
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load the new content type copy.
         $copiedContentType = $contentTypeService->loadContentType( $contentTypeId );
@@ -2918,8 +3008,17 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Delete the "comment" content type.
-        $contentTypeService->deleteContentType( $contentType );
+        try
+        {
+            // Delete the "comment" content type.
+            $contentTypeService->deleteContentType( $contentType );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -2953,11 +3052,20 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Delete the "comment" content type.
-        $contentTypeService->deleteContentType( $contentType );
+        try
+        {
+            // Delete the "comment" content type.
+            $contentTypeService->deleteContentType( $contentType );
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         try
         {
@@ -2994,8 +3102,17 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Assign group to content type
-        $contentTypeService->assignContentTypeGroup( $folderType, $mediaGroup );
+        try
+        {
+            // Assign group to content type
+            $contentTypeService->assignContentTypeGroup( $folderType, $mediaGroup );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -3037,11 +3154,20 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Assign group to content type
-        $contentTypeService->assignContentTypeGroup( $folderType, $mediaGroup );
+        try
+        {
+            // Assign group to content type
+            $contentTypeService->assignContentTypeGroup( $folderType, $mediaGroup );
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load all content types assigned to media group
         $contentTypes = $contentTypeService->loadContentTypes( $mediaGroup );

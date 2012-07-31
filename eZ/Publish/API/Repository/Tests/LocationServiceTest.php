@@ -299,16 +299,25 @@ class LocationServiceTest extends BaseTest
 
         $repository->beginTransaction();
 
-        // ContentInfo for "How to use eZ Publish"
-        $contentInfo = $contentService->loadContentInfo( $contentId );
+        try
+        {
+            // ContentInfo for "How to use eZ Publish"
+            $contentInfo = $contentService->loadContentInfo( $contentId );
 
-        $locationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
-        $locationCreate->remoteId = 'sindelfingen';
+            $locationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
+            $locationCreate->remoteId = 'sindelfingen';
 
-        $createdLocationId = $locationService->createLocation(
-            $contentInfo,
-            $locationCreate
-        )->id;
+            $createdLocationId = $locationService->createLocation(
+                $contentInfo,
+                $locationCreate
+            )->id;
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         $repository->rollback();
 

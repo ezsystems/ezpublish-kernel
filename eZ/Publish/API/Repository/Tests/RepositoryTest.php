@@ -258,8 +258,18 @@ class RepositoryTest extends BaseTest
     public function testCommit()
     {
         $repository = $this->getRepository();
-        $repository->beginTransaction();
-        $repository->commit();
+
+        try
+        {
+            $repository->beginTransaction();
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
     }
 
     /**
