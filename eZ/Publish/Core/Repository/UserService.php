@@ -129,8 +129,19 @@ class UserService implements UserServiceInterface
             throw new InvalidArgumentException( "parentGroup", "parent user group has no main location" );
 
         $locationCreateStruct = $locationService->newLocationCreateStruct( $mainParentGroupLocation->id );
-        $contentDraft = $contentService->createContent( $userGroupCreateStruct, array( $locationCreateStruct ) );
-        $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+
+        $this->repository->beginTransaction();
+        try
+        {
+            $contentDraft = $contentService->createContent( $userGroupCreateStruct, array( $locationCreateStruct ) );
+            $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->buildDomainUserGroupObject( $publishedContent );
     }
@@ -245,9 +256,18 @@ class UserService implements UserServiceInterface
 
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
 
-        //@todo: what happens to sub user groups and users below sub user groups
-
-        $this->repository->getContentService()->deleteContent( $loadedUserGroup->getVersionInfo()->getContentInfo() );
+        $this->repository->beginTransaction();
+        try
+        {
+            //@todo: what happens to sub user groups and users below sub user groups
+            $this->repository->getContentService()->deleteContent( $loadedUserGroup->getVersionInfo()->getContentInfo() );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -280,7 +300,17 @@ class UserService implements UserServiceInterface
         if ( $newParentMainLocation === null )
             throw new BadStateException( "newParent", 'new user group is not stored and/or does not have any location yet' );
 
-        $locationService->moveSubtree( $userGroupMainLocation, $newParentMainLocation );
+        $this->repository->beginTransaction();
+        try
+        {
+            $locationService->moveSubtree( $userGroupMainLocation, $newParentMainLocation );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -314,25 +344,36 @@ class UserService implements UserServiceInterface
 
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
 
-        $publishedContent = $loadedUserGroup;
-        if ( $userGroupUpdateStruct->contentUpdateStruct !== null )
+        $this->repository->beginTransaction();
+        try
         {
-            $contentDraft = $contentService->createContentDraft( $loadedUserGroup->getVersionInfo()->getContentInfo() );
+            $publishedContent = $loadedUserGroup;
+            if ( $userGroupUpdateStruct->contentUpdateStruct !== null )
+            {
+                $contentDraft = $contentService->createContentDraft( $loadedUserGroup->getVersionInfo()->getContentInfo() );
 
-            $contentDraft = $contentService->updateContent(
-                $contentDraft->getVersionInfo(),
-                $userGroupUpdateStruct->contentUpdateStruct
-            );
+                $contentDraft = $contentService->updateContent(
+                    $contentDraft->getVersionInfo(),
+                    $userGroupUpdateStruct->contentUpdateStruct
+                );
 
-            $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+                $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+            }
+
+            if ( $userGroupUpdateStruct->contentMetadataUpdateStruct !== null )
+            {
+                $publishedContent = $contentService->updateContentMetadata(
+                    $publishedContent->getVersionInfo()->getContentInfo(),
+                    $userGroupUpdateStruct->contentMetadataUpdateStruct
+                );
+            }
+
+            $this->repository->commit();
         }
-
-        if ( $userGroupUpdateStruct->contentMetadataUpdateStruct !== null )
+        catch ( \Exception $e )
         {
-            $publishedContent = $contentService->updateContentMetadata(
-                $publishedContent->getVersionInfo()->getContentInfo(),
-                $userGroupUpdateStruct->contentMetadataUpdateStruct
-            );
+            $this->repository->rollback();
+            throw $e;
         }
 
         return $this->buildDomainUserGroupObject( $publishedContent );
@@ -423,8 +464,18 @@ class UserService implements UserServiceInterface
             )
         );
 
-        $contentDraft = $contentService->createContent( $userCreateStruct, $locationCreateStructs );
-        $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+        $this->repository->beginTransaction();
+        try
+        {
+            $contentDraft = $contentService->createContent( $userCreateStruct, $locationCreateStructs );
+            $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->buildDomainUserObject(
             $this->persistenceHandler->userHandler()->load( $publishedContent->id ),
@@ -519,7 +570,17 @@ class UserService implements UserServiceInterface
 
         $loadedUser = $this->loadUser( $user->id );
 
-        $this->repository->getContentService()->deleteContent( $loadedUser->getVersionInfo()->getContentInfo() );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->repository->getContentService()->deleteContent( $loadedUser->getVersionInfo()->getContentInfo() );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -629,19 +690,30 @@ class UserService implements UserServiceInterface
             $userUpdateStruct->contentUpdateStruct->setField( $userFieldDefinition->identifier, $userFieldValue );
         }
 
-        $contentDraft = $contentService->createContentDraft( $userContentInfo );
-        $contentDraft = $contentService->updateContent(
-            $contentDraft->getVersionInfo(),
-            $userUpdateStruct->contentUpdateStruct
-        );
-        $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
-
-        if ( $userUpdateStruct->contentMetadataUpdateStruct !== null )
+        $this->repository->beginTransaction();
+        try
         {
-            $contentService->updateContentMetadata(
-                $publishedContent->getVersionInfo()->getContentInfo(),
-                $userUpdateStruct->contentMetadataUpdateStruct
+            $contentDraft = $contentService->createContentDraft( $userContentInfo );
+            $contentDraft = $contentService->updateContent(
+                $contentDraft->getVersionInfo(),
+                $userUpdateStruct->contentUpdateStruct
             );
+            $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+
+            if ( $userUpdateStruct->contentMetadataUpdateStruct !== null )
+            {
+                $contentService->updateContentMetadata(
+                    $publishedContent->getVersionInfo()->getContentInfo(),
+                    $userUpdateStruct->contentMetadataUpdateStruct
+                );
+            }
+
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
         }
 
         return $this->loadUser( $loadedUser->id );
@@ -686,10 +758,20 @@ class UserService implements UserServiceInterface
 
         $locationCreateStruct = $locationService->newLocationCreateStruct( $groupMainLocation->id );
 
-        $locationService->createLocation(
-            $loadedUser->getVersionInfo()->getContentInfo(),
-            $locationCreateStruct
-        );
+        $this->repository->beginTransaction();
+        try
+        {
+            $locationService->createLocation(
+                $loadedUser->getVersionInfo()->getContentInfo(),
+                $locationCreateStruct
+            );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -725,8 +807,18 @@ class UserService implements UserServiceInterface
         {
             if ( $userLocation->parentLocationId == $groupMainLocation->id )
             {
-                $locationService->deleteLocation( $userLocation );
-                return;
+                $this->repository->beginTransaction();
+                try
+                {
+                    $locationService->deleteLocation( $userLocation );
+                    $this->repository->commit();
+                    return;
+                }
+                catch ( \Exception $e )
+                {
+                    $this->repository->rollback();
+                    throw $e;
+                }
             }
         }
 
