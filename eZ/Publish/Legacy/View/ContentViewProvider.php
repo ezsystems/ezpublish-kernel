@@ -30,6 +30,9 @@ class ContentViewProvider implements ContentViewProviderInterface
      */
     private $logger;
 
+    /**
+     * @var \eZ\Publish\Legacy\View\TwigContentViewLayoutDecorator
+     */
     private $decorator;
 
     public function __construct( \Closure $legacyKernelClosure, TwigContentViewLayoutDecorator $decorator, LoggerInterface $logger = null )
