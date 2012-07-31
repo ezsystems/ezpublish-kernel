@@ -27,7 +27,6 @@ use eZ\Publish\API\Repository\ContentService as ContentServiceInterface,
     eZ\Publish\API\Repository\Values\Content\LocationCreateStruct,
     eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\API\Repository\Values\Content\SearchResult,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId as CriterionContentId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\RemoteId as CriterionRemoteId,
     eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
@@ -61,14 +60,15 @@ use eZ\Publish\API\Repository\ContentService as ContentServiceInterface,
     eZ\Publish\API\Repository\Values\Content\Relation as APIRelation,
     eZ\Publish\SPI\Persistence\Content\Relation as SPIRelation,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreateStruct,
-    DateTime;
+    DateTime,
+    Exception;
 
 /**
  * This class provides service methods for managing content
  *
  * @example Examples/content.php
  *
- * @package eZ\Publish\API\Repository
+ * @package eZ\Publish\Core\Repository
  */
 class ContentService implements ContentServiceInterface
 {
@@ -536,8 +536,16 @@ class ContentService implements ContentServiceInterface
         );
 
         $this->repository->beginTransaction();
-        $spiContent = $this->persistenceHandler->contentHandler()->create( $spiContentCreateStruct );
-        $this->repository->commit();
+        try
+        {
+            $spiContent = $this->persistenceHandler->contentHandler()->create( $spiContentCreateStruct );
+            $this->repository->commit();
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->buildContentDomainObject( $spiContent );
     }
@@ -650,57 +658,65 @@ class ContentService implements ContentServiceInterface
         }
 
         $this->repository->beginTransaction();
-        if ( $propertyCount > 1 || empty( $contentMetadataUpdateStruct->mainLocationId ) )
+        try
         {
-            if ( isset( $contentMetadataUpdateStruct->remoteId ) )
+            if ( $propertyCount > 1 || empty( $contentMetadataUpdateStruct->mainLocationId ) )
             {
-                try
+                if ( isset( $contentMetadataUpdateStruct->remoteId ) )
                 {
-                    $existingContent = $this->loadContentByRemoteId( $contentMetadataUpdateStruct->remoteId );
+                    try
+                    {
+                        $existingContent = $this->loadContentByRemoteId( $contentMetadataUpdateStruct->remoteId );
 
-                    if ( $existingContent->id !== $contentInfo->id )
-                        throw new InvalidArgumentException(
-                            "\$contentMetadataUpdateStruct",
-                            "Another content with remoteId '{$contentMetadataUpdateStruct->remoteId}' exists"
-                        );
+                        if ( $existingContent->id !== $contentInfo->id )
+                            throw new InvalidArgumentException(
+                                "\$contentMetadataUpdateStruct",
+                                "Another content with remoteId '{$contentMetadataUpdateStruct->remoteId}' exists"
+                            );
+                    }
+                    catch ( APINotFoundException $e )
+                    {
+                        // Do nothing
+                    }
                 }
-                catch ( APINotFoundException $e )
-                {
-                    // Do nothing
-                }
+
+                $spiMetadataUpdateStruct = new SPIMetadataUpdateStruct(
+                    array(
+                        "ownerId" => $contentMetadataUpdateStruct->ownerId,
+                        //@todo name should be computed
+                        //"name" => $contentMetadataUpdateStruct->name,
+                        "publicationDate" => isset( $contentMetadataUpdateStruct->publishedDate ) ?
+                            $contentMetadataUpdateStruct->publishedDate->getTimestamp() : null,
+                        "modificationDate" => isset( $contentMetadataUpdateStruct->modificationDate ) ?
+                            $contentMetadataUpdateStruct->modificationDate->getTimestamp() : null,
+                        "mainLanguageId" => isset( $contentMetadataUpdateStruct->mainLanguageCode ) ?
+                            $this->repository->getContentLanguageService()->loadLanguage(
+                                $contentMetadataUpdateStruct->mainLanguageCode
+                            )->id : null,
+                        "alwaysAvailable" => $contentMetadataUpdateStruct->alwaysAvailable,
+                        "remoteId" => $contentMetadataUpdateStruct->remoteId
+                    )
+                );
+                $this->persistenceHandler->contentHandler()->updateMetadata(
+                    $contentInfo->id,
+                    $spiMetadataUpdateStruct
+                );
             }
 
-            $spiMetadataUpdateStruct = new SPIMetadataUpdateStruct(
-                array(
-                    "ownerId" => $contentMetadataUpdateStruct->ownerId,
-                    //@todo name should be computed
-                    //"name" => $contentMetadataUpdateStruct->name,
-                    "publicationDate" => isset( $contentMetadataUpdateStruct->publishedDate ) ?
-                                            $contentMetadataUpdateStruct->publishedDate->getTimestamp() : null,
-                    "modificationDate" => isset( $contentMetadataUpdateStruct->modificationDate ) ?
-                                            $contentMetadataUpdateStruct->modificationDate->getTimestamp() : null,
-                    "mainLanguageId" => isset( $contentMetadataUpdateStruct->mainLanguageCode ) ?
-                                            $this->repository->getContentLanguageService()->loadLanguage(
-                                                $contentMetadataUpdateStruct->mainLanguageCode
-                                            )->id : null,
-                    "alwaysAvailable" => $contentMetadataUpdateStruct->alwaysAvailable,
-                    "remoteId" => $contentMetadataUpdateStruct->remoteId
-                )
-            );
-            $this->persistenceHandler->contentHandler()->updateMetadata(
-                $contentInfo->id,
-                $spiMetadataUpdateStruct
-            );
+            if ( isset( $contentMetadataUpdateStruct->mainLocationId ) )
+            {
+                $this->persistenceHandler->locationHandler()->changeMainLocation(
+                    $contentInfo->id,
+                    $contentMetadataUpdateStruct->mainLocationId
+                );
+            }
+            $this->repository->commit();
         }
-
-        if ( isset( $contentMetadataUpdateStruct->mainLocationId ) )
+        catch ( Exception $e )
         {
-            $this->persistenceHandler->locationHandler()->changeMainLocation(
-                $contentInfo->id,
-                $contentMetadataUpdateStruct->mainLocationId
-            );
+            $this->repository->rollback();
+            throw $e;
         }
-        $this->repository->commit();
 
         return $this->loadContent( $contentInfo->id );
     }
@@ -715,8 +731,16 @@ class ContentService implements ContentServiceInterface
     public function deleteContent( APIContentInfo $contentInfo )
     {
         $this->repository->beginTransaction();
-        $this->persistenceHandler->contentHandler()->deleteContent( $contentInfo->id );
-        $this->repository->commit();
+        try
+        {
+            $this->persistenceHandler->contentHandler()->deleteContent( $contentInfo->id );
+            $this->repository->commit();
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -768,12 +792,20 @@ class ContentService implements ContentServiceInterface
         }
 
         $this->repository->beginTransaction();
-        $spiContent = $this->persistenceHandler->contentHandler()->createDraftFromVersion(
-            $contentInfo->id,
-            $versionNo,
-            $user->id
-        );
-        $this->repository->commit();
+        try
+        {
+            $spiContent = $this->persistenceHandler->contentHandler()->createDraftFromVersion(
+                $contentInfo->id,
+                $versionNo,
+                $user->id
+            );
+            $this->repository->commit();
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->buildContentDomainObject( $spiContent );
     }
@@ -995,12 +1027,20 @@ class ContentService implements ContentServiceInterface
         );
 
         $this->repository->beginTransaction();
-        $spiContent = $this->persistenceHandler->contentHandler()->updateContent(
-            $versionInfo->getContentInfo()->id,
-            $versionInfo->versionNo,
-            $spiContentUpdateStruct
-        );
-        $this->repository->commit();
+        try
+        {
+            $spiContent = $this->persistenceHandler->contentHandler()->updateContent(
+                $versionInfo->getContentInfo()->id,
+                $versionInfo->versionNo,
+                $spiContentUpdateStruct
+            );
+            $this->repository->commit();
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->buildContentDomainObject( $spiContent );
     }
@@ -1023,8 +1063,16 @@ class ContentService implements ContentServiceInterface
         );
 
         $this->repository->beginTransaction();
-        $content = $this->internalPublishVersion( $loadedVersionInfo );
-        $this->repository->commit();
+        try
+        {
+            $content = $this->internalPublishVersion( $loadedVersionInfo );
+            $this->repository->commit();
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $content;
     }
@@ -1079,11 +1127,19 @@ class ContentService implements ContentServiceInterface
         }
 
         $this->repository->beginTransaction();
-        $success = $this->persistenceHandler->contentHandler()->deleteVersion(
-            $versionInfo->getContentInfo()->id,
-            $versionInfo->versionNo
-        );
-        $this->repository->commit();
+        try
+        {
+            $success = $this->persistenceHandler->contentHandler()->deleteVersion(
+                $versionInfo->getContentInfo()->id,
+                $versionInfo->versionNo
+            );
+            $this->repository->commit();
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -1155,21 +1211,29 @@ class ContentService implements ContentServiceInterface
         }
 
         $this->repository->beginTransaction();
-        $spiContent = $this->persistenceHandler->contentHandler()->copy(
-            $contentInfo->id,
-            $versionInfo ? $versionInfo->versionNo : null
-        );
+        try
+        {
+            $spiContent = $this->persistenceHandler->contentHandler()->copy(
+                $contentInfo->id,
+                $versionInfo ? $versionInfo->versionNo : null
+            );
 
-        $content = $this->internalPublishVersion(
-            $this->buildVersionInfoDomainObject( $spiContent->versionInfo ),
-            $spiContent->versionInfo->creationDate
-        );
+            $content = $this->internalPublishVersion(
+                $this->buildVersionInfoDomainObject( $spiContent->versionInfo ),
+                $spiContent->versionInfo->creationDate
+            );
 
-        $this->repository->getLocationService()->createLocation(
-            $this->buildContentInfoDomainObject( $spiContent->contentInfo ),
-            $destinationLocationCreateStruct
-        );
-        $this->repository->commit();
+            $this->repository->getLocationService()->createLocation(
+                $this->buildContentInfoDomainObject( $spiContent->contentInfo ),
+                $destinationLocationCreateStruct
+            );
+            $this->repository->commit();
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $content;
     }
@@ -1261,18 +1325,26 @@ class ContentService implements ContentServiceInterface
         $sourceContentInfo = $sourceVersion->getContentInfo();
 
         $this->repository->beginTransaction();
-        $spiRelation = $this->persistenceHandler->contentHandler()->addRelation(
-            new SPIRelationCreateStruct(
-                array(
-                    'sourceContentId' => $sourceContentInfo->id,
-                    'sourceContentVersionNo' => $sourceVersion->versionNo,
-                    'sourceFieldDefinitionId' => null,
-                    'destinationContentId' => $destinationContent->id,
-                    'type' => APIRelation::COMMON
+        try
+        {
+            $spiRelation = $this->persistenceHandler->contentHandler()->addRelation(
+                new SPIRelationCreateStruct(
+                    array(
+                        'sourceContentId' => $sourceContentInfo->id,
+                        'sourceContentVersionNo' => $sourceVersion->versionNo,
+                        'sourceFieldDefinitionId' => null,
+                        'destinationContentId' => $destinationContent->id,
+                        'type' => APIRelation::COMMON
+                    )
                 )
-            )
-        );
-        $this->repository->commit();
+            );
+            $this->repository->commit();
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->buildRelationDomainObject( $spiRelation, $sourceContentInfo, $destinationContent );
     }
@@ -1315,14 +1387,22 @@ class ContentService implements ContentServiceInterface
         // but in case there were ever more then one, we will remove them all
         // @todo: alternatively, throw BadStateException?
         $this->repository->beginTransaction();
-        foreach ( $spiRelations as $spiRelation )
+        try
         {
-            if ( $spiRelation->destinationContentId == $destinationContent->id )
+            foreach ( $spiRelations as $spiRelation )
             {
-                $this->persistenceHandler->contentHandler()->removeRelation( $spiRelation->id );
+                if ( $spiRelation->destinationContentId == $destinationContent->id )
+                {
+                    $this->persistenceHandler->contentHandler()->removeRelation( $spiRelation->id );
+                }
             }
+            $this->repository->commit();
         }
-        $this->repository->commit();
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
