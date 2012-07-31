@@ -1386,7 +1386,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
-    public function testPublishVersionFromOldContentDraftKeepsCurrentVersionNo()
+    public function testPublishVersionFromOldContentDraftArchivesNewerVersionNo()
     {
         $repository = $this->getRepository();
 
@@ -1404,11 +1404,12 @@ class ContentServiceTest extends BaseContentServiceTest
         // Publish draft with versionNo = 3
         $contentService->publishVersion( $draftedContentVersion3->getVersionInfo() );
 
-        // Publish the first draft with versionNo = 2, currentVersionNo is still 3
+        // Publish the first draft with versionNo = 2
+        // currentVersionNo is now 2, versionNo 3 will be archived
         $publishedDraft = $contentService->publishVersion( $draftedContentVersion2->getVersionInfo() );
         /* END: Use Case */
 
-        $this->assertEquals( 3, $publishedDraft->contentInfo->currentVersionNo );
+        $this->assertEquals( 2, $publishedDraft->contentInfo->currentVersionNo );
     }
 
     /**

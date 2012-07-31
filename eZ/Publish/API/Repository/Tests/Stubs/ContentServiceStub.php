@@ -199,7 +199,7 @@ class ContentServiceStub implements ContentService
     public function loadVersionInfoById( $contentId, $versionNo = null )
     {
         $versions = array();
-        foreach ( $this->versionInfo as $versionInfo )
+        foreach ( $this->versionInfo as $index => $versionInfo )
         {
             if ( $versionInfo->contentId !== $contentId )
             {
@@ -1157,7 +1157,8 @@ class ContentServiceStub implements ContentService
 
         $contentInfo = $versionInfo->getContentInfo();
 
-        $versionNo = max( $versionInfo->versionNo, $contentInfo->currentVersionNo );
+        // Newer versions will be ignored
+        $versionNo = $versionInfo->versionNo;
 
         $publishedContentInfo = new ContentInfoStub(
             array(
@@ -1195,26 +1196,26 @@ class ContentServiceStub implements ContentService
         );
 
         // Set all published versions of this content object to ARCHIVED
-        foreach ( $this->versionInfo as $versionId => $versionInfo )
+        foreach ( $this->versionInfo as $existingVersionId => $existingVersionInfo )
         {
-            if ( $versionInfo->contentId !== $contentInfo->id )
+            if ( $existingVersionInfo->contentId !== $contentInfo->id )
             {
                 continue;
             }
-            if ( $versionInfo->status !== VersionInfo::STATUS_PUBLISHED )
+            if ( $existingVersionInfo->status !== VersionInfo::STATUS_PUBLISHED )
             {
                 continue;
             }
 
-            $this->versionInfo[$versionId] = new VersionInfoStub(
+            $this->versionInfo[$existingVersionId] = new VersionInfoStub(
                 array(
-                    'id' => $versionInfo->id,
+                    'id' => $existingVersionInfo->id,
                     'status' => VersionInfo::STATUS_ARCHIVED,
-                    'versionNo' => $versionInfo->versionNo,
-                    'creatorId' => $versionInfo->creatorId,
-                    'initialLanguageCode' => $versionInfo->initialLanguageCode,
-                    'languageCodes' => $versionInfo->languageCodes,
-                    'names' => $versionInfo->getNames(),
+                    'versionNo' => $existingVersionInfo->versionNo,
+                    'creatorId' => $existingVersionInfo->creatorId,
+                    'initialLanguageCode' => $existingVersionInfo->initialLanguageCode,
+                    'languageCodes' => $existingVersionInfo->languageCodes,
+                    'names' => $existingVersionInfo->getNames(),
                     'modificationDate' => new \DateTime(),
 
                     'contentId' => $contentInfo->id,
