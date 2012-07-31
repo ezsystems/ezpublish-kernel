@@ -107,4 +107,12 @@ abstract class Controller extends ContainerAware
     {
         return $this->container->get( 'request' );
     }
+
+    /**
+     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    public function getEventDispatcher()
+    {
+        return $this->container->get( 'event_dispatcher' );
+    }
 }
