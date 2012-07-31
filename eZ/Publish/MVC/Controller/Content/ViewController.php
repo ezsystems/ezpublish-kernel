@@ -13,7 +13,9 @@ use eZ\Publish\MVC\Controller\Controller,
     eZ\Publish\API\Repository\Repository,
     eZ\Publish\MVC\View\Manager as ViewManager,
     Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\Response;
+    Symfony\Component\HttpFoundation\Response,
+    Symfony\Component\OptionsResolver\OptionsResolver,
+    Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ViewController extends Controller
 {
@@ -22,9 +24,22 @@ class ViewController extends Controller
      */
     private $viewManager;
 
-    public function __construct( ViewManager $viewManager )
+    public function __construct( ViewManager $viewManager, array $options = array() )
     {
         $this->viewManager = $viewManager;
+
+        $resolver = new OptionsResolver();
+        $this->setDefaultOptions( $resolver );
+        parent::__construct( $resolver->resolve( $options ) );
+    }
+
+    protected function setDefaultOptions( OptionsResolverInterface $resolver )
+    {
+        $resolver->setDefaults(
+            array(
+                 'viewCache'    => true
+            )
+        );
     }
 
     /**
@@ -42,13 +57,16 @@ class ViewController extends Controller
         $location = $repository->getLocationService()->loadLocation( $locationId );
 
         $response = new Response();
-        $response->setPublic();
-        // TODO: Use a dedicated etag generator, generating a hash instead of plain text
-        $response->setEtag( "ezpublish-location-$locationId-$viewMode" );
-        $response->setLastModified( $location->getContentInfo()->modificationDate );
-        if ( $response->isNotModified( $this->getRequest() ) )
+        if ( $this->getOption( 'viewCache' ) === true )
         {
-            return $response;
+            $response->setPublic();
+            // TODO: Use a dedicated etag generator, generating a hash instead of plain text
+            $response->setEtag( "ezpublish-location-$locationId-$viewMode" );
+            $response->setLastModified( $location->getContentInfo()->modificationDate );
+            if ( $response->isNotModified( $this->getRequest() ) )
+            {
+                return $response;
+            }
         }
 
         $response->setContent(

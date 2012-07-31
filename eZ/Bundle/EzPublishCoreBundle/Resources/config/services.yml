@@ -4,6 +4,7 @@ parameters:
 
     ezpublish.controller.base.class: eZ\Publish\MVC\Controller\Controller
     ezpublish.controller.content.view.class: eZ\Publish\MVC\Controller\Content\ViewController
+    ezpublish.controller.content.view.options: {}
 
 services:
     # Siteaccess is injected in the container at runtime
@@ -18,7 +19,7 @@ services:
 
     ezpublish.controller.content.view:
         class: %ezpublish.controller.content.view.class%
-        arguments: [@ezpublish.view_manager]
+        arguments: [@ezpublish.view_manager, %ezpublish.controller.content.view.options%]
         parent: ezpublish.controller.base
         scope: request
 
