@@ -108,10 +108,20 @@ class LocationService implements LocationServiceInterface
         if ( stripos( $loadedTargetLocation->pathString, $loadedSubtree->pathString ) !== false )
             throw new InvalidArgumentException("targetParentLocation", "target parent location is a sub location of the given subtree");
 
-        $newLocation = $this->persistenceHandler->locationHandler()->copySubtree(
-            $loadedSubtree->id,
-            $loadedTargetLocation->id
-        );
+        $this->repository->beginTransaction();
+        try
+        {
+            $newLocation = $this->persistenceHandler->locationHandler()->copySubtree(
+                $loadedSubtree->id,
+                $loadedTargetLocation->id
+            );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->buildDomainLocationObject( $newLocation );
     }
@@ -467,7 +477,18 @@ class LocationService implements LocationServiceInterface
         $createStruct->sortOrder = $locationCreateStruct->sortOrder !== null ? (int) $locationCreateStruct->sortOrder : APILocation::SORT_ORDER_ASC;
         $createStruct->parentId = $loadedParentLocation->id;
 
-        $newLocation = $this->persistenceHandler->locationHandler()->create( $createStruct );
+        $this->repository->beginTransaction();
+        try
+        {
+            $newLocation = $this->persistenceHandler->locationHandler()->create( $createStruct );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
+
         return $this->buildDomainLocationObject( $newLocation );
     }
 
@@ -518,7 +539,17 @@ class LocationService implements LocationServiceInterface
         $updateStruct->sortField = $locationUpdateStruct->sortField !== null ? (int) $locationUpdateStruct->sortField : $loadedLocation->sortField;
         $updateStruct->sortOrder = $locationUpdateStruct->sortOrder !== null ? (int) $locationUpdateStruct->sortOrder : $loadedLocation->sortOrder;
 
-        $this->persistenceHandler->locationHandler()->update( $updateStruct, $loadedLocation->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->locationHandler()->update( $updateStruct, $loadedLocation->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->loadLocation( $loadedLocation->id );
     }
@@ -542,7 +573,17 @@ class LocationService implements LocationServiceInterface
         $loadedLocation1 = $this->loadLocation( $location1->id );
         $loadedLocation2 = $this->loadLocation( $location2->id );
 
-        $this->persistenceHandler->locationHandler()->swap( $loadedLocation1->id, $loadedLocation2->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->locationHandler()->swap( $loadedLocation1->id, $loadedLocation2->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -559,7 +600,18 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
-        $this->persistenceHandler->locationHandler()->hide( $location->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->locationHandler()->hide( $location->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
+
         return $this->loadLocation( $location->id );
     }
 
@@ -580,7 +632,18 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
-        $this->persistenceHandler->locationHandler()->unHide( $location->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->locationHandler()->unHide( $location->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
+
         return $this->loadLocation( $location->id );
     }
 
@@ -603,7 +666,17 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $newParentLocation->id ) )
             throw new InvalidArgumentValue( "id", $newParentLocation->id, "Location" );
 
-        $this->persistenceHandler->locationHandler()->move( $location->id, $newParentLocation->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->locationHandler()->move( $location->id, $newParentLocation->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -618,7 +691,17 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
-        $this->persistenceHandler->locationHandler()->removeSubtree( $location->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->locationHandler()->removeSubtree( $location->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
 
