@@ -86,7 +86,18 @@ class ObjectStateService implements ObjectStateServiceInterface
             $objectStateGroupCreateStruct->descriptions
         );
 
-        $spiObjectStateGroup = $this->persistenceHandler->objectStateHandler()->createGroup( $inputStruct );
+        $this->repository->beginTransaction();
+        try
+        {
+            $spiObjectStateGroup = $this->persistenceHandler->objectStateHandler()->createGroup( $inputStruct );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
+
         return $this->buildDomainObjectStateGroupObject( $spiObjectStateGroup );
     }
 
@@ -177,10 +188,21 @@ class ObjectStateService implements ObjectStateServiceInterface
             $objectStateGroupUpdateStruct->descriptions
         );
 
-        $spiObjectStateGroup = $this->persistenceHandler->objectStateHandler()->updateGroup(
-            $loadedObjectStateGroup->id,
-            $inputStruct
-        );
+        $this->repository->beginTransaction();
+        try
+        {
+            $spiObjectStateGroup = $this->persistenceHandler->objectStateHandler()->updateGroup(
+                $loadedObjectStateGroup->id,
+                $inputStruct
+            );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
+
         return $this->buildDomainObjectStateGroupObject( $spiObjectStateGroup );
     }
 
@@ -198,7 +220,17 @@ class ObjectStateService implements ObjectStateServiceInterface
 
         $loadedObjectStateGroup = $this->loadObjectStateGroup( $objectStateGroup->id );
 
-        $this->persistenceHandler->objectStateHandler()->deleteGroup( $loadedObjectStateGroup->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->objectStateHandler()->deleteGroup( $loadedObjectStateGroup->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -223,18 +255,29 @@ class ObjectStateService implements ObjectStateServiceInterface
             $objectStateCreateStruct->descriptions
         );
 
-        $spiObjectState = $this->persistenceHandler->objectStateHandler()->create( $objectStateGroup->id, $inputStruct );
-
-        if ( is_numeric( $objectStateCreateStruct->priority ) )
+        $this->repository->beginTransaction();
+        try
         {
-            $this->persistenceHandler->objectStateHandler()->setPriority(
-                $spiObjectState->id,
-                (int) $objectStateCreateStruct->priority
-            );
+            $spiObjectState = $this->persistenceHandler->objectStateHandler()->create( $objectStateGroup->id, $inputStruct );
 
-            // Reload the object state to have the updated priority,
-            // considering that priorities are always incremental within a group
-            $spiObjectState = $this->persistenceHandler->objectStateHandler()->load( $spiObjectState->id );
+            if ( is_numeric( $objectStateCreateStruct->priority ) )
+            {
+                $this->persistenceHandler->objectStateHandler()->setPriority(
+                    $spiObjectState->id,
+                    (int) $objectStateCreateStruct->priority
+                );
+
+                // Reload the object state to have the updated priority,
+                // considering that priorities are always incremental within a group
+                $spiObjectState = $this->persistenceHandler->objectStateHandler()->load( $spiObjectState->id );
+            }
+
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
         }
 
         return $this->buildDomainObjectStateObject( $spiObjectState );
@@ -283,10 +326,21 @@ class ObjectStateService implements ObjectStateServiceInterface
             $objectStateUpdateStruct->descriptions
         );
 
-        $spiObjectState = $this->persistenceHandler->objectStateHandler()->update(
-            $loadedObjectState->id,
-            $inputStruct
-        );
+        $this->repository->beginTransaction();
+        try
+        {
+            $spiObjectState = $this->persistenceHandler->objectStateHandler()->update(
+                $loadedObjectState->id,
+                $inputStruct
+            );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
+
         return $this->buildDomainObjectStateObject( $spiObjectState );
     }
 
@@ -308,10 +362,20 @@ class ObjectStateService implements ObjectStateServiceInterface
 
         $loadedObjectState = $this->loadObjectState( $objectState->id );
 
-        $this->persistenceHandler->objectStateHandler()->setPriority(
-            $loadedObjectState->id,
-            (int) $priority
-        );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->objectStateHandler()->setPriority(
+                $loadedObjectState->id,
+                (int) $priority
+            );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -329,7 +393,17 @@ class ObjectStateService implements ObjectStateServiceInterface
 
         $loadedObjectState = $this->loadObjectState( $objectState->id );
 
-        $this->persistenceHandler->objectStateHandler()->delete( $loadedObjectState->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->objectStateHandler()->delete( $loadedObjectState->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -358,11 +432,21 @@ class ObjectStateService implements ObjectStateServiceInterface
         if ( $loadedObjectState->getObjectStateGroup()->id != $objectStateGroup->id )
             throw new InvalidArgumentException( "objectState", "Object state does not belong to the given group" );
 
-        $this->persistenceHandler->objectStateHandler()->setObjectState(
-            $contentInfo->id,
-            $objectStateGroup->id,
-            $loadedObjectState->id
-        );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->objectStateHandler()->setObjectState(
+                $contentInfo->id,
+                $objectStateGroup->id,
+                $loadedObjectState->id
+            );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
