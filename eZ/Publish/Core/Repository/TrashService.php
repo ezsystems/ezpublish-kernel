@@ -148,6 +148,23 @@ class TrashService implements TrashServiceInterface
                 $trashItem->id,
                 $newParentLocation ? $newParentLocation->id : $trashItem->parentLocationId
             );
+
+            // There is a possibility for content to loose main location when one of its locations is recovered
+            // from trash, so we need to check for it and set the newly recovered location to be the main one
+            $contentService = $this->repository->getContentService();
+
+            $contentInfo = $contentService->loadContentInfo( $trashItem->contentId );
+            if ( !is_numeric( $contentInfo->mainLocationId ) )
+            {
+                $contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+                $contentMetadataUpdateStruct->mainLocationId = $newLocationId;
+
+                $contentService->updateContentMetadata(
+                    $contentInfo,
+                    $contentMetadataUpdateStruct
+                );
+            }
+
             $this->repository->commit();
         }
         catch ( \Exception $e )
