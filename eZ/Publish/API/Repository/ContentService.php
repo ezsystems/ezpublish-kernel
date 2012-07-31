@@ -325,8 +325,7 @@ interface ContentService
     /**
      * Loads all incoming relations for a content object.
      *
-     * The relations come only
-     * from published versions of the source content objects
+     * The relations come only from published versions of the source content objects
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read this version
      *
@@ -339,11 +338,11 @@ interface ContentService
     /**
      * Adds a relation of type common.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
-     *
      * The source of the relation is the content and version
      * referenced by $versionInfo.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit this version
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent the destination of the relation
@@ -362,7 +361,7 @@ interface ContentService
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent
      */
-    public function deleteRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent);
+    public function deleteRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent );
 
     /**
      * add translation information to the content object
