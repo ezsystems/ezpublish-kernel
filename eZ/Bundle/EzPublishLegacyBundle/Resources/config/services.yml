@@ -9,6 +9,7 @@ parameters:
     ezpublish_legacy.router.class: eZ\Bundle\EzPublishLegacyBundle\Routing\FallbackRouter
     ezpublish_legacy.siteaccess_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess
     ezpublish_legacy.session_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Session
+    ezpublish_legacy.content_exception_handler.class: eZ\Publish\Legacy\EventListener\APIContentExceptionListener
 
 services:
     ezpublish_legacy.kernel:
@@ -53,5 +54,11 @@ services:
     ezpublish_legacy.session_mapper:
         class: %ezpublish_legacy.session_mapper.class%
         arguments: [@service_container]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish_legacy.content_exception_handler:
+        class: %ezpublish_legacy.content_exception_handler.class%
+        arguments: [@ezpublish_legacy.content_view_provider, @?logger]
         tags:
             - { name: kernel.event_subscriber }
