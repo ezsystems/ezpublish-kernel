@@ -29,6 +29,7 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\API\Repository\UserService as UserServiceInterface,
 
     eZ\Publish\SPI\Persistence\User as SPIUser,
+    eZ\Publish\Core\FieldType\User\Value as UserValue,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId,
@@ -36,6 +37,7 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus,
 
+    eZ\Publish\Core\Base\Exceptions\ContentValidationException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
@@ -387,13 +389,26 @@ class UserService implements UserServiceInterface
                 $locationCreateStructs[] = $locationService->newLocationCreateStruct( $mainLocation->id );
         }
 
-        $contentDraft = $contentService->createContent( $userCreateStruct, $locationCreateStructs );
-        $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+        // Search for the first ezuser field type in content type
+        $userFieldDefinition = null;
+        foreach ( $userCreateStruct->contentType->getFieldDefinitions() as $fieldDefinition )
+        {
+            if ( $fieldDefinition->fieldTypeIdentifier == 'ezuser' )
+            {
+                $userFieldDefinition = $fieldDefinition;
+                break;
+            }
+        }
 
-        $spiUser = $this->persistenceHandler->userHandler()->create(
-            new SPIUser(
+        if ( $userFieldDefinition === null )
+        {
+            throw new ContentValidationException( "Provided content type does not contain ezuser field type" );
+        }
+
+        $userCreateStruct->setField(
+            $userFieldDefinition->identifier,
+            new UserValue(
                 array(
-                    'id' => $publishedContent->id,
                     'login' => $userCreateStruct->login,
                     'email' => $userCreateStruct->email,
                     'passwordHash' => $this->createPasswordHash(
@@ -402,14 +417,19 @@ class UserService implements UserServiceInterface
                         $this->settings['siteName'],
                         $this->settings['hashType']
                     ),
-                    'hashAlgorithm' => $this->settings['hashType'],
-                    'isEnabled' => $userCreateStruct->enabled,
-                    'maxLogin' => 0
+                    'passwordHashType' => $this->settings['hashType'],
+                    'isEnabled' => $userCreateStruct->enabled
                 )
             )
         );
 
-        return $this->buildDomainUserObject( $spiUser, $publishedContent );
+        $contentDraft = $contentService->createContent( $userCreateStruct, $locationCreateStructs );
+        $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+
+        return $this->buildDomainUserObject(
+            $this->persistenceHandler->userHandler()->load( $publishedContent->id ),
+            $publishedContent
+        );
     }
 
     /**
