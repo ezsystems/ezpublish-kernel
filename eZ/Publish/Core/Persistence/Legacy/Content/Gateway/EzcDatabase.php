@@ -12,7 +12,6 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
@@ -24,7 +23,6 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\Relation,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Relation\UpdateStruct as RelationUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo,
@@ -1435,7 +1433,7 @@ class EzcDatabase extends Gateway
      *
      * @return int ID the inserted ID
      */
-    public function insertRelation( RelationCreateStruct $struct )
+    public function insertRelation( RelationCreateStruct $createStruct )
     {
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
@@ -1445,19 +1443,19 @@ class EzcDatabase extends Gateway
             $this->dbHandler->getAutoIncrementValue( 'ezcontentobject_link', 'id' )
         )->set(
             $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
-            $q->bindValue( (int)$struct->sourceFieldDefinitionId, null, \PDO::PARAM_INT )
+            $q->bindValue( (int)$createStruct->sourceFieldDefinitionId, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'from_contentobject_id' ),
-            $q->bindValue( $struct->sourceContentId, null, \PDO::PARAM_INT )
+            $q->bindValue( $createStruct->sourceContentId, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'from_contentobject_version' ),
-            $q->bindValue( $struct->sourceContentVersionNo, null, \PDO::PARAM_INT )
+            $q->bindValue( $createStruct->sourceContentVersionNo, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'relation_type' ),
-            $q->bindValue( $struct->type, null, \PDO::PARAM_INT )
+            $q->bindValue( $createStruct->type, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'to_contentobject_id' ),
-            $q->bindValue( $struct->destinationContentId, null, \PDO::PARAM_INT )
+            $q->bindValue( $createStruct->destinationContentId, null, \PDO::PARAM_INT )
         );
 
         $q->prepare()->execute();
