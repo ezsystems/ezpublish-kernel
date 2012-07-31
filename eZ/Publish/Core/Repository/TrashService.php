@@ -26,6 +26,7 @@ use eZ\Publish\API\Repository\TrashService as TrashServiceInterface,
 
     eZ\Publish\API\Repository\Values\Content\SearchResult,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
     DateTime;
 
@@ -273,6 +274,10 @@ class TrashService implements TrashServiceInterface
     {
         $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiTrashItem->contentId );
 
+        $trashedChildren = $this->persistenceHandler->trashHandler()->findTrashItems(
+            new ParentLocationId( $spiTrashItem->id )
+        );
+
         return new TrashItem(
             array(
                 'contentInfo' => $contentInfo,
@@ -287,8 +292,7 @@ class TrashService implements TrashServiceInterface
                 'depth' => (int) $spiTrashItem->depth,
                 'sortField' => (int) $spiTrashItem->sortField,
                 'sortOrder' => (int) $spiTrashItem->sortOrder,
-                //@todo: this has to be 0?
-                'childCount' => 0
+                'childCount' => count( $trashedChildren )
             )
         );
     }
