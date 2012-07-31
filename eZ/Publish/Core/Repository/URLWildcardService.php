@@ -104,13 +104,23 @@ class URLWildcardService implements URLWildcardServiceInterface
             throw new ContentValidationException( 'What error code should be used?' );
         }
 
-        return $this->buildUrlWildcardDomainObject(
-            $this->persistenceHandler->urlWildcardHandler()->create(
+        $this->repository->beginTransaction();
+        try
+        {
+            $spiUrlWildcard = $this->persistenceHandler->urlWildcardHandler()->create(
                 $sourceUrl,
                 $destinationUrl,
                 $forward
-            )
-        );
+            );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
+
+        return $this->buildUrlWildcardDomainObject( $spiUrlWildcard );
     }
 
     /**
@@ -122,9 +132,19 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     public function remove( URLWildcard $urlWildcard )
     {
-        $this->persistenceHandler->urlWildcardHandler()->remove(
-            $urlWildcard->id
-        );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->urlWildcardHandler()->remove(
+                $urlWildcard->id
+            );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
