@@ -2243,13 +2243,29 @@ class ContentServiceTest extends BaseContentServiceTest
         $versions = $contentService->loadVersions( $contentVersion2->contentInfo );
         /* END: Use Case */
 
-        $this->assertEquals(
-            array(
-                $contentService->loadVersionInfo( $contentVersion2->contentInfo, 1 ),
-                $contentService->loadVersionInfo( $contentVersion2->contentInfo, 2 )
-            ),
-            $versions
+        $expectedVersionIds = array(
+            $contentService->loadVersionInfo( $contentVersion2->contentInfo, 1 )->id => true,
+            $contentService->loadVersionInfo( $contentVersion2->contentInfo, 2 )->id => true,
         );
+
+        foreach ( $versions as $actualVersion )
+        {
+            if ( !isset( $expectedVersionIds[$actualVersion->id] ) )
+            {
+                $this->fail( "Unexpected version with ID '{$actualVersion->id}' loaded." );
+            }
+            unset( $expectedVersionIds[$actualVersion->id] );
+        }
+
+        if ( count( $expectedVersionIds ) !== 0 )
+        {
+            $this->fail(
+                sprintf(
+                    "Expected versions not loaded: '%s'",
+                    implode( "', '", $expectedVersionIds )
+                )
+            );
+        }
     }
 
     /**
