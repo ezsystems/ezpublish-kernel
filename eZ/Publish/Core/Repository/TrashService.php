@@ -102,7 +102,18 @@ class TrashService implements TrashServiceInterface
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
-        $spiTrashItem = $this->persistenceHandler->trashHandler()->trash( $location->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $spiTrashItem = $this->persistenceHandler->trashHandler()->trash( $location->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
+
         return $this->buildDomainTrashItemObject( $spiTrashItem );
     }
 
@@ -129,10 +140,20 @@ class TrashService implements TrashServiceInterface
         if ( $newParentLocation !== null && !is_numeric( $newParentLocation->id ) )
             throw new InvalidArgumentValue( "parentLocationId", $newParentLocation->id, "Location" );
 
-        $newLocationId = $this->persistenceHandler->trashHandler()->recover(
-            $trashItem->id,
-            $newParentLocation ? $newParentLocation->id : $trashItem->parentLocationId
-        );
+        $this->repository->beginTransaction();
+        try
+        {
+            $newLocationId = $this->persistenceHandler->trashHandler()->recover(
+                $trashItem->id,
+                $newParentLocation ? $newParentLocation->id : $trashItem->parentLocationId
+            );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->repository->getLocationService()->loadLocation( $newLocationId );
     }
@@ -147,8 +168,18 @@ class TrashService implements TrashServiceInterface
      */
     public function emptyTrash()
     {
-        // Persistence layer takes care of deleting content objects
-        $this->persistenceHandler->trashHandler()->emptyTrash();
+        $this->repository->beginTransaction();
+        try
+        {
+            // Persistence layer takes care of deleting content objects
+            $this->persistenceHandler->trashHandler()->emptyTrash();
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -165,7 +196,17 @@ class TrashService implements TrashServiceInterface
         if ( !is_numeric( $trashItem->id ) )
             throw new InvalidArgumentValue( "id", $trashItem->id, "TrashItem" );
 
-        $this->persistenceHandler->trashHandler()->deleteTrashItem( $trashItem->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->trashHandler()->deleteTrashItem( $trashItem->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
