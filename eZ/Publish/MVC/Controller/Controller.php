@@ -16,6 +16,47 @@ use Symfony\Component\DependencyInjection\ContainerAware,
 
 abstract class Controller extends ContainerAware
 {
+    private $options;
+
+    public function __construct( array $options = array() )
+    {
+        $this->options = $options;
+    }
+
+    /**
+     * Returns value for $optionName and fallbacks to $defaultValue if not defined
+     *
+     * @param string $optionName
+     * @param mixed $defaultValue
+     * @return mixed
+     */
+    public function getOption( $optionName, $defaultValue = null )
+    {
+        return isset( $this->options[$optionName] ) ? $this->options[$optionName] : $defaultValue;
+    }
+
+    /**
+     * Checks if $optionName is defined
+     *
+     * @param string $optionName
+     * @return bool
+     */
+    public function hasOption( $optionName )
+    {
+        return isset( $this->options[$optionName] );
+    }
+
+    /**
+     * Sets $optionName with $value
+     *
+     * @param string $optionName
+     * @param mixed $value
+     */
+    public function setOption( $optionName, $value )
+    {
+        $this->options[$optionName] = $value;
+    }
+
     /**
      * Renders a view.
      *
