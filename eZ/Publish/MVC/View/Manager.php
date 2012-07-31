@@ -166,7 +166,7 @@ class Manager
      * @param array $defaultParams
      * @return string
      */
-    protected function renderContentView( ContentViewInterface $view, array $defaultParams = array() )
+    public function renderContentView( ContentViewInterface $view, array $defaultParams = array() )
     {
         $view->addParameters( $defaultParams );
         $this->eventDispatcher->dispatch(

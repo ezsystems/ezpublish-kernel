@@ -12,6 +12,8 @@ namespace eZ\Publish\MVC\Controller\Content;
 use eZ\Publish\MVC\Controller\Controller,
     eZ\Publish\API\Repository\Repository,
     eZ\Publish\MVC\View\Manager as ViewManager,
+    eZ\Publish\MVC\MVCEvents,
+    eZ\Publish\MVC\Event\APIContentExceptionEvent,
     Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\Response,
     Symfony\Component\OptionsResolver\OptionsResolver,
@@ -47,37 +49,67 @@ class ViewController extends Controller
      * Response will be cached with HttpCache validation model (Etag)
      *
      * @param int $locationId
-     * @param string $viewMode
+     * @param string $viewType
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
      */
-    public function viewLocation( $locationId, $viewMode )
+    public function viewLocation( $locationId, $viewType )
     {
-        // Assume that location is cached by the repository
-        $repository = $this->getRepository();
-        $location = $repository->getLocationService()->loadLocation( $locationId );
-
         $response = new Response();
-        if ( $this->getOption( 'viewCache' ) === true )
+        $repository = $this->getRepository();
+        // TODO: Use a dedicated etag generator, generating a hash instead of plain text
+        $etag = "ezpublish-location-$locationId-$viewType";
+
+        try
         {
-            $response->setPublic();
-            // TODO: Use a dedicated etag generator, generating a hash instead of plain text
-            $response->setEtag( "ezpublish-location-$locationId-$viewMode" );
-            $response->setLastModified( $location->getContentInfo()->modificationDate );
-            if ( $response->isNotModified( $this->getRequest() ) )
+            // Assume that location is cached by the repository
+            $location = $repository->getLocationService()->loadLocation( $locationId );
+
+            if ( $this->getOption( 'viewCache' ) === true )
             {
+                $response->setPublic();
+                $response->setEtag( $etag );
+                $response->setLastModified( $location->getContentInfo()->modificationDate );
+                if ( $response->isNotModified( $this->getRequest() ) )
+                {
+                    return $response;
+                }
+            }
+
+            $response->setContent(
+                $this->viewManager->renderLocation(
+                    $location,
+                    $repository
+                        ->getContentService()
+                        ->loadContentByContentInfo( $location->getContentInfo() )
+                )
+            );
+
+            return $response;
+        }
+        catch ( \Exception $e )
+        {
+            $event = new APIContentExceptionEvent(
+                $e,
+                array(
+                     'contentId'    => null,
+                     'locationId'   => $locationId,
+                     'viewType'     => $viewType
+                )
+            );
+            $this->getEventDispatcher()->dispatch( MVCEvents::API_CONTENT_EXCEPTION, $event );
+            if ( $event->hasContentView() )
+            {
+                $response->setContent(
+                    $this->viewManager->renderContentView(
+                        $event->getContentView()
+                    )
+                );
+
                 return $response;
             }
+
+            throw $e;
         }
-
-        $response->setContent(
-            $this->viewManager->renderLocation(
-                $location,
-                $repository
-                    ->getContentService()
-                    ->loadContentByContentInfo( $location->getContentInfo() )
-            )
-        );
-
-        return $response;
     }
 }
