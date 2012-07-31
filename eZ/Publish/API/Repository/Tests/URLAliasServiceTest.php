@@ -435,7 +435,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         // Throws InvalidArgumentException, since this path already exists for the
         // language
         $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
-            'module:content/search?SearchText=eZ', 'Design/Plain-site', 'eng-US'
+            'module:content/search?SearchText=eZ', '/Design/Plain-site', 'eng-US'
         );
         /* END: Use Case */
     }
