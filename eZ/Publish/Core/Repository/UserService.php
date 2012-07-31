@@ -542,6 +542,26 @@ class UserService implements UserServiceInterface
         if ( !is_numeric( $user->id ) )
             throw new InvalidArgumentValue( "id", $user->id, "User" );
 
+        // We need to determine if we have anything to update.
+        // UserUpdateStruct is specific as some of the new content is in
+        // content update struct and some of it is in additional fields like
+        // email, password and so on
+        $doUpdate = false;
+        foreach ( $userUpdateStruct as $propertyValue )
+        {
+            if ( $propertyValue !== null )
+            {
+                $doUpdate = true;
+                break;
+            }
+        }
+
+        if ( !$doUpdate )
+        {
+            // Nothing to update, so we just quit
+            return $user;
+        }
+
         if ( $userUpdateStruct->email !== null )
         {
             if ( !is_string( $userUpdateStruct->email ) || empty( $userUpdateStruct->email ) )
@@ -563,19 +583,58 @@ class UserService implements UserServiceInterface
         $contentService = $this->repository->getContentService();
 
         $loadedUser = $this->loadUser( $user->id );
+        $userContentInfo = $loadedUser->getVersionInfo()->getContentInfo();
 
-        $publishedContent = $loadedUser;
-        if ( $userUpdateStruct->contentUpdateStruct !== null )
+        if ( $userUpdateStruct->contentUpdateStruct === null )
         {
-            $contentDraft = $contentService->createContentDraft( $loadedUser->getVersionInfo()->getContentInfo() );
-
-            $contentDraft = $contentService->updateContent(
-                $contentDraft->getVersionInfo(),
-                $userUpdateStruct->contentUpdateStruct
-            );
-
-            $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+            $userUpdateStruct->contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
         }
+
+        if ( $userUpdateStruct->email !== null || $userUpdateStruct->password !== null ||
+             $userUpdateStruct->maxLogin !== null || $userUpdateStruct->isEnabled !== null )
+        {
+            // Search for the first ezuser field type in content type
+            $userFieldDefinition = null;
+            foreach ( $userContentInfo->getContentType()->getFieldDefinitions() as $fieldDefinition )
+            {
+                if ( $fieldDefinition->fieldTypeIdentifier == 'ezuser' )
+                {
+                    $userFieldDefinition = $fieldDefinition;
+                    break;
+                }
+            }
+
+            if ( $userFieldDefinition === null )
+            {
+                throw new ContentValidationException( "Content type does not contain ezuser field type" );
+            }
+
+            $userFieldValue = new UserValue();
+            $userFieldValue->login = $loadedUser->login;
+            $userFieldValue->email = $userUpdateStruct->email !== null ? $userUpdateStruct->email : null;
+            $userFieldValue->isEnabled = $userUpdateStruct->isEnabled !== null ? $userUpdateStruct->isEnabled : null;
+            $userFieldValue->maxLogin = $userUpdateStruct->maxLogin !== null ? $userUpdateStruct->maxLogin : null;
+
+            if ( $userUpdateStruct->password !== null )
+            {
+                $userFieldValue->passwordHash = $this->createPasswordHash(
+                    $loadedUser->login,
+                    $userUpdateStruct->password,
+                    $this->settings['siteName'],
+                    $this->settings['hashType']
+                );
+                $userFieldValue->passwordHashType = $this->settings['hashType'];
+            }
+
+            $userUpdateStruct->contentUpdateStruct->setField( $userFieldDefinition->identifier, $userFieldValue );
+        }
+
+        $contentDraft = $contentService->createContentDraft( $userContentInfo );
+        $contentDraft = $contentService->updateContent(
+            $contentDraft->getVersionInfo(),
+            $userUpdateStruct->contentUpdateStruct
+        );
+        $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
 
         if ( $userUpdateStruct->contentMetadataUpdateStruct !== null )
         {
@@ -584,27 +643,6 @@ class UserService implements UserServiceInterface
                 $userUpdateStruct->contentMetadataUpdateStruct
             );
         }
-
-        $this->persistenceHandler->userHandler()->update(
-            new SPIUser(
-                array(
-                    'id' => $loadedUser->id,
-                    'login' => $loadedUser->login,
-                    'email' => $userUpdateStruct->email ?: $loadedUser->email,
-                    'passwordHash' => $userUpdateStruct->password ?
-                        $this->createPasswordHash(
-                            $loadedUser->login,
-                            $userUpdateStruct->password,
-                            $this->settings['siteName'],
-                            $this->settings['hashType']
-                        ) :
-                        $loadedUser->passwordHash,
-                    'hashAlgorithm' => $this->settings['hashType'],
-                    'isEnabled' => $userUpdateStruct->isEnabled !== null ? $userUpdateStruct->isEnabled : $loadedUser->isEnabled,
-                    'maxLogin' => $userUpdateStruct->maxLogin !== null ? (int) $userUpdateStruct->maxLogin : $loadedUser->maxLogin
-                )
-            )
-        );
 
         return $this->loadUser( $loadedUser->id );
     }
@@ -859,10 +897,7 @@ class UserService implements UserServiceInterface
      */
     public function newUserUpdateStruct()
     {
-        $userUpdateStruct = new UserUpdateStruct();
-        $userUpdateStruct->contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
-
-        return $userUpdateStruct;
+        return new UserUpdateStruct();
     }
 
     /**
