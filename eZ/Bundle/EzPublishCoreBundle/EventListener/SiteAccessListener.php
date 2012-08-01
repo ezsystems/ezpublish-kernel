@@ -55,7 +55,7 @@ class SiteAccessListener implements EventSubscriberInterface
         // Routers implementing RequestMatcherInterface should thus use this attribute instead of the original pathinfo
         $event->getRequest()->attributes->set(
             'semanticPathinfo',
-            $pathinfo
+            $semanticPathinfo
         );
 
         // Finally expose the current siteaccess as a service
