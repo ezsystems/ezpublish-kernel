@@ -97,11 +97,6 @@ class LegacyStorage extends Gateway
 
         $q->prepare()->execute();
 
-        /*if ( ( $row = $this->fetchByLink( $field->value->externalData['destinationContentId'] ) ) !== false )
-            $urlId = $row["id"];
-        else
-            $urlId = $this->insert( $versionInfo, $field );*/
-
         return false;
     }
 
@@ -119,7 +114,6 @@ class LegacyStorage extends Gateway
      */
     public function deleteFieldData( array $fieldId, array $context )
     {
-        echo "\nCalled ".__METHOD__.". Arguments\n" . print_r( func_get_args(), true ) . "\n";
-
+	// @todo implement when content deleting is fixed in the service
     }
 }

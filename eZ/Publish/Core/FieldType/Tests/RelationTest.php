@@ -88,7 +88,7 @@ class RelationTest extends FieldTypeTest
         $fieldValue = $ft->toPersistenceValue( new Value( 1 ) );
 
         self::assertSame( array( "destinationContentId" => 1 ), $fieldValue->data );
-        self::assertSame( array( "destinationContentId"  => 1), $fieldValue->externalData );
+        self::assertSame( array( "destinationContentId" => 1), $fieldValue->externalData );
     }
 
     /**
