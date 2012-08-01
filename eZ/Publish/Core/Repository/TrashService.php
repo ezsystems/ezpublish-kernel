@@ -26,6 +26,7 @@ use eZ\Publish\API\Repository\TrashService as TrashServiceInterface,
 
     eZ\Publish\API\Repository\Values\Content\SearchResult,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
     DateTime;
 
@@ -147,6 +148,23 @@ class TrashService implements TrashServiceInterface
                 $trashItem->id,
                 $newParentLocation ? $newParentLocation->id : $trashItem->parentLocationId
             );
+
+            // There is a possibility for content to loose main location when one of its locations is recovered
+            // from trash, so we need to check for it and set the newly recovered location to be the main one
+            $contentService = $this->repository->getContentService();
+
+            $contentInfo = $contentService->loadContentInfo( $trashItem->contentId );
+            if ( !is_numeric( $contentInfo->mainLocationId ) )
+            {
+                $contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+                $contentMetadataUpdateStruct->mainLocationId = $newLocationId;
+
+                $contentService->updateContentMetadata(
+                    $contentInfo,
+                    $contentMetadataUpdateStruct
+                );
+            }
+
             $this->repository->commit();
         }
         catch ( \Exception $e )
@@ -273,6 +291,10 @@ class TrashService implements TrashServiceInterface
     {
         $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiTrashItem->contentId );
 
+        $trashedChildren = $this->persistenceHandler->trashHandler()->findTrashItems(
+            new ParentLocationId( $spiTrashItem->id )
+        );
+
         return new TrashItem(
             array(
                 'contentInfo' => $contentInfo,
@@ -287,8 +309,7 @@ class TrashService implements TrashServiceInterface
                 'depth' => (int) $spiTrashItem->depth,
                 'sortField' => (int) $spiTrashItem->sortField,
                 'sortOrder' => (int) $spiTrashItem->sortOrder,
-                //@todo: this has to be 0?
-                'childCount' => 0
+                'childCount' => count( $trashedChildren )
             )
         );
     }

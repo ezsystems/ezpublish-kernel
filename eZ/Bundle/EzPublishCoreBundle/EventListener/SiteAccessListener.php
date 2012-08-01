@@ -41,15 +41,22 @@ class SiteAccessListener implements EventSubscriberInterface
     {
         $siteAccess = $event->getSiteAccess();
         // Analyse the pathinfo if needed since it might contain the siteaccess (i.e. like in URI mode)
+        $pathinfo = $event->getRequest()->getPathInfo();
         if ( $siteAccess->matcher instanceof URILexer )
         {
-            // Storing the modified pathinfo in 'semanticPathinfo' request attribute, to keep a trace of it.
-            // Routers implementing RequestMatcherInterface should thus use this attribute instead of the original pathinfo
-            $event->getRequest()->attributes->set(
-                'semanticPathinfo',
-                $siteAccess->matcher->analyseURI( $event->getRequest()->getPathInfo() )
-            );
+            $semanticPathinfo = $siteAccess->matcher->analyseURI( $pathinfo );
         }
+        else
+        {
+            $semanticPathinfo = $pathinfo;
+        }
+
+        // Storing the modified pathinfo in 'semanticPathinfo' request attribute, to keep a trace of it.
+        // Routers implementing RequestMatcherInterface should thus use this attribute instead of the original pathinfo
+        $event->getRequest()->attributes->set(
+            'semanticPathinfo',
+            $semanticPathinfo
+        );
 
         // Finally expose the current siteaccess as a service
         $this->container->set( 'ezpublish.siteaccess', $siteAccess );

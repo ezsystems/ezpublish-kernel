@@ -51,9 +51,9 @@ class Mapper
         {
             $urlWildcard = new UrlWildcard();
 
-            $urlWildcard->destinationUrl = $row["locale"];
+            $urlWildcard->destinationUrl = $row["destination_url"];
             $urlWildcard->id = (int)$row["id"];
-            $urlWildcard->sourceUrl = $row["name"];
+            $urlWildcard->sourceUrl = $row["source_url"];
             $urlWildcard->forward = (int)$row["type"] === 1 ? true : false;
 
             $urlWildcards[] = $urlWildcard;

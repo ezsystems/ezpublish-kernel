@@ -27,4 +27,13 @@ final class MVCEvents
      * @see eZ\Publish\MVC\View\Manager
      */
     const PRE_CONTENT_VIEW = 'ezpublish.pre_content_view';
+
+    /**
+     * The API_CONTENT_EXCEPTION event occurs when the API throws an exception that could not be caught internally
+     * (missing field type, internal error...).
+     * It allows further programmatic handling (like rendering a custom view) for the exception thrown.
+     *
+     * The event listener method receives an \eZ\Publish\MVC\Event\APIContentExceptionEvent.
+     */
+    const API_CONTENT_EXCEPTION = 'ezpublish.api.contentException';
 }

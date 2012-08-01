@@ -117,19 +117,22 @@ class Legacy extends SetupFactory
         $data = $this->getInitialData();
         $handler = $this->getDatabaseHandler();
 
+        // FIXME: Needs to be in fixture
+        $data['ezcontentobject_trash'] = array();
+
         foreach ( $data as $table => $rows )
         {
-            // Check that at least one row exists
-            if ( !isset( $rows[0] ) )
-            {
-                continue;
-            }
-
             // Cleanup before inserting
             $deleteQuery = $handler->createDeleteQuery();
             $deleteQuery->deleteFrom( $handler->quoteIdentifier( $table ) );
             $stmt = $deleteQuery->prepare();
             $stmt->execute();
+
+            // Check that at least one row exists
+            if ( !isset( $rows[0] ) )
+            {
+                continue;
+            }
 
             $q = $handler->createInsertQuery();
             $q->insertInto( $handler->quoteIdentifier( $table ) );

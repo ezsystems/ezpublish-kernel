@@ -447,8 +447,16 @@ class UserServiceTest extends BaseTest
         );
         /* END: Use Case */
 
+        $subUserGroupIds = array_map(
+            function ( $content )
+            {
+                return $content->id;
+            },
+            $subUserGroups
+        );
+
         $this->assertEquals( $membersGroupId, $userGroup->parentId );
-        $this->assertEquals( array( $userGroup ), $subUserGroups );
+        $this->assertEquals( array( $userGroup->id ), $subUserGroupIds );
     }
 
     /**

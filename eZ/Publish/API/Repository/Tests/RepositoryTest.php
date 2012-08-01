@@ -243,6 +243,12 @@ class RepositoryTest extends BaseTest
     public function testGetSearchService()
     {
         $repository = $this->getRepository();
+
+        if ( $repository instanceof \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub )
+        {
+            $this->markTestSkipped( 'SearchService is not available in the memory implementation.' );
+        }
+
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\SearchService',
             $repository->getSearchService()

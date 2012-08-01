@@ -2243,13 +2243,29 @@ class ContentServiceTest extends BaseContentServiceTest
         $versions = $contentService->loadVersions( $contentVersion2->contentInfo );
         /* END: Use Case */
 
-        $this->assertEquals(
-            array(
-                $contentService->loadVersionInfo( $contentVersion2->contentInfo, 1 ),
-                $contentService->loadVersionInfo( $contentVersion2->contentInfo, 2 )
-            ),
-            $versions
+        $expectedVersionIds = array(
+            $contentService->loadVersionInfo( $contentVersion2->contentInfo, 1 )->id => true,
+            $contentService->loadVersionInfo( $contentVersion2->contentInfo, 2 )->id => true,
         );
+
+        foreach ( $versions as $actualVersion )
+        {
+            if ( !isset( $expectedVersionIds[$actualVersion->id] ) )
+            {
+                $this->fail( "Unexpected version with ID '{$actualVersion->id}' loaded." );
+            }
+            unset( $expectedVersionIds[$actualVersion->id] );
+        }
+
+        if ( count( $expectedVersionIds ) !== 0 )
+        {
+            $this->fail(
+                sprintf(
+                    "Expected versions not loaded: '%s'",
+                    implode( "', '", $expectedVersionIds )
+                )
+            );
+        }
     }
 
     /**
@@ -2370,269 +2386,6 @@ class ContentServiceTest extends BaseContentServiceTest
         );
 
         $this->assertEquals( 1, $contentCopied->getVersionInfo()->versionNo );
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
-     * @see \eZ\Publish\API\Repository\ContentService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
-     */
-    public function testFindContent()
-    {
-        self::markTestIncomplete( "Search have been moved to SearchService" );
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $contentService = $repository->getContentService();
-
-        // Create a search query for content objects about "eZ Publish"
-        $query = new Query();
-        $query->criterion = new Criterion\LogicalAnd(
-            array(
-                new Criterion\Field( 'title', Criterion\Operator::LIKE, '*eZ Publish*' )
-            )
-        );
-
-        // Search for matching content
-        $searchResult = $contentService->findContent( $query, array() );
-        /* END: Use Case */
-
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SearchResult',
-            $searchResult
-        );
-
-        return $searchResult;
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\SearchResult $searchResult
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindContent
-     */
-    public function testFindContentSearchResultContainsExpectedProperties( $searchResult )
-    {
-        $this->assertGreaterThan( 0, $searchResult->count );
-        $this->assertEquals( $searchResult->count, count( $searchResult->items ) );
-
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Query',
-            $searchResult->query
-        );
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindContent
-     */
-    public function testFindContentWithLanguageFilter()
-    {
-        self::markTestIncomplete( "Search have been moved to SearchService" );
-        $repository = $this->getRepository();
-
-        $contentService = $repository->getContentService();
-
-        /* BEGIN: Use Case */
-        $draft = $this->createMultipleLanguageDraftVersion1();
-
-        // Publish the newly created draft
-        $contentService->publishVersion( $draft->getVersionInfo() );
-
-        // Create a search query for the created content object
-        $query = new Query();
-        $query->criterion = new Criterion\LogicalAnd(
-            array(
-                new Criterion\Field( 'name', Criterion\Operator::LIKE, '*multi-lang forum²*' )
-            )
-        );
-
-        // Search for matching content with field language filter
-        $searchResult = $contentService->findContent(
-            $query,
-            array( 'languages' => array( 'eng-GB' ) )
-        );
-        /* END: Use Case */
-
-        $this->assertEquals( 1, $searchResult->count );
-        $this->assertLocaleFieldsEquals(
-            $searchResult->items[0]->getFields(),
-            'eng-GB'
-        );
-    }
-
-    /**
-     * Test for the findSingle() method.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     * @see \eZ\Publish\API\Repository\ContentService::findSingle()
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
-     */
-    public function testFindSingle()
-    {
-        self::markTestIncomplete( "Search have been moved to SearchService" );
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $contentService = $repository->getContentService();
-
-        // Create a search query for content objects about "eZ Publish"
-        $query = new Query();
-        $query->criterion = new Criterion\LogicalAnd(
-            array(
-                new Criterion\Field( 'title', Criterion\Operator::LIKE, '*Demo Design*' )
-            )
-        );
-
-        // Search for a matching content object
-        $content = $contentService->findSingle( $query, array() );
-        /* END: Use Case */
-
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
-            $content
-        );
-
-        return $content;
-    }
-
-    /**
-     * Test for the findSingle() method.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::findSingle()
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindSingle
-     */
-    public function testFindSingleResultContainsExpectedProperties( $content )
-    {
-        $this->assertRegExp( '(Demo Design)i', $content->getFieldValue( 'title', 'eng-US' ) );
-    }
-
-    /**
-     * Test for the findSingle() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::findSingle()
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindSingle
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
-     */
-    public function testFindSingleWithLanguageFilter()
-    {
-        self::markTestIncomplete( "Search have been moved to SearchService" );
-        $repository = $this->getRepository();
-
-        $contentService = $repository->getContentService();
-
-        /* BEGIN: Use Case */
-        $draft = $this->createMultipleLanguageDraftVersion1();
-
-        // Publish the newly created draft
-        $contentService->publishVersion( $draft->getVersionInfo() );
-
-        // Create a search query for the created content object
-        $query = new Query();
-        $query->criterion = new Criterion\LogicalAnd(
-            array(
-                new Criterion\Field( 'name', Criterion\Operator::LIKE, '*multi-lang*' )
-            )
-        );
-
-        // Search for matching content with field language filter
-        $content = $contentService->findSingle(
-            $query,
-            array( 'languages' => array( 'eng-GB' ) )
-        );
-        /* END: Use Case */
-
-        $this->assertLocaleFieldsEquals(
-            $content->getFields(),
-            'eng-GB'
-        );
-    }
-
-    /**
-     * Test for the findSingle() method.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::findSingle()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindSingle
-     */
-    public function testFindSingleThrowsNotFoundException()
-    {
-        self::markTestIncomplete( "Search have been moved to SearchService" );
-        $repository = $this->getRepository();
-
-        $contentService = $repository->getContentService();
-
-        /* BEGIN: Use Case */
-        $draft = $this->createMultipleLanguageDraftVersion1();
-
-        // Publish the newly created draft
-        $contentService->publishVersion( $draft->getVersionInfo() );
-
-        // Create a search query for the created content object
-        $query = new Query();
-        $query->criterion = new Criterion\LogicalAnd(
-            array(
-                new Criterion\Field( 'title', Criterion\Operator::LIKE, 'TestingThisWithAnInvalidSearchQuery' )
-            )
-        );
-
-        // This call will fail with an "NotFoundException", because the above
-        // search query should not match against any object in an eZ Publish demo
-        $contentService->findSingle( $query, array() );
-        /* END: Use Case */
-    }
-
-    /**
-     * Test for the findSingle() method.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::findSingle()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testFindSingle
-     */
-    public function testFindSingleThrowsInvalidArgumentException()
-    {
-        self::markTestIncomplete( "Search have been moved to SearchService" );
-        $repository = $this->getRepository();
-
-        $contentService = $repository->getContentService();
-
-        /* BEGIN: Use Case */
-        $draft = $this->createMultipleLanguageDraftVersion1();
-
-        // Publish the newly created draft
-        $contentService->publishVersion( $draft->getVersionInfo() );
-
-        // Create a search query for the created content object
-        $query = new Query();
-        $query->criterion = new Criterion\LogicalAnd(
-            array(
-                new Criterion\Field( 'name', Criterion\Operator::LIKE, '*a*' )
-            )
-        );
-
-        // This call will fail with an "InvalidArgumentException", because the
-        // above query would return more than one result
-        $contentService->findSingle( $query, array() );
-        /* END: Use Case */
     }
 
     /**

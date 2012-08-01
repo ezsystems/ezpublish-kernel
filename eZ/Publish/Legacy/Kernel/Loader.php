@@ -117,9 +117,7 @@ class Loader
                     LegacyEvents::PRE_BUILD_LEGACY_KERNEL_WEB, $buildEvent
                 );
 
-                $settings = $legacyParameters->all();
-
-                $webHandler = new ezpKernelWeb( $settings );
+                $webHandler = new ezpKernelWeb( $legacyParameters->all() );
                 eZURI::instance()->setURIString(
                     $request->attributes->get(
                         'semanticPathinfo',
