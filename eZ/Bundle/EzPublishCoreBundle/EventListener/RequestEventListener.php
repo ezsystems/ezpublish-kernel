@@ -16,7 +16,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface,
     Symfony\Component\HttpKernel\HttpKernelInterface,
     Symfony\Bundle\FrameworkBundle\HttpKernel,
     Symfony\Component\HttpKernel\Log\LoggerInterface,
-    Symfony\Component\HttpFoundation\RedirectResponse;
+    Symfony\Component\HttpFoundation\RedirectResponse,
+    eZ\Publish\MVC\SiteAccess,
+    eZ\Publish\MVC\SiteAccess\URILexer;
 
 class RequestEventListener implements EventSubscriberInterface
 {
@@ -87,7 +89,11 @@ class RequestEventListener implements EventSubscriberInterface
             $request = $event->getRequest();
             if ( $request->attributes->get( 'needsRedirect' ) && $request->attributes->has( 'semanticPathinfo' ) )
             {
+                $siteaccess = $request->attributes->get( 'siteaccess' );
                 $semanticPathinfo = $request->attributes->get( 'semanticPathinfo' );
+                if ( $siteaccess instanceof SiteAccess && $siteaccess->matcher instanceof URILexer )
+                    $semanticPathinfo = $siteaccess->matcher->analyseLink( $semanticPathinfo );
+
                 $event->setResponse(
                     new RedirectResponse(
                         $semanticPathinfo,
