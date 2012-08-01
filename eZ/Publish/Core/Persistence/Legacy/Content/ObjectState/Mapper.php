@@ -20,9 +20,9 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState,
 class Mapper
 {
     /**
-     * Caching language handler
+     * Language handler
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
      */
     protected $languageHandler;
 
