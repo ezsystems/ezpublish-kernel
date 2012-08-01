@@ -106,7 +106,7 @@ class RelationFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     public function getValidCreationFieldData()
     {
-        return new RelationValue( 1 );
+        return new RelationValue( 4 );
     }
 
     /**
@@ -126,7 +126,7 @@ class RelationFieldTypeIntergrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'destinationContentId' => 1,
+            'destinationContentId' => 4,
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -172,7 +172,7 @@ class RelationFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     public function getValidUpdateFieldData()
     {
-        return new RelationValue( 2 );
+        return new RelationValue( 49 );
     }
 
     /**
@@ -190,7 +190,7 @@ class RelationFieldTypeIntergrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'destinationContentId' => 2,
+            'destinationContentId' => 49,
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -240,7 +240,7 @@ class RelationFieldTypeIntergrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'destinationContentId' => 1
+            'destinationContentId' => 4
         );
 
         $this->assertPropertiesCorrect(
@@ -273,9 +273,9 @@ class RelationFieldTypeIntergrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new RelationValue( 1 ),
+                new RelationValue( 4 ),
                 array(
-                    'destinationContentId' => 1,
+                    'destinationContentId' => 4,
                 )
             ),
         );
@@ -292,8 +292,8 @@ class RelationFieldTypeIntergrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                array( 'destinationContentId' => 1 ),
-                new RelationValue( 1 )
+                array( 'destinationContentId' => 4 ),
+                new RelationValue( 4 )
             ),
         );
     }
