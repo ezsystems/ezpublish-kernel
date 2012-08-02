@@ -361,7 +361,7 @@ class TrashServiceTest extends BaseTrashServiceTest
      * @see \eZ\Publish\API\Repository\TrashService::recover($trashItem, $newParentLocation)
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecoverWithLocationCreateStructParameter
      */
-    public function testRecoverWithLocationParameterSetsNewMainLocationId()
+    public function testRecoverSetsNewMainLocationId()
     {
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
@@ -399,7 +399,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* END: Use Case */
 
         $this->assertEquals(
-            $newLocation->id,
+            $location->id,
             $location->getContentInfo()->mainLocationId
         );
     }
