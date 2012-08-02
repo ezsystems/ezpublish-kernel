@@ -1258,9 +1258,9 @@ class ContentServiceTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         $draft = $this->createContentDraftVersion1();
 
-        // Now create an update struct and modify some fields
+        // Now create an update struct and set a mandatory field to null
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField( 'title', null );
+        $contentUpdateStruct->setField( 'name', null );
 
         // Don't set this, then the above call without languageCode will fail
         $contentUpdateStruct->initialLanguageCode = 'eng-US';
@@ -1272,6 +1272,51 @@ class ContentServiceTest extends BaseContentServiceTest
             $contentUpdateStruct
         );
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     */
+    public function testUpdateContentWithNotUpdatingMandatoryField()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $draft = $this->createContentDraftVersion1();
+
+        // Now create an update struct which does not overwrite mandatory
+        // fields
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField( 'description', 'An even cooler forum' );
+
+        // Don't set this, then the above call without languageCode will fail
+        $contentUpdateStruct->initialLanguageCode = 'eng-US';
+
+        // This will only update the "description" field in the "eng-US"
+        // language
+        $updatedDraft = $contentService->updateContent(
+            $draft->getVersionInfo(),
+            $contentUpdateStruct
+        );
+        /* END: Use Case */
+
+        foreach ( $updatedDraft->getFields() as $field )
+        {
+            if ( $field->languageCode === 'eng-US' && $field->fieldDefIdentifier === 'name' && $field->value !== null )
+            {
+                // Found field
+                return;
+            }
+        }
+        $this->fail(
+            'Field with identifier "name" in language "eng-US" could not be found or has empty value.'
+        );
     }
 
     /**
