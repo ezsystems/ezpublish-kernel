@@ -1301,7 +1301,10 @@ class ContentServiceTest extends BaseContentServiceTest
         // Now create an update struct which does not overwrite mandatory
         // fields
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField( 'description', 'An even cooler forum' );
+        $contentUpdateStruct->setField(
+            'description',
+            '<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"/>'
+        );
 
         // Don't set this, then the above call without languageCode will fail
         $contentUpdateStruct->initialLanguageCode = 'eng-US';
