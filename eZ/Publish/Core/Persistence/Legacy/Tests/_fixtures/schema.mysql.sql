@@ -532,6 +532,19 @@ CREATE TABLE ezurlalias_ml_incr (
 
 
 
+DROP TABLE IF EXISTS ezurlwildcard;
+CREATE TABLE ezurlwildcard (
+  destination_url longtext NOT NULL,
+  id int(11) NOT NULL auto_increment,
+  source_url longtext NOT NULL,
+  type int(11) NOT NULL default '0',
+  PRIMARY KEY  (id)
+) ENGINE=InnoDB;
+
+
+
+
+
 DROP TABLE IF EXISTS ezuser;
 CREATE TABLE ezuser (
   contentobject_id int(11) NOT NULL default '0',
