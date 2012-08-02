@@ -372,18 +372,18 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* BEGIN: Use Case */
         // $homeLocationId is the ID of the "Home" location in an eZ Publish
         // demo installation
-        // $usersLocationRemoteId is the ID of the "Community" location in an eZ Publish
+        // $usersLocationRemoteId is the ID of the "Users" location in an eZ Publish
         // demo installation
 
         $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
-        // Load "Community" page location
+        // Load "Users" page location
         $usersLocation = $locationService->loadLocationByRemoteId(
             $usersLocationRemoteId
         );
 
-        // Create a seconf Location for the content
+        // Create a second Location for the content
         $locationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
         $newLocation = $locationService->createLocation(
             $usersLocation->getContentInfo(),
@@ -394,7 +394,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         $newTrashItem = $trashService->trash( $newLocation );
         $usersTrashItem = $trashService->trash( $usersLocation );
 
-        // Recover thew ne Location, which now becomes the main location
+        // Recover the new Location, which now becomes the main location
         $location = $trashService->recover( $newTrashItem );
         /* END: Use Case */
 
