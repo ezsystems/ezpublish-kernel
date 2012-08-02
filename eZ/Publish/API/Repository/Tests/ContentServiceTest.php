@@ -272,6 +272,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationByRemoteId
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @group user
      */
     public function testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately()
     {
@@ -359,6 +360,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentInfo()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @group user
      */
     public function testLoadContentInfo()
     {
@@ -446,6 +448,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfo()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @group user
      */
     public function testLoadVersionInfo()
     {
@@ -587,6 +590,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @group user
      */
     public function testLoadContent()
     {
@@ -686,6 +690,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfo
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
+     * @group user
      */
     public function testPublishVersion()
     {
@@ -857,6 +862,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @group user
      */
     public function testCreateContentDraft()
     {
@@ -1084,6 +1090,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::newContentUpdateStruct()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @group user
      */
     public function testNewContentUpdateStruct()
     {
@@ -1108,6 +1115,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentUpdateStruct
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     * @group user
      */
     public function testUpdateContent()
     {
@@ -1463,6 +1471,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::newContentMetadataUpdateStruct()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @group user
      */
     public function testNewContentMetadataUpdateStruct()
     {
@@ -1492,6 +1501,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentMetadataUpdateStruct
+     * @group user
      */
     public function testUpdateContentMetadata()
     {
