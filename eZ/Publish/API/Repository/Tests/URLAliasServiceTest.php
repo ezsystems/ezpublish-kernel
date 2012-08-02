@@ -522,10 +522,10 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         // Create a second URL alias for $location, this is a "custom" one
         $urlAliasService->createUrlAlias(
-            $location, '/My/Great-new-Site', 'nor-NO'
+            $location, '/My/Great-new-Site', 'ger-DE'
         );
 
-        // $loadedAliases will contain all 3 aliases
+        // $loadedAliases will contain 2 aliases in eng-US only
         $loadedAliases = $urlAliasService->listLocationAliases(
             $location, false, 'eng-US'
         );
@@ -559,7 +559,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $location = $locationService->loadLocation( $locationId );
         // Create a second URL alias for $location
         $urlAliasService->createUrlAlias(
-            $location, '/My/Great-new-Site', 'nor-NO'
+            $location, '/My/Great-new-Site', 'ger-DE'
         );
 
         // $loadedAliases will contain only 2 of 3 aliases
