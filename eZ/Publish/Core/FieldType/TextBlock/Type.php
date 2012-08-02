@@ -31,20 +31,6 @@ class Type extends FieldType
     protected $validatorConfigurationSchema = array();
 
     /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FiledType\Value object with the provided $text as value.
-     *
-     * @param string $text
-     * @return \eZ\Publish\Core\FieldType\TextBlock\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $text )
-    {
-        return new Value( $text );
-    }
-
-    /**
      * Return the field type identifier for this field type
      *
      * @return string
@@ -77,6 +63,11 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( is_string( $inputValue ) )
+        {
+            $inputValue = new Value( $inputValue );
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(

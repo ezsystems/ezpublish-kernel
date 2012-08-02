@@ -19,20 +19,6 @@ use eZ\Publish\Core\FieldType\FieldType,
 class Type extends FieldType
 {
     /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FiledType\Value object with the provided $value as value.
-     *
-     * @param string[]|string $value
-     * @return \eZ\Publish\Core\FieldType\Keyword\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $value )
-    {
-        return new Value( $value );
-    }
-
-    /**
      * Return the field type identifier for this field type
      *
      * @return string
@@ -65,6 +51,11 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( is_null( $inputValue ) || is_array( $inputValue ) )
+        {
+            $inputValue = new Value( $inputValue );
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(

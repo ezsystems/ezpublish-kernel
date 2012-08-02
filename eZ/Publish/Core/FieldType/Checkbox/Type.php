@@ -20,20 +20,6 @@ use eZ\Publish\Core\FieldType\FieldType,
 class Type extends FieldType
 {
     /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FiledType\Value object with the provided $boolValue as value.
-     *
-     * @param bool $boolValue
-     * @return \eZ\Publish\Core\FieldType\Checkbox\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $boolValue )
-    {
-        return new Value( $boolValue );
-    }
-
-    /**
      * Return the field type identifier for this field type
      *
      * @return string
@@ -66,6 +52,11 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( is_bool( $inputValue ) )
+        {
+            $inputValue = new Value( $inputValue );
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(

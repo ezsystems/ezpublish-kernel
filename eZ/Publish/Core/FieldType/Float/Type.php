@@ -25,20 +25,6 @@ class Type extends FieldType
     );
 
     /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FiledType\Value object with the provided $value as value.
-     *
-     * @param float $value
-     * @return \eZ\Publish\Core\FieldType\Float\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $value )
-    {
-        return new Value( $value );
-    }
-
-    /**
      * Return the field type identifier for this field type
      *
      * @return string
@@ -71,6 +57,11 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( is_float( $inputValue ) )
+        {
+            $inputValue = new Value( $inputValue );
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
