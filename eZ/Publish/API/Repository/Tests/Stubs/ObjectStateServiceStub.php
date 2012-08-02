@@ -304,9 +304,11 @@ class ObjectStateServiceStub implements ObjectStateService
         );
         $stateData['stateGroup'] = $objectStateGroup;
 
-        // TODO: Re-assign priorities to be continuos. Rule for same
-        // priorities is not determined, yet.
-        return $this->createObjectStateFromArray( $stateData );
+        $newState = $this->createObjectStateFromArray( $stateData );
+
+        $this->renumberPriorities( $newState->stateGroup );
+
+        return $newState;
     }
 
     /**
@@ -320,7 +322,7 @@ class ObjectStateServiceStub implements ObjectStateService
         $newState = new Values\ObjectState\ObjectStateStub( $stateData );
 
         $this->states[$newState->id] = $newState;
-        $this->groupStateMap[$newState->getObjectStateGroup()->id][] = $newState->id;
+        $this->groupStateMap[$newState->getObjectStateGroup()->id][$newState->id] = $newState->id;
 
         return $newState;
     }
@@ -381,7 +383,11 @@ class ObjectStateServiceStub implements ObjectStateService
             $stateData['descriptions']
         );
 
-        return $this->createObjectStateFromArray( $stateData );
+        $updatedState = $this->createObjectStateFromArray( $stateData );
+
+        $this->renumberPriorities( $updatedState->stateGroup );
+
+        return $updatedState;
     }
 
     /**

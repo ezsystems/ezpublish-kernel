@@ -1,9 +1,6 @@
 {
-    "hash": "0fa343ef9d4a4cae3fd1beb772e8f13f",
+    "hash": "cb49c8f4c0d02806f4e459f910e396bc",
     "packages": [
-
-    ],
-    "packages-dev": [
         {
             "package": "Qafoo/RMF",
             "version": "dev-master",
@@ -13,8 +10,8 @@
         {
             "package": "doctrine/common",
             "version": "2.3.x-dev",
-            "source-reference": "b0ed9cc35ec28b7cd23d3d001e6fd4c7b5092926",
-            "commit-date": "1343082138"
+            "source-reference": "15b04ec520ccded3dc0eba65b12a69ff1931360f",
+            "commit-date": "1342443556"
         },
         {
             "package": "ezsystems/ezpublish-legacy",
@@ -24,19 +21,11 @@
         },
         {
             "package": "symfony/symfony",
-            "version": "v2.1.0-BETA4"
+            "version": "v2.1.0-BETA3"
         },
         {
             "package": "twig/twig",
-            "version": "dev-master",
-            "alias-pretty-version": "1.9.x-dev",
-            "alias-version": "1.9.9999999.9999999-dev"
-        },
-        {
-            "package": "twig/twig",
-            "version": "dev-master",
-            "source-reference": "657de7bdeb680815e0df95f63da9f81e1533d2ea",
-            "commit-date": "1342953178"
+            "version": "v1.9.1"
         },
         {
             "package": "zetacomponents/base",
@@ -64,9 +53,7 @@
         },
         {
             "package": "zetacomponents/mail",
-            "version": "dev-master",
-            "source-reference": "e0120aad96efb41bdfac5583d9cb3863bc2823e7",
-            "commit-date": "1337594175"
+            "version": "1.7"
         },
         {
             "package": "zetacomponents/php-generator",
@@ -75,6 +62,7 @@
             "commit-date": "1337594190"
         }
     ],
+    "packages-dev": null,
     "aliases": [
 
     ],
@@ -85,7 +73,6 @@
         "zetacomponents/php-generator": 20,
         "zetacomponents/configuration": 20,
         "zetacomponents/database": 20,
-        "zetacomponents/mail": 20,
         "qafoo/rmf": 20,
         "ezsystems/ezpublish-legacy": 20
     }

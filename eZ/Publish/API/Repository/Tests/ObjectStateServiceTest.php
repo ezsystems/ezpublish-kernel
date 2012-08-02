@@ -663,6 +663,8 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
             '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectState',
             $createdObjectState
         );
+        // Object sequences are renumbered
+        $objectStateCreateStruct->priority = 2;
         return array(
             $loadedObjectStateGroup,
             $objectStateCreateStruct,
@@ -967,8 +969,8 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
             'sindelfingen'
         );
         $objectStateCreateStruct->priority = 1;
+        $objectStateCreateStruct->defaultLanguageCode = 'eng-US';
         $objectStateCreateStruct->names = array( 'eng-US' => 'Sindelfingen' );
-        $objectStateCreateStruct->descriptions = array( 'eng-US' => 'Sindelfingen State' );
 
         $createdState = $objectStateService->createObjectState(
             $customGroup,
@@ -1004,7 +1006,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         );
         $this->assertEquals( 'sindelfingen', $initialObjectState->identifier );
         $this->assertEquals( array( 'eng-US' => 'Sindelfingen' ), $initialObjectState->names );
-        $this->assertEquals( array( 'eng-US' => 'Sindelfingen State' ), $initialObjectState->descriptions );
+        $this->assertEquals( 'eng-US', $initialObjectState->defaultLanguageCode );
     }
 
     /**

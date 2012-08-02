@@ -39,8 +39,8 @@ return array(
     array (
   2 => 
   array (
-    0 => '1',
-    1 => '2',
+    1 => '1',
+    2 => '2',
   ),
 ),
     array (
