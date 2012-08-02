@@ -340,7 +340,8 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     {
         $repository = $this->getRepository();
 
-        $existingGroupIdentifiers = $this->createObjectStateGroups();
+        $expectedGroupIdentifiers = $this->getGroupIdentifierMap( $this->createObjectStateGroups() );
+        $expectedGroupIdentifiers['ez_lock'] = true;
 
         /* BEGIN: Use Case */
         $objectStateService = $repository->getObjectStateService();
@@ -351,7 +352,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $this->assertInternalType( 'array', $loadedObjectStateGroups );
 
         $this->assertObjectsLoadedByIdentifiers(
-            $existingGroupIdentifiers,
+            $expectedGroupIdentifiers,
             $loadedObjectStateGroups,
             'ObjectStateGroup'
         );
@@ -369,10 +370,12 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $objectStateService = $repository->getObjectStateService();
 
         $identifiersToCreate = array(
-            'first'  => true,
-            'second' => true,
-            'third'  => true,
+            'first',
+            'second',
+            'third',
         );
+
+        $createdStateGroups = array();
 
         $groupCreateStruct = $objectStateService->newObjectStateGroupCreateStruct( 'dummy' );
 
@@ -380,16 +383,13 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $groupCreateStruct->names               = array( 'eng-US' => 'Foo' );
         $groupCreateStruct->descriptions        = array( 'eng-US' => 'Foo Bar' );
 
-        foreach ( array_keys( $identifiersToCreate ) as $identifier )
+        foreach ( $identifiersToCreate as $identifier )
         {
             $groupCreateStruct->identifier = $identifier;
-            $objectStateService->createObjectStateGroup( $groupCreateStruct );
+            $createdStateGroups[] = $objectStateService->createObjectStateGroup( $groupCreateStruct );
         }
 
-        return array_merge(
-            array( 'ez_lock' => true ),
-            $identifiersToCreate
-        );
+        return $createdStateGroups;
     }
 
     /**
@@ -437,8 +437,13 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     public function testLoadObjectStateGroupsWithOffset()
     {
         $repository = $this->getRepository();
+        $objectStateService = $repository->getObjectStateService();
 
-        $existingGroupIdentifiers = $this->createObjectStateGroups();
+        $this->createObjectStateGroups();
+
+        $allObjectStateGroups = $objectStateService->loadObjectStateGroups();
+
+        $existingGroupIdentifiers = $this->getGroupIdentifierMap( $allObjectStateGroups );
 
         /* BEGIN: Use Case */
         $objectStateService = $repository->getObjectStateService();
@@ -456,6 +461,25 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     }
 
     /**
+     * Returns a map of the given object state groups
+     *
+     * @param array $groups
+     * @return void
+     */
+    protected function getGroupIdentifierMap( array $groups )
+    {
+        $existingGroupIdentifiers = array_map(
+            function ( $group )
+            {
+                return $group->identifier;
+            },
+            $groups
+        );
+
+        return array_fill_keys( $existingGroupIdentifiers, true );
+    }
+
+    /**
      * Test for the loadObjectStateGroups() method.
      *
      * @return void
@@ -465,8 +489,11 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     public function testLoadObjectStateGroupsWithOffsetAndLimit()
     {
         $repository = $this->getRepository();
+        $objectStateService = $repository->getObjectStateService();
 
-        $existingGroupIdentifiers = $this->createObjectStateGroups();
+        $allObjectStateGroups = $objectStateService->loadObjectStateGroups();
+
+        $existingGroupIdentifiers = $this->getGroupIdentifierMap( $allObjectStateGroups );
 
         /* BEGIN: Use Case */
         $objectStateService = $repository->getObjectStateService();
@@ -925,11 +952,11 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $repository = $this->getRepository();
         $objectStateService = $repository->getObjectStateService();
 
-        $customObjectStateGroupId = $this->generateId( 'objectstategroup', 3 );
-        $anonymousUserId = $this->generateId( 'user', 10 );
-
         // Create object state group with custom state
-        $this->createObjectStateGroups();
+        $createdStateGroups = $this->createObjectStateGroups();
+
+        $customObjectStateGroupId = $createdStateGroups[1]->id;
+        $anonymousUserId = $this->generateId( 'user', 10 );
 
         $customGroup = $objectStateService->loadObjectStateGroup(
             $customObjectStateGroupId
@@ -1033,10 +1060,10 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     {
         $repository = $this->getRepository();
 
-        $this->createObjectStateGroups();
+        $createdStateGroups = $this->createObjectStateGroups();
 
         $anonymousUserId = $this->generateId( 'user', 10 );
-        $differentObjectStateGroupId = $this->generateId( 'objectstategroup', 3 );
+        $differentObjectStateGroupId = $createdStateGroups[1]->id;
         $lockedObjectStateId = $this->generateId( 'objectstate', 2 );
 
         /* BEGIN: Use Case */
