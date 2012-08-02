@@ -786,7 +786,7 @@ function generateObjectStateFixture( array $fixture )
         {
             $groupStateMap[$groupId] = array();
         }
-        $groupStateMap[$groupId][] = $data['id'];
+        $groupStateMap[$groupId][$data['id']] = $data['id'];
 
         // For internal use only
         $stateGroupMap[$data['id']] = $groupId;

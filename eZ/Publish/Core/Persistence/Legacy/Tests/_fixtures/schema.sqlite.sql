@@ -265,6 +265,12 @@ CREATE TABLE 'ezurlalias_ml' (
 CREATE TABLE 'ezurlalias_ml_incr' (
 	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT
 );
+CREATE TABLE 'ezurlwildcard' (
+	'destination_url' clob NOT NULL,
+	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+	'source_url' clob NOT NULL,
+	'type' integer NOT NULL DEFAULT 0
+);
 CREATE TABLE 'ezuser' (
 	'contentobject_id' integer NOT NULL DEFAULT 0,
 	'email' text(150) NOT NULL,

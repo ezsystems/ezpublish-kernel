@@ -1196,19 +1196,6 @@ class UserServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
      */
-    public function testUpdateUserIncrementsVersionNumber( $user )
-    {
-        $this->assertEquals( 2, $user->getVersionInfo()->versionNo );
-    }
-
-    /**
-     * Test for the updateUser() method.
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::updateUser()
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
-     */
     public function testUpdateUserReturnsPublishedVersion( $user )
     {
         $this->assertEquals(
@@ -1279,9 +1266,6 @@ class UserServiceTest extends BaseTest
         $contentUpdate = $contentService->newContentUpdateStruct();
         $contentUpdate->setField( 'first_name', 'Hello', 'eng-US' );
         $contentUpdate->setField( 'last_name', 'World', 'eng-US' );
-
-        // Required field
-        $contentUpdate->setField( 'user_account', $user );
 
         // Create a new update struct instance
         $userUpdate = $userService->newUserUpdateStruct();

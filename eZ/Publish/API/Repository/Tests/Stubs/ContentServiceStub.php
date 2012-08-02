@@ -1064,12 +1064,17 @@ class ContentServiceStub implements ContentService
         $content = $this->loadContentByVersionInfo( $versionInfo );
         $contentType = $content->contentType;
 
-        $mainLanguageCode = $contentUpdateStruct->initialLanguageCode;
+        $initialLanguageCode = $contentUpdateStruct->initialLanguageCode;
+        $mainLanguageCode = $versionInfo->getContentInfo()->mainLanguageCode;
 
-        $languageCodes = $this->getLanguageCodes( $contentUpdateStruct->fields, $mainLanguageCode );
-        $fields = $this->getFieldsByTypeAndLanguageCode( $contentType, $contentUpdateStruct->fields, $mainLanguageCode );
+        $oldAndNewFields = array_merge( $content->fields, $contentUpdateStruct->fields );
 
-        // Validate all required fields available in each language;
+        $languageCodes = $this->getLanguageCodes( $oldAndNewFields, $initialLanguageCode );
+
+        // Automatically overwrites old with new fields
+        $fields = $this->getFieldsByTypeAndLanguageCode( $contentType, $oldAndNewFields, $initialLanguageCode );
+
+        // Validate all required fields available in each language
         $this->checkRequiredFields( $contentType, $fields, $languageCodes, $mainLanguageCode );
 
         // Complete missing fields

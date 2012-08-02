@@ -272,6 +272,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationByRemoteId
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @group user
      */
     public function testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately()
     {
@@ -359,6 +360,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentInfo()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @group user
      */
     public function testLoadContentInfo()
     {
@@ -446,6 +448,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfo()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @group user
      */
     public function testLoadVersionInfo()
     {
@@ -587,6 +590,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @group user
      */
     public function testLoadContent()
     {
@@ -686,6 +690,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfo
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
+     * @group user
      */
     public function testPublishVersion()
     {
@@ -857,6 +862,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @group user
      */
     public function testCreateContentDraft()
     {
@@ -1084,6 +1090,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::newContentUpdateStruct()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @group user
      */
     public function testNewContentUpdateStruct()
     {
@@ -1108,6 +1115,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentUpdateStruct
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     * @group user
      */
     public function testUpdateContent()
     {
@@ -1258,9 +1266,9 @@ class ContentServiceTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         $draft = $this->createContentDraftVersion1();
 
-        // Now create an update struct and modify some fields
+        // Now create an update struct and set a mandatory field to null
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField( 'title', null );
+        $contentUpdateStruct->setField( 'name', null );
 
         // Don't set this, then the above call without languageCode will fail
         $contentUpdateStruct->initialLanguageCode = 'eng-US';
@@ -1272,6 +1280,54 @@ class ContentServiceTest extends BaseContentServiceTest
             $contentUpdateStruct
         );
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     */
+    public function testUpdateContentWithNotUpdatingMandatoryField()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $draft = $this->createContentDraftVersion1();
+
+        // Now create an update struct which does not overwrite mandatory
+        // fields
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField(
+            'description',
+            '<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"/>'
+        );
+
+        // Don't set this, then the above call without languageCode will fail
+        $contentUpdateStruct->initialLanguageCode = 'eng-US';
+
+        // This will only update the "description" field in the "eng-US"
+        // language
+        $updatedDraft = $contentService->updateContent(
+            $draft->getVersionInfo(),
+            $contentUpdateStruct
+        );
+        /* END: Use Case */
+
+        foreach ( $updatedDraft->getFields() as $field )
+        {
+            if ( $field->languageCode === 'eng-US' && $field->fieldDefIdentifier === 'name' && $field->value !== null )
+            {
+                // Found field
+                return;
+            }
+        }
+        $this->fail(
+            'Field with identifier "name" in language "eng-US" could not be found or has empty value.'
+        );
     }
 
     /**
@@ -1418,6 +1474,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::newContentMetadataUpdateStruct()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @group user
      */
     public function testNewContentMetadataUpdateStruct()
     {
@@ -1447,6 +1504,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentMetadataUpdateStruct
+     * @group user
      */
     public function testUpdateContentMetadata()
     {
