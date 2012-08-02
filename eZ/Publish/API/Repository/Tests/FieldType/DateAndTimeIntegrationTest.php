@@ -140,7 +140,7 @@ class DateAndTimeFieldTypeIntergrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'value' => $this->getRepository()->createDateTime( "@123456" ),
+            'value' => new \DateTime( "@123456" ),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -172,21 +172,10 @@ class DateAndTimeFieldTypeIntergrationTest extends BaseIntegrationTest
     public function provideInvalidCreationFieldData()
     {
         return array(
-            array( null, null ),
+            array(
+                "Some unknown date format", 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'
+            ),
         );
-    }
-
-    /**
-     * Tests failing content creation
-     *
-     * @param mixed $failingValue
-     * @param string $expectedException
-     * @dataProvider provideInvalidCreationFieldData
-     * @return void
-     */
-    public function testCreateContentFails( $failingValue, $expectedException )
-    {
-        $this->markTestSkipped( "There is no way to test this, since the DateTimeValue already fails on construction." );
     }
 
     /**
@@ -214,7 +203,7 @@ class DateAndTimeFieldTypeIntergrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'value' => $this->getRepository()->createDateTime( "@12345678" ),
+            'value' => new \DateTime( "@12345678" ),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -258,7 +247,11 @@ class DateAndTimeFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     public function testUpdateContentFails( $failingValue, $expectedException )
     {
-        $this->markTestSkipped( "There is no way to test this, since the DateTimeValue already fails on construction." );
+        return array(
+            array(
+                "Some unknown date format", 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'
+            ),
+        );
     }
 
     /**
@@ -277,7 +270,7 @@ class DateAndTimeFieldTypeIntergrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'value' => $this->getRepository()->createDateTime( "@123456" ),
+            'value' => new \DateTime( "@123456" ),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
