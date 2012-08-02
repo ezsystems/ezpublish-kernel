@@ -1,4 +1,9 @@
 {
+    "name": "ezsystems/ezpublish",
+    "description": "eZ Publish API and kernel. This is the heart of eZ Publish 5.",
+    "version": "5.0-dev",
+    "homepage": "http://share.ez.no",
+    "license": "GPL-2.0",
     "repositories": [
         {
             "type": "vcs",
@@ -6,17 +11,19 @@
         },
         {
             "type": "vcs",
-            "url": "git://github.com/ezsystems/ezpublish.git"
+            "url": "git@github.com:ezsystems/ezpublish.git"
         }
     ],
     "require": {
-        "symfony/symfony": "2.1.0-beta3",
-        "twig/twig": "1.9.1",
+        "php": ">=5.3.3"
+    },
+    "require-dev": {
+        "symfony/symfony": "2.1.0-beta4",
         "zetacomponents/cache": "dev-master",
         "zetacomponents/php-generator": "dev-master",
         "zetacomponents/configuration": "dev-master",
         "zetacomponents/database": "dev-master",
-        "zetacomponents/mail": "1.7",
+        "zetacomponents/mail": "dev-master",
         "Qafoo/RMF": "dev-master",
         "ezsystems/ezpublish-legacy": "dev-ezpublish5-integration"
     },
