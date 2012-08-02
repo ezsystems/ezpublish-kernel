@@ -400,8 +400,40 @@ class ObjectStateServiceStub implements ObjectStateService
         }
 
         $objectState->_setPriority( $priority );
-        // TODO: Re-assign priorities to be continuos. Rule for same
-        // priorities is not determined, yet.
+
+        $this->renumberPriorities( $objectState->stateGroup );
+    }
+
+    /**
+     * Renumbers priorities in the given $stateGroup
+     *
+     * @param ObjectStateGroup $stateGroup
+     * @return void
+     */
+    private function renumberPriorities( $stateGroup )
+    {
+        foreach ( $this->groupStateMap[$stateGroup->id] as $stateId )
+        {
+            $sortStates[] = $this->states[$stateId];
+        }
+
+        usort(
+            $sortStates,
+            function ( $a, $b )
+            {
+                if ( $a->priority == $b->priority )
+                {
+                    return 0;
+                }
+                return ( $a->priority < $b->priority ? -1 : 1 );
+            }
+        );
+
+        $newPrio = 0;
+        foreach ( $sortStates as $sortedState )
+        {
+            $sortedState->_setPriority( $newPrio++ );
+        }
     }
 
     /**

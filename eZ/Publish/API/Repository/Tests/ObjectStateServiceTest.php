@@ -874,9 +874,9 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     {
         $repository = $this->getRepository();
 
-        $objectStateId = $this->generateId( 'objectstate', 2 );
+        $objectStateId = $this->generateId( 'objectstate', 1 );
         /* BEGIN: Use Case */
-        // $objectStateId contains the ID of the "locked" state
+        // $objectStateId contains the ID of the "not_locked" state
         $objectStateService = $repository->getObjectStateService();
 
         $initiallyLoadedObjectState = $objectStateService->loadObjectState(
@@ -888,7 +888,8 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
             $initiallyLoadedObjectState,
             23
         );
-        // $loadObjectState now has the set priority
+        // $loadObjectState now has the priority 1, since object state
+        // priorities are always made sequential
         $loadedObjectState = $objectStateService->loadObjectState(
             $objectStateId
         );
@@ -898,7 +899,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
             'eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectState',
             $loadedObjectState
         );
-        $this->assertEquals( 23, $loadedObjectState->priority );
+        $this->assertEquals( 1, $loadedObjectState->priority );
     }
 
     /**
