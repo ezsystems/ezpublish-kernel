@@ -1280,9 +1280,6 @@ class UserServiceTest extends BaseTest
         $contentUpdate->setField( 'first_name', 'Hello', 'eng-US' );
         $contentUpdate->setField( 'last_name', 'World', 'eng-US' );
 
-        // Required field
-        $contentUpdate->setField( 'user_account', $user );
-
         // Create a new update struct instance
         $userUpdate = $userService->newUserUpdateStruct();
 
