@@ -81,28 +81,6 @@ class Type extends FieldType
     }
 
     /**
-     * Build a Relation\Value object with the provided $destinationContentInfo->id as value.
-     *
-     * @param \eZ\Publish\Core\Repository\Values\Content\ContentInfo|int|string $destinationContent
-     *        Either a ContentInfo object, or a content id
-     * @return \eZ\Publish\Core\Repository\FieldType\Relation\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $destinationContent )
-    {
-        if ( $destinationContent instanceof ContentInfo )
-            return new Value( $destinationContent->id );
-        elseif ( is_integer( $destinationContent ) || is_string( $destinationContent ) )
-            return new Value( $destinationContent );
-
-        throw new InvalidArgumentType(
-            '$destinationContentInfo',
-            'eZ\\Publish\\Core\\Repository\\Values\\Content\\ContentInfo',
-            $destinationContentInfo
-        );
-    }
-
-    /**
      * Return the field type identifier for this field type
      *
      * @return string
@@ -129,12 +107,21 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\TextLine\Value $inputValue
+     * @param mixed $inputValue A ContentInfo or content ID to build from, or a Relation\Value
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value
+     * @return \eZ\Publish\Core\Repository\FieldType\Relation\Value
      */
     public function acceptValue( $inputValue )
     {
+        // ContentInfo
+        if ( $inputValue instanceof ContentInfo )
+        {
+            $inputValue = new Value( $destinationContent->id );
+        }
+        // content id
+        elseif ( is_integer( $inputValue ) || is_string( $inputValue ) )
+            return new Value( $destinationContent );
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
