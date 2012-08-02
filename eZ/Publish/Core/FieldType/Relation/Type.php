@@ -116,11 +116,13 @@ class Type extends FieldType
         // ContentInfo
         if ( $inputValue instanceof ContentInfo )
         {
-            $inputValue = new Value( $destinationContent->id );
+            $inputValue = new Value( $inputValue->id );
         }
         // content id
         elseif ( is_integer( $inputValue ) || is_string( $inputValue ) )
-            return new Value( $destinationContent );
+        {
+            $inputValue = new Value( $inputValue );
+        }
 
         if ( !$inputValue instanceof Value )
         {
