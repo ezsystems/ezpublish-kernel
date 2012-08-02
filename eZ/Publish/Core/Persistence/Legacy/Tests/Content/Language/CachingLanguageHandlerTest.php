@@ -71,52 +71,6 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::getById
-     */
-    public function testGetById()
-    {
-        $this->expectCacheInitialize();
-
-        $cacheMock = $this->getLanguageCacheMock();
-
-        $cacheMock->expects( $this->once() )
-            ->method( 'getById' )
-            ->with( $this->equalTo( 23 ) )
-            ->will( $this->returnValue( new Language() ) );
-
-        $handler = $this->getLanguageHandler();
-
-        $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Language',
-            $handler->getById( 23 )
-        );
-    }
-
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::getByLocale
-     */
-    public function testGetByLocale()
-    {
-        $this->expectCacheInitialize();
-
-        $cacheMock = $this->getLanguageCacheMock();
-
-        $cacheMock->expects( $this->once() )
-            ->method( 'getByLocale' )
-            ->with( $this->equalTo( 'eng-GB' ) )
-            ->will( $this->returnValue( new Language() ) );
-
-        $handler = $this->getLanguageHandler();
-
-        $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Language',
-            $handler->getByLocale( 'eng-GB' )
-        );
-    }
-
-    /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::create
      */
     public function testCreate()
