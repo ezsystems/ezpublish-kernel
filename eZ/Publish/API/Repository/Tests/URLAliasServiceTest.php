@@ -841,7 +841,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $urlAliasService = $repository->getURLAliasService();
 
         // Throws NotFoundException
-        $loadedAlias = $urlAliasService->lookUp( '/Setup2', 'ger-DE' );
+        $loadedAlias = $urlAliasService->lookUp( '/Contact-Us', 'ger-DE' );
         /* END: Use Case */
     }
 }
