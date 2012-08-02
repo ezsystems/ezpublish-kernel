@@ -20,20 +20,6 @@ use eZ\Publish\Core\FieldType\FieldType,
 class Type extends FieldType
 {
     /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FieldType\Value object with the provided $link as value.
-     *
-     * @param string $link
-     * @return \eZ\Publish\Core\FieldType\Url\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $link )
-    {
-        return new Value( $link );
-    }
-
-    /**
      * Return the field type identifier for this field type
      *
      * @return string
@@ -66,6 +52,11 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( is_string( $inputValue ) )
+        {
+            $inputValue = new Value( $inputValue );
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(

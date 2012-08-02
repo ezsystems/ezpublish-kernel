@@ -172,16 +172,16 @@ class FloatFieldTypeIntergrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new FloatValue( new \stdClass() ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
+                new \stdClass(),
+                'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException',
             ),
             array(
                 new FloatValue( 5.5 ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
+                'eZ\\Publish\\API\\Repository\\Exceptions\\ContentFieldValidationException',
             ),
             array(
                 new FloatValue( 127.5 ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
+                'eZ\\Publish\\API\\Repository\\Exceptions\\ContentFieldValidationException',
             ),
         );
     }

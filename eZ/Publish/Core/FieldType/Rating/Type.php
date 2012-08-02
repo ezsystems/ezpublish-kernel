@@ -19,20 +19,6 @@ use eZ\Publish\Core\FieldType\FieldType,
 class Type extends FieldType
 {
     /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FiledType\Value object with the provided $isDisabled as value.
-     *
-     * @param bool $isDisabled
-     * @return \eZ\Publish\Core\FieldType\Rating\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $isDisabled )
-    {
-        return new Value( $isDisabled );
-    }
-
-    /**
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
@@ -65,6 +51,11 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( is_bool( $inputValue ) )
+        {
+            $inputValue = new Value( $inputValue );
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(

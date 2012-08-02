@@ -457,16 +457,12 @@ class ContentService implements ContentServiceInterface
                 if ( isset( $fields[$fieldDefinition->identifier][$valueLanguageCode] ) )
                 {
                     $field = $fields[$fieldDefinition->identifier][$valueLanguageCode];
-                    $fieldValue = $field->value instanceof Value ?
-                            $field->value :
-                            $fieldType->buildValue( $field->value );
+                    $fieldValue = $fieldType->acceptValue( $field->value );
                 }
                 else
                 {
-                    $fieldValue = $fieldType->buildValue( $fieldDefinition->defaultValue );
+                    $fieldValue = $fieldType->acceptValue( $fieldDefinition->defaultValue );
                 }
-
-                $fieldValue = $fieldType->acceptValue( $fieldValue );
 
                 // ... && !$fieldType->hasContent( $fieldValue )
                 if ( $fieldDefinition->isRequired && (string)$fieldValue === "" )
@@ -943,15 +939,11 @@ class ContentService implements ContentServiceInterface
                 if ( isset( $fields[$fieldDefinition->identifier][$languageCode] ) )
                 {
                     $field = $fields[$fieldDefinition->identifier][$languageCode];
-                    $fieldValue = $fieldType->acceptValue(
-                        $field->value instanceof Value ?
-                            $field->value :
-                            $fieldType->buildValue( $field->value )
-                    );
+                    $fieldValue = $fieldType->acceptValue( $field->value );
                 }
                 else
                 {
-                    $fieldValue = $fieldType->buildValue( $fieldDefinition->defaultValue );
+                    $fieldValue = $fieldType->acceptValue( $fieldDefinition->defaultValue );
                 }
 
                 if ( $fieldDefinition->isRequired && (string)$fieldValue === "" )
