@@ -21,20 +21,6 @@ use eZ\Publish\Core\FieldType\FieldType,
 class Type extends FieldType
 {
     /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FiledType\Value object with the provided $authors as value.
-     *
-     * @param array $authors
-     * @return \eZ\Publish\Core\FieldType\Author\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $authors )
-    {
-        return new Value( $authors );
-    }
-
-    /**
      * Return the field type identifier for this field type
      *
      * @return string
@@ -61,12 +47,17 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
      *
-     * @param \eZ\Publish\Core\FieldType\Author\Value $inputValue
+     * @param mixed $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\Author\Value
      */
     public function acceptValue( $inputValue )
     {
+        if ( is_array( $inputValue ) )
+        {
+            $inputValue = new Value( $inputValue );
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(

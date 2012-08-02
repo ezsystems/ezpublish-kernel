@@ -169,21 +169,8 @@ class AuthorFieldTypeIntergrationTest extends BaseIntegrationTest
     public function provideInvalidCreationFieldData()
     {
         return array(
-            array( null, null ),
+            array( 'Sindelfingen', 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException' ),
         );
-    }
-
-    /**
-     * Tests failing content creation
-     *
-     * @param mixed $failingValue
-     * @param string $expectedException
-     * @dataProvider provideInvalidCreationFieldData
-     * @return void
-     */
-    public function testCreateContentFails( $failingValue, $expectedException )
-    {
-        $this->markTestSkipped( "There is no way to test this, since the DateTimeValue already fails on construction." );
     }
 
     /**
@@ -255,19 +242,6 @@ class AuthorFieldTypeIntergrationTest extends BaseIntegrationTest
     public function provideInvalidUpdateFieldData()
     {
         return $this->provideInvalidCreationFieldData();
-    }
-
-    /**
-     * Tests failing content update
-     *
-     * @param mixed $failingValue
-     * @param string $expectedException
-     * @dataProvider provideInvalidUpdateFieldData
-     * @return void
-     */
-    public function testUpdateContentFails( $failingValue, $expectedException )
-    {
-        $this->markTestSkipped( "There is no way to test this, since the DateTimeValue already fails on construction." );
     }
 
     /**
