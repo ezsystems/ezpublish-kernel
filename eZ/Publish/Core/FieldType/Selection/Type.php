@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\Core\FieldType\Selection;
 use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+    eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * The Selection field type.
@@ -19,17 +20,91 @@ use eZ\Publish\Core\FieldType\FieldType,
 class Type extends FieldType
 {
     /**
-     * Build a Value object of current FieldType
+     * The setting keys which are available on this field type.
      *
-     * Build a FiledType\Value object with the provided $selection as value.
+     * The key is the setting name, and the value is the default value for given
+     * setting, set to null if no particular default should be set.
      *
-     * @param int[] $selection
-     * @return \eZ\Publish\Core\FieldType\Selection\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @var mixed
      */
-    public function buildValue( $selection )
+    protected $settingsSchema = array(
+        'isMultiple' => array(
+            'type' => 'bool',
+            'default' => false,
+        ),
+        'options' => array(
+            'type' => 'hash',
+            'default' => array(),
+        ),
+    );
+
+    /**
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings( $fieldSettings )
     {
-        return new Value( $selection );
+        $validationErrors = array();
+
+        if ( !is_array( $fieldSettings ) )
+        {
+            $validationErrors[] = new ValidationError(
+                "FieldType '%fieldType%' expects settings to be a hash map",
+                null,
+                array(
+                    "fieldType" => $this->getFieldTypeIdentifier()
+                )
+            );
+            return $validationErrors;
+        }
+
+        foreach ( $fieldSettings as $settingKey => $settingValue )
+        {
+            switch ( $settingKey )
+            {
+                case 'isMultiple':
+                    if ( !is_bool( $settingValue ) )
+                    {
+                        $validationErrors[] = new ValidationError(
+                            "FieldType '%fieldType%' expects setting %setting% to be a of type %type%",
+                            null,
+                            array(
+                                "fieldType" => $this->getFieldTypeIdentifier(),
+                                "setting"   => $settingKey,
+                                "type"      => "bool",
+                            )
+                        );
+                    }
+                    break;
+                case 'options':
+                    if ( !is_array( $settingValue ) )
+                    {
+                        $validationErrors[] = new ValidationError(
+                            "FieldType '%fieldType%' expects setting %setting% to be a of type %type%",
+                            null,
+                            array(
+                                "fieldType" => $this->getFieldTypeIdentifier(),
+                                "setting"   => $settingKey,
+                                "type"      => "hash",
+                            )
+                        );
+                    }
+                    break;
+                default:
+                    $validationErrors[] = new ValidationError(
+                        "Setting '%setting%' is unknown",
+                        null,
+                        array(
+                            "setting" => $settingKey
+                        )
+                    );
+            }
+        }
+
+        return $validationErrors;
     }
 
     /**
@@ -65,6 +140,11 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( is_array( $inputValue ) )
+        {
+            $inputValue = new Value();
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
@@ -93,7 +173,7 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
-        return (string) $value;
+        return implode( '-', $value->selection );
     }
 
     /**
