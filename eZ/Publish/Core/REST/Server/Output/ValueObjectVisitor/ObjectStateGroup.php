@@ -32,7 +32,7 @@ class ObjectStateGroup extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'objectStateGroup', array( 'group' => $data->id ) )
+            $this->urlHandler->generate( 'objectstategroup', array( 'objectstategroup' => $data->id ) )
         );
         $generator->endAttribute( 'href' );
 

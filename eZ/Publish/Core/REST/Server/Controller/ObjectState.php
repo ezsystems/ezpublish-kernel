@@ -83,9 +83,9 @@ class ObjectState
      */
     public function createObjectState( RMF\Request $request )
     {
-        $values = $this->urlHandler->parse( 'objectStates', $request->path );
+        $values = $this->urlHandler->parse( 'objectstates', $request->path );
 
-        $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $values['group'] );
+        $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] );
 
         return new Values\ObjectState(
             $this->objectStateService->createObjectState(
@@ -99,5 +99,17 @@ class ObjectState
             ),
             $objectStateGroup->id
         );
+    }
+
+    /**
+     * Loads an object state group
+     *
+     * @param RMF\Request $request
+     * @return Section
+     */
+    public function loadObjectStateGroup( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'objectstategroup', $request->path );
+        return $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] );
     }
 }

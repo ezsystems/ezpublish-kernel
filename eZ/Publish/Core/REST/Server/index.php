@@ -207,6 +207,9 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/content/objectstategroups$)' => array(
             'POST' => array( $objectStateController, 'createObjectStateGroup' ),
         ),
+        '(^/content/objectstategroups/[0-9]+$)' => array(
+            'GET' => array( $objectStateController, 'loadObjectStateGroup' ),
+        ),
         '(^/content/objectstategroups/[0-9]+/objectstates$)' => array(
             'POST' => array( $objectStateController, 'createObjectState' ),
         ),

@@ -95,7 +95,7 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
 
         $result = $this->client->request(
             'POST',
-            $this->urlHandler->generate( 'objectStateGroups' ),
+            $this->urlHandler->generate( 'objectstategroups' ),
             $inputMessage
         );
 
@@ -113,7 +113,14 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
      */
     public function loadObjectStateGroup( $objectStateGroupId )
     {
-        throw new \Exception( "@todo Implement" );
+        $response = $this->client->request(
+            'GET',
+            $objectStateGroupId,
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'ObjectStateGroup' ) )
+            )
+        );
+        return $this->inputDispatcher->parse( $response );
     }
 
     /**
@@ -188,7 +195,7 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
 
         $result = $this->client->request(
             'POST',
-            $this->urlHandler->generate( 'objectStates', array( 'group' => $objectStateGroup->id ) ),
+            $this->urlHandler->generate( 'objectstates', array( 'objectstategroup' => $objectStateGroup->id ) ),
             $inputMessage
         );
 
