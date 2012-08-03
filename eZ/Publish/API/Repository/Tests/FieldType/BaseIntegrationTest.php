@@ -397,15 +397,18 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     {
         $this->assertEquals(
             $this->getTypeName(),
-            $fieldDefinition->fieldTypeIdentifier
+            $fieldDefinition->fieldTypeIdentifier,
+            'Loaded fieldTypeIdentifier does not match.'
         );
         $this->assertEquals(
             $this->getValidFieldSettings(),
-            $fieldDefinition->fieldSettings
+            $fieldDefinition->fieldSettings,
+            'Loaded fieldSettings do not match.'
         );
         $this->assertEquals(
             $this->getValidValidatorConfiguration(),
-            $fieldDefinition->validatorConfiguration
+            $fieldDefinition->validatorConfiguration,
+            'Loaded validatorConfiguration does not match.'
         );
     }
 
