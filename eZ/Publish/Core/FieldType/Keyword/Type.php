@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Keyword;
 use eZ\Publish\Core\FieldType\FieldType,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
@@ -51,7 +52,7 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
-        if ( is_null( $inputValue ) || is_array( $inputValue ) )
+        if ( is_null( $inputValue ) || is_array( $inputValue ) || is_string( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
         }
@@ -132,5 +133,35 @@ class Type extends FieldType
     public function getIndexData( $value )
     {
         throw new \RuntimeExcepion( '@TODO: Implement' );
+    }
+
+    /**
+     * Converts a $value to a persistence value
+     *
+     * @param mixed $value
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
+     */
+    public function toPersistenceValue( $value )
+    {
+        return new FieldValue(
+            array(
+                "data" => null,
+                "externalData" => $value->values,
+                "sortKey" => $this->getSortInfo( $value ),
+            )
+        );
+    }
+
+    /**
+     * Converts a persistence $fieldValue to a Value
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
+     *
+     * @return mixed
+     */
+    public function fromPersistenceValue( FieldValue $fieldValue )
+    {
+        return new Value( $fieldValue->externalData );
     }
 }
