@@ -216,7 +216,7 @@ array (
 ),
 'ezcontentbrowserecent' =>
 array (
- 0 =>
+/* 0 =>
  array (
   'created' => '1343141328',
   'id' => '1',
@@ -231,7 +231,7 @@ array (
   'name' => 'Users',
   'node_id' => '5',
   'user_id' => '14',
- ),
+ ),*/
 ),
 'ezcontentclass' =>
 array (
@@ -10478,7 +10478,7 @@ array (
 ),
 'ezimagefile' =>
 array (
- 0 =>
+/* 0 =>
  array (
   'contentobject_attribute_id' => '172',
   'filepath' => 'var/storage/images/setup/ez_publish/172-1-eng-GB/ez_publish.',
@@ -10489,7 +10489,7 @@ array (
   'contentobject_attribute_id' => '172',
   'filepath' => 'var/ezflow_site/storage/images/design/plain-site/172-2-eng-US/eZ-Flow-without-demo-content1.png',
   'id' => '2',
- ),
+ ),*/
 ),
 'ezinfocollection' =>
 array (
@@ -10499,7 +10499,7 @@ array (
 ),
 'ezisbn_group' =>
 array (
- 0 =>
+/* 0 =>
  array (
   'description' => 'English language',
   'group_number' => '0',
@@ -11752,11 +11752,11 @@ array (
   'description' => 'France',
   'group_number' => '10',
   'id' => '209',
- ),
+ ),*/
 ),
 'ezisbn_group_range' =>
 array (
- 0 =>
+/* 0 =>
  array (
   'from_number' => '0',
   'group_from' => '0',
@@ -11827,11 +11827,11 @@ array (
   'group_to' => '10',
   'id' => '8',
   'to_number' => '10999',
- ),
+ ),*/
 ),
 'ezisbn_registrant_range' =>
 array (
- 0 =>
+/* 0 =>
  array (
   'from_number' => '0',
   'id' => '1',
@@ -21090,7 +21090,7 @@ array (
   'registrant_length' => '6',
   'registrant_to' => '999999',
   'to_number' => '99999',
- ),
+ ),*/
 ),
 'ezkeyword' =>
 array (
@@ -21407,7 +21407,7 @@ array (
 ),
 'eznotificationevent' =>
 array (
- 0 =>
+/* 0 =>
  array (
   'data_int1' => '57',
   'data_int2' => '1',
@@ -21462,7 +21462,7 @@ array (
   'event_type_string' => 'ezpublish',
   'id' => '4',
   'status' => '0',
- ),
+ ),*/
 ),
 'ezoperation_memento' =>
 array (
@@ -21478,7 +21478,7 @@ array (
 ),
 'ezorder_status' =>
 array (
- 0 =>
+/* 0 =>
  array (
   'id' => '1',
   'is_active' => '1',
@@ -21498,14 +21498,14 @@ array (
   'is_active' => '1',
   'name' => 'Delivered',
   'status_id' => '3',
- ),
+ ),*/
 ),
 'ezorder_status_history' =>
 array (
 ),
 'ezpackage' =>
 array (
- 0 =>
+/* 0 =>
  array (
   'id' => '1',
   'install_date' => '1301057838',
@@ -21560,7 +21560,7 @@ array (
   'install_date' => '1343141329',
   'name' => 'ezflow_democontent_clean',
   'version' => '2.5-0',
- ),
+ ),*/
 ),
 'ezpaymentobject' =>
 array (
@@ -22976,7 +22976,7 @@ array (
 ),
 'ezpreferences' =>
 array (
- 0 =>
+/* 0 =>
  array (
   'id' => '1',
   'name' => 'admin_navigation_content',
@@ -23017,7 +23017,7 @@ array (
   'name' => 'admin_bookmark_menu',
   'user_id' => '14',
   'value' => '1',
- ),
+ ),*/
 ),
 'ezprest_authcode' =>
 array (
@@ -23091,7 +23091,7 @@ array (
 ),
 'ezrss_export' =>
 array (
- 0 =>
+/* 0 =>
  array (
   'access_url' => 'my_feed',
   'active' => '1',
@@ -23110,11 +23110,11 @@ array (
   'status' => '1',
   'title' => 'My RSS Feed',
   'url' => 'http://example.com',
- ),
+ ),*/
 ),
 'ezrss_export_item' =>
 array (
- 0 =>
+/* 0 =>
  array (
   'category' => '',
   'class_id' => '16',
@@ -23126,7 +23126,7 @@ array (
   'status' => '1',
   'subnodes' => '0',
   'title' => 'title',
- ),
+ ),*/
 ),
 'ezrss_import' =>
 array (
@@ -23950,7 +23950,7 @@ array (
 ),
 'ezsite_data' =>
 array (
- 0 =>
+/* 0 =>
  array (
   'name' => 'ezflow',
   'value' => '2.0',
@@ -23964,7 +23964,7 @@ array (
  array (
   'name' => 'ezpublish-version',
   'value' => '4.7.0',
- ),
+ ),*/
 ),
 'ezstarrating' =>
 array (
@@ -25065,12 +25065,12 @@ array (
 ),
 'ezvattype' =>
 array (
- 0 =>
+/* 0 =>
  array (
   'id' => '1',
   'name' => 'Std',
   'percentage' => '0',
- ),
+ ),*/
 ),
 'ezview_counter' =>
 array (
@@ -25092,7 +25092,7 @@ array (
 ),
 'ezworkflow_group' =>
 array (
- 0 =>
+/* 0 =>
  array (
   'created' => '1024392098',
   'creator_id' => '14',
@@ -25100,7 +25100,7 @@ array (
   'modified' => '1024392098',
   'modifier_id' => '14',
   'name' => 'Standard',
- ),
+ ),*/
 ),
 'ezworkflow_group_link' =>
 array (
