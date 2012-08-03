@@ -402,9 +402,17 @@ class Handler implements BaseContentHandler
      */
     public function deleteContent( $contentId )
     {
-        foreach ( $this->contentGateway->getAllLocationIds( $contentId ) as $locationId )
+        $contentLocations = $this->contentGateway->getAllLocationIds( $contentId );
+        if ( empty( $contentLocations ) )
         {
-            $this->locationHandler->removeSubtree( $locationId );
+            $this->removeRawContent( $contentId );
+        }
+        else
+        {
+            foreach ( $contentLocations as $locationId )
+            {
+                $this->locationHandler->removeSubtree( $locationId );
+            }
         }
     }
 

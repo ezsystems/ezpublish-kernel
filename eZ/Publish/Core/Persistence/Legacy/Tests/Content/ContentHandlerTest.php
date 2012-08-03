@@ -849,9 +849,9 @@ class ContentHandlerTest extends TestCase
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::deleteContent
      */
-    public function testDeleteContent()
+    public function testDeleteContentWithLocations()
     {
-        $handlerMock = $this->getPartlyMockedHandler( array( "removeRawContent" ) );
+        $handlerMock = $this->getPartlyMockedHandler( array( "getAllLocationIds" ) );
         $gatewayMock = $this->getGatewayMock();
         $locationHandlerMock = $this->getLocationHandlerMock();
 
@@ -862,11 +862,33 @@ class ContentHandlerTest extends TestCase
         $locationHandlerMock->expects( $this->exactly( 2 ) )
             ->method( "removeSubtree" )
             ->with(
-                $this->logicalOr(
-                    $this->equalTo( 42 ),
-                    $this->equalTo( 24 )
+            $this->logicalOr(
+                $this->equalTo( 42 ),
+                $this->equalTo( 24 )
             )
         );
+
+        $handlerMock->deleteContent( 23 );
+    }
+
+    /**
+     * Test for the deleteContent() method.
+     *
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::deleteContent
+     */
+    public function testDeleteContentWithoutLocations()
+    {
+        $handlerMock = $this->getPartlyMockedHandler( array( "removeRawContent" ) );
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( "getAllLocationIds" )
+            ->with( $this->equalTo( 23 ) )
+            ->will( $this->returnValue( array() ) );
+        $handlerMock->expects( $this->once() )
+            ->method( "removeRawContent" )
+            ->with(  $this->equalTo( 23 ) );
 
         $handlerMock->deleteContent( 23 );
     }
