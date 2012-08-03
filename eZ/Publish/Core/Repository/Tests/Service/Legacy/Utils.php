@@ -34,10 +34,11 @@ abstract class Utils extends InMemoryUtils
     }
 
     /**
+     * @static
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $handler
      * @throws \Exception
      */
-    protected function insertLegacyData( EzcDbHandler $handler )
+    protected static function insertLegacyData( EzcDbHandler $handler )
     {
         $dsn = ( isset( $_ENV['DATABASE'] ) && $_ENV['DATABASE'] ) ? $_ENV['DATABASE'] : 'sqlite://:memory:';
         $db = preg_replace( '(^([a-z]+).*)', '\\1', $dsn );
