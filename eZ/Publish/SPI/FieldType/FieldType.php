@@ -28,7 +28,6 @@ interface FieldType
      * Return the field type identifier for this field type
      *
      * @return string
-     * @TODO Expose to Public API.
      */
     public function getFieldTypeIdentifier();
 
@@ -57,7 +56,6 @@ interface FieldType
      * consumer.
      *
      * @return mixed
-     * @TODO Expose to Public API.
      */
     public function getSettingsSchema();
 
@@ -99,7 +97,6 @@ interface FieldType
      * </code>
      *
      * @return mixed
-     * @TODO Expose to Public API.
      */
     public function getValidatorConfigurationSchema();
 
@@ -137,7 +134,6 @@ interface FieldType
      * Indicates if the field type supports indexing and sort keys for searching
      *
      * @return bool
-     * @TODO Expose to Public API.
      */
     public function isSearchable();
 
@@ -146,7 +142,6 @@ interface FieldType
      * value is provided in the field definition in content types.
      *
      * @return mixed
-     * @TODO Expose to Public API.
      */
     public function getDefaultDefaultValue();
 
@@ -179,7 +174,6 @@ interface FieldType
      * @param mixed $hash
      *
      * @return mixed
-     * @TODO Expose to Public API.
      * @TODO May support different formats, but best practice is only 1
      */
     public function fromHash( $hash );
@@ -190,7 +184,6 @@ interface FieldType
      * @param mixed $value
      *
      * @return mixed
-     * @TODO Expose to Public API.
      * @TODO May support different formats, but best practice is only 1
      */
     public function toHash( $value );
