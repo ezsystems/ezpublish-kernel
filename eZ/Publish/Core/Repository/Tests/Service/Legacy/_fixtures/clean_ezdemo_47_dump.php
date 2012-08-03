@@ -4,12 +4,12 @@
  */
 
 return array (
-'ezapprove_items' =>
+/* 'ezapprove_items' =>
 array (
 ),
 'ezbasket' =>
 array (
-),
+), */
 'ezbinaryfile' =>
 array (
 ),
@@ -165,7 +165,7 @@ array (
   'contentobject_state_id' => '1',
  ),
 ),
-'ezcollab_group' =>
+/* 'ezcollab_group' =>
 array (
 ),
 'ezcollab_item' =>
@@ -203,7 +203,7 @@ array (
 ),
 'ezcomment_subscription' =>
 array (
-),
+), */
 'ezcontent_language' =>
 array (
  0 =>
@@ -228,7 +228,7 @@ array (
   'name' => 'English (United Kingdom)',
  ),
 ),
-'ezcontentbrowsebookmark' =>
+/* 'ezcontentbrowsebookmark' =>
 array (
 ),
 'ezcontentbrowserecent' =>
@@ -249,7 +249,7 @@ array (
   'node_id' => '5',
   'user_id' => '14',
  ),
-),
+), */
 'ezcontentclass' =>
 array (
  0 =>
@@ -8563,7 +8563,7 @@ array (
   'workflow_event_pos' => '0',
  ),
 ),
-'ezcurrencydata' =>
+/* 'ezcurrencydata' =>
 array (
 ),
 'ezdiscountrule' =>
@@ -19719,7 +19719,7 @@ array (
 ),
 'ezpending_actions' =>
 array (
-),
+), */
 'ezpolicy' =>
 array (
  0 =>
@@ -20977,7 +20977,7 @@ array (
   'value' => '1',
  ),
 ),
-'ezpreferences' =>
+/* 'ezpreferences' =>
 array (
  0 =>
  array (
@@ -21048,7 +21048,7 @@ array (
 ),
 'ezpublishingqueueprocesses' =>
 array (
-),
+), */
 'ezrole' =>
 array (
  0 =>
@@ -21092,7 +21092,7 @@ array (
   'version' => '0',
  ),
 ),
-'ezrss_export' =>
+/* 'ezrss_export' =>
 array (
  0 =>
  array (
@@ -21136,7 +21136,7 @@ array (
 ),
 'ezscheduled_script' =>
 array (
-),
+), */
 'ezsearch_object_word_link' =>
 array (
  0 =>
@@ -22084,12 +22084,12 @@ array (
   'word_id' => '984',
  ),
 ),
-'ezsearch_return_count' =>
+/* 'ezsearch_return_count' =>
 array (
 ),
 'ezsearch_search_phrase' =>
 array (
-),
+), */
 'ezsearch_word' =>
 array (
  0 =>
@@ -22408,7 +22408,7 @@ array (
   'navigation_part_identifier' => 'ezcontentnavigationpart',
  ),
 ),
-'ezsession' =>
+/* 'ezsession' =>
 array (
 ),
 'ezsite_data' =>
@@ -22446,7 +22446,7 @@ array (
 ),
 'eztrigger' =>
 array (
-),
+), */
 'ezurl' =>
 array (
  0 =>
@@ -23426,9 +23426,9 @@ array (
 'ezuser_accountkey' =>
 array (
 ),
-'ezuser_discountrule' =>
+/* 'ezuser_discountrule' =>
 array (
-),
+), */
 'ezuser_role' =>
 array (
  0 =>
@@ -23538,7 +23538,7 @@ array (
   'user_id' => '14',
  ),
 ),
-'ezvatrule' =>
+/* 'ezvatrule' =>
 array (
 ),
 'ezvatrule_product_category' =>
@@ -23588,6 +23588,6 @@ array (
 ),
 'ezworkflow_process' =>
 array (
-),
+), */
 );
 
