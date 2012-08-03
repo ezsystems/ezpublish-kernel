@@ -183,7 +183,16 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
      */
     public function createObjectState( ObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct )
     {
-        throw new \Exception( "@todo Implement" );
+        $inputMessage = $this->outputVisitor->visit( $objectStateCreateStruct );
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'ObjectState' );
+
+        $result = $this->client->request(
+            'POST',
+            $this->urlHandler->generate( 'objectStates', array( 'group' => $objectStateGroup->id ) ),
+            $inputMessage
+        );
+
+        return $this->inputDispatcher->parse( $result );
     }
 
     /**

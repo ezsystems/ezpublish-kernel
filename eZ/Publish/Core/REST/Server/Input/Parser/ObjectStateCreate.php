@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\ObjectStateService;
 /**
  * Base class for input parser
  */
-class ObjectStateGroupCreate extends Base
+class ObjectStateCreate extends Base
 {
     /**
      * Object state service
@@ -42,46 +42,52 @@ class ObjectStateGroupCreate extends Base
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
         if ( !array_key_exists( 'identifier', $data ) )
         {
-            throw new Exceptions\Parser( "Missing 'identifier' attribute for ObjectStateGroupCreate." );
+            throw new Exceptions\Parser( "Missing 'identifier' attribute for ObjectStateCreate." );
+        }
+
+        if ( !array_key_exists( 'priority', $data ) )
+        {
+            throw new Exceptions\Parser( "Missing 'priority' attribute for ObjectStateCreate." );
         }
 
         if ( !array_key_exists( 'defaultLanguageCode', $data ) )
         {
-            throw new Exceptions\Parser( "Missing 'defaultLanguageCode' attribute for ObjectStateGroupCreate." );
+            throw new Exceptions\Parser( "Missing 'defaultLanguageCode' attribute for ObjectStateCreate." );
         }
 
         if ( !array_key_exists( 'names', $data ) || !is_array( $data['names'] ) )
         {
-            throw new Exceptions\Parser( "Missing or invalid 'names' element for ObjectStateGroupCreate." );
+            throw new Exceptions\Parser( "Missing or invalid 'names' element for ObjectStateCreate." );
         }
 
         if ( !array_key_exists( 'value', $data['names'] ) || !is_array( $data['names']['value'] ) )
         {
-            throw new Exceptions\Parser( "Missing or invalid 'names' element for ObjectStateGroupCreate." );
+            throw new Exceptions\Parser( "Missing or invalid 'names' element for ObjectStateCreate." );
         }
 
-        $objectStateGroupCreateStruct = $this->objectStateService->newObjectStateGroupCreateStruct( $data['identifier'] );
-        $objectStateGroupCreateStruct->defaultLanguageCode = $data['defaultLanguageCode'];
+        $objectStateCreateStruct = $this->objectStateService->newObjectStateCreateStruct( $data['identifier'] );
+        $objectStateCreateStruct->priority = (int) $data['priority'];
+        $objectStateCreateStruct->defaultLanguageCode = $data['defaultLanguageCode'];
 
         foreach ( $data['names']['value'] as $nameData )
         {
             if ( !array_key_exists( '_languageCode', $nameData ) )
             {
-                throw new Exceptions\Parser( "Missing '_languageCode' attribute for ObjectStateGroupCreate name." );
+                throw new Exceptions\Parser( "Missing '_languageCode' attribute for ObjectStateCreate name." );
             }
 
             if ( !array_key_exists( '#text', $nameData ) )
             {
-                throw new Exceptions\Parser( "Missing value for ObjectStateGroupCreate name." );
+                throw new Exceptions\Parser( "Missing value for ObjectStateCreate name." );
             }
 
-            $objectStateGroupCreateStruct->names[$nameData['_languageCode']] = $nameData['#text'];
+            $objectStateCreateStruct->names[$nameData['_languageCode']] = $nameData['#text'];
         }
 
         if ( array_key_exists( 'descriptions', $data ) && is_array( $data['descriptions'] ) )
@@ -92,19 +98,19 @@ class ObjectStateGroupCreate extends Base
                 {
                     if ( !array_key_exists( '_languageCode', $descriptionData ) )
                     {
-                        throw new Exceptions\Parser( "Missing '_languageCode' attribute for ObjectStateGroupCreate description." );
+                        throw new Exceptions\Parser( "Missing '_languageCode' attribute for ObjectStateCreate description." );
                     }
 
                     if ( !array_key_exists( '#text', $descriptionData ) )
                     {
-                        throw new Exceptions\Parser( "Missing value for ObjectStateGroupCreate description." );
+                        throw new Exceptions\Parser( "Missing value for ObjectStateCreate description." );
                     }
 
-                    $objectStateGroupCreateStruct->descriptions[$descriptionData['_languageCode']] = $descriptionData['#text'];
+                    $objectStateCreateStruct->descriptions[$descriptionData['_languageCode']] = $descriptionData['#text'];
                 }
             }
         }
 
-        return $objectStateGroupCreateStruct;
+        return $objectStateCreateStruct;
     }
 }

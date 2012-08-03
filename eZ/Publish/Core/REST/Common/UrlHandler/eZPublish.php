@@ -40,6 +40,8 @@ class eZPublish extends Pattern
         ''                     => '/content/objects/{object}/versions/{version}/relations/{relation}',
         'objectStateGroups'    => '/content/objectstategroups',
         'objectStateGroup'     => '/content/objectstategroups/{group}',
+        'objectStates'         => '/content/objectstategroups/{group}/objectstates',
+        'objectState'          => '/content/objectstategroups/{group}/objectstates/{state}',
         'sections'             => '/content/sections',
         'section'              => '/content/sections/{section}',
         'sectionByIdentifier'  => '/content/sections?identifier={section}',

@@ -81,6 +81,7 @@ $inputDispatcher = new Common\Input\Dispatcher(
         'application/vnd.ez.api.LocationCreate'         => new Input\Parser\LocationCreate( $urlHandler, $repository->getLocationService() ),
         'application/vnd.ez.api.LocationUpdate'         => new Input\Parser\LocationUpdate( $urlHandler, $repository->getLocationService() ),
         'application/vnd.ez.api.ObjectStateGroupCreate' => new Input\Parser\ObjectStateGroupCreate( $urlHandler, $repository->getObjectStateService() ),
+        'application/vnd.ez.api.ObjectStateCreate'      => new Input\Parser\ObjectStateCreate( $urlHandler, $repository->getObjectStateService() ),
     ) ),
     $handler
 );
@@ -160,6 +161,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location'             => new Output\ValueObjectVisitor\Location( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\LocationList'               => new Output\ValueObjectVisitor\LocationList( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup' => new Output\ValueObjectVisitor\ObjectStateGroup( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectState'                => new Output\ValueObjectVisitor\ObjectState( $urlHandler ),
 );
 
 /*
@@ -204,6 +206,9 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^/content/objectstategroups$)' => array(
             'POST' => array( $objectStateController, 'createObjectStateGroup' ),
+        ),
+        '(^/content/objectstategroups/[0-9]+/objectstates$)' => array(
+            'POST' => array( $objectStateController, 'createObjectState' ),
         ),
         '(^/content/locations/[0-9/]+$)' => array(
             'GET'    => array( $locationController, 'loadLocation' ),

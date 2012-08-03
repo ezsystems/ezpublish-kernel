@@ -74,4 +74,30 @@ class ObjectState
             )
         );
     }
+
+    /**
+     * Creates a new object state
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
+     */
+    public function createObjectState( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'objectStates', $request->path );
+
+        $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $values['group'] );
+
+        return new Values\ObjectState(
+            $this->objectStateService->createObjectState(
+                $objectStateGroup,
+                $this->inputDispatcher->parse(
+                    new Message(
+                        array( 'Content-Type' => $request->contentType ),
+                        $request->body
+                    )
+                )
+            ),
+            $objectStateGroup->id
+        );
+    }
 }

@@ -67,6 +67,7 @@ $repository = new Client\IntegrationTestRepository(
                 'application/vnd.ez.api.Location'           => new Client\Input\Parser\Location(),
                 'application/vnd.ez.api.LocationList'       => new Client\Input\Parser\LocationList(),
                 'application/vnd.ez.api.ObjectStateGroup'   => new Client\Input\Parser\ObjectStateGroup(),
+                'application/vnd.ez.api.ObjectState'        => new Client\Input\Parser\ObjectState(),
             )
         ),
         array(
@@ -102,6 +103,7 @@ $repository = new Client\IntegrationTestRepository(
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\PolicyUpdateStruct'                       => new Client\Output\ValueObjectVisitor\PolicyUpdateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\LocationCreateStruct'                     => new Client\Output\ValueObjectVisitor\LocationCreateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroupCreateStruct'      => new Client\Output\ValueObjectVisitor\ObjectStateGroupCreateStruct( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateCreateStruct'           => new Client\Output\ValueObjectVisitor\ObjectStateCreateStruct( $urlHandler ),
         )
     ),
     $urlHandler,
