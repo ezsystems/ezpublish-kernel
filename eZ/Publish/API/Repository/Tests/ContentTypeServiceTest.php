@@ -229,6 +229,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeGroupByIdentifier()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      * @group user
+     * @group field-type
      */
     public function testLoadContentTypeGroupByIdentifier()
     {
@@ -519,6 +520,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeCreateStruct()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      * @group user
+     * @group field-type
      */
     public function testNewContentTypeCreateStruct()
     {
@@ -575,6 +577,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @see \eZ\Publish\API\Repository\ContentTypeService::newFieldDefinitionCreateStruct()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      * @group user
+     * @group field-type
      */
     public function testNewFieldDefinitionCreateStruct()
     {
@@ -655,6 +658,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewFieldDefinitionCreateStruct
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeGroupByIdentifier
      * @group user
+     * @group field-type
      */
     public function testCreateContentType()
     {
@@ -1615,6 +1619,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentType()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      * @group user
+     * @group field-type
      */
     public function testLoadContentType()
     {

@@ -35,6 +35,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
      * @group user
+     * @group field-type
      */
     public function testNewContentCreateStruct()
     {
@@ -61,6 +62,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentCreateStruct
      * @group user
+     * @group field-type
      */
     public function testCreateContent()
     {
@@ -591,6 +593,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @see \eZ\Publish\API\Repository\ContentService::loadContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      * @group user
+     * @group field-type
      */
     public function testLoadContent()
     {
@@ -691,6 +694,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfo
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
      * @group user
+     * @group field-type
      */
     public function testPublishVersion()
     {
@@ -1116,6 +1120,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentUpdateStruct
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
      * @group user
+     * @group field-type
      */
     public function testUpdateContent()
     {
@@ -2332,6 +2337,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::copyContent()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     * @group field-type
      */
     public function testCopyContent()
     {
