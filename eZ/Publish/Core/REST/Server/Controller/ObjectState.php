@@ -112,4 +112,16 @@ class ObjectState
         $values = $this->urlHandler->parse( 'objectstategroup', $request->path );
         return $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] );
     }
+
+    /**
+     * Loads an object state
+     *
+     * @param RMF\Request $request
+     * @return Section
+     */
+    public function loadObjectState( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'objectstate', $request->path );
+        return $this->objectStateService->loadObjectState( $values['objectstate'] );
+    }
 }

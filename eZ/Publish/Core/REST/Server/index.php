@@ -213,6 +213,9 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/content/objectstategroups/[0-9]+/objectstates$)' => array(
             'POST' => array( $objectStateController, 'createObjectState' ),
         ),
+        '(^/content/objectstategroups/[0-9]+/objectstates/[0-9]+$)' => array(
+            'GET' => array( $objectStateController, 'loadObjectState' ),
+        ),
         '(^/content/locations/[0-9/]+$)' => array(
             'GET'    => array( $locationController, 'loadLocation' ),
             'PATCH'  => array( $locationController, 'updateLocation' ),
