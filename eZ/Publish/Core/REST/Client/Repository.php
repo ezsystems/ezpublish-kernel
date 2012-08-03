@@ -82,6 +82,11 @@ class Repository implements \eZ\Publish\API\Repository\Repository
     private $locationService;
 
     /**
+     * @var \eZ\Publish\Core\REST\Client\ObjectStateService
+     */
+    private $objectStateService;
+
+    /**
      * @var \eZ\Publish\Core\REST\Client\IOService
      */
     private $ioService;
@@ -419,7 +424,16 @@ class Repository implements \eZ\Publish\API\Repository\Repository
      */
     public function getObjectStateService()
     {
-        throw new \RuntimeException( '@TODO: Implement' );
+        if ( null === $this->objectStateService )
+        {
+            $this->objectStateService = new ObjectStateService(
+                $this->client,
+                $this->inputDispatcher,
+                $this->outputVisitor,
+                $this->urlHandler
+            );
+        }
+        return $this->objectStateService;
     }
 
     /**

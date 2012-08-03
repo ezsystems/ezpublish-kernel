@@ -71,15 +71,16 @@ $urlHandler = new Common\UrlHandler\eZPublish();
 
 $inputDispatcher = new Common\Input\Dispatcher(
     new Common\Input\ParsingDispatcher( array(
-        'application/vnd.ez.api.RoleInput'       => new Input\Parser\RoleInput( $urlHandler, $repository->getRoleService() ),
-        'application/vnd.ez.api.SectionInput'    => new Input\Parser\SectionInput( $urlHandler, $repository->getSectionService() ),
-        'application/vnd.ez.api.ContentUpdate'   => new Input\Parser\ContentUpdate( $urlHandler ),
-        'application/vnd.ez.api.PolicyCreate'    => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService() ),
-        'application/vnd.ez.api.PolicyUpdate'    => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService() ),
-        'application/vnd.ez.api.limitation'      => new Input\Parser\Limitation( $urlHandler ),
-        'application/vnd.ez.api.RoleAssignInput' => new Input\Parser\RoleAssignInput( $urlHandler ),
-        'application/vnd.ez.api.LocationCreate'  => new Input\Parser\LocationCreate( $urlHandler, $repository->getLocationService() ),
-        'application/vnd.ez.api.LocationUpdate'  => new Input\Parser\LocationUpdate( $urlHandler, $repository->getLocationService() ),
+        'application/vnd.ez.api.RoleInput'              => new Input\Parser\RoleInput( $urlHandler, $repository->getRoleService() ),
+        'application/vnd.ez.api.SectionInput'           => new Input\Parser\SectionInput( $urlHandler, $repository->getSectionService() ),
+        'application/vnd.ez.api.ContentUpdate'          => new Input\Parser\ContentUpdate( $urlHandler ),
+        'application/vnd.ez.api.PolicyCreate'           => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService() ),
+        'application/vnd.ez.api.PolicyUpdate'           => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService() ),
+        'application/vnd.ez.api.limitation'             => new Input\Parser\Limitation( $urlHandler ),
+        'application/vnd.ez.api.RoleAssignInput'        => new Input\Parser\RoleAssignInput( $urlHandler ),
+        'application/vnd.ez.api.LocationCreate'         => new Input\Parser\LocationCreate( $urlHandler, $repository->getLocationService() ),
+        'application/vnd.ez.api.LocationUpdate'         => new Input\Parser\LocationUpdate( $urlHandler, $repository->getLocationService() ),
+        'application/vnd.ez.api.ObjectStateGroupCreate' => new Input\Parser\ObjectStateGroupCreate( $urlHandler, $repository->getObjectStateService() ),
     ) ),
     $handler
 );
@@ -118,6 +119,12 @@ $locationController = new Controller\Location(
     $repository->getContentService()
 );
 
+$objectStateController = new Controller\ObjectState(
+    $inputDispatcher,
+    $urlHandler,
+    $repository->getObjectStateService()
+);
+
 /*
  * Visitors are used to transform the Value Objects returned by the Public API
  * into the output format requested by the client. In some cases, it is
@@ -131,27 +138,28 @@ $locationController = new Controller\Location(
  */
 
 $valueObjectVisitors = array(
-    '\\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException' => new Output\ValueObjectVisitor\InvalidArgumentException( $urlHandler,  true ),
-    '\\eZ\Publish\API\Repository\Exceptions\NotFoundException'        => new Output\ValueObjectVisitor\NotFoundException( $urlHandler,  true ),
-    '\\eZ\Publish\API\Repository\Exceptions\BadStateException'        => new Output\ValueObjectVisitor\BadStateException( $urlHandler,  true ),
-    '\\Exception'                                                     => new Output\ValueObjectVisitor\Exception( $urlHandler,  true ),
+    '\\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException'       => new Output\ValueObjectVisitor\InvalidArgumentException( $urlHandler,  true ),
+    '\\eZ\Publish\API\Repository\Exceptions\NotFoundException'              => new Output\ValueObjectVisitor\NotFoundException( $urlHandler,  true ),
+    '\\eZ\Publish\API\Repository\Exceptions\BadStateException'              => new Output\ValueObjectVisitor\BadStateException( $urlHandler,  true ),
+    '\\Exception'                                                           => new Output\ValueObjectVisitor\Exception( $urlHandler,  true ),
 
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\SectionList'          => new Output\ValueObjectVisitor\SectionList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedSection'       => new Output\ValueObjectVisitor\CreatedSection( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section'        => new Output\ValueObjectVisitor\Section( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\SectionList'                => new Output\ValueObjectVisitor\SectionList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedSection'             => new Output\ValueObjectVisitor\CreatedSection( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section'              => new Output\ValueObjectVisitor\Section( $urlHandler ),
 
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentList'          => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo'    => new Output\ValueObjectVisitor\ContentInfo( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentList'                => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo'          => new Output\ValueObjectVisitor\ContentInfo( $urlHandler ),
 
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleList'             => new Output\ValueObjectVisitor\RoleList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedRole'          => new Output\ValueObjectVisitor\CreatedRole( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role'              => new Output\ValueObjectVisitor\Role( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy'            => new Output\ValueObjectVisitor\Policy( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PolicyList'           => new Output\ValueObjectVisitor\PolicyList( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation'        => new Output\ValueObjectVisitor\Limitation( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleAssignmentList'   => new Output\ValueObjectVisitor\RoleAssignmentList( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location'       => new Output\ValueObjectVisitor\Location( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\LocationList'         => new Output\ValueObjectVisitor\LocationList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleList'                   => new Output\ValueObjectVisitor\RoleList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedRole'                => new Output\ValueObjectVisitor\CreatedRole( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role'                    => new Output\ValueObjectVisitor\Role( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy'                  => new Output\ValueObjectVisitor\Policy( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PolicyList'                 => new Output\ValueObjectVisitor\PolicyList( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation'              => new Output\ValueObjectVisitor\Limitation( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleAssignmentList'         => new Output\ValueObjectVisitor\RoleAssignmentList( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location'             => new Output\ValueObjectVisitor\Location( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\LocationList'               => new Output\ValueObjectVisitor\LocationList( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup' => new Output\ValueObjectVisitor\ObjectStateGroup( $urlHandler ),
 );
 
 /*
@@ -193,6 +201,9 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/content/objects/[0-9]+/locations$)' => array(
             'GET' => array( $locationController, 'loadLocationsForContent' ),
             'POST' => array( $locationController, 'createLocation' ),
+        ),
+        '(^/content/objectstategroups$)' => array(
+            'POST' => array( $objectStateController, 'createObjectStateGroup' ),
         ),
         '(^/content/locations/[0-9/]+$)' => array(
             'GET'    => array( $locationController, 'loadLocation' ),
