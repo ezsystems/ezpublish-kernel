@@ -120,7 +120,8 @@ class Handler implements HandlerInterface
      */
     public function urlAliasHandler()
     {
-        //@todo implement
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+
     }
 
     /**
@@ -128,28 +129,28 @@ class Handler implements HandlerInterface
      */
     public function urlWildcardHandler()
     {
-        //@todo implement
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
     }
 
     /**
      */
     public function beginTransaction()
     {
-        //throw new RuntimeException( '@TODO: Implement' );
+        //throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
     }
 
     /**
      */
     public function commit()
     {
-        //throw new RuntimeException( '@TODO: Implement' );
+        //throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
     }
 
     /**
      */
     public function rollback()
     {
-        //throw new RuntimeException( '@TODO: Implement' );
+        //throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
     }
 
     /**
