@@ -161,7 +161,7 @@ class TextBlockFieldTypeIntergrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new TextBlockValue( new \stdClass() ),
+                new \stdClass(),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
         );
