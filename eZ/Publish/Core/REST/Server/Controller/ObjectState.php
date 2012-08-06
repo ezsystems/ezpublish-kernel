@@ -187,6 +187,27 @@ class ObjectState
     }
 
     /**
+     * Updates an object state group
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
+     */
+    public function updateObjectStateGroup( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'objectstategroup', $request->path );
+        $updateStruct = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            )
+        );
+        return $this->objectStateService->updateObjectStateGroup(
+            $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] ),
+            $updateStruct
+        );
+    }
+
+    /**
      * Updates an object state
      *
      * @param RMF\Request $request

@@ -105,6 +105,7 @@ $repository = new Client\IntegrationTestRepository(
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\PolicyUpdateStruct'                       => new Client\Output\ValueObjectVisitor\PolicyUpdateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\LocationCreateStruct'                     => new Client\Output\ValueObjectVisitor\LocationCreateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroupCreateStruct'      => new Client\Output\ValueObjectVisitor\ObjectStateGroupCreateStruct( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroupUpdateStruct'      => new Client\Output\ValueObjectVisitor\ObjectStateGroupUpdateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateCreateStruct'           => new Client\Output\ValueObjectVisitor\ObjectStateCreateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateUpdateStruct'           => new Client\Output\ValueObjectVisitor\ObjectStateUpdateStruct( $urlHandler ),
         )

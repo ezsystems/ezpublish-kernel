@@ -175,7 +175,19 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
      */
     public function updateObjectStateGroup( ObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct )
     {
-        throw new \Exception( "@todo Implement" );
+        $inputMessage = $this->outputVisitor->visit( $objectStateGroupUpdateStruct );
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'ObjectStateGroup' );
+        $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
+
+        // Should originally be PATCH, but PHP's shiny new internal web server
+        // dies with it.
+        $result = $this->client->request(
+            'POST',
+            $objectStateGroup->id,
+            $inputMessage
+        );
+
+        return $this->inputDispatcher->parse( $result );
     }
 
     /**
