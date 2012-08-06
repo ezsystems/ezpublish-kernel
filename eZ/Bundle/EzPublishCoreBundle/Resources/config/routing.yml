@@ -1,6 +1,6 @@
 parameters:
     ezpublish.chain_router.class: eZ\Publish\MVC\Routing\ChainRouter
-    ezpublish.urlalias_router.class: eZ\Publish\MVC\Routing\UrlAliasRouter
+    ezpublish.urlalias_router.class: eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter
     ezpublish.siteaccess_router.class: eZ\Publish\MVC\SiteAccess\Router
     ezpublish.siteaccess_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\SiteAccessListener
     ezpublish.request_redirect_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\RequestEventListener
