@@ -25,6 +25,7 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\Core\Repository\ObjectStateService,
     eZ\Publish\Core\Repository\URLAliasService,
     eZ\Publish\Core\Repository\URLWildcardService,
+    eZ\Publish\Core\Repository\NameSchemaService,
     eZ\Publish\API\Repository\Values\ValueObject,
     eZ\Publish\API\Repository\Values\User\User,
     Exception,
@@ -143,11 +144,18 @@ class Repository implements RepositoryInterface
     protected $fieldTypeService;
 
     /**
-     * Instance of object state service
+     * Instance of validator service
      *
      * @var \eZ\Publish\Core\Repository\ValidatorService
      */
     protected $validatorService;
+
+    /**
+     * Instance of name schema resolver service
+     *
+     * @var \eZ\Publish\Core\Repository\NameSchemaService
+     */
+    protected $nameSchemaService;
 
     /**
      * Instance of URL alias service
@@ -199,6 +207,10 @@ class Repository implements RepositoryInterface
             'fieldType' => array(),
             'urlAlias' => array(),
             'urlWildcard' => array(),
+            'nameSchema' => array(
+                "limit" => 0,
+                "sequence" => ""
+            ),
         );
 
         if ( $user !== null )
@@ -542,6 +554,20 @@ class Repository implements RepositoryInterface
 
         $this->validatorService = new ValidatorService();
         return $this->validatorService;
+    }
+
+    /**
+     * Get NameSchemaResolverService
+     *
+     * @return \eZ\Publish\Core\Repository\NameSchemaService
+     */
+    public function getNameSchemaService()
+    {
+        if ( $this->nameSchemaService !== null )
+            return $this->nameSchemaService;
+
+        $this->nameSchemaService = new NameSchemaService( $this, $this->serviceSettings['nameSchema'] );
+        return $this->nameSchemaService;
     }
 
     /**
