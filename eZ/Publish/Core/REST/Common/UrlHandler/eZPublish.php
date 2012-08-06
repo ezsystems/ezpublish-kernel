@@ -34,6 +34,7 @@ class eZPublish extends Pattern
         ''                     => '/content/objects/{object}/currentversion',
         ''                     => '/content/objects/{object}/{lang_code}',
         'objectLocations'      => '/content/objects/{object}/locations',
+        'objectObjectStates'   => '/content/objects/{object}/objectstates',
         ''                     => '/content/objects/{object}/versions',
         ''                     => '/content/objects/{object}/versions/{version}',
         ''                     => '/content/objects/{object}/versions/{version}/relations',

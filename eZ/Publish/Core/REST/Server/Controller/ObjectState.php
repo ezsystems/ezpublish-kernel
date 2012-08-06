@@ -14,6 +14,9 @@ use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\ObjectStateService;
+use eZ\Publish\API\Repository\ContentService;
+
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 use Qafoo\RMF;
 
@@ -44,17 +47,26 @@ class ObjectState
     protected $objectStateService;
 
     /**
+     * Content service
+     *
+     * @var \eZ\Publish\API\Repository\ContentService
+     */
+    protected $contentService;
+
+    /**
      * Construct controller
      *
      * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\ObjectStateService $objectStateService
+     * @param \eZ\Publish\API\Repository\ContentService $contentService
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, ObjectStateService $objectStateService )
+    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, ObjectStateService $objectStateService, ContentService $contentService )
     {
         $this->inputDispatcher = $inputDispatcher;
         $this->urlHandler = $urlHandler;
         $this->objectStateService = $objectStateService;
+        $this->contentService = $contentService;
     }
 
     /**
@@ -229,5 +241,35 @@ class ObjectState
             ),
             $values['objectstategroup']
         );
+    }
+
+    /**
+     * Returns the object states of content
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ContentObjectStates
+     */
+    public function getObjectStatesForContent( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'objectObjectStates', $request->path );
+        $groups = $this->objectStateService->loadObjectStateGroups();
+        $contentInfo = $this->contentService->loadContentInfo( $values['object'] );
+
+        $contentObjectStates = array();
+
+        foreach ( $groups as $group )
+        {
+            try
+            {
+                $state = $this->objectStateService->getObjectState( $contentInfo, $group );
+                $contentObjectStates[] = new Values\ObjectState( $state, $group->id );
+            }
+            catch ( NotFoundException $e )
+            {
+                // Do nothing
+            }
+        }
+
+        return new Values\ContentObjectStates( $contentObjectStates );
     }
 }

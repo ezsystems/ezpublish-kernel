@@ -125,7 +125,8 @@ $locationController = new Controller\Location(
 $objectStateController = new Controller\ObjectState(
     $inputDispatcher,
     $urlHandler,
-    $repository->getObjectStateService()
+    $repository->getObjectStateService(),
+    $repository->getContentService()
 );
 
 /*
@@ -166,6 +167,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectStateGroupList'       => new Output\ValueObjectVisitor\ObjectStateGroupList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectState'                => new Output\ValueObjectVisitor\ObjectState( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectStateList'            => new Output\ValueObjectVisitor\ObjectStateList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentObjectStates'        => new Output\ValueObjectVisitor\ContentObjectStates( $urlHandler ),
 );
 
 /*
@@ -207,6 +209,9 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/content/objects/[0-9]+/locations$)' => array(
             'GET' => array( $locationController, 'loadLocationsForContent' ),
             'POST' => array( $locationController, 'createLocation' ),
+        ),
+        '(^/content/objects/[0-9]+/objectstates$)' => array(
+            'GET' => array( $objectStateController, 'getObjectStatesForContent' ),
         ),
         '(^/content/objectstategroups$)' => array(
             'GET' => array( $objectStateController, 'loadObjectStateGroups' ),
