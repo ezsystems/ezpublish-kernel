@@ -57,5 +57,12 @@ class SiteAccessListener implements EventSubscriberInterface
             'semanticPathinfo',
             $semanticPathinfo
         );
+
+        if ( $this->container->hasParameter( "ezpublish.siteaccess.config.$siteAccess->name" ) )
+        {
+            $siteAccess->attributes->add(
+                $this->container->getParameter( "ezpublish.siteaccess.config.$siteAccess->name" )
+            );
+        }
     }
 }
