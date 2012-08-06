@@ -185,4 +185,28 @@ class ObjectState
             $this->objectStateService->loadObjectState( $values['objectstate'] )
         );
     }
+
+    /**
+     * Updates an object state
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ObjectState
+     */
+    public function updateObjectState( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'objectstate', $request->path );
+        $updateStruct = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            )
+        );
+        return new Values\ObjectState(
+            $this->objectStateService->updateObjectState(
+                $this->objectStateService->loadObjectState( $values['objectstate'] ),
+                $updateStruct
+            ),
+            $values['objectstategroup']
+        );
+    }
 }

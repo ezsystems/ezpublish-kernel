@@ -82,6 +82,7 @@ $inputDispatcher = new Common\Input\Dispatcher(
         'application/vnd.ez.api.LocationUpdate'         => new Input\Parser\LocationUpdate( $urlHandler, $repository->getLocationService() ),
         'application/vnd.ez.api.ObjectStateGroupCreate' => new Input\Parser\ObjectStateGroupCreate( $urlHandler, $repository->getObjectStateService() ),
         'application/vnd.ez.api.ObjectStateCreate'      => new Input\Parser\ObjectStateCreate( $urlHandler, $repository->getObjectStateService() ),
+        'application/vnd.ez.api.ObjectStateUpdate'      => new Input\Parser\ObjectStateUpdate( $urlHandler, $repository->getObjectStateService() ),
     ) ),
     $handler
 );
@@ -220,6 +221,7 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^/content/objectstategroups/[0-9]+/objectstates/[0-9]+$)' => array(
             'GET' => array( $objectStateController, 'loadObjectState' ),
+            'PATCH' => array( $objectStateController, 'updateObjectState' ),
             'DELETE' => array( $objectStateController, 'deleteObjectState' ),
         ),
         '(^/content/locations/[0-9/]+$)' => array(
