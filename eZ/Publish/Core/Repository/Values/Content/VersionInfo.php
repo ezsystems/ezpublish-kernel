@@ -69,10 +69,14 @@ class VersionInfo extends APIVersionInfo
     public function getName( $languageCode = null )
     {
         if ( !isset( $languageCode ) )
+        {
             $languageCode = $this->initialLanguageCode;
+        }
 
         if ( isset( $this->names[$languageCode] ) )
+        {
             return $this->names[$languageCode];
+        }
 
         return null;
     }

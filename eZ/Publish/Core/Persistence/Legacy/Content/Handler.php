@@ -158,7 +158,8 @@ class Handler implements BaseContentHandler
             $this->contentGateway->setName(
                 $content->contentInfo->id,
                 $content->versionInfo->versionNo,
-                $name, $language
+                $name,
+                $language
             );
         }
 
@@ -284,7 +285,9 @@ class Handler implements BaseContentHandler
         $rows = $this->contentGateway->load( $id, $version, $translations );
 
         if ( empty( $rows ) )
+        {
             throw new NotFound( 'content', "contentId: $id, versionNo: $version" );
+        }
 
         $contentObjects = $this->mapper->extractContentFromRows( $rows );
         $content = $contentObjects[0];
@@ -312,6 +315,7 @@ class Handler implements BaseContentHandler
      *
      * @param int|string $contentId
      * @param int $versionNo Version number to load
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
      */
     public function loadVersionInfo( $contentId, $versionNo )
