@@ -105,7 +105,7 @@ class ObjectState
      * Loads an object state group
      *
      * @param RMF\Request $request
-     * @return Section
+     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
     public function loadObjectStateGroup( RMF\Request $request )
     {
@@ -117,7 +117,7 @@ class ObjectState
      * Loads an object state
      *
      * @param RMF\Request $request
-     * @return Section
+     * @return \eZ\Publish\Core\REST\Server\Values\ObjectState
      */
     public function loadObjectState( RMF\Request $request )
     {
@@ -132,7 +132,7 @@ class ObjectState
      * Returns a list of all object state groups
      *
      * @param RMF\Request $request
-     * @return mixed
+     * @return \eZ\Publish\Core\REST\Server\Values\ObjectStateGroupList
      */
     public function loadObjectStateGroups( RMF\Request $request )
     {
@@ -145,7 +145,7 @@ class ObjectState
      * Returns a list of all object states of the given group
      *
      * @param RMF\Request $request
-     * @return mixed
+     * @return \eZ\Publish\Core\REST\Server\Values\ObjectStateList
      */
     public function loadObjectStates( RMF\Request $request )
     {
@@ -169,6 +169,20 @@ class ObjectState
         $values = $this->urlHandler->parse( 'objectstategroup', $request->path );
         return $this->objectStateService->deleteObjectStateGroup(
             $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] )
+        );
+    }
+
+    /**
+     * The given object state is deleted
+     *
+     * @param RMF\Request $request
+     * @return void
+     */
+    public function deleteObjectState( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'objectstate', $request->path );
+        return $this->objectStateService->deleteObjectState(
+            $this->objectStateService->loadObjectState( $values['objectstate'] )
         );
     }
 }

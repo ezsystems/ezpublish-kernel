@@ -220,6 +220,7 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^/content/objectstategroups/[0-9]+/objectstates/[0-9]+$)' => array(
             'GET' => array( $objectStateController, 'loadObjectState' ),
+            'DELETE' => array( $objectStateController, 'deleteObjectState' ),
         ),
         '(^/content/locations/[0-9/]+$)' => array(
             'GET'    => array( $locationController, 'loadLocation' ),

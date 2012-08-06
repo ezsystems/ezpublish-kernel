@@ -289,7 +289,20 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
      */
     public function deleteObjectState( ObjectState $objectState )
     {
-        throw new \Exception( "@todo Implement" );
+        $response = $this->client->request(
+            'DELETE',
+            $objectState->id,
+            new Message(
+                // TODO: What media-type should we set here? Actually, it should be
+                // all expected exceptions + none? Or is "ObjectState" correct,
+                // since this is what is to be expected by the resource
+                // identified by the URL?
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'ObjectState' ) )
+            )
+        );
+
+        if ( !empty( $response->body ) )
+            $this->inputDispatcher->parse( $response );
     }
 
     /**
