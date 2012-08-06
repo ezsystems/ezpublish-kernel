@@ -29,11 +29,6 @@ class Type extends FieldType
     );
 
     /**
-     * @var \eZ\Publish\API\Repository\IOService
-     */
-    protected $IOService;
-
-    /**
      * Holds an instance of validator service
      *
      * @var \eZ\Publish\Core\Repository\ValidatorService
@@ -47,10 +42,9 @@ class Type extends FieldType
      * @param FieldTypeTools $fieldTypeTools
      * @param \eZ\Publish\API\Repository\Repository $repository
      */
-    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools, Repository $repository )
+    public function __construct( ValidatorService $validatorService )
     {
-        parent::__construct( $validatorService, $fieldTypeTools );
-        $this->IOService = $repository->getIOService();
+        $this->validatorService = $validatorService;
     }
 
     /**
@@ -114,6 +108,11 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( is_array( $inputValue ) )
+        {
+            $inputValue = new Value( $inputValue );
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
@@ -123,12 +122,28 @@ class Type extends FieldType
             );
         }
 
-        if ( isset( $inputValue->file ) && !$inputValue->file instanceof BinaryFile )
+        if ( isset( $inputValue->path ) && !file_exists( $inputValue->path ) )
         {
             throw new InvalidArgumentType(
-                '$inputValue->file',
-                'eZ\Publish\API\Repository\Values\IO\BinaryFile',
-                $inputValue->file
+                '$inputValue->path',
+                'Existing fileName',
+                $inputValue->path
+            );
+        }
+        if ( isset( $inputValue->alternativeText ) && !is_string( $inputValue->alternativeText ) )
+        {
+            throw new InvalidArgumentType(
+                '$inputValue->alternativeText',
+                'string',
+                $inputValue->alternativeText
+            );
+        }
+        if ( isset( $inputValue->fileName ) && !is_string( $inputValue->alternativeText ) )
+        {
+            throw new InvalidArgumentType(
+                '$inputValue->fileName',
+                'string',
+                $inputValue->fileName
             );
         }
 
@@ -138,6 +153,7 @@ class Type extends FieldType
     /**
      * @see \eZ\Publish\Core\FieldType::getSortInfo()
      * @return bool
+     * @todo Correct?
      */
     protected function getSortInfo( $value )
     {
@@ -153,8 +169,7 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
-        throw new \Exception( "Not implemented yet" );
-        return new Value( $this->IOService, $hash );
+        return new Value( $hash );
     }
 
     /**
@@ -166,7 +181,43 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
-        throw new \Exception( "Not implemented yet" );
-        return $value->value;
+        return array(
+            'alternativeText' => $value->alternativeText,
+            'fileName' => $value->fileName,
+            'path' => $value->path,
+        );
     }
+
+    /**
+     * Converts a $value to a persistence value
+     *
+     * @param mixed $value
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
+     */
+    public function toPersistenceValue( $value )
+    {
+        // Store original data as external (to indicate they need to be stored)
+        return new FieldValue(
+            array(
+                "data" => null,
+                "externalData" => $this->toHash( $value ),
+                "sortKey" => $this->getSortInfo( $value ),
+            )
+        );
+    }
+
+    /**
+     * Converts a persistence $fieldValue to a Value
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
+     *
+     * @return mixed
+     */
+    public function fromPersistenceValue( FieldValue $fieldValue )
+    {
+        // Restored data comes in $data, since it has already been processed
+        return $this->fromHash( $fieldValue->data );
+    }
+
 }

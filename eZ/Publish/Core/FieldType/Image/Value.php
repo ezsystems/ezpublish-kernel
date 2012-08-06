@@ -9,16 +9,17 @@
 
 namespace eZ\Publish\Core\FieldType\Image;
 use eZ\Publish\Core\FieldType\Value as BaseValue,
-    eZ\Publish\API\Repository\IOService;
+    eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
 
 /**
  * Value for Image field type
  *
- * @todo Rewrite image fieldtype
+ * @property string $fileName Display file name of the image.
+ * @property string $path Path where the image can be found
+ * @property string $alternativeText Alternative text for the image
  *
- * @property string $filename The name of the file in the eZ publish var directory
- *                            (for example "44b963c9e8d1ffa80cbb08e84d576735.avi").
- * @property string $mimeType
+ * @todo Mime type?
+ * @todo Dimensions?
  */
 class Value extends BaseValue
 {
@@ -30,33 +31,19 @@ class Value extends BaseValue
     public $alternativeText;
 
     /**
-     * Original file name
+     * Display file name of the image
      *
      * @var string
      */
-    public $originalFilename;
+    public $fileName;
 
     /**
+     * Path string, where the image is located
      *
-     * @var bool
+     * @var string
+     * @todo This could better be an URI? E.g. file://… or http://… or …
      */
-    public $isValid;
-
-    /**
-     * Image alias list, indexed by alias name
-     *
-     * @var \eZ\Publish\Core\FieldType\Image\AliasCollection
-     */
-    public $aliasList;
-
-    protected $properties = array(
-        'fieldId' => null,
-        'contentId' => null,
-        'versionNo' => null,
-        // Publication status (one of \eZ\Publish\API\Repository\Values\Content\VersionInfo::STATUS_*)
-        'status' => null,
-        'languageCode' => null,
-    );
+    public $path;
 
     /**
      * Construct a new Value object.
@@ -65,11 +52,23 @@ class Value extends BaseValue
      * @param string|null $file
      * @param string $alternativeText
      */
-    public function __construct( IOService $IOService, $file = null, $alternativeText = '' )
+    public function __construct( array $imageData = array() )
     {
-        $this->alternativeText = $alternativeText;
-        $this->aliasList = new AliasCollection( $this, $IOService );
-        $this->aliasList->initializeFromLocalImage( $file );
+        foreach ( $imageData as $key => $value )
+        {
+            try
+            {
+                $this->$key = $value;
+            }
+            catch ( PropertyNotFoundException $e )
+            {
+                throw new InvalidArgumentType(
+                    sprintf( '$imageData->%s', $key ),
+                    'Property not found',
+                    $value
+                );
+            }
+        }
     }
 
     /**
@@ -77,37 +76,7 @@ class Value extends BaseValue
      */
     public function __toString()
     {
-        $string = $this->aliasList['original']->url;
-        if ( !empty( $this->alternativeText ) )
-            $string .= "|$this->alternativeText";
-
-        return $string;
-    }
-
-    /**
-     * Magic getter
-     *
-     * @param string $name
-     */
-    public function __get( $name )
-    {
-        switch ( $name )
-        {
-            case 'filename':
-                return basename( $this->file->id );
-
-            case 'mimeType':
-                return $this->file->contentType;
-
-            case 'filesize':
-                return $this->file->size;
-
-            case 'filepath':
-                return $this->file->path;
-
-            default:
-                throw new PropertyNotFound( $name, get_class() );
-        }
+        return $this->fileName;
     }
 
     /**
@@ -115,6 +84,6 @@ class Value extends BaseValue
      */
     public function getTitle()
     {
-        return !empty( $this->alternativeText ) ? $this->alternativeText : $this->originalFilename;
+        return !empty( $this->alternativeText ) ? $this->alternativeText : $this->fileName;
     }
 }
