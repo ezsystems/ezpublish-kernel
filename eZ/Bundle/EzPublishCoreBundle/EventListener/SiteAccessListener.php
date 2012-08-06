@@ -57,8 +57,5 @@ class SiteAccessListener implements EventSubscriberInterface
             'semanticPathinfo',
             $semanticPathinfo
         );
-
-        // Finally expose the current siteaccess as a service
-        $this->container->set( 'ezpublish.siteaccess', $siteAccess );
     }
 }

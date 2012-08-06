@@ -18,7 +18,9 @@ services:
 
     ezpublish.siteaccess_router:
         class: %ezpublish.siteaccess_router.class%
-        arguments: [%ezpublish.siteaccess.default%, %ezpublish.siteaccess.config%]
+        arguments: [%ezpublish.siteaccess.default%, %ezpublish.siteaccess.match_config%]
+        calls:
+            - [setSiteAccess, [@ezpublish.siteaccess]]
 
     ezpublish.siteaccess_listener:
         class: %ezpublish.siteaccess_listener.class%
