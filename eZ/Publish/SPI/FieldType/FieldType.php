@@ -39,6 +39,18 @@ interface FieldType
     public function handleEvent( Event $event );
 
     /**
+     * Returns the name of the given field value.
+     *
+     * It will be used to generate content name and url alias if current field is designated
+     * to be used in the content name/urlAlias pattern.
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    public function getName( $value );
+
+    /**
      * Returns a schema for the settings expected by the FieldType
      *
      * Returns an arbitrary value, representing a schema for the settings of
@@ -46,7 +58,7 @@ interface FieldType
      *
      * Explanation: There are no possible generic schemas for defining settings
      * input, which is why no schema for the return value of this method is
-     * defined. It is up to the implementor to define and document a schema for
+     * defined. It is up to the implementer to define and document a schema for
      * the return value and document it. In addition, it is necessary that all
      * consumers of this interface (e.g. Public API, REST API, GUIs, ...)
      * provide plugin mechanisms to hook adapters for the specific FieldType
@@ -67,7 +79,7 @@ interface FieldType
      *
      * Explanation: There are no possible generic schemas for defining settings
      * input, which is why no schema for the return value of this method is
-     * defined. It is up to the implementor to define and document a schema for
+     * defined. It is up to the implementer to define and document a schema for
      * the return value and document it. In addition, it is necessary that all
      * consumers of this interface (e.g. Public API, REST API, GUIs, ...)
      * provide plugin mechanisms to hook adapters for the specific FieldType
@@ -148,7 +160,7 @@ interface FieldType
     /**
      * Potentially builds and checks the type and structure of the $inputValue.
      *
-     * This methiod first inspects $inputValue, if it needs to convert it, e.g.
+     * This method first inspects $inputValue, if it needs to convert it, e.g.
      * into a dedicated value object. An example would be, that the field type
      * uses values of MyCustomFieldTypeClass, but can also accept strings as
      * the input. In that case, $inputValue first needs to be converted into a

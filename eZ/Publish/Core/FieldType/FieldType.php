@@ -35,8 +35,6 @@ use eZ\Publish\API\Repository\Values\Content\Field,
  *
  * Field types are primed and pre-configured with the Field Definitions found in
  * Content Types.
- *
- * @todo Merge and optimize concepts for settings, validator data and field type properties.
  */
 abstract class FieldType implements FieldTypeInterface
 {

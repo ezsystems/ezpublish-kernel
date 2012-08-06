@@ -40,6 +40,21 @@ class Type extends FieldType
     }
 
     /**
+     * Returns the name of the given field value.
+     *
+     * It will be used to generate content name and url alias if current field is designated
+     * to be used in the content name/urlAlias pattern.
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    public function getName( $value )
+    {
+        throw new \RuntimeException( 'Implement this method' );
+    }
+
+    /**
      * Checks the type and structure of the $Value.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
