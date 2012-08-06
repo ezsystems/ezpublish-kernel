@@ -12,10 +12,12 @@ use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
+use eZ\Publish\Core\REST\Common\Values\ObjectState as CommonObjectState;
 
 use eZ\Publish\API\Repository\ObjectStateService;
 use eZ\Publish\API\Repository\ContentService;
 
+use eZ\Publish\Core\REST\Common\Values\ContentObjectStates;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 use Qafoo\RMF;
@@ -99,7 +101,7 @@ class ObjectState
 
         $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] );
 
-        return new Values\ObjectState(
+        return new CommonObjectState(
             $this->objectStateService->createObjectState(
                 $objectStateGroup,
                 $this->inputDispatcher->parse(
@@ -129,12 +131,12 @@ class ObjectState
      * Loads an object state
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\Core\REST\Server\Values\ObjectState
+     * @return \eZ\Publish\Core\REST\Common\Values\ObjectState
      */
     public function loadObjectState( RMF\Request $request )
     {
         $values = $this->urlHandler->parse( 'objectstate', $request->path );
-        return new Values\ObjectState(
+        return new CommonObjectState(
             $this->objectStateService->loadObjectState( $values['objectstate'] ),
             $values['objectstategroup']
         );
@@ -223,7 +225,7 @@ class ObjectState
      * Updates an object state
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\Core\REST\Server\Values\ObjectState
+     * @return \eZ\Publish\Core\REST\Common\Values\ObjectState
      */
     public function updateObjectState( RMF\Request $request )
     {
@@ -234,7 +236,7 @@ class ObjectState
                 $request->body
             )
         );
-        return new Values\ObjectState(
+        return new CommonObjectState(
             $this->objectStateService->updateObjectState(
                 $this->objectStateService->loadObjectState( $values['objectstate'] ),
                 $updateStruct
@@ -247,7 +249,7 @@ class ObjectState
      * Returns the object states of content
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\Core\REST\Server\Values\ContentObjectStates
+     * @return \eZ\Publish\Core\REST\Common\Values\ContentObjectStates
      */
     public function getObjectStatesForContent( RMF\Request $request )
     {
@@ -262,7 +264,7 @@ class ObjectState
             try
             {
                 $state = $this->objectStateService->getObjectState( $contentInfo, $group );
-                $contentObjectStates[] = new Values\ObjectState( $state, $group->id );
+                $contentObjectStates[] = new CommonObjectState( $state, $group->id );
             }
             catch ( NotFoundException $e )
             {
@@ -270,6 +272,36 @@ class ObjectState
             }
         }
 
-        return new Values\ContentObjectStates( $contentObjectStates );
+        return new ContentObjectStates( $contentObjectStates );
+    }
+
+    /**
+     * Updates object states of content
+     * An object state in the input overrides the state of the object state group
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Common\Values\ContentObjectStates
+     */
+    public function setObjectStatesForContent( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'objectObjectStates', $request->path );
+        $newObjectStates = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            )
+        );
+
+        $contentInfo = $this->contentService->loadContentInfo( $values['object'] );
+
+        $contentObjectStates = array();
+        foreach ( $newObjectStates as $newObjectState )
+        {
+            $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $newObjectState->groupId );
+            $this->objectStateService->setObjectState( $contentInfo, $objectStateGroup->id, $newObjectState->objectState );
+            $contentObjectStates[(int) $objectStateGroup->id] = $newObjectState;
+        }
+
+        return new ContentObjectStates( $contentObjectStates );
     }
 }

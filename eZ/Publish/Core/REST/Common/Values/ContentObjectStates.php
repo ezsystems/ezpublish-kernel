@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Server\Values;
+namespace eZ\Publish\Core\REST\Common\Values;
 
 /**
  * ContentObjectStates view model

@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
+namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
-use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Values\ContentObjectStates;
 use eZ\Publish\Core\REST\Common;
 
@@ -85,7 +85,7 @@ class ContentObjectStatesTest extends ValueObjectVisitorBaseTest
     /**
      * Get the ContentObjectStates visitor
      *
-     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ContentObjectStates
+     * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\ContentObjectStates
      */
     protected function getContentObjectStatesVisitor()
     {

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Server\Values;
+namespace eZ\Publish\Core\REST\Common\Values;
 
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState as APIObjectState;
 
