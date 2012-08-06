@@ -22,8 +22,7 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\SearchResult,
     eZ\Publish\SPI\Persistence\Content\Search\Result as SPISearchResult,
     eZ\Publish\API\Repository\Exceptions\NotFoundException,
-    eZ\Publish\API\Repository\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Repository\Values\ContentType\Validator\StringLengthValidator;
+    eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 
 /**
  * Test case for Content service
@@ -789,7 +788,7 @@ abstract class ContentBase extends BaseServiceTest
                     "remoteId" => "db787a9143f57828dd4331573466a013",
                     //sortField = Location::SORT_FIELD_NAME
                     //sortOrder = Location::SORT_ORDER_ASC
-                    "parentLocationId" => 5
+                    "parentLocationId" => 2
                 )
             ),
             new LocationCreateStruct(
@@ -929,14 +928,21 @@ abstract class ContentBase extends BaseServiceTest
                 // @todo: test content draft id
                 //"contentId" => $contentDraft->id,
                 // @todo
-                //"names" =>
+                "names" => array(
+                    "eng-GB" => "value for field definition with empty default value",
+                    "eng-US" => "value for field definition with empty default value"
+                )
             ),
             $contentDraft->versionInfo
         );
+
         $languageCodes = $this->getLanguageCodesFromFields( $contentCreate->fields, $contentCreate->mainLanguageCode );
+
         $this->assertCount( count( $languageCodes ), $contentDraft->versionInfo->languageCodes );
         foreach ( $contentDraft->versionInfo->languageCodes as $languageCode )
+        {
             $this->assertTrue( in_array( $languageCode, $languageCodes ) );
+        }
         $this->assertNotNull( $contentDraft->versionInfo->id );
         $this->assertGreaterThanOrEqual( $this->getDateTime( $time ), $contentDraft->versionInfo->creationDate );
         $this->assertGreaterThanOrEqual( $this->getDateTime( $time ), $contentDraft->versionInfo->modificationDate );
@@ -1466,9 +1472,9 @@ abstract class ContentBase extends BaseServiceTest
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
         $contentUpdateStruct->initialLanguageCode = "eng-US";
 
-        $contentUpdateStruct->setField( "test_required_empty", "new value for test_required_empty", "eng-US" );
+        $contentUpdateStruct->setField( "test_required_empty", "new value for test_required_empty", "eng-GB" );
         $contentUpdateStruct->setField( "test_translatable", "new eng-US value for test_translatable" );
-        $contentUpdateStruct->setField( "test_untranslatable", "new value for test_untranslatable" );
+        $contentUpdateStruct->setField( "test_untranslatable", "new value for test_untranslatable", "eng-GB" );
         $contentUpdateStruct->setField( "test_translatable", "new eng-GB value for test_translatable", "eng-GB" );
 
         $updatedContent = $contentService->updateContent( $versionInfo, $contentUpdateStruct );
@@ -1501,10 +1507,15 @@ abstract class ContentBase extends BaseServiceTest
         /** @var $contentDraft \eZ\Publish\API\Repository\Values\Content\Content */
         $contentDraft = $data['previous'];
 
+        $this->assertCount( 8, $updatedContentDraft->getFields() );
+
         // Check field values
         $structFields = array();
         foreach ( $contentUpdate->fields as $field )
+        {
             $structFields[$field->fieldDefIdentifier][$field->languageCode] = $field;
+        }
+
         foreach ( $updatedContentDraft->contentType->fieldDefinitions as $fieldDefinition )
         {
             $this->assertArrayHasKey(
@@ -1522,7 +1533,7 @@ abstract class ContentBase extends BaseServiceTest
                 );
 
                 // If field is not set in update struct, it should retain its previous value
-                $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $contentUpdate->initialLanguageCode;
+                $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $contentDraft->contentInfo->mainLanguageCode;
                 if ( isset( $structFields[$fieldDefinition->identifier][$valueLanguageCode] ) )
                 {
                     $this->assertEquals(
@@ -1550,6 +1561,48 @@ abstract class ContentBase extends BaseServiceTest
             $data["time"],
             $updatedContentDraft->versionInfo->modificationDate->getTimestamp()
         );
+    }
+
+    /**
+     * Test for the updateContent() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
+     */
+    public function testUpdateContentWithNewLanguage()
+    {
+        $content = $this->createTestContent();
+
+        /* BEGIN: Use Case */
+        $contentService = $this->repository->getContentService();
+
+        $versionInfo = $contentService->loadVersionInfoById(
+            $content->id,
+            $content->getVersionInfo()->versionNo
+        );
+
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->initialLanguageCode = "ger-DE";
+        $contentUpdateStruct->setField( "test_required_empty", "new value for untranslatable field", "eng-GB" );
+        $contentUpdateStruct->setField( "test_translatable", "Französisch frites", "ger-DE" );
+
+        $updatedContent = $contentService->updateContent( $versionInfo, $contentUpdateStruct );
+        /* END: Use Case */
+
+        $fields = $updatedContent->fields;
+
+        $this->assertCount( 3, $updatedContent->versionInfo->languageCodes );
+        $this->assertCount( 12, $updatedContent->getFields() );
+        $this->assertCount( 4, $updatedContent->fields );
+        foreach ( $fields as $langFields )
+        {
+            $this->assertCount( 3, $langFields );
+        }
+        $this->assertEquals( "new value for untranslatable field", $fields["test_required_empty"]["eng-GB"] );
+        $this->assertEquals( "new value for untranslatable field", $fields["test_required_empty"]["eng-US"] );
+        $this->assertEquals( "new value for untranslatable field", $fields["test_required_empty"]["ger-DE"] );
+        $this->assertEquals( $fields["test_required_not_empty"]["eng-GB"], $fields["test_required_not_empty"]["ger-DE"] );
+        $this->assertEquals( "Französisch frites", $fields["test_translatable"]["ger-DE"] );
+        $this->assertEquals( $fields["test_untranslatable"]["eng-GB"], $fields["test_untranslatable"]["ger-DE"] );
     }
 
     /**
@@ -1605,7 +1658,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentUpdateStruct->setField(
             "test_required_empty",
             "a string that is too long and will not validate 12345678901234567890123456789012345678901234567890",
-            "eng-US"
+            "eng-GB"
         );
 
         // Throws an exception because "test_required_empty" field value is too long and fails
@@ -1647,7 +1700,7 @@ abstract class ContentBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      */
-    public function testUpdateContentThrowsContentValidationExceptionFieldInUnexistingLanguage()
+    public function testUpdateContentThrowsContentValidationExceptionFieldDefinitionNonexistent()
     {
         $content = $this->createTestContent();
 
@@ -1661,37 +1714,9 @@ abstract class ContentBase extends BaseServiceTest
 
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
         $contentUpdateStruct->initialLanguageCode = "eng-GB";
-        $contentUpdateStruct->setField( "test_translatable", "Pommes frites", "fre-FR" );
+        $contentUpdateStruct->setField( "nonexistent_field_definition_identifier", "eng-GB" );
 
-        // Throws an exception because update struct is set with field in a language that is not
-        // already present in content draft
-        $updatedContent = $contentService->updateContent( $versionInfo, $contentUpdateStruct );
-        /* END: Use Case */
-    }
-
-    /**
-     * Test for the updateContent() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     */
-    public function testUpdateContentThrowsContentValidationExceptionFieldDefinitionUnexisting()
-    {
-        $content = $this->createTestContent();
-
-        /* BEGIN: Use Case */
-        $contentService = $this->repository->getContentService();
-
-        $versionInfo = $contentService->loadVersionInfoById(
-            $content->id,
-            $content->getVersionInfo()->versionNo
-        );
-
-        $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->initialLanguageCode = "eng-GB";
-        $contentUpdateStruct->setField( "unexisting_field_definition_identifier", "eng-GB" );
-
-        // Throws an exception because field definition with identifier "unexisting_field_definition_identifier"
+        // Throws an exception because field definition with identifier "nonexistent_field_definition_identifier"
         // does not exist in content draft content type
         $updatedContent = $contentService->updateContent( $versionInfo, $contentUpdateStruct );
         /* END: Use Case */
@@ -2904,11 +2929,11 @@ abstract class ContentBase extends BaseServiceTest
         $testContentType = $this->createTestContentType();
 
         $contentCreate = $contentService->newContentCreateStruct( $testContentType, 'eng-GB' );
-        $contentCreate->setField( "test_required_empty", "val 11" );
-        $contentCreate->setField( "test_required_not_empty", "val 12" );
-        $contentCreate->setField( "test_translatable", "val 13" );
-        $contentCreate->setField( "test_untranslatable", "val 14" );
-        $contentCreate->setField( "test_translatable", "val 23", "eng-US" );
+        $contentCreate->setField( "test_required_empty", "val-11" );
+        $contentCreate->setField( "test_required_not_empty", "val-12" );
+        $contentCreate->setField( "test_translatable", "val-13" );
+        $contentCreate->setField( "test_untranslatable", "val-14" );
+        $contentCreate->setField( "test_translatable", "val-23", "eng-US" );
         $contentCreate->sectionId = 1;
         $contentCreate->ownerId = 14;
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
@@ -2922,7 +2947,7 @@ abstract class ContentBase extends BaseServiceTest
                     "remoteId" => "db787a9143f57828dd4331573466a013",
                     //sortField = Location::SORT_FIELD_NAME
                     //sortOrder = Location::SORT_ORDER_ASC
-                    "parentLocationId" => 5
+                    "parentLocationId" => 2
                 )
             ),
             new LocationCreateStruct(
@@ -2957,8 +2982,8 @@ abstract class ContentBase extends BaseServiceTest
         $typeCreateStruct->creatorId = $this->repository->getCurrentUser()->id;
         $typeCreateStruct->creationDate = $this->getDateTime( 0 );
         $typeCreateStruct->mainLanguageCode = "eng-GB";
-        $typeCreateStruct->nameSchema = "<name>";
-        $typeCreateStruct->urlAliasSchema = "<name>";
+        $typeCreateStruct->nameSchema = "<test_required_empty>";
+        $typeCreateStruct->urlAliasSchema = "<test_required_empty>";
 
         $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct( "test_required_empty", "ezstring" );
         $fieldCreate->names = array( "eng-GB" => "Test required empty" );
