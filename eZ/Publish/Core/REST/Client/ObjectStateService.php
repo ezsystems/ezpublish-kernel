@@ -128,12 +128,20 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
      *
      * @param int $offset
      * @param int $limit
+     * @todo Implement offset & limit
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup[]
      */
     public function loadObjectStateGroups( $offset = 0, $limit = -1 )
     {
-        throw new \Exception( "@todo Implement" );
+        $response = $this->client->request(
+            'GET',
+            $this->urlHandler->generate( 'objectstategroups' ),
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'ObjectStateGroupList' ) )
+            )
+        );
+        return $this->inputDispatcher->parse( $response );
     }
 
     /**

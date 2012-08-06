@@ -127,4 +127,17 @@ class ObjectState
             $values['objectstategroup']
         );
     }
+
+    /**
+     * Returns a list of all object state groups
+     *
+     * @param RMF\Request $request
+     * @return mixed
+     */
+    public function loadObjectStateGroups( RMF\Request $request )
+    {
+        return new Values\ObjectStateGroupList(
+            $this->objectStateService->loadObjectStateGroups()
+        );
+    }
 }
