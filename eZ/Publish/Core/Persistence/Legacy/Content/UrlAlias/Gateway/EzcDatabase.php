@@ -542,9 +542,7 @@ class EzcDatabase extends Gateway
     public function loadRow( $parentId, $textMD5 )
     {
         $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $this->dbHandler->quoteColumn( "*" )
-        )->from(
+        $query->select( "*" )->from(
             $this->dbHandler->quoteTable( "ezurlalias_ml" )
         )->where(
             $query->expr->lAnd(
