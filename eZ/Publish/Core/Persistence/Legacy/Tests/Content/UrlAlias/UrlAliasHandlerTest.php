@@ -23,19 +23,23 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content\UrlAlias;
 
 /**
- * Test case for UrlAliasHandler
+ * Test case for UrlAliasHandler.
  *
  * @group urlalias-handler
  */
 class UrlAliasHandlerTest extends TestCase
 {
     /**
+     * Test for the lookup() method.
+     *
      * Simple lookup case.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::lookup
      * @group location
      * @group virtual
      * @group resource
+     * @group case-correction
+     * @group multiple-languages
      */
     public function testLookup()
     {
@@ -47,6 +51,8 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * Test for the lookup() method.
+     *
      * Trying to lookup non existent URL alias throws NotFoundException.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::lookup
@@ -100,6 +106,8 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * Test for the lookup() method.
+     *
      * Throws NotFoundException because parts of URL alias are not always available or not in list
      * of prioritized languages.
      *
@@ -131,7 +139,7 @@ class UrlAliasHandlerTest extends TestCase
             array(
                 "jedan",
                 array( "eng-GB" ),
-                array( "cro-HR" ),
+                array( "eng-GB" ),
                 true,
                 314,
                 "0-6896260129051a949051c3847c34466f"
@@ -139,7 +147,7 @@ class UrlAliasHandlerTest extends TestCase
             array(
                 "jedan",
                 array( "ger-DE" ),
-                array( "cro-HR" ),
+                array( "ger-DE" ),
                 true,
                 314,
                 "0-6896260129051a949051c3847c34466f"
@@ -147,7 +155,7 @@ class UrlAliasHandlerTest extends TestCase
             array(
                 "jedan/dva",
                 array( "cro-HR" ),
-                array( "cro-HR", "eng-GB" ),
+                array( "cro-HR" ),
                 false,
                 315,
                 "2-c67ed9a09ab136fae610b6a087d82e21"
@@ -155,7 +163,7 @@ class UrlAliasHandlerTest extends TestCase
             array(
                 "jedan/two",
                 array( "eng-GB" ),
-                array( "cro-HR", "eng-GB" ),
+                array( "eng-GB" ),
                 false,
                 315,
                 "2-b8a9f715dbb64fd5c56e7783c6820a61"
@@ -163,7 +171,7 @@ class UrlAliasHandlerTest extends TestCase
             array(
                 "jedan/dva",
                 array( "eng-GB", "cro-HR" ),
-                array( "cro-HR", "eng-GB" ),
+                array( "eng-GB", "cro-HR" ),
                 false,
                 315,
                 "2-c67ed9a09ab136fae610b6a087d82e21"
@@ -171,7 +179,7 @@ class UrlAliasHandlerTest extends TestCase
             array(
                 "jedan/two",
                 array( "eng-GB", "cro-HR" ),
-                array( "cro-HR", "eng-GB" ),
+                array( "eng-GB", "cro-HR" ),
                 false,
                 315,
                 "2-b8a9f715dbb64fd5c56e7783c6820a61"
@@ -179,7 +187,7 @@ class UrlAliasHandlerTest extends TestCase
             array(
                 "jedan/dva",
                 array( "cro-HR", "ger-DE" ),
-                array( "cro-HR", "eng-GB" ),
+                array( "cro-HR" ),
                 false,
                 315,
                 "2-c67ed9a09ab136fae610b6a087d82e21"
@@ -187,7 +195,7 @@ class UrlAliasHandlerTest extends TestCase
             array(
                 "jedan/two",
                 array( "eng-GB", "ger-DE" ),
-                array( "cro-HR", "eng-GB" ),
+                array( "eng-GB" ),
                 false,
                 315,
                 "2-b8a9f715dbb64fd5c56e7783c6820a61"
@@ -195,7 +203,7 @@ class UrlAliasHandlerTest extends TestCase
             array(
                 "jedan/dva/tri",
                 array( "cro-HR" ),
-                array( "cro-HR", "eng-GB", "ger-DE" ),
+                array( "cro-HR" ),
                 false,
                 316,
                 "3-d2cfe69af2d64330670e08efb2c86df7"
@@ -203,7 +211,7 @@ class UrlAliasHandlerTest extends TestCase
             array(
                 "jedan/two/three",
                 array( "eng-GB" ),
-                array( "cro-HR", "eng-GB", "ger-DE" ),
+                array( "eng-GB" ),
                 false,
                 316,
                 "3-35d6d33467aae9a2e3dccb4b6b027878"
@@ -211,7 +219,7 @@ class UrlAliasHandlerTest extends TestCase
             array(
                 "jedan/dva/tri",
                 array( "cro-HR", "eng-GB" ),
-                array( "cro-HR", "eng-GB", "ger-DE" ),
+                array( "cro-HR", "eng-GB" ),
                 false,
                 316,
                 "3-d2cfe69af2d64330670e08efb2c86df7"
@@ -219,7 +227,7 @@ class UrlAliasHandlerTest extends TestCase
             array(
                 "jedan/dva/three",
                 array( "cro-HR", "eng-GB" ),
-                array( "cro-HR", "eng-GB", "ger-DE" ),
+                array( "cro-HR", "eng-GB" ),
                 false,
                 316,
                 "3-35d6d33467aae9a2e3dccb4b6b027878"
@@ -227,7 +235,7 @@ class UrlAliasHandlerTest extends TestCase
             array(
                 "jedan/two/tri",
                 array( "cro-HR", "eng-GB" ),
-                array( "cro-HR", "eng-GB", "ger-DE" ),
+                array( "cro-HR", "eng-GB" ),
                 false,
                 316,
                 "3-d2cfe69af2d64330670e08efb2c86df7"
@@ -235,7 +243,7 @@ class UrlAliasHandlerTest extends TestCase
             array(
                 "jedan/two/three",
                 array( "cro-HR", "eng-GB" ),
-                array( "cro-HR", "eng-GB", "ger-DE" ),
+                array( "cro-HR", "eng-GB" ),
                 false,
                 316,
                 "3-35d6d33467aae9a2e3dccb4b6b027878"
@@ -243,7 +251,7 @@ class UrlAliasHandlerTest extends TestCase
             array(
                 "jedan/dva/tri",
                 array( "cro-HR", "ger-DE" ),
-                array( "cro-HR", "eng-GB", "ger-DE" ),
+                array( "cro-HR", "ger-DE" ),
                 false,
                 316,
                 "3-d2cfe69af2d64330670e08efb2c86df7"
@@ -251,7 +259,7 @@ class UrlAliasHandlerTest extends TestCase
             array(
                 "jedan/dva/drei",
                 array( "cro-HR", "ger-DE" ),
-                array( "cro-HR", "eng-GB", "ger-DE" ),
+                array( "cro-HR", "ger-DE" ),
                 false,
                 316,
                 "3-1d8d2fd0a99802b89eb356a86e029d25"
@@ -259,7 +267,7 @@ class UrlAliasHandlerTest extends TestCase
             array(
                 "jedan/two/three",
                 array( "eng-GB", "ger-DE" ),
-                array( "cro-HR", "eng-GB", "ger-DE" ),
+                array( "eng-GB", "ger-DE" ),
                 false,
                 316,
                 "3-35d6d33467aae9a2e3dccb4b6b027878"
@@ -267,7 +275,7 @@ class UrlAliasHandlerTest extends TestCase
             array(
                 "jedan/two/drei",
                 array( "eng-GB", "ger-DE" ),
-                array( "cro-HR", "eng-GB", "ger-DE" ),
+                array( "eng-GB", "ger-DE" ),
                 false,
                 316,
                 "3-1d8d2fd0a99802b89eb356a86e029d25"
@@ -324,6 +332,8 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * Test for the lookup() method.
+     *
      * Testing that UrlAlias is found and has expected state.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::lookup
@@ -371,7 +381,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertFalse( $urlAlias->forward );
         self::assertFalse( $urlAlias->isCustom );
         self::assertFalse( $urlAlias->isHistory );
-        self::assertCount( count( $languageCodes ), $urlAlias->languageCodes );
+        self::assertCount( count( $languageCodes ), array_unique( $urlAlias->languageCodes ) );
         foreach ( $languageCodes as $languageCode )
         {
             self::assertTrue( in_array( $languageCode, $urlAlias->languageCodes ) );
@@ -459,6 +469,100 @@ class UrlAliasHandlerTest extends TestCase
         self::assertEquals( $urlAliasCorrected->type, $urlAlias->type );
     }
 
+    public function providerForTestLookupMultipleLanguages()
+    {
+        return array(
+            array(
+                "jedan/dva",
+                array( "cro-HR" ),
+                array( "cro-HR" ),
+                false,
+                315,
+                "2-c67ed9a09ab136fae610b6a087d82e21"
+            ),
+            array(
+                "jedan/dva",
+                array( "eng-GB" ),
+                array( "eng-GB" ),
+                false,
+                315,
+                "2-c67ed9a09ab136fae610b6a087d82e21"
+            ),
+            array(
+                "jedan/dva",
+                array( "cro-HR", "eng-GB" ),
+                array( "cro-HR", "eng-GB" ),
+                false,
+                315,
+                "2-c67ed9a09ab136fae610b6a087d82e21"
+            ),
+            array(
+                "jedan/dva/tri",
+                array( "cro-HR", "eng-GB" ),
+                array( "cro-HR", "eng-GB" ),
+                false,
+                316,
+                "3-d2cfe69af2d64330670e08efb2c86df7"
+            ),
+            array(
+                "jedan/dva/tri",
+                array( "cro-HR" ),
+                array( "cro-HR" ),
+                false,
+                316,
+                "3-d2cfe69af2d64330670e08efb2c86df7"
+            ),
+            array(
+                "jedan/dva/three",
+                array( "eng-GB" ),
+                array( "eng-GB" ),
+                false,
+                316,
+                "3-35d6d33467aae9a2e3dccb4b6b027878"
+            ),
+            array(
+                "jedan/dva/three",
+                array( "eng-GB", "cro-HR" ),
+                array( "eng-GB", "cro-HR" ),
+                false,
+                316,
+                "3-35d6d33467aae9a2e3dccb4b6b027878"
+            ),
+        );
+    }
+
+    /**
+     * Test for the lookup() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::lookup
+     * @dataProvider providerForTestLookupMultipleLanguages
+     * @depends testLookup
+     * @group multiple-languages
+     * @group location
+     */
+    public function testLookupLocationMultipleLanguages(
+        $url,
+        array $prioritizedLanguageCodes,
+        array $languageCodes,
+        $alwaysAvailable,
+        $locationId,
+        $id )
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_location_multilang.php' );
+
+        $urlAlias = $handler->lookup( $url, $prioritizedLanguageCodes );
+
+        $this->assertLocationUrlAliasCorrect(
+            $urlAlias,
+            $url,
+            $languageCodes,
+            $alwaysAvailable,
+            $locationId,
+            $id
+        );
+    }
+
     public function providerForTestLookupVirtualUrlAliasThrowsNotFoundException()
     {
         return array(
@@ -470,6 +574,8 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * Test for the lookup() method.
+     *
      * Throws NotFoundException because parts of URL alias are not always available or not in list
      * of prioritized languages.
      *
@@ -593,6 +699,8 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * Test for the lookup() method.
+     *
      * Testing that UrlAlias is found and has expected state.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::lookup
@@ -656,6 +764,8 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * Test for the lookup() method.
+     *
      * Testing that NOP action redirects to site root.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::lookup
@@ -712,6 +822,8 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * Test for the lookup() method.
+     *
      * Testing that looking up case incorrect URL results in redirection to case correct path.
      *
      * Note that case corrected path is not always equal to case corrected case incorrect path, eg. "JEDAN/TWO/THREE"
@@ -760,6 +872,8 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * Test for the lookup() method.
+     *
      * Throws NotFoundException because parts of URL alias are not always available or not in list
      * of prioritized languages.
      *
@@ -811,6 +925,8 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * Test for the lookup() method.
+     *
      * Testing that UrlAlias is found and has expected state.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::lookup
@@ -874,6 +990,8 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * Test for the lookup() method.
+     *
      * Testing that NOP action redirects to site root.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::lookup
@@ -930,6 +1048,8 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * Test for the lookup() method.
+     *
      * Testing that looking up case incorrect URL results in redirection to case correct path.
      *
      * Note that case corrected path is not always equal to case corrected case incorrect path, eg. "JEDAN/TWO/THREE"
@@ -971,13 +1091,15 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * Test for the publishUrlAliasForLocation() method.
      *
+     * @todo document
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::lookup
-     * @_depends testLookupLocationUrlAliasThrowsNotFoundException
-     * @_depends testLookupLocationUrlAliasFound
-     * @_depends testLookupLocationCaseCorrection
-     * @_group publish
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::publishUrlAliasForLocation
+     * @depends testLookupLocationUrlAliasThrowsNotFoundException
+     * @depends testLookupLocationUrlAliasFound
+     * @depends testLookupLocationCaseCorrection
+     * @group publish
      */
     public function testPublishUrlAliasForLocation()
     {
@@ -1011,9 +1133,11 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * Test for the publishUrlAliasForLocation() method.
      *
+     * @todo document
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::lookup
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::publishUrlAliasForLocation
      * @dataProvider providerForTestPublishUrlAliasForLocationComplex
      * @depends testLookupLocationUrlAliasFound
      * @depends testPublishUrlAliasForLocation
@@ -1055,9 +1179,11 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * Test for the publishUrlAliasForLocation() method.
      *
+     * @todo document
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::lookup
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::publishUrlAliasForLocation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @dataProvider providerForTestLookupLocationUrlAliasThrowsNotFoundException
      * @depends testLookupLocationUrlAliasThrowsNotFoundException
