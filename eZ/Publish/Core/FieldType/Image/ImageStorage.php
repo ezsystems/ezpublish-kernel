@@ -25,16 +25,22 @@ use eZ\Publish\SPI\FieldType\FieldStorage,
 class ImageStorage extends GatewayBasedStorage
 {
     /**
+     * File service to be used
+     *
+     * @var FileService
+     */
+    protected $fileService;
+
+    /**
      * Construct from gateways
      *
      * @param \eZ\Publish\Core\FieldType\StorageGateway[] $gateways
+     * @param FileService $fileService
      */
-    public function __construct( array $gateways, $fileService )
+    public function __construct( array $gateways, FileService $fileService )
     {
-        foreach ( $gateways as $identifier => $gateway )
-        {
-            $this->addGateway( $identifier, $gateway );
-        }
+        parent::__construct( $gateways );
+        $this->fileService = $fileService;
     }
 
     /**

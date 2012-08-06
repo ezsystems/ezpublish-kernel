@@ -50,7 +50,8 @@ class LocalFileService implements FileService
     public function storeFile( VersionInfo $versionInfo, Field $field, $nodePathString )
     {
         $sourcePath = $field->value->externalData['path'];
-        $targetPath = $this->createTargetPath( $versionInfo, $field, $nodePathString );
+        $targetUri = $this->createTargetPath( $versionInfo, $field, $nodePathString );
+        $targetPath = $this->installDir . '/' . $targetUri;
 
         $this->createDirectoryRecursive(
             dirname( $targetPath )
@@ -69,6 +70,8 @@ class LocalFileService implements FileService
                 )
             );
         }
+
+        return $targetUri;
     }
 
     /**
@@ -86,7 +89,7 @@ class LocalFileService implements FileService
     public function getMetaData( $path )
     {
         // Does not depend on GD
-        $metaData = getimagesize( $path );
+        $metaData = getimagesize( $this->installDir . '/' . $path );
 
         return array(
             'width' => $metaData[0],
@@ -109,7 +112,12 @@ class LocalFileService implements FileService
             return;
         }
 
-        $this->createDirectoryRecursive( basedir( $directory ) );
+        if ( $directory === '' )
+        {
+            throw new \RuntimeException( "Unable to create empty directory!" );
+        }
+
+        $this->createDirectoryRecursive( dirname( $directory ) );
 
         $result = mkdir( $directory );
 
@@ -129,11 +137,10 @@ class LocalFileService implements FileService
      */
     protected function createTargetPath( VersionInfo $versionInfo, Field $field, $nodePathString )
     {
-        sprintf(
-            '%s/var/%s/storage/images/%s/%s-%s-%s/%s',
-            $this->installDir, // %s/
-            $this->siteName,  // /var/%s
-            $nodePathString, // images/%s
+        return sprintf(
+            'var/%s/storage/images/%s%s-%s-%s/%s',
+            $this->siteName,  // var/%s
+            $nodePathString, // images/%s, note that $nodePathString ends with a "/"
             $field->id, // /%s-
             $versionInfo->versionNo, // -%s-
             $field->languageCode, // -%s

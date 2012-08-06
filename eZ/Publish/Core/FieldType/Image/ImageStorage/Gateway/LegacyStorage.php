@@ -65,27 +65,29 @@ class LegacyStorage extends Gateway
      */
     public function getNodePathString( VersionInfo $versionInfo )
     {
-        $selectQuery = $this->getConnection()->createSelectQuery();
+        $connection = $this->getConnection();
+
+        $selectQuery = $connection->createSelectQuery();
         $selectQuery->select( 'path_identification_string' )
             ->from( $connection->quoteTable( 'ezcontentobject_tree' ) )
             ->where(
-                $select->expr->lAnd(
-                    $select->expr->eq(
+                $selectQuery->expr->lAnd(
+                    $selectQuery->expr->eq(
                         $connection->quoteColumn( 'contentobject_id' ),
-                        $select->bindValue( $versionInfo->contentId )
+                        $selectQuery->bindValue( $versionInfo->contentId )
                     ),
-                    $select->expr->eq(
+                    $selectQuery->expr->eq(
                         $connection->quoteColumn( 'contentobject_version' ),
-                        $select->bindValue( $versionInfo->versionNo )
+                        $selectQuery->bindValue( $versionInfo->versionNo )
                     ),
-                    $select->expr->eq(
+                    $selectQuery->expr->eq(
                         $connection->quoteColumn( 'node_id' ),
                         $connection->quoteColumn( 'main_node_id' )
                     )
                 )
             );
         $statement = $selectQuery->prepare();
-        $statement->excute();
+        $statement->execute();
 
         return $statement->fetchColumn();
     }
