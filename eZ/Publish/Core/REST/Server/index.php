@@ -212,6 +212,7 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^/content/objectstategroups/[0-9]+$)' => array(
             'GET' => array( $objectStateController, 'loadObjectStateGroup' ),
+            'DELETE' => array( $objectStateController, 'deleteObjectStateGroup' ),
         ),
         '(^/content/objectstategroups/[0-9]+/objectstates$)' => array(
             'GET' => array( $objectStateController, 'loadObjectStates' ),

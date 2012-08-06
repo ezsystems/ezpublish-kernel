@@ -157,4 +157,18 @@ class ObjectState
             $objectStateGroup->id
         );
     }
+
+    /**
+     * The given object state group including the object states is deleted
+     *
+     * @param RMF\Request $request
+     * @return void
+     */
+    public function deleteObjectStateGroup( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'objectstategroup', $request->path );
+        return $this->objectStateService->deleteObjectStateGroup(
+            $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] )
+        );
+    }
 }
