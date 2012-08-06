@@ -169,7 +169,7 @@ abstract class Gateway
      */
     abstract public function loadBasicUrlAliasData( array $urlElements, array $languageCodes );
 
-    abstract public function getLocationUrlAliasLanguageCodes( array $actions, array $languageCodes );
+    abstract public function getLocationUrlAliasLanguageCodes( array $actions, array $prioritizedLanguageCodes );
 
     /**
      *
