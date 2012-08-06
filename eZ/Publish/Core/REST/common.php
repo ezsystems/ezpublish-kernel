@@ -69,6 +69,7 @@ $repository = new Client\IntegrationTestRepository(
                 'application/vnd.ez.api.ObjectStateGroup'     => new Client\Input\Parser\ObjectStateGroup(),
                 'application/vnd.ez.api.ObjectStateGroupList' => new Client\Input\Parser\ObjectStateGroupList(),
                 'application/vnd.ez.api.ObjectState'          => new Client\Input\Parser\ObjectState(),
+                'application/vnd.ez.api.ObjectStateList'      => new Client\Input\Parser\ObjectStateList(),
             )
         ),
         array(

@@ -163,6 +163,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup' => new Output\ValueObjectVisitor\ObjectStateGroup( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectStateGroupList'       => new Output\ValueObjectVisitor\ObjectStateGroupList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectState'                => new Output\ValueObjectVisitor\ObjectState( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectStateList'            => new Output\ValueObjectVisitor\ObjectStateList( $urlHandler ),
 );
 
 /*
@@ -213,6 +214,7 @@ $dispatcher = new AuthenticatingDispatcher(
             'GET' => array( $objectStateController, 'loadObjectStateGroup' ),
         ),
         '(^/content/objectstategroups/[0-9]+/objectstates$)' => array(
+            'GET' => array( $objectStateController, 'loadObjectStates' ),
             'POST' => array( $objectStateController, 'createObjectState' ),
         ),
         '(^/content/objectstategroups/[0-9]+/objectstates/[0-9]+$)' => array(

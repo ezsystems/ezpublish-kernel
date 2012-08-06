@@ -153,7 +153,14 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
      */
     public function loadObjectStates( ObjectStateGroup $objectStateGroup )
     {
-        throw new \Exception( "@todo Implement" );
+        $response = $this->client->request(
+            'GET',
+            $objectStateGroup->id . '/objectstates',
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'ObjectStateList' ) )
+            )
+        );
+        return $this->inputDispatcher->parse( $response );
     }
 
     /**

@@ -11,29 +11,29 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
-use eZ\Publish\Core\REST\Server\Values\ObjectStateGroupList;
+use eZ\Publish\Core\REST\Server\Values\ObjectStateList;
 use eZ\Publish\Core\REST\Common;
 
-class ObjectStateGroupListTest extends ValueObjectVisitorBaseTest
+class ObjectStateListTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the ObjectStateGroupList visitor
+     * Test the ObjectStateList visitor
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getObjectStateGroupListVisitor();
+        $visitor   = $this->getObjectStateListVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
 
-        $groupList = new ObjectStateGroupList( array() );
+        $stateList = new ObjectStateList( array(), 42 );
 
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
-            $groupList
+            $stateList
         );
 
         $result = $generator->endDocument( null );
@@ -44,53 +44,53 @@ class ObjectStateGroupListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains ObjectStateGroupList element
+     * Test if result contains ObjectStateList element
      *
      * @param string $result
      * @depends testVisit
      */
-    public function testResultContainsObjectStateGroupListElement( $result )
+    public function testResultContainsObjectStateListElement( $result )
     {
         $this->assertTag(
             array(
-                'tag' => 'ObjectStateGroupList',
+                'tag' => 'ObjectStateList',
             ),
             $result,
-            'Invalid <ObjectStateGroupList> element.',
+            'Invalid <ObjectStateList> element.',
             false
         );
     }
 
     /**
-     * Test if result contains ObjectStateGroupList element attributes
+     * Test if result contains ObjectStateList element attributes
      *
      * @param string $result
      * @depends testVisit
      */
-    public function testResultContainsObjectStateGroupListAttributes( $result )
+    public function testResultContainsObjectStateListAttributes( $result )
     {
         $this->assertTag(
             array(
-                'tag' => 'ObjectStateGroupList',
+                'tag' => 'ObjectStateList',
                 'attributes' => array(
-                    'media-type' => 'application/vnd.ez.api.ObjectStateGroupList+xml',
-                    'href'       => '/content/objectstategroups',
+                    'media-type' => 'application/vnd.ez.api.ObjectStateList+xml',
+                    'href'       => '/content/objectstategroups/42/objectstates',
                 )
             ),
             $result,
-            'Invalid <ObjectStateGroupList> attributes.',
+            'Invalid <ObjectStateList> attributes.',
             false
         );
     }
 
     /**
-     * Get the ObjectStateGroupList visitor
+     * Get the ObjectStateList visitor
      *
-     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ObjectStateGroupList
+     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ObjectStateList
      */
-    protected function getObjectStateGroupListVisitor()
+    protected function getObjectStateListVisitor()
     {
-        return new ValueObjectVisitor\ObjectStateGroupList(
+        return new ValueObjectVisitor\ObjectStateList(
             new Common\UrlHandler\eZPublish()
         );
     }

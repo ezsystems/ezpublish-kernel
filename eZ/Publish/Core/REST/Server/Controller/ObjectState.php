@@ -140,4 +140,21 @@ class ObjectState
             $this->objectStateService->loadObjectStateGroups()
         );
     }
+
+    /**
+     * Returns a list of all object states of the given group
+     *
+     * @param RMF\Request $request
+     * @return mixed
+     */
+    public function loadObjectStates( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'objectstate', $request->path );
+
+        $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] );
+        return new Values\ObjectStateList(
+            $this->objectStateService->loadObjectStates( $objectStateGroup ),
+            $objectStateGroup->id
+        );
+    }
 }
