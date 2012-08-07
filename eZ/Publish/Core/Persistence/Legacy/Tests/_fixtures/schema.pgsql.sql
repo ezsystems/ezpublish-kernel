@@ -208,6 +208,13 @@ CREATE TABLE ezbinaryfile (
     "version" integer DEFAULT 0 NOT NULL
 );
 
+DROP TABLE IF EXISTS ezimagefile;
+CREATE TABLE ezimagefile (
+    contentobject_attribute_id integer DEFAULT 0 NOT NULL,
+    filepath text NOT NULL,
+    id integer DEFAULT nextval('ezimagefile_s'::text) NOT NULL
+);
+
 DROP TABLE IF EXISTS ezcobj_state;
 CREATE TABLE ezcobj_state (
     default_language_id integer NOT NULL DEFAULT 0,
@@ -641,6 +648,9 @@ CREATE TABLE ezkeyword_attribute_link (
   objectattribute_id integer DEFAULT 0 NOT NULL
 );
 
+CREATE INDEX ezimagefile_coid ON ezimagefile USING btree (contentobject_attribute_id);
+
+CREATE INDEX ezimagefile_file ON ezimagefile USING btree (filepath);
 
 CREATE UNIQUE INDEX ezcobj_state_identifier ON ezcobj_state USING btree (group_id, identifier);
 
@@ -815,6 +825,9 @@ CREATE INDEX ezkeyword_attr_link_oaid ON ezkeyword USING btree (objectattribute_
 
 ALTER TABLE ONLY ezcobj_state
     ADD CONSTRAINT ezcobj_state_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY ezimagefile
+    ADD CONSTRAINT ezimagefile_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY ezcobj_state_group
     ADD CONSTRAINT ezcobj_state_group_pkey PRIMARY KEY (id);

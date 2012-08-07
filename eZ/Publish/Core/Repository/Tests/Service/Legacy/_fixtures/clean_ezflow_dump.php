@@ -10478,7 +10478,7 @@ array (
 ),
 'ezimagefile' =>
 array (
-/* 0 =>
+ 0 =>
  array (
   'contentobject_attribute_id' => '172',
   'filepath' => 'var/storage/images/setup/ez_publish/172-1-eng-GB/ez_publish.',
@@ -10489,7 +10489,7 @@ array (
   'contentobject_attribute_id' => '172',
   'filepath' => 'var/ezflow_site/storage/images/design/plain-site/172-2-eng-US/eZ-Flow-without-demo-content1.png',
   'id' => '2',
- ),*/
+ ),
 ),
 'ezinfocollection' =>
 array (

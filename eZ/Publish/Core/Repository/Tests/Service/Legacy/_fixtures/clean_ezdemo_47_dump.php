@@ -8589,7 +8589,7 @@ array (
 ),
 'ezgmaplocation' =>
 array (
-),
+),*/
 'ezimagefile' =>
 array (
  0 =>
@@ -8605,7 +8605,7 @@ array (
   'id' => '2',
  ),
 ),
-'ezinfocollection' =>
+/* 'ezinfocollection' =>
 array (
 ),
 'ezinfocollection_attribute' =>
