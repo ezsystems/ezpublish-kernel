@@ -12,6 +12,8 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\ObjectStateList;
+use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState as CoreObjectState;
+use eZ\Publish\Core\REST\Common\Values\ObjectState;
 use eZ\Publish\Core\REST\Common;
 
 class ObjectStateListTest extends ValueObjectVisitorBaseTest
@@ -80,6 +82,32 @@ class ObjectStateListTest extends ValueObjectVisitorBaseTest
             $result,
             'Invalid <ObjectStateList> attributes.',
             false
+        );
+    }
+
+    /**
+     * Test if ObjectStateList visitor visits the children
+     */
+    public function testObjectStateListVisitsChildren()
+    {
+        $visitor   = $this->getObjectStateListVisitor();
+        $generator = $this->getGenerator();
+
+        $generator->startDocument( null );
+
+        $objectStateList = new ObjectStateList( array(
+            new ObjectState( new CoreObjectState(), 42 ),
+            new ObjectState( new CoreObjectState(), 42 ),
+        ), 42 );
+
+        $this->getVisitorMock()->expects( $this->exactly( 2 ) )
+            ->method( 'visitValueObject' )
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Common\\Values\\ObjectState' ) );
+
+        $visitor->visit(
+            $this->getVisitorMock(),
+            $generator,
+            $objectStateList
         );
     }
 

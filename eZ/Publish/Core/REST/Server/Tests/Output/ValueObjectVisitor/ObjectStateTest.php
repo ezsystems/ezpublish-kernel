@@ -12,7 +12,7 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState as CoreObjectState;
-use eZ\Publish\Core\REST\Server\Values;
+use eZ\Publish\Core\REST\Common\Values;
 use eZ\Publish\Core\REST\Common;
 
 class ObjectStateTest extends ValueObjectVisitorBaseTest

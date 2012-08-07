@@ -34,24 +34,10 @@ class ObjectStateList extends ValueObjectVisitor
         $generator->endAttribute( 'href' );
 
         $generator->startList( 'ObjectState' );
-
         foreach ( $data->states as $state )
         {
-            $generator->startObjectElement( 'ObjectState' );
-            $generator->startAttribute(
-                'href',
-                $this->urlHandler->generate(
-                    'objectstate',
-                    array(
-                        'objectstategroup' => $data->groupId,
-                        'objectstate' => $state->id
-                    )
-                )
-            );
-            $generator->endAttribute( 'href' );
-            $generator->endObjectElement( 'ObjectState' );
+            $visitor->visitValueObject( $state );
         }
-
         $generator->endList( 'ObjectState' );
 
         $generator->endObjectElement( 'ObjectStateList' );
