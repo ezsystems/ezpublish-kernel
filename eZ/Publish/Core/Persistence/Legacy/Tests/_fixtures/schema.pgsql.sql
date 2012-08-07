@@ -191,7 +191,7 @@ CREATE SEQUENCE ezkeyword_s
     CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezkeyword_attribute_link_s;
-CREATE SEQUENCE ezkeyword_s
+CREATE SEQUENCE ezkeyword_attribute_link_s
     START 1
     INCREMENT 1
     MAXVALUE 9223372036854775807
