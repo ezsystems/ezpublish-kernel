@@ -19,12 +19,19 @@ abstract class Utils
 {
     /**
      * @static
+     *
      * @param string $persistenceHandler
      * @param string $ioHandler
+     * @param array $dependencies For injecting parameters / services
+     *
      * @throws \RuntimeException
      * @return \eZ\Publish\Core\Base\ServiceContainer
      */
-    protected static function getServiceContainer( $persistenceHandler = '@persistence_handler_inmemory', $ioHandler = '@io_handler_inmemory' )
+    protected static function getServiceContainer(
+        $persistenceHandler = '@persistence_handler_inmemory',
+        $ioHandler = '@io_handler_inmemory',
+        array $dependencies = array()
+    )
     {
         // Get configuration config
         if ( !( $settings = include ( 'config.php' ) ) )
@@ -44,15 +51,12 @@ abstract class Utils
             $settings['base']['Configuration']['Paths']
         );
 
-        // Load service container & configuration, but force legacy handler
+        // Load service container & configuration, but overwrite some repository settings
         $settings = $configManager->getConfiguration('service')->getAll();
         $settings['repository']['arguments']['persistence_handler'] = $persistenceHandler;
         $settings['repository']['arguments']['io_handler'] = $ioHandler;
-        $settings['legacy_db_handler']['arguments']['dsn'] = ( isset( $_ENV['DATABASE'] ) && $_ENV['DATABASE'] ) ?
-            $_ENV['DATABASE'] : 'sqlite://:memory:';
 
         // Inject legacy kernel, as it does not yet have a factory (see current mess in boostrap.php)
-        $dependencies = array();
         if ( isset( $_ENV['legacyKernel'] ) )
         {
             $dependencies['@legacyKernel'] = $_ENV['legacyKernel'];
