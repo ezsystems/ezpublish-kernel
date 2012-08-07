@@ -109,7 +109,7 @@ class Type extends FieldType
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Relation\Value
+     * @return \eZ\Publish\Core\FieldType\Relation\Value
      */
     public function getDefaultDefaultValue()
     {
@@ -124,7 +124,7 @@ class Type extends FieldType
      *
      * @param mixed $inputValue A ContentInfo or content ID to build from, or a Relation\Value
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Relation\Value
+     * @return \eZ\Publish\Core\FieldType\Relation\Value
      */
     public function acceptValue( $inputValue )
     {
@@ -176,7 +176,7 @@ class Type extends FieldType
      *
      * @param mixed $hash
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\Relation\Value $value
+     * @return \eZ\Publish\Core\FieldType\Relation\Value $value
      */
     public function fromHash( $hash )
     {
@@ -186,7 +186,7 @@ class Type extends FieldType
     /**
      * Converts a $Value to a hash
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\Relation\Value $value
+     * @param \eZ\Publish\Core\FieldType\Relation\Value $value
      *
      * @return mixed
      */

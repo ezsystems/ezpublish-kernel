@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\FieldType\RelationList;
-use eZ\Publish\Core\Repository\FieldType\Value as BaseValue;
+namespace eZ\Publish\Core\FieldType\RelationList;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
- * Value for TextLine field type
+ * Value for RelationList field type
  */
 class Value extends BaseValue
 {
@@ -33,7 +33,7 @@ class Value extends BaseValue
     }
 
     /**
-     * @see \eZ\Publish\Core\Repository\FieldType\Value
+     * @see \eZ\Publish\Core\FieldType\Value
      */
     public function __toString()
     {

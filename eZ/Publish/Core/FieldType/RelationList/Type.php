@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\FieldType\RelationList;
-use eZ\Publish\Core\Repository\FieldType\FieldType,
+namespace eZ\Publish\Core\FieldType\RelationList;
+use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
@@ -19,7 +19,7 @@ use eZ\Publish\Core\Repository\FieldType\FieldType,
 class Type extends FieldType
 {
     protected $allowedValidators = array(
-    //    'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\StringLengthValidator'
+    //    'eZ\\Publish\\Core\\Repository\\FieldType\\RelationList\\StringLengthValidator'
     );
 
     /**
@@ -28,7 +28,7 @@ class Type extends FieldType
      * Build a FiledType\Value object with the provided $text as value.
      *
      * @param string $text
-     * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value
+     * @return \eZ\Publish\Core\FieldType\RelationList\Value
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function buildValue( $text )
@@ -65,7 +65,7 @@ class Type extends FieldType
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value
+     * @return \eZ\Publish\Core\FieldType\RelationList\Value
      */
     public function getDefaultDefaultValue()
     {
@@ -78,9 +78,9 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\TextLine\Value $inputValue
+     * @param \eZ\Publish\Core\FieldType\RelationList\Value $inputValue
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value
+     * @return \eZ\Publish\Core\FieldType\RelationList\Value
      */
     public function acceptValue( $inputValue )
     {
@@ -121,7 +121,7 @@ class Type extends FieldType
      *
      * @param mixed $hash
      *
-     * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value $value
+     * @return \eZ\Publish\Core\FieldType\RelationList\Value $value
      */
     public function fromHash( $hash )
     {
@@ -131,7 +131,7 @@ class Type extends FieldType
     /**
      * Converts a $Value to a hash
      *
-     * @param \eZ\Publish\Core\Repository\FieldType\TextLine\Value $value
+     * @param \eZ\Publish\Core\FieldType\RelationList\Value $value
      *
      * @return mixed
      */

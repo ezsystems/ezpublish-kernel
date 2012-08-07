@@ -35,7 +35,7 @@ class Value extends BaseValue
 
     /**
      * Returns the related content's name
-     * @see \eZ\Publish\Core\Repository\FieldType\Value
+     * @see \eZ\Publish\Core\FieldType\Value
      */
     public function __toString()
     {
