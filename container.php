@@ -30,7 +30,7 @@ if ( isset( $_ENV['legacyKernel'] ) )
     $dependencies['@legacyKernel'] = $_ENV['legacyKernel'];
 }
 
-// Return Service container with servie.ini settings
+// Return Service container with service.ini settings
 return new ServiceContainer(
     $configManager->getConfiguration('service')->getAll(),
     $dependencies
