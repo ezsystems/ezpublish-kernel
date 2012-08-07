@@ -34,13 +34,23 @@ class Value extends BaseValue
      * Display file name of the image
      *
      * @var string
+     * @required
      */
     public $fileName;
+
+    /**
+     * Size of the image file
+     *
+     * @var integer
+     * @required
+     */
+    public $fileSize;
 
     /**
      * Path string, where the image is located
      *
      * @var string
+     * @required
      * @todo This could better be an URI? E.g. file://… or http://… or …
      */
     public $path;
@@ -69,6 +79,16 @@ class Value extends BaseValue
                 );
             }
         }
+    }
+
+    /**
+     * Returns the image file size in byte
+     *
+     * @return integer
+     */
+    public function getFileSize()
+    {
+        return $this->fileSize;
     }
 
     /**

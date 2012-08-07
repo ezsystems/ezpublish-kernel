@@ -150,8 +150,15 @@ class ImageIntergrationTest extends BaseIntegrationTest
      */
     public function getTypeConstraints()
     {
-        // @TODO: None is correct?
-        return new Content\FieldTypeConstraints();
+        return new Content\FieldTypeConstraints(
+            array(
+                'validators' => array(
+                    'FileSizeValidator' => array(
+                        'maxFileSize' => 2 * 1024 * 1024, // 2 MB
+                    )
+                )
+            )
+        );
     }
 
     /**
@@ -167,7 +174,18 @@ class ImageIntergrationTest extends BaseIntegrationTest
             // The ezint field type does not have any special field definition
             // properties
             array( 'fieldType', 'ezimage' ),
-            array( 'fieldTypeConstraints', new Content\FieldTypeConstraints() ),
+            array(
+                'fieldTypeConstraints',
+                new Content\FieldTypeConstraints(
+                    array(
+                        'validators' => array(
+                            'FileSizeValidator' => array(
+                                'maxFileSize' => 2 * 1024 * 1024, // 2 MB
+                            )
+                        )
+                    )
+                )
+            ),
         );
     }
 

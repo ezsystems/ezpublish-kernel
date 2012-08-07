@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     eZ\Publish\Core\FieldType\Image\Value as ImageValue,
@@ -158,7 +159,9 @@ EOT;
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        // @TODO: What needs to be converted here?
+        $storageDef->dataInt1 = ( isset( $fieldDef->fieldTypeConstraints->validators['FileSizeValidator']['maxFileSize'] )
+            ? round( $fieldDef->fieldTypeConstraints->validators['FileSizeValidator']['maxFileSize'] / 1024 / 1024 )
+            : 0 );
     }
 
     /**
@@ -169,7 +172,15 @@ EOT;
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        // @TODO: What needs to be converted here?
+        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints( array(
+            'validators' => array(
+                'FileSizeValidator' => array(
+                    'maxFileSize' => ( $storageDef->dataInt1 != 0
+                        ? (int)$storageDef->dataInt1 * 1024 * 1024
+                        : false ),
+                )
+            )
+        ) );
     }
 
     /**

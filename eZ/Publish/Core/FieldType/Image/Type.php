@@ -24,8 +24,13 @@ class Type extends FieldType
     /**
      * @see eZ\Publish\Core\FieldType::$validatorConfigurationSchema
      */
-    protected $allowedValidators = array(
-        "FileSizeValidator"
+    protected $validatorConfigurationSchema = array(
+        "FileSizeValidator" => array(
+            'maxFileSize' => array(
+                'type' => 'int',
+                'default' => false,
+            )
+        )
     );
 
     /**
@@ -45,20 +50,6 @@ class Type extends FieldType
     public function __construct( ValidatorService $validatorService )
     {
         $this->validatorService = $validatorService;
-    }
-
-    /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FiledType\Value object with the provided $imagePath as value.
-     *
-     * @param string $imagePath
-     * @return \eZ\Publish\Core\FieldType\Image\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $imagePath )
-    {
-        return new Value( $this->IOService, $imagePath );
     }
 
     /**
@@ -93,7 +84,36 @@ class Type extends FieldType
      */
     public function getDefaultDefaultValue()
     {
-        return new Value( $this->IOService );
+        return new Value();
+    }
+
+    /**
+     * Returns a schema for supported validator configurations.
+     *
+     * This implementation returns a three dimensional map containing for each validator configuration
+     * referenced by identifier a map of supported parameters which are defined by a type and a default value
+     * (see example).
+     * Example:
+     * <code>
+     *  array(
+     *      'stringLength' => array(
+     *          'minStringLength' => array(
+     *              'type'    => 'int',
+     *              'default' => 0,
+     *          ),
+     *          'maxStringLength' => array(
+     *              'type'    => 'int'
+     *              'default' => null,
+     *          )
+     *      ),
+     *  );
+     * </code>
+     * The validator identifier is mapped to a Validator class which can be retrieved via the
+     * ValidatorService.
+     */
+    public function getValidatorConfigurationSchema()
+    {
+        return $this->validatorConfigurationSchema;
     }
 
     /**
@@ -122,7 +142,8 @@ class Type extends FieldType
             );
         }
 
-        if ( isset( $inputValue->path ) && !file_exists( $inputValue->path ) )
+        // Required paramater $path
+        if ( !isset( $inputValue->path ) || !file_exists( $inputValue->path ) )
         {
             throw new InvalidArgumentType(
                 '$inputValue->path',
@@ -130,6 +151,26 @@ class Type extends FieldType
                 $inputValue->path
             );
         }
+        // Required parameter $fileName
+        if ( !isset( $inputValue->fileName ) && !is_string( $inputValue->fileName ) )
+        {
+            throw new InvalidArgumentType(
+                '$inputValue->fileName',
+                'string',
+                $inputValue->fileName
+            );
+        }
+        // Required parameter $fileSize
+        if ( !isset( $inputValue->fileSize ) && !is_int( $inputValue->fileSize ) )
+        {
+            throw new InvalidArgumentType(
+                '$inputValue->fileSize',
+                'string',
+                $inputValue->fileSize
+            );
+        }
+
+        // Optional parameter $alternativeText
         if ( isset( $inputValue->alternativeText ) && !is_string( $inputValue->alternativeText ) )
         {
             throw new InvalidArgumentType(
@@ -138,16 +179,102 @@ class Type extends FieldType
                 $inputValue->alternativeText
             );
         }
-        if ( isset( $inputValue->fileName ) && !is_string( $inputValue->alternativeText ) )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->fileName',
-                'string',
-                $inputValue->fileName
-            );
-        }
 
         return $inputValue;
+    }
+
+    /**
+     * Validates a field based on the validators in the field definition
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
+     * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field for which an action is performed
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validate( FieldDefinition $fieldDefinition, $fieldValue )
+    {
+        $errors = array();
+        foreach ( (array)$fieldDefinition->getValidatorConfiguration() as $validatorIdentifier => $parameters )
+        {
+            switch ( $validatorIdentifier )
+            {
+                case 'FileSizeValidator':
+                    if ( !isset( $parameters['maxFileSize'] ) || $parameters['maxFileSize'] == false )
+                    {
+                        // No file size limit
+                        break;
+                    }
+                    if ( $parameters['maxFileSize'] < $value->fileSize )
+                    {
+                        $errors[] = new ValidationError(
+                            "The file size cannot exceed %size% byte.",
+                            "The file size cannot exceed %size% bytes.",
+                            array(
+                                "size" => $parameters['maxFileSize'],
+                            )
+                        );
+                    }
+                    break;
+            }
+        }
+        return $errors;
+    }
+
+    /**
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $validatorConfiguration
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValidatorConfiguration( $validatorConfiguration )
+    {
+        $validationErrors = array();
+
+        foreach ( $validatorConfiguration as $validatorIdentifier => $parameters )
+        {
+            switch ( $validatorIdentifier )
+            {
+                case 'FileSizeValidator':
+                    if ( !isset( $parameters['maxFileSize'] ) )
+                    {
+                        $validationErrors[] = new ValidationError(
+                            "Validator %validator% expects parameter %parameter% to be set.",
+                            null,
+                            array(
+                                "validator" => $validatorIdentifier,
+                                "parameter" => 'maxFileSize',
+                            )
+                        );
+                        break;
+                    }
+                    if ( !is_int( $parameter['maxFileSize'] ) && !is_bool( $parameter['maxFileSize'] ) )
+                    {
+                        $validationErrors[] = new ValidationError(
+                            "Validator %validator% expects parameter %parameter% to be of %type%.",
+                            null,
+                            array(
+                                "validator" => $validatorIdentifier,
+                                "parameter" => 'maxFileSize',
+                                "type" => 'integer',
+                            )
+                        );
+                    }
+                    break;
+                default:
+                    $validationErrors[] = new ValidationError(
+                        "Validator '%validator%' is unknown",
+                        null,
+                        array(
+                            "validator" => $validatorIdentifier
+                        )
+                    );
+            }
+        }
+
+        return $validationErrors;
     }
 
     /**
