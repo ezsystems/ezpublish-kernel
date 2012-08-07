@@ -133,7 +133,7 @@ class RelationTest extends FieldTypeTest
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\Relation\Type::__construct
+     * @covers \eZ\Publish\Core\FieldType\Relation\Value::__construct
      */
     public function testValueConstructor()
     {
