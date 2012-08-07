@@ -51,6 +51,11 @@ class Router
     protected $siteAccessesConfiguration;
 
     /**
+     * @var \eZ\Publish\MVC\SiteAccess
+     */
+    protected $siteAccess;
+
+    /**
      * Constructor.
      *
      * @param string $defaultSiteAccess
@@ -63,24 +68,33 @@ class Router
     }
 
     /**
+     * @param \eZ\Publish\MVC\SiteAccess $siteAccess
+     */
+    public function setSiteAccess( SiteAccess $siteAccess )
+    {
+        $this->siteAccess = $siteAccess;
+    }
+
+    /**
      * Performs SiteAccess matching given the $request.
      *
      * @param \eZ\Publish\MVC\Routing\SimplifiedRequest $request
      *
-     * @return string
+     * @return \eZ\Publish\MVC\SiteAccess
      */
     public function match( SimplifiedRequest $request )
     {
-        $siteaccess = new SiteAccess;
+        if ( !isset( $this->siteAccess ) )
+            $this->siteAccess = new SiteAccess;
 
         // First check environment variable
         $siteaccessEnvName = getenv( 'EZPUBLISH_SITEACCESS' );
         if ( $siteaccessEnvName !== false )
         {
             // TODO: Check siteaccess validity and throw \RuntimeException if invalid
-            $siteaccess->name = $siteaccessEnvName;
-            $siteaccess->matchingType = 'env';
-            return $siteaccess;
+            $this->siteAccess->name = $siteaccessEnvName;
+            $this->siteAccess->matchingType = 'env';
+            return $this->siteAccess;
         }
 
         foreach ( $this->siteAccessesConfiguration as $matchingClass => $matchingConfiguration )
@@ -95,15 +109,15 @@ class Router
 
             if ( ( $siteaccessName = $matcher->match() ) !== false )
             {
-                $siteaccess->name = $siteaccessName;
-                $siteaccess->matchingType = $matcher->getName();
-                $siteaccess->matcher = $matcher;
-                return $siteaccess;
+                $this->siteAccess->name = $siteaccessName;
+                $this->siteAccess->matchingType = $matcher->getName();
+                $this->siteAccess->matcher = $matcher;
+                return $this->siteAccess;
             }
         }
 
-        $siteaccess->name = $this->defaultSiteAccess;
-        $siteaccess->matchingType = 'default';
-        return $siteaccess;
+        $this->siteAccess->name = $this->defaultSiteAccess;
+        $this->siteAccess->matchingType = 'default';
+        return $this->siteAccess;
     }
 }

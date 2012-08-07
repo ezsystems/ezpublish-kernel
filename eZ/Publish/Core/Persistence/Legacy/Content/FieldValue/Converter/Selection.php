@@ -40,16 +40,7 @@ class Selection implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $optionsFlip = array_flip( $value->fieldSettings["options"] );
-        $options = array();
-        foreach ( $value->data as $value )
-        {
-            if ( isset( $optionsFlip[$value] ) )
-            {
-                $options[] = $optionsFlip[$value];
-            }
-        }
-        $storageFieldValue->sortKeyString = $storageFieldValue->dataText = join( "-", $options );
+        $storageFieldValue->sortKeyString = $storageFieldValue->dataText = $value->sortKey;
     }
 
     /**
@@ -60,17 +51,11 @@ class Selection implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        // Refactor out non-working code
-        return $fieldValue;
-
-        $fieldValue->data = array_values(
-            array_intersect_key(
-                $fieldValue->fieldSettings["options"] ?: array(),
-                $value->dataText !== ""
-                    ? array_flip( explode( "-", $value->dataText ) )
-                    : array()
-            )
+        $fieldValue->data = array_map(
+            'intval',
+            explode( '-', $value->dataText )
         );
+        $fieldValue->sortKey = $value->sortKeyString;
     }
 
     /**
@@ -122,11 +107,9 @@ class Selection implements Converter
             $options[(int)$option["id"]] = (string)$option["name"];
         }
 
-        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
-                "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false,
-                "options" => $options,
-            )
+        $fieldDef->fieldTypeConstraints->fieldSettings = array(
+            "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false,
+            "options" => $options,
         );
     }
 

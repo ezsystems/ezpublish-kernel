@@ -22,7 +22,7 @@ class FieldType implements FieldTypeInterface
     /**
      * Holds internal FieldType object
      *
-     * @var \eZ\Publish\Core\Repository\FieldType
+     * @var \eZ\Publish\Core\FieldType\FieldType
      */
     protected $internalFieldType;
 
@@ -42,6 +42,11 @@ class FieldType implements FieldTypeInterface
     public function getFieldTypeIdentifier()
     {
         return $this->internalFieldType->getFieldTypeIdentifier();
+    }
+
+    public function getName( $value )
+    {
+        return $this->internalFieldType->getName( $value );
     }
 
     /**

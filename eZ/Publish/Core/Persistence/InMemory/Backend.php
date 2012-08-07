@@ -29,11 +29,19 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
  */
 class Backend
 {
-
     /**
      * @var array
      */
     protected $data = array();
+
+    /**
+     * Stack of data for transactions
+     *
+     * Current data is always kept in $data, this is for rollbacks and transaction count.
+     *
+     * @var array
+     */
+    protected $transactionDataStack = array();
 
     /**
      * @var \eZ\Publish\Core\Repository\ValidatorService
@@ -303,6 +311,50 @@ class Backend
     public function count( $type, array $match = array(), array $joinInfo = array() )
     {
         return count( $this->rawFind( $type, $match, $joinInfo ) );
+    }
+
+    /**
+     * Begin transaction
+     *
+     * Begins an transaction, make sure you'll call commit or rollback when done,
+     * otherwise work will be lost.
+     */
+    public function beginTransaction()
+    {
+        // copy current data to transaction stack
+        $this->transactionDataStack[] = $this->data;
+    }
+
+    /**
+     * Commit transaction
+     *
+     * Commit transaction, or throw exceptions if no transactions has been started.
+     *
+     * @throws \RuntimeException If no transaction has been started
+     */
+    public function commit()
+    {
+        if ( empty( $this->transactionDataStack ) )
+            throw new \RuntimeException( "No transactions in progress" );
+
+        // remove one level of data from transaction stack
+        array_pop( $this->transactionDataStack );
+    }
+
+    /**
+     * Rollback transaction
+     *
+     * Rollback transaction, or throw exceptions if no transactions has been started.
+     *
+     * @throws \RuntimeException If no transaction has been started
+     */
+    public function rollback()
+    {
+        if ( empty( $this->transactionDataStack ) )
+            throw new \RuntimeException( "No transactions in progress" );
+
+        // pop last data set from transaction stack back to live $data set to wipe out changes
+        $this->data = array_pop( $this->transactionDataStack );
     }
 
     /**

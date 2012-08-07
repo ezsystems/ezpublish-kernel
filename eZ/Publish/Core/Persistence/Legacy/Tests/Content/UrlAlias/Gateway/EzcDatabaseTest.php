@@ -32,13 +32,6 @@ class EzcDatabaseTest extends TestCase
      */
     protected $gateway;
 
-    public function setUp()
-    {
-        parent::setUp();
-
-        //$this->insertDatabaseFixture( __DIR__ . '/_fixtures/url_aliases.php' );
-    }
-
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::__construct
      */
@@ -55,6 +48,8 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
+     * Test for the loadBasicUrlAliasData() method.
+     *
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadBasicUrlAliasData
      */
     public function testLoadBasicUrlaliasDataNonExistent()
@@ -88,6 +83,8 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
+     * Test for the loadBasicUrlAliasData() method.
+     *
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadBasicUrlAliasData
      */
     public function testLoadBasicUrlaliasData()
@@ -104,6 +101,8 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
+     * Test for the loadBasicUrlAliasData() method.
+     *
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadBasicUrlAliasData
      */
     public function testLoadBasicUrlaliasDataIsCaseInsensitive()
@@ -119,9 +118,66 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * Test for the loadBasicUrlAliasData() method.
+     *
+     * Test with fixture containing language mask with multiple languages.
+     *
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadBasicUrlAliasData
+     */
+    public function testLoadBasicUrlaliasDataMultipleLanguages()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_multilang.php' );
+        $gateway = $this->getGateway();
+        $expectedResult = array(
+            "id" =>  "3",
+            "link" =>  "3",
+            "is_alias" => "0",
+            "alias_redirects" => "1",
+            "action" => "eznode:315",
+            "is_original" => "1",
+            "ezurlalias_ml0_text" => "jedan",
+            "ezurlalias_ml1_text" => "dva",
+            "lang_mask" => '6',
+            "language_codes" => array( "cro-HR", "eng-GB" ),
+            'parent' => '2',
+            'text_md5' => 'c67ed9a09ab136fae610b6a087d82e21',
+            'ezurlalias_ml0_action' => 'eznode:314',
+            'ezurlalias_ml1_action' => 'eznode:315'
+        );
+
+        $row1 = $gateway->loadBasicUrlAliasData( array( "jedan", "dva" ), array( "cro-HR" ) );
+        $row2 = $gateway->loadBasicUrlAliasData( array( "jedan", "dva" ), array( "eng-GB" ) );
+        $row3 = $gateway->loadBasicUrlAliasData( array( "jedan", "dva" ), array( "cro-HR", "eng-GB" ) );
+
+        self::assertEquals( $expectedResult, $row1 );
+        self::assertEquals( $expectedResult, $row2 );
+        self::assertEquals( $expectedResult, $row3 );
+    }
+
     public function providerForGetPath()
     {
         return array(
+            array(
+                2,
+                array( "cro-HR" ),
+                "jedan"
+            ),
+            array(
+                2,
+                array( "eng-GB" ),
+                "jedan"
+            ),
+            array(
+                2,
+                array( "ger-DE" ),
+                "jedan"
+            ),
+            array(
+                2,
+                array( "kli-KR" ),
+                "jedan"
+            ),
             array(
                 4,
                 array( "cro-HR" ),
@@ -154,6 +210,11 @@ class EzcDatabaseTest extends TestCase
             ),
             array(
                 4,
+                array( "ger-DE", "cro-HR" ),
+                "jedan/dva/drei"
+            ),
+            array(
+                4,
                 array( "ger-DE", "cro-HR", "eng-GB" ),
                 "jedan/dva/drei"
             ),
@@ -166,8 +227,12 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
+     * Test for the getPath() method.
+     *
      * @dataProvider providerForGetPath
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::getPath
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::choosePrioritizedRow
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::languageScore
      */
     public function testGetPath( $id, array $prioritizedLanguageCodes, $expectedPath )
     {
@@ -180,7 +245,76 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    public function providerForGetPathMultipleLanguages()
+    {
+        return array(
+            array(
+                3,
+                array( "eng-GB" ),
+                "jedan/dva"
+            ),
+            array(
+                3,
+                array( "cro-HR" ),
+                "jedan/dva"
+            ),
+            array(
+                3,
+                array( "cro-HR", "eng-GB" ),
+                "jedan/dva"
+            ),
+            array(
+                3,
+                array( "eng-GB", "cro-HR" ),
+                "jedan/dva"
+            ),
+            array(
+                4,
+                array( "cro-HR" ),
+                "jedan/dva/tri"
+            ),
+            array(
+                4,
+                array( "eng-GB" ),
+                "jedan/dva/three"
+            ),
+            array(
+                4,
+                array( "eng-GB", "cro-HR" ),
+                "jedan/dva/three"
+            ),
+            array(
+                4,
+                array( "cro-HR", "eng-GB" ),
+                "jedan/dva/tri"
+            ),
+        );
+    }
+
     /**
+     * Test for the getPath() method.
+     *
+     * Test with fixture containing language mask with multiple languages.
+     *
+     * @dataProvider providerForGetPathMultipleLanguages
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::getPath
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::choosePrioritizedRow
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::languageScore
+     */
+    public function testGetPathMultipleLanguages( $id, array $prioritizedLanguageCodes, $expectedPath )
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_multilang.php' );
+        $gateway = $this->getGateway();
+
+        self::assertEquals(
+            $expectedPath,
+            $gateway->getPath( $id, $prioritizedLanguageCodes )
+        );
+    }
+
+    /**
+     * Test for the getPath() method.
+     *
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::getPath
      */
     public function testGetPathWithFallbackToArbitraryLanguage()

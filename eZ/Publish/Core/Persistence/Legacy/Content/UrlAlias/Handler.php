@@ -178,8 +178,8 @@ class Handler implements BaseUrlAliasHandler
                     "lang_mask" => ( $row["lang_mask"] & ~1 ) | $languageId | (int)$alwaysAvailable,
                     "text" => $newText,
                     "text_md5" => $newTextMD5,
-                    "id " => $newElementId,
-                    "link " => $newElementId
+                    "id" => $newElementId,
+                    "link" => $newElementId
                 );
                 $this->gateway->updateRow(
                     $parentId,

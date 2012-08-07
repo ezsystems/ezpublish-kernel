@@ -11,6 +11,17 @@ CREATE TABLE ezbinaryfile (
 ) ENGINE=InnoDB;
 
 
+DROP TABLE IF EXISTS ezimagefile;
+CREATE TABLE ezimagefile (
+  contentobject_attribute_id int(11) NOT NULL DEFAULT '0',
+  filepath longtext NOT NULL,
+  id int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (id),
+  KEY ezimagefile_coid (contentobject_attribute_id),
+  KEY ezimagefile_file (filepath(200))
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+
+
 DROP TABLE IF EXISTS ezcobj_state;
 CREATE TABLE ezcobj_state (
   default_language_id int(11) NOT NULL DEFAULT 0,

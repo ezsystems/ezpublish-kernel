@@ -19,12 +19,20 @@ abstract class Utils
 {
     /**
      * @static
+     *
      * @param string $persistenceHandler
      * @param string $ioHandler
+     * @param string $dsn
+     *
      * @throws \RuntimeException
+     *
      * @return \eZ\Publish\Core\Base\ServiceContainer
      */
-    protected static function getServiceContainer( $persistenceHandler = '@persistence_handler_inmemory', $ioHandler = '@io_handler_inmemory' )
+    protected static function getServiceContainer(
+        $persistenceHandler = '@persistence_handler_inmemory',
+        $ioHandler = '@io_handler_inmemory',
+        $dsn = 'sqlite://:memory:'
+    )
     {
         // Get configuration config
         if ( !( $settings = include ( 'config.php' ) ) )
@@ -32,37 +40,13 @@ abstract class Utils
             throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
         }
 
-        // Load configuration uncached
-        $configManager = new ConfigurationManager(
-            array_merge_recursive( $settings, array(
-                'base' => array(
-                    'Configuration' => array(
-                        'UseCache' => false
-                    )
-                )
-            ) ),
-            $settings['base']['Configuration']['Paths']
-        );
-
-        // Load service container & configuration, but force legacy handler
-        $settings = $configManager->getConfiguration('service')->getAll();
-        $settings['repository']['arguments']['persistence_handler'] = $persistenceHandler;
-        $settings['repository']['arguments']['io_handler'] = $ioHandler;
-        $settings['legacy_db_handler']['arguments']['dsn'] = ( isset( $_ENV['DATABASE'] ) && $_ENV['DATABASE'] ) ?
-            $_ENV['DATABASE'] : 'sqlite://:memory:';
-
-        // Inject legacy kernel, as it does not yet have a factory (see current mess in boostrap.php)
-        $dependencies = array();
-        if ( isset( $_ENV['legacyKernel'] ) )
-        {
-            $dependencies['@legacyKernel'] = $_ENV['legacyKernel'];
-        }
+        $settings['base']['Configuration']['UseCache'] = false;
+        $settings['service']['repository']['arguments']['persistence_handler'] = $persistenceHandler;
+        $settings['service']['repository']['arguments']['io_handler'] = $ioHandler;
+        $settings['service']['parameters']['legacy_dsn'] = $dsn;
 
         // Return Service Container
-        return new ServiceContainer(
-            $settings,
-            $dependencies
-        );
+        return require 'container.php';
 
     }
 

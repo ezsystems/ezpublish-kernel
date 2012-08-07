@@ -28,7 +28,6 @@ interface FieldType
      * Return the field type identifier for this field type
      *
      * @return string
-     * @TODO Expose to Public API.
      */
     public function getFieldTypeIdentifier();
 
@@ -40,6 +39,18 @@ interface FieldType
     public function handleEvent( Event $event );
 
     /**
+     * Returns the name of the given field value.
+     *
+     * It will be used to generate content name and url alias if current field is designated
+     * to be used in the content name/urlAlias pattern.
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    public function getName( $value );
+
+    /**
      * Returns a schema for the settings expected by the FieldType
      *
      * Returns an arbitrary value, representing a schema for the settings of
@@ -47,7 +58,7 @@ interface FieldType
      *
      * Explanation: There are no possible generic schemas for defining settings
      * input, which is why no schema for the return value of this method is
-     * defined. It is up to the implementor to define and document a schema for
+     * defined. It is up to the implementer to define and document a schema for
      * the return value and document it. In addition, it is necessary that all
      * consumers of this interface (e.g. Public API, REST API, GUIs, ...)
      * provide plugin mechanisms to hook adapters for the specific FieldType
@@ -57,7 +68,6 @@ interface FieldType
      * consumer.
      *
      * @return mixed
-     * @TODO Expose to Public API.
      */
     public function getSettingsSchema();
 
@@ -69,7 +79,7 @@ interface FieldType
      *
      * Explanation: There are no possible generic schemas for defining settings
      * input, which is why no schema for the return value of this method is
-     * defined. It is up to the implementor to define and document a schema for
+     * defined. It is up to the implementer to define and document a schema for
      * the return value and document it. In addition, it is necessary that all
      * consumers of this interface (e.g. Public API, REST API, GUIs, ...)
      * provide plugin mechanisms to hook adapters for the specific FieldType
@@ -99,7 +109,6 @@ interface FieldType
      * </code>
      *
      * @return mixed
-     * @TODO Expose to Public API.
      */
     public function getValidatorConfigurationSchema();
 
@@ -137,7 +146,6 @@ interface FieldType
      * Indicates if the field type supports indexing and sort keys for searching
      *
      * @return bool
-     * @TODO Expose to Public API.
      */
     public function isSearchable();
 
@@ -146,14 +154,13 @@ interface FieldType
      * value is provided in the field definition in content types.
      *
      * @return mixed
-     * @TODO Expose to Public API.
      */
     public function getDefaultDefaultValue();
 
     /**
      * Potentially builds and checks the type and structure of the $inputValue.
      *
-     * This methiod first inspects $inputValue, if it needs to convert it, e.g.
+     * This method first inspects $inputValue, if it needs to convert it, e.g.
      * into a dedicated value object. An example would be, that the field type
      * uses values of MyCustomFieldTypeClass, but can also accept strings as
      * the input. In that case, $inputValue first needs to be converted into a
@@ -179,7 +186,6 @@ interface FieldType
      * @param mixed $hash
      *
      * @return mixed
-     * @TODO Expose to Public API.
      * @TODO May support different formats, but best practice is only 1
      */
     public function fromHash( $hash );
@@ -190,7 +196,6 @@ interface FieldType
      * @param mixed $value
      *
      * @return mixed
-     * @TODO Expose to Public API.
      * @TODO May support different formats, but best practice is only 1
      */
     public function toHash( $value );

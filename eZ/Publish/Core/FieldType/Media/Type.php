@@ -102,6 +102,23 @@ class Type extends FieldType
     }
 
     /**
+     * Returns the name of the given field value.
+     *
+     * It will be used to generate content name and url alias if current field is designated
+     * to be used in the content name/urlAlias pattern.
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    public function getName( $value )
+    {
+        $value = $this->acceptValue( $value );
+
+        return $value->originalFilename;
+    }
+
+    /**
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *

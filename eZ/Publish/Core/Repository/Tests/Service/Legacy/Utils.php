@@ -24,7 +24,11 @@ abstract class Utils extends InMemoryUtils
     public static function getRepository()
     {
         // Override to set legacy handlers
-        $sc = self::getServiceContainer( '@persistence_handler_legacy', '@io_handler_legacy' );
+        $sc = self::getServiceContainer(
+            '@persistence_handler_legacy',
+            '@io_handler_legacy',
+            ( !empty( $_ENV['DATABASE'] ) ? $_ENV['DATABASE'] : 'sqlite://:memory:' )
+        );
 
         // And inject data
         self::insertLegacyData( $sc->get( 'legacy_db_handler' ) );
@@ -34,12 +38,13 @@ abstract class Utils extends InMemoryUtils
     }
 
     /**
+     * @static
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $handler
      * @throws \Exception
      */
-    protected function insertLegacyData( EzcDbHandler $handler )
+    protected static function insertLegacyData( EzcDbHandler $handler )
     {
-        $dsn = ( isset( $_ENV['DATABASE'] ) && $_ENV['DATABASE'] ) ? $_ENV['DATABASE'] : 'sqlite://:memory:';
+        $dsn = ( !empty( $_ENV['DATABASE'] ) ? $_ENV['DATABASE'] : 'sqlite://:memory:' );
         $db = preg_replace( '(^([a-z]+).*)', '\\1', $dsn );
         $legacyHandlerDir = "eZ/Publish/Core/Persistence";
 

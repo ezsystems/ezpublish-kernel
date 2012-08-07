@@ -37,6 +37,8 @@ use eZ\Publish\API\Repository\Tests,
  *
  * @group integration
  * @group field-type
+ *
+ * @TODO Finalize dependencies to other tests (including groups!)
  */
 abstract class BaseIntegrationTest extends Tests\BaseTest
 {
@@ -271,7 +273,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      */
     public function testCreateContentType()
     {
@@ -350,7 +352,8 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @dep_ends testCreateContentType
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentType
+     * @depends testCreateContentType
      */
     public function testLoadContentTypeField()
     {
@@ -394,20 +397,23 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     {
         $this->assertEquals(
             $this->getTypeName(),
-            $fieldDefinition->fieldTypeIdentifier
+            $fieldDefinition->fieldTypeIdentifier,
+            'Loaded fieldTypeIdentifier does not match.'
         );
         $this->assertEquals(
             $this->getValidFieldSettings(),
-            $fieldDefinition->fieldSettings
+            $fieldDefinition->fieldSettings,
+            'Loaded fieldSettings do not match.'
         );
         $this->assertEquals(
             $this->getValidValidatorConfiguration(),
-            $fieldDefinition->validatorConfiguration
+            $fieldDefinition->validatorConfiguration,
+            'Loaded validatorConfiguration does not match.'
         );
     }
 
     /**
-     * @dep_ends testCreateContentType
+     * @depends testCreateContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
      */
     public function testCreateContentTypeFailsWithInvalidFieldSettings()
@@ -431,7 +437,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @dep_ends testCreateContentType
+     * @depends testCreateContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
      */
     public function testCreateContentTypeFailsWithInvalidValidatorConfiguration()
@@ -443,7 +449,8 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @dep_ends testLoadContentTypeField
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent;
+     * @depends testLoadContentTypeField
      */
     public function testCreateContent()
     {
@@ -493,7 +500,8 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @dep_ends testCreateContent
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @depends testCreateContent
      */
     public function testPublishContent()
     {
@@ -527,7 +535,8 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @dep_ends testCreateContent
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends testCreateContent
      */
     public function testLoadField()
     {
@@ -563,7 +572,8 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @dep_ends testLoadFieldType
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     * @depends testLoadFieldType
      */
     public function testUpdateField()
     {
@@ -620,6 +630,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
     /**
      * @depends testCreateContent
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCopyContent
      */
     public function testCopyField( $content )
     {
@@ -668,6 +679,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
     /**
      * @depends testCopyField
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::deleteContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDeleteContent( $content )
@@ -688,6 +700,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      * @param mixed $failingValue
      * @param string $expectedException
      * @dataProvider provideInvalidCreationFieldData
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteContent
      * @return void
      */
     public function testCreateContentFails( $failingValue, $expectedException )
@@ -718,6 +731,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      * @param string $expectedException
      * @dataProvider provideInvalidUpdateFieldData
      * @return void
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
     public function testUpdateContentFails( $failingValue, $expectedException )
     {

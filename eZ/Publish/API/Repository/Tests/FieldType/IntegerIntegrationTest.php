@@ -172,7 +172,7 @@ class IntegerFieldTypeIntergrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new IntegerValue( new \stdClass() ),
+                new \stdClass(),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
             array(

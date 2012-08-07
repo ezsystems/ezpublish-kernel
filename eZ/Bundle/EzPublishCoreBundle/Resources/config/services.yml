@@ -2,6 +2,7 @@ parameters:
     # Kernel related params
     webroot_dir: %kernel.root_dir%/../web
 
+    ezpublish.siteaccess.class: eZ\Bundle\EzPublishCoreBundle\SiteAccess
     ezpublish.controller.base.class: eZ\Publish\MVC\Controller\Controller
     ezpublish.controller.content.view.class: eZ\Publish\MVC\Controller\Content\ViewController
     ezpublish.controller.content.view.options: {}
@@ -9,7 +10,7 @@ parameters:
 services:
     # Siteaccess is injected in the container at runtime
     ezpublish.siteaccess:
-        synthetic: true
+        class: %ezpublish.siteaccess.class%
 
     ezpublish.controller.base:
         class: %ezpublish.controller.base.class%

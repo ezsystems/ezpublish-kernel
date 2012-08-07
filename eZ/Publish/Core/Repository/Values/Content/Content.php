@@ -37,7 +37,7 @@ class Content extends APIContent
     protected $relations;
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
+     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
     protected $versionInfo;
 

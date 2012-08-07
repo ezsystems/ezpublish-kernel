@@ -13,24 +13,26 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class FieldTypeConstraints extends ValueObject
 {
     /**
-     * Array of validators.
-     * Key is the FQN for the validator class.
-     * Value is a hash like described in {@link \eZ\Publish\Core\FieldType\Validator::$constraints}
+     * Validator settings compatible to the corresponding FieldType
      *
-     * @see \eZ\Publish\Core\FieldType\Validator::$constraints
-     * @var array
+     * This property contains validator settings as defined by the fields type.
+     * Note that contents of this property must be serializable and exportable
+     * (i.e. no circular references, resources and friends).
+     *
+     * @see \eZ\Publish\SPI\FieldType\FieldType
+     * @var mixed
      */
     public $validators;
 
     /**
-     * Collection of field settings as it is supported by dedicated field type,
-     * and set in {@link \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition}.
-     * Collection is indexed by setting name.
+     * Field settings compatible to the corresponding FieldType
      *
-     * @see \eZ\Publish\Core\FieldType\FieldType::$fieldSettings
+     * This property contains field settings as defined by the fields type.
+     * Note that contents of this property must be serializable and exportable
+     * (i.e. no circular references, resources and friends).
      *
-     * @TODO Should not use Core class
-     * @var \eZ\Publish\Core\FieldType\FieldSettings
+     * @see \eZ\Publish\SPI\FieldType\FieldType
+     * @var mixed
      */
     public $fieldSettings;
 }

@@ -542,9 +542,7 @@ class EzcDatabase extends Gateway
     public function loadRow( $parentId, $textMD5 )
     {
         $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $this->dbHandler->quoteColumn( "*" )
-        )->from(
+        $query->select( "*" )->from(
             $this->dbHandler->quoteTable( "ezurlalias_ml" )
         )->where(
             $query->expr->lAnd(
@@ -630,7 +628,7 @@ class EzcDatabase extends Gateway
                     $query->expr->gt(
                         $query->expr->bitAnd(
                             $this->dbHandler->quoteColumn( "lang_mask", $tableName ),
-                            $languageMask
+                            $query->bindValue( $languageMask, null, \PDO::PARAM_INT )
                         ),
                         $query->bindValue( 0, null, \PDO::PARAM_INT )
                     ),
@@ -658,7 +656,7 @@ class EzcDatabase extends Gateway
 
         if ( !empty( $row ) )
         {
-            // Note: this will only be sufficient for UrlAlias::LOCATION and UrlAlias::RESOURCE type URLs, as these
+            // Note: this will only be sufficient for UrlAlias::VIRTUAL and UrlAlias::RESOURCE type URLs, as these
             // can have only one language per alias. If URL alias is of type UrlAlias::LOCATION additional query will
             // be needed to determine all the languages that it is available in. This is done from Handler.
             // @todo maybe add always available language indicator
@@ -679,11 +677,11 @@ class EzcDatabase extends Gateway
      * @throws \RuntimeException If path is incomplete or broken
      *
      * @param array $actions
-     * @param array $languageCodes
+     * @param array $prioritizedLanguageCodes
      *
      * @return array
      */
-    public function getLocationUrlAliasLanguageCodes( array $actions, array $languageCodes )
+    public function getLocationUrlAliasLanguageCodes( array $actions, array $prioritizedLanguageCodes )
     {
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
@@ -704,6 +702,17 @@ class EzcDatabase extends Gateway
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( "is_alias" ),
                     $query->bindValue( 0, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->gt(
+                    $query->expr->bitAnd(
+                        $this->dbHandler->quoteColumn( "lang_mask" ),
+                        $query->bindValue(
+                            $this->generateLanguageMask( $prioritizedLanguageCodes, true ),
+                            null,
+                            \PDO::PARAM_INT
+                        )
+                    ),
+                    $query->bindValue( 0, null, \PDO::PARAM_INT )
                 )
             )
         );
@@ -720,7 +729,7 @@ class EzcDatabase extends Gateway
             {
                 $actionMap[$row["action"]] = array();
             }
-            $actionMap[$row["action"]][] = $row["lang_mask"] & ~1;
+            $actionMap[$row["action"]][$row["lang_mask"]] = $row["lang_mask"];
         }
 
         if ( count( $actionMap ) !== count( $actions ) )
@@ -728,14 +737,38 @@ class EzcDatabase extends Gateway
             throw new \RuntimeException( "Path is incomplete or broken, can not determine languages for UrlAlias: " . __METHOD__ );
         }
 
-        $languageMaskSum = array_sum( array_unique( array_pop( $actionMap ) ) );
-        $languageCodes = array();
-        foreach ( $this->languageMaskGenerator->extractLanguageIdsFromMask( $languageMaskSum ) as $languageId )
-        {
-            $languageCodes[] = $this->languageHandler->load( $languageId )->languageCode;
-        }
+        // Calculate bitwise AND of language masks
+        $languageMaskSum = array_reduce(
+            array_pop( $actionMap ),
+            function( $a, $b )
+            {
+                return $a | $b;
+            },
+            0
+        );
 
-        return $languageCodes;
+        // If entry is always available we return given $prioritizedLanguageCodes.
+        if ( $languageMaskSum & 1 )
+        {
+            return $prioritizedLanguageCodes;
+        }
+        // Otherwise an extraction from language mask sum and also comparison against given $prioritizedLanguageCodes
+        // is needed, as in case when language mask sum is composite of multiple languages, only languages present in
+        // given $prioritizedLanguageCodes should be returned
+        else
+        {
+            $actualLanguageCodes = array();
+            foreach ( $this->languageMaskGenerator->extractLanguageIdsFromMask( $languageMaskSum ) as $languageId )
+            {
+                $languageCode = $this->languageHandler->load( $languageId )->languageCode;
+                if ( in_array( $languageCode, $prioritizedLanguageCodes ) )
+                {
+                    $actualLanguageCodes[] = $languageCode;
+                }
+            }
+
+            return $actualLanguageCodes;
+        }
     }
 
     /**
@@ -920,6 +953,7 @@ class EzcDatabase extends Gateway
             // @todo: notice
             // None of the available languages are prioritized in the SiteLanguageList setting.
             // An arbitrary language will be used.
+            $result = $rows[0];
         }
 
         return $result;
@@ -957,12 +991,15 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * @todo document
      *
+     * @todo remove throw when tested
+     * @throws \RuntimeException
      *
      * @param mixed $id
      * @param string[] $prioritizedLanguageCodes
      *
-     * @return string|null path found or null if path is not found
+     * @return string path string
      */
     public function getPath( $id, array $prioritizedLanguageCodes )
     {
@@ -1002,15 +1039,11 @@ class EzcDatabase extends Gateway
                 //break;
             }
             $row = $this->choosePrioritizedRow( $rows, $prioritizedLanguages );
-            if ( !$row )
-            {
-                $row = $rows[0];
-            }
-            $id = (int)$row["parent"];
+            $id = $row["parent"];
             array_unshift( $pathData, $row["text"] );
         }
 
-        return join( "/", $pathData );
+        return empty( $pathData ) ? "/" : join( "/", $pathData );
     }
 
     /**

@@ -172,7 +172,11 @@ class TextLineFieldTypeIntergrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new TextLineValue( new \stdClass() ),
+                new \stdClass(),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
+            ),
+            array(
+                42,
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
             array(

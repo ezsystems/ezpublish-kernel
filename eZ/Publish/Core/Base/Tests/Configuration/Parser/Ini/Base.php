@@ -193,6 +193,10 @@ regex[]=?P<name>\w+
 #regex[]=(?\'name\'\w+)
 regex[]=content/location/?<name>\w+
 regex[]=content/location/{?<name>\w+}
+
+[parameters]
+dsn=sqlite://:memory:
+legacy.dsn=sqlite://:memory:
 ';
         $expects = array(
             'test' => array(
@@ -227,6 +231,10 @@ regex[]=content/location/{?<name>\w+}
                     'content/location/?<name>\w+',
                     'content/location/{?<name>\w+}',
                 ),
+            ),
+            'parameters' => array(
+                'dsn'        => 'sqlite://:memory:',
+                'legacy.dsn' => 'sqlite://:memory:',
             ),
         );
 
