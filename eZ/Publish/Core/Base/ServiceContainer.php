@@ -76,8 +76,8 @@ class ServiceContainer implements Container
      */
     public function __construct( array $settings, array $dependencies = array() )
     {
-        $this->settings = $settings;
-        $this->dependencies = $dependencies + array(
+        // Set parameters as $dependencies, globals and settings parameters
+        $parameters = array(
             '$_SERVER' => $_SERVER,
             '$_REQUEST' => $_REQUEST,
             '$_COOKIE' => $_COOKIE,
@@ -85,6 +85,19 @@ class ServiceContainer implements Container
             '$_POST' => $_POST,
             '$_GET' => $_GET,
         );
+
+        if ( !empty( $settings['parameters'] ) )
+        {
+            foreach ( $settings['parameters'] as $parameterKey => $parameter )
+            {
+                $parameters['$' . $parameterKey ] = $parameter;
+            }
+            unset( $settings['parameters'] );
+        }
+
+        // Set properties
+        $this->settings = $settings;
+        $this->dependencies = $dependencies + $parameters;
     }
 
     /**
