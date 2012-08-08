@@ -96,7 +96,7 @@ class Value extends BaseValue
      */
     public function __toString()
     {
-        return $this->fileName;
+        return (string)$this->fileName;
     }
 
     /**
