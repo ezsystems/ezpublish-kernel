@@ -101,7 +101,7 @@ class Type extends FieldType
      */
     public function getDefaultDefaultValue()
     {
-        $value = <<< EOF
+        $value = <<<EOF
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
