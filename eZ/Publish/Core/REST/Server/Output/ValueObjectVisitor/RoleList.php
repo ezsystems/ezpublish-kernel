@@ -27,7 +27,7 @@ class RoleList extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'RoleList' );
+        $generator->startObjectElement( 'RoleList' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'RoleList' ) );
 
         $generator->startAttribute(
@@ -43,7 +43,7 @@ class RoleList extends ValueObjectVisitor
         }
         $generator->endList( 'Role' );
 
-        $generator->endElement( 'RoleList' );
+        $generator->endObjectElement( 'RoleList' );
     }
 }
 

@@ -21,32 +21,31 @@ class Limitation extends ValueObjectVisitor
     /**
      * Visit struct returned by controllers
      *
-     * @param Visitor $visitor
-     * @param Generator $generator
+     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param mixed $data
-     * @return void
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'limitation' );
+        $generator->startObjectElement( 'limitation' );
 
         $generator->startAttribute( 'identifier', $data->getIdentifier() );
         $generator->endAttribute( 'identifier' );
 
-        $generator->startElement( 'values' );
+        $generator->startObjectElement( 'values' );
         $generator->startList( 'values' );
 
         foreach ( $data->limitationValues as $limitationValue )
         {
-            $generator->startElement( 'ref' );
+            $generator->startObjectElement( 'ref' );
             $generator->startAttribute( 'href', $limitationValue );
             $generator->endAttribute( 'href' );
-            $generator->endElement( 'ref' );
+            $generator->endObjectElement( 'ref' );
         }
 
         $generator->endList( 'values' );
-        $generator->endElement( 'values' );
+        $generator->endObjectElement( 'values' );
 
-        $generator->endElement( 'limitation' );
+        $generator->endObjectElement( 'limitation' );
     }
 }

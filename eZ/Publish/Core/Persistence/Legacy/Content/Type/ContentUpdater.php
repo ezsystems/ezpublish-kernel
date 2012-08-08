@@ -13,7 +13,6 @@ use eZ\Publish\Core\Persistence\Legacy\Content,
     eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater,
     eZ\Publish\SPI\Persistence\Content\Type,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\API\Repository\Values\Content\Query,
@@ -117,7 +116,7 @@ class ContentUpdater
      * @param \eZ\Publish\SPI\Persistence\Content\Type $type
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      *
-     * @return void
+     * @return boolean
      */
     protected function hasFieldDefinition( Type $type, FieldDefinition $fieldDef )
     {

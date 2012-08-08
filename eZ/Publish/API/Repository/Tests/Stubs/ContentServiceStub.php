@@ -199,7 +199,7 @@ class ContentServiceStub implements ContentService
     public function loadVersionInfoById( $contentId, $versionNo = null )
     {
         $versions = array();
-        foreach ( $this->versionInfo as $versionInfo )
+        foreach ( $this->versionInfo as $index => $versionInfo )
         {
             if ( $versionInfo->contentId !== $contentId )
             {
@@ -1064,12 +1064,17 @@ class ContentServiceStub implements ContentService
         $content = $this->loadContentByVersionInfo( $versionInfo );
         $contentType = $content->contentType;
 
-        $mainLanguageCode = $contentUpdateStruct->initialLanguageCode;
+        $initialLanguageCode = $contentUpdateStruct->initialLanguageCode;
+        $mainLanguageCode = $versionInfo->getContentInfo()->mainLanguageCode;
 
-        $languageCodes = $this->getLanguageCodes( $contentUpdateStruct->fields, $mainLanguageCode );
-        $fields = $this->getFieldsByTypeAndLanguageCode( $contentType, $contentUpdateStruct->fields, $mainLanguageCode );
+        $oldAndNewFields = array_merge( $content->fields, $contentUpdateStruct->fields );
 
-        // Validate all required fields available in each language;
+        $languageCodes = $this->getLanguageCodes( $oldAndNewFields, $initialLanguageCode );
+
+        // Automatically overwrites old with new fields
+        $fields = $this->getFieldsByTypeAndLanguageCode( $contentType, $oldAndNewFields, $initialLanguageCode );
+
+        // Validate all required fields available in each language
         $this->checkRequiredFields( $contentType, $fields, $languageCodes, $mainLanguageCode );
 
         // Complete missing fields
@@ -1157,7 +1162,8 @@ class ContentServiceStub implements ContentService
 
         $contentInfo = $versionInfo->getContentInfo();
 
-        $versionNo = max( $versionInfo->versionNo, $contentInfo->currentVersionNo );
+        // Newer versions will be ignored
+        $versionNo = $versionInfo->versionNo;
 
         $publishedContentInfo = new ContentInfoStub(
             array(
@@ -1195,26 +1201,26 @@ class ContentServiceStub implements ContentService
         );
 
         // Set all published versions of this content object to ARCHIVED
-        foreach ( $this->versionInfo as $versionId => $versionInfo )
+        foreach ( $this->versionInfo as $existingVersionId => $existingVersionInfo )
         {
-            if ( $versionInfo->contentId !== $contentInfo->id )
+            if ( $existingVersionInfo->contentId !== $contentInfo->id )
             {
                 continue;
             }
-            if ( $versionInfo->status !== VersionInfo::STATUS_PUBLISHED )
+            if ( $existingVersionInfo->status !== VersionInfo::STATUS_PUBLISHED )
             {
                 continue;
             }
 
-            $this->versionInfo[$versionId] = new VersionInfoStub(
+            $this->versionInfo[$existingVersionId] = new VersionInfoStub(
                 array(
-                    'id' => $versionInfo->id,
+                    'id' => $existingVersionInfo->id,
                     'status' => VersionInfo::STATUS_ARCHIVED,
-                    'versionNo' => $versionInfo->versionNo,
-                    'creatorId' => $versionInfo->creatorId,
-                    'initialLanguageCode' => $versionInfo->initialLanguageCode,
-                    'languageCodes' => $versionInfo->languageCodes,
-                    'names' => $versionInfo->getNames(),
+                    'versionNo' => $existingVersionInfo->versionNo,
+                    'creatorId' => $existingVersionInfo->creatorId,
+                    'initialLanguageCode' => $existingVersionInfo->initialLanguageCode,
+                    'languageCodes' => $existingVersionInfo->languageCodes,
+                    'names' => $existingVersionInfo->getNames(),
                     'modificationDate' => new \DateTime(),
 
                     'contentId' => $contentInfo->id,
@@ -1417,126 +1423,6 @@ class ContentServiceStub implements ContentService
         $this->repository->getUrlAliasService()->_createAliasesForLocation( $location );
 
         return $this->loadContent( $this->contentNextId );
-    }
-
-    /**
-     * finds content objects for the given query.
-     *
-     * @TODO define structs for the field filters
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array  $fieldFilters - a map of filters for the returned fields.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
-     * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
-     */
-    public function findContent( Query $query, array $fieldFilters, $filterOnUserPermissions = true )
-    {
-        $callbacks = array();
-        foreach ( $query->criterion->criteria as $criteria )
-        {
-            if ( $criteria->operator === Criterion\Operator::LIKE )
-            {
-                $regexp = '(' . str_replace( '\*', '.*', preg_quote( $criteria->value ) ) . ')i';
-                $identifier = $criteria->target;
-
-                $callbacks[] = function( Content $content ) use ( $identifier, $regexp ) {
-                    foreach ( $content->getFields() as $field )
-                    {
-                        if ( $field->fieldDefIdentifier !== $identifier )
-                        {
-                            continue;
-                        }
-
-                        if ( preg_match( $regexp, $field->value ) )
-                        {
-
-                            return true;
-                        }
-                    }
-                    return false;
-                };
-            }
-        }
-
-        if ( false === $filterOnUserPermissions )
-        {
-            $this->repository->disableUserPermissions();
-        }
-
-        $result = array();
-        foreach ( $this->content as $content )
-        {
-            if ( $filterOnUserPermissions && false === $this->repository->canUser( 'content', 'read', $content ) )
-            {
-                continue;
-            }
-            if ( $content->getVersionInfo()->status !== VersionInfo::STATUS_PUBLISHED )
-            {
-                continue;
-            }
-
-            foreach ( $callbacks as $callback )
-            {
-                if ( false === $callback( $content ) )
-                {
-                    continue 2;
-                }
-            }
-
-            $result[] = $content;
-        }
-
-        if ( isset( $fieldFilters['languages'] ) )
-        {
-            foreach ( $result as $i => $content )
-            {
-                $result[$i] = $this->filterFieldsByLanguages(
-                    $content,
-                    $fieldFilters['languages']
-                );
-            }
-        }
-
-        $this->repository->enableUserPermissions();
-
-        return new SearchResult(
-            array(
-                'query' => $query,
-                'count' => count( $result ),
-                'items' => $result
-            )
-        );
-    }
-
-    /**
-     * Performs a query for a single content object
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the query would return more than one result
-     *
-     * @TODO define structs for the field filters
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array  $fieldFilters - a map of filters for the returned fields.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
-     * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    public function findSingle( Query $query, array $fieldFilters, $filterOnUserPermissions = true )
-    {
-        $searchResult = $this->findContent( $query, $fieldFilters, $filterOnUserPermissions );
-
-        if ( $searchResult->count === 1 )
-        {
-            return reset( $searchResult->items );
-        }
-        if ( $searchResult->count > 1 )
-        {
-            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
-        }
-        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**

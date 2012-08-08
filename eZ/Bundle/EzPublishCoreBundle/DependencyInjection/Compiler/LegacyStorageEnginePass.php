@@ -11,6 +11,8 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Exception\LogicException;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * This compiler pass will register eZ Publish field types.
@@ -30,24 +32,28 @@ class LegacyStorageEnginePass implements CompilerPassInterface
 
         foreach ( $container->findTaggedServiceIds( 'ezpublish.storageEngine.legacy.converter' ) as $id => $attributes )
         {
+            if ( isset( $attributes[0]['lazy'] ) && $attributes[0]['lazy'] === true )
+            {
+                if ( !isset( $attributes[0]['callback'] ) )
+                    throw new LogicException( "Converter service '$id' is marked as lazy but no callback is provided! Please provide a callback." );
+
+                $converter = $attributes[0]['callback'];
+                if ( strpos( $converter, '::' ) === 0 )
+                {
+                    $converter = $container->getDefinition( $id )->getClass() . $converter;
+                }
+            }
+            else
+            {
+                $converter = new Reference( $id );
+            }
+
             $legacyStorageEngineDef->addMethodCall(
                 'registerFieldTypeConverter',
                 array(
                      // TODO: Maybe there should be some validation here. What if no alias is provided ?
                      $attributes[0]['alias'],
-                     $container->getDefinition( $id )->getClass()
-                )
-            );
-        }
-
-        foreach ( $container->findTaggedServiceIds( 'ezpublish.storageEngine.legacy.externalStorageHandler' ) as $id => $attributes )
-        {
-            $legacyStorageEngineDef->addMethodCall(
-                'registerFieldTypeExternalStorageHandler',
-                array(
-                     // TODO: Maybe there should be some validation here. What if no alias is provided ?
-                     $attributes[0]['alias'],
-                     $container->getDefinition( $id )->getClass()
+                     $converter
                 )
             );
         }

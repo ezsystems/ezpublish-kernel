@@ -92,13 +92,13 @@ class RoleService implements RoleServiceInterface
         if ( !is_string( $roleCreateStruct->identifier ) || empty( $roleCreateStruct->identifier ) )
             throw new InvalidArgumentValue( "identifier", $roleCreateStruct->identifier, "RoleCreateStruct" );
 
-        if ( !is_string( $roleCreateStruct->mainLanguageCode ) || empty( $roleCreateStruct->mainLanguageCode ) )
+        if ( $roleCreateStruct->mainLanguageCode !== null && ( !is_string( $roleCreateStruct->mainLanguageCode ) || empty( $roleCreateStruct->mainLanguageCode ) ) )
             throw new InvalidArgumentValue( "mainLanguageCode", $roleCreateStruct->mainLanguageCode, "RoleCreateStruct" );
 
-        if ( !is_array( $roleCreateStruct->names ) || empty( $roleCreateStruct->names ) )
+        if ( $roleCreateStruct->names !== null && ( !is_array( $roleCreateStruct->names ) || empty( $roleCreateStruct->names ) ) )
             throw new InvalidArgumentValue( "names", $roleCreateStruct->names, "RoleCreateStruct" );
 
-        if ( !is_array( $roleCreateStruct->descriptions ) || empty( $roleCreateStruct->descriptions ) )
+        if ( $roleCreateStruct->descriptions !== null && ( !is_array( $roleCreateStruct->descriptions ) || empty( $roleCreateStruct->descriptions ) ) )
             throw new InvalidArgumentValue( "descriptions", $roleCreateStruct->descriptions, "RoleCreateStruct" );
 
         try
@@ -113,7 +113,18 @@ class RoleService implements RoleServiceInterface
         }
 
         $spiRole = $this->buildPersistenceRoleObject( $roleCreateStruct );
-        $createdRole = $this->persistenceHandler->userHandler()->createRole( $spiRole );
+
+        $this->repository->beginTransaction();
+        try
+        {
+            $createdRole = $this->persistenceHandler->userHandler()->createRole( $spiRole );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->buildDomainRoleObject( $createdRole );
     }
@@ -162,16 +173,26 @@ class RoleService implements RoleServiceInterface
 
         $loadedRole = $this->loadRole( $role->id );
 
-        $this->persistenceHandler->userHandler()->updateRole(
-            new SPIRoleUpdateStruct(
-                array(
-                    'id' => $loadedRole->id,
-                    'identifier' => $roleUpdateStruct->identifier ?: $role->identifier,
-                    'name' => $roleUpdateStruct->names ?: $role->getNames(),
-                    'description' => $roleUpdateStruct->descriptions ?: $role->getDescriptions()
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->userHandler()->updateRole(
+                new SPIRoleUpdateStruct(
+                    array(
+                        'id' => $loadedRole->id,
+                        'identifier' => $roleUpdateStruct->identifier ?: $role->identifier,
+                        'name' => $roleUpdateStruct->names ?: $role->getNames(),
+                        'description' => $roleUpdateStruct->descriptions ?: $role->getDescriptions()
+                    )
                 )
-            )
-        );
+            );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->loadRole( $loadedRole->id );
     }
@@ -208,7 +229,17 @@ class RoleService implements RoleServiceInterface
             $policyCreateStruct->getLimitations()
         );
 
-        $this->persistenceHandler->userHandler()->addPolicy( $loadedRole->id, $spiPolicy );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->userHandler()->addPolicy( $loadedRole->id, $spiPolicy );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->loadRole( $loadedRole->id );
     }
@@ -233,7 +264,17 @@ class RoleService implements RoleServiceInterface
 
         $loadedRole = $this->loadRole( $role->id );
 
-        $this->persistenceHandler->userHandler()->removePolicy( $loadedRole->id, $policy->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->userHandler()->removePolicy( $loadedRole->id, $policy->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->loadRole( $loadedRole->id );
     }
@@ -272,7 +313,17 @@ class RoleService implements RoleServiceInterface
         $spiPolicy->id = $policy->id;
         $spiPolicy->roleId = $policy->roleId;
 
-        $this->persistenceHandler->userHandler()->updatePolicy( $spiPolicy );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->userHandler()->updatePolicy( $spiPolicy );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->buildDomainPolicyObject( $spiPolicy );
     }
@@ -349,7 +400,17 @@ class RoleService implements RoleServiceInterface
 
         $loadedRole = $this->loadRole( $role->id );
 
-        $this->persistenceHandler->userHandler()->deleteRole( $loadedRole->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->userHandler()->deleteRole( $loadedRole->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -409,11 +470,21 @@ class RoleService implements RoleServiceInterface
             $spiRoleLimitation = array( $limitationIdentifier => $roleLimitation->limitationValues );
         }
 
-        $this->persistenceHandler->userHandler()->assignRole(
-            $loadedUserGroup->id,
-            $loadedRole->id,
-            $spiRoleLimitation
-        );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->userHandler()->assignRole(
+                $loadedUserGroup->id,
+                $loadedRole->id,
+                $spiRoleLimitation
+            );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -438,7 +509,17 @@ class RoleService implements RoleServiceInterface
         if ( !in_array( $userGroup->id, $spiRole->groupIds ) )
             throw new InvalidArgumentException( "userGroup", "role is not assigned to the user group" );
 
-        $this->persistenceHandler->userHandler()->unAssignRole( $userGroup->id, $role->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->userHandler()->unAssignRole( $userGroup->id, $role->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -473,11 +554,21 @@ class RoleService implements RoleServiceInterface
             $spiRoleLimitation = array( $limitationIdentifier => $roleLimitation->limitationValues );
         }
 
-        $this->persistenceHandler->userHandler()->assignRole(
-            $loadedUser->id,
-            $loadedRole->id,
-            $spiRoleLimitation
-        );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->userHandler()->assignRole(
+                $loadedUser->id,
+                $loadedRole->id,
+                $spiRoleLimitation
+            );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -502,7 +593,17 @@ class RoleService implements RoleServiceInterface
         if ( !in_array( $user->id, $spiRole->groupIds ) )
             throw new InvalidArgumentException( "user", "role is not assigned to the user" );
 
-        $this->persistenceHandler->userHandler()->unAssignRole( $user->id, $role->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->userHandler()->unAssignRole( $user->id, $role->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**

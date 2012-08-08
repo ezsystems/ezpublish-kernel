@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper,
     eZ\Publish\SPI\Persistence\Content\ObjectState,
     eZ\Publish\SPI\Persistence\Content\ObjectState\Group,
@@ -18,15 +18,8 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
 /**
  * Test case for Mapper
  */
-class MapperTest extends TestCase
+class MapperTest extends LanguageAwareTestCase
 {
-    /**
-     * Language handler mock
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
-     */
-    protected $languageHandler;
-
     /**
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateFromData
@@ -149,47 +142,8 @@ class MapperTest extends TestCase
     protected function getMapper()
     {
         return new Mapper(
-            $this->getLanguageHandlerMock()
+            $this->getLanguageHandler()
         );
-    }
-
-    /**
-     * Returns a language handler mock
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
-     */
-    protected function getLanguageHandlerMock()
-    {
-        if ( !isset( $this->languageHandler ) )
-        {
-            $innerLanguageHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
-
-            $this->languageHandler = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
-                array( 'getById' ),
-                array(
-                    $innerLanguageHandler,
-                    $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Cache' )
-                )
-            );
-
-            $this->languageHandler
-                ->expects( $this->any() )
-                ->method( 'getById' )
-                ->with( '2' )
-                ->will(
-                    $this->returnValue(
-                        new Language(
-                            array(
-                                'id' => 2,
-                                'languageCode' => 'eng-GB',
-                            )
-                        )
-                    )
-                );
-        }
-
-        return $this->languageHandler;
     }
 
     /**
@@ -244,10 +198,10 @@ class MapperTest extends TestCase
     {
         $objectState = new ObjectState();
         $objectState->identifier = 'not_locked';
-        $objectState->defaultLanguage = 'eng-GB';
-        $objectState->languageCodes = array( 'eng-GB' );
-        $objectState->name = array( 'eng-GB' => 'Not locked' );
-        $objectState->description = array( 'eng-GB' => '' );
+        $objectState->defaultLanguage = 'eng-US';
+        $objectState->languageCodes = array( 'eng-US' );
+        $objectState->name = array( 'eng-US' => 'Not locked' );
+        $objectState->description = array( 'eng-US' => '' );
 
         return $objectState;
     }
@@ -261,10 +215,10 @@ class MapperTest extends TestCase
     {
         $group = new Group();
         $group->identifier = 'ez_lock';
-        $group->defaultLanguage = 'eng-GB';
-        $group->languageCodes = array( 'eng-GB' );
-        $group->name = array( 'eng-GB' => 'Lock' );
-        $group->description = array( 'eng-GB' => '' );
+        $group->defaultLanguage = 'eng-US';
+        $group->languageCodes = array( 'eng-US' );
+        $group->name = array( 'eng-US' => 'Lock' );
+        $group->description = array( 'eng-US' => '' );
 
         return $group;
     }
@@ -278,10 +232,10 @@ class MapperTest extends TestCase
     {
         $inputStruct = new InputStruct();
 
-        $inputStruct->defaultLanguage = 'eng-GB';
+        $inputStruct->defaultLanguage = 'eng-US';
         $inputStruct->identifier = 'not_locked';
-        $inputStruct->name = array( 'eng-GB' => 'Not locked' );
-        $inputStruct->description = array( 'eng-GB' => '' );
+        $inputStruct->name = array( 'eng-US' => 'Not locked' );
+        $inputStruct->description = array( 'eng-US' => '' );
 
         return $inputStruct;
     }
@@ -295,10 +249,10 @@ class MapperTest extends TestCase
     {
         $inputStruct = new InputStruct();
 
-        $inputStruct->defaultLanguage = 'eng-GB';
+        $inputStruct->defaultLanguage = 'eng-US';
         $inputStruct->identifier = 'ez_lock';
-        $inputStruct->name = array( 'eng-GB' => 'Lock' );
-        $inputStruct->description = array( 'eng-GB' => '' );
+        $inputStruct->name = array( 'eng-US' => 'Lock' );
+        $inputStruct->description = array( 'eng-US' => '' );
 
         return $inputStruct;
     }

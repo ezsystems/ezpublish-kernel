@@ -182,21 +182,17 @@ interface Handler
      *
      * @todo It has been discussed to not support assigning roles with limitations, as it is kind of flawed in eZ Publish
      *       Hence you would simplify the design and reduce future bugs by forcing use of policy limitations instead.
-     * @param mixed $groupId The group Id to assign the role to.
-     *                       In Legacy storage engine this is the content object id of the group to assign to.
-     *                       By the nature of legacy storage engine, it is therefor possible to use $userId as well here.
+     * @param mixed $contentId User / group ID
      * @param mixed $roleId
      * @param array $limitation
      */
-    public function assignRole( $groupId, $roleId, array $limitation = null );
+    public function assignRole( $contentId, $roleId, array $limitation = null );
 
     /**
      * Un-assign a role
      *
-     * @param mixed $groupId The group Id to un-assign the role from.
-     *                       In Legacy storage engine this is the content object id of the group to un-assign from.
-     *                       By the nature of legacy storage engine, it is therefor possible to use $userId as well here.
+     * @param mixed $contentId User / group ID
      * @param mixed $roleId
      */
-    public function unAssignRole( $groupId, $roleId );
+    public function unAssignRole( $contentId, $roleId );
 }

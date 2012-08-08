@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element>
+    <value attribute="attribute value 1" >value 1</value>
+    <value attribute="attribute value 2" >value 2</value>
+</element>

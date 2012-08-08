@@ -40,7 +40,7 @@ interface LocationService
      * @todo enhancement - this method should return a result structure containing the new location and a list
      *       of locations which are not copied due to permission denials.
      */
-    public function copySubtree( Location $subtree,  Location $targetParentLocation );
+    public function copySubtree( Location $subtree, Location $targetParentLocation );
 
     /**
      * Loads a location object from its $locationId
@@ -142,7 +142,7 @@ interface LocationService
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location1
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location2
      */
-    public function swapLocation( Location $location1,  Location $location2 );
+    public function swapLocation( Location $location1, Location $location2 );
 
     /**
      * Hides the $location and marks invisible all descendants of $location.

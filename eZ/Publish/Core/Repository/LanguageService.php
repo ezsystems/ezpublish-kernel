@@ -101,7 +101,18 @@ class LanguageService implements LanguageServiceInterface
             )
         );
 
-        $createdLanguage = $this->persistenceHandler->contentLanguageHandler()->create( $createStruct );
+        $this->repository->beginTransaction();
+        try
+        {
+            $createdLanguage = $this->persistenceHandler->contentLanguageHandler()->create( $createStruct );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
+
         return $this->buildDomainObject( $createdLanguage );
     }
 
@@ -136,7 +147,17 @@ class LanguageService implements LanguageServiceInterface
             )
         );
 
-        $this->persistenceHandler->contentLanguageHandler()->update( $updateLanguageStruct );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->contentLanguageHandler()->update( $updateLanguageStruct );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->loadLanguageById( $loadedLanguage->id );
     }
@@ -166,7 +187,17 @@ class LanguageService implements LanguageServiceInterface
             )
         );
 
-        $this->persistenceHandler->contentLanguageHandler()->update( $updateLanguageStruct );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->contentLanguageHandler()->update( $updateLanguageStruct );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->loadLanguageById( $loadedLanguage->id );
     }
@@ -196,7 +227,17 @@ class LanguageService implements LanguageServiceInterface
             )
         );
 
-        $this->persistenceHandler->contentLanguageHandler()->update( $updateLanguageStruct );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->contentLanguageHandler()->update( $updateLanguageStruct );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->loadLanguageById( $loadedLanguage->id );
     }
@@ -277,13 +318,21 @@ class LanguageService implements LanguageServiceInterface
 
         $loadedLanguage = $this->loadLanguageById( $language->id );
 
+        $this->repository->beginTransaction();
         try
         {
             $this->persistenceHandler->contentLanguageHandler()->delete( $loadedLanguage->id );
+            $this->repository->commit();
         }
         catch ( LogicException $e )
         {
+            $this->repository->rollback();
             throw new InvalidArgumentException( "language", $e->getMessage(), $e );
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
         }
     }
 

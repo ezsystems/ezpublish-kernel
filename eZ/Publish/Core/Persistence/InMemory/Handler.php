@@ -116,24 +116,55 @@ class Handler implements HandlerInterface
     }
 
     /**
+     * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
+     */
+    public function urlAliasHandler()
+    {
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
+     */
+    public function urlWildcardHandler()
+    {
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+    }
+
+    /**
+     * Begin transaction
+     *
+     * Begins an transaction, make sure you'll call commit or rollback when done,
+     * otherwise work will be lost.
      */
     public function beginTransaction()
     {
-        //throw new RuntimeException( '@TODO: Implement' );
+        $this->backend->beginTransaction();
     }
 
     /**
+     * Commit transaction
+     *
+     * Commit transaction, or throw exceptions if no transactions has been started.
+     *
+     * @throws \RuntimeException If no transaction has been started
      */
     public function commit()
     {
-        //throw new RuntimeException( '@TODO: Implement' );
+        $this->backend->commit();
     }
 
     /**
+     * Rollback transaction
+     *
+     * Rollback transaction, or throw exceptions if no transactions has been started.
+     *
+     * @throws \RuntimeException If no transaction has been started
      */
     public function rollback()
     {
-        //throw new RuntimeException( '@TODO: Implement' );
+        $this->backend->rollback();
     }
 
     /**

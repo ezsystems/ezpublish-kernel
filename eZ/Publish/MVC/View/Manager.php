@@ -10,14 +10,20 @@
 namespace eZ\Publish\MVC\View;
 
 use eZ\Publish\MVC\View\ContentViewProvider,
-    eZ\Publish\MVC\View\ContentView,
+    eZ\Publish\MVC\View\ContentViewInterface,
     eZ\Publish\API\Repository\Values\Content\Content,
     eZ\Publish\API\Repository\Values\Content\Location,
+    eZ\Publish\MVC\MVCEvents,
+    eZ\Publish\MVC\Event\PreContentViewEvent,
     Symfony\Component\Templating\EngineInterface,
-    Symfony\Component\HttpKernel\Log\LoggerInterface;
+    Symfony\Component\HttpKernel\Log\LoggerInterface,
+    Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Manager
 {
+    const VIEW_TYPE_FULL = 'full',
+          VIEW_TYPE_LINE = 'line';
+
     /**
      * @var \Symfony\Component\Templating\EngineInterface
      */
@@ -40,9 +46,15 @@ class Manager
      */
     protected $sortedViewProviders;
 
-    public function __construct( EngineInterface $templateEngine, LoggerInterface $logger = null )
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    public function __construct( EngineInterface $templateEngine, EventDispatcherInterface $eventDispatcher, LoggerInterface $logger = null )
     {
         $this->templateEngine = $templateEngine;
+        $this->eventDispatcher = $eventDispatcher;
         $this->logger = $logger;
     }
 
@@ -93,19 +105,21 @@ class Manager
     }
 
     /**
-     * Renders $content by selecting the right template
+     * Renders $content by selecting the right template.
+     * $content will be injected in the selected template.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     * @return string
+     * @param string $viewType Variation of display for your content. Default is 'full'.
      * @throws \RuntimeException
+     * @return string
      */
-    public function renderContent( Content $content )
+    public function renderContent( Content $content, $viewType = self::VIEW_TYPE_FULL )
     {
         $contentInfo = $content->getVersionInfo()->getContentInfo();
         foreach ( $this->getAllViewProviders() as $viewProvider )
         {
-            $view = $viewProvider->getViewForContent( $contentInfo );
-            if ( $view instanceof ContentView )
+            $view = $viewProvider->getViewForContent( $contentInfo, $viewType );
+            if ( $view instanceof ContentViewInterface )
             {
                 return $this->renderContentView( $view, array( 'content' => $content ) );
             }
@@ -115,20 +129,29 @@ class Manager
     }
 
     /**
-     * Renders $location by selecting the right template
+     * Renders $location by selecting the right template for $viewType.
+     * $content and $location will be injected in the selected template.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @return string
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param string $viewType Variation of display for your content. Default is 'full'.
      * @throws \RuntimeException
+     * @return string
      */
-    public function renderLocation( Location $location )
+    public function renderLocation( Location $location, Content $content, $viewType = self::VIEW_TYPE_FULL )
     {
         foreach ( $this->getAllViewProviders() as $viewProvider )
         {
-            $view = $viewProvider->getViewForLocation( $location );
-            if ( $view instanceof ContentView )
+            $view = $viewProvider->getViewForLocation( $location, $viewType );
+            if ( $view instanceof ContentViewInterface )
             {
-                return $this->renderContentView( $view, array( 'location' => $location ) );
+                return $this->renderContentView(
+                    $view,
+                    array(
+                         'location' => $location,
+                         'content' => $content
+                    )
+                );
             }
         }
 
@@ -139,14 +162,20 @@ class Manager
      * Renders passed ContentView object via the template engine.
      * If $view's template identifier is a closure, then it is called directly and the result is returned as is.
      *
-     * @param \eZ\Publish\MVC\View\ContentView $view
+     * @param \eZ\Publish\MVC\View\ContentViewInterface $view
      * @param array $defaultParams
      * @return string
      */
-    protected function renderContentView( ContentView $view, array $defaultParams = array() )
+    public function renderContentView( ContentViewInterface $view, array $defaultParams = array() )
     {
+        $view->addParameters( $defaultParams );
+        $this->eventDispatcher->dispatch(
+            MVCEvents::PRE_CONTENT_VIEW,
+            new PreContentViewEvent( $view )
+        );
+
         $templateIdentifier = $view->getTemplateIdentifier();
-        $params = $view->getParameters() + $defaultParams;
+        $params = $view->getParameters();
         if ( $templateIdentifier instanceof \Closure )
             return $templateIdentifier( $params );
 

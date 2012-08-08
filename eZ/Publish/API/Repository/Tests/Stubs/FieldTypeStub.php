@@ -159,4 +159,14 @@ class FieldTypeStub implements FieldType
     {
         throw new \RuntimeException( "Not implemented, just a wrapper." );
     }
+
+    /**
+     * getName
+     *
+     * @return mixed $value
+     */
+    public function getName( $value )
+    {
+        throw new \RuntimeException( "Not implemented, just a wrapper." );
+    }
 }

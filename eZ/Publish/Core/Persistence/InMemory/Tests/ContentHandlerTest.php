@@ -111,7 +111,7 @@ class ContentHandlerTest extends HandlerTest
         $struct->ownerId = 14;
         $struct->sectionId = 1;
         $struct->typeId = 2;
-        $struct->initialLanguageId = 4;
+        $struct->initialLanguageId = 8;
         $struct->modified = time();
         $struct->fields[] = new Field(
             array(
@@ -189,7 +189,7 @@ class ContentHandlerTest extends HandlerTest
                 "name" => "the all new name",
                 "publicationDate" => time(),
                 "modificationDate" => time(),
-                "mainLanguageId" => 4,
+                "mainLanguageId" => 8,
                 "alwaysAvailable" => false,
                 "remoteId" => "the-all-new-remoteid"
             )

@@ -21,17 +21,16 @@ class RoleAssignment extends ValueObjectVisitor
     /**
      * Visit struct returned by controllers
      *
-     * @param Visitor $visitor
-     * @param Generator $generator
+     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param mixed $data
-     * @return void
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'RoleAssignInput' );
+        $generator->startObjectElement( 'RoleAssignInput' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'RoleAssignInput' ) );
 
-        $generator->startElement( 'Role' );
+        $generator->startObjectElement( 'Role' );
 
         $generator->startAttribute(
             'href',
@@ -39,7 +38,7 @@ class RoleAssignment extends ValueObjectVisitor
         );
         $generator->endAttribute( 'href' );
 
-        $generator->endElement( 'Role' );
+        $generator->endObjectElement( 'Role' );
 
         $roleLimitation = $data->getRoleLimitation();
         if ( $roleLimitation !== null )
@@ -47,6 +46,6 @@ class RoleAssignment extends ValueObjectVisitor
             $visitor->visitValueObject( $roleLimitation );
         }
 
-        $generator->endElement( 'RoleAssignInput' );
+        $generator->endObjectElement( 'RoleAssignInput' );
     }
 }

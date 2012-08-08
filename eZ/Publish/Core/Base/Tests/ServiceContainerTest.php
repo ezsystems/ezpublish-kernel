@@ -328,7 +328,32 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
         $obj = $sc->get('ExtendedTestLacyCheck');
         self::assertEquals( 3, $obj->count );
     }
-}
+
+    /**
+     * @covers \eZ\Publish\Core\Base\ServiceContainer::__construct
+     * @covers \eZ\Publish\Core\Base\ServiceContainer::get
+     * @covers \eZ\Publish\Core\Base\ServiceContainer::lookupArguments
+     */
+    public function testParameters()
+    {
+        $testPath = "TestValue/Path";
+        $sc = new ServiceContainer(
+            array(
+                'parameters' => array(
+                    'storage_path' => $testPath
+                ),
+                'ParameterTest' => array(
+                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\ParameterTest',
+                    'arguments' => array(
+                            'path' => '$storage_path',
+                    ),
+                ),
+            )
+        );
+        $obj = $sc->get('ParameterTest');
+        self::assertEquals( $testPath, $obj->parameter );
+    }
+}//ParameterTest
 
 class A
 {
@@ -492,5 +517,20 @@ class ExtendedTestLacyCheck
 
         }
         $this->count = $key;
+    }
+}
+
+class ParameterTest
+{
+    public $parameter;
+    public function __construct( $parameter, $test = null )
+    {
+        if ( empty( $parameter ) )
+            throw new \Exception( "Empty argument \$parameter" );
+
+        if ( !empty( $test ) )
+            throw new \Exception( "Argument should have been empty: \$test" );
+
+        $this->parameter = $parameter;
     }
 }

@@ -203,10 +203,6 @@ class HandlerTest extends TestCase
             'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler',
             $contentLanguageHandler
         );
-        $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
-            $contentLanguageHandler
-        );
     }
 
     /**
@@ -319,6 +315,39 @@ class HandlerTest extends TestCase
         $this->assertSame(
             $handler->sectionHandler(),
             $handler->sectionHandler()
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::urlAliasHandler
+     * @return void
+     */
+    public function testUrlAliasHandler()
+    {
+        $handler = $this->getHandlerFixture();
+        $urlAliasHandler = $handler->urlAliasHandler();
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler',
+            $urlAliasHandler
+        );
+        $this->assertInstanceOf(
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\Handler',
+            $urlAliasHandler
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::urlAliasHandler
+     * @return void
+     */
+    public function testUrlAliasHandlerTwice()
+    {
+        $handler = $this->getHandlerFixture();
+
+        $this->assertSame(
+            $handler->urlAliasHandler(),
+            $handler->urlAliasHandler()
         );
     }
 

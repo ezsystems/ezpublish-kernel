@@ -14,6 +14,13 @@ namespace eZ\Publish\Core\REST\Client\HttpClient;
  */
 class ConnectionException extends \RuntimeException
 {
+    /**
+     * Constructor
+     *
+     * @param string $server
+     * @param string $path
+     * @param string $method
+     */
     public function __construct( $server, $path, $method )
     {
         parent::__construct(

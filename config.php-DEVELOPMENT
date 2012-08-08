@@ -20,10 +20,11 @@ error_reporting ( E_ALL | E_STRICT );
 return array(
     'base' => array(
         'ClassLoader' => array(
-            // Optional additional namespace mapping in addition to those from Composer
-            'NamespaceMap' => array( /*'Vendor\\SomeApp' => __DIR__ . '/Vendor/SomeApp/'*/ ),
-            // Optional additional class mapping in addition to those from Composer
-            'ClassMap' => array( /*'className' => __DIR__ . '/path/ClassName.php'*/ ),
+            // Reference to file that contain composer namespace mapping
+            'NamespaceMap' => __DIR__ . '/vendor/composer/autoload_namespaces.php',
+
+            // Reference to file that contain composer class name mapping
+            'ClassMap' => __DIR__ . '/vendor/composer/autoload_classmap.php',
         ),
         'Configuration' => array(
             // Disable cache, default false
@@ -56,4 +57,13 @@ return array(
             ),
         ),
     ),
+    'service' => array(
+        'parameters' => array(
+            // The installation directory
+            'install_dir' => __DIR__,
+
+            // The Legacy Kernel installation directory
+            'legacy_dir' =>  __DIR__ . '/vendor/ezsystems/ezpublish-legacy'
+        )
+    )
 );

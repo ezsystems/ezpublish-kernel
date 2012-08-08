@@ -96,7 +96,7 @@ class SelectionTest extends FieldTypeTest
         $fieldValue = $ft->toPersistenceValue( new SelectionValue( (array)$string ) );
 
         self::assertSame( array( $string ), $fieldValue->data );
-        self::assertSame( array( "sort_key_string" => $string ), $fieldValue->sortKey );
+        self::assertSame( $string, $fieldValue->sortKey );
     }
 
     /**

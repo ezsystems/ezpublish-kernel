@@ -87,6 +87,8 @@ interface FieldType
      */
     public function getValidatorConfigurationSchema();
 
+    public function getName( $value );
+
     /**
      * Indicates if the field type supports indexing and sort keys for searching
      *

@@ -18,18 +18,18 @@ class Value extends BaseValue
     /**
      * Selection content
      *
-     * @var string[]
+     * @var int[]
      */
     public $selection;
 
     /**
-     * Construct a new Value object and initialize it $text
+     * Construct a new Value object and initialize it $selection
      *
-     * @param string|string[] $selection
+     * @param int[] $selection
      */
-    public function __construct( $selection = array() )
+    public function __construct( array $selection = array() )
     {
-        $this->selection = (array)$selection;
+        $this->selection = $selection;
     }
 
     /**
@@ -37,17 +37,6 @@ class Value extends BaseValue
      */
     public function __toString()
     {
-        if ( !is_array( $this->selection ) )
-            return "";
-
         return implode( ",", $this->selection );
-    }
-
-    /**
-     * @see \eZ\Publish\Core\FieldType\Value::getTitle()
-     */
-    public function getTitle()
-    {
-        throw new \RuntimeException( 'Implement this method' );
     }
 }

@@ -24,8 +24,8 @@ class IOTest extends BaseIOServiceTest
         return new IOUploadPHPT();
     }
 
-    protected function getRepository( array $serviceSettings )
+    protected function getRepository()
     {
-        return Utils::getRepository( $serviceSettings );
+        return Utils::getRepository();
     }
 }

@@ -177,4 +177,45 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
 
         self::assertEquals( $config, $this->configuration->getAll() );
     }
+
+    /**
+     * Test Configuration
+     *
+     * @covers \eZ\Publish\Core\Base\Configuration::load
+     */
+    public function testLoadGlobalConfig()
+    {
+        $globalConfig = array(
+            'NonExistingSection' => array( 'Setting1' => 'Value' ),
+            'ExistingSection' => array(
+                'Setting1' => 'Value',
+                'Setting2' => array( 'key1' => 1, 'Key2' => 2 )
+            )
+        );
+        $configuration = new Configuration(
+            'test',
+            array( 'base' => array( __DIR__ . '/Configuration/' ) ),
+            array(
+                'base' => array( 'Configuration' => array( 'Parsers' => array( '.ini' => $this->parserMock ) ) ),
+                'test' => $globalConfig
+            )
+        );
+        $config = array(
+            'ExistingSection' => array(
+                'Setting1' => 'ValueValue',
+                'Setting2' => array( 'key1' => 3, 'Key2' => 3, 'Key3' => 3 ),
+                'Setting3' => 'ValueValue'
+            )
+        );
+        $this->parserMock->expects( $this->once() )
+            ->method( 'parse' )
+            ->will( $this->returnValue( $config ) );
+        $configuration->load();
+
+        // Set extended value as we expect it
+        $globalConfig['ExistingSection']['Setting2']['Key3'] = 3;
+        $globalConfig['ExistingSection']['Setting3'] = 'ValueValue';
+
+        self::assertEquals( $globalConfig, $configuration->getAll() );
+    }
 }

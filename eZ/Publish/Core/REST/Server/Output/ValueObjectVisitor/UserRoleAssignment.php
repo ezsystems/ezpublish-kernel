@@ -29,7 +29,7 @@ class UserRoleAssignment extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'RoleAssignment' );
+        $generator->startObjectElement( 'RoleAssignment' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'RoleAssignment' ) );
 
         $role = $data->getRole();
@@ -51,14 +51,14 @@ class UserRoleAssignment extends ValueObjectVisitor
             $visitor->visitValueObject( $roleLimitation );
         }
 
-        $generator->startElement( 'Role' );
+        $generator->startObjectElement( 'Role' );
         $generator->startAttribute(
             'href',
             $this->urlHandler->generate( 'role', array( 'role' => $role->id ) )
         );
         $generator->endAttribute( 'href' );
-        $generator->endElement( 'Role' );
+        $generator->endObjectElement( 'Role' );
 
-        $generator->endElement( 'RoleAssignment' );
+        $generator->endObjectElement( 'RoleAssignment' );
     }
 }

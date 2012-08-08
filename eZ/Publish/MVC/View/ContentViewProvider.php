@@ -23,15 +23,17 @@ interface ContentViewProvider
      * Returns a ContentView object corresponding to $contentInfo, or void if not applicable
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param string $viewType Variation of display for your content
      * @return \eZ\Publish\MVC\View\ContentView|void
      */
-    public function getViewForContent( ContentInfo $contentInfo );
+    public function getViewForContent( ContentInfo $contentInfo, $viewType );
 
     /**
      * Returns a ContentView object corresponding to $location, or void if not applicable
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param string $viewType Variation of display for your content.
      * @return \eZ\Publish\MVC\View\ContentView|void
      */
-    public function getViewForLocation( Location $location );
+    public function getViewForLocation( Location $location, $viewType );
 }

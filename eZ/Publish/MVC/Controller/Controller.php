@@ -9,34 +9,52 @@
 
 namespace eZ\Publish\MVC\Controller;
 
-use Symfony\Component\Templating\EngineInterface,
-    Symfony\Component\HttpKernel\Log\LoggerInterface,
+use Symfony\Component\DependencyInjection\ContainerAware,
+    Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Routing\RouterInterface,
     Symfony\Component\HttpFoundation\Response;
 
-abstract class Controller
+abstract class Controller extends ContainerAware
 {
-    /**
-     * @var Symfony\Component\Templating\EngineInterface
-     */
-    protected $templateEngine;
+    private $options;
 
-    /**
-     * @var Symfony\Component\HttpKernel\Log\LoggerInterface
-     */
-    protected $logger;
-
-    public function setTemplateEngine( EngineInterface $templateEngine )
+    public function __construct( array $options = array() )
     {
-        $this->templateEngine = $templateEngine;
+        $this->options = $options;
     }
 
     /**
-     * @param \Symfony\Component\HttpKernel\Log\LoggerInterface $logger
+     * Returns value for $optionName and fallbacks to $defaultValue if not defined
+     *
+     * @param string $optionName
+     * @param mixed $defaultValue
+     * @return mixed
      */
-    public function setLogger( LoggerInterface $logger = null )
+    public function getOption( $optionName, $defaultValue = null )
     {
-        $this->logger = $logger;
+        return isset( $this->options[$optionName] ) ? $this->options[$optionName] : $defaultValue;
+    }
+
+    /**
+     * Checks if $optionName is defined
+     *
+     * @param string $optionName
+     * @return bool
+     */
+    public function hasOption( $optionName )
+    {
+        return isset( $this->options[$optionName] );
+    }
+
+    /**
+     * Sets $optionName with $value
+     *
+     * @param string $optionName
+     * @param mixed $value
+     */
+    public function setOption( $optionName, $value )
+    {
+        $this->options[$optionName] = $value;
     }
 
     /**
@@ -54,7 +72,47 @@ abstract class Controller
             $response = new Response();
         }
 
-        $response->setContent( $this->templateEngine->render( $view, $parameters ) );
+        $response->setContent( $this->getTemplateEngine()->render( $view, $parameters ) );
         return $response;
+    }
+
+    /**
+     * @return \Symfony\Component\Templating\EngineInterface
+     */
+    public function getTemplateEngine()
+    {
+        return $this->container->get( 'templating' );
+    }
+
+    /**
+     * @return \Symfony\Component\HttpKernel\Log\LoggerInterface\null
+     */
+    public function getLogger()
+    {
+        return $this->container->get( 'logger', ContainerInterface::NULL_ON_INVALID_REFERENCE );
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository
+     */
+    public function getRepository()
+    {
+        return $this->container->get( 'ezpublish.api.repository' );
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Request
+     */
+    public function getRequest()
+    {
+        return $this->container->get( 'request' );
+    }
+
+    /**
+     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    public function getEventDispatcher()
+    {
+        return $this->container->get( 'event_dispatcher' );
     }
 }

@@ -46,7 +46,7 @@ class Integer implements Converter
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
         $storageFieldValue->dataInt = $value->data;
-        $storageFieldValue->sortKeyInt = $value->sortKey['sort_key_int'];
+        $storageFieldValue->sortKeyInt = $value->sortKey;
     }
 
     /**
@@ -58,7 +58,7 @@ class Integer implements Converter
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
         $fieldValue->data = $value->dataInt;
-        $fieldValue->sortKey = array( 'sort_key_int' => $value->sortKeyInt );
+        $fieldValue->sortKey = $value->sortKeyInt;
     }
 
     /**
@@ -92,12 +92,12 @@ class Integer implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
+        $fieldDef->fieldTypeConstraints->validators = array(
+            self::FLOAT_VALIDATOR_IDENTIFIER => array( 'minIntegerValue' => false, 'maxIntegerValue' => false )
+        );
+
         if ( $storageDef->dataInt4 !== self::NO_MIN_MAX_VALUE )
         {
-            $fieldDef->fieldTypeConstraints->validators = array(
-                self::FLOAT_VALIDATOR_IDENTIFIER => array( 'minIntegerValue' => false, 'maxIntegerValue' => false )
-            );
-
             if ( !empty( $storageDef->dataInt1 ) )
             {
                 $fieldDef->fieldTypeConstraints

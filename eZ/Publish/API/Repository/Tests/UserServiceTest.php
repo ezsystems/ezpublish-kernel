@@ -350,18 +350,27 @@ class UserServiceTest extends BaseTest
 
         $repository->beginTransaction();
 
-        // Load main group
-        $parentUserGroup = $userService->loadUserGroup( $mainGroupId );
+        try
+        {
+            // Load main group
+            $parentUserGroup = $userService->loadUserGroup( $mainGroupId );
 
-        // Instantiate a new create struct
-        $userGroupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
-        $userGroupCreate->setField( 'name', 'Example Group' );
+            // Instantiate a new create struct
+            $userGroupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
+            $userGroupCreate->setField( 'name', 'Example Group' );
 
-        // Create the new user group
-        $createdUserGroupId = $userService->createUserGroup(
-            $userGroupCreate,
-            $parentUserGroup
-        )->id;
+            // Create the new user group
+            $createdUserGroupId = $userService->createUserGroup(
+                $userGroupCreate,
+                $parentUserGroup
+            )->id;
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         $repository->rollback();
 
@@ -438,8 +447,16 @@ class UserServiceTest extends BaseTest
         );
         /* END: Use Case */
 
+        $subUserGroupIds = array_map(
+            function ( $content )
+            {
+                return $content->id;
+            },
+            $subUserGroups
+        );
+
         $this->assertEquals( $membersGroupId, $userGroup->parentId );
-        $this->assertEquals( array( $userGroup ), $subUserGroups );
+        $this->assertEquals( array( $userGroup->id ), $subUserGroupIds );
     }
 
     /**
@@ -883,7 +900,16 @@ class UserServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $repository->beginTransaction();
 
-        $user = $this->createUserVersion1();
+        try
+        {
+            $user = $this->createUserVersion1();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         $repository->rollback();
 
@@ -1170,19 +1196,6 @@ class UserServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
      */
-    public function testUpdateUserIncrementsVersionNumber( $user )
-    {
-        $this->assertEquals( 2, $user->getVersionInfo()->versionNo );
-    }
-
-    /**
-     * Test for the updateUser() method.
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::updateUser()
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
-     */
     public function testUpdateUserReturnsPublishedVersion( $user )
     {
         $this->assertEquals(
@@ -1253,9 +1266,6 @@ class UserServiceTest extends BaseTest
         $contentUpdate = $contentService->newContentUpdateStruct();
         $contentUpdate->setField( 'first_name', 'Hello', 'eng-US' );
         $contentUpdate->setField( 'last_name', 'World', 'eng-US' );
-
-        // Required field
-        $contentUpdate->setField( 'user_account', $user );
 
         // Create a new update struct instance
         $userUpdate = $userService->newUserUpdateStruct();

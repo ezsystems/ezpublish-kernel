@@ -183,10 +183,11 @@ interface Handler
      *
      * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
      *
-     * @param  \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $relation
+     * @param \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $createStruct
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation
      */
-    public function addRelation( RelationCreateStruct $relation );
+    public function addRelation( RelationCreateStruct $createStruct );
 
     /**
      * Removes a relation by relation Id.

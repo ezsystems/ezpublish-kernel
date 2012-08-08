@@ -1,19 +1,35 @@
 parameters:
     ezpublish.chain_router.class: eZ\Publish\MVC\Routing\ChainRouter
+    ezpublish.urlalias_router.class: eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter
     ezpublish.siteaccess_router.class: eZ\Publish\MVC\SiteAccess\Router
     ezpublish.siteaccess_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\SiteAccessListener
+    ezpublish.request_redirect_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\RequestEventListener
 
 services:
     ezpublish.chain_router:
         class: %ezpublish.chain_router.class%
         arguments: [@ezpublish.siteaccess_router, @event_dispatcher, @router.request_context]
 
+    ezpublish.urlalias_router:
+        class: %ezpublish.urlalias_router.class%
+        arguments: [@ezpublish.api.repository, @?logger]
+        tags:
+            - {name: router, priority: 200}
+
     ezpublish.siteaccess_router:
         class: %ezpublish.siteaccess_router.class%
-        arguments: [%ezpublish.siteaccess.default%, %ezpublish.siteaccess.config%]
+        arguments: [%ezpublish.siteaccess.default%, %ezpublish.siteaccess.match_config%]
+        calls:
+            - [setSiteAccess, [@ezpublish.siteaccess]]
 
     ezpublish.siteaccess_listener:
         class: %ezpublish.siteaccess_listener.class%
         arguments: [@service_container]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish.request_redirect_listener:
+        class: %ezpublish.request_redirect_listener.class%
+        arguments: [@http_kernel, @?logger]
         tags:
             - { name: kernel.event_subscriber }

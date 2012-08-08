@@ -158,7 +158,8 @@ class Handler implements BaseContentHandler
             $this->contentGateway->setName(
                 $content->contentInfo->id,
                 $content->versionInfo->versionNo,
-                $name, $language
+                $name,
+                $language
             );
         }
 
@@ -284,7 +285,9 @@ class Handler implements BaseContentHandler
         $rows = $this->contentGateway->load( $id, $version, $translations );
 
         if ( empty( $rows ) )
+        {
             throw new NotFound( 'content', "contentId: $id, versionNo: $version" );
+        }
 
         $contentObjects = $this->mapper->extractContentFromRows( $rows );
         $content = $contentObjects[0];
@@ -312,6 +315,7 @@ class Handler implements BaseContentHandler
      *
      * @param int|string $contentId
      * @param int $versionNo Version number to load
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
      */
     public function loadVersionInfo( $contentId, $versionNo )
@@ -402,9 +406,17 @@ class Handler implements BaseContentHandler
      */
     public function deleteContent( $contentId )
     {
-        foreach ( $this->contentGateway->getAllLocationIds( $contentId ) as $locationId )
+        $contentLocations = $this->contentGateway->getAllLocationIds( $contentId );
+        if ( empty( $contentLocations ) )
         {
-            $this->locationHandler->removeSubtree( $locationId );
+            $this->removeRawContent( $contentId );
+        }
+        else
+        {
+            foreach ( $contentLocations as $locationId )
+            {
+                $this->locationHandler->removeSubtree( $locationId );
+            }
         }
     }
 
@@ -528,12 +540,13 @@ class Handler implements BaseContentHandler
      *
      * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
      *
-     * @param  \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $relation
+     * @param \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $createStruct
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation
      */
     public function addRelation( RelationCreateStruct $createStruct )
     {
-        $relation = $this->mapper->createRelationFromCreateStruct( $createStruct);
+        $relation = $this->mapper->createRelationFromCreateStruct( $createStruct );
 
         $relation->id = $this->contentGateway->insertRelation( $createStruct );
 

@@ -20,8 +20,8 @@ class LocationTest extends BaseLocationServiceTest
         $this->existingRemoteID = "remoteIDForLocation4";
     }
 
-    protected function getRepository( array $serviceSettings )
+    protected function getRepository()
     {
-        return Utils::getRepository( $serviceSettings );
+        return Utils::getRepository();
     }
 }

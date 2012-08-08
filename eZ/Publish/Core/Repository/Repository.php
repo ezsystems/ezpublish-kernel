@@ -23,11 +23,11 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\Core\Repository\UserService,
     eZ\Publish\Core\Repository\IOService,
     eZ\Publish\Core\Repository\ObjectStateService,
+    eZ\Publish\Core\Repository\URLAliasService,
+    eZ\Publish\Core\Repository\URLWildcardService,
+    eZ\Publish\Core\Repository\NameSchemaService,
     eZ\Publish\API\Repository\Values\ValueObject,
     eZ\Publish\API\Repository\Values\User\User,
-    eZ\Publish\Legacy\LegacyKernelAware,
-    eZ\Publish\Legacy\Kernel as LegacyKernel,
-    eZ\Publish\Legacy\Kernel\Loader as LegacyKernelLoader,
     Exception,
     LogicException,
     RuntimeException;
@@ -36,7 +36,7 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
  * Repository class
  * @package eZ\Publish\Core\Repository
  */
-class Repository implements RepositoryInterface, LegacyKernelAware
+class Repository implements RepositoryInterface
 {
     /**
      * Repository Handler object
@@ -144,11 +144,32 @@ class Repository implements RepositoryInterface, LegacyKernelAware
     protected $fieldTypeService;
 
     /**
-     * Instance of object state service
+     * Instance of validator service
      *
      * @var \eZ\Publish\Core\Repository\ValidatorService
      */
     protected $validatorService;
+
+    /**
+     * Instance of name schema resolver service
+     *
+     * @var \eZ\Publish\Core\Repository\NameSchemaService
+     */
+    protected $nameSchemaService;
+
+    /**
+     * Instance of URL alias service
+     *
+     * @var \eZ\Publish\Core\Repository\UrlAliasService
+     */
+    protected $urlAliasService;
+
+    /**
+     * Instance of URL wildcard service
+     *
+     * @var \eZ\Publish\Core\Repository\URLWildcardService
+     */
+    protected $urlWildcardService;
 
     /**
      * Service settings, first level key is service name
@@ -183,8 +204,13 @@ class Repository implements RepositoryInterface, LegacyKernelAware
             'io' => array(),
             'objectState' => array(),
             'search' => array(),
-            'legacy' => array(),
             'fieldType' => array(),
+            'urlAlias' => array(),
+            'urlWildcard' => array(),
+            'nameSchema' => array(
+                "limit" => 0,
+                "sequence" => ""
+            ),
         );
 
         if ( $user !== null )
@@ -423,7 +449,11 @@ class Repository implements RepositoryInterface, LegacyKernelAware
      */
     public function getURLAliasService()
     {
-        throw new \Exception("@todo URLAliasService Not Implemented");
+        if ( $this->urlAliasService !== null )
+            return $this->urlAliasService;
+
+        $this->urlAliasService = new URLAliasService( $this, $this->persistenceHandler, $this->serviceSettings['urlAlias'] );
+        return $this->urlAliasService;
     }
 
     /**
@@ -433,7 +463,11 @@ class Repository implements RepositoryInterface, LegacyKernelAware
      */
     public function getURLWildcardService()
     {
-        throw new \Exception("@todo URLWildcardService Not Implemented");
+        if ( $this->urlWildcardService !== null )
+            return $this->urlWildcardService;
+
+        $this->urlWildcardService = new URLWildcardService( $this, $this->persistenceHandler, $this->serviceSettings['urlWildcard'] );
+        return $this->urlWildcardService;
     }
 
     /**
@@ -523,6 +557,20 @@ class Repository implements RepositoryInterface, LegacyKernelAware
     }
 
     /**
+     * Get NameSchemaResolverService
+     *
+     * @return \eZ\Publish\Core\Repository\NameSchemaService
+     */
+    public function getNameSchemaService()
+    {
+        if ( $this->nameSchemaService !== null )
+            return $this->nameSchemaService;
+
+        $this->nameSchemaService = new NameSchemaService( $this, $this->serviceSettings['nameSchema'] );
+        return $this->nameSchemaService;
+    }
+
+    /**
      * Begin transaction
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,
@@ -572,57 +620,20 @@ class Repository implements RepositoryInterface, LegacyKernelAware
     }
 
     /**
-     * Injects the legacy kernel instance.
+     * Only for internal use.
      *
-     * @param \eZ\Publish\Legacy\Kernel $legacyKernel
-     * @return void
-     */
-    public function setLegacyKernel( LegacyKernel $legacyKernel )
-    {
-        $this->serviceSettings['legacy']['kernel'] = $legacyKernel;
-        if ( $this->ioHandler instanceof LegacyKernelAware )
-            $this->ioHandler->setLegacyKernel( $legacyKernel );
-    }
-
-    /**
-     * Gets the legacy kernel instance.
+     * Creates a \DateTime object for $timestamp in the current time zone
      *
-     * @return \eZ\Publish\Legacy\Kernel
-     * @throws \eZ\Publish\Core\Base\Exceptions\BadConfiguration
+     * @param int $timestamp
+     * @return \DateTime
      */
-    protected function getLegacyKernel()
+    public function createDateTime( $timestamp = null )
     {
-        if ( !isset( $this->serviceSettings['legacy']['kernel'] ) )
+        $dateTime = new \DateTime();
+        if ( $timestamp !== null )
         {
-            if ( !isset( $this->serviceSettings['legacy']['legacy_root_dir'] ) )
-            {
-                throw new BadConfiguration(
-                    "serviceSettings['legacy']['legacy_root_dir']",
-                    "You need to provide the path to eZ Publish legacy to be able to use the legacy kernel"
-                );
-            }
-
-            $originalRootDir = isset( $this->serviceSettings['legacy']['webroot_dir'] ) ? $this->serviceSettings['legacy']['webroot_dir'] : getcwd();
-            if ( !isset( $this->serviceSettings['legacy']['kernel_loader'] ) )
-            {
-                $this->serviceSettings['legacy']['kernel_loader'] = new LegacyKernelLoader(
-                    $this->serviceSettings['legacy']['legacy_root_dir'],
-                    $originalRootDir
-                );
-            }
-
-            if ( !isset( $this->serviceSettings['legacy']['kernel_handler'] ) )
-            {
-                throw new BadConfiguration(
-                    "serviceSettings['legacy']['kernel_handler']",
-                    "You need to provide a legacy kernel handler"
-                );
-            }
-
-            $kernelClosure = $this->serviceSettings['legacy']['kernel_loader']->buildLegacyKernel( $this->serviceSettings['legacy']['kernel_handler'] );
-            $this->setLegacyKernel( $kernelClosure() );
+            $dateTime->setTimestamp( $timestamp );
         }
-
-        return $this->serviceSettings['legacy']['kernel'];
+        return $dateTime;
     }
 }

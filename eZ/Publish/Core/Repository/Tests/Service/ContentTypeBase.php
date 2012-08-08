@@ -1355,6 +1355,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Another ContentType with identifier 'new-type' exists
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
      *
      * @return void
@@ -1393,6 +1394,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Another ContentType with remoteId 'new-remoteid' exists
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
      *
      * @return void
@@ -1421,6 +1423,115 @@ abstract class ContentTypeBase extends BaseServiceTest
                 // "Content" group
                 $contentTypeService->loadContentTypeGroup( 1 )
             )
+        );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the createContentTypeGroup() method.
+     *
+     * @depends testCreateContentType
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument must contain at least one FieldDefinitionCreateStruct
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
+     *
+     * @return array
+     */
+    public function testCreateContentTypeThrowsInvalidArgumentExceptionNoFieldDefinitions()
+    {
+        /* BEGIN: Use Case */
+        $contentTypeService = $this->repository->getContentTypeService();
+        // Creates published content type with remoteId "new-remoteid"
+        $this->createPublishedContentType();
+
+        $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(
+            'other-type'
+        );
+        $typeCreateStruct->remoteId = "new-unique-remoteid";
+        $typeCreateStruct->creatorId = $this->repository->getCurrentUser()->id;
+        $typeCreateStruct->creationDate = new \DateTime();
+        $typeCreateStruct->mainLanguageCode = 'eng-GB';
+        $typeCreateStruct->names = array('eng-US' => 'A name.');
+        $typeCreateStruct->descriptions = array('eng-US' => 'A description.');
+
+        // Throws an exception because content type create struct does not have any field definition create structs set
+        $type = $contentTypeService->createContentType(
+            $typeCreateStruct,
+            array(
+                // "Content" group
+                $contentTypeService->loadContentTypeGroup( 1 )
+            )
+        );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the createContentTypeGroup() method.
+     *
+     * @depends testCreateContentType
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument contains duplicate field definition identifier 'title'
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
+     *
+     * @return array
+     */
+    public function testCreateContentTypeThrowsInvalidArgumentExceptionDuplicateFieldDefinitionIdentifier()
+    {
+        /* BEGIN: Use Case */
+        $contentTypeService = $this->repository->getContentTypeService();
+        $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(
+            'new-type'
+        );
+        $typeCreateStruct->names = array(
+            'eng-US' => 'American type title',
+            'eng-GB' => 'British type title'
+        );
+        $typeCreateStruct->descriptions = array(
+            'eng-US' => 'American type description',
+            'eng-GB' => 'British type description'
+        );
+        $typeCreateStruct->remoteId = "new-remoteid";
+        $typeCreateStruct->creatorId = $this->repository->getCurrentUser()->id;
+        $typeCreateStruct->creationDate = new \DateTime();
+        $typeCreateStruct->mainLanguageCode = 'eng-GB';
+        $typeCreateStruct->nameSchema = "<name>";
+        $typeCreateStruct->urlAliasSchema = "<name>";
+
+        $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title',
+            'ezstring'
+        );
+        $titleFieldCreate->names = array(
+            'eng-US' => 'American title field name',
+            'eng-GB' => 'British title field name',
+        );
+        $titleFieldCreate->descriptions = array(
+            'eng-US' => 'American title field description',
+            'eng-GB' => 'British title field description',
+        );
+        $titleFieldCreate->fieldGroup = 'blog-content';
+        $titleFieldCreate->position = 1;
+        $titleFieldCreate->isTranslatable = true;
+        $titleFieldCreate->isRequired = true;
+        $titleFieldCreate->isInfoCollector = false;
+        $titleFieldCreate->isSearchable = true;
+        $titleFieldCreate->defaultValue = "New text line";
+        $titleFieldCreate->validatorConfiguration = array(
+            "StringLengthValidator" => array(
+                "maxStringLength" => 128
+            )
+        );
+        //$titleFieldCreate->fieldSettings
+
+        $typeCreateStruct->addFieldDefinition( $titleFieldCreate );
+        $typeCreateStruct->addFieldDefinition( clone $titleFieldCreate );
+
+        $groups = $this->createGroups();
+
+        // Throws an exception because two field definition create structs have the same identifier
+        $type = $contentTypeService->createContentType(
+            $typeCreateStruct,
+            $groups
         );
         /* END: Use Case */
     }
@@ -2141,10 +2252,6 @@ abstract class ContentTypeBase extends BaseServiceTest
         $publishedType = $this->createPublishedContentType();
         // Create draft for current user
         $this->repository->getContentTypeService()->createContentTypeDraft( $publishedType );
-        // Change user
-        $this->repository->setCurrentUser(
-            $this->getStubbedUser( 4096 )
-        );
 
         /* BEGIN: Use case */
         // $publishedType contains a ContentType object
@@ -2458,7 +2565,6 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::copyContentType
      *
      * @return array
-     * @todo change user
      */
     public function testCopyContentTypeWithSecondArgument()
     {
@@ -2466,6 +2572,7 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         /* BEGIN: Use Case */
         $user = $this->getStubbedUser( 4096 );
+        $this->repository->setCurrentUser( $user );
         $contentTypeService = $this->repository->getContentTypeService();
 
         $commentType = $contentTypeService->loadContentTypeByIdentifier( "comment" );
@@ -2525,7 +2632,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $this->assertGreaterThanOrEqual( $time, $copiedType->modificationDate->getTimestamp() );
         $this->assertEquals( $userId, $copiedType->creatorId );
         $this->assertEquals( $userId, $copiedType->modifierId );
-        $this->assertEquals( ContentType::STATUS_DRAFT, $copiedType->status );
+        $this->assertEquals( ContentType::STATUS_DEFINED, $copiedType->status );
     }
 
     /**

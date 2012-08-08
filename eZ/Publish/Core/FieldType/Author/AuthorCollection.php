@@ -19,17 +19,10 @@ use eZ\Publish\Core\FieldType\Author\Author,
 class AuthorCollection extends ArrayObject
 {
     /**
-     * @var \eZ\Publish\Core\FieldType\Author\Value
-     */
-    protected $authorValue;
-
-    /**
-     * @param Value $authorValue
      * @param \eZ\Publish\Core\FieldType\Author\Author[] $elements
      */
-    public function __construct( Value $authorValue, array $elements = array() )
+    public function __construct( array $elements = array() )
     {
-        $this->authorValue = $authorValue;
         // Call parent constructor without $elements because all author elements
         // must be given an id by $this->offsetSet()
         parent::__construct();

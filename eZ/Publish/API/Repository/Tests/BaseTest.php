@@ -66,33 +66,6 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Catch TODO exceptions and converts them to incomplete tests markers
-     *
-     * This is only a temporary solution to better distinguish errors and
-     * missing implementations.
-     *
-     * @return void
-     */
-    protected function runTest()
-    {
-        try
-        {
-            parent::runTest();
-        }
-        catch ( \Exception $e )
-        {
-            if ( stripos( $e->getMessage(), 'todo' ) !== false )
-            {
-                $this->markTestIncomplete( 'Missing implementation: ' . $e->getMessage() );
-            }
-            else
-            {
-                throw $e;
-            }
-        }
-    }
-
-    /**
      * Resets the temporary used repository between each test run.
      *
      * @return void
@@ -322,7 +295,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             $userGroup,
             new SubtreeLimitation(
                 array(
-                    'limitationValues' => array( '/1/43/' )
+                    'limitationValues' => array( '/1/48/' )
                 )
             )
         );

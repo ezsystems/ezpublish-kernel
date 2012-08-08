@@ -46,7 +46,8 @@ use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\ContentTypeFieldDefinitionValidationException,
-    DateTime;
+    DateTime,
+    Exception;
 
 /**
  * @example Examples/contenttype.php
@@ -133,10 +134,18 @@ class ContentTypeService implements ContentTypeServiceInterface
         );
 
         $this->repository->beginTransaction();
-        $spiContentTypeGroup = $this->persistenceHandler->contentTypeHandler()->createGroup(
-            $spiGroupCreateStruct
-        );
-        $this->repository->commit();
+        try
+        {
+            $spiContentTypeGroup = $this->persistenceHandler->contentTypeHandler()->createGroup(
+                $spiGroupCreateStruct
+            );
+            $this->repository->commit();
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->buildContentTypeGroupDomainObject( $spiContentTypeGroup );
     }
@@ -232,12 +241,18 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         if ( $contentTypeGroupUpdateStruct->modificationDate !== null )
+        {
             $modifiedTimestamp = $contentTypeGroupUpdateStruct->modificationDate->getTimestamp();
+        }
         else
+        {
             $modifiedTimestamp = time();
+        }
 
         if ( $contentTypeGroupUpdateStruct->modifierId === null )
+        {
             $contentTypeGroupUpdateStruct->modifierId = $this->repository->getCurrentUser()->id;
+        }
 
         $spiGroupUpdateStruct = new SPIContentTypeGroupUpdateStruct(
             array(
@@ -251,10 +266,18 @@ class ContentTypeService implements ContentTypeServiceInterface
         );
 
         $this->repository->beginTransaction();
-        $this->persistenceHandler->contentTypeHandler()->updateGroup(
-            $spiGroupUpdateStruct
-        );
-        $this->repository->commit();
+        try
+        {
+            $this->persistenceHandler->contentTypeHandler()->updateGroup(
+                $spiGroupUpdateStruct
+            );
+            $this->repository->commit();
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -269,9 +292,9 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function deleteContentTypeGroup( APIContentTypeGroup $contentTypeGroup )
     {
+        $this->repository->beginTransaction();
         try
         {
-            $this->repository->beginTransaction();
             $this->persistenceHandler->contentTypeHandler()->deleteGroup(
                 $contentTypeGroup->id
             );
@@ -279,11 +302,17 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
         catch ( APIBadStateException $e )
         {
+            $this->repository->rollback();
             throw new InvalidArgumentException(
-                "contentTypeGroup",
-                "content class group has content type instances",
+                "\$contentTypeGroup",
+                "Content type group has content type instances",
                 $e
             );
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
         }
     }
 
@@ -329,8 +358,11 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * The content type is created in the state STATUS_DRAFT.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the identifier or remoteId in the content type create struct already exists
-     *         or there is a duplicate field identifier
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException In case when
+     *         - array of content type groups does not contain at least one content type group
+     *         - identifier or remoteId in the content type create struct already exists
+     *         - there is a duplicate field identifier in the content type create struct
+     *         - content type create struct does not contain at least one field definition create struct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $contentTypeGroups Required array of {@link ContentTypeGroup} to link type with (must contain one)
@@ -379,18 +411,52 @@ class ContentTypeService implements ContentTypeServiceInterface
             // Do nothing
         }
 
+        if ( count( $contentTypeCreateStruct->fieldDefinitions ) === 0 )
+        {
+            throw new InvalidArgumentException(
+                "\$contentTypeCreateStruct",
+                "Argument must contain at least one FieldDefinitionCreateStruct"
+            );
+        }
+
+        $fieldDefinitionIdentifierCache = array();
+        foreach ( $contentTypeCreateStruct->fieldDefinitions as $fieldDefinitionCreateStruct )
+        {
+            if ( !isset( $fieldDefinitionIdentifierCache[$fieldDefinitionCreateStruct->identifier] ) )
+            {
+                $fieldDefinitionIdentifierCache[$fieldDefinitionCreateStruct->identifier] = true;
+            }
+            else
+            {
+                throw new InvalidArgumentException(
+                    "\$contentTypeCreateStruct",
+                    "Argument contains duplicate field definition identifier '{$fieldDefinitionCreateStruct->identifier}'"
+                );
+            }
+        }
+
         if ( $contentTypeCreateStruct->creatorId === null )
+        {
             $userId = $this->repository->getCurrentUser()->id;
+        }
         else
+        {
             $userId = $contentTypeCreateStruct->creatorId;
+        }
 
         if ( $contentTypeCreateStruct->creationDate === null )
+        {
             $timestamp = time();
+        }
         else
+        {
             $timestamp = $contentTypeCreateStruct->creationDate->getTimestamp();
+        }
 
         if ( $contentTypeCreateStruct->remoteId === null )
+        {
             $contentTypeCreateStruct->remoteId = md5( uniqid( get_class( $contentTypeCreateStruct ), true ) );
+        }
 
         $initialLanguageId = $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
             $contentTypeCreateStruct->mainLanguageCode
@@ -432,10 +498,18 @@ class ContentTypeService implements ContentTypeServiceInterface
         );
 
         $this->repository->beginTransaction();
-        $spiContentType = $this->persistenceHandler->contentTypeHandler()->create(
-            $spiContentTypeCreateStruct
-        );
-        $this->repository->commit();
+        try
+        {
+            $spiContentType = $this->persistenceHandler->contentTypeHandler()->create(
+                $spiContentTypeCreateStruct
+            );
+            $this->repository->commit();
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->buildContentTypeDraftDomainObject( $spiContentType );
     }
@@ -750,6 +824,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param int $contentTypeId
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     * @todo Use another excpetion when user of draft is someone else
      */
     public function loadContentTypeDraft( $contentTypeId )
     {
@@ -765,7 +840,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ( $spiContentType->modifierId != $this->repository->getCurrentUser()->id )
         {
-            throw new NotFoundException( "ContentType", $contentTypeId );
+            throw new NotFoundException( "ContentType owned by someone else", $contentTypeId );
         }
 
         return $this->buildContentTypeDraftDomainObject(
@@ -813,28 +888,32 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         try
         {
-            $spiContentType = $this->persistenceHandler->contentTypeHandler()->load(
+            $this->persistenceHandler->contentTypeHandler()->load(
                 $contentType->id,
                 SPIContentType::STATUS_DRAFT
             );
-            $currentUser = $this->repository->getCurrentUser();
 
-            if ( $spiContentType->modifierId !== $currentUser->id )
-            {
-                throw new BadStateException(
-                    "\$contentType",
-                    "Modifier of draft (id={$spiContentType->modifierId}) is not the same user as current user (id={$currentUser->id})"
-                );
-            }
+            throw new BadStateException(
+                "\$contentType",
+                "Draft of the ContentType already exists"
+            );
         }
         catch ( APINotFoundException $e )
         {
             $this->repository->beginTransaction();
-            $spiContentType = $this->persistenceHandler->contentTypeHandler()->createDraft(
-                $this->repository->getCurrentUser()->id,
-                $contentType->id
-            );
-            $this->repository->commit();
+            try
+            {
+                $spiContentType = $this->persistenceHandler->contentTypeHandler()->createDraft(
+                    $this->repository->getCurrentUser()->id,
+                    $contentType->id
+                );
+                $this->repository->commit();
+            }
+            catch ( Exception $e )
+            {
+                $this->repository->rollback();
+                throw $e;
+            }
         }
 
         return $this->buildContentTypeDraftDomainObject(
@@ -946,12 +1025,20 @@ class ContentTypeService implements ContentTypeServiceInterface
         );
 
         $this->repository->beginTransaction();
-        $this->persistenceHandler->contentTypeHandler()->update(
-            $contentTypeDraft->id,
-            $contentTypeDraft->status,
-            $spiContentTypeUpdateStruct
-        );
-        $this->repository->commit();
+        try
+        {
+            $this->persistenceHandler->contentTypeHandler()->update(
+                $contentTypeDraft->id,
+                $contentTypeDraft->status,
+                $spiContentTypeUpdateStruct
+            );
+            $this->repository->commit();
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -966,9 +1053,9 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function deleteContentType( APIContentType $contentType )
     {
+        $this->repository->beginTransaction();
         try
         {
-            $this->repository->beginTransaction();
             $this->persistenceHandler->contentTypeHandler()->delete(
                 $contentType->id,
                 $contentType->status
@@ -983,6 +1070,11 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "Content still exists for the given ContentType",
                 $e
             );
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
         }
     }
 
@@ -1007,15 +1099,20 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         $this->repository->beginTransaction();
-        $spiContentType = $this->persistenceHandler->contentTypeHandler()->copy(
-            $user->id,
-            $contentType->id,
-            SPIContentType::STATUS_DEFINED
-        );
-        $this->publishContentTypeDraft(
-            $this->buildContentTypeDraftDomainObject( $spiContentType )
-        );
-        $this->repository->commit();
+        try
+        {
+            $spiContentType = $this->persistenceHandler->contentTypeHandler()->copy(
+                $user->id,
+                $contentType->id,
+                SPIContentType::STATUS_DEFINED
+            );
+            $this->repository->commit();
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->loadContentType( $spiContentType->id );
     }
@@ -1045,12 +1142,20 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         $this->repository->beginTransaction();
-        $this->persistenceHandler->contentTypeHandler()->link(
-            $contentTypeGroup->id,
-            $contentType->id,
-            $contentType->status
-        );
-        $this->repository->commit();
+        try
+        {
+            $this->persistenceHandler->contentTypeHandler()->link(
+                $contentTypeGroup->id,
+                $contentType->id,
+                $contentType->status
+            );
+            $this->repository->commit();
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -1078,9 +1183,9 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
         }
 
+        $this->repository->beginTransaction();
         try
         {
-            $this->repository->beginTransaction();
             $this->persistenceHandler->contentTypeHandler()->unlink(
                 $contentTypeGroup->id,
                 $contentType->id,
@@ -1096,6 +1201,11 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "The given ContentTypeGroup is the last group assigned to the ContentType",
                 $e
             );
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
         }
     }
 
@@ -1127,12 +1237,20 @@ class ContentTypeService implements ContentTypeServiceInterface
         );
 
         $this->repository->beginTransaction();
-        $this->persistenceHandler->contentTypeHandler()->addFieldDefinition(
-            $contentTypeDraft->id,
-            $contentTypeDraft->status,
-            $spiFieldDefinitionCreateStruct
-        );
-        $this->repository->commit();
+        try
+        {
+            $this->persistenceHandler->contentTypeHandler()->addFieldDefinition(
+                $contentTypeDraft->id,
+                $contentTypeDraft->status,
+                $spiFieldDefinitionCreateStruct
+            );
+            $this->repository->commit();
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -1161,12 +1279,20 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         $this->repository->beginTransaction();
-        $this->persistenceHandler->contentTypeHandler()->removeFieldDefinition(
-            $contentTypeDraft->id,
-            SPIContentType::STATUS_DRAFT,
-            $fieldDefinition->id
-        );
-        $this->repository->commit();
+        try
+        {
+            $this->persistenceHandler->contentTypeHandler()->removeFieldDefinition(
+                $contentTypeDraft->id,
+                SPIContentType::STATUS_DRAFT,
+                $fieldDefinition->id
+            );
+            $this->repository->commit();
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -1212,12 +1338,20 @@ class ContentTypeService implements ContentTypeServiceInterface
         );
 
         $this->repository->beginTransaction();
-        $this->persistenceHandler->contentTypeHandler()->updateFieldDefinition(
-            $contentTypeDraft->id,
-            SPIContentType::STATUS_DRAFT,
-            $spiFieldDefinitionUpdateStruct
-        );
-        $this->repository->commit();
+        try
+        {
+            $this->persistenceHandler->contentTypeHandler()->updateFieldDefinition(
+                $contentTypeDraft->id,
+                SPIContentType::STATUS_DRAFT,
+                $spiFieldDefinitionUpdateStruct
+            );
+            $this->repository->commit();
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -1246,10 +1380,18 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         $this->repository->beginTransaction();
-        $this->persistenceHandler->contentTypeHandler()->publish(
-            $loadedContentTypeDraft->id
-        );
-        $this->repository->commit();
+        try
+        {
+            $this->persistenceHandler->contentTypeHandler()->publish(
+                $loadedContentTypeDraft->id
+            );
+            $this->repository->commit();
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**

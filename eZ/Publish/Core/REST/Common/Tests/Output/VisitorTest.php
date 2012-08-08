@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ContentTypeServiceTest class
+ * File containing the VisitorTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -19,10 +19,7 @@ class ValueObject extends \stdClass
 }
 
 /**
- * Test case for operations in the ContentTypeService using in memory storage.
- *
- * @see eZ\Publish\API\Repository\ContentTypeService
- * @group integration
+ * Visitor test
  */
 class VisitorTest extends \PHPUnit_Framework_TestCase
 {
@@ -242,13 +239,13 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
         $data = new \stdClass();
 
         $generator = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' );
-        $valueObjectVisior = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\ValueObjectVisitor', array(), array(), '', false );
+        $valueObjectVisitor = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\ValueObjectVisitor', array(), array(), '', false );
 
         $visitor = new Common\Output\Visitor( $generator, array(
-            '\\stdClass' => $valueObjectVisior,
+            '\\stdClass' => $valueObjectVisitor,
         ) );
 
-        $valueObjectVisior
+        $valueObjectVisitor
             ->expects( $this->at( 0 ) )
             ->method( 'visit' )
             ->with( $visitor, $generator, $data );
@@ -261,13 +258,13 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
         $data = new ValueObject();
 
         $generator = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' );
-        $valueObjectVisior = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\ValueObjectVisitor', array(), array(), '', false );
+        $valueObjectVisitor = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\ValueObjectVisitor', array(), array(), '', false );
 
         $visitor = new Common\Output\Visitor( $generator, array(
-            '\\stdClass' => $valueObjectVisior,
+            '\\stdClass' => $valueObjectVisitor,
         ) );
 
-        $valueObjectVisior
+        $valueObjectVisitor
             ->expects( $this->at( 0 ) )
             ->method( 'visit' )
             ->with( $visitor, $generator, $data );
@@ -280,19 +277,19 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
         $data = new ValueObject();
 
         $generator = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' );
-        $valueObjectVisior1 = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\ValueObjectVisitor', array(), array(), '', false );
-        $valueObjectVisior2 = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\ValueObjectVisitor', array(), array(), '', false );
+        $valueObjectVisitor1 = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\ValueObjectVisitor', array(), array(), '', false );
+        $valueObjectVisitor2 = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\ValueObjectVisitor', array(), array(), '', false );
 
         $visitor = new Common\Output\Visitor( $generator, array(
-            '\\WontMatch' => $valueObjectVisior1,
-            '\\stdClass'  => $valueObjectVisior2,
+            '\\WontMatch' => $valueObjectVisitor1,
+            '\\stdClass'  => $valueObjectVisitor2,
         ) );
 
-        $valueObjectVisior1
+        $valueObjectVisitor1
             ->expects( $this->never() )
             ->method( 'visit' );
 
-        $valueObjectVisior2
+        $valueObjectVisitor2
             ->expects( $this->at( 0 ) )
             ->method( 'visit' )
             ->with( $visitor, $generator, $data );
@@ -300,4 +297,3 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
         $visitor->visitValueObject( $data );
     }
 }
-

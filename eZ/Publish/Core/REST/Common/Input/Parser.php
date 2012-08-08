@@ -23,4 +23,3 @@ abstract class Parser
      */
     abstract public function parse( array $data, ParsingDispatcher $parsingDispatcher );
 }
-

@@ -27,12 +27,19 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
      */
     private $templateEngineMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eventDispatcherMock;
+
     protected  function setUp()
     {
         parent::setUp();
         $this->templateEngineMock = $this->getMock( 'Symfony\\Component\\Templating\\EngineInterface' );
+        $this->eventDispatcherMock = $this->getMock( 'Symfony\\Component\\EventDispatcher\\EventDispatcherInterface' );
         $this->viewManager = new Manager(
-            $this->templateEngineMock
+            $this->templateEngineMock,
+            $this->eventDispatcherMock
         );
     }
 
@@ -95,7 +102,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
         $viewProvider
             ->expects( $this->once() )
             ->method( 'getViewForContent' )
-            ->with( $contentInfo )
+            ->with( $contentInfo, 'customViewType' )
             ->will(
                 $this->returnValue(
                     new ContentView( $templateIdentifier, $params )
@@ -112,7 +119,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $expectedTemplateResult ) )
         ;
 
-        self::assertSame( $expectedTemplateResult, $this->viewManager->renderContent( $content ) );
+        self::assertSame( $expectedTemplateResult, $this->viewManager->renderContent( $content, 'customViewType' ) );
     }
 
     /**
@@ -177,6 +184,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
         $this->viewManager->addViewProvider( $viewProvider );
 
         $location = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
+        $content = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Content' );
 
         // Configuring view provider behaviour
         $templateIdentifier = 'foo:bar:baz';
@@ -184,7 +192,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
         $viewProvider
             ->expects( $this->once() )
             ->method( 'getViewForLocation' )
-            ->with( $location )
+            ->with( $location, 'customViewType' )
             ->will(
             $this->returnValue(
                 new ContentView( $templateIdentifier, $params )
@@ -197,11 +205,11 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
         $this->templateEngineMock
             ->expects( $this->once() )
             ->method( 'render' )
-            ->with( $templateIdentifier, $params + array( 'location' => $location ) )
+            ->with( $templateIdentifier, $params + array( 'location' => $location, 'content' => $content ) )
             ->will( $this->returnValue( $expectedTemplateResult ) )
         ;
 
-        self::assertSame( $expectedTemplateResult, $this->viewManager->renderLocation( $location ) );
+        self::assertSame( $expectedTemplateResult, $this->viewManager->renderLocation( $location, $content, 'customViewType' ) );
     }
 
     /**
@@ -214,6 +222,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
         $this->viewManager->addViewProvider( $viewProvider );
 
         $location = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
+        $content = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Content' );
 
         // Configuring view provider behaviour
         $closure = function ( $params )
@@ -233,14 +242,14 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
         ;
 
         // Configuring template engine behaviour
-        $params += array( 'location' => $location );
+        $params += array( 'location' => $location, 'content' => $content );
         $expectedTemplateResult = serialize( array_keys( $params ) );
         $this->templateEngineMock
             ->expects( $this->never() )
             ->method( 'render' )
         ;
 
-        self::assertSame( $expectedTemplateResult, $this->viewManager->renderLocation( $location ) );
+        self::assertSame( $expectedTemplateResult, $this->viewManager->renderLocation( $location, $content ) );
     }
 
     private function createViewProviderMocks()

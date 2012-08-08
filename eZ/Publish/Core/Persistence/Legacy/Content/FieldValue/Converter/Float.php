@@ -46,7 +46,7 @@ class Float implements Converter
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
         $storageFieldValue->dataFloat = $value->data;
-        $storageFieldValue->sortKeyInt = $value->sortKey['sort_key_int'];
+        $storageFieldValue->sortKeyInt = $value->sortKey;
     }
 
     /**
@@ -58,7 +58,7 @@ class Float implements Converter
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
         $fieldValue->data = $value->dataFloat;
-        $fieldValue->sortKey = array( 'sort_key_int' => $value->sortKeyInt );
+        $fieldValue->sortKey = $value->sortKeyInt;
     }
 
     /**
@@ -92,20 +92,20 @@ class Float implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
+        $fieldDef->fieldTypeConstraints->validators = array(
+            self::FLOAT_VALIDATOR_IDENTIFIER => array( 'minFloatValue' => false, 'maxFloatValue' => false )
+        );
+
         if ( $storageDef->dataFloat4 !== self::NO_MIN_MAX_VALUE )
         {
             if ( !empty( $storageDef->dataFloat1 ) )
             {
-                $fieldDef->fieldTypeConstraints->validators = array(
-                    self::FLOAT_VALIDATOR_IDENTIFIER => array( 'minFloatValue' => $storageDef->dataFloat1 )
-                );
+                $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minFloatValue'] = $storageDef->dataFloat1;
             }
 
             if ( !empty( $storageDef->dataFloat2 ) )
             {
-                $fieldDef->fieldTypeConstraints->validators = array(
-                    self::FLOAT_VALIDATOR_IDENTIFIER => array( 'maxFloatValue' => $storageDef->dataFloat2 )
-                );
+                $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxFloatValue'] = $storageDef->dataFloat2;
             }
         }
 

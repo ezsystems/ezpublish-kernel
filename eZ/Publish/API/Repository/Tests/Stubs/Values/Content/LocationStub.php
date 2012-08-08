@@ -215,4 +215,26 @@ class LocationStub extends Location
     {
         $this->contentInfo = $newContentInfo;
     }
+
+    /**
+     * FOR TEST USE ONLY!
+     *
+     * @param int $depth
+     * @return void
+     */
+    public function __setDepth( $depth )
+    {
+        $this->depth = $depth;
+    }
+
+    /**
+     * FOR TEST USE ONLY!
+     *
+     * @param string $pathString
+     * @return void
+     */
+    public function __setPathString( $pathString )
+    {
+        $this->pathString = $pathString;
+    }
 }

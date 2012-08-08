@@ -27,7 +27,7 @@ class Section extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'Section' );
+        $generator->startObjectElement( 'Section' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Section' ) );
 
         $generator->startAttribute(
@@ -45,7 +45,7 @@ class Section extends ValueObjectVisitor
         $generator->startValueElement( 'name', $data->name );
         $generator->endValueElement( 'name' );
 
-        $generator->endElement( 'Section' );
+        $generator->endObjectElement( 'Section' );
     }
 }
 

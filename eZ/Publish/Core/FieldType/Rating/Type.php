@@ -19,20 +19,6 @@ use eZ\Publish\Core\FieldType\FieldType,
 class Type extends FieldType
 {
     /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FiledType\Value object with the provided $isDisabled as value.
-     *
-     * @param bool $isDisabled
-     * @return \eZ\Publish\Core\FieldType\Rating\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $isDisabled )
-    {
-        return new Value( $isDisabled );
-    }
-
-    /**
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
@@ -54,6 +40,21 @@ class Type extends FieldType
     }
 
     /**
+     * Returns the name of the given field value.
+     *
+     * It will be used to generate content name and url alias if current field is designated
+     * to be used in the content name/urlAlias pattern.
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    public function getName( $value )
+    {
+        throw new \RuntimeException( 'Implement this method' );
+    }
+
+    /**
      * Checks the type and structure of the $Value.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
@@ -65,6 +66,11 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( is_bool( $inputValue ) )
+        {
+            $inputValue = new Value( $inputValue );
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
@@ -93,10 +99,7 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
-        return array(
-            "sort_key_string" => "",
-            "sort_key_int" => 0
-        );
+        return false;
     }
 
     /**
@@ -137,7 +140,7 @@ class Type extends FieldType
      * Get index data for field data for search backend
      *
      * @param mixed $value
-     * @return \eZ\Publish\SPI\Persistence\Content\Search\DocumentField[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
      */
     public function getIndexData( $value )
     {

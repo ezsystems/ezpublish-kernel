@@ -199,18 +199,32 @@ class Configuration
         if ( !isset( $this->globalConfiguration[ $this->moduleName ] ) )
             return;
 
-        foreach ( $this->globalConfiguration[ $this->moduleName ] as $section => $settings )
+        foreach ( $this->globalConfiguration[ $this->moduleName ] as $section => $globalSettings )
         {
             if ( !isset( $this->raw['data'][$section] ) )
             {
-                $this->raw['data'][$section] = $settings;
+                $this->raw['data'][$section] = $globalSettings;
                 continue;
             }
 
-            foreach ( $settings as $setting => $value )
-            {
-                $this->raw['data'][$section][$setting] = $value;
-            }
+            $this->setGlobalConfig( $globalSettings, $this->raw['data'][$section] );
+        }
+    }
+
+    /**
+     * Recursively set global configuration
+     *
+     * @param array $globalSettings
+     * @param array $conf
+     */
+    protected function setGlobalConfig( array $globalSettings, array &$conf )
+    {
+        foreach ( $globalSettings as $key => $globalSetting )
+        {
+            if ( !empty( $conf[$key] ) && !is_numeric( $key ) && is_array( $conf[$key] ) && is_array( $globalSetting ) )
+                $this->setGlobalConfig( $globalSetting, $conf[$key] );
+            else
+                $conf[$key] = $globalSetting;
         }
     }
 

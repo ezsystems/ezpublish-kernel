@@ -35,8 +35,6 @@ use eZ\Publish\API\Repository\Values\Content\Field,
  *
  * Field types are primed and pre-configured with the Field Definitions found in
  * Content Types.
- *
- * @todo Merge and optimize concepts for settings, validator data and field type properties.
  */
 abstract class FieldType implements FieldTypeInterface
 {
@@ -178,6 +176,13 @@ abstract class FieldType implements FieldTypeInterface
     public function validateValidatorConfiguration( $validatorConfiguration )
     {
         $validationErrors = array();
+
+        // @TODO: Is it supposed to be handled this way?
+        if ( $validatorConfiguration === false )
+        {
+            return $validationErrors;
+        }
+
         foreach ( (array)$validatorConfiguration as $validatorIdentifier => $constraints )
         {
             if ( in_array( $validatorIdentifier, $this->allowedValidators ) )
@@ -227,30 +232,18 @@ abstract class FieldType implements FieldTypeInterface
 
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
-     * Return value is an array where key is the sort type, value is field value to be used for sorting.
-     * Sort type can be :
-     *  - sort_key_string (sorting will be made with a string algorithm)
-     *  - sort_key_int (sorting will be made with an integer algorithm)
      *
-     * <code>
-     * protected function getSortInfo( $value )
-     * {
-     *     // Example for a text line type:
-     *     return array( 'sort_key_string' => $value->text );
+     * Return value is mixed. It should be something which is sensible for
+     * sorting.
      *
-     *     // Example for an int:
-     *     // return array( 'sort_key_int' => 123 );
+     * It is up to the persistence implementation to handle those values.
+     * Common string and integer values are safe.
      *
-     *     // Non sortable:
-     *     // return false;
-     * }
-     * </code>
-     *
-     * @abstract
+     * For the legacy storage it is up to the field converters to set this
+     * value in either sort_key_string or sort_key_int.
      *
      * @param mixed $value
-     *
-     * @return array|bool Array with sortInfo, or false if the Type doesn't support sorting
+     * @return mixed
      */
     abstract protected function getSortInfo( $value );
 

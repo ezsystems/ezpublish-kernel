@@ -92,10 +92,20 @@ class SectionService implements SectionServiceInterface
             // Do nothing
         }
 
-        $spiSection = $this->persistenceHandler->sectionHandler()->create(
-            $sectionCreateStruct->name,
-            $sectionCreateStruct->identifier
-        );
+        $this->repository->beginTransaction();
+        try
+        {
+            $spiSection = $this->persistenceHandler->sectionHandler()->create(
+                $sectionCreateStruct->name,
+                $sectionCreateStruct->identifier
+            );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->buildDomainSectionObject( $spiSection );
     }
@@ -138,11 +148,21 @@ class SectionService implements SectionServiceInterface
 
         $loadedSection = $this->loadSection( $section->id );
 
-        $spiSection = $this->persistenceHandler->sectionHandler()->update(
-            $loadedSection->id,
-            $sectionUpdateStruct->name ?: $loadedSection->name,
-            $sectionUpdateStruct->identifier ?: $loadedSection->identifier
-        );
+        $this->repository->beginTransaction();
+        try
+        {
+            $spiSection = $this->persistenceHandler->sectionHandler()->update(
+                $loadedSection->id,
+                $sectionUpdateStruct->name ?: $loadedSection->name,
+                $sectionUpdateStruct->identifier ?: $loadedSection->identifier
+            );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->buildDomainSectionObject( $spiSection );
     }
@@ -240,10 +260,20 @@ class SectionService implements SectionServiceInterface
         $loadedContentInfo = $this->repository->getContentService()->loadContentInfo( $contentInfo->id );
         $loadedSection = $this->loadSection( $section->id );
 
-        $this->persistenceHandler->sectionHandler()->assign(
-            $loadedSection->id,
-            $loadedContentInfo->id
-        );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->sectionHandler()->assign(
+                $loadedSection->id,
+                $loadedContentInfo->id
+            );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -266,7 +296,17 @@ class SectionService implements SectionServiceInterface
         if ( $this->countAssignedContents( $loadedSection ) > 0 )
             throw new BadStateException( "section", 'section is still assigned to content' );
 
-        $this->persistenceHandler->sectionHandler()->delete( $loadedSection->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->sectionHandler()->delete( $loadedSection->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**

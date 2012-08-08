@@ -15,11 +15,11 @@ use eZ\Publish\Core\Repository\Tests\Service\ObjectStateBase as BaseObjectStateS
  */
 class ObjectStateTest extends BaseObjectStateServiceTest
 {
-    protected function getRepository( array $serviceSettings )
+    protected function getRepository()
     {
         // Temporary hack for different language ids between in memory and legacy fixtures
         $this->defaultLanguageCode = 'eng-GB';
 
-        return Utils::getRepository( $serviceSettings );
+        return Utils::getRepository();
     }
 }

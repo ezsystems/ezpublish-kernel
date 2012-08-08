@@ -193,8 +193,8 @@ class SectionServiceAuthorizationTest extends BaseTest
         // $standardSectionId is the ID of the "Standard" section in a eZ
         // Publish demo installation.
 
-        // RemoteId of the "Support" page of an eZ Publish demo installation
-        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+        // RemoteId of the "Media" page of an eZ Publish demo installation
+        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
 
         $userService = $repository->getUserService();
         $contentService = $repository->getContentService();
@@ -202,7 +202,7 @@ class SectionServiceAuthorizationTest extends BaseTest
 
         // Load a content info instance
         $contentInfo = $contentService->loadContentInfoByRemoteId(
-            $supportRemoteId
+            $mediaRemoteId
         );
 
         // Load the "Standard" section

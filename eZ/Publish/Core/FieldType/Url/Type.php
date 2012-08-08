@@ -20,20 +20,6 @@ use eZ\Publish\Core\FieldType\FieldType,
 class Type extends FieldType
 {
     /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FieldType\Value object with the provided $link as value.
-     *
-     * @param string $link
-     * @return \eZ\Publish\Core\FieldType\Url\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $link )
-    {
-        return new Value( $link );
-    }
-
-    /**
      * Return the field type identifier for this field type
      *
      * @return string
@@ -41,6 +27,21 @@ class Type extends FieldType
     public function getFieldTypeIdentifier()
     {
         return "ezurl";
+    }
+
+    /**
+     * Returns the name of the given field value.
+     *
+     * It will be used to generate content name and url alias if current field is designated
+     * to be used in the content name/urlAlias pattern.
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    public function getName( $value )
+    {
+        throw new \RuntimeException( 'Implement this method' );
     }
 
     /**
@@ -66,6 +67,11 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( is_string( $inputValue ) )
+        {
+            $inputValue = new Value( $inputValue );
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
@@ -104,7 +110,7 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
-        return array('sort_key_string' => '');
+        return false;
     }
 
     /**

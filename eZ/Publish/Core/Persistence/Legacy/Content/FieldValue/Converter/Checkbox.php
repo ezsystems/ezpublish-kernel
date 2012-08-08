@@ -39,8 +39,8 @@ class Checkbox implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataInt = (int)$value->data;
-        $storageFieldValue->sortKeyInt = $value->sortKey['sort_key_int'];
+        $storageFieldValue->dataInt    = (int)$value->data;
+        $storageFieldValue->sortKeyInt = (int)$value->data;
     }
 
     /**
@@ -51,8 +51,8 @@ class Checkbox implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = (bool)$value->dataInt;
-        $fieldValue->sortKey = array( 'sort_key_int' => $value->sortKeyInt );
+        $fieldValue->data    = (bool)$value->dataInt;
+        $fieldValue->sortKey = $value->dataInt;
     }
 
     /**

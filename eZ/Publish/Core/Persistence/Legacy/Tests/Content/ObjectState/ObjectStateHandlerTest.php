@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler,
     eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway,
     eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper,
@@ -20,7 +20,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
 /**
  * Test case for Object state Handler
  */
-class ObjectStateHandlerTest extends TestCase
+class ObjectStateHandlerTest extends LanguageAwareTestCase
 {
     /**
      * Object state handler
@@ -42,14 +42,6 @@ class ObjectStateHandlerTest extends TestCase
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper
      */
     protected $mapperMock;
-
-    /**
-     * Language handler mock
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
-     */
-    protected $languageHandler;
-
 
     /**
      * @return void
@@ -621,7 +613,7 @@ class ObjectStateHandlerTest extends TestCase
             $this->mapperMock = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\ObjectState\\Mapper',
                 array(),
-                array( $this->getLanguageHandlerMock() )
+                array( $this->getLanguageHandler() )
             );
         }
         return $this->mapperMock;
@@ -641,51 +633,6 @@ class ObjectStateHandlerTest extends TestCase
             );
         }
         return $this->gatewayMock;
-    }
-
-    /**
-     * Returns a language handler mock
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
-     */
-    protected function getLanguageHandlerMock()
-    {
-        if ( !isset( $this->languageHandler ) )
-        {
-            $innerLanguageHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
-            $innerLanguageHandler->expects( $this->any() )
-                ->method( 'loadAll' )
-                ->will(
-                    $this->returnValue(
-                        array(
-                            new Language( array(
-                                'id' => 2,
-                                'languageCode' => 'eng-GB',
-                                'name' => 'British english'
-                            ) ),
-                            new Language( array(
-                                'id' => 4,
-                                'languageCode' => 'eng-US',
-                                'name' => 'US english'
-                            ) ),
-                            new Language( array(
-                                'id' => 8,
-                                'languageCode' => 'fre-FR',
-                                'name' => 'Français franchouillard'
-                            ) )
-                        )
-                    )
-                );
-            $this->languageHandler = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
-                array( 'getByLocale', 'getById', 'loadByLanguageCode' ),
-                array(
-                    $innerLanguageHandler,
-                    $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Cache' )
-                )
-            );
-        }
-        return $this->languageHandler;
     }
 
     /**

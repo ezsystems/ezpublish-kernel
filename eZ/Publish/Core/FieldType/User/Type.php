@@ -20,21 +20,6 @@ use eZ\Publish\Core\FieldType\FieldType,
 class Type extends FieldType
 {
     /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FieldType\Value object with the provided $link as value.
-     *
-     * @param mixed $someValue
-     * @return \eZ\Publish\Core\FieldType\User\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @TODO: Implement.
-     */
-    public function buildValue( $someValue )
-    {
-        return new Value();
-    }
-
-    /**
      * Return the field type identifier for this field type
      *
      * @return string
@@ -42,6 +27,23 @@ class Type extends FieldType
     public function getFieldTypeIdentifier()
     {
         return "ezuser";
+    }
+
+    /**
+     * Returns the name of the given field value.
+     *
+     * It will be used to generate content name and url alias if current field is designated
+     * to be used in the content name/urlAlias pattern.
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    public function getName( $value )
+    {
+        $value = $this->acceptValue( $value );
+
+        return (string) $value->login;
     }
 
     /**
@@ -69,6 +71,20 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( is_array( $inputValue ) )
+        {
+            $inputValue = new Value( $inputValue );
+        }
+
+        if ( !( $inputValue instanceof Value ) )
+        {
+            throw new InvalidArgumentType(
+                '$inputValue',
+                'eZ\\Publish\\Core\\FieldType\\User\\Value',
+                $inputValue
+            );
+        }
+
         return $inputValue;
     }
 
@@ -79,7 +95,7 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
-        return array('sort_key_string' => '');
+        return false;
     }
 
     /**

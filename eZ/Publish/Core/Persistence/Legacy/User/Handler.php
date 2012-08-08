@@ -285,7 +285,7 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Assign role to user group with given limitation
+     * Assign role to user group or user with given limitation
      *
      * The limitation array may look like:
      * <code>
@@ -302,24 +302,24 @@ class Handler implements BaseUserHandler
      * Where the keys are the limitation identifiers, and the respective values
      * are an array of limitation values. The limitation parameter is optional.
      *
-     * @param mixed $groupId
+     * @param mixed $contentId User / group ID
      * @param mixed $roleId
      * @param array $limitation
      */
-    public function assignRole( $groupId, $roleId, array $limitation = null )
+    public function assignRole( $contentId, $roleId, array $limitation = null )
     {
         $limitation = $limitation ?: array( '' => array( '' ) );
-        $this->userGateway->assignRole( $groupId, $roleId, $limitation );
+        $this->userGateway->assignRole( $contentId, $roleId, $limitation );
     }
 
     /**
-     * Un-assign a role
+     * Un-assign a role from a user or group
      *
-     * @param mixed $groupId The group / user Id to un-assign a role from
+     * @param mixed $contentId The group / user ID to un-assign a role from
      * @param mixed $roleId
      */
-    public function unAssignRole( $groupId, $roleId )
+    public function unAssignRole( $contentId, $roleId )
     {
-        $this->userGateway->removeRole( $groupId, $roleId );
+        $this->userGateway->removeRole( $contentId, $roleId );
     }
 }

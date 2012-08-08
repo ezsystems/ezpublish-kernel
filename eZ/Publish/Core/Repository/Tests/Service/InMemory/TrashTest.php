@@ -15,8 +15,8 @@ use eZ\Publish\Core\Repository\Tests\Service\TrashBase as BaseTrashServiceTest;
  */
 class TrashTest extends BaseTrashServiceTest
 {
-    protected function getRepository( array $serviceSettings )
+    protected function getRepository()
     {
-        return Utils::getRepository( $serviceSettings );
+        return Utils::getRepository();
     }
 }

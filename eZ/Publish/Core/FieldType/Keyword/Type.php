@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Keyword;
 use eZ\Publish\Core\FieldType\FieldType,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
@@ -19,20 +20,6 @@ use eZ\Publish\Core\FieldType\FieldType,
 class Type extends FieldType
 {
     /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FiledType\Value object with the provided $value as value.
-     *
-     * @param string[]|string $value
-     * @return \eZ\Publish\Core\FieldType\Keyword\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $value )
-    {
-        return new Value( $value );
-    }
-
-    /**
      * Return the field type identifier for this field type
      *
      * @return string
@@ -40,6 +27,23 @@ class Type extends FieldType
     public function getFieldTypeIdentifier()
     {
         return "ezkeyword";
+    }
+
+    /**
+     * Returns the name of the given field value.
+     *
+     * It will be used to generate content name and url alias if current field is designated
+     * to be used in the content name/urlAlias pattern.
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    public function getName( $value )
+    {
+        $value = $this->acceptValue( $value );
+
+        return implode( ', ', $value->values );
     }
 
     /**
@@ -65,6 +69,11 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( is_null( $inputValue ) || is_array( $inputValue ) || is_string( $inputValue ) )
+        {
+            $inputValue = new Value( $inputValue );
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
@@ -136,10 +145,40 @@ class Type extends FieldType
      * Get index data for field data for search backend
      *
      * @param mixed $value
-     * @return \eZ\Publish\SPI\Persistence\Content\Search\DocumentField[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
      */
     public function getIndexData( $value )
     {
-        throw new \RuntimeExcepion( '@TODO: Implement' );
+        throw new \RuntimeException( '@TODO: Implement' );
+    }
+
+    /**
+     * Converts a $value to a persistence value
+     *
+     * @param mixed $value
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
+     */
+    public function toPersistenceValue( $value )
+    {
+        return new FieldValue(
+            array(
+                "data" => null,
+                "externalData" => $value->values,
+                "sortKey" => $this->getSortInfo( $value ),
+            )
+        );
+    }
+
+    /**
+     * Converts a persistence $fieldValue to a Value
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
+     *
+     * @return mixed
+     */
+    public function fromPersistenceValue( FieldValue $fieldValue )
+    {
+        return new Value( $fieldValue->externalData );
     }
 }

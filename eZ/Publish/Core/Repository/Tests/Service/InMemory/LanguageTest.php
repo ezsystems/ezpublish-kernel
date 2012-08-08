@@ -15,8 +15,8 @@ use eZ\Publish\Core\Repository\Tests\Service\LanguageBase as BaseLanguageService
  */
 class LanguageTest extends BaseLanguageServiceTest
 {
-    protected function getRepository( array $serviceSettings )
+    protected function getRepository()
     {
-        return Utils::getRepository( $serviceSettings );
+        return Utils::getRepository();
     }
 }

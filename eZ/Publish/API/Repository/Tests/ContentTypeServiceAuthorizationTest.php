@@ -30,7 +30,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
-        $creatorId = $this->generateId( 'user', 23 );
+        $creatorId = $this->generateId( 'user', 14 );
         /* BEGIN: Use Case */
         $userService = $repository->getUserService();
         $contentTypeService = $repository->getContentTypeService();
@@ -38,9 +38,9 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
-        // $creatorId is the ID of user 23
+        // $creatorId is the ID of the administrator user
         $groupCreate->creatorId = $creatorId;
-        $groupCreate->creationDate = new \DateTime();
+        $groupCreate->creationDate = $this->getRepository()->createDateTime();
         $groupCreate->mainLanguageCode = 'ger-DE';
         $groupCreate->names = array( 'eng-GB' => 'A name.' );
         $groupCreate->descriptions = array( 'eng-GB' => 'A description.' );
@@ -65,7 +65,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
-        $modifierId = $this->generateId( 'user', 24 );
+        $modifierId = $this->generateId( 'user', 42 );
         /* BEGIN: Use Case */
         $userService = $repository->getUserService();
         $contentTypeService = $repository->getContentTypeService();
@@ -75,9 +75,9 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $groupUpdate = $contentTypeService->newContentTypeGroupUpdateStruct();
 
         $groupUpdate->identifier = 'Teardown';
-        // $modifierId is the ID of user 42
+        // $modifierId is the ID of a random user
         $groupUpdate->modifierId = $modifierId;
-        $groupUpdate->modificationDate = new \DateTime();
+        $groupUpdate->modificationDate = $this->getRepository()->createDateTime();
         $groupUpdate->mainLanguageCode = 'eng-GB';
 
         $groupUpdate->names = array(
@@ -143,7 +143,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
-        $modifierId = $this->generateId( 'user', 24 );
+        $modifierId = $this->generateId( 'user', 42 );
         /* BEGIN: Use Case */
         $contentTypeDraft = $this->createContentTypeDraft();
 
@@ -155,9 +155,9 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $typeUpdate->isContainer = true;
         $typeUpdate->mainLanguageCode = 'ger-DE';
         $typeUpdate->defaultAlwaysAvailable = false;
-        // $modifierId is the ID of user 42
+        // $modifierId is the ID of a random user
         $typeUpdate->modifierId = $modifierId;
-        $typeUpdate->modificationDate = new \DateTime();
+        $typeUpdate->modificationDate = $this->getRepository()->createDateTime();
         $typeUpdate->names = array(
             'eng-GB' => 'News article',
             'ger-DE' => 'Nachrichten-Artikel',

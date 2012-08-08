@@ -117,7 +117,7 @@ class Pattern implements UrlHandler
 
                 case preg_match( '(^' . self::PATTERN_REGEXP . ')', $pattern, $match ):
                     $pattern = substr( $pattern, strlen( $match[0] ) );
-                    $pcre   .= "(?P<" . $match[1] . ">[^/]+)";
+                    $pcre   .= "(?P<" . $match[1] . ">.+)";
                     break;
 
                 default:
@@ -166,4 +166,3 @@ class Pattern implements UrlHandler
         return $url;
     }
 }
-

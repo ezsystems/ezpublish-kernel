@@ -16,8 +16,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\SPI\Persistence\Content\Version,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Relation\UpdateStruct as RelationUpdateStruct;
+    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * Base class for content gateways
@@ -329,5 +328,5 @@ abstract class Gateway
      *
      * @return int ID the inserted ID
      */
-    abstract public function insertRelation( RelationCreateStruct $struct );
+    abstract public function insertRelation( RelationCreateStruct $createStruct );
 }

@@ -41,4 +41,3 @@ abstract class ValueObjectVisitor
      */
     abstract public function visit( Visitor $visitor, Generator $generator, $data );
 }
-

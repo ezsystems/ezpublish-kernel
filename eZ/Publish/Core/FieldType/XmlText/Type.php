@@ -69,20 +69,6 @@ class Type extends FieldType
     }
 
     /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FiledType\Value object with the provided $text as value.
-     *
-     * @param string $text
-     * @return \eZ\Publish\Core\FieldType\XmlText\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $text )
-    {
-        return new Value( $this->inputHandler, $text );
-    }
-
-    /**
      * Return the field type identifier for this field type
      *
      * @return string
@@ -93,6 +79,21 @@ class Type extends FieldType
     }
 
     /**
+     * Returns the name of the given field value.
+     *
+     * It will be used to generate content name and url alias if current field is designated
+     * to be used in the content name/urlAlias pattern.
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    public function getName( $value )
+    {
+        throw new \RuntimeException( 'Implement this method' );
+    }
+
+    /**
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
@@ -100,7 +101,7 @@ class Type extends FieldType
      */
     public function getDefaultDefaultValue()
     {
-        $value = <<< EOF
+        $value = <<<EOF
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
@@ -121,6 +122,11 @@ EOF;
      */
     public function acceptValue( $inputValue )
     {
+        if ( is_string( $inputValue ) )
+        {
+            $inputValue = new Value( $this->inputHandler, $inputValue );
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(

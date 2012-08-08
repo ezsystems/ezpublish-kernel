@@ -25,10 +25,10 @@ abstract class BaseContentServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $parentLocationId = $this->generateId( 'location', 167 );
+        $parentLocationId = $this->generateId( 'location', 56 );
         $sectionId = $this->generateId( 'section', 1 );
         /* BEGIN: Inline */
-        // $parentLocationId is the id of the "Home > Community" node
+        // $parentLocationId is the id of the /Design/eZ-publish node
 
         $contentService = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
@@ -44,12 +44,12 @@ abstract class BaseContentServiceTest extends BaseTest
         $locationCreate->sortOrder = Location::SORT_ORDER_DESC;
 
         // Load content type
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article_subpage' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
 
         // Configure new content object
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
 
-        $contentCreate->setField( 'title', 'An awesome story about eZ Publish' );
+        $contentCreate->setField( 'name', 'An awesome forum' );
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         // $sectionId is the ID of section 1
         $contentCreate->sectionId = $sectionId;
@@ -123,8 +123,8 @@ abstract class BaseContentServiceTest extends BaseTest
         // Create an update struct and modify some fields
         $contentUpdate = $contentService->newContentUpdateStruct();
         $contentUpdate->initialLanguageCode = 'eng-US';
-        $contentUpdate->setField( 'title', 'An awesome² story about ezp.' );
-        $contentUpdate->setField( 'title', 'An awesome²³ story about ezp.', 'eng-GB' );
+        $contentUpdate->setField( 'name', 'An awesome forum²' );
+        $contentUpdate->setField( 'name', 'An awesome forum²³', 'eng-GB' );
 
         // Update the content draft
         $draftVersion2 = $contentService->updateContent(
@@ -176,11 +176,9 @@ abstract class BaseContentServiceTest extends BaseTest
 
         $contentUpdate->initialLanguageCode = 'eng-US';
 
-        $contentUpdate->setField( 'title', 'An awesome² story about ezp.' );
-        $contentUpdate->setField( 'index_title', 'British index title...' );
+        $contentUpdate->setField( 'name', 'An awesome multi-lang forum²' );
 
-        $contentUpdate->setField( 'title', 'An awesome²³ story about ezp.', 'eng-GB' );
-        $contentUpdate->setField( 'index_title', 'American index title...', 'eng-GB' );
+        $contentUpdate->setField( 'name', 'An awesome multi-lang forum²³', 'eng-GB' );
 
         $draft = $contentService->updateContent(
             $draft->getVersionInfo(),

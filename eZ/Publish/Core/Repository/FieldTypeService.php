@@ -66,7 +66,16 @@ class FieldTypeService implements FieldTypeServiceInterface
      */
     public function getFieldTypes()
     {
+        /** @var $closure \Closure */
+        foreach ( $this->settings as $identifier => $closure )
+        {
+            if ( !isset( $this->fieldTypes[$identifier] ) )
+            {
+                $this->fieldTypes[$identifier] = new FieldType( $closure() );
+            }
+        }
 
+        return $this->fieldTypes;
     }
 
     /**

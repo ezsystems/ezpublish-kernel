@@ -14,7 +14,7 @@ return array(
         14 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub(
             array(
                 "login" => "admin",
-                "email" => "kn@ez.no",
+                "email" => "spam@ez.no",
                 "passwordHash" => "c78e3b0f3d9244ed8c6d1c29464bdff9",
                 "hashAlgorithm" => 2,
                 "isEnabled" => true,

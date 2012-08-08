@@ -393,7 +393,8 @@ class EzcDatabase extends Gateway
         $query
             ->select(
                 $this->handler->quoteColumn( 'node_id' ),
-                $this->handler->quoteColumn( 'contentobject_id' )
+                $this->handler->quoteColumn( 'contentobject_id' ),
+                $this->handler->quoteColumn( 'contentobject_version' )
             )
             ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
             ->where(
@@ -406,7 +407,7 @@ class EzcDatabase extends Gateway
         $statement->execute();
         foreach ( $statement->fetchAll() as $row )
         {
-            $contentObjects[$row['node_id']] = $row['contentobject_id'];
+            $contentObjects[$row['node_id']] = $row;
         }
 
         $query = $this->handler->createUpdateQuery();
@@ -414,7 +415,11 @@ class EzcDatabase extends Gateway
             ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
             ->set(
                 $this->handler->quoteColumn( 'contentobject_id' ),
-                $query->bindValue( $contentObjects[$locationId2] )
+                $query->bindValue( $contentObjects[$locationId2]['contentobject_id'] )
+            )
+            ->set(
+                $this->handler->quoteColumn( 'contentobject_version' ),
+                $query->bindValue( $contentObjects[$locationId2]['contentobject_version'] )
             )
             ->where(
                 $query->expr->eq(
@@ -429,7 +434,11 @@ class EzcDatabase extends Gateway
             ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
             ->set(
                 $this->handler->quoteColumn( 'contentobject_id' ),
-                $query->bindValue( $contentObjects[$locationId1] )
+                $query->bindValue( $contentObjects[$locationId1]['contentobject_id'] )
+            )
+            ->set(
+                $this->handler->quoteColumn( 'contentobject_version' ),
+                $query->bindValue( $contentObjects[$locationId1]['contentobject_version'] )
             )
             ->where(
                 $query->expr->eq(

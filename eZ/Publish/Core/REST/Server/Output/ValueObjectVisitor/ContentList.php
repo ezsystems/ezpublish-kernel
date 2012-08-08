@@ -27,7 +27,7 @@ class ContentList extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startElement( 'ContentList' );
+        $generator->startObjectElement( 'ContentList' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'ContentList' ) );
 
         $generator->startAttribute(
@@ -43,7 +43,7 @@ class ContentList extends ValueObjectVisitor
         }
         $generator->endList( 'ContentInfo' );
 
-        $generator->endElement( 'ContentList' );
+        $generator->endObjectElement( 'ContentList' );
     }
 }
 

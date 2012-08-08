@@ -77,26 +77,26 @@ abstract class Generator
     }
 
     /**
-     * Start element
+     * Start object element
      *
      * @param string $name
      * @param string $mediaTypeName
      */
-    abstract public function startElement( $name, $mediaTypeName = null );
+    abstract public function startObjectElement( $name, $mediaTypeName = null );
 
     /**
-     * Check start element
+     * Check start object element
      *
      * @param mixed $data
      */
-    protected function checkStartElement( $data )
+    protected function checkStartObjectElement( $data )
     {
-        $this->checkStart( 'element', $data, array( 'document', 'element', 'list' ) );
+        $this->checkStart( 'objectElement', $data, array( 'document', 'objectElement', 'list' ) );
 
         $last = count( $this->stack ) - 2;
         if ( $this->stack[$last][0] !== 'list' )
         {
-            // Ensure element type only occurs once outside of lists
+            // Ensure object element type only occurs once outside of lists
             if ( isset( $this->stack[$last][2][$data] ) )
             {
                 throw new Exceptions\OutputGeneratorException(
@@ -108,20 +108,67 @@ abstract class Generator
     }
 
     /**
-     * End element
+     * End object element
      *
      * @param string $name
      */
-    abstract public function endElement( $name );
+    abstract public function endObjectElement( $name );
 
     /**
-     * Check end element
+     * Check end object element
      *
      * @param mixed $data
      */
-    protected function checkEndElement( $data )
+    protected function checkEndObjectElement( $data )
     {
-        $this->checkEnd( 'element', $data );
+        $this->checkEnd( 'objectElement', $data );
+    }
+
+    /**
+     * Start hash element
+     *
+     * @param string $name
+     */
+    abstract public function startHashElement( $name );
+
+    /**
+     * Check start hash element
+     *
+     * @param mixed $data
+     */
+    protected function checkStartHashElement( $data )
+    {
+        $this->checkStart( 'hashElement', $data, array( 'document', 'objectElement', 'list' ) );
+
+        $last = count( $this->stack ) - 2;
+        if ( $this->stack[$last][0] !== 'list' )
+        {
+            // Ensure hash element type only occurs once outside of lists
+            if ( isset( $this->stack[$last][2][$data] ) )
+            {
+                throw new Exceptions\OutputGeneratorException(
+                    "Element {$data} may only occur once inside of {$this->stack[$last][0]}."
+                );
+            }
+        }
+        $this->stack[$last][2][$data] = true;
+    }
+
+    /**
+     * End hash element
+     *
+     * @param string $name
+     */
+    abstract public function endHashElement( $name );
+
+    /**
+     * Check end hash element
+     *
+     * @param mixed $data
+     */
+    protected function checkEndHashElement( $data )
+    {
+        $this->checkEnd( 'hashElement', $data );
     }
 
     /**
@@ -139,7 +186,7 @@ abstract class Generator
      */
     protected function checkStartValueElement( $data )
     {
-        $this->checkStart( 'valueElement', $data, array( 'element' ) );
+        $this->checkStart( 'valueElement', $data, array( 'objectElement' ) );
     }
 
     /**
@@ -160,6 +207,42 @@ abstract class Generator
     }
 
     /**
+     * Start hash value element
+     *
+     * @param string $name
+     * @param string $value
+     * @param array $attributes
+     */
+    abstract public function startHashValueElement( $name, $value, $attributes = array() );
+
+    /**
+     * Check start hash value element
+     *
+     * @param mixed $data
+     */
+    protected function checkStartHashValueElement( $data )
+    {
+        $this->checkStart( 'hashValueElement', $data, array( 'hashElement' ) );
+    }
+
+    /**
+     * End hash value element
+     *
+     * @param string $name
+     */
+    abstract public function endHashValueElement( $name );
+
+    /**
+     * Check end hash value element
+     *
+     * @param mixed $data
+     */
+    protected function checkEndHashValueElement( $data )
+    {
+        $this->checkEnd( 'hashValueElement', $data );
+    }
+
+    /**
      * Start list
      *
      * @param string $name
@@ -173,7 +256,7 @@ abstract class Generator
      */
     protected function checkStartList( $data )
     {
-        $this->checkStart( 'list', $data, array( 'element' ) );
+        $this->checkStart( 'list', $data, array( 'objectElement' ) );
     }
 
     /**
@@ -208,7 +291,7 @@ abstract class Generator
      */
     protected function checkStartAttribute( $data )
     {
-        $this->checkStart( 'attribute', $data, array( 'element' ) );
+        $this->checkStart( 'attribute', $data, array( 'objectElement' ) );
     }
 
     /**
@@ -316,4 +399,3 @@ abstract class Generator
         }
     }
 }
-

@@ -259,7 +259,49 @@ class MaskGeneratorTest extends LanguageAwareTestCase
      */
     protected function getMaskGenerator()
     {
-        return new MaskGenerator( $this->getLanguageLookupMock() );
+        return new MaskGenerator( $this->getLanguageHandler() );
+    }
+
+    /**
+     * Returns a language handler mock
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
+     */
+    protected function getLanguageHandler()
+    {
+        if ( !isset( $this->languageHandler ) )
+        {
+            $this->languageHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
+            $this->languageHandler->expects( $this->any() )
+                ->method( 'loadByLanguageCode' )
+                ->will(
+                    $this->returnCallback(
+                        function ( $languageCode )
+                        {
+                            switch ( $languageCode )
+                            {
+                                case 'eng-US':
+                                    return new Language(
+                                        array(
+                                            'id' => 2,
+                                            'languageCode' => 'eng-US',
+                                            'name' => 'US english'
+                                        )
+                                    );
+                                case 'eng-GB':
+                                    return new Language(
+                                        array(
+                                            'id' => 4,
+                                            'languageCode' => 'eng-GB',
+                                            'name' => 'British english'
+                                        )
+                                    );
+                            }
+                        }
+                    )
+                );
+        }
+        return $this->languageHandler;
     }
 
     /**

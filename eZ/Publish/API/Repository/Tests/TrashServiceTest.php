@@ -53,11 +53,11 @@ class TrashServiceTest extends BaseTrashServiceTest
     {
         $repository = $this->getRepository();
 
-        $communityRemoteId = 'c4604fb2e100a6681a4f53fbe6e5eeae';
+        $mediaRemoteId = '75c715a51699d2d309a924eca6a95145';
 
         // Load the location that will be trashed
         $location = $repository->getLocationService()
-            ->loadLocationByRemoteId( $communityRemoteId );
+            ->loadLocationByRemoteId( $mediaRemoteId );
 
         $expected = array(
             'id' => $location->id,
@@ -91,7 +91,7 @@ class TrashServiceTest extends BaseTrashServiceTest
     {
         $repository = $this->getRepository();
 
-        $communityRemoteId = 'c4604fb2e100a6681a4f53fbe6e5eeae';
+        $mediaRemoteId = '75c715a51699d2d309a924eca6a95145';
 
         /* BEGIN: Use Case */
         $this->createTrashItem();
@@ -99,9 +99,9 @@ class TrashServiceTest extends BaseTrashServiceTest
         // Load the location service
         $locationService = $repository->getLocationService();
 
-        // This call will fail with a "NotFoundException", because the community
+        // This call will fail with a "NotFoundException", because the media
         // location was marked as trashed in the main storage
-        $locationService->loadLocationByRemoteId( $communityRemoteId );
+        $locationService->loadLocationByRemoteId( $mediaRemoteId );
         /* END: Use Case */
     }
 
@@ -158,15 +158,15 @@ class TrashServiceTest extends BaseTrashServiceTest
         $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
-        $homeLocationId = $this->generateId( 'location', 2 );
+        $baseLocationId = $this->generateId( 'location', 1 );
 
-        $childCount = $locationService->loadLocation( $homeLocationId )->childCount;
+        $childCount = $locationService->loadLocation( $baseLocationId )->childCount;
 
         $this->createTrashItem();
 
         $this->assertEquals(
             $childCount - 1,
-            $locationService->loadLocation( $homeLocationId )->childCount
+            $locationService->loadLocation( $baseLocationId )->childCount
         );
     }
 
@@ -235,7 +235,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
-        $communityRemoteId = 'c4604fb2e100a6681a4f53fbe6e5eeae';
+        $mediaRemoteId = '75c715a51699d2d309a924eca6a95145';
 
         /* BEGIN: Use Case */
         $trashItem = $this->createTrashItem();
@@ -245,7 +245,7 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         // Load the recovered location
         $locationReloaded = $locationService->loadLocationByRemoteId(
-            $communityRemoteId
+            $mediaRemoteId
         );
         /* END: Use Case */
 
@@ -313,7 +313,8 @@ class TrashServiceTest extends BaseTrashServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\TrashService::recover($trashItem, $newParentLocation)
-     * @d epends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
+     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
+     * @todo Fix naming
      */
     public function testRecoverWithLocationCreateStructParameter()
     {
@@ -344,10 +345,10 @@ class TrashServiceTest extends BaseTrashServiceTest
                 'depth' => $newParentLocation->depth + 1,
                 'hidden' => false,
                 'invisible' => $trashItem->invisible,
-                'pathString' => "/1/2/" . $this->parseId( 'location', $location->id ) . "/",
-                'priority' => 4,
-                'sortField' => Location::SORT_FIELD_PUBLISHED,
-                'sortOrder' => Location::SORT_ORDER_DESC,
+                'pathString' => $newParentLocation->pathString . $this->parseId( 'location', $location->id ) . "/",
+                'priority' => 0,
+                'sortField' => Location::SORT_FIELD_NAME,
+                'sortOrder' => Location::SORT_ORDER_ASC,
             ),
             $location
         );
@@ -360,7 +361,7 @@ class TrashServiceTest extends BaseTrashServiceTest
      * @see \eZ\Publish\API\Repository\TrashService::recover($trashItem, $newParentLocation)
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecoverWithLocationCreateStructParameter
      */
-    public function testRecoverWithLocationParameterSetsNewMainLocationId()
+    public function testRecoverSetsNewMainLocationId()
     {
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
@@ -371,18 +372,18 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* BEGIN: Use Case */
         // $homeLocationId is the ID of the "Home" location in an eZ Publish
         // demo installation
-        // $usersLocationRemoteId is the ID of the "Community" location in an eZ Publish
+        // $usersLocationRemoteId is the ID of the "Users" location in an eZ Publish
         // demo installation
 
         $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
-        // Load "Community" page location
+        // Load "Users" page location
         $usersLocation = $locationService->loadLocationByRemoteId(
             $usersLocationRemoteId
         );
 
-        // Create a seconf Location for the content
+        // Create a second Location for the content
         $locationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
         $newLocation = $locationService->createLocation(
             $usersLocation->getContentInfo(),
@@ -393,12 +394,12 @@ class TrashServiceTest extends BaseTrashServiceTest
         $newTrashItem = $trashService->trash( $newLocation );
         $usersTrashItem = $trashService->trash( $usersLocation );
 
-        // Recover thew ne Location, which now becomes the main location
+        // Recover the new Location, which now becomes the main location
         $location = $trashService->recover( $newTrashItem );
         /* END: Use Case */
 
         $this->assertEquals(
-            $newLocation->id,
+            $location->id,
             $location->getContentInfo()->mainLocationId
         );
     }
@@ -434,7 +435,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* END: Use Case */
 
         $this->assertEquals(
-            $childCount,
+            $childCount + 1,
             $locationService->loadLocation( $homeLocationId )->childCount
         );
     }
@@ -471,8 +472,8 @@ class TrashServiceTest extends BaseTrashServiceTest
             $searchResult
         );
 
-        // 23 trashed locations from the sub tree
-        $this->assertEquals( 23, $searchResult->count );
+        // 4 trashed locations from the sub tree
+        $this->assertEquals( 4, $searchResult->count );
     }
 
     /**
@@ -521,16 +522,16 @@ class TrashServiceTest extends BaseTrashServiceTest
         $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
-        $supportLocationId = $this->generateId( 'location', 96 );
+        $demoDesignLocationId = $this->generateId( 'location', 56 );
         /* BEGIN: Use Case */
-        // $supportLocationId is the ID of the "Support" location in an eZ
+        // $demoDesignLocationId is the ID of the "Demo Design" location in an eZ
         // Publish demo installation
 
         $trashItem = $this->createTrashItem();
 
         // Trash one more location
         $trashService->trash(
-            $locationService->loadLocation( $supportLocationId )
+            $locationService->loadLocation( $demoDesignLocationId )
         );
 
         // Empty the trash
@@ -544,7 +545,7 @@ class TrashServiceTest extends BaseTrashServiceTest
             )
         );
 
-        // Load all trashed locations, should only contain the support location
+        // Load all trashed locations, should only contain the Demo Design location
         $searchResult = $trashService->findTrashItems( $query );
         /* END: Use Case */
 
@@ -556,9 +557,9 @@ class TrashServiceTest extends BaseTrashServiceTest
             $searchResult->items
         );
 
-        $this->assertEquals( 33, $searchResult->count );
+        $this->assertEquals( 4, $searchResult->count );
         $this->assertTrue(
-            array_search( $supportLocationId, $foundIds ) !== false
+            array_search( $demoDesignLocationId, $foundIds ) !== false
         );
     }
 
@@ -575,14 +576,14 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         /* BEGIN: Inline */
         // remoteId of the "Community" location in an eZ Publish demo installation
-        $communityRemoteId = 'c4604fb2e100a6681a4f53fbe6e5eeae';
+        $mediaRemoteId = '75c715a51699d2d309a924eca6a95145';
 
         // Load the location service
         $locationService = $repository->getLocationService();
 
         // Load direct children
         $children = $locationService->loadLocationChildren(
-            $locationService->loadLocationByRemoteId( $communityRemoteId )
+            $locationService->loadLocationByRemoteId( $mediaRemoteId )
         );
 
         $remoteIds = array();

@@ -78,4 +78,3 @@ class ParsingDispatcher
         return $this->parsers[$mediaType]->parse( $data, $this );
     }
 }
-

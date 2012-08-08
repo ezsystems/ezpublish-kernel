@@ -9,8 +9,11 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor,
+    Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LegacyStorageEngineFactory
 {
@@ -20,8 +23,6 @@ class LegacyStorageEngineFactory
     protected $container;
 
     protected $converters = array();
-
-    protected $externalStorages = array();
 
     public function __construct( ContainerInterface $container )
     {
@@ -41,35 +42,24 @@ class LegacyStorageEngineFactory
     }
 
     /**
-     * Registers an external storage handler for a field type.
-     * $className must implement \eZ\Publish\SPI\FieldType\FieldStorage interface.
-     *
-     * @param string $typeIdentifier Field type identifier the handler will be used for
-     * @param $className FQN of the external storage handler class
-     */
-    public function registerFieldTypeExternalStorageHandler( $typeIdentifier, $className )
-    {
-        $this->externalStorages[$typeIdentifier] = $className;
-    }
-
-    /**
      * Builds the Legacy Storage Engine
      *
      * @param string $dsn <database_type>://<user>:<password>@<host>/<database_name>
      * @param $deferTypeUpdate
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler|null $dbHandler
      * @return \eZ\Publish\Core\Persistence\Legacy\Handler
      */
-    public function buildLegacyEngine( $dsn, $deferTypeUpdate, EzcDbHandler $dbHandler = null )
+    public function buildLegacyEngine( $dsn, $deferTypeUpdate )
     {
         $legacyEngineClass = $this->container->getParameter( 'ezpublish.api.storage_engine.legacy.class' );
         return new $legacyEngineClass(
+            EzcDbHandler::create( $dsn ),
+            new ConverterRegistry( $this->converters ),
+            new StorageRegistry(
+                $this->container->get( 'ezpublish.api.repository.factory' )->getExternalStorageHandlers()
+            ),
+            $this->container->get( 'ezpublish.api.storage_engine.legacy.transformation_processor' ),
             array(
-                 'dsn'                          => $dsn,
                  'defer_type_update'            => (bool)$deferTypeUpdate,
-                 'transformation_rule_files'    => array(),
-                 'field_converter'              => $this->converters,
-                 'external_storages'            => $this->externalStorages
             )
         );
     }

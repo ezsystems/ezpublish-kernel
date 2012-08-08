@@ -12,31 +12,36 @@ namespace eZ\Publish\MVC\Controller\Content;
 use eZ\Publish\MVC\Controller\Controller,
     eZ\Publish\API\Repository\Repository,
     eZ\Publish\MVC\View\Manager as ViewManager,
+    eZ\Publish\MVC\MVCEvents,
+    eZ\Publish\MVC\Event\APIContentExceptionEvent,
     Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\Response;
+    Symfony\Component\HttpFoundation\Response,
+    Symfony\Component\OptionsResolver\OptionsResolver,
+    Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ViewController extends Controller
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    private $repository;
-
     /**
      * @var \eZ\Publish\MVC\View\Manager
      */
     private $viewManager;
 
-    /**
-     * @var \Symfony\Component\HttpFoundation\Request
-     */
-    private $request;
-
-    public function __construct( Repository $repository, ViewManager $viewManager, Request $request )
+    public function __construct( ViewManager $viewManager, array $options = array() )
     {
-        $this->repository = $repository;
         $this->viewManager = $viewManager;
-        $this->request = $request;
+
+        $resolver = new OptionsResolver();
+        $this->setDefaultOptions( $resolver );
+        parent::__construct( $resolver->resolve( $options ) );
+    }
+
+    protected function setDefaultOptions( OptionsResolverInterface $resolver )
+    {
+        $resolver->setDefaults(
+            array(
+                 'viewCache'    => true
+            )
+        );
     }
 
     /**
@@ -44,33 +49,67 @@ class ViewController extends Controller
      * Response will be cached with HttpCache validation model (Etag)
      *
      * @param int $locationId
-     * @param string $viewMode
+     * @param string $viewType
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
      */
-    public function viewLocationAction( $locationId, $viewMode )
+    public function viewLocation( $locationId, $viewType )
     {
-        // Assume that location is cached by the repository
-        $location = $this->repository->getLocationService()->loadLocation( $locationId );
-
         $response = new Response();
-        $response->setPublic();
+        $repository = $this->getRepository();
         // TODO: Use a dedicated etag generator, generating a hash instead of plain text
-        $response->setEtag( "ezpublish-location-$locationId-$viewMode" );
-        $response->setLastModified( $location->getContentInfo()->modificationDate );
-        if ( $response->isNotModified( $this->request ) )
+        $etag = "ezpublish-location-$locationId-$viewType";
+
+        try
         {
+            // Assume that location is cached by the repository
+            $location = $repository->getLocationService()->loadLocation( $locationId );
+
+            if ( $this->getOption( 'viewCache' ) === true )
+            {
+                $response->setPublic();
+                $response->setEtag( $etag );
+                $response->setLastModified( $location->getContentInfo()->modificationDate );
+                if ( $response->isNotModified( $this->getRequest() ) )
+                {
+                    return $response;
+                }
+            }
+
+            $response->setContent(
+                $this->viewManager->renderLocation(
+                    $location,
+                    $repository
+                        ->getContentService()
+                        ->loadContentByContentInfo( $location->getContentInfo() )
+                )
+            );
+
             return $response;
         }
+        catch ( \Exception $e )
+        {
+            $event = new APIContentExceptionEvent(
+                $e,
+                array(
+                     'contentId'    => null,
+                     'locationId'   => $locationId,
+                     'viewType'     => $viewType
+                )
+            );
+            $this->getEventDispatcher()->dispatch( MVCEvents::API_CONTENT_EXCEPTION, $event );
+            if ( $event->hasContentView() )
+            {
+                $response->setContent(
+                    $this->viewManager->renderContentView(
+                        $event->getContentView()
+                    )
+                );
 
-        // TODO: Use the view manager to generate the response content
-        $generationDate = new \DateTime;
-        $response->setContent(
-            "Location #$locationId ($viewMode view mode).
-            Path string is {$location->pathString}.
-            Content name is {$location->getContentInfo()->name}
-            Response generated at {$generationDate->format( 'Y-m-d H:i:s' )}"
-        );
+                return $response;
+            }
 
-        return $response;
+            throw $e;
+        }
     }
 }

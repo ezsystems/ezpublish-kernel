@@ -24,6 +24,7 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @group content
+     * @group user
      * @see \eZ\Publish\API\Repository\Repository::getContentService()
      */
     public function testGetContentService()
@@ -57,6 +58,7 @@ class RepositoryTest extends BaseTest
      * @return void
      * @group content-type
      * @group field-type
+     * @group user
      * @see \eZ\Publish\API\Repository\Repository::getContentTypeService()
      *
      */
@@ -241,6 +243,12 @@ class RepositoryTest extends BaseTest
     public function testGetSearchService()
     {
         $repository = $this->getRepository();
+
+        if ( $repository instanceof \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub )
+        {
+            $this->markTestSkipped( 'SearchService is not available in the memory implementation.' );
+        }
+
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\SearchService',
             $repository->getSearchService()
@@ -256,8 +264,18 @@ class RepositoryTest extends BaseTest
     public function testCommit()
     {
         $repository = $this->getRepository();
-        $repository->beginTransaction();
-        $repository->commit();
+
+        try
+        {
+            $repository->beginTransaction();
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
     }
 
     /**

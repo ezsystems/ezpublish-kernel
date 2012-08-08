@@ -44,4 +44,3 @@ class ArrayObject extends \ArrayObject
         return $this->_ref_parent;
     }
 }
-

@@ -35,16 +35,6 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
     protected $fieldRegistry;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingLanguageHandler
-     */
-    protected $languageHandler;
-
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
-     */
-    protected $languageMaskGenerator;
-
-    /**
      * Returns the test suite with all tests declared in this class.
      *
      * @return \PHPUnit_Framework_TestSuite
@@ -123,7 +113,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                     )
                 ),
                 new QueryBuilder( $this->getDatabaseHandler() ),
-                $this->getLanguageHandlerMock(),
+                $this->getLanguageHandler(),
                 $this->getLanguageMaskGenerator()
             ),
             $this->getContentMapperMock(),
@@ -150,7 +140,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                     false
                 ),
                 $this->getFieldRegistry(),
-                $this->getLanguageHandlerMock()
+                $this->getLanguageHandler()
             )
         );
         $mapperMock->expects( $this->any() )
@@ -176,64 +166,6 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                 )
             );
         return $mapperMock;
-    }
-
-    /**
-     * Returns a language handler mock
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingLanguageHandler
-     */
-    protected function getLanguageHandlerMock()
-    {
-        if ( !isset( $this->languageHandler ) )
-        {
-            $innerLanguageHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
-            $innerLanguageHandler->expects( $this->any() )
-                ->method( 'loadAll' )
-                ->will(
-                    $this->returnValue(
-                        array(
-                            new Language( array(
-                                'id' => 2,
-                                'languageCode' => 'eng-GB',
-                                'name' => 'British english'
-                            ) ),
-                            new Language( array(
-                                'id' => 4,
-                                'languageCode' => 'eng-US',
-                                'name' => 'US english'
-                            ) ),
-                            new Language( array(
-                                'id' => 8,
-                                'languageCode' => 'fre-FR',
-                                'name' => 'Français franchouillard'
-                            ) )
-                        )
-                    )
-                );
-            $this->languageHandler = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
-                array( 'getByLocale', 'getById' ),
-                array(
-                    $innerLanguageHandler,
-                    $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Cache' )
-                )
-            );
-            $this->languageHandler->expects( $this->any() )
-                ->method( 'getById' )
-                ->will(
-                    $this->returnValue(
-                        new Language(
-                            array(
-                                'id' => 2,
-                                'languageCode' => 'eng-GB',
-                                'name' => 'British english'
-                            )
-                        )
-                    )
-                );
-        }
-        return $this->languageHandler;
     }
 
     /**
@@ -268,22 +200,6 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             '',
             false
         );
-    }
-
-    /**
-     * Returns a language mask generator
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
-     */
-    protected function getLanguageMaskGenerator()
-    {
-        if ( !isset( $this->languageMaskGenerator ) )
-        {
-            $this->languageMaskGenerator = new LanguageMaskGenerator(
-                $this->getLanguageLookupMock()
-            );
-        }
-        return $this->languageMaskGenerator;
     }
 
     public function testNoSorting()

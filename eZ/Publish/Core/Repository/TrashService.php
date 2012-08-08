@@ -26,6 +26,7 @@ use eZ\Publish\API\Repository\TrashService as TrashServiceInterface,
 
     eZ\Publish\API\Repository\Values\Content\SearchResult,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
     DateTime;
 
@@ -102,7 +103,18 @@ class TrashService implements TrashServiceInterface
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
-        $spiTrashItem = $this->persistenceHandler->trashHandler()->trash( $location->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $spiTrashItem = $this->persistenceHandler->trashHandler()->trash( $location->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
+
         return $this->buildDomainTrashItemObject( $spiTrashItem );
     }
 
@@ -129,10 +141,37 @@ class TrashService implements TrashServiceInterface
         if ( $newParentLocation !== null && !is_numeric( $newParentLocation->id ) )
             throw new InvalidArgumentValue( "parentLocationId", $newParentLocation->id, "Location" );
 
-        $newLocationId = $this->persistenceHandler->trashHandler()->recover(
-            $trashItem->id,
-            $newParentLocation ? $newParentLocation->id : $trashItem->parentLocationId
-        );
+        $this->repository->beginTransaction();
+        try
+        {
+            $newLocationId = $this->persistenceHandler->trashHandler()->recover(
+                $trashItem->id,
+                $newParentLocation ? $newParentLocation->id : $trashItem->parentLocationId
+            );
+
+            // There is a possibility for content to loose main location when one of its locations is recovered
+            // from trash, so we need to check for it and set the newly recovered location to be the main one
+            $contentService = $this->repository->getContentService();
+
+            $contentInfo = $contentService->loadContentInfo( $trashItem->contentId );
+            if ( !is_numeric( $contentInfo->mainLocationId ) )
+            {
+                $contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+                $contentMetadataUpdateStruct->mainLocationId = $newLocationId;
+
+                $contentService->updateContentMetadata(
+                    $contentInfo,
+                    $contentMetadataUpdateStruct
+                );
+            }
+
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->repository->getLocationService()->loadLocation( $newLocationId );
     }
@@ -147,8 +186,18 @@ class TrashService implements TrashServiceInterface
      */
     public function emptyTrash()
     {
-        // Persistence layer takes care of deleting content objects
-        $this->persistenceHandler->trashHandler()->emptyTrash();
+        $this->repository->beginTransaction();
+        try
+        {
+            // Persistence layer takes care of deleting content objects
+            $this->persistenceHandler->trashHandler()->emptyTrash();
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -165,7 +214,17 @@ class TrashService implements TrashServiceInterface
         if ( !is_numeric( $trashItem->id ) )
             throw new InvalidArgumentValue( "id", $trashItem->id, "TrashItem" );
 
-        $this->persistenceHandler->trashHandler()->deleteTrashItem( $trashItem->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->trashHandler()->deleteTrashItem( $trashItem->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -232,6 +291,10 @@ class TrashService implements TrashServiceInterface
     {
         $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiTrashItem->contentId );
 
+        $trashedChildren = $this->persistenceHandler->trashHandler()->findTrashItems(
+            new ParentLocationId( $spiTrashItem->id )
+        );
+
         return new TrashItem(
             array(
                 'contentInfo' => $contentInfo,
@@ -246,8 +309,7 @@ class TrashService implements TrashServiceInterface
                 'depth' => (int) $spiTrashItem->depth,
                 'sortField' => (int) $spiTrashItem->sortField,
                 'sortOrder' => (int) $spiTrashItem->sortOrder,
-                //@todo: this has to be 0?
-                'childCount' => 0
+                'childCount' => count( $trashedChildren )
             )
         );
     }

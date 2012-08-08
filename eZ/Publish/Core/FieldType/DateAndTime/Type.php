@@ -43,20 +43,6 @@ class Type extends FieldType
     );
 
     /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FiledType\Value object with the provided $dateTime as value.
-     *
-     * @param \DateTime|string $dateTime
-     * @return \eZ\Publish\Core\FieldType\DateAndTime\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $dateTime )
-    {
-        return new Value( $dateTime );
-    }
-
-    /**
      * Return the field type identifier for this field type
      *
      * @return string
@@ -64,6 +50,23 @@ class Type extends FieldType
     public function getFieldTypeIdentifier()
     {
         return "ezdatetime";
+    }
+
+    /**
+     * Returns the name of the given field value.
+     *
+     * It will be used to generate content name and url alias if current field is designated
+     * to be used in the content name/urlAlias pattern.
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    public function getName( $value )
+    {
+        $value = $this->acceptValue( $value );
+
+        return $value->value->format( 'D Y-d-m H:i:s' );
     }
 
     /**
@@ -89,6 +92,11 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( ( $inputValue instanceof \DateTime ) || is_string( $inputValue ) )
+        {
+            $inputValue = new Value( $inputValue );
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
@@ -123,7 +131,7 @@ class Type extends FieldType
         if ( $value->value instanceof DateTime )
             $timestamp = $value->value->getTimestamp();
 
-        return array( 'sort_key_int' => $timestamp );
+        return $timestamp;
     }
 
     /**
@@ -135,7 +143,12 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
-        return new Value( "@$hash" );
+        if ( isset( $hash['rfc850'] ) && $hash['rfc850'] )
+        {
+            return new Value( $hash['rfc850'] );
+        }
+
+        return new Value( "@" . $hash['timestamp'] );
     }
 
     /**
@@ -148,8 +161,17 @@ class Type extends FieldType
     public function toHash( $value )
     {
         if ( $value->value instanceof DateTime )
-            return $value->value->getTimestamp();
-        return 0;
+        {
+            return array(
+                'timestamp' => $value->value->getTimestamp(),
+                'rfc850'    => $value->value->format( \DateTime::RFC850  ),
+            );
+        }
+
+        return array(
+            'timestamp' => 0,
+            'rfc850'    => null,
+        );
     }
 
     /**

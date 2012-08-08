@@ -40,6 +40,7 @@ class EzPublishCoreExtension extends Extension
         // Public API loading
         $this->handleApiLoading( $container, $loader );
         $this->handleTemplating( $container, $loader );
+        $this->handleSessionLoading( $container, $loader );
     }
 
     /**
@@ -80,4 +81,16 @@ class EzPublishCoreExtension extends Extension
     {
         $loader->load( 'templating.yml' );
     }
+
+    /**
+     * Handle session parameters
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \Symfony\Component\DependencyInjection\Loader\FileLoader $loader
+     */
+    private function handleSessionLoading( ContainerBuilder $container, FileLoader $loader )
+    {
+        $loader->load( 'session.yml' );
+    }
+
 }

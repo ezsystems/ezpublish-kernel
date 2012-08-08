@@ -3,7 +3,7 @@
     "description": "eZ Publish API and kernel. This is the heart of eZ Publish 5.",
     "version": "5.0-dev",
     "homepage": "http://share.ez.no",
-    "licence": "GPL-2.0",
+    "license": "GPL-2.0",
     "repositories": [
         {
             "type": "vcs",
@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": ">5.3.3"
+        "php": ">=5.3.3"
     },
     "require-dev": {
         "symfony/symfony": "2.1.0-beta4",

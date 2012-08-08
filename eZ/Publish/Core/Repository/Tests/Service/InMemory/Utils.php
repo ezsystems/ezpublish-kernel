@@ -9,23 +9,53 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service\InMemory;
 
-use eZ\Publish\Core\Repository\Repository,
-    eZ\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\Core\Repository\FieldTypeTools,
-    eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
-    eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler;
+use eZ\Publish\Core\Base\ConfigurationManager,
+    eZ\Publish\Core\Base\ServiceContainer;
 
 /**
  * Utils class for InMemory tesst
  */
 abstract class Utils
 {
-    public static function getRepository( array $serviceSettings )
+    /**
+     * @static
+     *
+     * @param string $persistenceHandler
+     * @param string $ioHandler
+     * @param string $dsn
+     *
+     * @throws \RuntimeException
+     *
+     * @return \eZ\Publish\Core\Base\ServiceContainer
+     */
+    protected static function getServiceContainer(
+        $persistenceHandler = '@persistence_handler_inmemory',
+        $ioHandler = '@io_handler_inmemory',
+        $dsn = 'sqlite://:memory:'
+    )
     {
-        return new Repository(
-            new InMemoryPersistenceHandler( new ValidatorService, new FieldTypeTools ),
-            new InMemoryIOHandler(),
-            $serviceSettings
-        );
+        // Get configuration config
+        if ( !( $settings = include ( 'config.php' ) ) )
+        {
+            throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
+        }
+
+        $settings['base']['Configuration']['UseCache'] = false;
+        $settings['service']['repository']['arguments']['persistence_handler'] = $persistenceHandler;
+        $settings['service']['repository']['arguments']['io_handler'] = $ioHandler;
+        $settings['service']['parameters']['legacy_dsn'] = $dsn;
+
+        // Return Service Container
+        return require 'container.php';
+
+    }
+
+    /**
+     * @static
+     * @return \eZ\Publish\API\Repository\Repository
+     */
+    public static function getRepository()
+    {
+        return self::getServiceContainer()->getRepository();
     }
 }

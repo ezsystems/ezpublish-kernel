@@ -92,7 +92,7 @@ class TextLineTest extends FieldTypeTest
         $fieldValue = $ft->toPersistenceValue( new TextLineValue( $string ) );
 
         self::assertSame( $string, $fieldValue->data );
-        self::assertSame( array( 'sort_key_string' => $string ), $fieldValue->sortKey );
+        self::assertSame( $string, $fieldValue->sortKey );
     }
 
     /**

@@ -35,7 +35,8 @@ class FullText extends CriterionVisitor
     /**
      * Map field value to a proper Solr representation
      *
-     * @param DocumentField $field
+     * @param Criterion $criterion
+     * @param CriterionVisitor $subVisitor
      * @return void
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )

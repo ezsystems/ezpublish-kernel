@@ -43,12 +43,12 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     {
         $value = new FieldValue;
         $value->data = "He's holding a thermal detonator!";
-        $value->sortKey = array( 'sort_key_string' => "He's holding" );
+        $value->sortKey = "He's holding";
         $storageFieldValue = new StorageFieldValue;
 
         $this->converter->toStorageValue( $value, $storageFieldValue );
         self::assertSame( $value->data, $storageFieldValue->dataText );
-        self::assertSame( $value->sortKey['sort_key_string'], $storageFieldValue->sortKeyString );
+        self::assertSame( $value->sortKey, $storageFieldValue->sortKeyString );
         self::assertSame( 0, $storageFieldValue->sortKeyInt );
     }
 
@@ -67,7 +67,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
         self::assertSame( $storageFieldValue->dataText, $fieldValue->data );
-        self::assertSame( $storageFieldValue->sortKeyString, $fieldValue->sortKey['sort_key_string'] );
+        self::assertSame( $storageFieldValue->sortKeyString, $fieldValue->sortKey );
     }
 
     /**

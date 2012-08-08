@@ -83,14 +83,14 @@ class Json extends Generator
     }
 
     /**
-     * Start element
+     * Start object element
      *
      * @param string $name
      * @param string $mediaTypeName
      */
-    public function startElement( $name, $mediaTypeName = null )
+    public function startObjectElement( $name, $mediaTypeName = null )
     {
-        $this->checkStartElement( $name );
+        $this->checkStartObjectElement( $name );
 
         $mediaTypeName = $mediaTypeName ?: $name;
 
@@ -112,13 +112,48 @@ class Json extends Generator
     }
 
     /**
-     * End element
+     * End object element
      *
      * @param string $name
      */
-    public function endElement( $name )
+    public function endObjectElement( $name )
     {
-        $this->checkEndElement( $name );
+        $this->checkEndObjectElement( $name );
+
+        $this->json = $this->json->getParent();
+    }
+
+    /**
+     * Start hash element
+     *
+     * @param string $name
+     */
+    public function startHashElement( $name )
+    {
+        $this->checkStartHashElement( $name );
+
+        $object = new Json\Object( $this->json );
+
+        if ( $this->json instanceof Json\ArrayObject )
+        {
+            $this->json[] = $object;
+            $this->json = $object;
+        }
+        else
+        {
+            $this->json->$name = $object;
+            $this->json = $object;
+        }
+    }
+
+    /**
+     * End hash element
+     *
+     * @param string $name
+     */
+    public function endHashElement( $name )
+    {
+        $this->checkEndHashElement( $name );
 
         $this->json = $this->json->getParent();
     }
@@ -144,6 +179,40 @@ class Json extends Generator
     public function endValueElement( $name )
     {
         $this->checkEndValueElement( $name );
+    }
+
+    /**
+     * Start hash value element
+     *
+     * @param string $name
+     * @param string $value
+     * @param array $attributes
+     */
+    public function startHashValueElement( $name, $value, $attributes = array() )
+    {
+        $this->checkStartHashValueElement( $name );
+
+        $object = new Json\Object( $this->json );
+        foreach ( $attributes as $attributeName => $attributeValue )
+        {
+            $object->{'_' . $attributeName} = $attributeValue;
+        }
+        $object->{'#text'} = $value;
+
+        if ( !isset( $this->json->$name ) )
+            $this->json->$name = new Json\ArrayObject( $this->json->getParent() );
+
+        $this->json->$name->append( $object );
+    }
+
+    /**
+     * End hash value element
+     *
+     * @param string $name
+     */
+    public function endHashValueElement( $name )
+    {
+        $this->checkEndHashValueElement( $name );
     }
 
     /**
@@ -207,4 +276,3 @@ class Json extends Generator
         return $this->generateMediaType( $name, 'json' );
     }
 }
-

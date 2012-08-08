@@ -12,8 +12,6 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
@@ -25,7 +23,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\Relation,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Relation\UpdateStruct as RelationUpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo,
     ezcQueryUpdate;
@@ -74,7 +72,7 @@ class EzcDatabase extends Gateway
     public function __construct(
         EzcDbHandler $db,
         QueryBuilder $queryBuilder,
-        CachingHandler $languageHandler,
+        LanguageHandler $languageHandler,
         LanguageMaskGenerator $languageMaskGenerator )
     {
         $this->dbHandler = $db;
@@ -227,7 +225,7 @@ class EzcDatabase extends Gateway
             $q->bindValue( $versionInfo->status, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'initial_language_id' ),
-            $q->bindValue( $this->languageHandler->getByLocale( $versionInfo->initialLanguageCode )->id, null, \PDO::PARAM_INT )
+            $q->bindValue( $this->languageHandler->loadByLanguageCode( $versionInfo->initialLanguageCode )->id, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'contentobject_id' ),
             $q->bindValue( $versionInfo->contentId, null, \PDO::PARAM_INT )
@@ -736,9 +734,9 @@ class EzcDatabase extends Gateway
         while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
         {
             $row['ezcontentobject_always_available'] = $this->languageMaskGenerator->isAlwaysAvailable( $row['ezcontentobject_version_language_mask'] );
-            $row['ezcontentobject_main_language_code'] = $this->languageHandler->getById( $row['ezcontentobject_initial_language_id'] )->languageCode;
+            $row['ezcontentobject_main_language_code'] = $this->languageHandler->load( $row['ezcontentobject_initial_language_id'] )->languageCode;
             $row['ezcontentobject_version_languages'] = $this->languageMaskGenerator->extractLanguageIdsFromMask( $row['ezcontentobject_version_language_mask'] );
-            $row['ezcontentobject_version_initial_language_code'] = $this->languageHandler->getById( $row['ezcontentobject_version_initial_language_id'] )->languageCode;
+            $row['ezcontentobject_version_initial_language_code'] = $this->languageHandler->load( $row['ezcontentobject_version_initial_language_id'] )->languageCode;
             $rows[] = $row;
         }
 
@@ -774,9 +772,9 @@ class EzcDatabase extends Gateway
         while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
         {
             $row['ezcontentobject_always_available'] = $this->languageMaskGenerator->isAlwaysAvailable( $row['ezcontentobject_version_language_mask'] );
-            $row['ezcontentobject_main_language_code'] = $this->languageHandler->getById( $row['ezcontentobject_initial_language_id'] )->languageCode;
+            $row['ezcontentobject_main_language_code'] = $this->languageHandler->load( $row['ezcontentobject_initial_language_id'] )->languageCode;
             $row['ezcontentobject_version_languages'] = $this->languageMaskGenerator->extractLanguageIdsFromMask( $row['ezcontentobject_version_language_mask'] );
-            $row['ezcontentobject_version_initial_language_code'] = $this->languageHandler->getById( $row['ezcontentobject_version_initial_language_id'] )->languageCode;
+            $row['ezcontentobject_version_initial_language_code'] = $this->languageHandler->load( $row['ezcontentobject_version_initial_language_id'] )->languageCode;
             $rows[] = $row;
         }
 
@@ -813,7 +811,7 @@ class EzcDatabase extends Gateway
 
         $contentInfo = $rows[0];
         $contentInfo['always_available'] = $this->languageMaskGenerator->isAlwaysAvailable( $contentInfo['language_mask'] );
-        $contentInfo['main_language_code'] = $this->languageHandler->getById( $contentInfo['initial_language_id'] )->languageCode;
+        $contentInfo['main_language_code'] = $this->languageHandler->load( $contentInfo['initial_language_id'] )->languageCode;
         return $contentInfo;
     }
 
@@ -879,7 +877,7 @@ class EzcDatabase extends Gateway
         $row['languages'] = $this->languageMaskGenerator->extractLanguageIdsFromMask( $row['language_mask'] );
 
         // Get initial language code
-        $row['initial_language_code'] = $this->languageHandler->getById( $row['initial_language_id'] )->languageCode;
+        $row['initial_language_code'] = $this->languageHandler->load( $row['initial_language_id'] )->languageCode;
 
         return $row;
     }
@@ -1231,7 +1229,7 @@ class EzcDatabase extends Gateway
      */
     public function setName( $contentId, $version, $name, $language )
     {
-        $language = $this->languageHandler->getByLocale( $language );
+        $language = $this->languageHandler->loadByLanguageCode( $language );
 
         // Is it an insert or an update ?
         $qSelect = $this->dbHandler->createSelectQuery();
@@ -1435,7 +1433,7 @@ class EzcDatabase extends Gateway
      *
      * @return int ID the inserted ID
      */
-    public function insertRelation( RelationCreateStruct $struct )
+    public function insertRelation( RelationCreateStruct $createStruct )
     {
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
@@ -1445,19 +1443,19 @@ class EzcDatabase extends Gateway
             $this->dbHandler->getAutoIncrementValue( 'ezcontentobject_link', 'id' )
         )->set(
             $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
-            $q->bindValue( (int)$struct->sourceFieldDefinitionId, null, \PDO::PARAM_INT )
+            $q->bindValue( (int)$createStruct->sourceFieldDefinitionId, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'from_contentobject_id' ),
-            $q->bindValue( $struct->sourceContentId, null, \PDO::PARAM_INT )
+            $q->bindValue( $createStruct->sourceContentId, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'from_contentobject_version' ),
-            $q->bindValue( $struct->sourceContentVersionNo, null, \PDO::PARAM_INT )
+            $q->bindValue( $createStruct->sourceContentVersionNo, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'relation_type' ),
-            $q->bindValue( $struct->type, null, \PDO::PARAM_INT )
+            $q->bindValue( $createStruct->type, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'to_contentobject_id' ),
-            $q->bindValue( $struct->destinationContentId, null, \PDO::PARAM_INT )
+            $q->bindValue( $createStruct->destinationContentId, null, \PDO::PARAM_INT )
         );
 
         $q->prepare()->execute();

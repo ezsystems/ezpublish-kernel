@@ -236,4 +236,3 @@ class Visitor
         return $this->generator->getMediaType( $type );
     }
 }
-

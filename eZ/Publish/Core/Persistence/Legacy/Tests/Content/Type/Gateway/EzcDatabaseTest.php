@@ -1361,16 +1361,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a Language MaskGenerator
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
-     */
-    protected function getLanguageMaskGenerator()
-    {
-        return new LanguageMaskGenerator( $this->getLanguageLookupMock() );
-    }
-
-    /**
      * Returns the test suite with all tests declared in this class.
      *
      * @return \PHPUnit_Framework_TestSuite

@@ -28,7 +28,6 @@ interface FieldType
      * Return the field type identifier for this field type
      *
      * @return string
-     * @TODO Expose to Public API.
      */
     public function getFieldTypeIdentifier();
 
@@ -40,6 +39,18 @@ interface FieldType
     public function handleEvent( Event $event );
 
     /**
+     * Returns the name of the given field value.
+     *
+     * It will be used to generate content name and url alias if current field is designated
+     * to be used in the content name/urlAlias pattern.
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    public function getName( $value );
+
+    /**
      * Returns a schema for the settings expected by the FieldType
      *
      * Returns an arbitrary value, representing a schema for the settings of
@@ -47,7 +58,7 @@ interface FieldType
      *
      * Explanation: There are no possible generic schemas for defining settings
      * input, which is why no schema for the return value of this method is
-     * defined. It is up to the implementor to define and document a schema for
+     * defined. It is up to the implementer to define and document a schema for
      * the return value and document it. In addition, it is necessary that all
      * consumers of this interface (e.g. Public API, REST API, GUIs, ...)
      * provide plugin mechanisms to hook adapters for the specific FieldType
@@ -57,7 +68,6 @@ interface FieldType
      * consumer.
      *
      * @return mixed
-     * @TODO Expose to Public API.
      */
     public function getSettingsSchema();
 
@@ -69,7 +79,7 @@ interface FieldType
      *
      * Explanation: There are no possible generic schemas for defining settings
      * input, which is why no schema for the return value of this method is
-     * defined. It is up to the implementor to define and document a schema for
+     * defined. It is up to the implementer to define and document a schema for
      * the return value and document it. In addition, it is necessary that all
      * consumers of this interface (e.g. Public API, REST API, GUIs, ...)
      * provide plugin mechanisms to hook adapters for the specific FieldType
@@ -99,21 +109,8 @@ interface FieldType
      * </code>
      *
      * @return mixed
-     * @TODO Expose to Public API.
      */
     public function getValidatorConfigurationSchema();
-
-    /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FiledType\Value object with the provided $plainValue as value.
-     *
-     * @TODO Should not use Core class
-     * @param mixed $plainValue
-     * @return \eZ\Publish\Core\FieldType\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $plainValue );
 
     /**
      * Validates a field based on the validators in the field definition
@@ -149,7 +146,6 @@ interface FieldType
      * Indicates if the field type supports indexing and sort keys for searching
      *
      * @return bool
-     * @TODO Expose to Public API.
      */
     public function isSearchable();
 
@@ -158,19 +154,29 @@ interface FieldType
      * value is provided in the field definition in content types.
      *
      * @return mixed
-     * @TODO Expose to Public API.
      */
     public function getDefaultDefaultValue();
 
     /**
-     * Checks the type and structure of the $Value.
+     * Potentially builds and checks the type and structure of the $inputValue.
+     *
+     * This method first inspects $inputValue, if it needs to convert it, e.g.
+     * into a dedicated value object. An example would be, that the field type
+     * uses values of MyCustomFieldTypeClass, but can also accept strings as
+     * the input. In that case, $inputValue first needs to be converted into a
+     * MyCustomFieldTypeClass instance.
+     *
+     * After that, the (possibly converted) value is checked for structural
+     * validity. Note that this does not include validation after the rules
+     * from validators, but only plausibility checks for the general data
+     * format.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
      *
      * @param mixed $inputValue
      *
-     * @return mixed
+     * @return mixed The potentially converted and structurally plausible value.
      */
     public function acceptValue( $inputValue );
 
@@ -180,7 +186,6 @@ interface FieldType
      * @param mixed $hash
      *
      * @return mixed
-     * @TODO Expose to Public API.
      * @TODO May support different formats, but best practice is only 1
      */
     public function fromHash( $hash );
@@ -191,7 +196,6 @@ interface FieldType
      * @param mixed $value
      *
      * @return mixed
-     * @TODO Expose to Public API.
      * @TODO May support different formats, but best practice is only 1
      */
     public function toHash( $value );

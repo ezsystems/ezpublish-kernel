@@ -37,6 +37,8 @@ use eZ\Publish\API\Repository\Tests,
  *
  * @group integration
  * @group field-type
+ *
+ * @TODO Finalize dependencies to other tests (including groups!)
  */
 abstract class BaseIntegrationTest extends Tests\BaseTest
 {
@@ -55,6 +57,13 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     abstract public function getTypeName();
 
     /**
+     * Get expected settings schema
+     *
+     * @return array
+     */
+    abstract public function getSettingsSchema();
+
+    /**
      * Get a valid $fieldSettings value
      *
      * @return mixed
@@ -62,18 +71,25 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     abstract public function getValidFieldSettings();
 
     /**
-     * Get a valid $validatorConfiguration
-     *
-     * @return mixed
-     */
-    abstract public function getValidValidatorConfiguration();
-
-    /**
      * Get $fieldSettings value not accepted by the field type
      *
      * @return mixed
      */
     abstract public function getInvalidFieldSettings();
+
+    /**
+     * Get expected validator schema
+     *
+     * @return array
+     */
+    abstract public function getValidatorSchema();
+
+    /**
+     * Get a valid $validatorConfiguration
+     *
+     * @return mixed
+     */
+    abstract public function getValidValidatorConfiguration();
 
     /**
      * Get $validatorConfiguration not accepted by the field type
@@ -230,14 +246,12 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     {
         parent::setUp();
 
-        /*
         if ( $this->getRepository() instanceof \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub )
         {
             $this->markTestSkipped(
                 'FieldType integration tests cannot be run against memory stub.'
             );
         }
-        */
     }
 
     /**
@@ -259,7 +273,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      */
     public function testCreateContentType()
     {
@@ -293,8 +307,8 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $createStruct->mainLanguageCode = 'eng-GB';
         $createStruct->remoteId     = $this->getTypeName();
         $createStruct->names        = array( 'eng-GB' => 'Test' );
-        $createStruct->creatorId    = 10;
-        $createStruct->creationDate = new \DateTime();
+        $createStruct->creatorId    = 14;
+        $createStruct->creationDate = $this->getRepository()->createDateTime();
 
         $nameFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
             'name', 'ezstring'
@@ -338,7 +352,8 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @dep_ends testCreateContentType
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentType
+     * @depends testCreateContentType
      */
     public function testLoadContentTypeField()
     {
@@ -363,6 +378,18 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         return $contentType->fieldDefinitions[1];
     }
 
+    public function testSettingsSchema()
+    {
+        $repository       = $this->getRepository();
+        $fieldTypeService = $repository->getFieldTypeService();
+        $fieldType = $fieldTypeService->getFieldType( $this->getTypeName() );
+
+        $this->assertEquals(
+            $this->getSettingsSchema(),
+            $fieldType->getSettingsSchema()
+        );
+    }
+
     /**
      * @depends testLoadContentTypeFieldType
      */
@@ -370,20 +397,23 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     {
         $this->assertEquals(
             $this->getTypeName(),
-            $fieldDefinition->fieldTypeIdentifier
+            $fieldDefinition->fieldTypeIdentifier,
+            'Loaded fieldTypeIdentifier does not match.'
         );
         $this->assertEquals(
             $this->getValidFieldSettings(),
-            $fieldDefinition->fieldSettings
+            $fieldDefinition->fieldSettings,
+            'Loaded fieldSettings do not match.'
         );
         $this->assertEquals(
             $this->getValidValidatorConfiguration(),
-            $fieldDefinition->validatorConfiguration
+            $fieldDefinition->validatorConfiguration,
+            'Loaded validatorConfiguration does not match.'
         );
     }
 
     /**
-     * @dep_ends testCreateContentType
+     * @depends testCreateContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
      */
     public function testCreateContentTypeFailsWithInvalidFieldSettings()
@@ -394,8 +424,20 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         );
     }
 
+    public function testValidatorSchema()
+    {
+        $repository       = $this->getRepository();
+        $fieldTypeService = $repository->getFieldTypeService();
+        $fieldType = $fieldTypeService->getFieldType( $this->getTypeName() );
+
+        $this->assertEquals(
+            $this->getValidatorSchema(),
+            $fieldType->getValidatorConfigurationSchema()
+        );
+    }
+
     /**
-     * @dep_ends testCreateContentType
+     * @depends testCreateContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
      */
     public function testCreateContentTypeFailsWithInvalidValidatorConfiguration()
@@ -407,7 +449,8 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @dep_ends testLoadContentTypeField
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent;
+     * @depends testLoadContentTypeField
      */
     public function testCreateContent()
     {
@@ -457,7 +500,8 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @dep_ends testCreateContent
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @depends testCreateContent
      */
     public function testPublishContent()
     {
@@ -491,7 +535,8 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @dep_ends testCreateContent
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends testCreateContent
      */
     public function testLoadField()
     {
@@ -527,7 +572,8 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * @dep_ends testLoadFieldType
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     * @depends testLoadFieldType
      */
     public function testUpdateField()
     {
@@ -584,6 +630,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
     /**
      * @depends testCreateContent
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCopyContent
      */
     public function testCopyField( $content )
     {
@@ -632,6 +679,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
     /**
      * @depends testCopyField
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::deleteContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDeleteContent( $content )
@@ -652,6 +700,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      * @param mixed $failingValue
      * @param string $expectedException
      * @dataProvider provideInvalidCreationFieldData
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteContent
      * @return void
      */
     public function testCreateContentFails( $failingValue, $expectedException )
@@ -661,6 +710,10 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
             $this->createContent( $failingValue );
 
             $this->fail( 'Expected exception not thrown.' );
+        }
+        catch ( \PHPUnit_Framework_AssertionFailedError $e )
+        {
+            throw $e;
         }
         catch ( \Exception $e )
         {
@@ -678,6 +731,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      * @param string $expectedException
      * @dataProvider provideInvalidUpdateFieldData
      * @return void
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
     public function testUpdateContentFails( $failingValue, $expectedException )
     {
@@ -686,6 +740,10 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
             $this->updateContent( $failingValue );
 
             $this->fail( 'Expected exception not thrown.' );
+        }
+        catch ( \PHPUnit_Framework_AssertionFailedError $e )
+        {
+            throw $e;
         }
         catch ( \Exception $e )
         {
