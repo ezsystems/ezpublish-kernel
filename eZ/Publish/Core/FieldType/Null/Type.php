@@ -107,7 +107,12 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
-        return $value->value;
+        if ( isset( $value->value ) )
+        {
+            return $value->value;
+        }
+
+        return null;
     }
 
     /**
@@ -131,7 +136,12 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
-        return $value->value;
+        if ( isset( $value->value ) )
+        {
+            return $value->value;
+        }
+
+        return null;
     }
 
     /**

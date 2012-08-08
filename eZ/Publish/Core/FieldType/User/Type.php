@@ -108,6 +108,22 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
+        $values = array_merge(
+            array(
+                'login'      => null,
+                'accountKey' => null,
+                'lastVisit'  => null,
+                'loginCount' => null,
+            ),
+            $hash
+        );
+
+        return new Value( array(
+            'login'      => $values['login'],
+            'accountKey' => $values['accountKey'],
+            'lastVisit'  => $values['lastVisit'],
+            'loginCount' => $values['loginCount'],
+        ) );
     }
 
     /**
@@ -120,6 +136,22 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
+        $values = array_merge(
+            array(
+                'login'      => null,
+                'accountKey' => null,
+                'lastVisit'  => null,
+                'loginCount' => null,
+            ),
+            (array) $value
+        );
+
+        return array(
+            'login'      => $values['login'],
+            'accountKey' => $values['accountKey'],
+            'lastVisit'  => $values['lastVisit'],
+            'loginCount' => $values['loginCount'],
+        );
     }
 
      /**
