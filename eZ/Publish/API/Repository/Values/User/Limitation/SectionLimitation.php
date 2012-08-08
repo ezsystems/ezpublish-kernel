@@ -14,10 +14,12 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 class SectionLimitation extends RoleLimitation
 {
     /**
-     * Constructs a role limitation with the section name
+     * @see \eZ\Publish\API\Repository\Values\User\Limitation::getIdentifier()
+     *
+     * @return string
      */
-    public function __construct()
+    public function getIdentifier()
     {
-        parent::__construct( Limitation::SECTION );
+        return Limitation::SECTION;
     }
 }
