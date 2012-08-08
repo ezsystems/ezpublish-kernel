@@ -49,11 +49,11 @@ class LegacySolr extends Legacy
     {
         $nameGenerator = new Solr\Content\Search\FieldNameGenerator();
         $fieldRegistry = new Solr\Content\Search\FieldRegistry( array(
-            'ezstring'              => new FieldType\String\SearchField(),
+            'ezstring'              => new FieldType\TextLine\SearchField(),
             'ezprice'               => new FieldType\Price\SearchField(),
             // @TODO: These two need proper custom search field definitions
-            'eztext'                => new FieldType\String\SearchField(),
-            'ezxmltext'             => new FieldType\String\SearchField(),
+            'eztext'                => new FieldType\TextLine\SearchField(),
+            'ezxmltext'             => new FieldType\TextLine\SearchField(),
             // @TODO: Define proper types for these:
             'ezuser'                => new FieldType\Unindexed(),
             'ezimage'               => new FieldType\Unindexed(),

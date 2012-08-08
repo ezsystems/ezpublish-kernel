@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\String;
+namespace eZ\Publish\Core\FieldType\TextLine;
 
 use eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\FieldType\Indexable,
