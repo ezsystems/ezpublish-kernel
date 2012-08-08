@@ -15,15 +15,43 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\UserGroupLimitation as APIUserGroupLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
+use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 
 /**
  * UserGroupLimitation is a Content Limitation
  */
-class UserGroupLimitation extends APIUserGroupLimitation
+class UserGroupLimitation implements SPILimitationTypeInterface
 {
     /**
-     * Evaluate permission against content and parent
+     * Create the Limitation Value
      *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     *
+     * @return bool
+     */
+    public function acceptValue( APILimitationValue $limitationValue, Repository $repository )
+    {
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( 'acceptValue' );
+    }
+
+    /**
+     * Create the Limitation Value
+     *
+     * @param mixed[] $limitationValues
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\Limitation
+     */
+    public function buildValue( array $limitationValues )
+    {
+        return new APIUserGroupLimitation( array( 'limitationValues' => $limitationValues ) );
+    }
+
+    /**
+     * Evaluate permission against content and placement
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
      * @param \eZ\Publish\API\Repository\Values\ValueObject $placement In 'create' limitations; this is parent
@@ -32,13 +60,16 @@ class UserGroupLimitation extends APIUserGroupLimitation
      * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
      * @return bool
      */
-    public function evaluate( Repository $repository, ValueObject $object, ValueObject $placement = null )
+    public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $placement = null )
     {
-        if ( $this->limitationValues[0] != 1 )
+        if ( !$value instanceof APIUserGroupLimitation )
+            throw new InvalidArgumentException( '$value', 'Must be of type: APIUserGroupLimitation' );
+
+        if ( $value->limitationValues[0] != 1 )
         {
             throw new BadStateException(
                 'Parent User Group limitation',
-                'expected limitation value to be 1 but got:' . $this->limitationValues[0]
+                'expected limitation value to be 1 but got:' . $value->limitationValues[0]
             );
         }
 
@@ -68,5 +99,31 @@ class UserGroupLimitation extends APIUserGroupLimitation
         }
 
         return false;
+    }
+
+    /**
+     * Return Criterion for use in find() query
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
+     */
+    public function getCriterion( APILimitationValue $value, Repository $repository )
+    {
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( 'getCriterion' );
+    }
+
+    /**
+     * Return info on valid $limitationValues
+     *
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     *
+     * @return mixed[]|int In case of array, a hash with key as valid limitations value and value as human readable name
+     *                     of that option, in case of int on of VALUE_SCHEMA_ constants.
+     */
+    public function valueSchema( Repository $repository )
+    {
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( 'valueSchema' );
     }
 }

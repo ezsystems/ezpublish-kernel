@@ -9,12 +9,12 @@
 
 namespace eZ\Publish\Core\Repository\Values\User\Limitation;
 
-use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation as APIRoleLimitation;
+use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 
 /**
  * RoleLimitation is a helper class to get the actual RoleLimitations
  */
-abstract class RoleLimitation extends APIRoleLimitation
+abstract class RoleLimitation implements SPILimitationTypeInterface
 {
     /**
      * @static
@@ -29,7 +29,7 @@ abstract class RoleLimitation extends APIRoleLimitation
     final public static function createRoleLimitation( $name )
     {
         $className = __NAMESPACE__ . '\\' . $name;
-        if ( class_exists( $className ) && $className instanceof APIRoleLimitation )
+        if ( class_exists( $className ) && $className instanceof SPILimitationTypeInterface )
             return new $className;
 
         throw new \LogicException( "Could not find Role limitation: {$name}" );
