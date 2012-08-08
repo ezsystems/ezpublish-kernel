@@ -37,68 +37,114 @@ closures pr limitation:
 #### Updated approach
 
 Prior approach had downside in that it used closures and was hard to extend.
-So in updated approach these permission check functions are moved to Limitation
-objects.
+So in updated approach these permission check functions are moved to a
+Limitation SPI interface (since extensions should be able to add their own).
 
-The following functions should be added to API for Content limitations:
+The following functions should be added to a SPI for Limitations:
+´´´php
+namespace eZ\Publish\SPI\Limitation;
+
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\User\Limitation as LimitationValue;
+use eZ\Publish\API\Repository\Repository;
+
+/**
+ * This interface represent the Limitation Type
+ */
+interface Type
+{
+    /**
+     * Constants for valueSchema() return values
+     *
+     * Used in cases where a certain value is accepted but the options are to many to return as a hash of options.
+     * GUI should typically present option to browse content tree to select limitation value(s).
+     */
+    const VALUE_SCHEMA_LOCATION_ID = 1;
+    const VALUE_SCHEMA_LOCATION_PATH = 2;
 
     /**
-     * Evaluate permission against live objects
+     * Accepts a Limitation value
      *
+     * Makes sure LimitationValue object is of correct type and that ->limitationValues
+     * is valid according to valueSchema().
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $placement In 'create' limitations; this is parent
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If limitation data is inconsistent
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If wrong Value objects are used
      * @return bool
      */
-    abstract public function evaluate( Repository $repository, ValueObject $object, ValueObject $placement = null );
+    public function acceptValue( LimitationValue $limitationValue, Repository $repository );
+
+    /**
+     * Create the Limitation Value
+     *
+     * @param mixed[] $limitationValues
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\Limitation
+     */
+    public function buildValue( array $limitationValues );
+
+    /**
+     * Evaluate permission against content and placement
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $placement In 'create' limitations this is the parent
+     *
+     * @return bool
+     */
+    public function evaluate( LimitationValue $value, Repository $repository, ValueObject $object, ValueObject $placement = null );
 
     /**
      * Return Criterion for use in find() query
      *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Repository $repository
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If limitation data is inconsistent
      * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
      */
-    abstract public function getCriterion( Repository $repository );
+    public function getCriterion( LimitationValue $value, Repository $repository );
 
     /**
-     * Return array with possible options for limitations
+     * Return info on valid $limitationValues
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If limitation data is inconsistent
-     * @return array A hash where key is value for use in limitation values, and value is human readable
-     *               name for the option in question.
+     * @return mixed[]|int In case of array, a hash with key as valid limitations value and value as human readable name
+     *                     of that option, in case of int on of VALUE_SCHEMA_* constants.
      */
-    abstract public function options( Repository $repository );
+    public function valueSchema( Repository $repository );
+}
+´´´
+Note: Access to Repository in evaluate() and getCriterion() is needed as not everything
+      is available via the object graph, but use of repository in limitations functions
+      should be avoided for performance reasons, especially when using un-cached parts
+      of the api.
 
-Access to Repository in evaluate() and getCriterion() is needed as not everything
-is available via the object graph, but use of repository in limitations functions
-should be avoided for performance reasons, especially when using un-cached parts
-of the api.
-
-@todo ->limitationValues needs to be validated using ->options() on store and update.
+Note2: buildValue() exists so that dependency injection system only have to know about the Limitation "Type".
+       Other functions like acceptValue() [and evaluate()] needs to know about the Limitation Value class anyway.
+       Hence this class organization is a simplified version of the one used on FiledTypes, which should be familiar.
 
 
 ### Authentication API
 
 The API needs two ways user can be authenticated:
 * Using login/email and password: [UserService->loadUserByCredentials()][login]
-* Using s user reference for session use: <TBD>
+* Using user reference for session use: <@todo: TBD>
 
 
 
-Implementation
---------------
+Implementation notes
+--------------------
 
 ### Extensibility
 
-This can be archived by means of using the dependency injection container system to map
-up the different limitations and which module functions they should be used in.
+This is archived by means of using the dependency injection container system to map
+up the different Limitation Types mapped by identifier, and a mapping of module functions
+to Limitation identifiers to be able to validate limitations values used on module functions.
+
+This means identifier needs to be unique!
 
 
 
