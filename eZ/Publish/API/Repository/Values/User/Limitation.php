@@ -10,7 +10,6 @@
 namespace eZ\Publish\API\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\API\Repository\Repository;
 
 /**
  * This class represents a Limitation applied to a policy
@@ -40,32 +39,9 @@ abstract class Limitation extends ValueObject
     abstract public function getIdentifier();
 
     /**
-     * Evaluate permission against content and parent
-     *
-     * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $placement In 'create' limitations; this is parent
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If limitation data is inconsistent
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If wrong Value objects are used
-     * @return bool
-     */
-    abstract public function evaluate( Repository $repository, ValueObject $object, ValueObject $placement = null );
-
-
-    /**
-     * Return Criterion for use in find() query
-     *
-     * @param \eZ\Publish\API\Repository\Repository $repository
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If limitation data is inconsistent
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
-     */
-    //abstract public function getCriterion( Repository $repository );
-
-    /**
      * An integer list of ids or identifiers for which the limitation should be applied
      *
+     * @readonly
      * @var array of mixed
      */
     public $limitationValues;
