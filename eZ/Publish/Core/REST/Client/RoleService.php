@@ -675,4 +675,17 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
     {
         return new RoleUpdateStruct();
     }
+
+    /**
+     * Returns the LimitationType registered with the given identifier
+     *
+     * @param string $identifier
+     * @return \eZ\Publish\SPI\Limitation\Type
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *         if there is no LimitationType registered with $identifier
+     */
+    public function getLimitationType( $identifier )
+    {
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+    }
 }

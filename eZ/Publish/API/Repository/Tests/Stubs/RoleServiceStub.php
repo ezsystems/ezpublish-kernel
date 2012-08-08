@@ -691,6 +691,19 @@ class RoleServiceStub implements RoleService
     }
 
     /**
+     * Returns the LimitationType registered with the given identifier
+     *
+     * @param string $identifier
+     * @return \eZ\Publish\SPI\Limitation\Type
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *         if there is no LimitationType registered with $identifier
+     */
+    public function getLimitationType( $identifier )
+    {
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+    }
+
+    /**
      * returns the roles assigned to the given user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user group

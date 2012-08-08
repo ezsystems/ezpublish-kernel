@@ -255,4 +255,14 @@ interface RoleService
      * @return \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct
      */
     public function newRoleUpdateStruct();
+
+    /**
+     * Returns the LimitationType registered with the given identifier
+     *
+     * @param string $identifier
+     * @return \eZ\Publish\SPI\Limitation\Type
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *         if there is no LimitationType registered with $identifier
+     */
+    public function getLimitationType( $identifier );
 }

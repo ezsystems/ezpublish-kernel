@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\Values\User\Limitation\SiteaccessLimitation class.
+ * File containing the eZ\Publish\API\Repository\Values\User\Limitation\SiteAccessLimitation class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -13,14 +13,14 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\API\Repository\Values\User\Limitation\SiteaccessLimitation as APISiteaccessLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\SiteAccessLimitation as APISiteAccessLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 
 /**
- * SiteaccessLimitation is a User limitation
+ * SiteAccessLimitation is a User limitation
  */
-class SiteaccessLimitationType implements SPILimitationTypeInterface
+class SiteAccessLimitationType implements SPILimitationTypeInterface
 {
     /**
      * Accepts a Limitation value
@@ -47,7 +47,7 @@ class SiteaccessLimitationType implements SPILimitationTypeInterface
      */
     public function buildValue( array $limitationValues )
     {
-        return new APISiteaccessLimitation( array( 'limitationValues' => $limitationValues ) );
+        return new APISiteAccessLimitation( array( 'limitationValues' => $limitationValues ) );
     }
 
     /**
@@ -64,8 +64,8 @@ class SiteaccessLimitationType implements SPILimitationTypeInterface
      */
     public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $placement = null )
     {
-        if ( !$value instanceof APISiteaccessLimitation )
-            throw new InvalidArgumentException( '$value', 'Must be of type: APISiteaccessLimitation' );
+        if ( !$value instanceof APISiteAccessLimitation )
+            throw new InvalidArgumentException( '$value', 'Must be of type: APISiteAccessLimitation' );
 
         if ( !$object instanceof User )
             throw new InvalidArgumentException( '$object', 'Must be of type: User' );

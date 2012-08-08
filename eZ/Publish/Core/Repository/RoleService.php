@@ -463,6 +463,8 @@ class RoleService implements RoleServiceInterface
         $spiRoleLimitation = null;
         if ( $roleLimitation !== null )
         {
+            // @todo This hardcoded identifier check is not needed is it? already enforced by making sure limitation is
+            // instance of RoleLimitation which itself is abstract
             $limitationIdentifier = $roleLimitation->getIdentifier();
             if ( $limitationIdentifier !== Limitation::SUBTREE && $limitationIdentifier !== Limitation::SECTION )
                 throw new InvalidArgumentValue( "identifier", $limitationIdentifier, "RoleLimitation" );
@@ -547,6 +549,8 @@ class RoleService implements RoleServiceInterface
         $spiRoleLimitation = null;
         if ( $roleLimitation !== null )
         {
+            // @todo This hardcoded identifier check is not needed is it? already enforced by making sure limitation is
+            // instance of RoleLimitation which itself is abstract
             $limitationIdentifier = $roleLimitation->getIdentifier();
             if ( $limitationIdentifier !== Limitation::SUBTREE && $limitationIdentifier !== Limitation::SECTION )
                 throw new InvalidArgumentValue( "identifier", $limitationIdentifier, "RoleLimitation" );
@@ -833,7 +837,7 @@ class RoleService implements RoleServiceInterface
         {
             foreach ( $policy->limitations as $limitationIdentifier => $limitationValues )
             {
-                $limitation = $this->getLimitationFromIdentifier( $limitationIdentifier );
+                $limitation = $this->getLimitationType( $limitationIdentifier )->buildValue( array() );
                 $limitation->limitationValues = $limitationValues;
                 $policyLimitations[] = $limitation;
             }
@@ -857,67 +861,15 @@ class RoleService implements RoleServiceInterface
      * @param string $identifier
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @return \eZ\Publish\API\Repository\Values\User\Limitation
+     * @return \eZ\Publish\SPI\Limitation\Type
      */
-    protected function getLimitationFromIdentifier( $identifier )
+    public function getLimitationType( $identifier )
     {
-        switch ( $identifier )
-        {
-            case Limitation::CONTENTTYPE :
-                return new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
-                break;
 
-            case Limitation::LANGUAGE :
-                return new \eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation();
-                break;
+        if ( !isset( $this->settings['limitationTypes'][$identifier] ) )
+            throw new \eZ\Publish\Core\Base\Exceptions\NotFoundException( 'Limitation', $identifier );
 
-            case Limitation::LOCATION :
-                return new \eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation();
-                break;
-
-            case Limitation::OWNER :
-                return new \eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation();
-                break;
-
-            case Limitation::PARENTOWNER :
-                return new \eZ\Publish\API\Repository\Values\User\Limitation\ParentOwnerLimitation();
-                break;
-
-            case Limitation::PARENTCONTENTTYPE :
-                return new \eZ\Publish\API\Repository\Values\User\Limitation\ParentContentTypeLimitation();
-                break;
-
-            case Limitation::PARENTDEPTH :
-                return new \eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation();
-                break;
-
-            case Limitation::SECTION :
-                return new \eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation();
-                break;
-
-            case Limitation::SITEACCESS :
-                return new \eZ\Publish\API\Repository\Values\User\Limitation\SiteaccessLimitation();
-                break;
-
-            case Limitation::STATE :
-                return new \eZ\Publish\API\Repository\Values\User\Limitation\StateLimitation();
-                break;
-
-            case Limitation::SUBTREE :
-                return new \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation();
-                break;
-
-            case Limitation::USERGROUP :
-                return new \eZ\Publish\API\Repository\Values\User\Limitation\UserGroupLimitation();
-                break;
-
-            case Limitation::PARENTUSERGROUP :
-                return new \eZ\Publish\API\Repository\Values\User\Limitation\ParentUserGroupLimitation();
-                break;
-
-            default:
-                throw new \eZ\Publish\Core\Base\Exceptions\NotFoundException( 'Limitation', $identifier );
-        }
+        return $this->settings['limitationTypes'][$identifier];
     }
 
     /**
