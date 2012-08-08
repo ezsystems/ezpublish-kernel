@@ -282,17 +282,6 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 new Query( array(
-                    'criterion' => new Criterion\Field(
-                        'some_hopefully_unknown_field',
-                        Criterion\Operator::BETWEEN,
-                        array( 10, 1000 )
-                    ),
-                    'sortClauses' => array( new SortClause\ContentId() )
-                ) ),
-                $fixtureDir . 'FieldUnknown.php',
-            ),
-            array(
-                new Query( array(
                     'criterion' => new Criterion\LogicalOr(
                         array(
                             new Criterion\Field(
@@ -358,6 +347,26 @@ class SearchServiceTest extends BaseTest
         $this->assertEquals(
             4,
             $content->id
+        );
+    }
+
+    /**
+     * @expectedException \OutOfBoundsException
+     */
+    public function testInvalidFieldIdentifier()
+    {
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $content = $searchService->findContent(
+            new Query( array(
+                'criterion' => new Criterion\Field(
+                    'some_hopefully_unknown_field',
+                    Criterion\Operator::BETWEEN,
+                    array( 10, 1000 )
+                ),
+                'sortClauses' => array( new SortClause\ContentId() )
+            ) )
         );
     }
 
