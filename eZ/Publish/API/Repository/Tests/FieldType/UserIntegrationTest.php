@@ -341,7 +341,10 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
     public function provideToHashData()
     {
         return array(
-            array( new UserValue(), 'toBeDefined' )
+            array(
+                new UserValue( array( 'login' => 'hans' ) ),
+                array( 'login' => 'hans' ),
+            ),
         );
     }
 
@@ -368,7 +371,10 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
     public function provideFromHashData()
     {
         return array(
-            array( 'toBeDefined', array() ),
+            array(
+                array( 'login' => 'hans' ),
+                new UserValue( array( 'login' => 'hans' ) ),
+            ),
         );
     }
 

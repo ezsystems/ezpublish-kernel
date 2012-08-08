@@ -108,6 +108,9 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
+        return new Value( array(
+            'login' => $hash['login']
+        ) );
     }
 
     /**
@@ -120,6 +123,9 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
+        return array(
+            'login' => $value->login,
+        );
     }
 
      /**
