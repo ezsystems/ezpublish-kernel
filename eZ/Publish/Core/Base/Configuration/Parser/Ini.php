@@ -46,6 +46,13 @@ class Ini implements Parser
     const TEMP_INI_KEY_VAR = '__KEY__';
 
     /**
+     * Constant string used as a temporary quote value when using php_ini_string {@see parserPhpQuoteSupport()}
+     *
+     * @var string
+     */
+    const TEMP_INI_QUOTE_VAR = '__QUOTE__';
+
+    /**
      * Defines if strict mode should be used (parse_ini_string), otherwise use ezcConfigurationIniReader
      *
      * @var boolean
@@ -126,6 +133,7 @@ class Ini implements Parser
         );
         $fileContent = $this->parserPhpDimensionArraySupport( $fileContent );
         $fileContent = $this->parserClearArraySupport( $fileContent );
+        $fileContent = $this->parserPhpQuoteSupport( $fileContent );
 
         // Parse string
         $configurationData = parse_ini_string( $fileContent, true );
@@ -307,6 +315,68 @@ class Ini implements Parser
         }
         return $fileContent;
     }
+    /**
+     * Pre processing needed for php ini parsers to support quotes in values
+     *
+     * Injects constants which is later cleaned up in {@link parsePhpPostArrayFilter()}.
+     *
+     * @param string $fileContent
+     * @return string
+     */
+    protected function parserPhpQuoteSupport( $fileContent )
+    {
+        if ( preg_match_all( "/^([^=]+)=([^'\n]+)?'(([^'\n]+)'(([^'\n]+)')?)?/m", $fileContent, $valueArray, PREG_OFFSET_CAPTURE ) )
+        {
+            $offsetDiff = 0;// Since we use offset captured before replace operations, we need to maintain an offset diff
+            foreach ( $valueArray[0] as $key => $match )
+            {
+                // Variable name
+                $replaceString = $valueArray[1][$key][0] . '=';
+
+                // If first key is empty use $key to make it unique
+                if ( !empty( $valueArray[2][$key][0] ) )
+                    $replaceString .= $valueArray[2][$key][0];
+
+                $replaceString .= self::TEMP_INI_QUOTE_VAR;
+
+                if ( !empty( $valueArray[4][$key][0] ) )
+                {
+                    $replaceString .= $valueArray[4][$key][0];
+                    $replaceString .= self::TEMP_INI_QUOTE_VAR;
+                }
+
+                if ( !empty( $valueArray[6][$key][0] ) )
+                {
+                    $replaceString .= $valueArray[6][$key][0];
+                    $replaceString .= self::TEMP_INI_QUOTE_VAR;
+                }
+
+                $fileContent = substr_replace( $fileContent, $replaceString, $match[1] + $offsetDiff, strlen( $match[0] ) );
+                $offsetDiff += strlen( $replaceString ) - strlen( $match[0] );
+            }
+        }
+        return $fileContent;
+    }
+
+    /**
+     * Common pre processing needed for both ezc and php parsers
+     *
+     * Marks array clearing, so post parser code in {@link Configuration::parse()} can detect it
+     *
+     * @param string $fileContent
+     * @return string
+     */
+    protected function parserClearArraySupport( $fileContent )
+    {
+        if ( preg_match_all( "/^([\w_-]+)\[([\w_-]+)?\](\[([\w_-]+)?\])?$/m", $fileContent, $valueArray ) )
+        {
+            foreach ( $valueArray[0] as $variableArrayClearing )
+            {
+                $fileContent = str_replace( "\n$variableArrayClearing\n", "\n$variableArrayClearing=" . Configuration::TEMP_INI_UNSET_VAR . "\n", $fileContent );
+            }
+        }
+        return $fileContent;
+    }
 
     /**
      * Transform temporary values the php equivalent to make sure parsed ini settings
@@ -330,6 +400,12 @@ class Ini implements Parser
 
             return (int)$iniValue;
         }
+
+        if ( $iniValue === self::TEMP_INI_QUOTE_VAR )
+            return '\'';
+
+        if ( strpos( $iniValue, self::TEMP_INI_QUOTE_VAR ) !== false )
+            $iniValue = str_replace( self::TEMP_INI_QUOTE_VAR, '\'', $iniValue );
 
         if ( isset( $iniValue[1] ) && is_string( $iniValue ) )
             return rtrim( $iniValue, ' ' );
@@ -371,26 +447,6 @@ class Ini implements Parser
             }
         }
         return $newArray;
-    }
-
-    /**
-     * Common pre processing needed for both ezc and php parsers
-     *
-     * Marks array clearing, so post parser code in {@link Configuration::parse()} can detect it
-     *
-     * @param string $fileContent
-     * @return string
-     */
-    protected function parserClearArraySupport( $fileContent )
-    {
-        if ( preg_match_all( "/^([\w_-]+)\[([\w_-]+)?\](\[([\w_-]+)?\])?$/m", $fileContent, $valueArray ) )
-        {
-            foreach ( $valueArray[0] as $variableArrayClearing )
-            {
-                $fileContent = str_replace( "\n$variableArrayClearing\n", "\n$variableArrayClearing=" . Configuration::TEMP_INI_UNSET_VAR . "\n", $fileContent );
-            }
-        }
-        return $fileContent;
     }
 
     /**
