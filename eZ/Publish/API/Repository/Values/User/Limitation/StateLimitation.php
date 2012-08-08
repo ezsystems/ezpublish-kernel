@@ -11,7 +11,7 @@ namespace eZ\Publish\API\Repository\Values\User\Limitation;
 
 use eZ\Publish\API\Repository\Values\User\Limitation;
 
-abstract class StateLimitation extends Limitation
+class StateLimitation extends Limitation
 {
     /**
      * @see \eZ\Publish\API\Repository\Values\User\Limitation::getIdentifier()

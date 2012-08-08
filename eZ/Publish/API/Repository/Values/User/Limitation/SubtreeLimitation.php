@@ -11,7 +11,7 @@ namespace eZ\Publish\API\Repository\Values\User\Limitation;
 
 use eZ\Publish\API\Repository\Values\User\Limitation;
 
-abstract class SubtreeLimitation extends RoleLimitation
+class SubtreeLimitation extends RoleLimitation
 {
     /**
      * Constructs a role limitation with the subtree name
