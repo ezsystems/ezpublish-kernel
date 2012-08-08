@@ -58,7 +58,6 @@ interface Type
      */
     public function evaluate( LimitationValue $value, Repository $repository, ValueObject $object, ValueObject $placement = null );
 
-
     /**
      * Return Criterion for use in find() query
      *
