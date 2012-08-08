@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation class.
+ * File containing the eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -13,14 +13,14 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation as APISectionLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation as APILanguageLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 
 /**
- * SectionLimitation is a Content Limitation & a Role Limitation
+ * LanguageLimitation is a Content limitation
  */
-class SectionLimitation implements SPILimitationTypeInterface
+class LanguageLimitationType implements SPILimitationTypeInterface
 {
     /**
      * Accepts a Limitation value
@@ -47,7 +47,7 @@ class SectionLimitation implements SPILimitationTypeInterface
      */
     public function buildValue( array $limitationValues )
     {
-        return new APISectionLimitation( array( 'limitationValues' => $limitationValues ) );
+        return new APILanguageLimitation( array( 'limitationValues' => $limitationValues ) );
     }
 
     /**
@@ -64,8 +64,8 @@ class SectionLimitation implements SPILimitationTypeInterface
      */
     public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $placement = null )
     {
-        if ( !$value instanceof APISectionLimitation )
-            throw new InvalidArgumentException( '$value', 'Must be of type: APISectionLimitation' );
+        if ( !$value instanceof APILanguageLimitation )
+            throw new InvalidArgumentException( '$value', 'Must be of type: APILanguageLimitation' );
 
         if ( !$object instanceof Content )
             throw new InvalidArgumentException( '$object', 'Must be of type: Content' );
@@ -76,7 +76,15 @@ class SectionLimitation implements SPILimitationTypeInterface
         /**
          * @var \eZ\Publish\API\Repository\Values\Content\Content $object
          */
-        return in_array( $object->contentInfo->sectionId, $value->limitationValues );
+        $versionInfo = $object->getVersionInfo();
+        foreach ( $value->limitationValues as $limitationLanguageCode )
+        {
+            if ( $versionInfo->initialLanguageCode === $limitationLanguageCode )
+                return true;
+            if ( in_array( $limitationLanguageCode, $versionInfo->languageCodes, true ) )
+                return true;
+        }
+        return false;
     }
 
     /**

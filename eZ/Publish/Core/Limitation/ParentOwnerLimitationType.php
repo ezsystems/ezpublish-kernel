@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\Values\User\Limitation\ParentUserGroupLimitation class.
+ * File containing the eZ\Publish\API\Repository\Values\User\Limitation\ParentOwnerLimitation class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -15,14 +15,14 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\API\Repository\Values\User\Limitation\ParentUserGroupLimitation as APIParentUserGroupLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\ParentOwnerLimitation as APIParentOwnerLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 
 /**
- * ParentUserGroupLimitation is a Content limitation
+ * ParentOwnerLimitation is a Content limitation
  */
-class ParentUserGroupLimitation implements SPILimitationTypeInterface
+class ParentOwnerLimitationType implements SPILimitationTypeInterface
 {
     /**
      * Accepts a Limitation value
@@ -49,7 +49,7 @@ class ParentUserGroupLimitation implements SPILimitationTypeInterface
      */
     public function buildValue( array $limitationValues )
     {
-        return new APIParentUserGroupLimitation( array( 'limitationValues' => $limitationValues ) );
+        return new APIParentOwnerLimitation( array( 'limitationValues' => $limitationValues ) );
     }
 
     /**
@@ -63,17 +63,19 @@ class ParentUserGroupLimitation implements SPILimitationTypeInterface
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
      * @return bool
+     *
+     * @todo Add support for $limitationValues[0] == 2 when session values can be injected somehow
      */
     public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $placement = null )
     {
-        if ( !$value instanceof APIParentUserGroupLimitation )
-            throw new InvalidArgumentException( '$value', 'Must be of type: APIParentUserGroupLimitation' );
+        if ( !$value instanceof APIParentOwnerLimitation )
+            throw new InvalidArgumentException( '$value', 'Must be of type: APIParentOwnerLimitation' );
 
-        if ( $value->limitationValues[0] != 1 )
+        if ( $value->limitationValues[0] != 1 && $value->limitationValues[0] != 2 )
         {
             throw new BadStateException(
-                'Parent User Group limitation',
-                'expected limitation value to be 1 but got:' . $value->limitationValues[0]
+                'Parent Owner limitation',
+                'expected limitation value to be 1 or 2 but got:' . $value->limitationValues[0]
             );
         }
 
@@ -86,29 +88,10 @@ class ParentUserGroupLimitation implements SPILimitationTypeInterface
         if ( $placement === null )
             return false;
 
-         /**
-          * @var \eZ\Publish\API\Repository\Values\Content\Location $placement
-          */
-        $parentContentInfo = $placement->getContentInfo();
-        $currentUser = $repository->getCurrentUser();
-        if ( $parentContentInfo->ownerId === $currentUser->id )
-            return true;
-
-        $userService = $repository->getUserService();
-        $parentOwner = $userService->loadUser( $parentContentInfo->ownerId );
-        $parentOwnerGroups = $userService->loadUserGroupsOfUser( $parentOwner );
-        $currentUserGroups = $userService->loadUserGroupsOfUser( $currentUser );
-
-        foreach ( $parentOwnerGroups as $parentOwnerGroup )
-        {
-            foreach ( $currentUserGroups as $currentUserGroup )
-            {
-                if ( $parentOwnerGroup->id === $currentUserGroup->id )
-                    return true;
-            }
-        }
-
-        return false;
+        /**
+         * @var \eZ\Publish\API\Repository\Values\Content\Location $placement
+         */
+        return $placement->getContentInfo()->ownerId === $repository->getCurrentUser()->id;
     }
 
     /**

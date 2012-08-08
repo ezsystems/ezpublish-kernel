@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation class.
+ * File containing the eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -12,15 +12,16 @@ namespace eZ\Publish\Core\Limitation;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation as APIContentTypeLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation as APIOwnerLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 
 /**
- * ContentTypeLimitation is a Content limitation
+ * OwnerLimitation is a Content limitation
  */
-class ContentTypeLimitation implements SPILimitationTypeInterface
+class OwnerLimitationType implements SPILimitationTypeInterface
 {
     /**
      * Accepts a Limitation value
@@ -47,7 +48,7 @@ class ContentTypeLimitation implements SPILimitationTypeInterface
      */
     public function buildValue( array $limitationValues )
     {
-        return new APIContentTypeLimitation( array( 'limitationValues' => $limitationValues ) );
+        return new APIOwnerLimitation( array( 'limitationValues' => $limitationValues ) );
     }
 
     /**
@@ -61,22 +62,29 @@ class ContentTypeLimitation implements SPILimitationTypeInterface
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
      * @return bool
+     *
+     * @todo Add support for $limitationValues[0] == 2 when session values can be injected somehow
      */
     public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $placement = null )
     {
-        if ( !$value instanceof APIContentTypeLimitation )
-            throw new InvalidArgumentException( '$value', 'Must be of type: APIContentTypeLimitation' );
+        if ( !$value instanceof APIOwnerLimitation )
+            throw new InvalidArgumentException( '$value', 'Must be of type: APIOwnerLimitation' );
+
+        if ( $value->limitationValues[0] != 1 && $value->limitationValues[0] != 2 )
+        {
+            throw new BadStateException(
+                'Owner limitation',
+                'expected limitation value to be 1 or 2 but got:' . $value->limitationValues[0]
+            );
+        }
 
         if ( !$object instanceof Content )
             throw new InvalidArgumentException( '$object', 'Must be of type: Content' );
 
-        if ( empty( $value->limitationValues ) )
-            return false;
-
         /**
          * @var \eZ\Publish\API\Repository\Values\Content\Content $object
          */
-        return in_array( $object->contentType->id, $value->limitationValues );
+        return $object->contentInfo->ownerId === $repository->getCurrentUser()->id;
     }
 
     /**

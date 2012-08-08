@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation class.
+ * File containing the eZ\Publish\API\Repository\Values\User\Limitation\UserGroupLimitation class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -12,15 +12,16 @@ namespace eZ\Publish\Core\Limitation;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation as APILanguageLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\UserGroupLimitation as APIUserGroupLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 
 /**
- * LanguageLimitation is a Content limitation
+ * UserGroupLimitation is a Content Limitation
  */
-class LanguageLimitation implements SPILimitationTypeInterface
+class UserGroupLimitationType implements SPILimitationTypeInterface
 {
     /**
      * Accepts a Limitation value
@@ -47,7 +48,7 @@ class LanguageLimitation implements SPILimitationTypeInterface
      */
     public function buildValue( array $limitationValues )
     {
-        return new APILanguageLimitation( array( 'limitationValues' => $limitationValues ) );
+        return new APIUserGroupLimitation( array( 'limitationValues' => $limitationValues ) );
     }
 
     /**
@@ -64,26 +65,42 @@ class LanguageLimitation implements SPILimitationTypeInterface
      */
     public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $placement = null )
     {
-        if ( !$value instanceof APILanguageLimitation )
-            throw new InvalidArgumentException( '$value', 'Must be of type: APILanguageLimitation' );
+        if ( !$value instanceof APIUserGroupLimitation )
+            throw new InvalidArgumentException( '$value', 'Must be of type: APIUserGroupLimitation' );
+
+        if ( $value->limitationValues[0] != 1 )
+        {
+            throw new BadStateException(
+                'Parent User Group limitation',
+                'expected limitation value to be 1 but got:' . $value->limitationValues[0]
+            );
+        }
 
         if ( !$object instanceof Content )
             throw new InvalidArgumentException( '$object', 'Must be of type: Content' );
 
-        if ( empty( $value->limitationValues ) )
-            return false;
+         /**
+          * @var \eZ\Publish\API\Repository\Values\Content\Content $object
+          */
+        $contentInfo = $object->contentInfo;
+        $currentUser = $repository->getCurrentUser();
+        if ( $contentInfo->ownerId === $currentUser->id )
+            return true;
 
-        /**
-         * @var \eZ\Publish\API\Repository\Values\Content\Content $object
-         */
-        $versionInfo = $object->getVersionInfo();
-        foreach ( $value->limitationValues as $limitationLanguageCode )
+        $userService = $repository->getUserService();
+        $contentOwner = $userService->loadUser( $contentInfo->ownerId );
+        $contentOwnerGroups = $userService->loadUserGroupsOfUser( $contentOwner );
+        $currentUserGroups = $userService->loadUserGroupsOfUser( $currentUser );
+
+        foreach ( $contentOwnerGroups as $contentOwnerGroup )
         {
-            if ( $versionInfo->initialLanguageCode === $limitationLanguageCode )
-                return true;
-            if ( in_array( $limitationLanguageCode, $versionInfo->languageCodes, true ) )
-                return true;
+            foreach ( $currentUserGroups as $currentUserGroup )
+            {
+                if ( $contentOwnerGroup->id === $currentUserGroup->id )
+                    return true;
+            }
         }
+
         return false;
     }
 

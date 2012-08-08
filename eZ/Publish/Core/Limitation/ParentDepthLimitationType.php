@@ -21,7 +21,7 @@ use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 /**
  * ParentDepthLimitation is a Content limitation
  */
-class ParentDepthLimitation implements SPILimitationTypeInterface
+class ParentDepthLimitationType implements SPILimitationTypeInterface
 {
     /**
      * Accepts a Limitation value
