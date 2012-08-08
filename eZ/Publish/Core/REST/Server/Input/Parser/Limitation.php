@@ -72,6 +72,8 @@ class Limitation extends Base
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @return \eZ\Publish\API\Repository\Values\User\Limitation
+     *
+     * @todo Use dependency injection system
      */
     protected function getLimitationByIdentifier( $identifier )
     {
