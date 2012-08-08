@@ -41,7 +41,8 @@ So in updated approach these permission check functions are moved to a
 Limitation SPI interface (since extensions should be able to add their own).
 
 The following functions should be added to a SPI for Limitations:
-´´´php
+
+```php
 namespace eZ\Publish\SPI\Limitation;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -116,7 +117,8 @@ interface Type
      */
     public function valueSchema( Repository $repository );
 }
-´´´
+```
+
 Note: Access to Repository in evaluate() and getCriterion() is needed as not everything
       is available via the object graph, but use of repository in limitations functions
       should be avoided for performance reasons, especially when using un-cached parts
