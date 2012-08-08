@@ -855,8 +855,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Returns the correct implementation of API Limitation value object
-     * based on provided identifier
+     * Returns the LimitationType registered with the given identifier
      *
      * @param string $identifier
      *
@@ -865,11 +864,32 @@ class RoleService implements RoleServiceInterface
      */
     public function getLimitationType( $identifier )
     {
-
         if ( !isset( $this->settings['limitationTypes'][$identifier] ) )
             throw new \eZ\Publish\Core\Base\Exceptions\NotFoundException( 'Limitation', $identifier );
 
         return $this->settings['limitationTypes'][$identifier];
+    }
+
+    /**
+     * Returns the LimitationTypes assigned to a module/function
+     *
+     * @param string $module
+     * @param string $function
+     *
+     * @uses getLimitationType()
+     * @return \eZ\Publish\SPI\Limitation\Type[] With identifier as key
+     */
+    protected function getLimitationTypes( $module, $function )
+    {
+
+        if ( empty( $this->settings['limitationMap'][$module][$function] ) )
+            return array();
+
+        $types = array();
+        foreach ( $this->settings['limitationMap'][$module][$function] as $identifier )
+            $types[$identifier] = $this->getLimitationType( $identifier );
+
+        return $types;
     }
 
     /**
