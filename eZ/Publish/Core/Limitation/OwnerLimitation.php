@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Values\User\Limitation;
+namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
