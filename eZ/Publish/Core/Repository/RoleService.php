@@ -856,6 +856,7 @@ class RoleService implements RoleServiceInterface
      *
      * @param string $identifier
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @return \eZ\Publish\API\Repository\Values\User\Limitation
      */
     protected function getLimitationFromIdentifier( $identifier )
@@ -915,7 +916,7 @@ class RoleService implements RoleServiceInterface
                 break;
 
             default:
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\CustomLimitation( $identifier );
+                throw new \eZ\Publish\Core\Base\Exceptions\NotFoundException( 'Limitation', $identifier );
         }
     }
 

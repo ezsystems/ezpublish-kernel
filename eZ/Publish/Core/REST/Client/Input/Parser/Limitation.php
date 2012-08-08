@@ -48,6 +48,8 @@ class Limitation extends Parser
      * Instantiates Limitation object based on identifier
      *
      * @param string $identifier
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @return \eZ\Publish\API\Repository\Values\User\Limitation
      */
     protected function getLimitationByIdentifier( $identifier )
@@ -92,8 +94,9 @@ class Limitation extends Parser
 
             case APILimitation::PARENTUSERGROUP:
                 return new \eZ\Publish\Core\Repository\Values\User\Limitation\ParentUserGroupLimitation();
-        }
 
-        return new \eZ\Publish\Core\Repository\Values\User\Limitation\CustomLimitation( $identifier );
+            default:
+                throw new \eZ\Publish\Core\Base\Exceptions\NotFoundException( 'Limitation', $identifier );
+        }
     }
 }
