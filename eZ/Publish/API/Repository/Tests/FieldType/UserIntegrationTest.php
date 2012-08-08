@@ -274,7 +274,7 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
         return array(
             array(
                 null,
-                'eZ\\Publish\\API\\Repository\\Exceptions\\ContentValidationException'
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType'
             ),
             // TODO: Define more failure cases ...
         );
