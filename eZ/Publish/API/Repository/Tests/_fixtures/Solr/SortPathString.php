@@ -10,10 +10,10 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 10,
-        'title' => 'Anonymous User',
+        'id' => 59,
+        'title' => 'Partners',
       ),
-       'score' => 4.135494,
+       'score' => 1.6931472,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -21,10 +21,10 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 42,
-        'title' => 'Anonymous Users',
+        'id' => 10,
+        'title' => 'Anonymous User',
       ),
-       'score' => 4.135494,
+       'score' => 1.6931472,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -32,10 +32,10 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 13,
-        'title' => 'Editors',
+        'id' => 42,
+        'title' => 'Anonymous Users',
       ),
-       'score' => 4.135494,
+       'score' => 1.6931472,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -43,10 +43,10 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 14,
-        'title' => 'Administrator User',
+        'id' => 13,
+        'title' => 'Editors',
       ),
-       'score' => 4.135494,
+       'score' => 1.6931472,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -54,10 +54,10 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 12,
-        'title' => 'Administrator users',
+        'id' => 14,
+        'title' => 'Administrator User',
       ),
-       'score' => 4.135494,
+       'score' => 1.6931472,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -65,10 +65,10 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 11,
-        'title' => 'Members',
+        'id' => 12,
+        'title' => 'Administrator users',
       ),
-       'score' => 4.135494,
+       'score' => 1.6931472,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -76,10 +76,21 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
+        'id' => 11,
+        'title' => 'Members',
+      ),
+       'score' => 1.6931472,
+       'index' => NULL,
+       'highlight' => NULL,
+    )),
+    7 => 
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+       'valueObject' => 
+      array (
         'id' => 4,
         'title' => 'Users',
       ),
-       'score' => 4.135494,
+       'score' => 1.6931472,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -87,7 +98,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
    'spellSuggestion' => NULL,
    'time' => 1,
    'timedOut' => NULL,
-   'maxScore' => 4.135494,
-   'totalCount' => 7,
+   'maxScore' => 1.6931472,
+   'totalCount' => 8,
 ));
 
