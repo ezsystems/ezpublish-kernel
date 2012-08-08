@@ -256,7 +256,33 @@ class Repository implements RepositoryInterface
      */
     public function hasAccess( $module, $function, User $user = null )
     {
-        //@todo implement, see impl in ezp-next
+        if ( $user === null )
+            $user = $this->getCurrentUser();
+
+        foreach ( $this->getRoleService()->loadPoliciesByUserId( $user->id ) as $policy )
+        {
+            if ( $policy->module === '*' )
+                return true;
+
+            if ( $policy->module !== $module )
+                continue;
+
+            if ( $policy->function === '*' )
+                return true;
+
+            if ( $policy->function !== $function )
+                continue;
+
+            if ( $policy->limitations === '*' )
+                return true;
+
+            $limitationArray[] = $policy->limitations;
+        }
+
+        if ( !empty( $limitationArray ) )
+            return $limitationArray;
+
+        return false;// No policies matching $module and $function
     }
 
     /**
@@ -271,18 +297,10 @@ class Repository implements RepositoryInterface
      */
     public function canUser( $module, $function, ValueObject $value, ValueObject $target = null )
     {
-        $className = $value;
         $limitationArray = $this->hasAccess( $module, $function );
         if ( $limitationArray === false || $limitationArray === true )
         {
             return $limitationArray;
-        }
-        if ( empty( $definition['functions'][$function] ) )
-        {
-            throw new BadConfiguration(
-                "{$className}::definition()",
-                "function limitations returned for '{$function}', but none defined in definition()"
-            );
         }
 
         /**
@@ -290,36 +308,23 @@ class Repository implements RepositoryInterface
          * that tells us where to get it from for instance.
          * @var array $functions
          */
-        $functions = $value::getLimitationFunctions();
+        $roleService = $this->getRoleService();
         foreach ( $limitationArray as $limitationSet )
         {
             $limitationSetSaysYes = true;
-            foreach ( $limitationSet as $limitationKey => $limitationValues )
+            /**
+             * @var \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
+             */
+            foreach ( $limitationSet as $limitationValue )
             {
-                if ( !isset( $functions[$function][$limitationKey]['compare'] ) )
-                {
-                    throw new LogicException(
-                        "\$definition[functions][{$function}][{$limitationKey}][compare] logic error, " .
-                        "could not find limitation compare function on {$className}::definition()"
-                    );
-                }
-
-                $limitationCompareFn = $functions[$function][$limitationKey]['compare'];
-                if ( !is_callable( $limitationCompareFn ) )
-                {
-                    throw new LogicException(
-                        "\$definition[functions][{$function}][{$limitationKey}][compare] logic error, " .
-                        "compare function from {$className}::definition() is not callable"
-                    );
-                }
-
-                if ( !$limitationCompareFn( $value, $limitationValues, $this, $target ) )
+                $type = $roleService->getLimitationType( $limitationValue->getIdentifier() );
+                if ( !$type->evaluate( $limitationValue, $this, $value, $target ) )
                 {
                     $limitationSetSaysYes = false;
                     // Break to next limitationSet
-                    break;
                     // If needed, there could be a if condition here building up an array of all limitations
                     // that are denying user access
+                    break;
                 }
             }
             if ( $limitationSetSaysYes )
