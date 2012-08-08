@@ -24,7 +24,10 @@ use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 class UserGroupLimitation implements SPILimitationTypeInterface
 {
     /**
-     * Create the Limitation Value
+     * Accepts a Limitation value
+     *
+     * Makes sure LimitationValue object is of correct type and that ->limitationValues
+     * is valid according to valueSchema().
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
      * @param \eZ\Publish\API\Repository\Repository $repository

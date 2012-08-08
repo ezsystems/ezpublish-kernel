@@ -28,7 +28,10 @@ interface Type
     const VALUE_SCHEMA_LOCATION_PATH = 2;
 
     /**
-     * Create the Limitation Value
+     * Accepts a Limitation value
+     *
+     * Makes sure LimitationValue object is of correct type and that ->limitationValues
+     * is valid according to valueSchema().
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -47,7 +50,7 @@ interface Type
     public function buildValue( array $limitationValues );
 
     /**
-     * Evaluate permission against content and parent
+     * Evaluate permission against content and placement
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -74,7 +77,7 @@ interface Type
      * @param \eZ\Publish\API\Repository\Repository $repository
      *
      * @return mixed[]|int In case of array, a hash with key as valid limitations value and value as human readable name
-     *                     of that option, in case of int on of VALUE_SCHEMA_ constants.
+     *                     of that option, in case of int on of VALUE_SCHEMA_* constants.
      */
     public function valueSchema( Repository $repository );
 }
