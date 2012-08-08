@@ -54,15 +54,4 @@ class Memory extends SetupFactory
     {
         return new IdManager\Php;
     }
-
-    /**
-     * Returns the (absolute) path to a storage dir, which tests are expected
-     * to use.
-     *
-     * @return string
-     */
-    public function getStoragePath()
-    {
-        throw new \RuntimeException( 'Storage path not supported by memory implementation.' );
-    }
 }

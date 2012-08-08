@@ -21,13 +21,27 @@ use eZ\Publish\API\Repository,
 class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
 {
     /**
-     * If the storage path was used by the test.
+     * Base install dir
      *
-     * Used to overcome uneccessary deletion of storage path.
-     *
-     * @var bool
+     * @var string
+     * @todo Make retrieved from service container
      */
-    protected static $usedStoragePath = false;
+    protected static $installDir;
+
+    /**
+     * Storeage dir
+     *
+     * @var string
+     * @todo Make retrieved from service container
+     */
+    protected static $storageDir;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        self::$installDir = __DIR__ . '/../../../../../..';
+        self::$storageDir = 'var/my_site/storage';
+    }
 
     /**
      * Sets up fixture data.
@@ -62,23 +76,7 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
     public static function tearDownAfterClass()
     {
         parent::tearDownAfterClass();
-        // Clean up stored image data
-        if ( self::$usedStoragePath !== false )
-        {
-            // self::cleanupStorageDir();
-        }
-    }
-
-    /**
-     * Returns the storage path. Sets the storage path to "used" on first
-     * access.
-     *
-     * @return string
-     */
-    protected function getStoragePath()
-    {
-        self::$usedStoragePath = parent::getStoragePath();
-        return self::$usedStoragePath;
+        self::cleanupStorageDir();
     }
 
     /**
@@ -91,7 +89,7 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
     {
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator(
-                self::$usedStoragePath,
+                self::$installDir . '/' . self::$storageDir,
                 \FileSystemIterator::KEY_AS_PATHNAME | \FileSystemIterator::SKIP_DOTS | \ FilesystemIterator::CURRENT_AS_FILEINFO
 
             ),
@@ -236,8 +234,9 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
             $field->value
         );
 
-        // @TODO: Assert path correct!
-        $this->assertNotNull( $field->value->path );
+        $this->assertTrue(
+            file_exists( self::$installDir . '/' . $field->value->path )
+        );
     }
 
     /**
@@ -323,7 +322,9 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
             $field->value
         );
 
-        $this->assertNotNull( $field->value->path );
+        $this->assertTrue(
+            file_exists( self::$installDir . '/' . $field->value->path )
+        );
     }
 
     /**
