@@ -10,11 +10,10 @@
 namespace eZ\Publish\Core\FieldType\Image;
 use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\API\Repository\Repository,
-    eZ\Publish\API\Repository\FieldTypeTools,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\API\Repository\Values\IO\BinaryFile,
-    eZ\Publish\Core\FieldType\ValidationError;
+    eZ\Publish\Core\FieldType\ValidationError,
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 /**
  * The Image field type
@@ -194,7 +193,7 @@ class Type extends FieldType
                         // No file size limit
                         break;
                     }
-                    if ( $parameters['maxFileSize'] < $value->fileSize )
+                    if ( $parameters['maxFileSize'] < $fieldValue->fileSize )
                     {
                         $errors[] = new ValidationError(
                             "The file size cannot exceed %size% byte.",
@@ -238,7 +237,7 @@ class Type extends FieldType
                         );
                         break;
                     }
-                    if ( !is_int( $parameter['maxFileSize'] ) && !is_bool( $parameter['maxFileSize'] ) )
+                    if ( !is_int( $parameters['maxFileSize'] ) && !is_bool( $parameters['maxFileSize'] ) )
                     {
                         $validationErrors[] = new ValidationError(
                             "Validator %validator% expects parameter %parameter% to be of %type%.",
@@ -299,6 +298,7 @@ class Type extends FieldType
         return array(
             'alternativeText' => $value->alternativeText,
             'fileName' => $value->fileName,
+            'fileSize' => $value->fileSize,
             'path' => $value->path,
         );
     }
@@ -332,7 +332,24 @@ class Type extends FieldType
     public function fromPersistenceValue( FieldValue $fieldValue )
     {
         // Restored data comes in $data, since it has already been processed
-        return $this->fromHash( $fieldValue->data );
+        // there might be more data in the persistence value than needed here
+        $result = $this->fromHash(
+            array(
+                'alternativeText' => ( isset( $fieldValue->data['alternativeText'] )
+                    ? $fieldValue->data['alternativeText']
+                    : null ),
+                'fileName' => ( isset( $fieldValue->data['fileName'] )
+                    ? $fieldValue->data['fileName']
+                    : null ),
+                'fileSize' => ( isset( $fieldValue->data['fileSize'] )
+                    ? $fieldValue->data['fileSize']
+                    : null ),
+                'path' => ( isset( $fieldValue->data['path'] )
+                    ? $fieldValue->data['path']
+                    : null ),
+            )
+        );
+        return $result;
     }
 
 }

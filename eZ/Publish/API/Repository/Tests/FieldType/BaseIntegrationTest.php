@@ -536,7 +536,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
     /**
      * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
-     * @depends testCreateContent
+     * @dep_ends testCreateContent
      */
     public function testLoadField()
     {

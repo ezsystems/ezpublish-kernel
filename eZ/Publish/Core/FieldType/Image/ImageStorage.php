@@ -50,7 +50,11 @@ class ImageStorage extends GatewayBasedStorage
     {
         $nodePathString = $this->getGateway( $context )->getNodePathString( $versionInfo );
 
-        $storedValue = $field->value->externalData;
+        $storedValue = isset( $field->value->externalData )
+            // New image
+            ? $field->value->externalData
+            // Copied / updated image
+            : $field->value->data;
 
         $storedValue['path'] = $this->fileService->storeFile(
             $versionInfo,
@@ -89,7 +93,7 @@ class ImageStorage extends GatewayBasedStorage
      */
     public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
-        // Not necessary
+        $field->value->data['fileSize'] = $this->fileService->getFileSize( $field->value->data['path'] );
     }
 
     /**

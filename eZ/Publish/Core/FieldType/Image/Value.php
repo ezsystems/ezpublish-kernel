@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Image;
 use eZ\Publish\Core\FieldType\Value as BaseValue,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
 
 /**

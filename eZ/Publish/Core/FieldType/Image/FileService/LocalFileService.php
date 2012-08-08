@@ -60,9 +60,22 @@ class LocalFileService implements FileService
      */
     public function storeFile( VersionInfo $versionInfo, Field $field, $nodePathString )
     {
-        $sourcePath = $field->value->externalData['path'];
+        $sourcePath = $this->getValueData( $field->value, 'path' );
+
+        // Relative path, if copy form DB value
+        if ( substr( $sourcePath, 0, 1 ) !== '/' )
+        {
+            $sourcePath = $this->getFullPath( $sourcePath );
+        }
+
         $targetUri = $this->createTargetPath( $versionInfo, $field, $nodePathString );
         $targetPath = $this->getFullPath( $targetUri );
+
+        if ( $sourcePath == $targetPath )
+        {
+            // Updating the field, no copy needed
+            return $targetUri;
+        }
 
         $this->createDirectoryRecursive(
             dirname( $targetPath )
@@ -110,6 +123,19 @@ class LocalFileService implements FileService
     }
 
     /**
+     * Returns the file size of the file identified by $path
+     *
+     * @param string $path
+     * @return int
+     */
+    public function getFileSize( $path )
+    {
+        return filesize(
+            $this->getFullPath( $path )
+        );
+    }
+
+    /**
      * Creates the given directory recursively
      *
      * @param string $directory
@@ -150,12 +176,32 @@ class LocalFileService implements FileService
     {
         return sprintf(
             '%s/images/%s%s-%s-%s/%s',
-            $this->installDir, // %s/
+            $this->storageDir, // %s/
             $nodePathString, // images/%s, note that $nodePathString ends with a "/"
             $field->id, // /%s-
             $versionInfo->versionNo, // -%s-
             $field->languageCode, // -%s
-            basename( $field->value->externalData['fileName'] ) // /%s
+            basename( $this->getValueData( $field->value, 'fileName' ) ) // /%s
         );
+    }
+
+    /**
+     * Retrieve data for $key either from data or externalData.
+     *
+     * @param FieldValue $value
+     * @param string $key
+     * @return mixed
+     */
+    protected function getValueData( $value, $key )
+    {
+        if ( isset( $value->externalData[$key] ) )
+        {
+            return $value->externalData[$key];
+        }
+        if ( isset( $value->data[$key] ) )
+        {
+            return $value->data[$key];
+        }
+        throw new \RuntimeException( "Data key '$key' not found in value." );
     }
 }

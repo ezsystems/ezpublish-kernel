@@ -42,7 +42,7 @@ class Image implements Converter
     {
         // Only store data if it is already available (after storage has stored
         // image)
-        if ( isset( $value->data ) )
+        if ( isset( $value->data ) && isset( $value->data['mime'] ) )
         {
             $storageFieldValue->dataText = $this->createLegacyXml( $value->data );
         }
