@@ -343,7 +343,12 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
         return array(
             array(
                 new UserValue( array( 'login' => 'hans' ) ),
-                array( 'login' => 'hans' ),
+                array(
+                    'login'      => 'hans',
+                    'accountKey' => null,
+                    'lastVisit'  => null,
+                    'loginCount' => null,
+                ),
             ),
         );
     }
