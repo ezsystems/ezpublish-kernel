@@ -11,7 +11,7 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException,
     eZ\Publish\Core\Repository\SearchService,
-    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
+    eZ\Publish\Core\Repository\Values\Content\Content,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
@@ -788,10 +788,10 @@ class SearchServiceTest extends BaseTest
         {
             switch ( true )
             {
-                case $hit->valueObject instanceof ContentInfo:
+                case $hit->valueObject instanceof Content:
                     $hit->valueObject = array(
-                        'id'    => $hit->valueObject->id,
-                        'title' => $hit->valueObject->name,
+                        'id'    => $hit->valueObject->contentInfo->id,
+                        'title' => $hit->valueObject->contentInfo->name,
                     );
                     break;
 
