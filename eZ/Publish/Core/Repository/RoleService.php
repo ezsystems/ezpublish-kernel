@@ -864,55 +864,55 @@ class RoleService implements RoleServiceInterface
         switch ( $identifier )
         {
             case Limitation::CONTENTTYPE :
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\ContentTypeLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
                 break;
 
             case Limitation::LANGUAGE :
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\LanguageLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation();
                 break;
 
             case Limitation::LOCATION :
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\LocationLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation();
                 break;
 
             case Limitation::OWNER :
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\OwnerLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation();
                 break;
 
             case Limitation::PARENTOWNER :
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\ParentOwnerLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\ParentOwnerLimitation();
                 break;
 
             case Limitation::PARENTCONTENTTYPE :
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\ParentContentTypeLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\ParentContentTypeLimitation();
                 break;
 
             case Limitation::PARENTDEPTH :
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\ParentDepthLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation();
                 break;
 
             case Limitation::SECTION :
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\SectionLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation();
                 break;
 
             case Limitation::SITEACCESS :
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\SiteaccessLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\SiteaccessLimitation();
                 break;
 
             case Limitation::STATE :
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\StateLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\StateLimitation();
                 break;
 
             case Limitation::SUBTREE :
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\SubtreeLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation();
                 break;
 
             case Limitation::USERGROUP :
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\UserGroupLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\UserGroupLimitation();
                 break;
 
             case Limitation::PARENTUSERGROUP :
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\ParentUserGroupLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\ParentUserGroupLimitation();
                 break;
 
             default:

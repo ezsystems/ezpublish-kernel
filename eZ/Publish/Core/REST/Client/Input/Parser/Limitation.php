@@ -57,43 +57,43 @@ class Limitation extends Parser
         switch ( $identifier )
         {
             case APILimitation::CONTENTTYPE:
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\ContentTypeLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
 
             case APILimitation::LANGUAGE:
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\LanguageLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation();
 
             case APILimitation::LOCATION:
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\LocationLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation();
 
             case APILimitation::OWNER:
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\OwnerLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation();
 
             case APILimitation::PARENTOWNER:
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\ParentOwnerLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\ParentOwnerLimitation();
 
             case APILimitation::PARENTCONTENTTYPE:
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\ParentContentTypeLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\ParentContentTypeLimitation();
 
             case APILimitation::PARENTDEPTH:
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\ParentDepthLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation();
 
             case APILimitation::SECTION:
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\SectionLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation();
 
             case APILimitation::SITEACCESS:
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\SiteaccessLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\SiteaccessLimitation();
 
             case APILimitation::STATE:
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\StateLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\StateLimitation();
 
             case APILimitation::SUBTREE:
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\SubtreeLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation();
 
             case APILimitation::USERGROUP:
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\UserGroupLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\UserGroupLimitation();
 
             case APILimitation::PARENTUSERGROUP:
-                return new \eZ\Publish\Core\Repository\Values\User\Limitation\ParentUserGroupLimitation();
+                return new \eZ\Publish\API\Repository\Values\User\Limitation\ParentUserGroupLimitation();
 
             default:
                 throw new \eZ\Publish\Core\Base\Exceptions\NotFoundException( 'Limitation', $identifier );
