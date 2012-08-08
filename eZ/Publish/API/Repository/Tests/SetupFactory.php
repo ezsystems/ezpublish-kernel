@@ -28,4 +28,12 @@ abstract class SetupFactory
      * @return \eZ\Publish\API\Repository\Tests\IdManager
      */
     abstract public function getIdManager();
+
+    /**
+     * Returns the (absolute) path to a storage dir, which tests are expected
+     * to use.
+     *
+     * @return string
+     */
+    abstract public function getStoragePath();
 }

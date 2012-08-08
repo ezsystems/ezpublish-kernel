@@ -108,6 +108,20 @@ class Legacy extends SetupFactory
     }
 
     /**
+     * Returns the (absolute) path to a storage dir, which tests are expected
+     * to use.
+     *
+     * @return string
+     */
+    public function getStoragePath()
+    {
+        return sprintf(
+            $this->getServiceContainer()->getVariable( 'install_dir' ),
+            $this->getServiceContainer()->getVariable( 'storage_dir' )
+        );
+    }
+
+    /**
      * Insert the database data
      *
      * @return void

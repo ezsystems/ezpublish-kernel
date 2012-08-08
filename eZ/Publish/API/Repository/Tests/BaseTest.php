@@ -142,6 +142,19 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Returns the (absolute) storage path to use for tests.
+     *
+     * ATTENTION: It is in duty of the test suit to clean up stored data after
+     * the test!
+     *
+     * @return string
+     */
+    protected function getStorageDir()
+    {
+        return $this->getSetupFactory()->getStoragePath();
+    }
+
+    /**
      * @return \eZ\Publish\API\Repository\Tests\SetupFactory
      */
     private function getSetupFactory()
