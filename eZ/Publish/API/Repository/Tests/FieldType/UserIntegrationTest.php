@@ -181,13 +181,12 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array(
-            array(
-                null,
-                'eZ\\Publish\\API\\Repository\\Exceptions\\ContentValidationException'
-            ),
-            // TODO: Define more failure cases ...
-        );
+        return array();
+    }
+
+    public function testCreateContentFails( $failingValue = null, $expectedException = null )
+    {
+        $this->markTestSkipped( "Values are ignored on creation." );
     }
 
     /**
