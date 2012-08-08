@@ -75,6 +75,8 @@ class LegacySolr extends Legacy
             'ezgmaplocation'        => new FieldType\Unindexed(),
             'ezbinaryfile'          => new FieldType\Unindexed(),
             'ezmedia'               => new FieldType\Unindexed(),
+            'ezpage'                => new FieldType\Unindexed(),
+            'ezcomcomments'         => new FieldType\Unindexed(),
         ) );
 
         $searchHandler = new Solr\Content\Search\Handler(
