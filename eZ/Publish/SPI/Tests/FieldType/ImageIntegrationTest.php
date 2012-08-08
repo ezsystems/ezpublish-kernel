@@ -130,7 +130,7 @@ class ImageIntergrationTest extends BaseIntegrationTest
                 ),
                 new FieldType\Image\FileService\LocalFileService(
                     self::$tmpDir,
-                    'my_fancy_site'
+                    'var/my_site/storage'
                 )
             )
         );

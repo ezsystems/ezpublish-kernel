@@ -15,27 +15,38 @@ use eZ\Publish\Core\FieldType\Image\FileService,
 class LocalFileService implements FileService
 {
     /**
-     * Target storage directory
+     * eZ Publish base install dir
      *
      * @var string
      */
     protected $installDir;
 
     /**
-     * Name of the site the file belongs to
+     * Storage dir path (relative to $installDir)
      *
      * @var string
      */
-    protected $siteName;
+    protected $storageDir;
 
     /**
      * @param string $installDir
      * @param string $siteName
      */
-    public function __construct( $installDir, $siteName )
+    public function __construct( $installDir, $storageDir )
     {
         $this->installDir = $installDir;
-        $this->siteName = $siteName;
+        $this->storageDir = $storageDir;
+    }
+
+    /**
+     * Returns the full path for $path
+     *
+     * @param string $path
+     * @return string
+     */
+    protected function getFullPath( $path )
+    {
+        return $this->installDir . '/' . $path;
     }
 
     /**
@@ -51,7 +62,7 @@ class LocalFileService implements FileService
     {
         $sourcePath = $field->value->externalData['path'];
         $targetUri = $this->createTargetPath( $versionInfo, $field, $nodePathString );
-        $targetPath = $this->installDir . '/' . $targetUri;
+        $targetPath = $this->getFullPath( $targetUri );
 
         $this->createDirectoryRecursive(
             dirname( $targetPath )
@@ -138,8 +149,8 @@ class LocalFileService implements FileService
     protected function createTargetPath( VersionInfo $versionInfo, Field $field, $nodePathString )
     {
         return sprintf(
-            'var/%s/storage/images/%s%s-%s-%s/%s',
-            $this->siteName,  // var/%s
+            '%s/images/%s%s-%s-%s/%s',
+            $this->installDir, // %s/
             $nodePathString, // images/%s, note that $nodePathString ends with a "/"
             $field->id, // /%s-
             $versionInfo->versionNo, // -%s-
