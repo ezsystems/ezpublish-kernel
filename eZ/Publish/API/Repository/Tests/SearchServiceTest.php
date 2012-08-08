@@ -738,12 +738,11 @@ class SearchServiceTest extends BaseTest
                     $record = $fixture . '.recording',
                     "<?php\n\nreturn " . var_export( $result, true ) . ";\n\n"
                 );
-                $this->markTestIncomplete( "No fixture available. Set \$_ENV['ez_tests_record'] to generate it." );
+                $this->markTestIncomplete( "No fixture available. Result recorded at $record. Result: \n" . $this->printResult( $result ) );
             }
             else
             {
-                // @TODO: Print result in a readable way here?
-                $this->markTestIncomplete( "No fixture available. Result recorded at $record. Result: \n" . $this->printResult( $result ) );
+                $this->markTestIncomplete( "No fixture available. Set \$_ENV['ez_tests_record'] to generate it." );
             }
         }
 
