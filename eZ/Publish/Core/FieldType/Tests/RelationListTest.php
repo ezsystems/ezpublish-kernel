@@ -8,14 +8,14 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Relation\Type as Relation,
-    eZ\Publish\Core\FieldType\Relation\Value,
+use eZ\Publish\Core\FieldType\RelationList\Type as Relation,
+    eZ\Publish\Core\FieldType\RelationList\Value,
     eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     PHPUnit_Framework_TestCase,
     eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 
-class RelationTest extends FieldTypeTest
+class RelationListTest extends FieldTypeTest
 {
     /**
      * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
@@ -58,7 +58,7 @@ class RelationTest extends FieldTypeTest
     public function testAcceptValueInvalidFormat()
     {
         $ft = new Relation( $this->validatorService, $this->fieldTypeTools );
-        $ft->acceptValue( new Value( array() ) );
+        $ft->acceptValue( new Value( array( null ) ) );
     }
 
     /**
@@ -67,7 +67,7 @@ class RelationTest extends FieldTypeTest
     public function testAcceptValueValidFormat()
     {
         $ft = new Relation( $this->validatorService, $this->fieldTypeTools );
-        $value = new Value( 1 );
+        $value = new Value( array( 1 ) );
         self::assertSame( $value, $ft->acceptValue( $value ) );
     }
 
@@ -77,10 +77,10 @@ class RelationTest extends FieldTypeTest
     public function testToPersistenceValue()
     {
         $ft = new Relation( $this->validatorService, $this->fieldTypeTools );
-        $fieldValue = $ft->toPersistenceValue( new Value( 1 ) );
+        $fieldValue = $ft->toPersistenceValue( new Value( array( 1 ) ) );
 
-        self::assertSame( array( "destinationContentId" => 1 ), $fieldValue->data );
-        self::assertSame( array( "destinationContentId" => 1), $fieldValue->externalData );
+        self::assertSame( array( "destinationContentIds" => array( 1 ) ), $fieldValue->data );
+        self::assertSame( array( "destinationContentIds" => array( 1 ) ), $fieldValue->externalData );
     }
 
     /**
@@ -88,11 +88,11 @@ class RelationTest extends FieldTypeTest
      */
     public function testFromPersistenceValue()
     {
-        $expectedValue = new Value( 1 );
+        $expectedValue = new Value( array( 1 ) );
 
         $fieldValue = new FieldValue();
-        $fieldValue->data = array( "destinationContentId" => 1 );
-        $fieldValue->externalData = array( "destinationContentId" => 1 );
+        $fieldValue->data = array( "destinationContentIds" => array( 1 ) );
+        $fieldValue->externalData = array( "destinationContentIds" => array( 1 ) );
 
         $ft = new Relation( $this->validatorService, $this->fieldTypeTools );
         $value = $ft->fromPersistenceValue( $fieldValue );
@@ -109,7 +109,7 @@ class RelationTest extends FieldTypeTest
         $type = new Relation( $this->validatorService, $this->fieldTypeTools );
         $contentInfo = new ContentInfo( array( 'id' => 1 ) );
         $value = $type->acceptValue( $contentInfo );
-        self::assertSame( $contentInfo->id, $value->destinationContentId );
+        self::assertSame( array( $contentInfo->id ), $value->destinationContentIds );
     }
 
     /**
@@ -121,7 +121,19 @@ class RelationTest extends FieldTypeTest
         $type = new Relation( $this->validatorService, $this->fieldTypeTools );
         $contentId = 1;
         $value = $type->acceptValue( $contentId );
-        self::assertSame( $contentId, $value->destinationContentId );
+        self::assertSame( array( $contentId ), $value->destinationContentIds );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\Relation\Type::acceptValue
+     * @covers \eZ\Publish\Core\FieldType\Relation\Type::__construct
+     */
+    public function testBuildValueWithIdList()
+    {
+        $type = new Relation( $this->validatorService, $this->fieldTypeTools );
+        $contentId = 1;
+        $value = $type->acceptValue( array( $contentId ) );
+        self::assertSame( array( $contentId ), $value->destinationContentIds );
     }
 
     /**
@@ -130,8 +142,8 @@ class RelationTest extends FieldTypeTest
     public function testValueConstructor()
     {
         $contentId = 1;
-        $value = new Value( $contentId );
-        self::assertSame( $contentId, $value->destinationContentId );
+        $value = new Value( array( $contentId ) );
+        self::assertSame( array( $contentId ), $value->destinationContentIds );
     }
 
     /**
@@ -140,7 +152,7 @@ class RelationTest extends FieldTypeTest
     public function testFieldValueToString()
     {
         $contentId = 1;
-        $value = new Value( $contentId );
+        $value = new Value( array( $contentId ) );
         self::assertSame( (string)$contentId, (string)$value );
     }
 }

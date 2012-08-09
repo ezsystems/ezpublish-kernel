@@ -8,17 +8,79 @@
  */
 
 namespace eZ\Publish\Core\FieldType\RelationList;
+
 use eZ\Publish\Core\FieldType\FieldType;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\SPI\FieldType\Event;
 
 /**
  * The RelationList field type.
  *
- * This field type represents a simple string.
+ * This field type represents a relation to a content.
+ *
+ * hash format ({@see fromhash()}, {@see toHash()}):
+ * array( 'destinationContentIds' => array( (int)$destinationContentId ) );
  */
 class Type extends FieldType
 {
+    const SELECTION_BROWSE = 0,
+          SELECTION_DROPDOWN = 1;
+
+    protected $settingsSchema = array(
+        'selectionMethod' => array(
+            'type' => 'int',
+            'default' => self::SELECTION_BROWSE,
+        ),
+        'selectionRoot' => array(
+            'type' => 'string',
+            'default' => '',
+        ),
+    );
+
+    /**
+     * @see \eZ\Publish\Core\FieldType\FieldType::validateFieldSettings()
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings( $fieldSettings )
+    {
+        $validationResult = array();
+
+        foreach( array_keys( $fieldSettings ) as $setting )
+        {
+            if ( !in_array( $setting, array_keys( $this->settingsSchema ) ) )
+            {
+                $validationResult[] = new ValidationError(
+                    "Unknown setting %setting%",
+                    null,
+                    array( 'setting' => $setting )
+                );
+            }
+        }
+        if ( $fieldSettings['selectionMethod'] != self::SELECTION_BROWSE && $fieldSettings['selectionMethod'] != self::SELECTION_DROPDOWN )
+        {
+            $validationResult[] = new ValidationError(
+                "Setting selection method must be either %selection_browse% or %selection_dropdown%",
+                null,
+                array( 'selection_browse' => self::SELECTION_BROWSE, 'selection_dropdown' => self::SELECTION_DROPDOWN )
+            );
+        }
+
+        if ( !is_string( $fieldSettings['selectionRoot'] ) && !is_numeric( $fieldSettings['selectionRoot'] ) )
+        {
+            $validationResult[] = new ValidationError(
+                "Setting selection root must be either a string or numeric integer"
+            );
+        }
+
+        return $validationResult;
+    }
+
     /**
      * Return the field type identifier for this field type
      *
@@ -109,13 +171,14 @@ class Type extends FieldType
 
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
+     * For this FieldType, the related object's name is returned.
      *
-     * @todo String normalization should occur here.
+     * @todo Repository needs to be rpovided to be able to get Content Relation name(s).
      * @return array
      */
     protected function getSortInfo( $value )
     {
-        return array( 'sort_key_string' => $value->text );
+        return (string)$value;
     }
 
     /**
@@ -150,5 +213,48 @@ class Type extends FieldType
     public function isSearchable()
     {
         return true;
+    }
+
+    /**
+     * Converts a $value to a persistence value
+     *
+     * @param mixed $value
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
+     */
+    public function toPersistenceValue( $value )
+    {
+        return new FieldValue(
+            array(
+                "data" => $this->toHash( $value ),
+                "externalData" => $this->toHash( $value ),
+                "sortKey" => null,
+            )
+        );
+    }
+
+    /**
+     * @see \eZ\Publish\Core\FieldType
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
+     *
+     * @return mixed
+     */
+    public function fromPersistenceValue( FieldValue $fieldValue )
+    {
+        return $this->fromHash( $fieldValue->data );
+    }
+
+    /**
+     * Events handler (prePublish, postPublish, preCreate, postCreate)
+     *
+     * @param string $event - prePublish, postPublish, preCreate, postCreate
+     * @param InternalRepository $repository
+     * @param $fieldDef - the field definition of the field
+     * @param $field - the field for which an action is performed
+     */
+    public function handleEvent( Event $event )
+    {
+
     }
 }

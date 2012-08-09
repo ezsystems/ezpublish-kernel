@@ -8,12 +8,13 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Relation;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\FieldType\ValidationError,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\SPI\FieldType\Event;
+
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\SPI\FieldType\Event;
 
 /**
  * The Relation field type.
@@ -162,8 +163,9 @@ class Type extends FieldType
 
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
-     * For this FieldType, the related object's name is returned:
+     * For this FieldType, the related object's name is returned.
      *
+     * @todo Repository needs to be rpovided to be able to get Content Relation name(s).
      * @return array
      */
     protected function getSortInfo( $value )
