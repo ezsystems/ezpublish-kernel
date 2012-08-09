@@ -129,10 +129,10 @@ EOT;
         return sprintf(
             $xml,
             // <ezimage>
-            htmlspecialchars( $pathInfo['basename'] ), // filename
-            htmlspecialchars( $pathInfo['extension'] ), // suffix
-            htmlspecialchars( $pathInfo['dirname'] ), // basename
-            htmlspecialchars( $imageData['path'] ), // dirpath
+            htmlspecialchars( $pathInfo['basename'] ), // filename="%s"
+            htmlspecialchars( $pathInfo['extension'] ), // suffix="%s"
+            htmlspecialchars( $pathInfo['filename'] ), // basename="%s"
+            htmlspecialchars( $pathInfo['dirname'] ), // dirpath
             htmlspecialchars( $imageData['path'] ), // url
             null, // @TODO: Needs original file name, for whatever reason?
             htmlspecialchars( $imageData['mime'] ), // mime_type
