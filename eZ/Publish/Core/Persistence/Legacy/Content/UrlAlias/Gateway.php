@@ -109,28 +109,28 @@ abstract class Gateway
 
     /**
      *
-     * @param mixed $newElementId
      * @param string $action
-     * @param mixed $parentId
-     * @param $newTextMD5
      * @param mixed $languageId
-     *
-     * @internal param string $textMD5
-     * @return mixed|void
-     */
-    abstract public function downgrade( $newElementId, $action, $parentId, $newTextMD5, $languageId );
-
-    /**
-     *
-     * @param mixed $newElementId
-     * @param string $action
      * @param mixed $parentId
-     * @param string $newTextMD5
-     * @param mixed $languageId
+     * @param string $textMD5
      *
      * @return void
      */
-    abstract public function relink( $newElementId, $action, $parentId, $newTextMD5, $languageId );
+    abstract public function downgrade( $action, $languageId, $parentId, $textMD5 );
+
+    /**
+     * Re-links aliases and location history entries
+     *
+     *
+     * @param string $action
+     * @param mixed $languageId
+     * @param mixed $newId
+     * @param mixed $parentId
+     * @param mixed $textMD5
+     *
+     * @return void
+     */
+    abstract public function relink( $action, $languageId, $newId, $parentId, $textMD5 );
 
     /**
      *
