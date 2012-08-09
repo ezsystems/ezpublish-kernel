@@ -134,7 +134,7 @@ EOT;
             htmlspecialchars( $pathInfo['filename'] ), // basename="%s"
             htmlspecialchars( $pathInfo['dirname'] ), // dirpath
             htmlspecialchars( $imageData['path'] ), // url
-            null, // @TODO: Needs original file name, for whatever reason?
+            htmlspecialchars( $pathInfo['basename'] ), // @TODO: Needs original file name, for whatever reason?
             htmlspecialchars( $imageData['mime'] ), // mime_type
             htmlspecialchars( $imageData['width'] ), // width
             htmlspecialchars( $imageData['height'] ), // height
