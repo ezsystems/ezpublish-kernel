@@ -233,6 +233,6 @@ class Type extends FieldType
      */
     public function getIndexData( $value )
     {
-        throw new \RuntimeExcepion( '@TODO: Implement' );
+        throw new \RuntimeException( '@TODO: Implement' );
     }
 }
