@@ -60,12 +60,12 @@ class DateAndTimeTest extends FieldTypeTest
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\DateAndTime\Type::getDefaultDefaultValue
+     * @covers \eZ\Publish\Core\FieldType\DateAndTime\Type::getEmptyValue
      */
     public function testDefaultValue()
     {
         $ft = new DateAndTime( $this->validatorService, $this->fieldTypeTools );
-        $value = $ft->getDefaultDefaultValue();
+        $value = $ft->getEmptyValue();
         self::assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\DateAndTime\\Value',
             $value

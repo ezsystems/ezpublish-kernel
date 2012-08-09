@@ -99,7 +99,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\XmlText\Value
      */
-    public function getDefaultDefaultValue()
+    public function getEmptyValue()
     {
         $value = <<<EOF
 <?xml version="1.0" encoding="utf-8"?>

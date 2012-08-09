@@ -94,7 +94,7 @@ class MediaTest extends FieldTypeTest
     public function testAcceptValueInvalidFormat()
     {
         $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository );
-        $invalidValue = $ft->getDefaultDefaultValue();
+        $invalidValue = $ft->getEmptyValue();
         $invalidValue->file = 'This is definitely not a binary file !';
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'acceptValue' );

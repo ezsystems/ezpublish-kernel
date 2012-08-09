@@ -69,7 +69,7 @@ class Type extends FieldType
     /**
      * @return \eZ\Publish\Core\FieldType\Image\Value
      */
-    public function getDefaultDefaultValue()
+    public function getEmptyValue()
     {
         return null;
     }

@@ -138,7 +138,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\Selection\Value
      */
-    public function getDefaultDefaultValue()
+    public function getEmptyValue()
     {
         return new Value;
     }

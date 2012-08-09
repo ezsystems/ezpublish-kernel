@@ -53,7 +53,7 @@ class Type extends FieldType
      * @return \eZ\Publish\Core\FieldType\User\Value
      * @TODO: Implement.
      */
-    public function getDefaultDefaultValue()
+    public function getEmptyValue()
     {
         return null;
     }
