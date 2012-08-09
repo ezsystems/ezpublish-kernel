@@ -75,7 +75,7 @@ class Image implements Converter
                     'width' => '',
                     'height' => '',
                     'mime' => '',
-                    'alternative_text' => '',
+                    'alternativeText' => '',
                 ),
                 $contentMetaData
             ),
