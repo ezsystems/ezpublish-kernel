@@ -129,6 +129,12 @@ $objectStateController = new Controller\ObjectState(
     $repository->getContentService()
 );
 
+$trashController = new Controller\Trash(
+    $inputDispatcher,
+    $urlHandler,
+    $repository->getTrashService()
+);
+
 /*
  * Visitors are used to transform the Value Objects returned by the Public API
  * into the output format requested by the client. In some cases, it is
@@ -237,6 +243,9 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^/content/locations/[0-9/]+/children$)' => array(
             'GET'    => array( $locationController, 'loadLocationChildren' ),
+        ),
+        '(^/content/trash$)' => array(
+            'GET'    => array( $trashController, 'loadTrashItems' ),
         ),
         '(^/user/roles$)' => array(
             'GET' => array( $roleController, 'listRoles' ),

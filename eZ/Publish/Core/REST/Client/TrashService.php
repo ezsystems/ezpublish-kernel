@@ -9,17 +9,18 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
-use \eZ\Publish\API\Repository\Values\Content\Query;
-use \eZ\Publish\API\Repository\Values\Content\Location;
-use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
-use \eZ\Publish\API\Repository\Values\Content\SearchResult;
-use \eZ\Publish\API\Repository\Values\Content\TrashItem;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
+use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 
-use \eZ\Publish\Core\REST\Common\UrlHandler;
-use \eZ\Publish\Core\REST\Common\Input;
-use \eZ\Publish\Core\REST\Common\Output;
-use \eZ\Publish\Core\REST\Common\Message;
-use \eZ\Publish\Core\REST\Client\Sessionable;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input;
+use eZ\Publish\Core\REST\Common\Output;
+use eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\REST\Client\Sessionable;
 
 /**
  * Trash service used for content/location trash handling.
@@ -54,6 +55,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
     private $urlHandler;
 
     /**
+     * @param \eZ\Publish\Core\REST\Client\LocationService $locationService
      * @param \eZ\Publish\Core\REST\Client\HttpClient $client
      * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
@@ -73,9 +75,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
      *
      * Only for testing
      *
-     * @param mixed tringid
-     * @return void
-     * @private
+     * @param mixed $id
      */
     public function setSession( $id )
     {
@@ -90,7 +90,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
      *
      * Note that $id is identical to original location, which has been previously trashed
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to read the trashed location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the trashed location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the location with the given id does not exist
      *
      * @param integer $trashItemId
@@ -107,7 +107,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
      *
      * Content is left untouched.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to trash the given location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to trash the given location
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
@@ -130,7 +130,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created or recovered location
      */
-    public function recover( TrashItem $trashItem, Location $newParentLocation = null )
+    public function recover( APITrashItem $trashItem, Location $newParentLocation = null )
     {
         throw new \Exception( "@TODO: Implement." );
     }
@@ -141,7 +141,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
      * All locations contained in the trash will be removed. Content objects will be removed
      * if all locations of the content are gone.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to empty the trash
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to empty the trash
      */
     public function emptyTrash()
     {
@@ -153,11 +153,11 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
      *
      * The corresponding content object will be removed
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to delete this trash item
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete this trash item
      *
      * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
      */
-    public function deleteTrashItem( TrashItem $trashItem )
+    public function deleteTrashItem( APITrashItem $trashItem )
     {
         throw new \Exception( "@TODO: Implement." );
     }
@@ -173,6 +173,49 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
      */
     public function findTrashItems( Query $query )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $this->urlHandler->generate( 'trashItems' ),
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'LocationList' ) )
+            )
+        );
+
+        $locations = $this->inputDispatcher->parse( $response );
+
+        $trashItems = array();
+        foreach ( $locations as $location )
+        {
+            $trashItems[] = $this->buildTrashItem( $location );
+        }
+        return $trashItems;
+    }
+
+    /**
+     * Converts the Location value object to TrashItem value object
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
+     */
+    protected function buildTrashItem( Location $location )
+    {
+        return new TrashItem(
+            array(
+                'contentInfo' => $location->contentInfo,
+                'id' => $location->id,
+                'priority' => $location->priority,
+                'hidden' => $location->hidden,
+                'invisible' => $location->invisible,
+                'remoteId' => $location->remoteId,
+                'parentLocationId' => $location->parentLocationId,
+                'pathString' => $location->pathString,
+                'modifiedSubLocationDate' => $location->modifiedSubLocationDate,
+                'depth' => (int) $location->depth,
+                'sortField' => $location->sortField,
+                'sortOrder' => $location->sortOrder,
+                'childCount' => $location->childCount
+            )
+        );
     }
 }
