@@ -247,11 +247,14 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Check if user has access to a given module / function
      *
+     * Low level function, use canUser instead if you have objects to check against.
      *
      * @param string $module
      * @param string $function
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
      * @return boolean|array if limitations are on this function an array of limitations is returned
      */
     public function hasAccess( $module, $function, User $user = null )
@@ -286,13 +289,16 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Check if user has access to a given action on a given value object
+     *
      * Indicates if the current user is allowed to perform an action given by the function on the given
-     * objects
+     * objects.
      *
      * @param string $module
      * @param string $function
      * @param \eZ\Publish\API\Repository\Values\ValueObject $value
      * @param \eZ\Publish\API\Repository\Values\ValueObject $target
+     *
      * @return array|bool
      */
     public function canUser( $module, $function, ValueObject $value, ValueObject $target = null )
@@ -303,11 +309,6 @@ class Repository implements RepositoryInterface
             return $limitationArray;
         }
 
-        /**
-         * @todo Somewhere to get limitation logic from (functions), then $value should impl a interface
-         * that tells us where to get it from for instance.
-         * @var array $functions
-         */
         $roleService = $this->getRoleService();
         foreach ( $limitationArray as $limitationSet )
         {
@@ -323,14 +324,14 @@ class Repository implements RepositoryInterface
                     $limitationSetSaysYes = false;
                     // Break to next limitationSet
                     // If needed, there could be a if condition here building up an array of all limitations
-                    // that are denying user access
+                    // that are denying user access, for debug use.
                     break;
                 }
             }
             if ( $limitationSetSaysYes )
                 return true;
         }
-        return false;
+        return false;// None of the limitation sets wanted to let you in, sorry!
     }
 
     /**

@@ -694,11 +694,32 @@ class RoleServiceStub implements RoleService
      * Returns the LimitationType registered with the given identifier
      *
      * @param string $identifier
+     *
      * @return \eZ\Publish\SPI\Limitation\Type
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     *         if there is no LimitationType registered with $identifier
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if there is no LimitationType with $identifier
      */
     public function getLimitationType( $identifier )
+    {
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+    }
+
+    /**
+     * Returns the LimitationType's assigned to a given module/function
+     *
+     * Typically used for:
+     *  - Internal validation limitation value use on Policies
+     *  - Role admin gui for editing policy limitations incl list limitation options via valueSchema()
+     *
+     * @param string $module Legacy name of "controller", it's a unique identifier like "content"
+     * @param string $function Legacy name of a controller "action", it's a unique within the controller like "read"
+     *
+     * @return \eZ\Publish\SPI\Limitation\Type[]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If module/function to limitation type mapping
+     *                                                                 refers to a non existing identifier.
+     */
+    public function getLimitationTypesByModuleFunction( $module, $function )
     {
         throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
     }

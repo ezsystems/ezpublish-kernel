@@ -859,8 +859,9 @@ class RoleService implements RoleServiceInterface
      *
      * @param string $identifier
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @return \eZ\Publish\SPI\Limitation\Type
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if there is no LimitationType with $identifier
      */
     public function getLimitationType( $identifier )
     {
@@ -871,24 +872,37 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Returns the LimitationTypes assigned to a module/function
+     * Returns the LimitationType's assigned to a given module/function
      *
-     * @param string $module
-     * @param string $function
+     * Typically used for:
+     *  - Internal validation limitation value use on Policies
+     *  - Role admin gui for editing policy limitations incl list limitation options via valueSchema()
      *
-     * @uses getLimitationType()
-     * @return \eZ\Publish\SPI\Limitation\Type[] With identifier as key
+     * @param string $module Legacy name of "controller", it's a unique identifier like "content"
+     * @param string $function Legacy name of a controller "action", it's a unique within the controller like "read"
+     *
+     * @return \eZ\Publish\SPI\Limitation\Type[]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If module/function to limitation type mapping
+     *                                                                 refers to a non existing identifier.
      */
-    protected function getLimitationTypes( $module, $function )
+    public function getLimitationTypesByModuleFunction( $module, $function )
     {
-
         if ( empty( $this->settings['limitationMap'][$module][$function] ) )
             return array();
 
         $types = array();
         foreach ( $this->settings['limitationMap'][$module][$function] as $identifier )
-            $types[$identifier] = $this->getLimitationType( $identifier );
-
+        {
+            if ( !isset( $this->settings['limitationTypes'][$identifier] ) )
+            {
+                throw new \eZ\Publish\Core\Base\Exceptions\BadStateException(
+                    '$identifier',
+                    "'{$identifier}' does not exists but was configured as limitation on {$module}/{$function}"
+                );
+            }
+            $types[$identifier] = $this->settings['limitationTypes'][$identifier];
+        }
         return $types;
     }
 

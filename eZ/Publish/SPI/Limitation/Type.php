@@ -43,6 +43,9 @@ interface Type
     /**
      * Create the Limitation Value
      *
+     * The is the api to create values as Limitation type needs value knowledge anyway in acceptValue,
+     * the reverse relation is provided by means of identifier lookup (Value has identifier, and so does RoleService).
+     *
      * @param mixed[] $limitationValues
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation
@@ -51,6 +54,10 @@ interface Type
 
     /**
      * Evaluate permission against content and placement
+     *
+     * NOTE: Repository is provided because not everything is available via the value object(s),
+     * but use of repository in limitation functions should be avoided for performance reasons
+     * if possible, especially when using un-cached parts of the api.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -63,6 +70,10 @@ interface Type
 
     /**
      * Return Criterion for use in find() query
+     *
+     * NOTE: Repository is provided because not everything is available via the limitation value,
+     * but use of repository in limitation functions should be avoided for performance reasons
+     * if possible, especially when using un-cached parts of the api.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Repository $repository

@@ -8,10 +8,11 @@ API
 ### Model API
 
 This part has already been defined, and value objects can be found here:
-https://github.com/ezsystems/ezp-next/tree/master/eZ/Publish/API/Repository/Values/User
+* https://github.com/ezsystems/ezp-next/tree/master/eZ/Publish/API/Repository/Values/User
 
-For the Service API that deal with these objects, look here:
-https://github.com/ezsystems/ezp-next/blob/master/eZ/Publish/API/Repository/UserService.php
+For the Service API's that deal with these objects, look here:
+* https://github.com/ezsystems/ezp-next/blob/master/eZ/Publish/API/Repository/UserService.php
+* https://github.com/ezsystems/ezp-next/blob/master/eZ/Publish/API/Repository/RoleService.php
 
 
 ### Authorization API
@@ -40,7 +41,7 @@ Prior approach had downside in that it used closures and was hard to extend.
 So in updated approach these permission check functions are moved to a
 Limitation SPI interface (since extensions should be able to add their own).
 
-The following functions should be added to a SPI for Limitations:
+The SPI interface:
 
 ```php
 namespace eZ\Publish\SPI\Limitation;
@@ -79,6 +80,9 @@ interface Type
     /**
      * Create the Limitation Value
      *
+     * The is the api to create values as Limitation type needs value knowledge anyway in acceptValue,
+     * the reverse relation is provided by means of identifier lookup (Value has identifier, and so does RoleService).
+     *
      * @param mixed[] $limitationValues
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation
@@ -87,6 +91,10 @@ interface Type
 
     /**
      * Evaluate permission against content and placement
+     *
+     * NOTE: Repository is provided because not everything is available via the value object(s),
+     * but use of repository in limitation functions should be avoided for performance reasons
+     * if possible, especially when using un-cached parts of the api.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -99,6 +107,10 @@ interface Type
 
     /**
      * Return Criterion for use in find() query
+     *
+     * NOTE: Repository is provided because not everything is available via the limitation value,
+     * but use of repository in limitation functions should be avoided for performance reasons
+     * if possible, especially when using un-cached parts of the api.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -120,14 +132,41 @@ interface Type
 }
 ```
 
-Note: Access to Repository in evaluate() and getCriterion() is needed as not everything
-      is available via the object graph, but use of repository in limitations functions
-      should be avoided for performance reasons, especially when using un-cached parts
-      of the api.
 
-Note2: buildValue() exists so that dependency injection system only have to know about the Limitation "Type".
-       Other functions like acceptValue() [and evaluate()] needs to know about the Limitation Value class anyway.
-       Hence this class organization is a simplified version of the one used on FiledTypes, which should be familiar.
+Methods on RoleService needs to be added to provide access to these Types, as GUI's will need to at least have access
+to valueSchema() to provide admin interfaces where policies can be created / updated.
+The added RoleService method is to get them by identifier or list based on module / function:
+
+```php
+    /**
+     * Returns the LimitationType registered with the given identifier
+     *
+     * @param string $identifier
+     *
+     * @return \eZ\Publish\SPI\Limitation\Type
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if there is no LimitationType with $identifier
+     */
+    public function getLimitationType( $identifier );
+
+    /**
+     * Returns the LimitationType's assigned to a given module/function
+     *
+     * Typically used for:
+     *  - Internal validation limitation value use on Policies
+     *  - Role admin gui for editing policy limitations incl list limitation options via valueSchema()
+     *
+     * @param string $module Legacy name of "controller", it's a unique identifier like "content"
+     * @param string $function Legacy name of a controller "action", it's a unique within the controller like "read"
+     *
+     * @return \eZ\Publish\SPI\Limitation\Type[]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If module/function to limitation type mapping
+     *                                                                 refers to a non existing identifier.
+     */
+    public function getLimitationTypesByModuleFunction( $module, $function );
+```
+
 
 
 ### Authentication API
