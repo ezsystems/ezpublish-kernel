@@ -11,8 +11,6 @@ namespace eZ\Publish\API\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
 
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-
 /**
  *
  * 5.x this class is used for reading and writing translation informations into the repository

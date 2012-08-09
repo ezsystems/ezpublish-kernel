@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent,
-    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
     eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 
 /**

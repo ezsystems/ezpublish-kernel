@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\URLAlias;
  * @see eZ\Publish\API\Repository\URLAliasService
  * @group url-alias
  */
-class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
+class URLAliasServiceTest extends BaseTest
 {
     /**
      * Tests that the required <b>LocationService::loadLocation()</b>

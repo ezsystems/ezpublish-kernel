@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Values\Content;
 
-use eZ\Publish\API\Repository\Values\ValueObject,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class holds version information data. It also contains the corresponding {@link Content} to

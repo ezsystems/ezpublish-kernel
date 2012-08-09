@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Service\InMemory;
-use eZ\Publish\Core\Repository\Tests\Service\IOBase as BaseIOServiceTest,
-    eZ\Publish\Core\Repository\Tests\Service\InMemory\IOUploadPHPT;
+use eZ\Publish\Core\Repository\Tests\Service\IOBase as BaseIOServiceTest;
 
 /**
  * Test case for IO Service using InMemory storage class

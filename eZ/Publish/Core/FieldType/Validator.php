@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType;
-use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound,
-    eZ\Publish\Core\FieldType\Value;
+use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;
 
 /**
  * Base field type validator validator.

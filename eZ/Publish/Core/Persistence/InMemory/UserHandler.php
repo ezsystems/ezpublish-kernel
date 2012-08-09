@@ -16,8 +16,6 @@ use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Persistence\InMemory\Handler,
-    eZ\Publish\Core\Persistence\InMemory\Backend,
     LogicException;
 
 /**

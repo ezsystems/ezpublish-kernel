@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
 use eZ\Publish\SPI\Persistence\Content\Language,
     eZ\Publish\SPI\Persistence\Content\Language\CreateStruct,
-    eZ\Publish\Core\Persistence\InMemory\Tests\HandlerTest,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**

@@ -11,8 +11,6 @@ namespace eZ\Publish\API\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
 
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-
 /**
  * this class represents a content object in a specific version
  *

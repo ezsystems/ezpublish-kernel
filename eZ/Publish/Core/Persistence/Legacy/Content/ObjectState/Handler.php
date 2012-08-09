@@ -10,8 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState;
 
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as BaseObjectStateHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper,
     eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct,
     eZ\Publish\Core\Base\Exceptions\NotFoundException;
 

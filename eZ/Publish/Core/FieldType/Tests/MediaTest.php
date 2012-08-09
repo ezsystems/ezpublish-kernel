@@ -14,7 +14,6 @@ use eZ\Publish\Core\FieldType\Media\Type as MediaType,
     eZ\Publish\Core\Repository\Repository,
     eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
     eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,
-    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     SplFileInfo as FileInfo,
     ReflectionObject;
 
