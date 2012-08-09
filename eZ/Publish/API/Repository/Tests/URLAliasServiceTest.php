@@ -615,13 +615,13 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         /* BEGIN: Inline */
         $urlAliasService->createGlobalUrlAlias(
-            '/Support', '/My/Special-Support', 'eng-US'
+            'module:content/search?SearchText=eZ', 'My/Special-Support', 'eng-US'
         );
         $urlAliasService->createGlobalUrlAlias(
-            '/Support', '/My/Spezial-Unterstützung', 'ger-DE'
+            'module:content/search?SearchText=eZ', 'My/Spezial-Unterstützung', 'ger-DE'
         );
         $urlAliasService->createGlobalUrlAlias(
-            '/Home', '/My/Fancy-Site', 'eng-US'
+            'module:content/search?SearchText=Sindelfingen', 'My/Fancy-Site', 'eng-US'
         );
         /* END: Inline */
     }
@@ -794,7 +794,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         // Create aliases in multiple languages
         $this->createGlobalAliases();
 
-        $loadedAlias = $urlAliasService->lookUp( '/My/Special-Support', 'eng-US' );
+        $loadedAlias = $urlAliasService->lookUp( 'My/Special-Support', 'eng-US' );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -802,7 +802,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
             $loadedAlias
         );
         $this->assertEquals(
-            '/Support',
+            'module:content/search?SearchText=eZ',
             $loadedAlias->destination
         );
     }
