@@ -106,6 +106,8 @@ class Handler implements BaseUrlAliasHandler
      * @param boolean $alwaysAvailable
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
+     *
+     * @todo maybe pass array of prioritized language codes in order to return correct language set
      */
     public function publishUrlAliasForLocation( $locationId, $name, $languageCode, $alwaysAvailable = false )
     {
@@ -151,33 +153,43 @@ class Handler implements BaseUrlAliasHandler
                     "text_md5" => $newTextMD5,
                 );
 
-                $newElementId = $this->gateway->insertRow( $data );
+                $newId = $this->gateway->insertRow( $data );
 
                 break;
             }
 
-            // Row exists, check if it is reusable. There are 3 cases:
-            // 1 - NOP
-            // 2 - maybe history, needs to be further checked
-            // 3 - history
+            // Row exists, check if it is reusable. There are 3 cases when this is possible:
+            // 1. NOP entry
+            // 2. custom alias entry
+            // 3. history entry
             if ( $row["action"] == "nop:" || $row["action"] == $action || $row["is_original"] == 0 )
             {
-                // Check for existing location entry on this level, if it's id differs from reusable entry id then
-                // reusable entry is history and should be updated with the location entry id
-                // Same id for location entries are needed to choose most prioritized row when translating URL
-                // Note: location entry will be moved to history or downgraded later
+                // @todo detect republishing of the same alias and bail out
+                if ( false )
+                {
+                    $isRepublish = true;
+                }
+
+                // Check for existing location entry on this level, if it exists and it's id differs from reusable
+                // entry id then reusable entry should be updated with the existing location entry id.
+                // Note: existing location entry may be downgraded and relinked later, depending on its language.
                 $existingLocationEntry = $this->gateway->loadLocationEntryByParentIdAndAction( $parentId, $action );
-                $newElementId = ( !empty( $existingLocationEntry ) && $existingLocationEntry["id"] != $row["id"] )
+                $newId = ( !empty( $existingLocationEntry ) && $existingLocationEntry["id"] != $row["id"] )
                     ? $existingLocationEntry["id"]
                     : $row["id"];
                 $data = array(
                     "action" => $action,
-                    // Add language and always available bit to the existing mask
+                    // Add language and always available bit to the existing mask with removed always available bit
                     "lang_mask" => ( $row["lang_mask"] & ~1 ) | $languageId | (int)$alwaysAvailable,
+                    // Always updating text ensures that letter case changes are stored
                     "text" => $newText,
-                    "text_md5" => $newTextMD5,
-                    "id" => $newElementId,
-                    "link" => $newElementId
+                    // Set "id" and "link" for case when reusable entry is history
+                    "id" => $newId,
+                    "link" => $newId,
+                    // Entry should be active location entry (original and not alias). @todo maybe also set redirects = 1 (4.x does not do this)
+                    // Note: this takes care of taking over custom alias entry on the same level and with same text.
+                    "is_original" => 1,
+                    "is_alias" => 0
                 );
                 $this->gateway->updateRow(
                     $parentId,
@@ -193,14 +205,17 @@ class Handler implements BaseUrlAliasHandler
         }
 
         // Cleanup
-        /** @var $newElementId */
+        /** @var $newId */
         /** @var $newTextMD5 */
-        //$this->gateway->downgrade( $newElementId, $action, $parentId, $newTextMD5, $languageId );
-        //$this->gateway->relink( $newElementId, $action, $parentId, $newTextMD5, $languageId );
-        //$this->gateway->reparent( $newElementId, $action, $parentId, $newTextMD5, $languageId );
+        // Note: cleanup does not touch custom and global entries
+        $this->gateway->downgrade( $action, $languageId, $parentId, $newTextMD5 );
+        $this->gateway->relink( $action, $languageId, $newId, $parentId, $newTextMD5 );
+        //$this->gateway->reparent( $newId, $action, $parentId, $newTextMD5, $languageId );
 
+        $data["parent"] = $parentId;
+        $data["text_md5"] = $newTextMD5;
         $data["type"] = UrlAlias::LOCATION;
-        $data["path"] = $this->gateway->getPath( $newElementId, array( $languageCode ) );
+        $data["path"] = $this->gateway->getPath( $newId, array( $languageCode ) );
         $data["forward"] = false;
         $data["destination"] = $locationId;
         $data["always_available"] = $alwaysAvailable;
@@ -211,7 +226,7 @@ class Handler implements BaseUrlAliasHandler
             $data["language_codes"][] = $this->languageHandler->load( $languageId )->languageCode;
         }
 
-        return $data;
+        return $this->mapper->extractUrlAliasFromRow( $data );
     }
 
     /**
