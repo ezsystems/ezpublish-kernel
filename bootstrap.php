@@ -30,6 +30,11 @@ $classLoader = new ClassLoader(
 );
 spl_autoload_register( array( $classLoader, 'load' ) );
 
+$classLoader = require_once __DIR__ . "/vendor/autoload.php";
+
+if ( $classLoader instanceof Composer\Autoload\ClassLoader )
+    $classLoader->register();
+
 // Bootstrap eZ Publish legacy kernel if configured
 if ( !empty( $settings['service']['parameters']['legacy_dir'] ) )
 {
