@@ -10,7 +10,7 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\Tests\SiteAccess;
 
 use eZ\Publish\Legacy\Tests\LegacyBasedTestCase,
-    eZ\Bundle\EzPublishLegacyBundle\SiteAccess\LegacyMapper,
+    eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess as LegacyMapper,
     eZ\Publish\MVC\SiteAccess,
     eZ\Publish\MVC\Event\PostSiteAccessMatchEvent,
     \eZSiteAccess;
@@ -19,8 +19,8 @@ class LegacyMapperTest extends LegacyBasedTestCase
 {
     /**
      * @dataProvider siteAccessMatchProvider
-     * @covers \eZ\Bundle\EzPublishLegacyBundle\SiteAccess\LegacyMapper::__construct
-     * @covers \eZ\Bundle\EzPublishLegacyBundle\SiteAccess\LegacyMapper::onSiteAccessMatch
+     * @covers \eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess::__construct
+     * @covers \eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess::onSiteAccessMatch
      */
     public function testOnSiteAccessMatch( $pathinfo, $semanticPathinfo, SiteAccess $siteaccess, $expectedAccess )
     {
