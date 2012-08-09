@@ -247,6 +247,9 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/content/trash$)' => array(
             'GET'    => array( $trashController, 'loadTrashItems' ),
         ),
+        '(^/content/trash/[0-9]+$)' => array(
+            'GET'    => array( $trashController, 'loadTrashItem' ),
+        ),
         '(^/user/roles$)' => array(
             'GET' => array( $roleController, 'listRoles' ),
             'POST' => array( $roleController, 'createRole' ),

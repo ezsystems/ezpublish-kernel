@@ -99,7 +99,16 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
      */
     public function loadTrashItem( $trashItemId )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $trashItemId,
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'Location' ) )
+            )
+        );
+
+        $location = $this->inputDispatcher->parse( $response );
+        return $this->buildTrashItem( $location );
     }
 
     /**

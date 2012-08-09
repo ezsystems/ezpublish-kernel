@@ -74,4 +74,16 @@ class Trash
             $request->path
         );
     }
+
+    /**
+     * Returns the trash item given by id
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     */
+    public function loadTrashItem( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'trash', $request->path );
+        $this->trashService->loadTrashItem( $values['trash'] );
+    }
 }
