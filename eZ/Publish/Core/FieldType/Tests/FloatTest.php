@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Float\Type as Float,
     eZ\Publish\Core\FieldType\Float\Value as FloatValue,
-    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
 /**

@@ -10,7 +10,6 @@
 namespace eZ\Publish\API\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\API\Repository\Values\Content\Content;
 
 /**
  * This class represents a location in the repository

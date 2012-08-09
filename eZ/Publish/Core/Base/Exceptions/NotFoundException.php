@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Base\Exceptions;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
-    eZ\Publish\Core\Base\Exceptions\Httpable,
     Exception;
 
 /**

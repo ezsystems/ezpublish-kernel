@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
  * @property-read $names calls getNames() or on access getName($language)
  * @property-read $descriptions calls getDescriptions() or on access getDescription($language)
  * @property-read $fieldSettings calls getFieldSettings()
- * @property-read $validatorConfiguration calls getValidators()
+ * @property-read mixed $validatorConfiguration calls getValidatorConfiguration()
  * @property-read int $id the id of the field definition
  * @property-read string $identifier the identifier of the field definition
  * @property-read string $fieldGroup the field group name

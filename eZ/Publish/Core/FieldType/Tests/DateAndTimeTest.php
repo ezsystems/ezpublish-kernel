@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\DateAndTime\Type as DateAndTime,
     eZ\Publish\Core\FieldType\DateAndTime\Value as DateAndTimeValue,
-    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject,
     DateTime;
 

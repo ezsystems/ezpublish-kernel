@@ -11,8 +11,7 @@ namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-
-use eZ\Publish\Core\Repository\Values\ObjectState;
+use eZ\Publish\Core\Repository\Values\ObjectState\ObjectStateGroup as CoreObjectStateGroup;
 
 /**
  * Parser for ObjectStateGroup
@@ -44,7 +43,7 @@ class ObjectStateGroup extends Parser
             }
         }
 
-        return new ObjectState\ObjectStateGroup(
+        return new CoreObjectStateGroup(
             array(
                 'id' => $data['_href'],
                 'identifier' => $data['identifier'],

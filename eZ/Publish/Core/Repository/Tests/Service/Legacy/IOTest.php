@@ -8,9 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Legacy;
-use eZ\Publish\Core\Repository\Tests\Service\IOBase as BaseIOServiceTest,
-
-    eZ\Publish\Core\Repository\Tests\Service\Legacy\IOUploadPHPT;
+use eZ\Publish\Core\Repository\Tests\Service\IOBase as BaseIOServiceTest;
 
 /**
  * Test case for IO Service using Legacy storage class

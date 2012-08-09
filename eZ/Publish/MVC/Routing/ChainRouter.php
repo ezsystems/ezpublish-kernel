@@ -23,7 +23,6 @@ use eZ\Publish\MVC\SiteAccess;
 use eZ\Publish\MVC\SiteAccess\Router as SiteAccessRouter;
 use eZ\Publish\MVC\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\MVC\MVCEvents;
-use eZ\Publish\MVC\Routing\SimplifiedRequest;
 
 /**
  * The ChainRouter is an aggregation of valid routers and allows URL matching against multiple routers.

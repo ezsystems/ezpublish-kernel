@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Rating\Type as Rating,
     eZ\Publish\Core\FieldType\Rating\Value as RatingValue,
-    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
 /**

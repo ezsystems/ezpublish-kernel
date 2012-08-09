@@ -8,7 +8,7 @@ namespace eZ\Publish\Core\REST\Client\Values\ContentType;
  * @property-read $names calls getNames() or on access getName($language)
  * @property-read $descriptions calls getDescriptions() or on access getDescription($language)
  * @property-read $fieldSettings calls getFieldSettings()
- * @property-read $validators calls getValidators()
+ * @property-read mixed $validators calls getValidatorConfiguration()
  * @property-read int $id the id of the field definition
  * @property-read string $identifier the identifier of the field definition
  * @property-read string $fieldGroup the field group name
@@ -115,7 +115,7 @@ class FieldDefinition extends \eZ\Publish\API\Repository\Values\ContentType\Fiel
      * this method returns the validators of this field definition supported by the field type
      * @return array an array of {@link Validator}
      */
-    public function getValidators()
+    public function getValidatorConfiguration()
     {
         return $this->validators;
     }

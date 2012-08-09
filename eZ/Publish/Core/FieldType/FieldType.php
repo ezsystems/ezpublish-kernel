@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\FieldType;
 use eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\API\Repository\FieldTypeTools,
     eZ\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\Core\FieldType\Validator,
     eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,

@@ -9,9 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ValueObject,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * this class represents a content type value

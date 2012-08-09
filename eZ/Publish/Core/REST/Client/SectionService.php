@@ -20,9 +20,6 @@ use \eZ\Publish\Core\REST\Common\Output;
 use \eZ\Publish\Core\REST\Common\Message;
 use \eZ\Publish\Core\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct;
 
-use \eZ\Publish\Core\REST\Client\Sessionable;
-
-
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\SectionService}
  * interface.

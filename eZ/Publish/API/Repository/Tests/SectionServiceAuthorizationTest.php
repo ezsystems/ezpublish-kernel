@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Tests\BaseTest;
-
 /**
  * Test case for operations in the SectionService using in memory storage.
  *

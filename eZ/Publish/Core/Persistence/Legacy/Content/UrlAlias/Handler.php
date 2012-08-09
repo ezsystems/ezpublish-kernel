@@ -10,8 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as BaseUrlAliasHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,

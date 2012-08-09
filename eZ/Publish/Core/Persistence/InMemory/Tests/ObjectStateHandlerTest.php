@@ -8,9 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
-use eZ\Publish\Core\Persistence\InMemory\Tests\HandlerTest,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct,
-    \eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct,
+    eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for ObjectStateHandler using in memory storage.

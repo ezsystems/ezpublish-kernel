@@ -15,7 +15,7 @@ use eZ\Publish\Core\REST\Common;
 
 use Qafoo\RMF;
 
-require __DIR__ . '/../../../../../bootstrap.php';
+require_once __DIR__ . '/../../../../../bootstrap.php';
 
 /*
  * This is a very simple session handling for the repository, which allows the

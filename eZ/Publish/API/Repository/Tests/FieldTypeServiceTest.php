@@ -15,7 +15,7 @@ namespace eZ\Publish\API\Repository\Tests;
  * @see eZ\Publish\API\Repository\FieldTypeService
  * @group field-type
  */
-class FieldTypeServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
+class FieldTypeServiceTest extends BaseTest
 {
     /**
      * Test for the getFieldTypes() method.

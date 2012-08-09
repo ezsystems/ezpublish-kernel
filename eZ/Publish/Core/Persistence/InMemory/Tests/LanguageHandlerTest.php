@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
 use eZ\Publish\SPI\Persistence\Content\Language,
     eZ\Publish\SPI\Persistence\Content\Language\CreateStruct,
-    eZ\Publish\Core\Persistence\InMemory\Tests\HandlerTest,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
@@ -18,11 +17,6 @@ use eZ\Publish\SPI\Persistence\Content\Language,
  */
 class LanguageHandlerTest extends HandlerTest
 {
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Language
-     */
-    protected $language;
-
     /**
      * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
      */
@@ -36,23 +30,6 @@ class LanguageHandlerTest extends HandlerTest
         parent::setUp();
 
         $this->handler = $this->persistenceHandler->contentLanguageHandler();
-
-        foreach ( $this->handler->loadAll() as $item )
-        {
-            $this->handler->delete( $item->id );
-        }
-
-        $struct = new CreateStruct();
-        $struct->languageCode = 'eng-GB';
-        $struct->name = 'English (United Kingdom)';
-        $struct->isEnabled = true;
-        $this->handler->create( $struct );
-
-        $struct = new CreateStruct();
-        $struct->languageCode = 'eng-US';
-        $struct->name = 'English (American)';
-        $struct->isEnabled = true;
-        $this->language = $this->handler->create( $struct );
     }
 
     /**
@@ -60,17 +37,6 @@ class LanguageHandlerTest extends HandlerTest
      */
     protected function tearDown()
     {
-        try
-        {
-            foreach ( $this->handler->loadAll() as $item )
-            {
-                $this->handler->delete( $item->id );
-            }
-            unset( $this->language );
-        }
-        catch ( NotFound $e )
-        {
-        }
         parent::tearDown();
     }
 
@@ -81,7 +47,7 @@ class LanguageHandlerTest extends HandlerTest
      */
     public function testLoad()
     {
-        $language = $this->handler->load( $this->language->id );
+        $language = $this->handler->load( 2 );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language', $language );
         $this->assertEquals( 'eng-US', $language->languageCode );
         $this->assertEquals( 'English (American)', $language->name );
@@ -95,7 +61,7 @@ class LanguageHandlerTest extends HandlerTest
      */
     public function testLoadByLanguageCode()
     {
-        $language = $this->handler->loadByLanguageCode( $this->language->languageCode );
+        $language = $this->handler->loadByLanguageCode( 'eng-US' );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language', $language );
         $this->assertEquals( 'eng-US', $language->languageCode );
         $this->assertEquals( 'English (American)', $language->name );
@@ -111,7 +77,7 @@ class LanguageHandlerTest extends HandlerTest
     {
         $languages = $this->handler->loadAll();
 
-        $this->assertEquals( 2, count( $languages ) );
+        $this->assertEquals( 3, count( $languages ) );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language', $languages['eng-GB'] );
         $this->assertEquals( 'eng-GB', $languages['eng-GB']->languageCode );
         $this->assertEquals( 'English (United Kingdom)', $languages['eng-GB']->name );
@@ -122,6 +88,11 @@ class LanguageHandlerTest extends HandlerTest
         $this->assertEquals( 'English (American)', $languages['eng-US']->name );
         $this->assertTrue( $languages['eng-US']->isEnabled );
 
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language', $languages['ger-DE'] );
+        $this->assertEquals( 'ger-DE', $languages['ger-DE']->languageCode );
+        $this->assertEquals( 'German', $languages['ger-DE']->name );
+        $this->assertTrue( $languages['ger-DE']->isEnabled );
+
         $struct = new CreateStruct();
         $struct->languageCode = 'nor-NB';
         $struct->name = 'Norwegian Bokmål';
@@ -130,7 +101,7 @@ class LanguageHandlerTest extends HandlerTest
 
         $languages = $this->handler->loadAll();
 
-        $this->assertEquals( 3, count( $languages ) );
+        $this->assertEquals( 4, count( $languages ) );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language', $languages['nor-NB'] );
         $this->assertEquals( 'nor-NB', $languages['nor-NB']->languageCode );
         $this->assertEquals( 'Norwegian Bokmål', $languages['nor-NB']->name );
@@ -151,7 +122,7 @@ class LanguageHandlerTest extends HandlerTest
         $language = $this->handler->create( $struct );
 
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language', $language );
-        $this->assertEquals( $this->language->id +1, $language->id );
+        $this->assertEquals( 9, $language->id );
         $this->assertEquals( 'nor-NB', $language->languageCode );
         $this->assertEquals( 'Norwegian Bokmål', $language->name );
         $this->assertFalse( $language->isEnabled );
@@ -164,14 +135,14 @@ class LanguageHandlerTest extends HandlerTest
      */
     public function testUpdate()
     {
-        $language = $this->handler->load( $this->language->id );
+        $language = $this->handler->load( 2 );
         $language->languageCode = 'Changed';
         $language->name = 'Changed';
         $language->isEnabled = false;
         $this->handler->update( $language );
 
-        $language = $this->handler->load( $this->language->id );
-        $this->assertEquals( $this->language->id, $language->id );
+        $language = $this->handler->load( 2 );
+        $this->assertEquals( 2, $language->id );
         $this->assertEquals( 'Changed', $language->name );
         $this->assertEquals( 'Changed', $language->languageCode );
         $this->assertFalse( $language->isEnabled );
@@ -184,14 +155,26 @@ class LanguageHandlerTest extends HandlerTest
      */
     public function testDelete()
     {
-        $this->handler->delete( $this->language->id );
+        $this->handler->delete( 4 );
         try
         {
-            $this->handler->load( $this->language->id );
+            $this->handler->load( 4 );
             $this->fail( "Language has not been deleted" );
         }
         catch ( NotFound $e )
         {
         }
+    }
+
+    /**
+     * Test delete function throwing LogicException
+     *
+     * @expectedException \LogicException
+     * @covers eZ\Publish\Core\Persistence\InMemory\LanguageHandler::delete
+     */
+    public function testDeleteThrowsLogicException()
+    {
+        $language = $this->handler->loadByLanguageCode( 'eng-GB' );
+        $this->handler->delete( $language->id );
     }
 }

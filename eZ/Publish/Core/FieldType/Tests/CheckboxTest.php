@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Checkbox\Type as Checkbox,
     eZ\Publish\Core\FieldType\Checkbox\Value as CheckboxValue,
-    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
 /**

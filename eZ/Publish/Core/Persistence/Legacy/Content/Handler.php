@@ -8,9 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
-use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler,
     eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,

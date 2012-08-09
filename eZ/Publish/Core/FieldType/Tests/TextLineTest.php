@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\TextLine\Type as TextLine,
     eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue,
-    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
 /**

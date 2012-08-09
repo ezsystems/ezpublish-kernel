@@ -16,7 +16,7 @@ use \eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
  *
  * @see eZ\Publish\API\Repository\URLWildcardService
  */
-class URLWildcardServiceAuthorizationTest extends \eZ\Publish\API\Repository\Tests\BaseTest
+class URLWildcardServiceAuthorizationTest extends BaseTest
 {
     /**
      * Test for the create() method.

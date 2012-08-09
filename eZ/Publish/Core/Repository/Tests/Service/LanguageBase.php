@@ -379,7 +379,6 @@ abstract class LanguageBase extends BaseServiceTest
      */
     public function testDeleteLanguageThrowsInvalidArgumentException()
     {
-        self::markTestSkipped( '@todo: Enable when functionality is implemented in LanguageService::deleteLanguage' );
         $languageService = $this->repository->getContentLanguageService();
 
         $language = $languageService->loadLanguage( 'eng-GB' );
