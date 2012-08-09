@@ -83,6 +83,24 @@ class Value extends BaseValue
     }
 
     /**
+     * Creates a value only from a file path
+     *
+     * @param string $path
+     * @return Value
+     */
+    public static function fromString( $path )
+    {
+        return new static(
+            array(
+                'path' => $path,
+                'fileName' => basename( $path ),
+                'fileSize' => filesize( $path ),
+                'alternativeText' => '',
+            )
+        );
+    }
+
+    /**
      * Returns the image file size in byte
      *
      * @return integer

@@ -118,13 +118,19 @@ class Type extends FieldType
         // null is the empty value for this type
         if ( $inputValue === null )
         {
-            return null;
+            return $this->getEmptyValue();
         }
 
         // default construction from array
         if ( is_array( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
+        }
+
+        // just given the file path as a string
+        if ( is_string( $inputValue ) )
+        {
+            $inputValue = Value::fromString( $inputValue );
         }
 
         if ( !$inputValue instanceof Value )
@@ -146,7 +152,7 @@ class Type extends FieldType
             );
         }
         // Required parameter $fileName
-        if ( !isset( $inputValue->fileName ) && !is_string( $inputValue->fileName ) )
+        if ( !isset( $inputValue->fileName ) || !is_string( $inputValue->fileName ) )
         {
             throw new InvalidArgumentType(
                 '$inputValue->fileName',
@@ -154,8 +160,9 @@ class Type extends FieldType
                 $inputValue->fileName
             );
         }
+
         // Required parameter $fileSize
-        if ( !isset( $inputValue->fileSize ) && !is_int( $inputValue->fileSize ) )
+        if ( !isset( $inputValue->fileSize ) || !is_int( $inputValue->fileSize ) )
         {
             throw new InvalidArgumentType(
                 '$inputValue->fileSize',
