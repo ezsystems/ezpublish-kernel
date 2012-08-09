@@ -86,4 +86,14 @@ class Trash
         $values = $this->urlHandler->parse( 'trash', $request->path );
         $this->trashService->loadTrashItem( $values['trash'] );
     }
+
+    /**
+     * Empties the trash
+     *
+     * @param RMF\Request $request
+     */
+    public function emptyTrash( RMF\Request $request )
+    {
+        return $this->trashService->emptyTrash();
+    }
 }

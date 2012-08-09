@@ -246,6 +246,7 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^/content/trash$)' => array(
             'GET'    => array( $trashController, 'loadTrashItems' ),
+            'DELETE' => array( $trashController, 'emptyTrash' ),
         ),
         '(^/content/trash/[0-9]+$)' => array(
             'GET'    => array( $trashController, 'loadTrashItem' ),
