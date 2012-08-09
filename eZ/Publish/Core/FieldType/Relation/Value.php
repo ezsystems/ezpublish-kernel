@@ -19,14 +19,14 @@ class Value extends BaseValue
     /**
      * Related content
      *
-     * @var \eZ\Publish\Core\Repository\Values\Content\ContentInfo
+     * @var mixed|null
      */
     public $destinationContentId;
 
     /**
      * Construct a new Value object and initialize it $destinationContent
      *
-     * @param \eZ\Publish\Core\Repository\Values\Content\ContentInfo $destinationContent Content the relation is to
+     * @param mixed $destinationContentId Content id the relation is to
      */
     public function __construct( $destinationContentId = null )
     {

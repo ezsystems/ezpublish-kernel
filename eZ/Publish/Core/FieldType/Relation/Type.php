@@ -20,7 +20,7 @@ use eZ\Publish\Core\FieldType\FieldType,
  *
  * This field type represents a relation to a content.
  *
- * hash format ({@see fromhash()}, {¨@see toHash()}):
+ * hash format ({@see fromhash()}, {@see toHash()}):
  * array( 'destinationContentId' => (int)$destinationContentId );
  */
 class Type extends FieldType
@@ -30,7 +30,7 @@ class Type extends FieldType
 
     protected $settingsSchema = array(
         'selectionMethod' => array(
-            'type' => 'choice',
+            'type' => 'int',
             'default' => self::SELECTION_BROWSE,
         ),
         'selectionRoot' => array(
@@ -111,7 +111,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\Relation\Value
      */
-    public function getDefaultDefaultValue()
+    public function getEmptyValue()
     {
         return new Value();
     }

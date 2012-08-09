@@ -109,26 +109,26 @@ class RelationTest extends FieldTypeTest
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\Relation\Type::__buildValue
+     * @covers \eZ\Publish\Core\FieldType\Relation\Type::acceptValue
      * @covers \eZ\Publish\Core\FieldType\Relation\Type::__construct
      */
     public function testBuildValueWithContentInfo()
     {
         $type = new Relation( $this->validatorService, $this->fieldTypeTools );
         $contentInfo = new ContentInfo( array( 'id' => 1 ) );
-        $value = $type->buildValue( $contentInfo );
+        $value = $type->acceptValue( $contentInfo );
         self::assertSame( $contentInfo->id, $value->destinationContentId );
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\Relation\Type::__buildValue
+     * @covers \eZ\Publish\Core\FieldType\Relation\Type::acceptValue
      * @covers \eZ\Publish\Core\FieldType\Relation\Type::__construct
      */
     public function testBuildValueWithId()
     {
         $type = new Relation( $this->validatorService, $this->fieldTypeTools );
         $contentId = 1;
-        $value = $type->buildValue( $contentId );
+        $value = $type->acceptValue( $contentId );
         self::assertSame( $contentId, $value->destinationContentId );
     }
 
