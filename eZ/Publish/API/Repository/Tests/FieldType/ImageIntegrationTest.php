@@ -36,6 +36,11 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     protected static $storageDir;
 
+    /**
+     * Sets directories to use.
+     *
+     * @return void
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -87,6 +92,11 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     protected static function cleanupStorageDir()
     {
+        if ( self::$installDir == null || self::$storageDir == null )
+        {
+            return;
+        }
+
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator(
                 self::$installDir . '/' . self::$storageDir,
