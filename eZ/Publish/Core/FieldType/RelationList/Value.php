@@ -16,20 +16,20 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 class Value extends BaseValue
 {
     /**
-     * Text content
+     * Related content
      *
-     * @var string
+     * @var mixed[]
      */
-    public $text;
+    public $destinationContentIds;
 
     /**
      * Construct a new Value object and initialize it $text
      *
-     * @param string $text
+     * @param mixed[] $destinationContentIds
      */
-    public function __construct( $text = '' )
+    public function __construct( array $destinationContentIds = array() )
     {
-        $this->text = $text;
+        $this->destinationContentIds = $destinationContentIds;
     }
 
     /**
@@ -37,6 +37,6 @@ class Value extends BaseValue
      */
     public function __toString()
     {
-        return (string)$this->text;
+        return implode( ',', $this->destinationContentIds );
     }
 }

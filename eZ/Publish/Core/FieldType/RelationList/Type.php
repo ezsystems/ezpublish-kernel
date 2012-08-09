@@ -8,8 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\RelationList;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 
 /**
  * The RelationList field type.
@@ -18,24 +19,6 @@ use eZ\Publish\Core\FieldType\FieldType,
  */
 class Type extends FieldType
 {
-    protected $allowedValidators = array(
-    //    'eZ\\Publish\\Core\\Repository\\FieldType\\RelationList\\StringLengthValidator'
-    );
-
-    /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FiledType\Value object with the provided $text as value.
-     *
-     * @param string $text
-     * @return \eZ\Publish\Core\FieldType\RelationList\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $text )
-    {
-        return new Value( $text );
-    }
-
     /**
      * Return the field type identifier for this field type
      *
@@ -67,9 +50,9 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\RelationList\Value
      */
-    public function getDefaultDefaultValue()
+    public function getEmptyValue()
     {
-        return new Value( '' );
+        return new Value();
     }
 
     /**
@@ -78,28 +61,47 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
      *
-     * @param \eZ\Publish\Core\FieldType\RelationList\Value $inputValue
+     * @param mixed $inputValue A ContentInfo, content ID or list of content ID's to build from, or a RelationList\Value
      *
      * @return \eZ\Publish\Core\FieldType\RelationList\Value
      */
     public function acceptValue( $inputValue )
     {
+        // ContentInfo
+        if ( $inputValue instanceof ContentInfo )
+        {
+            $inputValue = new Value( array( $inputValue->id ) );
+        }
+        // content id
+        elseif ( is_integer( $inputValue ) || is_string( $inputValue ) )
+        {
+            $inputValue = new Value( array( $inputValue ) );
+        }
+        // content id's
+        elseif ( is_array( $inputValue ) )
+        {
+            $inputValue = new Value( $inputValue );
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
                 '$inputValue',
-                'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\Value',
+                'eZ\\Publish\\Core\\Repository\\FieldType\\RelationList\\Value',
                 $inputValue
             );
         }
 
-        if ( !is_string( $inputValue->text ) )
+        foreach ( $inputValue->destinationContentIds as $key => $destinationContentId )
         {
-            throw new InvalidArgumentType(
-                '$inputValue->text',
-                'string',
-                $inputValue->text
-            );
+            if ( !is_integer( $destinationContentId ) && !is_string( $destinationContentId ) )
+            {
+               throw new InvalidArgumentType(
+                    "\$inputValue->destinationContentIds[$key]",
+                    'string|int',
+                   $destinationContentId
+                );
+            }
         }
 
         return $inputValue;
@@ -125,7 +127,7 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
-        return new Value( $hash );
+        return new Value( $hash['destinationContentIds'] );
     }
 
     /**
@@ -137,7 +139,7 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
-        return $value->text;
+        return array( 'destinationContentIds' => $value->destinationContentIds );
     }
 
     /**
