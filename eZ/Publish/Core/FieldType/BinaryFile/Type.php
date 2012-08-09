@@ -94,7 +94,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\BinaryFile\Value
      */
-    public function getDefaultDefaultValue()
+    public function getEmptyValue()
     {
         return new Value( $this->IOService );
     }

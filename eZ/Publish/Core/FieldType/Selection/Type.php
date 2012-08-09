@@ -138,7 +138,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\Selection\Value
      */
-    public function getDefaultDefaultValue()
+    public function getEmptyValue()
     {
         return new Value;
     }
@@ -233,6 +233,6 @@ class Type extends FieldType
      */
     public function getIndexData( $value )
     {
-        throw new \RuntimeExcepion( '@TODO: Implement' );
+        throw new \RuntimeException( '@TODO: Implement' );
     }
 }

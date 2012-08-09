@@ -80,7 +80,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\Null\Value
      */
-    public function getDefaultDefaultValue()
+    public function getEmptyValue()
     {
         return new Value( null );
     }
@@ -107,7 +107,12 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
-        return $value->value;
+        if ( isset( $value->value ) )
+        {
+            return $value->value;
+        }
+
+        return null;
     }
 
     /**
@@ -131,7 +136,12 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
-        return $value->value;
+        if ( isset( $value->value ) )
+        {
+            return $value->value;
+        }
+
+        return null;
     }
 
     /**

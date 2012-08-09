@@ -13,7 +13,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
         'id' => 10,
         'title' => 'Anonymous User',
       ),
-       'score' => 1.0183479,
+       'score' => 0.57124877,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -24,7 +24,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
         'id' => 4,
         'title' => 'Users',
       ),
-       'score' => 1.0183479,
+       'score' => 0.57124877,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -32,7 +32,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
    'spellSuggestion' => NULL,
    'time' => 1,
    'timedOut' => NULL,
-   'maxScore' => 1.0183479,
+   'maxScore' => 0.57124877,
    'totalCount' => 2,
 ));
 

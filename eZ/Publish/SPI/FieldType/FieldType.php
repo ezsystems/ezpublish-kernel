@@ -155,7 +155,7 @@ interface FieldType
      *
      * @return mixed
      */
-    public function getDefaultDefaultValue();
+    public function getEmptyValue();
 
     /**
      * Potentially builds and checks the type and structure of the $inputValue.

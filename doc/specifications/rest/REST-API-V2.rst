@@ -1934,17 +1934,10 @@ Perform a query on articles with a specific title.
 
     <?xml version="1.0" encoding="UTF-8"?>
     <ViewInput>
-      <identifier>ArticleTitleView</identifier>
+      <identifier>TitleView</identifier>
       <Query>
         <Criteria>
-          <AND>
-            <ContentTypeIdentifierCriterion>article</ContentTypeIdentifierCriterion>
-            <FieldCritierion>
-              <operator>EQ</operator>
-              <target>title</target>
-              <value>Title</value>
-            </FieldCritierion>
-          </AND>
+          <FullTextCritierion>Title</FieldCritierion>
         </Criteria>
         <limit>10</limit>
         <offset>0</offset>
@@ -1953,6 +1946,9 @@ Perform a query on articles with a specific title.
             <SortField>NAME</SortField>
           </SortClause>
         </SortClauses>
+        <FacetBuilders>
+          <contentTypeFacetBuilder/>
+        </FacetBuilders>
       </Query>
     </ViewInput>
 
@@ -1966,21 +1962,13 @@ Perform a query on articles with a specific title.
 .. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <View href="/content/views/ArticleTitleView" media-type="application/vnd.ez.api.View+xml">
-      <identifier>ArticleTitleView</identifier>
+    <View href="/content/views/TitleView" media-type="application/vnd.ez.api.View+xml">
+      <identifier>TitleView</identifier>
       <User href="/user/users/14" media-type="vnd.ez.api.User+xml"/>
       <public>false</public>
       <Query>
         <Criteria>
-          <AND>
-            <ContentTypeIdentifierCriterion>article
-            </ContentTypeIdentifierCriterion>
-            <FieldCritierion>
-              <operator>EQ</operator>
-              <target>title</target>
-              <value>Title</value>
-            </FieldCritierion>
-          </AND>
+          <FullTextCritierion>Title</FieldCritierion>
         </Criteria>
         <limit>10</limit>
         <offset>0</offset>
@@ -1989,62 +1977,92 @@ Perform a query on articles with a specific title.
             <SortField>NAME</SortField>
           </SortClause>
         </SortClauses>
+        <FacetBuilders>
+          <contentTypeFacetBuilder/>
+        </FacetBuilders>
       </Query>
       <Result href="/content/views/view1234/results"
-        media-type="application/vnd.ez.api.ViewResult+xml">
-        <count>1</count>
-        <Content href="/content/objects/23" id="23"
-          media-type="application/vnd.ez.api.Content+xml" remoteId="qwert123"
-          xmlns:p="http://ez.no/API/Values" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://ez.no/API/Values Content.xsd ">
-          <ContentType href="/content/types/10"
-            media-type="application/vnd.ez.api.ContentType+xml" />
-          <Name>Name</Name>
-          <Versions href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml" />
-          <CurrentVersion href="/content/objects/23/currentversion"
-            media-type="application/vnd.ez.api.Version+xml">
-            <Version href="/content/objects/23/versions/2"
-              media-type="application/vnd.ez.api.Version+xml">
-              <VersionInfo>
-                <id>123</id>
-                <versionNo>2</versionNo>
-                <status>PUBLISHED</status>
-                <modificationDate>2001-12-31T12:00:00</modificationDate>
-                <creator href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
-                <creationDate>2001-12-31T12:00:00</creationDate>
-                <initialLanguageCode>eng-UK</initialLanguageCode>
-                <Content href="/content/objects/23"
-                  media-type="application/vnd.ez.api.ContentInfo+xml" />
-              </VersionInfo>
-              <Fields>
-                <field>
-                  <id>1234</id>
-                  <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
-                  <languageCode>eng-UK</languageCode>
-                  <value>Title</value>
-                </field>
-                <field>
-                  <id>1235</id>
-                  <fieldDefinitionIdentifer>summary
-                  </fieldDefinitionIdentifer>
-                  <languageCode>eng-UK</languageCode>
-                  <value>This is a summary</value>
-                </field>
-              </Fields>
-              <Relations />
-            </Version>
-          </CurrentVersion>
-          <Section href="/content/objects/23/section" media-type="application/vnd.ez.api.Section+xml" />
-          <MainLocation href="/content/objects/23/mainlocation"
-            media-type="application/vnd.ez.api.Location+xml" />
-          <Locations href="/content/objects/23/locations"
-            media-type="application/vnd.ez.api.LocationList+xml" />
-          <Owner href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
-          <PublishDate>2001-12-31T12:00:00</PublishDate>
-          <LastModificationDate>2001-12-31T12:00:00</LastModificationDate>
-          <MainLanguageCode>eng-UK</MainLanguageCode>
-          <AlwaysAvailable>true</AlwaysAvailable>
-        </Content>
+        media-type="application/vnd.ez.api.ViewResult+xml" count="34" time="31" maxScore="1.0">
+        <searchHits>
+          <searchHit score="1.0" index="installid1234567890">
+            <hightlight/>
+            <value>
+              <Content href="/content/objects/23" id="23"
+                media-type="application/vnd.ez.api.Content+xml" remoteId="qwert123"
+                xmlns:p="http://ez.no/API/Values" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://ez.no/API/Values Content.xsd ">
+                <ContentType href="/content/types/10"
+                  media-type="application/vnd.ez.api.ContentType+xml" />
+                <Name>Name</Name>
+                <Versions href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml" />
+                <CurrentVersion href="/content/objects/23/currentversion"
+                  media-type="application/vnd.ez.api.Version+xml">
+                  <Version href="/content/objects/23/versions/2"
+                    media-type="application/vnd.ez.api.Version+xml">
+                    <VersionInfo>
+                      <id>123</id>
+                      <versionNo>2</versionNo>
+                      <status>PUBLISHED</status>
+                      <modificationDate>2001-12-31T12:00:00</modificationDate>
+                      <creator href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
+                      <creationDate>2001-12-31T12:00:00</creationDate>
+                      <initialLanguageCode>eng-UK</initialLanguageCode>
+                      <Content href="/content/objects/23"
+                        media-type="application/vnd.ez.api.ContentInfo+xml" />
+                    </VersionInfo>
+                    <Fields>
+                      <field>
+                        <id>1234</id>
+                        <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+                        <languageCode>eng-UK</languageCode>
+                        <value>Title</value>
+                      </field>
+                      <field>
+                        <id>1235</id>
+                        <fieldDefinitionIdentifer>summary
+                        </fieldDefinitionIdentifer>
+                        <languageCode>eng-UK</languageCode>
+                        <value>This is a summary</value>
+                      </field>
+                    </Fields>
+                    <Relations />
+                  </Version>
+                </CurrentVersion>
+                <Section href="/content/objects/23/section" media-type="application/vnd.ez.api.Section+xml" />
+                <MainLocation href="/content/objects/23/mainlocation"
+                  media-type="application/vnd.ez.api.Location+xml" />
+                <Locations href="/content/objects/23/locations"
+                  media-type="application/vnd.ez.api.LocationList+xml" />
+                <Owner href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
+                <PublishDate>2001-12-31T12:00:00</PublishDate>
+                <LastModificationDate>2001-12-31T12:00:00</LastModificationDate>
+                <MainLanguageCode>eng-UK</MainLanguageCode>
+                <AlwaysAvailable>true</AlwaysAvailable>
+              </Content>
+            </value>
+          </searchHit>
+          ....
+        </searchHits>
+        <facets>
+          <contentTypeFacet>
+            <contentTypeFacetEntry>
+              <contentType href="/content/types/1"  media-type="application/vnd.ez.api.ContentType+xml"/>
+              <count>3</count>
+            </contentTypeFacetEntry>
+            <contentTypeFacetEntry>
+              <contentType href="/content/types/7"  media-type="application/vnd.ez.api.ContentType+xml"/>
+              <count>9</count>
+            </contentTypeFacetEntry>
+            <contentTypeFacetEntry>
+              <contentType href="/content/types/11"  media-type="application/vnd.ez.api.ContentType+xml"/>
+              <count>1</count>
+            </contentTypeFacetEntry>
+            <contentTypeFacetEntry>
+              <contentType href="/content/types/15"  media-type="application/vnd.ez.api.ContentType+xml"/>
+              <count>8</count>
+            </contentTypeFacetEntry>
+          </contentTypeFacet>
+        </facets>
       </Result>
     </View>
 
@@ -3992,6 +4010,38 @@ Load User Group
 
 Example see UserGroupExample_
 
+Load User Groups
+````````````````
+:Resource: /user/groups
+:Method: GET
+:Description: loads a user groups 
+:Parameters: 
+    :roleId: lists user groups assigned to the given role
+    :remoteId: retieves the user group for the given remoteId 
+    :limit:    only <limit> items will be returned started by offset
+    :offset:   offset of the result set
+    :orderby:   one of (name | lastmodified)
+    :sort:      one of (asc|desc)
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.UserGroupList+xml:  if set the user group list returned in xml format (see UserGroup_)
+         :application/vnd.ez.api.UserGroupList+json:  if set the user group list is returned in json format (see UserGroup_)
+         :application/vnd.ez.api.UserGroupRefList+xml:  if set the link list of user groups is returned in xml format (see UserGroup_)
+         :application/vnd.ez.api.UserGroupRefList+json:  if set the link list of user groups is returned in json format (see UserGroup_)
+:Response: 
+
+.. code:: http
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+          UserGroup_      
+
+:Error Codes:
+    :401: If the user has no permission to read user groups
+
+
 Create User Group
 `````````````````
 :Resource: /user/groups/<path>/subgroups
@@ -4165,6 +4215,7 @@ Creating a top level group
       <Users href="/user/groups/1/5/65/users" media-type="application/vnd.ez.api.UserList+xml"/>
       <Roles href="/user/groups/1/5/65/roles" media-type="application/vnd.ez.api.RoleList+xml"/>
     </UserGroup>
+
 
     
 
@@ -4496,7 +4547,8 @@ List Users
 :Method: GET
 :Description: List users
 :Parameters: 
-    :remoteId: retieves the user the given remoteId 
+    :roleId: lists users assigned to the given role
+    :remoteId: retieves the user for the given remoteId 
     :limit:    only <limit> items will be returned started by offset
     :offset:   offset of the result set
     :orderby:   one of (name | lastmodified)
@@ -5552,6 +5604,33 @@ Delete Policy
     :401: If the user is not authorized to delete this content type
     :404: If the role or policy does not exist
 
+
+List Policies for user
+``````````````````````
+:Resource: /user/policies
+:Method: GET
+:Description: search all policies which are applied to a given user
+:Parameters:
+    :userId: the user id 
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.PolicyList+xml:  if set the policy list  is returned in xml format (see Policy_)
+         :application/vnd.ez.api.PolicyList+json:  if set the policy list  is returned in json format (see Policy_)
+:Response: 
+
+.. code:: http
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+          Policy_      
+
+
+:Error Codes:
+    :401: If the user has no permission to read roles
+
+
 .. _InputOutput:
 
 Input Output Specification
@@ -6453,6 +6532,8 @@ XML Example
     Content-Type: application/vnd.ez.api.Version+xml
     Content-Length: xxx
 
+.. code:: xml
+
     <?xml version="1.0" encoding="UTF-8"?>
     <Version href="/content/objects/123/versions/4" media-type="application/vnd.ez.api.Version+xml" 
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -6671,32 +6752,352 @@ View XML Schema
         </xsd:sequence>
       </xsd:complexType>
 
+      <xsd:complexType name="facetBuilderType">
+        <xsd:sequence>
+          <xsd:element name="criterion" type="criterionType"
+            minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attribute name="name" type="xsd:string" />
+        <xsd:attribute name="global" type="xsd:boolean" />
+        <xsd:attribute name="limit" type="xsd:int" />
+        <xsd:attribute name="minCount" type="xsd:int" />
+      </xsd:complexType>
+
+
+      <xsd:simpleType name="dateRangeFacetSelector">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="CREATED" />
+          <xsd:enumeration value="MODIFIED" />
+          <xsd:enumeration value="PUBLISHED" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
+
+      <xsd:complexType name="dateRangeType">
+        <xsd:attribute name="from" type="xsd:dateTime" />
+        <xsd:attribute name="to" type="xsd:dateTime" />
+      </xsd:complexType>
+
+      <xsd:complexType name="dateRangeFacetBuilderType">
+        <xsd:complexContent>
+          <xsd:extension base="facetBuilderType">
+            <xsd:sequence>
+              <xsd:element name="unboundedFrom" type="xsd:dateTime"
+                minOccurs="0" maxOccurs="1" />
+              <xsd:element name="range" type="dateRangeType"
+                minOccurs="0" maxOccurs="unbounded" />
+              <xsd:element name="unboundedTo" type="xsd:dateTime"
+                minOccurs="0" maxOccurs="1" />
+            </xsd:sequence>
+            <xsd:attribute name="select" type="dateRangeFacetSelector"
+              default="PUBLISHED" />
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:simpleType name="fieldFacetSortType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="TERM_ASC" />
+          <xsd:enumeration value="TERM_DESC" />
+          <xsd:enumeration value="COUNT_ASC" />
+          <xsd:enumeration value="COUNT_DESC" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
+      <xsd:complexType name="fieldFacetBuilderType">
+        <xsd:complexContent>
+          <xsd:extension base="facetBuilderType">
+            <xsd:sequence>
+              <xsd:element name="fieldPath" type="xsd:string"
+                minOccurs="1" maxOccurs="unbounded" />
+              <xsd:element name="regExpFilter" type="xsd:string"
+                minOccurs="0" maxOccurs="1" />
+            </xsd:sequence>
+            <xsd:attribute name="sort" type="fieldFacetSortType" />
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="fieldRangeType">
+        <xsd:attribute name="from" type="xsd:anySimpleType" />
+        <xsd:attribute name="to" type="xsd:anySimpleType" />
+      </xsd:complexType>
+
+      <xsd:complexType name="fieldRangeFacetBuilderType">
+        <xsd:complexContent>
+          <xsd:extension base="facetBuilderType">
+            <xsd:sequence>
+              <xsd:element name="unboundedFrom" type="xsd:anySimpleType"
+                minOccurs="0" maxOccurs="1" />
+              <xsd:element name="range" type="fieldRangeType"
+                minOccurs="0" maxOccurs="unbounded" />
+              <xsd:element name="unboundedTo" type="xsd:anySimpleType"
+                minOccurs="0" maxOccurs="1" />
+            </xsd:sequence>
+            <xsd:attribute name="fieldPath" type="xsd:string" />
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="locationFacetBuilderType">
+        <xsd:complexContent>
+          <xsd:extension base="facetBuilderType">
+            <xsd:sequence>
+              <xsd:element name="location" type="ref" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:simpleType name="userFacetSelector">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="OWNER" />
+          <xsd:enumeration value="CREATTOR" />
+          <xsd:enumeration value="MODIFIER" />
+          <xsd:enumeration value="GROUP" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
+      <xsd:complexType name="userFacetBuilderType">
+        <xsd:complexContent>
+          <xsd:extension base="facetBuilderType">
+            <xsd:attribute name="select" type="userFacetSelector"
+              default="OWNER" />
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="facetBuilderListType">
+        <xsd:sequence>
+          <xsd:choice>
+            <xsd:element name="contentTypeFacetBuilder" type="facetBuilderType" />
+            <xsd:element name="criterionFacetBuilder" type="facetBuilderType" />
+            <xsd:element name="dateRangeFacetBulder" type="dateRangeFacetBuilderType" />
+            <xsd:element name="fieldFacetBuilder" type="fieldFacetBuilderType"></xsd:element>
+            <xsd:element name="fieldRangeFacetBuilder" type="fieldRangeFacetBuilderType"></xsd:element>
+            <xsd:element name="locationFacetBuilder" type="locationFacetBuilderType" />
+            <xsd:element name="sectionFacetBuilder" type="facetBuilderType" />
+            <xsd:element name="termFacetBuilder" type="facetBuilderType" />
+            <xsd:element name="userFacetBuilder" type="userFacetBuilderType" />
+          </xsd:choice>
+        </xsd:sequence>
+      </xsd:complexType>
+
       <xsd:complexType name="queryType">
         <xsd:all>
-          <xsd:element name="Criteria" type="criterionType" />
+          <xsd:element name="Criterion" type="criterionType" />
           <xsd:element name="limit" type="xsd:int" />
           <xsd:element name="offset" type="xsd:int" />
+          <xsd:element name="FacetBuilders" type="facetBuilderListType" />
           <xsd:element name="SortClauses" type="sortClauseType" />
+          <xsd:element name="spellcheck" type="xsd:boolean" />
         </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="facetType">
+        <xsd:attribute name="name" type="xsd:string" />
+      </xsd:complexType>
+
+      <xsd:complexType name="contentTypeFacetEntryType">
+        <xsd:all>
+          <xsd:element name="contentType" type="ref" />
+          <xsd:element name="count" type="xsd:int" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="contentTypeFacetType">
+        <xsd:complexContent>
+          <xsd:extension base="facetType">
+            <xsd:sequence>
+              <xsd:element name="contentTypeFacetEntry" type="contentTypeFacetEntryType" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="sectionFacetEntryType">
+        <xsd:all>
+          <xsd:element name="section" type="ref" />
+          <xsd:element name="count" type="xsd:int" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="sectionFacetType">
+        <xsd:complexContent>
+          <xsd:extension base="facetType">
+            <xsd:sequence>
+              <xsd:element name="sectionFacetEntry" type="sectionFacetEntryType" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="locationFacetEntryType">
+        <xsd:all>
+          <xsd:element name="location" type="ref" />
+          <xsd:element name="count" type="xsd:int" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="locationFacetType">
+        <xsd:complexContent>
+          <xsd:extension base="facetType">
+            <xsd:sequence>
+              <xsd:element name="locationFacetEntry" type="locationFacetEntryType" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="userFacetEntryType">
+        <xsd:all>
+          <xsd:element name="user" type="ref" />
+          <xsd:element name="count" type="xsd:int" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="userFacetType">
+        <xsd:complexContent>
+          <xsd:extension base="facetType">
+            <xsd:sequence>
+              <xsd:element name="userFacetEntry" type="userFacetEntryType" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+
+      <xsd:complexType name="criterionFacetType">
+        <xsd:complexContent>
+          <xsd:extension base="facetType">
+            <xsd:all>
+              <xsd:element name="criterion" type="criterionType" />
+              <xsd:element name="count" type="xsd:int" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="rangeFacetEntryType">
+        <xsd:all>
+          <xsd:element name="from" type="xsd:anySimpleType" />
+          <xsd:element name="to" type="xsd:anySimpleType" />
+          <xsd:element name="totalCount" type="xsd:int" />
+          <xsd:element name="min" type="xsd:int" />
+          <xsd:element name="max" type="xsd:int" />
+          <xsd:element name="mean" type="xsd:int" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="dateRangeFacetType">
+        <xsd:complexContent>
+          <xsd:extension base="facetType">
+            <xsd:sequence>
+              <xsd:element name="dateRangeFacetEntry" type="rangeFacetEntryType" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="fieldRangeFacetType">
+        <xsd:complexContent>
+          <xsd:extension base="facetType">
+            <xsd:sequence>
+              <xsd:element name="fieldRangeFacetEntry" type="rangeFacetEntryType" />
+            </xsd:sequence>
+            <xsd:attribute name="totalCount" type="xsd:int" />
+            <xsd:attribute name="otherCount" type="xsd:int" />
+            <xsd:attribute name="missingCount" type="xsd:int" />
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="termFacetEntryType">
+        <xsd:all>
+          <xsd:element name="term" type="xsd:string" />
+          <xsd:element name="count" type="xsd:int" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="fieldFacetType">
+        <xsd:complexContent>
+          <xsd:extension base="facetType">
+            <xsd:sequence>
+              <xsd:element name="fieldFacetEntry" type="termFacetEntryType" />
+            </xsd:sequence>
+            <xsd:attribute name="totalCount" type="xsd:int" />
+            <xsd:attribute name="otherCount" type="xsd:int" />
+            <xsd:attribute name="missingCount" type="xsd:int" />
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="termFacetType">
+        <xsd:complexContent>
+          <xsd:extension base="facetType">
+            <xsd:sequence>
+              <xsd:element name="termFacetEntry" type="termFacetEntryType" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="facetTyoe">
+        <xsd:choice>
+          <xsd:element name="sectionFacet" type="sectionFacetType" />
+          <xsd:element name="locationFacet" type="locationFacetType" />
+          <xsd:element name="userFacet" type="userFacetType" />
+          <xsd:element name="contentTypeFacet" type="contentTypeFacetType" />
+          <xsd:element name="fieldFacet" type="fieldFacetType" />
+          <xsd:element name="fieldRangeFacet" type="fieldRangeFacetType" />
+          <xsd:element name="dateRangeFacet" type="dateRangeFacetType" />
+          <xsd:element name="criterionFacet" type="criterionFacetType" />
+          <xsd:element name="termFacet" type="termFacetType" />
+        </xsd:choice>
+      </xsd:complexType>
+
+      <xsd:complexType name="searchHitType">
+        <xsd:all>
+          <xsd:element name="value" type="xsd:anyType" />
+          <xsd:element name="hightlight" type="xsd:string" />
+        </xsd:all>
+        <xsd:attribute name="score" type="xsd:float" />
+        <xsd:attribute name="index" type="xsd:string" />
+      </xsd:complexType>
+
+      <xsd:complexType name="searchHitListType">
+        <xsd:sequence>
+          <xsd:element name="searchHit" type="searchHitType" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="facetListType">
+        <xsd:sequence>
+          <xsd:element name="facet" type="facetType" />
+        </xsd:sequence>
       </xsd:complexType>
 
       <xsd:complexType name="resultType">
         <xsd:complexContent>
           <xsd:extension base="ref">
-            <xsd:sequence>
-              <xsd:element name="count" type="xsd:int"
-                minOccurs="1" maxOccurs="1" />
-              <xsd:element name="Content" type="vnd.ez.api.Content"
-                maxOccurs="unbounded" />
-            </xsd:sequence>
+            <xsd:all>
+              <xsd:element name="searchHits" type="searchHitListType" />
+              <xsd:element name="facets" type="facetListType" />
+              <xsd:element name="spellcorrection" type="criterionType" />
+            </xsd:all>
+            <xsd:attribute name="count" type="xsd:int" />
+            <xsd:attribute name="time" type="xsd:int" />
+            <xsd:attribute name="timedOut" type="xsd:boolean" />
+            <xsd:attribute name="maxScore" type="xsd:float" />
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
 
       <xsd:complexType name="viewInputType">
         <xsd:all>
-          <xsd:element name="identifier" type="xsd:string" minOccurs="0" />
-          <xsd:element name="public" type="xsd:boolean" default="false"/>
+          <xsd:element name="identifier" type="xsd:string"
+            minOccurs="0" />
+          <xsd:element name="public" type="xsd:boolean" default="false" />
           <xsd:element name="Query" type="queryType" />
         </xsd:all>
       </xsd:complexType>
@@ -6706,8 +7107,8 @@ View XML Schema
           <xsd:extension base="ref">
             <xsd:all>
               <xsd:element name="identifier" type="xsd:string" />
-              <xsd:element name="User" type="ref"/>
-              <xsd:element name="public" type="xsd:boolean"/>
+              <xsd:element name="User" type="ref" />
+              <xsd:element name="public" type="xsd:boolean" />
               <xsd:element name="Query" type="queryType" />
               <xsd:element name="Result" type="resultType" />
             </xsd:all>
@@ -6715,6 +7116,7 @@ View XML Schema
         </xsd:complexContent>
       </xsd:complexType>
       <xsd:element name="ViewInput" type="viewInputType" />
+      <xsd:element name="FacetBuilder" type="facetBuilderListType" />
       <xsd:element name="View" type="viewType" />
     </xsd:schema>
 

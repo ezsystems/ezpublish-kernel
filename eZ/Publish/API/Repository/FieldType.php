@@ -102,7 +102,7 @@ interface FieldType
      *
      * @return mixed
      */
-    public function getDefaultDefaultValue();
+    public function getEmptyValue();
 
     /**
      * Converts an $hash to the Value defined by the field type

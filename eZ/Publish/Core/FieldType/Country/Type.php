@@ -108,7 +108,7 @@ class Type extends FieldType
      *       Shouldn't an exception be used?
      * @return \eZ\Publish\Core\FieldType\Country\Value
      */
-    public function getDefaultDefaultValue()
+    public function getEmptyValue()
     {
         return new Value();
     }

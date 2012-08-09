@@ -57,7 +57,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\Float\Value
      */
-    public function getDefaultDefaultValue()
+    public function getEmptyValue()
     {
         return new Value();
     }

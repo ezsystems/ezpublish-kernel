@@ -46,7 +46,7 @@ class eZPublish extends Pattern
         'sections'             => '/content/sections',
         'section'              => '/content/sections/{section}',
         'sectionByIdentifier'  => '/content/sections?identifier={section}',
-        ''                     => '/content/trash',
+        'trashItems'           => '/content/trash',
         'trash'                => '/content/trash/{trash}',
         ''                     => '/content/typegroups',
         'typegroup'            => '/content/typegroups/{typegroup}',

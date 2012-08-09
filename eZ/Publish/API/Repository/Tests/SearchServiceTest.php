@@ -11,7 +11,7 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException,
     eZ\Publish\Core\Repository\SearchService,
-    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
+    eZ\Publish\Core\Repository\Values\Content\Content,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
@@ -282,17 +282,6 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 new Query( array(
-                    'criterion' => new Criterion\Field(
-                        'some_hopefully_unknown_field',
-                        Criterion\Operator::BETWEEN,
-                        array( 10, 1000 )
-                    ),
-                    'sortClauses' => array( new SortClause\ContentId() )
-                ) ),
-                $fixtureDir . 'FieldUnknown.php',
-            ),
-            array(
-                new Query( array(
                     'criterion' => new Criterion\LogicalOr(
                         array(
                             new Criterion\Field(
@@ -358,6 +347,26 @@ class SearchServiceTest extends BaseTest
         $this->assertEquals(
             4,
             $content->id
+        );
+    }
+
+    /**
+     * @expectedException \OutOfBoundsException
+     */
+    public function testInvalidFieldIdentifier()
+    {
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $content = $searchService->findContent(
+            new Query( array(
+                'criterion' => new Criterion\Field(
+                    'some_hopefully_unknown_field',
+                    Criterion\Operator::BETWEEN,
+                    array( 10, 1000 )
+                ),
+                'sortClauses' => array( new SortClause\ContentId() )
+            ) )
         );
     }
 
@@ -738,12 +747,11 @@ class SearchServiceTest extends BaseTest
                     $record = $fixture . '.recording',
                     "<?php\n\nreturn " . var_export( $result, true ) . ";\n\n"
                 );
-                $this->markTestIncomplete( "No fixture available. Set \$_ENV['ez_tests_record'] to generate it." );
+                $this->markTestIncomplete( "No fixture available. Result recorded at $record. Result: \n" . $this->printResult( $result ) );
             }
             else
             {
-                // @TODO: Print result in a readable way here?
-                $this->markTestIncomplete( "No fixture available. Result recorded at $record. Result: \n" . $this->printResult( $result ) );
+                $this->markTestIncomplete( "No fixture available. Set \$_ENV['ez_tests_record'] to generate it." );
             }
         }
 
@@ -788,10 +796,10 @@ class SearchServiceTest extends BaseTest
         {
             switch ( true )
             {
-                case $hit->valueObject instanceof ContentInfo:
+                case $hit->valueObject instanceof Content:
                     $hit->valueObject = array(
-                        'id'    => $hit->valueObject->id,
-                        'title' => $hit->valueObject->name,
+                        'id'    => $hit->valueObject->contentInfo->id,
+                        'title' => $hit->valueObject->contentInfo->name,
                     );
                     break;
 

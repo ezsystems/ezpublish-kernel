@@ -12,6 +12,7 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\ObjectStateGroupList;
+use eZ\Publish\Core\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\Core\REST\Common;
 
 class ObjectStateGroupListTest extends ValueObjectVisitorBaseTest
@@ -80,6 +81,32 @@ class ObjectStateGroupListTest extends ValueObjectVisitorBaseTest
             $result,
             'Invalid <ObjectStateGroupList> attributes.',
             false
+        );
+    }
+
+    /**
+     * Test if ObjectStateGroupList visitor visits the children
+     */
+    public function testObjectStateGroupListVisitsChildren()
+    {
+        $visitor   = $this->getObjectStateGroupListVisitor();
+        $generator = $this->getGenerator();
+
+        $generator->startDocument( null );
+
+        $groupList = new ObjectStateGroupList( array(
+            new ObjectStateGroup(),
+            new ObjectStateGroup(),
+        ) );
+
+        $this->getVisitorMock()->expects( $this->exactly( 2 ) )
+            ->method( 'visitValueObject' )
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup' ) );
+
+        $visitor->visit(
+            $this->getVisitorMock(),
+            $generator,
+            $groupList
         );
     }
 

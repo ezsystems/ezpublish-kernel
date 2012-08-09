@@ -131,7 +131,7 @@ class FieldTypeStub implements FieldType
      *
      * @return mixed
      */
-    public function getDefaultDefaultValue()
+    public function getEmptyValue()
     {
         throw new \RuntimeException( "Not implemented, just a wrapper." );
     }
@@ -156,6 +156,16 @@ class FieldTypeStub implements FieldType
      * @return mixed
      */
     public function toHash( $value )
+    {
+        throw new \RuntimeException( "Not implemented, just a wrapper." );
+    }
+
+    /**
+     * getName
+     *
+     * @return mixed $value
+     */
+    public function getName( $value )
     {
         throw new \RuntimeException( "Not implemented, just a wrapper." );
     }

@@ -13,7 +13,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
         'id' => 4,
         'title' => 'Users',
       ),
-       'score' => 1.9522473,
+       'score' => 1.1303897,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -21,10 +21,10 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 65,
+        'id' => 57,
         'title' => 'Home',
       ),
-       'score' => 1.9522473,
+       'score' => 1.1303897,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -32,7 +32,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
    'spellSuggestion' => NULL,
    'time' => 1,
    'timedOut' => NULL,
-   'maxScore' => 1.9522473,
+   'maxScore' => 1.1303897,
    'totalCount' => 2,
 ));
 

@@ -144,7 +144,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     /**
      * @return \eZ\Publish\API\Repository\Tests\SetupFactory
      */
-    private function getSetupFactory()
+    protected function getSetupFactory()
     {
         if ( null === $this->setupFactory )
         {

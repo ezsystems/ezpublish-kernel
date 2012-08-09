@@ -572,7 +572,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         isset( $fieldDefinitionCreateStruct->defaultValue ) ?
             $spiFieldDefinition->defaultValue->data = $fieldDefinitionCreateStruct->defaultValue :
-            $spiFieldDefinition->defaultValue = $fieldType->toPersistenceValue( $fieldType->getDefaultDefaultValue() );
+            $spiFieldDefinition->defaultValue = $fieldType->toPersistenceValue( $fieldType->getEmptyValue() );
 
         return $spiFieldDefinition;
     }
@@ -637,7 +637,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         isset( $fieldDefinitionUpdateStruct->defaultValue ) ?
             $spiFieldDefinition->defaultValue->data = $fieldDefinitionUpdateStruct->defaultValue :
-            $spiFieldDefinition->defaultValue = $fieldType->toPersistenceValue( $fieldType->getDefaultDefaultValue() );
+            $spiFieldDefinition->defaultValue = $fieldType->toPersistenceValue( $fieldType->getEmptyValue() );
 
         return $spiFieldDefinition;
     }
