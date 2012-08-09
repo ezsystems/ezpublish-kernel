@@ -67,13 +67,14 @@ class ImageStorage extends GatewayBasedStorage
             return true;
         }
 
-        $nodePathString = $this->getGateway( $context )->getNodePathString( $versionInfo );
+        $nodePathString = $this->getGateway( $context )->getNodePathString( $versionInfo, $field->id );
 
         $storedValue['path'] = $this->fileService->storeFile(
             $versionInfo,
             $field,
             $nodePathString
         );
+        $this->getGateway( $context )->storeImageReference( $storedValue['path'], $field->id );
 
         $storedValue = array_merge(
             // Basic value data

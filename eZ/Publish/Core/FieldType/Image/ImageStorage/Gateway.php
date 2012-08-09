@@ -20,5 +20,14 @@ abstract class Gateway extends StorageGateway
      * @return string
      */
     abstract public function getNodePathString( VersionInfo $versionInfo );
+
+    /**
+     * Stores a reference to the image in $path for $fieldId
+     *
+     * @param string $path
+     * @param mixed $fieldId
+     * @return void
+     */
+    abstract public function storeImageReference( $path, $fieldId );
 }
 

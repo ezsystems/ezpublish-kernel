@@ -91,5 +91,30 @@ class LegacyStorage extends Gateway
 
         return $statement->fetchColumn();
     }
+
+    /**
+     * Stores a reference to the image in $path for $fieldId
+     *
+     * @param string $path
+     * @param mixed $fieldId
+     * @return void
+     */
+    public function storeImageReference( $path, $fieldId )
+    {
+        $connection = $this->getConnection();
+
+        $insertQuery = $connection->createInsertQuery();
+        $insertQuery->insertInto( $connection->quoteTable( 'ezimagefile' ) )
+            ->set(
+                $connection->quoteColumn( 'contentobject_attribute_id' ),
+                $insertQuery->bindValue( $fieldId, null, \PDO::PARAM_INT )
+            )->set(
+                $connection->quoteColumn( 'filepath' ),
+                $insertQuery->bindValue( $path )
+            );
+
+        $statement = $insertQuery->prepare();
+        $statement->execute();
+    }
 }
 
