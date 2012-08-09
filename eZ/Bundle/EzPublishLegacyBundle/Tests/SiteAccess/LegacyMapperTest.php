@@ -13,6 +13,7 @@ use eZ\Publish\Legacy\Tests\LegacyBasedTestCase,
     eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess as LegacyMapper,
     eZ\Publish\MVC\SiteAccess,
     eZ\Publish\MVC\Event\PostSiteAccessMatchEvent,
+    eZ\Publish\Legacy\Event\PreBuildKernelWebHandlerEvent,
     \eZSiteAccess;
 
 class LegacyMapperTest extends LegacyBasedTestCase
@@ -24,6 +25,13 @@ class LegacyMapperTest extends LegacyBasedTestCase
      */
     public function testOnSiteAccessMatch( $pathinfo, $semanticPathinfo, SiteAccess $siteaccess, $expectedAccess )
     {
+        $container = $this->getContainerMock();
+        $container
+            ->expects( $this->exactly( 1 ) )
+            ->method( 'get' )
+            ->with( 'ezpublish.siteaccess' )
+            ->will( $this->returnValue( $siteaccess ) );
+
         $request = $this->getRequestMock();
         $request
             ->expects( $this->any() )
@@ -31,14 +39,15 @@ class LegacyMapperTest extends LegacyBasedTestCase
             ->will( $this->returnValue( $pathinfo ) );
         $request->attributes->set( 'semanticPathinfo', $semanticPathinfo );
 
-        $mapper = new LegacyMapper;
-        $mapper->onSiteAccessMatch(
-            new PostSiteAccessMatchEvent(
-                $siteaccess,
+        $mapper = new LegacyMapper( $container );
+        $bag = new \Symfony\Component\HttpFoundation\ParameterBag();
+        $mapper->onBuildKernelWebHandler(
+            new PreBuildKernelWebHandlerEvent(
+                $bag,
                 $request
             )
         );
-        self::assertSame( $expectedAccess, $request->attributes->get( 'legacySiteaccess' ) );
+        self::assertSame( $expectedAccess, $bag->get( 'siteaccess' ) );
     }
 
     public function siteAccessMatchProvider()
@@ -206,6 +215,18 @@ class LegacyMapperTest extends LegacyBasedTestCase
         return $this
             ->getMockBuilder( 'Symfony\\Component\\HttpFoundation\\Request' )
             ->setMethods( array_merge( array( 'getPathInfo' ), $methodsToMock ) )
+            ->getMock();
+    }
+
+    /**
+     * @param $methodsToMock
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    private function getContainerMock( array $methodsToMock = array() )
+    {
+        return $this
+            ->getMockBuilder( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' )
+            ->setMethods( $methodsToMock )
             ->getMock();
     }
 }
