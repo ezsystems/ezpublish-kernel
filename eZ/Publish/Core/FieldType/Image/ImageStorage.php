@@ -48,13 +48,26 @@ class ImageStorage extends GatewayBasedStorage
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
-        $nodePathString = $this->getGateway( $context )->getNodePathString( $versionInfo );
-
         $storedValue = isset( $field->value->externalData )
             // New image
             ? $field->value->externalData
             // Copied / updated image
             : $field->value->data;
+
+        $contentMetaData = array(
+            'fieldId' => $field->id,
+            'versionNo' => $versionInfo->versionNo,
+            'languageCode' => $field->languageCode,
+        );
+
+        if ( $storedValue === null )
+        {
+            // Store empty value only with content meta data
+            $field->value->data = $contentMetaData;
+            return true;
+        }
+
+        $nodePathString = $this->getGateway( $context )->getNodePathString( $versionInfo );
 
         $storedValue['path'] = $this->fileService->storeFile(
             $versionInfo,
@@ -68,11 +81,7 @@ class ImageStorage extends GatewayBasedStorage
             // Image meta data
             $this->fileService->getMetaData( $storedValue['path'] ),
             // Content meta data
-            array(
-                'fieldId' => $field->id,
-                'versionNo' => $versionInfo->versionNo,
-                'languageCode' => $field->languageCode,
-            )
+            $contentMetaData
         );
 
         $field->value->data = $storedValue;
@@ -93,7 +102,10 @@ class ImageStorage extends GatewayBasedStorage
      */
     public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
-        $field->value->data['fileSize'] = $this->fileService->getFileSize( $field->value->data['path'] );
+        if ( $field->value->data !== null )
+        {
+            $field->value->data['fileSize'] = $this->fileService->getFileSize( $field->value->data['path'] );
+        }
     }
 
     /**

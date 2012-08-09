@@ -71,7 +71,7 @@ class Type extends FieldType
      */
     public function getDefaultDefaultValue()
     {
-        return new Value();
+        return null;
     }
 
     /**
@@ -115,6 +115,13 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        // null is the empty value for this type
+        if ( $inputValue === null )
+        {
+            return null;
+        }
+
+        // default construction from array
         if ( is_array( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
@@ -193,7 +200,7 @@ class Type extends FieldType
                         // No file size limit
                         break;
                     }
-                    if ( $parameters['maxFileSize'] < $fieldValue->fileSize )
+                    if ( $fieldValue !== null && $parameters['maxFileSize'] < $fieldValue->fileSize )
                     {
                         $errors[] = new ValidationError(
                             "The file size cannot exceed %size% byte.",
@@ -283,6 +290,12 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
+        if( $hash === null )
+        {
+            // empty value
+            return null;
+        }
+
         return new Value( $hash );
     }
 
@@ -295,6 +308,11 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
+        if ( $value === null )
+        {
+            return null;
+        }
+
         return array(
             'alternativeText' => $value->alternativeText,
             'fileName' => $value->fileName,
@@ -331,6 +349,12 @@ class Type extends FieldType
      */
     public function fromPersistenceValue( FieldValue $fieldValue )
     {
+        if ( $fieldValue->data === null )
+        {
+            // empty value
+            return null;
+        }
+
         // Restored data comes in $data, since it has already been processed
         // there might be more data in the persistence value than needed here
         $result = $this->fromHash(

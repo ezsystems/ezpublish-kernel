@@ -46,6 +46,10 @@ class LocalFileService implements FileService
      */
     protected function getFullPath( $path )
     {
+        if ( substr( $path, 0, 1 ) === '/' )
+        {
+            return $path;
+        }
         return $this->installDir . '/' . $path;
     }
 
@@ -60,13 +64,7 @@ class LocalFileService implements FileService
      */
     public function storeFile( VersionInfo $versionInfo, Field $field, $nodePathString )
     {
-        $sourcePath = $this->getValueData( $field->value, 'path' );
-
-        // Relative path, if copy form DB value
-        if ( substr( $sourcePath, 0, 1 ) !== '/' )
-        {
-            $sourcePath = $this->getFullPath( $sourcePath );
-        }
+        $sourcePath = $this->getFullPath( $this->getValueData( $field->value, 'path' ) );
 
         $targetUri = $this->createTargetPath( $versionInfo, $field, $nodePathString );
         $targetPath = $this->getFullPath( $targetUri );
@@ -113,7 +111,7 @@ class LocalFileService implements FileService
     public function getMetaData( $path )
     {
         // Does not depend on GD
-        $metaData = getimagesize( $this->installDir . '/' . $path );
+        $metaData = getimagesize( $this->getFullPath( $path ) );
 
         return array(
             'width' => $metaData[0],

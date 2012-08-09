@@ -40,12 +40,52 @@ class Image implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        // Only store data if it is already available (after storage has stored
-        // image)
-        if ( isset( $value->data ) && isset( $value->data['mime'] ) )
+        if ( isset( $value->data ) )
         {
-            $storageFieldValue->dataText = $this->createLegacyXml( $value->data );
+            // Determine what needs to be stored
+            if ( isset( $value->data['mime'] ) )
+            {
+                // $data['mime'] is only set for real images, which have been
+                // stored
+                $storageFieldValue->dataText = $this->createLegacyXml( $value->data );
+            }
+            else if ( isset( $value->data['fieldId'] ) )
+            {
+                // $fieldId is only set if data is to be stored at all
+                $storageFieldValue->dataText = $this->createEmptyLegacyXml( $value->data );
+            }
+            // otherwise the image is unprocessed and the DB field stays empty
+            // there will be a subsequent call to this method, after the image
+            // has been stored
         }
+    }
+
+    /**
+     * Creates an XML considered "empty" by the legacy storage
+     *
+     * @param array $contentMetaData
+     * @return string
+     */
+    protected function createEmptyLegacyXml( $contentMetaData )
+    {
+        return $this->fillXml(
+            array_merge(
+                array(
+                    'path' => '',
+                    'width' => '',
+                    'height' => '',
+                    'mime' => '',
+                    'alternative_text' => '',
+                ),
+                $contentMetaData
+            ),
+            array(
+                'basename' => '',
+                'extension' => '',
+                'dirname' => '',
+            ),
+            time()
+        );
     }
 
     /**
@@ -56,13 +96,25 @@ class Image implements Converter
      */
     protected function createLegacyXml( array $data )
     {
+        $pathInfo = pathinfo( $data['path'] );
+        return $this->fillXml( $data, $pathInfo, time() );
+    }
 
+    /**
+     * Fill the XML template with the data provided
+     *
+     * @param array $imageData
+     * @param array $pathInfo
+     * @param int $timestamp
+     * @return string
+     */
+    protected function fillXml( $imageData, $pathInfo, $timestamp )
+    {
         // <?xml version="1.0" encoding="utf-8"
         // <ezimage serial_number="1" is_valid="1" filename="River-Boat.jpg" suffix="jpg" basename="River-Boat" dirpath="var/ezdemo_site/storage/images/travel/peruvian-amazon/river-boat/322-1-eng-US" url="var/ezdemo_site/storage/images/travel/peruvian-amazon/river-boat/322-1-eng-US/River-Boat.jpg" original_filename="bbbbc2fe.jpg" mime_type="image/jpeg" width="770" height="512" alternative_text="Old River Boat" alias_key="1293033771" timestamp="1342530101">
         //   <original attribute_id="322" attribute_version="1" attribute_language="eng-US"/>
         //   <information Height="512" Width="770" IsColor="1"/>
         // </ezimage>
-
 $xml = <<<EOT
 <?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="%s"
@@ -73,7 +125,6 @@ $xml = <<<EOT
   <information Height="%s" Width="%s" IsColor="%s"/>
 </ezimage>
 EOT;
-        $pathInfo = pathinfo( $data['path'] );
 
         return sprintf(
             $xml,
@@ -81,22 +132,22 @@ EOT;
             htmlspecialchars( $pathInfo['basename'] ), // filename
             htmlspecialchars( $pathInfo['extension'] ), // suffix
             htmlspecialchars( $pathInfo['dirname'] ), // basename
-            htmlspecialchars( $data['path'] ), // dirpath
-            htmlspecialchars( $data['path'] ), // url
+            htmlspecialchars( $imageData['path'] ), // dirpath
+            htmlspecialchars( $imageData['path'] ), // url
             null, // @TODO: Needs original file name, for whatever reason?
-            htmlspecialchars( $data['mime'] ), // mime_type
-            htmlspecialchars( $data['width'] ), // width
-            htmlspecialchars( $data['height'] ), // height
-            htmlspecialchars( $data['alternativeText'] ), // alternative_text
-            htmlspecialchars( $timestamp = time() ), // alias_key
+            htmlspecialchars( $imageData['mime'] ), // mime_type
+            htmlspecialchars( $imageData['width'] ), // width
+            htmlspecialchars( $imageData['height'] ), // height
+            htmlspecialchars( $imageData['alternativeText'] ), // alternative_text
+            htmlspecialchars( $timestamp ), // alias_key
             htmlspecialchars( $timestamp ), // timestamp
             // <original>
-            $data['fieldId'],
-            $data['versionNo'],
-            $data['languageCode'],
+            $imageData['fieldId'],
+            $imageData['versionNo'],
+            $imageData['languageCode'],
             // <information>
-            $data['height'], // Height
-            $data['width'], // Width
+            $imageData['height'], // Height
+            $imageData['width'], // Width
             1 // IsColor @TODO Do we need to fix that here?
         );
     }
@@ -109,6 +160,11 @@ EOT;
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
+        if ( empty( $value->dataText ) )
+        {
+            // Special case for anonymous user
+            return;
+        }
         $fieldValue->data = $this->parseLegacyXml( $value->dataText );
     }
 
@@ -134,7 +190,14 @@ EOT;
         {
             throw new \RuntimeException( 'Missing attribute "url" in <ezimage/> tag.' );
         }
-        $extractedData['path'] = $ezimageTag->getAttribute( 'url' );
+
+        if ( ( $url = $ezimageTag->getAttribute( 'url' ) ) === '' )
+        {
+            // Detected XML considered "empty" by the legacy storage
+            return null;
+        }
+
+        $extractedData['path'] = $url;
 
         if ( !$ezimageTag->hasAttribute( 'filename' ) )
         {
