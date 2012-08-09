@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:FacetBuilder xmlns:p="http://ez.no/API/Values" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ez.no/API/Values ../View.xsd ">
+  <contentTypeFacetBuilder/>
+</p:FacetBuilder>
