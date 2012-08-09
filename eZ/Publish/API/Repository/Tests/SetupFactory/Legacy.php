@@ -98,6 +98,18 @@ class Legacy extends SetupFactory
     }
 
     /**
+     * Returns a config value for $configKey.
+     *
+     * @param string $configKey
+     * @return mixed
+     * @throws Exception if $configKey could not be found.
+     */
+    public function getConfigValue( $configKey )
+    {
+        return $this->getServiceContainer()->getVariable( $configKey );
+    }
+
+    /**
      * Returns a repository specific ID manager.
      *
      * @return \eZ\Publish\API\Repository\Tests\IdManager
