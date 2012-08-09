@@ -197,9 +197,9 @@ class Handler implements BaseUrlAliasHandler
         // Cleanup
         /** @var $newElementId */
         /** @var $newTextMD5 */
-        $this->gateway->downgrade( $newElementId, $action, $parentId, $newTextMD5, $languageId );
-        $this->gateway->relink( $newElementId, $action, $parentId, $newTextMD5, $languageId );
-        $this->gateway->reparent( $newElementId, $action, $parentId, $newTextMD5, $languageId );
+        //$this->gateway->downgrade( $newElementId, $action, $parentId, $newTextMD5, $languageId );
+        //$this->gateway->relink( $newElementId, $action, $parentId, $newTextMD5, $languageId );
+        //$this->gateway->reparent( $newElementId, $action, $parentId, $newTextMD5, $languageId );
 
         $data["type"] = UrlAlias::LOCATION;
         $data["path"] = $this->gateway->getPath( $newElementId, array( $languageCode ) );
