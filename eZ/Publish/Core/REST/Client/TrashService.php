@@ -159,7 +159,7 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
             $this->urlHandler->generate( 'trashItems' ),
             new Message(
                 // TODO: What media-type should we set here? Actually, it should be
-                // all expected exceptions + none? Or is "ObjectStateGroup" correct,
+                // all expected exceptions + none? Or is "Location" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
                 array( 'Accept' => $this->outputVisitor->getMediaType( 'Location' ) )
@@ -181,7 +181,20 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
      */
     public function deleteTrashItem( APITrashItem $trashItem )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'DELETE',
+            $trashItem->id,
+            new Message(
+                // TODO: What media-type should we set here? Actually, it should be
+                // all expected exceptions + none? Or is "Location" correct,
+                // since this is what is to be expected by the resource
+                // identified by the URL?
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'Location' ) )
+            )
+        );
+
+        if ( !empty( $response->body ) )
+            $this->inputDispatcher->parse( $response );
     }
 
     /**

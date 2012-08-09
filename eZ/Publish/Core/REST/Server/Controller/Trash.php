@@ -96,4 +96,17 @@ class Trash
     {
         return $this->trashService->emptyTrash();
     }
+
+    /**
+     * Deletes the given trash item
+     *
+     * @param RMF\Request $request
+     */
+    public function deleteTrashItem( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'trash', $request->path );
+        return $this->trashService->deleteTrashItem(
+            $this->trashService->loadTrashItem( $values['trash'] )
+        );
+    }
 }

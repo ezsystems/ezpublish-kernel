@@ -250,6 +250,7 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^/content/trash/[0-9]+$)' => array(
             'GET'    => array( $trashController, 'loadTrashItem' ),
+            'DELETE' => array( $trashController, 'deleteTrashItem' ),
         ),
         '(^/user/roles$)' => array(
             'GET' => array( $roleController, 'listRoles' ),
