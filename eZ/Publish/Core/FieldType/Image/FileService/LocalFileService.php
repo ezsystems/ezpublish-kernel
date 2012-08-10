@@ -181,5 +181,14 @@ class LocalFileService implements FileService
         {
             throw new  \RuntimeException( "Could not create directory '{$directory}'." );
         }
+
+        $chmodResult = chmod( $directory, 0775 );
+
+        if ( false === $chmodResult )
+        {
+            throw new  \RuntimeException(
+                "Could not set permissions 0775 on directory '{$directory}'."
+            );
+        }
     }
 }
