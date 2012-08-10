@@ -12,8 +12,7 @@ use eZ\Publish\SPI\FieldType\FieldStorage,
     eZ\Publish\Core\FieldType\GatewayBasedStorage,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\Core\FieldType\Relation\Value as UrlValue;
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 
 /**
  * Converter for Relation field type external storage

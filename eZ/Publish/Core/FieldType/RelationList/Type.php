@@ -26,6 +26,15 @@ use eZ\Publish\SPI\FieldType\Event;
  */
 class Type extends FieldType
 {
+    /**
+     * @todo Add missing settings, ref eZObjectRelationListType::defaultClassAttributeContent():
+     *
+     *         return array( 'object_class' => '',
+     *                       'selection_type' => 0,
+     *                       'type' => 0,
+     *                       'class_constraint_list' => array(),
+     *                       'default_placement' => false );
+     */
     const SELECTION_BROWSE = 0,
           SELECTION_DROPDOWN = 1;
 
@@ -173,7 +182,7 @@ class Type extends FieldType
      * Returns information for FieldValue->$sortKey relevant to the field type.
      * For this FieldType, the related object's name is returned.
      *
-     * @todo Repository needs to be rpovided to be able to get Content Relation name(s).
+     * @todo Repository needs to be provided to be able to get Content Relation name(s), and it is in ctor
      * @return array
      */
     protected function getSortInfo( $value )

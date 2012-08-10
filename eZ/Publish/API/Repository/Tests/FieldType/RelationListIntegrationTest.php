@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 use eZ\Publish\API\Repository,
-    eZ\Publish\Core\FieldType\Relation\Value as RelationValue,
+    eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue,
     eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository,
  * @group integration
  * @group field-type
  */
-class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
+class RelationListFieldTypeIntegrationTest extends BaseIntegrationTest
 {
     /**
      * Get name of tested field tyoe
@@ -27,7 +27,7 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
      */
     public function getTypeName()
     {
-        return 'ezobjectrelation';
+        return 'ezobjectrelationlist';
     }
 
     /**
@@ -106,7 +106,7 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
      */
     public function getValidCreationFieldData()
     {
-        return new RelationValue( 4 );
+        return new RelationListValue( array( 4 ) );
     }
 
     /**
@@ -121,12 +121,12 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
     public function assertFieldDataLoadedCorrect( Field $field)
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Relation\\Value',
+            'eZ\\Publish\\Core\\FieldType\\RelationList\\Value',
             $field->value
         );
 
         $expectedData = array(
-            'destinationContentId' => 4,
+            'destinationContentIds' => array( 4 ),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -159,7 +159,7 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new RelationValue( array() ),
+                new RelationListValue( array( null ) ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
         );
@@ -172,7 +172,7 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
      */
     public function getValidUpdateFieldData()
     {
-        return new RelationValue( 49 );
+        return new RelationListValue( array( 49 ) );
     }
 
     /**
@@ -185,12 +185,12 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
     public function assertUpdatedFieldDataLoadedCorrect( Field $field )
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Relation\\Value',
+            'eZ\\Publish\\Core\\FieldType\\RelationList\\Value',
             $field->value
         );
 
         $expectedData = array(
-            'destinationContentId' => 49,
+            'destinationContentIds' => array( 49 ),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -235,12 +235,12 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
     public function assertCopiedFieldDataLoadedCorrectly( Field $field )
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Relation\\Value',
+            'eZ\\Publish\\Core\\FieldType\\RelationList\\Value',
             $field->value
         );
 
         $expectedData = array(
-            'destinationContentId' => 4
+            'destinationContentIds' => array( 4 )
         );
 
         $this->assertPropertiesCorrect(
@@ -273,9 +273,9 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new RelationValue( 4 ),
+                new RelationListValue( array( 4 ) ),
                 array(
-                    'destinationContentId' => 4,
+                    'destinationContentIds' => array( 4 ),
                 )
             ),
         );
@@ -292,8 +292,8 @@ class RelationFieldTypeIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                array( 'destinationContentId' => 4 ),
-                new RelationValue( 4 )
+                array( 'destinationContentIds' => array( 4 ) ),
+                new RelationListValue( array( 4 ) )
             ),
         );
     }
