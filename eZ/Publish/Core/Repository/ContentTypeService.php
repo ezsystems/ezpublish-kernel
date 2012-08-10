@@ -565,14 +565,13 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
         }
 
-        $spiFieldDefinition->fieldTypeConstraints->validators =
-            $fieldDefinitionCreateStruct->validatorConfiguration;
-        $spiFieldDefinition->fieldTypeConstraints->fieldSettings =
-            $fieldDefinitionCreateStruct->fieldSettings;
-
-        isset( $fieldDefinitionCreateStruct->defaultValue ) ?
-            $spiFieldDefinition->defaultValue->data = $fieldDefinitionCreateStruct->defaultValue :
-            $spiFieldDefinition->defaultValue = $fieldType->toPersistenceValue( $fieldType->getEmptyValue() );
+        $spiFieldDefinition->fieldTypeConstraints->validators = $fieldDefinitionCreateStruct->validatorConfiguration;
+        $spiFieldDefinition->fieldTypeConstraints->fieldSettings = $fieldDefinitionCreateStruct->fieldSettings;
+        $spiFieldDefinition->defaultValue = $fieldType->toPersistenceValue(
+            isset( $fieldDefinitionCreateStruct->defaultValue )
+                ? $fieldType->acceptValue( $fieldDefinitionCreateStruct->defaultValue )
+                : $fieldType->getEmptyValue()
+        );
 
         return $spiFieldDefinition;
     }
@@ -630,14 +629,13 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
         }
 
-        $spiFieldDefinition->fieldTypeConstraints->validators =
-            $fieldDefinitionUpdateStruct->validatorConfiguration;
-        $spiFieldDefinition->fieldTypeConstraints->fieldSettings =
-            $fieldDefinitionUpdateStruct->fieldSettings;
-
-        isset( $fieldDefinitionUpdateStruct->defaultValue ) ?
-            $spiFieldDefinition->defaultValue->data = $fieldDefinitionUpdateStruct->defaultValue :
-            $spiFieldDefinition->defaultValue = $fieldType->toPersistenceValue( $fieldType->getEmptyValue() );
+        $spiFieldDefinition->fieldTypeConstraints->validators = $fieldDefinitionUpdateStruct->validatorConfiguration;
+        $spiFieldDefinition->fieldTypeConstraints->fieldSettings = $fieldDefinitionUpdateStruct->fieldSettings;
+        $spiFieldDefinition->defaultValue = $fieldType->toPersistenceValue(
+            isset( $fieldDefinitionUpdateStruct->defaultValue )
+                ? $fieldType->acceptValue( $fieldDefinitionUpdateStruct->defaultValue )
+                : $fieldType->getEmptyValue()
+        );
 
         return $spiFieldDefinition;
     }
