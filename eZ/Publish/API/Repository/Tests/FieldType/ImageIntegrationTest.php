@@ -134,7 +134,7 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
         foreach ( $iterator as $path => $fileInfo )
         {
             if ( $fileInfo->isDir() )
-            {;
+            {
                 rmdir( $path );
             }
             else
