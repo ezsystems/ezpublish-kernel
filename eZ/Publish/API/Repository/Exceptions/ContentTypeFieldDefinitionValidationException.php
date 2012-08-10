@@ -8,7 +8,6 @@
  */
 
 namespace eZ\Publish\API\Repository\Exceptions;
-use eZ\Publish\API\Repository\Exceptions\ForbiddenException;
 
 /**
  * This Exception is thrown on create or update content type one or more given field definitions are not valid

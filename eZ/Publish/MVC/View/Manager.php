@@ -9,9 +9,7 @@
 
 namespace eZ\Publish\MVC\View;
 
-use eZ\Publish\MVC\View\ContentViewProvider,
-    eZ\Publish\MVC\View\ContentViewInterface,
-    eZ\Publish\API\Repository\Values\Content\Content,
+use eZ\Publish\API\Repository\Values\Content\Content,
     eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\MVC\MVCEvents,
     eZ\Publish\MVC\Event\PreContentViewEvent,

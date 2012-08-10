@@ -24,7 +24,7 @@ use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
  * @see eZ\Publish\API\Repository\ObjectStateService
  * @group object-state
  */
-class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
+class ObjectStateServiceTest extends BaseTest
 {
     /**
      * Test for the newObjectStateGroupCreateStruct() method.

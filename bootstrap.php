@@ -21,13 +21,19 @@ if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
 }
 
 // Setup class loader
-require __DIR__ . '/eZ/Publish/Core/Base/ClassLoader.php';
+require_once __DIR__ . '/eZ/Publish/Core/Base/ClassLoader.php';
+
 $classLoader = new ClassLoader(
     include $settings['base']['ClassLoader']['NamespaceMap'],
     include $settings['base']['ClassLoader']['ClassMap'],
     $settings['service']['parameters']['legacy_dir']
 );
 spl_autoload_register( array( $classLoader, 'load' ) );
+
+$classLoader = require_once __DIR__ . "/vendor/autoload.php";
+
+if ( $classLoader instanceof Composer\Autoload\ClassLoader )
+    $classLoader->register();
 
 // Bootstrap eZ Publish legacy kernel if configured
 if ( !empty( $settings['service']['parameters']['legacy_dir'] ) )

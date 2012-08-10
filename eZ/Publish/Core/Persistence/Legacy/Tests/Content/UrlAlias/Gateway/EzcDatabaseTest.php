@@ -42,7 +42,7 @@ class EzcDatabaseTest extends TestCase
 
         $this->assertAttributeSame(
             $dbHandler,
-            'dbHandler',
+            "dbHandler",
             $gateway
         );
     }
@@ -54,7 +54,7 @@ class EzcDatabaseTest extends TestCase
      */
     public function testLoadBasicUrlaliasDataNonExistent()
     {
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_simple.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_simple.php" );
         $gateway = $this->getGateway();
 
         $rows = $gateway->loadBasicUrlAliasData( array( "tri" ), array( "cro-HR" ) );
@@ -73,12 +73,12 @@ class EzcDatabaseTest extends TestCase
             "is_original" => "1",
             "ezurlalias_ml0_text" => "jedan",
             "ezurlalias_ml1_text" => "dva",
-            "lang_mask" => '3',
+            "lang_mask" => "3",
             "language_codes" => array( "cro-HR" ),
-            'parent' => '2',
-            'text_md5' => 'c67ed9a09ab136fae610b6a087d82e21',
-            'ezurlalias_ml0_action' => 'eznode:314',
-            'ezurlalias_ml1_action' => 'eznode:315'
+            "parent" => "2",
+            "text_md5" => "c67ed9a09ab136fae610b6a087d82e21",
+            "ezurlalias_ml0_action" => "eznode:314",
+            "ezurlalias_ml1_action" => "eznode:315"
         );
     }
 
@@ -89,7 +89,7 @@ class EzcDatabaseTest extends TestCase
      */
     public function testLoadBasicUrlaliasData()
     {
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_simple.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_simple.php" );
         $gateway = $this->getGateway();
 
         $row = $gateway->loadBasicUrlAliasData( array( "jedan", "dva" ), array( "cro-HR" ) );
@@ -107,7 +107,7 @@ class EzcDatabaseTest extends TestCase
      */
     public function testLoadBasicUrlaliasDataIsCaseInsensitive()
     {
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_simple.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_simple.php" );
         $gateway = $this->getGateway();
 
         $row = $gateway->loadBasicUrlAliasData( array( "JEDAN", "DVA" ), array( "cro-HR" ) );
@@ -127,7 +127,7 @@ class EzcDatabaseTest extends TestCase
      */
     public function testLoadBasicUrlaliasDataMultipleLanguages()
     {
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_multilang.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_multilang.php" );
         $gateway = $this->getGateway();
         $expectedResult = array(
             "id" =>  "3",
@@ -138,12 +138,12 @@ class EzcDatabaseTest extends TestCase
             "is_original" => "1",
             "ezurlalias_ml0_text" => "jedan",
             "ezurlalias_ml1_text" => "dva",
-            "lang_mask" => '6',
+            "lang_mask" => "6",
             "language_codes" => array( "cro-HR", "eng-GB" ),
-            'parent' => '2',
-            'text_md5' => 'c67ed9a09ab136fae610b6a087d82e21',
-            'ezurlalias_ml0_action' => 'eznode:314',
-            'ezurlalias_ml1_action' => 'eznode:315'
+            "parent" => "2",
+            "text_md5" => "c67ed9a09ab136fae610b6a087d82e21",
+            "ezurlalias_ml0_action" => "eznode:314",
+            "ezurlalias_ml1_action" => "eznode:315"
         );
 
         $row1 = $gateway->loadBasicUrlAliasData( array( "jedan", "dva" ), array( "cro-HR" ) );
@@ -155,7 +155,7 @@ class EzcDatabaseTest extends TestCase
         self::assertEquals( $expectedResult, $row3 );
     }
 
-    public function providerForGetPath()
+    public function providerForTestGetPath()
     {
         return array(
             array(
@@ -229,14 +229,14 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the getPath() method.
      *
-     * @dataProvider providerForGetPath
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::getPath
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::choosePrioritizedRow
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::languageScore
+     * @dataProvider providerForTestGetPath
      */
     public function testGetPath( $id, array $prioritizedLanguageCodes, $expectedPath )
     {
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_fallback.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_fallback.php" );
         $gateway = $this->getGateway();
 
         self::assertEquals(
@@ -245,7 +245,7 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
-    public function providerForGetPathMultipleLanguages()
+    public function providerForTestGetPathMultipleLanguages()
     {
         return array(
             array(
@@ -296,14 +296,14 @@ class EzcDatabaseTest extends TestCase
      *
      * Test with fixture containing language mask with multiple languages.
      *
-     * @dataProvider providerForGetPathMultipleLanguages
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::getPath
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::choosePrioritizedRow
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::languageScore
+     * @dataProvider providerForTestGetPathMultipleLanguages
      */
     public function testGetPathMultipleLanguages( $id, array $prioritizedLanguageCodes, $expectedPath )
     {
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_multilang.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_multilang.php" );
         $gateway = $this->getGateway();
 
         self::assertEquals(
@@ -319,7 +319,7 @@ class EzcDatabaseTest extends TestCase
      */
     public function testGetPathWithFallbackToArbitraryLanguage()
     {
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_fallback.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_fallback.php" );
         $gateway = $this->getGateway();
 
         $klingonFriendlyPath = $gateway->getPath( 3, array( "kli-KR" ) );
@@ -330,6 +330,7 @@ class EzcDatabaseTest extends TestCase
             case "jedan/dva";
                 $hasMatched = true;
                 break;
+
             case "jedan/two";
                 $hasMatched = true;
                 break;
@@ -339,6 +340,147 @@ class EzcDatabaseTest extends TestCase
         {
             self::fail( "Fallback to arbitrary language not matched" );
         }
+    }
+
+    public function providerForTestDowngradeMarksAsHistory()
+    {
+        return array(
+            array(
+                "action" => "eznode:314",
+                "languageId" => 2,
+                "parentId" => 0,
+                "textMD5" => "6896260129051a949051c3847c34466f"
+            ),
+            array(
+                "action" => "eznode:315",
+                "languageId" => 2,
+                "parentId" => 0,
+                "textMD5" => "c67ed9a09ab136fae610b6a087d82e21"
+            ),
+        );
+    }
+
+    /**
+     * Test for the downgrade() method.
+     *
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::downgrade
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::markAsHistory
+     * @dataProvider providerForTestDowngradeMarksAsHistory
+     */
+    public function testDowngradeMarksAsHistory( $action, $languageId, $parentId, $textMD5 )
+    {
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_downgrade.php" );
+        $gateway = $this->getGateway();
+
+        $loadedRow = $gateway->loadRow( $parentId, $textMD5 );
+
+        $gateway->downgrade( $action, $languageId, $parentId, "jabberwocky" );
+
+        $reloadedRow = $gateway->loadRow( $parentId, $textMD5 );
+        $loadedRow["is_original"] = "0";
+
+        self::assertEquals( $reloadedRow, $loadedRow );
+    }
+
+    public function providerForTestDowngradeRemovesLanguage()
+    {
+        return array(
+            array(
+                "action" => "eznode:316",
+                "languageId" => 2,
+                "parentId" => 0,
+                "textMD5" => "d2cfe69af2d64330670e08efb2c86df7"
+            ),
+            array(
+                "action" => "eznode:317",
+                "languageId" => 2,
+                "parentId" => 0,
+                "textMD5" => "538dca05643d220317ad233cd7be7a0a"
+            ),
+        );
+    }
+
+    /**
+     * Test for the downgrade() method.
+     *
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::downgrade
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::removeLanguage
+     * @dataProvider providerForTestDowngradeRemovesLanguage
+     */
+    public function testDowngradeRemovesLanguage( $action, $languageId, $parentId, $textMD5 )
+    {
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_downgrade.php" );
+        $gateway = $this->getGateway();
+
+        $loadedRow = $gateway->loadRow( $parentId, $textMD5 );
+
+        $gateway->downgrade( $action, $languageId, $parentId, "jabberwocky" );
+
+        $reloadedRow = $gateway->loadRow( $parentId, $textMD5 );
+        $loadedRow["lang_mask"] = $loadedRow["lang_mask"] & ~$languageId;
+
+        self::assertEquals( $reloadedRow, $loadedRow );
+    }
+
+    /**
+     * Test for the relink() method.
+     *
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::relink
+     */
+    public function testRelinkUpdatesLink()
+    {
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_relink.php" );
+        $gateway = $this->getGateway();
+
+        $gateway->relink( "eznode:314", 2, 4, 0, "banderdash" );
+
+        self::assertEquals(
+            array(
+                "action" => "eznode:314",
+                "action_type" => "eznode",
+                "alias_redirects" => "1",
+                "id" => "2",
+                "is_alias" => "0",
+                "is_original" => "0",
+                "lang_mask" => "2",
+                "link" => "4",
+                "parent" => "0",
+                "text" => "history",
+                "text_md5" => "3cd15f8f2940aff879df34df4e5c2cd1"
+            ),
+            $gateway->loadRow( 0, "3cd15f8f2940aff879df34df4e5c2cd1" )
+        );
+    }
+
+    /**
+     * Test for the relink() method.
+     *
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::relink
+     * @depends testRelinkUpdatesLink
+     */
+    public function testRelinkUpdatesWithNextId()
+    {
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_relink.php" );
+        $gateway = $this->getGateway();
+
+        $gateway->relink( "eznode:315", 2, 3, 0, "banderdash" );
+
+        self::assertEquals(
+            array(
+                "action" => "eznode:315",
+                "action_type" => "eznode",
+                "alias_redirects" => "1",
+                "id" => "5",
+                "is_alias" => "0",
+                "is_original" => "0",
+                "lang_mask" => "2",
+                "link" => "3",
+                "parent" => "0",
+                "text" => "reused-history",
+                "text_md5" => "51e775a611265b7b0cde62a413c91cdc"
+            ),
+            $gateway->loadRow( 0, "51e775a611265b7b0cde62a413c91cdc" )
+        );
     }
 
 
@@ -351,15 +493,22 @@ class EzcDatabaseTest extends TestCase
 
 
 
+    /**
+     * Test for the getNewId() method.
+     *
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::getNextId
+     */
+    public function testGetNextId()
+    {
+        $gateway = $this->getGateway();
 
+        $refObject = new \ReflectionObject( $gateway );
+        $refMethod = $refObject->getMethod( "getNextId" );
+        $refMethod->setAccessible( true );
 
-
-
-
-
-
-
-
+        self::assertEquals( 1, $refMethod->invoke( $gateway ) );
+        self::assertEquals( 2, $refMethod->invoke( $gateway ) );
+    }
 
     /**
      * Returns the EzcDatabase gateway to test

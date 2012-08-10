@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\DateAndTime\Type as DateAndTime,
     eZ\Publish\Core\FieldType\DateAndTime\Value as DateAndTimeValue,
-    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject,
     DateTime;
 
@@ -60,12 +59,12 @@ class DateAndTimeTest extends FieldTypeTest
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\DateAndTime\Type::getDefaultDefaultValue
+     * @covers \eZ\Publish\Core\FieldType\DateAndTime\Type::getEmptyValue
      */
     public function testDefaultValue()
     {
         $ft = new DateAndTime( $this->validatorService, $this->fieldTypeTools );
-        $value = $ft->getDefaultDefaultValue();
+        $value = $ft->getEmptyValue();
         self::assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\DateAndTime\\Value',
             $value

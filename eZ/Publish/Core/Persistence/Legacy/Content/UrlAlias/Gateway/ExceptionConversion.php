@@ -241,6 +241,44 @@ class ExceptionConversion extends Gateway
     {
     }
 
+    public function getLocationUrlAliasLanguageCodes( array $actions, array $prioritizedLanguageCodes )
+    {
+    }
+
+    /**
+     *
+     *
+     * @param string $action
+     *
+     * @return int
+     */
+    public function loadLocationEntryIdByAction( $action )
+    {
+    }
+
+    /**
+     *
+     *
+     * @param string $action
+     *
+     * @return array
+     */
+    public function loadLocationEntryByAction( $action )
+    {
+    }
+
+    /**
+     *
+     *
+     * @param mixed $parentId
+     * @param string $action
+     *
+     * @return array
+     */
+    public function loadLocationEntryByParentIdAndAction( $parentId, $action )
+    {
+    }
+
     /**
      *
      *

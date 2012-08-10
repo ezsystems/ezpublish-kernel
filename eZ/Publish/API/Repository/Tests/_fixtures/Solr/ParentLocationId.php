@@ -13,7 +13,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
         'id' => 4,
         'title' => 'Users',
       ),
-       'score' => 4.4231763,
+       'score' => 2.098612,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -24,7 +24,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
         'id' => 41,
         'title' => 'Media',
       ),
-       'score' => 4.4231763,
+       'score' => 2.098612,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -35,7 +35,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
         'id' => 45,
         'title' => 'Setup',
       ),
-       'score' => 4.4231763,
+       'score' => 2.098612,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -46,7 +46,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
         'id' => 56,
         'title' => 'Design',
       ),
-       'score' => 4.4231763,
+       'score' => 2.098612,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -54,10 +54,10 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 65,
+        'id' => 57,
         'title' => 'Home',
       ),
-       'score' => 4.4231763,
+       'score' => 2.098612,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -65,7 +65,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
    'spellSuggestion' => NULL,
    'time' => 1,
    'timedOut' => NULL,
-   'maxScore' => 4.4231763,
+   'maxScore' => 2.098612,
    'totalCount' => 5,
 ));
 

@@ -93,7 +93,7 @@ class Field extends CriterionHandler
         $statement->execute();
         if ( !( $rows = $statement->fetchAll( \PDO::FETCH_ASSOC ) ) )
         {
-            throw new NotFoundException( 'Content type field', $fieldIdentifier );
+            throw new \OutOfBoundsException( "Content type field $fieldIdentifier not found." );
         }
 
         $fieldMapArray = array();

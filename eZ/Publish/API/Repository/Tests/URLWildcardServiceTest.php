@@ -19,7 +19,7 @@ use \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
  * @see eZ\Publish\API\Repository\URLWildcardService
  * @group url-wildcard
  */
-class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
+class URLWildcardServiceTest extends BaseTest
 {
     /**
      * Test for the create() method.

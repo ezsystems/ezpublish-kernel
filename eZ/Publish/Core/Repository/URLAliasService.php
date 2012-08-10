@@ -144,6 +144,7 @@ class URLAliasService implements URLAliasServiceInterface
         $path = $this->cleanUrl( $path );
         $path = $this->addPathPrefix( $path );
 
+        // @todo handle module:content/view/full/<id>
         if ( $matches[1] === "eznode" )
         {
             return $this->internalCreateUrlAlias(

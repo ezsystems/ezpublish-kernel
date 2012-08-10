@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
-    eZ\Publish\Core\Persistence\Legacy\Content,
     eZ\Publish\Core\Persistence\Legacy\Content\Type,
     eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler as ContentFieldHandler,
@@ -37,8 +36,6 @@ use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
     eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper as UrlWildcardMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase as UrlWildcardGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\Core\Persistence\Legacy\User,
     eZ\Publish\Core\Persistence\Legacy\User\Mapper as UserMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as ConverterRegistry,

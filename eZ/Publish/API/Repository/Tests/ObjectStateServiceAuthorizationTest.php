@@ -20,7 +20,7 @@ use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
  *
  * @see eZ\Publish\API\Repository\ObjectStateService
  */
-class ObjectStateServiceAuthorizationTest extends \eZ\Publish\API\Repository\Tests\BaseTest
+class ObjectStateServiceAuthorizationTest extends BaseTest
 {
     /**
      * Test for the createObjectStateGroup() method.

@@ -93,6 +93,19 @@ return array (
             'text' => 'tri',
             'text_md5' => 'd2cfe69af2d64330670e08efb2c86df7',
         ),
+        7 => array (
+            'action' => 'eznode:316',
+            'action_type' => 'eznode',
+            'alias_redirects' => '1',
+            'id' => '5',
+            'is_alias' => '0',
+            'is_original' => '0',
+            'lang_mask' => '2',
+            'link' => '4',
+            'parent' => '3',
+            'text' => 'tri-history',
+            'text_md5' => '5f46413bb0ba5998caef84ab1ea590e1',
+        ),
     ),
     'ezcontent_language' => array (
         0 => array(
@@ -132,6 +145,9 @@ return array (
         ),
         3 => array (
             'id' => '4',
+        ),
+        4 => array (
+            'id' => '5',
         ),
     ),
 );

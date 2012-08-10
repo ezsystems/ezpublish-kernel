@@ -114,6 +114,17 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Returns a config setting provided by the setup factory
+     *
+     * @param string $configKey
+     * @return mixed
+     */
+    protected function getConfigValue( $configKey )
+    {
+        return $this->getSetupFactory()->getConfigValue( $configKey );
+    }
+
+    /**
      * Tests if the currently tested api is based on a V4 implementation.
      *
      * @return boolean
@@ -144,7 +155,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     /**
      * @return \eZ\Publish\API\Repository\Tests\SetupFactory
      */
-    private function getSetupFactory()
+    protected function getSetupFactory()
     {
         if ( null === $this->setupFactory )
         {

@@ -76,7 +76,6 @@ class FileSizeValidatorTest extends FieldTypeTest
     /**
      * Tests setting and getting constraints
      *
-     * @group bla
      * @covers \eZ\Publish\Core\FieldType\Validator::__set
      * @covers \eZ\Publish\Core\FieldType\Validator::__get
      */

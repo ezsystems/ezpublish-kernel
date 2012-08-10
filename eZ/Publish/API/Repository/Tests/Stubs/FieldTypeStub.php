@@ -131,7 +131,7 @@ class FieldTypeStub implements FieldType
      *
      * @return mixed
      */
-    public function getDefaultDefaultValue()
+    public function getEmptyValue()
     {
         throw new \RuntimeException( "Not implemented, just a wrapper." );
     }

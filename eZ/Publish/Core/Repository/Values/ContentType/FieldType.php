@@ -133,9 +133,9 @@ class FieldType implements FieldTypeInterface
      *
      * @return mixed
      */
-    public function getDefaultDefaultValue()
+    public function getEmptyValue()
     {
-        return $this->internalFieldType->getDefaultDefaultValue();
+        return $this->internalFieldType->getEmptyValue();
     }
 
     /**

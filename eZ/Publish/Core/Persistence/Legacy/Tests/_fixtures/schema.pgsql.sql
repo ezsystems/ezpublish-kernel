@@ -198,6 +198,14 @@ CREATE SEQUENCE ezkeyword_attribute_link_s
     MINVALUE 1
     CACHE 1;
 
+DROP SEQUENCE IF EXISTS ezimagefile_s;
+CREATE SEQUENCE ezimagefile_s
+    START 1
+    INCREMENT 1
+    MAXVALUE 9223372036854775807
+    MINVALUE 1
+    CACHE 1;
+
 DROP TABLE IF EXISTS ezbinaryfile;
 CREATE TABLE ezbinaryfile (
     contentobject_attribute_id integer DEFAULT 0 NOT NULL,

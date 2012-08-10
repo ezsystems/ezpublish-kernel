@@ -9,10 +9,6 @@
 
 namespace eZ\Publish\SPI\IO;
 
-use eZ\Publish\SPI\IO\BinaryFile,
-    eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
-    eZ\Publish\SPI\IO\BinaryFileCreateStruct;
-
 /**
  * Backend interface for handling of binary files I/O
  */

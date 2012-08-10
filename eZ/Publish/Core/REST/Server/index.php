@@ -15,7 +15,7 @@ use eZ\Publish\Core\REST\Common;
 
 use Qafoo\RMF;
 
-require __DIR__ . '/../../../../../bootstrap.php';
+require_once __DIR__ . '/../../../../../bootstrap.php';
 
 /*
  * This is a very simple session handling for the repository, which allows the
@@ -129,6 +129,12 @@ $objectStateController = new Controller\ObjectState(
     $repository->getContentService()
 );
 
+$trashController = new Controller\Trash(
+    $inputDispatcher,
+    $urlHandler,
+    $repository->getTrashService()
+);
+
 /*
  * Visitors are used to transform the Value Objects returned by the Public API
  * into the output format requested by the client. In some cases, it is
@@ -237,6 +243,14 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^/content/locations/[0-9/]+/children$)' => array(
             'GET'    => array( $locationController, 'loadLocationChildren' ),
+        ),
+        '(^/content/trash$)' => array(
+            'GET'    => array( $trashController, 'loadTrashItems' ),
+            'DELETE' => array( $trashController, 'emptyTrash' ),
+        ),
+        '(^/content/trash/[0-9]+$)' => array(
+            'GET'    => array( $trashController, 'loadTrashItem' ),
+            'DELETE' => array( $trashController, 'deleteTrashItem' ),
         ),
         '(^/user/roles$)' => array(
             'GET' => array( $roleController, 'listRoles' ),

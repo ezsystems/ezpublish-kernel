@@ -176,38 +176,28 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Downgrades entry matched by given $action and $languageId and negatively matched by composite primary key.
      *
-     * @param mixed $newElementId
+     * If language mask of the found entry is composite (meaning it consists of multiple language ids) given
+     * $languageId will be removed from mask.
+     * Otherwise entry will be marked as history.
+     *
      * @param string $action
-     * @param mixed $parentId
-     * @param $newTextMD5
      * @param mixed $languageId
-     *
-     * @internal param string $textMD5
-     * @return mixed|void
-     */
-    public function downgrade( $newElementId, $action, $parentId, $newTextMD5, $languageId )
-    {
-
-    }
-
-    /**
-     *
-     * @param mixed $newElementId
-     * @param string $action
      * @param mixed $parentId
-     * @param string $newTextMD5
-     * @param mixed $languageId
+     * @param string $textMD5
      *
      * @return void
      */
-    public function relink( $newElementId, $action, $parentId, $newTextMD5, $languageId )
+    public function downgrade( $action, $languageId, $parentId, $textMD5 )
     {
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $this->dbHandler->quoteColumn( "id" ),
+            $this->dbHandler->quoteColumn( "parent" ),
             $this->dbHandler->quoteColumn( "text_md5" ),
-            $this->dbHandler->quoteColumn( "parent" )
+            $this->dbHandler->quoteColumn( "lang_mask" )
+        )->from(
+            $this->dbHandler->quoteTable( "ezurlalias_ml" )
         )->where(
             $query->expr->lAnd(
                 $query->expr->eq(
@@ -216,6 +206,163 @@ class EzcDatabase extends Gateway
                 ),
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( "is_original" ),
+                    $query->bindValue( 1, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "is_alias" ),
+                    $query->bindValue( 0, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->gt(
+                    $query->expr->bitAnd(
+                        $this->dbHandler->quoteColumn( "lang_mask" ),
+                        $query->bindValue( $languageId, null, \PDO::PARAM_INT )
+                    ),
+                    0
+                ),
+                // make sure newly published entry is not loaded
+                $query->expr->not(
+                    $query->expr->lAnd(
+                        $query->expr->eq(
+                            $this->dbHandler->quoteColumn( "parent" ),
+                            $query->bindValue( $parentId, null, \PDO::PARAM_INT )
+                        ),
+                        $query->expr->eq(
+                            $this->dbHandler->quoteColumn( "text_md5" ),
+                            $query->bindValue( $textMD5, null, \PDO::PARAM_STR )
+                        )
+                    )
+                )
+            )
+        );
+        $statement = $query->prepare();
+        $statement->execute();
+        $row = $statement->fetch( \PDO::FETCH_ASSOC );
+
+        if ( !empty( $row ) )
+        {
+            // If language mask is composite (consists of multiple languages) then remove given language from entry
+            if ( $row["lang_mask"] & ~( $languageId | 1 ) )
+            {
+                $this->removeLanguage( $row["parent"], $row["text_md5"], $languageId );
+            }
+            // Otherwise mark entry as history
+            else
+            {
+                $this->markAsHistory( $row["parent"], $row["text_md5"] );
+            }
+        }
+    }
+
+    /**
+     * Updates single row data matched by composite primary key.
+     *
+     * Sets "is_original" to 0 thus marking entry as history.
+     *
+     * @param mixed $parentId
+     * @param string $textMD5
+     *
+     * @return void
+     */
+    protected function markAsHistory( $parentId, $textMD5 )
+    {
+        $query = $this->dbHandler->createUpdateQuery();
+        $query->update(
+            $this->dbHandler->quoteColumn( "ezurlalias_ml" )
+        )->set(
+            $this->dbHandler->quoteColumn( "is_original" ),
+            $query->bindValue( 0, null, \PDO::PARAM_INT )
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "parent" ),
+                    $query->bindValue( $parentId, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "text_md5" ),
+                    $query->bindValue( $textMD5, null, \PDO::PARAM_STR )
+                )
+            )
+        );
+        $query->prepare()->execute();
+    }
+
+    /**
+     * Updates single row data matched by composite primary key.
+     *
+     * Removes given $languageId from entry's language mask
+     *
+     * @param mixed $parentId
+     * @param string $textMD5
+     * @param mixed $languageId
+     *
+     * @return void
+     */
+    protected function removeLanguage( $parentId, $textMD5, $languageId )
+    {
+        $query = $this->dbHandler->createUpdateQuery();
+        $query->update(
+            $this->dbHandler->quoteColumn( "ezurlalias_ml" )
+        )->set(
+            $this->dbHandler->quoteColumn( "lang_mask" ),
+            $query->expr->bitAnd(
+                $this->dbHandler->quoteColumn( "lang_mask" ),
+                $query->bindValue( ~$languageId, null, \PDO::PARAM_INT )
+            )
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "parent" ),
+                    $query->bindValue( $parentId, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "text_md5" ),
+                    $query->bindValue( $textMD5, null, \PDO::PARAM_STR )
+                )
+            )
+        );
+        $query->prepare()->execute();
+    }
+
+    /**
+     * Re-links custom location history entries.
+     *
+     * When new location alias is published we need to check for existing entries with the same action and
+     * language mask, update "link" column with given $newId and move "id" to next value.
+     *
+     * @param string $action
+     * @param mixed $languageId
+     * @param mixed $newId
+     * @param mixed $parentId
+     * @param mixed $textMD5
+     *
+     * @return void
+     */
+    public function relink( $action, $languageId, $newId, $parentId, $textMD5 )
+    {
+        // Select all history entries (location and custom alias) that match action and language mask
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $this->dbHandler->quoteColumn( "id" ),
+            $this->dbHandler->quoteColumn( "is_alias" ),
+            $this->dbHandler->quoteColumn( "text_md5" ),
+            $this->dbHandler->quoteColumn( "parent" )
+        )->from(
+            $this->dbHandler->quoteTable( "ezurlalias_ml" )
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "action" ),
+                    $query->bindValue( $action, null, \PDO::PARAM_STR )
+                ),
+                // Only location history entries ("is_original" = 0 AND "is_alias" = 0).
+                // This differs from 4.x where both location and custom entries are selected (no "is_alias" = 0).
+                // That seems to be meaningless. @todo check
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "is_original" ),
+                    $query->bindValue( 0, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "is_alias" ),
                     $query->bindValue( 0, null, \PDO::PARAM_INT )
                 ),
                 $query->expr->gt(
@@ -225,14 +372,17 @@ class EzcDatabase extends Gateway
                     ),
                     0
                 ),
-                $query->expr->lOr(
-                    $query->expr->neq(
-                        $this->dbHandler->quoteColumn( "parent" ),
-                        $query->bindValue( $parentId, null, \PDO::PARAM_INT )
-                    ),
-                    $query->expr->neq(
-                        $this->dbHandler->quoteColumn( "text_md5" ),
-                        $query->bindValue( $newTextMD5, null, \PDO::PARAM_STR )
+                // @todo this condition may not be needed
+                $query->expr->not(
+                    $query->expr->lAnd(
+                        $query->expr->eq(
+                            $this->dbHandler->quoteColumn( "parent" ),
+                            $query->bindValue( $parentId, null, \PDO::PARAM_INT )
+                        ),
+                        $query->expr->eq(
+                            $this->dbHandler->quoteColumn( "text_md5" ),
+                            $query->bindValue( $textMD5, null, \PDO::PARAM_STR )
+                        )
                     )
                 )
             )
@@ -243,18 +393,27 @@ class EzcDatabase extends Gateway
         $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
         foreach ( $rows as $row )
         {
+            // Columns "is_alias" and "link" are updated in both cases (for custom alias and location alias entry).
             $values = array(
-                "link" => $newElementId,
-                "is_alias" => 0
+                "link" => $newId,
+                //"is_alias" => 0
             );
-            if ( $row["id"] == $newElementId )
-                $values["id"] = $this->getNewId();
-            $this->updateRow( $row["parent"], $row["text_md5"], $values );
+            //// Id is changed to next value only for location alias when its id is equal to new entry id.
+            //if ( $row["is_alias"] != 0 && $row["id"] == $newId )
+            // If publish reused history id entry then move history entry to new id
+            if ( $row["id"] == $newId )
+            {
+                $values["id"] = $this->getNextId();
+            }
+            $this->updateRow(
+                $row["parent"],
+                $row["text_md5"],
+                $values
+            );
         }
     }
 
     /**
-     *
      *
      * @param mixed $newElementId
      * @param string $action
@@ -263,14 +422,14 @@ class EzcDatabase extends Gateway
      * @param mixed $languageId
      *
      * @return void
-     *
-     * @todo not clear why this behaviour is desired
      */
     public function reparent( $newElementId, $action, $parentId, $newTextMD5, $languageId )
     {
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $this->dbHandler->quoteColumn( "id" )
+        )->from(
+            $this->dbHandler->quoteTable( "ezurlalias_ml" )
         )->where(
             $query->expr->lAnd(
                 $query->expr->eq(
@@ -325,9 +484,9 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Updates single row data matched by composite primary key
+     * Updates single row data matched by composite primary key.
      *
-     * Use optional parameter $languageMaskMatch to additionally limit the query match with languages
+     * Use optional parameter $languageMaskMatch to additionally limit the query match with languages.
      *
      * @param mixed $parentId
      * @param string $textMD5
@@ -407,7 +566,7 @@ class EzcDatabase extends Gateway
         {
             throw new \Exception( "value set is incomplete, can't execute insert" );
         }
-        if ( !isset( $values["id"] ) ) $values["id"] = $this->getNewId();
+        if ( !isset( $values["id"] ) ) $values["id"] = $this->getNextId();
         if ( !isset( $values["link"] ) ) $values["link"] = $values["id"];
         if ( !isset( $values["is_original"] ) ) $values["is_original"] = ( $values["id"] == $values["link"] ? 1 : 0 );
         if ( !isset( $values["is_alias"] ) ) $values["is_alias"] = 0;
@@ -489,7 +648,7 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Deletes single row data matched by composite primary key
+     * Deletes single row data matched by composite primary key.
      *
      * @param mixed $parentId
      * @param string $textMD5
@@ -502,11 +661,11 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     *
+     * Returns next value for "id" column.
      *
      * @return mixed
      */
-    protected function getNewId()
+    protected function getNextId()
     {
         $query = $this->dbHandler->createInsertQuery();
         $query->insertInto(
@@ -753,8 +912,8 @@ class EzcDatabase extends Gateway
             return $prioritizedLanguageCodes;
         }
         // Otherwise an extraction from language mask sum and also comparison against given $prioritizedLanguageCodes
-        // is needed, as in case when language mask sum is composite of multiple languages, only languages present in
-        // given $prioritizedLanguageCodes should be returned
+        // is needed, because when language mask sum is composite of multiple languages only languages that are also
+        // present in given $prioritizedLanguageCodes array should be returned
         else
         {
             $actualLanguageCodes = array();
@@ -847,7 +1006,7 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     *
+     * Only one row can be returned here
      *
      * @param mixed $parentId
      * @param string $action
@@ -857,7 +1016,7 @@ class EzcDatabase extends Gateway
     public function loadLocationEntryByParentIdAndAction( $parentId, $action )
     {
         $query = $this->dbHandler->createSelectQuery();
-        $query->select(
+        $query->selectDistinct(
             $this->dbHandler->quoteColumn( "id" ),
             $this->dbHandler->quoteColumn( "parent" )
         )->from(
@@ -885,6 +1044,13 @@ class EzcDatabase extends Gateway
 
         $statement = $query->prepare();
         $statement->execute();
+        // @todo remove after testing
+        $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
+        if ( count( $rows ) > 1 )
+        {
+            throw new \RuntimeException( "more than one row returned in " . __METHOD__ );
+        }
+        return count( $rows ) ? $rows[0] : array();
 
         return $statement->fetch( \PDO::FETCH_ASSOC );
     }

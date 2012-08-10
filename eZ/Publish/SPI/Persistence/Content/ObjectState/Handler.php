@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\SPI\Persistence\Content\ObjectState;
 
-use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
-
 /**
  * The Object State Handler interface provides managing of object states and groups
  */

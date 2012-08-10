@@ -10,8 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard;
 
 use eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler as BaseUrlWildcardHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper,
     eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**

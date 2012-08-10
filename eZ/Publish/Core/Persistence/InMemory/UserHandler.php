@@ -16,8 +16,6 @@ use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Persistence\InMemory\Handler,
-    eZ\Publish\Core\Persistence\InMemory\Backend,
     LogicException;
 
 /**
@@ -243,8 +241,8 @@ class UserHandler implements UserHandlerInterface
 
         if ( !$content )
             throw new NotFound( 'Group', $groupId );
-        if ( $content->contentTypeId != 3 )
-            throw new NotFound( "Content with TypeId:3", $groupId );
+        if ( $content->contentTypeId != 3 && $content->contentTypeId != 4 )
+            throw new NotFound( "Content", $groupId );
 
         return $this->backend->find(
             'User\\Role',
@@ -473,8 +471,8 @@ class UserHandler implements UserHandlerInterface
             throw new NotFound( 'User Group', $groupId );
 
         // @todo Use eZ Publish settings for this, and maybe a better exception
-        if ( $content->contentTypeId != 3 )
-            throw new NotFound( "Content with TypeId:3", $groupId );
+        if ( $content->contentTypeId != 3 && $content->contentTypeId != 4 )
+            throw new NotFound( "Content", $groupId );
 
         $role = $this->loadRole( $roleId );
         if ( in_array( $groupId, $role->groupIds ) )

@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Selection\Type as Selection,
     eZ\Publish\Core\FieldType\Selection\Value as SelectionValue,
-    eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     ReflectionObject;
 
 /**
@@ -28,18 +27,6 @@ class SelectionTest extends FieldTypeTest
         self::assertEmpty(
             $ft->getValidatorConfigurationSchema(),
             "The validator configuration schema does not match what is expected."
-        );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
-     */
-    public function testSettingsSchema()
-    {
-        $ft = new Selection( $this->validatorService, $this->fieldTypeTools );
-        self::assertEmpty(
-            $ft->getSettingsSchema(),
-            "The settings schema does not match what is expected."
         );
     }
 
@@ -68,7 +55,7 @@ class SelectionTest extends FieldTypeTest
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
 
-        $value = new SelectionValue( "Choice1" );
+        $value = new SelectionValue( array( "Choice1" ) );
         self::assertSame( $value, $refMethod->invoke( $ft, $value ) );
     }
 
@@ -124,10 +111,10 @@ class SelectionTest extends FieldTypeTest
     public function testFieldValueToString()
     {
         $string = "Choice3";
-        $value = new SelectionValue( $string );
+        $value = new SelectionValue( array( $string ) );
         self::assertSame( $string, (string)$value );
 
-        $value2 = new SelectionValue( (string)$value );
+        $value2 = new SelectionValue( explode( ',', (string)$value ) );
         self::assertSame(
             (array)$string,
             $value2->selection,
