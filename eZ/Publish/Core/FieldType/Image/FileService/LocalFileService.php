@@ -106,6 +106,65 @@ class LocalFileService implements FileService
         return $targetPath;
     }
 
+    public function removePath( $path, $recursive = false )
+    {
+        $fullPath = $this->getFullPath( $path );
+
+        $this->removePathInternal( $fullPath, $recursive );
+    }
+
+    /**
+     * Deletes $path, $recursive or not
+     *
+     * @param string $path
+     * @param bool $recursive
+     * @return void
+     * @throws RuntimeException if $path is a non-empty directory and
+     *                          $recursive is false
+     * @throws RuntimeException if errors occure during removal
+     */
+    protected function removePathInternal( $path, $recursive )
+    {
+        echo "\nRemoving $path\n";
+        if ( is_dir( $path ) )
+        {
+            $iterator = new \FilesystemIterator(
+                $path,
+                \FilesystemIterator::CURRENT_AS_FILEINFO | \FilesystemIterator::KEY_AS_PATHNAME | \FileSystemIterator::SKIP_DOTS
+            );
+            foreach ( $iterator as $childPath => $fileInfo )
+            {
+                if ( !$recursive )
+                {
+                    throw new \RuntimeException(
+                        sprintf(
+                            'Cannot remove "%s", because directory is not empty.'
+                        )
+                    );
+                }
+                $this->removePathInternal( $childPath, $recursive );
+            }
+
+            $rmdirResult = rmdir( $path );
+            if ( false === $rmdirResult )
+            {
+                throw new \RuntimeException(
+                    sprintf( 'Could not remove directory "%s"', $path )
+                );
+            }
+        }
+        else
+        {
+            $unlinkResult = unlink( $path );
+            if ( false === $unlinkResult )
+            {
+                throw new \RuntimeException(
+                    sprintf( 'Could not remove file "%s"', $path )
+                );
+            }
+        }
+    }
+
     /**
      * Returns an internal, relative path
      *

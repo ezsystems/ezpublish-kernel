@@ -21,6 +21,18 @@ class LegacyStorage extends Gateway
     protected $dbHandler;
 
     /**
+     * Maps database field names to property names
+     *
+     * @var array
+     */
+    protected $fieldNameMap = array(
+        'id' => 'fieldId',
+        'version' => 'versionNo',
+        'language_code' => 'languageCode',
+        'path_identification_string' => 'nodePathString',
+    );
+
+    /**
      * Set database handler for this gateway
      *
      * @param mixed $dbHandler
@@ -115,6 +127,67 @@ class LegacyStorage extends Gateway
 
         $statement = $insertQuery->prepare();
         $statement->execute();
+    }
+
+    /**
+     * Returns a map of data needed to created a path for $fieldIds
+     *
+     * @param array $fieldIds
+     * @return array
+     */
+    public function getPathData( array $fieldIds )
+    {
+        $connection = $this->getConnection();
+
+        $selectQuery = $connection->createSelectQuery();
+        $selectQuery->select(
+            $connection->quoteColumn( 'id', 'ezcontentobject_attribute' ),
+            $connection->quoteColumn( 'version', 'ezcontentobject_attribute' ),
+            $connection->quoteColumn( 'language_code', 'ezcontentobject_attribute' ),
+            $connection->quoteColumn( 'path_identification_string', 'ezcontentobject_tree' )
+        )->from(
+            $connection->quoteTable( 'ezcontentobject_attribute' )
+        )->leftJoin(
+            $connection->quoteTable( 'ezcontentobject_tree' ),
+            $selectQuery->expr->lAnd(
+                $selectQuery->expr->eq(
+                    $connection->quoteColumn( 'contentobject_id', 'ezcontentobject_attribute' ),
+                    $connection->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' )
+                ),
+                $selectQuery->expr->eq(
+                    $connection->quoteColumn( 'version', 'ezcontentobject_attribute' ),
+                    $connection->quoteColumn( 'contentobject_version', 'ezcontentobject_tree' )
+                )
+            )
+        )->where(
+            $selectQuery->expr->lAnd(
+                $selectQuery->expr->eq(
+                    $connection->quoteColumn( 'node_id', 'ezcontentobject_tree' ),
+                    $connection->quoteColumn( 'main_node_id', 'ezcontentobject_tree' )
+                ),
+                $selectQuery->expr->in(
+                    $connection->quoteColumn( 'id', 'ezcontentobject_attribute' ),
+                    $fieldIds
+                )
+            )
+        );
+
+        $statement = $selectQuery->prepare();
+        $statement->execute();
+
+        $fieldLookup = array();
+        foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
+        {
+            $fieldLookup[$row['id']] = array();
+            foreach ( $row as $fieldName => $fieldValue )
+            {
+                if ( isset( $this->fieldNameMap[$fieldName] ) )
+                {
+                    $fieldLookup[$row['id']][$this->fieldNameMap[$fieldName]] = $fieldValue;
+                }
+            }
+        }
+        return $fieldLookup;
     }
 }
 

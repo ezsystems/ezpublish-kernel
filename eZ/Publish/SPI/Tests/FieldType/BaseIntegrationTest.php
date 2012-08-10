@@ -154,6 +154,17 @@ abstract class BaseIntegrationTest extends TestCase
     }
 
     /**
+     * Can be overwritten to assert that additional data has been deleted
+     *
+     * @param Content $content
+     * @return void
+     */
+    public function assertDeletedFieldDataCorrect( Content $content )
+    {
+        // Do nothing by default
+    }
+
+    /**
      * Only set up once for these read only tests on a large fixture
      *
      * Skipping the reset-up, since setting up for these tests takes quite some
@@ -417,6 +428,8 @@ abstract class BaseIntegrationTest extends TestCase
         $contentHandler->removeRawContent(
             $content->versionInfo->contentId
         );
+
+        $this->assertDeletedFieldDataCorrect( $content );
 
         $contentHandler->load(
             $content->versionInfo->contentId,

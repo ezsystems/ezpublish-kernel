@@ -16,22 +16,24 @@ use eZ\Publish\Core\FieldType\Image\PathGenerator,
 class LegacyPathGenerator extends PathGenerator
 {
     /**
-     * Generates the storage path for the given $field
+     * Generates the storage path for the field identified by parameters
      *
-     * Returns a relative storage path for the given $field.
+     * Returns a relative storage path.
      *
-     * @param VersionInfo $versionInfo
-     * @param Field $field
+     * @param mixed $fieldId
+     * @param int $versionNo
+     * @param strung $languageCode
+     * @param string $nodePathString
      * @return string
      */
-    public function getStoragePathForField( VersionInfo $versionInfo, Field $field, $nodePathString )
+    public function getStoragePathForField( $fieldId, $versionNo, $languageCode, $nodePathString )
     {
         return sprintf(
             '%s%s-%s-%s',
             $nodePathString, // note that $nodePathString ends with a "/"
-            $field->id,
-            $versionInfo->versionNo,
-            $field->languageCode
+            $fieldId,
+            $versionNo,
+            $languageCode
         );
     }
 }
