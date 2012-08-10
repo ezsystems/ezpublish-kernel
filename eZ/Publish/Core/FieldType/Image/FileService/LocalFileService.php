@@ -90,6 +90,19 @@ class LocalFileService implements FileService
             );
         }
 
+        $chmodResult = chmod( $fullTargetPath, 0664 );
+
+        if ( false === $chmodResult )
+        {
+            throw new RuntimeException(
+                sprintf(
+                    'Could not change permissions of "%s" to "%s"',
+                    $fullTargetPath,
+                    '0644'
+                )
+            );
+        }
+
         return $targetPath;
     }
 
@@ -162,7 +175,7 @@ class LocalFileService implements FileService
 
         $this->createDirectoryRecursive( dirname( $directory ) );
 
-        $result = mkdir( $directory );
+        $result = mkdir( $directory, 0755 );
 
         if ( false === $result )
         {
