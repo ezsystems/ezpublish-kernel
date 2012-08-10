@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository,
  * @group integration
  * @group field-type
  */
-class UserFieldTypeIntegrationTest extends BaseIntegrationTest
+class UserIntegrationTest extends BaseIntegrationTest
 {
     /**
      * Identifier of the custom field

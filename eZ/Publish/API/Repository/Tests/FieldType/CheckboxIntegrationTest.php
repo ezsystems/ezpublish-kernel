@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository,
  * @group integration
  * @group field-type
  */
-class CheckboxFieldTypeIntegrationTest extends BaseIntegrationTest
+class CheckboxIntegrationTest extends BaseIntegrationTest
 {
     /**
      * Get name of tested field tyoe

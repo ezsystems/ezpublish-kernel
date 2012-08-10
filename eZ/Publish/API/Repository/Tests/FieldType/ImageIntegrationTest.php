@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository,
  * @group integration
  * @group field-type
  */
-class ImageFieldTypeIntegrationTest extends BaseIntegrationTest
+class ImageIntegrationTest extends BaseIntegrationTest
 {
     /**
      * Base install dir

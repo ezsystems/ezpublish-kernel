@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository,
  * @group integration
  * @group field-type
  */
-class KeywordFieldTypeIntegrationTest extends BaseIntegrationTest
+class KeywordIntegrationTest extends BaseIntegrationTest
 {
     /**
      * Get name of tested field tyoe

@@ -20,7 +20,7 @@ use eZ\Publish\API\Repository,
  * @group integration
  * @group field-type
  */
-class AuthorFieldTypeIntegrationTest extends BaseIntegrationTest
+class AuthorIntegrationTest extends BaseIntegrationTest
 {
     /**
      * Get name of tested field tyoe
