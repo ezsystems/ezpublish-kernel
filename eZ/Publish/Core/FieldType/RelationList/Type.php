@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\FieldType\RelationList;
 
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceFieldValue;
 use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\SPI\FieldType\Event;
@@ -233,7 +233,7 @@ class Type extends FieldType
      */
     public function toPersistenceValue( $value )
     {
-        return new FieldValue(
+        return new PersistenceFieldValue(
             array(
                 "data" => $this->toHash( $value ),
                 "externalData" => $this->toHash( $value ),
@@ -249,7 +249,7 @@ class Type extends FieldType
      *
      * @return mixed
      */
-    public function fromPersistenceValue( FieldValue $fieldValue )
+    public function fromPersistenceValue( PersistenceFieldValue $fieldValue )
     {
         return $this->fromHash( $fieldValue->data );
     }
@@ -257,10 +257,7 @@ class Type extends FieldType
     /**
      * Events handler (prePublish, postPublish, preCreate, postCreate)
      *
-     * @param string $event - prePublish, postPublish, preCreate, postCreate
-     * @param InternalRepository $repository
-     * @param $fieldDef - the field definition of the field
-     * @param $field - the field for which an action is performed
+     * @param \eZ\Publish\SPI\FieldType\Event $event - prePublish, postPublish, preCreate, postCreate
      */
     public function handleEvent( Event $event )
     {
