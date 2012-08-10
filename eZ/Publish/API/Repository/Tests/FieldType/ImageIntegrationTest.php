@@ -24,7 +24,6 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
      * Base install dir
      *
      * @var string
-     * @todo Make retrieved from service container
      */
     protected static $installDir;
 
@@ -32,20 +31,30 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
      * Storeage dir
      *
      * @var string
-     * @todo Make retrieved from service container
      */
     protected static $storageDir;
 
     /**
-     * Sets directories to use.
+     * If storage data should not be cleaned up
+     *
+     * @var bool
+     */
+    protected static $leaveStorageData = false;
+
+    /**
+     * Perform storage directory setup on first execution
      *
      * @return void
      */
-    protected function setUp()
+    public function setUp()
     {
         parent::setUp();
-        self::$installDir = __DIR__ . '/../../../../../..';
-        self::$storageDir = 'var/my_site/storage';
+
+        if ( !isset( self::$installDir ) )
+        {
+            self::$installDir = $this->getConfigValue( 'install_dir' );
+            self::$storageDir = $this->getConfigValue( 'storage_dir' );
+        }
     }
 
     /**
@@ -85,19 +94,13 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Removes the given directory path recursively
+     * Returns an iterator over the full storage dir.
      *
-     * @param string $dir
-     * @return void
+     * @return Iterator
      */
-    protected static function cleanupStorageDir()
+    protected static function getStorageDirIterator()
     {
-        if ( self::$installDir == null || self::$storageDir == null )
-        {
-            return;
-        }
-
-        $iterator = new \RecursiveIteratorIterator(
+        return new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator(
                 self::$installDir . '/' . self::$storageDir,
                 \FileSystemIterator::KEY_AS_PATHNAME | \FileSystemIterator::SKIP_DOTS | \ FilesystemIterator::CURRENT_AS_FILEINFO
@@ -105,6 +108,23 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
             ),
             \RecursiveIteratorIterator::CHILD_FIRST
         );
+    }
+
+    /**
+     * Removes the given directory path recursively
+     *
+     * @param string $dir
+     * @return void
+     */
+    protected static function cleanupStorageDir()
+    {
+        if ( self::$installDir == null || self::$storageDir == null || self::$leaveStorageData )
+        {
+            // Nothing to do
+            return;
+        }
+
+        $iterator = self::getStorageDirIterator();
 
         foreach ( $iterator as $path => $fileInfo )
         {

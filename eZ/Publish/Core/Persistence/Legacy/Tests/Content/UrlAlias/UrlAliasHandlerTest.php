@@ -20,7 +20,8 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase as LanguageGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
-    eZ\Publish\SPI\Persistence\Content\UrlAlias;
+    eZ\Publish\SPI\Persistence\Content\UrlAlias,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * Test case for UrlAliasHandler.
@@ -44,7 +45,7 @@ class UrlAliasHandlerTest extends TestCase
     public function testLookup()
     {
         $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_location.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_location.php" );
 
         $urlAlias = $handler->lookup( "jedan", array( "cro-HR" ) );
         self::assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias", $urlAlias );
@@ -120,7 +121,7 @@ class UrlAliasHandlerTest extends TestCase
     public function testLookupLocationUrlAliasThrowsNotFoundException( $url, array $prioritizedLanguageCodes )
     {
         $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_location.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_location.php" );
 
         $handler->lookup( $url, $prioritizedLanguageCodes );
     }
@@ -350,7 +351,7 @@ class UrlAliasHandlerTest extends TestCase
         $id )
     {
         $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_location.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_location.php" );
 
         $urlAlias = $handler->lookup( $url, $prioritizedLanguageCodes );
 
@@ -450,7 +451,7 @@ class UrlAliasHandlerTest extends TestCase
     public function testLookupLocationCaseCorrection( $url, array $prioritizedLanguageCodes, $correctedPath, $id )
     {
         $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_location.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_location.php" );
 
         $urlAlias = $handler->lookup( $url, $prioritizedLanguageCodes );
 
@@ -469,7 +470,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertEquals( $urlAliasCorrected->type, $urlAlias->type );
     }
 
-    public function providerForTestLookupMultipleLanguages()
+    public function providerForTestLookupLocationMultipleLanguages()
     {
         return array(
             array(
@@ -535,7 +536,7 @@ class UrlAliasHandlerTest extends TestCase
      * Test for the lookup() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::lookup
-     * @dataProvider providerForTestLookupMultipleLanguages
+     * @dataProvider providerForTestLookupLocationMultipleLanguages
      * @depends testLookup
      * @group multiple-languages
      * @group location
@@ -549,7 +550,7 @@ class UrlAliasHandlerTest extends TestCase
         $id )
     {
         $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_location_multilang.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_location_multilang.php" );
 
         $urlAlias = $handler->lookup( $url, $prioritizedLanguageCodes );
 
@@ -560,6 +561,41 @@ class UrlAliasHandlerTest extends TestCase
             $alwaysAvailable,
             $locationId,
             $id
+        );
+    }
+
+    /**
+     * Test for the lookup() method.
+     *
+     * @todo document
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::lookup
+     * @depends testLookup
+     * @group history
+     * @group location
+     */
+    public function testLookupLocationHistoryUrlAlias()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_location.php" );
+
+        $urlAlias = $handler->lookup( "jedan/dva/tri-history", array( "cro-HR" ) );
+
+        self::assertEquals(
+            new UrlAlias(
+                array(
+                    "id" => "3-5f46413bb0ba5998caef84ab1ea590e1",
+                    "type" => UrlAlias::LOCATION,
+                    "destination" => "jedan/dva/tri",
+                    "languageCodes" => array( "cro-HR" ),
+                    "alwaysAvailable" => false,
+                    "path" => "jedan/dva/tri-history",
+                    "isHistory" => true,
+                    "isCustom" => false,
+                    "forward" => true,
+                )
+            ),
+            $urlAlias
         );
     }
 
@@ -588,7 +624,7 @@ class UrlAliasHandlerTest extends TestCase
     public function testLookupVirtualUrlAliasThrowsNotFoundException( $url, array $prioritizedLanguageCodes )
     {
         $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_virtual.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_virtual.php" );
 
         $handler->lookup( $url, $prioritizedLanguageCodes );
     }
@@ -718,7 +754,7 @@ class UrlAliasHandlerTest extends TestCase
         $id )
     {
         $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_virtual.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_virtual.php" );
 
         $urlAlias = $handler->lookup( $url, $prioritizedLanguageCodes );
         self::assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias", $urlAlias );
@@ -776,7 +812,7 @@ class UrlAliasHandlerTest extends TestCase
     public function testLookupVirtualNopForwardsToRoot( $url, array $prioritizedLanguageCodes, $id )
     {
         $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_virtual.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_virtual.php" );
 
         $urlAlias = $handler->lookup( $url, $prioritizedLanguageCodes );
         self::assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias", $urlAlias );
@@ -849,7 +885,7 @@ class UrlAliasHandlerTest extends TestCase
         $alwaysAvailable )
     {
         $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_virtual.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_virtual.php" );
 
         $urlAlias = $handler->lookup( $url, $prioritizedLanguageCodes );
 
@@ -886,7 +922,7 @@ class UrlAliasHandlerTest extends TestCase
     public function testLookupResourceUrlAliasThrowsNotFoundException( $url, array $prioritizedLanguageCodes )
     {
         $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_resource.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_resource.php" );
 
         $handler->lookup( $url, $prioritizedLanguageCodes );
     }
@@ -944,7 +980,7 @@ class UrlAliasHandlerTest extends TestCase
         $id )
     {
         $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_resource.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_resource.php" );
 
         $urlAlias = $handler->lookup( $url, $prioritizedLanguageCodes );
         self::assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias", $urlAlias );
@@ -1002,7 +1038,7 @@ class UrlAliasHandlerTest extends TestCase
     public function testLookupResourceNopForwardsToRoot( $url, array $prioritizedLanguageCodes, $id )
     {
         $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_resource.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_resource.php" );
 
         $urlAlias = $handler->lookup( $url, $prioritizedLanguageCodes );
         self::assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias", $urlAlias );
@@ -1075,7 +1111,7 @@ class UrlAliasHandlerTest extends TestCase
         $alwaysAvailable )
     {
         $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/urlaliases_resource.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_resource.php" );
 
         $urlAlias = $handler->lookup( $url, $prioritizedLanguageCodes );
 
@@ -1104,11 +1140,11 @@ class UrlAliasHandlerTest extends TestCase
     public function testPublishUrlAliasForLocation()
     {
         $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/publish_base.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/publish_base.php" );
 
-        $handler->publishUrlAliasForLocation( 314, "simple", "eng-GB", true );
+        $publishedUrlAlias = $handler->publishUrlAliasForLocation( 314, "simple", "eng-GB", true );
 
-        $urlAlias = $handler->lookup( "simple", array( "eng-GB" ) );
+        self::assertEquals( 2, $this->countRows() );
         self::assertEquals(
             new UrlAlias(
                 array(
@@ -1123,7 +1159,30 @@ class UrlAliasHandlerTest extends TestCase
                     "forward" => false,
                 )
             ),
-            $urlAlias
+            $publishedUrlAlias
+        );
+    }
+
+    /**
+     * Test for the publishUrlAliasForLocation() method.
+     *
+     * @todo document
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::publishUrlAliasForLocation
+     * @_depends testPublishUrlAliasForLocation
+     * @group publish
+     */
+    public function testPublishUrlAliasForLocationRepublish()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/publish_base.php" );
+
+        $publishedUrlAlias = $handler->publishUrlAliasForLocation( 314, "simple", "eng-GB", true );
+        $republishedUrlAlias = $handler->publishUrlAliasForLocation( 314, "simple", "eng-GB", true );
+        self::assertEquals( 2, $this->countRows() );
+        self::assertEquals(
+            $publishedUrlAlias,
+            $republishedUrlAlias
         );
     }
 
@@ -1152,7 +1211,7 @@ class UrlAliasHandlerTest extends TestCase
         $id )
     {
         $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/publish_base.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/publish_base.php" );
 
         $handler->publishUrlAliasForLocation( 314, "jedan", "cro-HR", true );
         $handler->publishUrlAliasForLocation( 315, "dva", "cro-HR", false );
@@ -1189,12 +1248,13 @@ class UrlAliasHandlerTest extends TestCase
      * @depends testLookupLocationUrlAliasThrowsNotFoundException
      * @depends testLookupLocationUrlAliasFound
      * @depends testLookupLocationCaseCorrection
+     * @depends testPublishUrlAliasForLocation
      * @group publish
      */
     public function testPublishUrlAliasForLocationComplexThrowsNotFoundException( $url, array $prioritizedLanguageCodes )
     {
         $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/publish_base.php' );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/publish_base.php" );
 
         $handler->publishUrlAliasForLocation( 314, "jedan", "cro-HR", true );
         $handler->publishUrlAliasForLocation( 315, "dva", "cro-HR", false );
@@ -1206,6 +1266,281 @@ class UrlAliasHandlerTest extends TestCase
         $handler->lookup( $url, $prioritizedLanguageCodes );
     }
 
+    /**
+     * Test for the publishUrlAliasForLocation() method.
+     *
+     * @todo document
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::publishUrlAliasForLocation
+     * @depends testPublishUrlAliasForLocation
+     * @group publish
+     */
+    public function testPublishUrlAliasForLocationSameAliasForMultipleLanguages()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/publish_base.php" );
+
+        $urlAlias1 = $handler->publishUrlAliasForLocation( 314, "jedan", "cro-HR", true );
+        $urlAlias2 = $handler->publishUrlAliasForLocation( 314, "jedan", "eng-GB", false );
+
+        self::assertEquals( 2, $this->countRows() );
+        self::assertEquals( $urlAlias1->id, $urlAlias2->id );
+        self::assertEquals( array( "cro-HR", "eng-GB" ), $urlAlias2->languageCodes );
+
+        $urlAlias1 = $handler->lookup( "jedan", array( "cro-HR" ) );
+        $urlAlias2 = $handler->lookup( "jedan", array( "eng-GB" ) );
+        $urlAlias3 = $handler->lookup( "jedan", array( "cro-HR", "eng-GB" ) );
+
+        self::assertEquals( array( "cro-HR" ), $urlAlias1->languageCodes );
+        self::assertEquals( array( "eng-GB" ), $urlAlias2->languageCodes );
+        self::assertEquals( array( "cro-HR", "eng-GB" ), $urlAlias3->languageCodes );
+    }
+
+    /**
+     * Test for the publishUrlAliasForLocation() method.
+     *
+     * @todo document
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::publishUrlAliasForLocation
+     * @depends testPublishUrlAliasForLocation
+     * @group publish
+     */
+    public function testPublishUrlAliasForLocationDowngradesOldEntryToHistory()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/publish_base.php" );
+
+        $handler->publishUrlAliasForLocation( 314, "jedan", "cro-HR", false );
+        $newUrlAlias = $handler->publishUrlAliasForLocation( 314, "dva", "cro-HR", true );
+
+        self::assertEquals( 3, $this->countRows() );
+
+        self::assertEquals(
+            new UrlAlias(
+                array(
+                    "id" => "0-c67ed9a09ab136fae610b6a087d82e21",
+                    "type" => 0,
+                    "destination" => 314,
+                    "languageCodes" => array( "cro-HR" ),
+                    "alwaysAvailable" => true,
+                    "path" => "dva",
+                    "isHistory" => false,
+                    "isCustom" => false,
+                    "forward" => false
+                )
+            ),
+            $newUrlAlias
+        );
+
+        $historyUrlAlias = $handler->lookup( "jedan", array( "cro-HR" ) );
+
+        self::assertEquals(
+            new UrlAlias(
+                array(
+                    "id" => "0-6896260129051a949051c3847c34466f",
+                    "type" => 0,
+                    "destination" => "dva",
+                    "languageCodes" => array( "cro-HR" ),
+                    "alwaysAvailable" => false,
+                    "path" => "jedan",
+                    "isHistory" => true,
+                    "isCustom" => false,
+                    "forward" => true
+                )
+            ),
+            $historyUrlAlias
+        );
+    }
+
+    /**
+     * Test for the publishUrlAliasForLocation() method.
+     *
+     * @todo document
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::publishUrlAliasForLocation
+     * @depends testPublishUrlAliasForLocation
+     * @depends testPublishUrlAliasForLocationSameAliasForMultipleLanguages
+     * @group publish
+     * @group downgrade
+     */
+    public function testPublishUrlAliasForLocationDowngradesOldEntryRemovesLanguage()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/publish_base.php" );
+
+        $handler->publishUrlAliasForLocation( 314, "jedan", "cro-HR", false );
+        $handler->publishUrlAliasForLocation( 314, "jedan", "eng-GB", false );
+        $newUrlAlias = $handler->publishUrlAliasForLocation( 314, "dva", "eng-GB", false );
+
+        self::assertEquals( 3, $this->countRows() );
+        self::assertEquals(
+            array( "eng-GB" ),
+            $newUrlAlias->languageCodes
+        );
+
+        $oldUrlAlias = $handler->lookup( "jedan", array( "cro-HR", "eng-GB" ) );
+        self::assertEquals(
+            array( "cro-HR", "eng-GB" ),
+            $oldUrlAlias->languageCodes
+        );
+
+        $newUrlAlias = $handler->lookup( "dva", array( "cro-HR", "eng-GB" ) );
+        self::assertEquals(
+            array( "cro-HR", "eng-GB" ),
+            $newUrlAlias->languageCodes
+        );
+
+        $downgradedUrlAlias = $handler->lookup( "jedan", array( "cro-HR" ) );
+        self::assertEquals(
+            new UrlAlias(
+                array(
+                    "id" => "0-6896260129051a949051c3847c34466f",
+                    "type" => 0,
+                    "destination" => 314,
+                    "languageCodes" => array( "cro-HR" ),
+                    "alwaysAvailable" => false,
+                    "path" => "jedan",
+                    "isHistory" => false,
+                    "isCustom" => false,
+                    "forward" => false
+                )
+            ),
+            $downgradedUrlAlias
+        );
+
+        try
+        {
+            $handler->lookup( "jedan", array( "eng-GB" ) );
+            self::fail( "Language is not removed!" );
+        }
+        catch ( NotFoundException $e )
+        {
+            // expected
+        }
+
+        try
+        {
+            $handler->lookup( "dva", array( "cro-HR" ) );
+            self::fail( "URL alias should not be loaded!" );
+        }
+        catch ( NotFoundException $e )
+        {
+            // expected
+        }
+    }
+
+    /**
+     * Test for the publishUrlAliasForLocation() method.
+     *
+     * @todo document
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::publishUrlAliasForLocation
+     * @depends testPublishUrlAliasForLocationDowngradesOldEntryToHistory
+     * @group publish
+     */
+    public function testPublishUrlAliasForLocationReusesHistory()
+    {
+        throw new \Exception( "implement" );
+    }
+
+    /**
+     * Test for the publishUrlAliasForLocation() method.
+     *
+     * @todo document
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::publishUrlAliasForLocation
+     * @group publish
+     */
+    public function testPublishUrlAliasForLocationReusesCustomAlias()
+    {
+        throw new \Exception( "implement" );
+    }
+
+    public function providerForTestPublishUrlAliasForLocationReusesNopElement()
+    {
+        return array(
+            array(
+                "locationId" => 314,
+                "name" => "nop-element",
+                "url" => "nop-element",
+                "languageCode" => "eng-GB",
+                "alwaysAvailable" => false,
+                "virtualUrl" => "nop-element/search",
+                "virtualUrlPrioritizedLanguageCodes" => array( "eng-GB" ),
+                "id" => "0-de55c2fff721217cc4cb67b58dc35f85"
+            ),
+        );
+    }
+
+    /**
+     * Test for the publishUrlAliasForLocation() method.
+     *
+     * @todo document
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::publishUrlAliasForLocation
+     * @dataProvider providerForTestPublishUrlAliasForLocationReusesNopElement
+     * @_depends testLookupLocationUrlAliasThrowsNotFoundException
+     * @_depends testLookupLocationUrlAliasFound
+     * @_depends testLookupLocationCaseCorrection
+     * @group publish
+     * @group bla
+     */
+    public function testPublishUrlAliasForLocationReusingNopElement(
+        $locationId,
+        $name,
+        $url,
+        $languageCode,
+        $alwaysAvailable,
+        $virtualUrl,
+        $virtualUrlPrioritizedLanguageCodes,
+        $id )
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_reusing.php" );
+
+        $virtualUrlAlias = $handler->lookup( $virtualUrl, $virtualUrlPrioritizedLanguageCodes );
+        $publishedLocationUrlAlias = $handler->publishUrlAliasForLocation( $locationId, $name, $languageCode, $alwaysAvailable );
+
+        self::assertEquals( 3, $this->countRows() );
+        self::assertEquals( $publishedLocationUrlAlias, $handler->lookup( $url, array( $languageCode ) ) );
+        $this->assertLocationUrlAliasCorrect(
+            $publishedLocationUrlAlias,
+            $url,
+            array( $languageCode ),
+            $alwaysAvailable,
+            $locationId,
+            $id
+        );
+
+        // Check that virtual alias still works as expected
+        self::assertEquals( $virtualUrlAlias, $handler->lookup( $virtualUrl, $virtualUrlPrioritizedLanguageCodes ) );
+    }
+
+
+
+
+
+
+
+
+    /**
+     * @return int
+     */
+    protected function countRows()
+    {
+        /** @var \ezcQuerySelect $query  */
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $query->expr->count( "*" )
+        )->from(
+            $this->dbHandler->quoteTable( "ezurlalias_ml" )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return (int)$statement->fetchColumn();
+    }
 
     /**
      * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler

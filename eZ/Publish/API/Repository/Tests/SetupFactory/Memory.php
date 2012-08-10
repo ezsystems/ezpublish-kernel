@@ -54,4 +54,16 @@ class Memory extends SetupFactory
     {
         return new IdManager\Php;
     }
+
+    /**
+     * Returns a config value for $configKey.
+     *
+     * @param string $configKey
+     * @return mixed
+     * @throws Exception if $configKey could not be found.
+     */
+    public function getConfigValue( $configKey )
+    {
+        throw new \RuntimeException( "Memory implementation does not support config." );
+    }
 }
