@@ -11,8 +11,8 @@ namespace eZ\Publish\Core\FieldType\XmlText;
 use eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\API\Repository\FieldTypeTools,
     eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\FieldType\XmlText\Input\Handler as XMLTextInputHandler,
-    eZ\Publish\Core\FieldType\XmlText\Input\Parser as XMLTextInputParserInterface,
+    eZ\Publish\Core\FieldType\XmlText\Input\Handler as XmlTextInputHandler,
+    eZ\Publish\Core\FieldType\XmlText\Input\Parser as XmlTextInputParserInterface,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
@@ -63,9 +63,9 @@ class Type extends FieldType
      *
      * @param \eZ\Publish\Core\FieldType\XmlText\Input\Parser $inputParser
      */
-    public function __construct( XMLTextInputParserInterface $inputParser )
+    public function __construct( XmlTextInputParserInterface $inputParser )
     {
-        $this->inputHandler = new XMLTextInputHandler( $inputParser );
+        $this->inputHandler = new XmlTextInputHandler( $inputParser );
     }
 
     /**
@@ -184,7 +184,7 @@ EOF;
         //    return $value;
 
         $handler = $value->getInputHandler( $value );
-        throw new \RuntimeException( '@todo XMLText has a dependency on version id and version number, after refactoring that is not available' );
+        throw new \RuntimeException( '@todo XmlText has a dependency on version id and version number, after refactoring that is not available' );
         $handler->process( $value->text, $this->fieldTypeTools, $field->version );
 
         $value->setRawText( $handler->getDocumentAsXml() );

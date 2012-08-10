@@ -21,7 +21,7 @@ class XmlTextTypeTest extends FieldTypeTest
     /**
      * Normally this should be enough:
      *
-     * $ft = new XmlTextType( $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XMLText\\Input\\Parser' ) );
+     * $ft = new XmlTextType( $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser' ) );
      *
      * But there is a bug in PHPUnit when mocking an interface and calling the test in a certain way
      * (eg. with --group switch), when invocationMocker is missing.
@@ -90,7 +90,7 @@ class XmlTextTypeTest extends FieldTypeTest
     public function testAcceptValueInvalidFormat( $text, $format )
     {
         self::markTestIncomplete( "buildValue changed w/o this test being changed as well" );
-        $parserMock = $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XMLText\\Input\\Parser' );
+        $parserMock = $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser' );
         $parserMock->expects( $this->once() )
                     ->method( 'process' )
                     ->with( $text )
@@ -107,7 +107,7 @@ class XmlTextTypeTest extends FieldTypeTest
     public function testAcceptValueValidFormat( $text, $format )
     {
         self::markTestIncomplete( "buildValue changed w/o this test being changed as well" );
-        $parserMock = $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XMLText\\Input\\Parser' );
+        $parserMock = $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser' );
         $parserMock->expects( $this->once() )
                     ->method( 'process' )
                     ->with( $text )
