@@ -175,7 +175,7 @@ class LocalFileService implements FileService
 
         $this->createDirectoryRecursive( dirname( $directory ) );
 
-        $result = mkdir( $directory, 0755 );
+        $result = mkdir( $directory, 0775 );
 
         if ( false === $result )
         {
