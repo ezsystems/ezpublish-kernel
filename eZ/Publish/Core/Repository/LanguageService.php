@@ -86,7 +86,7 @@ class LanguageService implements LanguageServiceInterface
             throw new InvalidArgumentValue( "enabled", $languageCreateStruct->enabled, "LanguageCreateStruct" );
 
         if ( $this->repository->hasAccess( 'content', 'translations' ) !== true )
-            throw new UnauthorizedException( 'content', 'translations'  );
+            throw new UnauthorizedException( 'content', 'translations' );
 
         try
         {

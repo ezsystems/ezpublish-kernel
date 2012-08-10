@@ -83,7 +83,7 @@ class SectionService implements SectionServiceInterface
             throw new InvalidArgumentValue( "identifier", $sectionCreateStruct->identifier, "SectionCreateStruct" );
 
         if ( $this->repository->hasAccess( 'section', 'edit' ) !== true )
-            throw new UnauthorizedException( 'section', 'edit'  );
+            throw new UnauthorizedException( 'section', 'edit' );
 
         try
         {
@@ -137,7 +137,7 @@ class SectionService implements SectionServiceInterface
             throw new InvalidArgumentValue( "identifier", $section->identifier, "Section" );
 
         if ( $this->repository->canUser( 'section', 'edit', $section ) !== true )
-            throw new UnauthorizedException( 'section', 'edit'  );
+            throw new UnauthorizedException( 'section', 'edit' );
 
         if ( $sectionUpdateStruct->identifier !== null )
         {
@@ -190,7 +190,7 @@ class SectionService implements SectionServiceInterface
             throw new InvalidArgumentValue( "sectionId", $sectionId );
 
         if ( $this->repository->hasAccess( 'section', 'view' ) !== true )
-            throw new UnauthorizedException( 'section', 'view'  );
+            throw new UnauthorizedException( 'section', 'view' );
 
         $spiSection = $this->persistenceHandler->sectionHandler()->load( $sectionId );
         return $this->buildDomainSectionObject( $spiSection );
@@ -206,7 +206,7 @@ class SectionService implements SectionServiceInterface
     public function loadSections()
     {
         if ( $this->repository->hasAccess( 'section', 'view' ) !== true )
-            throw new UnauthorizedException( 'section', 'view'  );
+            throw new UnauthorizedException( 'section', 'view' );
 
         $spiSections = $this->persistenceHandler->sectionHandler()->loadAll();
 
@@ -235,7 +235,7 @@ class SectionService implements SectionServiceInterface
             throw new InvalidArgumentValue( "sectionIdentifier", $sectionIdentifier );
 
         if ( $this->repository->hasAccess( 'section', 'view' ) !== true )
-            throw new UnauthorizedException( 'section', 'view'  );
+            throw new UnauthorizedException( 'section', 'view' );
 
         $spiSection = $this->persistenceHandler->sectionHandler()->loadByIdentifier( $sectionIdentifier );
         return $this->buildDomainSectionObject( $spiSection );

@@ -105,7 +105,7 @@ class RoleService implements RoleServiceInterface
             throw new InvalidArgumentValue( "descriptions", $roleCreateStruct->descriptions, "RoleCreateStruct" );
 
         if ( $this->repository->hasAccess( 'role', 'create' ) !== true )
-            throw new UnauthorizedException( 'role', 'create'  );
+            throw new UnauthorizedException( 'role', 'create' );
 
         try
         {
@@ -164,7 +164,7 @@ class RoleService implements RoleServiceInterface
             throw new InvalidArgumentValue( "descriptions", $roleUpdateStruct->descriptions, "RoleUpdateStruct" );
 
         if ( $this->repository->hasAccess( 'role', 'update' ) !== true )
-            throw new UnauthorizedException( 'role', 'update'  );
+            throw new UnauthorizedException( 'role', 'update' );
 
         if ( $roleUpdateStruct->identifier !== null )
         {
@@ -231,7 +231,7 @@ class RoleService implements RoleServiceInterface
             throw new InvalidArgumentValue( "module", $policyCreateStruct->module, "PolicyCreateStruct" );
 
         if ( $this->repository->hasAccess( 'role', 'update' ) !== true )
-            throw new UnauthorizedException( 'role', 'update'  );
+            throw new UnauthorizedException( 'role', 'update' );
 
         $loadedRole = $this->loadRole( $role->id );
 
@@ -275,7 +275,7 @@ class RoleService implements RoleServiceInterface
             throw new InvalidArgumentValue( "id", $policy->id, "Policy" );
 
         if ( $this->repository->hasAccess( 'role', 'update' ) !== true )
-            throw new UnauthorizedException( 'role', 'update'  );
+            throw new UnauthorizedException( 'role', 'update' );
 
         $loadedRole = $this->loadRole( $role->id );
 
@@ -320,7 +320,7 @@ class RoleService implements RoleServiceInterface
             throw new InvalidArgumentValue( "function", $policy->function, "Policy" );
 
         if ( $this->repository->hasAccess( 'role', 'update' ) !== true )
-            throw new UnauthorizedException( 'role', 'update'  );
+            throw new UnauthorizedException( 'role', 'update' );
 
         $spiPolicy = $this->buildPersistencePolicyObject(
             $policy->module,
