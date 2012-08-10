@@ -131,7 +131,8 @@ class ImageIntergrationTest extends BaseIntegrationTest
                 new FieldType\Image\FileService\LocalFileService(
                     self::$tmpDir,
                     'var/my_site/storage'
-                )
+                ),
+                new FieldType\Image\PathGenerator\LegacyPathGenerator()
             )
         );
         $handler->getFieldValueConverterRegistry()->register(

@@ -139,7 +139,7 @@ EOT;
             htmlspecialchars( $imageData['width'] ), // width
             htmlspecialchars( $imageData['height'] ), // height
             htmlspecialchars( $imageData['alternativeText'] ), // alternative_text
-            htmlspecialchars( $timestamp ), // alias_key
+            htmlspecialchars( 1293033771 ), // alias_key, fixed for the original image
             htmlspecialchars( $timestamp ), // timestamp
             // <original>
             $imageData['fieldId'],
