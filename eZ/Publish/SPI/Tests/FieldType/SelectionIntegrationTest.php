@@ -19,7 +19,7 @@ use eZ\Publish\Core\Persistence\Legacy,
  *
  * @group integration
  */
-class SelectionIntergrationTest extends BaseIntegrationTest
+class SelectionIntegrationTest extends BaseIntegrationTest
 {
     /**
      * Get name of tested field tyoe

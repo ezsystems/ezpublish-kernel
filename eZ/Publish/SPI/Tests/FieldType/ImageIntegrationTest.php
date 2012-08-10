@@ -34,7 +34,7 @@ use eZ\Publish\Core\Persistence\Legacy,
  *
  * @group integration
  */
-class ImageIntergrationTest extends BaseIntegrationTest
+class ImageIntegrationTest extends BaseIntegrationTest
 {
     /**
      * If the temporary directory should be removed after the tests.
