@@ -14,16 +14,14 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo,
 interface FileService
 {
     /**
-     * Store the file identified by $inputPath returning an identifying path
-     * for the storage location
+     * Store the file identified by $sourcePath in a location that corresponds
+     * to $targetPath. Returns an identifier of the source file (usually a path).
      *
-     * @param string $inputPath
-     * @param VersionInfo $versionInfo
-     * @param Field $field
+     * @param string $sourcePath
+     * @param string $targetPath
      * @return string
-     * @todo Avoid $connection parameter?
      */
-    public function storeFile( VersionInfo $versionInfo, Field $field, $connection );
+    public function storeFile( $sourcePath, $targetPath );
 
     /**
      * Returns a hash of meta data

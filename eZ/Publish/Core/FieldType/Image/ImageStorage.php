@@ -32,15 +32,24 @@ class ImageStorage extends GatewayBasedStorage
     protected $fileService;
 
     /**
+     * Path generator
+     *
+     * @var PathGenerator
+     */
+    protected $pathGenerator;
+
+    /**
      * Construct from gateways
      *
      * @param \eZ\Publish\Core\FieldType\StorageGateway[] $gateways
      * @param FileService $fileService
+     * @param PathGenerator $pathGenerator
      */
-    public function __construct( array $gateways, FileService $fileService )
+    public function __construct( array $gateways, FileService $fileService, PathGenerator $pathGenerator )
     {
         parent::__construct( $gateways );
         $this->fileService = $fileService;
+        $this->pathGenerator = $pathGenerator;
     }
 
     /**
@@ -69,11 +78,14 @@ class ImageStorage extends GatewayBasedStorage
 
         $nodePathString = $this->getGateway( $context )->getNodePathString( $versionInfo, $field->id );
 
-        $storedValue['path'] = $this->fileService->storeFile(
+        $targetPath = 'images/' . $this->pathGenerator->getStoragePathForField(
             $versionInfo,
             $field,
             $nodePathString
-        );
+        ) . '/' . $storedValue['fileName'];
+
+        $storedValue['path'] = $this->fileService->storeFile( $storedValue['path'], $targetPath );
+
         $this->getGateway( $context )->storeImageReference( $storedValue['path'], $field->id );
 
         $storedValue = array_merge(

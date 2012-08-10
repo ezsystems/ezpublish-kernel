@@ -54,46 +54,54 @@ class LocalFileService implements FileService
     }
 
     /**
-     * Store the file identified by $inputPath returning an identifying path
-     * for the storage location
+     * Store the file identified by $sourcePath in $targetPath.
      *
-     * @param VersionInfo $versionInfo
-     * @param Field $field
-     * @param string $nodePathString
+     * @param string $sourcePath
+     * @param string $targetPath
      * @return string
      */
-    public function storeFile( VersionInfo $versionInfo, Field $field, $nodePathString )
+    public function storeFile( $sourcePath, $targetPath )
     {
-        $sourcePath = $this->getFullPath( $this->getValueData( $field->value, 'path' ) );
+        $targetPath = $this->createInternalPath( $targetPath );
 
-        $targetUri = $this->createTargetPath( $versionInfo, $field, $nodePathString );
-        $targetPath = $this->getFullPath( $targetUri );
+        $fullSourcePath = $this->getFullPath( $sourcePath );
+        $fullTargetPath = $this->getFullPath( $targetPath );
 
-        if ( $sourcePath == $targetPath )
+        if ( $fullSourcePath == $fullTargetPath )
         {
             // Updating the field, no copy needed
-            return $targetUri;
+            return $targetPath;
         }
 
         $this->createDirectoryRecursive(
-            dirname( $targetPath )
+            dirname( $fullTargetPath )
         );
 
-        // @TODO Should we move here?
-        $copyResult = copy( $sourcePath, $targetPath );
+        $copyResult = copy( $fullSourcePath, $fullTargetPath );
 
         if ( false === $copyResult )
         {
             throw new RuntimeException(
                 sprintf(
                     'Could not copy "%s" to "%s"',
-                    $sourcePath,
-                    $targetPath
+                    $fullSourcePath,
+                    $fullTargetPath
                 )
             );
         }
 
-        return $targetUri;
+        return $targetPath;
+    }
+
+    /**
+     * Returns an internal, relative path
+     *
+     * @param string $path
+     * @return string
+     */
+    protected function createInternalPath( $path )
+    {
+        return $this->storageDir . '/' . $path;
     }
 
     /**
@@ -160,46 +168,5 @@ class LocalFileService implements FileService
         {
             throw new  \RuntimeException( "Could not create directory '{$directory}'." );
         }
-    }
-
-    /**
-     * Creates the target storage path
-     *
-     * @param VersionInfo $versionInfo
-     * @param Field $field
-     * @param string $nodePathString
-     * @return string
-     */
-    protected function createTargetPath( VersionInfo $versionInfo, Field $field, $nodePathString )
-    {
-        return sprintf(
-            '%s/images/%s%s-%s-%s/%s',
-            $this->storageDir, // %s/
-            $nodePathString, // images/%s, note that $nodePathString ends with a "/"
-            $field->id, // /%s-
-            $versionInfo->versionNo, // -%s-
-            $field->languageCode, // -%s
-            basename( $this->getValueData( $field->value, 'fileName' ) ) // /%s
-        );
-    }
-
-    /**
-     * Retrieve data for $key either from data or externalData.
-     *
-     * @param FieldValue $value
-     * @param string $key
-     * @return mixed
-     */
-    protected function getValueData( $value, $key )
-    {
-        if ( isset( $value->externalData[$key] ) )
-        {
-            return $value->externalData[$key];
-        }
-        if ( isset( $value->data[$key] ) )
-        {
-            return $value->data[$key];
-        }
-        throw new \RuntimeException( "Data key '$key' not found in value." );
     }
 }
