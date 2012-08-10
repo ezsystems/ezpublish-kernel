@@ -83,6 +83,7 @@ class Image implements Converter
                 'basename' => '',
                 'extension' => '',
                 'dirname' => '',
+                'filename' => '',
             ),
             time()
         );
