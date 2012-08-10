@@ -8,15 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use eZ\Publish\Core\FieldType\XmlText\Value as XmlTextValue,
-    eZ\Publish\Core\FieldType\FieldSettings,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
+use eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText as XmlTextConverter,
-    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
-    PHPUnit_Framework_TestCase,
-    DOMDocument;
+    PHPUnit_Framework_TestCase;
 
 /**
  * Test case for XmlText converter in Legacy storage
