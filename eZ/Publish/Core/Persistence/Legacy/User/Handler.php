@@ -322,4 +322,16 @@ class Handler implements BaseUserHandler
     {
         $this->userGateway->removeRole( $contentId, $roleId );
     }
+
+    /**
+     * returns a list of role assignments for the given user or user group id
+     *
+     * @param mixed $contentId
+     *
+     * @return eZ\Publish\SPI\Persistence\User\RoleAssignment[]
+     */
+    public function getRoleAssignments( $contentId )
+    {
+        throw new \RuntimeException( 'TODO: Implement.' );
+    }
 }
