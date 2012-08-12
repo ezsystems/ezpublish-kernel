@@ -137,14 +137,15 @@ class LocalFileService implements FileService
                 {
                     throw new \RuntimeException(
                         sprintf(
-                            'Cannot remove "%s", because directory is not empty.'
+                            'Cannot remove "%s", because directory is not empty.',
+                            $path
                         )
                     );
                 }
                 $this->removePathInternal( $childPath, $recursive );
             }
 
-            $rmdirResult = rmdir( $path );
+            $rmdirResult = @rmdir( $path );
             if ( false === $rmdirResult )
             {
                 throw new \RuntimeException(
@@ -154,7 +155,7 @@ class LocalFileService implements FileService
         }
         else
         {
-            $unlinkResult = unlink( $path );
+            $unlinkResult = @unlink( $path );
             if ( false === $unlinkResult )
             {
                 throw new \RuntimeException(
@@ -233,14 +234,14 @@ class LocalFileService implements FileService
 
         $this->createDirectoryRecursive( dirname( $directory ) );
 
-        $result = mkdir( $directory, 0775 );
+        $result = @mkdir( $directory, 0775 );
 
         if ( false === $result )
         {
             throw new  \RuntimeException( "Could not create directory '{$directory}'." );
         }
 
-        $chmodResult = chmod( $directory, 0775 );
+        $chmodResult = @chmod( $directory, 0775 );
 
         if ( false === $chmodResult )
         {
