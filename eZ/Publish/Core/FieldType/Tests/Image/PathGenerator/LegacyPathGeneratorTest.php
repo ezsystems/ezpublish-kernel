@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\Tests\Image;
+namespace eZ\Publish\Core\FieldType\Tests\Image\PathGenerator;
 use eZ\Publish\Core\FieldType\Image\PathGenerator\LegacyPathGenerator;
 
 /**
