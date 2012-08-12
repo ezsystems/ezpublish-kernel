@@ -125,7 +125,6 @@ class LocalFileService implements FileService
      */
     protected function removePathInternal( $path, $recursive )
     {
-        echo "\nRemoving $path\n";
         if ( is_dir( $path ) )
         {
             $iterator = new \FilesystemIterator(

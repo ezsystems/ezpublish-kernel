@@ -149,12 +149,11 @@ class ImageStorage extends GatewayBasedStorage
     public function deleteFieldData( array $fieldId, array $context )
     {
         $fieldData = $this->getGateway( $context )->getPathData( $fieldId );
-        var_dump( $fieldData );
 
         foreach ( $fieldData as $fieldDataSet )
         {
             $fieldPath = $this->getFieldPath(
-                $fieldDataSet-['fieldId'],
+                $fieldDataSet['fieldId'],
                 $fieldDataSet['versionNo'],
                 $fieldDataSet['languageCode'],
                 $fieldDataSet['nodePathString']
