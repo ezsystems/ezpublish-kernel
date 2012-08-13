@@ -25,6 +25,7 @@ abstract class Limitation extends ValueObject
     const PARENTCONTENTTYPE = "ParentClass";
     const PARENTDEPTH = "ParentDepth";
     const SECTION = "Section";
+    const NEWSECTION = "NewSection";
     const SITEACCESS = "SiteAccess";
     const STATE = "State";
     const SUBTREE = "Subtree";

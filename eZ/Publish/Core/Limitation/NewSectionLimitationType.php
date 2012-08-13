@@ -13,15 +13,16 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation as APISectionLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\NewSectionLimitation as APINewSectionLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 
 /**
- * SectionLimitation is a Content Limitation & a Role Limitation
+ * NewSectionLimitation is a Content Limitation used on 'section' 'assign' function
  */
-class SectionLimitationType implements SPILimitationTypeInterface
+class NewSectionLimitationType implements SPILimitationTypeInterface
 {
     /**
      * Accepts a Limitation value
@@ -48,7 +49,7 @@ class SectionLimitationType implements SPILimitationTypeInterface
      */
     public function buildValue( array $limitationValues )
     {
-        return new APISectionLimitation( array( 'limitationValues' => $limitationValues ) );
+        return new APINewSectionLimitation( array( 'limitationValues' => $limitationValues ) );
     }
 
     /**
@@ -72,21 +73,22 @@ class SectionLimitationType implements SPILimitationTypeInterface
      */
     public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null )
     {
-        if ( !$value instanceof APISectionLimitation )
-            throw new InvalidArgumentException( '$value', 'Must be of type: APISectionLimitation' );
+        if ( !$value instanceof APINewSectionLimitation )
+            throw new InvalidArgumentException( '$value', 'Must be of type: APINewSectionLimitation' );
 
-        if ( $object instanceof Content )
-            $object = $object->contentInfo;
-        else if ( !$object instanceof ContentInfo )
+        if ( !$object instanceof ContentInfo && !$object instanceof Content )
             throw new InvalidArgumentException( '$object', 'Must be of type: Content or ContentInfo' );
+
+        if ( !$target instanceof Section )
+            throw new InvalidArgumentException( '$target', 'Must be of type: Section' );
 
         if ( empty( $value->limitationValues ) )
             return false;
 
         /**
-         * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $object
+         * @var \eZ\Publish\API\Repository\Values\Content\Section $target
          */
-        return in_array( $object->sectionId, $value->limitationValues );
+        return in_array( $target->id, $value->limitationValues );
     }
 
     /**

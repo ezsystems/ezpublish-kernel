@@ -273,18 +273,18 @@ class SectionService implements SectionServiceInterface
         if ( !is_numeric( $section->id ) )
             throw new InvalidArgumentValue( "id", $section->id, "Section" );
 
-        $loadedContent = $this->repository->getContentService()->loadContent( $contentInfo->id );
+        $loadedContentInfo = $this->repository->getContentService()->loadContentInfo( $contentInfo->id );
         $loadedSection = $this->loadSection( $section->id );
 
-        if ( $this->repository->canUser( 'section', 'assign', $loadedContent, $loadedSection ) !== true )
-            throw new UnauthorizedException( 'section', 'assign', $section->id );
+        if ( $this->repository->canUser( 'section', 'assign', $loadedContentInfo, $loadedSection ) !== true )
+            throw new UnauthorizedException( 'section', 'assign', $loadedSection->id );
 
         $this->repository->beginTransaction();
         try
         {
             $this->persistenceHandler->sectionHandler()->assign(
                 $loadedSection->id,
-                $loadedContent->id
+                $loadedContentInfo->id
             );
             $this->repository->commit();
         }
@@ -313,7 +313,7 @@ class SectionService implements SectionServiceInterface
         $loadedSection = $this->loadSection( $section->id );
 
         if ( $this->repository->canUser( 'section', 'edit', $loadedSection ) !== true )
-            throw new UnauthorizedException( 'section', 'assign', $loadedSection->id );
+            throw new UnauthorizedException( 'section', 'edit', $loadedSection->id );
 
         if ( $this->countAssignedContents( $loadedSection ) > 0 )
             throw new BadStateException( "section", 'section is still assigned to content' );

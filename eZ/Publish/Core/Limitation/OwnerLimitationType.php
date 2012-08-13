@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Limitation;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation as APIOwnerLimitation;
@@ -85,13 +86,15 @@ class OwnerLimitationType implements SPILimitationTypeInterface
             );
         }
 
-        if ( !$object instanceof Content )
-            throw new InvalidArgumentException( '$object', 'Must be of type: Content' );
+        if ( $object instanceof Content )
+            $object = $object->contentInfo;
+        else if ( !$object instanceof ContentInfo )
+            throw new InvalidArgumentException( '$object', 'Must be of type: Content or ContentInfo' );
 
         /**
-         * @var \eZ\Publish\API\Repository\Values\Content\Content $object
+         * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $object
          */
-        return $object->contentInfo->ownerId === $repository->getCurrentUser()->id;
+        return $object->ownerId === $repository->getCurrentUser()->id;
     }
 
     /**

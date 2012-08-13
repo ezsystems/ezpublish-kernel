@@ -11,7 +11,8 @@ namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\SiteAccessLimitation as APISiteAccessLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
@@ -74,8 +75,8 @@ class SiteAccessLimitationType implements SPILimitationTypeInterface
         if ( !$value instanceof APISiteAccessLimitation )
             throw new InvalidArgumentException( '$value', 'Must be of type: APISiteAccessLimitation' );
 
-        if ( !$object instanceof User )
-            throw new InvalidArgumentException( '$object', 'Must be of type: User' );
+        if ( !$object instanceof Content && !$object instanceof ContentInfo )
+            throw new InvalidArgumentException( '$object', 'Must be of type: Content or ContentInfo' );
 
         if ( empty( $value->limitationValues ) )
             return false;
