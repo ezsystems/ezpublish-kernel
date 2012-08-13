@@ -22,7 +22,7 @@ use eZ\Publish\SPI\Persistence\User,
 class Handler implements BaseUserHandler
 {
     /**
-     * Gaateway for storing user data
+     * Gateway for storing user data
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\User\Gateway
      */
@@ -47,7 +47,7 @@ class Handler implements BaseUserHandler
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\User\Gateway $userGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway $roleGateway
-     * @return void
+     * @param \eZ\Publish\Core\Persistence\Legacy\User\Mapper $mapper
      */
     public function __construct( Gateway $userGateway, RoleGateway $roleGateway, Mapper $mapper )
     {
@@ -324,11 +324,11 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * returns a list of role assignments for the given user or user group id
+     * Returns a list of role assignments for the given user or user group id
      *
      * @param mixed $contentId
      *
-     * @return eZ\Publish\SPI\Persistence\User\RoleAssignment[]
+     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
      */
     public function getRoleAssignments( $contentId )
     {
