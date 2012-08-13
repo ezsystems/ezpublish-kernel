@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\API\Repository,
-    eZ\Publish\Core\FieldType\Media\Value as MediaValue,
+use eZ\Publish\Core\FieldType\Media\Value as MediaValue,
     eZ\Publish\API\Repository\Values\Content\Field;
 
 /**

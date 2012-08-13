@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Media\Type as MediaType,
-    eZ\Publish\Core\FieldType\Media\Value as MediaValue,
-    eZ\Publish\Core\FieldType\Media\Handler as MediaHandler,
     eZ\Publish\Core\Repository\Repository,
     eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
     eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,

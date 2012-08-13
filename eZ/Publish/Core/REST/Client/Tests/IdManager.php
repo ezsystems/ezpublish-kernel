@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Client\Tests;
 use eZ\Publish\Core\REST\Common;
-use eZ\Publish\API\Repository;
 
 /**
  * Base class for ID manager used in the tests suite

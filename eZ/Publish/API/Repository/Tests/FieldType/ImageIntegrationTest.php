@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\API\Repository,
-    eZ\Publish\Core\FieldType\Image\Value as ImageValue,
+use eZ\Publish\Core\FieldType\Image\Value as ImageValue,
     eZ\Publish\API\Repository\Values\Content\Field;
 
 /**

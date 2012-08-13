@@ -10,7 +10,6 @@
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    Symfony\Component\EventDispatcher\Event,
     Symfony\Component\HttpKernel\KernelEvents,
     Symfony\Component\HttpKernel\Event\GetResponseEvent,
     Symfony\Component\HttpKernel\HttpKernelInterface,

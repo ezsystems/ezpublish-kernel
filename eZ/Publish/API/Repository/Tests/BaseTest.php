@@ -11,9 +11,9 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use \PHPUnit_Framework_TestCase;
 
-use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\Values\ValueObject;
 use \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
+use \eZ\Publish\Core\REST\Client\Sessionable;
 
 /**
  * Base class for api specific tests.
@@ -49,7 +49,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             // Set session if we are testing the REST backend to make it
             // possible to persist data in the memory backend during multiple
             // requests.
-            if ( $repository instanceof \eZ\Publish\Core\REST\Client\Sessionable )
+            if ( $repository instanceof Sessionable )
             {
                 $repository->setSession( $id = md5( microtime() ) );
             }

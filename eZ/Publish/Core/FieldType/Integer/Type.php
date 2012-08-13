@@ -9,9 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Integer;
 use eZ\Publish\Core\FieldType\FieldType,
-    ez\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\Core\FieldType\ValidationError;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * Integer field types

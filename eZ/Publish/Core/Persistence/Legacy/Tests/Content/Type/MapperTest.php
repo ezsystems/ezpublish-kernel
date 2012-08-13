@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry,
 
     // Needed for $sortOrder and $sortField properties

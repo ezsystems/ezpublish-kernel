@@ -11,12 +11,10 @@ namespace eZ\Publish\Core\REST\Client;
 
 use \eZ\Publish\API\Repository\Values\IO\BinaryFile;
 use \eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct;
-use \eZ\Publish\API\Repository\Values\IO\ContentType;
 
 use \eZ\Publish\Core\REST\Common\UrlHandler;
 use \eZ\Publish\Core\REST\Common\Input;
 use \eZ\Publish\Core\REST\Common\Output;
-use \eZ\Publish\Core\REST\Common\Message;
 
 /**
  * Service used to handle io operations.

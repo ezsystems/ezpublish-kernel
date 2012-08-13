@@ -9,14 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Location,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Location\Trashed,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\SPI\Persistence;
+    eZ\Publish\API\Repository\Values\Content\Query;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase

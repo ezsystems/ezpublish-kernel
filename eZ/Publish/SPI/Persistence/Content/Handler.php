@@ -10,8 +10,7 @@
 namespace eZ\Publish\SPI\Persistence\Content;
 
 // @todo We must verify whether we want to type cast on the "Criterion" interface or abstract class
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion as AbstractCriterion,
-    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * The Content Handler interface defines content operations on the storage engine.

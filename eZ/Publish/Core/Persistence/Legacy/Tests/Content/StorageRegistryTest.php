@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
-    eZ\Publish\SPI\FieldType\FieldStorage;
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 
 /**
  * Test case for StorageRegistry

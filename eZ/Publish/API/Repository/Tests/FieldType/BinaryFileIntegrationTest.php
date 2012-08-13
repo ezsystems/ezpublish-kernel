@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\API\Repository,
-    eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue,
+use eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue,
     eZ\Publish\API\Repository\Values\Content\Field;
 
 /**

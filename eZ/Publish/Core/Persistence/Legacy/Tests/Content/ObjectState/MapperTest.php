@@ -12,8 +12,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper,
     eZ\Publish\SPI\Persistence\Content\ObjectState,
     eZ\Publish\SPI\Persistence\Content\ObjectState\Group,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct,
-    eZ\Publish\SPI\Persistence\Content\Language;
+    eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
 
 /**
  * Test case for Mapper

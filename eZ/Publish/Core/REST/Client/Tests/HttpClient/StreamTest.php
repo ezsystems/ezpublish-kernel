@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\REST\Client\Tests\HttpClient;
 
 use eZ\Publish\Core\REST\Client\HttpClient\Stream;
 use eZ\Publish\Core\REST\Client\HttpClient\ConnectionException;
-use \eZ\Publish\API\Repository\Tests\BaseTest;
 
 /**
  * Test case for stream HTTP client.

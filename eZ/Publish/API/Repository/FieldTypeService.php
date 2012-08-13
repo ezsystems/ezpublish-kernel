@@ -9,7 +9,6 @@
  */
 
 namespace eZ\Publish\API\Repository;
-use eZ\Publish\API\Repository\FieldType;
 
 /**
  * An implementation of this class provides access to FieldTypes

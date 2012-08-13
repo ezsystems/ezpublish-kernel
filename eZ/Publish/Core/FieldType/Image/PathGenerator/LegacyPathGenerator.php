@@ -9,9 +9,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Image\PathGenerator;
-use eZ\Publish\Core\FieldType\Image\PathGenerator,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\Core\FieldType\Image\PathGenerator;
 
 class LegacyPathGenerator extends PathGenerator
 {

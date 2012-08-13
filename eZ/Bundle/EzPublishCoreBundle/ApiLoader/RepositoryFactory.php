@@ -11,7 +11,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\IO\Handler as IoHandler;
-use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class RepositoryFactory

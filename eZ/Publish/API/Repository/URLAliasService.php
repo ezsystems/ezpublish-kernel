@@ -10,10 +10,7 @@
 
 namespace eZ\Publish\API\Repository;
 
-use eZ\Publish\API\Repository\Values\Content\Location,
-
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
  * URLAlias service

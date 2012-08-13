@@ -19,7 +19,6 @@ use eZ\Publish\SPI\Persistence\Content\Type,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler as UpdateHandler,
     eZ\Publish\Core\Persistence\Legacy\Exception,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\BadStateException;
 

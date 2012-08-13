@@ -10,8 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator,
-    eZ\Publish\SPI\Persistence\Content\Language,
     eZ\Publish\SPI\Persistence\Content\ObjectState,
     eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 

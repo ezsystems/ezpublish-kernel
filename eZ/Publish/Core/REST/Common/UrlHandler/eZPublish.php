@@ -9,9 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Common\UrlHandler;
 
-use eZ\Publish\Core\REST\Common\UrlHandler;
-use eZ\Publish\Core\REST\Common\Exceptions;
-
 /**
  * Pattern based URL Handler pre-configured for eZ Publish
  */

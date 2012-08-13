@@ -8,11 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Media;
-use eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage,
-    eZ\Publish\Core\FieldType\FileService,
-    eZ\Publish\SPI\FieldType\FieldStorage,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage;
 
 /**
  * Description of MediaStorage

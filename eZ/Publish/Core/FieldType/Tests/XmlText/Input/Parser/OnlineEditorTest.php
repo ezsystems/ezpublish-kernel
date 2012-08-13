@@ -11,8 +11,7 @@ namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Input\Parser;
 
 use eZ\Publish\Core\FieldType\XmlText\Input\Parser\OnlineEditor as Parser,
     eZ\Publish\Core\FieldType\XmlText\Schema,
-    PHPUnit_Framework_TestCase,
-    DOMDocument;
+    PHPUnit_Framework_TestCase;
 
 class OnlineEditorTest extends PHPUnit_Framework_TestCase
 {

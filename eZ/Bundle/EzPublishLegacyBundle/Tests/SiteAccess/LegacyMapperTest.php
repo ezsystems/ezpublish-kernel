@@ -12,9 +12,7 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Tests\SiteAccess;
 use eZ\Publish\Legacy\Tests\LegacyBasedTestCase,
     eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess as LegacyMapper,
     eZ\Publish\MVC\SiteAccess,
-    eZ\Publish\MVC\Event\PostSiteAccessMatchEvent,
-    eZ\Publish\Legacy\Event\PreBuildKernelWebHandlerEvent,
-    \eZSiteAccess;
+    eZ\Publish\Legacy\Event\PreBuildKernelWebHandlerEvent;
 
 class LegacyMapperTest extends LegacyBasedTestCase
 {

@@ -9,9 +9,6 @@
 
 namespace eZ\Publish\SPI\FieldType;
 
-use eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-
 /**
  * Abstract base class for FieldType events
  *

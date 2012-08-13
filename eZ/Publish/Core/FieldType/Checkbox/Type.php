@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Checkbox;
 use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\Core\FieldType\ValidationError;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * Checkbox field type.

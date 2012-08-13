@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Integer\Value as IntegerValue,
-    eZ\Publish\Core\FieldType\Validator\IntegerValueValidator,
-    eZ\Publish\Core\Repository\Tests\FieldType;
+    eZ\Publish\Core\FieldType\Validator\IntegerValueValidator;
 
 /**
  * @group fieldType

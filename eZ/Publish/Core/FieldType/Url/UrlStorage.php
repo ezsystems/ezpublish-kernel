@@ -8,12 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Url;
-use eZ\Publish\SPI\FieldType\FieldStorage,
-    eZ\Publish\Core\FieldType\GatewayBasedStorage,
+use eZ\Publish\Core\FieldType\GatewayBasedStorage,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\Core\FieldType\Url\Value as UrlValue;
+    eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Converter for Url field type external storage

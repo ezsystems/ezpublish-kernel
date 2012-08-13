@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\Content;
 
-use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
-
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\Content\ContentInfo}
  * class.

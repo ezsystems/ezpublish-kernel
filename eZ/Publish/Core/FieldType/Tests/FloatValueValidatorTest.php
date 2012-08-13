@@ -9,10 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Float\Value as FloatValue,
-    eZ\Publish\Core\FieldType\Validator\FloatValueValidator,
-    eZ\Publish\Core\Repository\Tests\FieldType,
-    eZ\Publish\API\Repository\Values\Translation\Message,
-    eZ\Publish\API\Repository\Values\Translation\Plural;
+    eZ\Publish\Core\FieldType\Validator\FloatValueValidator;
 
 /**
  * @group fieldType

@@ -9,11 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\XmlText;
 use eZ\Publish\Core\FieldType\Value as BaseValue,
-    eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceFieldValue,
-    eZ\Publish\Core\FieldType\XmlText\Input\Handler as InputHandler,
-    eZ\Publish\Core\FieldType\XmlText\Input\Parser\Simplified as SimplifiedInputParser,
-    eZ\Publish\Core\FieldType\XmlText\Input\Parser\OnlineEditor as OnlineEditorParser,
-    eZ\Publish\Core\FieldType\XmlText\Input\Parser\Raw as RawInputParser;
+    eZ\Publish\Core\FieldType\XmlText\Input\Handler as InputHandler;
 
 /**
  * Basic for TextLine field type

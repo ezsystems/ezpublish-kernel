@@ -13,8 +13,6 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Search,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     ezcQuerySelect;
 

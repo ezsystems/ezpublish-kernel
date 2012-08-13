@@ -9,20 +9,16 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service;
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
-    eZ\Publish\API\Repository\Exceptions,
     eZ\Publish\Core\Repository\Values\Content\VersionInfo,
     eZ\Publish\Core\Repository\Values\Content\ContentInfo,
     eZ\Publish\API\Repository\Values\Content\LocationCreateStruct,
     eZ\Publish\API\Repository\Values\Content\Content as APIContent,
     eZ\Publish\Core\Repository\Values\Content\Content,
-    eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\SortClause,
     eZ\Publish\API\Repository\Values\Content\SearchResult,
     eZ\Publish\SPI\Persistence\Content\Search\Result as SPISearchResult,
-    eZ\Publish\API\Repository\Exceptions\NotFoundException,
-    eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+    eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * Test case for Content service

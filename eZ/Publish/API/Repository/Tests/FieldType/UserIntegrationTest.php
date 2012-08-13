@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\API\Repository,
-    eZ\Publish\Core\FieldType\User\Value as UserValue,
+use eZ\Publish\Core\FieldType\User\Value as UserValue,
     eZ\Publish\API\Repository\Values\Content\Field;
 
 /**

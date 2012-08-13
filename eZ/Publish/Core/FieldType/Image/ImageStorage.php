@@ -8,13 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Image;
-use eZ\Publish\SPI\FieldType\FieldStorage,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
+use eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\Core\FieldType\FileService,
-    eZ\Publish\Core\FieldType\GatewayBasedStorage,
-    LogicException,
-    PDO;
+    eZ\Publish\Core\FieldType\GatewayBasedStorage;
 
 /**
  * Converter for Image field type external storage

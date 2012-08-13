@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue,
-    eZ\Publish\Core\FieldType\Validator\StringLengthValidator,
-    eZ\Publish\Core\Repository\Tests\FieldType;
+    eZ\Publish\Core\FieldType\Validator\StringLengthValidator;
 
 /**
  * @group fieldType

@@ -20,7 +20,6 @@ use eZ\Publish\API\Repository\IOService as IOServiceInterface,
     eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct,
 
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\API\Repository\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
 
     eZ\Publish\Legacy\LegacyKernelAware,

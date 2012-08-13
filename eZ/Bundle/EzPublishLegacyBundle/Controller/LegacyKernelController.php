@@ -11,7 +11,6 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Templating\EngineInterface;
-use eZ\Publish\Legacy\Kernel as LegacyKernel;
 use \ezpModuleNotFound;
 use \ezpModuleViewNotFound;
 use \ezpModuleDisabled;

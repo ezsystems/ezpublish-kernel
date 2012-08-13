@@ -10,11 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator,
-    eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler,
-    eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator,
-    eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry;
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * Visits the FullText criterion
