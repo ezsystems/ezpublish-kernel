@@ -12,6 +12,7 @@ use eZ\Publish\SPI\Persistence\User,
     eZ\Publish\SPI\Persistence\User\Role,
     eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
     eZ\Publish\SPI\Persistence\User\Policy,
+    eZ\Publish\SPI\Persistence\User\RoleAssignment,
     eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
@@ -76,7 +77,7 @@ class UserHandlerTest extends HandlerTest
     {
         try
         {
-            $users = $this->persistenceHandler->userHandler()->loadByLogin( 'nospam@ez.no' );
+            $this->persistenceHandler->userHandler()->loadByLogin( 'nospam@ez.no' );
             $this->fail( 'Succeeded loading user by non existent email' );
         }
         catch ( NotFound $e )
@@ -100,7 +101,7 @@ class UserHandlerTest extends HandlerTest
     {
         try
         {
-            $users = $this->persistenceHandler->userHandler()->loadByLogin( 'kamelåså' );
+            $this->persistenceHandler->userHandler()->loadByLogin( 'kamelåså' );
             $this->fail( 'Succeeded loading user by non existent login' );
         }
         catch ( NotFound $e )
@@ -109,7 +110,7 @@ class UserHandlerTest extends HandlerTest
 
         try
         {
-            $users = $this->persistenceHandler->userHandler()->loadByLogin( 'kamelåså@ez.no', true );
+            $this->persistenceHandler->userHandler()->loadByLogin( 'kamelåså@ez.no', true );
             $this->fail( 'Succeeded loading user by non existent email' );
         }
         catch ( NotFound $e )
@@ -295,7 +296,7 @@ class UserHandlerTest extends HandlerTest
         $this->assertCount( 2, $roles );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $roles[0] );
 
-        $obj = $handler->createRole( self::getRole() );
+        $handler->createRole( self::getRole() );
         $roles = $handler->loadRoles();
         $this->assertCount( 3, $roles );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $roles[0] );
@@ -750,6 +751,30 @@ class UserHandlerTest extends HandlerTest
 
         $list = $handler->loadPoliciesByUserId( 10 );// 10: Anonymous User
         $this->assertEquals( 4, count( $list ) );
+    }
+
+    /**
+     * Test getRoleAssignments function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::getRoleAssignments
+     */
+    public function testGetRoleAssignments()
+    {
+        $handler = $this->persistenceHandler->userHandler();
+
+        $this->assertEquals(
+            array(
+                new RoleAssignment(
+                    array(
+                        'id' => 1,
+                        'contentId' => 11,
+                        'limitationIdentifier' => null,
+                        'values' => null
+                    )
+                )
+            ),
+            $handler->getRoleAssignments( 11 )
+        );
     }
 
     /**

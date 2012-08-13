@@ -517,6 +517,6 @@ class UserHandler implements UserHandlerInterface
      */
     public function getRoleAssignments( $contentId )
     {
-        throw new \RuntimeException( 'TODO: Implement.' );
+        return $this->backend->find( 'User\\RoleAssignment', array( 'contentId' => $contentId ) );
     }
 }
