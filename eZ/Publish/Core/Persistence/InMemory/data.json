@@ -98,8 +98,8 @@
         {"id": 10, "login": "anonymous", "email": "nospam@ez.no", "passwordHash": "4e6f6184135228ccd45f8233d72a0363", "hashAlgorithm": 2, "isEnabled": true, "maxLogin": 1000}
     ],
     "User\\Role" : [
-        {"id": 1, "name": {"eng-GB": "Anonymous"}, "description": {"eng-GB": "Anonymous role"}, "identifier": "Anonymous", "groupIds": [ 42 ] },
-        {"id": 2, "name": {"eng-GB": "Administrator"}, "description": {"eng-GB": "Administrator role"}, "identifier": "Administrator", "groupIds": [ 12 ] }
+        {"id": 1, "name": {"eng-GB": "Anonymous"}, "description": {"eng-GB": "Anonymous role"}, "identifier": "Anonymous"},
+        {"id": 2, "name": {"eng-GB": "Administrator"}, "description": {"eng-GB": "Administrator role"}, "identifier": "Administrator"}
     ],
     "User\\Policy" : [
         {"id": 1, "roleId": 2, "module": "*", "function": "*", "limitations": "*" },
@@ -113,9 +113,9 @@
         {"id": 9, "roleId": 1, "module": "user", "function": "login", "limitations": { "SiteAccess" : [ 3781580864 ] } }
     ],
     "User\\RoleAssignment" : [
-        {"id": 1, "contentId": 11, "limitationIdentifier": null, "values": null},
-        {"id": 1, "contentId": 42, "limitationIdentifier": null, "values": null},
-        {"id": 2, "contentId": 12, "limitationIdentifier": null, "values": null}
+        {"id": 1, "contentId": 11, "limitationIdentifier": null, "values": null, "_id": 1},
+        {"id": 1, "contentId": 42, "limitationIdentifier": null, "values": null, "_id": 2},
+        {"id": 2, "contentId": 12, "limitationIdentifier": null, "values": null, "_id": 3}
     ],
     "Content\\ObjectState" : [
         {"id": 1, "identifier": "not_locked", "groupId": 2, "priority": 0, "defaultLanguage": "eng-GB", "languageCodes": ["eng-GB"], "name": {"eng-GB": "Not locked"}, "description": {"eng-GB": ""}, "_contentId": [1, 4, 10, 11, 12, 14, 42]},

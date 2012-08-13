@@ -1483,7 +1483,6 @@ class UrlAliasHandlerTest extends TestCase
      * @_depends testLookupLocationUrlAliasFound
      * @_depends testLookupLocationCaseCorrection
      * @group publish
-     * @group bla
      */
     public function testPublishUrlAliasForLocationReusingNopElement(
         $locationId,

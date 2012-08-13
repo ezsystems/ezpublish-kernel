@@ -245,16 +245,31 @@ class UserHandler implements UserHandlerInterface
         if ( $content->contentTypeId != 3 && $content->contentTypeId != 4 )
             throw new NotFound( "Content", $groupId );
 
-        return $this->backend->find(
-            'User\\Role',
-            array( 'groupIds' => $groupId ),
-            array(
-                'policies' => array(
-                    'type' => 'User\\Policy',
-                    'match' => array( 'roleId' => 'id' )
+        $roles = array();
+        $roleAssignments = $this->backend->find( 'User\\RoleAssignment', array( 'contentId' => $groupId ) );
+        foreach ( $roleAssignments as $roleAssignment )
+        {
+            $list = $this->backend->find(
+                'User\\Role',
+                array( 'id' => $roleAssignment->id ),
+                array(
+                    'policies' => array(
+                        'type' => 'User\\Policy',
+                        'match' => array( 'roleId' => 'id' )
+                    )
                 )
-            )
-        );
+            );
+
+            foreach ( $list as $role )
+            {
+                if ( !isset( $roles[$role->id] ) )
+                {
+                    $roles[$role->id] = $role;
+                }
+            }
+        }
+
+        return array_values( $roles );
     }
 
     /**
@@ -418,24 +433,33 @@ class UserHandler implements UserHandlerInterface
             throw new NotFound( "Content with TypeId:$typeId", $content->contentInfo->id );
 
         // fetch possible roles assigned to this object
-        $list = $this->backend->find(
-            'User\\Role',
-            array( 'groupIds' => $content->contentInfo->id ),
-            array(
-                'policies' => array(
-                    'type' => 'User\\Policy',
-                    'match' => array( 'roleId' => 'id' )
-                )
-            )
+
+        $roleAssignments = $this->backend->find(
+            'User\\RoleAssignment',
+            array( 'contentId' => $content->contentInfo->id )
         );
 
-        // merge policies
-        foreach ( $list as $role )
+        foreach ( $roleAssignments as $roleAssignment )
         {
-            foreach ( $role->policies as $policy )
+            $list = $this->backend->find(
+                'User\\Role',
+                array( 'id' => $roleAssignment->id ),
+                array(
+                    'policies' => array(
+                        'type' => 'User\\Policy',
+                        'match' => array( 'roleId' => 'id' )
+                    )
+                )
+            );
+
+            // merge policies
+            foreach ( $list as $role )
             {
-                if ( !isset( $policies[$policy->id] ) )
-                    $policies[$policy->id] = $policy;
+                foreach ( $role->policies as $policy )
+                {
+                    if ( !isset( $policies[$policy->id] ) )
+                        $policies[$policy->id] = $policy;
+                }
             }
         }
     }
@@ -463,7 +487,6 @@ class UserHandler implements UserHandlerInterface
      * @param array $limitation
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or role is not found
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group is not of user_group Content Type
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If group is already assigned role
      */
     public function assignRole( $contentId, $roleId, array $limitation = null )
     {
@@ -471,16 +494,45 @@ class UserHandler implements UserHandlerInterface
         if ( !$content )
             throw new NotFound( 'User Group', $contentId );
 
+        $role = $this->backend->load( 'User\\Role', $roleId );
+        if ( !$role )
+            throw new NotFound( 'Role', $roleId );
+
         // @todo Use eZ Publish settings for this, and maybe a better exception
         if ( $content->contentTypeId != 3 && $content->contentTypeId != 4 )
             throw new NotFound( "Content", $contentId );
 
-        $role = $this->loadRole( $roleId );
-        if ( in_array( $contentId, $role->groupIds ) )
-            throw new InvalidArgumentValue( '$roleId', $roleId );
-
-        $role->groupIds[] = $contentId;
-        $this->backend->update( 'User\\Role', $roleId, (array)$role );
+        if ( is_array( $limitation ) )
+        {
+            foreach ( $limitation as $limitIdentifier => $limitValues )
+            {
+                $this->backend->create(
+                    'User\\RoleAssignment',
+                    array(
+                        'id' => $roleId,
+                        'contentId' => $contentId,
+                        'limitationIdentifier' => $limitIdentifier,
+                        'values' => $limitValues
+                    ),
+                    true,
+                    '_id'
+                );
+            }
+        }
+        else
+        {
+            $this->backend->create(
+                'User\\RoleAssignment',
+                array(
+                    'id' => $roleId,
+                    'contentId' => $contentId,
+                    'limitationIdentifier' => null,
+                    'values' => null
+                ),
+                true,
+                '_id'
+            );
+        }
     }
 
     /**
@@ -498,16 +550,23 @@ class UserHandler implements UserHandlerInterface
         if ( !$content )
             throw new NotFound( 'User Group', $contentId );
 
+        $role = $this->backend->load( 'User\\Role', $roleId );
+        if ( !$role )
+            throw new NotFound( 'Role', $roleId );
+
         // @todo Use eZ Publish settings for this, and maybe a better exception
         if ( $content->contentTypeId != 3 && $content->contentTypeId != 4 )
             throw new NotFound( "3 or 4", $contentId );
 
-        $role = $this->loadRole( $roleId );
-        if ( !in_array( $contentId, $role->groupIds ) )
+        $roleAssignments = $this->backend->find(
+            'User\\RoleAssignment',
+            array( 'id' => $roleId, 'contentId' => $contentId )
+        );
+
+        if ( empty( $roleAssignments ) )
             throw new InvalidArgumentValue( '$roleId', $roleId );
 
-        $role->groupIds = array_values( array_diff( $role->groupIds, array( $contentId ) ) );
-        $this->backend->update( 'User\\Role', $roleId, (array)$role );
+        $this->backend->deleteByMatch( 'User\\RoleAssignment', array( 'id' => $roleId, 'contentId' => $contentId ) );
     }
 
     /**
