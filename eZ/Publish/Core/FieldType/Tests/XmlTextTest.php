@@ -10,6 +10,8 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType,
     eZ\Publish\Core\FieldType\XmlText\Value as XmlTextValue,
+    eZ\Publish\Core\FieldType\XmlText\Input\Parser\Raw as RawXmlTextInputParser,
+    eZ\Publish\Core\FieldType\XmlText\Schema as XmlTextSchema,
     DOMDocument;
 
 /**
@@ -31,11 +33,7 @@ class XmlTextTypeTest extends FieldTypeTest
      */
     protected function getFieldType()
     {
-        return new XmlTextType(
-            new \eZ\Publish\Core\FieldType\XmlText\Input\Parser\Raw(
-                new \eZ\Publish\Core\FieldType\XmlText\Schema()
-            )
-        );
+        return new XmlTextType( new RawXmlTextInputParser( new XmlTextSchema ) );
     }
 
     /**
