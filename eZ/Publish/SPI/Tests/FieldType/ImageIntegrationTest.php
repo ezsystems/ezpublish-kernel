@@ -135,7 +135,7 @@ class ImageIntergrationTest extends BaseIntegrationTest
                 array(
                     'LegacyStorage' => new FieldType\Image\ImageStorage\Gateway\LegacyStorage(),
                 ),
-                new FieldType\Image\FileService\LocalFileService(
+                new FieldType\FileService\LocalFileService(
                     self::$tmpDir,
                     self::$storageDir
                 ),

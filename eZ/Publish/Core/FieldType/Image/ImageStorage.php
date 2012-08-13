@@ -9,9 +9,10 @@
 
 namespace eZ\Publish\Core\FieldType\Image;
 use eZ\Publish\SPI\FieldType\FieldStorage,
-    eZ\Publish\Core\FieldType\GatewayBasedStorage,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\Core\FieldType\FileService,
+    eZ\Publish\Core\FieldType\GatewayBasedStorage,
     LogicException,
     PDO;
 
