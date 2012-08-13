@@ -41,7 +41,7 @@ class ImageIntergrationTest extends BaseIntegrationTest
      *
      * @var bool
      */
-    protected static $removeTmpDir = true;
+    protected static $removeTmpDir = false;
 
     /**
      * Temporary directory
@@ -303,7 +303,19 @@ class ImageIntergrationTest extends BaseIntegrationTest
             \RecursiveIteratorIterator::CHILD_FIRST
         );
 
-        // @TODO: Implement.
+        foreach ( $iterator as $path => $fileInfo )
+        {
+            if ( $fileInfo->isFile() )
+            {
+                $this->fail(
+                    sprintf(
+                        'Found undeleted file "%s"',
+                        $path
+                    )
+                );
+            }
+        }
+
     }
 }
 

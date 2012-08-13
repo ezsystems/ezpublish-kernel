@@ -108,7 +108,7 @@ class LocalFileService implements FileService
 
     public function removePath( $path, $recursive = false )
     {
-        $fullPath = $this->getFullPath( $path );
+        $fullPath = $this->getFullPath( $this->createInternalPath( $path ) );
 
         $this->removePathInternal( $fullPath, $recursive );
     }
