@@ -86,9 +86,15 @@ class ImageStorage extends GatewayBasedStorage
         ) . '/' . $storedValue['fileName'];
 
         // Delete old files on update
-        $this->fileService->removePath( dirname( $targetPath ), true );
+        $this->fileService->remove(
+            $this->fileService->getStorageIdentifier( dirname( $targetPath ) ),
+            true
+        );
 
-        $storedValue['path'] = $this->fileService->storeFile( $storedValue['path'], $targetPath );
+        $storedValue['path'] = $this->fileService->storeFile(
+            $storedValue['path'],
+            $this->fileService->getStorageIdentifier( $targetPath )
+        );
 
         $this->getGateway( $context )->storeImageReference( $storedValue['path'], $field->id );
 
@@ -162,7 +168,10 @@ class ImageStorage extends GatewayBasedStorage
                 $fieldDataSet['nodePathString']
             );
 
-            $storedFieldFiles = $this->fileService->removePath( $fieldPath, true );
+            $storedFieldFiles = $this->fileService->remove(
+                $this->fileService->getStorageIdentifier( $fieldPath ),
+                true
+            );
         }
     }
 

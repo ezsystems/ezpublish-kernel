@@ -54,23 +54,22 @@ class LocalFileService implements FileService
     }
 
     /**
-     * Store the file identified by $sourcePath in $targetPath.
+     * Store the local file identified by $sourcePath in a location that corresponds
+     * to $storageIdentifier. Returns an $storageIdentifier again.
      *
      * @param string $sourcePath
-     * @param string $targetPath
+     * @param string $storageIdentifier
      * @return string
      */
-    public function storeFile( $sourcePath, $targetPath )
+    public function storeFile( $sourcePath, $storageIdentifier )
     {
-        $targetPath = $this->createInternalPath( $targetPath );
-
         $fullSourcePath = $this->getFullPath( $sourcePath );
-        $fullTargetPath = $this->getFullPath( $targetPath );
+        $fullTargetPath = $this->getFullPath( $storageIdentifier );
 
         if ( $fullSourcePath == $fullTargetPath )
         {
             // Updating the field, no copy needed
-            return $targetPath;
+            return $storageIdentifier;
         }
 
         $this->createDirectoryRecursive(
@@ -103,12 +102,29 @@ class LocalFileService implements FileService
             );
         }
 
-        return $targetPath;
+        return $storageIdentifier;
     }
 
-    public function removePath( $path, $recursive = false )
+    /**
+     * Removes the path identified by $storageIdentifier, potentially
+     * $recursive.
+     *
+     * Attemts to removed the path identified by $storageIdentifier. If
+     * $storageIdentifier is a directory which is not empty and $recursive is
+     * set to false, an exception is thrown. Attemting to remove a non
+     * existing $storageIdentifier is silently ignored.
+     *
+     * @param string $storageIdentifier
+     * @param bool $recursive
+     * @return void
+     * @throws \RuntimeException if children of $storageIdentifier exist and
+     *                           $recursive is false
+     * @throws \RuntimeException if $storageIdentifier could not be removed (most
+     *                           likely permission issues)
+     */
+    public function remove( $storageIdentifier, $recursive = false )
     {
-        $fullPath = $this->getFullPath( $this->createInternalPath( $path ) );
+        $fullPath = $this->getFullPath( $storageIdentifier );
 
         $this->removePathInternal( $fullPath, $recursive );
     }
@@ -167,12 +183,15 @@ class LocalFileService implements FileService
     }
 
     /**
-     * Returns an internal, relative path
+     * Returns a storage identifier for the given $path
+     *
+     * The storage identifier is used to identify $path inside the storage
+     * encapsulated by the file service.
      *
      * @param string $path
      * @return string
      */
-    protected function createInternalPath( $path )
+    public function getStorageIdentifier( $path )
     {
         return $this->storageDir . '/' . $path;
     }
@@ -186,13 +205,13 @@ class LocalFileService implements FileService
      *  'mime' => <string>,
      * );
      *
-     * @param string $path
+     * @param string $storageIdentifier
      * @return array
      */
-    public function getMetaData( $path )
+    public function getMetaData( $storageIdentifier )
     {
         // Does not depend on GD
-        $metaData = getimagesize( $this->getFullPath( $path ) );
+        $metaData = getimagesize( $this->getFullPath( $storageIdentifier ) );
 
         return array(
             'width' => $metaData[0],
@@ -202,15 +221,15 @@ class LocalFileService implements FileService
     }
 
     /**
-     * Returns the file size of the file identified by $path
+     * Returns the file size of the file identified by $storageIdentifier
      *
-     * @param string $path
+     * @param string $storageIdentifier
      * @return int
      */
-    public function getFileSize( $path )
+    public function getFileSize( $storageIdentifier )
     {
         return filesize(
-            $this->getFullPath( $path )
+            $this->getFullPath( $storageIdentifier )
         );
     }
 
