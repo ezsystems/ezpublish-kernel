@@ -245,31 +245,16 @@ class UserHandler implements UserHandlerInterface
         if ( $content->contentTypeId != 3 && $content->contentTypeId != 4 )
             throw new NotFound( "Content", $groupId );
 
-        $roles = array();
-        $roleAssignments = $this->backend->find( 'User\\RoleAssignment', array( 'contentId' => $groupId ) );
-        foreach ( $roleAssignments as $roleAssignment )
-        {
-            $list = $this->backend->find(
-                'User\\Role',
-                array( 'id' => $roleAssignment->id ),
-                array(
-                    'policies' => array(
-                        'type' => 'User\\Policy',
-                        'match' => array( 'roleId' => 'id' )
-                    )
+        return $this->backend->find(
+            'User\\Role',
+            array( 'groupIds' => $groupId ),
+            array(
+                'policies' => array(
+                    'type' => 'User\\Policy',
+                    'match' => array( 'roleId' => 'id' )
                 )
-            );
-
-            foreach ( $list as $role )
-            {
-                if ( !isset( $roles[$role->id] ) )
-                {
-                    $roles[$role->id] = $role;
-                }
-            }
-        }
-
-        return array_values( $roles );
+            )
+        );
     }
 
     /**
@@ -433,33 +418,24 @@ class UserHandler implements UserHandlerInterface
             throw new NotFound( "Content with TypeId:$typeId", $content->contentInfo->id );
 
         // fetch possible roles assigned to this object
-
-        $roleAssignments = $this->backend->find(
-            'User\\RoleAssignment',
-            array( 'contentId' => $content->contentInfo->id )
+        $list = $this->backend->find(
+            'User\\Role',
+            array( 'groupIds' => $content->contentInfo->id ),
+            array(
+                'policies' => array(
+                    'type' => 'User\\Policy',
+                    'match' => array( 'roleId' => 'id' )
+                )
+            )
         );
 
-        foreach ( $roleAssignments as $roleAssignment )
+        // merge policies
+        foreach ( $list as $role )
         {
-            $list = $this->backend->find(
-                'User\\Role',
-                array( 'id' => $roleAssignment->id ),
-                array(
-                    'policies' => array(
-                        'type' => 'User\\Policy',
-                        'match' => array( 'roleId' => 'id' )
-                    )
-                )
-            );
-
-            // merge policies
-            foreach ( $list as $role )
+            foreach ( $role->policies as $policy )
             {
-                foreach ( $role->policies as $policy )
-                {
-                    if ( !isset( $policies[$policy->id] ) )
-                        $policies[$policy->id] = $policy;
-                }
+                if ( !isset( $policies[$policy->id] ) )
+                    $policies[$policy->id] = $policy;
             }
         }
     }
@@ -533,6 +509,9 @@ class UserHandler implements UserHandlerInterface
                 '_id'
             );
         }
+
+        $role->groupIds[] = $contentId;
+        $this->backend->update( 'User\\Role', $roleId, (array)$role );
     }
 
     /**
@@ -567,6 +546,9 @@ class UserHandler implements UserHandlerInterface
             throw new InvalidArgumentValue( '$roleId', $roleId );
 
         $this->backend->deleteByMatch( 'User\\RoleAssignment', array( 'id' => $roleId, 'contentId' => $contentId ) );
+
+        $role->groupIds = array_values( array_diff( $role->groupIds, array( $contentId ) ) );
+        $this->backend->update( 'User\\Role', $roleId, (array)$role );
     }
 
     /**
