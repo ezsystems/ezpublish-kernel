@@ -276,7 +276,13 @@ class ImageIntergrationTest extends BaseIntegrationTest
         $this->assertNotNull( $field->value->data );
 
         $this->assertTrue(
-            file_exists( self::$tmpDir . '/' . $field->value->data['path'] )
+            file_exists( ( $filePath = self::$tmpDir . '/' . $field->value->data['path'] ) )
+        );
+
+        // Check old files removed before update
+        $this->assertEquals(
+            1,
+            count( glob( dirname( $filePath ) . '/*' ) )
         );
 
         $this->assertEquals( 'Blueish-Blue.jpg', $field->value->data['fileName'] );

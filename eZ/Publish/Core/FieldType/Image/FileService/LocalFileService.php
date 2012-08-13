@@ -153,7 +153,7 @@ class LocalFileService implements FileService
                 );
             }
         }
-        else
+        else if ( is_file( $path ) )
         {
             $unlinkResult = @unlink( $path );
             if ( false === $unlinkResult )
@@ -163,6 +163,7 @@ class LocalFileService implements FileService
                 );
             }
         }
+        // If target does not exist, ignore it
     }
 
     /**

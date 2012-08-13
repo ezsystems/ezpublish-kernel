@@ -85,6 +85,9 @@ class ImageStorage extends GatewayBasedStorage
             $nodePathString
         ) . '/' . $storedValue['fileName'];
 
+        // Delete old files on update
+        $this->fileService->removePath( dirname( $targetPath ), true );
+
         $storedValue['path'] = $this->fileService->storeFile( $storedValue['path'], $targetPath );
 
         $this->getGateway( $context )->storeImageReference( $storedValue['path'], $field->id );
