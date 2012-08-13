@@ -29,7 +29,7 @@ class Handler implements BaseUserHandler
     protected $userGateway;
 
     /**
-     * Gaateway for storing role data
+     * Gateway for storing role data
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway
      */
@@ -267,7 +267,7 @@ class Handler implements BaseUserHandler
     {
         // Each policy can only be associated to exactly one role. Thus it is
         // sufficient to use the policyId for identification and just remove
-        // the policiy completely.
+        // the policy completely.
         $this->roleGateway->removePolicy( $policyId );
     }
 
@@ -332,6 +332,8 @@ class Handler implements BaseUserHandler
      */
     public function getRoleAssignments( $contentId )
     {
-        throw new \RuntimeException( 'TODO: Implement.' );
+        $data = $this->userGateway->loadRoleAssignments( $contentId );
+
+        return $this->mapper->mapRoleAssignments( $data );
     }
 }
