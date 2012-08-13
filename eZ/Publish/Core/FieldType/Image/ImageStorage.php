@@ -78,9 +78,10 @@ class ImageStorage extends GatewayBasedStorage
 
         $nodePathString = $this->getGateway( $context )->getNodePathString( $versionInfo, $field->id );
 
-        $targetPath = 'images/' . $this->pathGenerator->getStoragePathForField(
-            $versionInfo,
-            $field,
+        $targetPath = $this->getFieldPath(
+            $field->id,
+            $versionInfo->versionNo,
+            $field->languageCode,
             $nodePathString
         ) . '/' . $storedValue['fileName'];
 
@@ -101,6 +102,25 @@ class ImageStorage extends GatewayBasedStorage
 
         // Data has been updated and needs to be stored!
         return true;
+    }
+
+    /**
+     * Returns the path where images for the defined $fieldId are stored
+     *
+     * @param mixed $fieldId
+     * @param int $versionNo
+     * @param string $languageCode
+     * @param string $nodePathString
+     * @return string
+     */
+    protected function getFieldPath( $fieldId, $versionNo, $languageCode, $nodePathString )
+    {
+        return 'images/' . $this->pathGenerator->getStoragePathForField(
+            $fieldId,
+            $versionNo,
+            $languageCode,
+            $nodePathString
+        );
     }
 
     /**
@@ -128,7 +148,19 @@ class ImageStorage extends GatewayBasedStorage
      */
     public function deleteFieldData( array $fieldId, array $context )
     {
-        // @TODO: What about deleting an image? Variants?
+        $fieldData = $this->getGateway( $context )->getPathData( $fieldId );
+
+        foreach ( $fieldData as $fieldDataSet )
+        {
+            $fieldPath = $this->getFieldPath(
+                $fieldDataSet['fieldId'],
+                $fieldDataSet['versionNo'],
+                $fieldDataSet['languageCode'],
+                $fieldDataSet['nodePathString']
+            );
+
+            $storedFieldFiles = $this->fileService->removePath( $fieldPath, true );
+        }
     }
 
     /**

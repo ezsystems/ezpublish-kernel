@@ -50,6 +50,13 @@ class ImageIntergrationTest extends BaseIntegrationTest
      */
     protected static $tmpDir;
 
+    /**
+     * Storage directory used by image file service
+     *
+     * @var string
+     */
+    protected static $storageDir = 'var/my_site/storage';
+
     public static function setUpBeforeClass()
     {
         $tmpFile = tempnam( sys_get_temp_dir(), 'eZ_FieldType_ImageIntegrationTest' );
@@ -130,7 +137,7 @@ class ImageIntergrationTest extends BaseIntegrationTest
                 ),
                 new FieldType\Image\FileService\LocalFileService(
                     self::$tmpDir,
-                    'var/my_site/storage'
+                    self::$storageDir
                 ),
                 new FieldType\Image\PathGenerator\LegacyPathGenerator()
             )
@@ -277,6 +284,26 @@ class ImageIntergrationTest extends BaseIntegrationTest
         $this->assertEquals( 'This blue is so blueish.', $field->value->data['alternativeText'] );
 
         $this->assertNull( $field->value->externalData );
+    }
+
+    /**
+     * Can be overwritten to assert that additional data has been deleted
+     *
+     * @param Content $content
+     * @return void
+     */
+    public function assertDeletedFieldDataCorrect( Content $content )
+    {
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator(
+                self::$tmpDir . '/' . self::$storageDir,
+                \FileSystemIterator::KEY_AS_PATHNAME | \FileSystemIterator::SKIP_DOTS | \ FilesystemIterator::CURRENT_AS_FILEINFO
+
+            ),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        // @TODO: Implement.
     }
 }
 
