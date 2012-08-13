@@ -439,9 +439,9 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
-     * Assign role to user group with given limitation
+     * Assign role to a user or user group with given limitations
      *
-     * The limitation array may look like:
+     * The limitation array looks like:
      * <code>
      *  array(
      *      'Subtree' => array(
@@ -456,57 +456,55 @@ class UserHandler implements UserHandlerInterface
      * Where the keys are the limitation identifiers, and the respective values
      * are an array of limitation values. The limitation parameter is optional.
      *
-     * @param mixed $groupId The group Id to assign the role to.
-     *                       In Legacy storage engine this is the content object id of the group to assign to.
-     *                       Assigning to a user is not supported, only un-assigning is supported for bc.
+     * @param mixed $contentId The groupId or userId to assign the role to.
      * @param mixed $roleId
-     * @param array $limitation @todo Remove or implement
+     * @param array $limitation
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or role is not found
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group is not of user_group Content Type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If group is already assigned role
      */
-    public function assignRole( $groupId, $roleId, array $limitation = null )
+    public function assignRole( $contentId, $roleId, array $limitation = null )
     {
-        $content = $this->backend->load( 'Content\\ContentInfo', $groupId );
+        $content = $this->backend->load( 'Content\\ContentInfo', $contentId );
         if ( !$content )
-            throw new NotFound( 'User Group', $groupId );
+            throw new NotFound( 'User Group', $contentId );
 
         // @todo Use eZ Publish settings for this, and maybe a better exception
         if ( $content->contentTypeId != 3 && $content->contentTypeId != 4 )
-            throw new NotFound( "Content", $groupId );
+            throw new NotFound( "Content", $contentId );
 
         $role = $this->loadRole( $roleId );
-        if ( in_array( $groupId, $role->groupIds ) )
+        if ( in_array( $contentId, $role->groupIds ) )
             throw new InvalidArgumentValue( '$roleId', $roleId );
 
-        $role->groupIds[] = $groupId;
+        $role->groupIds[] = $contentId;
         $this->backend->update( 'User\\Role', $roleId, (array)$role );
     }
 
     /**
      * Un-assign a role
      *
-     * @param mixed $groupId The group / user Id to un-assign a role from
+     * @param mixed $contentId The user or user group Id to un-assign the role from.
      * @param mixed $roleId
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or role is not found
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group is not of user[_group] Content Type
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If group does not contain role
      */
-    public function unAssignRole( $groupId, $roleId )
+    public function unAssignRole( $contentId, $roleId )
     {
-        $content = $this->backend->load( 'Content\\ContentInfo', $groupId );
+        $content = $this->backend->load( 'Content\\ContentInfo', $contentId );
         if ( !$content )
-            throw new NotFound( 'User Group', $groupId );
+            throw new NotFound( 'User Group', $contentId );
 
         // @todo Use eZ Publish settings for this, and maybe a better exception
         if ( $content->contentTypeId != 3 && $content->contentTypeId != 4 )
-            throw new NotFound( "3 or 4", $groupId );
+            throw new NotFound( "3 or 4", $contentId );
 
         $role = $this->loadRole( $roleId );
-        if ( !in_array( $groupId, $role->groupIds ) )
+        if ( !in_array( $contentId, $role->groupIds ) )
             throw new InvalidArgumentValue( '$roleId', $roleId );
 
-        $role->groupIds = array_values( array_diff( $role->groupIds, array( $groupId ) ) );
+        $role->groupIds = array_values( array_diff( $role->groupIds, array( $contentId ) ) );
         $this->backend->update( 'User\\Role', $roleId, (array)$role );
     }
 

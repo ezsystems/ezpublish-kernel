@@ -285,9 +285,9 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Assign role to user group or user with given limitation
+     * Assign role to a user or user group with given limitations
      *
-     * The limitation array may look like:
+     * The limitation array looks like:
      * <code>
      *  array(
      *      'Subtree' => array(
@@ -302,7 +302,7 @@ class Handler implements BaseUserHandler
      * Where the keys are the limitation identifiers, and the respective values
      * are an array of limitation values. The limitation parameter is optional.
      *
-     * @param mixed $contentId User / group ID
+     * @param mixed $contentId The groupId or userId to assign the role to.
      * @param mixed $roleId
      * @param array $limitation
      */
@@ -313,9 +313,9 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Un-assign a role from a user or group
+     * Un-assign a role
      *
-     * @param mixed $contentId The group / user ID to un-assign a role from
+     * @param mixed $contentId The user or user group Id to un-assign the role from.
      * @param mixed $roleId
      */
     public function unAssignRole( $contentId, $roleId )
