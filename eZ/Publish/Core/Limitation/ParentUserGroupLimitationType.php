@@ -53,18 +53,25 @@ class ParentUserGroupLimitationType implements SPILimitationTypeInterface
     }
 
     /**
-     * Evaluate permission against content and placement
+     * Evaluate permission against content & target(placement/parent/assignment)
+     *
+     * NOTE: Repository is provided because not everything is available via the value object(s),
+     * but use of repository in limitation functions should be avoided for performance reasons
+     * if possible, especially when using un-cached parts of the api.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
+     *         Example: If LimitationValue is instance of ContentTypeLimitationValue, and Type is SectionLimitationType.
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
+     *         Example if OwnerLimitationValue->limitationValues[0] is not one of: [ 1,  2 ]
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $placement In 'create' limitations; this is parent
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
-     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
      * @return bool
      */
-    public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $placement = null )
+    public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null )
     {
         if ( !$value instanceof APIParentUserGroupLimitation )
             throw new InvalidArgumentException( '$value', 'Must be of type: APIParentUserGroupLimitation' );
@@ -80,16 +87,16 @@ class ParentUserGroupLimitationType implements SPILimitationTypeInterface
         if ( !$object instanceof Content )
             throw new InvalidArgumentException( '$object', 'Must be of type: Content' );
 
-        if ( $placement !== null  && !$placement instanceof Location )
-            throw new InvalidArgumentException( '$placement', 'Must be of type: Location' );
+        if ( $target !== null  && !$target instanceof Location )
+            throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
 
-        if ( $placement === null )
+        if ( $target === null )
             return false;
 
          /**
-          * @var \eZ\Publish\API\Repository\Values\Content\Location $placement
+          * @var \eZ\Publish\API\Repository\Values\Content\Location $target
           */
-        $parentContentInfo = $placement->getContentInfo();
+        $parentContentInfo = $target->getContentInfo();
         $currentUser = $repository->getCurrentUser();
         if ( $parentContentInfo->ownerId === $currentUser->id )
             return true;

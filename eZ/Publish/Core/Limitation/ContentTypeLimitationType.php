@@ -51,18 +51,25 @@ class ContentTypeLimitationType implements SPILimitationTypeInterface
     }
 
     /**
-     * Evaluate permission against content and placement
+     * Evaluate permission against content & target(placement/parent/assignment)
+     *
+     * NOTE: Repository is provided because not everything is available via the value object(s),
+     * but use of repository in limitation functions should be avoided for performance reasons
+     * if possible, especially when using un-cached parts of the api.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
+     *         Example: If LimitationValue is instance of ContentTypeLimitationValue, and Type is SectionLimitationType.
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
+     *         Example if OwnerLimitationValue->limitationValues[0] is not one of: [ 1,  2 ]
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $placement In 'create' limitations; this is parent
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
-     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
      * @return bool
      */
-    public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $placement = null )
+    public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null )
     {
         if ( !$value instanceof APIContentTypeLimitation )
             throw new InvalidArgumentException( '$value', 'Must be of type: APIContentTypeLimitation' );

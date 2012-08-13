@@ -171,13 +171,17 @@ class Repository implements \eZ\Publish\API\Repository\Repository
      * Indicates if the current user is allowed to perform an action given by the function on the given
      * objects
      *
-     * @param string $module
-     * @param string $function
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $value
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $target
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
+     *
+     * @param string $module The module, aka controller identifier to check permissions on
+     * @param string $function The function, aka the controller action to check permissions on
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
+     *
      * @return boolean
      */
-    public function canUser( $module, $function, ValueObject $value, ValueObject $target = null )
+    public function canUser( $module, $function, ValueObject $object, ValueObject $target = null )
     {
         // @TODO: Implement
     }
