@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\Tests\Image\FileService;
-use eZ\Publish\Core\FieldType\Image\FileService\LocalFileService;
+namespace eZ\Publish\Core\FieldType\Tests\FileService;
+use eZ\Publish\Core\FieldType\FileService\LocalFileService;
 
 /**
  * @group fieldType
@@ -111,6 +111,14 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
         return $this->fileService;
     }
 
+    public function testGetStorageIdentifier()
+    {
+        $this->assertEquals(
+            'my/fancy/site/some/sindelfingen/file.foo',
+            $this->getFileService()->getStorageIdentifier( 'some/sindelfingen/file.foo' )
+        );
+    }
+
     public function testStoreExternalFile()
     {
         $externalFile = __FILE__;
@@ -118,7 +126,10 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
 
         $fileService = $this->getFileService();
 
-        $storedPath = $fileService->storeFile( $externalFile, $target );
+        $storedPath = $fileService->storeFile(
+            $externalFile,
+            $fileService->getStorageIdentifier( $target )
+        );
 
         $this->assertEquals(
             sprintf(
@@ -202,7 +213,7 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
 
         $fileService = $this->getFileService();
 
-        $fileService->removePath( $storedPath );
+        $fileService->remove( $storedPath );
 
         $this->assertFalse(
             file_exists( $this->getTempDir() . '/' . $storedPath )
@@ -215,8 +226,8 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
 
         $fileService = $this->getFileService();
 
-        $fileService->removePath( $storedPath );
-        $fileService->removePath( dirname( $storedPath ) );
+        $fileService->remove( $storedPath );
+        $fileService->remove( dirname( $storedPath ) );
 
         $this->assertFalse(
             file_exists( dirname( $this->getTempDir() . '/' . $storedPath ) )
@@ -232,7 +243,7 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
 
         $fileService = $this->getFileService();
 
-        $fileService->removePath( dirname( $storedPath ) );
+        $fileService->remove( dirname( $storedPath ) );
     }
 
     public function testRemovePathDirRecursive()
@@ -241,7 +252,7 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
 
         $fileService = $this->getFileService();
 
-        $fileService->removePath( dirname( $storedPath ), true );
+        $fileService->remove( dirname( $storedPath ), true );
 
         $this->assertFalse(
             file_exists( dirname( $this->getTempDir() . '/' . $storedPath ) )
