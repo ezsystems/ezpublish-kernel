@@ -406,6 +406,7 @@ class UserHandler implements UserHandlerInterface
 
     /**
      * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param mixed $typeId
      * @param array $policies
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $content is not of user_group Content Type
      */
@@ -507,5 +508,17 @@ class UserHandler implements UserHandlerInterface
 
         $role->groupIds = array_values( array_diff( $role->groupIds, array( $groupId ) ) );
         $this->backend->update( 'User\\Role', $roleId, (array)$role );
+    }
+
+    /**
+     * Returns a list of role assignments for the given user or user group id
+     *
+     * @param mixed $contentId
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
+     */
+    public function getRoleAssignments( $contentId )
+    {
+        throw new \RuntimeException( 'TODO: Implement.' );
     }
 }
