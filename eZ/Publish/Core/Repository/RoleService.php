@@ -28,6 +28,7 @@ use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct,
     eZ\Publish\API\Repository\Values\User\Limitation,
 
     eZ\Publish\SPI\Persistence\User\Policy as SPIPolicy,
+    eZ\Publish\SPI\Persistence\User\RoleAssignment as SPIRoleAssignment,
     eZ\Publish\SPI\Persistence\User\Role as SPIRole,
     eZ\Publish\SPI\Persistence\User\RoleUpdateStruct as SPIRoleUpdateStruct,
 
@@ -620,41 +621,51 @@ class RoleService implements RoleServiceInterface
         if ( !is_numeric( $role->id ) )
             throw new InvalidArgumentValue( "id", $role->id, "Role" );
 
-        $spiRole = $this->persistenceHandler->userHandler()->loadRole( $role->id );
+        $userHandler = $this->persistenceHandler->userHandler();
+        $spiRole = $userHandler->loadRole( $role->id );
 
         $userService = $this->repository->getUserService();
 
         $roleAssignments = array();
         foreach ( $spiRole->groupIds as $groupId )
         {
-            // $spiRole->groupIds can contain both group and user IDs, although assigning roles to
-            // users is deprecated. Hence, we'll first check for groups. If that fails,
-            // we'll check for users
+            // $spiRole->groupIds can contain both group and user IDs
+            // We'll check if the ID belongs to group, if not, see if it belongs to user
             try
             {
                 $userGroup = $userService->loadUserGroup( $groupId );
-                $roleAssignments[] = new UserGroupRoleAssignment(
-                    array(
-                        // @todo: add limitation
-                        'limitation' => null,
-                        'role' => $this->buildDomainRoleObject( $spiRole ),
-                        'userGroup' => $userGroup
-                    )
-                );
+
+                $spiRoleAssignments = $userHandler->getRoleAssignments( $userGroup->id );
+                foreach ( $spiRoleAssignments as $spiRoleAssignment )
+                {
+                    if ( $spiRoleAssignment->id == $role->id )
+                    {
+                        $roleAssignments[] = $this->buildDomainUserGroupRoleAssignmentObject(
+                            $spiRoleAssignment,
+                            $userGroup,
+                            $role
+                        );
+                    }
+                }
             }
             catch ( NotFoundException $e )
             {
                 try
                 {
                     $user = $userService->loadUser( $groupId );
-                    $roleAssignments[] = new UserRoleAssignment(
-                        array(
-                            // @todo: add limitation
-                            'limitation' => null,
-                            'role' => $this->buildDomainRoleObject( $spiRole ),
-                            'user' => $user
-                        )
-                    );
+
+                    $spiRoleAssignments = $userHandler->getRoleAssignments( $user->id );
+                    foreach ( $spiRoleAssignments as $spiRoleAssignment )
+                    {
+                        if ( $spiRoleAssignment->id == $role->id )
+                        {
+                            $roleAssignments[] = $this->buildDomainUserRoleAssignmentObject(
+                                $spiRoleAssignment,
+                                $user,
+                                $role
+                            );
+                        }
+                    }
                 }
                 catch ( NotFoundException $e )
                 {
@@ -681,18 +692,10 @@ class RoleService implements RoleServiceInterface
             throw new InvalidArgumentValue( "id", $user->id, "User" );
 
         $roleAssignments = array();
-
-        $spiRoles = $this->persistenceHandler->userHandler()->loadRolesByGroupId( $user->id );
-        foreach ( $spiRoles as $spiRole )
+        $spiRoleAssignments = $this->persistenceHandler->userHandler()->getRoleAssignments( $user->id );
+        foreach ( $spiRoleAssignments as $spiRoleAssignment )
         {
-            $roleAssignments[] = new UserRoleAssignment(
-                array(
-                    // @todo: add limitation
-                    'limitation' => null,
-                    'role' => $this->buildDomainRoleObject( $spiRole ),
-                    'user' => $user
-                )
-            );
+            $roleAssignments[] = $this->buildDomainUserRoleAssignmentObject( $spiRoleAssignment, $user );
         }
 
         return $roleAssignments;
@@ -713,18 +716,10 @@ class RoleService implements RoleServiceInterface
             throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
 
         $roleAssignments = array();
-
-        $spiRoles = $this->persistenceHandler->userHandler()->loadRolesByGroupId( $userGroup->id );
-        foreach ( $spiRoles as $spiRole )
+        $spiRoleAssignments = $this->persistenceHandler->userHandler()->getRoleAssignments( $userGroup->id );
+        foreach ( $spiRoleAssignments as $spiRoleAssignment )
         {
-            $roleAssignments[] = new UserGroupRoleAssignment(
-                array(
-                    // @todo: add limitation
-                    'limitation' => null,
-                    'role' => $this->buildDomainRoleObject( $spiRole ),
-                    'userGroup' => $userGroup
-                )
-            );
+            $roleAssignments[] = $this->buildDomainUserGroupRoleAssignmentObject( $spiRoleAssignment, $userGroup );
         }
 
         return $roleAssignments;
@@ -846,6 +841,66 @@ class RoleService implements RoleServiceInterface
                 'module' => $policy->module,
                 'function' => $policy->function,
                 'limitations' => $policyLimitations
+            )
+        );
+    }
+
+    /**
+     * Builds the API UserRoleAssignment object from provided SPI RoleAssignment object
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\RoleAssignment $spiRoleAssignment
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\Role $role
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment
+     */
+    public function buildDomainUserRoleAssignmentObject( SPIRoleAssignment $spiRoleAssignment, User $user = null, APIRole $role = null )
+    {
+        $limitation = null;
+        if ( !empty( $spiRoleAssignment->limitationIdentifier ) )
+        {
+            $limitation = $this->getLimitationFromIdentifier( $spiRoleAssignment->limitationIdentifier );
+            $limitation->limitationValues = $spiRoleAssignment->values;
+        }
+
+        $user = $user ?: $this->repository->getUserService()->loadUser( $spiRoleAssignment->contentId );
+        $role = $role ?: $this->loadRole( $spiRoleAssignment->id );
+
+        return new UserRoleAssignment(
+            array(
+                'limitation' => $limitation,
+                'role' => $role,
+                'user' => $user
+            )
+        );
+    }
+
+    /**
+     * Builds the API UserGroupRoleAssignment object from provided SPI RoleAssignment object
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\RoleAssignment $spiRoleAssignment
+     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
+     * @param \eZ\Publish\API\Repository\Values\User\Role $role
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment
+     */
+    public function buildDomainUserGroupRoleAssignmentObject( SPIRoleAssignment $spiRoleAssignment, UserGroup $userGroup = null, APIRole $role = null )
+    {
+        $limitation = null;
+        if ( !empty( $spiRoleAssignment->limitationIdentifier ) )
+        {
+            $limitation = $this->getLimitationFromIdentifier( $spiRoleAssignment->limitationIdentifier );
+            $limitation->limitationValues = $spiRoleAssignment->values;
+        }
+
+        $userGroup = $userGroup ?: $this->repository->getUserService()->loadUserGroup( $spiRoleAssignment->contentId );
+        $role = $role ?: $this->loadRole( $spiRoleAssignment->id );
+
+        return new UserGroupRoleAssignment(
+            array(
+                'limitation' => $limitation,
+                'role' => $role,
+                'userGroup' => $userGroup
             )
         );
     }
