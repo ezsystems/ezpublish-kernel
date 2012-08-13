@@ -129,6 +129,7 @@ class UserHandler implements UserHandlerInterface
     public function delete( $userId )
     {
         $this->backend->delete( 'User', $userId );
+        $this->backend->deleteByMatch( 'User\\RoleAssignment', array( 'contentId' => $userId ) );
     }
 
     /**
@@ -288,6 +289,7 @@ class UserHandler implements UserHandlerInterface
     {
         $this->backend->delete( 'User\\Role', $roleId );
         $this->backend->deleteByMatch( 'User\\Policy', array( 'roleId' => $roleId ) );
+        $this->backend->deleteByMatch( 'User\\RoleAssignment', array( 'id' => $roleId ) );
     }
 
     /**
