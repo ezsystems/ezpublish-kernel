@@ -15,8 +15,35 @@ use eZ\Publish\SPI\FieldType\FieldStorage,
 /**
  * Description of BinaryFileStorage
  */
-class BinaryFileStorage implements FieldStorage
+class BinaryFileStorage extends GatewayBasedStorage
 {
+    /**
+     * File service to be used
+     *
+     * @var FileService
+     */
+    protected $fileService;
+
+    /**
+     * Path generator
+     *
+     * @var PathGenerator
+     */
+    protected $pathGenerator;
+
+    /**
+     * Construct from gateways
+     *
+     * @param \eZ\Publish\Core\FieldType\StorageGateway[] $gateways
+     * @param FileService $fileService
+     * @param PathGenerator $pathGenerator
+     */
+    public function __construct( array $gateways, FileService $fileService )
+    {
+        parent::__construct( $gateways );
+        $this->fileService = $fileService;
+    }
+
     /**
      * Allows custom field types to store data in an external source (e.g. another DB table).
      *

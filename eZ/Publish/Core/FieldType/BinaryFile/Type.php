@@ -25,41 +25,17 @@ use eZ\Publish\Core\FieldType\FieldType,
  */
 class Type extends FieldType
 {
-    protected $allowedValidators = array(
-        "FileSizeValidator"
+    /**
+     * @see eZ\Publish\Core\FieldType::$validatorConfigurationSchema
+     */
+    protected $validatorConfigurationSchema = array(
+        "FileSizeValidator" => array(
+            'maxFileSize' => array(
+                'type' => 'int',
+                'default' => false,
+            )
+        )
     );
-
-    /**
-     * @var \eZ\Publish\API\Repository\IOService
-     */
-    protected $IOService;
-
-    /**
-     * Constructs field type object, initializing internal data structures.
-     *
-     * @param \eZ\Publish\Core\Repository\ValidatorService $validatorService
-     * @param \eZ\Publish\API\Repository\FieldTypeTools $fieldTypeTools
-     * @param \eZ\Publish\API\Repository\Repository $repository
-     */
-    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools, Repository $repository )
-    {
-        parent::__construct( $validatorService, $fieldTypeTools );
-        $this->IOService = $repository->getIOService();
-    }
-
-    /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FiledType\Value object with the provided $file as value.
-     *
-     * @param string $file
-     * @return \eZ\Publish\Core\FieldType\BinaryFile\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $file )
-    {
-        return new Value( $this->IOService, $file );
-    }
 
     /**
      * Return the field type identifier for this field type
@@ -85,18 +61,18 @@ class Type extends FieldType
     {
         $value = $this->acceptValue( $value );
 
-        return $value->originalFilename;
+        return $value->fileName;
     }
 
     /**
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
-     * @return \eZ\Publish\Core\FieldType\BinaryFile\Value
+     * @return null
      */
     public function getEmptyValue()
     {
-        return new Value( $this->IOService );
+        return null;
     }
 
     /**
@@ -105,31 +81,106 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
      *
-     * @param \eZ\Publish\Core\FieldType\BinaryFile\Value $inputValue
+     * @param \eZ\Publish\Core\FieldType\Image\Value $inputValue
      *
-     * @return \eZ\Publish\Core\FieldType\BinaryFile\Value
+     * @return \eZ\Publish\Core\FieldType\Image\Value
      */
     public function acceptValue( $inputValue )
     {
+        // null is the empty value for this type
+        if ( $inputValue === null )
+        {
+            return $this->getEmptyValue();
+        }
+
+        // construction only from path
+        if ( is_string( $inputValue ) )
+        {
+            $inputValue = array( 'path' => $inputValue );
+        }
+
+        // default construction from array
+        if ( is_array( $inputValue ) )
+        {
+            $inputValue = new Value(
+                $this->completeArrayData(
+                    $inputValue
+                )
+            );
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
                 '$inputValue',
-                'eZ\\Publish\\Core\\FieldType\\BinaryFile\\Value',
+                'eZ\\Publish\\Core\\FieldType\\Image\\Value',
                 $inputValue
             );
         }
 
-        if ( isset( $inputValue->file ) && !$inputValue->file instanceof BinaryFile )
+        // Required paramater $path
+        if ( !isset( $inputValue->path ) || !file_exists( $inputValue->path ) )
         {
             throw new InvalidArgumentType(
-                '$inputValue->file',
-                'eZ\Publish\API\Repository\Values\IO\BinaryFile',
-                $inputValue->file
+                '$inputValue->path',
+                'Existing fileName',
+                $inputValue->path
+            );
+        }
+        // Required parameter $fileName
+        if ( !isset( $inputValue->fileName ) || !is_string( $inputValue->fileName ) )
+        {
+            throw new InvalidArgumentType(
+                '$inputValue->fileName',
+                'string',
+                $inputValue->fileName
+            );
+        }
+
+        // Required parameter $fileSize
+        if ( !isset( $inputValue->fileSize ) || !is_int( $inputValue->fileSize ) )
+        {
+            throw new InvalidArgumentType(
+                '$inputValue->fileSize',
+                'int',
+                $inputValue->fileSize
             );
         }
 
         return $inputValue;
+    }
+
+    /**
+     * Attempts to complete the file data given in $inputData
+     *
+     * @param array $inputData
+     * @return array
+     */
+    protected function completeArrayData( array $inputData )
+    {
+        if ( !isset( $inputData['path'] ) )
+        {
+            // no completion possible without path
+            return $inputData;
+        }
+
+        if ( !file_exists( $inputData['path'] ) )
+        {
+            // no completion possible with non-existing file
+            return $inputData;
+        }
+
+        if ( !isset( $inputData['fileSize'] ) )
+        {
+            $inputData['fileSize'] = filesize( $inputData['path'] );
+        }
+
+        if ( !isset( $inputData['fileName'] ) )
+        {
+            $inputData['fileName'] = basename( $inputData['path'] );
+        }
+
+        return $inputData;
     }
 
     /**
@@ -151,7 +202,13 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
-        return new Value( $this->IOService, $hash );
+        if( $hash === null )
+        {
+            // empty value
+            return null;
+        }
+
+        return new Value( $hash );
     }
 
     /**
@@ -163,7 +220,17 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
-        return $value->file;
+        if ( $value === null )
+        {
+            return null;
+        }
+
+        return array(
+            'fileName' => $value->fileName,
+            'fileSize' => $value->fileSize,
+            'path' => $value->path,
+            'downloadCount' => $value->downloadCount,
+        );
     }
 
     /**
@@ -190,7 +257,14 @@ class Type extends FieldType
      */
     public function toPersistenceValue( $value )
     {
-        // @TODO implement
+        // Store original data as external (to indicate they need to be stored)
+        return new FieldValue(
+            array(
+                "data" => null,
+                "externalData" => $this->toHash( $value ),
+                "sortKey" => $this->getSortInfo( $value ),
+            )
+        );
     }
 
     /**
@@ -204,7 +278,31 @@ class Type extends FieldType
      */
     public function fromPersistenceValue( FieldValue $fieldValue )
     {
-        // @TODO implement
+        if ( $fieldValue->data === null )
+        {
+            // empty value
+            return null;
+        }
+
+        // Restored data comes in $data, since it has already been processed
+        // there might be more data in the persistence value than needed here
+        $result = $this->fromHash(
+            array(
+                'path' => ( isset( $fieldValue->data['path'] )
+                    ? $fieldValue->data['path']
+                    : null ),
+                'fileName' => ( isset( $fieldValue->data['fileName'] )
+                    ? $fieldValue->data['fileName']
+                    : null ),
+                'fileSize' => ( isset( $fieldValue->data['fileSize'] )
+                    ? $fieldValue->data['fileSize']
+                    : null ),
+                'downloadCount' => ( isset( $fieldValue->data['downloadCount'] )
+                    ? $fieldValue->data['downloadCount']
+                    : null ),
+            )
+        );
+        return $result;
     }
 
     /**

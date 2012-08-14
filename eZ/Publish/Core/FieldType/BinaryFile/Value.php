@@ -25,18 +25,26 @@ use eZ\Publish\Core\FieldType\Value as BaseValue,
 class Value extends BaseValue
 {
     /**
-     * BinaryFile object
-     *
-     * @var \eZ\Publish\API\Repository\Values\IO\BinaryFile
-     */
-    public $file;
-
-    /**
-     * Original file name
+     * Path string, where the binary file is located
      *
      * @var string
      */
-    public $originalFilename;
+    public $path;
+
+    /**
+     * Display file name
+     *
+     * @var string
+     */
+    public $fileName;
+
+    /**
+     * Size of the image file
+     *
+     * @var integer
+     * @required
+     */
+    public $fileSize;
 
     /**
      * Number of times the file has been downloaded through content/download module
@@ -46,69 +54,43 @@ class Value extends BaseValue
     public $downloadCount = 0;
 
     /**
-     * @var \eZ\Publish\Core\FieldType\BinaryFile\Handler
-     */
-    protected $handler;
-
-    /**
      * Construct a new Value object.
-     * To affect a BinaryFile object to the $file property, use the handler:
-     * <code>
-     * use \eZ\Publish\Core\FieldType\BinaryFile;
-     * $binaryValue = new BinaryFile\Value;
-     * $binaryValue->file = $binaryValue->getHandler()->createFromLocalPath( '/path/to/local/file.txt' );
-     * </code>
      *
-     * @param \eZ\Publish\API\Repository\IOService $IOService
-     * @param string|null $file
+     * @param array $fileData
      */
-    public function __construct( IOService $IOService, $file = null )
+    public function __construct( array $fileData = array() )
     {
-        $this->handler = new Handler( $IOService );
-        if ( $file !== null )
+        foreach ( $imageData as $key => $value )
         {
-            $this->file = $this->handler->createFromLocalPath( $file );
-            $this->originalFilename = basename( $file );
+            try
+            {
+                $this->$key = $value;
+            }
+            catch ( PropertyNotFoundException $e )
+            {
+                throw new InvalidArgumentType(
+                    sprintf( '$imageData->%s', $key ),
+                    'Property not found',
+                    $value
+                );
+            }
         }
     }
 
     /**
-     * @see \eZ\Publish\Core\FieldType\Value
+     * Creates a value only from a file path
+     *
+     * @param string $path
+     * @return Value
      */
-    public function __toString()
+    public static function fromString( $path )
     {
-        if ( !isset( $this->file->id ) )
-            return "";
-
-        return $this->file->id;
-    }
-
-    public function __get( $name )
-    {
-        switch ( $name )
-        {
-            case 'filename':
-                return basename( $this->file->id );
-
-            case 'mimeType':
-                return $this->file->mimeType;
-
-            case 'filesize':
-                return $this->file->size;
-
-            case 'filepath':
-                return $this->file->id;
-
-            default:
-                throw new PropertyNotFoundException( $name, get_class( $this ) );
-        }
-    }
-
-    /**
-     * @see \eZ\Publish\Core\FieldType\Value::getTitle()
-     */
-    public function getTitle()
-    {
-        return $this->originalFilename;
+        return new static(
+            array(
+                'path' => $path,
+                'fileName' => basename( $path ),
+                'fileSize' => filesize( $path ),
+            )
+        );
     }
 }
