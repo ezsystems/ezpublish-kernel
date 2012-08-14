@@ -458,15 +458,16 @@ class RoleService implements RoleServiceInterface
         if ( !is_numeric( $userId ) )
             throw new InvalidArgumentValue( "userId", $userId );
 
-        $loadedUser = $this->repository->getUserService()->loadUser( $userId );
-
-        $spiPolicies = $this->persistenceHandler->userHandler()->loadPoliciesByUserId( $loadedUser->id );
+        $spiPolicies = $this->persistenceHandler->userHandler()->loadPoliciesByUserId( $userId );
 
         $policies = array();
         foreach ( $spiPolicies as $spiPolicy )
         {
             $policies[] = $this->buildDomainPolicyObject( $spiPolicy );
         }
+
+        if ( empty( $policies ) )
+            $this->persistenceHandler->userHandler()->load( $userId );// For NotFoundException in case userId is invalid
 
         return $policies;
     }
