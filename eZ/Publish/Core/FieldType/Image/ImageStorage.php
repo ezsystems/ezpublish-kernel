@@ -55,6 +55,7 @@ class ImageStorage extends GatewayBasedStorage
 
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage
+     * @TODO On copy, only reference! But entry in ezimage!
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
@@ -155,6 +156,7 @@ class ImageStorage extends GatewayBasedStorage
      * @param array $fieldId
      * @param array $context
      * @return bool
+     * @TODO Delete only when no references in ezimage table
      */
     public function deleteFieldData( array $fieldId, array $context )
     {
