@@ -644,14 +644,41 @@ abstract class RoleBase extends BaseServiceTest
     {
         $roleService = $this->repository->getRoleService();
 
-        $role = $roleService->loadRole( 2 );
-        $userGroup = $this->repository->getUserService()->loadUserGroup( 12 );
+        $anonymousRole = $roleService->loadRole( 1 );
+        $anonymousUserGroup = $this->repository->getUserService()->loadUserGroup( 42 );
 
-        $originalAssignmentCount = count( $roleService->getRoleAssignmentsForUserGroup( $userGroup ) );
+        $originalAssignmentCount = count( $roleService->getRoleAssignmentsForUserGroup( $anonymousUserGroup ) );
 
-        $roleService->unassignRoleFromUserGroup( $role, $userGroup );
-        $newAssignmentCount = count( $roleService->getRoleAssignmentsForUserGroup( $userGroup ) );
+        $roleService->unassignRoleFromUserGroup( $anonymousRole, $anonymousUserGroup );
+        $newAssignmentCount = count( $roleService->getRoleAssignmentsForUserGroup( $anonymousUserGroup ) );
         self::assertEquals( $originalAssignmentCount - 1, $newAssignmentCount );
+    }
+
+    /**
+     * Test unassigning role from user group
+     *
+     * But on current admin user so he lacks access to read roles.
+     *
+     * @covers \eZ\Publish\API\Repository\RoleService::unassignRoleFromUserGroup
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testUnassignRoleFromUserGroupUnauthorizedException()
+    {
+        $roleService = $this->repository->getRoleService();
+
+        try
+        {
+            $adminRole = $roleService->loadRole( 2 );
+            $adminUserGroup = $this->repository->getUserService()->loadUserGroup( 12 );
+            $roleService->getRoleAssignmentsForUserGroup( $adminUserGroup );
+            $roleService->unassignRoleFromUserGroup( $adminRole, $adminUserGroup );
+        }
+        catch ( \Exception $e )
+        {
+            self::fail( "Unexpected exception: " . $e->getMessage() . " \n[" . $e->getFile() . ' (' . $e->getLine() . ')]' );
+        }
+
+        $roleService->getRoleAssignmentsForUserGroup( $adminUserGroup );
     }
 
     /**
