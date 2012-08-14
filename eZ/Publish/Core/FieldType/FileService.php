@@ -74,4 +74,12 @@ interface FileService
      * @return string
      */
     public function getStorageIdentifier( $path );
+
+    /**
+     * Returns is a file/directory with the given $storageIdentifier exists
+     *
+     * @param string $storageIdentifier
+     * @return bool
+     */
+    public function exists( $storageIdentifier );
 }

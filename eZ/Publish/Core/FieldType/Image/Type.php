@@ -9,7 +9,9 @@
 
 namespace eZ\Publish\Core\FieldType\Image;
 use eZ\Publish\Core\FieldType\FieldType,
+    eZ\Publish\Core\FieldType\FileService,
     eZ\Publish\Core\Repository\ValidatorService,
+    eZ\Publish\Core\Repository\FieldTypeTools,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\Core\FieldType\ValidationError,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
@@ -33,11 +35,22 @@ class Type extends FieldType
     );
 
     /**
-     * Holds an instance of validator service
+     * File service
      *
-     * @var \eZ\Publish\Core\Repository\ValidatorService
+     * @var FileService
      */
-    protected $validatorService;
+    protected $fileService;
+
+    /**
+     * Creates a new Image FieldType
+     *
+     * @param FileService $fileService
+     */
+    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools, FileService $fileService )
+    {
+        parent::__construct( $validatorService, $fieldTypeTools );
+        $this->fileService = $fileService;
+    }
 
     /**
      * Return the field type identifier for this field type
@@ -143,7 +156,7 @@ class Type extends FieldType
         }
 
         // Required paramater $path
-        if ( !isset( $inputValue->path ) || !file_exists( $inputValue->path ) )
+        if ( !isset( $inputValue->path ) || !$this->fileExists( $inputValue->path ) )
         {
             throw new InvalidArgumentType(
                 '$inputValue->path',
@@ -182,6 +195,21 @@ class Type extends FieldType
         }
 
         return $inputValue;
+    }
+
+    /**
+     * Returns if the given $path exists on the local disc or in the file
+     * storage
+     *
+     * @param string $path
+     * @return bool
+     */
+    protected function fileExists( $path )
+    {
+        return (
+            ( substr( $path, 0, 1 ) === '/' && file_exists( $path ) )
+            || $this->fileService->exists( $this->fileService->getStorageIdentifier( $path ) )
+        );
     }
 
     /**

@@ -234,6 +234,17 @@ class LocalFileService implements FileService
     }
 
     /**
+     * Returns is a file/directory with the given $storageIdentifier exists
+     *
+     * @param string $storageIdentifier
+     * @return bool
+     */
+    public function exists( $storageIdentifier )
+    {
+        return file_exists( $this->getFullPath( $storageIdentifier ) );
+    }
+
+    /**
      * Creates the given directory recursively
      *
      * @param string $directory
