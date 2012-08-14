@@ -136,6 +136,7 @@ class EzcDatabase extends Gateway
             $row["forward"] = $row["is_alias"] && $row["alias_redirects"];
             $row["destination"] = $locationId;
             $row["always_available"] = (bool)( $row["lang_mask"] & 1 );
+            $row["language_codes"] = array();
             foreach ( $this->languageMaskGenerator->extractLanguageIdsFromMask( $row["lang_mask"] ) as $languageId )
             {
                 $row["language_codes"][] = $this->languageHandler->load( $languageId )->languageCode;
