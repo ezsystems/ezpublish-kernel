@@ -96,14 +96,12 @@ class EzcDatabase extends Gateway
     {
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $this->dbHandler->quoteColumn(
-                $this->dbHandler->quoteColumn( "id" ),
-                $this->dbHandler->quoteColumn( "link" ),
-                $this->dbHandler->quoteColumn( "is_alias" ),
-                $this->dbHandler->quoteColumn( "alias_redirects" ),
-                $this->dbHandler->quoteColumn( "lang_mask" ),
-                $this->dbHandler->quoteColumn( "is_original" )
-            )
+            $this->dbHandler->quoteColumn( "id" ),
+            $this->dbHandler->quoteColumn( "link" ),
+            $this->dbHandler->quoteColumn( "is_alias" ),
+            $this->dbHandler->quoteColumn( "alias_redirects" ),
+            $this->dbHandler->quoteColumn( "lang_mask" ),
+            $this->dbHandler->quoteColumn( "is_original" )
         )->from(
             $this->dbHandler->quoteTable( "ezurlalias_ml" )
         )->where(
