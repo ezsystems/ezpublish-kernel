@@ -25,33 +25,37 @@ use eZ\Publish\API\Repository\ContentService as ContentServiceInterface,
     eZ\Publish\API\Repository\Values\User\User,
     eZ\Publish\API\Repository\Values\Content\LocationCreateStruct,
     eZ\Publish\API\Repository\Values\Content\Field,
+    eZ\Publish\API\Repository\Values\Content\Relation as APIRelation,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\RemoteId as CriterionRemoteId,
     eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
-    eZ\Publish\Core\Repository\Values\Content\Content,
-    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
-    eZ\Publish\Core\Repository\Values\Content\VersionInfo,
-    eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct,
-    eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct,
-    eZ\Publish\Core\Repository\Values\Content\TranslationValues,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo,
-    eZ\Publish\SPI\Persistence\Content\Version as SPIVersion,
+
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\ContentValidationException,
     eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException,
+    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
+    eZ\Publish\Core\Repository\Values\Content\Content,
+    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
+    eZ\Publish\Core\Repository\Values\Content\VersionInfo,
+    eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct,
+    eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct,
+    eZ\Publish\Core\Repository\Values\Content\Relation,
+    eZ\Publish\Core\Repository\Values\Content\TranslationValues,
+
+    eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo,
+    eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo,
+    eZ\Publish\SPI\Persistence\Content\Version as SPIVersion,
     eZ\Publish\SPI\Persistence\Content as SPIContent,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct as SPIMetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\CreateStruct as SPIContentCreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct as SPIContentUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Field as SPIField,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as SPILocationCreateStruct,
-    eZ\Publish\Core\Repository\Values\Content\Relation,
-    eZ\Publish\API\Repository\Values\Content\Relation as APIRelation,
     eZ\Publish\SPI\Persistence\Content\Relation as SPIRelation,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreateStruct,
+
     DateTime,
     Exception;
 
@@ -1545,7 +1549,7 @@ class ContentService implements ContentServiceInterface
      *
      * @TODO: Made public, since the search service also needs access to this
      * method. Should be refactored into its own class together with the other
-     * build* method.
+     * build* methods.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $spiContent
      *
@@ -1599,7 +1603,7 @@ class ContentService implements ContentServiceInterface
      *
      * @TODO: Made public, since the search service also needs access to this
      * method. Should be refactored into its own class together with the other
-     * build* method.
+     * build* methods.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $spiContentInfo
      *
@@ -1680,6 +1684,11 @@ class ContentService implements ContentServiceInterface
         );
     }
 
+    /**
+     * @param int $spiStatus
+     *
+     * @return int|null
+     */
     protected function getDomainVersionStatus( $spiStatus )
     {
         $status = null;
@@ -1699,8 +1708,6 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     *
-     *
      * @param int|null $timestamp
      *
      * @return \DateTime|null
