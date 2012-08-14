@@ -55,7 +55,7 @@ class ImageIntergrationTest extends BaseIntegrationTest
      *
      * @var string
      */
-    protected static $storageDir = 'var/my_site/storage';
+    protected static $storageDir = 'var/my_site/storage/images';
 
     public static function setUpBeforeClass()
     {

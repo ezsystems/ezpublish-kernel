@@ -125,7 +125,7 @@ class ImageStorage extends GatewayBasedStorage
      */
     protected function getFieldPath( $fieldId, $versionNo, $languageCode, $nodePathString )
     {
-        return 'images/' . $this->pathGenerator->getStoragePathForField(
+        return $this->pathGenerator->getStoragePathForField(
             $fieldId,
             $versionNo,
             $languageCode,

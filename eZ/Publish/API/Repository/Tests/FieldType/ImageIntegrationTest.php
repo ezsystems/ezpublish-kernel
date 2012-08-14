@@ -53,7 +53,7 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
         if ( !isset( self::$installDir ) )
         {
             self::$installDir = $this->getConfigValue( 'install_dir' );
-            self::$storageDir = $this->getConfigValue( 'storage_dir' );
+            self::$storageDir = $this->getConfigValue( 'image_storage_dir' );
         }
     }
 
