@@ -101,7 +101,9 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( "is_alias" ),
             $this->dbHandler->quoteColumn( "alias_redirects" ),
             $this->dbHandler->quoteColumn( "lang_mask" ),
-            $this->dbHandler->quoteColumn( "is_original" )
+            $this->dbHandler->quoteColumn( "is_original" ),
+            $this->dbHandler->quoteColumn( "parent" ),
+            $this->dbHandler->quoteColumn( "text_md5" )
         )->from(
             $this->dbHandler->quoteTable( "ezurlalias_ml" )
         )->where(
