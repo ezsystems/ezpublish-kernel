@@ -1268,12 +1268,12 @@ class ContentService implements ContentServiceInterface
             );
 
             $content = $this->internalPublishVersion(
-                $this->buildVersionInfoDomainObject( $spiContent->versionInfo ),
+                $this->buildVersionInfoDomainObject( $spiContent->versionInfo, $spiContent ),
                 $spiContent->versionInfo->creationDate
             );
 
             $this->repository->getLocationService()->createLocation(
-                $this->buildContentInfoDomainObject( $spiContent->contentInfo ),
+                $content->getVersionInfo()->getContentInfo(),
                 $destinationLocationCreateStruct
             );
             $this->repository->commit();
@@ -1557,7 +1557,7 @@ class ContentService implements ContentServiceInterface
      */
     public function buildContentDomainObject( SPIContent $spiContent )
     {
-        $versionInfo = $this->buildVersionInfoDomainObject( $spiContent->versionInfo );
+        $versionInfo = $this->buildVersionInfoDomainObject( $spiContent->versionInfo, $spiContent );
         return new Content(
             array(
                 "internalFields" => $this->buildDomainFields( $spiContent->fields ),
@@ -1606,16 +1606,21 @@ class ContentService implements ContentServiceInterface
      * build* methods.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $spiContentInfo
+     * @param \eZ\Publish\SPI\Persistence\Content|null $spiContent
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\ContentInfo
      */
-    public function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo )
+    public function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo, SPIContent $spiContent = null )
     {
+
+        if ( $spiContent === null )
+        {
+            $spiContent = $this->persistenceHandler->contentHandler()->load(
+                $spiContentInfo->id,
+                $spiContentInfo->currentVersionNo
+            );
+        }
         // @todo: $mainLocationId should have been removed through SPI refactoring?
-        $spiContent = $this->persistenceHandler->contentHandler()->load(
-            $spiContentInfo->id,
-            $spiContentInfo->currentVersionNo
-        );
         $mainLocationId = null;
         foreach ( $spiContent->locations as $spiLocation )
         {
@@ -1655,10 +1660,11 @@ class ContentService implements ContentServiceInterface
      * Builds a VersionInfo domain object from value object returned from persistence
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $persistenceVersionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content|null $spiContent
      *
      * @return VersionInfo
      */
-    protected function buildVersionInfoDomainObject( SPIVersionInfo $persistenceVersionInfo )
+    protected function buildVersionInfoDomainObject( SPIVersionInfo $persistenceVersionInfo, SPIContent $spiContent = null )
     {
         $languageCodes = array();
         foreach ( $persistenceVersionInfo->languageIds as $languageId )
@@ -1679,7 +1685,9 @@ class ContentService implements ContentServiceInterface
                 "initialLanguageCode" => $persistenceVersionInfo->initialLanguageCode,
                 "languageCodes" => $languageCodes,
                 "names" => $persistenceVersionInfo->names,
-                "contentInfo" => $this->loadContentInfo( $persistenceVersionInfo->contentId )
+                "contentInfo" => ( $spiContent !== null ?
+                    $this->buildContentInfoDomainObject( $spiContent->contentInfo, $spiContent ) :
+                    $this->loadContentInfo( $persistenceVersionInfo->contentId ) )
             )
         );
     }
