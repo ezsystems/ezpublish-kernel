@@ -38,4 +38,16 @@ class SetupFactory extends Repository\Tests\SetupFactory
             new Common\UrlHandler\eZPublish()
         );
     }
+
+    /**
+     * Returns a config value for $configKey.
+     *
+     * @param string $configKey
+     * @return mixed
+     * @throws Exception if $configKey could not be found.
+     */
+    public function getConfigValue( $configKey )
+    {
+        throw new \RuntimeException( "REST implementation does not support config." );
+    }
 }
