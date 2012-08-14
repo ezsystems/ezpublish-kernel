@@ -41,7 +41,7 @@ class ImageIntergrationTest extends BaseIntegrationTest
      *
      * @var bool
      */
-    protected static $removeTmpDir = true;
+    protected static $removeTmpDir = false;
 
     /**
      * Temporary directory
@@ -55,7 +55,7 @@ class ImageIntergrationTest extends BaseIntegrationTest
      *
      * @var string
      */
-    protected static $storageDir = 'var/my_site/storage';
+    protected static $storageDir = 'var/my_site/storage/images';
 
     public static function setUpBeforeClass()
     {
@@ -135,7 +135,7 @@ class ImageIntergrationTest extends BaseIntegrationTest
                 array(
                     'LegacyStorage' => new FieldType\Image\ImageStorage\Gateway\LegacyStorage(),
                 ),
-                new FieldType\Image\FileService\LocalFileService(
+                new FieldType\FileService\LocalFileService(
                     self::$tmpDir,
                     self::$storageDir
                 ),
@@ -276,7 +276,13 @@ class ImageIntergrationTest extends BaseIntegrationTest
         $this->assertNotNull( $field->value->data );
 
         $this->assertTrue(
-            file_exists( self::$tmpDir . '/' . $field->value->data['path'] )
+            file_exists( ( $filePath = self::$tmpDir . '/' . $field->value->data['path'] ) )
+        );
+
+        // Check old files removed before update
+        $this->assertEquals(
+            1,
+            count( glob( dirname( $filePath ) . '/*' ) )
         );
 
         $this->assertEquals( 'Blueish-Blue.jpg', $field->value->data['fileName'] );
@@ -303,7 +309,19 @@ class ImageIntergrationTest extends BaseIntegrationTest
             \RecursiveIteratorIterator::CHILD_FIRST
         );
 
-        // @TODO: Implement.
+        foreach ( $iterator as $path => $fileInfo )
+        {
+            if ( $fileInfo->isFile() )
+            {
+                $this->fail(
+                    sprintf(
+                        'Found undeleted file "%s"',
+                        $path
+                    )
+                );
+            }
+        }
+
     }
 }
 

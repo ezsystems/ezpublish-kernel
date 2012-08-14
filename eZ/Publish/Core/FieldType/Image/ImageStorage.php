@@ -9,9 +9,10 @@
 
 namespace eZ\Publish\Core\FieldType\Image;
 use eZ\Publish\SPI\FieldType\FieldStorage,
-    eZ\Publish\Core\FieldType\GatewayBasedStorage,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\Core\FieldType\FileService,
+    eZ\Publish\Core\FieldType\GatewayBasedStorage,
     LogicException,
     PDO;
 
@@ -85,7 +86,16 @@ class ImageStorage extends GatewayBasedStorage
             $nodePathString
         ) . '/' . $storedValue['fileName'];
 
-        $storedValue['path'] = $this->fileService->storeFile( $storedValue['path'], $targetPath );
+        // Delete old files on update
+        $this->fileService->remove(
+            $this->fileService->getStorageIdentifier( dirname( $targetPath ) ),
+            true
+        );
+
+        $storedValue['path'] = $this->fileService->storeFile(
+            $storedValue['path'],
+            $this->fileService->getStorageIdentifier( $targetPath )
+        );
 
         $this->getGateway( $context )->storeImageReference( $storedValue['path'], $field->id );
 
@@ -115,7 +125,7 @@ class ImageStorage extends GatewayBasedStorage
      */
     protected function getFieldPath( $fieldId, $versionNo, $languageCode, $nodePathString )
     {
-        return 'images/' . $this->pathGenerator->getStoragePathForField(
+        return $this->pathGenerator->getStoragePathForField(
             $fieldId,
             $versionNo,
             $languageCode,
@@ -159,7 +169,10 @@ class ImageStorage extends GatewayBasedStorage
                 $fieldDataSet['nodePathString']
             );
 
-            $storedFieldFiles = $this->fileService->removePath( $fieldPath, true );
+            $storedFieldFiles = $this->fileService->remove(
+                $this->fileService->getStorageIdentifier( $fieldPath ),
+                true
+            );
         }
     }
 

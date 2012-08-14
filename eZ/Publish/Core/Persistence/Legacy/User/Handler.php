@@ -22,14 +22,14 @@ use eZ\Publish\SPI\Persistence\User,
 class Handler implements BaseUserHandler
 {
     /**
-     * Gaateway for storing user data
+     * Gateway for storing user data
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\User\Gateway
      */
     protected $userGateway;
 
     /**
-     * Gaateway for storing role data
+     * Gateway for storing role data
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway
      */
@@ -47,7 +47,7 @@ class Handler implements BaseUserHandler
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\User\Gateway $userGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway $roleGateway
-     * @return void
+     * @param \eZ\Publish\Core\Persistence\Legacy\User\Mapper $mapper
      */
     public function __construct( Gateway $userGateway, RoleGateway $roleGateway, Mapper $mapper )
     {
@@ -267,7 +267,7 @@ class Handler implements BaseUserHandler
     {
         // Each policy can only be associated to exactly one role. Thus it is
         // sufficient to use the policyId for identification and just remove
-        // the policiy completely.
+        // the policy completely.
         $this->roleGateway->removePolicy( $policyId );
     }
 
@@ -285,9 +285,9 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Assign role to user group or user with given limitation
+     * Assign role to a user or user group with given limitations
      *
-     * The limitation array may look like:
+     * The limitation array looks like:
      * <code>
      *  array(
      *      'Subtree' => array(
@@ -302,7 +302,7 @@ class Handler implements BaseUserHandler
      * Where the keys are the limitation identifiers, and the respective values
      * are an array of limitation values. The limitation parameter is optional.
      *
-     * @param mixed $contentId User / group ID
+     * @param mixed $contentId The groupId or userId to assign the role to.
      * @param mixed $roleId
      * @param array $limitation
      */
@@ -313,9 +313,9 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Un-assign a role from a user or group
+     * Un-assign a role
      *
-     * @param mixed $contentId The group / user ID to un-assign a role from
+     * @param mixed $contentId The user or user group Id to un-assign the role from.
      * @param mixed $roleId
      */
     public function unAssignRole( $contentId, $roleId )
@@ -324,14 +324,16 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * returns a list of role assignments for the given user or user group id
+     * Returns a list of role assignments for the given user or user group id
      *
      * @param mixed $contentId
      *
-     * @return eZ\Publish\SPI\Persistence\User\RoleAssignment[]
+     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
      */
     public function getRoleAssignments( $contentId )
     {
-        throw new \RuntimeException( 'TODO: Implement.' );
+        $data = $this->userGateway->loadRoleAssignments( $contentId );
+
+        return $this->mapper->mapRoleAssignments( $data );
     }
 }

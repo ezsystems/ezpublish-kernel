@@ -132,7 +132,7 @@ class SearchHandlerTest extends HandlerTest
      */
     public function testFindByLocationRemoteId()
     {
-        $content = $this->persistenceHandler->searchHandler()->findSingle( new LocationRemoteId( 'remoteIDForLocation2' ) );
+        $content = $this->persistenceHandler->searchHandler()->findSingle( new LocationRemoteId( 'f3e90596361e31d496d4026eb624c983' ) );
         $this->assertTrue( $content instanceof Content );
         $this->assertEquals( 1, $content->contentInfo->id );
     }

@@ -42,7 +42,7 @@ interface Handler
     /**
      * Load user(s) with user login / email.
      *
-     * Optimized for login use (hence the possibility to match email and resturn several users).
+     * Optimized for login use (hence the possibility to match email and return several users).
      *
      * @param string $login
      * @param boolean $alsoMatchEmail Also match user email, caller must verify that $login is a valid email address.
@@ -195,11 +195,11 @@ interface Handler
     public function unAssignRole( $contentId, $roleId );
 
     /**
-     * returns a list of role assignments for the given user or user group id
+     * Returns a list of role assignments for the given user or user group id
      *
      * @param mixed $contentId
      *
-     * @return eZ\Publish\SPI\Persistence\User\RoleAssignment[]
+     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
      */
-    public function getRoleAssignments($contentId);
+    public function getRoleAssignments( $contentId );
 }

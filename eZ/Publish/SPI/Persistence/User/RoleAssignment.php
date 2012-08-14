@@ -21,7 +21,6 @@ class RoleAssignment extends ValueObject
      */
     public $id;
 
-
     /**
      * The user or user group id
      *
@@ -37,7 +36,7 @@ class RoleAssignment extends ValueObject
     public $limitationIdentifier;
 
     /**
-     * the subtree paths or section ids.
+     * The subtree paths or section ids.
      *
      * @var mixed
      */

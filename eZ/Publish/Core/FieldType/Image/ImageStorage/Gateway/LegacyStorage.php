@@ -143,28 +143,11 @@ class LegacyStorage extends Gateway
         $selectQuery->select(
             $connection->quoteColumn( 'id', 'ezcontentobject_attribute' ),
             $connection->quoteColumn( 'version', 'ezcontentobject_attribute' ),
-            $connection->quoteColumn( 'language_code', 'ezcontentobject_attribute' ),
-            $connection->quoteColumn( 'path_identification_string', 'ezcontentobject_tree' )
+            $connection->quoteColumn( 'language_code', 'ezcontentobject_attribute' )
         )->from(
             $connection->quoteTable( 'ezcontentobject_attribute' )
-        )->leftJoin(
-            $connection->quoteTable( 'ezcontentobject_tree' ),
-            $selectQuery->expr->lAnd(
-                $selectQuery->expr->eq(
-                    $connection->quoteColumn( 'contentobject_id', 'ezcontentobject_attribute' ),
-                    $connection->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' )
-                ),
-                $selectQuery->expr->eq(
-                    $connection->quoteColumn( 'version', 'ezcontentobject_attribute' ),
-                    $connection->quoteColumn( 'contentobject_version', 'ezcontentobject_tree' )
-                )
-            )
         )->where(
             $selectQuery->expr->lAnd(
-                $selectQuery->expr->eq(
-                    $connection->quoteColumn( 'node_id', 'ezcontentobject_tree' ),
-                    $connection->quoteColumn( 'main_node_id', 'ezcontentobject_tree' )
-                ),
                 $selectQuery->expr->in(
                     $connection->quoteColumn( 'id', 'ezcontentobject_attribute' ),
                     $fieldIds
@@ -178,7 +161,9 @@ class LegacyStorage extends Gateway
         $fieldLookup = array();
         foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
         {
-            $fieldLookup[$row['id']] = array();
+            $fieldLookup[$row['id']] = array(
+                'nodePathString' => null, // default, if not available
+            );
             foreach ( $row as $fieldName => $fieldValue )
             {
                 if ( isset( $this->fieldNameMap[$fieldName] ) )
@@ -187,6 +172,34 @@ class LegacyStorage extends Gateway
                 }
             }
         }
+
+        $selectQuery = $connection->createSelectQuery();
+        $selectQuery->select(
+            $connection->quoteColumn( 'path_identification_string', 'ezcontentobject_tree' ),
+            $connection->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' )
+        )->from(
+            $connection->quoteTable( 'ezcontentobject_tree' )
+        )->where(
+            $selectQuery->expr->lAnd(
+                $selectQuery->expr->eq(
+                    $connection->quoteColumn( 'node_id', 'ezcontentobject_tree' ),
+                    $connection->quoteColumn( 'main_node_id', 'ezcontentobject_tree' )
+                ),
+                $selectQuery->expr->in(
+                    $connection->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' ),
+                    $fieldIds
+                )
+            )
+        );
+
+        $statement = $selectQuery->prepare();
+        $statement->execute();
+
+        foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
+        {
+            $fieldLookup[$row['contentobject_id']]['nodePathString'] = $row['path_identification_string'];
+        }
+
         return $fieldLookup;
     }
 }

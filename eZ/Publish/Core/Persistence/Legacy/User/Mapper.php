@@ -11,10 +11,11 @@ namespace eZ\Publish\Core\Persistence\Legacy\User;
 use eZ\Publish\SPI\Persistence\User,
     eZ\Publish\SPI\Persistence\User\Role,
     eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
-    eZ\Publish\SPI\Persistence\User\Policy;
+    eZ\Publish\SPI\Persistence\User\Policy,
+    eZ\Publish\SPI\Persistence\User\RoleAssignment;
 
 /**
- * mapper for User realted objects
+ * mapper for User related objects
  */
 class Mapper
 {
@@ -42,7 +43,7 @@ class Mapper
      * Map data for a set of user data
      *
      * @param array $data
-     * @return \eZ\Publish\SPI\Persistence\User\User[]
+     * @return \eZ\Publish\SPI\Persistence\User[]
      */
     public function mapUsers( array $data )
     {
@@ -120,7 +121,7 @@ class Mapper
             $role->groupIds[] = $row['ezuser_role_contentobject_id'];
         }
 
-        // Remove dublicates and santitize arrays
+        // Remove duplicates and sanitize arrays
         $role->groupIds = array_values( array_unique( array_filter( $role->groupIds ) ) );
         $role->policies = $this->mapPolicies( $data );
 
@@ -148,5 +149,60 @@ class Mapper
         }
 
         return $roles;
+    }
+
+    /**
+     * Map data for a set of role assignments
+     *
+     * @param array $data
+     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
+     */
+    public function mapRoleAssignments( array $data )
+    {
+        $roleAssignmentData = array();
+        foreach ( $data as $row )
+        {
+            $roleId = (int)$row['role_id'];
+            $contentId = (int)$row['contentobject_id'];
+            $limitIdentifier = $row['limit_identifier'];
+            if ( !empty( $limitIdentifier ) )
+            {
+                if ( !isset( $roleAssignmentData[$roleId][$contentId][$limitIdentifier] ) )
+                {
+                    $roleAssignmentData[$roleId][$contentId][$limitIdentifier] = new RoleAssignment(
+                        array(
+                            'id' => $roleId,
+                            'contentId' => $contentId,
+                            'limitationIdentifier' => $limitIdentifier,
+                            'values' => array( $row['limit_value'] )
+                        )
+                    );
+                }
+                else
+                {
+                    $roleAssignmentData[$roleId][$contentId][$limitIdentifier]->values[] = $row['limit_value'];
+                }
+            }
+            else
+            {
+                $roleAssignmentData[$roleId][$contentId] = new RoleAssignment(
+                    array(
+                        'id' => $roleId,
+                        'contentId' => $contentId
+                    )
+                );
+            }
+        }
+
+        $roleAssignments = array();
+        array_walk_recursive(
+            $roleAssignmentData,
+            function( $roleAssignment ) use ( &$roleAssignments )
+            {
+                $roleAssignments[] = $roleAssignment;
+            }
+        );
+
+        return $roleAssignments;
     }
 }

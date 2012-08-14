@@ -12,6 +12,7 @@ use eZ\Publish\SPI\Persistence\User,
     eZ\Publish\SPI\Persistence\User\Role,
     eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
     eZ\Publish\SPI\Persistence\User\Policy,
+    eZ\Publish\SPI\Persistence\User\RoleAssignment,
     eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
@@ -76,7 +77,7 @@ class UserHandlerTest extends HandlerTest
     {
         try
         {
-            $users = $this->persistenceHandler->userHandler()->loadByLogin( 'nospam@ez.no' );
+            $this->persistenceHandler->userHandler()->loadByLogin( 'nospam@ez.no' );
             $this->fail( 'Succeeded loading user by non existent email' );
         }
         catch ( NotFound $e )
@@ -100,7 +101,7 @@ class UserHandlerTest extends HandlerTest
     {
         try
         {
-            $users = $this->persistenceHandler->userHandler()->loadByLogin( 'kamelåså' );
+            $this->persistenceHandler->userHandler()->loadByLogin( 'kamelåså' );
             $this->fail( 'Succeeded loading user by non existent login' );
         }
         catch ( NotFound $e )
@@ -109,7 +110,7 @@ class UserHandlerTest extends HandlerTest
 
         try
         {
-            $users = $this->persistenceHandler->userHandler()->loadByLogin( 'kamelåså@ez.no', true );
+            $this->persistenceHandler->userHandler()->loadByLogin( 'kamelåså@ez.no', true );
             $this->fail( 'Succeeded loading user by non existent email' );
         }
         catch ( NotFound $e )
@@ -295,7 +296,7 @@ class UserHandlerTest extends HandlerTest
         $this->assertCount( 2, $roles );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $roles[0] );
 
-        $obj = $handler->createRole( self::getRole() );
+        $handler->createRole( self::getRole() );
         $roles = $handler->loadRoles();
         $this->assertCount( 3, $roles );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $roles[0] );
@@ -492,9 +493,16 @@ class UserHandlerTest extends HandlerTest
         $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
-        $obj = $handler->loadRole( $obj->id );
-        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
-        $this->assertTrue( in_array( 42, $obj->groupIds ), 'Role was not properly assigned to User Group with id: 42' );
+
+        $roleAssignments = $handler->getRoleAssignments( 42 );
+        // See if our role was properly assigned to the user group
+        foreach ( $roleAssignments as $roleAssignment )
+        {
+            if ( $roleAssignment->id == $obj->id )
+                return;
+        }
+
+        $this->fail( 'Role was not properly assigned to User Group with id: 42' );
     }
 
     /**
@@ -536,20 +544,6 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * Test assignRole function
-     *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::assignRole
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function testAssignRoleAlreadyAssigned()
-    {
-        $handler = $this->persistenceHandler->userHandler();
-        $obj = $handler->createRole( self::getRole() );
-        $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
-        $handler->assignRole( 42, $obj->id );
-    }
-
-    /**
      * Test unAssignRole function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::unAssignRole
@@ -560,14 +554,28 @@ class UserHandlerTest extends HandlerTest
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
 
-        $obj = $handler->loadRole( $obj->id );
-        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
-        $this->assertTrue( in_array( 42, $obj->groupIds ), 'Role was not properly assigned to User Group with id: 42' );
+        $roleAssignments = $handler->getRoleAssignments( 42 );
+        // See if our role was properly assigned to the user group
+        $roleAssigned = false;
+        foreach ( $roleAssignments as $roleAssignment )
+        {
+            if ( $roleAssignment->id == $obj->id )
+                $roleAssigned = true;
+        }
+
+        if ( !$roleAssigned )
+        {
+            $this->fail( 'Role was not properly assigned to User Group with id: 42' );
+        }
 
         $handler->unAssignRole( 42, $obj->id );// 42: Anonymous Users
-        $obj = $handler->loadRole( $obj->id );
-        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
-        $this->assertFalse( in_array( 42, $obj->groupIds ), 'Role was not properly assigned to User Group with id: 42' );
+
+        $roleAssignments = $handler->getRoleAssignments( 42 );
+        foreach ( $roleAssignments as $roleAssignment )
+        {
+            if ( $roleAssignment->id == $obj->id )
+                $this->fail( 'Role was not unassigned from User Group with id: 42' );
+        }
     }
 
     /**
@@ -750,6 +758,30 @@ class UserHandlerTest extends HandlerTest
 
         $list = $handler->loadPoliciesByUserId( 10 );// 10: Anonymous User
         $this->assertEquals( 4, count( $list ) );
+    }
+
+    /**
+     * Test getRoleAssignments function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::getRoleAssignments
+     */
+    public function testGetRoleAssignments()
+    {
+        $handler = $this->persistenceHandler->userHandler();
+
+        $this->assertEquals(
+            array(
+                new RoleAssignment(
+                    array(
+                        'id' => 1,
+                        'contentId' => 11,
+                        'limitationIdentifier' => null,
+                        'values' => null
+                    )
+                )
+            ),
+            $handler->getRoleAssignments( 11 )
+        );
     }
 
     /**
