@@ -27,8 +27,7 @@ class Simplified extends BaseParser implements InputParser
         'h' => array( 'name' => 'header' ),
         'p' => array( 'name' => 'paragraph' ),
         'para' => array( 'name' => 'paragraph' ),
-        'br' => array( 'name' => 'br',
-                            'noChildren' => true ),
+        'br' => array( 'name' => 'br', 'noChildren' => true ),
         'a' => array( 'name' => 'link' ),
         'h1' => array( 'nameHandler' => 'tagNameHeader' ),
         'h2' => array( 'nameHandler' => 'tagNameHeader' ),
@@ -36,83 +35,91 @@ class Simplified extends BaseParser implements InputParser
         'h4' => array( 'nameHandler' => 'tagNameHeader' ),
         'h5' => array( 'nameHandler' => 'tagNameHeader' ),
         'h6' => array( 'nameHandler' => 'tagNameHeader' ),
-        );
+    );
 
     protected $OutputTags = array(
         'section' => array(),
-
-        'embed' => array( //'parsingHandler' => 'breakInlineFlow',
-                              'structHandler' => 'appendLineParagraph',
-                              'publishHandler' => 'publishHandlerEmbed',
-                              'attributes' => array( 'id' => 'xhtml:id' ),
-                              'requiredInputAttributes' => array( 'href' ) ),
-
+        'embed' => array(
+            //'parsingHandler' => 'breakInlineFlow',
+            'structHandler' => 'appendLineParagraph',
+            'publishHandler' => 'publishHandlerEmbed',
+            'attributes' => array( 'id' => 'xhtml:id' ),
+            'requiredInputAttributes' => array( 'href' ),
+        ),
         'embed-inline' => array( //'parsingHandler' => 'breakInlineFlow',
-                              'structHandler' => 'appendLineParagraph',
-                              'publishHandler' => 'publishHandlerEmbed',
-                              'attributes' => array( 'id' => 'xhtml:id' ),
-                              'requiredInputAttributes' => array( 'href' ) ),
-
-        'object' => array( //'parsingHandler' => 'breakInlineFlow',
-                              'structHandler' => 'appendLineParagraph',
-                              'publishHandler' => 'publishHandlerObject',
-                              'attributes' => array( 'href' => 'image:ezurl_href',
-                                                     'target' => 'image:ezurl_target',
-                                                     'ezurl_href' => 'image:ezurl_href',
-                                                     'ezurl_id' => 'image:ezurl_id',
-                                                     'ezurl_target' => 'image:ezurl_target' ),
-                              'requiredInputAttributes' => array( 'id' ) ),
-
+            'structHandler' => 'appendLineParagraph',
+            'publishHandler' => 'publishHandlerEmbed',
+            'attributes' => array( 'id' => 'xhtml:id' ),
+            'requiredInputAttributes' => array( 'href' ),
+        ),
+        'object' => array(
+            //'parsingHandler' => 'breakInlineFlow',
+            'structHandler' => 'appendLineParagraph',
+            'publishHandler' => 'publishHandlerObject',
+            'attributes' => array(
+                'href' => 'image:ezurl_href',
+                'target' => 'image:ezurl_target',
+                'ezurl_href' => 'image:ezurl_href',
+                'ezurl_id' => 'image:ezurl_id',
+                'ezurl_target' => 'image:ezurl_target',
+            ),
+            'requiredInputAttributes' => array( 'id' ),
+        ),
         'table' => array( 'structHandler' => 'appendParagraph' ),
-
         'tr' => array(),
-
-        'td' => array( 'attributes' => array( 'width' => 'xhtml:width',
-                                                     'colspan' => 'xhtml:colspan',
-                                                     'rowspan' => 'xhtml:rowspan' ) ),
-
-        'th' => array( 'attributes' => array( 'width' => 'xhtml:width',
-                                                     'colspan' => 'xhtml:colspan',
-                                                     'rowspan' => 'xhtml:rowspan' ) ),
-
+        'td' => array(
+            'attributes' => array(
+                'width' => 'xhtml:width',
+                'colspan' => 'xhtml:colspan',
+                'rowspan' => 'xhtml:rowspan',
+            ),
+        ),
+        'th' => array(
+            'attributes' => array(
+                'width' => 'xhtml:width',
+                'colspan' => 'xhtml:colspan',
+                'rowspan' => 'xhtml:rowspan',
+            ),
+        ),
         'ol' => array( 'structHandler' => 'structHandlerLists' ),
-
         'ul' => array( 'structHandler' => 'structHandlerLists' ),
-
         'li' => array( 'autoCloseOn' => array( 'li' ) ),
-
-        'header' => array( 'autoCloseOn' => array( 'paragraph' ),
-                              'structHandler' => 'structHandlerHeader' ),
-
-        'paragraph' => array( 'autoCloseOn' => array( 'paragraph' ),
-                              'publishHandler' => 'publishHandlerParagraph' ),
-
+        'header' => array(
+            'autoCloseOn' => array( 'paragraph' ),
+            'structHandler' => 'structHandlerHeader',
+        ),
+        'paragraph' => array(
+            'autoCloseOn' => array( 'paragraph' ),
+            'publishHandler' => 'publishHandlerParagraph',
+        ),
         'line' => array(),
-
-        'br' => array( 'parsingHandler' => 'breakInlineFlow',
-                              'structHandler' => 'structHandlerBr',
-                              'attributes' => false ),
-
-        'literal' => array( 'parsingHandler' => 'parsingHandlerLiteral',
-                              'structHandler' => 'appendParagraph' ),
-
+        'br' => array(
+            'parsingHandler' => 'breakInlineFlow',
+            'structHandler' => 'structHandlerBr',
+            'attributes' => false,
+        ),
+        'literal' => array(
+            'parsingHandler' => 'parsingHandlerLiteral',
+            'structHandler' => 'appendParagraph',
+        ),
         'strong' => array( 'structHandler' => 'appendLineParagraph' ),
-
         'emphasize' => array( 'structHandler' => 'appendLineParagraph' ),
-
-        'link' => array( 'structHandler' => 'appendLineParagraph',
-                              'publishHandler' => 'publishHandlerLink',
-                              'attributes' => array( 'title' => 'xhtml:title',
-                                                     'id' => 'xhtml:id' ),
-                              'requiredInputAttributes' => array( 'href' ) ),
-
+        'link' => array(
+            'structHandler' => 'appendLineParagraph',
+            'publishHandler' => 'publishHandlerLink',
+            'attributes' => array(
+                'title' => 'xhtml:title',
+                'id' => 'xhtml:id',
+            ),
+            'requiredInputAttributes' => array( 'href' )
+        ),
         'anchor' => array( 'structHandler' => 'appendLineParagraph' ),
-
-        'custom' => array( 'structHandler' => 'structHandlerCustom',
-                              'publishHandler' => 'publishHandlerCustom',
-                              'requiredInputAttributes' => array( 'name' ) ),
-
-        '#text' => array( 'structHandler' => 'structHandlerText' )
+        'custom' => array(
+            'structHandler' => 'structHandlerCustom',
+            'publishHandler' => 'publishHandlerCustom',
+            'requiredInputAttributes' => array( 'name' ),
+        ),
+        '#text' => array( 'structHandler' => 'structHandlerText' ),
     );
 
     public function process( $xmlString, $createRootNode = true  )
@@ -128,33 +135,25 @@ class Simplified extends BaseParser implements InputParser
         switch ( $tagName )
         {
             case 'h1':
-            {
                 $attributes['level'] = '1';
-            } break;
+                break;
             case 'h2':
-            {
                 $attributes['level'] = '2';
-            } break;
+                break;
             case 'h3':
-            {
                 $attributes['level'] = '3';
-            } break;
+                break;
             case 'h4':
-            {
                 $attributes['level'] = '4';
-            } break;
+                break;
             case 'h5':
-            {
                 $attributes['level'] = '5';
-            } break;
+                break;
             case 'h6':
-            {
                 $attributes['level'] = '6';
-            } break;
+                break;
             default :
-            {
                 return '';
-            } break;
         }
         return 'header';
     }
@@ -179,22 +178,17 @@ class Simplified extends BaseParser implements InputParser
             return $ret;
         }
 
-        $text = substr( $data, $pos, $tablePos - $pos );
-
-        $textNode = $this->Document->createTextNode( $text );
-        $element->appendChild( $textNode );
+        $element->appendChild( $this->Document->createTextNode( substr( $data, $pos, $tablePos - $pos ) ) );
 
         $pos = $tablePos + strlen( '</literal>' );
-        $ret = false;
 
-        return $ret;
+        return false;
     }
 
     protected function breakInlineFlow( $element, $param )
     {
         // Breaks the flow of inline tags. Used for non-inline tags caught within inline.
         // Works for tags with no children only.
-        $ret = null;
         $data =& $param[0];
         $pos =& $param[1];
         $tagBeginPos = $param[2];
@@ -202,8 +196,7 @@ class Simplified extends BaseParser implements InputParser
 
         $wholeTagString = substr( $data, $tagBeginPos, $pos - $tagBeginPos );
 
-        if ( $parent &&
-            $this->XMLSchema->isInline( $parent ) )
+        if ( $parent && $this->XMLSchema->isInline( $parent ) )
         {
             $insertData = '';
             $currentParent = $parent;
@@ -246,10 +239,10 @@ class Simplified extends BaseParser implements InputParser
             $data = $insertData . substr( $data, $pos );
             $pos = 0;
             $element = $parent->removeChild( $element );
-            $ret = false;
+            return false;
         }
 
-        return $ret;
+        return null;
     }
 
     /**
@@ -313,8 +306,7 @@ class Simplified extends BaseParser implements InputParser
     // Structure handler for temporary <br> elements
     protected function structHandlerBr( $element, $newParent )
     {
-        $ret = array();
-        $ret['result'] = $newParent;
+        $ret = array( 'result' => $newParent );
         $parent = $element->parentNode;
 
         $next = $element->nextSibling;
@@ -687,8 +679,7 @@ class Simplified extends BaseParser implements InputParser
         if ( $element->childNodes->length == 1 && $line->nodeName == 'line' )
         {
             $lineChildren = array();
-            $lineChildNodes = $line->childNodes;
-            foreach ( $lineChildNodes as $lineChildNode )
+            foreach ( $line->childNodes as $lineChildNode )
             {
                 $lineChildren[] = $lineChildNode;
             }
@@ -958,15 +949,13 @@ class Simplified extends BaseParser implements InputParser
     // Publish handler for 'object' element.
     protected function publishHandlerObject( $element, &$params )
     {
-        $ret = null;
-
         $objectID = $element->getAttribute( 'id' );
         // protection from self-embedding
         if ( $objectID == $this->contentObjectID )
         {
             $this->isInputValid = false;
             $this->Messages[] = "Object '$objectID' can not be embeded to itself.";
-            return $ret;
+            return;
         }
 
         if ( !in_array( $objectID, $this->relatedObjectIDArray ) )
@@ -994,19 +983,13 @@ class Simplified extends BaseParser implements InputParser
         }
 
         $this->convertCustomAttributes( $element );
-
-        return $ret;
     }
 
     // Publish handler for 'custom' element.
     protected function publishHandlerCustom( $element, &$params )
     {
-        $ret = null;
-
         $element->removeAttribute( 'inline' );
         $this->convertCustomAttributes( $element );
-
-        return $ret;
     }
 
     protected function convertCustomAttributes( $element )
