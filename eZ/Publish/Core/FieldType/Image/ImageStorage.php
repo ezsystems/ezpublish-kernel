@@ -78,25 +78,29 @@ class ImageStorage extends GatewayBasedStorage
             return true;
         }
 
-        $nodePathString = $this->getGateway( $context )->getNodePathString( $versionInfo, $field->id );
+        if ( !$this->fileService->exists( $this->fileService->getStorageIdentifier( $storedValue['path'] ) ) )
+        {
+            // Only store a new copy of the image, if it does not exist, yet
+            $nodePathString = $this->getGateway( $context )->getNodePathString( $versionInfo, $field->id );
 
-        $targetPath = $this->getFieldPath(
-            $field->id,
-            $versionInfo->versionNo,
-            $field->languageCode,
-            $nodePathString
-        ) . '/' . $storedValue['fileName'];
+            $targetPath = $this->getFieldPath(
+                $field->id,
+                $versionInfo->versionNo,
+                $field->languageCode,
+                $nodePathString
+            ) . '/' . $storedValue['fileName'];
 
-        // Delete old files on update
-        $this->fileService->remove(
-            $this->fileService->getStorageIdentifier( dirname( $targetPath ) ),
-            true
-        );
+            // Delete old files on update
+            $this->fileService->remove(
+                $this->fileService->getStorageIdentifier( dirname( $targetPath ) ),
+                true
+            );
 
-        $storedValue['path'] = $this->fileService->storeFile(
-            $storedValue['path'],
-            $this->fileService->getStorageIdentifier( $targetPath )
-        );
+            $storedValue['path'] = $this->fileService->storeFile(
+                $storedValue['path'],
+                $this->fileService->getStorageIdentifier( $targetPath )
+            );
+        }
 
         $this->getGateway( $context )->storeImageReference( $storedValue['path'], $field->id );
 

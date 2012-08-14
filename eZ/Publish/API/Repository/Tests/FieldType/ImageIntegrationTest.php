@@ -42,6 +42,11 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
     protected static $leaveStorageData = false;
 
     /**
+     * Stores the loaded image path for copy test.
+     */
+    protected static $loadedImagePath;
+
+    /**
      * Perform storage directory setup on first execution
      *
      * @return void
@@ -267,6 +272,8 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
         $this->assertTrue(
             file_exists( self::$installDir . '/' . $field->value->path )
         );
+
+        self::$loadedImagePath = $field->value->path;
     }
 
     /**
@@ -394,6 +401,11 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
     public function assertCopiedFieldDataLoadedCorrectly( Field $field )
     {
         $this->assertFieldDataLoadedCorrect( $field );
+
+        $this->assertEquals(
+            self::$loadedImagePath,
+            $field->value->path
+        );
     }
 
     /**
