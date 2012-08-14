@@ -54,6 +54,7 @@ class QueryBuilder
             $this->dbHandler->aliasedColumn( $query, 'published', 'ezcontentobject' ),
             $this->dbHandler->aliasedColumn( $query, 'status', 'ezcontentobject' ),
             $this->dbHandler->aliasedColumn( $query, 'name', 'ezcontentobject' ),
+            $this->dbHandler->aliasedColumn( $query, 'language_mask', 'ezcontentobject' ),
             // Content object version
             $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject_version' ),
             $this->dbHandler->aliasedColumn( $query, 'version', 'ezcontentobject_version' ),

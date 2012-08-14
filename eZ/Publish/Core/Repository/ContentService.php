@@ -366,6 +366,11 @@ class ContentService implements ContentServiceInterface
             $contentCreateStruct->ownerId = $this->repository->getCurrentUser()->id;
         }
 
+        if ( $contentCreateStruct->alwaysAvailable === null )
+        {
+            $contentCreateStruct->alwaysAvailable = false;
+        }
+
         // @todo: check for user permissions
 
         if ( isset( $contentCreateStruct->remoteId ) )
