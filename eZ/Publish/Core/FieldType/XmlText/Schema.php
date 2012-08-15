@@ -238,12 +238,17 @@ class Schema
     /**
      * Determines if the tag is inline
      *
-     * @param \DOMNode|\DOMElement $element
+     * @param \DOMNode|\DOMElement|string $element
      *
      * @return bool
      */
-    public function isInline( DOMNode $element )
+    public function isInline( $element )
     {
+        if ( is_string( $element ) )
+        {
+            return $this->schema[$element]['isInline'];
+        }
+
         // Use specific custom tag setting if set
         if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
         {
