@@ -271,10 +271,10 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 new Query( array(
-                    'criterion' => new Criterion\Field(
-                        'price',
+                    'criterion' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::MODIFIED,
                         Criterion\Operator::BETWEEN,
-                        array( 10, 1000 )
+                        array( 1033920275, 1033920794 )
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
