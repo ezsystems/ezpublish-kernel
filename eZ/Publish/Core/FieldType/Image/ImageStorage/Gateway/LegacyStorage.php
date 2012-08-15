@@ -202,5 +202,66 @@ class LegacyStorage extends Gateway
 
         return $fieldLookup;
     }
+
+    /**
+     * Removes all references from $fieldId to a path that starts with $path
+     *
+     * @param string $path
+     * @param mixed $fieldId
+     * @return void
+     */
+    public function removeImageReferences( $path, $fieldId )
+    {
+        $connection = $this->getConnection();
+
+        $deleteQuery = $connection->createDeleteQuery();
+        $deleteQuery->deleteFrom(
+            $connection->quoteTable( 'ezimagefile' )
+        )->where(
+            $deleteQuery->expr->lAnd(
+                $deleteQuery->expr->eq(
+                    $connection->quoteColumn( 'contentobject_attribute_id' ),
+                    $deleteQuery->bindValue( $fieldId, null, \PDO::PARAM_INT )
+                ),
+                $deleteQuery->expr->like(
+                    $connection->quoteColumn( 'filepath' ),
+                    $deleteQuery->bindValue( $path . '%' )
+                )
+            )
+        );
+
+        $statement = $deleteQuery->prepare();
+        $statement->execute();
+    }
+
+    /**
+     * Returns the number of recorded references to the given $path
+     *
+     * @param string $path
+     * @return int
+     */
+    public function countImageReferences( $path )
+    {
+        $connection = $this->getConnection();
+
+        $selectQuery = $connection->createSelectQuery();
+        $selectQuery->select(
+            $selectQuery->expr->count(
+                $connection->quoteColumn( 'id' )
+            )
+        )->from(
+            $connection->quoteTable( 'ezimagefile' )
+        )->where(
+            $selectQuery->expr->like(
+                $connection->quoteColumn( 'filepath' ),
+                $selectQuery->bindValue( $path . '%' )
+            )
+        );
+
+        $statement = $selectQuery->prepare();
+        $statement->execute();
+
+        return (int)$statement->fetchColumn();
+    }
 }
 

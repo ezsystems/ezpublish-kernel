@@ -55,7 +55,6 @@ class ImageStorage extends GatewayBasedStorage
 
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage
-     * @TODO On copy, only reference! But entry in ezimage!
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
@@ -89,12 +88,6 @@ class ImageStorage extends GatewayBasedStorage
                 $field->languageCode,
                 $nodePathString
             ) . '/' . $storedValue['fileName'];
-
-            // Delete old files on update
-            $this->fileService->remove(
-                $this->fileService->getStorageIdentifier( dirname( $targetPath ) ),
-                true
-            );
 
             $storedValue['path'] = $this->fileService->storeFile(
                 $storedValue['path'],
@@ -160,11 +153,13 @@ class ImageStorage extends GatewayBasedStorage
      * @param array $fieldId
      * @param array $context
      * @return bool
-     * @TODO Delete only when no references in ezimage table
+     * @TODO Delete only when no references in ezimage table exist anymore
      */
     public function deleteFieldData( array $fieldId, array $context )
     {
-        $fieldData = $this->getGateway( $context )->getPathData( $fieldId );
+        $gateway = $this->getGateway( $context );
+
+        $fieldData = $gateway->getPathData( $fieldId );
 
         foreach ( $fieldData as $fieldDataSet )
         {
@@ -175,10 +170,15 @@ class ImageStorage extends GatewayBasedStorage
                 $fieldDataSet['nodePathString']
             );
 
-            $storedFieldFiles = $this->fileService->remove(
-                $this->fileService->getStorageIdentifier( $fieldPath ),
-                true
-            );
+            $gateway->removeImageReferences( $fieldPath, $fieldId );
+
+            if ( $gateway->countImageReferences( $fieldPath ) === 0 )
+            {
+                $storedFieldFiles = $this->fileService->remove(
+                    $this->fileService->getStorageIdentifier( $fieldPath ),
+                    true
+                );
+            }
         }
     }
 

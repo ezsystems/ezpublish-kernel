@@ -29,5 +29,30 @@ abstract class Gateway extends StorageGateway
      * @return void
      */
     abstract public function storeImageReference( $path, $fieldId );
+
+    /**
+     * Returns a map of data needed to created a path for $fieldIds
+     *
+     * @param array $fieldIds
+     * @return array
+     */
+    abstract public function getPathData( array $fieldIds );
+
+    /**
+     * Removes all references from $fieldId to a path that starts with $path
+     *
+     * @param string $path
+     * @param mixed $fieldId
+     * @return void
+     */
+    abstract public function removeImageReferences( $path, $fieldId );
+
+    /**
+     * Returns the number of recorded references to the given $path
+     *
+     * @param string $path
+     * @return int
+     */
+    abstract public function countImageReferences( $path );
 }
 

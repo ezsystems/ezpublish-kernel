@@ -279,9 +279,10 @@ class ImageIntergrationTest extends BaseIntegrationTest
             file_exists( ( $filePath = self::$tmpDir . '/' . $field->value->data['path'] ) )
         );
 
-        // Check old files removed before update
+        // Check old files not removed before update
+        // need to stay there for reference integrity
         $this->assertEquals(
-            1,
+            2,
             count( glob( dirname( $filePath ) . '/*' ) )
         );
 
