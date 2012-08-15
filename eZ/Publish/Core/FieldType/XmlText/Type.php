@@ -187,7 +187,7 @@ EOF;
         throw new \RuntimeException( '@todo XmlText has a dependency on version id and version number, after refactoring that is not available' );
         $handler->process( $value->text, $this->fieldTypeTools, $field->version );
 
-        $value->setRawText( $handler->getDocumentAsXml() );
+        $value->setText( $handler->getDocumentAsXml() );
     }
 
     /**

@@ -16,7 +16,7 @@ use eZ\Publish\Core\FieldType\Value as BaseValue,
     eZ\Publish\Core\FieldType\XmlText\Input\Parser\Raw as RawInputParser;
 
 /**
- * Basic, raw value for TextLine field type
+ * Basic for TextLine field type
  */
 class Value extends BaseValue
 {
@@ -28,54 +28,22 @@ class Value extends BaseValue
     public $text;
 
     /**
-     * Text content, as RAW format (self::INPUT_FORMAT_RAW)
-     * @var string
-     */
-    public $rawText;
-
-    /**
-     * Text input format
-     * @type string One of the INPUT_FORMAT_* class constants
-     */
-    private $inputFormat;
-
-    /**
      * Input handler
+     *
      * @var \eZ\Publish\Core\FieldType\XmlText\Input\Handler
      */
     private $inputHandler;
-
-    /**
-     * HTML input format constant
-     */
-    // const INPUT_FORMAT_HTML = 'html';
-
-    /**
-     * Plain text input format constant
-     */
-    const INPUT_FORMAT_PLAIN = 'plain';
-
-    /**
-     * RAW input format constant
-     * Internal storage format
-     */
-    const INPUT_FORMAT_RAW = 'raw';
 
     /**
      * Initializes a new XmlText Value object with $text in
      *
      * @param \eZ\Publish\Core\FieldType\XmlText\Input\Handler $handler
      * @param string $text
-     * @param string $inputFormat Which format the input is provided as. Expects one of the FORMAT_* class constants
      */
-    public function __construct( InputHandler $handler, $text = '', $inputFormat = self::INPUT_FORMAT_PLAIN )
+    public function __construct( InputHandler $handler, $text = '' )
     {
         $this->inputHandler = $handler;
         $this->text = $text;
-        if ( $inputFormat === self::INPUT_FORMAT_RAW )
-            $this->rawText = $text;
-
-        $this->inputFormat = $inputFormat;
     }
 
     /**
@@ -96,6 +64,7 @@ class Value extends BaseValue
 
     /**
      * Returns the input handler depending on the input value type
+     *
      * @return \eZ\Publish\Core\FieldType\XmlText\Input\Handler
      */
     public function getInputHandler()
@@ -104,11 +73,12 @@ class Value extends BaseValue
     }
 
     /**
-     * Sets the raw value for the XmlText to $rawText
-     * @var text
+     * Sets the value for the XmlText to $text
+     *
+     * @param $text string
      */
-    public function setRawText( $rawText )
+    public function setText( $text )
     {
-        $this->rawText = $rawText;
+        $this->text = $text;
     }
 }
