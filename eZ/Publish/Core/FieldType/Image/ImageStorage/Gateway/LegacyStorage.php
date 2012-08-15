@@ -30,6 +30,7 @@ class LegacyStorage extends Gateway
         'version' => 'versionNo',
         'language_code' => 'languageCode',
         'path_identification_string' => 'nodePathString',
+        'data_string' => 'xml',
     );
 
     /**
@@ -130,20 +131,19 @@ class LegacyStorage extends Gateway
     }
 
     /**
-     * Returns a map of data needed to created a path for $fieldIds
+     * Returns a the XML content stored for the given $fieldIds
      *
      * @param array $fieldIds
      * @return array
      */
-    public function getPathData( array $fieldIds )
+    public function getXmlForImages( array $fieldIds )
     {
         $connection = $this->getConnection();
 
         $selectQuery = $connection->createSelectQuery();
         $selectQuery->select(
             $connection->quoteColumn( 'id', 'ezcontentobject_attribute' ),
-            $connection->quoteColumn( 'version', 'ezcontentobject_attribute' ),
-            $connection->quoteColumn( 'language_code', 'ezcontentobject_attribute' )
+            $connection->quoteColumn( 'data_text', 'ezcontentobject_attribute' )
         )->from(
             $connection->quoteTable( 'ezcontentobject_attribute' )
         )->where(
@@ -161,43 +161,7 @@ class LegacyStorage extends Gateway
         $fieldLookup = array();
         foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
         {
-            $fieldLookup[$row['id']] = array(
-                'nodePathString' => null, // default, if not available
-            );
-            foreach ( $row as $fieldName => $fieldValue )
-            {
-                if ( isset( $this->fieldNameMap[$fieldName] ) )
-                {
-                    $fieldLookup[$row['id']][$this->fieldNameMap[$fieldName]] = $fieldValue;
-                }
-            }
-        }
-
-        $selectQuery = $connection->createSelectQuery();
-        $selectQuery->select(
-            $connection->quoteColumn( 'path_identification_string', 'ezcontentobject_tree' ),
-            $connection->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' )
-        )->from(
-            $connection->quoteTable( 'ezcontentobject_tree' )
-        )->where(
-            $selectQuery->expr->lAnd(
-                $selectQuery->expr->eq(
-                    $connection->quoteColumn( 'node_id', 'ezcontentobject_tree' ),
-                    $connection->quoteColumn( 'main_node_id', 'ezcontentobject_tree' )
-                ),
-                $selectQuery->expr->in(
-                    $connection->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' ),
-                    $fieldIds
-                )
-            )
-        );
-
-        $statement = $selectQuery->prepare();
-        $statement->execute();
-
-        foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
-        {
-            $fieldLookup[$row['contentobject_id']]['nodePathString'] = $row['path_identification_string'];
+            $fieldLookup[$row['id']] = $row['data_text'];
         }
 
         return $fieldLookup;

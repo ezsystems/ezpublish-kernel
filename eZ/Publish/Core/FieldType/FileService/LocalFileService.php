@@ -44,9 +44,9 @@ class LocalFileService implements FileService
      * @param string $path
      * @return string
      */
-    protected function getFullPath( $path )
+    protected function getFullPath( $path, $allowLocal = false )
     {
-        if ( substr( $path, 0, 1 ) === '/' )
+        if ( $allowLocal && substr( $path, 0, 1 ) === '/' )
         {
             return $path;
         }
@@ -63,7 +63,7 @@ class LocalFileService implements FileService
      */
     public function storeFile( $sourcePath, $storageIdentifier )
     {
-        $fullSourcePath = $this->getFullPath( $sourcePath );
+        $fullSourcePath = $this->getFullPath( $sourcePath, true );
         $fullTargetPath = $this->getFullPath( $storageIdentifier );
 
         if ( $fullSourcePath == $fullTargetPath )

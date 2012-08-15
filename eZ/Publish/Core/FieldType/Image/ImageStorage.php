@@ -77,7 +77,7 @@ class ImageStorage extends GatewayBasedStorage
             return true;
         }
 
-        if ( !$this->fileService->exists( $this->fileService->getStorageIdentifier( $storedValue['path'] ) ) )
+        if ( !$this->fileService->exists( $storedValue['path'] ) )
         {
             // Only store a new copy of the image, if it does not exist, yet
             $nodePathString = $this->getGateway( $context )->getNodePathString( $versionInfo, $field->id );
@@ -107,6 +107,7 @@ class ImageStorage extends GatewayBasedStorage
         );
 
         $field->value->data = $storedValue;
+        $field->value->externalData = null;
 
         // Data has been updated and needs to be stored!
         return true;
@@ -150,36 +151,57 @@ class ImageStorage extends GatewayBasedStorage
     }
 
     /**
-     * @param array $fieldId
+     * @param array $fieldIds
      * @param array $context
      * @return bool
      * @TODO Delete only when no references in ezimage table exist anymore
      */
-    public function deleteFieldData( array $fieldId, array $context )
+    public function deleteFieldData( array $fieldIds, array $context )
     {
         $gateway = $this->getGateway( $context );
 
-        $fieldData = $gateway->getPathData( $fieldId );
+        $fieldXmls = $gateway->getXmlForImages( $fieldIds );
 
-        foreach ( $fieldData as $fieldDataSet )
+        foreach ( $fieldXmls as $fieldId => $xml )
         {
-            $fieldPath = $this->getFieldPath(
-                $fieldDataSet['fieldId'],
-                $fieldDataSet['versionNo'],
-                $fieldDataSet['languageCode'],
-                $fieldDataSet['nodePathString']
-            );
+            $fieldStorageIdentifier = $this->extractStorageIdentifier( $xml );
 
-            $gateway->removeImageReferences( $fieldPath, $fieldId );
-
-            if ( $gateway->countImageReferences( $fieldPath ) === 0 )
+            if ( $fieldStorageIdentifier === false )
             {
-                $storedFieldFiles = $this->fileService->remove(
-                    $this->fileService->getStorageIdentifier( $fieldPath ),
-                    true
-                );
+                continue;
+            }
+
+            $gateway->removeImageReferences( $fieldStorageIdentifier, $fieldId );
+
+            if ( $gateway->countImageReferences( $fieldStorageIdentifier ) === 0 )
+            {
+                $storedFieldFiles = $this->fileService->remove( $fieldStorageIdentifier, true );
             }
         }
+    }
+
+    /**
+     * Extracts the field storage path from  the given $xml string
+     *
+     * @param string $xml
+     * @return string|false
+     */
+    protected function extractStorageIdentifier( $xml )
+    {
+        if ( empty( $xml ) )
+        {
+            // Empty image value
+            return false;
+        }
+
+        $dom = new \DOMDocument();
+        $dom->loadXml( $xml );
+
+        if ( $dom->documentElement->hasAttribute( 'dirpath' ) )
+        {
+            return $dom->documentElement->getAttribute( 'dirpath' );
+        }
+        return false;
     }
 
     /**

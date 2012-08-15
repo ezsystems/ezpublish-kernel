@@ -324,5 +324,59 @@ class ImageIntergrationTest extends BaseIntegrationTest
         }
 
     }
+
+    /**
+     * @dep_ends \eZ\Publish\SPI\Tests\FieldType\ImageIntergrationTest::testCreateContentType
+     */
+    public function testImagesNotDeletedIfReferencesStillExist()
+    {
+        $contentType = $this->createContentType();
+
+        $firstContent = $this->createContent( $contentType, $this->getInitialValue() );
+
+        $firstField = null;
+        foreach ( $firstContent->fields as $field )
+        {
+            if ( $field->type === $this->getTypeName() )
+            {
+                $firstField = $field;
+            }
+        }
+
+        $clonedValue = clone $firstField->value;
+
+        // Create an image reference copy
+        $secondContent = $this->createContent( $contentType, $clonedValue );
+
+        $secondField = null;
+        foreach ( $secondContent->fields as $field )
+        {
+            if ( $field->type === $this->getTypeName() )
+            {
+                $secondField = $field;
+            }
+        }
+
+        $this->assertNotEquals(
+            $firstField->value->data['fieldId'],
+            $secondField->value->data['fieldId']
+        );
+        unset( $firstField->value->data['fieldId'] );
+        unset( $secondField->value->data['fieldId'] );
+
+        $this->assertEquals( $firstField->value, $secondField->value );
+
+        $this->deleteContent( $firstContent );
+
+        $this->assertTrue(
+            file_exists( self::$tmpDir . '/' . $secondField->value->data['path'] )
+        );
+
+        $this->deleteContent( $secondContent );
+
+        $this->assertFalse(
+            file_exists( self::$tmpDir . '/' . $secondField->value->data['path'] )
+        );
+    }
 }
 

@@ -31,12 +31,12 @@ abstract class Gateway extends StorageGateway
     abstract public function storeImageReference( $path, $fieldId );
 
     /**
-     * Returns a map of data needed to created a path for $fieldIds
+     * Returns a the XML content stored for the given $fieldIds
      *
      * @param array $fieldIds
      * @return array
      */
-    abstract public function getPathData( array $fieldIds );
+    abstract public function getXmlForImages( array $fieldIds );
 
     /**
      * Removes all references from $fieldId to a path that starts with $path
