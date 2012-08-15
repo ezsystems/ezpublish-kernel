@@ -195,7 +195,7 @@ class Schema
     /**
      * @param array $settings
      */
-    function __construct( array $settings = array() )
+    public function __construct( array $settings = array() )
     {
         // Apply default values
         $settings = $settings + array(
@@ -242,7 +242,7 @@ class Schema
      *
      * @return bool
      */
-    function isInline( DOMNode $element )
+    public function isInline( DOMNode $element )
     {
         // Use specific custom tag setting if set
         if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
@@ -266,7 +266,7 @@ class Schema
      * @return bool|null true if elements match schema, false if elements don't match schema, null  in case of errors
      * @todo Add exceptions
      */
-    function check( DOMNode $parent, $child )
+    public function check( DOMNode $parent, $child )
     {
         $parentName = $parent->nodeName;
 
@@ -321,7 +321,7 @@ class Schema
      *
      * @return bool
      */
-    function childrenRequired( DOMNode $element )
+    public function childrenRequired( DOMNode $element )
     {
         // Use specific custom tag setting if set
         if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
@@ -342,7 +342,7 @@ class Schema
      *
      * @return bool
      */
-    function hasAttributes( DOMNode $element )
+    public function hasAttributes( DOMNode $element )
     {
         // Use specific custom tag setting if set
         if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
@@ -363,7 +363,7 @@ class Schema
      *
      * @return array
      */
-    function attributes( DOMNode $element )
+    public function attributes( DOMNode $element )
     {
         // Use specific custom tag setting if set
         if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
@@ -385,7 +385,7 @@ class Schema
      *
      * @return mixed
      */
-    function attributeDefaultValue( DOMNode $element, $attributeName )
+    public function attributeDefaultValue( DOMNode $element, $attributeName )
     {
         // Use specific custom tag setting if set
         if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
@@ -409,7 +409,7 @@ class Schema
      *
      * @return array
      */
-    function attributeDefaultValues( DOMNode $element )
+    public function attributeDefaultValues( DOMNode $element )
     {
         // Use specific custom tag setting if set
         if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
@@ -433,7 +433,7 @@ class Schema
      *
      * @return array
      */
-    function customAttributes( DOMNode $element )
+    public function customAttributes( DOMNode $element )
     {
         // Use specific custom tag setting if set
         if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
@@ -454,7 +454,7 @@ class Schema
      *
      * @return bool
      */
-    function exists( DOMNode $element )
+    public function exists( DOMNode $element )
     {
         if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
         {
@@ -470,7 +470,7 @@ class Schema
      *
      * @return array
      */
-    function getClassesList( DOMNode $element )
+    public function getClassesList( DOMNode $element )
     {
         // Use specific custom tag setting if set
         if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
@@ -486,13 +486,12 @@ class Schema
         return $this->schema[$element->nodeName]['classesList'];
     }
 
-
     /**
      * List of available classes
      *
      * @return array
      */
-    function availableElements()
+    public function availableElements()
     {
         return array_keys( $this->schema );
     }
