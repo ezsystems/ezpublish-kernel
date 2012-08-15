@@ -12,6 +12,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\Type,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 
@@ -189,6 +190,22 @@ abstract class BaseIntegrationTest extends TestCase
 
     public function testCreateContentType()
     {
+        $contentType = $this->createContentType();
+
+        $this->assertNotNull( $contentType->id );
+        self::$contentTypeId = $contentType->id;
+
+        return $contentType;
+    }
+
+    /**
+     * Performs the creation of the content type with a field of the field type
+     * under test
+     *
+     * @return ContentType
+     */
+    protected function createContentType()
+    {
         $createStruct = new Content\Type\CreateStruct( array(
             'name'              => array( 'eng-GB' => 'Test' ),
             'identifier'        => 'test-' . $this->getTypeName(),
@@ -226,12 +243,7 @@ abstract class BaseIntegrationTest extends TestCase
         $handler            = $this->getCustomHandler();
         $contentTypeHandler = $handler->contentTypeHandler();
 
-        $contentType = $contentTypeHandler->create( $createStruct );
-
-        $this->assertNotNull( $contentType->id );
-        self::$contentTypeId = $contentType->id;
-
-        return $contentType;
+        return $contentTypeHandler->create( $createStruct );
     }
 
     /**
@@ -286,8 +298,31 @@ abstract class BaseIntegrationTest extends TestCase
      */
     public function testCreateContent( $contentType )
     {
+        $handler = $this->getCustomHandler();
+
+        $content = $this->createContent( $contentType, $this->getInitialValue() );
+
+        self::$contentId      = $content->contentInfo->id;
+        self::$contentVersion = $content->contentInfo->currentVersionNo;
+
+        $this->postCreationHook( $handler, $content );
+
+        return $content;
+    }
+
+    /**
+     * Creates content of the given $contentType with $fieldValue in
+     * $languageCode
+     *
+     * @param Type $contentType
+     * @param mixed $fieldValue
+     * @param string $languageCode
+     * @return Content
+     */
+    protected function createContent( Type $contentType, $fieldValue, $languageCode = 'eng-GB' )
+    {
         $createStruct = new Content\CreateStruct( array(
-            'name'              => array( 'eng-GB' => 'Test object' ),
+            'name'              => array( $languageCode => 'Test object' ),
             'typeId'            => $contentType->id,
             'sectionId'         => 1,
             'ownerId'           => 14,
@@ -301,7 +336,7 @@ abstract class BaseIntegrationTest extends TestCase
             'fields'            => array(
                 new Content\Field( array(
                     'type'              => 'ezstring',
-                    'languageCode'      => 'eng-GB',
+                    'languageCode'      => $languageCode,
                     'fieldDefinitionId' => $contentType->fieldDefinitions[0]->id,
                     'value'             => new Content\FieldValue( array(
                         'data'    => 'This is just a test object',
@@ -310,23 +345,16 @@ abstract class BaseIntegrationTest extends TestCase
                 ) ),
                 new Content\Field( array(
                     'type'              => $this->getTypeName(),
-                    'languageCode'      => 'eng-GB',
+                    'languageCode'      => $languageCode,
                     'fieldDefinitionId' => $contentType->fieldDefinitions[1]->id,
-                    'value'             => $this->getInitialValue(),
+                    'value'             => $fieldValue,
                 ) ),
             ),
         ) );
 
         $handler = $this->getCustomHandler();
         $contentHandler = $handler->contentHandler();
-
-        $content = $contentHandler->create( $createStruct );
-        self::$contentId      = $content->contentInfo->id;
-        self::$contentVersion = $content->contentInfo->currentVersionNo;
-
-        $this->postCreationHook( $handler, $content );
-
-        return $content;
+        return $contentHandler->create( $createStruct );
     }
 
     /**
@@ -379,6 +407,21 @@ abstract class BaseIntegrationTest extends TestCase
      */
     public function testUpdateField( $field )
     {
+        $field->value = $this->getUpdatedValue();
+
+        return $this->updateContent( self::$contentId, self::$contentVersion, $field );
+    }
+
+    /**
+     * Performs an update on $contentId in $contentVersion setting $field
+     *
+     * @param mixed $contentId
+     * @param mixed $contentVersion
+     * @param Field $field
+     * @return Content
+     */
+    protected function updateContent( $contentId, $contentVersion, Field $field )
+    {
         $handler = $this->getCustomHandler();
 
         $field->value = $this->getUpdatedValue();
@@ -392,7 +435,7 @@ abstract class BaseIntegrationTest extends TestCase
         ) );
 
         $contentHandler = $handler->contentHandler();
-        return $contentHandler->updateContent( self::$contentId, self::$contentVersion, $updateStruct );
+        return $contentHandler->updateContent( $contentId, $contentVersion, $updateStruct );
     }
 
     /**
@@ -425,15 +468,29 @@ abstract class BaseIntegrationTest extends TestCase
         $handler        = $this->getCustomHandler();
         $contentHandler = $handler->contentHandler();
 
-        $contentHandler->removeRawContent(
-            $content->versionInfo->contentId
-        );
+        $this->deleteContent( $content );
 
         $this->assertDeletedFieldDataCorrect( $content );
 
         $contentHandler->load(
             $content->versionInfo->contentId,
             $content->versionInfo->versionNo
+        );
+    }
+
+    /**
+     * Deletes the given $content
+     *
+     * @param Content $content
+     * @return void
+     */
+    protected function deleteContent( Content $content )
+    {
+        $handler        = $this->getCustomHandler();
+        $contentHandler = $handler->contentHandler();
+
+        $contentHandler->removeRawContent(
+            $content->versionInfo->contentId
         );
     }
 
