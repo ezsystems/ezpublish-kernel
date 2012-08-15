@@ -22,7 +22,7 @@ use eZ\Publish\Core\FieldType\XmlText\Input\Parser as InputParser,
  */
 class Raw extends BaseParser implements InputParser
 {
-    protected $OutputTags = array(
+    protected $outputTags = array(
         'section' => array(),
 
         'embed' => array( //'parsingHandler' => 'breakInlineFlow',
@@ -184,7 +184,7 @@ class Raw extends BaseParser implements InputParser
 
             $nsUri = str_replace( '"', '', trim( $tagPartArray[1] ) );
             $nsName = $tagPartArray[0];
-            if ( isset( $namespaces[$nsName] ) && $nsUri === $this->Namespaces[$nsName] )
+            if ( isset( $namespaces[$nsName] ) && $nsUri === $this->namespaces[$nsName] )
             {
                 unset( $namespaces[$nsName] );
             }
@@ -248,7 +248,7 @@ class Raw extends BaseParser implements InputParser
 
         $text = substr( $data, $pos, $tablePos - $pos );
 
-        $textNode = $this->Document->createTextNode( $text );
+        $textNode = $this->document->createTextNode( $text );
         $element->appendChild( $textNode );
 
         $pos = $tablePos + strlen( '</literal>' );
@@ -270,31 +270,31 @@ class Raw extends BaseParser implements InputParser
         $wholeTagString = substr( $data, $tagBeginPos, $pos - $tagBeginPos );
 
         if ( $parent &&
-            $this->XMLSchema->isInline( $parent ) )
+            $this->xmlSchema->isInline( $parent ) )
         {
             $insertData = '';
             $currentParent = $parent;
             // Close all parent tags
-            end( $this->ParentStack );
+            end( $this->parentStack );
             do
             {
-                $stackData = current( $this->ParentStack );
+                $stackData = current( $this->parentStack );
                 $currentParentName = $stackData[0];
                 $insertData .= "</$currentParentName>";
                 $currentParent->setAttributeNS( 'http://ez.no/namespaces/ezpublish3/temporary/', 'tmp:new-element', 'true' );
                 $currentParent = $currentParent->parentNode;
-                prev( $this->ParentStack );
+                prev( $this->parentStack );
             }
-            while ( $this->XMLSchema->isInline( $currentParent ) );
+            while ( $this->xmlSchema->isInline( $currentParent ) );
 
             $insertData .= $wholeTagString;
 
             $currentParent = $parent;
-            end( $this->ParentStack );
+            end( $this->parentStack );
             $appendData = '';
             do
             {
-                $stackData = current( $this->ParentStack );
+                $stackData = current( $this->parentStack );
                 $currentParentName = $stackData[0];
                 $currentParentAttrString = '';
                 if ( $stackData[2] )
@@ -304,9 +304,9 @@ class Raw extends BaseParser implements InputParser
                 $currentParentAttrString .= " tmp:new-element='true'";
                 $appendData = "<$currentParentName$currentParentAttrString>" . $appendData;
                 $currentParent = $currentParent->parentNode;
-                prev( $this->ParentStack );
+                prev( $this->parentStack );
             }
-            while ( $this->XMLSchema->isInline( $currentParent ) );
+            while ( $this->xmlSchema->isInline( $currentParent ) );
 
             $insertData .= $appendData;
 
@@ -337,7 +337,7 @@ class Raw extends BaseParser implements InputParser
         $newParentName = $newParent != null ? $newParent->nodeName : '';
 
         // Correct structure by adding <line> and <paragraph> tags.
-        if ( $parentName == 'line' || $this->XMLSchema->isInline( $parent ) )
+        if ( $parentName == 'line' || $this->xmlSchema->isInline( $parent ) )
         {
             return $ret;
         }
@@ -364,7 +364,7 @@ class Raw extends BaseParser implements InputParser
             $newLine->appendChild( $element );
             $ret['result'] = $newLine;
         }
-        elseif ( $this->XMLSchema->check( $parent, 'paragraph' ) )
+        elseif ( $this->xmlSchema->check( $parent, 'paragraph' ) )
         {
             $newLine = $this->createAndPublishElement( 'line', $ret );
             $newPara = $this->createAndPublishElement( 'paragraph', $ret );
@@ -390,7 +390,7 @@ class Raw extends BaseParser implements InputParser
             $next &&
             $next->nodeName == 'br' )
         {
-            if ( $this->XMLSchema->check( $parent, 'paragraph' ) )
+            if ( $this->xmlSchema->check( $parent, 'paragraph' ) )
             {
                 if ( !$newParent )
                 {
@@ -471,7 +471,7 @@ class Raw extends BaseParser implements InputParser
                 $para->appendChild( $element );
                 $ret['result'] = $newParent->parentNode;
             }
-            elseif ( $this->XMLSchema->check( $parentName, 'paragraph' ) )
+            elseif ( $this->xmlSchema->check( $parentName, 'paragraph' ) )
             {
                 $newPara = $this->createAndPublishElement( 'paragraph', $ret );
                 $parent->replaceChild( $newPara, $element );
@@ -525,7 +525,7 @@ class Raw extends BaseParser implements InputParser
                 $newParent = $parent;
                 for ( $i = $sectionLevel; $i < $level; $i++ )
                 {
-                    $newSection = $this->Document->createElement( 'section' );
+                    $newSection = $this->document->createElement( 'section' );
                     if ( $i == $sectionLevel )
                     {
                         $newSection = $newParent->insertBefore( $newSection, $element );
@@ -555,7 +555,7 @@ class Raw extends BaseParser implements InputParser
                         {
                             if ( $headerLevel == $level )
                             {
-                                $newParent2 = $this->Document->createElement( 'section' );
+                                $newParent2 = $this->document->createElement( 'section' );
                                 $newParent->parentNode->appendChild( $newParent2 );
                                 $newParent = $newParent2;
                             }
@@ -610,7 +610,7 @@ class Raw extends BaseParser implements InputParser
     protected function structHandlerCustom( $element, &$params )
     {
         $ret = null;
-        if ( $this->XMLSchema->isInline( $element ) )
+        if ( $this->xmlSchema->isInline( $element ) )
         {
             $ret = $this->appendLineParagraph( $element, $params );
         }
@@ -641,7 +641,7 @@ class Raw extends BaseParser implements InputParser
             $prev = $element->previousSibling;
             if ( !$prev )
             {
-                $li = $this->Document->createElement( 'li' );
+                $li = $this->document->createElement( 'li' );
                 $li = $parent->insertBefore( $li, $element );
                 $element = $parent->removeChild( $element );
                 $li->appendChild( $element );
@@ -651,7 +651,7 @@ class Raw extends BaseParser implements InputParser
                 $lastChild = $prev->lastChild;
                 if ( $lastChild->nodeName != 'paragraph' )
                 {
-                    $para = $this->Document->createElement( 'paragraph' );
+                    $para = $this->document->createElement( 'paragraph' );
                     $element = $parent->removeChild( $element );
                     $prev->appendChild( $element );
                     $ret['result'] = $para;
@@ -993,7 +993,7 @@ class Raw extends BaseParser implements InputParser
             else
             {
                 $this->isInputValid = false;
-                $this->Messages[] = 'Invalid reference in &lt;embed&gt; tag. Note that <embed> tag supports only \'eznode\' and \'ezobject\' protocols.';
+                $this->messages[] = 'Invalid reference in &lt;embed&gt; tag. Note that <embed> tag supports only \'eznode\' and \'ezobject\' protocols.';
                 $element->removeAttribute( 'href' );
                 return $ret;
             }
@@ -1014,7 +1014,7 @@ class Raw extends BaseParser implements InputParser
         if ( $objectID == $this->contentObjectID )
         {
             $this->isInputValid = false;
-            $this->Messages[] = "Object '$objectID' can not be embeded to itself.";
+            $this->messages[] = "Object '$objectID' can not be embeded to itself.";
             return $ret;
         }
 
@@ -1024,17 +1024,17 @@ class Raw extends BaseParser implements InputParser
         }
 
         // If there are any image object with links.
-        $href = $element->getAttributeNS( $this->Namespaces['image'], 'ezurl_href' );
+        $href = $element->getAttributeNS( $this->namespaces['image'], 'ezurl_href' );
         //washing href. single and double quotes inside url replaced with their urlencoded form
         $href = str_replace( array('\'','"'), array('%27','%22'), $href );
 
-        $urlID = $element->getAttributeNS( $this->Namespaces['image'], 'ezurl_id' );
+        $urlID = $element->getAttributeNS( $this->namespaces['image'], 'ezurl_id' );
 
         if ( $href != null )
         {
             $urlID = eZURL::registerURL( $href );
-            $element->setAttributeNS( $this->Namespaces['image'], 'image:ezurl_id', $urlID );
-            $element->removeAttributeNS( $this->Namespaces['image'], 'ezurl_href' );
+            $element->setAttributeNS( $this->namespaces['image'], 'image:ezurl_id', $urlID );
+            $element->removeAttributeNS( $this->namespaces['image'], 'ezurl_href' );
         }
 
         if ( $urlID != null )
@@ -1060,7 +1060,7 @@ class Raw extends BaseParser implements InputParser
 
     protected function convertCustomAttributes( $element )
     {
-        $schemaAttrs = $this->XMLSchema->attributes( $element );
+        $schemaAttrs = $this->xmlSchema->attributes( $element );
         $attributes = $element->attributes;
 
         for ( $i = $attributes->length - 1; $i >= 0; $i-- )
@@ -1068,7 +1068,7 @@ class Raw extends BaseParser implements InputParser
             $attr = $attributes->item( $i );
             if ( !$attr->prefix && !in_array( $attr->nodeName, $schemaAttrs ) )
             {
-                $element->setAttributeNS( $this->Namespaces['custom'], 'custom:' . $attr->name, $element->getAttribute( $attr->name ) );
+                $element->setAttributeNS( $this->namespaces['custom'], 'custom:' . $attr->name, $element->getAttribute( $attr->name ) );
                 $element->removeAttributeNode( $attr );
             }
         }

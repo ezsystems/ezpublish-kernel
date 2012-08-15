@@ -31,9 +31,9 @@ class OnlineEditor extends BaseParser implements InputParser
      * Maps input tags (html) to a output tag or a hander to
      * decide what kind of ezxml tag to use.
      *
-     * @var array $InputTags
+     * @var array $inputTags
      */
-    protected $InputTags = array(
+    protected $inputTags = array(
         'section' => array( 'name' => 'section' ),
         'b' => array( 'name' => 'strong' ),
         'bold' => array( 'name' => 'strong' ),
@@ -76,9 +76,9 @@ class OnlineEditor extends BaseParser implements InputParser
      * Maps output tags (ezxml) to varius handlers at different stages
      * decide what kind of ezxml tag to use.
      *
-     * @var array $OutputTags
+     * @var array $outputTags
      */
-    protected $OutputTags = array(
+    protected $outputTags = array(
         'section' => array(),
 
         'embed' => array( 'initHandler' => 'transformStyles',
@@ -440,7 +440,7 @@ class OnlineEditor extends BaseParser implements InputParser
         $text = $this->entitiesDecode( $text );
         $text = $this->convertNumericEntities( $text );
 
-        $textNode = $this->Document->createTextNode( $text );
+        $textNode = $this->document->createTextNode( $text );
         $element->appendChild( $textNode );
 
         $param[1] = $prePos + strlen( '</pre>' );
@@ -473,14 +473,14 @@ class OnlineEditor extends BaseParser implements InputParser
         // Fix empty paragraphs in Gecko (<p><br></p>)
         if ( $text === '<br>' || $text === '<BR>' || $text === '<br />' )
         {
-            if ( !$this->XMLSchema->Schema['paragraph']['childrenRequired'] )
+            if ( !$this->xmlSchema->schema['paragraph']['childrenRequired'] )
             {
-                $textNode = $this->Document->createTextNode( $this->entitiesDecode( '&nbsp;' ) );
+                $textNode = $this->document->createTextNode( $this->entitiesDecode( '&nbsp;' ) );
                 $element->appendChild( $textNode );
             }
         }
         // Fix empty paragraphs in IE  (<P>&nbsp;</P>)
-        else if ( $text === '&nbsp;' && $this->XMLSchema->Schema['paragraph']['childrenRequired'] )
+        else if ( $text === '&nbsp;' && $this->xmlSchema->schema['paragraph']['childrenRequired'] )
         {
             $parent = $element->parentNode;
             $parent->removeChild( $element );
@@ -510,41 +510,41 @@ class OnlineEditor extends BaseParser implements InputParser
         $wholeTagString = substr( $data, $tagBeginPos, $pos - $tagBeginPos );
 
         if ( $parent &&
-            //!$this->XMLSchema->isInline( $element ) &&
-            $this->XMLSchema->isInline( $parent ) //&&
-            //!$this->XMLSchema->check( $parent, $element )
+            //!$this->xmlSchema->isInline( $element ) &&
+            $this->xmlSchema->isInline( $parent ) //&&
+            //!$this->xmlSchema->check( $parent, $element )
             )
         {
             $insertData = '';
             $currentParent = $parent;
-            end( $this->ParentStack );
+            end( $this->parentStack );
             do
             {
-                $stackData = current( $this->ParentStack );
+                $stackData = current( $this->parentStack );
                 $currentParentName = $stackData[0];
                 $insertData .= '</' . $currentParentName . '>';
                 $currentParent = $currentParent->parentNode;
-                prev( $this->ParentStack );
+                prev( $this->parentStack );
             }
-            while ( $this->XMLSchema->isInline( $currentParent ) );
+            while ( $this->xmlSchema->isInline( $currentParent ) );
 
             $insertData .= $wholeTagString;
 
             $currentParent = $parent;
-            end( $this->ParentStack );
+            end( $this->parentStack );
             $appendData = '';
             do
             {
-                $stackData = current( $this->ParentStack );
+                $stackData = current( $this->parentStack );
                 $currentParentName = $stackData[0];
                 $currentParentAttrString = '';
                 if ( $stackData[2] )
                     $currentParentAttrString = ' ' . $stackData[2];
                 $appendData = '<' . $currentParentName . $currentParentAttrString . '>' . $appendData;
                 $currentParent = $currentParent->parentNode;
-                prev( $this->ParentStack );
+                prev( $this->parentStack );
             }
-            while ( $this->XMLSchema->isInline( $currentParent ) );
+            while ( $this->xmlSchema->isInline( $currentParent ) );
 
             $insertData .= $appendData;
 
@@ -567,7 +567,7 @@ class OnlineEditor extends BaseParser implements InputParser
      */
     protected function initHandlerCustom( $element, &$params )
     {
-        if ( $this->XMLSchema->isInline( $element ) )
+        if ( $this->xmlSchema->isInline( $element ) )
             return null;
 
         self::elementStylesToAttribute( $element );
@@ -633,7 +633,7 @@ class OnlineEditor extends BaseParser implements InputParser
         $newParentName = $newParent != null ? $newParent->nodeName : '';
 
         // Correct schema by adding <line> and <paragraph> tags.
-        if ( $parentName === 'line' || $this->XMLSchema->isInline( $parent ) )
+        if ( $parentName === 'line' || $this->xmlSchema->isInline( $parent ) )
         {
             return $ret;
         }
@@ -659,7 +659,7 @@ class OnlineEditor extends BaseParser implements InputParser
             $newLine->appendChild( $element );
             $ret['result'] = $newLine;
         }
-        elseif ( $this->XMLSchema->check( $parent, 'paragraph' ) )
+        elseif ( $this->xmlSchema->check( $parent, 'paragraph' ) )
         {
             $newLine = $this->createAndPublishElement( 'line', $ret );
             $newPara = $this->createAndPublishElement( 'paragraph', $ret );
@@ -726,7 +726,7 @@ class OnlineEditor extends BaseParser implements InputParser
                 return $ret;
             }
 
-            if ( $this->XMLSchema->check( $parentName, 'paragraph' ) )
+            if ( $this->xmlSchema->check( $parentName, 'paragraph' ) )
             {
                 $newPara = $this->createAndPublishElement( 'paragraph', $ret );
                 $parent->replaceChild( $newPara, $element );
@@ -795,14 +795,14 @@ class OnlineEditor extends BaseParser implements InputParser
         $parent = $element->parentNode;
         if ( $addEmph === true )
         {
-            $emph = $this->Document->createElement( 'emphasize' );
+            $emph = $this->document->createElement( 'emphasize' );
             $emph = $parent->insertBefore( $emph, $element );
             $element = $parent->removeChild( $element );
             $emph->appendChild( $element );
         }
         if ( $addStrong === true )
         {
-            $strong = $this->Document->createElement( 'strong' );
+            $strong = $this->document->createElement( 'strong' );
             $strong = $parent->insertBefore( $strong, $element );
             $element = $parent->removeChild( $element );
             $strong->appendChild( $element );
@@ -891,7 +891,7 @@ class OnlineEditor extends BaseParser implements InputParser
                 $newTempParent = $parent;
                 for ( $i = $sectionLevel; $i < $level; $i++ )
                 {
-                    $newSection = $this->Document->createElement( 'section' );
+                    $newSection = $this->document->createElement( 'section' );
                     if ( $i == $sectionLevel )
                     {
                         $newSection = $newTempParent->insertBefore( $newSection, $element );
@@ -964,7 +964,7 @@ class OnlineEditor extends BaseParser implements InputParser
     protected function structHandlerCustom( $element, $newParent )
     {
         $ret = array();
-        $isInline = $this->XMLSchema->isInline( $element );
+        $isInline = $this->xmlSchema->isInline( $element );
         if ( $isInline )
         {
             $ret = $this->appendLineParagraph( $element, $newParent );
@@ -973,7 +973,7 @@ class OnlineEditor extends BaseParser implements InputParser
             if ( $value )
             {
                 $value = $this->washText( $value );
-                $textNode = $this->Document->createTextNode( $value );
+                $textNode = $this->document->createTextNode( $value );
                 $element->appendChild( $textNode );
             }
         }
@@ -1009,7 +1009,7 @@ class OnlineEditor extends BaseParser implements InputParser
             $prev = $element->previousSibling;
             if ( !$prev )
             {
-                $li = $this->Document->createElement( 'li' );
+                $li = $this->document->createElement( 'li' );
                 $li = $parent->insertBefore( $li, $element );
                 $element = $parent->removeChild( $element );
                 $li->appendChild( $element );
@@ -1019,7 +1019,7 @@ class OnlineEditor extends BaseParser implements InputParser
                 $lastChild = $prev->lastChild;
                 if ( $lastChild->nodeName !== 'paragraph' )
                 {
-                    $para = $this->Document->createElement( 'paragraph' );
+                    $para = $this->document->createElement( 'paragraph' );
                     $element = $parent->removeChild( $element );
                     $prev->appendChild( $element );
                     $ret['result'] = $para;
@@ -1062,7 +1062,7 @@ class OnlineEditor extends BaseParser implements InputParser
 
         $parentNode = $element->parentNode;
         if ( $parentNode->nodeName === 'custom' &&
-            !$this->XMLSchema->isInline( $parentNode ) &&
+            !$this->xmlSchema->isInline( $parentNode ) &&
             $parentNode->childNodes->length === 1 &&
             $parentNode->getAttribute( 'name' ) === $element->textContent )
         {
@@ -1129,7 +1129,7 @@ class OnlineEditor extends BaseParser implements InputParser
                 {
                     if ( !$this->handler->checkContentById( $contentId ))
                     {
-                        $this->Messages[] = "Object '$contentId' does not exist.";
+                        $this->messages[] = "Object '$contentId' does not exist.";
                     }
                 }
             }
@@ -1154,7 +1154,7 @@ class OnlineEditor extends BaseParser implements InputParser
                         $location = $this->handler->getLocationById( $locationId );
                         if ( $location === false )
                         {
-                            $this->Messages[] = "Location $locationId does not exist";
+                            $this->messages[] = "Location $locationId does not exist";
                         }
                         else
                         {
@@ -1170,7 +1170,7 @@ class OnlineEditor extends BaseParser implements InputParser
                         $location = $this->handler->getLocationByPath( $nodePath );
                         if ( $location === false )
                         {
-                            $this->Messages[] = "Node &apos;$nodePath&apos; does not exist.";
+                            $this->messages[] = "Node &apos;$nodePath&apos; does not exist.";
                         }
                         else
                         {
@@ -1205,7 +1205,7 @@ class OnlineEditor extends BaseParser implements InputParser
                     if ( preg_match( "/^(java|vb)script:.*/i" , $url ) )
                     {
                         $this->isInputValid = false;
-                        $this->Messages[] = "Using scripts in links is not allowed, '$url' has been removed";
+                        $this->messages[] = "Using scripts in links is not allowed, '$url' has been removed";
                         $element->removeAttribute( 'href' );
                         return $ret;
                     }
@@ -1218,7 +1218,7 @@ class OnlineEditor extends BaseParser implements InputParser
                         {
                             $this->isInputValid = false;
                             if ( $this->errorLevel >= 0 )
-                                $this->Messages[] = ezpI18n::tr( 'kernel/classes/datatypes/ezxmltext',
+                                $this->messages[] = ezpI18n::tr( 'kernel/classes/datatypes/ezxmltext',
                                                             "Invalid e-mail address: '%1'",
                                                             false,
                                                             array( $mailAddr[1] ) );
