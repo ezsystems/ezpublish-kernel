@@ -107,7 +107,7 @@ class Type extends FieldType
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />
 EOF;
-        return new Value( $this->inputHandler, $value, Value::INPUT_FORMAT_RAW );
+        return new Value( $this->inputHandler, $value );
     }
 
     /**
