@@ -312,7 +312,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query( array(
                     'criterion' => new Criterion\FullText(
-                        'applie*'
+                        'where other*'
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
