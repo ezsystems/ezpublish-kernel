@@ -289,11 +289,11 @@ class SearchServiceTest extends BaseTest
                                 Criterion\Operator::EQ,
                                 'Members'
                             ),
-                            new Criterion\Field(
-                                'price',
+                            new Criterion\DateMetadata(
+                                Criterion\DateMetadata::MODIFIED,
                                 Criterion\Operator::BETWEEN,
-                                array( 10, 1000 )
-                            )
+                                array( 1033920275, 1033920794 )
+                            ),
                         )
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
