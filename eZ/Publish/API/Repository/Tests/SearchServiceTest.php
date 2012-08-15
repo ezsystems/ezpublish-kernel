@@ -543,7 +543,7 @@ class SearchServiceTest extends BaseTest
                     'limit'       => 10,
                     'facetBuilders' => array(
                         new FacetBuilder\ContentTypeFacetBuilder( array(
-                            'minCount' => 10,
+                            'minCount' => 3,
                         ) )
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
