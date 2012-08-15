@@ -303,7 +303,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query( array(
                     'criterion' => new Criterion\FullText(
-                        'applied webpage'
+                        'All rights reserved'
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
