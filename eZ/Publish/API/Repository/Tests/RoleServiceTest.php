@@ -858,14 +858,10 @@ class RoleServiceTest extends BaseTest
 
         /* END: Use Case */
 
-        $this->assertEquals( 2, count( $roleAssignments ) );
+        $this->assertEquals( 1, count( $roleAssignments ) );
         $this->assertInstanceOf(
             '\eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment',
             reset( $roleAssignments )
-        );
-        $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment',
-            end( $roleAssignments )
         );
 
         return $roleAssignments;
@@ -883,14 +879,8 @@ class RoleServiceTest extends BaseTest
     public function testGetRoleAssignmentsContainExpectedLimitation( array $roleAssignments )
     {
         $this->assertEquals(
-            array(
-                'Subtree',
-                'Subtree',
-            ),
-            array(
-                reset( $roleAssignments )->limitation->getIdentifier(),
-                end( $roleAssignments )->limitation->getIdentifier(),
-            )
+            'Subtree',
+            reset( $roleAssignments )->limitation->getIdentifier()
         );
     }
 
