@@ -1328,9 +1328,9 @@ class RoleServiceTest extends BaseTest
                 array( 1, 'user', 'login' ),
                 array( 1, 'user', 'login' ),
                 array( 1, 'user', 'login' ),
-                array( 6, 'notification', 'use' ),
-                array( 6, 'user', 'password' ),
-                array( 6, 'user', 'selfedit' ),
+                array( $role->id, 'notification', 'use' ),
+                array( $role->id, 'user', 'password' ),
+                array( $role->id, 'user', 'selfedit' ),
             ),
             $policies
         );
