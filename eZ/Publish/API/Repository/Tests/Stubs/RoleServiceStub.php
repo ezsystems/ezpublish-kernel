@@ -735,19 +735,24 @@ class RoleServiceStub implements RoleService
         {
             $this->content2roles[$content->id] = array();
         }
-        $this->content2roles[$content->id][++$this->limitationId] = $role->id;
 
         if ( $roleLimitation )
         {
             foreach ( $roleLimitation->limitationValues as $value )
             {
+                $this->content2roles[$content->id][++$this->limitationId] = $role->id;
                 $this->roleLimitations[$this->limitationId] = array(
+                    'id' => $this->limitationId,
                     'roleId' => $role->id,
                     'contentId' => $content->id,
                     'identifier' => $roleLimitation->getIdentifier(),
                     'value' => array( $value )
                 );
             }
+        }
+        else
+        {
+            $this->content2roles[$content->id][++$this->limitationId] = $role->id;
         }
     }
 
