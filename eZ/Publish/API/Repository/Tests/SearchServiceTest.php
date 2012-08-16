@@ -103,7 +103,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query( array(
                     'criterion' => new Criterion\Subtree(
-                        '/1/2/69/'
+                        '/1/5/'
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
