@@ -43,12 +43,14 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
                 'fileName' => 'Icy-Night-Flower-Binary.jpg',
                 'fileSize' => filesize( $path ),
                 'mimeType' => 'image/jpeg',
+                // Left out'downloadCount' by intention (will be set to 0)
             ),
             'update' => array(
                 'path' => ( $path = __DIR__ . '/_fixtures/image.png' ),
                 'fileName' => 'Blue-Blue-Blue-Sindelfingen.png',
                 'fileSize' => filesize( $path ),
                 'downloadCount' => 23,
+                // Left out 'mimeType' by intention (will be auto-detected)
             ),
         );
     }
