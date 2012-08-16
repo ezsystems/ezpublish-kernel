@@ -63,7 +63,7 @@ class FieldRange extends Field
 
         if ( !isset( $fieldTypes[$criterion->target] ) )
         {
-            return '""';
+            throw new \OutOfBoundsException( "Content type field {$criterion->target} not found." );
         }
 
         $queries = array();

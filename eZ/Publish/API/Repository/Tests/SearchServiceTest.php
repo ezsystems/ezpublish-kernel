@@ -353,7 +353,7 @@ class SearchServiceTest extends BaseTest
     /**
      * @expectedException \OutOfBoundsException
      */
-    public function testInvalidFieldIdentifier()
+    public function testInvalidFieldIdentifierRange()
     {
         $repository    = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -364,6 +364,26 @@ class SearchServiceTest extends BaseTest
                     'some_hopefully_unknown_field',
                     Criterion\Operator::BETWEEN,
                     array( 10, 1000 )
+                ),
+                'sortClauses' => array( new SortClause\ContentId() )
+            ) )
+        );
+    }
+
+    /**
+     * @expectedException \OutOfBoundsException
+     */
+    public function testInvalidFieldIdentifierIn()
+    {
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $searchService->findContent(
+            new Query( array(
+                'criterion' => new Criterion\Field(
+                    'some_hopefully_unknown_field',
+                    Criterion\Operator::EQ,
+                    1000
                 ),
                 'sortClauses' => array( new SortClause\ContentId() )
             ) )
