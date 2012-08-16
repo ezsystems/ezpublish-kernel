@@ -389,7 +389,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      * @param mixed $fieldData
      * @return void
      */
-    protected function createContent( $fieldData )
+    protected function createContent( $fieldData, $contentType = null )
     {
         $repository  = $this->getRepository();
         $userService = $repository->getUserService();
