@@ -358,7 +358,7 @@ class SearchServiceTest extends BaseTest
         $repository    = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $content = $searchService->findContent(
+        $searchService->findContent(
             new Query( array(
                 'criterion' => new Criterion\Field(
                     'some_hopefully_unknown_field',
