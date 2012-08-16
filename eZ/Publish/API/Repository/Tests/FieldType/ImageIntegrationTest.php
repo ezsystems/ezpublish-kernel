@@ -18,49 +18,12 @@ use eZ\Publish\API\Repository,
  * @group integration
  * @group field-type
  */
-class ImageIntegrationTest extends BaseIntegrationTest
+class ImageIntegrationTest extends FileBaseIntegrationTest
 {
-    /**
-     * Base install dir
-     *
-     * @var string
-     */
-    protected static $installDir;
-
-    /**
-     * Storeage dir
-     *
-     * @var string
-     */
-    protected static $storageDir;
-
-    /**
-     * If storage data should not be cleaned up
-     *
-     * @var bool
-     */
-    protected static $leaveStorageData = false;
-
     /**
      * Stores the loaded image path for copy test.
      */
     protected static $loadedImagePath;
-
-    /**
-     * Perform storage directory setup on first execution
-     *
-     * @return void
-     */
-    public function setUp()
-    {
-        parent::setUp();
-
-        if ( !isset( self::$installDir ) )
-        {
-            self::$installDir = $this->getConfigValue( 'install_dir' );
-            self::$storageDir = $this->getConfigValue( 'image_storage_dir' );
-        }
-    }
 
     /**
      * Sets up fixture data.
@@ -83,65 +46,6 @@ class ImageIntegrationTest extends BaseIntegrationTest
                 'fileSize' => filesize( $path ),
             ),
         );
-    }
-
-    /**
-     * Tears down the test.
-     *
-     * Cleans up the storage directory, if it was used
-     *
-     * @return void
-     */
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-        self::cleanupStorageDir();
-    }
-
-    /**
-     * Returns an iterator over the full storage dir.
-     *
-     * @return Iterator
-     */
-    protected static function getStorageDirIterator()
-    {
-        return new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator(
-                self::$installDir . '/' . self::$storageDir,
-                \FileSystemIterator::KEY_AS_PATHNAME | \FileSystemIterator::SKIP_DOTS | \ FilesystemIterator::CURRENT_AS_FILEINFO
-
-            ),
-            \RecursiveIteratorIterator::CHILD_FIRST
-        );
-    }
-
-    /**
-     * Removes the given directory path recursively
-     *
-     * @param string $dir
-     * @return void
-     */
-    protected static function cleanupStorageDir()
-    {
-        if ( self::$installDir == null || self::$storageDir == null || self::$leaveStorageData )
-        {
-            // Nothing to do
-            return;
-        }
-
-        $iterator = self::getStorageDirIterator();
-
-        foreach ( $iterator as $path => $fileInfo )
-        {
-            if ( $fileInfo->isDir() )
-            {
-                rmdir( $path );
-            }
-            else
-            {
-                unlink( $path );
-            }
-        }
     }
 
     /**
@@ -270,7 +174,7 @@ class ImageIntegrationTest extends BaseIntegrationTest
         );
 
         $this->assertTrue(
-            file_exists( self::$installDir . '/' . $field->value->path )
+            file_exists( $this->getInstallDir() . '/' . $field->value->path )
         );
 
         self::$loadedImagePath = $field->value->path;
@@ -360,7 +264,7 @@ class ImageIntegrationTest extends BaseIntegrationTest
         );
 
         $this->assertTrue(
-            file_exists( self::$installDir . '/' . $field->value->path )
+            file_exists( $this->getInstallDir() . '/' . $field->value->path )
         );
     }
 
