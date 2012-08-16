@@ -26,6 +26,11 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     protected static $loadedBinaryFilePath;
 
     /**
+     * Storage dir settings key
+     */
+    protected static $storageDirConfigKey = 'binaryfile_storage_dir';
+
+    /**
      * Sets up fixture data.
      *
      * @return void
@@ -174,7 +179,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
         );
 
         $this->assertTrue(
-            file_exists( $this->getInstallDir() . '/' . $field->value->path )
+            file_exists( $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $field->value->path )
         );
 
         self::$loadedBinaryFilePath = $field->value->path;
@@ -263,7 +268,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
         );
 
         $this->assertTrue(
-            file_exists( $this->getInstallDir() . '/' . $field->value->path )
+            file_exists( $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $field->value->path )
         );
     }
 

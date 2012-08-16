@@ -49,6 +49,16 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     }
 
     /**
+     * Returns the storage dir used by the test
+     *
+     * @return string
+     */
+    protected function getStorageDir()
+    {
+        return self::$storageDir;
+    }
+
+    /**
      * Perform storage directory setup on first execution
      *
      * @return void
@@ -60,7 +70,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
         if ( !isset( self::$installDir ) )
         {
             self::$installDir = $this->getConfigValue( 'install_dir' );
-            self::$storageDir = $this->getConfigValue( 'image_storage_dir' );
+            self::$storageDir = $this->getConfigValue( static::$storageDirConfigKey );
         }
     }
 

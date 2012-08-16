@@ -29,13 +29,22 @@ class LocalFileService implements FileService
     protected $storageDir;
 
     /**
+     * Identifier prefix, will be appended to $storageDir for storing, but also
+     * delivered as part of the storage identifier.
+     *
+     * @var string
+     */
+    protected $identifierPrefix;
+
+    /**
      * @param string $installDir
      * @param string $siteName
      */
-    public function __construct( $installDir, $storageDir )
+    public function __construct( $installDir, $storageDir, $identifierPrefix = '' )
     {
         $this->installDir = $installDir;
         $this->storageDir = $storageDir;
+        $this->identifierPrefix = $identifierPrefix;
     }
 
     /**
@@ -50,7 +59,7 @@ class LocalFileService implements FileService
         {
             return $path;
         }
-        return $this->installDir . '/' . $path;
+        return $this->installDir . '/' . ( !empty( $this->storageDir ) ? $this->storageDir . '/' : '' ) . $path;
     }
 
     /**
@@ -193,9 +202,9 @@ class LocalFileService implements FileService
      */
     public function getStorageIdentifier( $path )
     {
-        return ( !empty( $this->storageDir )
-            ? $this->storageDir . '/' . $path
-            : $path );
+        return ( !empty( $this->identifierPrefix )
+            ? $this->identifierPrefix . '/'
+            : '' ) . $path;
     }
 
     /**

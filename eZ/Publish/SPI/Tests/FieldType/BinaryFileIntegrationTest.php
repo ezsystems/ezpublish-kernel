@@ -43,6 +43,16 @@ class BinaryFileIntergrationTest extends FileBaseIntegrationTest
      */
     protected function getStorageDir()
     {
+        return 'var/files';
+    }
+
+    /**
+     * Returns the storage identifier prefix used by the file service
+     *
+     * @return void
+     */
+    protected function getStorageIdentifierPrefix()
+    {
         return '';
     }
 
@@ -164,7 +174,7 @@ class BinaryFileIntergrationTest extends FileBaseIntegrationTest
         $this->assertNotNull( $field->value->externalData );
 
         $this->assertTrue(
-            file_exists( ( $path = $this->getTempDir() . '/' . $field->value->externalData['path'] ) )
+            file_exists( ( $path = $this->getTempDir() . '/' . $this->getStorageDir() . '/' . $field->value->externalData['path'] ) )
         );
 
         $this->assertEquals( 'Ice-Flower-Binary.jpg', $field->value->externalData['fileName'] );
@@ -214,7 +224,7 @@ class BinaryFileIntergrationTest extends FileBaseIntegrationTest
         $this->assertNotNull( $field->value->externalData );
 
         $this->assertTrue(
-            file_exists( ( $filePath = $this->getTempDir() . '/' . $field->value->externalData['path'] ) )
+            file_exists( ( $filePath = $this->getTempDir() . '/' . $this->getStorageDir() . '/' . $field->value->externalData['path'] ) )
         );
 
         // Check old file removed before update
@@ -305,13 +315,13 @@ class BinaryFileIntergrationTest extends FileBaseIntegrationTest
         $this->deleteContent( $firstContent );
 
         $this->assertTrue(
-            file_exists( $this->getTempDir() . '/' . $secondField->value->externalData['path'] )
+            file_exists( $this->getTempDir() . '/' . $this->getStorageDir() . '/' . $secondField->value->externalData['path'] )
         );
 
         $this->deleteContent( $secondContent );
 
         $this->assertFalse(
-            file_exists( $this->getTempDir() . '/' . $secondField->value->externalData['path'] )
+            file_exists( $this->getTempDir() . '/' . $this->getStorageDir() . '/' . $secondField->value->externalData['path'] )
         );
     }
 }

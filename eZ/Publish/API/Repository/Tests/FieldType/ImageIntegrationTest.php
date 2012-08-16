@@ -26,6 +26,11 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     protected static $loadedImagePath;
 
     /**
+     * Storage dir settings key
+     */
+    protected static $storageDirConfigKey = 'image_storage_dir';
+
+    /**
      * Sets up fixture data.
      *
      * @return void

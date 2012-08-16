@@ -43,7 +43,17 @@ class ImageIntergrationTest extends FileBaseIntegrationTest
      */
     protected function getStorageDir()
     {
-        return 'var/my_site/storage/images';
+        return '';
+    }
+
+    /**
+     * Returns the storage identifier prefix used by the file service
+     *
+     * @return void
+     */
+    protected function getStorageIdentifierPrefix()
+    {
+        return'var/my_site/storage/images';
     }
 
     /**

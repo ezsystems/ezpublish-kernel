@@ -27,6 +27,13 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     abstract protected function getStorageDir();
 
     /**
+     * Returns the storage identifier prefix used by the file service
+     *
+     * @return void
+     */
+    abstract protected function getStorageIdentifierPrefix();
+
+    /**
      * Returns a file service to be used.
      *
      * @return FileService
@@ -35,7 +42,8 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     {
         return new FieldType\FileService\LocalFileService(
             $this->getTempDir(),
-            $this->getStorageDir()
+            $this->getStorageDir(),
+            $this->getStorageIdentifierPrefix()
         );
     }
 
@@ -60,7 +68,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
 
         $tmpFile = tempnam(
             sys_get_temp_dir(),
-            substr( $calledClass, strrpos( $calledClass, '\\' ) + 1 )
+            'eZ_' . substr( $calledClass, strrpos( $calledClass, '\\' ) + 1 )
         );
 
         // Convert file into directory
