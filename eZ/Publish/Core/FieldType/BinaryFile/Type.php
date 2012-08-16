@@ -229,6 +229,7 @@ class Type extends FieldType
             'fileName' => $value->fileName,
             'fileSize' => $value->fileSize,
             'path' => $value->path,
+            'mimeType' => $value->mimeType,
             'downloadCount' => $value->downloadCount,
         );
     }
@@ -278,7 +279,7 @@ class Type extends FieldType
      */
     public function fromPersistenceValue( FieldValue $fieldValue )
     {
-        if ( $fieldValue->data === null )
+        if ( $fieldValue->externalData === null )
         {
             // empty value
             return null;
@@ -288,17 +289,17 @@ class Type extends FieldType
         // there might be more data in the persistence value than needed here
         $result = $this->fromHash(
             array(
-                'path' => ( isset( $fieldValue->data['path'] )
-                    ? $fieldValue->data['path']
+                'path' => ( isset( $fieldValue->externalData['path'] )
+                    ? $fieldValue->externalData['path']
                     : null ),
-                'fileName' => ( isset( $fieldValue->data['fileName'] )
-                    ? $fieldValue->data['fileName']
+                'fileName' => ( isset( $fieldValue->externalData['fileName'] )
+                    ? $fieldValue->externalData['fileName']
                     : null ),
-                'fileSize' => ( isset( $fieldValue->data['fileSize'] )
-                    ? $fieldValue->data['fileSize']
+                'fileSize' => ( isset( $fieldValue->externalData['fileSize'] )
+                    ? $fieldValue->externalData['fileSize']
                     : null ),
-                'downloadCount' => ( isset( $fieldValue->data['downloadCount'] )
-                    ? $fieldValue->data['downloadCount']
+                'downloadCount' => ( isset( $fieldValue->externalData['downloadCount'] )
+                    ? $fieldValue->externalData['downloadCount']
                     : null ),
             )
         );

@@ -193,7 +193,9 @@ class LocalFileService implements FileService
      */
     public function getStorageIdentifier( $path )
     {
-        return $this->storageDir . '/' . $path;
+        return ( !empty( $this->storageDir )
+            ? $this->storageDir . '/' . $path
+            : $path );
     }
 
     /**

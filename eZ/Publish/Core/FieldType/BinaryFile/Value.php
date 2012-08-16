@@ -28,6 +28,7 @@ class Value extends BaseValue
      * Path string, where the binary file is located
      *
      * @var string
+     * @required
      */
     public $path;
 
@@ -42,9 +43,15 @@ class Value extends BaseValue
      * Size of the image file
      *
      * @var integer
-     * @required
      */
     public $fileSize;
+
+    /**
+     * Mime type of the file
+     *
+     * @var string
+     */
+    public $mimeType;
 
     /**
      * Number of times the file has been downloaded through content/download module

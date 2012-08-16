@@ -8,7 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\BinaryFile;
-use eZ\Publish\SPI\FieldType\FieldStorage,
+use eZ\Publish\Core\FieldType\GatewayBasedStorage,
+    eZ\Publish\Core\FieldType\FileService,
+    eZ\Publish\SPI\FieldType\FieldStorage,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field;
 
@@ -38,10 +40,11 @@ class BinaryFileStorage extends GatewayBasedStorage
      * @param FileService $fileService
      * @param PathGenerator $pathGenerator
      */
-    public function __construct( array $gateways, FileService $fileService )
+    public function __construct( array $gateways, FileService $fileService, PathGenerator $pathGenerator )
     {
         parent::__construct( $gateways );
         $this->fileService = $fileService;
+        $this->pathGenerator = $pathGenerator;
     }
 
     /**
@@ -77,36 +80,61 @@ class BinaryFileStorage extends GatewayBasedStorage
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
-        $dbHandler = $context['connection'];
-        $file = $field->value->data->file;
+        if ( $field->value->externalData === null )
+        {
+            // Nothing to store
+            return false;
+        }
 
-        $q = $dbHandler->createInsertQuery();
-        $q->insertInto(
-            $dbHandler->quoteTable( 'ezbinaryfile' )
-        )->set(
-            $dbHandler->quoteColumn( 'contentobject_attribute_id' ),
-            $q->bindValue( $field->id, null, \PDO::PARAM_INT )
-        )->set(
-            // @todo: How to handle download_count ?
-            $dbHandler->quoteColumn( 'download_count' ),
-            $q->bindValue( 0, null, \PDO::PARAM_INT )
-        )->set(
-            $dbHandler->quoteColumn( 'filename' ),
-            $q->bindValue( basename( $file->path ) )
-        )->set(
-            $dbHandler->quoteColumn( 'mime_type' ),
-            $q->bindValue( $file->mimeType )
-        )->set(
-            $dbHandler->quoteColumn( 'original_filename' ),
-            $q->bindValue( $field->value->data->originalFilename )
-        )->set(
-            $dbHandler->quoteColumn( 'version' ),
-            $q->bindValue( $field->versionNo, null, \PDO::PARAM_INT )
-        );
+        $storedValue = $field->value->externalData;
 
-        $q->prepare()->execute();
+        if ( !$this->fileService->exists( $storedValue['path'] ) )
+        {
+            // Only store a new file copy, if it does not exist, yet
+            $targetPath = $this->pathGenerator->getStoragePathForField( $field, $versionInfo );
 
-        return false;
+            $storedValue['path'] = $this->fileService->storeFile(
+                $storedValue['path'],
+                $this->fileService->getStorageIdentifier( $targetPath )
+            );
+        }
+
+        $field->value->externalData = $storedValue;
+
+        $this->removeOldFile( $field->id, $versionInfo->versionNo, $context );
+
+        return $this->getGateway( $context )->storeFileReference( $versionInfo, $field );
+    }
+
+    /**
+     * Removes the old file referenced by $fieldId in $versionNo, if not
+     * referenced else where
+     *
+     * @param mixed $fieldId
+     * @param string $versionNo
+     * @param array $context
+     * @return void
+     */
+    protected function removeOldFile( $fieldId, $versionNo, array $context )
+    {
+        $gateway = $this->getGateway( $context );
+
+        $fileReference = $gateway->getFileReferenceData( $fieldId, $versionNo );
+
+        if ( $fileReference === null )
+        {
+            // No previous file
+            return;
+        }
+
+        $gateway->removeFileReference( $fieldId, $versionNo );
+
+        $fileCounts = $gateway->countFileReferences( array( $fileReference['path'] ) );
+
+        if ( $fileCounts[$fileReference['path']] === 0 )
+        {
+            $this->fileService->remove( $fileReference['path'] );
+        }
     }
 
     /**
@@ -123,17 +151,36 @@ class BinaryFileStorage extends GatewayBasedStorage
      */
     public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
+        $field->value->externalData = $this->getGateway( $context )->getFileReferenceData( $field->id, $versionInfo->versionNo );
 
+        if ( $field->value->externalData !== null )
+        {
+            $field->value->externalData['fileSize'] = $this->fileService->getFileSize( $field->value->externalData['path'] );
+        }
     }
 
     /**
-     * @param array $fieldId
+     * @param array $fieldIds
      * @param array $context
      * @return bool
      */
-    public function deleteFieldData( array $fieldId, array $context )
+    public function deleteFieldData( array $fieldIds, array $context )
     {
+        $gateway = $this->getGateway( $context );
 
+        $referencedFiles = $gateway->getReferencedFiles( $fieldIds );
+
+        $gateway->removeFileReferences( $fieldIds );
+
+        $referenceCountMap = $gateway->countFileReferences( $referencedFiles );
+
+        foreach ( $referenceCountMap as $filePath => $count )
+        {
+            if ( $count === 0 )
+            {
+                $this->fileService->remove( $filePath );
+            }
+        }
     }
 
     /**
@@ -144,18 +191,6 @@ class BinaryFileStorage extends GatewayBasedStorage
     public function hasFieldData()
     {
         return true;
-    }
-
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
-     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     * @param array $context
-     *
-     * @return void
-     */
-    public function copyFieldData( VersionInfo $versionInfo, Field $field, array $context )
-    {
-
     }
 
     /**
