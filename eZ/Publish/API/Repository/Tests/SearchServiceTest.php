@@ -132,7 +132,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
                         Criterion\Operator::GT,
-                        1311154214
+                        1343140540
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
@@ -143,7 +143,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
                         Criterion\Operator::GTE,
-                        1311154214
+                        1311154215
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
@@ -165,7 +165,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
                         Criterion\Operator::IN,
-                        array( 1311154214, 1311154215 )
+                        array( 1033920794, 1060695457, 1343140540 )
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
@@ -176,7 +176,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
                         Criterion\Operator::BETWEEN,
-                        array( 1311154213, 1311154215 )
+                        array( 1033920776, 1072180276 )
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
