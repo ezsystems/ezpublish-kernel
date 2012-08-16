@@ -365,5 +365,47 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             ),
         );
     }
+
+    public function testInherentCopyForNewLanguage()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $type = $this->createContentType(
+            $this->getValidFieldSettings(),
+            $this->getValidValidatorConfiguration(),
+            array(),
+            // Causes a copy of the image value for each language in legacy
+            // storage
+            array( 'isTranslatable' => false )
+        );
+
+        $draft = $this->createContent( $this->getValidCreationFieldData(), $type );
+
+        $updateStruct = $contentService->newContentUpdateStruct();
+        $updateStruct->initialLanguageCode = 'ger-DE';
+        $updateStruct->setField( 'name', 'Sindelfingen' );
+
+        // Automatically creates a copy of the image field in the back ground
+        $updatedDraft = $contentService->updateContent( $draft->versionInfo, $updateStruct );
+
+        $paths = array();
+        foreach( $updatedDraft->getFields() as $field )
+        {
+            if ( $field->fieldDefIdentifier === 'data' )
+            {
+                $paths[$field->languageCode] = $field->value->path;
+            }
+        }
+
+        $this->assertTrue( isset( $paths['eng-US'] ) && isset( $paths['ger-DE'] ) );
+        $this->assertEquals(
+            $paths['eng-US'],
+            $paths['ger-DE']
+        );
+
+        $contentService->deleteContent( $updatedDraft->contentInfo );
+    }
 }
 

@@ -208,7 +208,7 @@ class Type extends FieldType
     {
         return (
             ( substr( $path, 0, 1 ) === '/' && file_exists( $path ) )
-            || $this->fileService->exists( $this->fileService->getStorageIdentifier( $path ) )
+            || $this->fileService->exists( $path )
         );
     }
 
