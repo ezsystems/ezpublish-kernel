@@ -24,7 +24,7 @@ abstract class Field extends CriterionVisitor
     /**
      * Field registry
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\FieldRegistry
+     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry
      */
     protected $fieldRegistry;
 
