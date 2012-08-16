@@ -438,7 +438,7 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 new Query( array(
-                    'criterion'   => new Criterion\SectionId( array( 2 ) ),
+                    'criterion'   => new Criterion\SectionId( array( 3 ) ),
                     'offset'      => 0,
                     'limit'       => 10,
                     'sortClauses' => array(
