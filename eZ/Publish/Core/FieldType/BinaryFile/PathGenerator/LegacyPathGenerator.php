@@ -16,6 +16,8 @@ class LegacyPathGenerator extends PathGenerator
 {
     public function getStoragePathForField( Field $field, VersionInfo $versionInfo )
     {
-        return md5( uniqid( microtime( true ), true ) );
+        $extension = pathinfo( $field->value->externalData['fileName'], PATHINFO_EXTENSION );
+
+        return md5( uniqid( microtime( true ), true ) ) . ( !empty( $extension ) ? '.' . $extension : '' );
     }
 }
