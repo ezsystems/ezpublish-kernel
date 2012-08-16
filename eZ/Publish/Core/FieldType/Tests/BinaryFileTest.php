@@ -9,13 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\BinaryFile\Type as BinaryFileType,
-    eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue,
-    eZ\Publish\Core\FieldType\BinaryFile\Handler as BinaryFileHandler,
-    eZ\Publish\Core\Repository\Repository,
-    eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
-    eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,
-    SplFileInfo as FileInfo,
-    ReflectionObject;
+    eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue;
 
 /**
  * @group fieldType
@@ -23,32 +17,28 @@ use eZ\Publish\Core\FieldType\BinaryFile\Type as BinaryFileType,
  */
 class BinaryFileTest extends FieldTypeTest
 {
-    /**
-     * Path to test image
-     * @var string
-     */
-    protected $imagePath;
+    protected $validatorServiceMock;
 
-    /**
-     * FileInfo object for test image
-     * @var \splFileInfo
-     */
-    protected $imageFileInfo;
+    protected $fieldTypeToolsMock;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    protected $repository;
+    protected $fileServiceMock;
 
-    protected function setUp()
+    protected $mimeTypeDetectorMock;
+
+    protected $binaryFileType;
+
+    protected function getBinaryFileType()
     {
-        parent::setUp();
-        $this->repository = new Repository(
-            new InMemoryPersistenceHandler( $this->validatorService, $this->fieldTypeTools ),
-            new InMemoryIOHandler()
-        );
-        $this->imagePath = __DIR__ . '/squirrel-developers.jpg';
-        $this->imageFileInfo = new FileInfo( $this->imagePath );
+        if ( !isset( $this->binaryFileType ) )
+        {
+            $this->binaryFileType = new BinaryFileType(
+                $this->getValidatorServiceMock(),
+                $this->getFieldTypeToolsMock(),
+                $this->getFileServiceMock(),
+                $this->getMimeTypeDetectorMock()
+            );
+        }
+        return $this->binaryFileType;
     }
 
     /**
@@ -56,7 +46,8 @@ class BinaryFileTest extends FieldTypeTest
      */
     public function testValidatorConfigurationSchema()
     {
-        $ft = new BinaryFileType( $this->validatorService, $this->fieldTypeTools, $this->repository );
+        $fieldType = $this->getBinaryFileType();
+
         self::assertSame(
             array(
                 "FileSizeValidator" => array(
@@ -66,7 +57,7 @@ class BinaryFileTest extends FieldTypeTest
                     )
                 )
             ),
-            $ft->getValidatorConfigurationSchema(),
+            $fieldType->getValidatorConfigurationSchema(),
             "The set of allowed validators does not match what is expected."
         );
     }
@@ -76,105 +67,228 @@ class BinaryFileTest extends FieldTypeTest
      */
     public function testSettingsSchema()
     {
-        $ft = new BinaryFileType( $this->validatorService, $this->fieldTypeTools, $this->repository );
+        $fieldType = $this->getBinaryFileType();
         self::assertSame(
             array(),
-            $ft->getSettingsSchema(),
+            $fieldType->getSettingsSchema(),
             "The settings schema does not match what is expected."
         );
     }
 
     /**
+     * @covers \eZ\Publish\Core\FieldType\BinaryFile\Type::getEmptyValue
+     */
+    public function testEmptyValue()
+    {
+        $fieldType = $this->getBinaryFileType();
+
+        $this->assertNull( $fieldType->getEmptyValue() );
+    }
+
+    /**
+     * @param mixed $inputValue
+     * @param mixed $expectedException
      * @covers \eZ\Publish\Core\FieldType\BinaryFile\Type::acceptValue
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @dataProvider provideInvalidInputValues
      */
-    public function testAcceptValueInvalidFormat()
+    public function testAcceptValueFailsOnInvalidValues( $inputValue, $expectedException )
     {
-        $ft = new BinaryFileType( $this->validatorService, $this->fieldTypeTools, $this->repository );
-        $invalidValue = $ft->getEmptyValue();
-        $invalidValue->file = 'This is definitely not a binary file !';
-        $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'acceptValue' );
-        $refMethod->setAccessible( true );
-        $refMethod->invoke( $ft, $invalidValue );
+        $fieldType = $this->getBinaryFileType();
+
+        try
+        {
+            $fieldType->acceptValue( $inputValue );
+            $this->fail(
+                sprintf(
+                    'Expected exception of type "%s" not thrown.',
+                    $expectedException
+                )
+            );
+        }
+        catch ( \Exception $e )
+        {
+            $this->assertInstanceOf(
+                $expectedException,
+                $e
+            );
+        }
+    }
+
+    public function provideInvalidInputValues()
+    {
+        return array(
+            array(
+                new \stdClass(),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+            array(
+                array(),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+            array(
+                new BinaryFileValue(),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+            array(
+                array( 'path' => '/foo/bar' ),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+            array(
+                new BinaryFileValue( array( 'path' => '/foo/bar' ) ),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+        );
     }
 
     /**
+     * @param mixed $inputValue
+     * @param mixed $expectedOutputValue
+     * @dataProvider provideValidInputValues
      * @covers \eZ\Publish\Core\FieldType\BinaryFile\Type::acceptValue
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testAcceptInvalidValue()
+    public function testAcceptValue( $inputValue, $expectedOutputValue )
     {
-        $ft = new BinaryFileType( $this->validatorService, $this->fieldTypeTools, $this->repository );
-        $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'acceptValue' );
-        $refMethod->setAccessible( true );
-        $refMethod->invoke( $ft, $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Value' ) );
+        $fieldType = $this->getBinaryFileType();
+
+        $this->getMimeTypeDetectorMock()->expects( $this->any() )
+            ->method( 'getMimeType' )
+            ->will( $this->returnValue( 'text/plain' ) );
+
+        $outputValue = $fieldType->acceptValue( $inputValue );
+
+        $this->assertEquals(
+            $expectedOutputValue,
+            $outputValue,
+            'acceptValue() did not convert properly.'
+        );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\FieldType\BinaryFile\Type::acceptValue
-     */
-    public function testAcceptValueValidFormat()
+    public function provideValidInputValues()
     {
-        $ft = new BinaryFileType( $this->validatorService, $this->fieldTypeTools, $this->repository );
-        $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'acceptValue' );
-        $refMethod->setAccessible( true );
-
-        $value = $ft->buildValue( $this->imagePath );
-        self::assertSame( $value, $refMethod->invoke( $ft, $value ) );
+        return array(
+            array(
+                null,
+                null
+            ),
+            array(
+                __FILE__,
+                new BinaryFileValue( array(
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => filesize( __FILE__ ),
+                    'downloadCount' => 0,
+                    'mimeType' => 'text/plain',
+                ) )
+            ),
+            array(
+                array( 'path' => __FILE__ ),
+                new BinaryFileValue( array(
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => filesize( __FILE__ ),
+                    'downloadCount' => 0,
+                    'mimeType' => 'text/plain',
+                ) )
+            ),
+            array(
+                array(
+                    'path' => __FILE__,
+                    'fileSize' => 23,
+                ),
+                new BinaryFileValue( array(
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => 23,
+                    'downloadCount' => 0,
+                    'mimeType' => 'text/plain',
+                ) )
+            ),
+            array(
+                array(
+                    'path' => __FILE__,
+                    'downloadCount' => 42,
+                ),
+                new BinaryFileValue( array(
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => filesize( __FILE__ ),
+                    'downloadCount' => 42,
+                    'mimeType' => 'text/plain',
+                ) )
+            ),
+            array(
+                array(
+                    'path' => __FILE__,
+                    'mimeType' => 'application/text+php',
+                ),
+                new BinaryFileValue( array(
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => filesize( __FILE__ ),
+                    'downloadCount' => 0,
+                    'mimeType' => 'application/text+php',
+                ) )
+            ),
+        );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\FieldType\BinaryFile\Type::toPersistenceValue
-     */
-    public function testToPersistenceValue()
+    protected function getValidatorServiceMock()
     {
-        $this->markTestIncomplete( "Test for \\eZ\\Publish\\Core\\FieldType\\BinaryFile\\Type::toPersistenceValue() is not implemented." );
+        if ( !isset( $this->validatorServiceMock ) )
+        {
+            $this->validatorServiceMock = $this->getMock(
+                'eZ\\Publish\\Core\\Repository\\ValidatorService',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->validatorServiceMock;
     }
 
-    /**
-     * @covers \eZ\Publish\Core\FieldType\BinaryFile\Type::fromPersistenceValue
-     */
-    public function testFromPersistenceValue()
+    protected function getFieldTypeToolsMock()
     {
-        $this->markTestIncomplete( "Test for \\eZ\\Publish\\Core\\FieldType\\BinaryFile\\Type::fromPersistenceValue() is not implemented." );
+        if ( !isset( $this->fieldTypeToolsMock ) )
+        {
+            $this->fieldTypeToolsMock = $this->getMock(
+                'eZ\\Publish\\Core\\Repository\\FieldTypeTools',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->fieldTypeToolsMock;
     }
 
-    /**
-     * @covers \eZ\Publish\Core\FieldType\BinaryFile\Value::__toString
-     */
-    public function testFieldValueToString()
+    protected function getFileServiceMock()
     {
-        $ft = new BinaryFileType( $this->validatorService, $this->fieldTypeTools, $this->repository );
-        $value = $ft->buildValue( $this->imagePath );
-        self::assertSame( $value->file->id, (string)$value );
+        if ( !isset( $this->fileServiceMock ) )
+        {
+            $this->fileServiceMock = $this->getMock(
+                'eZ\\Publish\\Core\\FieldType\\FileService',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->fileServiceMock;
     }
 
-    /**
-     * Tests legacy properties, not directly accessible from Value object
-     *
-     * @covers \eZ\Publish\Core\FieldType\BinaryFile\Value::__get
-     */
-    public function testVirtualLegacyProperty()
+    protected function getMimeTypeDetectorMock()
     {
-        $ft = new BinaryFileType( $this->validatorService, $this->fieldTypeTools, $this->repository );
-        $value = $ft->buildValue( $this->imagePath );
-        self::assertSame( basename( $value->file->id ), $value->filename );
-        self::assertSame( $value->file->mimeType, $value->mimeType );
-        self::assertSame( $value->file->id, $value->filepath );
-        self::assertSame( $value->file->size, $value->filesize );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\BinaryFile\Value::__get
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
-     */
-    public function testInvalidVirtualProperty()
-    {
-        $ft = new BinaryFileType( $this->validatorService, $this->fieldTypeTools, $this->repository );
-        $value = $ft->buildValue( $this->imagePath );
-        $value->nonExistingProperty;
+        if ( !isset( $this->mimeTypeDetectorMock ) )
+        {
+            $this->mimeTypeDetectorMock = $this->getMock(
+                'eZ\\Publish\\Core\\FieldType\\BinaryFile\\MimeTypeDetector',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->mimeTypeDetectorMock;
     }
 }
