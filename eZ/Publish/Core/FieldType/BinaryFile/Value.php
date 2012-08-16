@@ -67,7 +67,7 @@ class Value extends BaseValue
      */
     public function __construct( array $fileData = array() )
     {
-        foreach ( $imageData as $key => $value )
+        foreach ( $fileData as $key => $value )
         {
             try
             {
@@ -85,19 +85,14 @@ class Value extends BaseValue
     }
 
     /**
-     * Creates a value only from a file path
+     * Returns a string representation of the field value.
+     * This string representation must be compatible with format accepted via
+     * {@link \eZ\Publish\SPI\FieldType\FieldType::buildValue}
      *
-     * @param string $path
-     * @return Value
+     * @return string
      */
-    public static function fromString( $path )
+    public function __toString()
     {
-        return new static(
-            array(
-                'path' => $path,
-                'fileName' => basename( $path ),
-                'fileSize' => filesize( $path ),
-            )
-        );
+        return (string)$this->path;
     }
 }
