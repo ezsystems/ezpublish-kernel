@@ -187,7 +187,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::CREATED,
                         Criterion\Operator::BETWEEN,
-                        array( 1299780749, 1311154215 )
+                        array( 1033920776, 1072180278 )
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
