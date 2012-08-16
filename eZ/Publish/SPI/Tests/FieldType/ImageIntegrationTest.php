@@ -34,80 +34,16 @@ use eZ\Publish\Core\Persistence\Legacy,
  *
  * @group integration
  */
-class ImageIntegrationTest extends BaseIntegrationTest
+class ImageIntergrationTest extends FileBaseIntegrationTest
 {
     /**
-     * If the temporary directory should be removed after the tests.
+     * Returns the storage dir used by the file service
      *
-     * @var bool
+     * @return string
      */
-    protected static $removeTmpDir = false;
-
-    /**
-     * Temporary directory
-     *
-     * @var string
-     */
-    protected static $tmpDir;
-
-    /**
-     * Storage directory used by image file service
-     *
-     * @var string
-     */
-    protected static $storageDir = 'var/my_site/storage/images';
-
-    public static function setUpBeforeClass()
+    protected function getStorageDir()
     {
-        $tmpFile = tempnam( sys_get_temp_dir(), 'eZ_FieldType_ImageIntegrationTest' );
-
-        // Convert file into directory
-        unlink( $tmpFile );
-        mkdir( $tmpFile );
-
-        self::$tmpDir = $tmpFile;
-    }
-
-    public static function tearDownAfterClass()
-    {
-        self::removeRecursive( self::$tmpDir );
-    }
-
-    /**
-     * Removes the given directory path recursively
-     *
-     * @param string $dir
-     * @return void
-     */
-    protected static function removeRecursive( $dir )
-    {
-        if ( !self::$removeTmpDir )
-        {
-            return;
-        }
-
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator(
-                $dir,
-                \FileSystemIterator::KEY_AS_PATHNAME | \FileSystemIterator::SKIP_DOTS | \ FilesystemIterator::CURRENT_AS_FILEINFO
-
-            ),
-            \RecursiveIteratorIterator::CHILD_FIRST
-        );
-
-        foreach ( $iterator as $path => $fileInfo )
-        {
-            if ( $fileInfo->isDir() )
-            {;
-                rmdir( $path );
-            }
-            else
-            {
-                unlink( $path );
-            }
-        }
-
-        rmdir( $dir );
+        return 'var/my_site/storage/images';
     }
 
     /**
@@ -135,10 +71,7 @@ class ImageIntegrationTest extends BaseIntegrationTest
                 array(
                     'LegacyStorage' => new FieldType\Image\ImageStorage\Gateway\LegacyStorage(),
                 ),
-                new FieldType\FileService\LocalFileService(
-                    self::$tmpDir,
-                    self::$storageDir
-                ),
+                $this->getFileService(),
                 new FieldType\Image\PathGenerator\LegacyPathGenerator()
             )
         );
@@ -229,7 +162,7 @@ class ImageIntegrationTest extends BaseIntegrationTest
         $this->assertNotNull( $field->value->data );
 
         $this->assertTrue(
-            file_exists( self::$tmpDir . '/' . $field->value->data['path'] )
+            file_exists( $this->getTempDir() . '/' . $field->value->data['path'] )
         );
 
         $this->assertEquals( 'Ice-Flower.jpg', $field->value->data['fileName'] );
@@ -276,7 +209,7 @@ class ImageIntegrationTest extends BaseIntegrationTest
         $this->assertNotNull( $field->value->data );
 
         $this->assertTrue(
-            file_exists( ( $filePath = self::$tmpDir . '/' . $field->value->data['path'] ) )
+            file_exists( ( $filePath = $this->getTempDir() . '/' . $field->value->data['path'] ) )
         );
 
         // Check old files not removed before update
@@ -303,7 +236,7 @@ class ImageIntegrationTest extends BaseIntegrationTest
     {
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator(
-                self::$tmpDir . '/' . self::$storageDir,
+                $this->getTempDir() . '/' . $this->getStorageDir(),
                 \FileSystemIterator::KEY_AS_PATHNAME | \FileSystemIterator::SKIP_DOTS | \ FilesystemIterator::CURRENT_AS_FILEINFO
 
             ),
@@ -369,13 +302,13 @@ class ImageIntegrationTest extends BaseIntegrationTest
         $this->deleteContent( $firstContent );
 
         $this->assertTrue(
-            file_exists( self::$tmpDir . '/' . $secondField->value->data['path'] )
+            file_exists( $this->getTempDir() . '/' . $secondField->value->data['path'] )
         );
 
         $this->deleteContent( $secondContent );
 
         $this->assertFalse(
-            file_exists( self::$tmpDir . '/' . $secondField->value->data['path'] )
+            file_exists( $this->getTempDir() . '/' . $secondField->value->data['path'] )
         );
     }
 }
