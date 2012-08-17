@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\BinaryFile;
-use eZ\Publish\Core\FieldType\FieldType,
+use eZ\Publish\Core\FieldType\BinaryBase\Type as BaseType,
     eZ\Publish\Core\FieldType\FileService,
     eZ\Publish\Core\Repository\ValidatorService,
     eZ\Publish\Core\Repository\FieldTypeTools,
@@ -22,49 +22,8 @@ use eZ\Publish\Core\FieldType\FieldType,
  *
  * This field type represents a simple string.
  */
-class Type extends FieldType
+class Type extends BaseType
 {
-    /**
-     * @see eZ\Publish\Core\FieldType::$validatorConfigurationSchema
-     */
-    protected $validatorConfigurationSchema = array(
-        "FileSizeValidator" => array(
-            'maxFileSize' => array(
-                'type' => 'int',
-                'default' => false,
-            )
-        )
-    );
-
-    /**
-     * File service for storing binary files
-     *
-     * @var FileService
-     */
-    protected $fileService;
-
-    /**
-     * MIME type detector
-     *
-     * @var MimeTypeDetector
-     */
-    protected $mimeTypeDetector;
-
-    /**
-     * Creates a new Image FieldType
-     *
-     * @param ValidatorService $validatorService
-     * @param FieldTypeTools $fieldTypeTools
-     * @param FileService $fileService
-     * @param MimeTypeDetector $mimeTypeDetector
-     */
-    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools, FileService $fileService, MimeTypeDetector $mimeTypeDetector )
-    {
-        parent::__construct( $validatorService, $fieldTypeTools );
-        $this->fileService = $fileService;
-        $this->mimeTypeDetector = $mimeTypeDetector;
-    }
-
     /**
      * Return the field type identifier for this field type
      *
@@ -76,60 +35,14 @@ class Type extends FieldType
     }
 
     /**
-     * Returns the name of the given field value.
+     * Creates a specific value of the derived class from $inputValue
      *
-     * It will be used to generate content name and url alias if current field is designated
-     * to be used in the content name/urlAlias pattern.
-     *
-     * @param mixed $value
-     *
-     * @return mixed
+     * @param array $inputValue
+     * @return Value
      */
-    public function getName( $value )
+    protected function createValue( array $inputValue )
     {
-        $value = $this->acceptValue( $value );
-
-        return $value->fileName;
-    }
-
-    /**
-     * Returns the fallback default value of field type when no such default
-     * value is provided in the field definition in content types.
-     *
-     * @return null
-     */
-    public function getEmptyValue()
-    {
-        return null;
-    }
-
-    /**
-     * Returns a schema for supported validator configurations.
-     *
-     * This implementation returns a three dimensional map containing for each validator configuration
-     * referenced by identifier a map of supported parameters which are defined by a type and a default value
-     * (see example).
-     * Example:
-     * <code>
-     *  array(
-     *      'stringLength' => array(
-     *          'minStringLength' => array(
-     *              'type'    => 'int',
-     *              'default' => 0,
-     *          ),
-     *          'maxStringLength' => array(
-     *              'type'    => 'int'
-     *              'default' => null,
-     *          )
-     *      ),
-     *  );
-     * </code>
-     * The validator identifier is mapped to a Validator class which can be retrieved via the
-     * ValidatorService.
-     */
-    public function getValidatorConfigurationSchema()
-    {
-        return $this->validatorConfigurationSchema;
+        return new Value( $inputValue );
     }
 
     /**
@@ -144,23 +57,7 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
-        // null is the empty value for this type
-        if ( $inputValue === null )
-        {
-            return $this->getEmptyValue();
-        }
-
-        // construction only from path
-        if ( is_string( $inputValue ) )
-        {
-            $inputValue = array( 'path' => $inputValue );
-        }
-
-        // default construction from array
-        if ( is_array( $inputValue ) )
-        {
-            $inputValue = new Value( $inputValue );
-        }
+        $inputValue = parent::acceptValue( $inputValue );
 
         if ( !$inputValue instanceof Value )
         {
@@ -171,91 +68,23 @@ class Type extends FieldType
             );
         }
 
-        // Required paramater $path
-        if ( !isset( $inputValue->path ) || !$this->fileExists( $inputValue->path ) )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->path',
-                'Existing fileName',
-                $inputValue->path
-            );
-        }
-
-        $this->completeValue( $inputValue );
-
-        // Required parameter $fileName
-        if ( !isset( $inputValue->fileName ) || !is_string( $inputValue->fileName ) )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->fileName',
-                'string',
-                $inputValue->fileName
-            );
-        }
-
-        // Required parameter $fileSize
-        if ( !isset( $inputValue->fileSize ) || !is_int( $inputValue->fileSize ) )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->fileSize',
-                'int',
-                $inputValue->fileSize
-            );
-        }
-
         return $inputValue;
     }
 
     /**
      * Attempts to complete the data in $value
      *
-     * @param value $value
+     * @param Value $value
      * @return void
      */
-    protected function completeValue( Value $value )
+    protected function completeValue( $value )
     {
-        if ( !isset( $value->fileSize ) )
+        parent::completeValue( $value );
+
+        if ( !isset( $value->downloadCount ) )
         {
-            $value->fileSize = filesize( $value->path );
+            $value->downloadCount = 0;
         }
-
-        if ( !isset( $value->fileName ) )
-        {
-            $value->fileName = basename( $value->path );
-        }
-
-        if ( !isset( $value->mimeType ) )
-        {
-            $value->mimeType = $this->mimeTypeDetector->getMimeType( $value->path );
-        }
-    }
-
-    /**
-     * BinaryFile does not support sorting
-     *
-     * @return bool
-     */
-    protected function getSortInfo( $value )
-    {
-        return false;
-    }
-
-    /**
-     * Converts an $hash to the Value defined by the field type
-     *
-     * @param mixed $hash
-     *
-     * @return \eZ\Publish\Core\FieldType\BinaryFile\Value $value
-     */
-    public function fromHash( $hash )
-    {
-        if( $hash === null )
-        {
-            // empty value
-            return null;
-        }
-
-        return new Value( $hash );
     }
 
     /**
@@ -267,52 +96,16 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
-        if ( $value === null )
+        $hash = parent::toHash( $value );
+
+        if ( $hash === null )
         {
-            return null;
+            return $hash;
         }
 
-        return array(
-            'fileName' => $value->fileName,
-            'fileSize' => $value->fileSize,
-            'path' => $value->path,
-            'mimeType' => $value->mimeType,
-            'downloadCount' => $value->downloadCount,
-        );
-    }
+        $hash['downloadCount'] = $value->downloadCount;
 
-    /**
-     * Converts a $value to a persistence value.
-     *
-     * In this method the field type puts the data which is stored in the field of content in the repository
-     * into the property FieldValue::data. The format of $data is a primitive, an array (map) or an object, which
-     * is then canonically converted to e.g. json/xml structures by future storage engines without
-     * further conversions. For mapping the $data to the legacy database an appropriate Converter
-     * (implementing eZ\Publish\Core\Persistence\Legacy\FieldValue\Converter) has implemented for the field
-     * type. Note: $data should only hold data which is actually stored in the field. It must not
-     * hold data which is stored externally.
-     *
-     * The $externalData property in the FieldValue is used for storing data externally by the
-     * FieldStorage interface method storeFieldData.
-     *
-     * The FieldValuer::sortKey is build by the field type for using by sort operations.
-     *
-     * @see \eZ\Publish\SPI\Persistence\Content\FieldValue
-     *
-     * @param mixed $value The value of the field type
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue the value processed by the storage engine
-     */
-    public function toPersistenceValue( $value )
-    {
-        // Store original data as external (to indicate they need to be stored)
-        return new FieldValue(
-            array(
-                "data" => null,
-                "externalData" => $this->toHash( $value ),
-                "sortKey" => $this->getSortInfo( $value ),
-            )
-        );
+        return $hash;
     }
 
     /**
@@ -326,152 +119,18 @@ class Type extends FieldType
      */
     public function fromPersistenceValue( FieldValue $fieldValue )
     {
-        if ( $fieldValue->externalData === null )
+        $result = parent::fromPersistenceValue( $fieldValue );
+
+        if ( $result === null )
         {
             // empty value
             return null;
         }
 
-        // Restored data comes in $data, since it has already been processed
-        // there might be more data in the persistence value than needed here
-        $result = $this->fromHash(
-            array(
-                'path' => ( isset( $fieldValue->externalData['path'] )
-                    ? $fieldValue->externalData['path']
-                    : null ),
-                'fileName' => ( isset( $fieldValue->externalData['fileName'] )
-                    ? $fieldValue->externalData['fileName']
-                    : null ),
-                'fileSize' => ( isset( $fieldValue->externalData['fileSize'] )
-                    ? $fieldValue->externalData['fileSize']
-                    : null ),
-                'downloadCount' => ( isset( $fieldValue->externalData['downloadCount'] )
-                    ? $fieldValue->externalData['downloadCount']
-                    : null ),
-                'mimeType' => ( isset( $fieldValue->externalData['mimeType'] )
-                    ? $fieldValue->externalData['mimeType']
-                    : null ),
-            )
-        );
+        $result->downloadCount = ( isset( $fieldValue->externalData['downloadCount'] )
+            ? $fieldValue->externalData['downloadCount']
+            : 0 );
+
         return $result;
-    }
-
-    /**
-     * Returns if the given $path exists on the local disc or in the file
-     * storage
-     *
-     * @param string $path
-     * @return bool
-     */
-    protected function fileExists( $path )
-    {
-        return (
-            ( substr( $path, 0, 1 ) === '/' && file_exists( $path ) )
-            || $this->fileService->exists( $this->fileService->getStorageIdentifier( $path ) )
-        );
-    }
-
-    /**
-     * Validates a field based on the validators in the field definition
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
-     * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field for which an action is performed
-     *
-     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
-     */
-    public function validate( FieldDefinition $fieldDefinition, $fieldValue )
-    {
-        $errors = array();
-        foreach ( (array)$fieldDefinition->getValidatorConfiguration() as $validatorIdentifier => $parameters )
-        {
-            switch ( $validatorIdentifier )
-            {
-                case 'FileSizeValidator':
-                    if ( !isset( $parameters['maxFileSize'] ) || $parameters['maxFileSize'] == false )
-                    {
-                        // No file size limit
-                        break;
-                    }
-                    if ( $fieldValue !== null && $parameters['maxFileSize'] < $fieldValue->fileSize )
-                    {
-                        $errors[] = new ValidationError(
-                            "The file size cannot exceed %size% byte.",
-                            "The file size cannot exceed %size% bytes.",
-                            array(
-                                "size" => $parameters['maxFileSize'],
-                            )
-                        );
-                    }
-                    break;
-            }
-        }
-        return $errors;
-    }
-
-    /**
-     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
-     *
-     * @param mixed $validatorConfiguration
-     *
-     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
-     */
-    public function validateValidatorConfiguration( $validatorConfiguration )
-    {
-        $validationErrors = array();
-
-        foreach ( $validatorConfiguration as $validatorIdentifier => $parameters )
-        {
-            switch ( $validatorIdentifier )
-            {
-                case 'FileSizeValidator':
-                    if ( !isset( $parameters['maxFileSize'] ) )
-                    {
-                        $validationErrors[] = new ValidationError(
-                            "Validator %validator% expects parameter %parameter% to be set.",
-                            null,
-                            array(
-                                "validator" => $validatorIdentifier,
-                                "parameter" => 'maxFileSize',
-                            )
-                        );
-                        break;
-                    }
-                    if ( !is_int( $parameters['maxFileSize'] ) && !is_bool( $parameters['maxFileSize'] ) )
-                    {
-                        $validationErrors[] = new ValidationError(
-                            "Validator %validator% expects parameter %parameter% to be of %type%.",
-                            null,
-                            array(
-                                "validator" => $validatorIdentifier,
-                                "parameter" => 'maxFileSize',
-                                "type" => 'integer',
-                            )
-                        );
-                    }
-                    break;
-                default:
-                    $validationErrors[] = new ValidationError(
-                        "Validator '%validator%' is unknown",
-                        null,
-                        array(
-                            "validator" => $validatorIdentifier
-                        )
-                    );
-            }
-        }
-
-        return $validationErrors;
-    }
-
-    /**
-     * Returns whether the field type is searchable
-     *
-     * @return bool
-     */
-    public function isSearchable()
-    {
-        return true;
     }
 }

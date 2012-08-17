@@ -82,7 +82,7 @@ class BinaryFileIntergrationTest extends FileBaseIntegrationTest
                     'LegacyStorage' => new FieldType\BinaryFile\BinaryFileStorage\Gateway\LegacyStorage(),
                 ),
                 $this->getFileService(),
-                new FieldType\BinaryFile\PathGenerator\LegacyPathGenerator()
+                new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator()
             )
         );
         $handler->getFieldValueConverterRegistry()->register(

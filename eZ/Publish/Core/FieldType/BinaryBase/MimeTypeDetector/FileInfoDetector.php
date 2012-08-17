@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\BinaryFile\MimeTypeDetector;
-use eZ\Publish\Core\FieldType\BinaryFile\MimeTypeDetector;
+namespace eZ\Publish\Core\FieldType\BinaryBase\MimeTypeDetector;
+use eZ\Publish\Core\FieldType\BinaryBase\MimeTypeDetector;
 
 class FileInfoDetector implements MimeTypeDetector
 {

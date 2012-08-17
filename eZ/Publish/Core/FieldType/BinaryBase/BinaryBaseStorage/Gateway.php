@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage;
+namespace eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\Core\FieldType\StorageGateway;

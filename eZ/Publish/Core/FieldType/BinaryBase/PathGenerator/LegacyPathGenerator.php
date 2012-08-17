@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\BinaryFile\PathGenerator;
-use eZ\Publish\Core\FieldType\BinaryFile\PathGenerator,
+namespace eZ\Publish\Core\FieldType\BinaryBase\PathGenerator;
+use eZ\Publish\Core\FieldType\BinaryBase\PathGenerator,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field;
 
