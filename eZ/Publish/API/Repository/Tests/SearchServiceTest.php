@@ -391,7 +391,7 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
-     * @expectedException \OutOfBoundsException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testFindSingleFailMultiple()
     {
