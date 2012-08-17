@@ -516,14 +516,14 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 new Query( array(
-                    'criterion'   => new Criterion\SectionId( array( 2 ) ),
+                    'criterion'   => new Criterion\SectionId( array( 5 ) ),
                     'offset'      => 0,
                     'limit'       => null,
                     'sortClauses' => array(
-                        new SortClause\Field( "product", "price" ),
+                        new SortClause\Field( "template_look", "title" ),
                     )
                 ) ),
-                $fixtureDir . '/SortFieldPrice.php',
+                $fixtureDir . '/SortTemplateTitle.php',
             ),
         );
     }

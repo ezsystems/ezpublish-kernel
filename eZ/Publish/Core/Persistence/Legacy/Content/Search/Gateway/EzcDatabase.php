@@ -97,6 +97,9 @@ class EzcDatabase extends Gateway
     /**
      * Returns a list of object satisfying the $criterion.
      *
+     * @todo Check Query recreation in this method. Something breaks if we reuse
+     *       the query, after we have added the applyJoin() stuff here.
+     *
      * @param Criterion $criterion
      * @param int $offset
      * @param int|null $limit
@@ -114,8 +117,14 @@ class EzcDatabase extends Gateway
 
         $query
             ->select( 'COUNT( * )' )
-            ->from( $this->handler->quoteTable( 'ezcontentobject' ) )
-            ->where( $condition );
+            ->from( $this->handler->quoteTable( 'ezcontentobject' ) );
+
+        if ( $sort !== null )
+        {
+            $this->sortClauseConverter->applyJoin( $query, $sort );
+        }
+
+        $query->where( $condition );
 
         $statement = $query->prepare();
         $statement->execute();
@@ -126,6 +135,16 @@ class EzcDatabase extends Gateway
         {
             return array( 'count' => $count, 'rows' => array() );
         }
+
+        // Get clean query, Not sure why we cannot reuse the existing query
+        // and conditions.
+        $query = $this->handler->createSelectQuery();
+        $condition = $this->getQueryCondition( $criterion, $query, $translations );
+
+        $query
+            ->select( 'COUNT( * )' )
+            ->from( $this->handler->quoteTable( 'ezcontentobject' ) )
+            ->where( $condition );
 
         $contentIds = $this->getContentIds( $query, $condition, $sort, $offset, $limit );
 
