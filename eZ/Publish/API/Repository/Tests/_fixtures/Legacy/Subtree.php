@@ -10,8 +10,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 67,
-        'title' => 'Products',
+        'id' => 4,
+        'title' => 'Users',
       ),
        'score' => NULL,
        'index' => NULL,
@@ -21,8 +21,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 68,
-        'title' => 'Software',
+        'id' => 10,
+        'title' => 'Anonymous User',
       ),
        'score' => NULL,
        'index' => NULL,
@@ -32,8 +32,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 69,
-        'title' => 'OS Type I',
+        'id' => 11,
+        'title' => 'Members',
       ),
        'score' => NULL,
        'index' => NULL,
@@ -43,8 +43,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 70,
-        'title' => 'Boxes',
+        'id' => 12,
+        'title' => 'Administrator users',
       ),
        'score' => NULL,
        'index' => NULL,
@@ -54,8 +54,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 71,
-        'title' => 'CD/DVD Box I',
+        'id' => 13,
+        'title' => 'Editors',
       ),
        'score' => NULL,
        'index' => NULL,
@@ -65,8 +65,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 72,
-        'title' => 'CD/DVD Box II',
+        'id' => 14,
+        'title' => 'Administrator User',
       ),
        'score' => NULL,
        'index' => NULL,
@@ -76,8 +76,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 73,
-        'title' => 'CD/DVD Box III',
+        'id' => 42,
+        'title' => 'Anonymous Users',
       ),
        'score' => NULL,
        'index' => NULL,
@@ -87,8 +87,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 74,
-        'title' => 'Products sheets',
+        'id' => 59,
+        'title' => 'Partners',
       ),
        'score' => NULL,
        'index' => NULL,
