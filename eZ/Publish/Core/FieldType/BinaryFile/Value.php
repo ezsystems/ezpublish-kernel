@@ -23,4 +23,4 @@ class Value extends BaseValue
      * @var int
      */
     public $downloadCount = 0;
-};
+}
