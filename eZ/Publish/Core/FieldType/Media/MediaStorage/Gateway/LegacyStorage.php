@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the BinaryFileStorage Gateway
+ * File containing the MediaStorage Gateway
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage\Gateway;
+namespace eZ\Publish\Core\FieldType\Media\MediaStorage\Gateway;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway\LegacyStorage as BaseLegacyStorage;
@@ -21,7 +21,7 @@ class LegacyStorage extends BaseLegacyStorage
      */
     protected function getStorageTable()
     {
-        return 'ezbinaryfile';
+        return 'ezmedia';
     }
 
     /**
@@ -32,8 +32,24 @@ class LegacyStorage extends BaseLegacyStorage
     protected function getPropertyMapping()
     {
         $propertyMap = parent::getPropertyMapping();
-        $propertyMap['download_count'] = array(
-            'name' => 'downloadCount',
+        $propertyMap['has_controller'] = array(
+            'name' => 'hasController',
+            'cast' => function ( $val ) { return (bool)$val; },
+        );
+        $propertyMap['is_autoplay'] = array(
+            'name' => 'autoplay',
+            'cast' => function ( $val ) { return (bool)$val; },
+        );
+        $propertyMap['is_loop'] = array(
+            'name' => 'loop',
+            'cast' => function ( $val ) { return (bool)$val; },
+        );
+        $propertyMap['width'] = array(
+            'name' => 'width',
+            'cast' => 'intval',
+        );
+        $propertyMap['height'] = array(
+            'name' => 'height',
             'cast' => 'intval',
         );
         return $propertyMap;
@@ -57,7 +73,11 @@ class LegacyStorage extends BaseLegacyStorage
 
         parent::setFetchColumns( $selectQuery, $fieldId, $versionNo );
         $selectQuery->select(
-            $connection->quoteColumn( 'download_count' )
+            $connection->quoteColumn( 'has_controller' ),
+            $connection->quoteColumn( 'is_autoplay' ),
+            $connection->quoteColumn( 'is_loop' ),
+            $connection->quoteColumn( 'width' ),
+            $connection->quoteColumn( 'height' )
         );
     }
 
@@ -79,8 +99,29 @@ class LegacyStorage extends BaseLegacyStorage
 
         parent::setInsertColumns( $insertQuery, $versionInfo, $field );
         $insertQuery->set(
-            $connection->quoteColumn( 'download_count' ),
-            $insertQuery->bindValue( $field->value->externalData['downloadCount'], null, \PDO::PARAM_INT )
+            $connection->quoteColumn( 'controls' ),
+            $insertQuery->bindValue( '' )
+        )->set(
+            $connection->quoteColumn( 'has_controller' ),
+            $insertQuery->bindValue( (int)$field->value->externalData['hasController'], null, \PDO::PARAM_INT )
+        )->set(
+            $connection->quoteColumn( 'height' ),
+            $insertQuery->bindValue( (int)$field->value->externalData['height'], null, \PDO::PARAM_INT )
+        )->set(
+            $connection->quoteColumn( 'is_autoplay' ),
+            $insertQuery->bindValue( (int)$field->value->externalData['autoplay'], null, \PDO::PARAM_INT )
+        )->set(
+            $connection->quoteColumn( 'is_loop' ),
+            $insertQuery->bindValue( (int)$field->value->externalData['loop'], null, \PDO::PARAM_INT )
+        )->set(
+            $connection->quoteColumn( 'pluginspage' ),
+            $insertQuery->bindValue( '' )
+        )->set(
+            $connection->quoteColumn( 'quality' ),
+            $insertQuery->bindValue( 'high' )
+        )->set(
+            $connection->quoteColumn( 'width' ),
+            $insertQuery->bindValue( (int)$field->value->externalData['width'], null, \PDO::PARAM_INT )
         );
     }
 }

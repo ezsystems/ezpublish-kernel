@@ -36,9 +36,18 @@ abstract class LegacyStorage extends Gateway
     protected function getPropertyMapping()
     {
         return array(
-            'filename' => 'path',
-            'mime_type' => 'mimeType',
-            'original_filename' => 'fileName',
+            'filename' => array(
+                'name' => 'path',
+                'cast' => 'strval',
+            ),
+            'mime_type' => array(
+                'name' => 'mimeType',
+                'cast' => 'strval',
+            ),
+            'original_filename' => array(
+                'name' => 'fileName',
+                'cast' => 'strval',
+            )
         );
     }
 
@@ -219,7 +228,7 @@ abstract class LegacyStorage extends Gateway
         $convertedResult = array();
         foreach ( reset( $result ) as $column => $value )
         {
-            $convertedResult[$propertyMap[$column]] = $value;
+            $convertedResult[$this->toPropertyName( $column )] = $this->castToPropertyValue( $value, $column );
         }
         $convertedResult['path'] = $this->prependMimeToPath(
             $convertedResult['path'],
@@ -227,6 +236,32 @@ abstract class LegacyStorage extends Gateway
         );
 
         return $convertedResult;
+    }
+
+    /**
+     * Returns the property name for the given $columnName
+     *
+     * @param string $columnName
+     * @return string
+     */
+    protected function toPropertyName( $columnName )
+    {
+        $propertyMap = $this->getPropertyMapping();
+        return ( $propertyMap[$columnName]['name'] );
+    }
+
+    /**
+     * Returns $value casted as specified by {@link getPropertyMapping()}.
+     *
+     * @param mixed $value
+     * @param string $columnName
+     * @return mixed
+     */
+    protected function castToPropertyValue( $value, $columnName )
+    {
+        $propertyMap = $this->getPropertyMapping();
+        $castFunction = $propertyMap[$columnName]['cast'];
+        return $castFunction( $value );
     }
 
     /**
