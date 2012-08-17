@@ -11,7 +11,7 @@
         },
         {
             "type": "vcs",
-            "url": "git@github.com:ezsystems/ezpublish.git"
+            "url": "https://github.com/ezsystems/ezpublish.git"
         }
     ],
     "require": {
@@ -25,7 +25,7 @@
         "zetacomponents/database": "dev-master",
         "zetacomponents/mail": "dev-master",
         "Qafoo/RMF": "dev-master",
-        "ezsystems/ezpublish-legacy": "dev-ezpublish5-integration"
+        "ezsystems/ezpublish-legacy": "dev-master"
     },
     "autoload": {
         "psr-0": {

@@ -18,9 +18,9 @@
         },
         {
             "package": "ezsystems/ezpublish-legacy",
-            "version": "dev-ezpublish5-integration",
-            "source-reference": "4299b41bd3e6955c852fafc5891ce35b584e19c4",
-            "commit-date": "1343037693"
+            "version": "dev-master",
+            "source-reference": "a00b83cde6edbbc9774bcbbf7647e92bece59425",
+            "commit-date": "1345213302"
         },
         {
             "package": "symfony/symfony",
