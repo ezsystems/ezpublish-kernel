@@ -1,5 +1,5 @@
 {
-    "hash": "0fa343ef9d4a4cae3fd1beb772e8f13f",
+    "hash": "fe3932e30d035def63b63acaf6101593",
     "packages": [
 
     ],
@@ -13,8 +13,8 @@
         {
             "package": "doctrine/common",
             "version": "2.3.x-dev",
-            "source-reference": "b0ed9cc35ec28b7cd23d3d001e6fd4c7b5092926",
-            "commit-date": "1343082138"
+            "source-reference": "2ec4bc6db13db6a0976a16b71058083c55cbcdbd",
+            "commit-date": "1343847076"
         },
         {
             "package": "ezsystems/ezpublish-legacy",
@@ -24,7 +24,7 @@
         },
         {
             "package": "symfony/symfony",
-            "version": "v2.1.0-BETA4"
+            "version": "v2.1.0-RC1"
         },
         {
             "package": "twig/twig",
@@ -35,8 +35,8 @@
         {
             "package": "twig/twig",
             "version": "dev-master",
-            "source-reference": "657de7bdeb680815e0df95f63da9f81e1533d2ea",
-            "commit-date": "1342953178"
+            "source-reference": "f2f698c820d4396f519ef4175ad6fe79fcfb9ecf",
+            "commit-date": "1344328685"
         },
         {
             "package": "zetacomponents/base",
@@ -80,7 +80,7 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "symfony/symfony": 10,
+        "symfony/symfony": 5,
         "zetacomponents/cache": 20,
         "zetacomponents/php-generator": 20,
         "zetacomponents/configuration": 20,
