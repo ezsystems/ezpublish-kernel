@@ -15,106 +15,56 @@ use eZ\Publish\Core\FieldType\BinaryFile\Type as BinaryFileType,
  * @group fieldType
  * @group ezbinaryfile
  */
-class BinaryFileTest extends FieldTypeTest
+class BinaryFileTest extends StandardizedFieldTypeTest
 {
-    protected $validatorServiceMock;
+    private $mimeTypeDetectorMock;
 
-    protected $fieldTypeToolsMock;
-
-    protected $fileServiceMock;
-
-    protected $mimeTypeDetectorMock;
-
-    protected $binaryFileType;
-
-    protected function getBinaryFileType()
-    {
-        if ( !isset( $this->binaryFileType ) )
-        {
-            $this->binaryFileType = new BinaryFileType(
-                $this->getValidatorServiceMock(),
-                $this->getFieldTypeToolsMock(),
-                $this->getFileServiceMock(),
-                $this->getMimeTypeDetectorMock()
-            );
-        }
-        return $this->binaryFileType;
-    }
+    private $binaryFileType;
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
+     * Returns the field type under test.
+     *
+     * This method is used by all test cases to retrieve the field type under
+     * test. Just create the FieldType instance using mocks from the provided
+     * get*Mock() methods and/or custom get*Mock() implementations. You MUST
+     * NOT take care for test case wide caching of the field type, just return
+     * a new instance from this method!
+     *
+     * @return FieldType
      */
-    public function testValidatorConfigurationSchema()
+    protected function createFieldTypeUnderTest()
     {
-        $fieldType = $this->getBinaryFileType();
-
-        self::assertSame(
-            array(
-                "FileSizeValidator" => array(
-                    "maxFileSize" => array(
-                        "type" => "int",
-                        "default" => false
-                    )
-                )
-            ),
-            $fieldType->getValidatorConfigurationSchema(),
-            "The set of allowed validators does not match what is expected."
+        return new BinaryFileType(
+            $this->getValidatorServiceMock(),
+            $this->getFieldTypeToolsMock(),
+            $this->getFileServiceMock(),
+            $this->getMimeTypeDetectorMock()
         );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
-     */
-    public function testSettingsSchema()
+    protected function getValidatorConfigurationSchemaExpectation()
     {
-        $fieldType = $this->getBinaryFileType();
-        self::assertSame(
-            array(),
-            $fieldType->getSettingsSchema(),
-            "The settings schema does not match what is expected."
+        return array(
+            "FileSizeValidator" => array(
+                "maxFileSize" => array(
+                    "type" => "int",
+                    "default" => false
+                )
+            )
         );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\FieldType\BinaryFile\Type::getEmptyValue
-     */
-    public function testEmptyValue()
+    protected function getSettingsSchemaExpectation()
     {
-        $fieldType = $this->getBinaryFileType();
-
-        $this->assertNull( $fieldType->getEmptyValue() );
+        return array();
     }
 
-    /**
-     * @param mixed $inputValue
-     * @param mixed $expectedException
-     * @covers \eZ\Publish\Core\FieldType\BinaryFile\Type::acceptValue
-     * @dataProvider provideInvalidInputValues
-     */
-    public function testAcceptValueFailsOnInvalidValues( $inputValue, $expectedException )
+    protected function getEmptyValueExpectation()
     {
-        $fieldType = $this->getBinaryFileType();
-
-        try
-        {
-            $fieldType->acceptValue( $inputValue );
-            $this->fail(
-                sprintf(
-                    'Expected exception of type "%s" not thrown.',
-                    $expectedException
-                )
-            );
-        }
-        catch ( \Exception $e )
-        {
-            $this->assertInstanceOf(
-                $expectedException,
-                $e
-            );
-        }
+        return null;
     }
 
-    public function provideInvalidInputValues()
+    public function provideInvalidInputForAcceptValue()
     {
         return array(
             array(
@@ -140,30 +90,7 @@ class BinaryFileTest extends FieldTypeTest
         );
     }
 
-    /**
-     * @param mixed $inputValue
-     * @param mixed $expectedOutputValue
-     * @dataProvider provideValidInputValues
-     * @covers \eZ\Publish\Core\FieldType\BinaryFile\Type::acceptValue
-     */
-    public function testAcceptValue( $inputValue, $expectedOutputValue )
-    {
-        $fieldType = $this->getBinaryFileType();
-
-        $this->getMimeTypeDetectorMock()->expects( $this->any() )
-            ->method( 'getMimeType' )
-            ->will( $this->returnValue( 'text/plain' ) );
-
-        $outputValue = $fieldType->acceptValue( $inputValue );
-
-        $this->assertEquals(
-            $expectedOutputValue,
-            $outputValue,
-            'acceptValue() did not convert properly.'
-        );
-    }
-
-    public function provideValidInputValues()
+    public function provideValidInputForAcceptValue()
     {
         return array(
             array(
@@ -230,51 +157,6 @@ class BinaryFileTest extends FieldTypeTest
                 ) )
             ),
         );
-    }
-
-    protected function getValidatorServiceMock()
-    {
-        if ( !isset( $this->validatorServiceMock ) )
-        {
-            $this->validatorServiceMock = $this->getMock(
-                'eZ\\Publish\\Core\\Repository\\ValidatorService',
-                array(),
-                array(),
-                '',
-                false
-            );
-        }
-        return $this->validatorServiceMock;
-    }
-
-    protected function getFieldTypeToolsMock()
-    {
-        if ( !isset( $this->fieldTypeToolsMock ) )
-        {
-            $this->fieldTypeToolsMock = $this->getMock(
-                'eZ\\Publish\\Core\\Repository\\FieldTypeTools',
-                array(),
-                array(),
-                '',
-                false
-            );
-        }
-        return $this->fieldTypeToolsMock;
-    }
-
-    protected function getFileServiceMock()
-    {
-        if ( !isset( $this->fileServiceMock ) )
-        {
-            $this->fileServiceMock = $this->getMock(
-                'eZ\\Publish\\Core\\FieldType\\FileService',
-                array(),
-                array(),
-                '',
-                false
-            );
-        }
-        return $this->fileServiceMock;
     }
 
     protected function getMimeTypeDetectorMock()
