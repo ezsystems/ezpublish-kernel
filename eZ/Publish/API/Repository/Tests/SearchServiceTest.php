@@ -398,7 +398,7 @@ class SearchServiceTest extends BaseTest
         $repository    = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $content = $searchService->findSingle(
+        $searchService->findSingle(
             new Criterion\ContentId(
                 array( 4, 10 )
             )
