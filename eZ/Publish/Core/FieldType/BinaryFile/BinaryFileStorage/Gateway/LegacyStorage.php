@@ -93,7 +93,9 @@ class LegacyStorage extends Gateway
             $insertQuery->bindValue( $field->value->externalData['downloadCount'], null, \PDO::PARAM_INT )
         )->set(
             $connection->quoteColumn( 'filename' ),
-            $insertQuery->bindValue( $field->value->externalData['path'] )
+            $insertQuery->bindValue(
+                $this->removeMimeFromPath( $field->value->externalData['path'] )
+            )
         )->set(
             $connection->quoteColumn( 'mime_type' ),
             $insertQuery->bindValue( $field->value->externalData['mimeType'] )
@@ -108,6 +110,19 @@ class LegacyStorage extends Gateway
         $insertQuery->prepare()->execute();
 
         return false;
+    }
+
+    /**
+     * Removes the prepended mime-type directory from $path for legacy storage.
+     *
+     * @param string $path
+     * @return string
+     * @protected
+     */
+    public function removeMimeFromPath( $path )
+    {
+        $res = substr( $path, strpos( $path, '/' ) + 1 );
+        return $res;
     }
 
     /**
@@ -157,8 +172,26 @@ class LegacyStorage extends Gateway
         {
             $convertedResult[$this->propertyMap[$column]] = $value;
         }
+        $convertedResult['path'] = $this->prependMimeToPath(
+            $convertedResult['path'],
+            $convertedResult['mimeType']
+        );
 
         return $convertedResult;
+    }
+
+    /**
+     * Prepends $path with the first part of the given $mimeType.
+     *
+     * @param string $path
+     * @param string $mimeType
+     * @return string
+     * @protected
+     */
+    public function prependMimeToPath( $path, $mimeType )
+    {
+        $res = substr( $mimeType, 0, strpos( $mimeType, '/' ) ) . '/' . $path;
+        return $res;
     }
 
     /**
@@ -215,7 +248,7 @@ class LegacyStorage extends Gateway
     }
 
     /**
-     * Returns a map of files referenced by the given $fieldIds
+     * Returns a set o file references, referenced by the given $fieldIds.
      *
      * @param array $fieldIds
      * @return array
@@ -226,7 +259,8 @@ class LegacyStorage extends Gateway
 
         $selectQuery = $connection->createSelectQuery();
         $selectQuery->select(
-            $connection->quoteColumn( 'filename' )
+            $connection->quoteColumn( 'filename' ),
+            $connection->quoteColumn( 'mime_type' )
         )->from(
             $connection->quoteTable( 'ezbinaryfile' )
         )->where(
@@ -239,7 +273,14 @@ class LegacyStorage extends Gateway
         $statement = $selectQuery->prepare();
         $statement->execute();
 
-        return $statement->fetchAll( \PDO::FETCH_COLUMN );
+        $gateway = $this;
+        return array_map(
+            function ( $row ) use ( $gateway )
+            {
+                return $gateway->prependMimeToPath( $row['filename'], $row['mime_type'] );
+            },
+            $statement->fetchAll( \PDO::FETCH_ASSOC )
+        );
     }
 
     /**
@@ -255,6 +296,7 @@ class LegacyStorage extends Gateway
         $selectQuery = $connection->createSelectQuery();
         $selectQuery->select(
             $connection->quoteColumn( 'filename' ),
+            $connection->quoteColumn( 'mime_type' ),
             $selectQuery->alias(
                 $selectQuery->expr->count( $connection->quoteColumn( 'contentobject_attribute_id' ) ),
                 'count'
@@ -264,7 +306,10 @@ class LegacyStorage extends Gateway
         )->where(
             $selectQuery->expr->in(
                 $connection->quoteColumn( 'filename' ),
-                $files
+                array_map(
+                    array( $this, 'removeMimeFromPath' ),
+                    $files
+                )
             )
         )->groupBy( $connection->quoteColumn( 'filename' ) );
 
@@ -274,15 +319,20 @@ class LegacyStorage extends Gateway
         $countMap = array();
         foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
         {
-            $countMap[$row['filename']] = (int)$row['count'];
+            $path = $this->prependMimeToPath( $row['filename'], $row['mime_type'] );
+            $countMap[$path] = (int)$row['count'];
         }
-        foreach ( $files as $file )
+
+        // Complete counts
+        foreach ( $files as $path )
         {
-            if ( !isset( $countMap[$file] ) )
+            // This is already the correct path
+            if ( !isset( $countMap[$path] ) )
             {
-                $countMap[$file] = 0;
+                $countMap[$path] = 0;
             }
         }
+
         return $countMap;
     }
 }

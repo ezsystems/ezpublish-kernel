@@ -18,6 +18,19 @@ class LegacyPathGenerator extends PathGenerator
     {
         $extension = pathinfo( $field->value->externalData['fileName'], PATHINFO_EXTENSION );
 
-        return md5( uniqid( microtime( true ), true ) ) . ( !empty( $extension ) ? '.' . $extension : '' );
+        return $this->getFirstPartOfMimeType( $field->value->externalData['mimeType'] )
+            . '/' . md5( uniqid( microtime( true ), true ) )
+            . ( !empty( $extension ) ? '.' . $extension : '' );
+    }
+
+    /**
+     * Extracts the first part (before the '/') from the given $mimeType.
+     *
+     * @param string $mimeType
+     * @return string
+     */
+    protected function getFirstPartOfMimeType( $mimeType )
+    {
+        return substr( $mimeType, 0, strpos( $mimeType, '/' ) );
     }
 }
