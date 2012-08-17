@@ -505,18 +505,18 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 new Query( array(
-                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'criterion' => new Criterion\ContentTypeId( 1 ),
                     'offset'      => 0,
                     'limit'       => null,
                     'sortClauses' => array(
-                        new SortClause\Field( "article", "title" ),
+                        new SortClause\Field( "folder", "name" ),
                     )
                 ) ),
-                $fixtureDir . '/SortFieldTitle.php',
+                $fixtureDir . '/SortFolderName.php',
             ),
             array(
                 new Query( array(
-                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'criterion'   => new Criterion\SectionId( array( 2 ) ),
                     'offset'      => 0,
                     'limit'       => null,
                     'sortClauses' => array(
