@@ -442,8 +442,8 @@ class SearchServiceTest extends BaseTest
                     'offset'      => 0,
                     'limit'       => 10,
                     'sortClauses' => array(
-                        new SortClause\LocationDepth( Query::SORT_ASC ),
                         new SortClause\LocationPathString( Query::SORT_DESC ),
+                        new SortClause\ContentName( Query::SORT_ASC )
                     )
                 ) ),
                 $fixtureDir . '/SortMultiple.php',

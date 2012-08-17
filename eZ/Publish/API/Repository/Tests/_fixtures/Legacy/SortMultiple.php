@@ -6,18 +6,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
   ),
    'searchHits' => 
   array (
-    0 => 
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
-       'valueObject' => 
-      array (
-        'id' => 41,
-        'title' => 'Media',
-      ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
-    )),
-    1 => 
+    0 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
@@ -28,7 +17,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'index' => NULL,
        'highlight' => NULL,
     )),
-    2 => 
+    1 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
@@ -39,7 +28,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'index' => NULL,
        'highlight' => NULL,
     )),
-    3 => 
+    2 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
@@ -49,6 +38,17 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'score' => NULL,
        'index' => NULL,
        'highlight' => NULL,
+    )),
+    3 =>
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+        'valueObject' =>
+        array (
+            'id' => 41,
+            'title' => 'Media',
+        ),
+        'score' => NULL,
+        'index' => NULL,
+        'highlight' => NULL,
     )),
   ),
    'spellSuggestion' => NULL,
