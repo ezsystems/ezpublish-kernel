@@ -366,31 +366,31 @@ class TrashServiceTest extends BaseTrashServiceTest
         $repository = $this->getRepository();
 
         $homeLocationId = $this->generateId( 'location', 2 );
-        $usersLocationRemoteId = '3f6d92f8044aed134f32153517850f5a';
+        $mediaLocationRemoteId = '75c715a51699d2d309a924eca6a95145';
         /* BEGIN: Use Case */
         // $homeLocationId is the ID of the "Home" location in an eZ Publish
         // demo installation
-        // $usersLocationRemoteId is the ID of the "Users" location in an eZ Publish
+        // $mediaLocationRemoteId is the ID of the "Media" location in an eZ Publish
         // demo installation
 
         $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
-        // Load "Users" page location
-        $usersLocation = $locationService->loadLocationByRemoteId(
-            $usersLocationRemoteId
+        // Load "media" page location
+        $mediaLocation = $locationService->loadLocationByRemoteId(
+            $mediaLocationRemoteId
         );
 
         // Create a second Location for the content
         $locationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
         $newLocation = $locationService->createLocation(
-            $usersLocation->getContentInfo(),
+            $mediaLocation->getContentInfo(),
             $locationCreate
         );
 
         // Trash the both locations
         $newTrashItem = $trashService->trash( $newLocation );
-        $usersTrashItem = $trashService->trash( $usersLocation );
+        $mediaTrashItem = $trashService->trash( $mediaLocation );
 
         // Recover the new Location, which now becomes the main location
         $location = $trashService->recover( $newTrashItem );
