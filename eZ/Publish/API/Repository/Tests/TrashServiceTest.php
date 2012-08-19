@@ -364,8 +364,6 @@ class TrashServiceTest extends BaseTrashServiceTest
     public function testRecoverSetsNewMainLocationId()
     {
         $repository = $this->getRepository();
-        $trashService = $repository->getTrashService();
-        $locationService = $repository->getLocationService();
 
         $homeLocationId = $this->generateId( 'location', 2 );
         $usersLocationRemoteId = '3f6d92f8044aed134f32153517850f5a';

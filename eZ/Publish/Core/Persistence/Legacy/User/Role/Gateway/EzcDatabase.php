@@ -359,6 +359,9 @@ class EzcDatabase extends Gateway
             )
         );
 
+        if ( empty( $nodeIDs ) )
+            return array();
+
         // Limit nodes to groups only
         $query = $this->handler->createSelectQuery();
         $query->select(
@@ -382,7 +385,7 @@ class EzcDatabase extends Gateway
                     // We use the integer type ID here, to minimize joins and
                     // make use of existing keys. One might want to make this
                     // "injectable".
-                    $query->bindValue( self::GROUP_TYPE_ID, null, \PDO::PARAM_INT )
+                    $query->bindValue( self::GROUP_TYPE_ID, null, \PDO::PARAM_INT )// @todo: Can not hard code group type id!
                 )
             )
         );
