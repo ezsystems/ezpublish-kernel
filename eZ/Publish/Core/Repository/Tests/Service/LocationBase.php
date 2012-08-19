@@ -15,8 +15,7 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound,
     eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException,
     eZ\Publish\API\Repository\Exceptions\NotFoundException,
-    eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct,
-    eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+    eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 
 /**
  * Test case for Location Service

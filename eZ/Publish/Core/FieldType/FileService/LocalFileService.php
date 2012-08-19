@@ -8,9 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\FileService;
-use eZ\Publish\Core\FieldType\FileService,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\Core\FieldType\FileService;
 
 class LocalFileService implements FileService
 {
@@ -29,13 +27,22 @@ class LocalFileService implements FileService
     protected $storageDir;
 
     /**
+     * Identifier prefix, will be appended to $storageDir for storing, but also
+     * delivered as part of the storage identifier.
+     *
+     * @var string
+     */
+    protected $identifierPrefix;
+
+    /**
      * @param string $installDir
      * @param string $siteName
      */
-    public function __construct( $installDir, $storageDir )
+    public function __construct( $installDir, $storageDir, $identifierPrefix = '' )
     {
         $this->installDir = $installDir;
         $this->storageDir = $storageDir;
+        $this->identifierPrefix = $identifierPrefix;
     }
 
     /**
@@ -44,13 +51,13 @@ class LocalFileService implements FileService
      * @param string $path
      * @return string
      */
-    protected function getFullPath( $path )
+    protected function getFullPath( $path, $allowLocal = false )
     {
-        if ( substr( $path, 0, 1 ) === '/' )
+        if ( $allowLocal && substr( $path, 0, 1 ) === '/' )
         {
             return $path;
         }
-        return $this->installDir . '/' . $path;
+        return $this->installDir . '/' . ( !empty( $this->storageDir ) ? $this->storageDir . '/' : '' ) . $path;
     }
 
     /**
@@ -63,7 +70,7 @@ class LocalFileService implements FileService
      */
     public function storeFile( $sourcePath, $storageIdentifier )
     {
-        $fullSourcePath = $this->getFullPath( $sourcePath );
+        $fullSourcePath = $this->getFullPath( $sourcePath, true );
         $fullTargetPath = $this->getFullPath( $storageIdentifier );
 
         if ( $fullSourcePath == $fullTargetPath )
@@ -193,7 +200,9 @@ class LocalFileService implements FileService
      */
     public function getStorageIdentifier( $path )
     {
-        return $this->storageDir . '/' . $path;
+        return ( !empty( $this->identifierPrefix )
+            ? $this->identifierPrefix . '/'
+            : '' ) . $path;
     }
 
     /**
@@ -231,6 +240,17 @@ class LocalFileService implements FileService
         return filesize(
             $this->getFullPath( $storageIdentifier )
         );
+    }
+
+    /**
+     * Returns is a file/directory with the given $storageIdentifier exists
+     *
+     * @param string $storageIdentifier
+     * @return bool
+     */
+    public function exists( $storageIdentifier )
+    {
+        return file_exists( $this->getFullPath( $storageIdentifier ) );
     }
 
     /**

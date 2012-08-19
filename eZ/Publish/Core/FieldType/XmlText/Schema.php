@@ -195,7 +195,7 @@ class Schema
     /**
      * @param array $settings
      */
-    function __construct( array $settings = array() )
+    public function __construct( array $settings = array() )
     {
         // Apply default values
         $settings = $settings + array(
@@ -216,7 +216,7 @@ class Schema
         // Apply custom attribute settings
         foreach ( $settings['customAttributes'] as $tagName => $customAttributes )
         {
-            if ( !isset($this->schema[$tagName]) )
+            if ( !isset( $this->schema[$tagName] ) )
             {
                 throw new \Exception("Unsupported tag name in customAttributes settings: {$tagName}");
             }
@@ -227,7 +227,7 @@ class Schema
         // Apply classes allowed pr tag
         foreach ( $settings['classesList'] as $tagName => $classesList )
         {
-            if ( !isset($this->schema[$tagName]) )
+            if ( !isset( $this->schema[$tagName] ) )
                 throw new \Exception("Unsupported tag name in classesList settings: {$tagName}");
 
             $this->schema[$tagName]['classesList'] = $classesList;
@@ -238,17 +238,22 @@ class Schema
     /**
      * Determines if the tag is inline
      *
-     * @param \DOMNode|\DOMElement $element
+     * @param \DOMNode|\DOMElement|string $element
      *
      * @return bool
      */
-    function isInline( DOMNode $element )
+    public function isInline( $element )
     {
+        if ( is_string( $element ) )
+        {
+            return $this->schema[$element]['isInline'];
+        }
+
         // Use specific custom tag setting if set
         if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
         {
             $name = $element->getAttribute( 'name' );
-            if ( isset($this->schema['custom']['tags'][$name]['isInline']) )
+            if ( isset( $this->schema['custom']['tags'][$name]['isInline'] ) )
             {
                 return $this->schema['custom']['tags'][$name]['isInline'];
             }
@@ -266,7 +271,7 @@ class Schema
      * @return bool|null true if elements match schema, false if elements don't match schema, null  in case of errors
      * @todo Add exceptions
      */
-    function check( DOMNode $parent, $child )
+    public function check( DOMNode $parent, $child )
     {
         $parentName = $parent->nodeName;
 
@@ -275,7 +280,7 @@ class Schema
         else
             $childName = $child;
 
-        if ( isset($this->schema[$childName]) )
+        if ( isset( $this->schema[$childName] ) )
         {
             $isInline = $this->isInline( $child );
 
@@ -321,13 +326,13 @@ class Schema
      *
      * @return bool
      */
-    function childrenRequired( DOMNode $element )
+    public function childrenRequired( DOMNode $element )
     {
         // Use specific custom tag setting if set
         if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
         {
             $name = $element->getAttribute( 'name' );
-            if ( isset($this->schema['custom']['tags'][$name]['childrenRequired']) )
+            if ( isset( $this->schema['custom']['tags'][$name]['childrenRequired'] ) )
             {
                 return $this->schema['custom']['tags'][$name]['childrenRequired'];
             }
@@ -342,20 +347,20 @@ class Schema
      *
      * @return bool
      */
-    function hasAttributes( DOMNode $element )
+    public function hasAttributes( DOMNode $element )
     {
         // Use specific custom tag setting if set
         if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
         {
             $name = $element->getAttribute( 'name' );
-            if ( isset($this->schema['custom']['tags'][$name]['attributes']) )
+            if ( isset( $this->schema['custom']['tags'][$name]['attributes'] ) )
             {
-                return !empty($this->schema['custom']['tags'][$name]['attributes']);
+                return !empty( $this->schema['custom']['tags'][$name]['attributes'] );
             }
             // fallback to settings on base custom tag
         }
 
-        return !empty($this->schema[$element->nodeName]['attributes']);
+        return !empty( $this->schema[$element->nodeName]['attributes'] );
     }
 
     /**
@@ -363,13 +368,13 @@ class Schema
      *
      * @return array
      */
-    function attributes( DOMNode $element )
+    public function attributes( DOMNode $element )
     {
         // Use specific custom tag setting if set
         if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
         {
             $name = $element->getAttribute( 'name' );
-            if ( isset($this->schema['custom']['tags'][$name]['attributes']) )
+            if ( isset( $this->schema['custom']['tags'][$name]['attributes'] ) )
             {
                 return $this->schema['custom']['tags'][$name]['attributes'];
             }
@@ -385,20 +390,20 @@ class Schema
      *
      * @return mixed
      */
-    function attributeDefaultValue( DOMNode $element, $attributeName )
+    public function attributeDefaultValue( DOMNode $element, $attributeName )
     {
         // Use specific custom tag setting if set
         if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
         {
             $name = $element->getAttribute( 'name' );
-            if ( isset($this->schema['custom']['tags'][$name]['attributesDefaults'][$attributeName]) )
+            if ( isset( $this->schema['custom']['tags'][$name]['attributesDefaults'][$attributeName] ) )
             {
                 return $this->schema['custom']['tags'][$name]['attributesDefaults'][$attributeName];
             }
             // fallback to settings on base custom tag
         }
 
-        if ( isset($this->schema[$element->nodeName]['attributesDefaults'][$attributeName]) )
+        if ( isset( $this->schema[$element->nodeName]['attributesDefaults'][$attributeName] ) )
             return $this->schema[$element->nodeName]['attributesDefaults'][$attributeName];
 
         return null;
@@ -409,20 +414,20 @@ class Schema
      *
      * @return array
      */
-    function attributeDefaultValues( DOMNode $element )
+    public function attributeDefaultValues( DOMNode $element )
     {
         // Use specific custom tag setting if set
         if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
         {
             $name = $element->getAttribute( 'name' );
-            if ( isset($this->schema['custom']['tags'][$name]['attributesDefaults']) )
+            if ( isset( $this->schema['custom']['tags'][$name]['attributesDefaults'] ) )
             {
                 return $this->schema['custom']['tags'][$name]['attributesDefaults'];
             }
             // fallback to settings on base custom tag
         }
 
-        if ( isset($this->schema[$element->nodeName]['attributesDefaults']) )
+        if ( isset( $this->schema[$element->nodeName]['attributesDefaults'] ) )
             return $this->schema[$element->nodeName]['attributesDefaults'];
 
         return array();
@@ -433,13 +438,13 @@ class Schema
      *
      * @return array
      */
-    function customAttributes( DOMNode $element )
+    public function customAttributes( DOMNode $element )
     {
         // Use specific custom tag setting if set
         if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
         {
             $name = $element->getAttribute( 'name' );
-            if ( isset($this->schema['custom']['tags'][$name]['customAttributes']) )
+            if ( isset( $this->schema['custom']['tags'][$name]['customAttributes'] ) )
             {
                 return $this->schema['custom']['tags'][$name]['customAttributes'];
             }
@@ -454,15 +459,15 @@ class Schema
      *
      * @return bool
      */
-    function exists( DOMNode $element )
+    public function exists( DOMNode $element )
     {
         if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
         {
             $name = $element->getAttribute( 'name' );
-            return $name && isset($this->schema['custom']['tags'][$name]);
+            return $name && isset( $this->schema['custom']['tags'][$name] );
         }
 
-        return isset($this->schema[$element->nodeName]);
+        return isset( $this->schema[$element->nodeName] );
     }
 
     /**
@@ -470,13 +475,13 @@ class Schema
      *
      * @return array
      */
-    function getClassesList( DOMNode $element )
+    public function getClassesList( DOMNode $element )
     {
         // Use specific custom tag setting if set
         if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
         {
             $name = $element->getAttribute( 'name' );
-            if ( isset($this->schema['custom']['tags'][$name]['classesList']) )
+            if ( isset( $this->schema['custom']['tags'][$name]['classesList'] ) )
             {
                 return $this->schema['custom']['tags'][$name]['classesList'];
             }
@@ -486,13 +491,12 @@ class Schema
         return $this->schema[$element->nodeName]['classesList'];
     }
 
-
     /**
      * List of available classes
      *
      * @return array
      */
-    function availableElements()
+    public function availableElements()
     {
         return array_keys( $this->schema );
     }

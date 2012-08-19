@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\User;
 
-use \eZ\Publish\API\Repository\Values;
-
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\User\Role}
  * class.

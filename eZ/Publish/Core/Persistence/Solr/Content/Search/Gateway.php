@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search;
 
-use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query;
 
 /**
  * The Content Search Gateway provides the implementation for one database to

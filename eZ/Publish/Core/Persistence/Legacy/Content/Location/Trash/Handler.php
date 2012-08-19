@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash;
-use eZ\Publish\SPI\Persistence\Content\Location\Trash,
-    eZ\Publish\SPI\Persistence\Content\Location\Trashed,
+use eZ\Publish\SPI\Persistence\Content\Location\Trashed,
     eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as BaseTrashHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,

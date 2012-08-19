@@ -16,7 +16,6 @@ use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface,
     eZ\Publish\API\Repository\Values\Content\URLWildcard,
     eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult,
     eZ\Publish\SPI\Persistence\Content\UrlWildcard as SPIUrlWildcard,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\ContentValidationException,
     eZ\Publish\Core\Base\Exceptions\UnauthorizedException;

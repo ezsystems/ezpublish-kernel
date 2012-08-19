@@ -10,8 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * Visits the LogicalOr criterion

@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class
+ * File contains: eZ\Publish\SPI\Tests\FieldType\ImageIntegrationTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -11,8 +11,7 @@ namespace eZ\Publish\SPI\Tests\FieldType;
 use eZ\Publish\Core\Persistence\Legacy,
     eZ\Publish\Core\FieldType,
     eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
+    eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Integration test for legacy storage field types
@@ -34,80 +33,26 @@ use eZ\Publish\Core\Persistence\Legacy,
  *
  * @group integration
  */
-class ImageIntergrationTest extends BaseIntegrationTest
+class ImageIntergrationTest extends FileBaseIntegrationTest
 {
     /**
-     * If the temporary directory should be removed after the tests.
+     * Returns the storage dir used by the file service
      *
-     * @var bool
+     * @return string
      */
-    protected static $removeTmpDir = false;
-
-    /**
-     * Temporary directory
-     *
-     * @var string
-     */
-    protected static $tmpDir;
-
-    /**
-     * Storage directory used by image file service
-     *
-     * @var string
-     */
-    protected static $storageDir = 'var/my_site/storage/images';
-
-    public static function setUpBeforeClass()
+    protected function getStorageDir()
     {
-        $tmpFile = tempnam( sys_get_temp_dir(), 'eZ_FieldType_ImageIntegrationTest' );
-
-        // Convert file into directory
-        unlink( $tmpFile );
-        mkdir( $tmpFile );
-
-        self::$tmpDir = $tmpFile;
-    }
-
-    public static function tearDownAfterClass()
-    {
-        self::removeRecursive( self::$tmpDir );
+        return '';
     }
 
     /**
-     * Removes the given directory path recursively
+     * Returns the storage identifier prefix used by the file service
      *
-     * @param string $dir
      * @return void
      */
-    protected static function removeRecursive( $dir )
+    protected function getStorageIdentifierPrefix()
     {
-        if ( !self::$removeTmpDir )
-        {
-            return;
-        }
-
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator(
-                $dir,
-                \FileSystemIterator::KEY_AS_PATHNAME | \FileSystemIterator::SKIP_DOTS | \ FilesystemIterator::CURRENT_AS_FILEINFO
-
-            ),
-            \RecursiveIteratorIterator::CHILD_FIRST
-        );
-
-        foreach ( $iterator as $path => $fileInfo )
-        {
-            if ( $fileInfo->isDir() )
-            {;
-                rmdir( $path );
-            }
-            else
-            {
-                unlink( $path );
-            }
-        }
-
-        rmdir( $dir );
+        return'var/my_site/storage/images';
     }
 
     /**
@@ -135,10 +80,7 @@ class ImageIntergrationTest extends BaseIntegrationTest
                 array(
                     'LegacyStorage' => new FieldType\Image\ImageStorage\Gateway\LegacyStorage(),
                 ),
-                new FieldType\FileService\LocalFileService(
-                    self::$tmpDir,
-                    self::$storageDir
-                ),
+                $this->getFileService(),
                 new FieldType\Image\PathGenerator\LegacyPathGenerator()
             )
         );
@@ -229,7 +171,7 @@ class ImageIntergrationTest extends BaseIntegrationTest
         $this->assertNotNull( $field->value->data );
 
         $this->assertTrue(
-            file_exists( self::$tmpDir . '/' . $field->value->data['path'] )
+            file_exists( $this->getTempDir() . '/' . $field->value->data['path'] )
         );
 
         $this->assertEquals( 'Ice-Flower.jpg', $field->value->data['fileName'] );
@@ -276,12 +218,13 @@ class ImageIntergrationTest extends BaseIntegrationTest
         $this->assertNotNull( $field->value->data );
 
         $this->assertTrue(
-            file_exists( ( $filePath = self::$tmpDir . '/' . $field->value->data['path'] ) )
+            file_exists( ( $filePath = $this->getTempDir() . '/' . $field->value->data['path'] ) )
         );
 
-        // Check old files removed before update
+        // Check old files not removed before update
+        // need to stay there for reference integrity
         $this->assertEquals(
-            1,
+            2,
             count( glob( dirname( $filePath ) . '/*' ) )
         );
 
@@ -302,7 +245,7 @@ class ImageIntergrationTest extends BaseIntegrationTest
     {
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator(
-                self::$tmpDir . '/' . self::$storageDir,
+                $this->getTempDir() . '/' . $this->getStorageDir(),
                 \FileSystemIterator::KEY_AS_PATHNAME | \FileSystemIterator::SKIP_DOTS | \ FilesystemIterator::CURRENT_AS_FILEINFO
 
             ),
@@ -322,6 +265,60 @@ class ImageIntergrationTest extends BaseIntegrationTest
             }
         }
 
+    }
+
+    /**
+     * @dep_ends \eZ\Publish\SPI\Tests\FieldType\ImageIntergrationTest::testCreateContentType
+     */
+    public function testImagesNotDeletedIfReferencesStillExist()
+    {
+        $contentType = $this->createContentType();
+
+        $firstContent = $this->createContent( $contentType, $this->getInitialValue() );
+
+        $firstField = null;
+        foreach ( $firstContent->fields as $field )
+        {
+            if ( $field->type === $this->getTypeName() )
+            {
+                $firstField = $field;
+            }
+        }
+
+        $clonedValue = clone $firstField->value;
+
+        // Create an image reference copy
+        $secondContent = $this->createContent( $contentType, $clonedValue );
+
+        $secondField = null;
+        foreach ( $secondContent->fields as $field )
+        {
+            if ( $field->type === $this->getTypeName() )
+            {
+                $secondField = $field;
+            }
+        }
+
+        $this->assertNotEquals(
+            $firstField->value->data['fieldId'],
+            $secondField->value->data['fieldId']
+        );
+        unset( $firstField->value->data['fieldId'] );
+        unset( $secondField->value->data['fieldId'] );
+
+        $this->assertEquals( $firstField->value, $secondField->value );
+
+        $this->deleteContent( $firstContent );
+
+        $this->assertTrue(
+            file_exists( $this->getTempDir() . '/' . $secondField->value->data['path'] )
+        );
+
+        $this->deleteContent( $secondContent );
+
+        $this->assertFalse(
+            file_exists( $this->getTempDir() . '/' . $secondField->value->data['path'] )
+        );
     }
 }
 

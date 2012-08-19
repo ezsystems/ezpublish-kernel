@@ -16,7 +16,6 @@ use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as BaseUrlAliasHandler,
     eZ\Publish\SPI\Persistence\Content\UrlAlias,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\ForbiddenException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     RuntimeException;
 
 /**

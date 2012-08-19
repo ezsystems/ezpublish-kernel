@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\RepositoryTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\ImageIntegrationTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\API\Repository,
-    eZ\Publish\Core\FieldType\Image\Value as ImageValue,
+use eZ\Publish\Core\FieldType\Image\Value as ImageValue,
     eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
@@ -18,44 +17,17 @@ use eZ\Publish\API\Repository,
  * @group integration
  * @group field-type
  */
-class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
+class ImageIntegrationTest extends FileBaseIntegrationTest
 {
     /**
-     * Base install dir
-     *
-     * @var string
+     * Stores the loaded image path for copy test.
      */
-    protected static $installDir;
+    protected static $loadedImagePath;
 
     /**
-     * Storeage dir
-     *
-     * @var string
+     * Storage dir settings key
      */
-    protected static $storageDir;
-
-    /**
-     * If storage data should not be cleaned up
-     *
-     * @var bool
-     */
-    protected static $leaveStorageData = false;
-
-    /**
-     * Perform storage directory setup on first execution
-     *
-     * @return void
-     */
-    public function setUp()
-    {
-        parent::setUp();
-
-        if ( !isset( self::$installDir ) )
-        {
-            self::$installDir = $this->getConfigValue( 'install_dir' );
-            self::$storageDir = $this->getConfigValue( 'image_storage_dir' );
-        }
-    }
+    protected static $storageDirConfigKey = 'image_storage_dir';
 
     /**
      * Sets up fixture data.
@@ -78,65 +50,6 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
                 'fileSize' => filesize( $path ),
             ),
         );
-    }
-
-    /**
-     * Tears down the test.
-     *
-     * Cleans up the storage directory, if it was used
-     *
-     * @return void
-     */
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-        self::cleanupStorageDir();
-    }
-
-    /**
-     * Returns an iterator over the full storage dir.
-     *
-     * @return Iterator
-     */
-    protected static function getStorageDirIterator()
-    {
-        return new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator(
-                self::$installDir . '/' . self::$storageDir,
-                \FileSystemIterator::KEY_AS_PATHNAME | \FileSystemIterator::SKIP_DOTS | \ FilesystemIterator::CURRENT_AS_FILEINFO
-
-            ),
-            \RecursiveIteratorIterator::CHILD_FIRST
-        );
-    }
-
-    /**
-     * Removes the given directory path recursively
-     *
-     * @param string $dir
-     * @return void
-     */
-    protected static function cleanupStorageDir()
-    {
-        if ( self::$installDir == null || self::$storageDir == null || self::$leaveStorageData )
-        {
-            // Nothing to do
-            return;
-        }
-
-        $iterator = self::getStorageDirIterator();
-
-        foreach ( $iterator as $path => $fileInfo )
-        {
-            if ( $fileInfo->isDir() )
-            {;
-                rmdir( $path );
-            }
-            else
-            {
-                unlink( $path );
-            }
-        }
     }
 
     /**
@@ -265,8 +178,10 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
         );
 
         $this->assertTrue(
-            file_exists( self::$installDir . '/' . $field->value->path )
+            file_exists( $this->getInstallDir() . '/' . $field->value->path )
         );
+
+        self::$loadedImagePath = $field->value->path;
     }
 
     /**
@@ -353,7 +268,7 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
         );
 
         $this->assertTrue(
-            file_exists( self::$installDir . '/' . $field->value->path )
+            file_exists( $this->getInstallDir() . '/' . $field->value->path )
         );
     }
 
@@ -394,6 +309,11 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
     public function assertCopiedFieldDataLoadedCorrectly( Field $field )
     {
         $this->assertFieldDataLoadedCorrect( $field );
+
+        $this->assertEquals(
+            self::$loadedImagePath,
+            $field->value->path
+        );
     }
 
     /**
@@ -443,6 +363,48 @@ class ImageFieldTypeIntergrationTest extends BaseIntegrationTest
                 $this->getValidCreationFieldData()
             ),
         );
+    }
+
+    public function testInherentCopyForNewLanguage()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $type = $this->createContentType(
+            $this->getValidFieldSettings(),
+            $this->getValidValidatorConfiguration(),
+            array(),
+            // Causes a copy of the image value for each language in legacy
+            // storage
+            array( 'isTranslatable' => false )
+        );
+
+        $draft = $this->createContent( $this->getValidCreationFieldData(), $type );
+
+        $updateStruct = $contentService->newContentUpdateStruct();
+        $updateStruct->initialLanguageCode = 'ger-DE';
+        $updateStruct->setField( 'name', 'Sindelfingen' );
+
+        // Automatically creates a copy of the image field in the back ground
+        $updatedDraft = $contentService->updateContent( $draft->versionInfo, $updateStruct );
+
+        $paths = array();
+        foreach( $updatedDraft->getFields() as $field )
+        {
+            if ( $field->fieldDefIdentifier === 'data' )
+            {
+                $paths[$field->languageCode] = $field->value->path;
+            }
+        }
+
+        $this->assertTrue( isset( $paths['eng-US'] ) && isset( $paths['ger-DE'] ) );
+        $this->assertEquals(
+            $paths['eng-US'],
+            $paths['ger-DE']
+        );
+
+        $contentService->deleteContent( $updatedDraft->contentInfo );
     }
 }
 

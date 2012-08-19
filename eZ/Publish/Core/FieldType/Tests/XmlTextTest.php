@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType,
-    eZ\Publish\Core\FieldType\XmlText\Value as XmlTextValue,
+    eZ\Publish\Core\FieldType\XmlText\Input\Parser\Raw as RawXmlTextInputParser,
+    eZ\Publish\Core\FieldType\XmlText\Schema as XmlTextSchema,
     DOMDocument;
 
 /**
@@ -21,7 +22,7 @@ class XmlTextTypeTest extends FieldTypeTest
     /**
      * Normally this should be enough:
      *
-     * $ft = new XmlTextType( $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XMLText\\Input\\Parser' ) );
+     * $ft = new XmlTextType( $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser' ) );
      *
      * But there is a bug in PHPUnit when mocking an interface and calling the test in a certain way
      * (eg. with --group switch), when invocationMocker is missing.
@@ -31,11 +32,7 @@ class XmlTextTypeTest extends FieldTypeTest
      */
     protected function getFieldType()
     {
-        return new XmlTextType(
-            new \eZ\Publish\Core\FieldType\XmlText\Input\Parser\Raw(
-                new \eZ\Publish\Core\FieldType\XmlText\Schema()
-            )
-        );
+        return new XmlTextType( new RawXmlTextInputParser( new XmlTextSchema ) );
     }
 
     /**
@@ -78,8 +75,7 @@ class XmlTextTypeTest extends FieldTypeTest
      */
     public function testAcceptValueInvalidType()
     {
-        $ft = $this->getFieldType();
-        $ft->acceptValue( $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Value' ) );
+        $this->getFieldType()->acceptValue( $this->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\Value' )->disableOriginalConstructor()->getMock() );
     }
 
     /**
@@ -87,34 +83,32 @@ class XmlTextTypeTest extends FieldTypeTest
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @dataProvider providerForTestAcceptValueInvalidFormat
      */
-    public function testAcceptValueInvalidFormat( $text, $format )
+    public function testAcceptValueInvalidFormat( $text, $parser )
     {
-        self::markTestIncomplete( "buildValue changed w/o this test being changed as well" );
-        $parserMock = $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XMLText\\Input\\Parser' );
-        $parserMock->expects( $this->once() )
-                    ->method( 'process' )
-                    ->with( $text )
-                    ->will( $this->returnValue( $text ) );
-        $ft = new XmlTextType( $parserMock );
-        $value = $ft->buildValue( $text, $format );
-        $ft->acceptValue( $value );
+        $parserMock = $this->getMockBuilder( $parser )->disableOriginalConstructor()->getMock();
+        $parserMock
+            ->expects( $this->once() )
+            ->method( 'process' )
+            ->with( $text )
+            ->will( $this->throwException( $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException" ) ) );
+        $fieldType = new XmlTextType( $parserMock );
+        $fieldType->acceptValue( $text );
     }
 
     /**
      * @covers \eZ\Publish\Core\FieldType\Author\Type::acceptValue
      * @dataProvider providerForTestAcceptValueValidFormat
      */
-    public function testAcceptValueValidFormat( $text, $format )
+    public function testAcceptValueValidFormat( $text, $parser )
     {
-        self::markTestIncomplete( "buildValue changed w/o this test being changed as well" );
-        $parserMock = $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XMLText\\Input\\Parser' );
-        $parserMock->expects( $this->once() )
-                    ->method( 'process' )
-                    ->with( $text )
-                    ->will( $this->returnValue( new DOMDocument( '1.0', 'utf-8' ) ) );
-        $ft = new XmlTextType( $parserMock );
-        $value = $ft->buildValue( $text, $format );
-        $ft->acceptValue( $value );
+        $parserMock = $this->getMockBuilder( $parser )->disableOriginalConstructor()->getMock();
+        $parserMock
+            ->expects( $this->once() )
+            ->method( 'process' )
+            ->with( $text )
+            ->will( $this->returnValue( new DOMDocument( '1.0', 'utf-8' ) ) );
+        $fieldType = new XmlTextType( $parserMock );
+        $fieldType->acceptValue( $text );
     }
 
     /**
@@ -122,25 +116,27 @@ class XmlTextTypeTest extends FieldTypeTest
      */
     public function testToPersistenceValue()
     {
-        self::markTestIncomplete( "buildValue changed w/o this test being changed as well" );
+        $xmlData = '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">Header 1</header></section>';
         // @todo Do one per value class
         $ft = $this->getFieldType();
-        $value = $ft->buildValue( '', XmlTextValue::INPUT_FORMAT_PLAIN );
+        $value = $ft->acceptValue( $xmlData );
 
         $fieldValue = $ft->toPersistenceValue( $value );
 
-        self::assertSame( "", $fieldValue->data );
+        self::assertSame( $xmlData, $fieldValue->data );
     }
 
     public function providerForTestAcceptValueInvalidFormat()
     {
         return array(
-
             // RawValue requires root XML + section tags
-            array( '', XmlTextValue::INPUT_FORMAT_RAW ),
+            array( '', "eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser\\Raw" ),
 
             // wrong closing tag
-            array( '<a href="http://www.google.com/">bar</foo>', XmlTextValue::INPUT_FORMAT_PLAIN ),
+            array( '<a href="http://www.google.com/">bar</foo>', "eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser\\Simplified" ),
         );
     }
 
@@ -153,18 +149,20 @@ class XmlTextTypeTest extends FieldTypeTest
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">This is a piece of text</header></section>',
-                XmlTextValue::INPUT_FORMAT_RAW ),
+                "eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser\\Raw"
+            ),
 
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
-                XmlTextValue::INPUT_FORMAT_RAW ),
+                "eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser\\Raw"
+            ),
 
-            array( '<section>test</section>', XmlTextValue::INPUT_FORMAT_PLAIN ),
+            array( '<section>test</section>', "eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser\\Simplified" ),
 
-            array( '<paragraph><a href="eznode://1">test</a><a href="ezobject://1">test</a></paragraph>', XmlTextValue::INPUT_FORMAT_PLAIN ),
+            array( '<paragraph><a href="eznode://1">test</a><a href="ezobject://1">test</a></paragraph>', "eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser\\Simplified" ),
         );
     }
 }

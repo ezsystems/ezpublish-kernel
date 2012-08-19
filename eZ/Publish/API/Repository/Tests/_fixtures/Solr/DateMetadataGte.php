@@ -13,7 +13,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
         'id' => 11,
         'title' => 'Members',
       ),
-       'score' => 1,
+       'score' => 1.0,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -24,7 +24,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
         'id' => 14,
         'title' => 'Administrator User',
       ),
-       'score' => 1,
+       'score' => 1.0,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -32,18 +32,29 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 225,
-        'title' => 'Partners',
+        'id' => 58,
+        'title' => 'Contact Us',
       ),
-       'score' => 1,
+       'score' => 1.0,
        'index' => NULL,
        'highlight' => NULL,
+    )),
+    3 =>
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+        'valueObject' =>
+        array (
+            'id' => 59,
+            'title' => 'Partners',
+        ),
+        'score' => 1.0,
+        'index' => NULL,
+        'highlight' => NULL,
     )),
   ),
    'spellSuggestion' => NULL,
    'time' => 1,
    'timedOut' => NULL,
-   'maxScore' => 1,
-   'totalCount' => 3,
+   'maxScore' => 1.0,
+   'totalCount' => 4,
 ));
 

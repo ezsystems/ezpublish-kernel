@@ -12,10 +12,7 @@ namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\Field
 use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor,
     eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\Field,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator,
-    eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler,
-    eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator,
-    eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry;
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**
  * Visits the Field criterion
@@ -63,16 +60,13 @@ class FieldRange extends Field
 
         if ( !isset( $fieldTypes[$criterion->target] ) )
         {
-            return '""';
+            throw new \OutOfBoundsException( "Content type field {$criterion->target} not found." );
         }
 
         $queries = array();
-        foreach ( $criterion->value as $value )
+        foreach ( $fieldTypes[$criterion->target] as $name )
         {
-            foreach ( $fieldTypes[$criterion->target] as $name )
-            {
-                $queries[] = $name . ':' . $this->getRange( $criterion->operator, $start, $end );
-            }
+            $queries[] = $name . ':' . $this->getRange( $criterion->operator, $start, $end );
         }
 
         return '(' . implode( ' OR ', $queries ) . ')';

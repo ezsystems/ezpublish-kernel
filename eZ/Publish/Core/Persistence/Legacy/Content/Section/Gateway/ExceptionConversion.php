@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway,
-    eZ\Publish\SPI\Persistence\Content\Section;
+use eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway;
 
 /**
  * Section Handler

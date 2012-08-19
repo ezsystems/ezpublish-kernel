@@ -13,7 +13,6 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
     eZ\Publish\SPI\Persistence\Handler,
-    eZ\Publish\API\Repository\Values\Content\Content as APIContent,
     eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUpdateStruct,
     eZ\Publish\API\Repository\Values\ContentType\ContentType,
     eZ\Publish\API\Repository\Values\Content\TranslationInfo,

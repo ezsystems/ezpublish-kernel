@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Tests;
 
-use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
-    eZ\Publish\Core\Repository\Repository;
+use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest;
 
 /**
  * @group repository

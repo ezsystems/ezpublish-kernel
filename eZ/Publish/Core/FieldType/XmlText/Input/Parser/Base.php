@@ -14,8 +14,7 @@ use eZ\Publish\Core\FieldType\XmlText\Schema as XmlSchema,
     eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     DOMDocument,
     DOMElement,
-    DOMNode,
-    DOMText;
+    DOMNode;
 
 /**
  * Base class for the input parser.
@@ -66,14 +65,14 @@ abstract class Base
      * - noChildren: boolean value that determines if this tag could have child tags. Default value is false.
      *
      * <code>
-     * $InputTags = array(
+     * $inputTags = array(
      *     'original-name' => array( 'name' => 'new-name' ),
      *     'original-name2' => array( 'nameHandler' => 'tagNameHandler',
      *                                'noChildren' => true ),
      * );
      * </code>
      */
-    protected $InputTags = array();
+    protected $inputTags = array();
 
     /**
      * Properties of elements that are produced in the output.
@@ -93,7 +92,7 @@ abstract class Base
      *                            it raises invalid input flag.
      *
      * <code>
-     * public $OutputTags = array(
+     * public $outputTags = array(
      *    'custom' => array( 'parsingHandler' => 'parsingHandlerCustom',
      *                          'initHandler' => 'initHandlerCustom',
      *                          'structHandler' => 'structHandlerCustom',
@@ -103,14 +102,14 @@ abstract class Base
      *
      * @var array
      */
-    protected $OutputTags = array();
+    protected $outputTags = array();
 
     /**
      * List of XmlText namespaces
      *
      * @var array
      */
-    protected $Namespaces = array( 'image' => 'http://ez.no/namespaces/ezpublish3/image/',
+    protected $namespaces = array( 'image' => 'http://ez.no/namespaces/ezpublish3/image/',
                                    'xhtml' => 'http://ez.no/namespaces/ezpublish3/xhtml/',
                                    'custom' => 'http://ez.no/namespaces/ezpublish3/custom/',
                                    'tmp' => 'http://ez.no/namespaces/ezpublish3/temporary/' );
@@ -137,14 +136,14 @@ abstract class Base
      *
      * @var \eZ\Publish\Core\FieldType\XmlText\Schema
      */
-    protected $XMLSchema;
+    protected $xmlSchema;
 
     /**
      * DOM document object
      *
      * @var \DOMDocument
      */
-    protected $Document = null;
+    protected $document = null;
 
     /**
      * Processing messages
@@ -152,14 +151,14 @@ abstract class Base
      * @var string[]
      * @see getMessages()
      */
-    protected $Messages = array();
+    protected $messages = array();
 
     /**
      * Parent nodes stack
      *
      * @var string[]
      */
-    protected $ParentStack = array();
+    protected $parentStack = array();
 
     /**
      * Boolean holding the validity status of the input string
@@ -174,7 +173,7 @@ abstract class Base
      *
      * @var boolean
      */
-    protected $QuitProcess = false;
+    protected $quitProcess = false;
 
     /**
      * Array of Url objects ids
@@ -215,7 +214,7 @@ abstract class Base
      */
     public function __construct( XmlSchema $scheme, array $options = array() )
     {
-        $this->XMLSchema = $scheme;
+        $this->xmlSchema = $scheme;
 
         // Set options
         $this->options = $options + $this->options;
@@ -297,20 +296,20 @@ abstract class Base
             $text = str_replace( "\n", '', $text);
         }
 
-        $this->Document = $this->createDomDocument();
+        $this->document = $this->createDomDocument();
 
         // Perform pass 1
         // Parsing the source string
         $this->performPass1( $text );
 
-        $this->Document->formatOutput = true;
+        $this->document->formatOutput = true;
         // $debug = eZDebugSetting::isConditionTrue( 'kernel-datatype-ezxmltext', eZDebug::LEVEL_DEBUG );
         /*if ( $debug )
         {
-            // eZDebug::writeDebug( $this->Document->saveXML(), eZDebugSetting::changeLabel( 'kernel-datatype-ezxmltext', 'XML after pass 1' ) );
+            // eZDebug::writeDebug( $this->document->saveXML(), eZDebugSetting::changeLabel( 'kernel-datatype-ezxmltext', 'XML after pass 1' ) );
         }*/
 
-        if ( $this->QuitProcess )
+        if ( $this->quitProcess )
         {
             return false;
         }
@@ -318,18 +317,18 @@ abstract class Base
         // Perform pass 2
         $this->performPass2();
 
-        $this->Document->formatOutput = true;
+        $this->document->formatOutput = true;
         /*if ( $debug )
         {
-            // eZDebug::writeDebug( $this->Document->saveXML(), eZDebugSetting::changeLabel( 'kernel-datatype-ezxmltext', 'XML after pass 2' ) );
+            // eZDebug::writeDebug( $this->document->saveXML(), eZDebugSetting::changeLabel( 'kernel-datatype-ezxmltext', 'XML after pass 2' ) );
         }*/
 
-        if ( $this->QuitProcess )
+        if ( $this->quitProcess )
         {
             return false;
         }
 
-        return $this->Document;
+        return $this->document;
     }
 
     /**
@@ -349,7 +348,7 @@ abstract class Base
             $domDocument->appendChild( $mainSection );
             foreach ( array( 'image', 'xhtml', 'custom' ) as $prefix )
             {
-                $mainSection->setAttributeNS( 'http://www.w3.org/2000/xmlns/', 'xmlns:' . $prefix, $this->Namespaces[$prefix] );
+                $mainSection->setAttributeNS( 'http://www.w3.org/2000/xmlns/', 'xmlns:' . $prefix, $this->namespaces[$prefix] );
             }
         }
         return $domDocument;
@@ -363,12 +362,12 @@ abstract class Base
         $ret = true;
         $pos = 0;
 
-        if ( $this->Document->documentElement )
+        if ( $this->document->documentElement )
         {
             do
             {
-                $this->parseTag( $data, $pos, $this->Document->documentElement );
-                if ( $this->QuitProcess )
+                $this->parseTag( $data, $pos, $this->document->documentElement );
+                if ( $this->quitProcess )
                 {
                     $ret = false;
                     break;
@@ -381,7 +380,7 @@ abstract class Base
         {
             $tmp = null;
             $this->parseTag( $data, $pos, $tmp );
-            if ( $this->QuitProcess )
+            if ( $this->quitProcess )
             {
                 $ret = false;
             }
@@ -450,14 +449,14 @@ abstract class Base
             $pos = $tagEndPos + 1;
             $closedTagName = strtolower( trim( substr( $data, $tagBeginPos + 2, $tagEndPos - $tagBeginPos - 2 ) ) );
 
-            // Find matching tag in ParentStack array
+            // Find matching tag in parentStack array
             $firstLoop = true;
-            for ( $i = count( $this->ParentStack ) - 1; $i >= 0; $i-- )
+            for ( $i = count( $this->parentStack ) - 1; $i >= 0; $i-- )
             {
-                $parentNames = $this->ParentStack[$i];
+                $parentNames = $this->parentStack[$i];
                 if ( $parentNames[0] == $closedTagName )
                 {
-                    array_pop( $this->ParentStack );
+                    array_pop( $this->parentStack );
                     if ( !$firstLoop )
                     {
                         $pos = $tagBeginPos;
@@ -525,9 +524,9 @@ abstract class Base
             }
 
             // Determine tag's name
-            if ( isset( $this->InputTags[$tagName] ) )
+            if ( isset( $this->inputTags[$tagName] ) )
             {
-                $thisInputTag = $this->InputTags[$tagName];
+                $thisInputTag = $this->inputTags[$tagName];
 
                 if ( isset( $thisInputTag['name'] ) )
                 {
@@ -542,7 +541,7 @@ abstract class Base
             {
                 // @todo -cBase DO use XMLSchema
                 $newTagName = $tagName;
-                if ( $this->XMLSchema->exists( $tagName ) )
+                if ( $this->xmlSchema->exists( new DOMElement( $tagName ) ) )
                 {
                     $newTagName = $tagName;
                 }
@@ -559,7 +558,7 @@ abstract class Base
                 $noChildren = true;
             }
 
-            $thisOutputTag = isset( $this->OutputTags[$newTagName] ) ? $this->OutputTags[$newTagName] : null;
+            $thisOutputTag = isset( $this->outputTags[$newTagName] ) ? $this->outputTags[$newTagName] : null;
 
             // Implementation of 'autoCloseOn' rule ( Handling of unclosed tags, ex.: <p>, <li> )
             if ( isset( $thisOutputTag['autoCloseOn'] ) &&
@@ -568,7 +567,7 @@ abstract class Base
                  in_array( $parent->nodeName, $thisOutputTag['autoCloseOn'] ) )
             {
                 // Wrong nesting: auto-close parent and try to re-parse this tag at higher level
-                array_pop( $this->ParentStack );
+                array_pop( $this->parentStack );
                 $pos = $tagBeginPos;
                 return true;
             }
@@ -576,7 +575,7 @@ abstract class Base
             // Append to parent stack
             if ( !$noChildren && $newTagName !== false )
             {
-                $this->ParentStack[] = array( $tagName, $newTagName, $attributeString );
+                $this->parentStack[] = array( $tagName, $newTagName, $attributeString );
             }
 
             if ( !$newTagName )
@@ -598,11 +597,11 @@ abstract class Base
         // Create text or normal node.
         if ( $newTagName == '#text' )
         {
-            $element = $this->Document->createTextNode( $textContent );
+            $element = $this->document->createTextNode( $textContent );
         }
         else
         {
-            $element = $this->Document->createElement( $newTagName );
+            $element = $this->document->createElement( $newTagName );
         }
 
         if ( $attributes )
@@ -617,7 +616,7 @@ abstract class Base
         }
         else
         {
-            $this->Document->appendChild( $element );
+            $this->document->appendChild( $element );
         }
 
         $params = array();
@@ -631,12 +630,12 @@ abstract class Base
             // This tag is already parsed in handler
             if ( !$noChildren )
             {
-                array_pop( $this->ParentStack );
+                array_pop( $this->parentStack );
             }
             return false;
         }
 
-        if ( $this->QuitProcess )
+        if ( $this->quitProcess )
         {
             return false;
         }
@@ -647,7 +646,7 @@ abstract class Base
             do
             {
                 $parseResult = $this->parseTag( $data, $pos, $element );
-                if ( $this->QuitProcess )
+                if ( $this->quitProcess )
                 {
                     return false;
                 }
@@ -699,7 +698,7 @@ abstract class Base
      */
     private function setAttributes( DOMElement $element, $attributes )
     {
-        $thisOutputTag = $this->OutputTags[$element->nodeName];
+        $thisOutputTag = $this->outputTags[$element->nodeName];
 
         foreach ( $attributes as $key => $value )
         {
@@ -717,7 +716,7 @@ abstract class Base
             // Filter classes
             if ( $qualifiedName == 'class' )
             {
-                $classesList = $this->XMLSchema->getClassesList( $element );
+                $classesList = $this->xmlSchema->getClassesList( $element );
                 if ( !in_array( $value, $classesList ) )
                 {
                     $this->handleError( self::ERROR_DATA, "Class '$value' is not allowed for element &lt;$element->nodeName&gt; (check content.ini).");
@@ -731,9 +730,9 @@ abstract class Base
                 if ( strpos( $qualifiedName, ':' ) )
                 {
                     list( $prefix, $name ) = explode( ':', $qualifiedName );
-                    if ( isset( $this->Namespaces[$prefix] ) )
+                    if ( isset( $this->namespaces[$prefix] ) )
                     {
-                        $URI = $this->Namespaces[$prefix];
+                        $URI = $this->namespaces[$prefix];
                         $element->setAttributeNS( $URI, $qualifiedName, $value );
                     }
                     else
@@ -749,9 +748,9 @@ abstract class Base
         }
 
         // Check for required attrs are present
-        if ( isset( $this->OutputTags[$element->nodeName]['requiredInputAttributes'] ) )
+        if ( isset( $this->outputTags[$element->nodeName]['requiredInputAttributes'] ) )
         {
-            foreach ( $this->OutputTags[$element->nodeName]['requiredInputAttributes'] as $reqAttrName )
+            foreach ( $this->outputTags[$element->nodeName]['requiredInputAttributes'] as $reqAttrName )
             {
                 $presented = false;
                 foreach ( $attributes as $key => $value )
@@ -847,6 +846,8 @@ abstract class Base
 
     private function wordMatchSupport( $newTagName, $attributes, $attributeString )
     {
+        return $attributes;
+        // @todo Fix wordmatch configuration
         $cfg = Configuration::getInstance( 'wordmatch' );
         if ( $cfg->has( $newTagName, 'MatchString' ) )
         {
@@ -871,15 +872,15 @@ abstract class Base
     {
         $tmp = null;
 
-        $this->processSubtree( $this->Document->documentElement, $tmp );
+        $this->processSubtree( $this->document->documentElement, $tmp );
     }
 
     /**
-     * @param \DOMElement $element
+     * @param \DOMNode $element
      * @param $lastHandlerResult
      * @return mixed|null
      */
-    private function processSubtree( DOMElement $element, &$lastHandlerResult )
+    private function processSubtree( DOMNode $element, &$lastHandlerResult )
     {
         $ret = null;
         $tmp = null;
@@ -930,7 +931,7 @@ abstract class Base
                     $newElements = array_merge( $newElements, $childReturn['new_elements'] );
                 }
 
-                if ( $this->QuitProcess )
+                if ( $this->quitProcess )
                 {
                     return $ret;
                 }
@@ -938,7 +939,7 @@ abstract class Base
 
             /*if ( $debug )
             {
-                eZDebug::writeDebug( $this->Document->saveXML(),
+                eZDebug::writeDebug( $this->document->saveXML(),
                                      eZDebugSetting::changeLabel( 'kernel-datatype-ezxmltext',
                                                                   'XML before processNewElements for element ' . $element->nodeName ) );
             }*/
@@ -948,7 +949,7 @@ abstract class Base
 
             /*if ( $debug )
             {
-                eZDebug::writeDebug( $this->Document->saveXML(),
+                eZDebug::writeDebug( $this->document->saveXML(),
                                      eZDebugSetting::changeLabel( 'kernel-datatype-ezxmltext',
                                                                   'XML after processNewElements for element ' . $element->nodeName ) );
             }*/
@@ -957,7 +958,7 @@ abstract class Base
         // Call "Structure handler"
         if ( $debug )
         {
-            /*eZDebug::writeDebug( $this->Document->saveXML(),
+            /*eZDebug::writeDebug( $this->document->saveXML(),
                                  eZDebugSetting::changeLabel( 'kernel-datatype-ezxmltext',
                                                               'XML before callOutputHandler structHandler for element ' . $element->nodeName ) );*/
         }
@@ -966,7 +967,7 @@ abstract class Base
 
         /*if ( $debug )
         {
-            eZDebug::writeDebug( $this->Document->saveXML(),
+            eZDebug::writeDebug( $this->document->saveXML(),
                                  eZDebugSetting::changeLabel( 'kernel-datatype-ezxmltext',
                                                               'XML after callOutputHandler structHandler for element ' . $element->nodeName ) );
             eZDebug::writeDebug( $ret,
@@ -979,7 +980,7 @@ abstract class Base
         {
             /*if ( $debug )
             {
-                eZDebug::writeDebug( $this->Document->saveXML(),
+                eZDebug::writeDebug( $this->document->saveXML(),
                                      eZDebugSetting::changeLabel( 'kernel-datatype-ezxmltext',
                                                                   'XML after failed processBySchemaPresence for element ' . $element->nodeName ) );
             }*/
@@ -988,7 +989,7 @@ abstract class Base
 
         /*if ( $debug )
         {
-            eZDebug::writeDebug( $this->Document->saveXML(),
+            eZDebug::writeDebug( $this->document->saveXML(),
                                  eZDebugSetting::changeLabel( 'kernel-datatype-ezxmltext',
                                                               'XML after processBySchemaPresence for element ' . $element->nodeName ) );
         }*/
@@ -998,7 +999,7 @@ abstract class Base
         {
             /*if ( $debug )
             {
-                eZDebug::writeDebug( $this->Document->saveXML(),
+                eZDebug::writeDebug( $this->document->saveXML(),
                                      eZDebugSetting::changeLabel( 'kernel-datatype-ezxmltext',
                                                                   'XML after failed processBySchemaTree for element ' . $element->nodeName ) );
             }*/
@@ -1007,7 +1008,7 @@ abstract class Base
 
         /*if ( $debug )
         {
-            eZDebug::writeDebug( $this->Document->saveXML(),
+            eZDebug::writeDebug( $this->document->saveXML(),
                                  eZDebugSetting::changeLabel( 'kernel-datatype-ezxmltext',
                                                               'XML after processBySchemaTree for element ' . $element->nodeName ) );
         }*/
@@ -1019,7 +1020,7 @@ abstract class Base
         // Process attributes according to the schema
         if ( $element->hasAttributes() )
         {
-            if ( !$this->XMLSchema->hasAttributes( $element ) )
+            if ( !$this->xmlSchema->hasAttributes( $element ) )
             {
                 self::removeAllAttributes( $element );
             }
@@ -1056,7 +1057,7 @@ abstract class Base
         if ( $parent instanceof DOMElement )
         {
             // If this is a foreign element, remove it
-            if ( !$this->XMLSchema->exists( $element ) )
+            if ( !$this->xmlSchema->exists( $element ) )
             {
                 if ( $element->nodeName == 'custom' )
                 {
@@ -1069,7 +1070,7 @@ abstract class Base
             // Delete if children required and no children
             // If this is an auto-added element, then do not throw error
 
-            if ( $element->nodeType == XML_ELEMENT_NODE && ( $this->XMLSchema->childrenRequired( $element ) || $element->getAttribute( 'children_required' ) )
+            if ( $element->nodeType == XML_ELEMENT_NODE && ( $this->xmlSchema->childrenRequired( $element ) || $element->getAttribute( 'children_required' ) )
                  && !$element->hasChildNodes() )
             {
                 $element = $parent->removeChild( $element );
@@ -1100,7 +1101,7 @@ abstract class Base
 
         if ( $parent instanceof DOMElement )
         {
-            $schemaCheckResult = $this->XMLSchema->check( $parent, $element );
+            $schemaCheckResult = $this->xmlSchema->check( $parent, $element );
             if ( !$schemaCheckResult )
             {
                 if ( $schemaCheckResult === false )
@@ -1146,7 +1147,7 @@ abstract class Base
             $child = $element->removeChild( $child );
             $child = $mainParent->insertBefore( $child, $mainChild );
 
-            if ( !$this->XMLSchema->check( $mainParent, $child ) )
+            if ( !$this->xmlSchema->check( $mainParent, $child ) )
             {
                 $this->fixSubtree( $child, $mainChild );
             }
@@ -1160,8 +1161,8 @@ abstract class Base
     protected function processAttributesBySchema( DOMElement $element )
     {
         // Remove attributes that don't match schema
-        $schemaAttributes = $this->XMLSchema->attributes( $element );
-        $schemaCustomAttributes = $this->XMLSchema->customAttributes( $element );
+        $schemaAttributes = $this->xmlSchema->attributes( $element );
+        $schemaCustomAttributes = $this->xmlSchema->customAttributes( $element );
 
         $attributes = $element->attributes;
 
@@ -1195,7 +1196,7 @@ abstract class Base
                     // add 'custom' prefix if it is not given
                     $allowed = true;
                     $removeAttr = true;
-                    $element->setAttributeNS( $this->Namespaces['custom'], 'custom:' . $fullName, $attr->value );
+                    $element->setAttributeNS( $this->namespaces['custom'], 'custom:' . $fullName, $attr->value );
                 }
             }
 
@@ -1207,7 +1208,7 @@ abstract class Base
             elseif ( $this->getOption( self::OPT_REMOVE_DEFAULT_ATTRS ) )
             {
                 // Remove attributes having default values
-                $default = $this->XMLSchema->attributeDefaultValue( $element, $fullName );
+                $default = $this->xmlSchema->attributeDefaultValue( $element, $fullName );
                 if ( $attr->value === $default )
                 {
                     $removeAttr = true;
@@ -1234,7 +1235,7 @@ abstract class Base
     protected function callInputHandler( $handlerName, $tagName, &$attributes )
     {
         $result = null;
-        $thisInputTag = $this->InputTags[$tagName];
+        $thisInputTag = $this->inputTags[$tagName];
         if ( isset( $thisInputTag[$handlerName] ) )
         {
             if ( is_callable( array( $this, $thisInputTag[$handlerName] ) ) )
@@ -1261,7 +1262,7 @@ abstract class Base
     protected function callOutputHandler( $handlerName, DOMNode $element, &$params )
     {
         $result = null;
-        $thisOutputTag = $this->OutputTags[$element->nodeName];
+        $thisOutputTag = $this->outputTags[$element->nodeName];
         if ( isset( $thisOutputTag[$handlerName] ) )
         {
             if ( is_callable( array( $this, $thisOutputTag[$handlerName] ) ) )
@@ -1290,7 +1291,7 @@ abstract class Base
      */
     protected function createAndPublishElement( $elementName, &$ret )
     {
-        $element = $this->Document->createElement( $elementName );
+        $element = $this->document->createElement( $elementName );
         $element->setAttributeNS( 'http://ez.no/namespaces/ezpublish3/temporary/', 'tmp:new-element', 'true' );
 
         if ( !isset( $ret['new_elements'] ) )
@@ -1322,7 +1323,7 @@ abstract class Base
             {
                 /*if ( $debug )
                 {
-                    eZDebug::writeDebug( $this->Document->saveXML(),
+                    eZDebug::writeDebug( $this->document->saveXML(),
                                          eZDebugSetting::changeLabel( 'kernel-datatype-ezxmltext',
                                                                       'xml string after failed processBySchemaPresence for new element ' . $element->nodeName ) );
                 }*/
@@ -1331,7 +1332,7 @@ abstract class Base
 
             /*if ( $debug )
             {
-                eZDebug::writeDebug( $this->Document->saveXML(),
+                eZDebug::writeDebug( $this->document->saveXML(),
                                      eZDebugSetting::changeLabel( 'kernel-datatype-ezxmltext',
                                                                   'xml string after processBySchemaPresence for new element ' . $element->nodeName ) );
             }*/
@@ -1344,7 +1345,7 @@ abstract class Base
             {
                 /*if ( $debug )
                 {
-                    eZDebug::writeDebug( $this->Document->saveXML(),
+                    eZDebug::writeDebug( $this->document->saveXML(),
                                          eZDebugSetting::changeLabel( 'kernel-datatype-ezxmltext',
                                                                       'xml string after failed processBySchemaTree for new element ' . $element->nodeName ) );
                 }*/
@@ -1353,7 +1354,7 @@ abstract class Base
 
             /*if ( $debug )
             {
-                eZDebug::writeDebug( $this->Document->saveXML(),
+                eZDebug::writeDebug( $this->document->saveXML(),
                                      eZDebugSetting::changeLabel( 'kernel-datatype-ezxmltext',
                                                                   'xml string after processBySchemaTree for new element ' . $element->nodeName ) );
             }*/
@@ -1365,7 +1366,7 @@ abstract class Base
 
             /*if ( $debug )
             {
-                eZDebug::writeDebug( $this->Document->saveXML(),
+                eZDebug::writeDebug( $this->document->saveXML(),
                                      eZDebugSetting::changeLabel( 'kernel-datatype-ezxmltext',
                                                                   'xml string after callOutputHandler publishHandler for new element ' . $element->nodeName ) );
             }*/
@@ -1373,7 +1374,7 @@ abstract class Base
             // Process attributes according to the schema
             if ( $element->hasAttributes() )
             {
-                if ( !$this->XMLSchema->hasAttributes( $element ) )
+                if ( !$this->xmlSchema->hasAttributes( $element ) )
                 {
                     self::removeAllAttributes( $element );
                 }
@@ -1392,7 +1393,7 @@ abstract class Base
      */
     public function getMessages()
     {
-        return $this->Messages;
+        return $this->messages;
     }
 
     /**
@@ -1413,17 +1414,17 @@ abstract class Base
     {
         if ( $type & $this->getOption( self::OPT_DETECT_ERROR_LEVEL ) )
         {
-            $this->IsInputValid = false;
+            $this->isInputValid = false;
             if ( $message )
             {
-                $this->Messages[] = $message;
+                $this->messages[] = $message;
             }
         }
 
         if ( $type & $this->getOption( self::OPT_VALIDATE_ERROR_LEVEL ) )
         {
-            $this->IsInputValid = false;
-            $this->QuitProcess = true;
+            $this->isInputValid = false;
+            $this->quitProcess = true;
         }
     }
 

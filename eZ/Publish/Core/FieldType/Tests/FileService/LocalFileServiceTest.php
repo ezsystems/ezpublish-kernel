@@ -28,7 +28,14 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
      *
      * @var string
      */
-    protected $storagePath = 'my/fancy/site';
+    protected $storagePath = 'var/storage';
+
+    /**
+     * Prefix for storage identifiers
+     *
+     * @var string
+     */
+    protected $storageIdentifierPrefix = 'my/fancy/site';
 
     /**
      * File service under test
@@ -56,6 +63,16 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
             $this->tmpDir = $tmpPath;
         }
         return $this->tmpDir;
+    }
+
+    /**
+     * Returns the storage dir used by the file handler
+     *
+     * @return string
+     */
+    protected function getStorageDir()
+    {
+        return $this->getTempDir() . '/' . $this->storagePath;
     }
 
     /**
@@ -105,7 +122,8 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
         {
             $this->fileService = new LocalFileService(
                 $this->getTempDir(),
-                $this->storagePath
+                $this->storagePath,
+                $this->storageIdentifierPrefix
             );
         }
         return $this->fileService;
@@ -134,7 +152,7 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             sprintf(
                 '%s/%s',
-                $this->storagePath,
+                $this->storageIdentifierPrefix,
                 $target
             ),
             $storedPath
@@ -148,7 +166,7 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
         $storedPath = $this->testStoreExternalFile();
 
         $this->assertTrue(
-            file_exists( $this->getTempDir() . '/' . $storedPath )
+            file_exists( $this->getStorageDir() . '/' . $storedPath )
         );
     }
 
@@ -158,7 +176,7 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             0664,
-            fileperms( $this->getTempDir() . '/' . $storedPath ) & 0777
+            fileperms( $this->getStorageDir() . '/' . $storedPath ) & 0777
         );
     }
 
@@ -168,7 +186,7 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             0775,
-            fileperms( dirname( $this->getTempDir() . '/' . $storedPath ) ) & 0777
+            fileperms( dirname( $this->getStorageDir() . '/' . $storedPath ) ) & 0777
         );
     }
 
@@ -178,7 +196,7 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             file_get_contents( __FILE__ ),
-            file_get_contents( $this->getTempDir() . '/' . $storedPath )
+            file_get_contents( $this->getStorageDir() . '/' . $storedPath )
         );
     }
 
@@ -191,7 +209,7 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
         $storedPath = $fileService->storeFile( $internalFile, 'new/destination/bar.foo' );
 
         $this->assertTrue(
-            file_exists( $this->getTempDir() . '/' . $storedPath )
+            file_exists( $this->getStorageDir() . '/' . $storedPath )
         );
 
         return $storedPath;
@@ -203,7 +221,7 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             file_get_contents( __FILE__ ),
-            file_get_contents( $this->getTempDir() . '/' . $storedPath )
+            file_get_contents( $this->getStorageDir() . '/' . $storedPath )
         );
     }
 
@@ -216,7 +234,7 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
         $fileService->remove( $storedPath );
 
         $this->assertFalse(
-            file_exists( $this->getTempDir() . '/' . $storedPath )
+            file_exists( $this->getStorageDir() . '/' . $storedPath )
         );
     }
 
@@ -230,7 +248,7 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
         $fileService->remove( dirname( $storedPath ) );
 
         $this->assertFalse(
-            file_exists( dirname( $this->getTempDir() . '/' . $storedPath ) )
+            file_exists( dirname( $this->getStorageDir() . '/' . $storedPath ) )
         );
     }
 
@@ -255,7 +273,7 @@ class LocalFileServiceTest extends \PHPUnit_Framework_TestCase
         $fileService->remove( dirname( $storedPath ), true );
 
         $this->assertFalse(
-            file_exists( dirname( $this->getTempDir() . '/' . $storedPath ) )
+            file_exists( dirname( $this->getStorageDir() . '/' . $storedPath ) )
         );
     }
 

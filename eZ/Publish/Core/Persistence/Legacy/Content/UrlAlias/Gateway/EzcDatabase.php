@@ -14,9 +14,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     eZ\Publish\SPI\Persistence\Content\UrlAlias,
-    ezcQuery,
-    ezcQueryInsert,
-    ezcQueryUpdate;
+    ezcQuery;
 
 /**
  * UrlAlias Gateway

@@ -18,11 +18,7 @@ use eZ\Publish\SPI\Persistence\Content\Type,
     eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
 
     eZ\Publish\Core\Persistence\Legacy\Exception,
-
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
+    eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler;
 
 /**
  * Test case for Content Type Handler.

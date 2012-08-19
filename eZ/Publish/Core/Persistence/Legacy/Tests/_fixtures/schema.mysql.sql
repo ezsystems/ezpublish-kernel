@@ -19,8 +19,25 @@ CREATE TABLE ezimagefile (
   PRIMARY KEY (id),
   KEY ezimagefile_coid (contentobject_attribute_id),
   KEY ezimagefile_file (filepath(200))
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `ezmedia`;
+CREATE TABLE `ezmedia` (
+  `contentobject_attribute_id` int(11) NOT NULL DEFAULT '0',
+  `controls` varchar(50) DEFAULT NULL,
+  `filename` varchar(255) NOT NULL DEFAULT '',
+  `has_controller` int(11) DEFAULT '0',
+  `height` int(11) DEFAULT NULL,
+  `is_autoplay` int(11) DEFAULT '0',
+  `is_loop` int(11) DEFAULT '0',
+  `mime_type` varchar(50) NOT NULL DEFAULT '',
+  `original_filename` varchar(255) NOT NULL DEFAULT '',
+  `pluginspage` varchar(255) DEFAULT NULL,
+  `quality` varchar(50) DEFAULT NULL,
+  `version` int(11) NOT NULL DEFAULT '0',
+  `width` int(11) DEFAULT NULL,
+  PRIMARY KEY (`contentobject_attribute_id`,`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS ezcobj_state;
 CREATE TABLE ezcobj_state (

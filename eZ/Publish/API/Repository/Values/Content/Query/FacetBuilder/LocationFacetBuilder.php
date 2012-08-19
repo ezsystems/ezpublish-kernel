@@ -12,7 +12,6 @@
 namespace eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
-use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
  * Build a Subtree facet

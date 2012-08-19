@@ -8,8 +8,6 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Image;
-use eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field;
 
 abstract class PathGenerator
 {

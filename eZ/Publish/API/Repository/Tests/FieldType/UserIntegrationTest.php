@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\RepositoryTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\UserIntegrationTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\API\Repository,
-    eZ\Publish\Core\FieldType\User\Value as UserValue,
+use eZ\Publish\Core\FieldType\User\Value as UserValue,
     eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
@@ -18,7 +17,7 @@ use eZ\Publish\API\Repository,
  * @group integration
  * @group field-type
  */
-class UserFieldTypeIntergrationTest extends BaseIntegrationTest
+class UserIntegrationTest extends BaseIntegrationTest
 {
     /**
      * Identifier of the custom field
@@ -389,7 +388,7 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      * @param mixed $fieldData
      * @return void
      */
-    protected function createContent( $fieldData )
+    protected function createContent( $fieldData, $contentType = null )
     {
         $repository  = $this->getRepository();
         $userService = $repository->getUserService();

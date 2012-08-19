@@ -9,9 +9,6 @@
 
 namespace eZ\Publish\Core\IO\Tests;
 use eZ\Publish\Core\IO\InMemoryHandler as InMemory,
-    eZ\Publish\SPI\IO\BinaryFile,
-    eZ\Publish\SPI\IO\BinaryFileCreateStruct,
-    eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
     eZ\Publish\Core\IO\Tests\Base as BaseHandlerTest;
 
 /**

@@ -10,9 +10,7 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Author\Type as AuthorType,
     eZ\Publish\Core\FieldType\Author\Value as AuthorValue,
-    eZ\Publish\Core\FieldType\Author\Author,
-    eZ\Publish\Core\FieldType\Author\AuthorCollection,
-    ReflectionObject;
+    eZ\Publish\Core\FieldType\Author\Author;
 
 /**
  * @group fieldType

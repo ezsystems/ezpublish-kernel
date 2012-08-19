@@ -10,9 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content\Language,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper;
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler;
 
 /**
  * Test case for Language Handler

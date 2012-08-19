@@ -9,12 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\TextLine;
 use eZ\Publish\Core\FieldType\FieldType,
-    ez\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\FieldType\ValidationError;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * The TextLine field type.

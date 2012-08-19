@@ -10,9 +10,7 @@
 namespace eZ\Publish\SPI\Tests\FieldType;
 use eZ\Publish\Core\Persistence\Legacy,
     eZ\Publish\Core\FieldType,
-    eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
+    eZ\Publish\SPI\Persistence\Content;
 
 /**
  * Integration test for legacy storage field types
@@ -34,7 +32,7 @@ use eZ\Publish\Core\Persistence\Legacy,
  *
  * @group integration
  */
-class DateAndTimeIntergrationTest extends BaseIntegrationTest
+class DateAndTimeIntegrationTest extends BaseIntegrationTest
 {
     /**
      * Get name of tested field tyoe

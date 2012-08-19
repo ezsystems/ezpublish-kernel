@@ -12,8 +12,6 @@ namespace eZ\Publish\Core\REST\Client\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 
-use eZ\Publish\Core\REST\Client;
-
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitation;
 
 /**

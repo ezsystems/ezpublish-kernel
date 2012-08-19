@@ -10,8 +10,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 73,
-        'title' => 'CD/DVD Box III',
+        'id' => 41,
+        'title' => 'Media',
       ),
        'score' => NULL,
        'index' => NULL,
@@ -21,8 +21,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 71,
-        'title' => 'CD/DVD Box I',
+        'id' => 56,
+        'title' => 'Design',
       ),
        'score' => NULL,
        'index' => NULL,
@@ -32,8 +32,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 72,
-        'title' => 'CD/DVD Box II',
+        'id' => 50,
+        'title' => 'Files',
       ),
        'score' => NULL,
        'index' => NULL,
@@ -43,8 +43,30 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 69,
-        'title' => 'OS Type I',
+        'id' => 49,
+        'title' => 'Images',
+      ),
+       'score' => NULL,
+       'index' => NULL,
+       'highlight' => NULL,
+    )),
+    4 => 
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+       'valueObject' => 
+      array (
+        'id' => 51,
+        'title' => 'Multimedia',
+      ),
+       'score' => NULL,
+       'index' => NULL,
+       'highlight' => NULL,
+    )),
+    5 => 
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
+       'valueObject' => 
+      array (
+        'id' => 45,
+        'title' => 'Setup',
       ),
        'score' => NULL,
        'index' => NULL,
@@ -55,6 +77,6 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
    'time' => 1,
    'timedOut' => NULL,
    'maxScore' => NULL,
-   'totalCount' => 147,
+   'totalCount' => 6,
 ));
 

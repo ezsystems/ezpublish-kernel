@@ -14,12 +14,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler,
     eZ\Publish\SPI\Persistence\Content\Search\Field,
     eZ\Publish\SPI\Persistence\Content\Search\FieldType,
-    eZ\Publish\Core\Persistence\Solr\Exception,
-    eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler,
-    eZ\Publish\API\Repository\Exceptions\NotImplementedException,
-    eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit,
+    eZ\Publish\Core\Persistence\Legacy\Exception\InvalidObjectCount,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query;
 
@@ -119,7 +114,7 @@ class Handler extends BaseSearchHandler
 
         if ( $result->totalCount !== 1 )
         {
-            throw new \OutOfBoundsException(
+            throw new InvalidObjectCount(
                 'Expected exactly one object to be found -- found ' . $result->totalCount . '.'
             );
         }

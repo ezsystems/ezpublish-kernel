@@ -10,7 +10,6 @@
 namespace eZ\Publish\Legacy\Templating\Twig\Extension;
 
 use eZ\Publish\Legacy\Templating\Twig\TokenParser\LegacyIncludeParser;
-use eZ\Publish\Legacy\Kernel as LegacyKernel;
 use eZ\Publish\Legacy\Templating\LegacyCompatible;
 use eZ\Publish\Legacy\Templating\Converter\MultipleObjectConverter;
 use eZTemplate;

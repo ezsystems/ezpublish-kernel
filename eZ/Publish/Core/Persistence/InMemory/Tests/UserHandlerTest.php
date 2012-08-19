@@ -13,7 +13,6 @@ use eZ\Publish\SPI\Persistence\User,
     eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
     eZ\Publish\SPI\Persistence\User\Policy,
     eZ\Publish\SPI\Persistence\User\RoleAssignment,
-    eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**

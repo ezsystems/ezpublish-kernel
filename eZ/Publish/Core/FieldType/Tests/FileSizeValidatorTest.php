@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue,
     eZ\Publish\Core\FieldType\Validator\FileSizeValidator,
-    eZ\Publish\Core\Repository\Tests\FieldType,
     eZ\Publish\API\Repository\Values\IO\BinaryFile;
 
 /**
@@ -139,6 +138,7 @@ class FileSizeValidatorTest extends FieldTypeTest
      */
     public function testValidateCorrectValues( $size )
     {
+        $this->markTestIncomplete( 'BinaryFile field type does not use this validator anymore.' );
         $validator = new FileSizeValidator;
         $validator->maxFileSize = 4096;
         $this->assertTrue( $validator->validate( $this->getBinaryFileValue( $size ) ) );
@@ -152,6 +152,7 @@ class FileSizeValidatorTest extends FieldTypeTest
      */
     protected function getBinaryFileValue( $size )
     {
+        $this->markTestIncomplete( 'BinaryFile field type does not use this validator anymore.' );
         $value = new BinaryFileValue( $this->getMock( 'eZ\\Publish\\API\\Repository\\IOService' ) );
         $value->file = new BinaryFile( array( "size" => $size ) );
 
@@ -175,6 +176,7 @@ class FileSizeValidatorTest extends FieldTypeTest
      */
     public function testValidateWrongValues( $size, $message, $values )
     {
+        $this->markTestIncomplete( 'BinaryFile field type does not use this validator anymore.' );
         $validator = new FileSizeValidator;
         $validator->maxFileSize = $this->getMaxFileSize();
         $this->assertFalse( $validator->validate( $this->getBinaryFileValue( $size ) ) );

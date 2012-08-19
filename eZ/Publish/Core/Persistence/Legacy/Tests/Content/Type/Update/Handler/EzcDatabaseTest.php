@@ -9,9 +9,6 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\UpdateHandler;
 use eZ\Publish\SPI\Persistence\Content\Type,
-
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\EzcDatabase;
 
 /**

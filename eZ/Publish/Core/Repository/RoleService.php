@@ -46,8 +46,6 @@ use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct,
 /**
  * This service provides methods for managing Roles and Policies
  *
- * @todo add get roles for user including limitations
- *
  * @package eZ\Publish\Core\Repository
  */
 class RoleService implements RoleServiceInterface
@@ -566,8 +564,6 @@ class RoleService implements RoleServiceInterface
      * assigns a role to the given user
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
-     *
-     * @todo add limitations
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\User $user

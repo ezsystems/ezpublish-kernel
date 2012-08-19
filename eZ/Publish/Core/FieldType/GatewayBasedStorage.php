@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType;
-use eZ\Publish\SPI\FieldType\FieldStorage,
-    eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\SPI\FieldType\FieldStorage;
 
 /**
  * Storage gateway base class to be used by FieldType storages
