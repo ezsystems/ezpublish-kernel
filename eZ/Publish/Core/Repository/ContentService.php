@@ -329,14 +329,16 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null )
     {
-        $content = $this->repository->getSearchService()->findSingle( new CriterionRemoteId( $remoteId ) );
-
-        if ( $languages === null && $versionNo === null )
+        $content = $this->repository->getSearchService()->findSingle( new CriterionRemoteId( $remoteId ), array(), false );
+        if ( $languages !== null || $versionNo !== null )
         {
-            return $content;
+            $content = $this->loadContent( $content->id, $languages, $versionNo );
         }
 
-        return $this->loadContent( $content->id, $languages, $versionNo );
+        if ( !$this->repository->canUser( 'content', 'read', $content ) )
+            throw new UnauthorizedException( 'content', 'read' );
+
+        return $content;
     }
 
     /**

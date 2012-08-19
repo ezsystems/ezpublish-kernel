@@ -195,8 +195,8 @@ class Repository implements RepositoryInterface
             'urlAlias' => array(),
             'urlWildcard' => array(),
             'nameSchema' => array(
-                "limit" => 0,
-                "sequence" => ""
+                'limit' => 0,
+                'sequence' => ''
             ),
         );
 
@@ -212,7 +212,9 @@ class Repository implements RepositoryInterface
     public function getCurrentUser()
     {
         if ( !$this->user instanceof User )
+        {
             $this->user = $this->getUserService()->loadAnonymousUser();
+        }
 
         return $this->user;
     }
