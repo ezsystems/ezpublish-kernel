@@ -13,6 +13,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     ezcQuerySelect,
     RuntimeException;
 
@@ -101,6 +102,13 @@ class Field extends CriterionHandler
             if ( !isset( $fieldMapArray[ $row['data_type_string'] ] ) )
             {
                 $converter = $this->fieldConverterRegistry->getConverter( $row['data_type_string'] );
+
+                if ( !$converter instanceof Converter )
+                {
+                    throw new RuntimeException( "getConverter({$row['data_type_string']}) did not return a converter, got: " .
+                        gettype( $converter ) );
+                }
+
                 $fieldMapArray[ $row['data_type_string'] ] = array(
                     'ids' => array(),
                     'column' => $converter->getIndexColumn(),

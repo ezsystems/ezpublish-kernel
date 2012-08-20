@@ -25,7 +25,7 @@ class ContentSearchHandlerTest extends LanguageAwareTestCase
     /**
      * Field registry mock
      *
-     * @var \eZ\Publish\SPI\Persistence\Content\FieldValue\ConverterRegistry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected $fieldRegistry;
 
