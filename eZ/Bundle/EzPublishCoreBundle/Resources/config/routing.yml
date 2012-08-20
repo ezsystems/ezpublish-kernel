@@ -12,7 +12,7 @@ services:
 
     ezpublish.urlalias_router:
         class: %ezpublish.urlalias_router.class%
-        arguments: [@ezpublish.api.repository, @?logger]
+        arguments: [@ezpublish.api.repository, @?router.request_context, @?logger]
         tags:
             - {name: router, priority: 200}
 
