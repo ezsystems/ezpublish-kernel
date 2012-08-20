@@ -109,13 +109,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue( array(
             'data'         => null,
-            'externalData' => array(
-                'account_key' => null,
-                'is_enabled'  => true,
-                'last_visit'  => null,
-                'login_count' => 0,
-                'max_login'   => 1000,
-            ),
+            'externalData' => array(),
             'sortKey'      => 'user',
         ) );
     }
@@ -132,19 +126,15 @@ class UserIntegrationTest extends BaseIntegrationTest
     public function assertLoadedFieldDataCorrect( Field $field )
     {
         $expectedValues = array(
-            'account_key' => null,
-            'has_stored_login' => true,
-            'contentobject_id' => self::$contentId,
+            'hasStoredLogin' => true,
+            'contentObjectId' => self::$contentId,
             'login' => 'hans',
             'email' => 'hans@example.com',
-            'password_hash' => '*',
-            'password_hash_type' => 0,
-            'is_logged_in' => true,
-            'is_enabled' => true,
-            'is_locked' => false,
-            'last_visit' => null,
-            'login_count' => null,
-            'max_login' => 1000,
+            'passwordHash' => '*',
+            'passwordHashType' => 0,
+            'isLoggedIn' => true,
+            'isEnabled' => true,
+            'maxLogin' => 1000,
         );
 
         foreach ( $expectedValues as $key => $value )
@@ -165,15 +155,12 @@ class UserIntegrationTest extends BaseIntegrationTest
         return new Content\FieldValue( array(
             'data'         => null,
             'externalData' => array(
-                'account_key'        => 'foobar',
                 'login'              => 'change', // Change is intended to not get through
                 'email'              => 'change', // Change is intended to not get through
-                'password_hash'      => 'change', // Change is intended to not get through
-                'password_hash_type' => 'change', // Change is intended to not get through
-                'last_visit'         => 123456789,
-                'login_count'        => 2300,
-                'is_enabled'         => 'changed', // Change is intended to not get through
-                'max_login'          => 'changed', // Change is intended to not get through
+                'passwordHash'      => 'change', // Change is intended to not get through
+                'passwordHashType' => 'change', // Change is intended to not get through
+                'isEnabled'         => 'changed', // Change is intended to not get through
+                'maxLogin'          => 'changed', // Change is intended to not get through
             ),
             'sortKey'      => 'user',
         ) );
@@ -193,26 +180,8 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function assertUpdatedFieldDataCorrect( Field $field )
     {
-        $expectedValues = array(
-            'account_key' => 'foobar',
-            'has_stored_login' => true,
-            'contentobject_id' => self::$contentId,
-            'login' => 'hans',
-            'email' => 'hans@example.com',
-            'password_hash' => '*',
-            'password_hash_type' => 0,
-            'is_logged_in' => true,
-            'is_enabled' => true,
-            'is_locked' => true,
-            'last_visit' => 123456789,
-            'login_count' => 2300,
-            'max_login' => 1000,
-        );
-
-        foreach ( $expectedValues as $key => $value )
-        {
-            $this->assertEquals( $value, $field->value->externalData[$key] );
-        }
+        // No update of user data possible through field type
+        $this->assertLoadedFieldDataCorrect( $field );
     }
 
     /**
