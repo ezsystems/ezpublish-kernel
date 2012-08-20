@@ -127,7 +127,7 @@ class EzcDatabase extends Gateway
         $statement->execute();
 
         $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
-        foreach ( $rows as $row )
+        foreach ( $rows as &$row )
         {
             $row["path"] = $this->getPath( $row["id"], $prioritizedLanguageCodes );
             $row["type"] = $row["is_alias"] ? UrlAlias::VIRTUAL : UrlAlias::LOCATION;
