@@ -13,7 +13,6 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
     ezcQuerySelect,
     RuntimeException;
 

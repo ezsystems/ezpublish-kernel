@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Legacy\User;
 use eZ\Publish\SPI\Persistence\User,
     eZ\Publish\SPI\Persistence\User\Role,
-    eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
     eZ\Publish\SPI\Persistence\User\Policy,
     eZ\Publish\SPI\Persistence\User\RoleAssignment;
 

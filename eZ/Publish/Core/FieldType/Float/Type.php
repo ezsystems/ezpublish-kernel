@@ -9,9 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Float;
 use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\Core\FieldType\ValidationError;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * Float field types

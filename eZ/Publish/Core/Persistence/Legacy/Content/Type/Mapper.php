@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type,
     eZ\Publish\SPI\Persistence\Content\Type\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\SPI\Persistence\Content\Type\Group,
     eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,

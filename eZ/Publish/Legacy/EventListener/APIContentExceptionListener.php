@@ -16,8 +16,7 @@ use eZ\Publish\MVC\Event\APIContentExceptionEvent,
     eZ\Publish\Core\Repository\Values\Content\ContentInfo,
     eZ\Publish\Legacy\View\ContentViewProvider as LegacyContentViewProvider,
     Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    Symfony\Component\HttpKernel\Log\LoggerInterface,
-    Symfony\Component\HttpFoundation\Response;
+    Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 class APIContentExceptionListener implements EventSubscriberInterface
 {

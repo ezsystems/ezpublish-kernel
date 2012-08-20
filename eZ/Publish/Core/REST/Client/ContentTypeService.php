@@ -24,7 +24,6 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 use \eZ\Publish\Core\REST\Common\UrlHandler;
 use \eZ\Publish\Core\REST\Common\Input;
 use \eZ\Publish\Core\REST\Common\Output;
-use \eZ\Publish\Core\REST\Common\Message;
 
 /**
  * @example Examples/contenttype.php

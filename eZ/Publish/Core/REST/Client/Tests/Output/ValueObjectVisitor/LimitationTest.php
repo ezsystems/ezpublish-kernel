@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
-use eZ\Publish\Core\REST\Client\Values\User;
 use eZ\Publish\Core\REST\Common;
 
 class LimitationTest extends ValueObjectVisitorBaseTest

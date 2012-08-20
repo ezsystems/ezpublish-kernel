@@ -8,9 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Media;
-use eZ\Publish\Core\FieldType\BinaryBase\Value as BaseValue,
-    eZ\Publish\API\Repository\IOService,
-    eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
+use eZ\Publish\Core\FieldType\BinaryBase\Value as BaseValue;
 
 /**
  * Value for Media field type

@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\Content;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 

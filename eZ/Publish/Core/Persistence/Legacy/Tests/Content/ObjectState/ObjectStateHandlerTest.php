@@ -10,12 +10,9 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState;
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler,
-    eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper,
     eZ\Publish\SPI\Persistence\Content\ObjectState,
     eZ\Publish\SPI\Persistence\Content\ObjectState\Group,
-    eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct,
-    eZ\Publish\SPI\Persistence\Content\Language;
+    eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
 
 /**
  * Test case for Object state Handler

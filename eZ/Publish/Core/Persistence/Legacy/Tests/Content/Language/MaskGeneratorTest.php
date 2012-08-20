@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache,
     eZ\Publish\SPI\Persistence\Content\Language;
 
 /**

@@ -10,8 +10,7 @@
 namespace eZ\Publish\Core\FieldType;
 
 use eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\FieldType\Indexable,
-    eZ\Publish\SPI\Persistence\Content\Search;
+    eZ\Publish\SPI\FieldType\Indexable;
 
 /**
  * Indexable definition for string field type

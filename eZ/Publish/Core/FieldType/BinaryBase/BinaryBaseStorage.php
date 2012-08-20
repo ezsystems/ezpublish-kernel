@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\FieldType\BinaryBase;
 use eZ\Publish\Core\FieldType\GatewayBasedStorage,
     eZ\Publish\Core\FieldType\FileService,
-    eZ\Publish\SPI\FieldType\FieldStorage,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field;
 

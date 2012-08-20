@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
-use eZ\Publish\SPI\Persistence\Content\UrlAlias;
-
 /**
  * UrlAlias Gateway
  */

@@ -101,7 +101,7 @@ class MediaIntergrationTest extends FileBaseIntegrationTest
      */
     public function getTypeConstraints()
     {
-        return new Content\FieldTypeConstraints(
+        return new FieldTypeConstraints(
             array(
                 'validators' => array(
                     'FileSizeValidator' => array(
@@ -127,7 +127,7 @@ class MediaIntergrationTest extends FileBaseIntegrationTest
             array( 'fieldType', 'ezmedia' ),
             array(
                 'fieldTypeConstraints',
-                new Content\FieldTypeConstraints(
+                new FieldTypeConstraints(
                     array(
                         'validators' => array(
                             'FileSizeValidator' => array(

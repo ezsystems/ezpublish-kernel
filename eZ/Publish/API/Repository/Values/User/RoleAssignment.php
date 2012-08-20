@@ -10,7 +10,6 @@
 namespace eZ\Publish\API\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 
 /**
  * This value object represents an assignment od a user or user group to a role including a limitation

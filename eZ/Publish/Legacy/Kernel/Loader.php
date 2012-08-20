@@ -10,12 +10,9 @@
 namespace eZ\Publish\Legacy\Kernel;
 
 use eZ\Publish\Legacy\Kernel as LegacyKernel,
-    eZ\Publish\MVC\SiteAccess,
     eZ\Publish\Legacy\LegacyEvents,
     eZ\Publish\Legacy\Event\PreBuildKernelWebHandlerEvent,
-    \ezpKernelHandler,
     \ezpKernelWeb,
-    \eZSiteAccess,
     \eZURI,
     Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\DependencyInjection\Exception\InactiveScopeException,

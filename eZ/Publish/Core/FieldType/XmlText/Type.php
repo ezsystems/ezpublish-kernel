@@ -9,14 +9,11 @@
 
 namespace eZ\Publish\Core\FieldType\XmlText;
 use eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\API\Repository\FieldTypeTools,
     eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\FieldType\XmlText\Input\Handler as XmlTextInputHandler,
     eZ\Publish\Core\FieldType\XmlText\Input\Parser as XmlTextInputParserInterface,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\SPI\FieldType\Event,
     eZ\Publish\Core\FieldType\ValidationError;
 

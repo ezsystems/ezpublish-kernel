@@ -9,11 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\InMemory;
 use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as TrashHandlerInterface,
-    eZ\Publish\SPI\Persistence\Content\Location\Trashed as TrashedValue,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Location as LocationValue,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler

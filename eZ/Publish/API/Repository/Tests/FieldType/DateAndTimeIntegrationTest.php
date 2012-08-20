@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\API\Repository,
-    eZ\Publish\Core\FieldType\DateAndTime\Value as DateAndTimeValue,
+use eZ\Publish\Core\FieldType\DateAndTime\Value as DateAndTimeValue,
     eZ\Publish\API\Repository\Values\Content\Field;
 
 /**

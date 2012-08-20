@@ -10,9 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Section;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content\Section,
-    eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Section\Mapper;
+    eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler;
 
 /**
  * Test case for Section Handler

@@ -8,12 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Keyword;
-use eZ\Publish\SPI\FieldType\FieldStorage,
-    eZ\Publish\Core\FieldType\GatewayBasedStorage,
+use eZ\Publish\Core\FieldType\GatewayBasedStorage,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    LogicException,
-    PDO;
+    eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Converter for Keyword field type external storage

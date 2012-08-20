@@ -9,12 +9,8 @@
 
 namespace eZ\Publish\SPI\FieldType;
 
-use eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\Core\FieldType\Validator,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\SPI\FieldType\Event;
 
 /**

@@ -13,7 +13,6 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\FieldType\XmlText\Value as XmlTextValue,
     eZ\Publish\Core\FieldType\FieldSettings;
 
 class XmlText implements Converter

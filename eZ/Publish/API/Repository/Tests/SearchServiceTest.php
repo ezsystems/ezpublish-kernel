@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException,
-    eZ\Publish\Core\Repository\SearchService,
+use eZ\Publish\Core\Repository\SearchService,
     eZ\Publish\Core\Repository\Values\Content\Content,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
@@ -505,25 +504,25 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 new Query( array(
-                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'criterion' => new Criterion\ContentTypeId( 1 ),
                     'offset'      => 0,
                     'limit'       => null,
                     'sortClauses' => array(
-                        new SortClause\Field( "article", "title" ),
+                        new SortClause\Field( "folder", "name" ),
                     )
                 ) ),
-                $fixtureDir . '/SortFieldTitle.php',
+                $fixtureDir . '/SortFolderName.php',
             ),
             array(
                 new Query( array(
-                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'criterion'   => new Criterion\SectionId( array( 5 ) ),
                     'offset'      => 0,
                     'limit'       => null,
                     'sortClauses' => array(
-                        new SortClause\Field( "product", "price" ),
+                        new SortClause\Field( "template_look", "title" ),
                     )
                 ) ),
-                $fixtureDir . '/SortFieldPrice.php',
+                $fixtureDir . '/SortTemplateTitle.php',
             ),
         );
     }

@@ -10,8 +10,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Service;
 
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
-    eZ\Publish\API\Repository\Values\Content\UrlAlias,
-    eZ\Publish\SPI\Persistence\Content\UrlAlias as SPIUrlAlias;
+    eZ\Publish\API\Repository\Values\Content\UrlAlias;
 
 /**
  * Test case for UrlAlias Service

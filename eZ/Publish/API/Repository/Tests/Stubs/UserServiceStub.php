@@ -10,7 +10,6 @@
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
 use \eZ\Publish\API\Repository\UserService;
-use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\UserCreateStruct;
 use \eZ\Publish\API\Repository\Values\User\UserUpdateStruct;

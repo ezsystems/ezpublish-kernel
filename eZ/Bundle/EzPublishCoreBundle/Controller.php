@@ -9,8 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController,
-    eZ\Publish\API\Repository\Repository;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
 
 class Controller extends BaseController
 {

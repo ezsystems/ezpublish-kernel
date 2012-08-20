@@ -11,7 +11,6 @@ namespace eZ\Publish\SPI\Tests\FieldType;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText as XmlTextConverter,
     eZ\Publish\Core\FieldType\NullStorage,
     eZ\Publish\Core\FieldType\FieldSettings,
-    eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 

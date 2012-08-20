@@ -3,10 +3,6 @@ namespace eZ\Publish\Core\REST\Client\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 
-use eZ\Publish\API\Repository\Values\Content\Location;
-
-use eZ\Publish\Core\REST\Client\Exceptions;
-
 class ContentTypeCreateStruct extends \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct
 {
     protected $fieldDefinitions = array();

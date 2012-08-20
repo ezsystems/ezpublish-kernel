@@ -10,8 +10,7 @@
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion,
 eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications,
-eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface,
-InvalidArgumentException;
+eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * A more like this criterion is matched by content which contains similar terms

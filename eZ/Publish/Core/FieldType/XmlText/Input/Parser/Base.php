@@ -14,8 +14,7 @@ use eZ\Publish\Core\FieldType\XmlText\Schema as XmlSchema,
     eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     DOMDocument,
     DOMElement,
-    DOMNode,
-    DOMText;
+    DOMNode;
 
 /**
  * Base class for the input parser.

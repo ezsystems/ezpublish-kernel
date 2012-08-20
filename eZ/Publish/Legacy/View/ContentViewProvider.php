@@ -10,7 +10,6 @@
 namespace eZ\Publish\Legacy\View;
 
 use eZ\Publish\MVC\View\ContentViewProvider as ContentViewProviderInterface,
-    eZ\Publish\Legacy\Kernel,
     eZ\Publish\API\Repository\Values\Content\ContentInfo,
     eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\MVC\View\ContentView,

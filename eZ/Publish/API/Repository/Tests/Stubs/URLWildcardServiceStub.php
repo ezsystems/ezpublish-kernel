@@ -10,7 +10,6 @@
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
 use \eZ\Publish\API\Repository\URLWildcardService;
-use \eZ\Publish\API\Repository\Values\Content\URLAlias;
 use \eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\ContentValidationExceptionStub;

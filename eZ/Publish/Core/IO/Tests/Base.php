@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\IO\Tests;
-use eZ\Publish\SPI\IO\BinaryFile,
-    eZ\Publish\SPI\IO\BinaryFileCreateStruct,
+use eZ\Publish\SPI\IO\BinaryFileCreateStruct,
     eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
     DateTime,
     finfo;

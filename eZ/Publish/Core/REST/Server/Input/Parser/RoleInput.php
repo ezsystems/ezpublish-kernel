@@ -13,8 +13,6 @@ use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\RoleService;
 
-use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
-
 /**
  * Base class for input parser
  */

@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
 use eZ\Publish\SPI\Persistence\Content\Type,
-    eZ\Publish\SPI\Persistence\Content\Type\Group,
     eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
     eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,

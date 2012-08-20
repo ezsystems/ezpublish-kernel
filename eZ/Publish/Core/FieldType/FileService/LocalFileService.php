@@ -8,9 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\FileService;
-use eZ\Publish\Core\FieldType\FileService,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\Core\FieldType\FileService;
 
 class LocalFileService implements FileService
 {
