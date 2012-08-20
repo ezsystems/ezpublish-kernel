@@ -2171,6 +2171,8 @@ class ContentServiceTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         $draft = $this->createMultipleLanguageDraftVersion1();
 
+        $contentService->publishVersion($draft->versionInfo);
+
         // This draft contains those fields localized with "eng-GB"
         $draftLocalized = $contentService->loadContentByRemoteId(
             $draft->contentInfo->remoteId,
@@ -4161,7 +4163,7 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id' => 0,
-                    'value' => null,
+                    'value' => 'Foo',
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'description'
                 )
@@ -4169,7 +4171,7 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id' => 0,
-                    'value' => null,
+                    'value' => 'Bar',
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'description'
                 )
