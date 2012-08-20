@@ -113,9 +113,9 @@
         {"id": 9, "roleId": 1, "module": "user", "function": "login", "limitations": { "SiteAccess" : [ 3781580864 ] } }
     ],
     "User\\RoleAssignment" : [
-        {"id": 1, "contentId": 11, "limitationIdentifier": null, "values": null, "_id": 1},
-        {"id": 1, "contentId": 42, "limitationIdentifier": null, "values": null, "_id": 2},
-        {"id": 2, "contentId": 12, "limitationIdentifier": null, "values": null, "_id": 3}
+        {"id": 1, "roleId": 1, "contentId": 11, "limitationIdentifier": null, "values": null},
+        {"id": 2, "roleId": 1, "contentId": 42, "limitationIdentifier": null, "values": null},
+        {"id": 3, "roleId": 2, "contentId": 12, "limitationIdentifier": null, "values": null}
     ],
     "Content\\ObjectState" : [
         {"id": 1, "identifier": "not_locked", "groupId": 2, "priority": 0, "defaultLanguage": "eng-US", "languageCodes": ["eng-US"], "name": {"eng-US": "Not locked"}, "description": {"eng-US": ""}, "_contentId": [1, 4, 10, 11, 12, 14, 42]},

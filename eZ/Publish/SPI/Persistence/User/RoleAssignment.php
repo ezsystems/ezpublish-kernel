@@ -19,7 +19,7 @@ class RoleAssignment extends ValueObject
      *
      * @var mixed
      */
-    public $id;
+    public $roleId;
 
     /**
      * The user or user group id

@@ -634,7 +634,7 @@ class RoleService implements RoleServiceInterface
                 $spiRoleAssignments = $userHandler->getRoleAssignments( $userGroup->id );
                 foreach ( $spiRoleAssignments as $spiRoleAssignment )
                 {
-                    if ( $spiRoleAssignment->id == $role->id )
+                    if ( $spiRoleAssignment->roleId == $role->id )
                     {
                         $roleAssignments[] = $this->buildDomainUserGroupRoleAssignmentObject(
                             $spiRoleAssignment,
@@ -653,7 +653,7 @@ class RoleService implements RoleServiceInterface
                     $spiRoleAssignments = $userHandler->getRoleAssignments( $user->id );
                     foreach ( $spiRoleAssignments as $spiRoleAssignment )
                     {
-                        if ( $spiRoleAssignment->id == $role->id )
+                        if ( $spiRoleAssignment->roleId == $role->id )
                         {
                             $roleAssignments[] = $this->buildDomainUserRoleAssignmentObject(
                                 $spiRoleAssignment,
@@ -860,7 +860,7 @@ class RoleService implements RoleServiceInterface
         }
 
         $user = $user ?: $this->repository->getUserService()->loadUser( $spiRoleAssignment->contentId );
-        $role = $role ?: $this->loadRole( $spiRoleAssignment->id );
+        $role = $role ?: $this->loadRole( $spiRoleAssignment->roleId );
 
         return new UserRoleAssignment(
             array(
@@ -890,7 +890,7 @@ class RoleService implements RoleServiceInterface
         }
 
         $userGroup = $userGroup ?: $this->repository->getUserService()->loadUserGroup( $spiRoleAssignment->contentId );
-        $role = $role ?: $this->loadRole( $spiRoleAssignment->id );
+        $role = $role ?: $this->loadRole( $spiRoleAssignment->roleId );
 
         return new UserGroupRoleAssignment(
             array(
