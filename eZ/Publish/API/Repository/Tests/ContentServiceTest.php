@@ -1151,7 +1151,7 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id' => 0,
-                    'value' => null,
+                    'value' => true,
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'description'
                 )
@@ -1159,7 +1159,7 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id' => 0,
-                    'value' => null,
+                    'value' => true,
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'description'
                 )
@@ -1945,7 +1945,7 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id' => 0,
-                    'value' => null,
+                    'value' => true,
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'description'
                 )
@@ -2014,7 +2014,7 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id' => 0,
-                    'value' => null,
+                    'value' => true,
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'description'
                 )
