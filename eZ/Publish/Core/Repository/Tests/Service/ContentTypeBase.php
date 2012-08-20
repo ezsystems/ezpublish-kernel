@@ -2568,7 +2568,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $time = time();
 
         /* BEGIN: Use Case */
-        $user = $this->getStubbedUser( 4096 );
+        $user = $this->getStubbedUser( 14 );
         $this->repository->setCurrentUser( $user );
         $contentTypeService = $this->repository->getContentTypeService();
 
