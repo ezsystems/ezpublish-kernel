@@ -14,6 +14,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\API\Repository\Values\Content\VersionInfo,
     ezcQuerySelect;
 
 /**
@@ -115,14 +116,25 @@ class EzcDatabase extends Gateway
 
         $query
             ->select( 'COUNT( * )' )
-            ->from( $this->handler->quoteTable( 'ezcontentobject' ) );
+            ->from( $this->handler->quoteTable( 'ezcontentobject' ) )
+            ->innerJoin(
+                'ezcontentobject_version',
+                'ezcontentobject.id',
+                'ezcontentobject_version.contentobject_id'
+            );
 
         if ( $sort !== null )
         {
             $this->sortClauseConverter->applyJoin( $query, $sort );
         }
 
-        $query->where( $condition );
+        $query->where(
+            $query->expr->eq(
+                'ezcontentobject_version.status',
+                VersionInfo::STATUS_PUBLISHED
+            ),
+            $condition
+        );
 
         $statement = $query->prepare();
         $statement->execute();
@@ -247,6 +259,10 @@ class EzcDatabase extends Gateway
     {
         $loadQuery = $this->queryBuilder->createFindQuery( $translations );
         $loadQuery->where(
+            $loadQuery->expr->eq(
+                'ezcontentobject_version.status',
+                VersionInfo::STATUS_PUBLISHED
+            ),
             $loadQuery->expr->in(
                 $this->handler->quoteColumn( 'id', 'ezcontentobject' ),
                 $contentIds
