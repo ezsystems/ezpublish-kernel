@@ -10,7 +10,8 @@
 namespace eZ\Publish\Core\FieldType\Media;
 use eZ\Publish\Core\FieldType\BinaryBase\Type as BaseType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\SPI\Persistence\Content\FieldValue;
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * The TextLine field type.
@@ -82,7 +83,7 @@ class Type extends BaseType
                 switch ( $name )
                 {
                     case "mediaType":
-                        if ( !in_array( $value, $this->availableTypes ) )
+                        if ( !in_array( $value, self::$availableTypes ) )
                         {
                             $validationErrors[] = new ValidationError(
                                 "Setting '%setting%' is of unknown type",
