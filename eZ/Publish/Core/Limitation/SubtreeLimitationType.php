@@ -144,6 +144,6 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
      */
     public function valueSchema( Repository $repository )
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( 'valueSchema' );
+        self::VALUE_SCHEMA_LOCATION_PATH;
     }
 }

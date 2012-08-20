@@ -134,6 +134,6 @@ class LocationLimitationType implements SPILimitationTypeInterface
      */
     public function valueSchema( Repository $repository )
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( 'valueSchema' );
+        self::VALUE_SCHEMA_LOCATION_ID;
     }
 }
