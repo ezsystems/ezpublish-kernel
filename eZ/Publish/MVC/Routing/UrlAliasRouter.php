@@ -38,6 +38,11 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
     protected $urlAliasService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    protected $repository;
+
+    /**
      * @var \Symfony\Component\HttpKernel\Log\LoggerInterface
      */
     protected $logger;
@@ -45,6 +50,7 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
     public function __construct( Repository $repository, RequestContext $requestContext, LoggerInterface $logger = null )
     {
         $this->urlAliasService = $repository->getURLAliasService();
+        $this->repository = $repository;
         $this->requestContext = isset( $requestContext ) ? $requestContext : new RequestContext();
         $this->logger = $logger;
     }
@@ -144,15 +150,26 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
     {
         if ( $name === self::URL_ALIAS_ROUTE_NAME )
         {
-            if ( !isset( $parameters['location'] ) || !$parameters['location'] instanceof Location )
+            // We must have at least 'location' or 'locationId' to retrieve the UrlAlias
+            if ( !isset( $parameters['location'] ) && !isset( $parameters['locationId'] ) )
+            {
+                throw new \InvalidArgumentException(
+                    "When generating an UrlAlias route, either 'location' or 'locationId must be provided."
+                );
+            }
+
+            // Check if location is a valid Location object
+            if ( isset( $parameters['location'] ) && !$parameters['location'] instanceof Location )
             {
                 throw new \LogicException(
                     "When generating an UrlAlias route, 'location' parameter must be a valid eZ\\Publish\\API\\Repository\\Values\\Content\\Location."
                 );
             }
 
+            $location = isset( $parameters['location'] ) ? $parameters['location'] : $this->repository->getLocationService()->loadLocation( $parameters['locationId'] );
+
             $urlAliases = $this->urlAliasService->listLocationAliases(
-                $parameters['location'],
+                $location,
                 false,
                 // TODO : Don't hardcode language. Build the Repository with configured prioritized languages instead.
                 'eng-GB'
