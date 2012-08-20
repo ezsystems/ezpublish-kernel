@@ -16,6 +16,8 @@ use \eZ\Publish\API\Repository\Values\Content\Location;
  *
  * @see eZ\Publish\API\Repository\LocationService
  * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+ * @group integration
+ * @group authorization
  */
 class LocationServiceAuthorizationTest extends BaseTest
 {

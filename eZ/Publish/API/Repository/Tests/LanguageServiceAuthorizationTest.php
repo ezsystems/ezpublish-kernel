@@ -15,6 +15,7 @@ namespace eZ\Publish\API\Repository\Tests;
  * @see \eZ\Publish\API\Repository\LanguageService
  * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
  * @group integration
+ * @group authorization
  */
 class LanguageServiceAuthorizationTest extends BaseTest
 {
