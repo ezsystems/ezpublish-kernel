@@ -13,6 +13,8 @@ namespace eZ\Publish\API\Repository\Tests;
  * Test case for operations in the URLWildcardService.
  *
  * @see eZ\Publish\API\Repository\URLWildcardService
+ * @group integration
+ * @group authorization
  */
 class URLWildcardServiceAuthorizationTest extends BaseTest
 {

@@ -55,7 +55,7 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return null;
+        return new Value();
     }
 
     /**
@@ -104,26 +104,10 @@ class Type extends FieldType
      * @param mixed $hash
      *
      * @return \eZ\Publish\Core\FieldType\User\Value $value
-     * @TODO: Implement.
      */
     public function fromHash( $hash )
     {
-        $values = array_merge(
-            array(
-                'login'      => null,
-                'accountKey' => null,
-                'lastVisit'  => null,
-                'loginCount' => null,
-            ),
-            $hash
-        );
-
-        return new Value( array(
-            'login'      => $values['login'],
-            'accountKey' => $values['accountKey'],
-            'lastVisit'  => $values['lastVisit'],
-            'loginCount' => $values['loginCount'],
-        ) );
+        return new Value( $hash );
     }
 
     /**
@@ -136,22 +120,7 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
-        $values = array_merge(
-            array(
-                'login'      => null,
-                'accountKey' => null,
-                'lastVisit'  => null,
-                'loginCount' => null,
-            ),
-            (array) $value
-        );
-
-        return array(
-            'login'      => $values['login'],
-            'accountKey' => $values['accountKey'],
-            'lastVisit'  => $values['lastVisit'],
-            'loginCount' => $values['loginCount'],
-        );
+        return (array) $value;
     }
 
      /**
@@ -180,8 +149,8 @@ class Type extends FieldType
     {
         return new FieldValue(
             array(
-                "data" => array(),
-                "externalData" => null,
+                "data" => null,
+                "externalData" => $this->toHash( $value ),
                 "sortKey" => null,
             )
         );
@@ -195,11 +164,9 @@ class Type extends FieldType
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      *
      * @return mixed
-     * @TODO: Implement.
      */
     public function fromPersistenceValue( FieldValue $fieldValue )
     {
-        // return new Value( $fieldValue->externalData );
-        return new Value();
+        return $this->acceptValue( $fieldValue->externalData );
     }
 }

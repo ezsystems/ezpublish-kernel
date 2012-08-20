@@ -14,6 +14,7 @@ namespace eZ\Publish\API\Repository\Tests;
  *
  * @see eZ\Publish\API\Repository\UserService
  * @group integration
+ * @group authorization
  */
 class UserServiceAuthorizationTest extends BaseTest
 {

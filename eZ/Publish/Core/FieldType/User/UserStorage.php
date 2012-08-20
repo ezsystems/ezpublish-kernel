@@ -82,8 +82,7 @@ class UserStorage extends GatewayBasedStorage
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
-        $gateway = $this->getGateway( $context );
-        $field->value->externalData = $gateway->storeFieldData( $field->id, $field->value->externalData );
+        // Only the UserService may update user data
     }
 
     /**
@@ -109,13 +108,7 @@ class UserStorage extends GatewayBasedStorage
      */
     public function deleteFieldData( array $fieldId, array $context )
     {
-        // @TODO: What do we actually want to do in here?
-        $gateway = $this->getGateway( $context );
-
-        foreach ( $fieldId as $id )
-        {
-            $gateway->deleteFieldData( $id );
-        }
+        // Only the UserService may update user data
     }
 
     /**

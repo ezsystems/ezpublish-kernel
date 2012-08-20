@@ -14,6 +14,7 @@ namespace eZ\Publish\API\Repository\Tests;
  *
  * @see eZ\Publish\API\Repository\TrashService
  * @group integration
+ * @group authorization
  */
 class TrashServiceAuthorizationTest extends BaseTrashServiceTest
 {

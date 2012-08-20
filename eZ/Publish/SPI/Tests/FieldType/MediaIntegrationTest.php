@@ -107,7 +107,10 @@ class MediaIntergrationTest extends FileBaseIntegrationTest
                     'FileSizeValidator' => array(
                         'maxFileSize' => 2 * 1024 * 1024, // 2 MB
                     )
-                )
+                ),
+                'fieldSettings' => new FieldType\FieldSettings( array(
+                    'mediaType' => FieldType\Media\Type::TYPE_SILVERLIGHT,
+                ) )
             )
         );
     }
@@ -122,8 +125,6 @@ class MediaIntergrationTest extends FileBaseIntegrationTest
     public function getFieldDefinitionData()
     {
         return array(
-            // The ezint field type does not have any special field definition
-            // properties
             array( 'fieldType', 'ezmedia' ),
             array(
                 'fieldTypeConstraints',
@@ -133,7 +134,10 @@ class MediaIntergrationTest extends FileBaseIntegrationTest
                             'FileSizeValidator' => array(
                                 'maxFileSize' => 2 * 1024 * 1024, // 2 MB
                             )
-                        )
+                        ),
+                        'fieldSettings' => new FieldType\FieldSettings( array(
+                            'mediaType' => FieldType\Media\Type::TYPE_SILVERLIGHT,
+                        ) )
                     )
                 )
             ),

@@ -36,13 +36,14 @@ parameters:
     #         underline:
     #             isInline: true
     ezpublish.fieldType.ezcountry.class: eZ\Publish\Core\FieldType\Country\Type
-    # Temporary workaround for ezpage, ezemail, ezimage, ezgmaplocation, ezcomcomments to treat those field types as
+    # Temporary workaround for ezpage, ezemail, ezimage, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
     # a ezstring until proper implementation will be in place
     ezpublish.fieldType.ezpage.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezemail.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezimage.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezgmaplocation.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezcomcomments.class: eZ\Publish\Core\FieldType\TextLine\Type
+    ezpublish.fieldType.ezobjectrelationlist.class: eZ\Publish\Core\FieldType\TextLine\Type
 
 services:
     ezpublish.api.fieldTypeValidator:
@@ -184,7 +185,7 @@ services:
             - %ezpublish.fieldType.ezxmltext.xmlSchema.options%
         public: false
 
-    # Temporary workaround for ezpage, ezemail, ezimage, ezgmaplocation, ezcomcomments to treat those field types as
+    # Temporary workaround for ezpage, ezemail, ezimage, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
     # a ezstring until proper implementation will be in place
     ezpublish.fieldType.ezpage:
         class: %ezpublish.fieldType.ezpage.class%
@@ -216,3 +217,8 @@ services:
         tags:
             - {name: ezpublish.fieldType, alias: ezcomcomments}
 
+    ezpublish.fieldType.ezobjectrelationlist:
+        class: %ezpublish.fieldType.ezobjectrelationlist.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezobjectrelationlist}

@@ -54,6 +54,12 @@ class Type extends BaseType
     {
         $inputValue = parent::acceptValue( $inputValue );
 
+        if ( $inputValue === null )
+        {
+            // Empty value
+            return null;
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(

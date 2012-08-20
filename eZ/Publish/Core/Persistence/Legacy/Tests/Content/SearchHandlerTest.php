@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\ContentSearchHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -18,14 +18,14 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
 /**
  * Test case for ContentSearchHandler
  */
-class ContentSearchHandlerTest extends LanguageAwareTestCase
+class SearchHandlerTest extends LanguageAwareTestCase
 {
     protected static $setUp = false;
 
     /**
      * Field registry mock
      *
-     * @var \eZ\Publish\SPI\Persistence\Content\FieldValue\ConverterRegistry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected $fieldRegistry;
 

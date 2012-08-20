@@ -15,12 +15,8 @@ use eZ\Publish\Core\FieldType\BinaryFile\Type as BinaryFileType,
  * @group fieldType
  * @group ezbinaryfile
  */
-class BinaryFileTest extends StandardizedFieldTypeTest
+class BinaryFileTest extends BinaryBaseTest
 {
-    private $mimeTypeDetectorMock;
-
-    private $binaryFileType;
-
     /**
      * Returns the field type under test.
      *
@@ -42,45 +38,12 @@ class BinaryFileTest extends StandardizedFieldTypeTest
         );
     }
 
-    protected function getValidatorConfigurationSchemaExpectation()
-    {
-        return array(
-            "FileSizeValidator" => array(
-                "maxFileSize" => array(
-                    "type" => "int",
-                    "default" => false
-                )
-            )
-        );
-    }
-
-    protected function getSettingsSchemaExpectation()
-    {
-        return array();
-    }
-
-    protected function getEmptyValueExpectation()
-    {
-        return null;
-    }
-
     public function provideInvalidInputForAcceptValue()
     {
-        return array(
-            array(
-                new \stdClass(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                array(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
+        $baseInput = parent::provideInvalidInputForAcceptValue();
+        $binaryFileInput = array(
             array(
                 new BinaryFileValue(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                array( 'path' => '/foo/bar' ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
@@ -88,6 +51,7 @@ class BinaryFileTest extends StandardizedFieldTypeTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
+        return array_merge( $baseInput, $binaryFileInput );
     }
 
     public function provideValidInputForAcceptValue()
@@ -157,20 +121,5 @@ class BinaryFileTest extends StandardizedFieldTypeTest
                 ) )
             ),
         );
-    }
-
-    protected function getMimeTypeDetectorMock()
-    {
-        if ( !isset( $this->mimeTypeDetectorMock ) )
-        {
-            $this->mimeTypeDetectorMock = $this->getMock(
-                'eZ\\Publish\\Core\\FieldType\\BinaryFile\\MimeTypeDetector',
-                array(),
-                array(),
-                '',
-                false
-            );
-        }
-        return $this->mimeTypeDetectorMock;
     }
 }

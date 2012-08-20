@@ -13,6 +13,8 @@ namespace eZ\Publish\API\Repository\Tests;
  * Test case for operations in the ObjectStateService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\ObjectStateService
+ * @group integration
+ * @group authorization
  */
 class ObjectStateServiceAuthorizationTest extends BaseTest
 {

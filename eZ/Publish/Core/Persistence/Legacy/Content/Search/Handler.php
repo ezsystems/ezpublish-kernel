@@ -105,7 +105,7 @@ class Handler extends BaseSearchHandler
         $result->time       = microtime( true ) - $start;
         $result->totalCount = $data['count'];
 
-        foreach ( $this->extractMostRecentContentFromRows( $data['rows'] ) as $content ) {
+        foreach ( $this->contentMapper->extractContentFromRows( $data['rows'] ) as $content ) {
             $this->fieldHandler->loadExternalFieldData( $content );
             $searchHit = new SearchHit();
             $searchHit->valueObject = $content;
@@ -114,39 +114,6 @@ class Handler extends BaseSearchHandler
         }
 
         return $result;
-    }
-
-    /**
-     * Extracts the content objects with the most recent version number from the
-     * given database result.
-     *
-     * @todo What about different languages for the same content?
-     *
-     * @param array $rows
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content[]
-     */
-    private function extractMostRecentContentFromRows( array $rows )
-    {
-        $contents = array();
-        foreach ( $this->contentMapper->extractContentFromRows( $rows ) as $content )
-        {
-            if ( VersionInfo::STATUS_PUBLISHED !== $content->versionInfo->status )
-            {
-                continue;
-            }
-            
-            if ( !isset( $contents[$content->contentInfo->id] ) )
-            {
-                $contents[$content->contentInfo->id] = $content;
-            }
-            else if ( $content->versionInfo->versionNo > $contents[$content->contentInfo->id]->versionInfo->versionNo )
-            {
-                $contents[$content->contentInfo->id] = $content;
-            }
-        }
-
-        return $contents;
     }
 
     /**

@@ -36,30 +36,5 @@ abstract class Gateway extends StorageGateway
      * @return array
      */
     abstract public function getFieldData( $fieldId, $userId = null );
-
-    /**
-     * Store external field data
-     *
-     * @param mixed $fieldId
-     * @param array $data
-     * @return void
-     */
-    abstract public function storeFieldData( $fieldId, array $data );
-
-    /**
-     * Copy all field data
-     *
-     * @param mixed $fieldId
-     * @return void
-     */
-    abstract public function copyFieldData( $fieldId );
-
-    /**
-     * Delete all field data
-     *
-     * @param mixed $fieldId
-     * @return void
-     */
-    abstract public function deleteFieldData( $fieldId );
 }
 

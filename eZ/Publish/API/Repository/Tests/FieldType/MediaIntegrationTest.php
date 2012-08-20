@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 use eZ\Publish\Core\FieldType\Media\Value as MediaValue,
+    eZ\Publish\Core\FieldType\Media\Type as MediaType,
     eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
@@ -76,7 +77,12 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array();
+        return array(
+            'mediaType' => array(
+                'type' => 'choice',
+                'default' => MediaType::TYPE_HTML5_VIDEO,
+            )
+        );
     }
 
     /**
@@ -86,7 +92,9 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array();
+        return array(
+            'mediaType' => MediaType::TYPE_FLASH,
+        );
     }
 
     /**

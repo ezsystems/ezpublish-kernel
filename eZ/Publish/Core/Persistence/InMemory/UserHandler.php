@@ -289,7 +289,7 @@ class UserHandler implements UserHandlerInterface
     {
         $this->backend->delete( 'User\\Role', $roleId );
         $this->backend->deleteByMatch( 'User\\Policy', array( 'roleId' => $roleId ) );
-        $this->backend->deleteByMatch( 'User\\RoleAssignment', array( 'id' => $roleId ) );
+        $this->backend->deleteByMatch( 'User\\RoleAssignment', array( 'roleId' => $roleId ) );
     }
 
     /**
@@ -485,13 +485,11 @@ class UserHandler implements UserHandlerInterface
                 $this->backend->create(
                     'User\\RoleAssignment',
                     array(
-                        'id' => $roleId,
+                        'roleId' => $roleId,
                         'contentId' => $contentId,
                         'limitationIdentifier' => $limitIdentifier,
                         'values' => $limitValues
-                    ),
-                    true,
-                    '_id'
+                    )
                 );
             }
         }
@@ -500,13 +498,11 @@ class UserHandler implements UserHandlerInterface
             $this->backend->create(
                 'User\\RoleAssignment',
                 array(
-                    'id' => $roleId,
+                    'roleId' => $roleId,
                     'contentId' => $contentId,
                     'limitationIdentifier' => null,
                     'values' => null
-                ),
-                true,
-                '_id'
+                )
             );
         }
 
@@ -539,13 +535,13 @@ class UserHandler implements UserHandlerInterface
 
         $roleAssignments = $this->backend->find(
             'User\\RoleAssignment',
-            array( 'id' => $roleId, 'contentId' => $contentId )
+            array( 'roleId' => $roleId, 'contentId' => $contentId )
         );
 
         if ( empty( $roleAssignments ) )
             throw new InvalidArgumentValue( '$roleId', $roleId );
 
-        $this->backend->deleteByMatch( 'User\\RoleAssignment', array( 'id' => $roleId, 'contentId' => $contentId ) );
+        $this->backend->deleteByMatch( 'User\\RoleAssignment', array( 'roleId' => $roleId, 'contentId' => $contentId ) );
 
         $role->groupIds = array_values( array_diff( $role->groupIds, array( $contentId ) ) );
         $this->backend->update( 'User\\Role', $roleId, (array)$role );

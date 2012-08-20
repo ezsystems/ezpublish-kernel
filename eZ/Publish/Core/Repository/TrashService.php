@@ -304,8 +304,14 @@ class TrashService implements TrashServiceInterface
     {
         $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiTrashItem->contentId );
 
-        $trashedChildren = $this->persistenceHandler->trashHandler()->findTrashItems(
-            new ParentLocationId( $spiTrashItem->id )
+        $trashedChildren = array_filter(
+            $this->persistenceHandler->trashHandler()->findTrashItems(
+                new ParentLocationId( $spiTrashItem->id )
+            ),
+            function( $trashedChild ) use ( $spiTrashItem )
+            {
+                return $trashedChild->parentId === $spiTrashItem->id;
+            }
         );
 
         return new TrashItem(

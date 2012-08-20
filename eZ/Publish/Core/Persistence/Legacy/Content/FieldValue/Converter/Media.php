@@ -9,6 +9,12 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
+use eZ\Publish\Core\FieldType\Media\Type as MediaType,
+    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
+    eZ\Publish\Core\FieldType\FieldSettings;
+
 class Media extends BinaryFile
 {
     /**
@@ -22,5 +28,44 @@ class Media extends BinaryFile
     public static function create()
     {
         return new self;
+    }
+
+    /**
+     * Converts field definition data in $fieldDef into $storageFieldDef
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
+     */
+    public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
+    {
+        $storageDef->dataInt1 = ( isset( $fieldDef->fieldTypeConstraints->validators['FileSizeValidator']['maxFileSize'] )
+            ? $fieldDef->fieldTypeConstraints->validators['FileSizeValidator']['maxFileSize']
+            : 0 );
+
+        $storageDef->dataText1 = ( isset( $fieldDef->fieldTypeConstraints->fieldSettings['mediaType'] )
+            ? $fieldDef->fieldTypeConstraints->fieldSettings['mediaType']
+            : MediaType::TYPE_HTML5_VIDEO );
+    }
+
+    /**
+     * Converts field definition data in $storageDef into $fieldDef
+     *
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
+     */
+    public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
+    {
+        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints( array(
+            'validators' => array(
+                'FileSizeValidator' => array(
+                    'maxFileSize' => ( $storageDef->dataInt1 != 0
+                        ? $storageDef->dataInt1
+                        : false ),
+                )
+            ),
+            'fieldSettings' => new FieldSettings( array(
+                'mediaType' => $storageDef->dataText1,
+            ) ),
+        ) );
     }
 }

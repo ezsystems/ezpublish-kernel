@@ -10,7 +10,8 @@
 namespace eZ\Publish\Core\FieldType\Media;
 use eZ\Publish\Core\FieldType\BinaryBase\Type as BaseType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\SPI\Persistence\Content\FieldValue;
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * The TextLine field type.
@@ -19,6 +20,41 @@ use eZ\Publish\Core\FieldType\BinaryBase\Type as BaseType,
  */
 class Type extends BaseType
 {
+
+    /**
+     * List of possible media type settings
+     */
+    const TYPE_FLASH = 'flash',
+          TYPE_QUICKTIME = 'quick_time',
+          TYPE_REALPLAYER = 'real_player',
+          TYPE_SILVERLIGHT = 'silverlight',
+          TYPE_WINDOWSMEDIA = 'windows_media_player',
+          TYPE_HTML5_VIDEO = 'html5_video',
+          TYPE_HTML5_AUDIO = 'html5_audio';
+
+    /**
+     * Type constants for validation.
+     */
+    private static $availableTypes = array(
+        self::TYPE_FLASH,
+        self::TYPE_QUICKTIME,
+        self::TYPE_REALPLAYER,
+        self::TYPE_SILVERLIGHT,
+        self::TYPE_WINDOWSMEDIA,
+        self::TYPE_HTML5_VIDEO,
+        self::TYPE_HTML5_AUDIO
+    );
+
+    /**
+     * @var array
+     */
+    protected $settingsSchema = array(
+        'mediaType' => array(
+            'type' => 'choice',
+            'default' => self::TYPE_HTML5_VIDEO,
+        )
+    );
+
     /**
      * Return the field type identifier for this field type
      *
@@ -27,6 +63,52 @@ class Type extends BaseType
     public function getFieldTypeIdentifier()
     {
         return "ezmedia";
+    }
+
+    /**
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings( $fieldSettings )
+    {
+        $validationErrors = array();
+
+        foreach ( $fieldSettings as $name => $value )
+        {
+            if ( isset( $this->settingsSchema[$name] ) )
+            {
+                switch ( $name )
+                {
+                    case "mediaType":
+                        if ( !in_array( $value, self::$availableTypes ) )
+                        {
+                            $validationErrors[] = new ValidationError(
+                                "Setting '%setting%' is of unknown type",
+                                null,
+                                array(
+                                    "setting" => $name
+                                )
+                            );
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                $validationErrors[] = new ValidationError(
+                    "Setting '%setting%' is unknown",
+                    null,
+                    array(
+                        "setting" => $name
+                    )
+                );
+            }
+        }
+
+        return $validationErrors;
     }
 
     /**
@@ -53,6 +135,12 @@ class Type extends BaseType
     public function acceptValue( $inputValue )
     {
         $inputValue = parent::acceptValue( $inputValue );
+
+        if ( $inputValue === null )
+        {
+            // Empty value
+            return null;
+        }
 
         if ( !$inputValue instanceof Value )
         {

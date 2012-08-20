@@ -83,7 +83,14 @@ class TwigContentViewLayoutDecorator implements ContentViewInterface
 {$contentViewClosure( $params )}
 {% endblock %}
 EOT;
-            return $twig->render( $twigContentTemplate );
+            return $twig->render(
+                $twigContentTemplate,
+                array(
+                     'location'     => isset( $params['location'] ) ? $params['location'] : null,
+                     'content'      => isset( $params['content'] ) ? $params['content'] : null,
+                     'params'       => $params
+                )
+            );
         };
     }
 
