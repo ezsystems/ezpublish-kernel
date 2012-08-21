@@ -393,7 +393,8 @@ abstract class Type extends FieldType
                         // No file size limit
                         break;
                     }
-                    if ( $fieldValue !== null && $parameters['maxFileSize'] < $fieldValue->fileSize )
+                    // Database stores maxFileSize in MB
+                    if ( $fieldValue !== null && ( $parameters['maxFileSize'] * 1024 * 1024 ) < $fieldValue->fileSize )
                     {
                         $errors[] = new ValidationError(
                             "The file size cannot exceed %size% byte.",
