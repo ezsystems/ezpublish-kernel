@@ -134,7 +134,7 @@ class EzcDatabase extends Gateway
             $row["forward"] = $row["is_alias"] && $row["alias_redirects"];
             $row["destination"] = $locationId;
             $row["always_available"] = (bool)( $row["lang_mask"] & 1 );
-            $row["language_codes"] = array();
+            //$row["language_codes"] = array();
             foreach ( $this->languageMaskGenerator->extractLanguageIdsFromMask( $row["lang_mask"] ) as $languageId )
             {
                 $row["language_codes"][] = $this->languageHandler->load( $languageId )->languageCode;
@@ -325,8 +325,8 @@ class EzcDatabase extends Gateway
     /**
      * Re-links custom location history entries.
      *
-     * When new location alias is published we need to check for existing entries with the same action and
-     * language mask, update "link" column with given $newId and move "id" to next value.
+     * When new location alias is published we need to check for existing history entries with the same action and
+     * language mask, update their "link" column with given $newId and "id" column with next id value.
      *
      * @param string $action
      * @param mixed $languageId
@@ -413,16 +413,18 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Updates parent ids of children entries when location is moved.
      *
-     * @param mixed $newElementId
      * @param string $action
-     * @param mixed $parentId
-     * @param string $newTextMD5
      * @param mixed $languageId
+     * @param mixed $newParentId
+     * @param mixed $parentId
+     * @param string $textMD5
      *
+     * @throws \Exception
      * @return void
      */
-    public function reparent( $newElementId, $action, $parentId, $newTextMD5, $languageId )
+    public function reparent( $action, $languageId, $newParentId, $parentId, $textMD5 )
     {
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
@@ -439,35 +441,38 @@ class EzcDatabase extends Gateway
                     $this->dbHandler->quoteColumn( "is_alias" ),
                     $query->bindValue( 0, null, \PDO::PARAM_INT )
                 ),
-                $query->expr->lOr(
-                    $query->expr->neq(
-                        $this->dbHandler->quoteColumn( "parent" ),
-                        $query->bindValue( $parentId, null, \PDO::PARAM_INT )
-                    ),
-                    $query->expr->neq(
-                        $this->dbHandler->quoteColumn( "text_md5" ),
-                        $query->bindValue( $newTextMD5, null, \PDO::PARAM_STR )
+                // make sure newly published entry is not loaded
+                $query->expr->not(
+                    $query->expr->lAnd(
+                        $query->expr->eq(
+                            $this->dbHandler->quoteColumn( "parent" ),
+                            $query->bindValue( $parentId, null, \PDO::PARAM_INT )
+                        ),
+                        $query->expr->eq(
+                            $this->dbHandler->quoteColumn( "text_md5" ),
+                            $query->bindValue( $textMD5, null, \PDO::PARAM_STR )
+                        )
                     )
                 )
             )
         );
         $statement = $query->prepare();
         $statement->execute();
+        $ids = $statement->fetchAll( \PDO::FETCH_COLUMN, 0 );
 
-        $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
-        foreach ( $rows as $row )
+        if ( !empty( $ids ) )
         {
             $query = $this->dbHandler->createUpdateQuery();
             $query->update(
                 $this->dbHandler->quoteColumn( "ezurlalias_ml" )
             )->set(
                 $this->dbHandler->quoteColumn( "parent" ),
-                $query->bindValue( $newElementId, null, \PDO::PARAM_INT )
+                $query->bindValue( $newParentId, null, \PDO::PARAM_INT )
             )->where(
                 $query->expr->lAnd(
-                    $query->expr->eq(
+                    $query->expr->in(
                         $this->dbHandler->quoteColumn( "parent" ),
-                        $query->bindValue( $row["id"], null, \PDO::PARAM_INT )
+                        $ids
                     ),
                     $query->expr->eq(
                         $this->dbHandler->quoteColumn( "lang_mask" ),
@@ -478,6 +483,7 @@ class EzcDatabase extends Gateway
                     )
                 )
             );
+
             $query->prepare()->execute();
         }
     }
