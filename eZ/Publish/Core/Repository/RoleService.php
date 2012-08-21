@@ -493,25 +493,13 @@ class RoleService implements RoleServiceInterface
         $loadedRole = $this->loadRole( $role->id );
         $loadedUserGroup = $this->repository->getUserService()->loadUserGroup( $userGroup->id );
 
-        $spiRoleLimitation = null;
-        if ( $roleLimitation !== null )
-        {
-            // @todo This hardcoded identifier check is not needed is it? already enforced by making sure limitation is
-            // instance of RoleLimitation which itself is abstract
-            $limitationIdentifier = $roleLimitation->getIdentifier();
-            if ( $limitationIdentifier !== Limitation::SUBTREE && $limitationIdentifier !== Limitation::SECTION )
-                throw new InvalidArgumentValue( "identifier", $limitationIdentifier, "RoleLimitation" );
-
-            $spiRoleLimitation = array( $limitationIdentifier => $roleLimitation->limitationValues );
-        }
-
         $this->repository->beginTransaction();
         try
         {
             $this->persistenceHandler->userHandler()->assignRole(
                 $loadedUserGroup->id,
                 $loadedRole->id,
-                $spiRoleLimitation
+                $roleLimitation ? array( $roleLimitation->getIdentifier() => $roleLimitation->limitationValues ) : null
             );
             $this->repository->commit();
         }
@@ -583,25 +571,13 @@ class RoleService implements RoleServiceInterface
         $loadedRole = $this->loadRole( $role->id );
         $loadedUser = $this->repository->getUserService()->loadUser( $user->id );
 
-        $spiRoleLimitation = null;
-        if ( $roleLimitation !== null )
-        {
-            // @todo This hardcoded identifier check is not needed is it? already enforced by making sure limitation is
-            // instance of RoleLimitation which itself is abstract
-            $limitationIdentifier = $roleLimitation->getIdentifier();
-            if ( $limitationIdentifier !== Limitation::SUBTREE && $limitationIdentifier !== Limitation::SECTION )
-                throw new InvalidArgumentValue( "identifier", $limitationIdentifier, "RoleLimitation" );
-
-            $spiRoleLimitation = array( $limitationIdentifier => $roleLimitation->limitationValues );
-        }
-
         $this->repository->beginTransaction();
         try
         {
             $this->persistenceHandler->userHandler()->assignRole(
                 $loadedUser->id,
                 $loadedRole->id,
-                $spiRoleLimitation
+                $roleLimitation ? array( $roleLimitation->getIdentifier() => $roleLimitation->limitationValues ) : null
             );
             $this->repository->commit();
         }

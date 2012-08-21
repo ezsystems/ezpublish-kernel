@@ -930,7 +930,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testCopyContentThrowsUnauthorizedException()
     {
-        $parentLocationId = $this->generateId( 'location', 167 );
+        $parentLocationId = $this->generateId( 'location', 52 );
 
         $repository = $this->getRepository();
 
@@ -976,7 +976,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      */
     public function testCopyContentThrowsUnauthorizedExceptionWithThirdParameter()
     {
-        $parentLocationId = $this->generateId( 'location', 167 );
+        $parentLocationId = $this->generateId( 'location', 52 );
 
         $repository = $this->getRepository();
 

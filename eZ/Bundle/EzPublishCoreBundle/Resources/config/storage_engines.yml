@@ -24,6 +24,7 @@ parameters:
     # Value converters
     ezpublish.fieldType.ezauthor.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Author
     ezpublish.fieldType.ezbinaryfile.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\BinaryFile
+    ezpublish.fieldType.ezbinaryfile.storage_gateway.class: eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezboolean.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Checkbox
     #ezpublish.fieldType.ezcountry.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country
     ezpublish.fieldType.ezdatetime.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime
@@ -33,6 +34,7 @@ parameters:
     ezpublish.fieldType.ezkeyword.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Keyword
     ezpublish.fieldType.ezkeyword.storage_gateway.class: eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezmedia.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Media
+    ezpublish.fieldType.ezmedia.storage_gateway.class: eZ\Publish\Core\FieldType\Media\MediaStorage\Gateway\LegacyStorage
     #ezpublish.fieldType.ezobjectrelationlist.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ObjectRelationList
     ezpublish.fieldType.ezselection.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection
     ezpublish.fieldType.ezstring.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
@@ -100,6 +102,11 @@ services:
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezbinaryfile, lazy: true, callback: '::create'}
 
+    ezpublish.fieldType.ezbinaryfile.storage_gateway:
+        class: %ezpublish.fieldType.ezbinaryfile.storage_gateway.class%
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezbinaryfile, identifier: LegacyStorage}
+
     ezpublish.fieldType.ezboolean.converter:
         class: %ezpublish.fieldType.ezboolean.converter.class%
         tags:
@@ -134,6 +141,11 @@ services:
         class: %ezpublish.fieldType.ezmedia.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezmedia, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezmedia.storage_gateway:
+        class: %ezpublish.fieldType.ezmedia.storage_gateway.class%
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezmedia, identifier: LegacyStorage}
 
     ezpublish.fieldType.ezselection.converter:
         class: %ezpublish.fieldType.ezselection.converter.class%

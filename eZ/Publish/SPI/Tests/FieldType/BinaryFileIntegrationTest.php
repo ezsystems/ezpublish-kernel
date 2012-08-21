@@ -105,7 +105,7 @@ class BinaryFileIntergrationTest extends FileBaseIntegrationTest
             array(
                 'validators' => array(
                     'FileSizeValidator' => array(
-                        'maxFileSize' => 2 * 1024 * 1024, // 2 MB
+                        'maxFileSize' => 2, // 2 MB
                     )
                 )
             )
@@ -131,7 +131,7 @@ class BinaryFileIntergrationTest extends FileBaseIntegrationTest
                     array(
                         'validators' => array(
                             'FileSizeValidator' => array(
-                                'maxFileSize' => 2 * 1024 * 1024, // 2 MB
+                                'maxFileSize' => 2, // 2 MB
                             )
                         )
                     )

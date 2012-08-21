@@ -14,6 +14,7 @@ return array (
     'ezcontentobject_published' => '1313047907',
     'ezcontentobject_status' => '1',
     'ezcontentobject_name' => 'Something',
+    'ezcontentobject_language_mask' => '2',
     'ezcontentobject_version_id' => '676',
     'ezcontentobject_version_version' => '2',
     'ezcontentobject_version_modified' => '1313061404',
@@ -52,7 +53,7 @@ return array (
     'ezcontentobject_tree_sort_order' => '1',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => true,
+    'ezcontentobject_always_available' => false,
     'ezcontentobject_main_language_code' => 'eng-US',
     'ezcontentobject_version_languages' =>
     array (
@@ -73,6 +74,7 @@ return array (
     'ezcontentobject_published' => '1313047907',
     'ezcontentobject_status' => '1',
     'ezcontentobject_name' => 'Something',
+    'ezcontentobject_language_mask' => '2',
     'ezcontentobject_version_id' => '676',
     'ezcontentobject_version_version' => '2',
     'ezcontentobject_version_modified' => '1313061404',
@@ -111,7 +113,7 @@ return array (
     'ezcontentobject_tree_sort_order' => '1',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => true,
+    'ezcontentobject_always_available' => false,
     'ezcontentobject_main_language_code' => 'eng-US',
     'ezcontentobject_version_languages' =>
     array (
@@ -132,6 +134,7 @@ return array (
     'ezcontentobject_published' => '1313047907',
     'ezcontentobject_status' => '1',
     'ezcontentobject_name' => 'Something',
+    'ezcontentobject_language_mask' => '2',
     'ezcontentobject_version_id' => '676',
     'ezcontentobject_version_version' => '2',
     'ezcontentobject_version_modified' => '1313061404',
@@ -170,7 +173,7 @@ return array (
     'ezcontentobject_tree_sort_order' => '1',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => true,
+    'ezcontentobject_always_available' => false,
     'ezcontentobject_main_language_code' => 'eng-US',
     'ezcontentobject_version_languages' =>
     array (
@@ -191,6 +194,7 @@ return array (
     'ezcontentobject_published' => '1313047907',
     'ezcontentobject_status' => '1',
     'ezcontentobject_name' => 'Something',
+    'ezcontentobject_language_mask' => '2',
     'ezcontentobject_version_id' => '676',
     'ezcontentobject_version_version' => '2',
     'ezcontentobject_version_modified' => '1313061404',
@@ -231,7 +235,7 @@ return array (
     'ezcontentobject_tree_sort_order' => '1',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => true,
+    'ezcontentobject_always_available' => false,
     'ezcontentobject_main_language_code' => 'eng-US',
     'ezcontentobject_version_languages' =>
     array (
@@ -252,6 +256,7 @@ return array (
     'ezcontentobject_published' => '1313047907',
     'ezcontentobject_status' => '1',
     'ezcontentobject_name' => 'Something',
+    'ezcontentobject_language_mask' => '2',
     'ezcontentobject_version_id' => '676',
     'ezcontentobject_version_version' => '2',
     'ezcontentobject_version_modified' => '1313061404',
@@ -292,7 +297,7 @@ return array (
     'ezcontentobject_tree_sort_order' => '1',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => true,
+    'ezcontentobject_always_available' => false,
     'ezcontentobject_main_language_code' => 'eng-US',
     'ezcontentobject_version_languages' =>
     array (
@@ -313,6 +318,7 @@ return array (
     'ezcontentobject_published' => '1313047907',
     'ezcontentobject_status' => '1',
     'ezcontentobject_name' => 'Something',
+    'ezcontentobject_language_mask' => '2',
     'ezcontentobject_version_id' => '676',
     'ezcontentobject_version_version' => '2',
     'ezcontentobject_version_modified' => '1313061404',
@@ -353,7 +359,7 @@ return array (
     'ezcontentobject_tree_sort_order' => '1',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => true,
+    'ezcontentobject_always_available' => false,
     'ezcontentobject_main_language_code' => 'eng-US',
     'ezcontentobject_version_languages' =>
     array (
@@ -374,6 +380,7 @@ return array (
     'ezcontentobject_published' => '1313047907',
     'ezcontentobject_status' => '1',
     'ezcontentobject_name' => 'Something',
+    'ezcontentobject_language_mask' => '2',
     'ezcontentobject_version_id' => '676',
     'ezcontentobject_version_version' => '2',
     'ezcontentobject_version_modified' => '1313061404',
@@ -412,7 +419,7 @@ return array (
     'ezcontentobject_tree_sort_order' => '1',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => true,
+    'ezcontentobject_always_available' => false,
     'ezcontentobject_main_language_code' => 'eng-US',
     'ezcontentobject_version_languages' =>
     array (
@@ -433,6 +440,7 @@ return array (
     'ezcontentobject_published' => '1313047907',
     'ezcontentobject_status' => '1',
     'ezcontentobject_name' => 'Something',
+    'ezcontentobject_language_mask' => '2',
     'ezcontentobject_version_id' => '676',
     'ezcontentobject_version_version' => '2',
     'ezcontentobject_version_modified' => '1313061404',
@@ -473,7 +481,7 @@ return array (
     'ezcontentobject_tree_sort_order' => '1',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => true,
+    'ezcontentobject_always_available' => false,
     'ezcontentobject_main_language_code' => 'eng-US',
     'ezcontentobject_version_languages' =>
     array (
@@ -494,6 +502,7 @@ return array (
     'ezcontentobject_published' => '1313047907',
     'ezcontentobject_status' => '1',
     'ezcontentobject_name' => 'Something',
+    'ezcontentobject_language_mask' => '2',
     'ezcontentobject_version_id' => '676',
     'ezcontentobject_version_version' => '2',
     'ezcontentobject_version_modified' => '1313061404',
@@ -534,7 +543,7 @@ return array (
     'ezcontentobject_tree_sort_order' => '1',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => true,
+    'ezcontentobject_always_available' => false,
     'ezcontentobject_main_language_code' => 'eng-US',
     'ezcontentobject_version_languages' =>
     array (
@@ -555,6 +564,7 @@ return array (
     'ezcontentobject_published' => '1313047907',
     'ezcontentobject_status' => '1',
     'ezcontentobject_name' => 'Something',
+    'ezcontentobject_language_mask' => '2',
     'ezcontentobject_version_id' => '676',
     'ezcontentobject_version_version' => '2',
     'ezcontentobject_version_modified' => '1313061404',
@@ -593,7 +603,7 @@ return array (
     'ezcontentobject_tree_sort_order' => '1',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => true,
+    'ezcontentobject_always_available' => false,
     'ezcontentobject_main_language_code' => 'eng-US',
     'ezcontentobject_version_languages' =>
     array (
@@ -614,6 +624,7 @@ return array (
     'ezcontentobject_published' => '1313047907',
     'ezcontentobject_status' => '1',
     'ezcontentobject_name' => 'Something',
+    'ezcontentobject_language_mask' => '2',
     'ezcontentobject_version_id' => '676',
     'ezcontentobject_version_version' => '2',
     'ezcontentobject_version_modified' => '1313061404',
@@ -652,7 +663,7 @@ return array (
     'ezcontentobject_tree_sort_order' => '1',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => true,
+    'ezcontentobject_always_available' => false,
     'ezcontentobject_main_language_code' => 'eng-US',
     'ezcontentobject_version_languages' =>
     array (
@@ -673,6 +684,7 @@ return array (
     'ezcontentobject_published' => '1313047907',
     'ezcontentobject_status' => '1',
     'ezcontentobject_name' => 'Something',
+    'ezcontentobject_language_mask' => '2',
     'ezcontentobject_version_id' => '676',
     'ezcontentobject_version_version' => '2',
     'ezcontentobject_version_modified' => '1313061404',
@@ -711,7 +723,7 @@ return array (
     'ezcontentobject_tree_sort_order' => '1',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => true,
+    'ezcontentobject_always_available' => false,
     'ezcontentobject_main_language_code' => 'eng-US',
     'ezcontentobject_version_languages' =>
     array (
@@ -732,6 +744,7 @@ return array (
     'ezcontentobject_published' => '1313047907',
     'ezcontentobject_status' => '1',
     'ezcontentobject_name' => 'Something',
+    'ezcontentobject_language_mask' => '2',
     'ezcontentobject_version_id' => '676',
     'ezcontentobject_version_version' => '2',
     'ezcontentobject_version_modified' => '1313061404',
@@ -770,7 +783,7 @@ return array (
     'ezcontentobject_tree_sort_order' => '1',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => true,
+    'ezcontentobject_always_available' => false,
     'ezcontentobject_main_language_code' => 'eng-US',
     'ezcontentobject_version_languages' =>
     array (

@@ -173,7 +173,7 @@ class Role
 
         $loadedRole = $this->roleService->loadRole( $values['role'] );
 
-        return new Values\PolicyList( $loadedRole->id, $loadedRole->getPolicies() );
+        return new Values\PolicyList( $loadedRole->getPolicies(), $loadedRole->id );
     }
 
     /**
@@ -402,6 +402,21 @@ class Role
 
         $roleAssignments = $this->roleService->getRoleAssignmentsForUserGroup( $userGroup );
         return new Values\RoleAssignmentList( $roleAssignments, $userGroup->id, true );
+    }
+
+    /**
+     * Search all policies which are applied to a given user
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\PolicyList
+     */
+    public function listPoliciesForUser( RMF\Request $request )
+    {
+        return new Values\PolicyList(
+            $this->roleService->loadPoliciesByUserId(
+                $request->variables['userId']
+            )
+        );
     }
 
     /**

@@ -157,7 +157,7 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Updates "always available" flag for content identified by $contentId, in respect to $isAlwaysAvailable.
+     * Updates "always available" flag for content identified by $contentId, in respect to $alwaysAvailable.
      *
      * @param int $contentId
      * @param bool $newAlwaysAvailable New "always available" value

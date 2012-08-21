@@ -38,9 +38,7 @@ class Media extends BinaryFile
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        $storageDef->dataInt1 = ( isset( $fieldDef->fieldTypeConstraints->validators['FileSizeValidator']['maxFileSize'] )
-            ? $fieldDef->fieldTypeConstraints->validators['FileSizeValidator']['maxFileSize']
-            : 0 );
+        parent::toStorageFieldDefinition( $fieldDef, $storageDef );
 
         $storageDef->dataText1 = ( isset( $fieldDef->fieldTypeConstraints->fieldSettings['mediaType'] )
             ? $fieldDef->fieldTypeConstraints->fieldSettings['mediaType']
@@ -55,17 +53,9 @@ class Media extends BinaryFile
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints( array(
-            'validators' => array(
-                'FileSizeValidator' => array(
-                    'maxFileSize' => ( $storageDef->dataInt1 != 0
-                        ? $storageDef->dataInt1
-                        : false ),
-                )
-            ),
-            'fieldSettings' => new FieldSettings( array(
+        parent::toFieldDefinition( $storageDef, $fieldDef );
+        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings( array(
                 'mediaType' => $storageDef->dataText1,
-            ) ),
         ) );
     }
 }

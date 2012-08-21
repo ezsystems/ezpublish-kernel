@@ -218,6 +218,7 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^/content/objects/[0-9]+/objectstates$)' => array(
             'GET' => array( $objectStateController, 'getObjectStatesForContent' ),
+            'PATCH' => array( $objectStateController, 'setObjectStatesForContent' ),
         ),
         '(^/content/objectstategroups$)' => array(
             'GET' => array( $objectStateController, 'loadObjectStateGroups' ),
@@ -237,6 +238,9 @@ $dispatcher = new AuthenticatingDispatcher(
             'PATCH' => array( $objectStateController, 'updateObjectState' ),
             'DELETE' => array( $objectStateController, 'deleteObjectState' ),
         ),
+        '(^/content/locations\?remoteId=[0-9a-z]+$)' => array(
+            'GET' => array( $locationController, 'loadLocationByRemoteId' ),
+        ),
         '(^/content/locations/[0-9/]+$)' => array(
             'GET'    => array( $locationController, 'loadLocation' ),
             'PATCH'  => array( $locationController, 'updateLocation' ),
@@ -251,6 +255,9 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/content/trash/[0-9]+$)' => array(
             'GET'    => array( $trashController, 'loadTrashItem' ),
             'DELETE' => array( $trashController, 'deleteTrashItem' ),
+        ),
+        '(^/user/policies\?userId=[0-9]+$)' => array(
+            'GET' => array( $roleController, 'listPoliciesForUser' ),
         ),
         '(^/user/roles$)' => array(
             'GET' => array( $roleController, 'listRoles' ),

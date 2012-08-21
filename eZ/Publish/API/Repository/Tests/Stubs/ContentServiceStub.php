@@ -719,7 +719,9 @@ class ContentServiceStub implements ContentService
                         $allFields[$fieldId] = new FieldStub(
                             array(
                                 'id' => $fieldId,
-                                'value' => $fieldDefinition->defaultValue,
+                                // 'value' => $fieldDefinition->defaultValue,
+                                // No default value in memory!
+                                'value' => 'Pseudo default value from memory stuff.',
                                 'languageCode' => $languageCode,
                                 'fieldDefIdentifier' => $fieldDefinition->identifier
                             )
@@ -748,7 +750,9 @@ class ContentServiceStub implements ContentService
                     $allFields[$fieldId] = new FieldStub(
                         array(
                             'id' => $fieldId,
-                            'value' => $fieldDefinition->defaultValue,
+                            // 'value' => $fieldDefinition->defaultValue,
+                            // No default value in memory!
+                            'value' => 'Pseudo default value from memory stuff.',
                             'languageCode' => null,
                             'fieldDefIdentifier' => $fieldDefinition->identifier
                         )

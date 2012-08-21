@@ -6,6 +6,9 @@ parameters:
     ezpublish.fieldType.ezauthor.class: eZ\Publish\Core\FieldType\Author\Type
     ezpublish.fieldType.ezbinaryfile.class: eZ\Publish\Core\FieldType\BinaryFile\Type
     ezpublish.fieldType.ezbinaryfile.externalStorage.class: eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage
+    ezpublish.fieldType.ezbinaryfile.fileService.class: eZ\Publish\Core\FieldType\FileService\LocalFileService
+    ezpublish.fieldType.ezbinaryfile.mimeTypeDetector.class: eZ\Publish\Core\FieldType\BinaryBase\MimeTypeDetector\FileInfoDetector
+    ezpublish.fieldType.ezbinaryfile.pathGenerator.class: eZ\Publish\Core\FieldType\BinaryBase\PathGenerator\LegacyPathGenerator
     ezpublish.fieldType.ezboolean.class: eZ\Publish\Core\FieldType\Checkbox\Type
     ezpublish.fieldType.ezdatetime.class: eZ\Publish\Core\FieldType\DateAndTime\Type
     ezpublish.fieldType.ezfloat.class: eZ\Publish\Core\FieldType\Float\Type
@@ -66,12 +69,23 @@ services:
     ezpublish.fieldType.ezbinaryfile:
         class: %ezpublish.fieldType.ezbinaryfile.class%
         parent: ezpublish.fieldType
-        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools, @ezpublish.api.repository]
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools, @ezpublish.fieldType.ezbinaryfile.fileService]
         tags:
             - {name: ezpublish.fieldType, alias: ezbinaryfile}
 
+    ezpublish.fieldType.ezbinaryfile.fileService:
+        class: %ezpublish.fieldType.ezbinaryfile.fileService.class%
+        arguments: [%kernel.root_dir%, %binaryfile_storage_dir%, %binaryfile_identifier_prefix%]
+
+    ezpublish.fieldType.ezbinaryfile.mimeTypeDetector:
+        class: %ezpublish.fieldType.ezbinaryfile.mimeTypeDetector.class%
+
+    ezpublish.fieldType.ezbinaryfile.pathGenerator:
+        class: %ezpublish.fieldType.ezbinaryfile.pathGenerator.class%
+
     ezpublish.fieldType.ezbinaryfile.externalStorage:
         class: %ezpublish.fieldType.ezbinaryfile.externalStorage.class%
+        arguments: [@ezpublish.fieldType.ezbinaryfile.fileService, ]
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezbinaryfile}
 

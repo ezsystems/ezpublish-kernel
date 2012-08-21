@@ -1651,7 +1651,7 @@ class ContentService implements ContentServiceInterface
                 "publishedDate" => $spiContentInfo->publicationDate == 0
                     ? null
                     : $this->getDateTime( $spiContentInfo->publicationDate ),
-                "alwaysAvailable" => $spiContentInfo->isAlwaysAvailable,
+                "alwaysAvailable" => $spiContentInfo->alwaysAvailable,
                 "remoteId" => $spiContentInfo->remoteId,
                 "mainLanguageCode" => $spiContentInfo->mainLanguageCode,
                 "mainLocationId" => $mainLocationId,

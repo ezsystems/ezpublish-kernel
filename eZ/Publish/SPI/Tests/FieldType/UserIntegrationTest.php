@@ -127,7 +127,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     {
         $expectedValues = array(
             'hasStoredLogin' => true,
-            'contentObjectId' => self::$contentId,
+            'contentId' => self::$contentId,
             'login' => 'hans',
             'email' => 'hans@example.com',
             'passwordHash' => '*',

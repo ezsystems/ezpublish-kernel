@@ -87,7 +87,11 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      */
     public function newLocationCreateStruct( $parentLocationId )
     {
-        throw new \Exception( "@TODO: Implement." );
+        return new LocationCreateStruct(
+            array(
+                'parentLocationId' => (int) $parentLocationId
+            )
+        );
     }
 
     /**
@@ -152,7 +156,15 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      */
     public function loadLocationByRemoteId( $remoteId )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $this->urlHandler->generate( 'locationByRemote', array( 'location' => $remoteId ) ),
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'LocationList' ) )
+            )
+        );
+
+        return reset( $this->inputDispatcher->parse( $response ) );
     }
 
     /**
@@ -162,7 +174,7 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      */
     public function newLocationUpdateStruct()
     {
-        throw new \Exception( "@TODO: Implement." );
+        return new LocationUpdateStruct();
     }
 
     /**
@@ -221,9 +233,10 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      */
     public function loadLocations( ContentInfo $contentInfo, Location $rootLocation = null )
     {
+        $values = $this->urlHandler->parse( 'object', $contentInfo->id );
         $response = $this->client->request(
             'GET',
-            $contentInfo->id . '/locations',
+            $this->urlHandler->generate( 'objectLocations', array( 'object' => $values['object'] ) ),
             new Message(
                 array( 'Accept' => $this->outputVisitor->getMediaType( 'LocationList' ) )
             )
@@ -244,9 +257,10 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      */
     public function loadLocationChildren( Location $location, $offset = 0, $limit = -1 )
     {
+        $values = $this->urlHandler->parse( 'location', $location->id );
         $response = $this->client->request(
             'GET',
-            $location->id . '/children',
+            $this->urlHandler->generate( 'locationChildren', array( 'location' => $values['location'] ) ),
             new Message(
                 array( 'Accept' => $this->outputVisitor->getMediaType( 'LocationList' ) )
             )

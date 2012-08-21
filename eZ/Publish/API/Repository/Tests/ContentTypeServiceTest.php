@@ -121,13 +121,40 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $createStruct = $data['createStruct'];
         $group = $data['group'];
 
-        $this->assertStructPropertiesCorrect(
-            $createStruct,
-            $group,
-            array( 'names', 'descriptions' )
+        $this->assertEquals(
+            array(
+                'identifier' => $group->identifier,
+                'creatorId' => $group->creatorId,
+                'creationDate' => $group->creationDate,
+            ),
+            array(
+                'identifier' => $createStruct->identifier,
+                'creatorId' => $createStruct->creatorId,
+                'creationDate' => $createStruct->creationDate,
+            )
         );
         $this->assertNotNull(
             $group->id
+        );
+        return $data;
+    }
+
+    /**
+     * Test for the createContentTypeGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeGroup()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroupStructValues
+     */
+    public function testCreateContentTypeGroupStructLanguageDependentValues( array $data )
+    {
+        $createStruct = $data['createStruct'];
+        $group = $data['group'];
+
+        $this->assertStructPropertiesCorrect(
+            $createStruct,
+            $group,
+            array( 'names', 'descriptions', 'mainLanguageCode' )
         );
     }
 
@@ -432,6 +459,30 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeGroup
      */
     public function testUpdateContentTypeGroupStructValues( array $data )
+    {
+        $expectedValues = array(
+            'identifier' => $data['updateStruct']->identifier,
+            'creationDate' => $data['originalGroup']->creationDate,
+            'modificationDate' => $data['updateStruct']->modificationDate,
+            'creatorId' => $data['originalGroup']->creatorId,
+            'modifierId' => $data['updateStruct']->modifierId,
+        );
+
+        $this->assertPropertiesCorrect(
+            $expectedValues, $data['updatedGroup']
+        );
+
+        return $data;
+    }
+
+    /**
+     * Test for the updateContentTypeGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeGroup()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeGroupStructValues
+     */
+    public function testUpdateContentTypeGroupStructLanguageDependentValues( array $data )
     {
         $expectedValues = array(
             'identifier' => $data['updateStruct']->identifier,
@@ -2045,34 +2096,85 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $originalType = $data['originalType'];
         $typeDraft = $data['typeDraft'];
 
-        $this->assertStructPropertiesCorrect(
-            $originalType,
-            $typeDraft,
+        // Names and descriptions tested in corresponding language test
+        $this->assertEquals(
             array(
-                'id',
-                'names',
-                'descriptions',
-                'identifier',
-                'creationDate',
-                'modificationDate',
-                'creatorId',
-                'modifierId',
-                'remoteId',
-                'urlAliasSchema',
-                'nameSchema',
-                'isContainer',
-                'mainLanguageCode',
-                'defaultAlwaysAvailable',
-                'defaultSortField',
-                'defaultSortOrder',
-                'contentTypeGroups',
-                'fieldDefinitions',
+                'id' => $originalType->id,
+                'names' => $originalType->names,
+                'descriptions' => $originalType->descriptions,
+                'identifier' => $originalType->identifier,
+                'creatorId' => $originalType->creatorId,
+                'modifierId' => $originalType->modifierId,
+                'remoteId' => $originalType->remoteId,
+                'urlAliasSchema' => $originalType->urlAliasSchema,
+                'nameSchema' => $originalType->nameSchema,
+                'isContainer' => $originalType->isContainer,
+                'mainLanguageCode' => $originalType->mainLanguageCode,
+                'defaultAlwaysAvailable' => $originalType->defaultAlwaysAvailable,
+                'defaultSortField' => $originalType->defaultSortField,
+                'defaultSortOrder' => $originalType->defaultSortOrder,
+                'contentTypeGroups' => $originalType->contentTypeGroups,
+                'fieldDefinitions' => $originalType->fieldDefinitions,
+            ),
+            array(
+                'id' => $typeDraft->id,
+                'names' => $typeDraft->names,
+                'descriptions' => $typeDraft->descriptions,
+                'identifier' => $typeDraft->identifier,
+                'creatorId' => $typeDraft->creatorId,
+                'modifierId' => $typeDraft->modifierId,
+                'remoteId' => $typeDraft->remoteId,
+                'urlAliasSchema' => $typeDraft->urlAliasSchema,
+                'nameSchema' => $typeDraft->nameSchema,
+                'isContainer' => $typeDraft->isContainer,
+                'mainLanguageCode' => $typeDraft->mainLanguageCode,
+                'defaultAlwaysAvailable' => $typeDraft->defaultAlwaysAvailable,
+                'defaultSortField' => $typeDraft->defaultSortField,
+                'defaultSortOrder' => $typeDraft->defaultSortOrder,
+                'contentTypeGroups' => $typeDraft->contentTypeGroups,
+                'fieldDefinitions' => $typeDraft->fieldDefinitions,
             )
         );
+
+        $this->assertInstanceOf(
+            'DateTime',
+            $typeDraft->modificationDate
+        );
+        $modificationDifference = $originalType->modificationDate->diff(
+            $typeDraft->modificationDate
+        );
+        // No modification date is newer, interval is not inverted
+        $this->assertEquals( 0, $modificationDifference->invert );
 
         $this->assertEquals(
             ContentType::STATUS_DRAFT,
             $typeDraft->status
+        );
+
+        return $data;
+    }
+
+    /**
+     * Test for the createContentTypeDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeDraftStructValues
+     */
+    public function testCreateContentTypeDraftStructLanguageDependentValues( array $data )
+    {
+        $originalType = $data['originalType'];
+        $typeDraft = $data['typeDraft'];
+
+        $this->assertEquals(
+            array(
+                'names' => $originalType->names,
+                'descriptions' => $originalType->descriptions,
+            ),
+            array(
+                'names' => $typeDraft->names,
+                'descriptions' => $typeDraft->descriptions,
+            )
         );
     }
 

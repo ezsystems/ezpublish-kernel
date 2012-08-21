@@ -146,8 +146,10 @@ interface FieldType
     public function isSearchable();
 
     /**
-     * Returns the fallback default value of field type when no such default
-     * value is provided in the field definition in content types.
+     * Returns the empty value for this field type.
+     *
+     * This value will be used, if no value was provided for a field of this
+     * type and no default value was specified in the field definition.
      *
      * @return mixed
      */
@@ -158,7 +160,7 @@ interface FieldType
      *
      * This method first inspects $inputValue, if it needs to convert it, e.g.
      * into a dedicated value object. An example would be, that the field type
-     * uses values of MyCustomFieldTypeClass, but can also accept strings as
+     * uses values of MyCustomFieldTypeValue, but can also accept strings as
      * the input. In that case, $inputValue first needs to be converted into a
      * MyCustomFieldTypeClass instance.
      *

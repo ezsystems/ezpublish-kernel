@@ -127,7 +127,7 @@ class Handler implements BaseContentHandler
         $content->versionInfo->creationDate = $struct->modified;
         $content->versionInfo->modificationDate = $struct->modified;
         $content->versionInfo->id = $this->contentGateway->insertVersion(
-            $content->versionInfo, $struct->fields, $content->contentInfo->isAlwaysAvailable
+            $content->versionInfo, $struct->fields, $content->contentInfo->alwaysAvailable
         );
         $content->fields = $struct->fields;
         $content->versionInfo->names = $struct->name;
@@ -231,7 +231,7 @@ class Handler implements BaseContentHandler
         $content->versionInfo->id = $this->contentGateway->insertVersion(
             $content->versionInfo,
             $content->fields,
-            $content->contentInfo->isAlwaysAvailable
+            $content->contentInfo->alwaysAvailable
         );
 
         // Clone fields from previous version and append them to the new one
@@ -507,7 +507,7 @@ class Handler implements BaseContentHandler
                 $versionContent->versionInfo->id = $this->contentGateway->insertVersion(
                     $versionContent->versionInfo,
                     $versionContent->fields,
-                    $versionContent->contentInfo->isAlwaysAvailable
+                    $versionContent->contentInfo->alwaysAvailable
                 );
 
                 $this->fieldHandler->createNewFields( $versionContent );

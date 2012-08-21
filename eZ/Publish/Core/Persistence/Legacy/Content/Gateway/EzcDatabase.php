@@ -363,7 +363,7 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Updates "always available" flag for content identified by $contentId, in respect to $isAlwaysAvailable.
+     * Updates "always available" flag for content identified by $contentId, in respect to $alwaysAvailable.
      *
      * @param int $contentId
      * @param bool $newAlwaysAvailable New "always available" value
@@ -592,7 +592,7 @@ class EzcDatabase extends Gateway
             $q->bindValue(
                 $this->languageMaskGenerator->generateLanguageIndicator(
                     $field->languageCode,
-                    $content->contentInfo->isAlwaysAvailable
+                    $content->contentInfo->alwaysAvailable
                 ),
                 null,
                 \PDO::PARAM_INT

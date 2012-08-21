@@ -75,7 +75,7 @@ class Mapper
         $contentInfo->contentTypeId = $struct->typeId;
         $contentInfo->sectionId = $struct->sectionId;
         $contentInfo->ownerId = $struct->ownerId;
-        $contentInfo->isAlwaysAvailable = $struct->alwaysAvailable;
+        $contentInfo->alwaysAvailable = $struct->alwaysAvailable;
         $contentInfo->remoteId = $struct->remoteId;
         $contentInfo->mainLanguageCode = $this->languageHandler->load( $struct->initialLanguageId )->languageCode;
         // For drafts published and modified timestamps should be 0
@@ -240,7 +240,7 @@ class Mapper
         $contentInfo->ownerId = (int)$row["{$prefix}owner_id"];
         $contentInfo->publicationDate = (int)$row["{$prefix}published"];
         $contentInfo->modificationDate = (int)$row["{$prefix}modified"];
-        $contentInfo->isAlwaysAvailable = $row["{$prefix}always_available"];
+        $contentInfo->alwaysAvailable = $row["{$prefix}always_available"];
         $contentInfo->mainLanguageCode = $row["{$prefix}main_language_code"];
         $contentInfo->remoteId = $row["{$prefix}remote_id"];
 
@@ -401,7 +401,7 @@ class Mapper
         $struct->sectionId = $content->contentInfo->sectionId;
         $struct->ownerId = $content->contentInfo->ownerId;
         $struct->locations = array();
-        $struct->alwaysAvailable = $content->contentInfo->isAlwaysAvailable;
+        $struct->alwaysAvailable = $content->contentInfo->alwaysAvailable;
         $struct->remoteId = md5( uniqid( get_class( $this ), true ) );
         $struct->initialLanguageId = $this->languageHandler->loadByLanguageCode( $content->versionInfo->initialLanguageCode )->id;
         $struct->modified = time();

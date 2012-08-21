@@ -26,7 +26,7 @@ class LegacyStorage extends Gateway
      */
     protected $defaultValues = array(
         'hasStoredLogin'   => false,
-        'contentObjectId'   => null,
+        'contentId'   => null,
         'login'              => null,
         'email'              => null,
         'passwordHash'      => null,
@@ -49,7 +49,7 @@ class LegacyStorage extends Gateway
                 'cast' => function ( $input ) { return ( $input == "1" ); },
             ),
             'contentobject_id' => array(
-                'name' => 'contentObjectId',
+                'name' => 'contentId',
                 'cast' => 'intval'
             ),
             'login' => array(

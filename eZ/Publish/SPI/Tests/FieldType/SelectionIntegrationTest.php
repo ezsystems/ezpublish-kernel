@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\SPI\Tests\FieldType;
 use eZ\Publish\Core\Persistence\Legacy,
+    eZ\Publish\Core\FieldType\FieldSettings,
     eZ\Publish\Core\FieldType,
     eZ\Publish\SPI\Persistence\Content;
 
@@ -61,14 +62,14 @@ class SelectionIntegrationTest extends BaseIntegrationTest
         return new Content\FieldTypeConstraints(
             array(
                 'validators' => null,
-                'fieldSettings' => array(
+                'fieldSettings' => new FieldSettings( array(
                     'isMultiple' => true,
                     'options' => array(
                         1 => 'First',
                         2 => 'Second',
                         3 => 'Sindelfingen',
                     )
-                )
+                ) )
             )
         );
     }
@@ -86,14 +87,14 @@ class SelectionIntegrationTest extends BaseIntegrationTest
             array( 'fieldType', 'ezselection' ),
             array( 'fieldTypeConstraints', new Content\FieldTypeConstraints( array(
                 'validators' => null,
-                'fieldSettings' => array(
+                'fieldSettings' => new FieldSettings( array(
                     'isMultiple' => true,
                     'options' => array(
                         1 => 'First',
                         2 => 'Second',
                         3 => 'Sindelfingen',
                     )
-                )
+                ) )
             ) ) )
         );
     }

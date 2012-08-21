@@ -133,17 +133,17 @@ abstract class Gateway
     /**
      *
      *
-     * @param mixed $newElementId
      * @param string $action
-     * @param mixed $parentId
-     * @param string $newTextMD5
      * @param mixed $languageId
+     * @param mixed $newParentId
+     * @param mixed $parentId
+     * @param string $textMD5
      *
      * @return void
      *
      * @todo not clear why this behaviour is desired
      */
-    abstract public function reparent( $newElementId, $action, $parentId, $newTextMD5, $languageId );
+    abstract public function reparent( $action, $languageId, $newParentId, $parentId, $textMD5 );
 
     /**
      *

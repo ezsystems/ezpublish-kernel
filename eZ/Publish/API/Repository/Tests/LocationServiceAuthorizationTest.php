@@ -47,7 +47,7 @@ class LocationServiceAuthorizationTest extends BaseTest
         // Set current user to newly created user
         $repository->setCurrentUser( $user );
 
-        $locationCreate = $locationService->newLocationCreateStruct( 5 );
+        $locationCreate = $locationService->newLocationCreateStruct( 1 );
         $locationCreate->priority = 23;
         $locationCreate->hidden = true;
         $locationCreate->remoteId = 'sindelfingen';

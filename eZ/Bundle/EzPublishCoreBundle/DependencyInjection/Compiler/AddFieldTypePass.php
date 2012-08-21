@@ -74,10 +74,14 @@ class AddFieldTypePass implements CompilerPassInterface
 
             // If the storage handler is gateway based, then we need to add a corresponding gateway to it.
             // Will throw a LogicException if no gateway is defined for this field type.
-            $storageHandlerDef = $container->getDefinition( $id );
+            $storageHandlerDef = $container->findDefinition( $id );
+            $storageHandlerClass = $storageHandlerDef->getClass();
+            if ( preg_match( '/^%([^%\s]+)%$/', $storageHandlerClass, $match ) )
+                $storageHandlerClass = $container->getParameter( $match[1] );
+
             if (
                 is_subclass_of(
-                    $storageHandlerDef->getClass(),
+                    $storageHandlerClass,
                     'eZ\\Publish\\Core\\FieldType\\GatewayBasedStorage'
                 )
             )

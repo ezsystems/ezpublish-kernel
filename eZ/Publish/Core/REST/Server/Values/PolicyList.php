@@ -31,13 +31,13 @@ class PolicyList
     /**
      * Construct
      *
-     * @param mixed $roleId
      * @param array $policies
+     * @param mixed $roleId
      */
-    public function __construct( $roleId, array $policies )
+    public function __construct( array $policies, $roleId = null )
     {
-        $this->roleId = $roleId;
         $this->policies = $policies;
+        $this->roleId = $roleId;
     }
 }
 

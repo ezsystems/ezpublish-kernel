@@ -28,18 +28,14 @@ class User extends PseudoExternalStorage
      * @var array
      */
     protected $defaultValues = array(
-        'accountKey'       => null,
         'hasStoredLogin'   => false,
-        'contentobjectId'  => null,
+        'contentId'        => null,
         'login'            => null,
         'email'            => null,
         'passwordHash'     => null,
         'passwordHashType' => null,
         'isLoggedIn'       => true,
         'isEnabled'        => false,
-        'isLocked'         => false,
-        'lastVisit'        => null,
-        'loginCount'       => null,
         'maxLogin'         => null,
     );
 
@@ -48,11 +44,7 @@ class User extends PseudoExternalStorage
      *
      * @var array
      */
-    protected $editable = array(
-        'accountKey' => true,
-        'lastVisit'  => true,
-        'loginCount' => true,
-    );
+    protected $editable = array();
 
     /**
      * Storage for field data
@@ -204,14 +196,13 @@ class User extends PseudoExternalStorage
      */
     protected function joinUserData( $data, $userData )
     {
-        $data->contentobjectId  = $userData->id;
+        $data->contentId        = $userData->id;
         $data->hasStoredLogin   = true;
         $data->login            = $userData->login;
         $data->email            = $userData->email;
         $data->passwordHash     = $userData->passwordHash;
         $data->passwordHashType = $userData->hashAlgorithm;
         $data->isEnabled        = $userData->isEnabled;
-        $data->isLocked         = $data->loginCount < $userData->maxLogin;
 
         return $data;
     }

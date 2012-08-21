@@ -13,7 +13,10 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
     eZ\Publish\SPI\Persistence\Content as ContentObject,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\API\Repository\Values\Content\Query;
+    eZ\Publish\API\Repository\Values\Content\Query,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine;
 
 /**
  * Test case for ContentSearchHandler
@@ -139,10 +142,12 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         ),
                         new Content\Search\Gateway\CriterionHandler\Field(
                             $this->getDatabaseHandler(),
-                            $this->fieldRegistry = $this->getMock(
-                                '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\ConverterRegistry',
-                                array(),
-                                array( array() )
+                            $this->fieldRegistry = new ConverterRegistry(
+                                array(
+                                    'ezint' => new Integer(),
+                                    'ezstring' => new TextLine(),
+                                    'ezprice' => new Integer()
+                                )
                             )
                         ),
                     )
@@ -914,18 +919,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $converter = $this->getMock( '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter' );
-        $converter
-            ->expects( $this->once() )
-            ->method( 'getIndexColumn' )
-            ->will( $this->returnValue( 'sort_key_string' ) );
-
-        $this->fieldRegistry
-            ->expects( $this->once() )
-            ->method( 'getConverter' )
-            ->with( 'ezstring' )
-            ->will( $this->returnValue( $converter ) );
-
         $result = $locator->findContent( new Query( array(
             'criterion' => new Criterion\Field(
                 'name',
@@ -952,18 +945,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
     public function testFieldFilterIn()
     {
         $locator = $this->getContentSearchHandler();
-
-        $converter = $this->getMock( '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter' );
-        $converter
-            ->expects( $this->once() )
-            ->method( 'getIndexColumn' )
-            ->will( $this->returnValue( 'sort_key_string' ) );
-
-        $this->fieldRegistry
-            ->expects( $this->once() )
-            ->method( 'getConverter' )
-            ->with( 'ezstring' )
-            ->will( $this->returnValue( $converter ) );
 
         $result = $locator->findContent( new Query( array(
             'criterion' => new Criterion\Field(
@@ -992,18 +973,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $converter = $this->getMock( '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter' );
-        $converter
-            ->expects( $this->once() )
-            ->method( 'getIndexColumn' )
-            ->will( $this->returnValue( 'sort_key_int' ) );
-
-        $this->fieldRegistry
-            ->expects( $this->once() )
-            ->method( 'getConverter' )
-            ->with( 'ezprice' )
-            ->will( $this->returnValue( $converter ) );
-
         $result = $locator->findContent( new Query( array(
             'criterion' => new Criterion\Field(
                 'price',
@@ -1031,29 +1000,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
     public function testFieldFilterOr()
     {
         $locator = $this->getContentSearchHandler();
-
-        $converter = $this->getMock( '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter' );
-        $converter
-            ->expects( $this->at( 0 ) )
-            ->method( 'getIndexColumn' )
-            ->will( $this->returnValue( 'sort_key_string' ) );
-
-        $converter
-            ->expects( $this->at( 1 ) )
-            ->method( 'getIndexColumn' )
-            ->will( $this->returnValue( 'sort_key_int' ) );
-
-        $this->fieldRegistry
-            ->expects( $this->at( 0 ) )
-            ->method( 'getConverter' )
-            ->with( 'ezstring' )
-            ->will( $this->returnValue( $converter ) );
-
-        $this->fieldRegistry
-            ->expects( $this->at( 1 ) )
-            ->method( 'getConverter' )
-            ->with( 'ezprice' )
-            ->will( $this->returnValue( $converter ) );
 
         $result = $locator->findContent( new Query( array(
             'criterion' => new Criterion\LogicalOr(

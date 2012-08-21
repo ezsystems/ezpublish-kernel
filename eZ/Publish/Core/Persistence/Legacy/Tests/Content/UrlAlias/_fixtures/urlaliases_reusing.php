@@ -41,6 +41,19 @@ return array (
             'text' => 'search',
             'text_md5' => '06a943c59f33a34bb5924aaf72cd2995',
         ),
+        3 => array (
+            'action' => 'eznode:314',
+            'action_type' => 'eznode',
+            'alias_redirects' => '1',
+            'id' => '4',
+            'is_alias' => '1',
+            'is_original' => '1',
+            'lang_mask' => '4',
+            'link' => '4',
+            'parent' => '0',
+            'text' => 'hello',
+            'text_md5' => '5d41402abc4b2a76b9719d911017c592',
+        ),
     ),
     'ezcontentobject_tree' => array(
         0 => array(
@@ -85,6 +98,9 @@ return array (
         ),
         2 => array (
             'id' => '3',
+        ),
+        3 => array (
+            'id' => '4',
         ),
     ),
 );

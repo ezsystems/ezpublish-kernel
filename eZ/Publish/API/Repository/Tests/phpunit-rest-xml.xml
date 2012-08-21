@@ -27,6 +27,7 @@
             <file>URLWildcardServiceTest.php</file>
             <file>SectionServiceAuthorizationTest.php</file>
             <file>LanguageServiceAuthorizationTest.php</file>
+            <file>ObjectStateServiceTest.php</file>
             <file>ContentTypeServiceAuthorizationTest.php</file>
             <file>ContentServiceAuthorizationTest.php</file>
             <file>LocationServiceAuthorizationTest.php</file>

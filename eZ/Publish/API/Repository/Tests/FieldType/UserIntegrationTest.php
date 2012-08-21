@@ -141,7 +141,7 @@ class UserIntegrationTest extends BaseIntegrationTest
             $field->value
         );
 
-        $this->assertNotNull( $field->value->contentObjectId );
+        $this->assertNotNull( $field->value->contentId );
     }
 
     /**
@@ -253,7 +253,7 @@ class UserIntegrationTest extends BaseIntegrationTest
 
         $expectedData = array(
             'hasStoredLogin' => false,
-            'contentObjectId' => null,
+            'contentId' => null,
             'login' => null,
             'email' => null,
             'passwordHash' => null,
@@ -298,7 +298,7 @@ class UserIntegrationTest extends BaseIntegrationTest
                 array(
                     'login'      => 'hans',
                     'hasStoredLogin' => null,
-                    'contentObjectId' => null,
+                    'contentId' => null,
                     'email' => null,
                     'passwordHash' => null,
                     'passwordHashType' => null,

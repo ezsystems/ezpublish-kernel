@@ -199,7 +199,7 @@ class ContentHandlerTest extends HandlerTest
         $this->assertEquals( $updateStruct->publicationDate, $contentInfo->publicationDate );
         $this->assertEquals( $updateStruct->modificationDate, $contentInfo->modificationDate );
         $this->assertEquals( "eng-GB", $contentInfo->mainLanguageCode );
-        $this->assertFalse( $contentInfo->isAlwaysAvailable );
+        $this->assertFalse( $contentInfo->alwaysAvailable );
         $this->assertEquals( $updateStruct->remoteId, $contentInfo->remoteId );
     }
 

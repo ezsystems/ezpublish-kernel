@@ -481,7 +481,37 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * Test for the reparent() method.
+     *
+     * @todo document
+     *
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::reparent
+     */
+    public function testReparent()
+    {
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_reparent.php" );
+        $gateway = $this->getGateway();
 
+        $gateway->reparent( "eznode:315", 2, 3, 2, "new-location" );
+
+        self::assertEquals(
+            array(
+                "action" => "eznode:316",
+                "action_type" => "eznode",
+                "alias_redirects" => "1",
+                "id" => "5",
+                "is_alias" => "0",
+                "is_original" => "1",
+                "lang_mask" => "2",
+                "link" => "5",
+                "parent" => "3",
+                "text" => "to-be-reparented",
+                "text_md5" => "97d0d0299c217478587ca24fcc5bdb2e"
+            ),
+            $gateway->loadRow( 3, "97d0d0299c217478587ca24fcc5bdb2e" )
+        );
+    }
 
 
 

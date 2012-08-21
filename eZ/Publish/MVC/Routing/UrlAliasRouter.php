@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Repository,
     eZ\Publish\API\Repository\Exceptions\NotFoundException,
     eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\MVC\View\Manager as ViewManager,
+    eZ\Publish\MVC\Routing\Generator\UrlAliasGenerator,
     Symfony\Component\Routing\RouterInterface,
     Symfony\Component\Routing\Matcher\RequestMatcherInterface,
     Symfony\Component\HttpFoundation\Request,
@@ -43,14 +44,20 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
     protected $repository;
 
     /**
+     * @var \eZ\Publish\MVC\Routing\Generator\UrlAliasGenerator
+     */
+    protected $generator;
+
+    /**
      * @var \Symfony\Component\HttpKernel\Log\LoggerInterface
      */
     protected $logger;
 
-    public function __construct( Repository $repository, RequestContext $requestContext, LoggerInterface $logger = null )
+    public function __construct( Repository $repository, UrlAliasGenerator $generator, RequestContext $requestContext, LoggerInterface $logger = null )
     {
         $this->urlAliasService = $repository->getURLAliasService();
         $this->repository = $repository;
+        $this->generator = $generator;
         $this->requestContext = isset( $requestContext ) ? $requestContext : new RequestContext();
         $this->logger = $logger;
     }
@@ -132,6 +139,7 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
     /**
      * Generates a URL for a location, from the given parameters.
      * If applicable, the "location" key in $parameters must be set to a valid eZ\Publish\API\Repository\Values\Content\Location object.
+     * "locationId" can also be provided.
      *
      * If the generator is not able to generate the url, it must throw the RouteNotFoundException
      * as documented below.
@@ -142,6 +150,7 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
      *
      * @throws \LogicException
      * @throws \Symfony\Component\Routing\Exception\RouteNotFoundException
+     * @throws \InvalidArgumentException
      * @return string The generated URL
      *
      * @api
@@ -167,32 +176,8 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
             }
 
             $location = isset( $parameters['location'] ) ? $parameters['location'] : $this->repository->getLocationService()->loadLocation( $parameters['locationId'] );
-
-            $urlAliases = $this->urlAliasService->listLocationAliases(
-                $location,
-                false,
-                // TODO : Don't hardcode language. Build the Repository with configured prioritized languages instead.
-                'eng-GB'
-            );
-
-            $url = $this->requestContext->getBaseUrl() . '/' . $urlAliases[0]->path;
-            if ( $absolute )
-            {
-                $scheme = $this->requestContext->getScheme();
-                $port = '';
-                if ( $scheme === 'http' && $this->requestContext->getHttpPort() != 80 )
-                {
-                    $port = ':' . $this->requestContext->getHttpPort();
-                }
-                else if ( $scheme === 'https' && $this->requestContext->getHttpsPort() != 443 )
-                {
-                    $port = ':' . $this->requestContext->getHttpsPort();
-                }
-
-                $url = $scheme . '://' . $this->requestContext->getHost() . $port . $url;
-            }
-
-            return $url;
+            unset( $parameters['location'], $parameters['locationId'] );
+            return $this->generator->generate( $location, $parameters, $absolute );
         }
 
         throw new RouteNotFoundException( 'Could not match route' );

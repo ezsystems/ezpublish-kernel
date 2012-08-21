@@ -80,7 +80,7 @@ class MapperTest extends LanguageAwareTestCase
         );
         self::assertSame( $struct->typeId, $content->contentInfo->contentTypeId );
         self::assertSame( 'eng-US', $content->contentInfo->mainLanguageCode );
-        self::assertSame( $struct->alwaysAvailable, $content->contentInfo->isAlwaysAvailable );
+        self::assertSame( $struct->alwaysAvailable, $content->contentInfo->alwaysAvailable );
         self::assertSame( 0, $content->contentInfo->publicationDate );
         self::assertSame( 0, $content->contentInfo->modificationDate );
         self::assertEquals( 1, $content->contentInfo->currentVersionNo );
@@ -369,7 +369,7 @@ class MapperTest extends LanguageAwareTestCase
         self::assertNotEquals( $content->contentInfo->remoteId, $struct->remoteId );
         self::assertSame( $content->contentInfo->contentTypeId, $struct->typeId );
         self::assertSame( 2, $struct->initialLanguageId );
-        self::assertSame( $content->contentInfo->isAlwaysAvailable, $struct->alwaysAvailable );
+        self::assertSame( $content->contentInfo->alwaysAvailable, $struct->alwaysAvailable );
         self::assertGreaterThanOrEqual( $time, $struct->modified );
     }
 

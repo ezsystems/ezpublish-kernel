@@ -27,7 +27,7 @@ class Value extends BaseValue
      *
      * @var mixed
      */
-    public $contentObjectId;
+    public $contentId;
 
     /**
      * Login
