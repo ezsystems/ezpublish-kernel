@@ -8,7 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
+use eZ\Publish\Core\FieldType\FieldSettings,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
@@ -49,10 +50,17 @@ class Selection implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = array_map(
-            'intval',
-            explode( '-', $value->dataText )
-        );
+        if ( $value->dataText !== '' )
+        {
+            $fieldValue->data = array_map(
+                'intval',
+                explode( '-', $value->dataText )
+            );
+        }
+        else
+        {
+            $fieldValue->data = array();
+        }
         $fieldValue->sortKey = $value->sortKeyString;
     }
 
@@ -105,10 +113,10 @@ class Selection implements Converter
             $options[(int)$option["id"]] = (string)$option["name"];
         }
 
-        $fieldDef->fieldTypeConstraints->fieldSettings = array(
+        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings( array(
             "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false,
             "options" => $options,
-        );
+        ) );
     }
 
     /**
