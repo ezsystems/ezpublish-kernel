@@ -13,7 +13,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
         'id' => 58,
         'title' => 'Contact Us',
       ),
-       'score' => 1.0,
+       'score' => NULL,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -21,7 +21,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
    'spellSuggestion' => NULL,
    'time' => 1,
    'timedOut' => NULL,
-   'maxScore' => 1.0,
+   'maxScore' => NULL,
    'totalCount' => 1,
 ));
 

@@ -10,10 +10,10 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 58,
-        'title' => 'Contact Us',
+        'id' => 11,
+        'title' => 'Members',
       ),
-       'score' => 1.0,
+       'score' => NULL,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -21,7 +21,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
    'spellSuggestion' => NULL,
    'time' => 1,
    'timedOut' => NULL,
-   'maxScore' => 1.0,
+   'maxScore' => NULL,
    'totalCount' => 1,
 ));
 

@@ -164,7 +164,7 @@ CREATE TABLE 'ezcontentobject_attribute' (
 	'language_code' text(20) NOT NULL,
 	'language_id' integer NOT NULL DEFAULT 0,
 	'sort_key_int' integer NOT NULL DEFAULT 0,
-	'sort_key_string' text(255) NOT NULL,
+	'sort_key_string' text(255) NOT NULL COLLATE NOCASE,
 	'version' integer NOT NULL DEFAULT 0,
     PRIMARY KEY ( id, version )
 );
@@ -353,7 +353,7 @@ CREATE TABLE 'ezsearch_object_word_link' (
 CREATE TABLE 'ezsearch_word' (
       'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
       'object_count' integer NOT NULL DEFAULT '0',
-      'word' text(150) DEFAULT NULL
+      'word' text(150) DEFAULT NULL COLLATE NOCASE
 );
 CREATE TABLE 'ezsection' (
   'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,

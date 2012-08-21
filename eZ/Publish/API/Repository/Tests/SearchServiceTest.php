@@ -155,6 +155,7 @@ class SearchServiceTest extends BaseTest
                         Criterion\Operator::LTE,
                         1311154215
                     ),
+                    'limit' => 10,
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
                 $fixtureDir . 'DateMetadataLte.php',
@@ -302,7 +303,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query( array(
                     'criterion' => new Criterion\FullText(
-                        'All rights reserved'
+                        'contact'
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
@@ -311,7 +312,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query( array(
                     'criterion' => new Criterion\FullText(
-                        'where other*'
+                        'Contact*'
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
@@ -325,7 +326,7 @@ class SearchServiceTest extends BaseTest
      *
      * @dataProvider getSearches
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @d epends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFindContent( Query $query, $fixture )
     {
