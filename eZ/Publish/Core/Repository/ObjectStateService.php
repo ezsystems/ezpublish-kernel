@@ -440,7 +440,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function setObjectState( ContentInfo $contentInfo, APIObjectStateGroup $objectStateGroup, APIObjectState $objectState )
     {
-        if ( $this->repository->hasAccess( 'state', 'assign' ) !== true )
+        if ( $this->repository->canUser( 'state', 'assign', $contentInfo, $objectState ) !== true )
             throw new UnauthorizedException( 'state', 'assign' );
 
         if ( !is_numeric( $contentInfo->id ) )
