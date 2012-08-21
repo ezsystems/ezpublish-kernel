@@ -105,10 +105,28 @@ class Location
     }
 
     /**
+     * Loads a location by remote ID
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\LocationList
+     */
+    public function loadLocationByRemoteId( RMF\Request $request )
+    {
+        return new Values\LocationList(
+            array(
+                $this->locationService->loadLocationByRemoteId(
+                    $request->variables['remoteId']
+                )
+            ),
+            $request->path
+        );
+    }
+
+    /**
      * Loads all locations for content object
      *
      * @param \Qafoo\RMF\Request $request
-     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     * @return \eZ\Publish\Core\REST\Server\Values\LocationList
      */
     public function loadLocationsForContent( RMF\Request $request )
     {
@@ -126,7 +144,7 @@ class Location
      * Loads child locations of a location
      *
      * @param \Qafoo\RMF\Request $request
-     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     * @return \eZ\Publish\Core\REST\Server\Values\LocationList
      */
     public function loadLocationChildren( RMF\Request $request )
     {

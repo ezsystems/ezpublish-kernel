@@ -22,7 +22,8 @@ class eZPublish extends Pattern
      */
     protected $map = array(
         ''                     => '/',
-        ''                     => '/content/locations',
+        'locations'            => '/content/locations',
+        'locationByRemote'     => '/content/locations?remoteId={location}',
         'location'             => '/content/locations/{location}',
         'locationChildren'     => '/content/locations/{location}/children',
         'objects'              => '/content/objects',

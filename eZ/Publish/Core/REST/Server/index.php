@@ -238,6 +238,9 @@ $dispatcher = new AuthenticatingDispatcher(
             'PATCH' => array( $objectStateController, 'updateObjectState' ),
             'DELETE' => array( $objectStateController, 'deleteObjectState' ),
         ),
+        '(^/content/locations\?remoteId=[0-9a-z]+$)' => array(
+            'GET' => array( $locationController, 'loadLocationByRemoteId' ),
+        ),
         '(^/content/locations/[0-9/]+$)' => array(
             'GET'    => array( $locationController, 'loadLocation' ),
             'PATCH'  => array( $locationController, 'updateLocation' ),
