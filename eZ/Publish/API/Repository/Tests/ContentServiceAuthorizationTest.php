@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
  * Test case for operations in the ContentServiceAuthorization using in memory storage.
  *
  * @see eZ\Publish\API\Repository\ContentService
- * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
+ * @d epends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
  * @group integration
  * @group authorization
  */
@@ -578,8 +578,8 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages, $versionNo)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByRemoteIdWithThirdParameter
+     * @e xpectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @d epends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByRemoteIdWithThirdParameter
      */
     public function testLoadContentByRemoteIdThrowsUnauthorizedExceptionWithThirdParameter()
     {
@@ -597,7 +597,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $repository->setCurrentUser( $pseudoEditor );
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->loadContentByRemoteId( $anonymousRemoteId, array( 'eng-US' ), 1 );
+        $contentService->loadContentByRemoteId( $anonymousRemoteId, array( 'eng-US' ), 2 );
         /* END: Use Case */
     }
 
