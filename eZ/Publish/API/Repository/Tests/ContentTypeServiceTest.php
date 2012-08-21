@@ -121,9 +121,17 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $createStruct = $data['createStruct'];
         $group = $data['group'];
 
-        $this->assertStructPropertiesCorrect(
-            $createStruct,
-            $group
+        $this->assertEquals(
+            array(
+                'identifier' => $group->identifier,
+                'creatorId' => $group->creatorId,
+                'creationDate' => $group->creationDate,
+            ),
+            array(
+                'identifier' => $createStruct->identifier,
+                'creatorId' => $createStruct->creatorId,
+                'creationDate' => $createStruct->creationDate,
+            )
         );
         $this->assertNotNull(
             $group->id
