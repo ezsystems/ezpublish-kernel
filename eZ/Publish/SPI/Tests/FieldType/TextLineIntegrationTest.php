@@ -124,9 +124,9 @@ class TextLineIntegrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue( array(
-            'data'         => 'A different text now…',
+            'data'         => null,
             'externalData' => null,
-            'sortKey'      => 'a different text now',
+            'sortKey'      => '',
         ) );
     }
 }
