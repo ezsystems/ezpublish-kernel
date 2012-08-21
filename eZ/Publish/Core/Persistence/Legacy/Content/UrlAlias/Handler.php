@@ -159,7 +159,7 @@ class Handler implements BaseUrlAliasHandler
 
             // Row exists, check if it is reusable. There are 3 cases when this is possible:
             // 1. NOP entry
-            // 2. custom alias entry
+            // 2. existing location or custom alias entry
             // 3. history entry
             if ( $row["action"] == "nop:" || $row["action"] == $action || $row["is_original"] == 0 )
             {
@@ -209,7 +209,6 @@ class Handler implements BaseUrlAliasHandler
         // Note: cleanup does not touch custom and global entries
         $this->gateway->downgrade( $action, $languageId, $parentId, $newTextMD5 );
         $this->gateway->relink( $action, $languageId, $newId, $parentId, $newTextMD5 );
-        //$this->gateway->reparent( $newId, $action, $parentId, $newTextMD5, $languageId );
 
         $data["parent"] = $parentId;
         $data["text_md5"] = $newTextMD5;
@@ -220,7 +219,7 @@ class Handler implements BaseUrlAliasHandler
         $data["always_available"] = $alwaysAvailable;
         $data["is_original"] = true;
         $data["is_alias"] = false;
-        $data["language_codes"] = array();
+        //$data["language_codes"] = array();
         foreach ( $this->languageMaskGenerator->extractLanguageIdsFromMask( $data["lang_mask"] ) as $languageId )
         {
             $data["language_codes"][] = $this->languageHandler->load( $languageId )->languageCode;
@@ -380,7 +379,7 @@ class Handler implements BaseUrlAliasHandler
         // Path already exists, exit with ForbiddenException
         else
         {
-            throw new ForbiddenException( "Path '\$path' already exists" );
+            throw new ForbiddenException( "Path '\$path' already exists for the given language" );
         }
 
         $createdPath[] = $topElement;
@@ -392,10 +391,9 @@ class Handler implements BaseUrlAliasHandler
         $data["always_available"] = $alwaysAvailable;
         $data["is_original"] = true;
         $data["is_alias"] = true;
-        $data["language_codes"] = array();
         foreach ( $this->languageMaskGenerator->extractLanguageIdsFromMask( $data["lang_mask"] ) as $languageId )
         {
-            $data["language_codes"][] = $this->languageHandler->getById( $languageId )->languageCode;
+            $data["language_codes"][] = $this->languageHandler->load( $languageId )->languageCode;
         }
 
         return $this->mapper->extractUrlAliasFromRow( $data );
@@ -575,7 +573,7 @@ class Handler implements BaseUrlAliasHandler
 
         /** @var $type */
         $data["type"] = $type;
-        $data["language_codes"] = array();
+        //$data["language_codes"] = array();
         /** @var $actions */
         if ( $type === UrlAlias::LOCATION )
         {
@@ -627,6 +625,17 @@ class Handler implements BaseUrlAliasHandler
     public function locationMoved( $locationId, $newParentId )
     {
         //@todo implement
+        //$this->updateAliasSubtree();
+        //$this->gateway->reparent();
+    }
+
+    /**
+     * Updates subtree aliases when a location is moved
+     */
+    protected function updateAliasSubtree()
+    {
+        //@todo implement
+        //$this->updateAliasSubtree();
     }
 
     /**
