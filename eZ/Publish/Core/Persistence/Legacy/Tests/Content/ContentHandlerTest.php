@@ -359,7 +359,7 @@ class ContentHandlerTest extends TestCase
             ->with(
                 $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
                 $this->getContentFixtureForDraft()->fields,
-                $this->getContentFixtureForDraft()->contentInfo->isAlwaysAvailable
+                $this->getContentFixtureForDraft()->contentInfo->alwaysAvailable
             )->will( $this->returnValue( 42 ) );
 
         $gatewayMock->expects( $this->once() )
@@ -1054,7 +1054,7 @@ class ContentHandlerTest extends TestCase
                     new Content(
                         array(
                             "versionInfo" => new VersionInfo( array( "names" => array( "eng-US" => "Test" ) ) ),
-                            "contentInfo" => new ContentInfo( array( "isAlwaysAvailable" => true ) ),
+                            "contentInfo" => new ContentInfo( array( "alwaysAvailable" => true ) ),
                             "fields" => array()
                         )
                     )
@@ -1096,7 +1096,7 @@ class ContentHandlerTest extends TestCase
                             "contentInfo" => new ContentInfo(
                                 array(
                                     "id" => 24,
-                                    "isAlwaysAvailable" => true
+                                    "alwaysAvailable" => true
                                 )
                             ),
                             "fields" => array()

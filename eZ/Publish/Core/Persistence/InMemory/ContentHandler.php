@@ -64,7 +64,7 @@ class ContentHandler implements ContentHandlerInterface
                 // Published and modified timestamps for drafts is 0
                 'modificationDate' => 0,
                 'publicationDate' => 0,
-                'isAlwaysAvailable' => $content->alwaysAvailable,
+                'alwaysAvailable' => $content->alwaysAvailable,
                 'remoteId' => $content->remoteId,
                 'mainLanguageCode' => $this->handler->contentLanguageHandler()
                     ->load( $content->initialLanguageId )->languageCode
@@ -207,7 +207,7 @@ class ContentHandler implements ContentHandlerInterface
                 "mainLanguageCode" => $contentInfo->mainLanguageCode,
                 "modificationDate" => 0,
                 "publicationDate" => 0,
-                "isAlwaysAvailable" => $contentInfo->isAlwaysAvailable
+                "alwaysAvailable" => $contentInfo->alwaysAvailable
             )
         );
 
@@ -413,7 +413,7 @@ class ContentHandler implements ContentHandlerInterface
     public function updateMetadata( $contentId, MetadataUpdateStruct $content )
     {
         $updateData = (array) $content;
-        $updateData["isAlwaysAvailable"] = $updateData["alwaysAvailable"];
+        $updateData["alwaysAvailable"] = $updateData["alwaysAvailable"];
         $updateData["mainLanguageCode"] = $this->handler->contentLanguageHandler()
             ->load( $content->mainLanguageId )->languageCode;
 
@@ -723,7 +723,7 @@ class ContentHandler implements ContentHandlerInterface
             {
                 if ( $propertyName === "alwaysAvailable" )
                 {
-                    $contentInfoUpdateData["isAlwaysAvailable"] = $propertyValue;
+                    $contentInfoUpdateData["alwaysAvailable"] = $propertyValue;
                 }
                 elseif ( $propertyName === "mainLanguageId" )
                 {

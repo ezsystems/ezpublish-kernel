@@ -140,7 +140,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $content->contentInfo->currentVersionNo = 2;
         $content->contentInfo->mainLanguageCode = 'eng-US';
         $content->contentInfo->remoteId = 'some_remote_id';
-        $content->contentInfo->isAlwaysAvailable = true;
+        $content->contentInfo->alwaysAvailable = true;
         $content->contentInfo->publicationDate = 123;
         $content->contentInfo->modificationDate = 456;
         $content->contentInfo->isPublished = false;
