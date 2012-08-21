@@ -18,7 +18,9 @@ use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface,
     eZ\Publish\SPI\Persistence\Content\URLAlias as SPIURLAlias,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
+    eZ\Publish\API\Repository\Exceptions\ForbiddenException,
+    Exception;
 
 /**
  * URLAlias service
@@ -85,8 +87,25 @@ class URLAliasService implements URLAliasServiceInterface
         $path = $this->addPathPrefix( $path );
 
         $this->repository->beginTransaction();
-        $spiUrlAlias = $this->internalCreateUrlAlias( $location->id, $path, $languageCode, $forward, $alwaysAvailable );
-        $this->repository->commit();
+        try
+        {
+            $spiUrlAlias = $this->internalCreateUrlAlias( $location->id, $path, $languageCode, $forward, $alwaysAvailable );
+            $this->repository->commit();
+        }
+        catch ( ForbiddenException $e )
+        {
+            $this->repository->rollback();
+            throw new InvalidArgumentException(
+                "\$path",
+                $e->getMessage(),
+                $e
+            );
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->buildUrlAliasDomainObject( $spiUrlAlias );
     }
@@ -158,14 +177,31 @@ class URLAliasService implements URLAliasServiceInterface
         }
 
         $this->repository->beginTransaction();
-        $spiUrlAlias = $this->persistenceHandler->urlAliasHandler()->createGlobalUrlAlias(
-            $resource,
-            $path,
-            $forward,
-            $languageCode,
-            $alwaysAvailable
-        );
-        $this->repository->beginTransaction();
+        try
+        {
+            $spiUrlAlias = $this->persistenceHandler->urlAliasHandler()->createGlobalUrlAlias(
+                $resource,
+                $path,
+                $forward,
+                $languageCode,
+                $alwaysAvailable
+            );
+            $this->repository->commit();
+        }
+        catch ( ForbiddenException $e )
+        {
+            $this->repository->rollback();
+            throw new InvalidArgumentException(
+                "\$path",
+                $e->getMessage(),
+                $e
+            );
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->buildUrlAliasDomainObject( $spiUrlAlias );
     }
