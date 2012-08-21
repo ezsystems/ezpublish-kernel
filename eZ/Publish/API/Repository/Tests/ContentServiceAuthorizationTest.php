@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
  * Test case for operations in the ContentServiceAuthorization using in memory storage.
  *
  * @see eZ\Publish\API\Repository\ContentService
- * @d epends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
+ * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
  * @group integration
  * @group authorization
  */
@@ -513,7 +513,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $repository->setCurrentUser( $pseudoEditor );
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->loadContent( $anonymousUserId, array( 'eng-US' ), 1 );
+        $contentService->loadContent( $anonymousUserId, array( 'eng-US' ), 2 );
         /* END: Use Case */
     }
 
@@ -578,8 +578,8 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages, $versionNo)
-     * @e xpectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @d epends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByRemoteIdWithThirdParameter
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByRemoteIdWithThirdParameter
      */
     public function testLoadContentByRemoteIdThrowsUnauthorizedExceptionWithThirdParameter()
     {
