@@ -1438,7 +1438,18 @@ class UrlAliasHandlerTest extends TestCase
      */
     public function testPublishUrlAliasForLocationReusesHistory()
     {
-        throw new \Exception( "implement" );
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/publish_base.php" );
+
+        $urlAlias = $handler->publishUrlAliasForLocation( 314, "jedan", "cro-HR", false );
+        $handler->publishUrlAliasForLocation( 314, "dva", "cro-HR", true );
+        $urlAliasReusesHistory = $handler->publishUrlAliasForLocation( 314, "jedan", "cro-HR", false );
+
+        self::assertEquals( 3, $this->countRows() );
+        self::assertEquals(
+            $urlAlias,
+            $urlAliasReusesHistory
+        );
     }
 
     /**
@@ -1451,7 +1462,17 @@ class UrlAliasHandlerTest extends TestCase
      */
     public function testPublishUrlAliasForLocationReusesCustomAlias()
     {
-        throw new \Exception( "implement" );
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_reusing.php" );
+
+        $countBeforeReusing = $this->countRows();
+        $urlAlias = $handler->publishUrlAliasForLocation( 314, "hello", "eng-GB", false );
+
+        self::assertEquals(
+            $countBeforeReusing,
+            $this->countRows()
+        );
+        self::assertFalse( $urlAlias->isCustom );
     }
 
     public function providerForTestPublishUrlAliasForLocationReusesNopElement()
@@ -1498,7 +1519,7 @@ class UrlAliasHandlerTest extends TestCase
         $virtualUrlAlias = $handler->lookup( $virtualUrl, $virtualUrlPrioritizedLanguageCodes );
         $publishedLocationUrlAlias = $handler->publishUrlAliasForLocation( $locationId, $name, $languageCode, $alwaysAvailable );
 
-        self::assertEquals( 3, $this->countRows() );
+        self::assertEquals( 4, $this->countRows() );
         self::assertEquals( $publishedLocationUrlAlias, $handler->lookup( $url, array( $languageCode ) ) );
         $this->assertLocationUrlAliasCorrect(
             $publishedLocationUrlAlias,
@@ -1512,9 +1533,6 @@ class UrlAliasHandlerTest extends TestCase
         // Check that virtual alias still works as expected
         self::assertEquals( $virtualUrlAlias, $handler->lookup( $virtualUrl, $virtualUrlPrioritizedLanguageCodes ) );
     }
-
-
-
 
 
 
