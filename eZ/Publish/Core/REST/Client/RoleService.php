@@ -121,6 +121,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
         );
 
         $createdRole = $this->inputDispatcher->parse( $result );
+        $createdRoleValues = $this->urlHandler->parse( 'role', $createdRole->id );
 
         $createdPolicies = array();
         foreach ( $roleCreateStruct->getPolicies() as $policyCreateStruct )
@@ -130,7 +131,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
 
             $result = $this->client->request(
                 'POST',
-                $createdRole->id . '/policies',
+                $this->urlHandler->generate( 'policies', array( 'role' => $createdRoleValues['role'] ) ),
                 $inputMessage
             );
 
@@ -198,12 +199,13 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function addPolicy( APIRole $role, APIPolicyCreateStruct $policyCreateStruct )
     {
+        $values = $this->urlHandler->parse( 'role', $role->id );
         $inputMessage = $this->outputVisitor->visit( $policyCreateStruct );
         $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Policy' );
 
         $result = $this->client->request(
             'POST',
-            $role->id . '/policies',
+            $this->urlHandler->generate( 'policies', array( 'role' => $values['role'] ) ),
             $inputMessage
         );
 
@@ -246,9 +248,16 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function removePolicy( APIRole $role, APIPolicy $policy )
     {
+        $values = $this->urlHandler->parse( 'role', $role->id );
         $response = $this->client->request(
             'DELETE',
-            $role->id . '/policies/' . $policy->id,
+            $this->urlHandler->generate(
+                'policy',
+                array(
+                    'role' => $values['role'],
+                    'policy' => $policy->id
+                )
+            ),
             new Message(
                 // TODO: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "Section" correct,
@@ -277,13 +286,20 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function updatePolicy( APIPolicy $policy, APIPolicyUpdateStruct $policyUpdateStruct )
     {
+        $values = $this->urlHandler->parse( 'role', $policy->roleId );
         $inputMessage = $this->outputVisitor->visit( $policyUpdateStruct );
         $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Policy' );
         $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
 
         $result = $this->client->request(
             'POST',
-            $policy->roleId . '/policies/' . $policy->id,
+            $this->urlHandler->generate(
+                'policy',
+                array(
+                    'role' => $values['role'],
+                    'policy' => $policy->id
+                )
+            ),
             $inputMessage
         );
 
@@ -311,9 +327,10 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
         );
 
         $loadedRole = $this->inputDispatcher->parse( $response );
+        $loadedRoleValues = $this->urlHandler->parse( 'role', $loadedRole->id );
         $response = $this->client->request(
             'GET',
-            $loadedRole->id . '/policies',
+            $this->urlHandler->generate( 'policies', array( 'role' => $loadedRoleValues['role'] ) ),
             new Message(
                 array( 'Accept' => $this->outputVisitor->getMediaType( 'PolicyList' ) )
             )

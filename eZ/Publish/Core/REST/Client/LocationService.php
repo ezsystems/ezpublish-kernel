@@ -233,9 +233,10 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      */
     public function loadLocations( ContentInfo $contentInfo, Location $rootLocation = null )
     {
+        $values = $this->urlHandler->parse( 'object', $contentInfo->id );
         $response = $this->client->request(
             'GET',
-            $contentInfo->id . '/locations',
+            $this->urlHandler->generate( 'objectLocations', array( 'object' => $values['object'] ) ),
             new Message(
                 array( 'Accept' => $this->outputVisitor->getMediaType( 'LocationList' ) )
             )
@@ -256,9 +257,10 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
      */
     public function loadLocationChildren( Location $location, $offset = 0, $limit = -1 )
     {
+        $values = $this->urlHandler->parse( 'location', $location->id );
         $response = $this->client->request(
             'GET',
-            $location->id . '/children',
+            $this->urlHandler->generate( 'locationChildren', array( 'location' => $values['location'] ) ),
             new Message(
                 array( 'Accept' => $this->outputVisitor->getMediaType( 'LocationList' ) )
             )

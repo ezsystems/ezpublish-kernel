@@ -153,9 +153,10 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
      */
     public function loadObjectStates( ObjectStateGroup $objectStateGroup )
     {
+        $values = $this->urlHandler->parse( 'objectstategroup', $objectStateGroup->id );
         $response = $this->client->request(
             'GET',
-            $objectStateGroup->id . '/objectstates',
+            $this->urlHandler->generate( 'objectstates', array( 'objectstategroup' => $values['objectstategroup'] ) ),
             new Message(
                 array( 'Accept' => $this->outputVisitor->getMediaType( 'ObjectStateList' ) )
             )
