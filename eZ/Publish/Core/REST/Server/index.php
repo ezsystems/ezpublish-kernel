@@ -218,6 +218,7 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^/content/objects/[0-9]+/objectstates$)' => array(
             'GET' => array( $objectStateController, 'getObjectStatesForContent' ),
+            'PATCH' => array( $objectStateController, 'setObjectStatesForContent' ),
         ),
         '(^/content/objectstategroups$)' => array(
             'GET' => array( $objectStateController, 'loadObjectStateGroups' ),

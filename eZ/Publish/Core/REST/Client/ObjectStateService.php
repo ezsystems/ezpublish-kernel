@@ -22,6 +22,7 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
+use eZ\Publish\Core\REST\Common\Values\ContentObjectStates;
 
 /**
  * ObjectStateService service
@@ -340,7 +341,20 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
      */
     public function setObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState )
     {
-        throw new \Exception( "@todo Implement" );
+        $inputMessage = $this->outputVisitor->visit( new ContentObjectStates( array( $objectState ) ) );
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'ContentObjectStates' );
+        $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
+
+        // Should originally be PATCH, but PHP's shiny new internal web server
+        // dies with it.
+        $values = $this->urlHandler->parse( 'object', $contentInfo->id );
+        $result = $this->client->request(
+            'POST',
+            $this->urlHandler->generate( 'objectObjectStates', array( 'object' => $values['object'] ) ),
+            $inputMessage
+        );
+
+        $this->inputDispatcher->parse( $result );
     }
 
     /**
