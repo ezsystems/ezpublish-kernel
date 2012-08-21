@@ -1279,7 +1279,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentUpdateStruct->initialLanguageCode = 'eng-US';
 
         // This call will fail with a "ContentValidationException", because the
-        // mandatory "title" field is empty.
+        // mandatory "name" field is empty.
         $contentService->updateContent(
             $draft->getVersionInfo(),
             $contentUpdateStruct
@@ -2680,6 +2680,8 @@ class ContentServiceTest extends BaseContentServiceTest
         // Load all relations
         $relations = $contentService->loadReverseRelations( $content->contentInfo );
         /* END: Use Case */
+
+        $this->assertEquals( 2, count( $relations ) );
 
         usort( $relations, function( $rel1, $rel2 ) {
             return strcasecmp(
