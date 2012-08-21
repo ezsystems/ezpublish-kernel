@@ -23,6 +23,7 @@ use eZ\Publish\API\Repository\TrashService as TrashServiceInterface,
     eZ\Publish\SPI\Persistence\Content\Location\Trashed,
 
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
 
     eZ\Publish\API\Repository\Values\Content\SearchResult,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
@@ -103,6 +104,9 @@ class TrashService implements TrashServiceInterface
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
+        if ( $this->repository->canUser( 'content', 'manage_locations', $location->getContentInfo(), $location ) !== true )
+            throw new UnauthorizedException( 'content', 'manage_locations' );
+
         $this->repository->beginTransaction();
         try
         {
@@ -140,6 +144,9 @@ class TrashService implements TrashServiceInterface
 
         if ( $newParentLocation !== null && !is_numeric( $newParentLocation->id ) )
             throw new InvalidArgumentValue( "parentLocationId", $newParentLocation->id, "Location" );
+
+        if ( $this->repository->hasAccess( 'content', 'restore' ) !== true )
+            throw new UnauthorizedException( 'content', 'restore' );
 
         $this->repository->beginTransaction();
         try
@@ -186,6 +193,9 @@ class TrashService implements TrashServiceInterface
      */
     public function emptyTrash()
     {
+        if ( $this->repository->hasAccess( 'content', 'cleantrash' ) !== true )
+            throw new UnauthorizedException( 'content', 'cleantrash' );
+
         $this->repository->beginTransaction();
         try
         {
@@ -211,6 +221,9 @@ class TrashService implements TrashServiceInterface
      */
     public function deleteTrashItem( APITrashItem $trashItem )
     {
+        if ( $this->repository->hasAccess( 'content', 'cleantrash' ) !== true )
+            throw new UnauthorizedException( 'content', 'cleantrash' );
+
         if ( !is_numeric( $trashItem->id ) )
             throw new InvalidArgumentValue( "id", $trashItem->id, "TrashItem" );
 
@@ -291,8 +304,14 @@ class TrashService implements TrashServiceInterface
     {
         $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiTrashItem->contentId );
 
-        $trashedChildren = $this->persistenceHandler->trashHandler()->findTrashItems(
-            new ParentLocationId( $spiTrashItem->id )
+        $trashedChildren = array_filter(
+            $this->persistenceHandler->trashHandler()->findTrashItems(
+                new ParentLocationId( $spiTrashItem->id )
+            ),
+            function( $trashedChild ) use ( $spiTrashItem )
+            {
+                return $trashedChild->parentId === $spiTrashItem->id;
+            }
         );
 
         return new TrashItem(

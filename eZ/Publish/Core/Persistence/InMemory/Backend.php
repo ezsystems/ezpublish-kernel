@@ -10,12 +10,10 @@
 namespace eZ\Publish\Core\Persistence\InMemory;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\Core\Repository\ValidatorService,
     eZ\Publish\API\Repository\FieldTypeTools,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\ValueObject,
     LogicException;
 

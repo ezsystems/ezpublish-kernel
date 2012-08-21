@@ -11,9 +11,6 @@ namespace eZ\Publish\Core\Repository\Tests\Service;
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\API\Repository\Values\ContentType\ContentType,
-    eZ\Publish\Core\Repository\Values\User\User,
-    eZ\Publish\Core\Repository\Values\Content\VersionInfo,
-    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
     eZ\Publish\API\Repository\Exceptions;
 
 /**
@@ -2571,7 +2568,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $time = time();
 
         /* BEGIN: Use Case */
-        $user = $this->getStubbedUser( 4096 );
+        $user = $this->getStubbedUser( 14 );
         $this->repository->setCurrentUser( $user );
         $contentTypeService = $this->repository->getContentTypeService();
 

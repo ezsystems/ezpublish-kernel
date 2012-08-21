@@ -54,7 +54,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 65,
+        'id' => 57,
         'title' => 'Home',
       ),
        'score' => NULL,

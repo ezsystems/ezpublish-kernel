@@ -22,7 +22,6 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct,
     eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\API\Repository\Values\Content\Content as APIContent,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo,
 
     eZ\Publish\SPI\Persistence\Handler,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,

@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service\InMemory;
 
-use eZ\Publish\Core\Base\ConfigurationManager,
-    eZ\Publish\Core\Base\ServiceContainer;
+use RuntimeException;
 
 /**
  * Utils class for InMemory tesst
@@ -37,7 +36,7 @@ abstract class Utils
         // Get configuration config
         if ( !( $settings = include ( 'config.php' ) ) )
         {
-            throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
+            throw new RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
         }
 
         $settings['base']['Configuration']['UseCache'] = false;

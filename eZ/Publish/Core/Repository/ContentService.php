@@ -13,7 +13,6 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
     eZ\Publish\SPI\Persistence\Handler,
-    eZ\Publish\API\Repository\Values\Content\Content as APIContent,
     eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUpdateStruct,
     eZ\Publish\API\Repository\Values\ContentType\ContentType,
     eZ\Publish\API\Repository\Values\Content\TranslationInfo,
@@ -25,33 +24,37 @@ use eZ\Publish\API\Repository\ContentService as ContentServiceInterface,
     eZ\Publish\API\Repository\Values\User\User,
     eZ\Publish\API\Repository\Values\Content\LocationCreateStruct,
     eZ\Publish\API\Repository\Values\Content\Field,
+    eZ\Publish\API\Repository\Values\Content\Relation as APIRelation,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\RemoteId as CriterionRemoteId,
     eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
-    eZ\Publish\Core\Repository\Values\Content\Content,
-    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
-    eZ\Publish\Core\Repository\Values\Content\VersionInfo,
-    eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct,
-    eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct,
-    eZ\Publish\Core\Repository\Values\Content\TranslationValues,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo,
-    eZ\Publish\SPI\Persistence\Content\Version as SPIVersion,
+
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\ContentValidationException,
     eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException,
+    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
+    eZ\Publish\Core\Repository\Values\Content\Content,
+    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
+    eZ\Publish\Core\Repository\Values\Content\VersionInfo,
+    eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct,
+    eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct,
+    eZ\Publish\Core\Repository\Values\Content\Relation,
+    eZ\Publish\Core\Repository\Values\Content\TranslationValues,
+
+    eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo,
+    eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo,
+    eZ\Publish\SPI\Persistence\Content\Version as SPIVersion,
     eZ\Publish\SPI\Persistence\Content as SPIContent,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct as SPIMetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\CreateStruct as SPIContentCreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct as SPIContentUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Field as SPIField,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as SPILocationCreateStruct,
-    eZ\Publish\Core\Repository\Values\Content\Relation,
-    eZ\Publish\API\Repository\Values\Content\Relation as APIRelation,
     eZ\Publish\SPI\Persistence\Content\Relation as SPIRelation,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreateStruct,
+
     DateTime,
     Exception;
 
@@ -137,7 +140,12 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentInfoByRemoteId( $remoteId )
     {
-        return $this->repository->getSearchService()->findSingle( new CriterionRemoteId( $remoteId ) )->contentInfo;
+        $content = $this->repository->getSearchService()->findSingle( new CriterionRemoteId( $remoteId ), array(), false );
+
+        if ( !$this->repository->canUser( 'content', 'read', $content ) )
+            throw new UnauthorizedException( 'content', 'read' );
+
+        return $content->contentInfo;
     }
 
     /**
@@ -325,14 +333,16 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null )
     {
-        $content = $this->repository->getSearchService()->findSingle( new CriterionRemoteId( $remoteId ) );
-
-        if ( $languages === null && $versionNo === null )
+        $content = $this->repository->getSearchService()->findSingle( new CriterionRemoteId( $remoteId ), array(), false );
+        if ( $languages !== null || $versionNo !== null )
         {
-            return $content;
+            $content = $this->loadContent( $content->id, $languages, $versionNo );
         }
 
-        return $this->loadContent( $content->id, $languages, $versionNo );
+        if ( !$this->repository->canUser( 'content', 'read', $content ) )
+            throw new UnauthorizedException( 'content', 'read' );
+
+        return $content;
     }
 
     /**
@@ -364,6 +374,11 @@ class ContentService implements ContentServiceInterface
         if ( $contentCreateStruct->ownerId === null )
         {
             $contentCreateStruct->ownerId = $this->repository->getCurrentUser()->id;
+        }
+
+        if ( $contentCreateStruct->alwaysAvailable === null )
+        {
+            $contentCreateStruct->alwaysAvailable = false;
         }
 
         // @todo: check for user permissions
@@ -1259,12 +1274,12 @@ class ContentService implements ContentServiceInterface
             );
 
             $content = $this->internalPublishVersion(
-                $this->buildVersionInfoDomainObject( $spiContent->versionInfo ),
+                $this->buildVersionInfoDomainObject( $spiContent->versionInfo, $spiContent ),
                 $spiContent->versionInfo->creationDate
             );
 
             $this->repository->getLocationService()->createLocation(
-                $this->buildContentInfoDomainObject( $spiContent->contentInfo ),
+                $content->getVersionInfo()->getContentInfo(),
                 $destinationLocationCreateStruct
             );
             $this->repository->commit();
@@ -1540,7 +1555,7 @@ class ContentService implements ContentServiceInterface
      *
      * @TODO: Made public, since the search service also needs access to this
      * method. Should be refactored into its own class together with the other
-     * build* method.
+     * build* methods.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $spiContent
      *
@@ -1548,7 +1563,7 @@ class ContentService implements ContentServiceInterface
      */
     public function buildContentDomainObject( SPIContent $spiContent )
     {
-        $versionInfo = $this->buildVersionInfoDomainObject( $spiContent->versionInfo );
+        $versionInfo = $this->buildVersionInfoDomainObject( $spiContent->versionInfo, $spiContent );
         return new Content(
             array(
                 "internalFields" => $this->buildDomainFields( $spiContent->fields ),
@@ -1594,19 +1609,24 @@ class ContentService implements ContentServiceInterface
      *
      * @TODO: Made public, since the search service also needs access to this
      * method. Should be refactored into its own class together with the other
-     * build* method.
+     * build* methods.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $spiContentInfo
+     * @param \eZ\Publish\SPI\Persistence\Content|null $spiContent
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\ContentInfo
      */
-    public function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo )
+    public function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo, SPIContent $spiContent = null )
     {
+
+        if ( $spiContent === null )
+        {
+            $spiContent = $this->persistenceHandler->contentHandler()->load(
+                $spiContentInfo->id,
+                $spiContentInfo->currentVersionNo
+            );
+        }
         // @todo: $mainLocationId should have been removed through SPI refactoring?
-        $spiContent = $this->persistenceHandler->contentHandler()->load(
-            $spiContentInfo->id,
-            $spiContentInfo->currentVersionNo
-        );
         $mainLocationId = null;
         foreach ( $spiContent->locations as $spiLocation )
         {
@@ -1646,10 +1666,11 @@ class ContentService implements ContentServiceInterface
      * Builds a VersionInfo domain object from value object returned from persistence
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $persistenceVersionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content|null $spiContent
      *
      * @return VersionInfo
      */
-    protected function buildVersionInfoDomainObject( SPIVersionInfo $persistenceVersionInfo )
+    protected function buildVersionInfoDomainObject( SPIVersionInfo $persistenceVersionInfo, SPIContent $spiContent = null )
     {
         $languageCodes = array();
         foreach ( $persistenceVersionInfo->languageIds as $languageId )
@@ -1670,11 +1691,18 @@ class ContentService implements ContentServiceInterface
                 "initialLanguageCode" => $persistenceVersionInfo->initialLanguageCode,
                 "languageCodes" => $languageCodes,
                 "names" => $persistenceVersionInfo->names,
-                "contentInfo" => $this->loadContentInfo( $persistenceVersionInfo->contentId )
+                "contentInfo" => ( $spiContent !== null ?
+                    $this->buildContentInfoDomainObject( $spiContent->contentInfo, $spiContent ) :
+                    $this->loadContentInfo( $persistenceVersionInfo->contentId ) )
             )
         );
     }
 
+    /**
+     * @param int $spiStatus
+     *
+     * @return int|null
+     */
     protected function getDomainVersionStatus( $spiStatus )
     {
         $status = null;
@@ -1694,8 +1722,6 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     *
-     *
      * @param int|null $timestamp
      *
      * @return \DateTime|null

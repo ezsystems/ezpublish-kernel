@@ -860,4 +860,54 @@ class UserHandlerTest extends TestCase
         ) );
         $this->assertEquals( 6, count( $policies ) );
     }
+
+    public function testLoadRoleAssignments()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/../Content/SearchHandler/_fixtures/full_dump.php' );
+        $handler = $this->getUserHandler();
+
+        $this->assertEquals(
+            array(
+                new Persistence\User\RoleAssignment(
+                    array(
+                        'roleId' => 1,
+                        'contentId' => 11
+                    )
+                ),
+                new Persistence\User\RoleAssignment(
+                    array(
+                        'roleId' => 5,
+                        'contentId' => 11
+                    )
+                )
+            ),
+            $handler->getRoleAssignments( 11 )
+        );
+    }
+
+    public function testLoadComplexRoleAssignments()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/../Content/SearchHandler/_fixtures/full_dump.php' );
+        $handler = $this->getUserHandler();
+
+        $this->assertEquals(
+            array(
+                new Persistence\User\RoleAssignment(
+                    array(
+                        'roleId' => 3,
+                        'contentId' => 13,
+                        'limitationIdentifier' => 'Subtree',
+                        'values' => array( '/1/2/', '/1/43/' )
+                    )
+                ),
+                new Persistence\User\RoleAssignment(
+                    array(
+                        'roleId' => 5,
+                        'contentId' => 13
+                    )
+                )
+            ),
+            $handler->getRoleAssignments( 13 )
+        );
+    }
 }

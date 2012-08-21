@@ -19,9 +19,11 @@ use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface,
 
     eZ\Publish\API\Repository\Values\Content\Language,
 
-    eZ\Publish\API\Repository\Exceptions\NotFoundException,
+    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
+
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
     LogicException;
 
 /**
@@ -83,12 +85,15 @@ class LanguageService implements LanguageServiceInterface
         if ( !is_bool( $languageCreateStruct->enabled ) )
             throw new InvalidArgumentValue( "enabled", $languageCreateStruct->enabled, "LanguageCreateStruct" );
 
+        if ( $this->repository->hasAccess( 'content', 'translations' ) !== true )
+            throw new UnauthorizedException( 'content', 'translations' );
+
         try
         {
             if ( $this->loadLanguage( $languageCreateStruct->languageCode ) !== null )
                 throw new InvalidArgumentException( "languageCreateStruct", "language with specified language code already exists" );
         }
-        catch ( NotFoundException $e )
+        catch ( APINotFoundException $e )
         {
             // Do nothing
         }
@@ -136,6 +141,9 @@ class LanguageService implements LanguageServiceInterface
         if ( !is_string( $newName ) || empty( $newName ) )
             throw new InvalidArgumentValue( "newName", $newName );
 
+        if ( $this->repository->hasAccess( 'content', 'translations' ) !== true )
+            throw new UnauthorizedException( 'content', 'translations' );
+
         $loadedLanguage = $this->loadLanguageById( $language->id );
 
         $updateLanguageStruct = new SPILanguage(
@@ -176,6 +184,9 @@ class LanguageService implements LanguageServiceInterface
         if ( !is_numeric( $language->id ) )
             throw new InvalidArgumentValue( "id", $language->id );
 
+        if ( $this->repository->hasAccess( 'content', 'translations' ) !== true )
+            throw new UnauthorizedException( 'content', 'translations' );
+
         $loadedLanguage = $this->loadLanguageById( $language->id );
 
         $updateLanguageStruct = new SPILanguage(
@@ -215,6 +226,9 @@ class LanguageService implements LanguageServiceInterface
     {
         if ( !is_numeric( $language->id ) )
             throw new InvalidArgumentValue( "id", $language->id );
+
+        if ( $this->repository->hasAccess( 'content', 'translations' ) !== true )
+            throw new UnauthorizedException( 'content', 'translations' );
 
         $loadedLanguage = $this->loadLanguageById( $language->id );
 
@@ -315,6 +329,9 @@ class LanguageService implements LanguageServiceInterface
     {
         if ( !is_numeric( $language->id ) )
             throw new InvalidArgumentValue( "id", $language->id, "Language" );
+
+        if ( $this->repository->hasAccess( 'content', 'translations' ) !== true )
+            throw new UnauthorizedException( 'content', 'translations' );
 
         $loadedLanguage = $this->loadLanguageById( $language->id );
 

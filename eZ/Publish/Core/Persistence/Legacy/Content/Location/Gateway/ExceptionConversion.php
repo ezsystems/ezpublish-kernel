@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway,
-    eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 

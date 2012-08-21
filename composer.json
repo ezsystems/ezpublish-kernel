@@ -11,21 +11,21 @@
         },
         {
             "type": "vcs",
-            "url": "git@github.com:ezsystems/ezpublish.git"
+            "url": "https://github.com/ezsystems/ezpublish.git"
         }
     ],
     "require": {
         "php": ">=5.3.3"
     },
     "require-dev": {
-        "symfony/symfony": "2.1.0-beta4",
+        "symfony/symfony": "2.1.0-RC1",
         "zetacomponents/cache": "dev-master",
         "zetacomponents/php-generator": "dev-master",
         "zetacomponents/configuration": "dev-master",
         "zetacomponents/database": "dev-master",
         "zetacomponents/mail": "dev-master",
         "Qafoo/RMF": "dev-master",
-        "ezsystems/ezpublish-legacy": "dev-ezpublish5-integration"
+        "ezsystems/ezpublish-legacy": "dev-master"
     },
     "autoload": {
         "psr-0": {

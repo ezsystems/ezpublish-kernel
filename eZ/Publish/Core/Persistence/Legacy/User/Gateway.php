@@ -70,4 +70,11 @@ abstract class Gateway
      * @param mixed $roleId
      */
     abstract public function removeRole( $contentId, $roleId );
+
+    /**
+     * Loads role assignments for specified content ID
+     *
+     * @param mixed $contentId
+     */
+    abstract public function loadRoleAssignments( $contentId );
 }

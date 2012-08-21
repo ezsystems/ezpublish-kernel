@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
 use eZ\Publish\SPI\Persistence\Content\Type,
-    eZ\Publish\SPI\Persistence\Content\Type\Group,
     eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
     eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
@@ -211,7 +210,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLoadByRemoteId()
     {
-        $obj = $this->persistenceHandler->ContentTypeHandler()->loadByRemoteId( 'remoteIDForType1' );
+        $obj = $this->persistenceHandler->ContentTypeHandler()->loadByRemoteId( 'a3d405b81be900468eb153d774f4f0d2' );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type', $obj );
         $this->assertEquals( 1, $obj->id );
         $this->assertEquals( 'folder', $obj->identifier );

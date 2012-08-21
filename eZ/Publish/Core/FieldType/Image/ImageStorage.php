@@ -8,12 +8,10 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Image;
-use eZ\Publish\SPI\FieldType\FieldStorage,
-    eZ\Publish\Core\FieldType\GatewayBasedStorage,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
+use eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
-    LogicException,
-    PDO;
+    eZ\Publish\Core\FieldType\FileService,
+    eZ\Publish\Core\FieldType\GatewayBasedStorage;
 
 /**
  * Converter for Image field type external storage
@@ -76,15 +74,23 @@ class ImageStorage extends GatewayBasedStorage
             return true;
         }
 
-        $nodePathString = $this->getGateway( $context )->getNodePathString( $versionInfo, $field->id );
+        if ( !$this->fileService->exists( $storedValue['path'] ) )
+        {
+            // Only store a new copy of the image, if it does not exist, yet
+            $nodePathString = $this->getGateway( $context )->getNodePathString( $versionInfo, $field->id );
 
-        $targetPath = 'images/' . $this->pathGenerator->getStoragePathForField(
-            $versionInfo,
-            $field,
-            $nodePathString
-        ) . '/' . $storedValue['fileName'];
+            $targetPath = $this->getFieldPath(
+                $field->id,
+                $versionInfo->versionNo,
+                $field->languageCode,
+                $nodePathString
+            ) . '/' . $storedValue['fileName'];
 
-        $storedValue['path'] = $this->fileService->storeFile( $storedValue['path'], $targetPath );
+            $storedValue['path'] = $this->fileService->storeFile(
+                $storedValue['path'],
+                $this->fileService->getStorageIdentifier( $targetPath )
+            );
+        }
 
         $this->getGateway( $context )->storeImageReference( $storedValue['path'], $field->id );
 
@@ -98,9 +104,29 @@ class ImageStorage extends GatewayBasedStorage
         );
 
         $field->value->data = $storedValue;
+        $field->value->externalData = null;
 
         // Data has been updated and needs to be stored!
         return true;
+    }
+
+    /**
+     * Returns the path where images for the defined $fieldId are stored
+     *
+     * @param mixed $fieldId
+     * @param int $versionNo
+     * @param string $languageCode
+     * @param string $nodePathString
+     * @return string
+     */
+    protected function getFieldPath( $fieldId, $versionNo, $languageCode, $nodePathString )
+    {
+        return $this->pathGenerator->getStoragePathForField(
+            $fieldId,
+            $versionNo,
+            $languageCode,
+            $nodePathString
+        );
     }
 
     /**
@@ -122,13 +148,57 @@ class ImageStorage extends GatewayBasedStorage
     }
 
     /**
-     * @param array $fieldId
+     * @param array $fieldIds
      * @param array $context
      * @return bool
+     * @TODO Delete only when no references in ezimage table exist anymore
      */
-    public function deleteFieldData( array $fieldId, array $context )
+    public function deleteFieldData( array $fieldIds, array $context )
     {
-        // @TODO: What about deleting an image? Variants?
+        $gateway = $this->getGateway( $context );
+
+        $fieldXmls = $gateway->getXmlForImages( $fieldIds );
+
+        foreach ( $fieldXmls as $fieldId => $xml )
+        {
+            $fieldStorageIdentifier = $this->extractStorageIdentifier( $xml );
+
+            if ( $fieldStorageIdentifier === false )
+            {
+                continue;
+            }
+
+            $gateway->removeImageReferences( $fieldStorageIdentifier, $fieldId );
+
+            if ( $gateway->countImageReferences( $fieldStorageIdentifier ) === 0 )
+            {
+                $storedFieldFiles = $this->fileService->remove( $fieldStorageIdentifier, true );
+            }
+        }
+    }
+
+    /**
+     * Extracts the field storage path from  the given $xml string
+     *
+     * @param string $xml
+     * @return string|false
+     */
+    protected function extractStorageIdentifier( $xml )
+    {
+        if ( empty( $xml ) )
+        {
+            // Empty image value
+            return false;
+        }
+
+        $dom = new \DOMDocument();
+        $dom->loadXml( $xml );
+
+        if ( $dom->documentElement->hasAttribute( 'dirpath' ) )
+        {
+            return $dom->documentElement->getAttribute( 'dirpath' );
+        }
+        return false;
     }
 
     /**

@@ -18,7 +18,8 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query;
+    eZ\Publish\API\Repository\Values\Content\Query,
+    eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a

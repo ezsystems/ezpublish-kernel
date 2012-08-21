@@ -10,13 +10,9 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway,
-    eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler,
-    eZ\Publish\SPI\Persistence\Content\Search\Field,
-    eZ\Publish\SPI\Persistence\Content\Search\FieldType,
     eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator,
     eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor,

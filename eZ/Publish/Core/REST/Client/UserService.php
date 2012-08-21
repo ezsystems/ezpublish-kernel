@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
-use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\UserCreateStruct;
 use \eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
@@ -20,7 +19,6 @@ use \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use \eZ\Publish\Core\REST\Common\UrlHandler;
 use \eZ\Publish\Core\REST\Common\Input;
 use \eZ\Publish\Core\REST\Common\Output;
-use \eZ\Publish\Core\REST\Common\Message;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\UserService}

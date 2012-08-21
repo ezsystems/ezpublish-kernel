@@ -17,36 +17,25 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'index' => NULL,
        'highlight' => NULL,
     )),
-    1 => 
+    1 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 69,
-        'title' => 'OS Type I',
+        'id' => 12,
+        'title' => 'Administrator users',
       ),
-       'score' => 0.03612267,
+       'score' => 0.03347406,
        'index' => NULL,
        'highlight' => NULL,
     )),
-    2 => 
+    2 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' => 
       array (
-        'id' => 71,
-        'title' => 'CD/DVD Box I',
+        'id' => 13,
+        'title' => 'Editors',
       ),
-       'score' => 0.03612267,
-       'index' => NULL,
-       'highlight' => NULL,
-    )),
-    3 => 
-    eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
-       'valueObject' => 
-      array (
-        'id' => 72,
-        'title' => 'CD/DVD Box II',
-      ),
-       'score' => 0.03612267,
+       'score' => 0.03347406,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -54,7 +43,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
    'spellSuggestion' => NULL,
    'time' => 1,
    'timedOut' => NULL,
-   'maxScore' => 0.03612267,
-   'totalCount' => 4,
+   'maxScore' => 0.03347406,
+   'totalCount' => 3,
 ));
 

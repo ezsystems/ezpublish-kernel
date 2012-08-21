@@ -9,16 +9,12 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler,
     eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Relation,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Relation\UpdateStruct as RelationUpdateStruct,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**

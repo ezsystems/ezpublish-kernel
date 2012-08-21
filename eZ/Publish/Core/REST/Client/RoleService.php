@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
-use \eZ\Publish\API\Repository\Values\Content\Content;
 use \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use \eZ\Publish\API\Repository\Values\User\Policy as APIPolicy;
 use \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
@@ -673,5 +672,39 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
     public function newRoleUpdateStruct()
     {
         return new RoleUpdateStruct();
+    }
+
+    /**
+     * Returns the LimitationType registered with the given identifier
+     *
+     * @param string $identifier
+     *
+     * @return \eZ\Publish\SPI\Limitation\Type
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if there is no LimitationType with $identifier
+     */
+    public function getLimitationType( $identifier )
+    {
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+    }
+
+    /**
+     * Returns the LimitationType's assigned to a given module/function
+     *
+     * Typically used for:
+     *  - Internal validation limitation value use on Policies
+     *  - Role admin gui for editing policy limitations incl list limitation options via valueSchema()
+     *
+     * @param string $module Legacy name of "controller", it's a unique identifier like "content"
+     * @param string $function Legacy name of a controller "action", it's a unique within the controller like "read"
+     *
+     * @return \eZ\Publish\SPI\Limitation\Type[]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If module/function to limitation type mapping
+     *                                                                 refers to a non existing identifier.
+     */
+    public function getLimitationTypesByModuleFunction( $module, $function )
+    {
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class
+ * File contains: eZ\Publish\SPI\Tests\FieldType\KeywordIntegrationTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -11,8 +11,7 @@ namespace eZ\Publish\SPI\Tests\FieldType;
 use eZ\Publish\Core\Persistence\Legacy,
     eZ\Publish\Core\FieldType,
     eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
+    eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Integration test for legacy storage field types
@@ -34,7 +33,7 @@ use eZ\Publish\Core\Persistence\Legacy,
  *
  * @group integration
  */
-class KeywordIntergrationTest extends BaseIntegrationTest
+class KeywordIntegrationTest extends BaseIntegrationTest
 {
     /**
      * Get name of tested field tyoe

@@ -195,8 +195,8 @@ class Repository implements RepositoryInterface
             'urlAlias' => array(),
             'urlWildcard' => array(),
             'nameSchema' => array(
-                "limit" => 0,
-                "sequence" => ""
+                'limit' => 0,
+                'sequence' => ''
             ),
         );
 
@@ -212,7 +212,9 @@ class Repository implements RepositoryInterface
     public function getCurrentUser()
     {
         if ( !$this->user instanceof User )
+        {
             $this->user = $this->getUserService()->loadAnonymousUser();
+        }
 
         return $this->user;
     }
@@ -234,85 +236,94 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Check if user has access to a given module / function
      *
+     * Low level function, use canUser instead if you have objects to check against.
      *
      * @param string $module
      * @param string $function
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
      * @return boolean|array if limitations are on this function an array of limitations is returned
      */
     public function hasAccess( $module, $function, User $user = null )
     {
-        //@todo implement, see impl in ezp-next
+        if ( $user === null )
+            $user = $this->getCurrentUser();
+
+        foreach ( $this->getRoleService()->loadPoliciesByUserId( $user->id ) as $policy )
+        {
+            if ( $policy->module === '*' )
+                return true;
+
+            if ( $policy->module !== $module )
+                continue;
+
+            if ( $policy->function === '*' )
+                return true;
+
+            if ( $policy->function !== $function )
+                continue;
+
+            if ( $policy->limitations === '*' )
+                return true;
+
+            $limitationArray[] = $policy->limitations;
+        }
+
+        if ( !empty( $limitationArray ) )
+            return $limitationArray;
+
+        return false;// No policies matching $module and $function
     }
 
     /**
-     * Indicates if the current user is allowed to perform an action given by the function on the given
-     * objects
+     * Check if user has access to a given action on a given value object
      *
-     * @param string $module
-     * @param string $function
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $value
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $target
-     * @return array|bool
+     * Indicates if the current user is allowed to perform an action given by the function on the given
+     * objects.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
+     *
+     * @param string $module The module, aka controller identifier to check permissions on
+     * @param string $function The function, aka the controller action to check permissions on
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
+     *
+     * @return boolean
      */
-    public function canUser( $module, $function, ValueObject $value, ValueObject $target = null )
+    public function canUser( $module, $function, ValueObject $object, ValueObject $target = null )
     {
-        $className = $value;
         $limitationArray = $this->hasAccess( $module, $function );
         if ( $limitationArray === false || $limitationArray === true )
         {
             return $limitationArray;
         }
-        if ( empty( $definition['functions'][$function] ) )
-        {
-            throw new BadConfiguration(
-                "{$className}::definition()",
-                "function limitations returned for '{$function}', but none defined in definition()"
-            );
-        }
 
-        /**
-         * @todo Somewhere to get limitation logic from (functions), then $value should impl a interface
-         * that tells us where to get it from for instance.
-         * @var array $functions
-         */
-        $functions = $value::getLimitationFunctions();
+        $roleService = $this->getRoleService();
         foreach ( $limitationArray as $limitationSet )
         {
             $limitationSetSaysYes = true;
-            foreach ( $limitationSet as $limitationKey => $limitationValues )
+            /**
+             * @var \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
+             */
+            foreach ( $limitationSet as $limitationValue )
             {
-                if ( !isset( $functions[$function][$limitationKey]['compare'] ) )
-                {
-                    throw new LogicException(
-                        "\$definition[functions][{$function}][{$limitationKey}][compare] logic error, " .
-                        "could not find limitation compare function on {$className}::definition()"
-                    );
-                }
-
-                $limitationCompareFn = $functions[$function][$limitationKey]['compare'];
-                if ( !is_callable( $limitationCompareFn ) )
-                {
-                    throw new LogicException(
-                        "\$definition[functions][{$function}][{$limitationKey}][compare] logic error, " .
-                        "compare function from {$className}::definition() is not callable"
-                    );
-                }
-
-                if ( !$limitationCompareFn( $value, $limitationValues, $this, $target ) )
+                $type = $roleService->getLimitationType( $limitationValue->getIdentifier() );
+                if ( !$type->evaluate( $limitationValue, $this, $object, $target ) )
                 {
                     $limitationSetSaysYes = false;
                     // Break to next limitationSet
-                    break;
                     // If needed, there could be a if condition here building up an array of all limitations
-                    // that are denying user access
+                    // that are denying user access, for debug use.
+                    break;
                 }
             }
             if ( $limitationSetSaysYes )
                 return true;
         }
-        return false;
+        return false;// None of the limitation sets wanted to let you in, sorry!
     }
 
     /**

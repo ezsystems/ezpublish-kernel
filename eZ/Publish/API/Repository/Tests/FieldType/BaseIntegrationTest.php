@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\RepositoryTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\BaseIntegrationTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -290,13 +290,18 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
     /**
      * Creates a content type under test with $fieldSettings and
-     * $validatorConfiguration
+     * $validatorConfiguration.
+     *
+     * $typeCreateOverride and $fieldCreateOverride can be used to selectively
+     * override settings on the type create struct and field create struct.
      *
      * @param mixed $fieldSettings
      * @param mixed $validatorConfiguration
+     * @param array $typeCreateOverride
+     * @param array $fieldCreateOverride
      * @return \eZ\Publish\API\Repository\Values\ContentType
      */
-    protected function createContentType( $fieldSettings, $validatorConfiguration )
+    protected function createContentType( $fieldSettings, $validatorConfiguration, array $typeCreateOverride = array(), array $fieldCreateOverride = array() )
     {
         $repository         = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
@@ -304,9 +309,9 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $createStruct = $contentTypeService->newContentTypeCreateStruct(
             'test-' . $this->getTypeName()
         );
-        $createStruct->mainLanguageCode = 'eng-GB';
+        $createStruct->mainLanguageCode = $this->getOverride( 'mainLanguageCode', $typeCreateOverride, 'eng-GB' );
         $createStruct->remoteId     = $this->getTypeName();
-        $createStruct->names        = array( 'eng-GB' => 'Test' );
+        $createStruct->names        = $this->getOverride( 'names', $typeCreateOverride, array( 'eng-GB' => 'Test' ) );
         $createStruct->creatorId    = 14;
         $createStruct->creationDate = $this->getRepository()->createDateTime();
 
@@ -316,14 +321,16 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $nameFieldCreate->names      = array( 'eng-GB' => 'Title' );
         $nameFieldCreate->fieldGroup = 'main';
         $nameFieldCreate->position   = 1;
+        $nameFieldCreate->isTranslatable = true;
         $createStruct->addFieldDefinition( $nameFieldCreate );
 
         $dataFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
             'data', $this->getTypeName()
         );
-        $dataFieldCreate->names      = array( 'eng-GB' => 'Title' );
+        $dataFieldCreate->names      = $this->getOverride( 'names', $fieldCreateOverride, array( 'eng-GB' => 'Title' ) );
         $dataFieldCreate->fieldGroup = 'main';
         $dataFieldCreate->position   = 2;
+        $dataFieldCreate->isTranslatable = $this->getOverride( 'isTranslatable', $fieldCreateOverride, false );
 
         // Custom settings
         $dataFieldCreate->fieldSettings = $fieldSettings;
@@ -338,6 +345,20 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $contentType = $contentTypeService->loadContentType( $contentTypeDraft->id );
 
         return $contentType;
+    }
+
+    /**
+     * Retrieves a value for $key from $overrideValues, falling back to
+     * $default
+     *
+     * @param string $key
+     * @param array $overrideValues
+     * @param mixed $default
+     * @return mixed
+     */
+    protected function getOverride( $key, array $overrideValues, $default )
+    {
+        return ( isset( $overrideValues[$key] ) ? $overrideValues[$key] : $default );
     }
 
     /**
@@ -463,9 +484,12 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      * @param mixed $fieldData
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    protected function createContent( $fieldData )
+    protected function createContent( $fieldData, $contentType = null )
     {
-        $contentType = $this->testCreateContentType();
+        if ( $contentType === null )
+        {
+            $contentType = $this->testCreateContentType();
+        }
 
         $repository     = $this->getRepository();
         $contentService = $repository->getContentService();

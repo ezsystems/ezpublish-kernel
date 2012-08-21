@@ -10,11 +10,9 @@
 namespace eZ\Publish\MVC\Controller\Content;
 
 use eZ\Publish\MVC\Controller\Controller,
-    eZ\Publish\API\Repository\Repository,
     eZ\Publish\MVC\View\Manager as ViewManager,
     eZ\Publish\MVC\MVCEvents,
     eZ\Publish\MVC\Event\APIContentExceptionEvent,
-    Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\Response,
     Symfony\Component\OptionsResolver\OptionsResolver,
     Symfony\Component\OptionsResolver\OptionsResolverInterface;

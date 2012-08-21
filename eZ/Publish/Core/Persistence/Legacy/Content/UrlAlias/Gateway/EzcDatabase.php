@@ -14,9 +14,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     eZ\Publish\SPI\Persistence\Content\UrlAlias,
-    ezcQuery,
-    ezcQueryInsert,
-    ezcQueryUpdate;
+    ezcQuery;
 
 /**
  * UrlAlias Gateway
@@ -96,14 +94,14 @@ class EzcDatabase extends Gateway
     {
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $this->dbHandler->quoteColumn(
-                $this->dbHandler->quoteColumn( "id" ),
-                $this->dbHandler->quoteColumn( "link" ),
-                $this->dbHandler->quoteColumn( "is_alias" ),
-                $this->dbHandler->quoteColumn( "alias_redirects" ),
-                $this->dbHandler->quoteColumn( "lang_mask" ),
-                $this->dbHandler->quoteColumn( "is_original" )
-            )
+            $this->dbHandler->quoteColumn( "id" ),
+            $this->dbHandler->quoteColumn( "link" ),
+            $this->dbHandler->quoteColumn( "is_alias" ),
+            $this->dbHandler->quoteColumn( "alias_redirects" ),
+            $this->dbHandler->quoteColumn( "lang_mask" ),
+            $this->dbHandler->quoteColumn( "is_original" ),
+            $this->dbHandler->quoteColumn( "parent" ),
+            $this->dbHandler->quoteColumn( "text_md5" )
         )->from(
             $this->dbHandler->quoteTable( "ezurlalias_ml" )
         )->where(
@@ -129,13 +127,14 @@ class EzcDatabase extends Gateway
         $statement->execute();
 
         $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
-        foreach ( $rows as $row )
+        foreach ( $rows as &$row )
         {
             $row["path"] = $this->getPath( $row["id"], $prioritizedLanguageCodes );
             $row["type"] = $row["is_alias"] ? UrlAlias::VIRTUAL : UrlAlias::LOCATION;
             $row["forward"] = $row["is_alias"] && $row["alias_redirects"];
             $row["destination"] = $locationId;
             $row["always_available"] = (bool)( $row["lang_mask"] & 1 );
+            $row["language_codes"] = array();
             foreach ( $this->languageMaskGenerator->extractLanguageIdsFromMask( $row["lang_mask"] ) as $languageId )
             {
                 $row["language_codes"][] = $this->languageHandler->load( $languageId )->languageCode;

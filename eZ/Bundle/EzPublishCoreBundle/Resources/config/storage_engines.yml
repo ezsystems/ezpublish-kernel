@@ -42,6 +42,15 @@ parameters:
     ezpublish.fieldType.ezurl.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url
     ezpublish.fieldType.ezurl.storage_gateway.class: eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage
 
+    # Temporary workaround for ezpage, ezemail, ezimage, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
+    # a ezstring until proper implementation will be in place
+    ezpublish.fieldType.ezpage.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
+    ezpublish.fieldType.ezemail.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
+    ezpublish.fieldType.ezimage.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
+    ezpublish.fieldType.ezgmaplocation.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
+    ezpublish.fieldType.ezcomcomments.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
+    ezpublish.fieldType.ezobjectrelationlist.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
+
 services:
     ezpublish.api.storage_engine.in_memory:
         class: %ezpublish.api.storage_engine.in_memory.class%
@@ -160,3 +169,35 @@ services:
         class: %ezpublish.fieldType.ezurl.storage_gateway.class%
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezurl, identifier: LegacyStorage}
+
+    # Temporary workaround for ezpage, ezemail, ezimage, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
+    # a ezstring until proper implementation will be in place
+    ezpublish.fieldType.ezpage.converter:
+        class: %ezpublish.fieldType.ezpage.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezpage, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezemail.converter:
+        class: %ezpublish.fieldType.ezemail.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezemail, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezimage.converter:
+        class: %ezpublish.fieldType.ezimage.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezimage, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezgmaplocation.converter:
+        class: %ezpublish.fieldType.ezgmaplocation.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezgmaplocation, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezcomcomments.converter:
+        class: %ezpublish.fieldType.ezcomcomments.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezcomcomments, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezobjectrelationlist.converter:
+        class: %ezpublish.fieldType.ezobjectrelationlist.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezobjectrelationlist, lazy: true, callback: '::create'}

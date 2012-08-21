@@ -52,16 +52,13 @@ class Value extends BaseValue
      *
      * @var string
      * @required
-     * @todo This could better be an URI? E.g. file://… or http://… or …
      */
     public $path;
 
     /**
      * Construct a new Value object.
      *
-     * @param \eZ\Publish\API\Repository\IOService $IOService
-     * @param string|null $file
-     * @param string $alternativeText
+     * @param array $fileData
      */
     public function __construct( array $imageData = array() )
     {

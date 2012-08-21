@@ -15,8 +15,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
  * Test case for SearchHandler using in memory storage.
@@ -132,7 +131,7 @@ class SearchHandlerTest extends HandlerTest
      */
     public function testFindByLocationRemoteId()
     {
-        $content = $this->persistenceHandler->searchHandler()->findSingle( new LocationRemoteId( 'remoteIDForLocation2' ) );
+        $content = $this->persistenceHandler->searchHandler()->findSingle( new LocationRemoteId( 'f3e90596361e31d496d4026eb624c983' ) );
         $this->assertTrue( $content instanceof Content );
         $this->assertEquals( 1, $content->contentInfo->id );
     }

@@ -13,8 +13,7 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Legacy;
 use eZ\Publish\Core\Base\ConfigurationManager,
-    eZ\Publish\Core\Base\ServiceContainer,
-    ReflectionProperty;
+    eZ\Publish\Core\Base\ServiceContainer;
 
 /**
  * Common init code for legacy service tests, returns repository

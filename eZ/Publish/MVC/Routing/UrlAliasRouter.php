@@ -12,6 +12,7 @@ namespace eZ\Publish\MVC\Routing;
 use eZ\Publish\API\Repository\Repository,
     eZ\Publish\API\Repository\Values\Content\URLAlias,
     eZ\Publish\API\Repository\Exceptions\NotFoundException,
+    eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\MVC\View\Manager as ViewManager,
     Symfony\Component\Routing\RouterInterface,
     Symfony\Component\Routing\Matcher\RequestMatcherInterface,
@@ -24,7 +25,7 @@ use eZ\Publish\API\Repository\Repository,
 
 class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
 {
-    const URL_ALIAS_ROUTE_NAME = 'eZURLAliasRoute';
+    const URL_ALIAS_ROUTE_NAME = 'ez_urlalias';
 
     /**
      * @var \Symfony\Component\Routing\RequestContext
@@ -37,13 +38,20 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
     protected $urlAliasService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    protected $repository;
+
+    /**
      * @var \Symfony\Component\HttpKernel\Log\LoggerInterface
      */
     protected $logger;
 
-    public function __construct( Repository $repository, LoggerInterface $logger = null )
+    public function __construct( Repository $repository, RequestContext $requestContext, LoggerInterface $logger = null )
     {
         $this->urlAliasService = $repository->getURLAliasService();
+        $this->repository = $repository;
+        $this->requestContext = isset( $requestContext ) ? $requestContext : new RequestContext();
         $this->logger = $logger;
     }
 
@@ -122,7 +130,8 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
     }
 
     /**
-     * Generates a URL from the given parameters.
+     * Generates a URL for a location, from the given parameters.
+     * If applicable, the "location" key in $parameters must be set to a valid eZ\Publish\API\Repository\Values\Content\Location object.
      *
      * If the generator is not able to generate the url, it must throw the RouteNotFoundException
      * as documented below.
@@ -131,15 +140,62 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
      * @param mixed   $parameters An array of parameters
      * @param Boolean $absolute   Whether to generate an absolute URL
      *
+     * @throws \LogicException
+     * @throws \Symfony\Component\Routing\Exception\RouteNotFoundException
      * @return string The generated URL
-     *
-     * @throws RouteNotFoundException if route doesn't exist
      *
      * @api
      */
     public function generate( $name, $parameters = array(), $absolute = false )
     {
-        throw new RouteNotFoundException( 'Not implemented yet.' );
+        if ( $name === self::URL_ALIAS_ROUTE_NAME )
+        {
+            // We must have at least 'location' or 'locationId' to retrieve the UrlAlias
+            if ( !isset( $parameters['location'] ) && !isset( $parameters['locationId'] ) )
+            {
+                throw new \InvalidArgumentException(
+                    "When generating an UrlAlias route, either 'location' or 'locationId must be provided."
+                );
+            }
+
+            // Check if location is a valid Location object
+            if ( isset( $parameters['location'] ) && !$parameters['location'] instanceof Location )
+            {
+                throw new \LogicException(
+                    "When generating an UrlAlias route, 'location' parameter must be a valid eZ\\Publish\\API\\Repository\\Values\\Content\\Location."
+                );
+            }
+
+            $location = isset( $parameters['location'] ) ? $parameters['location'] : $this->repository->getLocationService()->loadLocation( $parameters['locationId'] );
+
+            $urlAliases = $this->urlAliasService->listLocationAliases(
+                $location,
+                false,
+                // TODO : Don't hardcode language. Build the Repository with configured prioritized languages instead.
+                'eng-GB'
+            );
+
+            $url = $this->requestContext->getBaseUrl() . '/' . $urlAliases[0]->path;
+            if ( $absolute )
+            {
+                $scheme = $this->requestContext->getScheme();
+                $port = '';
+                if ( $scheme === 'http' && $this->requestContext->getHttpPort() != 80 )
+                {
+                    $port = ':' . $this->requestContext->getHttpPort();
+                }
+                else if ( $scheme === 'https' && $this->requestContext->getHttpsPort() != 443 )
+                {
+                    $port = ':' . $this->requestContext->getHttpsPort();
+                }
+
+                $url = $scheme . '://' . $this->requestContext->getHost() . $port . $url;
+            }
+
+            return $url;
+        }
+
+        throw new RouteNotFoundException( 'Could not match route' );
     }
 
     public function setContext( RequestContext $context )

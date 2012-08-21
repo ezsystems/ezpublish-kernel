@@ -21,6 +21,19 @@ class LegacyStorage extends Gateway
     protected $dbHandler;
 
     /**
+     * Maps database field names to property names
+     *
+     * @var array
+     */
+    protected $fieldNameMap = array(
+        'id' => 'fieldId',
+        'version' => 'versionNo',
+        'language_code' => 'languageCode',
+        'path_identification_string' => 'nodePathString',
+        'data_string' => 'xml',
+    );
+
+    /**
      * Set database handler for this gateway
      *
      * @param mixed $dbHandler
@@ -115,6 +128,104 @@ class LegacyStorage extends Gateway
 
         $statement = $insertQuery->prepare();
         $statement->execute();
+    }
+
+    /**
+     * Returns a the XML content stored for the given $fieldIds
+     *
+     * @param array $fieldIds
+     * @return array
+     */
+    public function getXmlForImages( array $fieldIds )
+    {
+        $connection = $this->getConnection();
+
+        $selectQuery = $connection->createSelectQuery();
+        $selectQuery->select(
+            $connection->quoteColumn( 'id', 'ezcontentobject_attribute' ),
+            $connection->quoteColumn( 'data_text', 'ezcontentobject_attribute' )
+        )->from(
+            $connection->quoteTable( 'ezcontentobject_attribute' )
+        )->where(
+            $selectQuery->expr->lAnd(
+                $selectQuery->expr->in(
+                    $connection->quoteColumn( 'id', 'ezcontentobject_attribute' ),
+                    $fieldIds
+                )
+            )
+        );
+
+        $statement = $selectQuery->prepare();
+        $statement->execute();
+
+        $fieldLookup = array();
+        foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
+        {
+            $fieldLookup[$row['id']] = $row['data_text'];
+        }
+
+        return $fieldLookup;
+    }
+
+    /**
+     * Removes all references from $fieldId to a path that starts with $path
+     *
+     * @param string $path
+     * @param mixed $fieldId
+     * @return void
+     */
+    public function removeImageReferences( $path, $fieldId )
+    {
+        $connection = $this->getConnection();
+
+        $deleteQuery = $connection->createDeleteQuery();
+        $deleteQuery->deleteFrom(
+            $connection->quoteTable( 'ezimagefile' )
+        )->where(
+            $deleteQuery->expr->lAnd(
+                $deleteQuery->expr->eq(
+                    $connection->quoteColumn( 'contentobject_attribute_id' ),
+                    $deleteQuery->bindValue( $fieldId, null, \PDO::PARAM_INT )
+                ),
+                $deleteQuery->expr->like(
+                    $connection->quoteColumn( 'filepath' ),
+                    $deleteQuery->bindValue( $path . '%' )
+                )
+            )
+        );
+
+        $statement = $deleteQuery->prepare();
+        $statement->execute();
+    }
+
+    /**
+     * Returns the number of recorded references to the given $path
+     *
+     * @param string $path
+     * @return int
+     */
+    public function countImageReferences( $path )
+    {
+        $connection = $this->getConnection();
+
+        $selectQuery = $connection->createSelectQuery();
+        $selectQuery->select(
+            $selectQuery->expr->count(
+                $connection->quoteColumn( 'id' )
+            )
+        )->from(
+            $connection->quoteTable( 'ezimagefile' )
+        )->where(
+            $selectQuery->expr->like(
+                $connection->quoteColumn( 'filepath' ),
+                $selectQuery->bindValue( $path . '%' )
+            )
+        );
+
+        $statement = $selectQuery->prepare();
+        $statement->execute();
+
+        return (int)$statement->fetchColumn();
     }
 }
 

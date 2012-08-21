@@ -17,11 +17,9 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Version,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\Relation,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
     eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
@@ -733,7 +731,7 @@ class EzcDatabase extends Gateway
         $rows = array();
         while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
         {
-            $row['ezcontentobject_always_available'] = $this->languageMaskGenerator->isAlwaysAvailable( $row['ezcontentobject_version_language_mask'] );
+            $row['ezcontentobject_always_available'] = $this->languageMaskGenerator->isAlwaysAvailable( $row['ezcontentobject_language_mask'] );
             $row['ezcontentobject_main_language_code'] = $this->languageHandler->load( $row['ezcontentobject_initial_language_id'] )->languageCode;
             $row['ezcontentobject_version_languages'] = $this->languageMaskGenerator->extractLanguageIdsFromMask( $row['ezcontentobject_version_language_mask'] );
             $row['ezcontentobject_version_initial_language_code'] = $this->languageHandler->load( $row['ezcontentobject_version_initial_language_id'] )->languageCode;

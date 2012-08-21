@@ -14,13 +14,9 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\Relation as RelationValue,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\API\Repository\Values\Content\Relation,
-    eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
+    eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 /**
  * Test case for ContentHandler using in memory storage.

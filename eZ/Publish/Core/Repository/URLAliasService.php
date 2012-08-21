@@ -17,7 +17,8 @@ use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface,
     eZ\Publish\API\Repository\Values\Content\URLAlias,
     eZ\Publish\SPI\Persistence\Content\URLAlias as SPIURLAlias,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 
 /**
  * URLAlias service
@@ -124,13 +125,13 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * $alwaysAvailable makes the alias available in all languages.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
-     *
      * @param string $resource
      * @param string $path
-     * @param boolean $forward
      * @param string $languageCode
+     * @param boolean $forward
      * @param boolean $alwaysAvailable
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */

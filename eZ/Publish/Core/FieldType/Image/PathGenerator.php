@@ -8,19 +8,19 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Image;
-use eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field;
 
 abstract class PathGenerator
 {
     /**
-     * Generates the storage path for the given $field
+     * Generates the storage path for the field identified by parameters
      *
-     * Returns a relative storage path for the given $field.
+     * Returns a relative storage path.
      *
-     * @param VersionInfo $versionInfo
-     * @param Field $field
+     * @param mixed $fieldId
+     * @param int $versionNo
+     * @param strung $languageCode
+     * @param string $nodePathString
      * @return string
      */
-    abstract public function getStoragePathForField( VersionInfo $versionInfo, Field $field, $nodePathString );
+    abstract public function getStoragePathForField( $fieldId, $versionNo, $languageCode, $nodePathString );
 }

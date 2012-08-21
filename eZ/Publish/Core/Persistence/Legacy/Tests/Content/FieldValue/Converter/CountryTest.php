@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use eZ\Publish\Core\FieldType\Country\Value as CountryValue,
-    eZ\Publish\Core\FieldType\Country\Type as CountryType,
+use eZ\Publish\Core\FieldType\Country\Type as CountryType,
     eZ\Publish\Core\FieldType\FieldSettings,
     eZ\Publish\Core\Repository\ValidatorService,
     eZ\Publish\Core\Repository\FieldTypeTools,
@@ -19,9 +18,7 @@ use eZ\Publish\Core\FieldType\Country\Value as CountryValue,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country as CountryConverter,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
-    PHPUnit_Framework_TestCase,
-    DOMDocument,
-    DOMXPath;
+    PHPUnit_Framework_TestCase;
 
 /**
  * Test case for Country converter in Legacy storage

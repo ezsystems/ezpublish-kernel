@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator,
     eZ\Publish\SPI\Persistence\Content\Type,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,

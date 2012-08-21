@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\RepositoryTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\UserIntegrationTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\API\Repository,
-    eZ\Publish\Core\FieldType\User\Value as UserValue,
+use eZ\Publish\Core\FieldType\User\Value as UserValue,
     eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
@@ -18,7 +17,7 @@ use eZ\Publish\API\Repository,
  * @group integration
  * @group field-type
  */
-class UserFieldTypeIntergrationTest extends BaseIntegrationTest
+class UserIntegrationTest extends BaseIntegrationTest
 {
     /**
      * Identifier of the custom field
@@ -108,13 +107,7 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     public function getValidCreationFieldData()
     {
-        return new UserValue( array(
-            'accountKey' => null,
-            'isEnabled'  => true,
-            'lastVisit'  => null,
-            'loginCount' => 0,
-            'maxLogin'   => 1000,
-        ) );
+        return new UserValue();
     }
 
     /**
@@ -134,28 +127,21 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'accountKey' => null,
             'hasStoredLogin' => true,
-            'contentobjectId' => 226,
             'login' => 'hans',
             'email' => 'hans@example.com',
             'passwordHash' => '680869a9873105e365d39a6d14e68e46',
             'passwordHashType' => 2,
             'isLoggedIn' => true,
             'isEnabled' => true,
-            // @TODO: Fails because of maxLogin problem
-            // 'isLocked' => false,
-            'lastVisit' => null,
-            'loginCount' => null,
-            // @TODO: Currently not editable through UserService, tests will
-            // fail
-            // 'maxLogin' => 1000,
         );
 
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
         );
+
+        $this->assertNotNull( $field->value->contentObjectId );
     }
 
     /**
@@ -197,15 +183,11 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
     public function getValidUpdateFieldData()
     {
         return new UserValue( array(
-            'accountKey'       => 'foobar',
             'login'            => 'change', // Change is intended to not get through
             'email'            => 'change', // Change is intended to not get through
             'passwordHash'     => 'change', // Change is intended to not get through
             'passwordHashType' => 'change', // Change is intended to not get through
-            'lastVisit'        => 123456789,
-            'loginCount'       => 2300,
-            'isEnabled'        => 'changed', // Change is intended to not get through
-            'maxLogin'         => 'changed', // Change is intended to not get through
+            'isEnabled'        => 'change', // Change is intended to not get through
         ) );
     }
 
@@ -218,34 +200,8 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      */
     public function assertUpdatedFieldDataLoadedCorrect( Field $field )
     {
-        $this->assertInstanceOf(
-            'eZ\Publish\Core\FieldType\User\Value',
-            $field->value
-        );
-
-        $expectedData = array(
-            'accountKey' => 'foobar',
-            'hasStoredLogin' => true,
-            'contentobjectId' => 226,
-            'login' => 'hans',
-            'email' => 'hans@example.com',
-            'passwordHash' => '680869a9873105e365d39a6d14e68e46',
-            'passwordHashType' => 2,
-            'isLoggedIn' => true,
-            'isEnabled' => true,
-            // @TODO: Fails because of maxLogin problem
-            // 'isLocked' => true,
-            'lastVisit' => 123456789,
-            'loginCount' => 2300,
-            // @TODO: Currently not editable through UserService, tests will
-            // fail
-            // 'maxLogin' => 1000,
-        );
-
-        $this->assertPropertiesCorrect(
-            $expectedData,
-            $field->value
-        );
+        // No update possible through field type
+        $this->assertFieldDataLoadedCorrect( $field );
     }
 
     /**
@@ -296,18 +252,14 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'accountKey' => null,
             'hasStoredLogin' => false,
-            'contentobjectId' => null,
+            'contentObjectId' => null,
             'login' => null,
             'email' => null,
             'passwordHash' => null,
             'passwordHashType' => null,
             'isLoggedIn' => true,
             'isEnabled' => false,
-            'isLocked' => false,
-            'lastVisit' => null,
-            'loginCount' => null,
             'maxLogin' => null,
         );
 
@@ -345,9 +297,14 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
                 new UserValue( array( 'login' => 'hans' ) ),
                 array(
                     'login'      => 'hans',
-                    'accountKey' => null,
-                    'lastVisit'  => null,
-                    'loginCount' => null,
+                    'hasStoredLogin' => null,
+                    'contentObjectId' => null,
+                    'email' => null,
+                    'passwordHash' => null,
+                    'passwordHashType' => null,
+                    'isLoggedIn' => null,
+                    'isEnabled' => null,
+                    'maxLogin' => null,
                 ),
             ),
         );
@@ -389,7 +346,7 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      * @param mixed $fieldData
      * @return void
      */
-    protected function createContent( $fieldData )
+    protected function createContent( $fieldData, $contentType = null )
     {
         $repository  = $this->getRepository();
         $userService = $repository->getUserService();

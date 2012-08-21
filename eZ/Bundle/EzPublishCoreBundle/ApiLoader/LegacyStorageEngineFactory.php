@@ -12,7 +12,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor,
     Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LegacyStorageEngineFactory

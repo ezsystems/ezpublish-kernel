@@ -12,7 +12,6 @@ use eZ\Publish\Core\REST\Server\Tests\BaseTest;
 
 use eZ\Publish\Core\REST\Server\View;
 use eZ\Publish\Core\REST\Server\Values;
-use eZ\Publish\Core\REST\Common\Output;
 use eZ\Publish\Core\REST\Common\Message;
 
 use Qafoo\RMF;

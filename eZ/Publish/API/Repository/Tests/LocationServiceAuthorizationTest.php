@@ -10,13 +10,14 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use \eZ\Publish\API\Repository\Values\Content\Location;
-use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 
 /**
  * Test case for operations in the LocationService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\LocationService
  * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+ * @group integration
+ * @group authorization
  */
 class LocationServiceAuthorizationTest extends BaseTest
 {

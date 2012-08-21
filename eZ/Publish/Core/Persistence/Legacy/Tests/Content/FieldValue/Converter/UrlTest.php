@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use eZ\Publish\Core\FieldType\Url\Value as UrlValue,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
+use eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url as UrlConverter,

@@ -13,8 +13,6 @@ use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\API\Repository\SectionService;
 use eZ\Publish\Core\REST\Common\Exceptions;
 
-use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
-
 /**
  * Base class for input parser
  */

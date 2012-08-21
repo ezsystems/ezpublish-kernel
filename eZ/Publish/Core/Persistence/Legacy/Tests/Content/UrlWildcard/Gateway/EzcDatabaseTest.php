@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlWildcard\Gateway;
 
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase.

@@ -17,9 +17,6 @@ class ObjectStateTest extends BaseObjectStateServiceTest
 {
     protected function getRepository()
     {
-        // Temporary hack for different language ids between in memory and legacy fixtures
-        $this->defaultLanguageCode = 'eng-US';
-
         return Utils::getRepository();
     }
 }

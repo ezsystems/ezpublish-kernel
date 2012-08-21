@@ -16,13 +16,6 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 class Value extends BaseValue
 {
     /**
-     * Account key
-     *
-     * @var string
-     */
-    public $accountKey;
-
-    /**
      * Has stored login
      *
      * @var bool
@@ -34,7 +27,7 @@ class Value extends BaseValue
      *
      * @var mixed
      */
-    public $contentobjectId;
+    public $contentObjectId;
 
     /**
      * Login
@@ -77,27 +70,6 @@ class Value extends BaseValue
      * @var bool
      */
     public $isEnabled;
-
-    /**
-     * Is locked
-     *
-     * @var bool
-     */
-    public $isLocked;
-
-    /**
-     * Last visit timestamp
-     *
-     * @var int
-     */
-    public $lastVisit;
-
-    /**
-     * Login count
-     *
-     * @var int
-     */
-    public $loginCount;
 
     /**
      * Max login

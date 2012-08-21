@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     ezcQuerySelect,
     RuntimeException;
 

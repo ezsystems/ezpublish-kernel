@@ -8,13 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Media;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\Repository\ValidatorService,
+use eZ\Publish\Core\FieldType\BinaryBase\Type as BaseType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\API\Repository\FieldTypeTools,
-    eZ\Publish\API\Repository\Repository,
-    eZ\Publish\API\Repository\Values\IO\BinaryFile,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\FieldType\ValidationError;
 
 /**
@@ -22,8 +18,12 @@ use eZ\Publish\Core\FieldType\FieldType,
  *
  * This field type represents a simple string.
  */
-class Type extends FieldType
+class Type extends BaseType
 {
+
+    /**
+     * List of possible media type settings
+     */
     const TYPE_FLASH = 'flash',
           TYPE_QUICKTIME = 'quick_time',
           TYPE_REALPLAYER = 'real_player',
@@ -32,64 +32,28 @@ class Type extends FieldType
           TYPE_HTML5_VIDEO = 'html5_video',
           TYPE_HTML5_AUDIO = 'html5_audio';
 
-    protected $allowedValidators = array(
-        "FileSizeValidator"
+    /**
+     * Type constants for validation.
+     */
+    private static $availableTypes = array(
+        self::TYPE_FLASH,
+        self::TYPE_QUICKTIME,
+        self::TYPE_REALPLAYER,
+        self::TYPE_SILVERLIGHT,
+        self::TYPE_WINDOWSMEDIA,
+        self::TYPE_HTML5_VIDEO,
+        self::TYPE_HTML5_AUDIO
     );
 
-    /*
-     * mediaType can be one of those values:
-     *   - flash
-     *   - quick_time
-     *   - real_player
-     *   - silverlight
-     *   - windows_media_player
-     *   - html5_video
-     *   - html5_audio
-     *
-     * Default value for ezmedia is a media of HTML5 video type
+    /**
+     * @var array
      */
     protected $settingsSchema = array(
-        'mediaType' => self::TYPE_HTML5_VIDEO
+        'mediaType' => array(
+            'type' => 'choice',
+            'default' => self::TYPE_HTML5_VIDEO,
+        )
     );
-
-    /**
-     * @var \eZ\Publish\API\Repository\IOService
-     */
-    protected $IOService;
-
-    /**
-     * Holds an instance of validator service
-     *
-     * @var \eZ\Publish\Core\Repository\ValidatorService
-     */
-    protected $validatorService;
-
-    /**
-     * Constructs field type object, initializing internal data structures.
-     *
-     * @param \eZ\Publish\Core\Repository\ValidatorService $validatorService
-     * @param \eZ\Publish\API\Repository\FieldTypeTools $fieldTypeTools
-     * @param \eZ\Publish\API\Repository\Repository $repository
-     */
-    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools, Repository $repository )
-    {
-        parent::__construct( $validatorService, $fieldTypeTools );
-        $this->IOService = $repository->getIOService();
-    }
-
-    /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FiledType\Value object with the provided $file as value.
-     *
-     * @param string $file
-     * @return \eZ\Publish\Core\FieldType\Media\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $file )
-    {
-        return new Value( $this->IOService, $file );
-    }
 
     /**
      * Return the field type identifier for this field type
@@ -98,35 +62,64 @@ class Type extends FieldType
      */
     public function getFieldTypeIdentifier()
     {
-        return 'ezmedia';
+        return "ezmedia";
     }
 
     /**
-     * Returns the name of the given field value.
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
      *
-     * It will be used to generate content name and url alias if current field is designated
-     * to be used in the content name/urlAlias pattern.
+     * @param mixed $fieldSettings
      *
-     * @param mixed $value
-     *
-     * @return mixed
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function getName( $value )
+    public function validateFieldSettings( $fieldSettings )
     {
-        $value = $this->acceptValue( $value );
+        $validationErrors = array();
 
-        return $value->originalFilename;
+        foreach ( $fieldSettings as $name => $value )
+        {
+            if ( isset( $this->settingsSchema[$name] ) )
+            {
+                switch ( $name )
+                {
+                    case "mediaType":
+                        if ( !in_array( $value, self::$availableTypes ) )
+                        {
+                            $validationErrors[] = new ValidationError(
+                                "Setting '%setting%' is of unknown type",
+                                null,
+                                array(
+                                    "setting" => $name
+                                )
+                            );
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                $validationErrors[] = new ValidationError(
+                    "Setting '%setting%' is unknown",
+                    null,
+                    array(
+                        "setting" => $name
+                    )
+                );
+            }
+        }
+
+        return $validationErrors;
     }
 
     /**
-     * Returns the fallback default value of field type when no such default
-     * value is provided in the field definition in content types.
+     * Creates a specific value of the derived class from $inputValue
      *
-     * @return \eZ\Publish\Core\FieldType\Media\Value
+     * @param array $inputValue
+     * @return Value
      */
-    public function getEmptyValue()
+    protected function createValue( array $inputValue )
     {
-        return new Value( $this->IOService );
+        return new Value( $inputValue );
     }
 
     /**
@@ -141,6 +134,14 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        $inputValue = parent::acceptValue( $inputValue );
+
+        if ( $inputValue === null )
+        {
+            // Empty value
+            return null;
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
@@ -150,12 +151,45 @@ class Type extends FieldType
             );
         }
 
-        if ( isset( $inputValue->file ) && !$inputValue->file instanceof BinaryFile )
+        if ( !is_bool( $inputValue->hasController ) )
         {
             throw new InvalidArgumentType(
-                '$inputValue->file',
-                'eZ\Publish\API\Repository\Values\IO\BinaryFile',
-                $inputValue->file
+                '$inputValue->hasController',
+                'bool',
+                $inputValue->hasController
+            );
+        }
+        if ( !is_bool( $inputValue->autoplay ) )
+        {
+            throw new InvalidArgumentType(
+                '$inputValue->autoplay',
+                'bool',
+                $inputValue->autoplay
+            );
+        }
+        if ( !is_bool( $inputValue->loop ) )
+        {
+            throw new InvalidArgumentType(
+                '$inputValue->loop',
+                'bool',
+                $inputValue->loop
+            );
+        }
+
+        if ( !is_int( $inputValue->height ) )
+        {
+            throw new InvalidArgumentType(
+                '$inputValue->height',
+                'int',
+                $inputValue->height
+            );
+        }
+        if ( !is_int( $inputValue->width ) )
+        {
+            throw new InvalidArgumentType(
+                '$inputValue->width',
+                'int',
+                $inputValue->width
             );
         }
 
@@ -163,26 +197,36 @@ class Type extends FieldType
     }
 
     /**
-     * BinaryFile does not support sorting
+     * Attempts to complete the data in $value
      *
-     * @return bool
+     * @param Value $value
+     * @return void
      */
-    protected function getSortInfo( $value )
+    protected function completeValue( $value )
     {
-        return false;
-    }
+        parent::completeValue( $value );
 
-    /**
-     * Converts an $hash to the Value defined by the field type
-     *
-     * @param mixed $hash
-     *
-     * @return \eZ\Publish\Core\FieldType\Media\Value $value
-     */
-    public function fromHash( $hash )
-    {
-        throw new \Exception( "Not implemented yet" );
-        return new Value( $this->IOService, $hash );
+        if ( !isset( $value->hasController ) )
+        {
+            $value->hasController = false;
+        }
+        if ( !isset( $value->autoplay ) )
+        {
+            $value->autoplay = false;
+        }
+        if ( !isset( $value->loop ) )
+        {
+            $value->loop = false;
+        }
+
+        if ( !isset( $value->height ) )
+        {
+            $value->height = 0;
+        }
+        if ( !isset( $value->width ) )
+        {
+            $value->width = 0;
+        }
     }
 
     /**
@@ -194,7 +238,57 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
-        throw new \Exception( "Not implemented yet" );
-        return $value->value;
+        $hash = parent::toHash( $value );
+
+        if ( $hash === null )
+        {
+            return $hash;
+        }
+
+        $hash['hasController'] = $value->hasController;
+        $hash['autoplay'] = $value->autoplay;
+        $hash['loop'] = $value->loop;
+        $hash['width'] = $value->width;
+        $hash['height'] = $value->height;
+
+        return $hash;
+    }
+
+    /**
+     * Converts a persistence $fieldValue to a Value
+     *
+     * This method builds a field type value from the $data and $externalData properties.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
+     *
+     * @return mixed
+     */
+    public function fromPersistenceValue( FieldValue $fieldValue )
+    {
+        $result = parent::fromPersistenceValue( $fieldValue );
+
+        if ( $result === null )
+        {
+            // empty value
+            return null;
+        }
+
+        $result->hasController = ( isset( $fieldValue->externalData['hasController'] )
+            ? $fieldValue->externalData['hasController']
+            : false );
+        $result->autoplay = ( isset( $fieldValue->externalData['autoplay'] )
+            ? $fieldValue->externalData['autoplay']
+            : false );
+        $result->loop = ( isset( $fieldValue->externalData['loop'] )
+            ? $fieldValue->externalData['loop']
+            : false );
+        $result->height = ( isset( $fieldValue->externalData['height'] )
+            ? $fieldValue->externalData['height']
+            : 0 );
+        $result->width = ( isset( $fieldValue->externalData['width'] )
+            ? $fieldValue->externalData['width']
+            : 0 );
+
+        return $result;
     }
 }

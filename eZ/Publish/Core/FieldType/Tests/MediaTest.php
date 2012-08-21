@@ -9,169 +9,225 @@
 
 namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Media\Type as MediaType,
-    eZ\Publish\Core\FieldType\Media\Value as MediaValue,
-    eZ\Publish\Core\FieldType\Media\Handler as MediaHandler,
-    eZ\Publish\Core\Repository\Repository,
-    eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
-    eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,
-    SplFileInfo as FileInfo,
-    ReflectionObject;
+    eZ\Publish\Core\FieldType\Media\Value as MediaValue;
 
 /**
  * @group fieldType
- * @group ezmedia
+ * @group ezbinaryfile
  */
-class MediaTest extends FieldTypeTest
+class MediaTest extends BinaryBaseTest
 {
     /**
-     * Path to test media
-     * @var string
-     */
-    protected $mediaPath;
-
-    /**
-     * FileInfo object for test image
-     * @var \splFileInfo
-     */
-    protected $mediaFileInfo;
-
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    protected $repository;
-
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->repository = new Repository(
-            new InMemoryPersistenceHandler( $this->validatorService, $this->fieldTypeTools ),
-            new InMemoryIOHandler()
-        );
-        $this->mediaPath = __DIR__ . '/developer-got-hurt.m4v';
-        $this->mediaFileInfo = new FileInfo( $this->mediaPath );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
-     */
-    public function testValidatorConfigurationSchema()
-    {
-        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository );
-        self::assertSame(
-            array(
-                "FileSizeValidator" => array(
-                    "maxFileSize" => array(
-                        "type" => "int",
-                        "default" => false
-                    )
-                )
-            ),
-            $ft->getValidatorConfigurationSchema(),
-            "The validator configuration schema does not match what is expected."
-        );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
-     */
-    public function testSettingsSchema()
-    {
-        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository );
-        self::assertSame(
-            array(
-                'mediaType' => MediaType::TYPE_HTML5_VIDEO
-            ),
-            $ft->getSettingsSchema(),
-            "The settings schema does not match what is expected."
-        );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Media\Type::acceptValue
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function testAcceptValueInvalidFormat()
-    {
-        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository );
-        $invalidValue = $ft->getEmptyValue();
-        $invalidValue->file = 'This is definitely not a binary file !';
-        $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'acceptValue' );
-        $refMethod->setAccessible( true );
-        $refMethod->invoke( $ft, $invalidValue );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Media\Type::acceptValue
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function testAcceptInvalidValue()
-    {
-        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository );
-        $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'acceptValue' );
-        $refMethod->setAccessible( true );
-        $refMethod->invoke( $ft, $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Value' ) );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Media\Type::acceptValue
-     */
-    public function testAcceptValueValidFormat()
-    {
-        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository );
-        $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'acceptValue' );
-        $refMethod->setAccessible( true );
-
-        $value = $ft->buildValue( $this->mediaPath );
-        self::assertSame( $value, $refMethod->invoke( $ft, $value ) );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Media\Value::__construct
-     */
-    public function testBuildFieldValueFromString()
-    {
-        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository );
-        $value = $ft->buildValue( $this->mediaPath );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\FieldType\\Media\\Value', $value );
-        self::assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\IO\\BinaryFile', $value->file );
-        self::assertSame( $this->mediaFileInfo->getBasename(), $value->originalFilename );
-        self::assertSame( $value->originalFilename, $value->file->originalFile );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Media\Value::__toString
-     */
-    public function testFieldValueToString()
-    {
-        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository );
-        $value = $ft->buildValue( $this->mediaPath );
-        self::assertSame( $value->file->id, (string)$value );
-    }
-
-    /**
-     * Tests legacy properties, not directly accessible from Value object
+     * Returns the field type under test.
      *
-     * @covers \eZ\Publish\Core\FieldType\Media\Value::__get
+     * This method is used by all test cases to retrieve the field type under
+     * test. Just create the FieldType instance using mocks from the provided
+     * get*Mock() methods and/or custom get*Mock() implementations. You MUST
+     * NOT take care for test case wide caching of the field type, just return
+     * a new instance from this method!
+     *
+     * @return FieldType
      */
-    public function testVirtualLegacyProperty()
+    protected function createFieldTypeUnderTest()
     {
-        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository );
-        $value = $ft->buildValue( $this->mediaPath );
-        self::assertSame( basename( $value->file->id ), $value->filename );
-        self::assertSame( $value->file->mimeType, $value->mimeType );
+        return new MediaType(
+            $this->getValidatorServiceMock(),
+            $this->getFieldTypeToolsMock(),
+            $this->getFileServiceMock(),
+            $this->getMimeTypeDetectorMock()
+        );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Media\Value::__get
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
-     */
-    public function testInvalidVirtualProperty()
+    public function provideInvalidInputForAcceptValue()
     {
-        $ft = new MediaType( $this->validatorService, $this->fieldTypeTools, $this->repository );
-        $value = $ft->buildValue( $this->mediaPath );
-        $value->nonExistingProperty;
+        $baseInput = parent::provideInvalidInputForAcceptValue();
+        $binaryFileInput = array(
+            array(
+                new MediaValue(),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+            array(
+                new MediaValue( array( 'path' => '/foo/bar' ) ),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+            array(
+                new MediaValue( array( 'hasController' => 'yes' ) ),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+            array(
+                new MediaValue( array( 'autoplay' => 'yes' ) ),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+            array(
+                new MediaValue( array( 'loop' => 'yes' ) ),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+            array(
+                new MediaValue( array( 'height' => array() ) ),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+            array(
+                new MediaValue( array( 'width' => new \stdClass() ) ),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+        );
+        return array_merge( $baseInput, $binaryFileInput );
+    }
+
+    public function provideValidInputForAcceptValue()
+    {
+        return array(
+            array(
+                null,
+                null
+            ),
+            array(
+                __FILE__,
+                new MediaValue( array(
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => filesize( __FILE__ ),
+                    'mimeType' => 'text/plain',
+                    'hasController' => false,
+                    'autoplay' => false,
+                    'loop' => false,
+                    'width' => 0,
+                    'height' => 0,
+                ) )
+            ),
+            array(
+                array( 'path' => __FILE__ ),
+                new MediaValue( array(
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => filesize( __FILE__ ),
+                    'mimeType' => 'text/plain',
+                    'hasController' => false,
+                    'autoplay' => false,
+                    'loop' => false,
+                    'width' => 0,
+                    'height' => 0,
+                ) )
+            ),
+            array(
+                array(
+                    'path' => __FILE__,
+                    'fileSize' => 23,
+                ),
+                new MediaValue( array(
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => 23,
+                    'mimeType' => 'text/plain',
+                    'hasController' => false,
+                    'autoplay' => false,
+                    'loop' => false,
+                    'width' => 0,
+                    'height' => 0,
+                ) )
+            ),
+            array(
+                array(
+                    'path' => __FILE__,
+                    'mimeType' => 'application/text+php',
+                ),
+                new MediaValue( array(
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => filesize( __FILE__ ),
+                    'mimeType' => 'application/text+php',
+                    'hasController' => false,
+                    'autoplay' => false,
+                    'loop' => false,
+                    'width' => 0,
+                    'height' => 0,
+                ) )
+            ),
+            array(
+                array(
+                    'path' => __FILE__,
+                    'hasController' => true,
+                ),
+                new MediaValue( array(
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => filesize( __FILE__ ),
+                    'mimeType' => 'text/plain',
+                    'hasController' => true,
+                    'autoplay' => false,
+                    'loop' => false,
+                    'width' => 0,
+                    'height' => 0,
+                ) )
+            ),
+            array(
+                array(
+                    'path' => __FILE__,
+                    'autoplay' => true,
+                ),
+                new MediaValue( array(
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => filesize( __FILE__ ),
+                    'mimeType' => 'text/plain',
+                    'hasController' => false,
+                    'autoplay' => true,
+                    'loop' => false,
+                    'width' => 0,
+                    'height' => 0,
+                ) )
+            ),
+            array(
+                array(
+                    'path' => __FILE__,
+                    'loop' => true,
+                ),
+                new MediaValue( array(
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => filesize( __FILE__ ),
+                    'mimeType' => 'text/plain',
+                    'hasController' => false,
+                    'autoplay' => false,
+                    'loop' => true,
+                    'width' => 0,
+                    'height' => 0,
+                ) )
+            ),
+            array(
+                array(
+                    'path' => __FILE__,
+                    'width' => 23,
+                ),
+                new MediaValue( array(
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => filesize( __FILE__ ),
+                    'mimeType' => 'text/plain',
+                    'hasController' => false,
+                    'autoplay' => false,
+                    'loop' => false,
+                    'width' => 23,
+                    'height' => 0,
+                ) )
+            ),
+            array(
+                array(
+                    'path' => __FILE__,
+                    'height' => 42,
+                ),
+                new MediaValue( array(
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => filesize( __FILE__ ),
+                    'mimeType' => 'text/plain',
+                    'hasController' => false,
+                    'autoplay' => false,
+                    'loop' => false,
+                    'width' => 0,
+                    'height' => 42,
+                ) )
+            ),
+        );
     }
 }

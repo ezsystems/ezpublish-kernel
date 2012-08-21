@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\ContentSearchHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandlerSortTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,17 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
     eZ\Publish\Core\Persistence\Legacy\Content,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     eZ\Publish\SPI\Persistence\Content as ContentObject,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
-    eZ\Publish\SPI\Persistence\Content\Language,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\SPI\Persistence;
+    eZ\Publish\API\Repository\Values\Content\Query;
 
 /**
  * Test case for ContentSearchHandler

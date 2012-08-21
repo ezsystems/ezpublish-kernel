@@ -12,8 +12,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\FieldType\Url\Value as UrlValue;
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 class Url implements Converter
 {

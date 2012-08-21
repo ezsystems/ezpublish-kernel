@@ -11,7 +11,6 @@ namespace eZ\Publish\MVC\Controller;
 
 use Symfony\Component\DependencyInjection\ContainerAware,
     Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\Routing\RouterInterface,
     Symfony\Component\HttpFoundation\Response;
 
 abstract class Controller extends ContainerAware

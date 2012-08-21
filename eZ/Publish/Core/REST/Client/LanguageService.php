@@ -15,7 +15,6 @@ use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 use \eZ\Publish\Core\REST\Common\UrlHandler;
 use \eZ\Publish\Core\REST\Common\Input;
 use \eZ\Publish\Core\REST\Common\Output;
-use \eZ\Publish\Core\REST\Common\Message;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\LanguageService}

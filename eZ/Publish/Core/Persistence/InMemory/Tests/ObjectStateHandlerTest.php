@@ -50,10 +50,10 @@ class ObjectStateHandlerTest extends HandlerTest
 
         $this->assertEquals( 3, $createdGroup->id );
         $this->assertEquals( 'test', $createdGroup->identifier );
-        $this->assertEquals( 'eng-GB', $createdGroup->defaultLanguage );
-        $this->assertEquals( array( 'eng-GB' ), $createdGroup->languageCodes );
-        $this->assertEquals( array( 'eng-GB' => 'Test' ), $createdGroup->name );
-        $this->assertEquals( array( 'eng-GB' => 'Test description' ), $createdGroup->description );
+        $this->assertEquals( 'eng-US', $createdGroup->defaultLanguage );
+        $this->assertEquals( array( 'eng-US' ), $createdGroup->languageCodes );
+        $this->assertEquals( array( 'eng-US' => 'Test' ), $createdGroup->name );
+        $this->assertEquals( array( 'eng-US' => 'Test description' ), $createdGroup->description );
     }
 
     /**
@@ -67,10 +67,10 @@ class ObjectStateHandlerTest extends HandlerTest
 
         $this->assertEquals( 2, $group->id );
         $this->assertEquals( 'ez_lock', $group->identifier );
-        $this->assertEquals( 'eng-GB', $group->defaultLanguage );
-        $this->assertEquals( array( 'eng-GB' ), $group->languageCodes );
-        $this->assertEquals( array( 'eng-GB' => 'Lock' ), $group->name );
-        $this->assertEquals( array( 'eng-GB' => '' ), $group->description );
+        $this->assertEquals( 'eng-US', $group->defaultLanguage );
+        $this->assertEquals( array( 'eng-US' ), $group->languageCodes );
+        $this->assertEquals( array( 'eng-US' => 'Lock' ), $group->name );
+        $this->assertEquals( array( 'eng-US' => '' ), $group->description );
     }
 
     /**
@@ -95,10 +95,10 @@ class ObjectStateHandlerTest extends HandlerTest
 
         $this->assertEquals( 2, $groups[0]->id );
         $this->assertEquals( 'ez_lock', $groups[0]->identifier );
-        $this->assertEquals( 'eng-GB', $groups[0]->defaultLanguage );
-        $this->assertEquals( array( 'eng-GB' ), $groups[0]->languageCodes );
-        $this->assertEquals( array( 'eng-GB' => 'Lock' ), $groups[0]->name );
-        $this->assertEquals( array( 'eng-GB' => '' ), $groups[0]->description );
+        $this->assertEquals( 'eng-US', $groups[0]->defaultLanguage );
+        $this->assertEquals( array( 'eng-US' ), $groups[0]->languageCodes );
+        $this->assertEquals( array( 'eng-US' => 'Lock' ), $groups[0]->name );
+        $this->assertEquals( array( 'eng-US' => '' ), $groups[0]->description );
     }
 
     /**
@@ -115,10 +115,10 @@ class ObjectStateHandlerTest extends HandlerTest
         $this->assertEquals( 1, $states[0]->id );
         $this->assertEquals( 2, $states[0]->groupId );
         $this->assertEquals( 'not_locked', $states[0]->identifier );
-        $this->assertEquals( 'eng-GB', $states[0]->defaultLanguage );
-        $this->assertEquals( array( 'eng-GB' ), $states[0]->languageCodes );
-        $this->assertEquals( array( 'eng-GB' => 'Not locked' ), $states[0]->name );
-        $this->assertEquals( array( 'eng-GB' => '' ), $states[0]->description );
+        $this->assertEquals( 'eng-US', $states[0]->defaultLanguage );
+        $this->assertEquals( array( 'eng-US' ), $states[0]->languageCodes );
+        $this->assertEquals( array( 'eng-US' => 'Not locked' ), $states[0]->name );
+        $this->assertEquals( array( 'eng-US' => '' ), $states[0]->description );
         $this->assertEquals( 0, $states[0]->priority );
 
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState', $states[1] );
@@ -126,10 +126,10 @@ class ObjectStateHandlerTest extends HandlerTest
         $this->assertEquals( 2, $states[1]->id );
         $this->assertEquals( 2, $states[1]->groupId );
         $this->assertEquals( 'locked', $states[1]->identifier );
-        $this->assertEquals( 'eng-GB', $states[1]->defaultLanguage );
-        $this->assertEquals( array( 'eng-GB' ), $states[1]->languageCodes );
-        $this->assertEquals( array( 'eng-GB' => 'Locked' ), $states[1]->name );
-        $this->assertEquals( array( 'eng-GB' => '' ), $states[1]->description );
+        $this->assertEquals( 'eng-US', $states[1]->defaultLanguage );
+        $this->assertEquals( array( 'eng-US' ), $states[1]->languageCodes );
+        $this->assertEquals( array( 'eng-US' => 'Locked' ), $states[1]->name );
+        $this->assertEquals( array( 'eng-US' => '' ), $states[1]->description );
         $this->assertEquals( 1, $states[1]->priority );
     }
 
@@ -144,10 +144,10 @@ class ObjectStateHandlerTest extends HandlerTest
 
         $this->assertEquals( 2, $updatedGroup->id );
         $this->assertEquals( 'test', $updatedGroup->identifier );
-        $this->assertEquals( 'eng-GB', $updatedGroup->defaultLanguage );
-        $this->assertEquals( array( 'eng-GB' ), $updatedGroup->languageCodes );
-        $this->assertEquals( array( 'eng-GB' => 'Test' ), $updatedGroup->name );
-        $this->assertEquals( array( 'eng-GB' => 'Test description' ), $updatedGroup->description );
+        $this->assertEquals( 'eng-US', $updatedGroup->defaultLanguage );
+        $this->assertEquals( array( 'eng-US' ), $updatedGroup->languageCodes );
+        $this->assertEquals( array( 'eng-US' => 'Test' ), $updatedGroup->name );
+        $this->assertEquals( array( 'eng-US' => 'Test description' ), $updatedGroup->description );
     }
 
     /**
@@ -200,10 +200,10 @@ class ObjectStateHandlerTest extends HandlerTest
         $this->assertEquals( 3, $createdState->id );
         $this->assertEquals( 2, $createdState->groupId );
         $this->assertEquals( 'test', $createdState->identifier );
-        $this->assertEquals( 'eng-GB', $createdState->defaultLanguage );
-        $this->assertEquals( array( 'eng-GB' ), $createdState->languageCodes );
-        $this->assertEquals( array( 'eng-GB' => 'Test' ), $createdState->name );
-        $this->assertEquals( array( 'eng-GB' => 'Test description' ), $createdState->description );
+        $this->assertEquals( 'eng-US', $createdState->defaultLanguage );
+        $this->assertEquals( array( 'eng-US' ), $createdState->languageCodes );
+        $this->assertEquals( array( 'eng-US' => 'Test' ), $createdState->name );
+        $this->assertEquals( array( 'eng-US' => 'Test description' ), $createdState->description );
         $this->assertEquals( 2, $createdState->priority );
     }
 
@@ -220,10 +220,10 @@ class ObjectStateHandlerTest extends HandlerTest
         $this->assertEquals( 3, $createdState->id );
         $this->assertEquals( $createdGroup->id, $createdState->groupId );
         $this->assertEquals( 'test', $createdState->identifier );
-        $this->assertEquals( 'eng-GB', $createdState->defaultLanguage );
-        $this->assertEquals( array( 'eng-GB' ), $createdState->languageCodes );
-        $this->assertEquals( array( 'eng-GB' => 'Test' ), $createdState->name );
-        $this->assertEquals( array( 'eng-GB' => 'Test description' ), $createdState->description );
+        $this->assertEquals( 'eng-US', $createdState->defaultLanguage );
+        $this->assertEquals( array( 'eng-US' ), $createdState->languageCodes );
+        $this->assertEquals( array( 'eng-US' => 'Test' ), $createdState->name );
+        $this->assertEquals( array( 'eng-US' => 'Test description' ), $createdState->description );
         $this->assertEquals( 0, $createdState->priority );
 
         $this->assertEquals( 7, $this->handler->getContentCount( $createdState->id ) );
@@ -241,10 +241,10 @@ class ObjectStateHandlerTest extends HandlerTest
         $this->assertEquals( 1, $state->id );
         $this->assertEquals( 2, $state->groupId );
         $this->assertEquals( 'not_locked', $state->identifier );
-        $this->assertEquals( 'eng-GB', $state->defaultLanguage );
-        $this->assertEquals( array( 'eng-GB' ), $state->languageCodes );
-        $this->assertEquals( array( 'eng-GB' => 'Not locked' ), $state->name );
-        $this->assertEquals( array( 'eng-GB' => '' ), $state->description );
+        $this->assertEquals( 'eng-US', $state->defaultLanguage );
+        $this->assertEquals( array( 'eng-US' ), $state->languageCodes );
+        $this->assertEquals( array( 'eng-US' => 'Not locked' ), $state->name );
+        $this->assertEquals( array( 'eng-US' => '' ), $state->description );
         $this->assertEquals( 0, $state->priority );
     }
 
@@ -269,10 +269,10 @@ class ObjectStateHandlerTest extends HandlerTest
         $this->assertEquals( 1, $updatedState->id );
         $this->assertEquals( 2, $updatedState->groupId );
         $this->assertEquals( 'test', $updatedState->identifier );
-        $this->assertEquals( 'eng-GB', $updatedState->defaultLanguage );
-        $this->assertEquals( array( 'eng-GB' ), $updatedState->languageCodes );
-        $this->assertEquals( array( 'eng-GB' => 'Test' ), $updatedState->name );
-        $this->assertEquals( array( 'eng-GB' => 'Test description' ), $updatedState->description );
+        $this->assertEquals( 'eng-US', $updatedState->defaultLanguage );
+        $this->assertEquals( array( 'eng-US' ), $updatedState->languageCodes );
+        $this->assertEquals( array( 'eng-US' => 'Test' ), $updatedState->name );
+        $this->assertEquals( array( 'eng-US' => 'Test description' ), $updatedState->description );
         $this->assertEquals( 0, $updatedState->priority );
     }
 
@@ -365,9 +365,9 @@ class ObjectStateHandlerTest extends HandlerTest
         $inputStruct = new InputStruct();
 
         $inputStruct->identifier = 'test';
-        $inputStruct->defaultLanguage = 'eng-GB';
-        $inputStruct->name = array( 'eng-GB' => 'Test' );
-        $inputStruct->description = array( 'eng-GB' => 'Test description' );
+        $inputStruct->defaultLanguage = 'eng-US';
+        $inputStruct->name = array( 'eng-US' => 'Test' );
+        $inputStruct->description = array( 'eng-US' => 'Test description' );
 
         return $inputStruct;
     }

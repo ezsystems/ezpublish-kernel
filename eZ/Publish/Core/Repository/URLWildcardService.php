@@ -15,11 +15,10 @@ use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface,
     eZ\Publish\SPI\Persistence\Handler,
     eZ\Publish\API\Repository\Values\Content\URLWildcard,
     eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult,
-    eZ\Publish\API\Repository\Exceptions\UnauthorizedException,
     eZ\Publish\SPI\Persistence\Content\UrlWildcard as SPIUrlWildcard,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\ContentValidationException;
+    eZ\Publish\Core\Base\Exceptions\ContentValidationException,
+    eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 
 /**
  * URLAlias service
@@ -76,6 +75,10 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     public function create( $sourceUrl, $destinationUrl, $forward = false )
     {
+        if ( $this->repository->hasAccess( 'content', 'urltranslator' ) !== true )
+            throw new UnauthorizedException( 'content', 'urltranslator' );
+
+        // @todo This needs to be optimized
         $spiUrlWildcards = $this->persistenceHandler->urlWildcardHandler()->loadAll();
         foreach ( $spiUrlWildcards as $wildcard )
         {
@@ -132,6 +135,9 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     public function remove( URLWildcard $urlWildcard )
     {
+        if ( $this->repository->hasAccess( 'content', 'urltranslator' ) !== true )
+            throw new UnauthorizedException( 'content', 'urltranslator' );
+
         $this->repository->beginTransaction();
         try
         {

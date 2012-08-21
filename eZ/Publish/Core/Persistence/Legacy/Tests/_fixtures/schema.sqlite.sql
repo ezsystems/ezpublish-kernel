@@ -6,6 +6,22 @@ CREATE TABLE 'ezbinaryfile' (
 	'original_filename' text(255) NOT NULL,
 	'version' integer NOT NULL DEFAULT 0
 );
+CREATE TABLE 'ezmedia' (
+  'contentobject_attribute_id' integer NOT NULL DEFAULT 0,
+  'controls' text(50) DEFAULT NULL,
+  'filename' text(255) NOT NULL DEFAULT '',
+  'has_controller' integer DEFAULT 0,
+  'height' integer DEFAULT NULL,
+  'is_autoplay' integer DEFAULT 0,
+  'is_loop' integer DEFAULT 0,
+  'mime_type' text(50) NOT NULL DEFAULT '',
+  'original_filename' text(255) NOT NULL DEFAULT '',
+  'pluginspage' text(255) DEFAULT NULL,
+  'quality' text(50) DEFAULT NULL,
+  'version' integer NOT NULL DEFAULT 0,
+  'width' integer DEFAULT NULL,
+  PRIMARY KEY ('contentobject_attribute_id','version')
+);
 CREATE TABLE 'ezimagefile' (
 	'contentobject_attribute_id' integer NOT NULL DEFAULT 0,
 	'filepath' text NOT NULL,

@@ -23,13 +23,6 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
 abstract class ObjectStateBase extends BaseServiceTest
 {
     /**
-     * Temporary hack for different language ids between in memory and legacy fixtures
-     *
-     * @var string
-     */
-    protected $defaultLanguageCode;
-
-    /**
      * Test a new class and default values on properties
      * @covers \eZ\Publish\API\Repository\Values\ObjectState\ObjectState::__construct
      * @covers \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup::__construct
@@ -210,10 +203,10 @@ abstract class ObjectStateBase extends BaseServiceTest
             array(
                 'id' => 2,
                 'identifier' => 'ez_lock',
-                'defaultLanguageCode' => $this->defaultLanguageCode,
-                'languageCodes' => array( $this->defaultLanguageCode ),
-                'names' => array( $this->defaultLanguageCode => 'Lock' ),
-                'descriptions' => array( $this->defaultLanguageCode => '' )
+                'defaultLanguageCode' => 'eng-US',
+                'languageCodes' => array( 'eng-US' ),
+                'names' => array( 'eng-US' => 'Lock' ),
+                'descriptions' => array( 'eng-US' => '' )
             ),
             $group
         );
@@ -473,10 +466,10 @@ abstract class ObjectStateBase extends BaseServiceTest
                 'id' => 1,
                 'identifier' => 'not_locked',
                 'priority' => 0,
-                'defaultLanguageCode' => $this->defaultLanguageCode,
-                'languageCodes' => array( $this->defaultLanguageCode ),
-                'names' => array( $this->defaultLanguageCode => 'Not locked' ),
-                'descriptions' => array( $this->defaultLanguageCode => '' )
+                'defaultLanguageCode' => 'eng-US',
+                'languageCodes' => array( 'eng-US' ),
+                'names' => array( 'eng-US' => 'Not locked' ),
+                'descriptions' => array( 'eng-US' => '' )
             ),
             $state
         );
@@ -673,10 +666,10 @@ abstract class ObjectStateBase extends BaseServiceTest
                 'id' => 1,
                 'identifier' => 'not_locked',
                 'priority' => 0,
-                'defaultLanguageCode' => $this->defaultLanguageCode,
-                'languageCodes' => array( $this->defaultLanguageCode ),
-                'names' => array( $this->defaultLanguageCode => 'Not locked' ),
-                'descriptions' => array( $this->defaultLanguageCode => '' )
+                'defaultLanguageCode' => 'eng-US',
+                'languageCodes' => array( 'eng-US' ),
+                'names' => array( 'eng-US' => 'Not locked' ),
+                'descriptions' => array( 'eng-US' => '' )
             ),
             $objectState
         );

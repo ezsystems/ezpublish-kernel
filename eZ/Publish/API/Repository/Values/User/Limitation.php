@@ -10,6 +10,7 @@
 namespace eZ\Publish\API\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
+
 /**
  * This class represents a Limitation applied to a policy
  */
@@ -24,6 +25,7 @@ abstract class Limitation extends ValueObject
     const PARENTCONTENTTYPE = "ParentClass";
     const PARENTDEPTH = "ParentDepth";
     const SECTION = "Section";
+    const NEWSECTION = "NewSection";
     const SITEACCESS = "SiteAccess";
     const STATE = "State";
     const SUBTREE = "Subtree";
@@ -40,6 +42,7 @@ abstract class Limitation extends ValueObject
     /**
      * An integer list of ids or identifiers for which the limitation should be applied
      *
+     * @readonly
      * @var array of mixed
      */
     public $limitationValues;

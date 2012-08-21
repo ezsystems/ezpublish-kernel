@@ -8,7 +8,10 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\User;
-use eZ\Publish\SPI\Persistence\User;
+use eZ\Publish\SPI\Persistence\User,
+    eZ\Publish\SPI\Persistence\User\Role,
+    eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
+    eZ\Publish\SPI\Persistence\User\Policy;
 
 /**
  * Storage Engine handler for user module
@@ -39,7 +42,7 @@ interface Handler
     /**
      * Load user(s) with user login / email.
      *
-     * Optimized for login use (hence the possibility to match email and resturn several users).
+     * Optimized for login use (hence the possibility to match email and return several users).
      *
      * @param string $login
      * @param boolean $alsoMatchEmail Also match user email, caller must verify that $login is a valid email address.
@@ -160,9 +163,9 @@ interface Handler
     public function loadPoliciesByUserId( $userId );
 
     /**
-     * Assign role to user group with given limitation
+     * Assign role to a user or user group with given limitations
      *
-     * The limitation array may look like:
+     * The limitation array looks like:
      * <code>
      *  array(
      *      'Subtree' => array(
@@ -177,9 +180,7 @@ interface Handler
      * Where the keys are the limitation identifiers, and the respective values
      * are an array of limitation values. The limitation parameter is optional.
      *
-     * @todo It has been discussed to not support assigning roles with limitations, as it is kind of flawed in eZ Publish
-     *       Hence you would simplify the design and reduce future bugs by forcing use of policy limitations instead.
-     * @param mixed $contentId User / group ID
+     * @param mixed $contentId The groupId or userId to assign the role to.
      * @param mixed $roleId
      * @param array $limitation
      */
@@ -188,8 +189,17 @@ interface Handler
     /**
      * Un-assign a role
      *
-     * @param mixed $contentId User / group ID
+     * @param mixed $contentId The user or user group Id to un-assign the role from.
      * @param mixed $roleId
      */
     public function unAssignRole( $contentId, $roleId );
+
+    /**
+     * Returns a list of role assignments for the given user or user group id
+     *
+     * @param mixed $contentId
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
+     */
+    public function getRoleAssignments( $contentId );
 }

@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Country\Exception;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    Exception;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * Exception thrown if an invalid identifier is used for a country

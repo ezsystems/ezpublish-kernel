@@ -24,8 +24,9 @@ use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
-    eZ\Publish\API\Repository\Exceptions\NotFoundException,
-    eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
+
+    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 
 /**
  * Section service, used for section operations
@@ -81,13 +82,16 @@ class SectionService implements SectionServiceInterface
         if ( !is_string( $sectionCreateStruct->identifier ) || empty( $sectionCreateStruct->identifier ) )
             throw new InvalidArgumentValue( "identifier", $sectionCreateStruct->identifier, "SectionCreateStruct" );
 
+        if ( $this->repository->hasAccess( 'section', 'edit' ) !== true )
+            throw new UnauthorizedException( 'section', 'edit' );
+
         try
         {
             $existingSection = $this->loadSectionByIdentifier( $sectionCreateStruct->identifier );
             if ( $existingSection !== null )
                 throw new InvalidArgumentException( "sectionCreateStruct", "section with specified identifier already exists" );
         }
-        catch ( NotFoundException $e )
+        catch ( APINotFoundException $e )
         {
             // Do nothing
         }
@@ -132,6 +136,9 @@ class SectionService implements SectionServiceInterface
         if ( $sectionUpdateStruct->identifier !== null && !is_string( $sectionUpdateStruct->identifier ) )
             throw new InvalidArgumentValue( "identifier", $section->identifier, "Section" );
 
+        if ( $this->repository->canUser( 'section', 'edit', $section ) !== true )
+            throw new UnauthorizedException( 'section', 'edit' );
+
         if ( $sectionUpdateStruct->identifier !== null )
         {
             try
@@ -140,7 +147,7 @@ class SectionService implements SectionServiceInterface
                 if ( $existingSection !== null )
                     throw new InvalidArgumentException( "sectionUpdateStruct", "section with specified identifier already exists" );
             }
-            catch ( NotFoundException $e )
+            catch ( APINotFoundException $e )
             {
                 // Do nothing
             }
@@ -182,6 +189,9 @@ class SectionService implements SectionServiceInterface
         if ( !is_numeric( $sectionId ) )
             throw new InvalidArgumentValue( "sectionId", $sectionId );
 
+        if ( $this->repository->hasAccess( 'section', 'view' ) !== true )
+            throw new UnauthorizedException( 'section', 'view' );
+
         $spiSection = $this->persistenceHandler->sectionHandler()->load( $sectionId );
         return $this->buildDomainSectionObject( $spiSection );
     }
@@ -195,6 +205,9 @@ class SectionService implements SectionServiceInterface
      */
     public function loadSections()
     {
+        if ( $this->repository->hasAccess( 'section', 'view' ) !== true )
+            throw new UnauthorizedException( 'section', 'view' );
+
         $spiSections = $this->persistenceHandler->sectionHandler()->loadAll();
 
         $sections = array();
@@ -220,6 +233,9 @@ class SectionService implements SectionServiceInterface
     {
         if ( !is_string( $sectionIdentifier ) || empty( $sectionIdentifier ) )
             throw new InvalidArgumentValue( "sectionIdentifier", $sectionIdentifier );
+
+        if ( $this->repository->hasAccess( 'section', 'view' ) !== true )
+            throw new UnauthorizedException( 'section', 'view' );
 
         $spiSection = $this->persistenceHandler->sectionHandler()->loadByIdentifier( $sectionIdentifier );
         return $this->buildDomainSectionObject( $spiSection );
@@ -260,6 +276,9 @@ class SectionService implements SectionServiceInterface
         $loadedContentInfo = $this->repository->getContentService()->loadContentInfo( $contentInfo->id );
         $loadedSection = $this->loadSection( $section->id );
 
+        if ( $this->repository->canUser( 'section', 'assign', $loadedContentInfo, $loadedSection ) !== true )
+            throw new UnauthorizedException( 'section', 'assign', $loadedSection->id );
+
         $this->repository->beginTransaction();
         try
         {
@@ -292,6 +311,9 @@ class SectionService implements SectionServiceInterface
             throw new InvalidArgumentValue( "id", $section->id, "Section" );
 
         $loadedSection = $this->loadSection( $section->id );
+
+        if ( $this->repository->canUser( 'section', 'edit', $loadedSection ) !== true )
+            throw new UnauthorizedException( 'section', 'edit', $loadedSection->id );
 
         if ( $this->countAssignedContents( $loadedSection ) > 0 )
             throw new BadStateException( "section", 'section is still assigned to content' );

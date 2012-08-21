@@ -216,6 +216,24 @@ CREATE TABLE ezbinaryfile (
     "version" integer DEFAULT 0 NOT NULL
 );
 
+DROP TABLE IF EXISTS ezmedia;
+CREATE TABLE ezmedia (
+    contentobject_attribute_id integer DEFAULT 0 NOT NULL,
+    download_count integer DEFAULT 0 NOT NULL,
+    filename character varying(255) DEFAULT ''::character varying NOT NULL,
+    mime_type character varying(255) DEFAULT ''::character varying NOT NULL,
+    original_filename character varying(255) DEFAULT ''::character varying NOT NULL,
+    "version" integer DEFAULT 0 NOT NULL,
+    "controls" character varying(50) DEFAULT ''::character varying NOT NULL,
+    "has_controller" integer DEFAULT 0 NOT NULL,
+    "height" integer DEFAULT 0 NOT NULL,
+    "is_autoplay" integer DEFAULT 0 NOT NULL,
+    "is_loop" integer DEFAULT 0 NOT NULL,
+    "pluginspage" character varying(255) DEFAULT ''::character varying NOT NULL,
+    "quality" character varying(50) DEFAULT ''::character varying NOT NULL,
+    "width" integer DEFAULT NULL
+);
+
 DROP TABLE IF EXISTS ezimagefile;
 CREATE TABLE ezimagefile (
     contentobject_attribute_id integer DEFAULT 0 NOT NULL,
@@ -836,6 +854,12 @@ ALTER TABLE ONLY ezcobj_state
 
 ALTER TABLE ONLY ezimagefile
     ADD CONSTRAINT ezimagefile_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY ezbinaryfile
+    ADD CONSTRAINT ezbinaryfile_pkey PRIMARY KEY (contentobject_attribute_id, "version");
+
+ALTER TABLE ONLY ezmedia
+    ADD CONSTRAINT ezmedia_pkey PRIMARY KEY (contentobject_attribute_id, "version");
 
 ALTER TABLE ONLY ezcobj_state_group
     ADD CONSTRAINT ezcobj_state_group_pkey PRIMARY KEY (id);

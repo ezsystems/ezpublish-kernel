@@ -15,8 +15,6 @@ use eZ\Publish\Core\REST\Server\Values;
 
 use \eZ\Publish\API\Repository\ContentService;
 use \eZ\Publish\API\Repository\SectionService;
-use \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
-use \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 
 use Qafoo\RMF;
 

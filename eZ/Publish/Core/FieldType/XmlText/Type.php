@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the eZ\Publish\Core\FieldType\XmlBlock class.
+ * File containing the eZ\Publish\Core\FieldType\XmlText\Type class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,19 +9,16 @@
 
 namespace eZ\Publish\Core\FieldType\XmlText;
 use eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\API\Repository\FieldTypeTools,
     eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\FieldType\XmlText\Input\Handler as XMLTextInputHandler,
-    eZ\Publish\Core\FieldType\XmlText\Input\Parser as XMLTextInputParserInterface,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
+    eZ\Publish\Core\FieldType\XmlText\Input\Handler as XmlTextInputHandler,
+    eZ\Publish\Core\FieldType\XmlText\Input\Parser as XmlTextInputParserInterface,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\SPI\FieldType\Event,
     eZ\Publish\Core\FieldType\ValidationError;
 
 /**
- * XmlBlock field type.
+ * XmlText field type.
  */
 class Type extends FieldType
 {
@@ -63,9 +60,9 @@ class Type extends FieldType
      *
      * @param \eZ\Publish\Core\FieldType\XmlText\Input\Parser $inputParser
      */
-    public function __construct( XMLTextInputParserInterface $inputParser )
+    public function __construct( XmlTextInputParserInterface $inputParser )
     {
-        $this->inputHandler = new XMLTextInputHandler( $inputParser );
+        $this->inputHandler = new XmlTextInputHandler( $inputParser );
     }
 
     /**
@@ -107,7 +104,7 @@ class Type extends FieldType
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />
 EOF;
-        return new Value( $this->inputHandler, $value, Value::INPUT_FORMAT_RAW );
+        return new Value( $this->inputHandler, $value );
     }
 
     /**
@@ -184,10 +181,10 @@ EOF;
         //    return $value;
 
         $handler = $value->getInputHandler( $value );
-        throw new \RuntimeException( '@todo XMLText has a dependency on version id and version number, after refactoring that is not available' );
+        throw new \RuntimeException( '@todo XmlText has a dependency on version id and version number, after refactoring that is not available' );
         $handler->process( $value->text, $this->fieldTypeTools, $field->version );
 
-        $value->setRawText( $handler->getDocumentAsXml() );
+        $value->setText( $handler->getDocumentAsXml() );
     }
 
     /**

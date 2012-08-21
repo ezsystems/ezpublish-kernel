@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
  * @see eZ\Publish\API\Repository\ContentService
  * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
  * @group integration
+ * @group authorization
  */
 class ContentServiceAuthorizationTest extends BaseContentServiceTest
 {

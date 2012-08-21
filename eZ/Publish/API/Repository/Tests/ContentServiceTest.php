@@ -14,8 +14,6 @@ use \eZ\Publish\API\Repository\Values\Content\Location;
 use \eZ\Publish\API\Repository\Values\Content\URLAlias;
 use \eZ\Publish\API\Repository\Values\Content\Relation;
 use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use \eZ\Publish\API\Repository\Values\Content\Query;
-use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
@@ -1153,7 +1151,7 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id' => 0,
-                    'value' => null,
+                    'value' => true,
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'description'
                 )
@@ -1161,7 +1159,7 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id' => 0,
-                    'value' => null,
+                    'value' => true,
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'description'
                 )
@@ -1947,7 +1945,7 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id' => 0,
-                    'value' => null,
+                    'value' => true,
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'description'
                 )
@@ -2016,7 +2014,7 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id' => 0,
-                    'value' => null,
+                    'value' => true,
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'description'
                 )
@@ -2172,6 +2170,8 @@ class ContentServiceTest extends BaseContentServiceTest
 
         /* BEGIN: Use Case */
         $draft = $this->createMultipleLanguageDraftVersion1();
+
+        $contentService->publishVersion($draft->versionInfo);
 
         // This draft contains those fields localized with "eng-GB"
         $draftLocalized = $contentService->loadContentByRemoteId(
@@ -4163,7 +4163,7 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id' => 0,
-                    'value' => null,
+                    'value' => 'Foo',
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'description'
                 )
@@ -4171,7 +4171,7 @@ class ContentServiceTest extends BaseContentServiceTest
             new Field(
                 array(
                     'id' => 0,
-                    'value' => null,
+                    'value' => 'Bar',
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'description'
                 )

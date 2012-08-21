@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 use eZ\Publish\SPI\FieldType\FieldStorage,
-    eZ\Publish\Core\Persistence\Legacy\Exception,
     eZ\Publish\Core\FieldType\NullStorage;
 
 /**

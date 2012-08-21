@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException,
-    eZ\Publish\Core\Repository\SearchService,
+use eZ\Publish\Core\Repository\SearchService,
     eZ\Publish\Core\Repository\Values\Content\Content,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
@@ -103,7 +102,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query( array(
                     'criterion' => new Criterion\Subtree(
-                        '/1/2/69/'
+                        '/1/5/'
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
@@ -132,7 +131,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
                         Criterion\Operator::GT,
-                        1311154214
+                        1343140540
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
@@ -143,7 +142,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
                         Criterion\Operator::GTE,
-                        1311154214
+                        1311154215
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
@@ -165,7 +164,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
                         Criterion\Operator::IN,
-                        array( 1311154214, 1311154215 )
+                        array( 1033920794, 1060695457, 1343140540 )
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
@@ -176,7 +175,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
                         Criterion\Operator::BETWEEN,
-                        array( 1311154213, 1311154215 )
+                        array( 1033920776, 1072180276 )
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
@@ -187,7 +186,7 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::CREATED,
                         Criterion\Operator::BETWEEN,
-                        array( 1299780749, 1311154215 )
+                        array( 1033920776, 1072180278 )
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
@@ -271,10 +270,10 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 new Query( array(
-                    'criterion' => new Criterion\Field(
-                        'price',
+                    'criterion' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::MODIFIED,
                         Criterion\Operator::BETWEEN,
-                        array( 10, 1000 )
+                        array( 1033920275, 1033920794 )
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
@@ -289,11 +288,11 @@ class SearchServiceTest extends BaseTest
                                 Criterion\Operator::EQ,
                                 'Members'
                             ),
-                            new Criterion\Field(
-                                'price',
+                            new Criterion\DateMetadata(
+                                Criterion\DateMetadata::MODIFIED,
                                 Criterion\Operator::BETWEEN,
-                                array( 10, 1000 )
-                            )
+                                array( 1033920275, 1033920794 )
+                            ),
                         )
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
@@ -303,7 +302,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query( array(
                     'criterion' => new Criterion\FullText(
-                        'applied webpage'
+                        'All rights reserved'
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
@@ -312,7 +311,7 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query( array(
                     'criterion' => new Criterion\FullText(
-                        'applie*'
+                        'where other*'
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ) ),
@@ -353,12 +352,12 @@ class SearchServiceTest extends BaseTest
     /**
      * @expectedException \OutOfBoundsException
      */
-    public function testInvalidFieldIdentifier()
+    public function testInvalidFieldIdentifierRange()
     {
         $repository    = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $content = $searchService->findContent(
+        $searchService->findContent(
             new Query( array(
                 'criterion' => new Criterion\Field(
                     'some_hopefully_unknown_field',
@@ -373,12 +372,32 @@ class SearchServiceTest extends BaseTest
     /**
      * @expectedException \OutOfBoundsException
      */
+    public function testInvalidFieldIdentifierIn()
+    {
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $searchService->findContent(
+            new Query( array(
+                'criterion' => new Criterion\Field(
+                    'some_hopefully_unknown_field',
+                    Criterion\Operator::EQ,
+                    1000
+                ),
+                'sortClauses' => array( new SortClause\ContentId() )
+            ) )
+        );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
     public function testFindSingleFailMultiple()
     {
         $repository    = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $content = $searchService->findSingle(
+        $searchService->findSingle(
             new Criterion\ContentId(
                 array( 4, 10 )
             )
@@ -418,12 +437,12 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 new Query( array(
-                    'criterion'   => new Criterion\SectionId( array( 2 ) ),
+                    'criterion'   => new Criterion\SectionId( array( 3 ) ),
                     'offset'      => 0,
                     'limit'       => 10,
                     'sortClauses' => array(
-                        new SortClause\LocationDepth( Query::SORT_ASC ),
                         new SortClause\LocationPathString( Query::SORT_DESC ),
+                        new SortClause\ContentName( Query::SORT_ASC )
                     )
                 ) ),
                 $fixtureDir . '/SortMultiple.php',
@@ -485,25 +504,25 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 new Query( array(
-                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'criterion' => new Criterion\ContentTypeId( 1 ),
                     'offset'      => 0,
                     'limit'       => null,
                     'sortClauses' => array(
-                        new SortClause\Field( "article", "title" ),
+                        new SortClause\Field( "folder", "name" ),
                     )
                 ) ),
-                $fixtureDir . '/SortFieldTitle.php',
+                $fixtureDir . '/SortFolderName.php',
             ),
             array(
                 new Query( array(
-                    'criterion'   => new Criterion\SectionId( array( 1 ) ),
+                    'criterion'   => new Criterion\SectionId( array( 5 ) ),
                     'offset'      => 0,
                     'limit'       => null,
                     'sortClauses' => array(
-                        new SortClause\Field( "product", "price" ),
+                        new SortClause\Field( "template_look", "title" ),
                     )
                 ) ),
-                $fixtureDir . '/SortFieldPrice.php',
+                $fixtureDir . '/SortTemplateTitle.php',
             ),
         );
     }
@@ -543,7 +562,7 @@ class SearchServiceTest extends BaseTest
                     'limit'       => 10,
                     'facetBuilders' => array(
                         new FacetBuilder\ContentTypeFacetBuilder( array(
-                            'minCount' => 10,
+                            'minCount' => 3,
                         ) )
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )

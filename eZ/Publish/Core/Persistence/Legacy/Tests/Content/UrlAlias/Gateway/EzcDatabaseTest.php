@@ -12,9 +12,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlAlias\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as LanguageCachingHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache as LanguageCache,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase as LanguageGateway;
 

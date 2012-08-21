@@ -15,8 +15,6 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase as LocationGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as LanguageCachingHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache as LanguageCache,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase as LanguageGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
@@ -1483,7 +1481,6 @@ class UrlAliasHandlerTest extends TestCase
      * @_depends testLookupLocationUrlAliasFound
      * @_depends testLookupLocationCaseCorrection
      * @group publish
-     * @group bla
      */
     public function testPublishUrlAliasForLocationReusingNopElement(
         $locationId,

@@ -8,14 +8,11 @@
  */
 
 namespace eZ\Publish\Core\FieldType;
-use eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\API\Repository\FieldTypeTools,
+use eZ\Publish\API\Repository\FieldTypeTools,
     eZ\Publish\Core\Repository\ValidatorService,
     eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\SPI\FieldType\Event;
 
 /**

@@ -16,7 +16,6 @@ use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as BaseUrlAliasHandler,
     eZ\Publish\SPI\Persistence\Content\UrlAlias,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\ForbiddenException,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     RuntimeException;
 
 /**
@@ -221,6 +220,7 @@ class Handler implements BaseUrlAliasHandler
         $data["always_available"] = $alwaysAvailable;
         $data["is_original"] = true;
         $data["is_alias"] = false;
+        $data["language_codes"] = array();
         foreach ( $this->languageMaskGenerator->extractLanguageIdsFromMask( $data["lang_mask"] ) as $languageId )
         {
             $data["language_codes"][] = $this->languageHandler->load( $languageId )->languageCode;
@@ -392,6 +392,7 @@ class Handler implements BaseUrlAliasHandler
         $data["always_available"] = $alwaysAvailable;
         $data["is_original"] = true;
         $data["is_alias"] = true;
+        $data["language_codes"] = array();
         foreach ( $this->languageMaskGenerator->extractLanguageIdsFromMask( $data["lang_mask"] ) as $languageId )
         {
             $data["language_codes"][] = $this->languageHandler->getById( $languageId )->languageCode;
@@ -574,6 +575,7 @@ class Handler implements BaseUrlAliasHandler
 
         /** @var $type */
         $data["type"] = $type;
+        $data["language_codes"] = array();
         /** @var $actions */
         if ( $type === UrlAlias::LOCATION )
         {

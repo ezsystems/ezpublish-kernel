@@ -8,59 +8,17 @@
  */
 
 namespace eZ\Publish\Core\FieldType\BinaryFile;
-use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\API\Repository\FieldTypeTools,
-    eZ\Publish\API\Repository\Repository,
-    eZ\Publish\API\Repository\IOService,
+use eZ\Publish\Core\FieldType\BinaryBase\Type as BaseType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\API\Repository\Values\IO\BinaryFile,
-    eZ\Publish\Core\FieldType\ValidationError;
+    eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 /**
  * The TextLine field type.
  *
  * This field type represents a simple string.
  */
-class Type extends FieldType
+class Type extends BaseType
 {
-    protected $allowedValidators = array(
-        "FileSizeValidator"
-    );
-
-    /**
-     * @var \eZ\Publish\API\Repository\IOService
-     */
-    protected $IOService;
-
-    /**
-     * Constructs field type object, initializing internal data structures.
-     *
-     * @param \eZ\Publish\Core\Repository\ValidatorService $validatorService
-     * @param \eZ\Publish\API\Repository\FieldTypeTools $fieldTypeTools
-     * @param \eZ\Publish\API\Repository\Repository $repository
-     */
-    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools, Repository $repository )
-    {
-        parent::__construct( $validatorService, $fieldTypeTools );
-        $this->IOService = $repository->getIOService();
-    }
-
-    /**
-     * Build a Value object of current FieldType
-     *
-     * Build a FiledType\Value object with the provided $file as value.
-     *
-     * @param string $file
-     * @return \eZ\Publish\Core\FieldType\BinaryFile\Value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function buildValue( $file )
-    {
-        return new Value( $this->IOService, $file );
-    }
-
     /**
      * Return the field type identifier for this field type
      *
@@ -72,31 +30,14 @@ class Type extends FieldType
     }
 
     /**
-     * Returns the name of the given field value.
+     * Creates a specific value of the derived class from $inputValue
      *
-     * It will be used to generate content name and url alias if current field is designated
-     * to be used in the content name/urlAlias pattern.
-     *
-     * @param mixed $value
-     *
-     * @return mixed
+     * @param array $inputValue
+     * @return Value
      */
-    public function getName( $value )
+    protected function createValue( array $inputValue )
     {
-        $value = $this->acceptValue( $value );
-
-        return $value->originalFilename;
-    }
-
-    /**
-     * Returns the fallback default value of field type when no such default
-     * value is provided in the field definition in content types.
-     *
-     * @return \eZ\Publish\Core\FieldType\BinaryFile\Value
-     */
-    public function getEmptyValue()
-    {
-        return new Value( $this->IOService );
+        return new Value( $inputValue );
     }
 
     /**
@@ -111,6 +52,14 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        $inputValue = parent::acceptValue( $inputValue );
+
+        if ( $inputValue === null )
+        {
+            // Empty value
+            return null;
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
@@ -120,38 +69,23 @@ class Type extends FieldType
             );
         }
 
-        if ( isset( $inputValue->file ) && !$inputValue->file instanceof BinaryFile )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->file',
-                'eZ\Publish\API\Repository\Values\IO\BinaryFile',
-                $inputValue->file
-            );
-        }
-
         return $inputValue;
     }
 
     /**
-     * BinaryFile does not support sorting
+     * Attempts to complete the data in $value
      *
-     * @return bool
+     * @param Value $value
+     * @return void
      */
-    protected function getSortInfo( $value )
+    protected function completeValue( $value )
     {
-        return false;
-    }
+        parent::completeValue( $value );
 
-    /**
-     * Converts an $hash to the Value defined by the field type
-     *
-     * @param mixed $hash
-     *
-     * @return \eZ\Publish\Core\FieldType\BinaryFile\Value $value
-     */
-    public function fromHash( $hash )
-    {
-        return new Value( $this->IOService, $hash );
+        if ( !isset( $value->downloadCount ) )
+        {
+            $value->downloadCount = 0;
+        }
     }
 
     /**
@@ -163,34 +97,16 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
-        return $value->file;
-    }
+        $hash = parent::toHash( $value );
 
-    /**
-     * Converts a $value to a persistence value.
-     *
-     * In this method the field type puts the data which is stored in the field of content in the repository
-     * into the property FieldValue::data. The format of $data is a primitive, an array (map) or an object, which
-     * is then canonically converted to e.g. json/xml structures by future storage engines without
-     * further conversions. For mapping the $data to the legacy database an appropriate Converter
-     * (implementing eZ\Publish\Core\Persistence\Legacy\FieldValue\Converter) has implemented for the field
-     * type. Note: $data should only hold data which is actually stored in the field. It must not
-     * hold data which is stored externally.
-     *
-     * The $externalData property in the FieldValue is used for storing data externally by the
-     * FieldStorage interface method storeFieldData.
-     *
-     * The FieldValuer::sortKey is build by the field type for using by sort operations.
-     *
-     * @see \eZ\Publish\SPI\Persistence\Content\FieldValue
-     *
-     * @param mixed $value The value of the field type
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue the value processed by the storage engine
-     */
-    public function toPersistenceValue( $value )
-    {
-        // @TODO implement
+        if ( $hash === null )
+        {
+            return $hash;
+        }
+
+        $hash['downloadCount'] = $value->downloadCount;
+
+        return $hash;
     }
 
     /**
@@ -204,16 +120,18 @@ class Type extends FieldType
      */
     public function fromPersistenceValue( FieldValue $fieldValue )
     {
-        // @TODO implement
-    }
+        $result = parent::fromPersistenceValue( $fieldValue );
 
-    /**
-     * Returns whether the field type is searchable
-     *
-     * @return bool
-     */
-    public function isSearchable()
-    {
-        return true;
+        if ( $result === null )
+        {
+            // empty value
+            return null;
+        }
+
+        $result->downloadCount = ( isset( $fieldValue->externalData['downloadCount'] )
+            ? $fieldValue->externalData['downloadCount']
+            : 0 );
+
+        return $result;
     }
 }

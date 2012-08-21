@@ -9,12 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler,
-    eZ\Publish\SPI\Persistence,
-    eZ\Publish\SPI\Persistence\Content\Location\Trashed,
-    eZ\Publish\SPI\Persistence\Content\Location\Trash\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Location\Trash\CreateStruct;
+    eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 
 /**
  * Test case for TrashHandlerTest

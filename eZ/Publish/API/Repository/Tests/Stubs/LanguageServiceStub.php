@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\LanguageService;
 use \eZ\Publish\API\Repository\Values\Content\Language;
 use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;

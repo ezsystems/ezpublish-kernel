@@ -12,7 +12,6 @@ namespace eZ\Publish\API\Repository\Tests\Stubs;
 use \eZ\Publish\API\Repository\TrashService;
 use \eZ\Publish\API\Repository\Values\Content\Query;
 use \eZ\Publish\API\Repository\Values\Content\Location;
-use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\SearchResult;
 use \eZ\Publish\API\Repository\Values\Content\TrashItem;
 

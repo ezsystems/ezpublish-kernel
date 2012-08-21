@@ -9,14 +9,10 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
-    eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\Gateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache as LanguageCache,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
 
     // For SORT_ORDER_* constants
     eZ\Publish\SPI\Persistence\Content\Location,
-    eZ\Publish\SPI\Persistence\Content\Language,
 
     eZ\Publish\SPI\Persistence\Content\Type,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,

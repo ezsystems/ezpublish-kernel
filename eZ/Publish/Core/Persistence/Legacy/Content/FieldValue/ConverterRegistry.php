@@ -76,6 +76,12 @@ class ConverterRegistry
 
             $factory = $this->converterMap[$typeName];
             $this->converterMap[$typeName] = call_user_func( $factory );
+
+            if ( !$this->converterMap[$typeName] instanceof Converter )
+            {
+                throw new \RuntimeException( "Converter '$typeName' callable did not return a converter, instead: "
+                    . gettype( $this->converterMap[$typeName] ) );
+            }
         }
         return $this->converterMap[$typeName];
     }

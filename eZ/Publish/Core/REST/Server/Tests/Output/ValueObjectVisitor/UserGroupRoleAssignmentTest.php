@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
+use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation as APISectionLimitationValue;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\User;
 use eZ\Publish\Core\Repository\Values\Content\Content;
@@ -166,7 +167,7 @@ class UserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $limitation = new User\Limitation\RoleLimitation( 'Class' );
+        $limitation = new APISectionLimitationValue();
         $limitation->limitationValues = array( 1, 2, 3 );
 
         $userGroupRoleAssignment = new User\UserGroupRoleAssignment(

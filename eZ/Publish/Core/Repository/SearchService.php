@@ -13,11 +13,7 @@ use eZ\Publish\API\Repository\SearchService as SearchServiceInterface,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\SPI\Persistence\Handler,
-    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo,
-    eZ\Publish\Core\Repository\Values\Content\Content,
-    eZ\Publish\SPI\Persistence\Content as SPIContent;
+    eZ\Publish\SPI\Persistence\Handler;
 
 /**
  * Search service
