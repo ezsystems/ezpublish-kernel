@@ -636,12 +636,14 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             $res[2]['ezcontentobject_version_id']
         );
 
-        /*
-        $this->storeFixture(
+        //$orig = include __DIR__ . '/../_fixtures/restricted_version_rows.php';
+
+        /*$this->storeFixture(
             __DIR__ . '/../_fixtures/restricted_version_rows.php',
             $res
-        );
-        */
+        );*/
+
+        //$this->assertEquals( $orig, $res, "Fixtures differ between what was previously stored(expected) and what it now generates(actual), this hints either some mistake in impl or that the fixture (../_fixtures/restricted_version_rows.php) and tests needs to be adapted." );
     }
 
     /**
