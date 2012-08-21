@@ -719,6 +719,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::load
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
+     */
     public function testCreateFixtureForMapperExtractContentFromRowsMultipleVersions()
     {
         $this->insertDatabaseFixture(
@@ -732,12 +733,15 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         $res = array_merge( $resFirst, $resSecond );
 
-        $this->storeFixture(
+        $orig = include __DIR__ . '/../_fixtures/extract_content_from_rows_multiple_versions.php';
+
+        /*$this->storeFixture(
             __DIR__ . '/../_fixtures/extract_content_from_rows_multiple_versions.php',
             $res
-        );
+        );*/
+
+        $this->assertEquals( $orig, $res, "Fixtures differ between what was previously stored(expected) and what it now generates(actual), this hints either some mistake in impl or that the fixture (../_fixtures/extract_content_from_rows_multiple_versions.php) and tests needs to be adapted." );
     }
-     */
 
     /**
      * @return void
@@ -756,10 +760,14 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         $res = array_merge( $res );
 
-        $this->storeFixture(
+        $orig = include __DIR__ . '/../_fixtures/extract_content_from_rows.php';
+
+        /*$this->storeFixture(
             __DIR__ . '/../_fixtures/extract_content_from_rows.php',
             $res
-        );
+        );*/
+
+        $this->assertEquals( $orig, $res, "Fixtures differ between what was previously stored(expected) and what it now generates(actual), this hints either some mistake in impl or that the fixture (../_fixtures/extract_content_from_rows.php) and tests needs to be adapted." );
     }
 
     /**
