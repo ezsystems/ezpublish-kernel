@@ -180,11 +180,11 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function updateObjectStateGroup( APIObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct )
     {
-        if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
-            throw new UnauthorizedException( 'state', 'administrate' );
-
         if ( !is_numeric( $objectStateGroup->id ) )
             throw new InvalidArgumentValue( "id", $objectStateGroup->id, "ObjectStateGroup" );
+
+        if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
+            throw new UnauthorizedException( 'state', 'administrate' );
 
         $loadedObjectStateGroup = $this->loadObjectStateGroup( $objectStateGroup->id );
 
@@ -222,11 +222,11 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function deleteObjectStateGroup( APIObjectStateGroup $objectStateGroup )
     {
-        if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
-            throw new UnauthorizedException( 'state', 'administrate' );
-
         if ( !is_numeric( $objectStateGroup->id ) )
             throw new InvalidArgumentValue( "id", $objectStateGroup->id, "ObjectStateGroup" );
+
+        if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
+            throw new UnauthorizedException( 'state', 'administrate' );
 
         $loadedObjectStateGroup = $this->loadObjectStateGroup( $objectStateGroup->id );
 
@@ -327,11 +327,11 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function updateObjectState( APIObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct )
     {
-        if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
-            throw new UnauthorizedException( 'state', 'administrate' );
-
         if ( !is_numeric( $objectState->id ) )
             throw new InvalidArgumentValue( "id", $objectState->id, "ObjectState" );
+
+        if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
+            throw new UnauthorizedException( 'state', 'administrate' );
 
         $loadedObjectState = $this->loadObjectState( $objectState->id );
 
@@ -370,14 +370,14 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function setPriorityOfObjectState( APIObjectState $objectState, $priority )
     {
-        if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
-            throw new UnauthorizedException( 'state', 'administrate' );
-
         if ( !is_numeric( $objectState->id ) )
             throw new InvalidArgumentValue( "id", $objectState->id, "ObjectState" );
 
         if ( !is_numeric( $priority ) )
             throw new InvalidArgumentValue( "priority", $priority );
+
+        if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
+            throw new UnauthorizedException( 'state', 'administrate' );
 
         $loadedObjectState = $this->loadObjectState( $objectState->id );
 
@@ -407,11 +407,11 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function deleteObjectState( APIObjectState $objectState )
     {
-        if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
-            throw new UnauthorizedException( 'state', 'administrate' );
-
         if ( !is_numeric( $objectState->id ) )
             throw new InvalidArgumentValue( "id", $objectState->id, "ObjectState" );
+
+        if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
+            throw new UnauthorizedException( 'state', 'administrate' );
 
         $loadedObjectState = $this->loadObjectState( $objectState->id );
 
@@ -440,9 +440,6 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function setObjectState( ContentInfo $contentInfo, APIObjectStateGroup $objectStateGroup, APIObjectState $objectState )
     {
-        if ( $this->repository->canUser( 'state', 'assign', $contentInfo, $objectState ) !== true )
-            throw new UnauthorizedException( 'state', 'assign' );
-
         if ( !is_numeric( $contentInfo->id ) )
             throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
 
@@ -451,6 +448,9 @@ class ObjectStateService implements ObjectStateServiceInterface
 
         if ( !is_numeric( $objectState->id ) )
             throw new InvalidArgumentValue( "id", $objectState->id, "ObjectState" );
+
+        if ( $this->repository->canUser( 'state', 'assign', $contentInfo, $objectState ) !== true )
+            throw new UnauthorizedException( 'state', 'assign' );
 
         $loadedObjectState = $this->loadObjectState( $objectState->id );
 
