@@ -412,9 +412,10 @@ class Role
      */
     public function listPoliciesForUser( RMF\Request $request )
     {
-        $values = $this->urlHandler->parse( 'userPolicies', $request->path );
         return new Values\PolicyList(
-            $this->roleService->loadPoliciesByUserId( $values['user'] )
+            $this->roleService->loadPoliciesByUserId(
+                $request->variables['userId']
+            )
         );
     }
 
