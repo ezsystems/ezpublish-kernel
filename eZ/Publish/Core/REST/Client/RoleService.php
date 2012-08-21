@@ -412,7 +412,16 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
      */
     public function loadPoliciesByUserId( $userId )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $values = $this->urlHandler->parse( 'user', $userId );
+        $response = $this->client->request(
+            'GET',
+            $this->urlHandler->generate( 'userPolicies', array( 'user' => $values['user'] ) ),
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'PolicyList' ) )
+            )
+        );
+
+        return $this->inputDispatcher->parse( $response );
     }
 
     /**

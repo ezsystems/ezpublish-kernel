@@ -252,6 +252,9 @@ $dispatcher = new AuthenticatingDispatcher(
             'GET'    => array( $trashController, 'loadTrashItem' ),
             'DELETE' => array( $trashController, 'deleteTrashItem' ),
         ),
+        '(^/user/policies\?userId=[0-9]+$)' => array(
+            'GET' => array( $roleController, 'listPoliciesForUser' ),
+        ),
         '(^/user/roles$)' => array(
             'GET' => array( $roleController, 'listRoles' ),
             'POST' => array( $roleController, 'createRole' ),
