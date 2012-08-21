@@ -9,17 +9,39 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Routing;
 
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use eZModule,
+    Symfony\Component\Routing\RouterInterface,
+    Symfony\Component\Routing\RequestContext,
+    Symfony\Component\Routing\RouteCollection,
+    Symfony\Component\Routing\Exception\RouteNotFoundException,
+    Symfony\Component\HttpKernel\Log\LoggerInterface,
+    Symfony\Component\DependencyInjection\ContainerInterface;
 
 class FallbackRouter implements RouterInterface
 {
+    const ROUTE_NAME = 'ez_legacy';
+
     /**
      * @var \Symfony\Component\Routing\RequestContext
      */
     private $context;
+
+    /**
+     * @var \Symfony\Component\HttpKernel\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    private $container;
+
+    public function __construct( ContainerInterface $container, RequestContext $context = null, LoggerInterface $logger = null )
+    {
+        $this->container = $container;
+        $this->context = $context = $context ?: new RequestContext;
+        $this->logger = $logger;
+    }
 
     /**
      * Sets the request context.
@@ -53,24 +75,49 @@ class FallbackRouter implements RouterInterface
     }
 
     /**
-     * Generates a URL from the given parameters.
+     * Generates a URL for an eZ Publish legacy fallback route, from the given parameters.
+     * "module_uri" must be provided as a key in $parameters. The module URI must contain ordered parameters if any
+     * (e.g. /content/view/full/2, "full", and "2" being regular ordered parameters. See your module definition for more info.).
+     * All additional named parameters will be passed as unordered params in the form "/(<paramName>)/<paramValue"
      *
-     * If the generator is not able to generate the url, it must throw the RouteNotFoundException
-     * as documented below.
+     * Example :
+     * <code>
+     * $params = array(
+     *     'module_uri'    => '/content/view/full/2',
+     *     'offset'        => 30,
+     *     'limit'         => 10
+     * );
+     * $url = $legacyRouter->generate( 'ez_legacy', $params );
+     * // $url will be "/content/view/full/2/(offset)/30/(limit)/10"
+     * </code>
      *
      * @param string  $name       The name of the route
      * @param mixed   $parameters An array of parameters
      * @param Boolean $absolute   Whether to generate an absolute URL
      *
+     * @throws \Symfony\Component\Routing\Exception\RouteNotFoundException
+     * @throws \InvalidArgumentException
      * @return string The generated URL
-     *
-     * @throws RouteNotFoundException if route doesn't exist
      *
      * @api
      */
     public function generate( $name, $parameters = array(), $absolute = false )
     {
-        // TODO: We might need to support URL generation by convention for links pointing to legacy modules
+        if ( $name === self::ROUTE_NAME )
+        {
+            if ( !isset( $parameters['module_uri'] ) )
+            {
+                throw new \InvalidArgumentException( 'When generating an eZ Publish legacy fallback route, "uri" parameter must be provided.' );
+            }
+
+            $moduleUri = $parameters['module_uri'];
+            unset( $parameters['module_uri'] );
+            // Using service container here because of urlGenerator dependency on legacy kernel which is in the "request" scope.
+            // So cannot inject it in the constructor since a router is not yet in that scope.
+            $urlGenerator = $this->container->get( 'ezpublish_legacy.url_generator' );
+            return $urlGenerator->generate( $moduleUri, $parameters, $absolute );
+        }
+
         throw new RouteNotFoundException();
     }
 
@@ -92,7 +139,7 @@ class FallbackRouter implements RouterInterface
     public function match( $pathinfo )
     {
         return array(
-            "_route" => "eZLegacyFallback",
+            "_route" => self::ROUTE_NAME,
             "_controller" => "ezpublish_legacy.controller:indexAction",
         );
     }
