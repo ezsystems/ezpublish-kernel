@@ -1,6 +1,8 @@
 parameters:
     # Kernel related params
     webroot_dir: %kernel.root_dir%/../web
+    binaryfile_storage_dir: var/files
+    binaryfile_identifier_prefix:
 
     ezpublish.siteaccess.class: eZ\Bundle\EzPublishCoreBundle\SiteAccess
     ezpublish.controller.base.class: eZ\Publish\MVC\Controller\Controller
