@@ -202,7 +202,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $repository->setCurrentUser( $pseudoEditor );
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->loadVersionInfo( $contentInfo, 1 );
+        $contentService->loadVersionInfo( $contentInfo, 2 );
         /* END: Use Case */
     }
 
@@ -260,7 +260,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $repository->setCurrentUser( $pseudoEditor );
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->loadVersionInfoById( $anonymousUserId, 1 );
+        $contentService->loadVersionInfoById( $anonymousUserId, 2 );
         /* END: Use Case */
     }
 
@@ -356,7 +356,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $repository->setCurrentUser( $pseudoEditor );
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->loadContentByContentInfo( $contentInfo, array( 'eng-US' ), 1 );
+        $contentService->loadContentByContentInfo( $contentInfo, array( 'eng-US' ), 2 );
         /* END: Use Case */
     }
 
