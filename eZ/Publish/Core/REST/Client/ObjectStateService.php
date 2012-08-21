@@ -355,7 +355,25 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
      */
     public function getObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup )
     {
-        throw new \Exception( "@todo Implement" );
+        $values = $this->urlHandler->parse( 'object', $contentInfo->id );
+        $groupValues = $this->urlHandler->parse( 'objectstategroup', $objectStateGroup->id );
+        $response = $this->client->request(
+            'GET',
+            $this->urlHandler->generate( 'objectObjectStates', array( 'object' => $values['object'] ) ),
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'ContentObjectStates' ) )
+            )
+        );
+
+        $objectStates = $this->inputDispatcher->parse( $response );
+        foreach ( $objectStates as $state )
+        {
+            $stateValues = $this->urlHandler->parse( 'objectstate', $state->id );
+            if ( $stateValues['objectstategroup'] == $groupValues['objectstategroup'] )
+            {
+                return $state;
+            }
+        }
     }
 
     /**
