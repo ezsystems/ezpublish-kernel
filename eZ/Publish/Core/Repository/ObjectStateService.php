@@ -28,7 +28,8 @@ use eZ\Publish\API\Repository\ObjectStateService as ObjectStateServiceInterface,
     eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 
 /**
  * ObjectStateService service
@@ -79,6 +80,9 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function createObjectStateGroup( ObjectStateGroupCreateStruct $objectStateGroupCreateStruct )
     {
+        if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
+            throw new UnauthorizedException( 'state', 'administrate' );
+
         $inputStruct = $this->buildInputStruct(
             $objectStateGroupCreateStruct->identifier,
             $objectStateGroupCreateStruct->defaultLanguageCode,
@@ -176,6 +180,9 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function updateObjectStateGroup( APIObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct )
     {
+        if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
+            throw new UnauthorizedException( 'state', 'administrate' );
+
         if ( !is_numeric( $objectStateGroup->id ) )
             throw new InvalidArgumentValue( "id", $objectStateGroup->id, "ObjectStateGroup" );
 
@@ -215,6 +222,9 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function deleteObjectStateGroup( APIObjectStateGroup $objectStateGroup )
     {
+        if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
+            throw new UnauthorizedException( 'state', 'administrate' );
+
         if ( !is_numeric( $objectStateGroup->id ) )
             throw new InvalidArgumentValue( "id", $objectStateGroup->id, "ObjectStateGroup" );
 
@@ -248,6 +258,9 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function createObjectState( APIObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct )
     {
+        if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
+            throw new UnauthorizedException( 'state', 'administrate' );
+
         $inputStruct = $this->buildInputStruct(
             $objectStateCreateStruct->identifier,
             $objectStateCreateStruct->defaultLanguageCode,
@@ -314,6 +327,9 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function updateObjectState( APIObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct )
     {
+        if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
+            throw new UnauthorizedException( 'state', 'administrate' );
+
         if ( !is_numeric( $objectState->id ) )
             throw new InvalidArgumentValue( "id", $objectState->id, "ObjectState" );
 
@@ -354,6 +370,9 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function setPriorityOfObjectState( APIObjectState $objectState, $priority )
     {
+        if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
+            throw new UnauthorizedException( 'state', 'administrate' );
+
         if ( !is_numeric( $objectState->id ) )
             throw new InvalidArgumentValue( "id", $objectState->id, "ObjectState" );
 
@@ -388,6 +407,9 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function deleteObjectState( APIObjectState $objectState )
     {
+        if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
+            throw new UnauthorizedException( 'state', 'administrate' );
+
         if ( !is_numeric( $objectState->id ) )
             throw new InvalidArgumentValue( "id", $objectState->id, "ObjectState" );
 
@@ -418,6 +440,9 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function setObjectState( ContentInfo $contentInfo, APIObjectStateGroup $objectStateGroup, APIObjectState $objectState )
     {
+        if ( $this->repository->hasAccess( 'state', 'assign' ) !== true )
+            throw new UnauthorizedException( 'state', 'assign' );
+
         if ( !is_numeric( $contentInfo->id ) )
             throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
 
