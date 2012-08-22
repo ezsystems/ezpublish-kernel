@@ -38,6 +38,16 @@ class MediaTest extends BinaryBaseTest
         );
     }
 
+    protected function getSettingsSchemaExpectation()
+    {
+        return array(
+            'mediaType' => array(
+                'type' => 'choice',
+                'default' => MediaType::TYPE_HTML5_VIDEO,
+            )
+        );
+    }
+
     public function provideInvalidInputForAcceptValue()
     {
         $baseInput = parent::provideInvalidInputForAcceptValue();
