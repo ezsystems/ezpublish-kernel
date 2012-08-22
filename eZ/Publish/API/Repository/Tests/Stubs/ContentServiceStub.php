@@ -539,6 +539,18 @@ class ContentServiceStub implements ContentService
                             break;
                     }
                     break;
+
+                case 'forum':
+                    switch ( $field->fieldDefIdentifier )
+                    {
+                        case 'name':
+                            if ( !is_string( $field->value ) && $field->value !== null )
+                            {
+                                throw new Exceptions\InvalidArgumentExceptionStub();
+                            }
+                            break;
+                    }
+                    break;
             }
         }
     }

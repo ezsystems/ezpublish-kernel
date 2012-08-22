@@ -265,6 +265,34 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     */
+    public function testCreateContentThrowsInvalidArgumentExceptionOnFieldTypeNotAccept()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
+        // The name field does only accept strings and null as its values
+        $contentCreate->setField( 'name', new \stdClass() );
+
+        // Throws InvalidArgumentException since the name field is filled
+        // improperly
+        $draft = $contentService->createContent( $contentCreate );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
@@ -1272,6 +1300,37 @@ class ContentServiceTest extends BaseContentServiceTest
         // is not a draft.
         $contentService->updateContent(
             $content->getVersionInfo(),
+            $contentUpdateStruct
+        );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     */
+    public function testUpdateContentThrowsInvalidArgumentExceptionWhenFieldTypeDoesNotAccept()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $draft = $this->createContentDraftVersion1();
+
+        // Now create an update struct and modify some fields
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        // The name field does not accept a stdClass object as its input
+        $contentUpdateStruct->setField( 'name', new\stdClass(), 'eng-US' );
+
+        // Throws an InvalidArgumentException, since the value for field "name"
+        // is not accepted
+        $contentService->updateContent(
+            $draft->getVersionInfo(),
             $contentUpdateStruct
         );
         /* END: Use Case */
