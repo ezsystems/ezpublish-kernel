@@ -166,10 +166,6 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
-        $this->getMimeTypeDetectorMock()->expects( $this->any() )
-            ->method( 'getMimeType' )
-            ->will( $this->returnValue( 'text/plain' ) );
-
         $outputValue = $fieldType->acceptValue( $inputValue );
 
         $this->assertEquals(

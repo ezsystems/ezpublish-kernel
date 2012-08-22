@@ -20,6 +20,15 @@ abstract class BinaryBaseTest extends StandardizedFieldTypeTest
 {
     private $mimeTypeDetectorMock;
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->getMimeTypeDetectorMock()->expects( $this->any() )
+            ->method( 'getMimeType' )
+            ->will( $this->returnValue( 'text/plain' ) );
+    }
+
     protected function getValidatorConfigurationSchemaExpectation()
     {
         return array(
