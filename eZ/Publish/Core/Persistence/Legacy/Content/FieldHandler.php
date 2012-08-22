@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 use eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Type,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway as TypeGateway;
@@ -104,10 +105,26 @@ class FieldHandler
         // Field converter is called once again via the Mapper
         if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
         {
-            $this->contentGateway->updateField(
-                $field,
-                $this->mapper->convertToStorageValue( $field )
+            $isTranslatable = $this->typeGateway->isFieldTranslatable(
+                $field->fieldDefinitionId,
+                Type::STATUS_DEFINED
             );
+
+            if ( $isTranslatable )
+            {
+                $this->contentGateway->updateField(
+                    $field,
+                    $this->mapper->convertToStorageValue( $field )
+                );
+            }
+            else
+            {
+                $this->contentGateway->updateNonTranslatableField(
+                    $field,
+                    $this->mapper->convertToStorageValue( $field ),
+                    $content->contentInfo->id
+                );
+            }
         }
     }
 
@@ -140,12 +157,12 @@ class FieldHandler
             $field->versionNo = $content->versionInfo->versionNo;
             if ( isset( $field->id ) )
             {
-                if (
-                    $this->typeGateway->isFieldTranslatable(
-                        $field->fieldDefinitionId,
-                        0
-                    )
-                )
+                $isTranslatable = $this->typeGateway->isFieldTranslatable(
+                    $field->fieldDefinitionId,
+                    Type::STATUS_DEFINED
+                );
+
+                if ( $isTranslatable )
                 {
                     $this->contentGateway->updateField(
                         $field,
@@ -166,10 +183,21 @@ class FieldHandler
                 // Field converter is called once again via the Mapper
                 if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
                 {
-                    $this->contentGateway->updateField(
-                        $field,
-                        $this->mapper->convertToStorageValue( $field )
-                    );
+                    if ( $isTranslatable )
+                    {
+                        $this->contentGateway->updateField(
+                            $field,
+                            $this->mapper->convertToStorageValue( $field )
+                        );
+                    }
+                    else
+                    {
+                        $this->contentGateway->updateNonTranslatableField(
+                            $field,
+                            $this->mapper->convertToStorageValue( $field ),
+                            $content->contentInfo->id
+                        );
+                    }
                 }
             }
             else

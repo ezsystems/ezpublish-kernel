@@ -224,8 +224,11 @@ class UserServiceAuthorizationTest extends BaseTest
             'test',
             'test@example.com',
             'password',
-            'eng-US'
+            'eng-GB'
         );
+
+        $userCreateStruct->setField('first_name', 'Christian');
+        $userCreateStruct->setField('last_name', 'Bacher');
 
         $parentUserGroup = $userService->loadUserGroup( $editorsGroupId );
 
