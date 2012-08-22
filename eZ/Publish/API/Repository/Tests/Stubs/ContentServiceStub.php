@@ -541,9 +541,22 @@ class ContentServiceStub implements ContentService
                     break;
 
                 case 'forum':
+                case 'user_group':
                     switch ( $field->fieldDefIdentifier )
                     {
                         case 'name':
+                            if ( !is_string( $field->value ) && $field->value !== null )
+                            {
+                                throw new Exceptions\InvalidArgumentExceptionStub();
+                            }
+                            break;
+                    }
+                    break;
+
+                case 'user':
+                    switch ( $field->fieldDefIdentifier )
+                    {
+                        case 'first_name':
                             if ( !is_string( $field->value ) && $field->value !== null )
                             {
                                 throw new Exceptions\InvalidArgumentExceptionStub();
