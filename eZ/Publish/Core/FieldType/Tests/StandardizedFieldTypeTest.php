@@ -53,6 +53,31 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
     abstract protected function getEmptyValueExpectation();
 
     /**
+     * Data provider for invalid input to acceptValue().
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The invalid
+     * input to acceptValue(), 2. The expected exception type as a string. For
+     * example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          new \stdClass(),
+     *          'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+     *      ),
+     *      array(
+     *          array(),
+     *          'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    abstract public function provideInvalidInputForAcceptValue();
+
+    /**
      * Data provider for valid input to acceptValue().
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
@@ -74,31 +99,6 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
      *              'downloadCount' => 0,
      *              'mimeType' => 'text/plain',
      *          ) )
-     *      ),
-     *      // ...
-     *  );
-     * </code>
-     *
-     * @return array
-     */
-    abstract public function provideInvalidInputForAcceptValue();
-
-    /**
-     * Data provider for invalid input to acceptValue().
-     *
-     * Returns an array of data provider sets with 2 arguments: 1. The invalid
-     * input to acceptValue(), 2. The expected exception type as a string. For
-     * example:
-     *
-     * <code>
-     *  return array(
-     *      array(
-     *          new \stdClass(),
-     *          'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-     *      ),
-     *      array(
-     *          array(),
-     *          'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
      *      ),
      *      // ...
      *  );
