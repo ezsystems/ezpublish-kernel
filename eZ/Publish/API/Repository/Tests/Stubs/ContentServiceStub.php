@@ -433,6 +433,9 @@ class ContentServiceStub implements ContentService
         // Complete missing fields
         $allFields = $this->createCompleteFields( $contentCreateStruct->contentType, $fields, $languageCodes, $contentCreateStruct->mainLanguageCode );
 
+        // Perform some fake validation to emulate validation exceptions
+        $this->fakeFieldValidation( $contentCreateStruct->contentType, $allFields );
+
         $content = new ContentStub(
             array(
                 'id' => ++$this->contentNextId,
@@ -504,6 +507,40 @@ class ContentServiceStub implements ContentService
         $this->locationsOnPublish[$contentInfo->id] = $locationCreateStructs;
 
         return $content;
+    }
+
+    /**
+     * Performs specific fake validations on the given $fields
+     *
+     * Checks:
+     *
+     * - String length <= 100 for folder::short_name
+     *
+     * @param ContentType $contentType
+     * @param array $fields
+     * @return void
+     * @throws ContentFieldValidationException if any of the fake rules are
+     *         violated
+     */
+    private function fakeFieldValidation( ContentType $contentType, array $fields )
+    {
+        foreach ( $fields as $field )
+        {
+            switch ( $contentType->identifier )
+            {
+                case 'folder':
+                    switch ( $field->fieldDefIdentifier )
+                    {
+                        case 'short_name':
+                            if ( strlen( $field->value ) > 100 )
+                            {
+                                throw new Exceptions\ContentFieldValidationExceptionStub();
+                            }
+                            break;
+                    }
+                    break;
+            }
+        }
     }
 
     /**
@@ -1079,6 +1116,9 @@ class ContentServiceStub implements ContentService
 
         // Complete missing fields
         $allFields = $this->createCompleteFields( $contentType, $fields, $languageCodes, $mainLanguageCode );
+
+        // Perform some fake validation to emulate validation exceptions
+        $this->fakeFieldValidation( $contentType, $allFields );
 
         $draftedContent = new ContentStub(
             array(

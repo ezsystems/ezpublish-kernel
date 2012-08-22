@@ -263,6 +263,63 @@ class ContentServiceTest extends BaseContentServiceTest
     /**
      * Test for the createContent() method.
      *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     */
+    public function testCreateContentThrowsContentFieldValidationException()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+
+        $contentCreate1 = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
+        $contentCreate1->setField( 'name', 'An awesome Sidelfingen folder' );
+        // Violates string length constraint
+        $contentCreate1->setField( 'short_name', str_repeat( 'a', 200 ) );
+
+        // Throws ContentValidationException, since short_name does not pass
+        // validation of the string length validator
+        $draft = $contentService->createContent( $contentCreate1 );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     */
+    public function testCreateContentThrowsContentValidationException()
+    {
+
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
+
+        $contentCreate1 = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
+        // Required field "name" is not set
+
+        // Throws a ContentValidationException, since a required field is
+        // missing
+        $draft = $contentService->createContent( $contentCreate1 );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
      * NOTE: We have bidirectional dependencies between the ContentService and
      * the LocationService, so that we cannot use PHPUnit's test dependencies
      * here.
@@ -1284,6 +1341,39 @@ class ContentServiceTest extends BaseContentServiceTest
             $draft->getVersionInfo(),
             $contentUpdateStruct
         );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateContent() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     */
+    public function testUpdateContentThrowsContentFieldValidationException()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+
+        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
+        $contentCreate->setField( 'name', 'An awesome Sidelfingen folder' );
+
+        $draft = $contentService->createContent( $contentCreate );
+
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        // Violates string length constraint
+        $contentUpdate->setField( 'short_name', str_repeat( 'a', 200 ), 'eng-US' );
+
+        // Throws ContentFieldValidationException because the string length
+        // validation of the field "short_name" fails
+        $contentService->updateContent( $draft->getVersionInfo(), $contentUpdate );
         /* END: Use Case */
     }
 
