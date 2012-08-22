@@ -91,10 +91,10 @@ class AddField extends Action
     }
 
     /**
+     * @param \eZ\Publish\SPI\Persistence\Content $content
      *
+     * @return \eZ\Publish\SPI\Persistence\Content\Field
      *
-     * @param Content $content
-     * @return void
      * @todo Handle ->languageCode
      */
     protected function createField( Content $content )

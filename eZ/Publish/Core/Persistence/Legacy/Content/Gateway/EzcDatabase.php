@@ -611,7 +611,7 @@ class EzcDatabase extends Gateway
      *
      * @param Field $field
      * @param StorageFieldValue $value
-     * @param boolean $alwaysAvailable
+     *
      * @return void
      */
     public function updateField( Field $field, StorageFieldValue $value )
@@ -638,7 +638,7 @@ class EzcDatabase extends Gateway
     /**
      * Sets update fields for $value on $q
      *
-     * @param ezcQueryUpdate $q
+     * @param \ezcQueryUpdate $q
      * @param StorageFieldValue $value
      * @return void
      */
