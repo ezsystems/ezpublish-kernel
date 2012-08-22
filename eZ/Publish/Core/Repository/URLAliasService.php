@@ -89,7 +89,14 @@ class URLAliasService implements URLAliasServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $spiUrlAlias = $this->internalCreateUrlAlias( $location->id, $path, $languageCode, $forward, $alwaysAvailable );
+            $spiUrlAlias = $this->persistenceHandler->urlAliasHandler()->createCustomUrlAlias(
+                $location->id,
+                $path,
+                $this->settings["prioritizedLanguageList"],
+                $forward,
+                $languageCode,
+                $alwaysAvailable
+            );
             $this->repository->commit();
         }
         catch ( ForbiddenException $e )
@@ -108,30 +115,6 @@ class URLAliasService implements URLAliasServiceInterface
         }
 
         return $this->buildUrlAliasDomainObject( $spiUrlAlias );
-    }
-
-    /**
-     * Internal method for creating URL alias
-     *
-     * Reused by self::createUrlAlias and self::createGlobalUrlAlias if $resource is "eznode"
-     *
-     * @param $locationId
-     * @param $path
-     * @param $languageCode
-     * @param $forward
-     * @param $alwaysAvailable
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
-     */
-    public function internalCreateUrlAlias( $locationId, $path, $languageCode, $forward, $alwaysAvailable )
-    {
-        return $this->persistenceHandler->urlAliasHandler()->createCustomUrlAlias(
-            $locationId,
-            $path,
-            $forward,
-            $languageCode,
-            $alwaysAvailable
-        );
     }
 
      /**
@@ -167,7 +150,7 @@ class URLAliasService implements URLAliasServiceInterface
         // @todo handle module:content/view/full/<id>
         if ( $matches[1] === "eznode" )
         {
-            return $this->internalCreateUrlAlias(
+            return $this->createUrlAlias(
                 $matches[2],
                 $path,
                 $languageCode,
