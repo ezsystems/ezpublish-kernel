@@ -93,6 +93,15 @@ class FieldHandlerTest extends TestCase
 
     /**
      * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::createNewFields
+     */
+    public function testCreateNewFieldsUpdatingStorageHandler()
+    {
+        self::markTestIncomplete( "@todo Test createNewField() with updating storage handler and 1 untranslatable field" );
+    }
+
+    /**
+     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::loadExternalFieldData
      */
     public function testLoadExternalFieldData()
@@ -198,6 +207,24 @@ class FieldHandlerTest extends TestCase
             $this->getContentFixture(),
             $this->getUpdateStructFixture()
         );
+    }
+
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
+     */
+    public function testUpdateFieldsUpdatingStorageHandlerNonTranslatable()
+    {
+        self::markTestIncomplete( "@todo Test updateFields() with updating storage handler and untranslatable fields" );
+    }
+
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
+     */
+    public function testUpdateFieldsUpdatingStorageHandlerTranslatable()
+    {
+        self::markTestIncomplete( "@todo Test updateFields() with updating storage handler and translatable fields" );
     }
 
     /**

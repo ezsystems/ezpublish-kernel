@@ -116,6 +116,33 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField::apply
+     */
+    public function testApplyUnTranslatableField()
+    {
+        self::markTestIncomplete( "@todo Test Action/AddField with untranslatable field" );
+    }
+
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField::apply
+     */
+    public function testApplyUpdatingStorageHandler()
+    {
+        self::markTestIncomplete( "@todo Test Action/AddField with Storage Handler that returns true" );
+    }
+
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField::apply
+     */
+    public function testApplyUpdatingStorageHandlerUnTranslatableField()
+    {
+        self::markTestIncomplete( "@todo Test Action/AddField with Storage Handler that returns true and untranslatable field" );
+    }
+
+    /**
      * Returns a Content fixture
      *
      * @return \eZ\Publish\SPI\Persistence\Content

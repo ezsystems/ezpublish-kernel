@@ -241,6 +241,15 @@ CREATE TABLE ezimagefile (
     id integer DEFAULT nextval('ezimagefile_s'::text) NOT NULL
 );
 
+DROP TABLE IF EXISTS ezgmaplocation;
+CREATE TABLE ezgmaplocation (
+  contentobject_attribute_id integer DEFAULT '0' NOT NULL,
+  contentobject_version integer DEFAULT '0' NOT NULL,
+  latitude double precision DEFAULT '0' NOT NULL,
+  longitude double precision DEFAULT '0' NOT NULL,
+  address varying(150) DEFAULT NULL
+);
+
 DROP TABLE IF EXISTS ezcobj_state;
 CREATE TABLE ezcobj_state (
     default_language_id integer NOT NULL DEFAULT 0,
@@ -678,6 +687,8 @@ CREATE INDEX ezimagefile_coid ON ezimagefile USING btree (contentobject_attribut
 
 CREATE INDEX ezimagefile_file ON ezimagefile USING btree (filepath);
 
+CREATE INDEX ezgmaplocation_file ON ezgmaplocation USING btree (latitude,longitude);
+
 CREATE UNIQUE INDEX ezcobj_state_identifier ON ezcobj_state USING btree (group_id, identifier);
 
 CREATE INDEX ezcobj_state_lmask ON ezcobj_state USING btree (language_mask);
@@ -854,6 +865,9 @@ ALTER TABLE ONLY ezcobj_state
 
 ALTER TABLE ONLY ezimagefile
     ADD CONSTRAINT ezimagefile_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY ezgmaplocation
+    ADD CONSTRAINT ezgmaplocation_pkey PRIMARY KEY (contentobject_attribute_id,contentobject_version);
 
 ALTER TABLE ONLY ezbinaryfile
     ADD CONSTRAINT ezbinaryfile_pkey PRIMARY KEY (contentobject_attribute_id, "version");
