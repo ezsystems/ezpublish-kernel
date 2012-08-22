@@ -27,6 +27,14 @@ CREATE TABLE 'ezimagefile' (
 	'filepath' text NOT NULL,
 	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT
 );
+CREATE TABLE 'ezgmaplocation' (
+  'contentobject_attribute_id' integer NOT NULL DEFAULT 0,
+  'contentobject_version' integer NOT NULL DEFAULT 0,
+  'latitude' real NOT NULL DEFAULT 0,
+  'longitude' real NOT NULL DEFAULT 0,
+  'address' text(150) DEFAULT NULL,
+  PRIMARY KEY ('contentobject_attribute_id','contentobject_version')
+);
 CREATE TABLE 'ezcobj_state' (
 	'default_language_id' integer NOT NULL DEFAULT 0,
 	'group_id' integer NOT NULL DEFAULT 0,
@@ -391,6 +399,8 @@ CREATE TABLE 'ezkeyword_attribute_link' (
 
 CREATE UNIQUE INDEX 'ezbinaryfile_pri' ON 'ezbinaryfile' ( 'contentobject_attribute_id', 'version' );
 CREATE UNIQUE INDEX 'ezimagefile_pri' ON 'ezimagefile' ( 'id' );
+CREATE UNIQUE INDEX 'ezgmaplocation_pri' ON 'ezgmaplocation' ( 'contentobject_attribute_id','contentobject_version' );
+CREATE INDEX 'ezgmaplocation_latlon' ON 'ezgmaplocation' ( 'latitude','longitude' );
 CREATE INDEX 'ezimagefile_coid' ON 'ezimagefile' ( 'contentobject_attribute_id' );
 CREATE INDEX 'ezimagefile_file' ON 'ezimagefile' ( 'filepath' );
 CREATE UNIQUE INDEX 'ezcobj_state_identifier' ON 'ezcobj_state' ( 'group_id', 'identifier' );
