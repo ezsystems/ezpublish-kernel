@@ -42,6 +42,7 @@ use eZ\Publish\API\Repository\ContentService as ContentServiceInterface,
     eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct,
     eZ\Publish\Core\Repository\Values\Content\Relation,
     eZ\Publish\Core\Repository\Values\Content\TranslationValues,
+    eZ\Publish\Core\Repository\ObjectStorage,
 
     eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo,
     eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo,
@@ -78,6 +79,11 @@ class ContentService implements ContentServiceInterface
     protected $persistenceHandler;
 
     /**
+     * @var ObjectStorage
+     */
+    protected $objectStore;
+
+    /**
      * @var array
      */
     protected $settings;
@@ -87,12 +93,14 @@ class ContentService implements ContentServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param ObjectStorage $objectStore
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct( RepositoryInterface $repository, Handler $handler, ObjectStorage $objectStore, array $settings = array() )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
+        $this->objectStore = $objectStore;
         $this->settings = $settings;
     }
 
@@ -110,20 +118,9 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentInfo( $contentId )
     {
-        try
-        {
-            $spiContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo( $contentId );
-        }
-        catch ( APINotFoundException $e )
-        {
-            throw new NotFoundException(
-                "Content",
-                $contentId,
-                $e
-            );
-        }
-
-        return $this->buildContentInfoDomainObject( $spiContentInfo );
+        // reuse load content since it has cache (and to avoid having several caches pr object)
+        // and we would need Content to check permissions anyway.
+        return $this->loadContent( $contentId )->contentInfo;
     }
 
     /**
@@ -265,6 +262,15 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContent( $contentId, array $languages = null, $versionNo = null )
     {
+        // lookup cached version
+        if ( empty( $languages ) &&
+            /** @var Repository\Values\Content\Content $content */
+            ( $content = $this->objectStore->get( 'content', $contentId ) ) &&
+            ( $versionNo === null || $content->getVersionInfo()->versionNo == $versionNo ) )
+        {
+            return $content;
+        }
+
         try
         {
             if ( $versionNo === null )
@@ -293,7 +299,7 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        if ( isset( $languages ) )
+        if ( !empty( $languages ) )
         {
             foreach ( $languages as $languageCode )
             {
@@ -314,7 +320,17 @@ class ContentService implements ContentServiceInterface
             }
         }
 
-        return $this->buildContentDomainObject( $spiContent );
+        $content = $this->buildContentDomainObject( $spiContent );
+
+        if (
+            empty( $languages ) &&
+            ( $versionNo === null ||
+              $versionNo === $content->getVersionInfo()->getContentInfo()->currentVersionNo ) )
+        {
+            $this->objectStore->add( $content );
+        }
+
+        return $content;
     }
 
     /**
@@ -677,6 +693,7 @@ class ContentService implements ContentServiceInterface
         {
             if ( isset( $contentMetadataUpdateStruct->$propertyName ) ) $propertyCount += 1;
         }
+
         if ( $propertyCount === 0 )
         {
             throw new InvalidArgumentException(
@@ -684,6 +701,9 @@ class ContentService implements ContentServiceInterface
                 "At least one property must be set"
             );
         }
+
+        // clear content object cache
+        $this->objectStore->discard( 'content', $contentInfo->id );
 
         $this->repository->beginTransaction();
         try
@@ -761,6 +781,9 @@ class ContentService implements ContentServiceInterface
      */
     public function deleteContent( APIContentInfo $contentInfo )
     {
+        // clear object cache
+        $this->objectStore->discard( 'content', $contentInfo->id );
+
         $this->repository->beginTransaction();
         try
         {
@@ -821,6 +844,9 @@ class ContentService implements ContentServiceInterface
                 "Content is not published, draft can be created only from published or archived version"
             );
         }
+
+        // clear object cache
+        $this->objectStore->discard( 'content', $contentInfo->id );
 
         $this->repository->beginTransaction();
         try
@@ -910,9 +936,10 @@ class ContentService implements ContentServiceInterface
      */
     public function updateContent( APIVersionInfo $versionInfo, APIContentUpdateStruct $contentUpdateStruct )
     {
+        $contentId = $versionInfo->getContentInfo()->id;
         /** @var $content \eZ\Publish\Core\Repository\Values\Content\Content */
         $content = $this->loadContent(
-            $versionInfo->getContentInfo()->id,
+            $contentId,
             null,
             $versionInfo->versionNo
         );
@@ -1061,6 +1088,9 @@ class ContentService implements ContentServiceInterface
             )
         );
 
+        // clear object cache
+        $this->objectStore->discard( 'content', $contentId );
+
         $this->repository->beginTransaction();
         try
         {
@@ -1092,10 +1122,14 @@ class ContentService implements ContentServiceInterface
      */
     public function publishVersion( APIVersionInfo $versionInfo )
     {
+        $contentId = $versionInfo->getContentInfo()->id;
         $loadedVersionInfo = $this->loadVersionInfoById(
-            $versionInfo->contentInfo->id,
+            $versionInfo->getContentInfo()->id,
             $versionInfo->versionNo
         );
+
+        // clear object cache
+         $this->objectStore->discard( 'content', $contentId );
 
         $this->repository->beginTransaction();
         try
@@ -1178,6 +1212,9 @@ class ContentService implements ContentServiceInterface
                 "Version is published and can not be removed"
             );
         }
+
+         // clear object cache
+         $this->objectStore->discard( 'content', $versionInfo->getContentInfo()->id );
 
         $this->repository->beginTransaction();
         try
@@ -1379,6 +1416,9 @@ class ContentService implements ContentServiceInterface
 
         $sourceContentInfo = $sourceVersion->getContentInfo();
 
+        // clear object cache
+         $this->objectStore->discard( 'content', $sourceContentInfo->id );
+
         $this->repository->beginTransaction();
         try
         {
@@ -1437,6 +1477,9 @@ class ContentService implements ContentServiceInterface
                 "There are no relations of type COMMON for the given destination"
             );
         }
+
+         // clear object cache
+         $this->objectStore->discard( 'content', $sourceVersion->getContentInfo()->id );
 
         // there should be only one relation of type COMMON for each destination,
         // but in case there were ever more then one, we will remove them all

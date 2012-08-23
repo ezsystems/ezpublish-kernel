@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Repository\Tests\Service;
 
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\Core\Repository\Values\Content\TrashItem,
+    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
     eZ\Publish\Core\Repository\Values\Content\Location,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\LocationCreateStruct,
@@ -238,7 +239,13 @@ abstract class TrashBase extends BaseServiceTest
     {
         $trashService = $this->repository->getTrashService();
 
-        $trashItem = new TrashItem( array( "id" => PHP_INT_MAX, "parentLocationId" => PHP_INT_MAX ) );
+        $trashItem = new TrashItem(
+            array(
+                "id" => PHP_INT_MAX -1,
+                "parentLocationId" => PHP_INT_MAX,
+                "contentInfo" => new ContentInfo( array( 'id' =>  PHP_INT_MAX -2 ) )
+            )
+        );
         $trashService->recover( $trashItem );
     }
 
@@ -348,7 +355,12 @@ abstract class TrashBase extends BaseServiceTest
     {
         $trashService = $this->repository->getTrashService();
 
-        $trashItem = new TrashItem( array( "id" => PHP_INT_MAX ) );
+        $trashItem = new TrashItem(
+            array(
+                "id" => PHP_INT_MAX,
+                "contentInfo" => new ContentInfo( array( 'id' =>  PHP_INT_MAX ) )
+            )
+        );
         $trashService->deleteTrashItem( $trashItem );
     }
 

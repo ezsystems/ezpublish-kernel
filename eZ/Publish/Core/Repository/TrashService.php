@@ -24,6 +24,7 @@ use eZ\Publish\API\Repository\TrashService as TrashServiceInterface,
 
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
+    eZ\Publish\Core\Repository\ObjectStorage,
 
     eZ\Publish\API\Repository\Values\Content\SearchResult,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
@@ -49,6 +50,11 @@ class TrashService implements TrashServiceInterface
     protected $persistenceHandler;
 
     /**
+     * @var ObjectStorage
+     */
+    protected $objectStore;
+
+    /**
      * @var array
      */
     protected $settings;
@@ -58,12 +64,14 @@ class TrashService implements TrashServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository  $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param ObjectStorage $objectStore
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct( RepositoryInterface $repository, Handler $handler, ObjectStorage $objectStore, array $settings = array() )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
+        $this->objectStore = $objectStore;
         $this->settings = $settings;
     }
 
@@ -107,6 +115,9 @@ class TrashService implements TrashServiceInterface
         if ( $this->repository->canUser( 'content', 'manage_locations', $location->getContentInfo(), $location ) !== true )
             throw new UnauthorizedException( 'content', 'manage_locations' );
 
+        // clear content object cache on main node change
+        $this->objectStore->discard( 'content', $location->contentId );
+
         $this->repository->beginTransaction();
         try
         {
@@ -147,6 +158,9 @@ class TrashService implements TrashServiceInterface
 
         if ( $this->repository->hasAccess( 'content', 'restore' ) !== true )
             throw new UnauthorizedException( 'content', 'restore' );
+
+        // clear content object cache on main node change
+        $this->objectStore->discard( 'content', $trashItem->getContentInfo()->id );
 
         $this->repository->beginTransaction();
         try
@@ -196,6 +210,9 @@ class TrashService implements TrashServiceInterface
         if ( $this->repository->hasAccess( 'content', 'cleantrash' ) !== true )
             throw new UnauthorizedException( 'content', 'cleantrash' );
 
+        // clear content object cache on main node change
+        $this->objectStore->reset();
+
         $this->repository->beginTransaction();
         try
         {
@@ -226,6 +243,9 @@ class TrashService implements TrashServiceInterface
 
         if ( !is_numeric( $trashItem->id ) )
             throw new InvalidArgumentValue( "id", $trashItem->id, "TrashItem" );
+
+        // clear content object cache on main node change
+        $this->objectStore->discard( 'content', $trashItem->contentId );
 
         $this->repository->beginTransaction();
         try
