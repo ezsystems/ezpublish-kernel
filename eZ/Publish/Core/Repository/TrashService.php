@@ -159,9 +159,6 @@ class TrashService implements TrashServiceInterface
         if ( $this->repository->hasAccess( 'content', 'restore' ) !== true )
             throw new UnauthorizedException( 'content', 'restore' );
 
-        // clear content object cache on main node change
-        $this->objectStore->discard( 'content', $trashItem->getContentInfo()->id );
-
         $this->repository->beginTransaction();
         try
         {
@@ -187,6 +184,7 @@ class TrashService implements TrashServiceInterface
             }
 
             $this->repository->commit();
+            $this->objectStore->discard( 'content', $trashItem->getContentInfo()->id );
         }
         catch ( \Exception $e )
         {
