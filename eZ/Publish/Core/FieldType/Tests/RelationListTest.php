@@ -37,13 +37,17 @@ class RelationListTest extends FieldTypeTest
         $ft = new Relation( $this->validatorService, $this->fieldTypeTools );
         self::assertSame(
             array(
-                    'selectionMethod' => array(
+                'selectionMethod' => array(
                     'type' => 'int',
                     'default' => Relation::SELECTION_BROWSE,
                 ),
-                    'selectionRoot' => array(
+                'selectionDefaultLocation' => array(
                     'type' => 'string',
-                    'default' => '',
+                    'default' => null,
+                ),
+                'selectionContentTypes' => array(
+                    'type' => 'array',
+                    'default' => array(),
                 ),
             ),
             $ft->getSettingsSchema(),
