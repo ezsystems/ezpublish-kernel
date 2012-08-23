@@ -67,12 +67,13 @@ abstract class Gateway
     abstract public function insertRow( array $values );
 
     /**
-     * @param $parentId
-     * @param $pathElement
+     * @param mixed $parentId
+     * @param string $text
+     * @param string $textMD5
      *
      * @return mixed
      */
-    abstract public function insertNopRow( $parentId, $pathElement );
+    abstract public function insertNopRow( $parentId, $text, $textMD5 );
 
     /**
      * Updates single row data matched by composite primary key

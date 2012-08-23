@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\REST\Client;
 use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
+use \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\TranslationInfo;
 use \eZ\Publish\API\Repository\Values\Content\TranslationValues;
@@ -270,7 +271,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content with the updated attributes
      */
-    public function updateContentMetadata( ContentInfo $contentInfo, ContentMetaDataUpdateStruct $contentMetadataUpdateStruct )
+    public function updateContentMetadata( ContentInfo $contentInfo, ContentMetadataUpdateStruct $contentMetadataUpdateStruct )
     {
         throw new \Exception( "@TODO: Implement." );
     }

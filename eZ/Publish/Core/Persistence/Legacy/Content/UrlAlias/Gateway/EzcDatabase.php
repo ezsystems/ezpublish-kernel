@@ -578,14 +578,8 @@ class EzcDatabase extends Gateway
         if ( !isset( $values["alias_redirects"] ) ) $values["alias_redirects"] = 0;
         if ( !isset( $values["action_type"] ) )
         {
-            if ( preg_match( "#^(.+):#", $values["action"], $matches ) )
-            {
-                $values["action_type"] = $matches[1];
-            }
-            else
-            {
-                $values["action_type"] = "nop";
-            }
+            if ( preg_match( "#^(.+):.*#", $values["action"], $matches ) )
+            $values["action_type"] = $matches[1];
         }
         if ( $values["is_alias"] ) $values["is_original"] = 1;
         if ( $values["action"] === "nop:" ) $values["is_original"] = 0;
@@ -635,19 +629,21 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * @param $parentId
-     * @param $pathElement
+     * @param mixed $parentId
+     * @param string $text
+     * @param string $textMD5
      *
      * @return mixed
      */
-    public function insertNopRow( $parentId, $pathElement )
+    public function insertNopRow( $parentId, $text, $textMD5 )
     {
         return $this->insertRow(
             array(
                 "lang_mask" => 1,
                 "action" => "nop:",
                 "parent" => $parentId,
-                "text" => $pathElement
+                "text" => $text,
+                "text_md5" => $textMD5
             )
         );
     }

@@ -740,7 +740,7 @@ class UrlAliasHandlerTest extends TestCase
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::lookup
      * @dataProvider providerForTestLookupVirtualUrlAliasFound
      * @depends testLookup
-     * @group location
+     * @group virtual
      */
     public function testLookupVirtualUrlAliasFound(
         $url,
@@ -1039,9 +1039,18 @@ class UrlAliasHandlerTest extends TestCase
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_resource.php" );
 
         $urlAlias = $handler->lookup( $url, $prioritizedLanguageCodes );
+        $this->assertNopElementValid(
+            $urlAlias,
+            strtolower( $url ),
+            $id
+        );
+    }
+
+    protected function assertNopElementValid( UrlAlias $urlAlias, $path, $id )
+    {
         self::assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias", $urlAlias );
         self::assertEquals( UrlAlias::VIRTUAL, $urlAlias->type );
-        self::assertEquals( strtolower( $url ), $urlAlias->path );
+        self::assertEquals( $path, $urlAlias->path );
         self::assertTrue( $urlAlias->alwaysAvailable );
         self::assertEquals( "/", $urlAlias->destination );
         self::assertEquals( $id, $urlAlias->id );
@@ -1466,7 +1475,7 @@ class UrlAliasHandlerTest extends TestCase
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_reusing.php" );
 
         $countBeforeReusing = $this->countRows();
-        $urlAlias = $handler->publishUrlAliasForLocation( 314, "hello", "eng-GB", false );
+        $urlAlias = $handler->publishUrlAliasForLocation( 314, "custom-hello", "eng-GB", false );
 
         self::assertEquals(
             $countBeforeReusing,
@@ -1479,7 +1488,7 @@ class UrlAliasHandlerTest extends TestCase
     {
         return array(
             array(
-                "locationId" => 314,
+                "locationId" => 315,
                 "name" => "nop-element",
                 "url" => "nop-element",
                 "languageCode" => "eng-GB",
@@ -1498,10 +1507,9 @@ class UrlAliasHandlerTest extends TestCase
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::publishUrlAliasForLocation
      * @dataProvider providerForTestPublishUrlAliasForLocationReusesNopElement
-     * @_depends testLookupLocationUrlAliasThrowsNotFoundException
-     * @_depends testLookupLocationUrlAliasFound
-     * @_depends testLookupLocationCaseCorrection
-     * @group publish
+     * @depends testLookupLocationUrlAliasThrowsNotFoundException
+     * @depends testLookupLocationUrlAliasFound
+     * @depends testLookupLocationCaseCorrection
      */
     public function testPublishUrlAliasForLocationReusingNopElement(
         $locationId,
@@ -1516,10 +1524,14 @@ class UrlAliasHandlerTest extends TestCase
         $handler = $this->getHandler();
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_reusing.php" );
 
+        $countBeforeReusing = $this->countRows();
         $virtualUrlAlias = $handler->lookup( $virtualUrl, $virtualUrlPrioritizedLanguageCodes );
         $publishedLocationUrlAlias = $handler->publishUrlAliasForLocation( $locationId, $name, $languageCode, $alwaysAvailable );
 
-        self::assertEquals( 4, $this->countRows() );
+        self::assertEquals(
+            $countBeforeReusing,
+            $this->countRows()
+        );
         self::assertEquals( $publishedLocationUrlAlias, $handler->lookup( $url, array( $languageCode ) ) );
         $this->assertLocationUrlAliasCorrect(
             $publishedLocationUrlAlias,
@@ -1533,6 +1545,399 @@ class UrlAliasHandlerTest extends TestCase
         // Check that virtual alias still works as expected
         self::assertEquals( $virtualUrlAlias, $handler->lookup( $virtualUrl, $virtualUrlPrioritizedLanguageCodes ) );
     }
+
+    /**
+     * Test for the createCustomUrlAlias() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::createCustomUrlAlias
+     * @group create
+     * @group custom
+     */
+    public function testCreateCustomUrlAliasBehaviour()
+    {
+        $handlerMock = $this->getPartlyMockedHandler( array( "createUrlAlias" ) );
+
+        $handlerMock->expects(
+            $this->once()
+        )->method(
+            "createUrlAlias"
+        )->with(
+            $this->equalTo( "eznode:1" ),
+            $this->equalTo( "path" ),
+            $this->equalTo( false ),
+            $this->equalTo( null ),
+            $this->equalTo( false ),
+            $this->equalTo( array( "cro-HR" ) )
+        )->will(
+            $this->returnValue(
+                new UrlAlias()
+            )
+        );
+
+        $this->assertInstanceOf(
+            "eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias",
+            $handlerMock->createCustomUrlAlias( 1, "path", array( "cro-HR" ) )
+        );
+    }
+
+    /**
+     * Test for the createGlobalUrlAlias() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::createGlobalUrlAlias
+     * @group create
+     * @group global
+     */
+    public function testCreateGlobalUrlAliasBehaviour()
+    {
+        $handlerMock = $this->getPartlyMockedHandler( array( "createUrlAlias" ) );
+
+        $handlerMock->expects(
+            $this->once()
+        )->method(
+            "createUrlAlias"
+        )->with(
+            $this->equalTo( "module/module" ),
+            $this->equalTo( "path" ),
+            $this->equalTo( false ),
+            $this->equalTo( null ),
+            $this->equalTo( false ),
+            $this->equalTo( null )
+        )->will(
+            $this->returnValue(
+                new UrlAlias()
+            )
+        );
+
+        $this->assertInstanceOf(
+            "eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias",
+            $handlerMock->createGlobalUrlAlias( "module/module", "path" )
+        );
+    }
+
+    /**
+     * Test for the createUrlAlias() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::createUrlAlias
+     * @group create
+     * @group custom
+     */
+    public function testCreateCustomUrlAlias()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/publish_base.php" );
+
+        $path = "custom-location-alias";
+        $customUrlAlias = $handler->createCustomUrlAlias(
+            314,
+            $path,
+            array( "cro-HR" ),
+            false,
+            "cro-HR",
+            false
+        );
+
+        self::assertEquals( 2, $this->countRows() );
+        self::assertEquals(
+            new UrlAlias(
+                array(
+                    "id" => "0-" . md5( $path ),
+                    "type" => UrlAlias::VIRTUAL,
+                    "destination" => 314,
+                    "languageCodes" => array( "cro-HR" ),
+                    "alwaysAvailable" => false,
+                    "path" => $path,
+                    "isHistory" => false,
+                    "isCustom" => true,
+                    "forward" => false
+                )
+            ),
+            $customUrlAlias
+        );
+    }
+
+    /**
+     * Test for the createUrlAlias() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::createUrlAlias
+     * @group create
+     * @group custom
+     */
+    public function testCreatedCustomUrlAliasIsLoadable()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/publish_base.php" );
+
+        $path = "custom-location-alias";
+        $customUrlAlias = $handler->createCustomUrlAlias(
+            314,
+            $path,
+            array( "cro-HR" ),
+            false,
+            "cro-HR",
+            false
+        );
+
+        self::assertEquals( 2, $this->countRows() );
+        self::assertEquals(
+            $handler->lookup( "custom-location-alias", array( "cro-HR" ) ),
+            $customUrlAlias
+        );
+    }
+
+    /**
+     * Test for the createUrlAlias() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::createUrlAlias
+     * @group create
+     * @group custom
+     */
+    public function testCreateCustomUrlAliasWithNopElement()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/publish_base.php" );
+
+        $path = "ribar/palunko";
+        $customUrlAlias = $handler->createCustomUrlAlias(
+            314,
+            $path,
+            array( "cro-HR" ),
+            false,
+            "cro-HR",
+            true
+        );
+
+        self::assertEquals( 3, $this->countRows() );
+        self::assertEquals(
+            new UrlAlias(
+                array(
+                    "id" => "2-" . md5( "palunko" ),
+                    "type" => UrlAlias::VIRTUAL,
+                    "destination" => 314,
+                    "languageCodes" => array( "cro-HR" ),
+                    "alwaysAvailable" => true,
+                    "path" => $path,
+                    "isHistory" => false,
+                    "isCustom" => true,
+                    "forward" => false
+                )
+            ),
+            $customUrlAlias
+        );
+
+        return $handler;
+    }
+
+    /**
+     * Test for the createUrlAlias() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::createUrlAlias
+     * @depends testCreateCustomUrlAliasWithNopElement
+     * @group create
+     * @group custom
+     */
+    public function testCreateUrlAliasWithNopElementCreatesValidNopElement( Handler $handler )
+    {
+        $url = "ribar";
+        $urlAlias = $handler->lookup( $url, array( "cro-HR" ) );
+
+        $this->assertNopElementValid(
+            $urlAlias,
+            strtolower( $url ),
+            "0-" . md5( $url )
+        );
+    }
+
+    /**
+     * Test for the createUrlAlias() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::createUrlAlias
+     * @group create
+     * @group custom
+     */
+    public function testCreateCustomUrlAliasReusesHistoryElement()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_reusing.php" );
+
+        $countBeforeReusing = $this->countRows();
+        $historyUrlAlias = $handler->lookup( "history-hello", array( "eng-GB" ) );
+        $handler->createCustomUrlAlias(
+            314,
+            "history-hello",
+            array( "eng-GB" ),
+            true,
+            "eng-GB",
+            true
+        );
+
+        self::assertEquals(
+            $countBeforeReusing,
+            $this->countRows()
+        );
+        self::assertNotEquals(
+            $historyUrlAlias,
+            $handler->lookup( "history-hello", array( "eng-GB" ) )
+        );
+    }
+
+    /**
+     * Test for the createUrlAlias() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::createUrlAlias
+     * @group create
+     * @group custom
+     */
+    public function testCreateCustomUrlAliasReusesNopElement()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_reusing.php" );
+
+        $countBeforeReusing = $this->countRows();
+        $virtualUrlAlias = $handler->lookup( "nop-element/search", array( "eng-GB" ) );
+        $handler->createCustomUrlAlias(
+            314,
+            "nop-element",
+            array( "cro-HR" ),
+            true,
+            "cro-HR",
+            true
+        );
+
+        self::assertEquals(
+            $countBeforeReusing,
+            $this->countRows()
+        );
+
+        // Check that virtual alias still works as expected
+        self::assertEquals( $virtualUrlAlias, $handler->lookup( "nop-element/search", array( "eng-GB" ) ) );
+    }
+
+    /**
+     * Test for the createUrlAlias() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::createUrlAlias
+     * @group create
+     * @group custom
+     */
+    public function testCreateCustomUrlAliasReusesLocationElement()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_reusing.php" );
+
+        $countBeforeReusing = $this->countRows();
+        $locationUrlAlias = $handler->lookup( "autogenerated-hello", array( "eng-GB" ) );
+        $handler->createCustomUrlAlias(
+            315,
+            "autogenerated-hello/custom-location-alias-for-315",
+            array( "cro-HR" ),
+            true,
+            "cro-HR",
+            true
+        );
+
+        self::assertEquals(
+            $countBeforeReusing + 1,
+            $this->countRows()
+        );
+
+        // Check that location alias still works as expected
+        self::assertEquals(
+            $locationUrlAlias,
+            $handler->lookup( "autogenerated-hello", array( "eng-GB" ) )
+        );
+    }
+
+    public function providerForTestCreateCustomUrlAliasWithForward()
+    {
+        return array(
+            array(
+                "jedan/dva/tri",
+                array( "cro-HR" ),
+                316
+            ),
+            array(
+                "jedan/two/three",
+                array( "eng-GB" ),
+                316
+            ),
+            array(
+                "jedan/dva/tri",
+                array( "cro-HR", "eng-GB" ),
+                316
+            ),
+            array(
+                "jedan/two/three",
+                array( "eng-GB", "cro-HR" ),
+                316
+            ),
+            array(
+                "jedan/dva/tri",
+                array( "cro-HR", "ger-DE" ),
+                316
+            ),
+            array(
+                "jedan/dva/drei",
+                array( "ger-DE", "cro-HR" ),
+                316
+            ),
+            array(
+                "jedan/two/three",
+                array( "eng-GB", "ger-DE" ),
+                316
+            ),
+            array(
+                "jedan/two/drei",
+                array( "ger-DE", "eng-GB" ),
+                316
+            ),
+            array(
+                "jedan/two/drei",
+                array( "ger-DE", "eng-GB" ),
+                316
+            ),
+            array(
+                "jedan/dva/drei",
+                array( "ger-DE", "cro-HR" ),
+                316
+            ),
+        );
+    }
+
+    /**
+     * Test for the createUrlAlias() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::createUrlAlias
+     * @dataProvider providerForTestCreateCustomUrlAliasWithForward
+     */
+    public function testCreateCustomUrlAliasWithForward(
+        $url,
+        array $prioritizedLanguageCodes,
+        $locationId )
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_location.php" );
+
+        $customUrlAlias = $handler->createCustomUrlAlias(
+            $locationId,
+            "custom-location-alias-for-" . $locationId,
+            $prioritizedLanguageCodes,
+            true,
+            "cro-HR",
+            true
+        );
+
+        self::assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias", $customUrlAlias );
+        self::assertEquals(
+            $url,
+            $customUrlAlias->destination
+        );
+    }
+
+
+
+
+
+
 
 
 
@@ -1561,6 +1966,40 @@ class UrlAliasHandlerTest extends TestCase
      * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected $dbHandler;
+
+    /**
+     * @param array $methods
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getPartlyMockedHandler( array $methods )
+    {
+        $mock = $this->getMock(
+            "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\Handler",
+            $methods,
+            array(
+                self::getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\Gateway" ),
+                self::getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\Mapper" ),
+                self::getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway" ),
+                self::getMock(
+                    "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Handler",
+                    array(),
+                    array(),
+                    '',
+                    false
+                ),
+                self::getMock(
+                    "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\MaskGenerator",
+                    array(),
+                    array(),
+                    '',
+                    false
+                )
+            )
+        );
+
+        return $mock;
+    }
 
     protected function getHandler()
     {

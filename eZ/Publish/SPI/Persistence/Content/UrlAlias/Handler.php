@@ -44,15 +44,14 @@ interface Handler
      *
      * @param mixed $locationId
      * @param string $path
+     * @param array $prioritizedLanguageCodes
      * @param boolean $forwarding
      * @param string|null $languageName
      * @param boolean $alwaysAvailable
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given language
-     *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
-    public function createCustomUrlAlias( $locationId, $path, $forwarding = false, $languageName = null, $alwaysAvailable = false );
+    public function createCustomUrlAlias( $locationId, $path, array $prioritizedLanguageCodes, $forwarding = false, $languageName = null, $alwaysAvailable = false );
 
     /**
      * Create a user chosen $alias pointing to a resource in $languageName.

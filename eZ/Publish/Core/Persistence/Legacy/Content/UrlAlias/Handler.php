@@ -178,6 +178,8 @@ class Handler implements BaseUrlAliasHandler
                     : $row["id"];
                 $data = array(
                     "action" => $action,
+                    // In case when NOP row was reused
+                    "action_type" => "eznode",
                     // Add language and always available bit to the existing mask with removed always available bit
                     "lang_mask" => ( $row["lang_mask"] & ~1 ) | $languageId | (int)$alwaysAvailable,
                     // Always updating text ensures that letter case changes are stored
@@ -219,13 +221,12 @@ class Handler implements BaseUrlAliasHandler
         $data["always_available"] = $alwaysAvailable;
         $data["is_original"] = true;
         $data["is_alias"] = false;
-        //$data["language_codes"] = array();
         foreach ( $this->languageMaskGenerator->extractLanguageIdsFromMask( $data["lang_mask"] ) as $languageId )
         {
             $data["language_codes"][] = $this->languageHandler->load( $languageId )->languageCode;
         }
 
-        return $this->mapper->extractUrlAliasFromRow( $data );
+        return $this->mapper->extractUrlAliasFromData( $data );
     }
 
     /**
@@ -236,24 +237,22 @@ class Handler implements BaseUrlAliasHandler
      *
      * @param mixed $locationId
      * @param string $path
+     * @param array $prioritizedLanguageCodes
      * @param boolean $forwarding
      * @param string $languageCode
      * @param boolean $alwaysAvailable
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given language
-     *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
-    public function createCustomUrlAlias( $locationId, $path, $forwarding = false, $languageCode = null, $alwaysAvailable = false )
+    public function createCustomUrlAlias( $locationId, $path, array $prioritizedLanguageCodes, $forwarding = false, $languageCode = null, $alwaysAvailable = false )
     {
-        return $this->mapper->extractUrlAliasFromRow(
-            $this->createUrlAlias(
-                "eznode:" . $locationId,
-                $path,
-                $forwarding,
-                $languageCode,
-                $alwaysAvailable
-            )
+        return $this->createUrlAlias(
+            "eznode:" . $locationId,
+            $path,
+            $forwarding,
+            $languageCode,
+            $alwaysAvailable,
+            $prioritizedLanguageCodes
         );
     }
 
@@ -277,14 +276,12 @@ class Handler implements BaseUrlAliasHandler
      */
     public function createGlobalUrlAlias( $resource, $path, $forwarding = false, $languageCode = null, $alwaysAvailable = false )
     {
-        return $this->mapper->extractUrlAliasFromRow(
-            $this->createUrlAlias(
-                $resource,
-                $path,
-                $forwarding,
-                $languageCode,
-                $alwaysAvailable
-            )
+        return $this->createUrlAlias(
+            $resource,
+            $path,
+            $forwarding,
+            $languageCode,
+            $alwaysAvailable
         );
     }
 
@@ -298,10 +295,11 @@ class Handler implements BaseUrlAliasHandler
      * @param bool $forward
      * @param string|null $languageCode
      * @param bool $alwaysAvailable
+     * @param array $prioritizedLanguageCodes
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
-    protected function createUrlAlias( $action, $path, $forward, $languageCode = null, $alwaysAvailable = false )
+    protected function createUrlAlias( $action, $path, $forward, $languageCode, $alwaysAvailable, array $prioritizedLanguageCodes = null )
     {
         $pathElements = explode( "/", $path );
         // Pop and store topmost path element, it is handled separately later
@@ -318,7 +316,7 @@ class Handler implements BaseUrlAliasHandler
             $row = $this->gateway->loadRow( $parentId, $pathElementMD5 );
 
             $parentId = empty( $row )
-                ? $this->gateway->insertNopRow( $parentId, $pathElement )
+                ? $this->gateway->insertNopRow( $parentId, $pathElement, $pathElementMD5 )
                 : $row["link"];
 
             $createdPath[] = $pathElement;
@@ -335,45 +333,41 @@ class Handler implements BaseUrlAliasHandler
             $createdPath = array();
         }
 
+        $topElementMD5 = $this->getHash( $topElement );
         // Set common values for two cases below
         $data = array(
             "action" => $action,
             "is_alias" => 1,
             "alias_redirects" => $forward ? 1 : 0,
-            "parent" => $parentId
+            "parent" => $parentId,
+            "text" => $topElement,
+            "text_md5" => $topElementMD5
         );
-        $topElementMD5 = $this->getHash( $topElement );
         // Try to load topmost element
         $row = $this->gateway->loadRow( $parentId, $topElementMD5 );
 
         // If nothing was returned perform insert
         if ( empty( $row ) )
         {
-            $this->gateway->insertRow(
-                $data + array(
-                    // Set mask to language and always available bit
-                    "lang_mask" => $languageId | (int)$alwaysAvailable,
-                    "text" => $topElement,
-                    "text_md5" => $topElementMD5
-                )
-            );
+            $data["lang_mask"] = $languageId | (int)$alwaysAvailable;
+            $this->gateway->insertRow( $data );
         }
         // If a entry was returned check if it is reusable
+        // There are 3 possible cases:
+        // 1. @todo document
+        // 2. NOP entry
+        // 3. history entry
         elseif (
             ( $row["action"] == $action && $row["id"] == $row["link"] )
             || $row["action"] == "nop:"
             || $row["is_original"] == 0
         )
         {
+            $data["lang_mask"] = $row["lang_mask"] | $languageId | (int)$alwaysAvailable;
             $this->gateway->updateRow(
                 $parentId,
                 $topElementMD5,
-                $data + array(
-                    // Add language and always available bit to the mask
-                    "lang_mask" => $row["lang_mask"] | $languageId | (int)$alwaysAvailable,
-                    "text" => $topElement,
-                    "text_md5" => $topElementMD5
-                )
+                $data
             );
         }
         // Path already exists, exit with ForbiddenException
@@ -384,19 +378,22 @@ class Handler implements BaseUrlAliasHandler
 
         $createdPath[] = $topElement;
 
-        $data["type"] = UrlAlias::LOCATION;
+        preg_match( "#^([a-zA-Z0-9_]+):(.+)?$#", $action, $matches );
+        $data["type"] = $matches[1] === "eznode" ? UrlAlias::VIRTUAL : UrlALias::RESOURCE;
         $data["path"] = implode( "/", $createdPath );
         $data["forward"] = $forward;
-        $data["destination"] = $data["path"];
+        $data["destination"] = $data["type"] === UrlAlias::RESOURCE || !$forward
+            ? $matches[2]
+            : $this->gateway->getPath(
+                $this->gateway->loadLocationEntryIdByAction( $action ),
+                $prioritizedLanguageCodes
+            );
         $data["always_available"] = $alwaysAvailable;
         $data["is_original"] = true;
         $data["is_alias"] = true;
-        foreach ( $this->languageMaskGenerator->extractLanguageIdsFromMask( $data["lang_mask"] ) as $languageId )
-        {
-            $data["language_codes"][] = $this->languageHandler->load( $languageId )->languageCode;
-        }
+        $data["language_codes"][] = $languageCode;
 
-        return $this->mapper->extractUrlAliasFromRow( $data );
+        return $this->mapper->extractUrlAliasFromData( $data );
     }
 
     /**
@@ -410,7 +407,7 @@ class Handler implements BaseUrlAliasHandler
      */
     public function listURLAliasesForLocation( $locationId, $custom = false, array $prioritizedLanguageCodes )
     {
-        return $this->mapper->extractUrlAliasListFromRows(
+        return $this->mapper->extractUrlAliasListFromData(
             $this->gateway->loadUrlAliasListDataByLocationId(
                 $locationId,
                 $custom,
@@ -476,7 +473,7 @@ class Handler implements BaseUrlAliasHandler
             }
             elseif ( $data["is_alias"] )
             {
-                if ( preg_match( "#^module:(.+)$#", $data["action"] ) )
+                if ( preg_match( "#^module:.+$#", $data["action"] ) )
                 {
                     $type = UrlAlias::RESOURCE;
                 }
@@ -598,7 +595,7 @@ class Handler implements BaseUrlAliasHandler
         $data["is_fallback"] = $isFallback;
         $data["always_available"] = (bool)( $data["lang_mask"] & 1 );
 
-        return $this->mapper->extractUrlAliasFromRow( $data );
+        return $this->mapper->extractUrlAliasFromData( $data );
     }
 
     /**
