@@ -54,6 +54,9 @@ class LegacyStorage extends RelationLegacyStorage
         $stmt = $q->prepare();
         foreach ( $field->value->data['destinationContentIds'] as $dataDestinationContentId )
         {
+            if ( $dataDestinationContentId === null )
+                throw new \RuntimeException( "\$destinationContentId can not be of value null" );
+
             $destinationContentId = $dataDestinationContentId;
             $stmt->execute();
         }

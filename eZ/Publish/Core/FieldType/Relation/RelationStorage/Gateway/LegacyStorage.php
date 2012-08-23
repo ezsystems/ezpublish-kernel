@@ -71,6 +71,9 @@ class LegacyStorage extends Gateway
     {
         $dbHandler = $this->getConnection();
 
+        if ( empty( $field->value->data['destinationContentId'] ) )
+            throw new \RuntimeException( "\$destinationContentId can not be of value null" );
+
         // insert relation to ezcontentobject_link
         $q = $dbHandler->createInsertQuery();
         $q->insertInto(
