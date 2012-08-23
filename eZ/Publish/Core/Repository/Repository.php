@@ -623,6 +623,7 @@ class Repository implements RepositoryInterface
         {
             throw new RuntimeException( $e->getMessage(), 0, $e );
         }
+        $this->objectStore->reset();
     }
 
     /**

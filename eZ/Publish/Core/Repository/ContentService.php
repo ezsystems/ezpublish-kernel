@@ -702,9 +702,6 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        // clear content object cache
-        $this->objectStore->discard( 'content', $contentInfo->id );
-
         $this->repository->beginTransaction();
         try
         {
@@ -762,6 +759,7 @@ class ContentService implements ContentServiceInterface
                 );
             }
             $this->repository->commit();
+            $this->objectStore->discard( 'content', $contentInfo->id );
         }
         catch ( Exception $e )
         {
@@ -781,14 +779,12 @@ class ContentService implements ContentServiceInterface
      */
     public function deleteContent( APIContentInfo $contentInfo )
     {
-        // clear object cache
-        $this->objectStore->discard( 'content', $contentInfo->id );
-
         $this->repository->beginTransaction();
         try
         {
             $this->persistenceHandler->contentHandler()->deleteContent( $contentInfo->id );
             $this->repository->commit();
+            $this->objectStore->discard( 'content', $contentInfo->id );
         }
         catch ( Exception $e )
         {
@@ -845,8 +841,6 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        // clear object cache
-        $this->objectStore->discard( 'content', $contentInfo->id );
 
         $this->repository->beginTransaction();
         try
@@ -857,6 +851,7 @@ class ContentService implements ContentServiceInterface
                 $user->id
             );
             $this->repository->commit();
+            $this->objectStore->discard( 'content', $contentInfo->id );
         }
         catch ( Exception $e )
         {
@@ -1088,9 +1083,6 @@ class ContentService implements ContentServiceInterface
             )
         );
 
-        // clear object cache
-        $this->objectStore->discard( 'content', $contentId );
-
         $this->repository->beginTransaction();
         try
         {
@@ -1100,6 +1092,7 @@ class ContentService implements ContentServiceInterface
                 $spiContentUpdateStruct
             );
             $this->repository->commit();
+            $this->objectStore->discard( 'content', $contentId );
         }
         catch ( Exception $e )
         {
@@ -1128,14 +1121,13 @@ class ContentService implements ContentServiceInterface
             $versionInfo->versionNo
         );
 
-        // clear object cache
-         $this->objectStore->discard( 'content', $contentId );
 
         $this->repository->beginTransaction();
         try
         {
             $content = $this->internalPublishVersion( $loadedVersionInfo );
             $this->repository->commit();
+            $this->objectStore->discard( 'content', $contentId );
         }
         catch ( Exception $e )
         {
@@ -1213,8 +1205,6 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-         // clear object cache
-         $this->objectStore->discard( 'content', $versionInfo->getContentInfo()->id );
 
         $this->repository->beginTransaction();
         try
@@ -1224,6 +1214,7 @@ class ContentService implements ContentServiceInterface
                 $versionInfo->versionNo
             );
             $this->repository->commit();
+            $this->objectStore->discard( 'content', $versionInfo->getContentInfo()->id );
         }
         catch ( Exception $e )
         {
@@ -1416,9 +1407,6 @@ class ContentService implements ContentServiceInterface
 
         $sourceContentInfo = $sourceVersion->getContentInfo();
 
-        // clear object cache
-         $this->objectStore->discard( 'content', $sourceContentInfo->id );
-
         $this->repository->beginTransaction();
         try
         {
@@ -1434,6 +1422,7 @@ class ContentService implements ContentServiceInterface
                 )
             );
             $this->repository->commit();
+            $this->objectStore->discard( 'content', $sourceContentInfo->id );
         }
         catch ( Exception $e )
         {
@@ -1478,9 +1467,6 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-         // clear object cache
-         $this->objectStore->discard( 'content', $sourceVersion->getContentInfo()->id );
-
         // there should be only one relation of type COMMON for each destination,
         // but in case there were ever more then one, we will remove them all
         // @todo: alternatively, throw BadStateException?
@@ -1495,6 +1481,7 @@ class ContentService implements ContentServiceInterface
                 }
             }
             $this->repository->commit();
+            $this->objectStore->discard( 'content', $sourceVersion->getContentInfo()->id );
         }
         catch ( Exception $e )
         {

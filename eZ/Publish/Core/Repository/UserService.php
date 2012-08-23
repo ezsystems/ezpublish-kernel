@@ -263,15 +263,13 @@ class UserService implements UserServiceInterface
 
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
 
-        // clear content object cache on main node change
-        $this->objectStore->discard( 'content', $userGroup->id );
-
         $this->repository->beginTransaction();
         try
         {
             //@todo: what happens to sub user groups and users below sub user groups
             $this->repository->getContentService()->deleteContent( $loadedUserGroup->getVersionInfo()->getContentInfo() );
             $this->repository->commit();
+            $this->objectStore->reset();
         }
         catch ( \Exception $e )
         {
@@ -311,13 +309,14 @@ class UserService implements UserServiceInterface
             throw new BadStateException( "newParent", 'new user group is not stored and/or does not have any location yet' );
 
         // clear content object cache on main node change
-        $this->objectStore->discard( 'content', $userGroup->id );
+
 
         $this->repository->beginTransaction();
         try
         {
             $locationService->moveSubtree( $userGroupMainLocation, $newParentMainLocation );
             $this->repository->commit();
+            $this->objectStore->reset();
         }
         catch ( \Exception $e )
         {
@@ -357,9 +356,6 @@ class UserService implements UserServiceInterface
 
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
 
-        // clear content object cache on main node change
-        $this->objectStore->discard( 'content', $userGroup->id );
-
         $this->repository->beginTransaction();
         try
         {
@@ -385,6 +381,7 @@ class UserService implements UserServiceInterface
             }
 
             $this->repository->commit();
+            $this->objectStore->discard( 'content', $loadedUserGroup->id );
         }
         catch ( \Exception $e )
         {
@@ -622,14 +619,12 @@ class UserService implements UserServiceInterface
 
         $loadedUser = $this->loadUser( $user->id );
 
-        // clear content object cache on main node change
-        $this->objectStore->discard( 'content', $user->id );
-
         $this->repository->beginTransaction();
         try
         {
             $this->repository->getContentService()->deleteContent( $loadedUser->getVersionInfo()->getContentInfo() );
             $this->repository->commit();
+            $this->objectStore->reset();
         }
         catch ( \Exception $e )
         {
@@ -699,9 +694,6 @@ class UserService implements UserServiceInterface
         $contentService = $this->repository->getContentService();
         $loadedUser = $this->loadUser( $user->id );
 
-        // clear content object cache on main node change
-        $this->objectStore->discard( 'content', $user->id );
-
         $this->repository->beginTransaction();
         try
         {
@@ -746,6 +738,7 @@ class UserService implements UserServiceInterface
             );
 
             $this->repository->commit();
+            $this->objectStore->discard( 'content', $user->id );
         }
         catch ( \Exception $e )
         {
@@ -795,9 +788,6 @@ class UserService implements UserServiceInterface
 
         $locationCreateStruct = $locationService->newLocationCreateStruct( $groupMainLocation->id );
 
-        // clear content object cache on main node change
-        $this->objectStore->discard( 'content', $user->id );
-
         $this->repository->beginTransaction();
         try
         {
@@ -806,6 +796,7 @@ class UserService implements UserServiceInterface
                 $locationCreateStruct
             );
             $this->repository->commit();
+            $this->objectStore->reset();
         }
         catch ( \Exception $e )
         {
@@ -847,14 +838,12 @@ class UserService implements UserServiceInterface
         {
             if ( $userLocation->parentLocationId == $groupMainLocation->id )
             {
-                // clear content object cache on main node change
-                $this->objectStore->discard( 'content', $userLocation->contentId );
-
                 $this->repository->beginTransaction();
                 try
                 {
                     $locationService->deleteLocation( $userLocation );
                     $this->repository->commit();
+                    $this->objectStore->reset();
                     return;
                 }
                 catch ( \Exception $e )

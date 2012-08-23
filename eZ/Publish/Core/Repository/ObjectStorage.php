@@ -18,8 +18,8 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * cache at a time to avoid exces memory usage. Since it is pr type, and
  * on intention simple with no knowledge of the objects them self it
  * is not recommended to store anything but the root aggregate to avoid
- * having to discard lots of different ca caches and do logic to use
- * correct. Also, this is not meant to cache all the api's, only the hotspot
+ * having to discard lots of different caches and do logic to use
+ * correct. Also, this is not meant to cache all the api's, only the hot-spots.
  *
  */
 class ObjectStorage

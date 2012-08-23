@@ -708,13 +708,11 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
-        // clear content object cache in case of main node change
-        $this->objectStore->discard( 'content', $location->contentId );
-
         $this->repository->beginTransaction();
         try
         {
             $this->persistenceHandler->locationHandler()->removeSubtree( $location->id );
+            $this->objectStore->reset();
             $this->repository->commit();
         }
         catch ( \Exception $e )
