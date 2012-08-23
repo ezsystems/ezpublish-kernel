@@ -37,7 +37,9 @@ class ViewController extends Controller
     {
         $resolver->setDefaults(
             array(
-                 'viewCache'    => true
+                 'viewCache'    => true,
+                 // Content responses accessible to anonymous users (e.g. not logged-in) will receive anonymousTTL as Max-Age value
+                 'anonymousTTL' => 60,
             )
         );
     }
@@ -54,6 +56,7 @@ class ViewController extends Controller
     public function viewLocation( $locationId, $viewType )
     {
         $response = new Response();
+        $request = $this->getRequest();
         $repository = $this->getRepository();
         // TODO: Use a dedicated etag generator, generating a hash instead of plain text
         $etag = "ezpublish-location-$locationId-$viewType";
@@ -67,6 +70,16 @@ class ViewController extends Controller
             {
                 $response->setPublic();
                 $response->setEtag( $etag );
+
+                // If-None-Match is the request counterpart of Etag response header
+                // Making the response to vary against it ensures that an HTTP reverse proxy caches the different possible variations of the response
+                // as it can depend on user role for instance.
+                if ( $request->headers->has( 'If-None-Match' ) )
+                {
+                    $response->setVary( 'If-None-Match' );
+                    $response->setMaxAge( $this->getOption( 'anonymousTTL' ) );
+                }
+
                 $response->setLastModified( $location->getContentInfo()->modificationDate );
                 if ( $response->isNotModified( $this->getRequest() ) )
                 {
