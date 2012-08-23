@@ -22,7 +22,7 @@ class NullStorage implements FieldStorage
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
-        return;
+        return false;
     }
 
     /**
