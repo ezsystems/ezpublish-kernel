@@ -42,7 +42,29 @@ class RelationList implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataText = $this->generateXmlString( $value );
+        $doc = new DOMDocument( '1.0', 'utf-8' );
+        $root = $doc->createElement( 'related-objects' );
+        $doc->appendChild( $root );
+
+        $relationList = $doc->createElement( 'relation-list' );
+        foreach ( $this->getRelationXmlHashFromDB( $value->data['destinationContentIds'] ) as $row )
+        {
+            $relationItem = $doc->createElement( 'relation-item' );
+            foreach( self::dbAttributeMap() as $domAttrKey => $propertyKey )
+            {
+                if ( !isset( $row[$propertyKey] ) )
+                    throw new \RuntimeException( "Missing relation-item external data property: $propertyKey" );
+
+                $relationItem->setAttribute( $domAttrKey, $row[$propertyKey] );
+            }
+            $relationList->appendChild( $relationItem );
+            unset( $relationItem );
+        }
+
+        $root->appendChild( $relationList );
+        $doc->appendChild( $root );
+
+        $storageFieldValue->dataText = $doc->saveXML();
     }
 
     /**
@@ -53,7 +75,19 @@ class RelationList implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $this->restoreValueFromXmlString( $value->dataText, $fieldValue );
+        $fieldValue->data = array( 'destinationContentIds' => array() );
+        if ( $value->dataText === null )
+            return;
+
+        $dom = new DOMDocument( '1.0', 'utf-8' );
+        if ( $dom->loadXML( $value->dataText ) === true )
+        {
+            foreach ( $dom->getElementsByTagName( 'relation-item' ) as $relationItem )
+            {
+                /** @var \DOMElement $relationItem */
+                $fieldValue->data['destinationContentIds'][] = $relationItem->getAttribute( 'contentobject-id' );;
+            }
+        }
     }
 
     /**
@@ -103,63 +137,6 @@ class RelationList implements Converter
     public function getIndexColumn()
     {
         return 'sort_key_string';
-    }
-
-    /**
-     * Generates XML string from $authorValue to be stored in storage engine
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
-     *
-     * @throws \RuntimeException
-     * @return string The generated XML string
-     */
-    private function generateXmlString( FieldValue $value )
-    {
-        $doc = new DOMDocument( '1.0', 'utf-8' );
-        $root = $doc->createElement( 'related-objects' );
-        $doc->appendChild( $root );
-
-        $relationList = $doc->createElement( 'relation-list' );
-        foreach ( $this->getRelationXmlHashFromDB( $value->data['destinationContentIds'] ) as $row )
-        {
-            $relationItem = $doc->createElement( 'relation-item' );
-            foreach( self::dbAttributeMap() as $domAttrKey => $propertyKey )
-            {
-                if ( !isset( $row[$propertyKey] ) )
-                    throw new \RuntimeException( "Missing relation-item external data property: $propertyKey" );
-
-                $relationItem->setAttribute( $domAttrKey, $row[$propertyKey] );
-            }
-            $relationList->appendChild( $relationItem );
-            unset( $relationItem );
-        }
-
-        $root->appendChild( $relationList );
-        $doc->appendChild( $root );
-
-        return $doc->saveXML();
-    }
-
-    /**
-     * Restores an author Value object from $xmlString
-     *
-     * @param string $xmlString XML String stored in storage engine
-     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
-     *
-     * @return void
-     */
-    private function restoreValueFromXmlString( $xmlString, FieldValue $fieldValue )
-    {
-        $dom = new DOMDocument( '1.0', 'utf-8' );
-        $fieldValue->data = array( 'destinationContentIds' => array() );
-        if ( $xmlString !== null && $dom->loadXML( $xmlString ) === true )
-        {
-            foreach ( $dom->getElementsByTagName( 'relation-item' ) as $relationItem )
-            {
-                /** @var \DOMElement $relationItem */
-                $fieldValue->data['destinationContentIds'][] = $relationItem->getAttribute( 'contentobject-id' );;
-            }
-        }
     }
 
     /**
