@@ -102,6 +102,6 @@ class Relation implements Converter
      */
     public function getIndexColumn()
     {
-        return false;
+        return 'sort_key_int';
     }
 }
