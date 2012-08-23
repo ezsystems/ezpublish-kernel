@@ -92,7 +92,7 @@ class LegacyStorage extends Gateway
             $q->bindValue( APIRelationValue::FIELD, null, \PDO::PARAM_INT )
         )->set(
             $dbHandler->quoteColumn( "to_contentobject_id" ),
-            $q->bindValue( $field->value->externalData['destinationContentId'], null, \PDO::PARAM_INT )
+            $q->bindValue( $field->value->data['destinationContentId'], null, \PDO::PARAM_INT )
         );
 
         $q->prepare()->execute();

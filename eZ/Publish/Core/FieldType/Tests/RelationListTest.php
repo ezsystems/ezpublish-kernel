@@ -80,7 +80,7 @@ class RelationListTest extends FieldTypeTest
         $fieldValue = $ft->toPersistenceValue( new Value( array( 1 ) ) );
 
         self::assertSame( array( "destinationContentIds" => array( 1 ) ), $fieldValue->data );
-        self::assertSame( array( "destinationContentIds" => array( 1 ) ), $fieldValue->externalData );
+        self::assertSame( null, $fieldValue->externalData );
     }
 
     /**
@@ -92,7 +92,7 @@ class RelationListTest extends FieldTypeTest
 
         $fieldValue = new FieldValue();
         $fieldValue->data = array( "destinationContentIds" => array( 1 ) );
-        $fieldValue->externalData = array( "destinationContentIds" => array( 1 ) );
+        $fieldValue->externalData = null;
 
         $ft = new Relation( $this->validatorService, $this->fieldTypeTools );
         $value = $ft->fromPersistenceValue( $fieldValue );

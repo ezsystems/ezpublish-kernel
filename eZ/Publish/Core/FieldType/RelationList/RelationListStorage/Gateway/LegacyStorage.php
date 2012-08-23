@@ -52,9 +52,9 @@ class LegacyStorage extends RelationLegacyStorage
         );
 
         $stmt = $q->prepare();
-        foreach ( $field->value->externalData['destinationContentIds'] as $externalDataDestinationContentId )
+        foreach ( $field->value->data['destinationContentIds'] as $dataDestinationContentId )
         {
-            $destinationContentId = $externalDataDestinationContentId;
+            $destinationContentId = $dataDestinationContentId;
             $stmt->execute();
         }
 

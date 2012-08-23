@@ -16,7 +16,7 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 class Value extends BaseValue
 {
     /**
-     * Related content
+     * Related content id's
      *
      * @var mixed[]
      */

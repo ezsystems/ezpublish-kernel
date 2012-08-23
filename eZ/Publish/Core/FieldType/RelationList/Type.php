@@ -223,44 +223,4 @@ class Type extends FieldType
     {
         return true;
     }
-
-    /**
-     * Converts a $value to a persistence value
-     *
-     * @param mixed $value
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
-     */
-    public function toPersistenceValue( $value )
-    {
-        return new PersistenceFieldValue(
-            array(
-                "data" => $this->toHash( $value ),
-                "externalData" => $this->toHash( $value ),
-                "sortKey" => null,
-            )
-        );
-    }
-
-    /**
-     * @see \eZ\Publish\Core\FieldType
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
-     *
-     * @return mixed
-     */
-    public function fromPersistenceValue( PersistenceFieldValue $fieldValue )
-    {
-        return $this->fromHash( $fieldValue->data );
-    }
-
-    /**
-     * Events handler (prePublish, postPublish, preCreate, postCreate)
-     *
-     * @param \eZ\Publish\SPI\FieldType\Event $event - prePublish, postPublish, preCreate, postCreate
-     */
-    public function handleEvent( Event $event )
-    {
-
-    }
 }
