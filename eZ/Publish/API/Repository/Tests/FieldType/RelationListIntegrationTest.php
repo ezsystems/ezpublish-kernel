@@ -10,6 +10,7 @@
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 use eZ\Publish\API\Repository,
     eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue,
+    eZ\Publish\Core\FieldType\RelationList\Type as RelationListType,
     eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
@@ -38,12 +39,16 @@ class RelationListFieldTypeIntegrationTest extends BaseIntegrationTest
         return array(
             'selectionMethod' => array(
                 'type' => 'int',
-                'default' => 0
+                'default' => RelationListType::SELECTION_BROWSE,
             ),
-            'selectionRoot' => array(
+            'selectionDefaultLocation' => array(
                 'type' => 'string',
-                'default' => '',
-            )
+                'default' => null,
+            ),
+            'selectionContentTypes' => array(
+                'type' => 'array',
+                'default' => array(),
+            ),
         );
     }
 
@@ -63,7 +68,11 @@ class RelationListFieldTypeIntegrationTest extends BaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array( 'selectionMethod' => 0, 'selectionRoot' => '1' );
+        return array(
+            'selectionMethod' => 1,
+            'selectionDefaultLocation' => '2',
+            'selectionContentTypes' => array( 'blog_post' ),
+        );
     }
 
     /**
@@ -85,7 +94,7 @@ class RelationListFieldTypeIntegrationTest extends BaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array( 'selectionMethod' => 'a', 'selectionRoot' => true, 'unknownSetting' => false );
+        return array( 'selectionMethod' => 'a', 'selectionDefaultLocation' => true, 'unknownSetting' => false );
     }
 
     /**

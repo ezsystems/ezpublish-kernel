@@ -27,13 +27,8 @@ use eZ\Publish\SPI\FieldType\Event;
 class Type extends FieldType
 {
     /**
-     * @todo Add missing settings, ref eZObjectRelationListType::defaultClassAttributeContent():
+     * @todo Consider to add all 6 selection options
      *
-     *         return array( 'object_class' => '',
-     *                       'selection_type' => 0,
-     *                       'type' => 0,
-     *                       'class_constraint_list' => array(),
-     *                       'default_placement' => false );
      */
     const SELECTION_BROWSE = 0,
           SELECTION_DROPDOWN = 1;
@@ -43,9 +38,13 @@ class Type extends FieldType
             'type' => 'int',
             'default' => self::SELECTION_BROWSE,
         ),
-        'selectionRoot' => array(
+        'selectionDefaultLocation' => array(
             'type' => 'string',
-            'default' => '',
+            'default' => null,
+        ),
+        'selectionContentTypes' => array(
+            'type' => 'array',
+            'default' => array(),
         ),
     );
 
@@ -80,10 +79,17 @@ class Type extends FieldType
             );
         }
 
-        if ( !is_string( $fieldSettings['selectionRoot'] ) && !is_numeric( $fieldSettings['selectionRoot'] ) )
+        if ( !is_string( $fieldSettings['selectionDefaultLocation'] ) && !is_numeric( $fieldSettings['selectionDefaultLocation'] ) )
         {
             $validationResult[] = new ValidationError(
-                "Setting selection root must be either a string or numeric integer"
+                "Setting selectionDefaultLocation must be either a string or numeric integer"
+            );
+        }
+
+        if ( isset( $fieldSettings['selectionContentTypes'] ) && !is_array( $fieldSettings['selectionContentTypes'] ) )
+        {
+            $validationResult[] = new ValidationError(
+                "Setting selectionContentTypes must be a array"
             );
         }
 

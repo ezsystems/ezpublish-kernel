@@ -85,7 +85,7 @@ class RelationList implements Converter
             foreach ( $dom->getElementsByTagName( 'relation-item' ) as $relationItem )
             {
                 /** @var \DOMElement $relationItem */
-                $fieldValue->data['destinationContentIds'][] = $relationItem->getAttribute( 'contentobject-id' );;
+                $fieldValue->data['destinationContentIds'][] = $relationItem->getAttribute( 'contentobject-id' );
             }
         }
     }
@@ -95,11 +95,49 @@ class RelationList implements Converter
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
-     *
-     * @todo Implement, legacy format is xml, see RelationList\Type & eZObjectRelationListType for more info
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
+        $fieldSettings = $fieldDef->fieldTypeConstraints->fieldSettings;
+        $doc = new DOMDocument( '1.0', 'utf-8' );
+        $root = $doc->createElement( 'related-objects' );
+        $doc->appendChild( $root );
+
+        $constraints = $doc->createElement( 'constraints' );
+        if ( !empty( $fieldSettings['selectionContentTypes'] ) )
+        {
+            foreach ( $fieldSettings['selectionContentTypes'] as $typeIdentifier )
+            {
+                $allowedClass = $doc->createElement( 'allowed-class' );
+                $allowedClass->setAttribute( 'contentclass-identifier', $typeIdentifier );
+                $constraints->appendChild( $allowedClass );
+                unset( $allowedClass );
+            }
+        }
+        $root->appendChild( $constraints );
+
+        $type = $doc->createElement( 'type' );
+        $type->setAttribute( 'value', 2 );//Deprecated advance object relation list type, set since 4.x does
+        $root->appendChild( $type );
+
+        $objectClass = $doc->createElement( 'object_class' );
+        $objectClass->setAttribute( 'value', '' );//Deprecated advance object relation class type, set since 4.x does
+        $root->appendChild( $objectClass );
+
+        $selectionType = $doc->createElement( 'selection_type' );
+        if ( isset( $fieldSettings['selectionMethod'] ) )
+            $selectionType->setAttribute( 'value', (int)$fieldSettings['selectionMethod'] );
+        else
+            $selectionType->setAttribute( 'value', 0 );
+        $root->appendChild( $selectionType );
+
+        $defaultLocation = $doc->createElement( 'contentobject-placement' );
+        if ( !empty( $fieldSettings['selectionDefaultLocation'] ) )
+            $defaultLocation->setAttribute( 'node-id', (int)$fieldSettings['selectionDefaultLocation'] );
+        $root->appendChild( $defaultLocation );
+
+        $doc->appendChild( $root );
+        $storageDef->dataText5 = $doc->saveXML();
     }
 
     /**
@@ -116,13 +154,48 @@ class RelationList implements Converter
      *   <contentobject-placement node-id="67"/>
      * </related-objects>
      *
+     * <?xml version="1.0" encoding="utf-8"?>
+     * <related-objects>
+     *   <constraints/>
+     *   <type value="2"/>
+     *   <selection_type value="0"/>
+     *   <object_class value=""/>
+     *   <contentobject-placement/>
+     * </related-objects>
+     *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
-     *
-     * @todo Implement, legacy format is xml, {@see toStorageFieldDefinition()}
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
+        $fieldDef->fieldTypeConstraints->fieldSettings = array(
+            'selectionMethod' => 0,
+            'selectionDefaultLocation' => null,
+            'selectionContentTypes' => array()
+        );
+
+        if ( $storageDef->dataText5 === null )
+            return;
+
+        $fieldSettings =& $fieldDef->fieldTypeConstraints->fieldSettings;
+        $dom = new DOMDocument( '1.0', 'utf-8' );
+        if ( $dom->loadXML( $storageDef->dataText5 ) !== true )
+            return;
+
+        if ( $selectionType = $dom->getElementsByTagName( 'selection_type' ) )
+            $fieldSettings['selectionMethod'] = (int)$selectionType->item( 0 )->getAttribute('value');
+
+        if (
+            ( $defaultLocation = $dom->getElementsByTagName( 'contentobject-placement' ) ) &&
+            $defaultLocation->item( 0 )->hasAttribute('node-id')
+        )
+            $fieldSettings['selectionDefaultLocation'] = (int)$defaultLocation->item( 0 )->getAttribute('node-id');
+
+        if ( !( $constraints = $dom->getElementsByTagName( 'constraints' ) ) )
+            return;
+
+        foreach ( $constraints->item( 0 )->childNodes as $allowedClass )
+            $fieldSettings['selectionContentTypes'][] = $allowedClass->getAttribute('contentclass-identifier');
     }
 
     /**
