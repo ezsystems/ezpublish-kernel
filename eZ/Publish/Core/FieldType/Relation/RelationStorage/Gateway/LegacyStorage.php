@@ -115,7 +115,7 @@ class LegacyStorage extends Gateway
     /**
      * @see \eZ\Publish\SPI\FieldType\Relation\RelationStorage\Gateway
      */
-    public function deleteFieldData( array $fieldId, array $context )
+    public function deleteFieldData( VersionInfo $versionInfo, array $fieldId, array $context )
     {
 	// @todo implement when content deleting is fixed in the service
     }
