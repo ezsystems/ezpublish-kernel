@@ -117,7 +117,7 @@ class MapLocationTest extends StandardizedFieldTypeTest
                 new MapLocation\Value( array(
                     'latitude' => 23.42,
                     'longitude' => 42.23,
-                    'address' => new \stdClass(),
+                    'address' => array(),
                 ) ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
