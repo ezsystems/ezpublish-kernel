@@ -4159,6 +4159,31 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test to ensure that old versions are not affected by updates to newer
+     * drafts.
+     *
+     * @return void
+     */
+    public function testUpdatingDraftDoesNotUpdateOldVersions()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        $contentService = $repository->getContentService();
+
+        $contentVersion2 = $this->createContentVersion2();
+
+        $loadedContent1 = $contentService->loadContent( $contentVersion2->id, null, 1 );
+        $loadedContent2 = $contentService->loadContent( $contentVersion2->id, null, 2 );
+
+        $this->assertNotEquals(
+            $loadedContent1->getFieldValue( 'name', 'eng-US' ),
+            $loadedContent2->getFieldValue( 'name', 'eng-US' )
+        );
+    }
+
+    /**
      * Asserts that all aliases defined in $expectedAliasProperties with the
      * given properties are available in $actualAliases and not more.
      *
