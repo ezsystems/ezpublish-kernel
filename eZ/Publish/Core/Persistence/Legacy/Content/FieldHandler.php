@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Type,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway as TypeGateway;
@@ -208,20 +209,19 @@ class FieldHandler
     }
 
     /**
-     * Deletes the fields in $content from the database.
-     * If $versionNo is set only field IDs for that version are returned.
+     * Deletes the fields for $contentId in $versionInfo from the database
      *
      * @param int $contentId
-     * @param int|null $versionNo
-     *
+     * @param eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @return void
      */
-    public function deleteFields( $contentId, $versionNo = null )
+    public function deleteFields( $contentId, VersionInfo $versionInfo )
     {
-        foreach ( $this->contentGateway->getFieldIdsByType( $contentId, $versionNo ) as $fieldType => $ids )
+        foreach ( $this->contentGateway->getFieldIdsByType( $contentId, $versionInfo->versionNo )
+            as $fieldType => $ids )
         {
-            $this->storageHandler->deleteFieldData( $fieldType, $ids );
+            $this->storageHandler->deleteFieldData( $fieldType, $versionInfo, $ids );
         }
-        $this->contentGateway->deleteFields( $contentId, $versionNo );
+        $this->contentGateway->deleteFields( $contentId, $versionInfo->versionNo );
     }
 }

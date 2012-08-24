@@ -814,11 +814,24 @@ class ContentHandlerTest extends TestCase
         $handler = $this->getContentHandler();
 
         $gatewayMock = $this->getGatewayMock();
+        $mapperMock = $this->getMapperMock();
         $fieldHandlerMock = $this->getFieldHandlerMock();
 
-        $fieldHandlerMock->expects( $this->once() )
+        // Method needs to list versions
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractVersionInfoListFromRows' )
+            ->will( $this->returnValue( array( new VersionInfo(), new VersionInfo() ) ) );
+        $gatewayMock->expects( $this->once() )
+            ->method( 'listVersions' )
+            ->will( $this->returnValue( array() ) );
+
+        // Normal delete process
+        $fieldHandlerMock->expects( $this->exactly( 2 ) )
             ->method( "deleteFields" )
-            ->with( $this->equalTo( 23 ) );
+            ->with(
+                $this->equalTo( 23 ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' )
+        );
         $gatewayMock->expects( $this->once() )
             ->method( "deleteRelations" )
             ->with( $this->equalTo( 23 ) );
@@ -894,8 +907,17 @@ class ContentHandlerTest extends TestCase
         $handler = $this->getContentHandler();
 
         $gatewayMock = $this->getGatewayMock();
+        $mapperMock = $this->getMapperMock();
         $locationHandlerMock = $this->getLocationGatewayMock();
         $fieldHandlerMock = $this->getFieldHandlerMock();
+
+        // Load VersionInfo to delete fields
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractVersionInfoFromRow' )
+            ->will( $this->returnValue( new VersionInfo() ) );
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadVersionInfo' )
+            ->will( $this->returnValue( array() ) );
 
         $locationHandlerMock->expects( $this->once() )
             ->method( 'deleteNodeAssignment' )
@@ -908,7 +930,7 @@ class ContentHandlerTest extends TestCase
             ->method( 'deleteFields' )
             ->with(
                 $this->equalTo( 225 ),
-                $this->equalTo( 2 )
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' )
             );
         $gatewayMock->expects( $this->once() )
             ->method( 'deleteRelations' )

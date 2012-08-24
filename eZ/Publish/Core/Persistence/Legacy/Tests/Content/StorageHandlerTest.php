@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue;
 
@@ -149,6 +150,7 @@ class StorageHandlerTest extends TestCase
         $storageMock->expects( $this->once() )
             ->method( 'deleteFieldData' )
             ->with(
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
                 $this->equalTo( array( 1, 2, 3 ) ),
                 $this->equalTo( $this->getContextMock() )
             );
@@ -159,7 +161,7 @@ class StorageHandlerTest extends TestCase
             ->will( $this->returnValue( $storageMock ) );
 
         $handler = $this->getStorageHandler();
-        $handler->deleteFieldData( 'foobar', array( 1, 2, 3 ) );
+        $handler->deleteFieldData( 'foobar', new VersionInfo(), array( 1, 2, 3 ) );
     }
 
     /**
