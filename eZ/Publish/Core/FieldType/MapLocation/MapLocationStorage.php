@@ -44,13 +44,14 @@ class MapLocationStorage extends GatewayBasedStorage
     }
 
     /**
+     * @param VersionInfo $versionInfo
      * @param array $fieldId
      * @param array $context
      * @return bool
      */
-    public function deleteFieldData( array $fieldIds, array $context )
+    public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
-        $this->getGateway( $context )->deleteFieldData( $fieldIds );
+        $this->getGateway( $context )->deleteFieldData( $versionInfo, $fieldIds );
     }
 
     /**
