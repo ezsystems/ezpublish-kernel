@@ -168,51 +168,6 @@ class FieldHandlerTest extends TestCase
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
      */
-    public function testUpdateFieldsNonTranslatable()
-    {
-        $fieldHandler = $this->getFieldHandler();
-
-        $typeGatewayMock = $this->getTypeGatewayMock();
-        $typeGatewayMock->expects( $this->exactly( 2 ) )
-            ->method( 'isFieldTranslatable' )
-            ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) )
-            ->will( $this->returnValue( false ) );
-
-        $mapperMock = $this->getMapperMock();
-        $mapperMock->expects( $this->exactly( 2 ) )
-            ->method( 'convertToStorageValue' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) )
-            ->will( $this->returnValue( new StorageFieldValue() ) );
-
-        $contentGatewayMock = $this->getContentGatewayMock();
-        $contentGatewayMock->expects( $this->exactly( 2 ) )
-            ->method( 'updateNonTranslatableField' )
-            ->with(
-            $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ),
-            $this->isInstanceOf(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue'
-            ),
-            42
-        );
-
-        $storageHandlerMock = $this->getStorageHandlerMock();
-        $storageHandlerMock->expects( $this->exactly( 2 ) )
-            ->method( 'storeFieldData' )
-            ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' )
-            );
-
-        $fieldHandler->updateFields(
-            $this->getContentFixture(),
-            $this->getUpdateStructFixture()
-        );
-    }
-
-    /**
-     * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
-     */
     public function testUpdateFieldsUpdatingStorageHandlerNonTranslatable()
     {
         self::markTestIncomplete( "@todo Test updateFields() with updating storage handler and untranslatable fields" );

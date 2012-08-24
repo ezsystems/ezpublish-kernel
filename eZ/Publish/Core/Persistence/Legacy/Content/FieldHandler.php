@@ -95,37 +95,35 @@ class FieldHandler
     protected function createNewField( Field $field, Content $content )
     {
         $field->versionNo = $content->versionInfo->versionNo;
-        $field->id = $this->contentGateway->insertNewField(
-            $content,
-            $field,
-            $this->mapper->convertToStorageValue( $field )
-        );
+
+        $storageFieldValue = $this->mapper->convertToStorageValue( $field );
+
+        if ( isset( $field->id ) )
+        {
+            $this->contentGateway->insertExistingField(
+                $content,
+                $field,
+                $storageFieldValue
+            );
+        }
+        else
+        {
+            $field->id = $this->contentGateway->insertNewField(
+                $content,
+                $field,
+                $storageFieldValue
+            );
+        }
 
         // If the storage handler returns true, it means that $field value has been modified
         // So we need to update it in order to store those modifications
         // Field converter is called once again via the Mapper
         if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
         {
-            $isTranslatable = $this->typeGateway->isFieldTranslatable(
-                $field->fieldDefinitionId,
-                Type::STATUS_DEFINED
+            $this->contentGateway->updateField(
+                $field,
+                $this->mapper->convertToStorageValue( $field )
             );
-
-            if ( $isTranslatable )
-            {
-                $this->contentGateway->updateField(
-                    $field,
-                    $this->mapper->convertToStorageValue( $field )
-                );
-            }
-            else
-            {
-                $this->contentGateway->updateNonTranslatableField(
-                    $field,
-                    $this->mapper->convertToStorageValue( $field ),
-                    $content->contentInfo->id
-                );
-            }
         }
     }
 
@@ -158,48 +156,10 @@ class FieldHandler
             $field->versionNo = $content->versionInfo->versionNo;
             if ( isset( $field->id ) )
             {
-                $isTranslatable = $this->typeGateway->isFieldTranslatable(
-                    $field->fieldDefinitionId,
-                    Type::STATUS_DEFINED
+                $this->contentGateway->updateField(
+                    $field,
+                    $this->mapper->convertToStorageValue( $field )
                 );
-
-                if ( $isTranslatable )
-                {
-                    $this->contentGateway->updateField(
-                        $field,
-                        $this->mapper->convertToStorageValue( $field )
-                    );
-                }
-                else
-                {
-                    $this->contentGateway->updateNonTranslatableField(
-                        $field,
-                        $this->mapper->convertToStorageValue( $field ),
-                        $content->contentInfo->id
-                    );
-                }
-
-                // If the storage handler returns true, it means that $field value has been modified
-                // So we need to update it in order to store those modifications
-                // Field converter is called once again via the Mapper
-                if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
-                {
-                    if ( $isTranslatable )
-                    {
-                        $this->contentGateway->updateField(
-                            $field,
-                            $this->mapper->convertToStorageValue( $field )
-                        );
-                    }
-                    else
-                    {
-                        $this->contentGateway->updateNonTranslatableField(
-                            $field,
-                            $this->mapper->convertToStorageValue( $field ),
-                            $content->contentInfo->id
-                        );
-                    }
-                }
             }
             else
             {
