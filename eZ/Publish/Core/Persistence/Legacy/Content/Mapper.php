@@ -373,9 +373,16 @@ class Mapper
     {
         $storageValue = new StorageFieldValue();
 
-        $storageValue->dataFloat = (float)$row['ezcontentobject_attribute_data_float'];
-        $storageValue->dataInt = (int)$row['ezcontentobject_attribute_data_int'];
+        // Nullable field
+        $storageValue->dataFloat = isset( $row['ezcontentobject_attribute_data_float'] )
+            ? (float)$row['ezcontentobject_attribute_data_float']
+            : null;
+        // Nullable field
+        $storageValue->dataInt = isset( $row['ezcontentobject_attribute_data_int'] )
+            ? (int)$row['ezcontentobject_attribute_data_int']
+            : null;
         $storageValue->dataText = $row['ezcontentobject_attribute_data_text'];
+        // Not nullable field
         $storageValue->sortKeyInt = (int)$row['ezcontentobject_attribute_sort_key_int'];
         $storageValue->sortKeyString = $row['ezcontentobject_attribute_sort_key_string'];
 
