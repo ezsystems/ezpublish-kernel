@@ -11,6 +11,7 @@ parameters:
     ezpublish.fieldType.ezbinaryfile.pathGenerator.class: eZ\Publish\Core\FieldType\BinaryBase\PathGenerator\LegacyPathGenerator
     ezpublish.fieldType.ezboolean.class: eZ\Publish\Core\FieldType\Checkbox\Type
     ezpublish.fieldType.ezdatetime.class: eZ\Publish\Core\FieldType\DateAndTime\Type
+    ezpublish.fieldType.ezemail.class: eZ\Publish\Core\FieldType\Mail\Type
     ezpublish.fieldType.ezfloat.class: eZ\Publish\Core\FieldType\Float\Type
     ezpublish.fieldType.ezinteger.class: eZ\Publish\Core\FieldType\Integer\Type
     #ezpublish.fieldType.ezimage.class: eZ\Publish\Core\FieldType\Image\Type
@@ -39,10 +40,9 @@ parameters:
     #         underline:
     #             isInline: true
     ezpublish.fieldType.ezcountry.class: eZ\Publish\Core\FieldType\Country\Type
-    # Temporary workaround for ezpage, ezemail, ezimage, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
+    # Temporary workaround for ezpage, ezimage, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
     # a ezstring until proper implementation will be in place
     ezpublish.fieldType.ezpage.class: eZ\Publish\Core\FieldType\TextLine\Type
-    ezpublish.fieldType.ezemail.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezimage.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezgmaplocation.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezcomcomments.class: eZ\Publish\Core\FieldType\TextLine\Type
@@ -100,6 +100,12 @@ services:
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezdatetime}
+
+    ezpublish.fieldType.ezemail:
+        class: %ezpublish.fieldType.ezemail.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezemail}
 
     ezpublish.fieldType.ezfloat:
         class: %ezpublish.fieldType.ezfloat.class%
