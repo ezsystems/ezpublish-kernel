@@ -59,7 +59,7 @@ class KeywordStorage extends GatewayBasedStorage
      * @param array $context
      * @return bool
      */
-    public function deleteFieldData( array $fieldId, array $context )
+    public function deleteFieldData( VersionInfo $versionInfo, array $fieldId, array $context )
     {
         // @TODO: What about deleting keywords?
     }
