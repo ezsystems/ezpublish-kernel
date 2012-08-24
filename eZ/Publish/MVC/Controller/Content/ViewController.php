@@ -38,8 +38,8 @@ class ViewController extends Controller
         $resolver->setDefaults(
             array(
                  'viewCache'    => true,
-                 // Content responses accessible to anonymous users (e.g. not logged-in) will receive anonymousTTL as Max-Age value
-                 'anonymousTTL' => 60,
+                 'defaultTTL'   => 60,
+                 'TTLCache'     => false
             )
         );
     }
@@ -74,10 +74,10 @@ class ViewController extends Controller
                 // If-None-Match is the request counterpart of Etag response header
                 // Making the response to vary against it ensures that an HTTP reverse proxy caches the different possible variations of the response
                 // as it can depend on user role for instance.
-                if ( $request->headers->has( 'If-None-Match' ) )
+                if ( $request->headers->has( 'If-None-Match' ) && $this->getOption( 'TTLCache' ) === true )
                 {
                     $response->setVary( 'If-None-Match' );
-                    $response->setMaxAge( $this->getOption( 'anonymousTTL' ) );
+                    $response->setMaxAge( $this->getOption( 'defaultTTL' ) );
                 }
 
                 $response->setLastModified( $location->getContentInfo()->modificationDate );
