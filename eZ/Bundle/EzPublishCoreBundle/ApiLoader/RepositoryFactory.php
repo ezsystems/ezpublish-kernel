@@ -75,6 +75,22 @@ class RepositoryFactory
     }
 
     /**
+     * Registers an external storage handler for a field type, identified by $fieldTypeAlias.
+     * They are being registered as closures so that they will be lazy loaded.
+     *
+     * @param string $serviceId The external storage handler service Id
+     * @param string $fieldTypeAlias The field type alias (e.g. "ezstring")
+     */
+    public function registerExternalStorageHandler( $serviceId, $fieldTypeAlias )
+    {
+        $container = $this->container;
+        $this->externalStorages[$fieldTypeAlias] = function () use ( $container, $serviceId )
+        {
+            return $container->get( $serviceId );
+        };
+    }
+
+    /**
      * Returns registered external storage handlers for field types (as closures to be lazy loaded in the public API)
      *
      * @return \Closure[]

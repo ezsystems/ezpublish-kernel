@@ -100,6 +100,15 @@ class AddFieldTypePass implements CompilerPassInterface
                     )
                 );
             }
+
+            $repositoryFactoryDef->addMethodCall(
+                'registerExternalStorageHandler',
+                array(
+                     // Only pass the service Id since field types will be lazy loaded via the service container
+                     $id,
+                     $attributes[0]['alias']
+                )
+            );
         }
     }
 }
