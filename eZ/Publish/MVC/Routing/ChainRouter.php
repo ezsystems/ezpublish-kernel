@@ -178,7 +178,6 @@ class ChainRouter implements RouterInterface, WarmableInterface, RequestMatcherI
         }
 
         $httpMethodMismatch = null;
-        $pathinfo = $request->getPathInfo();
         $siteaccess = $request->attributes->get( 'siteaccess' );
         if ( $siteaccess instanceof SiteAccess )
         {
@@ -194,7 +193,7 @@ class ChainRouter implements RouterInterface, WarmableInterface, RequestMatcherI
                 if ( $router instanceof RequestMatcherInterface )
                     return $router->matchRequest( $request );
 
-                return $router->match( $pathinfo );
+                return $router->match( $request->getPathInfo() );
             }
             catch ( ResourceNotFoundException $e )
             {
@@ -209,7 +208,7 @@ class ChainRouter implements RouterInterface, WarmableInterface, RequestMatcherI
         }
 
         // Finally throw a ResourceNotFoundException since the chain router couldn't find any valid router for current route
-        throw $httpMethodMismatch ?: new ResourceNotFoundException( "Couldn't find any router able to match '$pathinfo'" );
+        throw $httpMethodMismatch ?: new ResourceNotFoundException( "Couldn't find any router able to match '{$request->getPathInfo()}'" );
     }
 
     /**
