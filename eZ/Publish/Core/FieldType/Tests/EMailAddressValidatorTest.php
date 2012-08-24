@@ -12,6 +12,8 @@ use eZ\Publish\Core\FieldType\Mail\Value as MailValue,
     eZ\Publish\Core\FieldType\Validator\EmailAddressValidator;
 
 /**
+ *
+ * @todo add more tests, like on validateConstraints method
  * @group fieldType
  * @group validator
  */

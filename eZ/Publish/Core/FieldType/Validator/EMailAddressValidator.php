@@ -41,7 +41,7 @@ class EMailAddressValidator extends Validator
             {
                 case "Extent":
 
-                    if ( $value !== false && $value === "regex" )
+                    if ( $value !== false && $value !== "regex" )
                     {
                         $validationErrors[] = new ValidationError(
                             "Validator parameter '%parameter%' value must be regex for now",
