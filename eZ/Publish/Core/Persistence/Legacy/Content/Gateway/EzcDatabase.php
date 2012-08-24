@@ -583,6 +583,11 @@ class EzcDatabase extends Gateway
 
         $this->setInsertFieldValues( $q, $content, $field, $value );
 
+        $q->set(
+            $this->dbHandler->quoteColumn( 'id' ),
+            $q->bindValue( $field->id, null, \PDO::PARAM_INT )
+        );
+
         $q->prepare()->execute();
     }
 

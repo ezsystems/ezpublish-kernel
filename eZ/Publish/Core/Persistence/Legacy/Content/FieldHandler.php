@@ -83,6 +83,20 @@ class FieldHandler
     }
 
     /**
+     * Creates existing fields in a new version for $content
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @return void
+     */
+    public function createExistingFieldsInNewVersion( Content $content )
+    {
+        foreach ( $content->fields as $field )
+        {
+            $this->createExistingFieldInNewVersion( $field, $content );
+        }
+    }
+
+    /**
      * Creates a new field in the database
      *
      * Used by self::createNewFields() and self::updateFields()
@@ -96,24 +110,40 @@ class FieldHandler
     {
         $field->versionNo = $content->versionInfo->versionNo;
 
-        $storageFieldValue = $this->mapper->convertToStorageValue( $field );
+        $field->id = $this->contentGateway->insertNewField(
+            $content,
+            $field,
+            $this->mapper->convertToStorageValue( $field )
+        );
 
-        if ( isset( $field->id ) )
+        // If the storage handler returns true, it means that $field value has been modified
+        // So we need to update it in order to store those modifications
+        // Field converter is called once again via the Mapper
+        if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
         {
-            $this->contentGateway->insertExistingField(
-                $content,
+            $this->contentGateway->updateField(
                 $field,
-                $storageFieldValue
+                $this->mapper->convertToStorageValue( $field )
             );
         }
-        else
-        {
-            $field->id = $this->contentGateway->insertNewField(
-                $content,
-                $field,
-                $storageFieldValue
-            );
-        }
+    }
+
+    /**
+     * Creates an existing field in a new version, no new ID is generated
+     *
+     * @param Field $field
+     * @param Content $content
+     * @return void
+     */
+    public function createExistingFieldInNewVersion( Field $field, Content $content )
+    {
+        $field->versionNo = $content->versionInfo->versionNo;
+
+        $this->contentGateway->insertExistingField(
+            $content,
+            $field,
+            $this->mapper->convertToStorageValue( $field )
+        );
 
         // If the storage handler returns true, it means that $field value has been modified
         // So we need to update it in order to store those modifications
@@ -164,6 +194,17 @@ class FieldHandler
             else
             {
                 $this->createNewField( $field, $content );
+            }
+
+            // If the storage handler returns true, it means that $field value has been modified
+            // So we need to update it in order to store those modifications
+            // Field converter is called once again via the Mapper
+            if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
+            {
+                $this->contentGateway->updateField(
+                    $field,
+                    $this->mapper->convertToStorageValue( $field )
+                );
             }
         }
     }

@@ -242,7 +242,8 @@ class Handler implements BaseContentHandler
             $newField->versionNo = $content->versionInfo->versionNo;
             $content->fields[] = $newField;
         }
-        $this->fieldHandler->createNewFields( $content );
+        $content->fields;
+        $this->fieldHandler->createExistingFieldsInNewVersion( $content );
 
         // Create name
         foreach ( $content->versionInfo->names as $language => $name )
