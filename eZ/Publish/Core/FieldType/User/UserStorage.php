@@ -102,11 +102,12 @@ class UserStorage extends GatewayBasedStorage
     }
 
     /**
-     * @param array $fieldId Array of field Ids
+     * @param VersionInfo $versionInfo
+     * @param array $fieldIds Array of field Ids
      * @param array $context
      * @return bool
      */
-    public function deleteFieldData( array $fieldId, array $context )
+    public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
         // Only the UserService may update user data
     }
