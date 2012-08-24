@@ -33,19 +33,21 @@ abstract class Gateway extends StorageGateway
     /**
      * Returns a the XML content stored for the given $fieldIds
      *
+     * @parent int $versionNo
      * @param array $fieldIds
      * @return array
      */
-    abstract public function getXmlForImages( array $fieldIds );
+    abstract public function getXmlForImages( $versionNo, array $fieldIds );
 
     /**
      * Removes all references from $fieldId to a path that starts with $path
      *
      * @param string $path
+     * @parent int $versionNo
      * @param mixed $fieldId
      * @return void
      */
-    abstract public function removeImageReferences( $path, $fieldId );
+    abstract public function removeImageReferences( $path, $versionNo, $fieldId );
 
     /**
      * Returns the number of recorded references to the given $path
