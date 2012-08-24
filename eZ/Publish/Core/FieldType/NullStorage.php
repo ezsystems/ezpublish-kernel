@@ -35,9 +35,8 @@ class NullStorage implements FieldStorage
 
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage::deleteFieldData()
-     * @return bool
      */
-    public function deleteFieldData( array $fieldId, array $context )
+    public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
         return true;
     }
