@@ -56,7 +56,7 @@ class RelationIntergrationTest extends BaseIntegrationTest
         $handler = $this->getHandler();
 
         $handler->getStorageRegistry()->register(
-            'ezobjetrelation',
+            'ezobjectrelation',
             new FieldType\Relation\RelationStorage(
                 array(
                     'LegacyStorage' => new FieldType\Relation\RelationStorage\Gateway\LegacyStorage(),
