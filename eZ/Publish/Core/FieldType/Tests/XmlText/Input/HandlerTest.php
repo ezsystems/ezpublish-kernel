@@ -68,7 +68,7 @@ class HandlerTest extends PHPUnit_Framework_TestCase
         $persistenceHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Handler' );
 
         $contentService = $this->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\ContentService' )
-            ->setConstructorArgs( array( $repository, $persistenceHandler ) )
+            ->setConstructorArgs( array( $repository, $persistenceHandler, $this->getMock( 'eZ\\Publish\\Core\\Repository\\ObjectStorage' ) ) )
             ->getMock();
 
         // 6 calls to ContentService::addRelation())

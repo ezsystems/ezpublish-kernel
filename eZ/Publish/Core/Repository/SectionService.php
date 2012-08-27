@@ -25,6 +25,7 @@ use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
+    eZ\Publish\Core\Repository\ObjectStorage,
 
     eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 
@@ -46,6 +47,11 @@ class SectionService implements SectionServiceInterface
     protected $persistenceHandler;
 
     /**
+     * @var ObjectStorage
+     */
+    protected $objectStore;
+
+    /**
      * @var array
      */
     protected $settings;
@@ -55,12 +61,14 @@ class SectionService implements SectionServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository  $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param ObjectStorage $objectStore
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct( RepositoryInterface $repository, Handler $handler, ObjectStorage $objectStore, array $settings = array() )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
+        $this->objectStore = $objectStore;
         $this->settings = $settings;
     }
 
@@ -278,6 +286,9 @@ class SectionService implements SectionServiceInterface
 
         if ( $this->repository->canUser( 'section', 'assign', $loadedContentInfo, $loadedSection ) !== true )
             throw new UnauthorizedException( 'section', 'assign', $loadedSection->id );
+
+        // clear content object cache
+        $this->objectStore->discard( 'content', $loadedContentInfo->id );
 
         $this->repository->beginTransaction();
         try

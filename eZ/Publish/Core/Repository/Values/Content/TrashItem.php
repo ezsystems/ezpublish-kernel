@@ -45,7 +45,7 @@ class TrashItem extends APITrashItem
         switch ( $property )
         {
             case 'contentId':
-                return $this->contentInfo->id;
+                return $this->getContentInfo()->id;
         }
 
         return parent::__get( $property );

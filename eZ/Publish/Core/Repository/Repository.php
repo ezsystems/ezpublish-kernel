@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Repository;
 use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\Core\Repository\ObjectStorage,
     eZ\Publish\SPI\IO\Handler as IoHandler,
     eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
@@ -166,6 +167,11 @@ class Repository implements RepositoryInterface
     protected $serviceSettings;
 
     /**
+     * @var ObjectStorage
+     */
+    protected $objectStore;
+
+    /**
      * Constructor
      *
      * Construct repository object with provided storage engine
@@ -202,6 +208,8 @@ class Repository implements RepositoryInterface
 
         if ( $user !== null )
             $this->setCurrentUser( $user );
+
+        $this->objectStore = new ObjectStorage;
     }
 
     /**
@@ -338,7 +346,7 @@ class Repository implements RepositoryInterface
         if ( $this->contentService !== null )
             return $this->contentService;
 
-        $this->contentService = new ContentService( $this, $this->persistenceHandler, $this->serviceSettings['content'] );
+        $this->contentService = new ContentService( $this, $this->persistenceHandler, $this->objectStore, $this->serviceSettings['content'] );
         return $this->contentService;
     }
 
@@ -387,7 +395,7 @@ class Repository implements RepositoryInterface
         if ( $this->locationService !== null )
             return $this->locationService;
 
-        $this->locationService = new LocationService( $this, $this->persistenceHandler, $this->serviceSettings['location'] );
+        $this->locationService = new LocationService( $this, $this->persistenceHandler, $this->objectStore, $this->serviceSettings['location'] );
         return $this->locationService;
     }
 
@@ -404,7 +412,7 @@ class Repository implements RepositoryInterface
         if ( $this->trashService !== null )
             return $this->trashService;
 
-        $this->trashService = new TrashService( $this, $this->persistenceHandler, $this->serviceSettings['trash'] );
+        $this->trashService = new TrashService( $this, $this->persistenceHandler, $this->objectStore, $this->serviceSettings['trash'] );
         return $this->trashService;
     }
 
@@ -420,7 +428,7 @@ class Repository implements RepositoryInterface
         if ( $this->sectionService !== null )
             return $this->sectionService;
 
-        $this->sectionService = new SectionService( $this, $this->persistenceHandler, $this->serviceSettings['section'] );
+        $this->sectionService = new SectionService( $this, $this->persistenceHandler, $this->objectStore, $this->serviceSettings['section'] );
         return $this->sectionService;
     }
 
@@ -436,7 +444,7 @@ class Repository implements RepositoryInterface
         if ( $this->userService !== null )
             return $this->userService;
 
-        $this->userService = new UserService( $this, $this->persistenceHandler, $this->serviceSettings['user'] );
+        $this->userService = new UserService( $this, $this->persistenceHandler, $this->objectStore, $this->serviceSettings['user'] );
         return $this->userService;
     }
 
@@ -615,6 +623,7 @@ class Repository implements RepositoryInterface
         {
             throw new RuntimeException( $e->getMessage(), 0, $e );
         }
+        $this->objectStore->reset();
     }
 
     /**

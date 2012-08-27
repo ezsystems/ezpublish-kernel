@@ -2909,7 +2909,8 @@ abstract class ContentBase extends BaseServiceTest
             $methods,
             array(
                 $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' ),
-                $this->getPersistenceHandlerMock()
+                $this->getPersistenceHandlerMock(),
+                $this->getMock( 'eZ\\Publish\\Core\\Repository\\ObjectStorage' )
             )
         );
     }

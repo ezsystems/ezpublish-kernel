@@ -41,6 +41,7 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    eZ\Publish\Core\Repository\ObjectStorage,
 
     ezcMailTools;
 
@@ -64,6 +65,11 @@ class UserService implements UserServiceInterface
     protected $persistenceHandler;
 
     /**
+     * @var ObjectStorage
+     */
+    protected $objectStore;
+
+    /**
      * @var array
      */
     protected $settings;
@@ -73,12 +79,14 @@ class UserService implements UserServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository  $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param ObjectStorage $objectStore
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct( RepositoryInterface $repository, Handler $handler, ObjectStorage $objectStore, array $settings = array() )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
+        $this->objectStore = $objectStore;
         $this->settings = $settings + array(
             'anonymousUserID' => 10,
             'defaultUserPlacement' => 12,
@@ -261,6 +269,7 @@ class UserService implements UserServiceInterface
             //@todo: what happens to sub user groups and users below sub user groups
             $this->repository->getContentService()->deleteContent( $loadedUserGroup->getVersionInfo()->getContentInfo() );
             $this->repository->commit();
+            $this->objectStore->reset();
         }
         catch ( \Exception $e )
         {
@@ -299,11 +308,15 @@ class UserService implements UserServiceInterface
         if ( $newParentMainLocation === null )
             throw new BadStateException( "newParent", 'new user group is not stored and/or does not have any location yet' );
 
+        // clear content object cache on main node change
+
+
         $this->repository->beginTransaction();
         try
         {
             $locationService->moveSubtree( $userGroupMainLocation, $newParentMainLocation );
             $this->repository->commit();
+            $this->objectStore->reset();
         }
         catch ( \Exception $e )
         {
@@ -368,6 +381,7 @@ class UserService implements UserServiceInterface
             }
 
             $this->repository->commit();
+            $this->objectStore->discard( 'content', $loadedUserGroup->id );
         }
         catch ( \Exception $e )
         {
@@ -610,6 +624,7 @@ class UserService implements UserServiceInterface
         {
             $this->repository->getContentService()->deleteContent( $loadedUser->getVersionInfo()->getContentInfo() );
             $this->repository->commit();
+            $this->objectStore->reset();
         }
         catch ( \Exception $e )
         {
@@ -723,6 +738,7 @@ class UserService implements UserServiceInterface
             );
 
             $this->repository->commit();
+            $this->objectStore->discard( 'content', $user->id );
         }
         catch ( \Exception $e )
         {
@@ -780,6 +796,7 @@ class UserService implements UserServiceInterface
                 $locationCreateStruct
             );
             $this->repository->commit();
+            $this->objectStore->reset();
         }
         catch ( \Exception $e )
         {
@@ -826,6 +843,7 @@ class UserService implements UserServiceInterface
                 {
                     $locationService->deleteLocation( $userLocation );
                     $this->repository->commit();
+                    $this->objectStore->reset();
                     return;
                 }
                 catch ( \Exception $e )

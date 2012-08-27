@@ -37,6 +37,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
+    eZ\Publish\Core\Repository\ObjectStorage,
 
     DateTime;
 
@@ -60,6 +61,11 @@ class LocationService implements LocationServiceInterface
     protected $persistenceHandler;
 
     /**
+     * @var ObjectStorage
+     */
+    protected $objectStore;
+
+    /**
      * @var array
      */
     protected $settings;
@@ -69,12 +75,14 @@ class LocationService implements LocationServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param ObjectStorage $objectStore
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct( RepositoryInterface $repository, Handler $handler, ObjectStorage $objectStore, array $settings = array() )
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
+        $this->objectStore = $objectStore;
         $this->settings = $settings;
     }
 
@@ -477,6 +485,9 @@ class LocationService implements LocationServiceInterface
         $createStruct->sortOrder = $locationCreateStruct->sortOrder !== null ? (int) $locationCreateStruct->sortOrder : APILocation::SORT_ORDER_ASC;
         $createStruct->parentId = $loadedParentLocation->id;
 
+        if ( $mainLocation === null ) // clear content object cache on main node change
+            $this->objectStore->discard( 'content', $contentInfo->id );
+
         $this->repository->beginTransaction();
         try
         {
@@ -572,6 +583,10 @@ class LocationService implements LocationServiceInterface
 
         $loadedLocation1 = $this->loadLocation( $location1->id );
         $loadedLocation2 = $this->loadLocation( $location2->id );
+
+        // clear content object cache in case of main node change
+        $this->objectStore->discard( 'content', $loadedLocation1->contentId );
+        $this->objectStore->discard( 'content', $loadedLocation2->contentId );
 
         $this->repository->beginTransaction();
         try
@@ -671,6 +686,8 @@ class LocationService implements LocationServiceInterface
         {
             $this->persistenceHandler->locationHandler()->move( $location->id, $newParentLocation->id );
             $this->repository->commit();
+            // clear content object cache in case of main node change
+            $this->objectStore->reset();
         }
         catch ( \Exception $e )
         {
@@ -695,6 +712,7 @@ class LocationService implements LocationServiceInterface
         try
         {
             $this->persistenceHandler->locationHandler()->removeSubtree( $location->id );
+            $this->objectStore->reset();
             $this->repository->commit();
         }
         catch ( \Exception $e )
