@@ -368,7 +368,7 @@ class ContentHandlerTest extends TestCase
             ->will( $this->returnValue( 2 ) );
 
         $fieldHandlerMock->expects( $this->once() )
-            ->method( 'createNewFields' )
+            ->method( 'createExistingFieldsInNewVersion' )
             ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ) );
 
         $result = $handler->createDraftFromVersion( 23, 2, 14 );

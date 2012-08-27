@@ -128,12 +128,6 @@ class FieldHandlerTest extends TestCase
     {
         $fieldHandler = $this->getFieldHandler();
 
-        $typeGatewayMock = $this->getTypeGatewayMock();
-        $typeGatewayMock->expects( $this->exactly( 2 ) )
-            ->method( 'isFieldTranslatable' )
-            ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) )
-            ->will( $this->returnValue( true ) );
-
         $mapperMock = $this->getMapperMock();
         $mapperMock->expects( $this->exactly( 2 ) )
             ->method( 'convertToStorageValue' )
