@@ -17,7 +17,7 @@ use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType,
  * @group fieldType
  * @group ezxmltext
  */
-class XmlTextTypeTest extends FieldTypeTest
+class XmlTextTest extends FieldTypeTest
 {
     public function setUp()
     {
