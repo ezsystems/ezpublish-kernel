@@ -649,28 +649,4 @@ class ExceptionConversion extends Gateway
             throw new \RuntimeException( 'Database error', 0, $e );
         }
     }
-
-    /**
-     * Returns if the field identified by $fieldDefinitionId and $status is
-     * translateable
-     *
-     * @param mixed $fieldDefinitionId
-     * @param int $status
-     * @return bool
-     */
-    public function isFieldTranslatable( $fieldDefinitionId, $status )
-    {
-        try
-        {
-            return $this->innerGateway->isFieldTranslatable( $fieldDefinitionId, $status );
-        }
-        catch ( \ezcDbException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( \PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-    }
 }
