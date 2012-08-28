@@ -15,6 +15,7 @@ use eZ\Publish\Core\FieldType\Country\Type as Country,
 /**
  * @group fieldType
  * @group ezcountry
+ * @todo Migrate to StandardizedFieldTypeTest
  */
 class CountryTest extends FieldTypeTest
 {
@@ -25,6 +26,7 @@ class CountryTest extends FieldTypeTest
 
     public function setUp()
     {
+        $this->markTestIncomplete( 'Country FieldType needs clarification and potentially refactoring.' );
         parent::setUp();
         $this->ft = new Country(
             $this->validatorService,
