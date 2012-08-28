@@ -57,7 +57,7 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value();
+        return null;
     }
 
     /**
@@ -83,6 +83,15 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( $inputValue === null )
+        {
+            return null;
+        }
+
+        if ( is_int( $inputValue ) )
+        {
+            $inputValue = (float)$inputValue;
+        }
         if ( is_float( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
@@ -129,6 +138,10 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
+        if ( empty( $hash ) )
+        {
+            return null;
+        }
         return new Value( $hash );
     }
 
@@ -141,6 +154,10 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
+        if ( $value === null )
+        {
+            return null;
+        }
         return $value->value;
     }
 }
