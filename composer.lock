@@ -1,5 +1,5 @@
 {
-    "hash": "fe3932e30d035def63b63acaf6101593",
+    "hash": "ba181eaef3b29ff3d14a540eddd06573",
     "packages": [
 
     ],
@@ -19,12 +19,12 @@
         {
             "package": "ezsystems/ezpublish-legacy",
             "version": "dev-master",
-            "source-reference": "a00b83cde6edbbc9774bcbbf7647e92bece59425",
-            "commit-date": "1345213302"
+            "source-reference": "580b20c9fb6139e66e6a46854a30cb4763c705e5",
+            "commit-date": "1346164120"
         },
         {
             "package": "symfony/symfony",
-            "version": "v2.1.0-RC1"
+            "version": "v2.1.0-RC2"
         },
         {
             "package": "twig/twig",
@@ -35,8 +35,8 @@
         {
             "package": "twig/twig",
             "version": "dev-master",
-            "source-reference": "f2f698c820d4396f519ef4175ad6fe79fcfb9ecf",
-            "commit-date": "1344328685"
+            "source-reference": "92d8b25fee71e1d2f19f5d0c31838d6144a4bbcd",
+            "commit-date": "1346166350"
         },
         {
             "package": "zetacomponents/base",
