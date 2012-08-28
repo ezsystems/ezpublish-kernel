@@ -1,4 +1,6 @@
 parameters:
+    # Redefining the default router class to implement the RequestMatcherInterface
+    router.class: eZ\Bundle\EzPublishCoreBundle\Routing\DefaultRouter
     ezpublish.chain_router.class: eZ\Publish\MVC\Routing\ChainRouter
     ezpublish.url_generator.base.class: eZ\Publish\MVC\Routing\Generator
     ezpublish.urlalias_router.class: eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter
