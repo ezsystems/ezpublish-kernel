@@ -120,7 +120,8 @@ class Loader
                     LegacyEvents::PRE_BUILD_LEGACY_KERNEL_WEB, $buildEvent
                 );
 
-                if ( !is_subclass_of( $webHandlerClass, 'ezpKernelHandler' ) )
+                $interfaces = class_implements( $webHandlerClass );
+                if ( !isset( $interfaces['ezpKernelHandler'] ) )
                     throw new \InvalidArgumentException( 'A legacy kernel handler must be an instance of ezpKernelHandler.' );
 
                 $webHandler = new $webHandlerClass( $legacyParameters->all() );
@@ -137,6 +138,11 @@ class Loader
         };
     }
 
+    /**
+     * @param array $settings
+     *
+     * @return CLIHandler
+     */
     public function buildLegacyKernelHandlerCLI( array $settings = array() )
     {
         chdir( $this->legacyRootDir );
