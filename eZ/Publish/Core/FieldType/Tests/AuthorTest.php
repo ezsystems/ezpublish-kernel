@@ -16,7 +16,7 @@ use eZ\Publish\Core\FieldType\Author\Type as AuthorType,
  * @group fieldType
  * @group ezauthor
  */
-class AuthorTest extends FieldTypeTest
+class AuthorTest extends StandardizedFieldTypeTest
 {
     /**
      * @var \eZ\Publish\Core\FieldType\Author\Author[]
@@ -30,6 +30,157 @@ class AuthorTest extends FieldTypeTest
             new Author( array( 'name' => 'Boba Fett', 'email' => 'boba.fett@bountyhunters.com' ) ),
             new Author( array( 'name' => 'Darth Vader', 'email' => 'darth.vader@evilempire.biz' ) ),
             new Author( array( 'name' => 'Luke Skywalker', 'email' => 'luke@imtheone.net' ) )
+        );
+    }
+
+    /**
+     * Returns the field type under test.
+     *
+     * This method is used by all test cases to retrieve the field type under
+     * test. Just create the FieldType instance using mocks from the provided
+     * get*Mock() methods and/or custom get*Mock() implementations. You MUST
+     * NOT take care for test case wide caching of the field type, just return
+     * a new instance from this method!
+     *
+     * @return FieldType
+     */
+    protected function createFieldTypeUnderTest()
+    {
+        return new AuthorType(
+            $this->getValidatorServiceMock(),
+            $this->getFieldTypeToolsMock()
+        );
+    }
+
+    /**
+     * Returns the validator configuration schema expected from the field type.
+     *
+     * @return array
+     */
+    protected function getValidatorConfigurationSchemaExpectation()
+    {
+        return array();
+    }
+
+    /**
+     * Returns the settings schema expected from the field type.
+     *
+     * @return array
+     */
+    protected function getSettingsSchemaExpectation()
+    {
+        return array();
+    }
+
+    /**
+     * Returns the empty value expected from the field type.
+     *
+     * @return void
+     */
+    protected function getEmptyValueExpectation()
+    {
+        return new AuthorValue();
+    }
+
+    /**
+     * Data provider for invalid input to acceptValue().
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The invalid
+     * input to acceptValue(), 2. The expected exception type as a string. For
+     * example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          new \stdClass(),
+     *          'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+     *      ),
+     *      array(
+     *          array(),
+     *          'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInvalidInputForAcceptValue()
+    {
+        return array(
+            array(
+                'My name',
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+            array(
+                23,
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+            array(
+                array( 'foo' ),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+        );
+    }
+
+    /**
+     * Data provider for valid input to acceptValue().
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The valid
+     * input to acceptValue(), 2. The expected return value from acceptValue().
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          null,
+     *          null
+     *      ),
+     *      array(
+     *          __FILE__,
+     *          new BinaryFileValue( array(
+     *              'path' => __FILE__,
+     *              'fileName' => basename( __FILE__ ),
+     *              'fileSize' => filesize( __FILE__ ),
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'text/plain',
+     *          ) )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideValidInputForAcceptValue()
+    {
+        return array(
+            array(
+                array(),
+                new AuthorValue( array() ),
+            ),
+            array(
+                array(
+                    new Author( array( 'name' => 'Boba Fett', 'email' => 'boba.fett@example.com' ) )
+                ),
+                new AuthorValue(
+                    array(
+                        new Author( array( 'id' => 1, 'name' => 'Boba Fett', 'email' => 'boba.fett@example.com' ) )
+                    )
+                ),
+            ),
+            array(
+                array(
+                    new Author( array( 'name' => 'Boba Fett', 'email' => 'boba.fett@example.com' ) ),
+                    new Author( array( 'name' => 'Darth Vader', 'email' => 'darth.vader@example.com' ) ),
+                ),
+                new AuthorValue(
+                    array(
+                        new Author( array( 'id' => 1, 'name' => 'Boba Fett', 'email' => 'boba.fett@example.com' ) ),
+                        new Author( array( 'id' => 2, 'name' => 'Darth Vader', 'email' => 'darth.vader@example.com' ) ),
+                    )
+                ),
+            )
         );
     }
 
