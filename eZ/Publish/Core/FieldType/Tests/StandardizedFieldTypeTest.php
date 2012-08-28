@@ -270,6 +270,13 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
         }
         catch ( \Exception $e )
         {
+            if ( $e instanceof \PHPUnit_Framework_Exception
+                 || $e instanceof \PHPUnit_Framework_Error
+                 || $e instanceof \PHPUnit_Framework_AssertionFailedError )
+            {
+                throw $e;
+            }
+
             $this->assertInstanceOf(
                 $expectedException,
                 $e
