@@ -109,6 +109,80 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
     abstract public function provideValidInputForAcceptValue();
 
     /**
+     * Provide input for the toHash() method
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The valid
+     * input to toHash(), 2. The expected return value from toHash().
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          null,
+     *          null
+     *      ),
+     *      array(
+     *          new BinaryFileValue( array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ) ),
+     *          array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    abstract public function provideInputForToHash();
+
+    /**
+     * Provide input to fromHash() method
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The valid
+     * input to fromHash(), 2. The expected return value from fromHash().
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          null,
+     *          null
+     *      ),
+     *      array(
+     *          array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ),
+     *          new BinaryFileValue( array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ) )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    abstract public function provideInputForFromHash();
+
+    /**
      * Retrieves a test wide cached version of the field type under test.
      *
      * Uses {@link createFieldTypeUnderTest()} to create the instance
@@ -201,6 +275,42 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
                 $e
             );
         }
+    }
+
+    /**
+     * @param mixed $inputValue
+     * @param array $expectedResult
+     * @dataProvider provideInputForToHash
+     */
+    public function testToHash( $inputValue, $expectedResult )
+    {
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        $actualResult = $fieldType->toHash( $inputValue );
+
+        $this->assertEquals(
+            $expectedResult,
+            $actualResult,
+            'toHash() method did not create expected result.'
+        );
+    }
+
+    /**
+     * @param mixed $inputValue
+     * @param array $expectedResult
+     * @dataProvider provideInputForFromHash
+     */
+    public function testFromHash( $inputHash, $expectedResult )
+    {
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        $actualResult = $fieldType->fromHash( $inputHash );
+
+        $this->assertEquals(
+            $expectedResult,
+            $actualResult,
+            'fromHash() method did not create expected result.'
+        );
     }
 
     // @TODO: More test methods …
