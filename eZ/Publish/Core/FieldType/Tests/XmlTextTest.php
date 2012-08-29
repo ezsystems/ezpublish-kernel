@@ -8,10 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType,
-    eZ\Publish\Core\FieldType\XmlText\Input\Parser\Raw as RawXmlTextInputParser,
-    eZ\Publish\Core\FieldType\XmlText\Schema as XmlTextSchema,
-    DOMDocument;
+use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType;
 
 /**
  * @group fieldType
@@ -19,11 +16,6 @@ use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType,
  */
 class XmlTextTest extends FieldTypeTest
 {
-    public function setUp()
-    {
-        $this->markTestSkipped( 'TODO: Needs test suite refactoring.' );
-    }
-
     /**
      * Normally this should be enough:
      *
@@ -37,7 +29,10 @@ class XmlTextTest extends FieldTypeTest
      */
     protected function getFieldType()
     {
-        return new XmlTextType( new RawXmlTextInputParser( new XmlTextSchema ) );
+        return new XmlTextType(
+            $this->getValidatorServiceMock(),
+            $this->getFieldTypeToolsMock()
+        );
     }
 
     /**
@@ -84,35 +79,12 @@ class XmlTextTest extends FieldTypeTest
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\XmlText\Type::acceptValue
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @dataProvider providerForTestAcceptValueInvalidFormat
-     */
-    public function testAcceptValueInvalidFormat( $text, $parser )
-    {
-        $parserMock = $this->getMockBuilder( $parser )->disableOriginalConstructor()->getMock();
-        $parserMock
-            ->expects( $this->once() )
-            ->method( 'process' )
-            ->with( $text )
-            ->will( $this->throwException( $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException" ) ) );
-        $fieldType = new XmlTextType( $parserMock );
-        $fieldType->acceptValue( $text );
-    }
-
-    /**
      * @covers \eZ\Publish\Core\FieldType\Author\Type::acceptValue
      * @dataProvider providerForTestAcceptValueValidFormat
      */
-    public function testAcceptValueValidFormat( $text, $parser )
+    public function testAcceptValueValidFormat( $text )
     {
-        $parserMock = $this->getMockBuilder( $parser )->disableOriginalConstructor()->getMock();
-        $parserMock
-            ->expects( $this->once() )
-            ->method( 'process' )
-            ->with( $text )
-            ->will( $this->returnValue( new DOMDocument( '1.0', 'utf-8' ) ) );
-        $fieldType = new XmlTextType( $parserMock );
+        $fieldType = new XmlTextType( $this->getValidatorServiceMock(), $this->getFieldTypeToolsMock() );
         $fieldType->acceptValue( $text );
     }
 
@@ -127,22 +99,10 @@ class XmlTextTest extends FieldTypeTest
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">Header 1</header></section>';
         // @todo Do one per value class
         $ft = $this->getFieldType();
-        $value = $ft->acceptValue( $xmlData );
 
-        $fieldValue = $ft->toPersistenceValue( $value );
+        $fieldValue = $ft->toPersistenceValue( $ft->acceptValue( $xmlData ) );
 
         self::assertSame( $xmlData, $fieldValue->data );
-    }
-
-    public function providerForTestAcceptValueInvalidFormat()
-    {
-        return array(
-            // RawValue requires root XML + section tags
-            array( '', "eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser\\Raw" ),
-
-            // wrong closing tag
-            array( '<a href="http://www.google.com/">bar</foo>', "eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser\\Simplified" ),
-        );
     }
 
     public static function providerForTestAcceptValueValidFormat()
