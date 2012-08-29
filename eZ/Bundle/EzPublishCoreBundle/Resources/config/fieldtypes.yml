@@ -181,7 +181,7 @@ services:
 
     ezpublish.fieldType.ezxmltext:
         class: %ezpublish.fieldType.ezxmltext.class%
-        arguments: [@ezpublish.fieldType.ezxmltext.simplifiedInputParser]
+        parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezxmltext}
 

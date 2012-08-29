@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\XmlText;
-use eZ\Publish\Core\FieldType\Value as BaseValue,
-    eZ\Publish\Core\FieldType\XmlText\Input\Handler as InputHandler;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * Basic for TextLine field type
@@ -24,21 +23,12 @@ class Value extends BaseValue
     public $text;
 
     /**
-     * Input handler
-     *
-     * @var \eZ\Publish\Core\FieldType\XmlText\Input\Handler
-     */
-    private $inputHandler;
-
-    /**
      * Initializes a new XmlText Value object with $text in
      *
-     * @param \eZ\Publish\Core\FieldType\XmlText\Input\Handler $handler
      * @param string $text
      */
-    public function __construct( InputHandler $handler, $text = '' )
+    public function __construct( $text = "" )
     {
-        $this->inputHandler = $handler;
         $this->text = $text;
     }
 
@@ -48,25 +38,5 @@ class Value extends BaseValue
     public function __toString()
     {
         return (string)$this->text;
-    }
-
-    /**
-     * Returns the input handler depending on the input value type
-     *
-     * @return \eZ\Publish\Core\FieldType\XmlText\Input\Handler
-     */
-    public function getInputHandler()
-    {
-        return $this->inputHandler;
-    }
-
-    /**
-     * Sets the value for the XmlText to $text
-     *
-     * @param $text string
-     */
-    public function setText( $text )
-    {
-        $this->text = $text;
     }
 }
