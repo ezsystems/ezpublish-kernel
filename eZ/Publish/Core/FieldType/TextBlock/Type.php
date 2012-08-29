@@ -19,8 +19,6 @@ use eZ\Publish\Core\FieldType\FieldType,
  */
 class Type extends FieldType
 {
-    // @TODO remove extension of TextLine?
-
     protected $settingsSchema = array(
         "textRows" => array(
             "type" => "int",

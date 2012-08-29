@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the IntegerTest class
+ * File containing the UserTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,15 +8,15 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Integer\Type as Integer,
-    eZ\Publish\Core\FieldType\Integer\Value as IntegerValue,
+use eZ\Publish\Core\FieldType\User\Type as UserType,
+    eZ\Publish\Core\FieldType\User\Value as UserValue,
     ReflectionObject;
 
 /**
  * @group fieldType
- * @group ezinteger
+ * @group ezurl
  */
-class IntegerTest extends StandardizedFieldTypeTest
+class UserTest extends StandardizedFieldTypeTest
 {
     /**
      * Returns the field type under test.
@@ -31,9 +31,8 @@ class IntegerTest extends StandardizedFieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Integer(
-            // TODO: Get rid of this
-            $this->validatorService,
+        return new UserType(
+            $this->getValidatorServiceMock(),
             $this->getFieldTypeToolsMock()
         );
     }
@@ -45,18 +44,7 @@ class IntegerTest extends StandardizedFieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array(
-            "IntegerValueValidator" => array(
-                "minIntegerValue" => array(
-                    "type" => "int",
-                    "default" => 0
-                ),
-                "maxIntegerValue" => array(
-                    "type" => "int",
-                    "default" => false
-                )
-            )
-        );
+        return array();
     }
 
     /**
@@ -106,15 +94,7 @@ class IntegerTest extends StandardizedFieldTypeTest
     {
         return array(
             array(
-                'foo',
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                array(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                new IntegerValue( 'foo' ),
+                23,
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
@@ -157,16 +137,40 @@ class IntegerTest extends StandardizedFieldTypeTest
                 null,
             ),
             array(
-                42,
-                new IntegerValue( 42 ),
+                array(),
+                new UserValue( array() ),
             ),
             array(
-                23,
-                new IntegerValue( 23 ),
+                new UserValue( array( 'login' => 'sindelfingen' ) ),
+                new UserValue( array( 'login' => 'sindelfingen' ) ),
             ),
             array(
-                new IntegerValue( 23 ),
-                new IntegerValue( 23 ),
+                ( $userData = array(
+                    'hasStoredLogin' => true,
+                    'contentId' => 23,
+                    'login' => 'sindelfingen',
+                    'email' => 'sindelfingen@example.com',
+                    'passwordHash' => '1234567890abcdef',
+                    'passwordHashType' => 'md5',
+                    'isLoggedIn' => true,
+                    'isEnabled' => true,
+                    'maxLogin' => 1000,
+                ) ),
+                new UserValue( $userData ),
+            ),
+            array(
+                new UserValue( $userData = array(
+                    'hasStoredLogin' => true,
+                    'contentId' => 23,
+                    'login' => 'sindelfingen',
+                    'email' => 'sindelfingen@example.com',
+                    'passwordHash' => '1234567890abcdef',
+                    'passwordHashType' => 'md5',
+                    'isLoggedIn' => true,
+                    'isEnabled' => true,
+                    'maxLogin' => 1000,
+                ) ),
+                new UserValue( $userData ),
             ),
         );
     }
@@ -211,11 +215,21 @@ class IntegerTest extends StandardizedFieldTypeTest
         return array(
             array(
                 null,
-                null,
+                null
             ),
             array(
-                new IntegerValue( 42 ),
-                42,
+                new UserValue( $userData = array(
+                    'hasStoredLogin' => true,
+                    'contentId' => 23,
+                    'login' => 'sindelfingen',
+                    'email' => 'sindelfingen@example.com',
+                    'passwordHash' => '1234567890abcdef',
+                    'passwordHashType' => 'md5',
+                    'isLoggedIn' => true,
+                    'isEnabled' => true,
+                    'maxLogin' => 1000,
+                ) ),
+                $userData,
             ),
         );
     }
@@ -260,11 +274,21 @@ class IntegerTest extends StandardizedFieldTypeTest
         return array(
             array(
                 null,
-                null,
+                null
             ),
             array(
-                42,
-                new IntegerValue( 42 ),
+                ( $userData = array(
+                    'hasStoredLogin' => true,
+                    'contentId' => 23,
+                    'login' => 'sindelfingen',
+                    'email' => 'sindelfingen@example.com',
+                    'passwordHash' => '1234567890abcdef',
+                    'passwordHashType' => 'md5',
+                    'isLoggedIn' => true,
+                    'isEnabled' => true,
+                    'maxLogin' => 1000,
+                ) ),
+                new UserValue( $userData ),
             ),
         );
     }

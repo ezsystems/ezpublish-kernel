@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the IntegerTest class
+ * File containing the TextBlockTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,15 +8,15 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Integer\Type as Integer,
-    eZ\Publish\Core\FieldType\Integer\Value as IntegerValue,
+use eZ\Publish\Core\FieldType\TextBlock\Type as TextBlockType,
+    eZ\Publish\Core\FieldType\TextBlock\Value as TextBlockValue,
     ReflectionObject;
 
 /**
  * @group fieldType
- * @group ezinteger
+ * @group ezselection
  */
-class IntegerTest extends StandardizedFieldTypeTest
+class TextBlockTest extends StandardizedFieldTypeTest
 {
     /**
      * Returns the field type under test.
@@ -31,9 +31,8 @@ class IntegerTest extends StandardizedFieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Integer(
-            // TODO: Get rid of this
-            $this->validatorService,
+        return new TextBlockType(
+            $this->getValidatorServiceMock(),
             $this->getFieldTypeToolsMock()
         );
     }
@@ -45,18 +44,7 @@ class IntegerTest extends StandardizedFieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array(
-            "IntegerValueValidator" => array(
-                "minIntegerValue" => array(
-                    "type" => "int",
-                    "default" => 0
-                ),
-                "maxIntegerValue" => array(
-                    "type" => "int",
-                    "default" => false
-                )
-            )
-        );
+        return array();
     }
 
     /**
@@ -66,7 +54,12 @@ class IntegerTest extends StandardizedFieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-        return array();
+       return array(
+            'textRows' => array(
+                'type' => 'int',
+                'default' => 10,
+            ),
+        );
     }
 
     /**
@@ -76,7 +69,7 @@ class IntegerTest extends StandardizedFieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return null;
+        return new TextBlockValue( '' );
     }
 
     /**
@@ -106,15 +99,11 @@ class IntegerTest extends StandardizedFieldTypeTest
     {
         return array(
             array(
-                'foo',
+                23,
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                array(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                new IntegerValue( 'foo' ),
+                new TextBlockValue( 23 ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
@@ -153,20 +142,16 @@ class IntegerTest extends StandardizedFieldTypeTest
     {
         return array(
             array(
-                null,
-                null,
+                '',
+                new TextBlockValue( '' ),
             ),
             array(
-                42,
-                new IntegerValue( 42 ),
+                'sindelfingen',
+                new TextBlockValue( 'sindelfingen' ),
             ),
             array(
-                23,
-                new IntegerValue( 23 ),
-            ),
-            array(
-                new IntegerValue( 23 ),
-                new IntegerValue( 23 ),
+                new TextBlockValue( 'sindelfingen' ),
+                new TextBlockValue( 'sindelfingen' ),
             ),
         );
     }
@@ -210,12 +195,12 @@ class IntegerTest extends StandardizedFieldTypeTest
     {
         return array(
             array(
-                null,
-                null,
+                new TextBlockValue(),
+                '',
             ),
             array(
-                new IntegerValue( 42 ),
-                42,
+                new TextBlockValue( 'sindelfingen' ),
+                'sindelfingen',
             ),
         );
     }
@@ -259,12 +244,12 @@ class IntegerTest extends StandardizedFieldTypeTest
     {
         return array(
             array(
-                null,
-                null,
+                '',
+                new TextBlockValue(),
             ),
             array(
-                42,
-                new IntegerValue( 42 ),
+                'sindelfingen',
+                new TextBlockValue( 'sindelfingen' ),
             ),
         );
     }

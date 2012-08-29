@@ -78,6 +78,11 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( $inputValue === null )
+        {
+            return null;
+        }
+
         if ( is_string( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
@@ -133,6 +138,11 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
+        if ( $hash === null )
+        {
+            return null;
+        }
+
         if ( isset( $hash["text"] ) )
             return new Value( $hash["link"], $hash["text"] );
 
@@ -148,6 +158,11 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
+        if ( $value === null )
+        {
+            return null;
+        }
+
         return array( "link" => $value->link, "text" => $value->text );
     }
 

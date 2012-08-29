@@ -8,155 +8,257 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\RelationList\Type as Relation,
+use eZ\Publish\Core\FieldType\RelationList\Type as RelationList,
     eZ\Publish\Core\FieldType\RelationList\Value,
     eZ\Publish\Core\FieldType\Tests\FieldTypeTest,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     PHPUnit_Framework_TestCase,
     eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 
-class RelationListTest extends FieldTypeTest
+class RelationListTest extends StandardizedFieldTypeTest
 {
     /**
-     * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
+     * Returns the field type under test.
+     *
+     * This method is used by all test cases to retrieve the field type under
+     * test. Just create the FieldType instance using mocks from the provided
+     * get*Mock() methods and/or custom get*Mock() implementations. You MUST
+     * NOT take care for test case wide caching of the field type, just return
+     * a new instance from this method!
+     *
+     * @return FieldType
      */
-    public function testValidatorConfigurationSchema()
+    protected function createFieldTypeUnderTest()
     {
-        $ft = new Relation( $this->validatorService, $this->fieldTypeTools );
-        self::assertEmpty(
-            $ft->getValidatorConfigurationSchema(),
-            "The validator configuration schema does not match what is expected."
+        return new RelationList(
+            $this->getValidatorServiceMock(),
+            $this->getFieldTypeToolsMock()
         );
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
+     * Returns the validator configuration schema expected from the field type.
+     *
+     * @return array
      */
-    public function testSettingsSchema()
+    protected function getValidatorConfigurationSchemaExpectation()
     {
-        $ft = new Relation( $this->validatorService, $this->fieldTypeTools );
-        self::assertSame(
-            array(
-                'selectionMethod' => array(
-                    'type' => 'int',
-                    'default' => Relation::SELECTION_BROWSE,
-                ),
-                'selectionDefaultLocation' => array(
-                    'type' => 'string',
-                    'default' => null,
-                ),
-                'selectionContentTypes' => array(
-                    'type' => 'array',
-                    'default' => array(),
-                ),
+        return array();
+    }
+
+    /**
+     * Returns the settings schema expected from the field type.
+     *
+     * @return array
+     */
+    protected function getSettingsSchemaExpectation()
+    {
+        return array(
+            'selectionMethod' => array(
+                'type' => 'int',
+                'default' => RelationList::SELECTION_BROWSE,
             ),
-            $ft->getSettingsSchema(),
-            "The settings schema does not match what is expected."
+            'selectionDefaultLocation' => array(
+                'type' => 'string',
+                'default' => null,
+            ),
+            'selectionContentTypes' => array(
+                'type' => 'array',
+                'default' => array(),
+            ),
         );
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\Relation\Type::acceptValue
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * Returns the empty value expected from the field type.
+     *
+     * @return void
      */
-    public function testAcceptValueInvalidFormat()
+    protected function getEmptyValueExpectation()
     {
-        $ft = new Relation( $this->validatorService, $this->fieldTypeTools );
-        $ft->acceptValue( new Value( array( null ) ) );
+        // FIXME: Is this correct?
+        return new Value();
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\Relation\Type::acceptValue
+     * Data provider for invalid input to acceptValue().
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The invalid
+     * input to acceptValue(), 2. The expected exception type as a string. For
+     * example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          new \stdClass(),
+     *          'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+     *      ),
+     *      array(
+     *          array(),
+     *          'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
      */
-    public function testAcceptValueValidFormat()
+    public function provideInvalidInputForAcceptValue()
     {
-        $ft = new Relation( $this->validatorService, $this->fieldTypeTools );
-        $value = new Value( array( 1 ) );
-        self::assertSame( $value, $ft->acceptValue( $value ) );
+        return array(
+            array(
+                true,
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            )
+        );
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\Relation\Type::toPersistenceValue
+     * Data provider for valid input to acceptValue().
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The valid
+     * input to acceptValue(), 2. The expected return value from acceptValue().
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          null,
+     *          null
+     *      ),
+     *      array(
+     *          __FILE__,
+     *          new BinaryFileValue( array(
+     *              'path' => __FILE__,
+     *              'fileName' => basename( __FILE__ ),
+     *              'fileSize' => filesize( __FILE__ ),
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'text/plain',
+     *          ) )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
      */
-    public function testToPersistenceValue()
+    public function provideValidInputForAcceptValue()
     {
-        $ft = new Relation( $this->validatorService, $this->fieldTypeTools );
-        $fieldValue = $ft->toPersistenceValue( new Value( array( 1 ) ) );
-
-        self::assertSame( array( "destinationContentIds" => array( 1 ) ), $fieldValue->data );
-        self::assertSame( null, $fieldValue->externalData );
+        return array(
+            array(
+                new Value(),
+                new Value(),
+            ),
+            array(
+                23,
+                new Value( array( 23 ) ),
+            ),
+            array(
+                new ContentInfo( array( 'id' => 23 ) ),
+                new Value( array( 23 ) ),
+            ),
+            array(
+                array( 23, 42 ),
+                new Value( array( 23, 42 ) ),
+            ),
+        );
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\Relation\Type::fromPersistenceValue
+     * Provide input for the toHash() method
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The valid
+     * input to toHash(), 2. The expected return value from toHash().
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          null,
+     *          null
+     *      ),
+     *      array(
+     *          new BinaryFileValue( array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ) ),
+     *          array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
      */
-    public function testFromPersistenceValue()
+    public function provideInputForToHash()
     {
-        $expectedValue = new Value( array( 1 ) );
-
-        $fieldValue = new FieldValue();
-        $fieldValue->data = array( "destinationContentIds" => array( 1 ) );
-        $fieldValue->externalData = null;
-
-        $ft = new Relation( $this->validatorService, $this->fieldTypeTools );
-        $value = $ft->fromPersistenceValue( $fieldValue );
-
-        self::assertEquals( $expectedValue, $value );
+        return array(
+            array(
+                new Value( array( 23, 42 ) ),
+                array( 'destinationContentIds' => array( 23, 42 ) ),
+            ),
+            array(
+                new Value(),
+                array( 'destinationContentIds' => array() ),
+            ),
+        );
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\Relation\Type::acceptValue
-     * @covers \eZ\Publish\Core\FieldType\Relation\Type::__construct
+     * Provide input to fromHash() method
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The valid
+     * input to fromHash(), 2. The expected return value from fromHash().
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          null,
+     *          null
+     *      ),
+     *      array(
+     *          array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ),
+     *          new BinaryFileValue( array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ) )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
      */
-    public function testBuildValueWithContentInfo()
+    public function provideInputForFromHash()
     {
-        $type = new Relation( $this->validatorService, $this->fieldTypeTools );
-        $contentInfo = new ContentInfo( array( 'id' => 1 ) );
-        $value = $type->acceptValue( $contentInfo );
-        self::assertSame( array( $contentInfo->id ), $value->destinationContentIds );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Relation\Type::acceptValue
-     * @covers \eZ\Publish\Core\FieldType\Relation\Type::__construct
-     */
-    public function testBuildValueWithId()
-    {
-        $type = new Relation( $this->validatorService, $this->fieldTypeTools );
-        $contentId = 1;
-        $value = $type->acceptValue( $contentId );
-        self::assertSame( array( $contentId ), $value->destinationContentIds );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Relation\Type::acceptValue
-     * @covers \eZ\Publish\Core\FieldType\Relation\Type::__construct
-     */
-    public function testBuildValueWithIdList()
-    {
-        $type = new Relation( $this->validatorService, $this->fieldTypeTools );
-        $contentId = 1;
-        $value = $type->acceptValue( array( $contentId ) );
-        self::assertSame( array( $contentId ), $value->destinationContentIds );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Relation\Value::__construct
-     */
-    public function testValueConstructor()
-    {
-        $contentId = 1;
-        $value = new Value( array( $contentId ) );
-        self::assertSame( array( $contentId ), $value->destinationContentIds );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Relation\Value::__toString
-     */
-    public function testFieldValueToString()
-    {
-        $contentId = 1;
-        $value = new Value( array( $contentId ) );
-        self::assertSame( (string)$contentId, (string)$value );
+        return array(
+            array(
+                array( 'destinationContentIds' => array( 23, 42 ) ),
+                new Value( array( 23, 42 ) ),
+            ),
+            array(
+                array( 'destinationContentIds' => array() ),
+                new Value(),
+            ),
+        );
     }
 }

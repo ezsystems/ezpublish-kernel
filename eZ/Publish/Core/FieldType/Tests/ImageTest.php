@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the IntegerTest class
+ * File containing the ImageTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,16 +8,48 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Integer\Type as Integer,
-    eZ\Publish\Core\FieldType\Integer\Value as IntegerValue,
+use eZ\Publish\Core\FieldType\Image\Type as ImageType,
+    eZ\Publish\Core\FieldType\Image\Value as ImageValue,
     ReflectionObject;
 
 /**
  * @group fieldType
- * @group ezinteger
+ * @group ezfloat
  */
-class IntegerTest extends StandardizedFieldTypeTest
+class ImageTest extends StandardizedFieldTypeTest
 {
+    /**
+     * FileService mock
+     *
+     * @var PHPUnit_Framework_Mock
+     */
+    private $fileServiceMock;
+
+    public function getImagePath()
+    {
+        return __DIR__ . '/squirrel-developers.jpg';
+    }
+
+    /**
+     * Returns a mock for the FileService
+     *
+     * @return eZ\Publish\Core\FieldType\FileService
+     */
+    protected function getFileServiceMock()
+    {
+        if ( !isset( $this->fileServiceMock ) )
+        {
+            $this->fileServiceMock = $this->getMock(
+                'eZ\\Publish\\Core\\FieldType\\FileService',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->fileServiceMock;
+    }
+
     /**
      * Returns the field type under test.
      *
@@ -31,10 +63,10 @@ class IntegerTest extends StandardizedFieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Integer(
-            // TODO: Get rid of this
-            $this->validatorService,
-            $this->getFieldTypeToolsMock()
+        return new ImageType(
+            $this->getValidatorServiceMock(),
+            $this->getFieldTypeToolsMock(),
+            $this->getFileServiceMock()
         );
     }
 
@@ -46,14 +78,10 @@ class IntegerTest extends StandardizedFieldTypeTest
     protected function getValidatorConfigurationSchemaExpectation()
     {
         return array(
-            "IntegerValueValidator" => array(
-                "minIntegerValue" => array(
-                    "type" => "int",
-                    "default" => 0
-                ),
-                "maxIntegerValue" => array(
-                    "type" => "int",
-                    "default" => false
+            "FileSizeValidator" => array(
+                'maxFileSize' => array(
+                    'type' => 'int',
+                    'default' => false,
                 )
             )
         );
@@ -114,7 +142,45 @@ class IntegerTest extends StandardizedFieldTypeTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                new IntegerValue( 'foo' ),
+                new ImageValue(),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+            array(
+                new ImageValue(
+                    array(
+                        'path' => 'non/existent/path',
+                    )
+                ),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+            array(
+                new ImageValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => array()
+                    )
+                ),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+            array(
+                new ImageValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => 'ImageTest.php',
+                        'fileSize' => 'truebar'
+                    )
+                ),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+            array(
+                new ImageValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => 'ImageTest.php',
+                        'fileSize' => 23,
+                        'alternativeText' => array()
+                    )
+                ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
@@ -157,16 +223,31 @@ class IntegerTest extends StandardizedFieldTypeTest
                 null,
             ),
             array(
-                42,
-                new IntegerValue( 42 ),
+                $this->getImagePath(),
+                new ImageValue(
+                    array(
+                        'path' => $this->getImagePath(),
+                        'fileName' => basename( $this->getImagePath() ),
+                        'fileSize' => filesize( $this->getImagePath() ),
+                        'alternativeText' => null,
+                    )
+                ),
             ),
             array(
-                23,
-                new IntegerValue( 23 ),
-            ),
-            array(
-                new IntegerValue( 23 ),
-                new IntegerValue( 23 ),
+                array(
+                    'path' => $this->getImagePath(),
+                    'fileName' => 'Sindelfingen-Squirrels.jpg',
+                    'fileSize' => 23,
+                    'alternativeText' => 'This is so Sindelfingen!',
+                ),
+                new ImageValue(
+                    array(
+                        'path' => $this->getImagePath(),
+                        'fileName' => 'Sindelfingen-Squirrels.jpg',
+                        'fileSize' => 23,
+                        'alternativeText' => 'This is so Sindelfingen!',
+                    )
+                ),
             ),
         );
     }
@@ -214,8 +295,20 @@ class IntegerTest extends StandardizedFieldTypeTest
                 null,
             ),
             array(
-                new IntegerValue( 42 ),
-                42,
+                new ImageValue(
+                    array(
+                        'path' => $this->getImagePath(),
+                        'fileName' => 'Sindelfingen-Squirrels.jpg',
+                        'fileSize' => 23,
+                        'alternativeText' => 'This is so Sindelfingen!',
+                    )
+                ),
+                array(
+                    'path' => $this->getImagePath(),
+                    'fileName' => 'Sindelfingen-Squirrels.jpg',
+                    'fileSize' => 23,
+                    'alternativeText' => 'This is so Sindelfingen!',
+                ),
             ),
         );
     }
@@ -263,9 +356,22 @@ class IntegerTest extends StandardizedFieldTypeTest
                 null,
             ),
             array(
-                42,
-                new IntegerValue( 42 ),
+                array(
+                    'path' => $this->getImagePath(),
+                    'fileName' => 'Sindelfingen-Squirrels.jpg',
+                    'fileSize' => 23,
+                    'alternativeText' => 'This is so Sindelfingen!',
+                ),
+                new ImageValue(
+                    array(
+                        'path' => $this->getImagePath(),
+                        'fileName' => 'Sindelfingen-Squirrels.jpg',
+                        'fileSize' => 23,
+                        'alternativeText' => 'This is so Sindelfingen!',
+                    )
+                ),
             ),
+            // @TODO: Provide REST upload tests
         );
     }
 }

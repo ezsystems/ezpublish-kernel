@@ -18,7 +18,7 @@
         "php": ">=5.3.3"
     },
     "require-dev": {
-        "symfony/symfony": "2.1.0-RC1",
+        "symfony/symfony": "2.1.0-RC2",
         "zetacomponents/cache": "dev-master",
         "zetacomponents/php-generator": "dev-master",
         "zetacomponents/configuration": "dev-master",

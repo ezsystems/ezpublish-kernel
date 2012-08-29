@@ -85,7 +85,7 @@ class Type extends FieldType
             $inputValue = new Value( $inputValue );
         }
 
-        if ( !$inputValue instanceof Value )
+        if ( !( $inputValue instanceof Value ) )
         {
             throw new InvalidArgumentType(
                 '$inputValue',

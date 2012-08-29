@@ -52,7 +52,7 @@ EOT
         }
 
         $output->writeln( "Installing wrappers for eZ Publish legacy front controllers" );
-        foreach ( array( 'index_treemenu.php', 'index_rest.php', 'index_cluster.php' ) as $frontController )
+        foreach ( array( 'index_rest.php', 'index_cluster.php' ) as $frontController )
         {
             $newFrontController = "$webroot/$frontController";
             $filesystem->remove( $newFrontController );

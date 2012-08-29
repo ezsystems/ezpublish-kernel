@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the IntegerTest class
+ * File containing the KeywordTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,15 +8,15 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Integer\Type as Integer,
-    eZ\Publish\Core\FieldType\Integer\Value as IntegerValue,
+use eZ\Publish\Core\FieldType\Keyword\Type as KeywordType,
+    eZ\Publish\Core\FieldType\Keyword\Value as KeywordValue,
     ReflectionObject;
 
 /**
  * @group fieldType
  * @group ezinteger
  */
-class IntegerTest extends StandardizedFieldTypeTest
+class KeywordTest extends StandardizedFieldTypeTest
 {
     /**
      * Returns the field type under test.
@@ -31,9 +31,8 @@ class IntegerTest extends StandardizedFieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Integer(
-            // TODO: Get rid of this
-            $this->validatorService,
+        return new KeywordType(
+            $this->getValidatorServiceMock(),
             $this->getFieldTypeToolsMock()
         );
     }
@@ -45,18 +44,7 @@ class IntegerTest extends StandardizedFieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array(
-            "IntegerValueValidator" => array(
-                "minIntegerValue" => array(
-                    "type" => "int",
-                    "default" => 0
-                ),
-                "maxIntegerValue" => array(
-                    "type" => "int",
-                    "default" => false
-                )
-            )
-        );
+        return array();
     }
 
     /**
@@ -76,7 +64,7 @@ class IntegerTest extends StandardizedFieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return null;
+        return new KeywordValue( array() );
     }
 
     /**
@@ -106,15 +94,7 @@ class IntegerTest extends StandardizedFieldTypeTest
     {
         return array(
             array(
-                'foo',
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                array(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                new IntegerValue( 'foo' ),
+                23,
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
@@ -154,19 +134,19 @@ class IntegerTest extends StandardizedFieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new KeywordValue( array() ),
             ),
             array(
-                42,
-                new IntegerValue( 42 ),
+                array(),
+                new KeywordValue( array() ),
             ),
             array(
-                23,
-                new IntegerValue( 23 ),
+                array( 'foo' ),
+                new KeywordValue( array( 'foo' ) ),
             ),
             array(
-                new IntegerValue( 23 ),
-                new IntegerValue( 23 ),
+                new KeywordValue( array( 'foo' ) ),
+                new KeywordValue( array( 'foo' ) ),
             ),
         );
     }
@@ -210,12 +190,12 @@ class IntegerTest extends StandardizedFieldTypeTest
     {
         return array(
             array(
-                null,
-                null,
+                new KeywordValue( array() ),
+                array(),
             ),
             array(
-                new IntegerValue( 42 ),
-                42,
+                new KeywordValue( array( 'foo', 'bar' ) ),
+                array( 'foo', 'bar' ),
             ),
         );
     }
@@ -259,12 +239,12 @@ class IntegerTest extends StandardizedFieldTypeTest
     {
         return array(
             array(
-                null,
-                null,
+                array(),
+                new KeywordValue( array() ),
             ),
             array(
-                42,
-                new IntegerValue( 42 ),
+                array( 'foo', 'bar' ),
+                new KeywordValue( array( 'foo', 'bar' ) ),
             ),
         );
     }

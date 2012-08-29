@@ -57,7 +57,7 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value( 0 );
+        return null;
     }
 
     /**
@@ -83,7 +83,12 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
-        if ( is_int( $inputValue ) || $inputValue === null )
+        if ( $inputValue === null )
+        {
+            return null;
+        }
+
+        if ( is_int( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
         }
@@ -116,6 +121,10 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
+        if ( $value === null )
+        {
+            return null;
+        }
         return $value->value;
     }
 
@@ -128,6 +137,10 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
+        if ( $hash === null )
+        {
+            return null;
+        }
         return new Value( $hash );
     }
 
@@ -140,6 +153,10 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
+        if ( $value === null )
+        {
+            return null;
+        }
         return $value->value;
     }
 
