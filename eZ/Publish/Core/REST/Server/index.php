@@ -313,9 +313,9 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/user/groups/[0-9/]+/roles$)' => array(
             'GET'  => array( $roleController, 'loadRoleAssignmentsForUserGroup' ),
             'POST'  => array( $roleController, 'assignRoleToUserGroup' ),
+        ),
         '(^/user/groups/[0-9/]+/roles/[0-9]+$)' => array(
             'DELETE'  => array( $roleController, 'unassignRoleFromUserGroup' ),
-        ),
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(
