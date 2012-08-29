@@ -1176,13 +1176,13 @@ XML Example
           <id>1234</id>
           <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <fieldValue xsi:type="xsd:string">Neuer Titel</fieldValue>
+          <fieldValue>Neuer Titel</fieldValue>
         </field>
         <field>
           <id>1235</id>
           <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <fieldValue xsi:type="xsd:string">Dies ist eine neue Zusammenfassungy</fieldValue>
+          <fieldValue>Dies ist eine neue Zusammenfassungy</fieldValue>
         </field>
       </fields>
     </VersionUpdate>
@@ -1217,18 +1217,18 @@ XML Example
           <id>1234</id>
           <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <fieldValue xsi:type="xsd:string">Neuer Titel</fieldValue>
+          <fieldValue>Neuer Titel</fieldValue>
         </field>
         <field>
           <id>1235</id>
           <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <fieldValue xsi:type="xsd:string">Dies ist eine neuse Zusammenfassungy</fieldValue>
+          <fieldValue>Dies ist eine neuse Zusammenfassungy</fieldValue>
         </field>
         <field>
           <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <fieldValue xsi:type="authorsType">
+          <fieldValue>
             <authors>
               <author name="Klaus Mustermann" email="klaus.mustermann@example.net" />
             </authors>
