@@ -76,6 +76,11 @@ $inputDispatcher = new Common\Input\Dispatcher(
         'application/vnd.ez.api.ContentUpdate'          => new Input\Parser\ContentUpdate( $urlHandler ),
         'application/vnd.ez.api.PolicyCreate'           => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService() ),
         'application/vnd.ez.api.PolicyUpdate'           => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService() ),
+        // FIXME: There is no resource specified for Limitation, therefore,
+        // parsing of limitations cannot be bound to the media type. Please fix
+        // this to have the parser for limitation structs triggered directly
+        // from the points where limitations occur. The parser can e.g. be
+        // aggregated by the parsers for PolicyCreate and PolicyUpdate.
         'application/vnd.ez.api.limitation'             => new Input\Parser\Limitation( $urlHandler ),
         'application/vnd.ez.api.RoleAssignInput'        => new Input\Parser\RoleAssignInput( $urlHandler ),
         'application/vnd.ez.api.LocationCreate'         => new Input\Parser\LocationCreate( $urlHandler, $repository->getLocationService() ),
