@@ -199,6 +199,9 @@ $valueObjectVisitors = array(
 
 $dispatcher = new AuthenticatingDispatcher(
     new RMF\Router\Regexp( array(
+
+    // /content/sections
+
         '(^/content/sections$)' => array(
             'GET'  => array( $sectionController, 'listSections' ),
             'POST' => array( $sectionController, 'createSection' ),
@@ -211,6 +214,9 @@ $dispatcher = new AuthenticatingDispatcher(
             'PATCH'  => array( $sectionController, 'updateSection' ),
             'DELETE' => array( $sectionController, 'deleteSection' ),
         ),
+
+    // /content/objects
+
         '(^/content/objects\?remoteId=[0-9a-z]+$)' => array(
             'GET'   => array( $contentController, 'loadContentInfoByRemoteId' ),
         ),
@@ -225,6 +231,9 @@ $dispatcher = new AuthenticatingDispatcher(
             'GET' => array( $objectStateController, 'getObjectStatesForContent' ),
             'PATCH' => array( $objectStateController, 'setObjectStatesForContent' ),
         ),
+
+    // /content/objectstategroups
+
         '(^/content/objectstategroups$)' => array(
             'GET' => array( $objectStateController, 'loadObjectStateGroups' ),
             'POST' => array( $objectStateController, 'createObjectStateGroup' ),
@@ -243,6 +252,9 @@ $dispatcher = new AuthenticatingDispatcher(
             'PATCH' => array( $objectStateController, 'updateObjectState' ),
             'DELETE' => array( $objectStateController, 'deleteObjectState' ),
         ),
+
+    // content/locations
+
         '(^/content/locations\?remoteId=[0-9a-z]+$)' => array(
             'GET' => array( $locationController, 'loadLocationByRemoteId' ),
         ),
@@ -253,6 +265,9 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/content/locations/[0-9/]+/children$)' => array(
             'GET'    => array( $locationController, 'loadLocationChildren' ),
         ),
+
+    // /content/trash
+
         '(^/content/trash$)' => array(
             'GET'    => array( $trashController, 'loadTrashItems' ),
             'DELETE' => array( $trashController, 'emptyTrash' ),
@@ -261,6 +276,9 @@ $dispatcher = new AuthenticatingDispatcher(
             'GET'    => array( $trashController, 'loadTrashItem' ),
             'DELETE' => array( $trashController, 'deleteTrashItem' ),
         ),
+
+    // /user
+
         '(^/user/policies\?userId=[0-9]+$)' => array(
             'GET' => array( $roleController, 'listPoliciesForUser' ),
         ),
