@@ -22,6 +22,7 @@
                        all services here.
             -->
             <file>SearchServiceTest.php</file>
+            <file>SearchServiceAuthorizationTest.php</file>
         </testsuite>
     </testsuites>
     <filter>

@@ -38,6 +38,7 @@
             <file>URLWildcardServiceAuthorizationTest.php</file>
             <file>ObjectStateServiceAuthorizationTest.php</file>
             <file>SearchServiceTest.php</file>
+            <file>SearchServiceAuthorizationTest.php</file>
             <directory>FieldType/</directory>
         </testsuite>
     </testsuites>
