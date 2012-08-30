@@ -57,7 +57,9 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     {
         if ( !isset( $this->generator ) )
         {
-            $this->generator = new Generator\Xml();
+            $this->generator = new Generator\Xml(
+                new Generator\Xml\FieldTypeHashGenerator()
+            );
         }
         return $this->generator;
     }
