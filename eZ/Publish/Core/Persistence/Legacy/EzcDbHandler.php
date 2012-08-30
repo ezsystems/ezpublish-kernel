@@ -43,7 +43,19 @@ class EzcDbHandler
     /**
      * Factory for getting EzcDbHandler handler object
      *
-     * Will use postgres or sqllite specific wrappers if dsn indicates such databases.
+     * Will use postgres or sqlite specific wrappers if dsn indicates such databases.
+     *
+     * The DSN (data source name) defines which database to use. It's format is
+     * defined by the Apache Zeta Components Database component. Examples are:
+     *
+     * - mysql://root:secret@localhost/ezp
+     *   For the MySQL database "ezp" on localhost, which will be accessed
+     *   using user "root" with password "secret"
+     * - sqlite://:memory:
+     *   for a SQLite in memory database (used e.g. for unit tests)
+     *
+     * For further information on the database setup, please refer to
+     * {@see http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html#handler-usage}
      *
      * @static
      * @param $dsn

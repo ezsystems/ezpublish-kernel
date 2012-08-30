@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Base\Tests\Configuration\Parser\Ini;
-use eZ\Publish\Core\Base\Configuration\Parser\Ini as IniParser,
-    eZ\Publish\Core\Base\Tests\Configuration\Parser\Ini\Base;
+use eZ\Publish\Core\Base\Configuration\Parser\Ini as IniParser;
 
 /**
  * Test case for Parser\Ini class
@@ -19,11 +18,7 @@ class EzcTest extends Base
     public function getParser()
     {
         return new IniParser(
-            array(
-                'base' => array(
-                    'Configuration' => array( 'IniParserStrict' => false )
-                )
-            )
+            array( 'IniParserStrict' => false )
         );
     }
 }

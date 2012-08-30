@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Values\Content;
 
-use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo,
-    eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo;
 
 /**
  * This class provides all version independent information of the content object.

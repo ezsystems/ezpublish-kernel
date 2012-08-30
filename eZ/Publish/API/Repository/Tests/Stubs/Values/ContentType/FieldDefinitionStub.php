@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
  * @property-read $names calls getNames() or on access getName($language)
  * @property-read $descriptions calls getDescriptions() or on access getDescription($language)
  * @property-read $fieldSettings calls getFieldSettings()
- * @property-read $validators calls getValidators()
+ * @property-read mixed $validatorConfiguration calls getValidatorConfiguration()
  * @property-read int $id the id of the field definition
  * @property-read string $identifier the identifier of the field definition
  * @property-read string $fieldGroup the field group name
@@ -110,11 +110,11 @@ class FieldDefinitionStub extends FieldDefinition
     // protected $isInfoCollector;
 
     /**
-     * Contains the validators of this field definition supported by the field type#
+     * Contains the validatorConfiguration of this field definition supported by the field type#
      *
      * @var array an array of {@link Validator}
      */
-    protected $validators;
+    protected $validatorConfiguration;
 
     /**
      * Contains settings for the field definition supported by the field type
@@ -200,17 +200,19 @@ class FieldDefinitionStub extends FieldDefinition
     }
 
     /**
-     * this method returns the validators of this field definition supported by the field type
-     * @return array an array of {@link Validator}
+     * this method returns the validator configuration of this field definition supported by the field type
+     *
+     * @return mixed
      */
-    public function getValidators()
+    public function getValidatorConfiguration()
     {
-        return $this->validators;
+        return $this->validatorConfiguration;
     }
 
     /**
      * this method returns settings for the field definition supported by the field type
-     * @return array
+     *
+     * @return mixed
      */
     public function getFieldSettings()
     {

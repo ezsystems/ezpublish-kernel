@@ -5,6 +5,7 @@
   convertErrorsToExceptions="true"
   convertNoticesToExceptions="true"
   convertWarningsToExceptions="true"
+  colors="false"
   >
   <testsuites>
     <testsuite name="eZ\Publish\Core\Base">
@@ -13,45 +14,40 @@
     <testsuite name="eZ\Publish\Core\Repository">
       <directory>eZ/Publish/Core/Repository/Tests</directory>
     </testsuite>
+    <testsuite name="eZ\Publish\Core\FieldType">
+      <directory>eZ/Publish/Core/FieldType/Tests</directory>
+    </testsuite>
     <testsuite name="eZ\Publish\Core\Persistence\InMemory">
       <directory>eZ/Publish/Core/Persistence/InMemory/Tests</directory>
     </testsuite>
     <testsuite name="eZ\Publish\Core\Persistence\Legacy">
       <directory>eZ/Publish/Core/Persistence/Legacy/Tests</directory>
     </testsuite>
-    <testsuite name="eZ\Publish\Core\Io">
-      <directory>eZ/Publish/Core/Io/Tests</directory>
+    <testsuite name="eZ\Publish\Core\IO">
+      <directory>eZ/Publish/Core/IO/Tests</directory>
+    </testsuite>
+    <testsuite name="eZ Publish HMVC test suite">
+      <directory>eZ/Publish/MVC</directory>
+      <directory>eZ/Bundle</directory>
+    </testsuite>
+    <testsuite name="eZ Publish legacy test suite">
+        <directory>eZ/Publish/Legacy</directory>
     </testsuite>
   </testsuites>
   <filter>
     <whitelist>
       <directory suffix=".php">eZ</directory>
       <exclude>
-          <directory>eZ/Publish/API/Repository/Tests</directory>
-          <!-- directory>eZ/Publish/API/Repository/Tests/_fixtures</directory>
-          <file>eZ/Publish/API/Repository/Tests/common.php</file -->
-
+          <directory>eZ/Publish/*/Tests</directory>
+          <directory>eZ/Publish/*/*/Tests</directory>
+          <directory>eZ/Bundle/*/Tests</directory>
+          <directory>eZ/Bundle/*/_fixtures</directory>
+          <directory>eZ/Publish/Core/Persistence/Legacy/docs</directory>
+          <directory>doc</directory>
+          <directory>design</directory>
+          <directory>vendor</directory>
           <directory>eZ/Publish/API/Repository/Examples</directory>
           <directory>eZ/Publish/API/Repository/Tutorials</directory>
-
-          <directory suffix=".php">eZ/Publish/Core/Base/Tests</directory>
-
-          <directory suffix=".php">eZ/Publish/Core/Io/Tests</directory>
-
-          <directory suffix="Test.php">eZ/Publish/Core/Persistence/InMemory/Tests</directory>
-          <directory suffix="Test.php">eZ/Publish/Core/Persistence/Legacy/Tests</directory>
-          <directory>eZ/Publish/Core/Persistence/Legacy/Tests/Content/Type/_fixtures</directory>
-          <directory>eZ/Publish/Core/Persistence/Legacy/Tests/Content/Type/Gateway/_fixtures</directory>
-          <directory>eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures</directory>
-          <directory>eZ/Publish/Core/Persistence/Legacy/Tests/Content/_fixtures</directory>
-          <directory>eZ/Publish/Core/Persistence/Legacy/Tests/Content/Location/Gateway/_fixtures</directory>
-          <directory>eZ/Publish/Core/Persistence/Legacy/Tests/_fixtures</directory>
-          <directory>eZ/Publish/Core/Persistence/Legacy/docs</directory>
-
-          <directory suffix=".php">eZ/Publish/Core/Repository/Tests</directory>
-          <directory>eZ/Publish/Core/Repository/Tests/Service/Legacy/_fixtures</directory>
-
-          <directory suffix=".php">doc</directory>
       </exclude>
     </whitelist>
   </filter>

@@ -12,12 +12,23 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\Repository\FieldType\Checkbox\Value as CheckboxValue,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings;
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 class Checkbox implements Converter
 {
+    /**
+     * Factory for current class
+     *
+     * @note Class should instead be configured as service if it gains dependencies.
+     *
+     * @static
+     * @return Checkbox
+     */
+    public static function create()
+    {
+        return new self;
+    }
+
     /**
      * Converts data from $value to $storageFieldValue
      *
@@ -26,8 +37,8 @@ class Checkbox implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataInt = (int)$value->data;
-        $storageFieldValue->sortKeyInt = $value->sortKey['sort_key_int'];
+        $storageFieldValue->dataInt    = (int)$value->data;
+        $storageFieldValue->sortKeyInt = (int)$value->data;
     }
 
     /**
@@ -38,8 +49,8 @@ class Checkbox implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = (bool)$value->dataInt;
-        $fieldValue->sortKey = array( 'sort_key_int' => $value->sortKeyInt );
+        $fieldValue->data    = (bool)$value->dataInt;
+        $fieldValue->sortKey = $value->dataInt;
     }
 
     /**
@@ -50,7 +61,7 @@ class Checkbox implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        $storageDef->dataInt3 = (int)$fieldDef->fieldTypeConstraints->fieldSettings['defaultValue'];
+        $storageDef->dataInt3 = (int)$fieldDef->defaultValue->data;
     }
 
     /**
@@ -61,13 +72,7 @@ class Checkbox implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $defaultValue = (bool)$storageDef->dataInt3;
-        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
-                'defaultValue' => $defaultValue
-            )
-        );
-        $fieldDef->defaultValue->data = $defaultValue;
+        $fieldDef->defaultValue->data = !empty( $storageDef->dataInt3 ) ? (bool)$storageDef->dataInt3 : false;
     }
 
     /**

@@ -1,0 +1,322 @@
+=========================
+REST Client Server Design
+=========================
+
+This documents describes the architecture and design of the REST client and
+server, as well as the testing setup. It will also cover some details of the
+implementation as far as those are required for finishing the implementation or
+extending the software.
+
+Architecture
+============
+
+.. figure:: architecture.svg
+    :alt:   System architecture
+
+    System architecture
+
+As the figure shows the architecture depends on several layers.
+
+The basic idea behind the architecture is the following:
+
+    The user should be able to use the REST Client (SDK) just like the public
+    API on a local system.
+
+Thus a PHP client (script) will likely use the REST Client SDK, which
+implements the full Public API.
+
+The SDK implements a client which will communicate with the REST Server. The
+communication may use XML or JSON as a transport encoding format. The used
+encoding will depend on content types and accept headers provided.
+
+The server is a classic PHP webservice, which understands all requests as
+defined in the REST API v3 specification. The server itself then maps the
+requests to the REST API back to requests to the public API. Thus the server
+may utilize different implementations of the public API. For now this will
+likely be the test memory backend or the legacy backend.
+
+The server will of course work independently from the REST Client (SDK), if it
+is accessed directly using the REST API. This setup enables us to use the
+integration test suite together with the REST Client SDK to verify the client
+and the server implement all of the required functionality.
+
+Client & Server Implementation
+==============================
+
+.. figure:: client-server.svg
+    :alt:   Client Server Interaction
+
+    Client Server Interaction
+
+The figure shows a typical example of client server interaction.
+
+The Simple ``GET`` Request
+--------------------------
+
+The first request usually will just point to ``/`` on the server to discover
+the servers capabilities. This is simple for the server to process, as it just
+needs to return the available services.
+
+The server will typically retrieve the data it should send back to the client
+from the public API. The data from the public API is paraphrased as ``$data``
+in the figure. This data needs to be converted into JSON or XML depending on
+the clients capabilities (which are communicated through ``Accept`` HTTP
+headers). For this the ``Common\Output\Visitor`` is used. More details on this
+later.
+
+The Client now receives the generated ``$response`` (remember: XML or JSON) and
+needs to convert it back into ``$data`` since we are in the SDK and the PHP
+scripts wants to retrieve the common ``Value`` objects from the public API. For
+this conversion the ``Client\Input\Dispatcher`` is used, which dispatches to
+concrete parsers for the ``$response``. More on that later.
+
+A ``POST`` Request
+------------------
+
+In a more complex example, where the client wants to transmit data to the
+server and not just receive data two more steps are involved in the client
+server interaction.
+
+The client has some ``Value`` object structures, which must be transmitted to
+the server. For the conversion of the ``$data`` into a proper (JSON or XML)
+request ``$body`` again the ``Common\Output\Visitor`` is used, since this
+process is very similar to the server output conversion. (It is just some
+``$data`` into some JSON or XML conversion)
+
+The server must read some input data now, which was not necessary for the
+simple ``GET`` request. This conversion again requires to convert JSON or XML
+data (``$body``) into some ``Value`` object structures usable by the public API
+implementation. This again is very similar to the Client parsing a servers
+answer, so the ``Common\Input\Dispatcher`` is used here.
+
+The server and the clients usually must parse / return slightly different
+XML / JSON structures. Because of this the concrete implementations for parsing
+some structure or creating some structure are not in the ``Common`` namespace,
+but in the ``Server`` and ``Client`` namespace, respectively.
+
+The Output Visitor
+==================
+
+The output visitor is a slightly more sophisticated implementation of the
+visitor pattern. The basic idea is:
+
+#) Find a proper Visitor for a Value object
+#) Use a generator to generate either XML or JSON
+#) Iterate this process for all aggregated Value objects
+
+Finding a concrete visitor
+--------------------------
+
+Finding a concrete visitor depends on the Value object passed to
+``Common\Output\Visitor``. If a visitor has been registered for the exact class
+of the passed Value object, this one is used. Otherwise all parent classes are
+checked, until a visitor could be found. If there is no visitor for the passed
+Value objects nor for any of its parent classes an exception will be thrown.
+
+There is one speciality: The method ``visit()`` may only be called for the
+outermost Value object. It starts the document. For all aggregated objects the
+method ``visitValueObject()`` should be called.
+
+The concrete visitors for single Value objects will receive a reference to the
+``Common\Output\Visitor`` so they can call ``visitValueObject()`` for all
+aggregated value objects.
+
+The Generator
+-------------
+
+Since we need to generate XML or JSON depending on the client the visitors do
+not generate output themselves, but call an implementation of
+``Common\Output\Generator`` which does the actual work. This also allows us to
+do some error checking, so that only valid structures are generated. The API of
+those generators is fairly simple and straight forward. Just take a look at the
+API documentation or concrete visitor examples.
+
+The Input Dispatcher
+====================
+
+The ``Common\Input\Dispatcher`` receives a ``Message`` object, which contains a
+set of message headers and a message body, to parse that. The parsing depends
+on the ``Content-Type`` header set. They determine which concrete parser should
+be used.
+
+The ``Content-Type`` header also determines the input type (XML or JSON) of the
+message. The basic idea of the parsing process therefore is:
+
+#) Receive message
+#) Convert message into a native structure from XML or JSON
+#) Call a parser (/ handler) for the current data
+#) Iterate: For aggregated data call a parser (/handler) for this data.
+
+Data Conversion
+---------------
+
+Both, XML and JSON, are converted into a native array structure which then can
+be handled by the concrete parsers. For JSON this just means a call to
+``json_decode()``, which it is slightly more complex for the XML data.
+
+The XML data is converted by the ``Common\Input\Handler\Xml`` implementation
+which will generate the JSON array structure from the XML. There is one
+speciality in this conversion process when it comes to lists.
+
+In XML it is possible to have multiple elements with the same name in a direct
+row. This is not possible in JSON and therefore an array needs to be used here,
+which is also used in the common array structure.
+
+However, in XML it cannot be decided if an element is part of a list or
+stand-alone, if it only occurs once. For example::
+
+    <ContentList href="/content/objects">
+      <ContentInfo href="/content/contents/94" id="94">
+        <ContentType href="/content/types/23"/>
+      </ContentInfo>
+    </ContentList>
+
+In this case, it is not clear to the XML parser, that the ``<ContentInfo />``
+elements form a list, since only one occurs here. To conform to the same
+structure as achieved by ``json_decode()``, the parser needs to know that this
+specific combination of parent-child elements forms a list, no matter how many
+elements are present.
+
+To achieve this, the ``$forceList`` property in
+``Common/Input/Handler/Xml.php`` is used. It defines element combinations,
+which are forced to create a list structure. In order to use this mechanism for
+your purposes, just extend the array mapping.
+
+Calling A Parser
+----------------
+
+Calling the correct parser (/handler) for an array structure depends on the
+associated mime type. This is provided in the message headers for the outermost
+element and as a property for all aggregated elements.
+
+The class ``Common\Input\ParsingDispatcher`` maintains a mapping of
+Content-Types to concrete parser implementations for this purpose. Thus,
+depending on the mime type (/ content type) a parser is called, which then
+handles the data and converts it into the corresponding ``Value`` object.
+
+For aggregated data it may call again the ``Common\Input\ParsingDispatcher`` to
+dispatch the data handling to a specialized parser.
+
+Exchanging the Server Back End
+==============================
+
+The REST server simply works on an instance of the Public API implementation.
+In the test environment, this is the *in memory* implementation also used by
+the integration tests. However, for production use or other test scenarios,
+this must be replaced by a real world implementation of the public API.
+
+None of the infrastructure (MVC) parts of the REST API needs the repository. It
+is only needed for:
+
+1. Controller
+
+   A controller by now receives the services it needs in order to fulfill its
+   requests. These services must descend from the same repository. For example,
+   the ``SectionController`` needs the ``SectionService``.
+
+2. Authenticator
+
+   The ``Authenticator`` given to the enhanced dispatching mechanism needs the
+   Repository, in order to call ``setCurrentUser()`` on it, based on the
+   credentials provided by a REST client.
+
+It is a wise decision to have the used repository created by a Dependency
+Injection Container, or similar, and to have this inject the necessary services
+into other components.
+
+
+.. note::
+    Since the memory back end used for integration tests does not provide state
+    between requests, the ``index.php`` used for integration currently
+    implements a rudimentary session management. This should not be required for
+    any other setup! See the ``index.php`` for further detail.
+
+Authentication
+==============
+
+Authentication has to be performed through a mechanism over HTTP. Therefore,
+the slient and server both contain example implementation on how additional
+authentication mechanisms can be implemented.
+
+Server
+------
+
+The Server uses a derived version of the RMF\Dispatcher\Simple class, which
+handles authentication before the actual dispatching takes place. As
+examples, the …\REST\Server\Authenticator base class has been implemented for
+the integration test framework and basic auth.
+
+In order to realize multiple different authentication methods in the server, a
+PriorityAuthenticator can be implemented, which aggregates multiple
+authenticators and iterates through them. In production, the last authenticator
+in such a process should be an AnonymousAuthenticator, which loads the
+anonymous user and sets it as the current user in the repository.
+
+The IntegrationTest authenticator is ONLY meant to be used with integration
+tests. It loads the user for which the ID is provided in a special header. This
+is neccessary, since the test suite contains tests with different access
+permissions.
+
+Client
+------
+
+In the client Repository implementation, the setCurrentUser() method has been
+deactivated. This method does not make sense in a REST context, since the user
+to execute operations with, must be authenticated in every request anyway.
+
+Therefore, authentication is exclusively handled by different implementations
+of the HttpClient base class. The authentication mechanism can send arbitrary
+data with every request to trigger authentication in the server. As examples,
+the IntegrationTestAuthenticator and BasicAuth have been implemented. The user
+must provide his credentials for these, if he wants to use the API via REST.
+
+If a user of the SDK wants to act as the anonymous user, he can use one of the
+HttpClient impelementations without authentication facilities.
+
+Extending Server And Client
+===========================
+
+The input and output processing for the server and the client are configured in
+two different files. Both are, in their current state, for testing only.
+
+The test server is configured in
+``eZ/Publish/Core/REST/Server/index.php``.  Details of the
+configuration can be found in the inline documentation.
+
+The test client is configured in ``eZ/Publish/Core/REST/common.php``.
+Details can also be found in the inline documentation.
+
+You can find addtional details on extending throughout this document.
+
+Running The Tests
+=================
+
+There are two sets of tests. The unit tests for the REST server and the
+integration tests, which may use the REST SDK and Server.
+
+The Unit Tests
+--------------
+
+The unit tests are located at
+``eZ/Publish/Core/REST`` and can be executed like::
+
+    phpunit -c phpunit.xml.dist
+
+The Integration Tests
+---------------------
+
+The integration tests require a web server for REST server to run. You can
+either configure your webserver accordingly or use the PHP build-in webserver
+(available since 5.4). To use the build-in webserver go to
+``eZ/Publish/Core/REST/Server`` in the repository and execute::
+
+    php -S localhost:8042 index.php
+
+To verify that the code works using XML and JSON as transport mechanism this
+transport mechanism can be configured using an environment variable. We
+prepared two PHPUnit XML configuration files for each variation. To execute the
+tests go to ``eZ/Publish/API/Repository/Tests`` in the repository and execute
+either of the following lines::
+
+    phpunit -c phpunit-rest-xml.xml
+    phpunit -c phpunit-rest-json.xml

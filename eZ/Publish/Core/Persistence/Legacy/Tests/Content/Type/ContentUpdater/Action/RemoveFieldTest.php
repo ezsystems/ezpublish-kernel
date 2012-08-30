@@ -77,6 +77,7 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
             ->method( 'deleteFieldData' )
             ->with(
                 $this->equalTo( 'ezstring' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
                 $this->equalTo( array( 3 ) )
             );
 

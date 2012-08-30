@@ -9,13 +9,13 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 use eZ\Publish\Core\Persistence\Legacy\Content,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler as SearchHandler,
+    eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry,
     eZ\Publish\SPI\Persistence\Content\Type,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
+    eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
@@ -33,7 +33,7 @@ class ContentUpdater
     /**
      * FieldValue converter registry
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected $converterRegistry;
 
@@ -56,7 +56,7 @@ class ContentUpdater
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway $contentTypeGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry $converterRegistry
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $converterRegistry
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler
      */
     public function __construct(
@@ -116,7 +116,7 @@ class ContentUpdater
      * @param \eZ\Publish\SPI\Persistence\Content\Type $type
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      *
-     * @return void
+     * @return boolean
      */
     protected function hasFieldDefinition( Type $type, FieldDefinition $fieldDef )
     {
@@ -156,6 +156,16 @@ class ContentUpdater
      */
     protected function loadContentObjects( $contentTypeId )
     {
-        return $this->searchHandler->find( new Criterion\ContentTypeId( $contentTypeId ) );
+        $result = $this->searchHandler->findContent( new Query( array(
+            'criterion' => new Criterion\ContentTypeId( $contentTypeId )
+        ) ) );
+
+        $content = array();
+        foreach ( $result->searchHits as $hit )
+        {
+            $content[] = $hit->valueObject;
+        }
+
+        return $content;
     }
 }

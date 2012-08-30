@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:include schemaLocation="CommonDefinitions.xsd" />
+  <xsd:complexType name="versionInfoType">
+    <xsd:all>
+      <xsd:element name="id" type="xsd:int">
+        <xsd:annotation>
+          <xsd:documentation>
+            The version id.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="versionNo" type="xsd:int">
+        <xsd:annotation>
+          <xsd:documentation>
+            The version number.
+            This is the version
+            number, which only
+            increments in scope of a single Content
+            object.
+                </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="status" type="versionStatus" />
+      <xsd:element name="modificationDate" type="xsd:dateTime">
+        <xsd:annotation>
+          <xsd:documentation>
+            The date of the last modification of this
+            version
+                </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Creator" type="ref">
+        <xsd:annotation>
+          <xsd:documentation>
+            The user which has created this version
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="creationDate" type="xsd:dateTime">
+        <xsd:annotation>
+          <xsd:documentation>
+            The date this version was created
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="initialLanguageCode" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>
+            In 4.x this is the language code which is
+            used for labeling a
+            translation.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="languageCodes" type="xsd:string"
+        minOccurs="0" maxOccurs="1" default="array()">
+        <xsd:annotation>
+          <xsd:documentation>
+            List of languages in this version
+            Reflects
+            which languages fields exists in for this version.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="names" type="multiLanguageValuesType"/>
+      <xsd:element name="Content" type="ref" />
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:element name="VersionInfo" type="versionInfoType"/>
+</xsd:schema>

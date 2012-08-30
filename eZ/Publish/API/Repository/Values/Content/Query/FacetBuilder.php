@@ -11,12 +11,14 @@
 
 namespace eZ\Publish\API\Repository\Values\Content\Query;
 
+use eZ\Publish\API\Repository\Values\ValueObject;
+
 /**
  * This class is the base class for facet builders
  *
  * @package eZ\Publish\API\Repository\Values\Content\Query
  */
-abstract class FacetBuilder {
+abstract class FacetBuilder extends ValueObject {
 
     /**
      * The name of the facet

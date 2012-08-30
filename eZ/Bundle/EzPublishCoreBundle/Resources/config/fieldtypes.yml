@@ -1,0 +1,238 @@
+parameters:
+    ezpublish.api.fieldTypeValidator.class: eZ\Publish\Core\Repository\ValidatorService
+    ezpublish.api.fieldTypeTools.class: eZ\Publish\Core\Repository\FieldTypeTools
+
+    ezpublish.fieldType.class: eZ\Publish\Core\FieldType\FieldType
+    ezpublish.fieldType.ezauthor.class: eZ\Publish\Core\FieldType\Author\Type
+    ezpublish.fieldType.ezbinaryfile.class: eZ\Publish\Core\FieldType\BinaryFile\Type
+    ezpublish.fieldType.ezbinaryfile.externalStorage.class: eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage
+    ezpublish.fieldType.ezbinaryfile.fileService.class: eZ\Publish\Core\FieldType\FileService\LocalFileService
+    ezpublish.fieldType.ezbinaryfile.mimeTypeDetector.class: eZ\Publish\Core\FieldType\BinaryBase\MimeTypeDetector\FileInfoDetector
+    ezpublish.fieldType.ezbinaryfile.pathGenerator.class: eZ\Publish\Core\FieldType\BinaryBase\PathGenerator\LegacyPathGenerator
+    ezpublish.fieldType.ezboolean.class: eZ\Publish\Core\FieldType\Checkbox\Type
+    ezpublish.fieldType.ezdatetime.class: eZ\Publish\Core\FieldType\DateAndTime\Type
+    ezpublish.fieldType.ezfloat.class: eZ\Publish\Core\FieldType\Float\Type
+    ezpublish.fieldType.ezinteger.class: eZ\Publish\Core\FieldType\Integer\Type
+    #ezpublish.fieldType.ezimage.class: eZ\Publish\Core\FieldType\Image\Type
+    ezpublish.fieldType.ezkeyword.class: eZ\Publish\Core\FieldType\Keyword\Type
+    ezpublish.fieldType.ezkeyword.externalStorage.class: eZ\Publish\Core\FieldType\Keyword\KeywordStorage
+    ezpublish.fieldType.ezmedia.class: eZ\Publish\Core\FieldType\Media\Type
+    ezpublish.fieldType.ezmedia.externalStorage.class: eZ\Publish\Core\FieldType\Media\MediaStorage
+    ezpublish.fieldType.ezsrrating.class: eZ\Publish\Core\FieldType\Rating\Type
+    ezpublish.fieldType.ezselection.class: eZ\Publish\Core\FieldType\Selection\Type
+    ezpublish.fieldType.eztext.class: eZ\Publish\Core\FieldType\TextBlock\Type
+    ezpublish.fieldType.ezstring.class: eZ\Publish\Core\FieldType\TextLine\Type
+    ezpublish.fieldType.ezurl.class: eZ\Publish\Core\FieldType\Url\Type
+    ezpublish.fieldType.ezurl.externalStorage.class: eZ\Publish\Core\FieldType\Url\UrlStorage
+    ezpublish.fieldType.ezxmltext.class: eZ\Publish\Core\FieldType\XmlText\Type
+    ezpublish.fieldType.ezxmltext.simplifiedInputParser.class: eZ\Publish\Core\FieldType\XmlText\Input\Parser\Simplified
+    ezpublish.fieldType.ezxmltext.xmlSchema.class: eZ\Publish\Core\FieldType\XmlText\Schema
+    ezpublish.fieldType.ezxmltext.xmlSchema.options: []
+    # ezpublish.fieldType.ezxmltext.xmlSchema.options:
+    #    customAttributes:
+    #         table:
+    #             - cellpadding
+    #     classesList:
+    #         paragraph:
+    #             - pink
+    #     customTags:
+    #         underline:
+    #             isInline: true
+    ezpublish.fieldType.ezcountry.class: eZ\Publish\Core\FieldType\Country\Type
+    # Temporary workaround for ezpage, ezemail, ezimage, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
+    # a ezstring until proper implementation will be in place
+    ezpublish.fieldType.ezpage.class: eZ\Publish\Core\FieldType\TextLine\Type
+    ezpublish.fieldType.ezemail.class: eZ\Publish\Core\FieldType\TextLine\Type
+    ezpublish.fieldType.ezimage.class: eZ\Publish\Core\FieldType\TextLine\Type
+    ezpublish.fieldType.ezgmaplocation.class: eZ\Publish\Core\FieldType\TextLine\Type
+    ezpublish.fieldType.ezcomcomments.class: eZ\Publish\Core\FieldType\TextLine\Type
+    ezpublish.fieldType.ezobjectrelationlist.class: eZ\Publish\Core\FieldType\TextLine\Type
+
+services:
+    ezpublish.api.fieldTypeValidator:
+        class: %ezpublish.api.fieldTypeValidator.class%
+
+    ezpublish.api.fieldTypeTools:
+        class: %ezpublish.api.fieldTypeTools.class%
+
+    ezpublish.fieldType:
+        class: %ezpublish.fieldType.class%
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
+        abstract: true
+
+    ezpublish.fieldType.ezauthor:
+        class: %ezpublish.fieldType.ezauthor.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezauthor}
+
+    ezpublish.fieldType.ezbinaryfile:
+        class: %ezpublish.fieldType.ezbinaryfile.class%
+        parent: ezpublish.fieldType
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools, @ezpublish.fieldType.ezbinaryfile.fileService]
+        tags:
+            - {name: ezpublish.fieldType, alias: ezbinaryfile}
+
+    ezpublish.fieldType.ezbinaryfile.fileService:
+        class: %ezpublish.fieldType.ezbinaryfile.fileService.class%
+        arguments: [%kernel.root_dir%, %binaryfile_storage_dir%, %binaryfile_identifier_prefix%]
+
+    ezpublish.fieldType.ezbinaryfile.mimeTypeDetector:
+        class: %ezpublish.fieldType.ezbinaryfile.mimeTypeDetector.class%
+
+    ezpublish.fieldType.ezbinaryfile.pathGenerator:
+        class: %ezpublish.fieldType.ezbinaryfile.pathGenerator.class%
+
+    ezpublish.fieldType.ezbinaryfile.externalStorage:
+        class: %ezpublish.fieldType.ezbinaryfile.externalStorage.class%
+        arguments: [@ezpublish.fieldType.ezbinaryfile.fileService, ]
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezbinaryfile}
+
+    ezpublish.fieldType.ezboolean:
+        class: %ezpublish.fieldType.ezboolean.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezboolean}
+
+    ezpublish.fieldType.ezdatetime:
+        class: %ezpublish.fieldType.ezdatetime.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezdatetime}
+
+    ezpublish.fieldType.ezfloat:
+        class: %ezpublish.fieldType.ezfloat.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezfloat}
+
+    ezpublish.fieldType.ezinteger:
+        class: %ezpublish.fieldType.ezinteger.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezinteger}
+
+    #ezpublish.fieldType.ezimage:
+    #    class: %ezpublish.fieldType.ezimage.class%
+    #    parent: ezpublish.fieldType
+    #    parameters: [@ezpublish.api.repository, @ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
+    #    tags:
+    #        - {name: ezpublish.fieldType, alias: ezimage}
+
+    ezpublish.fieldType.ezkeyword:
+        class: %ezpublish.fieldType.ezkeyword.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezkeyword}
+
+    ezpublish.fieldType.ezkeyword.externalStorage:
+        class: %ezpublish.fieldType.ezkeyword.externalStorage.class%
+        arguments: [[]]
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezkeyword}
+
+    ezpublish.fieldType.ezmedia:
+        class: %ezpublish.fieldType.ezmedia.class%
+        parent: ezpublish.fieldType
+        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools, @ezpublish.api.repository]
+        tags:
+            - {name: ezpublish.fieldType, alias: ezmedia}
+
+    ezpublish.fieldType.ezmedia.externalStorage:
+        class: %ezpublish.fieldType.ezmedia.externalStorage.class%
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezmedia}
+
+    ezpublish.fieldType.ezsrrating:
+        class: %ezpublish.fieldType.ezsrrating.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezsrrating}
+
+    ezpublish.fieldType.ezselection:
+        class: %ezpublish.fieldType.ezselection.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezselection}
+
+    ezpublish.fieldType.eztext:
+        class: %ezpublish.fieldType.eztext.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: eztext}
+
+    ezpublish.fieldType.ezstring:
+        class: %ezpublish.fieldType.ezstring.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezstring}
+
+    ezpublish.fieldType.ezurl:
+        class: %ezpublish.fieldType.ezurl.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezurl}
+
+    ezpublish.fieldType.ezurl.externalStorage:
+        class: %ezpublish.fieldType.ezurl.externalStorage.class%
+        arguments: [[]]
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezurl}
+
+    ezpublish.fieldType.ezxmltext:
+        class: %ezpublish.fieldType.ezxmltext.class%
+        arguments: [@ezpublish.fieldType.ezxmltext.simplifiedInputParser]
+        tags:
+            - {name: ezpublish.fieldType, alias: ezxmltext}
+
+    ezpublish.fieldType.ezxmltext.simplifiedInputParser:
+        class: %ezpublish.fieldType.ezxmltext.simplifiedInputParser.class%
+        public: false
+        arguments:
+            - @ezpublish.fieldType.ezxmltext.xmlSchema
+        #   - {TrimSpaces: true, AllowMultipleSpaces: true}
+
+    ezpublish.fieldType.ezxmltext.xmlSchema:
+        class: %ezpublish.fieldType.ezxmltext.xmlSchema.class%
+        arguments:
+            - %ezpublish.fieldType.ezxmltext.xmlSchema.options%
+        public: false
+
+    # Temporary workaround for ezpage, ezemail, ezimage, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
+    # a ezstring until proper implementation will be in place
+    ezpublish.fieldType.ezpage:
+        class: %ezpublish.fieldType.ezpage.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezpage}
+
+    ezpublish.fieldType.ezemail:
+        class: %ezpublish.fieldType.ezemail.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezemail}
+
+    ezpublish.fieldType.ezimage:
+        class: %ezpublish.fieldType.ezimage.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezimage}
+
+    ezpublish.fieldType.ezgmaplocation:
+        class: %ezpublish.fieldType.ezgmaplocation.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezgmaplocation}
+
+    ezpublish.fieldType.ezcomcomments:
+        class: %ezpublish.fieldType.ezcomcomments.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezcomcomments}
+
+    ezpublish.fieldType.ezobjectrelationlist:
+        class: %ezpublish.fieldType.ezobjectrelationlist.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezobjectrelationlist}

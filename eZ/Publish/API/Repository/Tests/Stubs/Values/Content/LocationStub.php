@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\Content;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
@@ -202,5 +201,38 @@ class LocationStub extends Location
     public function __makeInvisible()
     {
         $this->invisible = true;
+    }
+
+    /**
+     * FOR TEST USE ONLY!
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $newContentInfo
+     * @return void
+     */
+    public function __setContentInfo( ContentInfo $newContentInfo )
+    {
+        $this->contentInfo = $newContentInfo;
+    }
+
+    /**
+     * FOR TEST USE ONLY!
+     *
+     * @param int $depth
+     * @return void
+     */
+    public function __setDepth( $depth )
+    {
+        $this->depth = $depth;
+    }
+
+    /**
+     * FOR TEST USE ONLY!
+     *
+     * @param string $pathString
+     * @return void
+     */
+    public function __setPathString( $pathString )
+    {
+        $this->pathString = $pathString;
     }
 }

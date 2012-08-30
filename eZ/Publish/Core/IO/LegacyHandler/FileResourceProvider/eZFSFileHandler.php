@@ -15,7 +15,7 @@ use eZ\Publish\Core\IO\LegacyHandler\FileResourceProvider;
  * This class provides file resource functionnality for a cluster file
  */
 
-class eZFSFileHandler implements FileResourceProvider
+class eZFSFileHandler extends BaseHandler implements FileResourceProvider
 {
     /**
      * Returns a read file resource for $clusterFile
@@ -24,6 +24,10 @@ class eZFSFileHandler implements FileResourceProvider
      */
     public function getResource( $file )
     {
-        return fopen( $file->path, 'rb' );
+        $this->legacyKernel->enterLegacyRootDir();
+        $fh = fopen( $file->path, 'rb' );
+        $this->legacyKernel->leaveLegacyRootDir();
+
+        return $fh;
     }
 }

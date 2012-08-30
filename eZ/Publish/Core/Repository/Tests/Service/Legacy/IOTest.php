@@ -8,15 +8,25 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Legacy;
-use eZ\Publish\Core\Repository\Tests\Service\IOBase as BaseIOServiceTest,
-
-    eZ\Publish\Core\Repository\Tests\Service\Legacy\IOUploadPHPT;
+use eZ\Publish\Core\Repository\Tests\Service\IOBase as BaseIOServiceTest;
 
 /**
  * Test case for IO Service using Legacy storage class
  */
 class IOTest extends BaseIOServiceTest
 {
+    protected function tearDown()
+    {
+        $legacyKernel = $_ENV['legacyKernel'];
+        $legacyKernel->enterLegacyRootDir();
+        if ( file_exists( 'var/test' ) )
+        {
+            \ezcBaseFile::removeRecursive( 'var/test' );
+        }
+        $legacyKernel->leaveLegacyRootDir();
+        parent::tearDown();
+    }
+
     /**
      * @return \PHPUnit_Extensions_PhptTestCase
      */
@@ -25,14 +35,18 @@ class IOTest extends BaseIOServiceTest
         return new IOUploadPHPT();
     }
 
-    protected function getRepository( array $serviceSettings )
+    protected function getRepository()
     {
-        if ( !class_exists( 'eZClusterFileHandler' ) )
-            $this->markTestSkipped( 'Cluster files could not be loaded' );
-
         try
         {
-            return include 'common.php';
+            if ( !isset( $_ENV['legacyKernel'] ) )
+            {
+                self::markTestSkipped(
+                    'Legacy kernel is needed to run these tests. Please ensure that "legacyKernel" environment variable is properly set with a eZ\\Publish\\Legacy\\Kernel instance'
+                );
+            }
+
+            return Utils::getRepository();
         }
         catch ( \Exception $e )
         {

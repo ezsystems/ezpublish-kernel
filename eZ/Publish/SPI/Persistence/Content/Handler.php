@@ -8,13 +8,9 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content;
-use eZ\Publish\SPI\Persistence\Content\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
-    // @todo We must verify whether we want to type cast on the "Criterion" interface or abstract class
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion as AbstractCriterion,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+
+// @todo We must verify whether we want to type cast on the "Criterion" interface or abstract class
+use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * The Content Handler interface defines content operations on the storage engine.
@@ -45,11 +41,12 @@ interface Handler
      * version of the referred Content from it.
      *
      * @param mixed $contentId
-     * @param int $srcVersion
+     * @param mixed $srcVersion
+     * @param mixed $userId
+     *
      * @return \eZ\Publish\SPI\Persistence\Content
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException Thrown if $contentId and/or $srcVersion are invalid
      */
-    public function createDraftFromVersion( $contentId, $srcVersion );
+    public function createDraftFromVersion( $contentId, $srcVersion, $userId );
 
     /**
      * Returns the raw data of a content object identified by $id, in a struct.
@@ -182,10 +179,11 @@ interface Handler
      *
      * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
      *
-     * @param  \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $relation
+     * @param \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $createStruct
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation
      */
-    public function addRelation( RelationCreateStruct $relation );
+    public function addRelation( RelationCreateStruct $createStruct );
 
     /**
      * Removes a relation by relation Id.

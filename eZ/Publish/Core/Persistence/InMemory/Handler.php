@@ -9,8 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\InMemory;
 use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
-    eZ\Publish\Core\Base\Exceptions\MissingClass,
-    RuntimeException;
+    eZ\Publish\API\Repository\FieldTypeTools,
+    eZ\Publish\Core\Repository\ValidatorService,
+    eZ\Publish\Core\Base\Exceptions\MissingClass;
 
 /**
  * The main handler for in memory Storage Engine
@@ -33,10 +34,13 @@ class Handler implements HandlerInterface
 
     /**
      * Setup instance with an instance of Backend class
+     *
+     * @param \eZ\Publish\Core\Repository\ValidatorService $validatorService
+     * @param \eZ\Publish\API\Repository\FieldTypeTools $fieldTypeTools
      */
-    public function __construct()
+    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools )
     {
-        $this->backend = new Backend( json_decode( file_get_contents( __DIR__ . '/data.json' ), true ) );
+        $this->backend = new Backend( json_decode( file_get_contents( __DIR__ . '/data.json' ), true ), $validatorService, $fieldTypeTools );
     }
 
     /**
@@ -112,24 +116,55 @@ class Handler implements HandlerInterface
     }
 
     /**
+     * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
+     */
+    public function urlAliasHandler()
+    {
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
+     */
+    public function urlWildcardHandler()
+    {
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+    }
+
+    /**
+     * Begin transaction
+     *
+     * Begins an transaction, make sure you'll call commit or rollback when done,
+     * otherwise work will be lost.
      */
     public function beginTransaction()
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $this->backend->beginTransaction();
     }
 
     /**
+     * Commit transaction
+     *
+     * Commit transaction, or throw exceptions if no transactions has been started.
+     *
+     * @throws \RuntimeException If no transaction has been started
      */
     public function commit()
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $this->backend->commit();
     }
 
     /**
+     * Rollback transaction
+     *
+     * Rollback transaction, or throw exceptions if no transactions has been started.
+     *
+     * @throws \RuntimeException If no transaction has been started
      */
     public function rollback()
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $this->backend->rollback();
     }
 
     /**

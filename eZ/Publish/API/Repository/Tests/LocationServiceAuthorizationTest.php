@@ -9,16 +9,15 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Tests\BaseTest;
-
 use \eZ\Publish\API\Repository\Values\Content\Location;
-use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 
 /**
  * Test case for operations in the LocationService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\LocationService
  * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+ * @group integration
+ * @group authorization
  */
 class LocationServiceAuthorizationTest extends BaseTest
 {
@@ -48,7 +47,7 @@ class LocationServiceAuthorizationTest extends BaseTest
         // Set current user to newly created user
         $repository->setCurrentUser( $user );
 
-        $locationCreate = $locationService->newLocationCreateStruct( 5 );
+        $locationCreate = $locationService->newLocationCreateStruct( 1 );
         $locationCreate->priority = 23;
         $locationCreate->hidden = true;
         $locationCreate->remoteId = 'sindelfingen';
@@ -198,26 +197,23 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $communityLocationId = $this->generateId( 'location', 167 );
-        $supportLocationId = $this->generateId( 'location', 96 );
+        $mediaLocationId = $this->generateId( 'location', 43 );
+        $demoDesignLocationId = $this->generateId( 'location', 56 );
         /* BEGIN: Use Case */
-        // $communityLocationId is the ID of the "Community" page location in
+        // $mediaLocationId is the ID of the "Media" Location in
         // an eZ Publish demo installation
 
-        // $supportLocationId is the ID of the "Support" page location in an eZ
+        // $demoDesignLocationId is the ID of the "Demo Design" Location in an eZ
         // Publish demo installation
 
         // Load the location service
         $locationService = $repository->getLocationService();
 
-        // Load first child of the "Community" location
-        $locationLeft = $locationService->loadLocationChildren(
-            $locationService->loadLocation( $communityLocationId ), 0, 1
-        );
-        $locationLeft = reset( $locationLeft );
+        $mediaLocation = $locationService->loadLocation( $mediaLocationId );
+        $demoDesignLocation = $locationService->loadLocation( $demoDesignLocationId );
 
-        // Load "Support" location
-        $locationRight = $locationService->loadLocation( $supportLocationId );
+        // Swaps the content referred to by the locations
+        $locationService->swapLocation( $mediaLocation, $demoDesignLocation );
 
         $user = $this->createMediaUserVersion1();
 
@@ -225,7 +221,7 @@ class LocationServiceAuthorizationTest extends BaseTest
         $repository->setCurrentUser( $user );
 
         // This call will fail with an "UnauthorizedException"
-        $locationService->swapLocation( $locationLeft, $locationRight );
+        $locationService->swapLocation( $mediaLocation, $demoDesignLocation );
         /* END: Use Case */
     }
 
@@ -331,25 +327,25 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $communityLocationId = $this->generateId( 'location', 167 );
-        $supportLocationId = $this->generateId( 'location', 96 );
+        $mediaLocationId = $this->generateId( 'location', 43 );
+        $demoDesignLocationId = $this->generateId( 'location', 56 );
         /* BEGIN: Use Case */
         $user = $this->createMediaUserVersion1();
 
-        // $communityLocationId is the ID of the "Community" page location in
+        // $mediaLocationId is the ID of the "Media" Location in
         // an eZ Publish demo installation
 
-        // $supportLocationId is the ID of the "Support" page location in an eZ
+        // $demoDesignLocationId is the ID of the "Demo Design" Location in an eZ
         // Publish demo installation
 
         // Load the location service
         $locationService = $repository->getLocationService();
 
         // Load location to copy
-        $locationToCopy = $locationService->loadLocation( $communityLocationId );
+        $locationToCopy = $locationService->loadLocation( $mediaLocationId );
 
         // Load new parent location
-        $newParentLocation = $locationService->loadLocation( $supportLocationId );
+        $newParentLocation = $locationService->loadLocation( $demoDesignLocationId );
 
         // Set media editor as current user
         $repository->setCurrentUser( $user );
@@ -374,25 +370,25 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $communityLocationId = $this->generateId( 'location', 167 );
-        $supportLocationId = $this->generateId( 'location', 96 );
+        $mediaLocationId = $this->generateId( 'location', 43 );
+        $demoDesignLocationId = $this->generateId( 'location', 56 );
         /* BEGIN: Use Case */
         $user = $this->createMediaUserVersion1();
 
-        // $communityLocationId is the ID of the "Community" page location in
+        // $mediaLocationId is the ID of the "Media" page location in
         // an eZ Publish demo installation
 
-        // $supportLocationId is the ID of the "Support" page location in an eZ
+        // $demoDesignLocationId is the ID of the "Demo Design" page location in an eZ
         // Publish demo installation
 
         // Load the location service
         $locationService = $repository->getLocationService();
 
         // Load location to move
-        $locationToMove = $locationService->loadLocation( $communityLocationId );
+        $locationToMove = $locationService->loadLocation( $mediaLocationId );
 
         // Load new parent location
-        $newParentLocation = $locationService->loadLocation( $supportLocationId );
+        $newParentLocation = $locationService->loadLocation( $demoDesignLocationId );
 
         // Set media editor as current user
         $repository->setCurrentUser( $user );

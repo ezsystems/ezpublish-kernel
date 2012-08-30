@@ -9,14 +9,13 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Tests\BaseTest;
-
 /**
  * Test case for operations in the SectionService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\SectionService
  * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
  * @group integration
+ * @group authorization
  */
 class SectionServiceAuthorizationTest extends BaseTest
 {
@@ -193,8 +192,8 @@ class SectionServiceAuthorizationTest extends BaseTest
         // $standardSectionId is the ID of the "Standard" section in a eZ
         // Publish demo installation.
 
-        // RemoteId of the "Support" page of an eZ Publish demo installation
-        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+        // RemoteId of the "Media" page of an eZ Publish demo installation
+        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
 
         $userService = $repository->getUserService();
         $contentService = $repository->getContentService();
@@ -202,7 +201,7 @@ class SectionServiceAuthorizationTest extends BaseTest
 
         // Load a content info instance
         $contentInfo = $contentService->loadContentInfoByRemoteId(
-            $supportRemoteId
+            $mediaRemoteId
         );
 
         // Load the "Standard" section

@@ -9,14 +9,13 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\StringLengthValidatorStub;
-
 /**
  * Test case for operations in the ContentTypeServiceAuthorization using in memory storage.
  *
  * @see eZ\Publish\API\Repository\ContentTypeService
  * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
  * @group integration
+ * @group authorization
  */
 class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
 {
@@ -32,7 +31,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
-        $creatorId = $this->generateId( 'user', 23 );
+        $creatorId = $this->generateId( 'user', 14 );
         /* BEGIN: Use Case */
         $userService = $repository->getUserService();
         $contentTypeService = $repository->getContentTypeService();
@@ -40,10 +39,10 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
-        // $creatorId is the ID of user 23
+        // $creatorId is the ID of the administrator user
         $groupCreate->creatorId = $creatorId;
-        $groupCreate->creationDate = new \DateTime();
-        $groupCreate->mainLanguageCode = 'de-DE';
+        $groupCreate->creationDate = $this->getRepository()->createDateTime();
+        $groupCreate->mainLanguageCode = 'ger-DE';
         $groupCreate->names = array( 'eng-GB' => 'A name.' );
         $groupCreate->descriptions = array( 'eng-GB' => 'A description.' );
 
@@ -67,7 +66,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
-        $modifierId = $this->generateId( 'user', 24 );
+        $modifierId = $this->generateId( 'user', 42 );
         /* BEGIN: Use Case */
         $userService = $repository->getUserService();
         $contentTypeService = $repository->getContentTypeService();
@@ -77,9 +76,9 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $groupUpdate = $contentTypeService->newContentTypeGroupUpdateStruct();
 
         $groupUpdate->identifier = 'Teardown';
-        // $modifierId is the ID of user 42
+        // $modifierId is the ID of a random user
         $groupUpdate->modifierId = $modifierId;
-        $groupUpdate->modificationDate = new \DateTime();
+        $groupUpdate->modificationDate = $this->getRepository()->createDateTime();
         $groupUpdate->mainLanguageCode = 'eng-GB';
 
         $groupUpdate->names = array(
@@ -145,7 +144,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
-        $modifierId = $this->generateId( 'user', 24 );
+        $modifierId = $this->generateId( 'user', 42 );
         /* BEGIN: Use Case */
         $contentTypeDraft = $this->createContentTypeDraft();
 
@@ -155,18 +154,18 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $typeUpdate->urlAliasSchema = 'url@alias|scheme';
         $typeUpdate->nameSchema = '@name@scheme@';
         $typeUpdate->isContainer = true;
-        $typeUpdate->mainLanguageCode = 'de-DE';
+        $typeUpdate->mainLanguageCode = 'ger-DE';
         $typeUpdate->defaultAlwaysAvailable = false;
-        // $modifierId is the ID of user 42
+        // $modifierId is the ID of a random user
         $typeUpdate->modifierId = $modifierId;
-        $typeUpdate->modificationDate = new \DateTime();
+        $typeUpdate->modificationDate = $this->getRepository()->createDateTime();
         $typeUpdate->names = array(
             'eng-GB' => 'News article',
-            'de-DE' => 'Nachrichten-Artikel',
+            'ger-DE' => 'Nachrichten-Artikel',
         );
         $typeUpdate->descriptions = array(
             'eng-GB' => 'A news article',
-            'de-DE' => 'Ein Nachrichten-Artikel',
+            'ger-DE' => 'Ein Nachrichten-Artikel',
         );
 
         // Load the user service
@@ -202,22 +201,25 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         );
         $fieldDefCreate->names = array(
             'eng-GB' => 'Tags',
-            'de-DE' => 'Schlagworte',
+            'ger-DE' => 'Schlagworte',
         );
         $fieldDefCreate->descriptions = array(
             'eng-GB' => 'Tags of the blog post',
-            'de-DE' => 'Schlagworte des Blog-Eintrages',
+            'ger-DE' => 'Schlagworte des Blog-Eintrages',
         );
         $fieldDefCreate->fieldGroup = 'blog-meta';
         $fieldDefCreate->position = 1;
         $fieldDefCreate->isTranslatable = true;
         $fieldDefCreate->isRequired = true;
         $fieldDefCreate->isInfoCollector = false;
-        $fieldDefCreate->validators = array(
-            new StringLengthValidatorStub(),
+        $fieldDefCreate->validatorConfiguration = array(
+            'StringLengthValidator' => array(
+                'minStringLength' => 0,
+                'maxStringLength' => 0,
+            ),
         );
         $fieldDefCreate->fieldSettings = array(
-            'textblockheight' => 10
+            'textRows' => 10
         );
         $fieldDefCreate->isSearchable = true;
 
@@ -289,20 +291,20 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $bodyUpdateStruct->identifier = 'blog-body';
         $bodyUpdateStruct->names = array(
             'eng-GB' => 'Blog post body',
-            'de-DE' => 'Blog-Eintrags-Textkörper',
+            'ger-DE' => 'Blog-Eintrags-Textkörper',
         );
         $bodyUpdateStruct->descriptions = array(
             'eng-GB' => 'Blog post body of the blog post',
-            'de-DE' => 'Blog-Eintrags-Textkörper des Blog-Eintrages',
+            'ger-DE' => 'Blog-Eintrags-Textkörper des Blog-Eintrages',
         );
         $bodyUpdateStruct->fieldGroup = 'updated-blog-content';
         $bodyUpdateStruct->position = 3;
         $bodyUpdateStruct->isTranslatable = false;
         $bodyUpdateStruct->isRequired = false;
         $bodyUpdateStruct->isInfoCollector = true;
-        $bodyUpdateStruct->validators = array();
+        $bodyUpdateStruct->validatorConfiguration = array();
         $bodyUpdateStruct->fieldSettings = array(
-            'textblockheight' => 60
+            'textRows' => 60
         );
         $bodyUpdateStruct->isSearchable = false;
 

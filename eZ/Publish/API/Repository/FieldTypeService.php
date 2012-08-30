@@ -10,34 +10,36 @@
 
 namespace eZ\Publish\API\Repository;
 
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-
 /**
- * This class provides service methods available to FieldTypes
+ * An implementation of this class provides access to FieldTypes
  *
  * @package eZ\Publish\API\Repository
+ * @see eZ\Publish\API\Repository\FieldType
  */
 interface FieldTypeService
 {
     /**
-     * Adds a relation
+     * Returns a list of all field types.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $relationType has an unsupported value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If there is a mismatch between $relationType and provided values.
-     *
-     * The source of the relation is the content and version
-     * referenced by $sourceVersion.
-     *
-     * @param int $relationType One of Relation::COMMON, Relation::EMBED, Relation::LINK or Relation::FIELD
-     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion
-     * @param mixed $destinationContentId
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|null $fieldDefinition
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation The newly created relation
+     * @return \eZ\Publish\API\Repository\FieldType[]
      */
-    public function addRelation( $relationType,
-                                 VersionInfo $sourceVersion,
-                                 $destinationContentId,
-                                 FieldDefinition $fieldDefinition = null );
+    public function getFieldTypes();
+
+    /**
+     * Returns the FieldType registered with the given identifier
+     *
+     * @param string $identifier
+     * @return \eZ\Publish\API\Repository\FieldType
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *         if there is no FieldType registered with $identifier
+     */
+    public function getFieldType( $identifier );
+
+    /**
+     * Returns if there is a FieldType registered under $identifier
+     *
+     * @param string $identifier
+     * @return bool
+     */
+    public function hasFieldType( $identifier );
 }

@@ -22,8 +22,9 @@ use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
  * Test case for operations in the ObjectStateService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\ObjectStateService
+ * @group object-state
  */
-class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
+class ObjectStateServiceTest extends BaseTest
 {
     /**
      * Test for the newObjectStateGroupCreateStruct() method.
@@ -339,7 +340,8 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     {
         $repository = $this->getRepository();
 
-        $existingGroupIdentifiers = $this->createObjectStateGroups();
+        $expectedGroupIdentifiers = $this->getGroupIdentifierMap( $this->createObjectStateGroups() );
+        $expectedGroupIdentifiers['ez_lock'] = true;
 
         /* BEGIN: Use Case */
         $objectStateService = $repository->getObjectStateService();
@@ -350,7 +352,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $this->assertInternalType( 'array', $loadedObjectStateGroups );
 
         $this->assertObjectsLoadedByIdentifiers(
-            $existingGroupIdentifiers,
+            $expectedGroupIdentifiers,
             $loadedObjectStateGroups,
             'ObjectStateGroup'
         );
@@ -368,10 +370,12 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $objectStateService = $repository->getObjectStateService();
 
         $identifiersToCreate = array(
-            'first'  => true,
-            'second' => true,
-            'third'  => true,
+            'first',
+            'second',
+            'third',
         );
+
+        $createdStateGroups = array();
 
         $groupCreateStruct = $objectStateService->newObjectStateGroupCreateStruct( 'dummy' );
 
@@ -379,16 +383,13 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $groupCreateStruct->names               = array( 'eng-US' => 'Foo' );
         $groupCreateStruct->descriptions        = array( 'eng-US' => 'Foo Bar' );
 
-        foreach ( array_keys( $identifiersToCreate ) as $identifier )
+        foreach ( $identifiersToCreate as $identifier )
         {
             $groupCreateStruct->identifier = $identifier;
-            $objectStateService->createObjectStateGroup( $groupCreateStruct );
+            $createdStateGroups[] = $objectStateService->createObjectStateGroup( $groupCreateStruct );
         }
 
-        return array_merge(
-            array( 'ez_lock' => true ),
-            $identifiersToCreate
-        );
+        return $createdStateGroups;
     }
 
     /**
@@ -436,8 +437,13 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     public function testLoadObjectStateGroupsWithOffset()
     {
         $repository = $this->getRepository();
+        $objectStateService = $repository->getObjectStateService();
 
-        $existingGroupIdentifiers = $this->createObjectStateGroups();
+        $this->createObjectStateGroups();
+
+        $allObjectStateGroups = $objectStateService->loadObjectStateGroups();
+
+        $existingGroupIdentifiers = $this->getGroupIdentifierMap( $allObjectStateGroups );
 
         /* BEGIN: Use Case */
         $objectStateService = $repository->getObjectStateService();
@@ -455,6 +461,25 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     }
 
     /**
+     * Returns a map of the given object state groups
+     *
+     * @param array $groups
+     * @return void
+     */
+    protected function getGroupIdentifierMap( array $groups )
+    {
+        $existingGroupIdentifiers = array_map(
+            function ( $group )
+            {
+                return $group->identifier;
+            },
+            $groups
+        );
+
+        return array_fill_keys( $existingGroupIdentifiers, true );
+    }
+
+    /**
      * Test for the loadObjectStateGroups() method.
      *
      * @return void
@@ -464,8 +489,11 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     public function testLoadObjectStateGroupsWithOffsetAndLimit()
     {
         $repository = $this->getRepository();
+        $objectStateService = $repository->getObjectStateService();
 
-        $existingGroupIdentifiers = $this->createObjectStateGroups();
+        $allObjectStateGroups = $objectStateService->loadObjectStateGroups();
+
+        $existingGroupIdentifiers = $this->getGroupIdentifierMap( $allObjectStateGroups );
 
         /* BEGIN: Use Case */
         $objectStateService = $repository->getObjectStateService();
@@ -635,6 +663,8 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
             '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectState',
             $createdObjectState
         );
+        // Object sequences are renumbered
+        $objectStateCreateStruct->priority = 2;
         return array(
             $loadedObjectStateGroup,
             $objectStateCreateStruct,
@@ -846,9 +876,9 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     {
         $repository = $this->getRepository();
 
-        $objectStateId = $this->generateId( 'objectstate', 2 );
+        $objectStateId = $this->generateId( 'objectstate', 1 );
         /* BEGIN: Use Case */
-        // $objectStateId contains the ID of the "locked" state
+        // $objectStateId contains the ID of the "not_locked" state
         $objectStateService = $repository->getObjectStateService();
 
         $initiallyLoadedObjectState = $objectStateService->loadObjectState(
@@ -860,7 +890,8 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
             $initiallyLoadedObjectState,
             23
         );
-        // $loadObjectState now has the set priority
+        // $loadObjectState now has the priority 1, since object state
+        // priorities are always made sequential
         $loadedObjectState = $objectStateService->loadObjectState(
             $objectStateId
         );
@@ -870,7 +901,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
             'eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectState',
             $loadedObjectState
         );
-        $this->assertEquals( 23, $loadedObjectState->priority );
+        $this->assertEquals( 1, $loadedObjectState->priority );
     }
 
     /**
@@ -924,11 +955,11 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $repository = $this->getRepository();
         $objectStateService = $repository->getObjectStateService();
 
-        $customObjectStateGroupId = $this->generateId( 'objectstategroup', 3 );
-        $anonymousUserId = $this->generateId( 'user', 10 );
-
         // Create object state group with custom state
-        $this->createObjectStateGroups();
+        $createdStateGroups = $this->createObjectStateGroups();
+
+        $customObjectStateGroupId = $createdStateGroups[1]->id;
+        $anonymousUserId = $this->generateId( 'user', 10 );
 
         $customGroup = $objectStateService->loadObjectStateGroup(
             $customObjectStateGroupId
@@ -938,6 +969,8 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
             'sindelfingen'
         );
         $objectStateCreateStruct->priority = 1;
+        $objectStateCreateStruct->defaultLanguageCode = 'eng-US';
+        $objectStateCreateStruct->names = array( 'eng-US' => 'Sindelfingen' );
 
         $createdState = $objectStateService->createObjectState(
             $customGroup,
@@ -972,6 +1005,8 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
             $initialObjectState
         );
         $this->assertEquals( 'sindelfingen', $initialObjectState->identifier );
+        $this->assertEquals( array( 'eng-US' => 'Sindelfingen' ), $initialObjectState->names );
+        $this->assertEquals( 'eng-US', $initialObjectState->defaultLanguageCode );
     }
 
     /**
@@ -1032,10 +1067,10 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
     {
         $repository = $this->getRepository();
 
-        $this->createObjectStateGroups();
+        $createdStateGroups = $this->createObjectStateGroups();
 
         $anonymousUserId = $this->generateId( 'user', 10 );
-        $differentObjectStateGroupId = $this->generateId( 'objectstategroup', 3 );
+        $differentObjectStateGroupId = $createdStateGroups[1]->id;
         $lockedObjectStateId = $this->generateId( 'objectstate', 2 );
 
         /* BEGIN: Use Case */
@@ -1084,7 +1119,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $objectCount = $objectStateService->getContentCount( $notLockedObjectState );
         /* END: Use Case */
 
-        $this->assertEquals( 184, $objectCount );
+        $this->assertEquals( 18, $objectCount );
     }
 
     /**
@@ -1115,7 +1150,7 @@ class ObjectStateServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         // All objects transfered
         $this->assertEquals(
-            184,
+            18,
             $objectStateService->getContentCount( $lockedObjectState )
         );
     }

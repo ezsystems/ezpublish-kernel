@@ -12,6 +12,14 @@ return array(
         4 => new \eZ\Publish\API\Repository\Values\Content\Language(
             array(
                 "id" => 4,
+                "name" => "German",
+                "enabled" => true,
+                "languageCode" => "ger-DE",
+            )
+        ),
+        8 => new \eZ\Publish\API\Repository\Values\Content\Language(
+            array(
+                "id" => 8,
                 "name" => "English (United Kingdom)",
                 "enabled" => true,
                 "languageCode" => "eng-GB",
@@ -20,7 +28,8 @@ return array(
     ),
     array(
         "eng-US" => 2,
-        "eng-GB" => 4,
+        "ger-DE" => 4,
+        "eng-GB" => 8,
     ),
-    4
+    8
 );

@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class
+ * File contains: eZ\Publish\SPI\Tests\FieldType\UserIntegrationTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -11,13 +11,15 @@ namespace eZ\Publish\SPI\Tests\FieldType;
 use eZ\Publish\Core\Persistence\Legacy,
     eZ\Publish\Core\FieldType,
     eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     eZ\Publish\SPI\Persistence\User;
 
 /**
  * Integration test for legacy storage field types
  *
  * This abstract base test case is supposed to be the base for field type
- * integration tests. It basically calls all involved methods in the field type 
+ * integration tests. It basically calls all involved methods in the field type
  * ``Converter`` and ``Storage`` implementations. Fo get it working implement
  * the abstract methods in a sensible way.
  *
@@ -33,7 +35,7 @@ use eZ\Publish\Core\Persistence\Legacy,
  *
  * @group integration
  */
-class UserIntergrationTest extends BaseIntegrationTest
+class UserIntegrationTest extends BaseIntegrationTest
 {
     /**
      * Get name of tested field tyoe
@@ -56,16 +58,29 @@ class UserIntergrationTest extends BaseIntegrationTest
 
         $handler->getStorageRegistry()->register(
             'ezuser',
-            new FieldType\UserStorage( array(
-                'LegacyStorage' => new FieldType\UserStorage\Gateway\LegacyStorage(),
-            ) )
+            new FieldType\User\UserStorage(
+                array(
+                    'LegacyStorage' => new FieldType\User\UserStorage\Gateway\LegacyStorage(),
+                )
+            )
         );
         $handler->getFieldValueConverterRegistry()->register(
             'ezuser',
-            new Legacy\Content\FieldValue\Converter\User()
+            new Legacy\Content\FieldValue\Converter\Null()
         );
 
         return $handler;
+    }
+
+    /**
+     * Returns the FieldTypeConstraints to be used to create a field definition
+     * of the FieldType under test.
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints
+     */
+    public function getTypeConstraints()
+    {
+        return new FieldTypeConstraints();
     }
 
     /**
@@ -86,123 +101,93 @@ class UserIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get initial field externals data
+     * Get initial field value
      *
-     * @return array
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function getInitialFieldData()
+    public function getInitialValue()
     {
-        return array(
-            'account_key' => null,
-            'is_enabled'  => true,
-            'last_visit'  => null,
-            'login_count' => 0,
-            'max_login'   => 1000,
-        );
+        return new Content\FieldValue( array(
+            'data'         => null,
+            'externalData' => array(),
+            'sortKey'      => 'user',
+        ) );
     }
 
     /**
-     * Get externals field data values
+     * Asserts that the loaded field data is correct
      *
-     * This is a PHPUnit data provider
-     *
-     * @return array
+     * Performs assertions on the loaded field, mainly checking that the
+     * $field->value->externalData is loaded correctly. If the loading of
+     * external data manipulates other aspects of $field, their correctness
+     * also needs to be asserted. Make sure you implement this method agnostic
+     * to the used SPI\Persistence implementation!
      */
-    public function getExternalsFieldData()
+    public function assertLoadedFieldDataCorrect( Field $field )
     {
-        return array(
-            array( 'account_key', null ),
-            array( 'has_stored_login', true ),
-            array( 'contentobject_id', 226 ),
-            array( 'login', 'hans' ),
-            array( 'email', 'hans@example.com' ),
-            array( 'password_hash', '*' ),
-            array( 'password_hash_type', 0 ),
-            array( 'is_logged_in', true ),
-            array( 'is_enabled', true ),
-            array( 'is_locked', false ),
-            array( 'last_visit', null ),
-            array( 'login_count', null ),
-            array( 'max_login', 1000 ),
+        $expectedValues = array(
+            'hasStoredLogin' => true,
+            'contentId' => self::$contentId,
+            'login' => 'hans',
+            'email' => 'hans@example.com',
+            'passwordHash' => '*',
+            'passwordHashType' => 0,
+            'isLoggedIn' => true,
+            'isEnabled' => true,
+            'maxLogin' => 1000,
         );
+
+        foreach ( $expectedValues as $key => $value )
+        {
+            $this->assertEquals( $value, $field->value->externalData[$key] );
+        }
     }
 
     /**
-     * Get update field externals data
+     * Get update field value.
      *
-     * @return array
+     * Use to update the field
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function getUpdateFieldData()
+    public function getUpdatedValue()
     {
-        return array(
-            'account_key'        => 'foobar',
-            'login'              => 'change', // Change is intended to not get through
-            'email'              => 'change', // Change is intended to not get through
-            'password_hash'      => 'change', // Change is intended to not get through
-            'password_hash_type' => 'change', // Change is intended to not get through
-            'last_visit'         => 123456789,
-            'login_count'        => 2300,
-            'is_enabled'         => 'changed', // Change is intended to not get through
-            'max_login'          => 'changed', // Change is intended to not get through
-        );
+        return new Content\FieldValue( array(
+            'data'         => null,
+            'externalData' => array(
+                'login'              => 'change', // Change is intended to not get through
+                'email'              => 'change', // Change is intended to not get through
+                'passwordHash'      => 'change', // Change is intended to not get through
+                'passwordHashType' => 'change', // Change is intended to not get through
+                'isEnabled'         => 'changed', // Change is intended to not get through
+                'maxLogin'          => 'changed', // Change is intended to not get through
+            ),
+            'sortKey'      => 'user',
+        ) );
     }
 
     /**
-     * Get externals updated field data values
+     * Asserts that the updated field data is loaded correct
      *
-     * This is a PHPUnit data provider
+     * Performs assertions on the loaded field after it has been updated,
+     * mainly checking that the $field->value->externalData is loaded
+     * correctly. If the loading of external data manipulates other aspects of
+     * $field, their correctness also needs to be asserted. Make sure you
+     * implement this method agnostic to the used SPI\Persistence
+     * implementation!
      *
-     * @return array
+     * @return void
      */
-    public function getUpdatedExternalsFieldData()
+    public function assertUpdatedFieldDataCorrect( Field $field )
     {
-        return array(
-            array( 'account_key', 'foobar' ),
-            array( 'has_stored_login', true ),
-            array( 'contentobject_id', 226 ),
-            array( 'login', 'hans' ),
-            array( 'email', 'hans@example.com' ),
-            array( 'password_hash', '*' ),
-            array( 'password_hash_type', 0 ),
-            array( 'is_logged_in', true ),
-            array( 'is_enabled', true ),
-            array( 'is_locked', true ),
-            array( 'last_visit', 123456789 ),
-            array( 'login_count', 2300 ),
-            array( 'max_login', 1000 ),
-        );
-    }
-
-    /**
-     * Get externals copied field data values
-     *
-     * This is a PHPUnit data provider
-     *
-     * @return array
-     */
-    public function getCopiedExternalsFieldData()
-    {
-        return array(
-            array( 'account_key', null ),
-            array( 'has_stored_login', false ),
-            array( 'contentobject_id', null ),
-            array( 'login', null ),
-            array( 'email', null ),
-            array( 'password_hash', null ),
-            array( 'password_hash_type', null ),
-            array( 'is_logged_in', true ),
-            array( 'is_enabled', false ),
-            array( 'is_locked', false ),
-            array( 'last_visit', null ),
-            array( 'login_count', null ),
-            array( 'max_login', null ),
-        );
+        // No update of user data possible through field type
+        $this->assertLoadedFieldDataCorrect( $field );
     }
 
     /**
      * Method called after content creation
      *
-     * Useful, if additional stuff should be executed (like creating the actual 
+     * Useful, if additional stuff should be executed (like creating the actual
      * user).
      *
      * @param Legacy\Handler $handler

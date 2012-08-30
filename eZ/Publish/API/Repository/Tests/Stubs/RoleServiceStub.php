@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
-use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\RoleService;
 use \eZ\Publish\API\Repository\Values\Content\Content;
 use \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
@@ -435,7 +434,6 @@ class RoleServiceStub implements RoleService
             $contentIds[] = $group->id;
         }
 
-        $limits = array();
         $roleIds = array();
         foreach ( $contentIds as $contentId )
         {
@@ -443,18 +441,9 @@ class RoleServiceStub implements RoleService
             {
                 continue;
             }
-            foreach ( $this->content2roles[$contentId] as $limitationId => $roleId)
+            foreach ( $this->content2roles[$contentId] as $roleId )
             {
                 $roleIds[] = $roleId;
-
-                if ( $limitation = $this->getOptionalRoleLimitation( $limitationId ) )
-                {
-                    if ( false === isset( $limits[$roleId] ) )
-                    {
-                        $limits[$roleId] = array();
-                    }
-                    $limits[$roleId][] = $limitation;
-                }
             }
         }
 
@@ -475,22 +464,13 @@ class RoleServiceStub implements RoleService
             {
                 $policy = $this->policies[$policyId];
 
-                $limitations = $policy->getLimitations();
-                if ( isset( $limits[$policy->roleId] ) )
-                {
-                    foreach ( $limits[$policy->roleId] as $limit )
-                    {
-                        $limitations[] = $limit;
-                    }
-                }
-
                 $this->policies[$policyId] = $policies[] = new PolicyStub(
                     array(
                         'id' => $policy->id,
                         'roleId' => $policy->roleId,
                         'module' => $policy->module,
                         'function' => $policy->function,
-                        'limitations' => $limitations
+                        'limitations' => $policy->getLimitations()
                     )
                 );
             }
@@ -589,20 +569,30 @@ class RoleServiceStub implements RoleService
         }
 
         $roleAssignments = array();
+        $processedContentIds = array();
         foreach ( $this->content2roles as $contentId => $roleIds )
         {
-            foreach ( $roleIds as $limitationId => $roleId )
+            foreach ( $roleIds as $roleId )
             {
                 if ( $roleId !== $role->id )
                 {
                     continue;
                 }
 
-                $roleAssignments[] = $this->getRoleAssignment(
-                    $role,
-                    $contentId,
-                    $limitationId
+                if ( in_array( $contentId, $processedContentIds ) )
+                {
+                    continue;
+                }
+
+                $roleAssignments = array_merge(
+                    $roleAssignments,
+                    $this->getRoleAssignmentsForRoleAndContent(
+                        $role,
+                        $contentId
+                    )
                 );
+
+                $processedContentIds[] = $contentId;
             }
         }
 
@@ -691,6 +681,40 @@ class RoleServiceStub implements RoleService
     }
 
     /**
+     * Returns the LimitationType registered with the given identifier
+     *
+     * @param string $identifier
+     *
+     * @return \eZ\Publish\SPI\Limitation\Type
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if there is no LimitationType with $identifier
+     */
+    public function getLimitationType( $identifier )
+    {
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+    }
+
+    /**
+     * Returns the LimitationType's assigned to a given module/function
+     *
+     * Typically used for:
+     *  - Internal validation limitation value use on Policies
+     *  - Role admin gui for editing policy limitations incl list limitation options via valueSchema()
+     *
+     * @param string $module Legacy name of "controller", it's a unique identifier like "content"
+     * @param string $function Legacy name of a controller "action", it's a unique within the controller like "read"
+     *
+     * @return \eZ\Publish\SPI\Limitation\Type[]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If module/function to limitation type mapping
+     *                                                                 refers to a non existing identifier.
+     */
+    public function getLimitationTypesByModuleFunction( $module, $function )
+    {
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+    }
+
+    /**
      * returns the roles assigned to the given user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user group
@@ -707,13 +731,23 @@ class RoleServiceStub implements RoleService
         }
 
         $roleAssignments = array();
-        foreach ( $this->content2roles[$content->id] as $limitationId => $roleId )
+        $processedRoleIds = array();
+        foreach ( $this->content2roles[$content->id] as $roleId )
         {
-            $roleAssignments[] = $this->getRoleAssignment(
-                $this->loadRole( $roleId ),
-                $content->id,
-                $limitationId
+            if ( in_array( $roleId, $processedRoleIds ) )
+            {
+                continue;
+            }
+
+            $roleAssignments = array_merge(
+                $roleAssignments,
+                    $this->getRoleAssignmentsForRoleAndContent(
+                    $this->loadRole( $roleId ),
+                    $content->id
+                )
             );
+
+            $processedRoleIds[] = $roleId;
         }
 
         return $roleAssignments;
@@ -734,14 +768,24 @@ class RoleServiceStub implements RoleService
         {
             $this->content2roles[$content->id] = array();
         }
-        $this->content2roles[$content->id][++$this->limitationId] = $role->id;
 
         if ( $roleLimitation )
         {
-            $this->roleLimitations[$this->limitationId] = array(
-                'identifier' => $roleLimitation->getIdentifier(),
-                'value' => $roleLimitation->limitationValues
-            );
+            foreach ( $roleLimitation->limitationValues as $value )
+            {
+                $this->content2roles[$content->id][++$this->limitationId] = $role->id;
+                $this->roleLimitations[$this->limitationId] = array(
+                    'id' => $this->limitationId,
+                    'roleId' => $role->id,
+                    'contentId' => $content->id,
+                    'identifier' => $roleLimitation->getIdentifier(),
+                    'value' => array( $value )
+                );
+            }
+        }
+        else
+        {
+            $this->content2roles[$content->id][++$this->limitationId] = $role->id;
         }
     }
 
@@ -772,80 +816,126 @@ class RoleServiceStub implements RoleService
     }
 
     /**
-     * Returns a role assignment instance.
+     * Returns list of role assignments for specific role and content.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param integer $contentId
-     * @param integer $limitationId
      *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment
+     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[]
      */
-    private function getRoleAssignment( Role $role, $contentId, $limitationId )
+    private function getRoleAssignmentsForRoleAndContent( Role $role, $contentId )
     {
         $contentService = $this->repository->getContentService();
         $userService = $this->repository->getUserService();
 
         $contentType = $contentService->loadContent( $contentId )->contentType;
-        if ( 'user_group' === $contentType->identifier )
+        if ( $contentType->identifier != 'user_group' && $contentType->identifier != 'user' )
         {
-            return new UserGroupRoleAssignmentStub(
-                array(
-                    'role' => $role,
-                    'userGroup' => $userService->loadUserGroup( $contentId ),
-                    'limitation' => $this->getOptionalRoleLimitation( $limitationId ),
-                )
+            throw new \ErrorException(
+                "Implementation error, unknown contentType '{$contentType->identifier}'."
             );
         }
-        else if ( 'user' === $contentType->identifier )
+
+        $roleAssignments = array();
+        foreach ( $this->roleLimitations as $limit )
         {
-            return new UserRoleAssignmentStub(
-                array(
-                    'role' => $role,
-                    'user' => $userService->loadUser( $contentId ),
-                    'limitation' => $this->getOptionalRoleLimitation( $limitationId ),
-                )
-            );
+            if ( $limit['roleId'] == $role->id && $limit['contentId'] == $contentId )
+            {
+                $limitIdentifier = $limit['identifier'];
+                if ( !isset( $roleAssignments[$limitIdentifier] ) )
+                {
+                    if ( 'user_group' === $contentType->identifier )
+                    {
+                        $roleAssignments[$limitIdentifier] = new UserGroupRoleAssignmentStub(
+                            array(
+                                'role' => $role,
+                                'userGroup' => $userService->loadUserGroup( $contentId ),
+                                'limitation' => $this->getOptionalRoleLimitation( $role->id, $contentId, $limitIdentifier ),
+                            )
+                        );
+                    }
+                    else if ( 'user' === $contentType->identifier )
+                    {
+                        $roleAssignments[$limitIdentifier] = new UserRoleAssignmentStub(
+                            array(
+                                'role' => $role,
+                                'user' => $userService->loadUser( $contentId ),
+                                'limitation' => $this->getOptionalRoleLimitation( $role->id, $contentId, $limitIdentifier ),
+                            )
+                        );
+                    }
+                }
+            }
         }
-        throw new \ErrorException(
-            "Implementation error, unknown contentType '{$contentType->identifier}'."
-        );
+
+        if ( empty( $roleAssignments ) )
+        {
+            if ( 'user_group' === $contentType->identifier )
+            {
+                $roleAssignments[] = new UserGroupRoleAssignmentStub(
+                    array(
+                        'role' => $role,
+                        'userGroup' => $userService->loadUserGroup( $contentId ),
+                        'limitation' => null,
+                    )
+                );
+            }
+            else if ( 'user' === $contentType->identifier )
+            {
+                $roleAssignments[] = new UserRoleAssignmentStub(
+                    array(
+                        'role' => $role,
+                        'user' => $userService->loadUser( $contentId ),
+                        'limitation' => null,
+                    )
+                );
+            }
+        }
+
+        return array_values( $roleAssignments );
     }
 
     /**
      * Returns the associated limitation or <b>NULL</b>.
      *
-     * @param string $limitationId
+     * @param integer $roleId
+     * @param integer $contentId
+     * @param string $limitationIdentifier
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation
      */
-    private function getOptionalRoleLimitation( $limitationId )
+    private function getOptionalRoleLimitation( $roleId, $contentId, $limitationIdentifier )
     {
-        if ( false === isset( $this->roleLimitations[$limitationId] ) )
+        $limitationValues = array();
+        foreach ( $this->roleLimitations as $limit )
+        {
+            if ( $roleId == $limit['roleId'] && $contentId == $limit['contentId'] && $limitationIdentifier == $limit['identifier'] )
+            {
+                $limitationValues = array_merge( $limitationValues, $limit['value'] );
+            }
+        }
+
+        if ( empty( $limitationValues ) )
         {
             return null;
         }
 
-        switch ( $this->roleLimitations[$limitationId]['identifier'] )
+        switch ( $limitationIdentifier )
         {
             case 'Subtree':
                 return new \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation(
                     array(
-                        'limitationValues' => $this->roleLimitations[$limitationId]['value']
+                        'limitationValues' => $limitationValues
                     )
                 );
 
             case 'Section':
                 return new \eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation(
                     array(
-                        'limitationValues' => $this->roleLimitations[$limitationId]['value']
+                        'limitationValues' => $limitationValues
                     )
                 );
         }
-
-        throw new \ErrorException(
-            "Implementation error, unknown limitation identifier '" .
-            $this->roleLimitations[$limitationId]['identifier'] . "'."
-        );
     }
 
     /**

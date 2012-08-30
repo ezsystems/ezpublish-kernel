@@ -12,7 +12,6 @@ namespace eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 
 /**
  * this class represents a content type value

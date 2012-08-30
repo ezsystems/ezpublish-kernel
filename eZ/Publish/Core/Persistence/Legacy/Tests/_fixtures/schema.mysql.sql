@@ -11,6 +11,34 @@ CREATE TABLE ezbinaryfile (
 ) ENGINE=InnoDB;
 
 
+DROP TABLE IF EXISTS ezimagefile;
+CREATE TABLE ezimagefile (
+  contentobject_attribute_id int(11) NOT NULL DEFAULT '0',
+  filepath longtext NOT NULL,
+  id int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (id),
+  KEY ezimagefile_coid (contentobject_attribute_id),
+  KEY ezimagefile_file (filepath(200))
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ezmedia`;
+CREATE TABLE `ezmedia` (
+  `contentobject_attribute_id` int(11) NOT NULL DEFAULT '0',
+  `controls` varchar(50) DEFAULT NULL,
+  `filename` varchar(255) NOT NULL DEFAULT '',
+  `has_controller` int(11) DEFAULT '0',
+  `height` int(11) DEFAULT NULL,
+  `is_autoplay` int(11) DEFAULT '0',
+  `is_loop` int(11) DEFAULT '0',
+  `mime_type` varchar(50) NOT NULL DEFAULT '',
+  `original_filename` varchar(255) NOT NULL DEFAULT '',
+  `pluginspage` varchar(255) DEFAULT NULL,
+  `quality` varchar(50) DEFAULT NULL,
+  `version` int(11) NOT NULL DEFAULT '0',
+  `width` int(11) DEFAULT NULL,
+  PRIMARY KEY (`contentobject_attribute_id`,`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS ezcobj_state;
 CREATE TABLE ezcobj_state (
   default_language_id int(11) NOT NULL DEFAULT 0,
@@ -43,8 +71,9 @@ CREATE TABLE ezcobj_state_group_language (
   contentobject_state_group_id int(11) NOT NULL DEFAULT 0,
   description longtext NOT NULL,
   language_id int(11) NOT NULL DEFAULT 0,
+  real_language_id int(11) NOT NULL DEFAULT 0,
   name varchar(45) NOT NULL DEFAULT '',
-  PRIMARY KEY ( contentobject_state_group_id, language_id )
+  PRIMARY KEY ( contentobject_state_group_id, real_language_id )
 ) ENGINE=InnoDB;
 
 
@@ -531,6 +560,19 @@ CREATE TABLE ezurlalias_ml_incr (
 
 
 
+DROP TABLE IF EXISTS ezurlwildcard;
+CREATE TABLE ezurlwildcard (
+  destination_url longtext NOT NULL,
+  id int(11) NOT NULL auto_increment,
+  source_url longtext NOT NULL,
+  type int(11) NOT NULL default '0',
+  PRIMARY KEY  (id)
+) ENGINE=InnoDB;
+
+
+
+
+
 DROP TABLE IF EXISTS ezuser;
 CREATE TABLE ezuser (
   contentobject_id int(11) NOT NULL default '0',
@@ -651,3 +693,44 @@ CREATE TABLE `ezuservisit` (
       KEY `ezuservisit_co_visit_count` (`current_visit_timestamp`,`login_count`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `ezkeyword`;
+CREATE TABLE `ezkeyword` (
+  `class_id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `keyword` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ezkeyword_keyword` (`keyword`),
+  KEY `ezkeyword_keyword_id` (`keyword`,`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ezkeyword_attribute_link`;
+CREATE TABLE `ezkeyword_attribute_link` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `keyword_id` int(11) NOT NULL DEFAULT '0',
+  `objectattribute_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `ezkeyword_attr_link_keyword_id` (`keyword_id`),
+  KEY `ezkeyword_attr_link_kid_oaid` (`keyword_id`,`objectattribute_id`),
+  KEY `ezkeyword_attr_link_oaid` (`objectattribute_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ezimagefile`;
+CREATE TABLE `ezimagefile` (
+	  `contentobject_attribute_id` int(11) NOT NULL DEFAULT '0',
+	  `filepath` longtext NOT NULL,
+	  `id` int(11) NOT NULL AUTO_INCREMENT,
+	  PRIMARY KEY (`id`),
+	  KEY `ezimagefile_coid` (`contentobject_attribute_id`),
+	  KEY `ezimagefile_file` (`filepath`(200))
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=193 ;
+
+DROP TABLE IF EXISTS `ezgmaplocation`;
+CREATE TABLE `ezgmaplocation` (
+  `contentobject_attribute_id` int(11) NOT NULL DEFAULT '0',
+  `contentobject_version` int(11) NOT NULL DEFAULT '0',
+  `latitude` double NOT NULL DEFAULT '0',
+  `longitude` double NOT NULL DEFAULT '0',
+  `address` varchar(150) DEFAULT NULL,
+  PRIMARY KEY (`contentobject_attribute_id`,`contentobject_version`),
+  KEY `latitude_longitude_key` (`latitude`,`longitude`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

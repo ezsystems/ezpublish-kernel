@@ -12,9 +12,10 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    ezcQuerySelect;
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
+    ezcQuerySelect,
+    RuntimeException;
 
 /**
  * Field criterion handler
@@ -31,16 +32,15 @@ class Field extends CriterionHandler
     /**
      * Field converter registry
      *
-     * @var Converter\Registry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected $fieldConverterRegistry;
 
     /**
      * Construct from handler handler
      *
-     * @param EzcDbHandler $dbHandler
-     * @param Converter\Registry $fieldConverterRegistry
-     * @return void
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $fieldConverterRegistry
      */
     public function __construct( EzcDbHandler $dbHandler, Registry $fieldConverterRegistry )
     {
@@ -93,7 +93,7 @@ class Field extends CriterionHandler
         $statement->execute();
         if ( !( $rows = $statement->fetchAll( \PDO::FETCH_ASSOC ) ) )
         {
-            throw new NotFoundException( 'Content type field', $fieldIdentifier );
+            throw new \OutOfBoundsException( "Content type field $fieldIdentifier not found." );
         }
 
         $fieldMapArray = array();
@@ -102,6 +102,13 @@ class Field extends CriterionHandler
             if ( !isset( $fieldMapArray[ $row['data_type_string'] ] ) )
             {
                 $converter = $this->fieldConverterRegistry->getConverter( $row['data_type_string'] );
+
+                if ( !$converter instanceof Converter )
+                {
+                    throw new RuntimeException( "getConverter({$row['data_type_string']}) did not return a converter, got: " .
+                        gettype( $converter ) );
+                }
+
                 $fieldMapArray[ $row['data_type_string'] ] = array(
                     'ids' => array(),
                     'column' => $converter->getIndexColumn(),
@@ -168,7 +175,7 @@ class Field extends CriterionHandler
                     break;
 
                 default:
-                    throw new \RuntimeException( 'Unknown operator.' );
+                    throw new RuntimeException( 'Unknown operator.' );
             }
 
             $whereExpressions[] = $subSelect->expr->lAnd(

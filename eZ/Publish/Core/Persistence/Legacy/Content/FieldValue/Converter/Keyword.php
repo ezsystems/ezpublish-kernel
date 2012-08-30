@@ -12,11 +12,23 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\Repository\FieldType\Keyword\Value as KeywordValue;
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 class Keyword implements Converter
 {
+    /**
+     * Factory for current class
+     *
+     * @note Class should instead be configured as service if it gains dependencies.
+     *
+     * @static
+     * @return Keyword
+     */
+    public static function create()
+    {
+        return new self;
+    }
+
     /**
      * Converts data from $value to $storageFieldValue
      *

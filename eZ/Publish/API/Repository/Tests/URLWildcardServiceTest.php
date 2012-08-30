@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\Content\URLAlias;
 use \eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
 
@@ -17,8 +16,9 @@ use \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
  * Test case for operations in the URLWildcardService.
  *
  * @see eZ\Publish\API\Repository\URLWildcardService
+ * @group url-wildcard
  */
-class URLWildcardServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
+class URLWildcardServiceTest extends BaseTest
 {
     /**
      * Test for the create() method.

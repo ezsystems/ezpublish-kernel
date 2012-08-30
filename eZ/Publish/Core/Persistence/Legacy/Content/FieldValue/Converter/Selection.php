@@ -8,17 +8,29 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
+use eZ\Publish\Core\FieldType\FieldSettings,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings,
-    eZ\Publish\Core\Repository\FieldType\Selection\Value as SelectionValue,
     DOMDocument;
 
 class Selection implements Converter
 {
+    /**
+     * Factory for current class
+     *
+     * @note Class should instead be configured as service if it gains dependencies.
+     *
+     * @static
+     * @return Selection
+     */
+    public static function create()
+    {
+        return new self;
+    }
+
     /**
      * Converts data from $value to $storageFieldValue
      *
@@ -27,16 +39,7 @@ class Selection implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $optionsFlip = array_flip( $value->fieldSettings["options"] );
-        $options = array();
-        foreach ( $value->data as $value )
-        {
-            if ( isset( $optionsFlip[$value] ) )
-            {
-                $options[] = $optionsFlip[$value];
-            }
-        }
-        $storageFieldValue->sortKeyString = $storageFieldValue->dataText = join( "-", $options );
+        $storageFieldValue->sortKeyString = $storageFieldValue->dataText = $value->sortKey;
     }
 
     /**
@@ -47,14 +50,18 @@ class Selection implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = array_values(
-            array_intersect_key(
-                $fieldValue->fieldSettings["options"],
-                $value->dataText !== ""
-                    ? array_flip( explode( "-", $value->dataText ) )
-                    : array()
-            )
-        );
+        if ( $value->dataText !== '' )
+        {
+            $fieldValue->data = array_map(
+                'intval',
+                explode( '-', $value->dataText )
+            );
+        }
+        else
+        {
+            $fieldValue->data = array();
+        }
+        $fieldValue->sortKey = $value->sortKeyString;
     }
 
     /**
@@ -106,12 +113,10 @@ class Selection implements Converter
             $options[(int)$option["id"]] = (string)$option["name"];
         }
 
-        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
-                "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false,
-                "options" => $options,
-            )
-        );
+        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings( array(
+            "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false,
+            "options" => $options,
+        ) );
     }
 
     /**

@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator as CriterionOperator,
     ezcQuerySelect;

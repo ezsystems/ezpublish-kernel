@@ -15,15 +15,12 @@ use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
-use eZ\Publish\API\Repository\Values\User\RoleAssignment;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 
 /**
  * This service provides methods for managing Roles and Policies
- *
- * @todo add get roles for user including limitations
  *
  * @package eZ\Publish\API\Repository
  */
@@ -171,8 +168,6 @@ interface RoleService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
      *
-     * @todo add limitations
-     *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
@@ -255,4 +250,32 @@ interface RoleService
      * @return \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct
      */
     public function newRoleUpdateStruct();
+
+    /**
+     * Returns the LimitationType registered with the given identifier
+     *
+     * @param string $identifier
+     *
+     * @return \eZ\Publish\SPI\Limitation\Type
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if there is no LimitationType with $identifier
+     */
+    public function getLimitationType( $identifier );
+
+    /**
+     * Returns the LimitationType's assigned to a given module/function
+     *
+     * Typically used for:
+     *  - Internal validation limitation value use on Policies
+     *  - Role admin gui for editing policy limitations incl list limitation options via valueSchema()
+     *
+     * @param string $module Legacy name of "controller", it's a unique identifier like "content"
+     * @param string $function Legacy name of a controller "action", it's a unique within the controller like "read"
+     *
+     * @return \eZ\Publish\SPI\Limitation\Type[]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If module/function to limitation type mapping
+     *                                                                 refers to a non existing identifier.
+     */
+    public function getLimitationTypesByModuleFunction( $module, $function );
 }

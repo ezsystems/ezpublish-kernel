@@ -13,10 +13,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\Repository\FieldType\DateAndTime\Type as DateAndTimeType,
-    eZ\Publish\Core\Repository\FieldType\DateAndTime\Value as DateAndTimeValue,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+    eZ\Publish\Core\FieldType\DateAndTime\Type as DateAndTimeType,
+    eZ\Publish\Core\FieldType\FieldSettings,
     DateTime,
     DateInterval,
     DOMDocument,
@@ -25,6 +23,19 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
 class DateAndTime implements Converter
 {
     /**
+     * Factory for current class
+     *
+     * @note Class should instead be configured as service if it gains dependencies.
+     *
+     * @static
+     * @return DateAndTime
+     */
+    public static function create()
+    {
+        return new self;
+    }
+
+    /**
      * Converts data from $value to $storageFieldValue
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
@@ -32,11 +43,10 @@ class DateAndTime implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataInt = 0;
-        if ( $value->data instanceof DateTime )
-            $storageFieldValue->dataInt = $value->data->getTimestamp();
-
-        $storageFieldValue->sortKeyInt = $value->sortKey['sort_key_int'];
+        // @TODO: One should additionally store the timezone here. This could
+        // be done in a backwards compatible way, I think…
+        $storageFieldValue->dataInt    = ( $value->data !== null ? $value->data['timestamp'] : null);
+        $storageFieldValue->sortKeyInt = $value->sortKey;
     }
 
     /**
@@ -47,11 +57,16 @@ class DateAndTime implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $date = new DateTime;
-        $date->setTimestamp( $value->dataInt );
+        if ( $value->dataInt === null )
+        {
+            return;
+        }
 
-        $fieldValue->data = $date;
-        $fieldValue->sortKey = array( 'sort_key_int' => $value->sortKeyInt );
+        $fieldValue->data    = array(
+            'rfc850'    => null,
+            'timestamp' => $value->dataInt,
+        );
+        $fieldValue->sortKey = $value->sortKeyInt;
     }
 
     /**

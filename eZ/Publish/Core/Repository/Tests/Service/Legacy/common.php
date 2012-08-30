@@ -5,154 +5,145 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Service\Legacy;
-use eZ\Publish\Core\Repository\Repository,
-    eZ\Publish\Core\IO\LegacyHandler as LegacyIoHandler,
-    eZ\Publish\Core\Persistence\Legacy\Handler as LegacyPersistenceHandler,
-    ReflectionMethod;
+/*
+ * ATTENTION: All changes to this file must be synced to
+ * eZ\Publish\API\Repository\Tests\SetupFactory\Legacy
+ *
+ */
 
+namespace eZ\Publish\Core\Repository\Tests\Service\Legacy;
+use eZ\Publish\Core\Base\ConfigurationManager,
+    eZ\Publish\Core\Base\ServiceContainer;
 
 /**
  * Common init code for legacy service tests, returns repository
  */
-
 $dsn = ( isset( $_ENV['DATABASE'] ) && $_ENV['DATABASE'] ) ? $_ENV['DATABASE'] : 'sqlite://:memory:';
 $db = preg_replace( '(^([a-z]+).*)', '\\1', $dsn );
 
-$legacyHandler = new LegacyPersistenceHandler(
-    array(
-        'dsn' => $dsn,
-        'defer_type_update' => false,
-        'external_storage' => array(
-            'ezauthor' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezbinaryfile' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\BinaryFileStorage',
-            'ezboolean' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezcountry' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezdatetime' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezemail' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezfloat' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            //'ezimage' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\ImageStorage',
-            'ezinteger' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            //'ezkeyword' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\KeywordStorage',
-            'ezmedia' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\MediaStorage',
-            //'ezobjectrelationlist' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\ObjectRelationListStorage',
-            'ezpage' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezselection' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezstring' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezsrrating' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'eztext' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezurl' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\UrlStorage',
-            'ezuser' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-            'ezxmltext' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage'
-        ),
-        'field_converter' => array(
-            'ezauthor' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextLine',
-            'ezbinaryfile' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\BinaryFile',
-            'ezboolean' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Checkbox',
-            'ezcountry' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Country',
-            'ezdatetime' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Integer',
-            'ezemail' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextLine',
-            //'ezfloat' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Float',
-            //'ezimage' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Image',
-            'ezinteger' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Integer',
-            'ezkeyword' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextLine',
-            'ezmedia' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Media',
-            //'ezobjectrelationlist' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\ObjectRelationList',
-            'ezpage' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextLine',
-            'ezselection' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Selection',
-            'ezstring' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextLine',
-            'ezsrrating' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Rating',
-            'eztext' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextBlock',
-            'ezurl' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Url',
-            'ezuser' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Integer',
-            'ezxmltext' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\XmlText',
-         )
-    )
+// Detect directories
+if ( file_exists( 'eZ/Publish/Core/Persistence/' ) )
+{
+    $baseDir = "";
+    $legacyHandlerDir = "eZ/Publish/Core/Persistence";
+}
+else if ( file_exists( 'vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/' ) )
+{
+    $baseDir = "vendor/ezsystems/ezpublish/";
+    $legacyHandlerDir = "vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence";
+}
+else
+{
+    throw new \Exception( 'Could not find Legacy dir, skipping' );
+}
+
+// get configuration config
+if ( !( $settings = include ( $baseDir . 'config.php' ) ) )
+{
+    throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
+}
+
+// set existing services
+$dependencies = array();
+if ( isset( $_ENV['legacyKernel'] ) )
+{
+    $dependencies['@legacyKernel'] = $_ENV['legacyKernel'];
+}
+
+// load configuration uncached
+$configManager = new ConfigurationManager(
+    array_merge_recursive( $settings, array(
+        'base' => array(
+            'Configuration' => array(
+                'UseCache' => false
+            )
+        )
+    ) ),
+    $settings['base']['Configuration']['Paths']
 );
 
-// Get access to ezc DB handler
-    $refGetDatabase = new ReflectionMethod( $legacyHandler, 'getDatabase' );
-    $refGetDatabase->setAccessible( true );
-    $handler = $refGetDatabase->invoke( $legacyHandler );
+// load service container & configuration, but force legacy handler
+$serviceSettings = $configManager->getConfiguration('service')->getAll();
+$serviceSettings['repository']['arguments']['persistence_handler'] = '@persistence_handler_legacy';
+$serviceSettings['repository']['arguments']['io_handler'] = '@io_handler_legacy';
+$serviceSettings['persistence_handler_legacy']['arguments']['config']['dsn'] = $dsn;
+$serviceSettings['legacy_db_handler']['arguments']['dsn'] = $dsn;
+$sc = new ServiceContainer(
+    $serviceSettings,
+    $dependencies
+);
 
-
-// Find Persistence dir
-    if ( file_exists( 'eZ/Publish/Core/Persistence/' ) )
-        $legacyHandlerDir = "eZ/Publish/Core/Persistence";
-    else if ( file_exists( 'extension/api/eZ/Publish/Core/Persistence/' ) )
-        $legacyHandlerDir = "extension/api/eZ/Publish/Core/Persistence";
-    else
-        throw new \Exception( 'Could not find Legacy dir, skipping' );
-
+// Get ezc DB handler
+$handler = $sc->get( 'legacy_db_handler' );
 
 // Insert Schema
-    $schema = $legacyHandlerDir . '/Legacy/Tests/_fixtures/schema.' . $db . '.sql';
-    $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( $schema ) ) );
+$schema = $legacyHandlerDir . '/Legacy/Tests/_fixtures/schema.' . $db . '.sql';
+$queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( $schema ) ) );
+foreach ( $queries as $query )
+{
+    $handler->exec( $query );
+}
+
+
+// Insert some default data
+$data = require __DIR__ . '/_fixtures/full_dump.php';
+foreach ( $data as $table => $rows )
+{
+    // Check that at least one row exists
+    if ( !isset( $rows[0] ) )
+    {
+        continue;
+    }
+
+    $q = $handler->createInsertQuery();
+    $q->insertInto( $handler->quoteIdentifier( $table ) );
+
+    // Contains the bound parameters
+    $values = array();
+
+    // Binding the parameters
+    foreach ( $rows[0] as $col => $val )
+    {
+        $q->set(
+            $handler->quoteIdentifier( $col ),
+            $q->bindParam( $values[$col] )
+        );
+    }
+
+    $stmt = $q->prepare();
+
+    foreach ( $rows as $row )
+    {
+        try
+        {
+            // This CANNOT be replaced by:
+            // $values = $row
+            // each $values[$col] is a PHP reference which should be
+            // kept for parameters binding to work
+            foreach ( $row as $col => $val )
+            {
+                $values[$col] = $val;
+            }
+
+            $stmt->execute();
+        }
+        catch ( \Exception $e )
+        {
+            echo "$table ( ", implode( ', ', $row ), " )\n";
+            throw $e;
+        }
+    }
+}
+
+if ( $db === 'pgsql' )
+{
+    // Update PostgreSQL sequences
+    $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( $legacyHandlerDir . '/Legacy/Tests/_fixtures/setval.pgsql.sql' ) ) );
     foreach ( $queries as $query )
     {
         $handler->exec( $query );
     }
+}
 
 
-// Insert some default data
-    $data = require __DIR__ . '/_fixtures/full_dump.php';
-    //$data = require __DIR__ . '/_fixtures/mini_dump.php';
-    foreach ( $data as $table => $rows )
-    {
-        // Check that at least one row exists
-        if ( !isset( $rows[0] ) )
-        {
-            continue;
-        }
-
-        $q = $handler->createInsertQuery();
-        $q->insertInto( $handler->quoteIdentifier( $table ) );
-
-        // Contains the bound parameters
-        $values = array();
-
-        // Binding the parameters
-        foreach ( $rows[0] as $col => $val )
-        {
-            $q->set(
-                $handler->quoteIdentifier( $col ),
-                $q->bindParam( $values[$col] )
-            );
-        }
-
-        $stmt = $q->prepare();
-
-        foreach ( $rows as $row )
-        {
-            try
-            {
-                // This CANNOT be replaced by:
-                // $values = $row
-                // each $values[$col] is a PHP reference which should be
-                // kept for parameters binding to work
-                foreach ( $row as $col => $val )
-                {
-                    $values[$col] = $val;
-                }
-
-                $stmt->execute();
-            }
-            catch ( \Exception $e )
-            {
-                echo "$table ( ", implode( ', ', $row ), " )\n";
-                throw $e;
-            }
-        }
-    }
-
-    if ( $db === 'pgsql' )
-    {
-        // Update PostgreSQL sequences
-        $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( $legacyHandlerDir . '/Legacy/Tests/_fixtures/setval.pgsql.sql' ) ) );
-        foreach ( $queries as $query )
-        {
-            $handler->exec( $query );
-        }
-    }
-
-return new Repository( $legacyHandler, new LegacyIoHandler(), ( isset( $serviceSettings ) ? $serviceSettings : array() ) );
+return $sc->getRepository();

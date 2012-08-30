@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\RepositoryTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\UserIntegrationTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,29 +8,16 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\API\Repository;
+use eZ\Publish\Core\FieldType\User\Value as UserValue,
+    eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
- * Integration test for legacy storage field types
- *
- * This abstract base test case is supposed to be the base for field type
- * integration tests. It basically calls all involved methods in the field type 
- * ``Converter`` and ``Storage`` implementations. Fo get it working implement
- * the abstract methods in a sensible way.
- *
- * The following actions are performed by this test using the custom field
- * type:
- *
- * - Create a new content type with the given field type
- * - Load create content type
- * - Create content object of new content type
- * - Load created content
- * - Copy created content
- * - Remove copied content
+ * Integration test for use field type
  *
  * @group integration
+ * @group field-type
  */
-class UserFieldTypeIntergrationTest extends BaseIntegrationTest
+class UserIntegrationTest extends BaseIntegrationTest
 {
     /**
      * Identifier of the custom field
@@ -50,20 +37,66 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field definition data values
-     *
-     * This is a PHPUnit data provider
+     * Get expected settings schema
      *
      * @return array
      */
-    public function getFieldDefinitionData()
+    public function getSettingsSchema()
+    {
+        return array();
+    }
+
+    /**
+     * Get a valid $fieldSettings value
+     *
+     * @return mixed
+     */
+    public function getValidFieldSettings()
+    {
+        return array();
+    }
+
+    /**
+     * Get $fieldSettings value not accepted by the field type
+     *
+     * @return mixed
+     */
+    public function getInvalidFieldSettings()
     {
         return array(
-            // The user field type does not have any special field definition
-            // properties, so there is nothing to check for
-            array( 'fieldTypeIdentifier', 'ezuser' ),
-            array( 'fieldSettings', null ),
-            array( 'validators', null ),
+            'somethingUnknown' => 0,
+        );
+    }
+
+    /**
+     * Get expected validator schema
+     *
+     * @return array
+     */
+    public function getValidatorSchema()
+    {
+        return array();
+    }
+
+    /**
+     * Get a valid $validatorConfiguration
+     *
+     * @return mixed
+     */
+    public function getValidValidatorConfiguration()
+    {
+        return array();
+    }
+
+    /**
+     * Get $validatorConfiguration not accepted by the field type
+     *
+     * @return mixed
+     */
+    public function getInvalidValidatorConfiguration()
+    {
+        return array(
+            'unkknown' => array( 'value' => 23 )
         );
     }
 
@@ -72,44 +105,74 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      *
      * @return array
      */
-    public function getInitialFieldData()
+    public function getValidCreationFieldData()
     {
-        return array(
-            'account_key' => null,
-            'is_enabled'  => true,
-            'last_visit'  => null,
-            'login_count' => 0,
-            'max_login'   => 1000,
-        );
+        return new UserValue();
     }
 
     /**
-     * Get externals field data values
+     * Asserts that the field data was loaded correctly.
      *
-     * This is a PHPUnit data provider
+     * Asserts that the data provided by {@link getValidCreationFieldData()}
+     * was stored and loaded correctly.
      *
-     * @return array
+     * @param Field $field
+     * @return void
      */
-    public function getExternalsFieldData()
+    public function assertFieldDataLoadedCorrect( Field $field )
     {
-        return array(
-            array( 'account_key', null ),
-            array( 'has_stored_login', true ),
-            array( 'contentobject_id', 226 ),
-            array( 'login', 'hans' ),
-            array( 'email', 'hans@example.com' ),
-            array( 'password_hash', '680869a9873105e365d39a6d14e68e46' ),
-            array( 'password_hash_type', 2 ),
-            array( 'is_logged_in', true ),
-            array( 'is_enabled', true ),
-            // @TODO: Fails because of max_login problem
-            array( 'is_locked', false ),
-            array( 'last_visit', null ),
-            array( 'login_count', null ),
-            // @TODO: Currently not editable through UserService, tests will
-            // fail
-            array( 'max_login', 1000 ),
+        $this->assertInstanceOf(
+            'eZ\Publish\Core\FieldType\User\Value',
+            $field->value
         );
+
+        $expectedData = array(
+            'hasStoredLogin' => true,
+            'login' => 'hans',
+            'email' => 'hans@example.com',
+            'passwordHash' => '680869a9873105e365d39a6d14e68e46',
+            'passwordHashType' => 2,
+            'isLoggedIn' => true,
+            'isEnabled' => true,
+        );
+
+        $this->assertPropertiesCorrect(
+            $expectedData,
+            $field->value
+        );
+
+        $this->assertNotNull( $field->value->contentId );
+    }
+
+    /**
+     * Get field data which will result in errors during creation
+     *
+     * This is a PHPUnit data provider.
+     *
+     * The returned records must contain of an error producing data value and
+     * the expected exception class (from the API or SPI, not implementation
+     * specific!) as the second element. For example:
+     *
+     * <code>
+     * array(
+     *      array(
+     *          new DoomedValue( true ),
+     *          'eZ\\Publish\\API\\Repository\\Exceptions\\ContentValidationException'
+     *      ),
+     *      // ...
+     * );
+     * </code>
+     *
+     * @return array[]
+     */
+    public function provideInvalidCreationFieldData()
+    {
+        return array();
+    }
+
+    public function testCreateContentFails( $failingValue = null, $expectedException = null )
+    {
+        $this->markTestSkipped( "Values are ignored on creation." );
     }
 
     /**
@@ -117,19 +180,15 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      *
      * @return array
      */
-    public function getUpdateFieldData()
+    public function getValidUpdateFieldData()
     {
-        return array(
-            'account_key'        => 'foobar',
-            'login'              => 'change', // Change is intended to not get through
-            'email'              => 'change', // Change is intended to not get through
-            'password_hash'      => 'change', // Change is intended to not get through
-            'password_hash_type' => 'change', // Change is intended to not get through
-            'last_visit'         => 123456789,
-            'login_count'        => 2300,
-            'is_enabled'         => 'changed', // Change is intended to not get through
-            'max_login'          => 'changed', // Change is intended to not get through
-        );
+        return new UserValue( array(
+            'login'            => 'change', // Change is intended to not get through
+            'email'            => 'change', // Change is intended to not get through
+            'passwordHash'     => 'change', // Change is intended to not get through
+            'passwordHashType' => 'change', // Change is intended to not get through
+            'isEnabled'        => 'change', // Change is intended to not get through
+        ) );
     }
 
     /**
@@ -139,55 +198,155 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
      *
      * @return array
      */
-    public function getUpdatedExternalsFieldData()
+    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
+    {
+        // No update possible through field type
+        $this->assertFieldDataLoadedCorrect( $field );
+    }
+
+    /**
+     * Get field data which will result in errors during update
+     *
+     * This is a PHPUnit data provider.
+     *
+     * The returned records must contain of an error producing data value and
+     * the expected exception class (from the API or SPI, not implementation
+     * specific!) as the second element. For example:
+     *
+     * <code>
+     * array(
+     *      array(
+     *          new DoomedValue( true ),
+     *          'eZ\\Publish\\API\\Repository\\Exceptions\\ContentValidationException'
+     *      ),
+     *      // ...
+     * );
+     * </code>
+     *
+     * @return array[]
+     */
+    public function provideInvalidUpdateFieldData()
     {
         return array(
-            array( 'account_key', 'foobar' ),
-            array( 'has_stored_login', true ),
-            array( 'contentobject_id', 226 ),
-            array( 'login', 'hans' ),
-            array( 'email', 'hans@example.com' ),
-            array( 'password_hash', '680869a9873105e365d39a6d14e68e46' ),
-            array( 'password_hash_type', 2 ),
-            array( 'is_logged_in', true ),
-            array( 'is_enabled', true ),
-            // @TODO: Fails because of max_login problem
-            array( 'is_locked', true ),
-            array( 'last_visit', 123456789 ),
-            array( 'login_count', 2300 ),
-            // @TODO: Currently not editable through UserService, tests will
-            // fail
-            array( 'max_login', 1000 ),
+            array(
+                null,
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType'
+            ),
+            // TODO: Define more failure cases ...
         );
     }
 
     /**
-     * Get externals copied field data values
+     * Asserts the the field data was loaded correctly.
+     *
+     * Asserts that the data provided by {@link getValidCreationFieldData()};
+     * was copied and loaded correctly.
+     *
+     * @param Field $field
+     */
+    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
+    {
+        $this->assertInstanceOf(
+            'eZ\Publish\Core\FieldType\User\Value',
+            $field->value
+        );
+
+        $expectedData = array(
+            'hasStoredLogin' => false,
+            'contentId' => null,
+            'login' => null,
+            'email' => null,
+            'passwordHash' => null,
+            'passwordHashType' => null,
+            'isLoggedIn' => true,
+            'isEnabled' => false,
+            'maxLogin' => null,
+        );
+
+        $this->assertPropertiesCorrect(
+            $expectedData,
+            $field->value
+        );
+        return ;
+    }
+
+    /**
+     * Get data to test to hash method
      *
      * This is a PHPUnit data provider
      *
+     * The returned records must have the the original value assigned to the
+     * first index and the expected hash result to the second. For example:
+     *
+     * <code>
+     * array(
+     *      array(
+     *          new MyValue( true ),
+     *          array( 'myValue' => true ),
+     *      ),
+     *      // ...
+     * );
+     * </code>
+     *
      * @return array
      */
-    public function getCopiedExternalsFieldData()
+    public function provideToHashData()
     {
         return array(
-            array( 'account_key', null ),
-            array( 'has_stored_login', false ),
-            array( 'contentobject_id', null ),
-            array( 'login', null ),
-            array( 'email', null ),
-            array( 'password_hash', null ),
-            array( 'password_hash_type', null ),
-            array( 'is_logged_in', true ),
-            array( 'is_enabled', false ),
-            array( 'is_locked', false ),
-            array( 'last_visit', null ),
-            array( 'login_count', null ),
-            array( 'max_login', null ),
+            array(
+                new UserValue( array( 'login' => 'hans' ) ),
+                array(
+                    'login'      => 'hans',
+                    'hasStoredLogin' => null,
+                    'contentId' => null,
+                    'email' => null,
+                    'passwordHash' => null,
+                    'passwordHashType' => null,
+                    'isLoggedIn' => null,
+                    'isEnabled' => null,
+                    'maxLogin' => null,
+                ),
+            ),
         );
     }
 
-    public function createContentOverwrite()
+    /**
+     * Get hashes and their respective converted values
+     *
+     * This is a PHPUnit data provider
+     *
+     * The returned records must have the the input hash assigned to the
+     * first index and the expected value result to the second. For example:
+     *
+     * <code>
+     * array(
+     *      array(
+     *          array( 'myValue' => true ),
+     *          new MyValue( true ),
+     *      ),
+     *      // ...
+     * );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideFromHashData()
+    {
+        return array(
+            array(
+                array( 'login' => 'hans' ),
+                new UserValue( array( 'login' => 'hans' ) ),
+            ),
+        );
+    }
+
+    /**
+     * Overwrite normal content creation
+     *
+     * @param mixed $fieldData
+     * @return void
+     */
+    protected function createContent( $fieldData, $contentType = null )
     {
         $repository  = $this->getRepository();
         $userService = $repository->getUserService();
@@ -211,7 +370,9 @@ class UserFieldTypeIntergrationTest extends BaseIntegrationTest
         // Create a new user instance.
         $user = $userService->createUser( $userCreate, array( $group ) );
 
-        return $user->content;
+        // Create draft from user content object
+        $contentService = $repository->getContentService();
+        return $contentService->createContentDraft( $user->content->contentInfo, $user->content->versionInfo );
     }
 }
 

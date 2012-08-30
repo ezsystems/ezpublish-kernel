@@ -236,7 +236,17 @@ class SectionServiceStub implements SectionService
         {
             $this->assignedContents[$section->id] = array();
         }
-        $this->assignedContents[$section->id][] = $contentInfo->id;
+
+        // Unassign from previous section
+        foreach ( $this->assignedContents as $sectionId => $assignedContents )
+        {
+            if ( isset( $assignedContents[$contentInfo->id] ) )
+            {
+                unset( $this->assignedContents[$sectionId][$contentInfo->id] );
+            }
+        }
+
+        $this->assignedContents[$section->id][$contentInfo->id] = true;
     }
 
     /**
@@ -307,6 +317,7 @@ class SectionServiceStub implements SectionService
         list(
             $this->sections,
             $this->identifiers,
+            $this->assignedContents,
             $this->nextId
         ) = $this->repository->loadFixture( 'Section' );
     }

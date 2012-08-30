@@ -15,16 +15,11 @@ use eZ\Publish\Core\Repository\Tests\Service\LocationBase as BaseLocationService
  */
 class LocationTest extends BaseLocationServiceTest
 {
-    public function __construct()
-    {
-        $this->existingRemoteID = "769380b7aa94541679167eab817ca893";
-    }
-
-    protected function getRepository( array $serviceSettings )
+    protected function getRepository()
     {
         try
         {
-            return include 'common.php';
+            return Utils::getRepository();
         }
         catch ( \Exception $e )
         {

@@ -36,7 +36,7 @@ interface URLWildcardService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
      */
-    public function create($sourceUrl, $destinationUrl, $foreward = false);
+    public function create( $sourceUrl, $destinationUrl, $foreward = false );
 
     /**
      * removes an url wildcard

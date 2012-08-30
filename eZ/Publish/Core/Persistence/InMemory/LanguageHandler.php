@@ -11,7 +11,8 @@ namespace eZ\Publish\Core\Persistence\InMemory;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandlerInterface,
     eZ\Publish\SPI\Persistence\Content\Language,
     eZ\Publish\SPI\Persistence\Content\Language\CreateStruct,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
+    LogicException;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
@@ -111,12 +112,18 @@ class LanguageHandler implements LanguageHandlerInterface
     /**
      * Delete a language
      *
-     * @todo Might throw an exception if the language is still associated with some content / types / (...) ?
+     * @throws \LogicException If language could not be deleted
      *
      * @param mixed $id
      */
     public function delete( $id )
     {
+        $versions = $this->backend->find( 'Content\\VersionInfo', array( 'languageIds' => $id ) );
+        if ( !empty( $versions ) )
+        {
+            throw new LogicException( "Deleting language logic error, some content still references that language and therefore it can't be deleted" );
+        }
+
         $this->backend->delete( 'Content\\Language', $id );
     }
 }

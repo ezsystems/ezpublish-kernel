@@ -9,11 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Location,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase,
-    eZ\Publish\SPI\Persistence,
     eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
@@ -517,7 +515,7 @@ class EzpDatabaseTest extends TestCase
             array( 'op_code', 3 ),
             array( 'parent_node', 77 ),
             array( 'parent_remote_id', '' ),
-            array( 'remote_id', 0 ),
+            array( 'remote_id', 'some_id' ),
             array( 'sort_field', 2 ),
             array( 'sort_order', 0 ),
             array( 'is_main', 0 ),
@@ -598,6 +596,49 @@ class EzpDatabaseTest extends TestCase
                         $query->expr->eq( 'parent_node', 77 )
                     )
                 )
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::updateLocationsContentVersionNo
+     */
+    public function testUpdateLocationsContentVersionNo()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $gateway = $this->getLocationGateway();
+
+        $gateway->create(
+            new CreateStruct(
+                array(
+                    "contentId" => 4096,
+                    "remoteId" => "some_id",
+                    "contentVersion" => 1
+                )
+            ),
+            array(
+                "node_id" => "77",
+                "depth" => "2",
+                "path_string" => "/1/2/77/"
+            )
+        );
+
+        $gateway->updateLocationsContentVersionNo( 4096, 2 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array( 2 ),
+            ),
+            $query->select(
+                "contentobject_version"
+            )->from(
+                "ezcontentobject_tree"
+            )->where(
+                $query->expr->eq(
+                    "contentobject_id",
+                    4096
+                )
+            )
         );
     }
 

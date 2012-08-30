@@ -19,9 +19,12 @@ use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface,
 
     eZ\Publish\API\Repository\Values\Content\Language,
 
-    eZ\Publish\API\Repository\Exceptions\NotFoundException,
+    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
+
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
+    LogicException;
 
 /**
  * Language service, used for language operations
@@ -82,12 +85,15 @@ class LanguageService implements LanguageServiceInterface
         if ( !is_bool( $languageCreateStruct->enabled ) )
             throw new InvalidArgumentValue( "enabled", $languageCreateStruct->enabled, "LanguageCreateStruct" );
 
+        if ( $this->repository->hasAccess( 'content', 'translations' ) !== true )
+            throw new UnauthorizedException( 'content', 'translations' );
+
         try
         {
             if ( $this->loadLanguage( $languageCreateStruct->languageCode ) !== null )
                 throw new InvalidArgumentException( "languageCreateStruct", "language with specified language code already exists" );
         }
-        catch ( NotFoundException $e )
+        catch ( APINotFoundException $e )
         {
             // Do nothing
         }
@@ -100,7 +106,18 @@ class LanguageService implements LanguageServiceInterface
             )
         );
 
-        $createdLanguage = $this->persistenceHandler->contentLanguageHandler()->create( $createStruct );
+        $this->repository->beginTransaction();
+        try
+        {
+            $createdLanguage = $this->persistenceHandler->contentLanguageHandler()->create( $createStruct );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
+
         return $this->buildDomainObject( $createdLanguage );
     }
 
@@ -124,6 +141,9 @@ class LanguageService implements LanguageServiceInterface
         if ( !is_string( $newName ) || empty( $newName ) )
             throw new InvalidArgumentValue( "newName", $newName );
 
+        if ( $this->repository->hasAccess( 'content', 'translations' ) !== true )
+            throw new UnauthorizedException( 'content', 'translations' );
+
         $loadedLanguage = $this->loadLanguageById( $language->id );
 
         $updateLanguageStruct = new SPILanguage(
@@ -135,7 +155,17 @@ class LanguageService implements LanguageServiceInterface
             )
         );
 
-        $this->persistenceHandler->contentLanguageHandler()->update( $updateLanguageStruct );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->contentLanguageHandler()->update( $updateLanguageStruct );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->loadLanguageById( $loadedLanguage->id );
     }
@@ -154,6 +184,9 @@ class LanguageService implements LanguageServiceInterface
         if ( !is_numeric( $language->id ) )
             throw new InvalidArgumentValue( "id", $language->id );
 
+        if ( $this->repository->hasAccess( 'content', 'translations' ) !== true )
+            throw new UnauthorizedException( 'content', 'translations' );
+
         $loadedLanguage = $this->loadLanguageById( $language->id );
 
         $updateLanguageStruct = new SPILanguage(
@@ -165,7 +198,17 @@ class LanguageService implements LanguageServiceInterface
             )
         );
 
-        $this->persistenceHandler->contentLanguageHandler()->update( $updateLanguageStruct );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->contentLanguageHandler()->update( $updateLanguageStruct );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->loadLanguageById( $loadedLanguage->id );
     }
@@ -184,6 +227,9 @@ class LanguageService implements LanguageServiceInterface
         if ( !is_numeric( $language->id ) )
             throw new InvalidArgumentValue( "id", $language->id );
 
+        if ( $this->repository->hasAccess( 'content', 'translations' ) !== true )
+            throw new UnauthorizedException( 'content', 'translations' );
+
         $loadedLanguage = $this->loadLanguageById( $language->id );
 
         $updateLanguageStruct = new SPILanguage(
@@ -195,7 +241,17 @@ class LanguageService implements LanguageServiceInterface
             )
         );
 
-        $this->persistenceHandler->contentLanguageHandler()->update( $updateLanguageStruct );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->contentLanguageHandler()->update( $updateLanguageStruct );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->loadLanguageById( $loadedLanguage->id );
     }
@@ -217,7 +273,6 @@ class LanguageService implements LanguageServiceInterface
             throw new InvalidArgumentException( "languageCode", "language code has an invalid value" );
 
         $language = $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode( $languageCode );
-
         return $this->buildDomainObject( $language );
     }
 
@@ -269,16 +324,33 @@ class LanguageService implements LanguageServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
-     *
-     * @todo implement properly when it is possible to count translation content
      */
     public function deleteLanguage( Language $language )
     {
         if ( !is_numeric( $language->id ) )
             throw new InvalidArgumentValue( "id", $language->id, "Language" );
 
+        if ( $this->repository->hasAccess( 'content', 'translations' ) !== true )
+            throw new UnauthorizedException( 'content', 'translations' );
+
         $loadedLanguage = $this->loadLanguageById( $language->id );
-        $this->persistenceHandler->contentLanguageHandler()->delete( $loadedLanguage->id );
+
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->contentLanguageHandler()->delete( $loadedLanguage->id );
+            $this->repository->commit();
+        }
+        catch ( LogicException $e )
+        {
+            $this->repository->rollback();
+            throw new InvalidArgumentException( "language", $e->getMessage(), $e );
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**

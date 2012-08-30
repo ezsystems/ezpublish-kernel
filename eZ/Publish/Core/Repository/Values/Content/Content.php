@@ -9,9 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Values\Content;
 
-use eZ\Publish\API\Repository\Values\Content\Content as APIContent,
-    eZ\Publish\Core\Repository\Values\Content\ContentInfo,
-    eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 
 /**
  *
@@ -37,7 +35,7 @@ class Content extends APIContent
     protected $relations;
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
+     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
     protected $versionInfo;
 
@@ -79,7 +77,6 @@ class Content extends APIContent
      * @param string $languageCode
      *
      * @return mixed a primitive type or a field type Value object depending on the field type.
-     * @todo should an exception be thrown here if nothing is found?
      */
     public function getFieldValue( $fieldDefIdentifier, $languageCode = null )
     {

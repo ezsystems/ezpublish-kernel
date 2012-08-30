@@ -17,6 +17,7 @@ use \eZ\Publish\API\Repository\Values\Content\Section;
  *
  * @see eZ\Publish\API\Repository\SectionService
  * @group integration
+ * @group section
  */
 class SectionServiceTest extends BaseTest
 {
@@ -33,15 +34,15 @@ class SectionServiceTest extends BaseTest
 
         try
         {
-            // RemoteId of the "Support" page of an eZ Publish demo installation
-            $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+            // RemoteId of the "Media" page of an eZ Publish demo installation
+            $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
 
             // Load the ContentService
             $contentService = $this->getRepository()->getContentService();
 
             // Load a content info instance
             $contentInfo = $contentService->loadContentInfoByRemoteId(
-                $supportRemoteId
+                $mediaRemoteId
             );
 
             if ( false === is_object( $contentInfo ) )
@@ -414,8 +415,8 @@ class SectionServiceTest extends BaseTest
                 new Section(
                     array(
                         'id' => $this->generateId( 'section', 6 ),
-                        'name' => 'Protected',
-                        'identifier' => 'protected'
+                        'name' => 'Restricted',
+                        'identifier' => ''
                     )
                 ),
             ),
@@ -470,30 +471,70 @@ class SectionServiceTest extends BaseTest
     }
 
     /**
-     * Test for the assignSection() method.
+     * Test for the countAssignedContents() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\SectionService::assignSection()
-     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
+     * @see \eZ\Publish\API\Repository\SectionService::countAssignedContents()
      */
-    public function testAssignSection()
+    public function testCountAssignedContents()
     {
         $repository = $this->getRepository();
+
+        $sectionService = $repository->getSectionService();
 
         $standardSectionId = $this->generateId( 'section', 1 );
         /* BEGIN: Use Case */
         // $standardSectionId contains the ID of the "Standard" section in a eZ
         // Publish demo installation.
 
-        // RemoteId of the "Support" page of an eZ Publish demo installation
-        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+        $standardSection = $sectionService->loadSection( $standardSectionId );
+
+        $numberOfAssignedContent = $sectionService->countAssignedContents(
+            $standardSection
+        );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            2, // Taken from the fixture
+            $numberOfAssignedContent
+        );
+    }
+
+    /**
+     * Test for the assignSection() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\SectionService::assignSection()
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCountAssignedContents
+     */
+    public function testAssignSection()
+    {
+        $repository = $this->getRepository();
+        $sectionService = $repository->getSectionService();
+
+        $standardSectionId = $this->generateId( 'section', 1 );
+        $mediaSectionId = $this->generateId( 'section', 3 );
+
+        $beforeStandardCount = $sectionService->countAssignedContents(
+            $sectionService->loadSection( $standardSectionId )
+        );
+        $beforeMediaCount = $sectionService->countAssignedContents(
+            $sectionService->loadSection( $mediaSectionId )
+        );
+
+        /* BEGIN: Use Case */
+        // $mediaSectionId contains the ID of the "Media" section in a eZ
+        // Publish demo installation.
+
+        // RemoteId of the "Media" page of an eZ Publish demo installation
+        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
 
         $contentService = $repository->getContentService();
         $sectionService = $repository->getSectionService();
 
         // Load a content info instance
         $contentInfo = $contentService->loadContentInfoByRemoteId(
-            $supportRemoteId
+            $mediaRemoteId
         );
 
         // Load the "Standard" section
@@ -503,60 +544,17 @@ class SectionServiceTest extends BaseTest
         $sectionService->assignSection( $contentInfo, $section );
         /* END: Use Case */
 
-        // TODO: What to assert here? countAssignedContents() is not good, because that test depends on this test
         $this->assertEquals(
-            1,
-            $sectionService->countAssignedContents( $section )
+            $beforeStandardCount + 1,
+            $sectionService->countAssignedContents(
+                $sectionService->loadSection( $standardSectionId )
+            )
         );
-    }
-
-    /**
-     * Test for the countAssignedContents() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\SectionService::countAssignedContents()
-     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testAssignSection
-     */
-    public function testCountAssignedContents()
-    {
-        $repository = $this->getRepository();
-
-        $sectionService = $repository->getSectionService();
-        $assignedContents = $sectionService->countAssignedContents(
-            $sectionService->loadSection( $this->generateId( 'section', 1 ) )
-        );
-
-        $standardSectionId = $this->generateId( 'section', 1 );
-        /* BEGIN: Use Case */
-        // $standardSectionId contains the ID of the "Standard" section in a eZ
-        // Publish demo installation.
-
-        // Remote ids of the "Support" and the "Community" page of a eZ Publish
-        // demo installation.
-        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
-        $communityRemoteId = '378acc2bc7a52400701956047a2f7d45';
-
-        $contentService = $repository->getContentService();
-        $sectionService = $repository->getSectionService();
-
-        // Load "Support" and "Community" ContentInfo objects
-        $contentInfoSupport = $contentService->loadContentInfoByRemoteId(
-            $supportRemoteId
-        );
-        $contentInfoCommunity = $contentService->loadContentInfoByRemoteId(
-            $communityRemoteId
-        );
-
-        // Load standard section
-        $section = $sectionService->loadSection( $standardSectionId );
-
-        $sectionService->assignSection( $contentInfoSupport, $section );
-        $sectionService->assignSection( $contentInfoCommunity, $section );
-        /* END: Use Case */
-
         $this->assertEquals(
-            $assignedContents + 2,
-            $sectionService->countAssignedContents( $section )
+            $beforeMediaCount - 1,
+            $sectionService->countAssignedContents(
+                $sectionService->loadSection( $mediaSectionId )
+            )
         );
     }
 
@@ -660,19 +658,19 @@ class SectionServiceTest extends BaseTest
         // $standardSectionId contains the ID of the "Standard" section in a eZ
         // Publish demo installation.
 
-        // RemoteId of the "Support" page of an eZ Publish demo installation
-        $supportRemoteId = 'affc99e41128c1475fa4f23dafb7159b';
+        // RemoteId of the "Media" page of an eZ Publish demo installation
+        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
 
         $contentService = $repository->getContentService();
         $sectionService = $repository->getSectionService();
 
-        // Load the "Support" ContentInfo
-        $contentInfo = $contentService->loadContentInfoByRemoteId( $supportRemoteId );
+        // Load the "Media" ContentInfo
+        $contentInfo = $contentService->loadContentInfoByRemoteId( $mediaRemoteId );
 
         // Load the "Standard" section
         $section = $sectionService->loadSection( $standardSectionId );
 
-        // Assign "Support" to "Standard" section
+        // Assign "Media" to "Standard" section
         $sectionService->assignSection( $contentInfo, $section );
 
         // This call should fail with a BadStateException, because there are assigned contents
@@ -699,13 +697,22 @@ class SectionServiceTest extends BaseTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Get a create struct and set some properties
-        $sectionCreate = $sectionService->newSectionCreateStruct();
-        $sectionCreate->name = 'Test Section';
-        $sectionCreate->identifier = 'uniqueKey';
+        try
+        {
+            // Get a create struct and set some properties
+            $sectionCreate = $sectionService->newSectionCreateStruct();
+            $sectionCreate->name = 'Test Section';
+            $sectionCreate->identifier = 'uniqueKey';
 
-        // Create a new section
-        $sectionService->createSection( $sectionCreate );
+            // Create a new section
+            $sectionService->createSection( $sectionCreate );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -743,16 +750,25 @@ class SectionServiceTest extends BaseTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Get a create struct and set some properties
-        $sectionCreate = $sectionService->newSectionCreateStruct();
-        $sectionCreate->name = 'Test Section';
-        $sectionCreate->identifier = 'uniqueKey';
+        try
+        {
+            // Get a create struct and set some properties
+            $sectionCreate = $sectionService->newSectionCreateStruct();
+            $sectionCreate->name = 'Test Section';
+            $sectionCreate->identifier = 'uniqueKey';
 
-        // Create a new section
-        $sectionService->createSection( $sectionCreate );
+            // Create a new section
+            $sectionService->createSection( $sectionCreate );
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load new section
         $section = $sectionService->loadSectionByIdentifier( 'uniqueKey' );
@@ -780,15 +796,24 @@ class SectionServiceTest extends BaseTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Load standard section
-        $section = $sectionService->loadSectionByIdentifier( 'standard' );
+        try
+        {
+            // Load standard section
+            $section = $sectionService->loadSectionByIdentifier( 'standard' );
 
-        // Get an update struct and change section name
-        $sectionUpdate = $sectionService->newSectionUpdateStruct();
-        $sectionUpdate->name = 'My Standard';
+            // Get an update struct and change section name
+            $sectionUpdate = $sectionService->newSectionUpdateStruct();
+            $sectionUpdate->name = 'My Standard';
 
-        // Update section
-        $sectionService->updateSection( $section, $sectionUpdate );
+            // Update section
+            $sectionService->updateSection( $section, $sectionUpdate );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -819,18 +844,27 @@ class SectionServiceTest extends BaseTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Load standard section
-        $section = $sectionService->loadSectionByIdentifier( 'standard' );
+        try
+        {
+            // Load standard section
+            $section = $sectionService->loadSectionByIdentifier( 'standard' );
 
-        // Get an update struct and change section name
-        $sectionUpdate = $sectionService->newSectionUpdateStruct();
-        $sectionUpdate->name = 'My Standard';
+            // Get an update struct and change section name
+            $sectionUpdate = $sectionService->newSectionUpdateStruct();
+            $sectionUpdate->name = 'My Standard';
 
-        // Update section
-        $sectionService->updateSection( $section, $sectionUpdate );
+            // Update section
+            $sectionService->updateSection( $section, $sectionUpdate );
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load updated section, name will now be "My Standard"
         $updatedStandard = $sectionService->loadSectionByIdentifier( 'standard' );

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+  <xsd:complexType name="vnd.ez.api.ContentTypeUpdate">
+    <xsd:all>
+      <xsd:element name="identifier" type="xsd:string"
+        minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            String identifier of a content type
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="names"
+        type="multiLanguageValuesType" minOccurs="0" />
+      <xsd:element name="descriptions" type="multiLanguageValuesType"
+        minOccurs="0" />
+      <xsd:element name="modificationDate" type="xsd:dateTime"
+        minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            If set this date is used as modification
+            date
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="User" type="ref" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The user under which this update should be
+            done
+              </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="remoteId" type="xsd:string"
+        minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            Unique remote ID of the content type
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="urlAliasSchema" type="xsd:string"
+        minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            URL alias schema
+            If nothing is provided,
+            nameSchema will be used
+            instead.
+              </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="nameSchema" type="xsd:string"
+        minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            Name schema.
+            Can be composed of
+            FieldDefinition identifier place
+            holders.These place
+            holders
+            must comply this pattern :
+            &lt;field_definition_identifier&gt;.
+            An OR condition can
+            be
+            used :
+            &lt;field_def|other_field_def&gt;
+            In this
+            example,
+            field_def will be used if available. If not,
+            other_field_def
+            will be used for content name generation
+              </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="isContainer" type="xsd:boolean"
+        minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            Determines if the type is a container
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="mainLanguageCode" type="xsd:string"
+        minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            Main language
+              </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="defaultAlwaysAvailable" type="xsd:boolean"
+        minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            if an instance of acontent type is
+            created
+            the always available
+            flag is set by default this
+            this value.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="defaultSortField" type="sortFieldType"
+        minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            Specifies which property the child
+            locations should be sorted on by
+            default when created
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="defaultSortOrder" type="sortOrderType"
+        minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            Specifies whether the sort order should
+            be
+            ascending or descending by
+            default when created
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:element name="ContentTypeUpdate" type="vnd.ez.api.ContentTypeUpdate"></xsd:element>
+</xsd:schema>

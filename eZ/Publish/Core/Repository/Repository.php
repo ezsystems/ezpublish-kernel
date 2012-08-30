@@ -10,22 +10,13 @@
 namespace eZ\Publish\Core\Repository;
 use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\Logic,
     eZ\Publish\SPI\IO\Handler as IoHandler,
     eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\Core\Repository\ContentService,
-    eZ\Publish\Core\Repository\LanguageService,
-    eZ\Publish\Core\Repository\TrashService,
-    eZ\Publish\Core\Repository\LocationService,
-    eZ\Publish\Core\Repository\SectionService,
-    eZ\Publish\Core\Repository\ContentTypeService,
-    eZ\Publish\Core\Repository\RoleService,
-    eZ\Publish\Core\Repository\UserService,
-    eZ\Publish\Core\Repository\IOService,
-    eZ\Publish\Core\Repository\ObjectStateService,
     eZ\Publish\API\Repository\Values\ValueObject,
     eZ\Publish\API\Repository\Values\User\User,
+    Exception,
+    LogicException,
     RuntimeException;
 
 /**
@@ -77,6 +68,13 @@ class Repository implements RepositoryInterface
     protected $roleService;
 
     /**
+     * Instance of search service
+     *
+     * @var \eZ\Publish\API\Repository\SearchService
+     */
+    protected $searchService;
+
+    /**
      * Instance of user service
      *
      * @var \eZ\Publish\API\Repository\UserService
@@ -126,6 +124,41 @@ class Repository implements RepositoryInterface
     protected $objectStateService;
 
     /**
+     * Instance of field type service
+     *
+     * @var \eZ\Publish\API\Repository\FieldTypeService
+     */
+    protected $fieldTypeService;
+
+    /**
+     * Instance of validator service
+     *
+     * @var \eZ\Publish\Core\Repository\ValidatorService
+     */
+    protected $validatorService;
+
+    /**
+     * Instance of name schema resolver service
+     *
+     * @var \eZ\Publish\Core\Repository\NameSchemaService
+     */
+    protected $nameSchemaService;
+
+    /**
+     * Instance of URL alias service
+     *
+     * @var \eZ\Publish\Core\Repository\UrlAliasService
+     */
+    protected $urlAliasService;
+
+    /**
+     * Instance of URL wildcard service
+     *
+     * @var \eZ\Publish\Core\Repository\URLWildcardService
+     */
+    protected $urlWildcardService;
+
+    /**
      * Service settings, first level key is service name
      *
      * @var array
@@ -157,6 +190,14 @@ class Repository implements RepositoryInterface
             'trash' => array(),
             'io' => array(),
             'objectState' => array(),
+            'search' => array(),
+            'fieldType' => array(),
+            'urlAlias' => array(),
+            'urlWildcard' => array(),
+            'nameSchema' => array(
+                'limit' => 0,
+                'sequence' => ''
+            ),
         );
 
         if ( $user !== null )
@@ -171,7 +212,9 @@ class Repository implements RepositoryInterface
     public function getCurrentUser()
     {
         if ( !$this->user instanceof User )
+        {
             $this->user = $this->getUserService()->loadAnonymousUser();
+        }
 
         return $this->user;
     }
@@ -193,85 +236,94 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Check if user has access to a given module / function
      *
+     * Low level function, use canUser instead if you have objects to check against.
      *
      * @param string $module
      * @param string $function
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
      * @return boolean|array if limitations are on this function an array of limitations is returned
      */
     public function hasAccess( $module, $function, User $user = null )
     {
-        //@todo implement, see impl in ezp-next
+        if ( $user === null )
+            $user = $this->getCurrentUser();
+
+        foreach ( $this->getRoleService()->loadPoliciesByUserId( $user->id ) as $policy )
+        {
+            if ( $policy->module === '*' )
+                return true;
+
+            if ( $policy->module !== $module )
+                continue;
+
+            if ( $policy->function === '*' )
+                return true;
+
+            if ( $policy->function !== $function )
+                continue;
+
+            if ( $policy->limitations === '*' )
+                return true;
+
+            $limitationArray[] = $policy->limitations;
+        }
+
+        if ( !empty( $limitationArray ) )
+            return $limitationArray;
+
+        return false;// No policies matching $module and $function
     }
 
     /**
-     * Indicates if the current user is allowed to perform an action given by the function on the given
-     * objects
+     * Check if user has access to a given action on a given value object
      *
-     * @param string $module
-     * @param string $function
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $value
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $target
-     * @return array|bool
+     * Indicates if the current user is allowed to perform an action given by the function on the given
+     * objects.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
+     *
+     * @param string $module The module, aka controller identifier to check permissions on
+     * @param string $function The function, aka the controller action to check permissions on
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
+     *
+     * @return boolean
      */
-    public function canUser( $module, $function, ValueObject $value, ValueObject $target = null )
+    public function canUser( $module, $function, ValueObject $object, ValueObject $target = null )
     {
-        $className = $value;
         $limitationArray = $this->hasAccess( $module, $function );
         if ( $limitationArray === false || $limitationArray === true )
         {
             return $limitationArray;
         }
-        if ( empty( $definition['functions'][$function] ) )
-        {
-            throw new BadConfiguration(
-                "{$className}::definition()",
-                "function limitations returned for '{$function}', but none defined in definition()"
-            );
-        }
 
-        /**
-         * @todo Somewhere to get limitation logic from (functions), then $value should impl a interface
-         * that tells us where to get it from for instance.
-         * @var array $functions
-         */
-        $functions = $value::getLimitationFunctions();
+        $roleService = $this->getRoleService();
         foreach ( $limitationArray as $limitationSet )
         {
             $limitationSetSaysYes = true;
-            foreach ( $limitationSet as $limitationKey => $limitationValues )
+            /**
+             * @var \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
+             */
+            foreach ( $limitationSet as $limitationValue )
             {
-                if ( !isset( $functions[$function][$limitationKey]['compare'] ) )
-                {
-                    throw new Logic(
-                        "\$definition[functions][{$function}][{$limitationKey}][compare]",
-                        "could not find limitation compare function on {$className}::definition()"
-                    );
-                }
-
-                $limitationCompareFn = $functions[$function][$limitationKey]['compare'];
-                if ( !is_callable( $limitationCompareFn ) )
-                {
-                    throw new Logic(
-                        "\$definition[functions][{$function}][{$limitationKey}][compare]",
-                        "compare function from {$className}::definition() is not callable"
-                    );
-                }
-
-                if ( !$limitationCompareFn( $value, $limitationValues, $this, $target ) )
+                $type = $roleService->getLimitationType( $limitationValue->getIdentifier() );
+                if ( !$type->evaluate( $limitationValue, $this, $object, $target ) )
                 {
                     $limitationSetSaysYes = false;
                     // Break to next limitationSet
-                    break;
                     // If needed, there could be a if condition here building up an array of all limitations
-                    // that are denying user access
+                    // that are denying user access, for debug use.
+                    break;
                 }
             }
             if ( $limitationSetSaysYes )
                 return true;
         }
-        return false;
+        return false;// None of the limitation sets wanted to let you in, sorry!
     }
 
     /**
@@ -395,7 +447,11 @@ class Repository implements RepositoryInterface
      */
     public function getURLAliasService()
     {
-        throw new \Exception("@todo URLAliasService Not Implemented");
+        if ( $this->urlAliasService !== null )
+            return $this->urlAliasService;
+
+        $this->urlAliasService = new URLAliasService( $this, $this->persistenceHandler, $this->serviceSettings['urlAlias'] );
+        return $this->urlAliasService;
     }
 
     /**
@@ -405,7 +461,11 @@ class Repository implements RepositoryInterface
      */
     public function getURLWildcardService()
     {
-        throw new \Exception("@todo URLWildcardService Not Implemented");
+        if ( $this->urlWildcardService !== null )
+            return $this->urlWildcardService;
+
+        $this->urlWildcardService = new URLWildcardService( $this, $this->persistenceHandler, $this->serviceSettings['urlWildcard'] );
+        return $this->urlWildcardService;
     }
 
     /**
@@ -453,6 +513,62 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Get SearchService
+     *
+     * @return \eZ\Publish\API\Repository\SearchService
+     */
+    public function getSearchService()
+    {
+        if ( $this->searchService !== null )
+            return $this->searchService;
+
+        $this->searchService = new SearchService( $this, $this->persistenceHandler, $this->serviceSettings['search'] );
+        return $this->searchService;
+    }
+
+    /**
+     * Get FieldTypeService
+     *
+     * @return \eZ\Publish\API\Repository\FieldTypeService
+     */
+    public function getFieldTypeService()
+    {
+        if ( $this->fieldTypeService !== null )
+            return $this->fieldTypeService;
+
+        $this->fieldTypeService = new FieldTypeService( $this, $this->persistenceHandler, $this->serviceSettings['fieldType'] );
+        return $this->fieldTypeService;
+    }
+
+    /**
+     * Get ValidatorService
+     *
+     * @return \eZ\Publish\Core\Repository\ValidatorService
+     */
+    public function getValidatorService()
+    {
+        if ( $this->validatorService !== null )
+            return $this->validatorService;
+
+        $this->validatorService = new ValidatorService();
+        return $this->validatorService;
+    }
+
+    /**
+     * Get NameSchemaResolverService
+     *
+     * @return \eZ\Publish\Core\Repository\NameSchemaService
+     */
+    public function getNameSchemaService()
+    {
+        if ( $this->nameSchemaService !== null )
+            return $this->nameSchemaService;
+
+        $this->nameSchemaService = new NameSchemaService( $this, $this->serviceSettings['nameSchema'] );
+        return $this->nameSchemaService;
+    }
+
+    /**
      * Begin transaction
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,
@@ -472,7 +588,14 @@ class Repository implements RepositoryInterface
      */
     public function commit()
     {
-        $this->persistenceHandler->commit();
+        try
+        {
+            $this->persistenceHandler->commit();
+        }
+        catch ( Exception $e )
+        {
+            throw new RuntimeException( $e->getMessage(), 0, $e );
+        }
     }
 
     /**
@@ -484,6 +607,31 @@ class Repository implements RepositoryInterface
      */
     public function rollback()
     {
-        $this->persistenceHandler->rollback();
+        try
+        {
+            $this->persistenceHandler->rollback();
+        }
+        catch ( Exception $e )
+        {
+            throw new RuntimeException( $e->getMessage(), 0, $e );
+        }
+    }
+
+    /**
+     * Only for internal use.
+     *
+     * Creates a \DateTime object for $timestamp in the current time zone
+     *
+     * @param int $timestamp
+     * @return \DateTime
+     */
+    public function createDateTime( $timestamp = null )
+    {
+        $dateTime = new \DateTime();
+        if ( $timestamp !== null )
+        {
+            $dateTime->setTimestamp( $timestamp );
+        }
+        return $dateTime;
     }
 }

@@ -9,12 +9,11 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 use eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Type,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\Version,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
-    eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway as TypeGateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
+    eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway as TypeGateway;
 
 /**
  * Field Handler.
@@ -79,53 +78,82 @@ class FieldHandler
     {
         foreach ( $content->fields as $field )
         {
-            $field->versionNo = $content->versionInfo->versionNo;
-            $field->id = $this->contentGateway->insertNewField(
-                $content,
-                $field,
-                $this->mapper->convertToStorageValue( $field )
-            );
-
-            // If the storage handler returns true, it means that $field value has been modified
-            // So we need to update it in order to store those modifications
-            // Field converter is called once again via the Mapper
-            if ( $this->storageHandler->storeFieldData( $field ) === true )
-            {
-                $this->contentGateway->updateField(
-                    $field,
-                    $this->mapper->convertToStorageValue( $field )
-                );
-            }
+            $this->createNewField( $field, $content );
         }
     }
 
     /**
-     * Copies fields in the database
+     * Creates existing fields in a new version for $content
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @return void
      */
-    public function copyFields( Content $content )
+    public function createExistingFieldsInNewVersion( Content $content )
     {
         foreach ( $content->fields as $field )
         {
-            $field->versionNo = $content->versionInfo->versionNo;
-            $field->id = $this->contentGateway->insertNewField(
-                $content,
+            $this->createExistingFieldInNewVersion( $field, $content );
+        }
+    }
+
+    /**
+     * Creates a new field in the database
+     *
+     * Used by self::createNewFields() and self::updateFields()
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     *
+     * return void
+     */
+    protected function createNewField( Field $field, Content $content )
+    {
+        $field->versionNo = $content->versionInfo->versionNo;
+
+        $field->id = $this->contentGateway->insertNewField(
+            $content,
+            $field,
+            $this->mapper->convertToStorageValue( $field )
+        );
+
+        // If the storage handler returns true, it means that $field value has been modified
+        // So we need to update it in order to store those modifications
+        // Field converter is called once again via the Mapper
+        if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
+        {
+            $this->contentGateway->updateField(
                 $field,
                 $this->mapper->convertToStorageValue( $field )
             );
+        }
+    }
 
-            // If the storage handler returns true, it means that $field value has been modified
-            // So we need to update it in order to store those modifications
-            // Field converter is called once again via the Mapper
-            if ( $this->storageHandler->copyFieldData( $field ) === true )
-            {
-                $this->contentGateway->updateField(
-                    $field,
-                    $this->mapper->convertToStorageValue( $field )
-                );
-            }
+    /**
+     * Creates an existing field in a new version, no new ID is generated
+     *
+     * @param Field $field
+     * @param Content $content
+     * @return void
+     */
+    public function createExistingFieldInNewVersion( Field $field, Content $content )
+    {
+        $field->versionNo = $content->versionInfo->versionNo;
+
+        $this->contentGateway->insertExistingField(
+            $content,
+            $field,
+            $this->mapper->convertToStorageValue( $field )
+        );
+
+        // If the storage handler returns true, it means that $field value has been modified
+        // So we need to update it in order to store those modifications
+        // Field converter is called once again via the Mapper
+        if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
+        {
+            $this->contentGateway->updateField(
+                $field,
+                $this->mapper->convertToStorageValue( $field )
+            );
         }
     }
 
@@ -139,30 +167,24 @@ class FieldHandler
     {
         foreach ( $content->fields as $field )
         {
-            $this->storageHandler->getFieldData( $field );
+            $this->storageHandler->getFieldData( $content->versionInfo, $field );
         }
     }
 
     /**
      * Updates the fields in for content identified by $contentId and $versionNo in the database in respect to $updateStruct
      *
-     * @param int $contentId
-     * @param int $versionNo
+     * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $updateStruct
+     *
      * @return void
      */
-    public function updateFields( $contentId, $versionNo, UpdateStruct $updateStruct )
+    public function updateFields( $content, UpdateStruct $updateStruct )
     {
         foreach ( $updateStruct->fields as $field )
         {
-            $field->versionNo = $versionNo;
-
-            if (
-                $this->typeGateway->isFieldTranslatable(
-                    $field->fieldDefinitionId,
-                    0
-                )
-            )
+            $field->versionNo = $content->versionInfo->versionNo;
+            if ( isset( $field->id ) )
             {
                 $this->contentGateway->updateField(
                     $field,
@@ -171,17 +193,13 @@ class FieldHandler
             }
             else
             {
-                $this->contentGateway->updateNonTranslatableField(
-                    $field,
-                    $this->mapper->convertToStorageValue( $field ),
-                    $contentId
-                );
+                $this->createNewField( $field, $content );
             }
 
             // If the storage handler returns true, it means that $field value has been modified
             // So we need to update it in order to store those modifications
             // Field converter is called once again via the Mapper
-            if ( $this->storageHandler->storeFieldData( $field ) === true )
+            if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
             {
                 $this->contentGateway->updateField(
                     $field,
@@ -192,20 +210,19 @@ class FieldHandler
     }
 
     /**
-     * Deletes the fields in $content from the database.
-     * If $versionNo is set only field IDs for that version are returned.
+     * Deletes the fields for $contentId in $versionInfo from the database
      *
      * @param int $contentId
-     * @param int|null $versionNo
-     *
+     * @param eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @return void
      */
-    public function deleteFields( $contentId, $versionNo = null )
+    public function deleteFields( $contentId, VersionInfo $versionInfo )
     {
-        foreach ( $this->contentGateway->getFieldIdsByType( $contentId, $versionNo ) as $fieldType => $ids )
+        foreach ( $this->contentGateway->getFieldIdsByType( $contentId, $versionInfo->versionNo )
+            as $fieldType => $ids )
         {
-            $this->storageHandler->deleteFieldData( $fieldType, $ids );
+            $this->storageHandler->deleteFieldData( $fieldType, $versionInfo, $ids );
         }
-        $this->contentGateway->deleteFields( $contentId, $versionNo );
+        $this->contentGateway->deleteFields( $contentId, $versionInfo->versionNo );
     }
 }

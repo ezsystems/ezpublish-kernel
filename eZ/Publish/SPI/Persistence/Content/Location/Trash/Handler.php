@@ -8,10 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content\Location\Trash;
-use eZ\Publish\SPI\Persistence\Content\Location,
-    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * The Trash Handler interface defines operations on Location elements in the storage engine.
@@ -52,7 +49,7 @@ interface Handler
      * @param mixed $trashedId
      * @param mixed $newParentId
      * @return int Newly restored location id
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If $newParentId is invalid
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $newParentId is invalid
      */
     public function recover( $trashedId, $newParentId );
 

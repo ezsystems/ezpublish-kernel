@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry;
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
 
 /**
  * Test case for FieldValue Converter Registry
@@ -19,15 +18,12 @@ class FieldValueConverterRegistryTest extends TestCase
 {
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry::register
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::register
      */
     public function testRegister()
     {
-        $registry = new Registry();
-
         $converter = $this->getFieldValueConverterMock();
-
-        $registry->register( 'some-type', $converter );
+        $registry = new Registry( array( 'some-type' => $converter ) );
 
         $this->assertAttributeSame(
             array(
@@ -40,14 +36,12 @@ class FieldValueConverterRegistryTest extends TestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry::getConverter
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::getConverter
      */
     public function testGetStorage()
     {
-        $registry = new Registry();
-
         $converter = $this->getFieldValueConverterMock();
-        $registry->register( 'some-type', $converter );
+        $registry = new Registry( array( 'some-type' => $converter ) );
 
         $res = $registry->getConverter( 'some-type' );
 
@@ -59,14 +53,13 @@ class FieldValueConverterRegistryTest extends TestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry::getConverter
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::getConverter
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      * @expectedException eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
-     * @expectedExceptionMessage FieldValue Converter for type "not-found" not found.
      */
     public function testGetNotFound()
     {
-        $registry = new Registry();
+        $registry = new Registry( array() );
 
         $registry->getConverter( 'not-found' );
     }

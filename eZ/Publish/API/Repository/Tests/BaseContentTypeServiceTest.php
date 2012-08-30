@@ -9,9 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\Content\Location;
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\StringLengthValidatorStub;
-
 /**
  * Base class for content type specific tests.
  */
@@ -26,7 +23,7 @@ abstract class BaseContentTypeServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $creatorId = $this->generateId( 'user', 23 );
+        $creatorId = $this->generateId( 'user', 14 );
         /* BEGIN: Inline */
         $contentTypeService = $repository->getContentTypeService();
 
@@ -42,63 +39,62 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         $typeCreate->nameSchema = 'name|scheme';
         $typeCreate->names = array(
             'eng-US' => 'Blog post',
-            'de-DE' => 'Blog-Eintrag',
+            'ger-DE' => 'Blog-Eintrag',
         );
         $typeCreate->descriptions = array(
             'eng-US' => 'A blog post',
-            'de-DE' => 'Ein Blog-Eintrag',
+            'ger-DE' => 'Ein Blog-Eintrag',
         );
         // $creatorId contains the ID of user 23
         $typeCreate->creatorId = $creatorId;
-        $typeCreate->creationDate = new \DateTime();
+        $typeCreate->creationDate = $this->getRepository()->createDateTime();
 
         $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'title', 'string'
+            'title', 'ezstring'
         );
         $titleFieldCreate->names = array(
             'eng-US' => 'Title',
-            'de-DE' => 'Titel',
+            'ger-DE' => 'Titel',
         );
         $titleFieldCreate->descriptions = array(
             'eng-US' => 'Title of the blog post',
-            'de-DE' => 'Titel des Blog-Eintrages',
+            'ger-DE' => 'Titel des Blog-Eintrages',
         );
         $titleFieldCreate->fieldGroup = 'blog-content';
         $titleFieldCreate->position = 1;
         $titleFieldCreate->isTranslatable = true;
         $titleFieldCreate->isRequired = true;
         $titleFieldCreate->isInfoCollector = false;
-        $titleFieldCreate->validators = array(
-            new StringLengthValidatorStub(),
+        $titleFieldCreate->validatorConfiguration = array(
+            'StringLengthValidator' => array(
+                'minStringLength' => 0,
+                'maxStringLength' => 0,
+            ),
         );
-        $titleFieldCreate->fieldSettings = array(
-            'textblockheight' => 10
-        );
+        $titleFieldCreate->fieldSettings = array();
         $titleFieldCreate->isSearchable = true;
 
         $typeCreate->addFieldDefinition( $titleFieldCreate );
 
         $bodyFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'body', 'text'
+            'body', 'eztext'
         );
         $bodyFieldCreate->names = array(
             'eng-US' => 'Body',
-            'de-DE' => 'Textkörper',
+            'ger-DE' => 'Textkörper',
         );
         $bodyFieldCreate->descriptions = array(
             'eng-US' => 'Body of the blog post',
-            'de-DE' => 'Textkörper des Blog-Eintrages',
+            'ger-DE' => 'Textkörper des Blog-Eintrages',
         );
         $bodyFieldCreate->fieldGroup = 'blog-content';
         $bodyFieldCreate->position = 2;
         $bodyFieldCreate->isTranslatable = true;
         $bodyFieldCreate->isRequired = true;
         $bodyFieldCreate->isInfoCollector = false;
-        $bodyFieldCreate->validators = array(
-            new StringLengthValidatorStub(),
-        );
+        $bodyFieldCreate->validatorConfiguration = array();
         $bodyFieldCreate->fieldSettings = array(
-            'textblockheight' => 80
+            'textRows' => 80
         );
         $bodyFieldCreate->isSearchable = true;
 

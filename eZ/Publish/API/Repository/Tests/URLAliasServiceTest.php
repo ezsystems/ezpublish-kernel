@@ -15,8 +15,9 @@ use eZ\Publish\API\Repository\Values\Content\URLAlias;
  * Test case for operations in the URLAliasService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\URLAliasService
+ * @group url-alias
  */
-class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
+class URLAliasServiceTest extends BaseTest
 {
     /**
      * Tests that the required <b>LocationService::loadLocation()</b>
@@ -262,7 +263,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         // Throws InvalidArgumentException, since this path already exists for the
         // language
         $createdUrlAlias = $urlAliasService->createUrlAlias(
-            $location, '/Support', 'eng-US'
+            $location, '/Design/Plain-site', 'eng-US'
         );
         /* END: Use Case */
     }
@@ -282,7 +283,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $urlAliasService = $repository->getURLAliasService();
 
         $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
-            '/Home/My-Site', '/Home/My-New-Site', 'eng-US'
+            'module:content/search?SearchText=eZ', 'Home/My-New-Site', 'eng-US'
         );
         /* END: Use Case */
 
@@ -305,8 +306,8 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $this->assertPropertiesCorrect(
             array(
                 'type' => URLAlias::RESOURCE,
-                'destination' => '/Home/My-Site',
-                'path' => '/Home/My-New-Site',
+                'destination' => 'module:content/search?SearchText=eZ',
+                'path' => 'Home/My-New-Site',
                 'languageCodes' => array( 'eng-US' ),
                 'alwaysAvailable' => false,
                 'isHistory' => false,
@@ -332,7 +333,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $urlAliasService = $repository->getURLAliasService();
 
         $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
-            '/Home/My-Site', '/Home/My-New-Site', 'eng-US', true
+            'module:content/search?SearchText=eZ', 'Home/My-New-Site', 'eng-US', true
         );
         /* END: Use Case */
 
@@ -355,8 +356,8 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $this->assertPropertiesCorrect(
             array(
                 'type' => URLAlias::RESOURCE,
-                'destination' => '/Home/My-Site',
-                'path' => '/Home/My-New-Site',
+                'destination' => 'module:content/search?SearchText=eZ',
+                'path' => 'Home/My-New-Site',
                 'languageCodes' => array( 'eng-US' ),
                 'alwaysAvailable' => false,
                 'isHistory' => false,
@@ -382,7 +383,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $urlAliasService = $repository->getURLAliasService();
 
         $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
-            '/Home/My-Site', '/Home/My-New-Site', 'eng-US', false, true
+            'module:content/search?SearchText=eZ', 'Home/My-New-Site', 'eng-US', false, true
         );
         /* END: Use Case */
 
@@ -405,8 +406,8 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $this->assertPropertiesCorrect(
             array(
                 'type' => URLAlias::RESOURCE,
-                'destination' => '/Home/My-Site',
-                'path' => '/Home/My-New-Site',
+                'destination' => 'module:content/search?SearchText=eZ',
+                'path' => 'Home/My-New-Site',
                 'languageCodes' => array( 'eng-US' ),
                 'alwaysAvailable' => true,
                 'isHistory' => false,
@@ -434,7 +435,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         // Throws InvalidArgumentException, since this path already exists for the
         // language
         $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
-            '/My-new-Site', '/Support', 'eng-US'
+            'module:content/search?SearchText=eZ', '/Design/Plain-site', 'eng-US'
         );
         /* END: Use Case */
     }
@@ -521,10 +522,10 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         // Create a second URL alias for $location, this is a "custom" one
         $urlAliasService->createUrlAlias(
-            $location, '/My/Great-new-Site', 'nor-NO'
+            $location, '/My/Great-new-Site', 'ger-DE'
         );
 
-        // $loadedAliases will contain all 3 aliases
+        // $loadedAliases will contain 2 aliases in eng-US only
         $loadedAliases = $urlAliasService->listLocationAliases(
             $location, false, 'eng-US'
         );
@@ -558,7 +559,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $location = $locationService->loadLocation( $locationId );
         // Create a second URL alias for $location
         $urlAliasService->createUrlAlias(
-            $location, '/My/Great-new-Site', 'nor-NO'
+            $location, '/My/Great-new-Site', 'ger-DE'
         );
 
         // $loadedAliases will contain only 2 of 3 aliases
@@ -614,13 +615,13 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
 
         /* BEGIN: Inline */
         $urlAliasService->createGlobalUrlAlias(
-            '/Support', '/My/Special-Support', 'eng-US'
+            'module:content/search?SearchText=eZ', 'My/Special-Support', 'eng-US'
         );
         $urlAliasService->createGlobalUrlAlias(
-            '/Support', '/My/Spezial-Unterstützung', 'ger-DE'
+            'module:content/search?SearchText=eZ', 'My/Spezial-Unterstützung', 'ger-DE'
         );
         $urlAliasService->createGlobalUrlAlias(
-            '/Home', '/My/Fancy-Site', 'eng-US'
+            'module:content/search?SearchText=Sindelfingen', 'My/Fancy-Site', 'eng-US'
         );
         /* END: Inline */
     }
@@ -793,7 +794,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         // Create aliases in multiple languages
         $this->createGlobalAliases();
 
-        $loadedAlias = $urlAliasService->lookUp( '/My/Special-Support', 'eng-US' );
+        $loadedAlias = $urlAliasService->lookUp( 'My/Special-Support', 'eng-US' );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -801,7 +802,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
             $loadedAlias
         );
         $this->assertEquals(
-            '/Support',
+            'module:content/search?SearchText=eZ',
             $loadedAlias->destination
         );
     }
@@ -840,7 +841,7 @@ class URLAliasServiceTest extends \eZ\Publish\API\Repository\Tests\BaseTest
         $urlAliasService = $repository->getURLAliasService();
 
         // Throws NotFoundException
-        $loadedAlias = $urlAliasService->lookUp( '/Setup2', 'ger-DE' );
+        $loadedAlias = $urlAliasService->lookUp( '/Contact-Us', 'ger-DE' );
         /* END: Use Case */
     }
 }

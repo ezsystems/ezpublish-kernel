@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class
+ * File contains: eZ\Publish\SPI\Tests\FieldType\BaseIntegrationTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,7 +10,11 @@
 namespace eZ\Publish\SPI\Tests\FieldType;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy,
-    eZ\Publish\SPI\Persistence\Content;
+    eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\Type,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 
 /**
  * Integration test for the legacy storage
@@ -48,21 +52,33 @@ abstract class BaseIntegrationTest extends TestCase
     protected static $contentVersion;
 
     /**
-     * Get name of tested field tyoe
+     * Returns the identifier of the FieldType under test
      *
      * @return string
      */
     abstract public function getTypeName();
 
     /**
-     * Get handler with required custom field types registered
+     * Returns the Handler with all necessary objects registered
      *
-     * @return Handler
+     * Returns an instance of the Persistence Handler where the
+     * FieldTypy\Storage has been registered.
+     *
+     * @return \eZ\Publish\SPI\Persistence\Handler
      */
     abstract public function getCustomHandler();
 
     /**
-     * Get field definition data values
+     * Returns the FieldTypeConstraints to be used to create a field definition
+     * of the FieldType under test.
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints
+     */
+    abstract public function getTypeConstraints();
+
+    /**
+     * Returns the field definition data expected after loading the newly
+     * created field definition with the FieldType under test
      *
      * This is a PHPUnit data provider
      *
@@ -71,50 +87,62 @@ abstract class BaseIntegrationTest extends TestCase
     abstract public function getFieldDefinitionData();
 
     /**
-     * Get initial field externals data
+     * Get initial field value
      *
-     * @return array
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    abstract public function getInitialFieldData();
+    abstract public function getInitialValue();
 
     /**
-     * Get externals field data values
+     * Asserts that the loaded field data is correct
      *
-     * This is a PHPUnit data provider
-     *
-     * @return array
+     * Performs assertions on the loaded field, mainly checking that the
+     * $field->value->externalData is loaded correctly. If the loading of
+     * external data manipulates other aspects of $field, their correctness
+     * also needs to be asserted. Make sure you implement this method agnostic
+     * to the used SPI\Persistence implementation!
      */
-    abstract public function getExternalsFieldData();
+    public function assertLoadedFieldDataCorrect( Field $field )
+    {
+        $this->assertEquals(
+            $this->getInitialValue(),
+            $field->value
+        );
+    }
 
     /**
-     * Get update field externals data
+     * Get update field value.
      *
-     * @return array
+     * Use to update the field
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    abstract public function getUpdateFieldData();
+    abstract public function getUpdatedValue();
 
     /**
-     * Get externals updated field data values
+     * Asserts that the updated field data is loaded correct
      *
-     * This is a PHPUnit data provider
+     * Performs assertions on the loaded field after it has been updated,
+     * mainly checking that the $field->value->externalData is loaded
+     * correctly. If the loading of external data manipulates other aspects of
+     * $field, their correctness also needs to be asserted. Make sure you
+     * implement this method agnostic to the used SPI\Persistence
+     * implementation!
      *
-     * @return array
+     * @return void
      */
-    abstract public function getUpdatedExternalsFieldData();
-
-    /**
-     * Get externals copied field data values
-     *
-     * This is a PHPUnit data provider
-     *
-     * @return array
-     */
-    abstract public function getCopiedExternalsFieldData();
+    public function assertUpdatedFieldDataCorrect( Field $field )
+    {
+        $this->assertEquals(
+            $this->getUpdatedValue(),
+            $field->value
+        );
+    }
 
     /**
      * Method called after content creation
      *
-     * Useful, if additional stuff should be executed (like creating the actual 
+     * Useful, if additional stuff should be executed (like creating the actual
      * user).
      *
      * @param Legacy\Handler $handler
@@ -122,6 +150,17 @@ abstract class BaseIntegrationTest extends TestCase
      * @return void
      */
     public function postCreationHook( Legacy\Handler $handler, Content $content )
+    {
+        // Do nothing by default
+    }
+
+    /**
+     * Can be overwritten to assert that additional data has been deleted
+     *
+     * @param Content $content
+     * @return void
+     */
+    public function assertDeletedFieldDataCorrect( Content $content )
     {
         // Do nothing by default
     }
@@ -150,6 +189,22 @@ abstract class BaseIntegrationTest extends TestCase
     }
 
     public function testCreateContentType()
+    {
+        $contentType = $this->createContentType();
+
+        $this->assertNotNull( $contentType->id );
+        self::$contentTypeId = $contentType->id;
+
+        return $contentType;
+    }
+
+    /**
+     * Performs the creation of the content type with a field of the field type
+     * under test
+     *
+     * @return ContentType
+     */
+    protected function createContentType()
     {
         $createStruct = new Content\Type\CreateStruct( array(
             'name'              => array( 'eng-GB' => 'Test' ),
@@ -181,18 +236,14 @@ abstract class BaseIntegrationTest extends TestCase
                 'fieldType'      => $this->getTypeName(),
                 'isTranslatable' => false,
                 'isRequired'     => true,
+                'fieldTypeConstraints' => $this->getTypeConstraints(),
             ) ),
         );
 
         $handler            = $this->getCustomHandler();
         $contentTypeHandler = $handler->contentTypeHandler();
 
-        $contentType = $contentTypeHandler->create( $createStruct );
-
-        $this->assertNotNull( $contentType->id );
-        self::$contentTypeId = $contentType->id;
-
-        return $contentType;
+        return $contentTypeHandler->create( $createStruct );
     }
 
     /**
@@ -247,47 +298,63 @@ abstract class BaseIntegrationTest extends TestCase
      */
     public function testCreateContent( $contentType )
     {
-        $createStruct = new Content\CreateStruct( array(
-            'name'              => array( 'eng-GB' => 'Test object' ),
-            'typeId'            => $contentType->id,
-            'sectionId'         => 1,
-            'ownerId'           => 14,
-            'locations'         => array( new Content\Location\CreateStruct( array( 'parentId' => 2 ) ) ),
-            'initialLanguageId' => 2,
-            'remoteId'          => 'sindelfingen',
-            'modified'          => time(),
-            'fields'            => array(
-                new Content\Field( array(
-                    'type'              => 'ezstring',
-                    'languageCode'      => 'eng-GB',
-                    'fieldDefinitionId' => $contentType->fieldDefinitions[0]->id,
-                    'value'             => new Content\FieldValue( array(
-                        'data'    => 'This is just a test object',
-                        'sortKey' => array( 'sort_key_string' => 'This is just a test object' ),
-                    ) ),
-                ) ),
-                new Content\Field( array(
-                    'type'              => 'ezuser',
-                    'languageCode'      => 'eng-GB',
-                    'fieldDefinitionId' => $contentType->fieldDefinitions[1]->id,
-                    'value'             => new Content\FieldValue( array(
-                        'data'         => null,
-                        'externalData' => $this->getInitialFieldData(),
-                    ) ),
-                ) ),
-            ),
-        ) );
-
         $handler = $this->getCustomHandler();
-        $contentHandler = $handler->contentHandler();
 
-        $content = $contentHandler->create( $createStruct );
+        $content = $this->createContent( $contentType, $this->getInitialValue() );
+
         self::$contentId      = $content->contentInfo->id;
         self::$contentVersion = $content->contentInfo->currentVersionNo;
 
         $this->postCreationHook( $handler, $content );
 
         return $content;
+    }
+
+    /**
+     * Creates content of the given $contentType with $fieldValue in
+     * $languageCode
+     *
+     * @param Type $contentType
+     * @param mixed $fieldValue
+     * @param string $languageCode
+     * @return Content
+     */
+    protected function createContent( Type $contentType, $fieldValue, $languageCode = 'eng-GB' )
+    {
+        $createStruct = new Content\CreateStruct( array(
+            'name'              => array( $languageCode => 'Test object' ),
+            'typeId'            => $contentType->id,
+            'sectionId'         => 1,
+            'ownerId'           => 14,
+            'locations'         => array( new Content\Location\CreateStruct( array(
+                'parentId' => 2,
+                'remoteId' => 'sindelfingen',
+            ) ) ),
+            'initialLanguageId' => 2,
+            'remoteId'          => microtime(),
+            'modified'          => time(),
+            'fields'            => array(
+                new Content\Field( array(
+                    'type'              => 'ezstring',
+                    'languageCode'      => $languageCode,
+                    'fieldDefinitionId' => $contentType->fieldDefinitions[0]->id,
+                    'value'             => new Content\FieldValue( array(
+                        'data'    => 'This is just a test object',
+                        'sortKey' => 'this is just a test object',
+                    ) ),
+                ) ),
+                new Content\Field( array(
+                    'type'              => $this->getTypeName(),
+                    'languageCode'      => $languageCode,
+                    'fieldDefinitionId' => $contentType->fieldDefinitions[1]->id,
+                    'value'             => $fieldValue,
+                ) ),
+            ),
+        ) );
+
+        $handler = $this->getCustomHandler();
+        $contentHandler = $handler->contentHandler();
+        return $contentHandler->create( $createStruct );
     }
 
     /**
@@ -303,6 +370,9 @@ abstract class BaseIntegrationTest extends TestCase
         return $content->fields[1];
     }
 
+    /**
+     * @depends testCreateContent
+     */
     public function testLoadField()
     {
         $handler = $this->getCustomHandler();
@@ -326,19 +396,10 @@ abstract class BaseIntegrationTest extends TestCase
 
     /**
      * @depends testLoadFieldType
-     * @dataProvider getExternalsFieldData
      */
-    public function testLoadExternalData( $name, $value, $field )
+    public function testLoadExternalData( $field )
     {
-        if ( !array_key_exists( $name, $field->value->externalData ) )
-        {
-            $this->fail( "Property $name not avialable." );
-        }
-
-        $this->assertEquals(
-            $value,
-            $field->value->externalData[$name]
-        );
+        $this->assertLoadedFieldDataCorrect( $field );
     }
 
     /**
@@ -346,9 +407,24 @@ abstract class BaseIntegrationTest extends TestCase
      */
     public function testUpdateField( $field )
     {
+        $field->value = $this->getUpdatedValue();
+
+        return $this->updateContent( self::$contentId, self::$contentVersion, $field );
+    }
+
+    /**
+     * Performs an update on $contentId in $contentVersion setting $field
+     *
+     * @param mixed $contentId
+     * @param mixed $contentVersion
+     * @param Field $field
+     * @return Content
+     */
+    protected function updateContent( $contentId, $contentVersion, Field $field )
+    {
         $handler = $this->getCustomHandler();
 
-        $field->value->externalData = $this->getUpdateFieldData();
+        $field->value = $this->getUpdatedValue();
         $updateStruct = new \eZ\Publish\SPI\Persistence\Content\UpdateStruct( array(
             'creatorId' => 14,
             'modificationDate' => time(),
@@ -359,7 +435,7 @@ abstract class BaseIntegrationTest extends TestCase
         ) );
 
         $contentHandler = $handler->contentHandler();
-        return $contentHandler->updateContent( self::$contentId, self::$contentVersion, $updateStruct );
+        return $contentHandler->updateContent( $contentId, $contentVersion, $updateStruct );
     }
 
     /**
@@ -377,88 +453,44 @@ abstract class BaseIntegrationTest extends TestCase
 
     /**
      * @depends testUpdateFieldType
-     * @dataProvider getUpdatedExternalsFieldData
      */
-    public function testUpdateExternalData( $name, $value, $field )
+    public function testUpdateExternalData( $field )
     {
-        if ( !array_key_exists( $name, $field->value->externalData ) )
-        {
-            $this->fail( "Property $name not avialable." );
-        }
-
-        $this->assertEquals(
-            $value,
-            $field->value->externalData[$name]
-        );
+        $this->assertUpdatedFieldDataCorrect( $field );
     }
 
     /**
-     * @depends testCreateContent
-     */
-    public function testCopyField( $content )
-    {
-        $handler        = $this->getCustomHandler();
-        $contentHandler = $handler->contentHandler();
-
-        $copied = $contentHandler->copy( self::$contentId, self::$contentVersion );
-
-        $this->assertNotSame(
-            $content->versionInfo->contentId,
-            $copied->versionInfo->contentId
-        );
-
-        return $contentHandler->load(
-            $copied->versionInfo->contentId,
-            $copied->versionInfo->versionNo
-        );
-    }
-
-    /**
-     * @depends testCopyField
-     */
-    public function testCopiedFieldType( $content )
-    {
-        $this->assertSame(
-            $this->getTypeName(),
-            $content->fields[1]->type
-        );
-
-        return $content->fields[1];
-    }
-
-    /**
-     * @depends testCopiedFieldType
-     * @dataProvider getCopiedExternalsFieldData
-     */
-    public function testCopiedExternalData( $name, $value, $field )
-    {
-        if ( !array_key_exists( $name, $field->value->externalData ) )
-        {
-            $this->fail( "Property $name not avialable." );
-        }
-
-        $this->assertEquals(
-            $value,
-            $field->value->externalData[$name]
-        );
-    }
-
-    /**
-     * @depends testCopyField
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @depends testUpdateField
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDeleteField( $content )
     {
         $handler        = $this->getCustomHandler();
         $contentHandler = $handler->contentHandler();
 
-        $contentHandler->removeRawContent(
-            $content->versionInfo->contentId
-        );
+        $this->deleteContent( $content );
+
+        $this->assertDeletedFieldDataCorrect( $content );
 
         $contentHandler->load(
             $content->versionInfo->contentId,
             $content->versionInfo->versionNo
+        );
+    }
+
+    /**
+     * Deletes the given $content
+     *
+     * @param Content $content
+     * @return void
+     */
+    protected function deleteContent( Content $content )
+    {
+        $handler        = $this->getCustomHandler();
+        $contentHandler = $handler->contentHandler();
+
+        $contentHandler->removeRawContent(
+            $content->versionInfo->contentId
         );
     }
 
@@ -470,25 +502,22 @@ abstract class BaseIntegrationTest extends TestCase
     protected function getHandler()
     {
         return new Legacy\Handler(
-            array(
-                'external_storage' => array(
-                    'ezstring' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
-                ),
-                'field_converter' => array(
-                    'ezstring' => 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\TextLine',
+            self::$setUp,
+            new ConverterRegistry(
+                array(
+                    'ezstring' => new Legacy\Content\FieldValue\Converter\TextLine(),
                 )
             ),
-            self::$setUp
+            new StorageRegistry(
+                array()
+            ),
+            $this->getMock(
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Search\\TransformationProcessor',
+                array(),
+                array(),
+                '',
+                false
+            )
         );
-    }
-
-    /**
-     * Returns the test suite with all tests declared in this class.
-     *
-     * @return \PHPUnit_Framework_TestSuite
-     */
-    public static function suite()
-    {
-        return new \PHPUnit_Framework_TestSuite( get_called_class() );
     }
 }

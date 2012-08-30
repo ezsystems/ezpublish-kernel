@@ -98,11 +98,15 @@ interface ContentTypeService
      *
      * The content type is created in the state STATUS_DRAFT.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the identifier or remoteId in the content type create struct already exists
-     *         or there is a dublicate field identifier or the array of groups is empty
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException In case when
+     *         - array of content type groups does not contain at least one content type group
+     *         - identifier or remoteId in the content type create struct already exists
+     *         - there is a duplicate field identifier in the content type create struct
+     *         - content type create struct does not contain at least one field definition create struct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
-     * @param array $contentTypeGroups Required array of {@link ContentTypeGroup} to link type with (must contain one)
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $contentTypeGroups Required array of
+     *        {@link ContentTypeGroup} to link type with (must contain one)
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
@@ -308,7 +312,7 @@ interface ContentTypeService
     public function newContentTypeCreateStruct( $identifier );
 
     /**
-     * instanciates a new content type update struct
+     * Instantiates a new content type update struct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct
      */
@@ -337,15 +341,4 @@ interface ContentTypeService
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct
      */
     public function newFieldDefinitionUpdateStruct();
-
-    /**
-     * Instantiates a FieldType\Type object
-     *
-     * @todo Add to API or remove!
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $type not priorly setup with settings injected to service
-     *
-     * @param string $type
-     * @return \eZ\Publish\SPI\FieldType\FieldType
-     */
-    public function buildFieldType( $type );
 }

@@ -14,13 +14,9 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\Relation as RelationValue,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\API\Repository\Values\Content\Relation,
-    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue;
+    eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 /**
  * Test case for ContentHandler using in memory storage.
@@ -111,7 +107,7 @@ class ContentHandlerTest extends HandlerTest
         $struct->ownerId = 14;
         $struct->sectionId = 1;
         $struct->typeId = 2;
-        $struct->initialLanguageId = 4;
+        $struct->initialLanguageId = 8;
         $struct->modified = time();
         $struct->fields[] = new Field(
             array(
@@ -189,7 +185,7 @@ class ContentHandlerTest extends HandlerTest
                 "name" => "the all new name",
                 "publicationDate" => time(),
                 "modificationDate" => time(),
-                "mainLanguageId" => 4,
+                "mainLanguageId" => 8,
                 "alwaysAvailable" => false,
                 "remoteId" => "the-all-new-remoteid"
             )
@@ -203,7 +199,7 @@ class ContentHandlerTest extends HandlerTest
         $this->assertEquals( $updateStruct->publicationDate, $contentInfo->publicationDate );
         $this->assertEquals( $updateStruct->modificationDate, $contentInfo->modificationDate );
         $this->assertEquals( "eng-GB", $contentInfo->mainLanguageCode );
-        $this->assertFalse( $contentInfo->isAlwaysAvailable );
+        $this->assertFalse( $contentInfo->alwaysAvailable );
         $this->assertEquals( $updateStruct->remoteId, $contentInfo->remoteId );
     }
 
@@ -459,7 +455,7 @@ class ContentHandlerTest extends HandlerTest
         $content = $contentHandler->copy( 1, 1 );
         $this->contentToDelete[] = $content;
 
-        $draft = $contentHandler->createDraftFromVersion( $content->contentInfo->id, 1 );
+        $draft = $contentHandler->createDraftFromVersion( $content->contentInfo->id, 1, 10 );
 
         self::assertSame( $content->contentInfo->currentVersionNo + 1, $draft->versionInfo->versionNo );
         self::assertGreaterThanOrEqual( $time, $draft->versionInfo->creationDate );

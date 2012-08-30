@@ -35,15 +35,9 @@ class InMemoryHandler implements IoHandlerInterface
      */
     private $data;
 
-    /**
-     * File data resources (handles)
-     * @var resource[]
-     */
-    private $resources = array();
-
-    public function __construct()
+    public function __construct( array $storage = array() )
     {
-        $this->storage = array();
+        $this->storage = $storage;
     }
 
     /**
@@ -71,6 +65,7 @@ class InMemoryHandler implements IoHandlerInterface
 
         $binaryFile = new BinaryFile();
         $binaryFile->path = $createFilestruct->path;
+        $binaryFile->uri = $createFilestruct->path;
         $binaryFile->mimeType = $createFilestruct->mimeType;
         $binaryFile->ctime = new DateTime;
         $binaryFile->mtime = clone $binaryFile->ctime;

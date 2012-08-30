@@ -16,9 +16,7 @@ use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exceptions\Logic,
-    eZ\Publish\Core\Persistence\InMemory\Handler,
-    eZ\Publish\Core\Persistence\InMemory\Backend;
+    LogicException;
 
 /**
  * Storage Engine handler for user module
@@ -26,20 +24,20 @@ use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
 class UserHandler implements UserHandlerInterface
 {
     /**
-     * @var Handler
+     * @var \eZ\Publish\Core\Persistence\InMemory\Handler
      */
     protected $handler;
 
     /**
-     * @var Backend
+     * @var \eZ\Publish\Core\Persistence\InMemory\Backend
      */
     protected $backend;
 
     /**
      * Setups current handler instance with reference to Handler object that created it.
      *
-     * @param Handler $handler
-     * @param Backend $backend The storage engine backend
+     * @param \eZ\Publish\Core\Persistence\InMemory\Handler $handler
+     * @param \eZ\Publish\Core\Persistence\InMemory\Backend $backend The storage engine backend
      */
     public function __construct( Handler $handler, Backend $backend )
     {
@@ -55,7 +53,7 @@ class UserHandler implements UserHandlerInterface
      *
      * @param \eZ\Publish\SPI\Persistence\User $user
      * @return \eZ\Publish\SPI\Persistence\User
-     * @throws \eZ\Publish\Core\Base\Exceptions\Logic If no id was provided or if it already exists
+     * @throws LogicException If no id was provided or if it already exists
      */
     public function create( User $user )
     {
@@ -131,6 +129,7 @@ class UserHandler implements UserHandlerInterface
     public function delete( $userId )
     {
         $this->backend->delete( 'User', $userId );
+        $this->backend->deleteByMatch( 'User\\RoleAssignment', array( 'contentId' => $userId ) );
     }
 
     /**
@@ -243,8 +242,8 @@ class UserHandler implements UserHandlerInterface
 
         if ( !$content )
             throw new NotFound( 'Group', $groupId );
-        if ( $content->contentTypeId != 3 )
-            throw new NotFound( "Content with TypeId:3", $groupId );
+        if ( $content->contentTypeId != 3 && $content->contentTypeId != 4 )
+            throw new NotFound( "Content", $groupId );
 
         return $this->backend->find(
             'User\\Role',
@@ -290,6 +289,7 @@ class UserHandler implements UserHandlerInterface
     {
         $this->backend->delete( 'User\\Role', $roleId );
         $this->backend->deleteByMatch( 'User\\Policy', array( 'roleId' => $roleId ) );
+        $this->backend->deleteByMatch( 'User\\RoleAssignment', array( 'roleId' => $roleId ) );
     }
 
     /**
@@ -398,7 +398,7 @@ class UserHandler implements UserHandlerInterface
                 );
 
                 if ( isset( $list[1] ) )
-                    throw new Logic( 'content tree', 'there is more then one item with parentId:' . $parentId );
+                    throw new LogicException( "'content tree' logic error, there is more than one item with parentId: $parentId" );
                 if ( $list )
                     $this->getPermissionsForObject( $list[0], 3, $policies );
             }
@@ -408,6 +408,7 @@ class UserHandler implements UserHandlerInterface
 
     /**
      * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param mixed $typeId
      * @param array $policies
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $content is not of user_group Content Type
      */
@@ -440,9 +441,9 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
-     * Assign role to user group with given limitation
+     * Assign role to a user or user group with given limitations
      *
-     * The limitation array may look like:
+     * The limitation array looks like:
      * <code>
      *  array(
      *      'Subtree' => array(
@@ -457,57 +458,104 @@ class UserHandler implements UserHandlerInterface
      * Where the keys are the limitation identifiers, and the respective values
      * are an array of limitation values. The limitation parameter is optional.
      *
-     * @param mixed $groupId The group Id to assign the role to.
-     *                       In Legacy storage engine this is the content object id of the group to assign to.
-     *                       Assigning to a user is not supported, only un-assigning is supported for bc.
+     * @param mixed $contentId The groupId or userId to assign the role to.
      * @param mixed $roleId
-     * @param array $limitation @todo Remove or implement
+     * @param array $limitation
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or role is not found
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group is not of user_group Content Type
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If group is already assigned role
      */
-    public function assignRole( $groupId, $roleId, array $limitation = null )
+    public function assignRole( $contentId, $roleId, array $limitation = null )
     {
-        $content = $this->backend->load( 'Content\\ContentInfo', $groupId );
+        $content = $this->backend->load( 'Content\\ContentInfo', $contentId );
         if ( !$content )
-            throw new NotFound( 'User Group', $groupId );
+            throw new NotFound( 'User Group', $contentId );
+
+        $role = $this->backend->load( 'User\\Role', $roleId );
+        if ( !$role )
+            throw new NotFound( 'Role', $roleId );
 
         // @todo Use eZ Publish settings for this, and maybe a better exception
-        if ( $content->contentTypeId != 3 )
-            throw new NotFound( 3, $groupId );
+        if ( $content->contentTypeId != 3 && $content->contentTypeId != 4 )
+            throw new NotFound( "Content", $contentId );
 
-        $role = $this->loadRole( $roleId );
-        if ( in_array( $groupId, $role->groupIds ) )
-            throw new InvalidArgumentValue( '$roleId', $roleId );
+        if ( is_array( $limitation ) )
+        {
+            foreach ( $limitation as $limitIdentifier => $limitValues )
+            {
+                $this->backend->create(
+                    'User\\RoleAssignment',
+                    array(
+                        'roleId' => $roleId,
+                        'contentId' => $contentId,
+                        'limitationIdentifier' => $limitIdentifier,
+                        'values' => $limitValues
+                    )
+                );
+            }
+        }
+        else
+        {
+            $this->backend->create(
+                'User\\RoleAssignment',
+                array(
+                    'roleId' => $roleId,
+                    'contentId' => $contentId,
+                    'limitationIdentifier' => null,
+                    'values' => null
+                )
+            );
+        }
 
-        $role->groupIds[] = $groupId;
+        $role->groupIds[] = $contentId;
         $this->backend->update( 'User\\Role', $roleId, (array)$role );
     }
 
     /**
      * Un-assign a role
      *
-     * @param mixed $groupId The group / user Id to un-assign a role from
+     * @param mixed $contentId The user or user group Id to un-assign the role from.
      * @param mixed $roleId
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or role is not found
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group is not of user[_group] Content Type
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If group does not contain role
      */
-    public function unAssignRole( $groupId, $roleId )
+    public function unAssignRole( $contentId, $roleId )
     {
-        $content = $this->backend->load( 'Content\\ContentInfo', $groupId );
+        $content = $this->backend->load( 'Content\\ContentInfo', $contentId );
         if ( !$content )
-            throw new NotFound( 'User Group', $groupId );
+            throw new NotFound( 'User Group', $contentId );
+
+        $role = $this->backend->load( 'User\\Role', $roleId );
+        if ( !$role )
+            throw new NotFound( 'Role', $roleId );
 
         // @todo Use eZ Publish settings for this, and maybe a better exception
         if ( $content->contentTypeId != 3 && $content->contentTypeId != 4 )
-            throw new NotFound( "3 or 4", $groupId );
+            throw new NotFound( "3 or 4", $contentId );
 
-        $role = $this->loadRole( $roleId );
-        if ( !in_array( $groupId, $role->groupIds ) )
+        $roleAssignments = $this->backend->find(
+            'User\\RoleAssignment',
+            array( 'roleId' => $roleId, 'contentId' => $contentId )
+        );
+
+        if ( empty( $roleAssignments ) )
             throw new InvalidArgumentValue( '$roleId', $roleId );
 
-        $role->groupIds = array_values( array_diff( $role->groupIds, array( $groupId ) ) );
+        $this->backend->deleteByMatch( 'User\\RoleAssignment', array( 'roleId' => $roleId, 'contentId' => $contentId ) );
+
+        $role->groupIds = array_values( array_diff( $role->groupIds, array( $contentId ) ) );
         $this->backend->update( 'User\\Role', $roleId, (array)$role );
+    }
+
+    /**
+     * Returns a list of role assignments for the given user or user group id
+     *
+     * @param mixed $contentId
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
+     */
+    public function getRoleAssignments( $contentId )
+    {
+        return $this->backend->find( 'User\\RoleAssignment', array( 'contentId' => $contentId ) );
     }
 }

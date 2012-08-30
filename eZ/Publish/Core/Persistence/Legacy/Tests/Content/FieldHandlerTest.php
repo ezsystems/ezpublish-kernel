@@ -14,12 +14,9 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\Version,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler;
 
 /**
  * Test case for Content Handler
@@ -86,9 +83,21 @@ class FieldHandlerTest extends TestCase
 
         $storageHandlerMock->expects( $this->exactly( 2 ) )
             ->method( 'storeFieldData' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) );
+            ->with(
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' )
+            );
 
         $fieldHandler->createNewFields( $this->getContentFixture() );
+    }
+
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::createNewFields
+     */
+    public function testCreateNewFieldsUpdatingStorageHandler()
+    {
+        self::markTestIncomplete( "@todo Test createNewField() with updating storage handler and 1 untranslatable field" );
     }
 
     /**
@@ -103,7 +112,10 @@ class FieldHandlerTest extends TestCase
 
         $storageHandlerMock->expects( $this->exactly( 2 ) )
             ->method( 'getFieldData' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) );
+            ->with(
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' )
+            );
 
         $fieldHandler->loadExternalFieldData( $this->getContentFixture() );
     }
@@ -115,12 +127,6 @@ class FieldHandlerTest extends TestCase
     public function testUpdateFieldsTranslatable()
     {
         $fieldHandler = $this->getFieldHandler();
-
-        $typeGatewayMock = $this->getTypeGatewayMock();
-        $typeGatewayMock->expects( $this->exactly( 2 ) )
-            ->method( 'isFieldTranslatable' )
-            ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) )
-            ->will( $this->returnValue( true ) );
 
         $mapperMock = $this->getMapperMock();
         $mapperMock->expects( $this->exactly( 2 ) )
@@ -141,48 +147,54 @@ class FieldHandlerTest extends TestCase
         $storageHandlerMock = $this->getStorageHandlerMock();
         $storageHandlerMock->expects( $this->exactly( 2 ) )
             ->method( 'storeFieldData' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) );
+            ->with(
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' )
+            );
 
-        $fieldHandler->updateFields( 42, 3, $this->getUpdateStructFixture() );
+        $fieldHandler->updateFields(
+            $this->getContentFixture(),
+            $this->getUpdateStructFixture()
+        );
     }
 
     /**
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
      */
-    public function testUpdateFieldsNonTranslatable()
+    public function testUpdateFieldsUpdatingStorageHandlerNonTranslatable()
     {
-        $fieldHandler = $this->getFieldHandler();
+        self::markTestIncomplete( "@todo Test updateFields() with updating storage handler and untranslatable fields" );
+    }
 
-        $typeGatewayMock = $this->getTypeGatewayMock();
-        $typeGatewayMock->expects( $this->exactly( 2 ) )
-            ->method( 'isFieldTranslatable' )
-            ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) )
-            ->will( $this->returnValue( false ) );
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
+     */
+    public function testUpdateFieldsUpdatingStorageHandlerTranslatable()
+    {
+        self::markTestIncomplete( "@todo Test updateFields() with updating storage handler and translatable fields" );
+    }
 
-        $mapperMock = $this->getMapperMock();
-        $mapperMock->expects( $this->exactly( 2 ) )
-            ->method( 'convertToStorageValue' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) )
-            ->will( $this->returnValue( new StorageFieldValue() ) );
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
+     */
+    public function testUpdateFieldsCreatesNewFields()
+    {
+        $partlyMockedFieldHandler = $this->getPartlyMockedFieldHandler( array( "createNewField" ) );
 
-        $contentGatewayMock = $this->getContentGatewayMock();
-        $contentGatewayMock->expects( $this->exactly( 2 ) )
-            ->method( 'updateNonTranslatableField' )
+        $partlyMockedFieldHandler->expects( $this->exactly( 2 ) )
+            ->method( 'createNewField' )
             ->with(
                 $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ),
-                $this->isInstanceOf(
-                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue'
-                ),
-                42
+                $this->equalTo( $this->getContentFixture() )
             );
 
-        $storageHandlerMock = $this->getStorageHandlerMock();
-        $storageHandlerMock->expects( $this->exactly( 2 ) )
-            ->method( 'storeFieldData' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) );
-
-        $fieldHandler->updateFields( 42, 3, $this->getUpdateStructFixture() );
+        $partlyMockedFieldHandler->updateFields(
+            $this->getContentFixture(),
+            $this->getUpdateStructFixture( false )
+        );
     }
 
     /**
@@ -196,51 +208,28 @@ class FieldHandlerTest extends TestCase
         $contentGatewayMock = $this->getContentGatewayMock();
         $contentGatewayMock->expects( $this->once() )
             ->method( 'getFieldIdsByType' )
-            ->with( $this->equalTo( 42 ) )
-            ->will( $this->returnValue( array( 'some-type' => array( 2, 3 ) ) ) );
+            ->with(
+                $this->equalTo( 42 ),
+                $this->equalTo( 2 )
+            )->will( $this->returnValue( array( 'some-type' => array( 2, 3 ) ) ) );
 
         $storageHandlerMock = $this->getStorageHandlerMock();
         $storageHandlerMock->expects( $this->once() )
             ->method( 'deleteFieldData' )
             ->with(
             $this->equalTo( 'some-type' ),
+            $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
             $this->equalTo( array( 2, 3 ) )
         );
 
         $contentGatewayMock->expects( $this->once() )
             ->method( 'deleteFields' )
-            ->with( $this->equalTo( 42 ) );
-
-        $fieldHandler->deleteFields( 42 );
-    }
-
-    /**
-     * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::deleteFields
-     */
-    public function testDeleteFieldsWithSecondArgument()
-    {
-        $fieldHandler = $this->getFieldHandler();
-
-        $contentGatewayMock = $this->getContentGatewayMock();
-        $contentGatewayMock->expects( $this->once() )
-            ->method( 'getFieldIdsByType' )
-            ->with( $this->equalTo( 42 ) )
-            ->will( $this->returnValue( array( 'some-type' => array( 2, 3 ) ) ) );
-
-        $storageHandlerMock = $this->getStorageHandlerMock();
-        $storageHandlerMock->expects( $this->once() )
-            ->method( 'deleteFieldData' )
             ->with(
-            $this->equalTo( 'some-type' ),
-            $this->equalTo( array( 2, 3 ) )
-        );
+                $this->equalTo( 42 ),
+                $this->equalTo( 2 )
+            );
 
-        $contentGatewayMock->expects( $this->once() )
-            ->method( 'deleteFields' )
-            ->with( $this->equalTo( 42 ) );
-
-        $fieldHandler->deleteFields( 42, 2 );
+        $fieldHandler->deleteFields( 42, new VersionInfo( array( 'versionNo' => 2 ) ) );
     }
 
     /**
@@ -273,15 +262,24 @@ class FieldHandlerTest extends TestCase
     /**
      * Returns an UpdateStruct fixture
      *
+     * @param bool $setIds
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\UpdateStruct
      */
-    protected function getUpdateStructFixture()
+    protected function getUpdateStructFixture( $setIds = true )
     {
         $struct = new UpdateStruct();
 
         $content = $this->getContentFixture();
 
         $struct->fields = $content->fields;
+        if ( $setIds )
+        {
+            foreach ( $struct->fields as $index => $field )
+            {
+                $field->id = $index;
+            }
+        }
 
         return $struct;
     }
@@ -298,6 +296,26 @@ class FieldHandlerTest extends TestCase
             $this->getTypeGatewayMock(),
             $this->getMapperMock(),
             $this->getStorageHandlerMock()
+        );
+    }
+
+    /**
+     * Returns the handler to test with $methods mocked
+     *
+     * @param string[] $methods
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
+     */
+    protected function getPartlyMockedFieldHandler( array $methods )
+    {
+        return $this->getMock(
+            '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldHandler',
+            $methods,
+            array(
+                $this->getContentGatewayMock(),
+                $this->getTypeGatewayMock(),
+                $this->getMapperMock(),
+                $this->getStorageHandlerMock()
+            )
         );
     }
 

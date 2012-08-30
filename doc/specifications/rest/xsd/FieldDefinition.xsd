@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:include schemaLocation="CommonDefinitions.xsd" />
+
+  <xsd:complexType name="vnd.ez.api.FieldDefinition">
+    <xsd:complexContent>
+      <xsd:extension base="ref">
+        <xsd:all>
+          <xsd:element name="id" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                the unique id of this field definition
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="identifier" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                Readable string identifier of a field
+                definition
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="fieldGroup" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                Field group name
+                </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="position" type="xsd:int">
+            <xsd:annotation>
+              <xsd:documentation>
+                the position of the field definition in
+                the content typr
+                </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="fieldType" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                String identifier of the field type
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="isTranslatable" type="xsd:boolean">
+            <xsd:annotation>
+              <xsd:documentation>
+                If the field type is translatable
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="isRequired" type="xsd:boolean">
+            <xsd:annotation>
+              <xsd:documentation>
+                Is the field required
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="isInfoCollector" type="xsd:boolean">
+            <xsd:annotation>
+              <xsd:documentation>
+                the flag if this attribute is used for
+                information collection
+                </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="defaultValue" type="xsd:string">
+            <xsd:annotation>
+              <xsd:documentation>
+                Default value of the field
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="isSearchable" type="xsd:boolean">
+            <xsd:annotation>
+              <xsd:documentation>
+                Indicates if th the content is
+                searchable by this attribute
+                </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="names" type="multiLanguageValuesType" />
+          <xsd:element name="descriptions" type="multiLanguageValuesType" />
+        </xsd:all>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="vnd.ez.api.FieldDefinitionList">
+    <xsd:complexContent>
+      <xsd:extension base="ref">
+        <xsd:sequence>
+          <xsd:element name="FieldDefinition" type="vnd.ez.api.FieldDefinition"
+            minOccurs="1" maxOccurs="unbounded" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="FieldDefinitionList" type="vnd.ez.api.FieldDefinitionList" />
+  <xsd:element name="FieldDefinition" type="vnd.ez.api.FieldDefinition" />
+</xsd:schema>

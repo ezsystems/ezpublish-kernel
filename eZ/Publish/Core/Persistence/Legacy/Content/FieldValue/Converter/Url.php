@@ -12,11 +12,23 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\Repository\FieldType\Url\Value as UrlValue;
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 class Url implements Converter
 {
+    /**
+     * Factory for current class
+     *
+     * @note Class should instead be configured as service if it gains dependencies.
+     *
+     * @static
+     * @return Url
+     */
+    public static function create()
+    {
+        return new self;
+    }
+
     /**
      * Converts data from $value to $storageFieldValue
      *
@@ -25,7 +37,12 @@ class Url implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataText = $value->data["text"];
+        $storageFieldValue->dataText = isset( $value->data['text'] )
+            ? $value->data['text']
+            : null;
+        $storageFieldValue->dataInt = isset( $value->data['urlId'] )
+            ? $value->data['urlId']
+            : null;
     }
 
     /**
@@ -37,8 +54,8 @@ class Url implements Converter
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
         $fieldValue->data = array(
-            "text" => $value->dataText,
             "urlId" => $value->dataInt,
+            'text' => $value->dataText,
         );
         $fieldValue->sortKey = false;
     }

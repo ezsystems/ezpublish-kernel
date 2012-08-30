@@ -15,13 +15,12 @@ use \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use \eZ\Publish\API\Repository\Exceptions;
 use \eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
-use \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\StringLengthValidatorStub;
-
 /**
  * Test case for operations in the ContentTypeService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\ContentTypeService
  * @group integration
+ * @group content-type
  */
 class ContentTypeServiceTest extends BaseContentTypeServiceTest
 {
@@ -31,6 +30,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeGroupCreateStruct()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @group user
      */
     public function testNewContentTypeGroupCreateStruct()
     {
@@ -77,6 +77,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeGroup()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewContentTypeGroupCreateStruct
+     * @group user
      */
     public function testCreateContentTypeGroup()
     {
@@ -89,7 +90,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             'new-group'
         );
         $groupCreate->creatorId = $repository->getCurrentUser()->id;
-        $groupCreate->creationDate = new \DateTime();
+        $groupCreate->creationDate = $this->getRepository()->createDateTime();
         $groupCreate->mainLanguageCode = 'ger-DE';
         $groupCreate->names = array( 'eng-GB' => 'A name.' );
         $groupCreate->descriptions = array( 'eng-GB' => 'A description.' );
@@ -120,13 +121,40 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $createStruct = $data['createStruct'];
         $group = $data['group'];
 
-        $this->assertStructPropertiesCorrect(
-            $createStruct,
-            $group,
-            array( 'names', 'descriptions' )
+        $this->assertEquals(
+            array(
+                'identifier' => $group->identifier,
+                'creatorId' => $group->creatorId,
+                'creationDate' => $group->creationDate,
+            ),
+            array(
+                'identifier' => $createStruct->identifier,
+                'creatorId' => $createStruct->creatorId,
+                'creationDate' => $createStruct->creationDate,
+            )
         );
         $this->assertNotNull(
             $group->id
+        );
+        return $data;
+    }
+
+    /**
+     * Test for the createContentTypeGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeGroup()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroupStructValues
+     */
+    public function testCreateContentTypeGroupStructLanguageDependentValues( array $data )
+    {
+        $createStruct = $data['createStruct'];
+        $group = $data['group'];
+
+        $this->assertStructPropertiesCorrect(
+            $createStruct,
+            $group,
+            array( 'names', 'descriptions', 'mainLanguageCode' )
         );
     }
 
@@ -160,6 +188,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeGroup()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
+     * @group user
      */
     public function testLoadContentTypeGroup()
     {
@@ -195,8 +224,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             array(
                 'id' => $this->generateId( 'typegroup', 2 ),
                 'identifier' => 'Users',
-                'creationDate' => new \DateTime( '@1031216941' ),
-                'modificationDate' => new \DateTime( '@1033922113' ),
+                'creationDate' => $this->getRepository()->createDateTime( 1031216941 ),
+                'modificationDate' => $this->getRepository()->createDateTime( 1033922113 ),
                 'creatorId' => $this->generateId( 'user', 14 ),
                 'modifierId' => $this->generateId( 'user', 14 ),
             ),
@@ -226,6 +255,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeGroupByIdentifier()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @group user
+     * @group field-type
      */
     public function testLoadContentTypeGroupByIdentifier()
     {
@@ -381,6 +412,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
+        $modifierId = $this->generateId( 'user', 42 );
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
 
@@ -389,8 +421,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $groupUpdate = $contentTypeService->newContentTypeGroupUpdateStruct();
 
         $groupUpdate->identifier = 'Teardown';
-        $groupUpdate->modifierId = $this->generateId( 'user', 42 );
-        $groupUpdate->modificationDate = new \DateTime();
+        $groupUpdate->modifierId = $modifierId;
+        $groupUpdate->modificationDate = $this->getRepository()->createDateTime();
         $groupUpdate->mainLanguageCode = 'eng-GB';
 
         $groupUpdate->names = array(
@@ -427,6 +459,30 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeGroup
      */
     public function testUpdateContentTypeGroupStructValues( array $data )
+    {
+        $expectedValues = array(
+            'identifier' => $data['updateStruct']->identifier,
+            'creationDate' => $data['originalGroup']->creationDate,
+            'modificationDate' => $data['updateStruct']->modificationDate,
+            'creatorId' => $data['originalGroup']->creatorId,
+            'modifierId' => $data['updateStruct']->modifierId,
+        );
+
+        $this->assertPropertiesCorrect(
+            $expectedValues, $data['updatedGroup']
+        );
+
+        return $data;
+    }
+
+    /**
+     * Test for the updateContentTypeGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeGroup()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeGroupStructValues
+     */
+    public function testUpdateContentTypeGroupStructLanguageDependentValues( array $data )
     {
         $expectedValues = array(
             'identifier' => $data['updateStruct']->identifier,
@@ -514,6 +570,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeCreateStruct()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @group user
+     * @group field-type
      */
     public function testNewContentTypeCreateStruct()
     {
@@ -569,6 +627,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::newFieldDefinitionCreateStruct()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     * @group user
+     * @group field-type
      */
     public function testNewFieldDefinitionCreateStruct()
     {
@@ -609,7 +669,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'isTranslatable' => null,
                 'isRequired' => null,
                 'isInfoCollector' => null,
-                'validators' => null,
+                'validatorConfiguration' => null,
                 'fieldSettings' => null,
                 'defaultValue' => null,
                 'isSearchable' => null,
@@ -648,6 +708,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewContentTypeCreateStruct
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewFieldDefinitionCreateStruct
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeGroupByIdentifier
+     * @group user
+     * @group field-type
      */
     public function testCreateContentType()
     {
@@ -670,7 +732,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             'ger-DE' => 'Ein Blog-Eintrag',
         );
         $typeCreate->creatorId = $repository->getCurrentUser()->id;
-        $typeCreate->creationDate = new \DateTime();
+        $typeCreate->creationDate = $this->getRepository()->createDateTime();
 
         $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
             'title', 'ezstring'
@@ -688,18 +750,19 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $titleFieldCreate->isTranslatable = true;
         $titleFieldCreate->isRequired = true;
         $titleFieldCreate->isInfoCollector = false;
-        $titleFieldCreate->validators = array(
-            new StringLengthValidatorStub(),
+        $titleFieldCreate->validatorConfiguration = array(
+            'StringLengthValidator' => array(
+                'minStringLength' => 0,
+                'maxStringLength' => 0,
+            ),
         );
-        $titleFieldCreate->fieldSettings = array(
-            'textblockheight' => 10
-        );
+        $titleFieldCreate->fieldSettings = array();
         $titleFieldCreate->isSearchable = true;
 
         $typeCreate->addFieldDefinition( $titleFieldCreate );
 
         $bodyFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'body', 'text'
+            'body', 'ezstring'
         );
         $bodyFieldCreate->names = array(
             'eng-GB' => 'Body',
@@ -714,12 +777,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $bodyFieldCreate->isTranslatable = true;
         $bodyFieldCreate->isRequired = true;
         $bodyFieldCreate->isInfoCollector = false;
-        $bodyFieldCreate->validators = array(
-            new StringLengthValidatorStub(),
+        $bodyFieldCreate->validatorConfiguration = array(
+            'StringLengthValidator' => array(
+                'minStringLength' => 0,
+                'maxStringLength' => 0,
+            ),
         );
-        $bodyFieldCreate->fieldSettings = array(
-            'textblockheight' => 80
-        );
+        $bodyFieldCreate->fieldSettings = array();
         $bodyFieldCreate->isSearchable = true;
 
         $typeCreate->addFieldDefinition( $bodyFieldCreate );
@@ -939,7 +1003,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $typeCreate->addFieldDefinition( $firstFieldCreate );
 
         $secondFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'title', 'text'
+            'title', 'ezstring'
         );
         $typeCreate->addFieldDefinition( $secondFieldCreate );
 
@@ -1049,7 +1113,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
-        $modifierId = $this->generateId( 'user', 42 );
+        $modifierId = $this->generateId( 'user', 14 );
         /* BEGIN: Use Case */
         $contentTypeDraft = $this->createContentTypeDraft();
 
@@ -1062,7 +1126,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $typeUpdate->mainLanguageCode = 'ger-DE';
         $typeUpdate->defaultAlwaysAvailable = false;
         $typeUpdate->modifierId = $modifierId;
-        $typeUpdate->modificationDate = new \DateTime();
+        $typeUpdate->modificationDate = $this->getRepository()->createDateTime();
         $typeUpdate->names = array(
             'eng-GB' => 'News article',
             'ger-DE' => 'Nachrichten-Artikel',
@@ -1206,12 +1270,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $fieldDefCreate->isTranslatable = true;
         $fieldDefCreate->isRequired = true;
         $fieldDefCreate->isInfoCollector = false;
-        $fieldDefCreate->validators = array(
-            new StringLengthValidatorStub(),
+        $fieldDefCreate->validatorConfiguration = array(
+            'StringLengthValidator' => array(
+                'minStringLength' => 0,
+                'maxStringLength' => 0,
+            ),
         );
-        $fieldDefCreate->fieldSettings = array(
-            'textblockheight' => 10
-        );
+        $fieldDefCreate->fieldSettings = array();
         $fieldDefCreate->isSearchable = true;
 
         $contentTypeService->addFieldDefinition( $contentTypeDraft, $fieldDefCreate );
@@ -1423,9 +1488,9 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $bodyUpdateStruct->isTranslatable = false;
         $bodyUpdateStruct->isRequired = false;
         $bodyUpdateStruct->isInfoCollector = true;
-        $bodyUpdateStruct->validators = array();
+        $bodyUpdateStruct->validatorConfiguration = array();
         $bodyUpdateStruct->fieldSettings = array(
-            'textblockheight' => 60
+            'textRows' => 60
         );
         $bodyUpdateStruct->isSearchable = false;
 
@@ -1474,7 +1539,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'isTranslatable' => $updateStruct->isTranslatable,
                 'isRequired' => $updateStruct->isRequired,
                 'isInfoCollector' => $updateStruct->isInfoCollector,
-                'validators' => $updateStruct->validators,
+                'validatorConfiguration' => $updateStruct->validatorConfiguration,
                 'defaultValue' => $originalField->defaultValue,
                 'isSearchable' => $updateStruct->isSearchable,
             ),
@@ -1604,6 +1669,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentType()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
+     * @group user
+     * @group field-type
      */
     public function testLoadContentType()
     {
@@ -1640,8 +1707,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'id' => $this->generateId( 'type', 3 ),
                 'status' => 0,
                 'identifier' => 'user_group',
-                'creationDate' => new \DateTime( '@1024392098' ),
-                'modificationDate' => new \DateTime( '@1048494743' ),
+                'creationDate' => $this->getRepository()->createDateTime( 1024392098 ),
+                'modificationDate' => $this->getRepository()->createDateTime( 1048494743 ),
                 'creatorId' => $this->generateId( 'user', 14 ),
                 'modifierId' => $this->generateId( 'user', 14 ),
                 'remoteId' => '25b4268cdcd01921b808a0d854b877ef',
@@ -1656,62 +1723,135 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'defaultAlwaysAvailable' => true,
                 'defaultSortField' => 1,
                 'defaultSortOrder' => 1,
-                'fieldDefinitions' => array(
-                    6 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
-                        array(
-                            'id' => 6,
-                            'identifier' => 'name',
-                            'fieldGroup' => '',
-                            'position' => 1,
-                            'fieldTypeIdentifier' => 'ezstring',
-                            'isTranslatable' => true,
-                            'isRequired' => true,
-                            'isInfoCollector' => false,
-                            'isSearchable' => true,
-                            'defaultValue' => null,
-                            'names' => array(
-                                'eng-US' => 'Name',
-                            ),
-                            'descriptions' => array(
-                                0 => '',
-                            ),
-                            'fieldSettings' => array(
-                            ),
-                            'validators' => array(
-                            ),
-                        )
-                    ),
-                    7 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionStub(
-                        array(
-                            'id' => 7,
-                            'identifier' => 'description',
-                            'fieldGroup' => '',
-                            'position' => 2,
-                            'fieldTypeIdentifier' => 'ezstring',
-                            'isTranslatable' => true,
-                            'isRequired' => false,
-                            'isInfoCollector' => false,
-                            'isSearchable' => true,
-                            'defaultValue' => null,
-                            'names' => array(
-                                'eng-US' => 'Description',
-                            ),
-                            'descriptions' => array(
-                                0 => '',
-                            ),
-                            'fieldSettings' => array(
-                            ),
-                            'validators' => array(
-                            ),
-                        )
-                    ),
-                ),
                 'contentTypeGroups' => array(
                     0 => $contentTypeService->loadContentTypeGroup( $this->generateId( 'typegroup', 2 ) )
                 ),
             ),
             $userGroupType
         );
+
+        return $userGroupType->fieldDefinitions;
+    }
+
+    /**
+     * Test for the loadContentType() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentType()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeStructValues
+     */
+    public function testLoadContentTypeFieldDefinitions( array $fieldDefinitions )
+    {
+        $expectedFieldDefinitions = array(
+            'name' => array(
+                'identifier' => 'name',
+                'fieldGroup' => '',
+                'position' => 1,
+                'fieldTypeIdentifier' => 'ezstring',
+                'isTranslatable' => true,
+                'isRequired' => true,
+                'isInfoCollector' => false,
+                'isSearchable' => true,
+                'defaultValue' => null,
+                'names' => array(
+                    'eng-US' => 'Name',
+                ),
+                'descriptions' => array(
+                    0 => '',
+                ),
+                'fieldSettings' => array(
+                ),
+                'validatorConfiguration' => array(
+                ),
+            ),
+            'description' => array(
+                'identifier' => 'description',
+                'fieldGroup' => '',
+                'position' => 2,
+                'fieldTypeIdentifier' => 'ezstring',
+                'isTranslatable' => true,
+                'isRequired' => false,
+                'isInfoCollector' => false,
+                'isSearchable' => true,
+                'defaultValue' => null,
+                'names' => array(
+                    'eng-US' => 'Description',
+                ),
+                'descriptions' => array(
+                    0 => '',
+                ),
+                'fieldSettings' => array(
+                ),
+                'validatorConfiguration' => array(
+                ),
+            )
+        );
+
+        foreach ( $fieldDefinitions as $index => $fieldDefinition )
+        {
+            $this->assertInstanceOf(
+                'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition',
+                $fieldDefinition
+            );
+
+            $this->assertNotNull( $fieldDefinition->id );
+
+            if ( !isset( $expectedFieldDefinitions[$fieldDefinition->identifier] ) )
+            {
+                $this->fail(
+                    sprintf(
+                        'Unexpected FieldDefinition loaded: "%s" (%s)',
+                        $fieldDefinition->identifier,
+                        $fieldDefinition->id
+                    )
+                );
+            }
+
+            $this->assertPropertiesCorrect(
+                $expectedFieldDefinitions[$fieldDefinition->identifier],
+                $fieldDefinition
+            );
+            unset( $expectedFieldDefinitions[$fieldDefinition->identifier] );
+            unset( $fieldDefinitions[$index] );
+        }
+
+        if ( 0 !== count( $expectedFieldDefinitions ) )
+        {
+            $this->fail(
+                sprintf(
+                    'Missing expected FieldDefinitions: %s',
+                    implode(
+                        ',',
+                        array_map(
+                            function ( $fieldDefArray )
+                            {
+                                return $fieldDefArray['identifier'];
+                            },
+                            $expectedFieldDefinitions
+                        )
+                    )
+                )
+            );
+        }
+
+        if ( 0 !== count( $fieldDefinitions ) )
+        {
+            $this->fail(
+                sprintf(
+                    'Loaded unexpected FieldDefinitions: %s',
+                    implode(
+                        ',',
+                        array_map(
+                            function ( $fieldDefinition )
+                            {
+                                return $fieldDefinition->identifier;
+                            },
+                            $fieldDefinitions
+                        )
+                    )
+                )
+            );
+        }
     }
 
     /**
@@ -1741,6 +1881,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeByIdentifier()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentType
+     * @group user
      */
     public function testLoadContentTypeByIdentifier()
     {
@@ -1955,34 +2096,85 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $originalType = $data['originalType'];
         $typeDraft = $data['typeDraft'];
 
-        $this->assertStructPropertiesCorrect(
-            $originalType,
-            $typeDraft,
+        // Names and descriptions tested in corresponding language test
+        $this->assertEquals(
             array(
-                'id',
-                'names',
-                'descriptions',
-                'identifier',
-                'creationDate',
-                'modificationDate',
-                'creatorId',
-                'modifierId',
-                'remoteId',
-                'urlAliasSchema',
-                'nameSchema',
-                'isContainer',
-                'mainLanguageCode',
-                'defaultAlwaysAvailable',
-                'defaultSortField',
-                'defaultSortOrder',
-                'contentTypeGroups',
-                'fieldDefinitions',
+                'id' => $originalType->id,
+                'names' => $originalType->names,
+                'descriptions' => $originalType->descriptions,
+                'identifier' => $originalType->identifier,
+                'creatorId' => $originalType->creatorId,
+                'modifierId' => $originalType->modifierId,
+                'remoteId' => $originalType->remoteId,
+                'urlAliasSchema' => $originalType->urlAliasSchema,
+                'nameSchema' => $originalType->nameSchema,
+                'isContainer' => $originalType->isContainer,
+                'mainLanguageCode' => $originalType->mainLanguageCode,
+                'defaultAlwaysAvailable' => $originalType->defaultAlwaysAvailable,
+                'defaultSortField' => $originalType->defaultSortField,
+                'defaultSortOrder' => $originalType->defaultSortOrder,
+                'contentTypeGroups' => $originalType->contentTypeGroups,
+                'fieldDefinitions' => $originalType->fieldDefinitions,
+            ),
+            array(
+                'id' => $typeDraft->id,
+                'names' => $typeDraft->names,
+                'descriptions' => $typeDraft->descriptions,
+                'identifier' => $typeDraft->identifier,
+                'creatorId' => $typeDraft->creatorId,
+                'modifierId' => $typeDraft->modifierId,
+                'remoteId' => $typeDraft->remoteId,
+                'urlAliasSchema' => $typeDraft->urlAliasSchema,
+                'nameSchema' => $typeDraft->nameSchema,
+                'isContainer' => $typeDraft->isContainer,
+                'mainLanguageCode' => $typeDraft->mainLanguageCode,
+                'defaultAlwaysAvailable' => $typeDraft->defaultAlwaysAvailable,
+                'defaultSortField' => $typeDraft->defaultSortField,
+                'defaultSortOrder' => $typeDraft->defaultSortOrder,
+                'contentTypeGroups' => $typeDraft->contentTypeGroups,
+                'fieldDefinitions' => $typeDraft->fieldDefinitions,
             )
         );
+
+        $this->assertInstanceOf(
+            'DateTime',
+            $typeDraft->modificationDate
+        );
+        $modificationDifference = $originalType->modificationDate->diff(
+            $typeDraft->modificationDate
+        );
+        // No modification date is newer, interval is not inverted
+        $this->assertEquals( 0, $modificationDifference->invert );
 
         $this->assertEquals(
             ContentType::STATUS_DRAFT,
             $typeDraft->status
+        );
+
+        return $data;
+    }
+
+    /**
+     * Test for the createContentTypeDraft() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeDraftStructValues
+     */
+    public function testCreateContentTypeDraftStructLanguageDependentValues( array $data )
+    {
+        $originalType = $data['originalType'];
+        $typeDraft = $data['typeDraft'];
+
+        $this->assertEquals(
+            array(
+                'names' => $originalType->names,
+                'descriptions' => $originalType->descriptions,
+            ),
+            array(
+                'names' => $typeDraft->names,
+                'descriptions' => $typeDraft->descriptions,
+            )
         );
     }
 
@@ -1996,6 +2188,10 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      */
     public function testCreateContentTypeDraftThrowsBadStateException()
     {
+        $this->markTestIncomplete(
+            'Behavior to test is: If a draft *by a different user* exists, throw BadState. Cannot be tested on current fixture, since additional, previledged user is missing.'
+        );
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -2055,10 +2251,10 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'user' );
 
         // This call will fail with a "BadStateException" because there is at
-        // least on content object of type "article" in an eZ Publish demo
+        // least on content object of type "user" in an eZ Publish demo
         $contentTypeService->deleteContentType( $contentType );
         /* END: Use Case */
     }
@@ -2164,7 +2360,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                     'isTranslatable',
                     'isRequired',
                     'isInfoCollector',
-                    'validators',
+                    'validatorConfiguration',
                     'defaultValue',
                     'isSearchable',
                 )
@@ -2385,8 +2581,17 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Create the new content type group
-        $groupId = $contentTypeService->createContentTypeGroup( $groupCreate )->id;
+        try
+        {
+            // Create the new content type group
+            $groupId = $contentTypeService->createContentTypeGroup( $groupCreate )->id;
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -2428,11 +2633,20 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Create the new content type group
-        $groupId = $contentTypeService->createContentTypeGroup( $groupCreate )->id;
+        try
+        {
+            // Create the new content type group
+            $groupId = $contentTypeService->createContentTypeGroup( $groupCreate )->id;
 
-        // Rollback all changes
-        $repository->commit();
+            // Rollback all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load created content type group
         $group = $contentTypeService->loadContentTypeGroup( $groupId );
@@ -2467,8 +2681,17 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Apply update to group
-        $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
+        try
+        {
+            // Apply update to group
+            $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -2506,11 +2729,20 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Apply update to group
-        $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
+        try
+        {
+            // Apply update to group
+            $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load updated group by it's new identifier "Teardown"
         $updatedGroup = $contentTypeService->loadContentTypeGroupByIdentifier(
@@ -2545,11 +2777,20 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Create the new group
-        $group = $contentTypeService->createContentTypeGroup( $groupCreate );
+        try
+        {
+            // Create the new group
+            $group = $contentTypeService->createContentTypeGroup( $groupCreate );
 
-        // Delete the currently created group
-        $contentTypeService->deleteContentTypeGroup( $group );
+            // Delete the currently created group
+            $contentTypeService->deleteContentTypeGroup( $group );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -2592,14 +2833,23 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Create the new group
-        $group = $contentTypeService->createContentTypeGroup( $groupCreate );
+        try
+        {
+            // Create the new group
+            $group = $contentTypeService->createContentTypeGroup( $groupCreate );
 
-        // Delete the currently created group
-        $contentTypeService->deleteContentTypeGroup( $group );
+            // Delete the currently created group
+            $contentTypeService->deleteContentTypeGroup( $group );
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         try
         {
@@ -2634,28 +2884,38 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Get create struct and set some properties
-        $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
-        $typeCreate->mainLanguageCode = 'eng-GB';
-        $typeCreate->names = array( 'eng-GB' => 'Blog post' );
+        try
+        {
+            // Get create struct and set some properties
+            $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
+            $typeCreate->mainLanguageCode = 'eng-GB';
+            $typeCreate->names = array( 'eng-GB' => 'Blog post' );
 
-        $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'title', 'ezstring'
-        );
-        $titleFieldCreate->names = array( 'eng-GB' => 'Title' );
+            $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+                'title', 'ezstring'
+            );
+            $titleFieldCreate->names = array( 'eng-GB' => 'Title' );
+            $typeCreate->addFieldDefinition( $titleFieldCreate );
 
-        $groups = array(
-            $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )
-        );
+            $groups = array(
+                $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )
+            );
 
-        // Create content type
-        $contentTypeDraft = $contentTypeService->createContentType(
-            $typeCreate,
-            $groups
-        );
+            // Create content type
+            $contentTypeDraft = $contentTypeService->createContentType(
+                $typeCreate,
+                $groups
+            );
 
-        // Publish the content type draft
-        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+            // Publish the content type draft
+            $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes.
         $repository->rollback();
@@ -2693,31 +2953,41 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Get create struct and set some properties
-        $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
-        $typeCreate->mainLanguageCode = 'eng-GB';
-        $typeCreate->names = array( 'eng-GB' => 'Blog post' );
+        try
+        {
+            // Get create struct and set some properties
+            $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
+            $typeCreate->mainLanguageCode = 'eng-GB';
+            $typeCreate->names = array( 'eng-GB' => 'Blog post' );
 
-        $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'title', 'ezstring'
-        );
-        $titleFieldCreate->names = array( 'eng-GB' => 'Title' );
+            $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+                'title', 'ezstring'
+            );
+            $titleFieldCreate->names = array( 'eng-GB' => 'Title' );
+            $typeCreate->addFieldDefinition( $titleFieldCreate );
 
-        $groups = array(
-            $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )
-        );
+            $groups = array(
+                $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )
+            );
 
-        // Create content type
-        $contentTypeDraft = $contentTypeService->createContentType(
-            $typeCreate,
-            $groups
-        );
+            // Create content type
+            $contentTypeDraft = $contentTypeService->createContentType(
+                $typeCreate,
+                $groups
+            );
 
-        // Publish the content type draft
-        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+            // Publish the content type draft
+            $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
 
-        // Commit all changes.
-        $repository->commit();
+            // Commit all changes.
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load the newly created content type
         $contentType = $contentTypeService->loadContentTypeByIdentifier( 'blog-post' );
@@ -2749,8 +3019,17 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Complete copy of the content type
-        $copiedType = $contentTypeService->copyContentType( $contentType );
+        try
+        {
+            // Complete copy of the content type
+            $copiedType = $contentTypeService->copyContentType( $contentType );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -2792,11 +3071,20 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Complete copy of the content type
-        $contentTypeId = $contentTypeService->copyContentType( $contentType )->id;
+        try
+        {
+            // Complete copy of the content type
+            $contentTypeId = $contentTypeService->copyContentType( $contentType )->id;
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load the new content type copy.
         $copiedContentType = $contentTypeService->loadContentType( $contentTypeId );
@@ -2827,8 +3115,17 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Delete the "comment" content type.
-        $contentTypeService->deleteContentType( $contentType );
+        try
+        {
+            // Delete the "comment" content type.
+            $contentTypeService->deleteContentType( $contentType );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -2862,11 +3159,20 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Delete the "comment" content type.
-        $contentTypeService->deleteContentType( $contentType );
+        try
+        {
+            // Delete the "comment" content type.
+            $contentTypeService->deleteContentType( $contentType );
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         try
         {
@@ -2903,8 +3209,17 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Assign group to content type
-        $contentTypeService->assignContentTypeGroup( $folderType, $mediaGroup );
+        try
+        {
+            // Assign group to content type
+            $contentTypeService->assignContentTypeGroup( $folderType, $mediaGroup );
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Rollback all changes
         $repository->rollback();
@@ -2946,11 +3261,20 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        // Assign group to content type
-        $contentTypeService->assignContentTypeGroup( $folderType, $mediaGroup );
+        try
+        {
+            // Assign group to content type
+            $contentTypeService->assignContentTypeGroup( $folderType, $mediaGroup );
 
-        // Commit all changes
-        $repository->commit();
+            // Commit all changes
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         // Load all content types assigned to media group
         $contentTypes = $contentTypeService->loadContentTypes( $mediaGroup );

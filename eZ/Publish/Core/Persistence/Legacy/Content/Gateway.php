@@ -8,16 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
-use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\SPI\Persistence\Content,
+use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Version,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Relation\UpdateStruct as RelationUpdateStruct;
+    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * Base class for content gateways
@@ -71,7 +68,7 @@ abstract class Gateway
     abstract public function updateVersion( $contentId, $versionNo, UpdateStruct $struct );
 
     /**
-     * Updates "always available" flag for content identified by $contentId, in respect to $isAlwaysAvailable.
+     * Updates "always available" flag for content identified by $contentId, in respect to $alwaysAvailable.
      *
      * @param int $contentId
      * @param bool $newAlwaysAvailable New "always available" value
@@ -93,8 +90,9 @@ abstract class Gateway
     /**
      * Inserts a new field.
      *
-     * Only used when a new content object is created. After that, field IDs
-     * need to stay the same, only the version number changes.
+     * Only used when a new field is created (i.e. a new object or a field in a
+     * new language!). After that, field IDs need to stay the same, only the
+     * version number changes.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
@@ -102,6 +100,18 @@ abstract class Gateway
      * @return int ID
      */
     abstract public function insertNewField( Content $content, Field $field, StorageFieldValue $value );
+
+    /**
+     * Inserts an existing field.
+     *
+     * Used to insert a field with an exsting ID but a new version number.
+     *
+     * @param Content $content
+     * @param Field $field
+     * @param StorageFieldValue $value
+     * @return void
+     */
+    abstract public function insertExistingField( Content $content, Field $field, StorageFieldValue $value );
 
     /**
      * Updates an existing field
@@ -329,5 +339,5 @@ abstract class Gateway
      *
      * @return int ID the inserted ID
      */
-    abstract public function insertRelation( RelationCreateStruct $struct );
+    abstract public function insertRelation( RelationCreateStruct $createStruct );
 }

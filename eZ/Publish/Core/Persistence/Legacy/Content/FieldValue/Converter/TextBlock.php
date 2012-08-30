@@ -13,11 +13,23 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\Repository\FieldType\TextBlock\Value as TextBlockValue,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings;
+    eZ\Publish\Core\FieldType\FieldSettings;
 
 class TextBlock implements Converter
 {
+    /**
+     * Factory for current class
+     *
+     * @note Class should instead be configured as service if it gains dependencies.
+     *
+     * @static
+     * @return TextBlock
+     */
+    public static function create()
+    {
+        return new self;
+    }
+
     /**
      * Converts data from $value to $storageFieldValue
      *
@@ -26,8 +38,8 @@ class TextBlock implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataText = $value->data;
-        $storageFieldValue->sortKeyString = $value->sortKey['sort_key_string'];
+        $storageFieldValue->dataText      = $value->data;
+        $storageFieldValue->sortKeyString = $value->sortKey;
     }
 
     /**
@@ -38,9 +50,8 @@ class TextBlock implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = $value->dataText;
-        // @todo: Feel there is room for some improvement here, to generalize this code across field types.
-        $fieldValue->sortKey = array( 'sort_key_string' => $value->sortKeyString );
+        $fieldValue->data    = $value->dataText;
+        $fieldValue->sortKey = $value->sortKeyString;
     }
 
     /**
@@ -51,7 +62,10 @@ class TextBlock implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->fieldSettings['textColumns'];
+        if ( isset( $fieldDef->fieldTypeConstraints->fieldSettings["textRows"] ) )
+        {
+            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->fieldSettings["textRows"];
+        }
     }
 
     /**
@@ -64,7 +78,7 @@ class TextBlock implements Converter
     {
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                'textColumns' => $storageDef->dataInt1
+                "textRows" => $storageDef->dataInt1
             )
         );
         $fieldDef->defaultValue->data = "";

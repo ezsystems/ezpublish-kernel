@@ -9,18 +9,14 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
-use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
-use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
-use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
-use \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
-
 /**
  * Test case for operations in the ObjectStateService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\ObjectStateService
+ * @group integration
+ * @group authorization
  */
-class ObjectStateServiceAuthorizationTest extends \eZ\Publish\API\Repository\Tests\BaseTest
+class ObjectStateServiceAuthorizationTest extends BaseTest
 {
     /**
      * Test for the createObjectStateGroup() method.

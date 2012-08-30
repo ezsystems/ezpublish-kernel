@@ -30,7 +30,7 @@ class InvalidArgumentValue extends InvalidArgumentException
     {
         parent::__construct(
             $argumentName,
-            "'" . var_export( $value, true ) . "' is wrong value" .( $className ? " in class '{$className}'" : "" ),
+            "'" . var_export( $value, true ) . "' is wrong value" . ( $className ? " in class '{$className}'" : "" ),
             $previous
         );
     }

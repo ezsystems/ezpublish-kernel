@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content;
-use eZ\Publish\SPI\Persistence\ValueObject,
-    eZ\Publish\Core\Repository\FieldType\Value;
+use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  */
@@ -18,7 +17,9 @@ class FieldValue extends ValueObject
     /**
      * Mixed field data
      *
-     * @note: For the "old" storage engine we will need adaptors to map them to
+     * Either a primitive, an array (map) or an object
+     *
+     * @note: For the legacy storage engine we will need adaptors to map them to
      * the existing database fields, like data_int, data_float, data_text.
      *
      * @var mixed
@@ -26,22 +27,16 @@ class FieldValue extends ValueObject
     public $data;
 
     /**
-     * Collection of custom properties which are specific to the field type.
-     * Typically these properties are used to configure behaviour of field types
-     * and normally set in the FieldDefinition on ContentTypes.
+     * Data which is not stored in the field but at an external place.
+     * This data is processed by the field type storage interface method
+     * storeFieldData
      *
-     * Example: List of base choices in ezselection field type
-     *
-     * Settings are indexed by field setting name.
-     *
-     * @var \eZ\Publish\Core\Repository\FieldType\FieldSettings
+     * @var mixed
      */
-    public $fieldSettings;
-
     public $externalData;
 
     /**
-     * Mixed sort key
+     * A value which can be used for sorting
      *
      * @note: For the "old" storage engine we will need adaptors to map them to
      * the existing database fields, like sort_key_int, sort_key_string
@@ -49,11 +44,4 @@ class FieldValue extends ValueObject
      * @var mixed
      */
     public $sortKey;
-
-    public function __clone()
-    {
-        // Force object cloning to avoid them to point to the same object (same reference)
-        if ( isset( $this->fieldSettings ) )
-            $this->fieldSettings = clone $this->fieldSettings;
-    }
 }

@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Values\Content;
 
-use eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
@@ -80,12 +78,14 @@ abstract class ContentInfo extends ValueObject
 
     /**
      * Content modification date
+     *
      * @var \DateTime
      */
     protected $modificationDate;
 
     /**
-     * Content protectedation date
+     * Content publication date
+     *
      * @var \DateTime
      */
     protected $publishedDate;

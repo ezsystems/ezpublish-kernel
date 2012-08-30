@@ -21,13 +21,14 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupCreateStruct,
     eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct,
     eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\API\Repository\Values\Content\Content,
+    eZ\Publish\API\Repository\Values\Content\Content as APIContent,
 
     eZ\Publish\SPI\Persistence\Handler,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
     eZ\Publish\API\Repository\UserService as UserServiceInterface,
 
     eZ\Publish\SPI\Persistence\User as SPIUser,
+    eZ\Publish\Core\FieldType\User\Value as UserValue,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId,
@@ -35,6 +36,7 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus,
 
+    eZ\Publish\Core\Base\Exceptions\ContentValidationException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
@@ -126,8 +128,19 @@ class UserService implements UserServiceInterface
             throw new InvalidArgumentException( "parentGroup", "parent user group has no main location" );
 
         $locationCreateStruct = $locationService->newLocationCreateStruct( $mainParentGroupLocation->id );
-        $contentDraft = $contentService->createContent( $userGroupCreateStruct, array( $locationCreateStruct ) );
-        $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+
+        $this->repository->beginTransaction();
+        try
+        {
+            $contentDraft = $contentService->createContent( $userGroupCreateStruct, array( $locationCreateStruct ) );
+            $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->buildDomainUserGroupObject( $publishedContent );
     }
@@ -179,13 +192,13 @@ class UserService implements UserServiceInterface
             $mainGroupLocation->sortField,
             $mainGroupLocation->sortOrder
         );
-        if ( $searchResult->count == 0 )
+        if ( $searchResult->totalCount == 0 )
             return array();
 
         $subUserGroups = array();
-        foreach ( $searchResult->items as $resultItem )
+        foreach ( $searchResult->searchHits as $searchHit )
         {
-            $subUserGroups[] = $this->buildDomainUserGroupObject( $resultItem );
+            $subUserGroups[] = $this->buildDomainUserGroupObject( $searchHit->valueObject );
         }
 
         return $subUserGroups;
@@ -200,7 +213,7 @@ class UserService implements UserServiceInterface
      * @param int $offset
      * @param int $limit
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
     protected function searchSubGroups( $locationId, $sortField = null, $sortOrder = Location::SORT_ORDER_ASC, $offset = 0, $limit = -1 )
     {
@@ -223,7 +236,7 @@ class UserService implements UserServiceInterface
 
         $searchQuery->sortClauses = $sortClause;
 
-        return $this->repository->getContentService()->findContent( $searchQuery, array() );
+        return $this->repository->getSearchService()->findContent( $searchQuery, array() );
     }
 
     /**
@@ -242,9 +255,18 @@ class UserService implements UserServiceInterface
 
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
 
-        //@todo: what happens to sub user groups and users below sub user groups
-
-        $this->repository->getContentService()->deleteContent( $loadedUserGroup->getVersionInfo()->getContentInfo() );
+        $this->repository->beginTransaction();
+        try
+        {
+            //@todo: what happens to sub user groups and users below sub user groups
+            $this->repository->getContentService()->deleteContent( $loadedUserGroup->getVersionInfo()->getContentInfo() );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -277,7 +299,17 @@ class UserService implements UserServiceInterface
         if ( $newParentMainLocation === null )
             throw new BadStateException( "newParent", 'new user group is not stored and/or does not have any location yet' );
 
-        $locationService->moveSubtree( $userGroupMainLocation, $newParentMainLocation );
+        $this->repository->beginTransaction();
+        try
+        {
+            $locationService->moveSubtree( $userGroupMainLocation, $newParentMainLocation );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -311,25 +343,36 @@ class UserService implements UserServiceInterface
 
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
 
-        $publishedContent = $loadedUserGroup;
-        if ( $userGroupUpdateStruct->contentUpdateStruct !== null )
+        $this->repository->beginTransaction();
+        try
         {
-            $contentDraft = $contentService->createContentDraft( $loadedUserGroup->getVersionInfo()->getContentInfo() );
+            $publishedContent = $loadedUserGroup;
+            if ( $userGroupUpdateStruct->contentUpdateStruct !== null )
+            {
+                $contentDraft = $contentService->createContentDraft( $loadedUserGroup->getVersionInfo()->getContentInfo() );
 
-            $contentDraft = $contentService->updateContent(
-                $contentDraft->getVersionInfo(),
-                $userGroupUpdateStruct->contentUpdateStruct
-            );
+                $contentDraft = $contentService->updateContent(
+                    $contentDraft->getVersionInfo(),
+                    $userGroupUpdateStruct->contentUpdateStruct
+                );
 
-            $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+                $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+            }
+
+            if ( $userGroupUpdateStruct->contentMetadataUpdateStruct !== null )
+            {
+                $publishedContent = $contentService->updateContentMetadata(
+                    $publishedContent->getVersionInfo()->getContentInfo(),
+                    $userGroupUpdateStruct->contentMetadataUpdateStruct
+                );
+            }
+
+            $this->repository->commit();
         }
-
-        if ( $userGroupUpdateStruct->contentMetadataUpdateStruct !== null )
+        catch ( \Exception $e )
         {
-            $publishedContent = $contentService->updateContentMetadata(
-                $publishedContent->getVersionInfo()->getContentInfo(),
-                $userGroupUpdateStruct->contentMetadataUpdateStruct
-            );
+            $this->repository->rollback();
+            throw $e;
         }
 
         return $this->buildDomainUserGroupObject( $publishedContent );
@@ -386,29 +429,93 @@ class UserService implements UserServiceInterface
                 $locationCreateStructs[] = $locationService->newLocationCreateStruct( $mainLocation->id );
         }
 
-        $contentDraft = $contentService->createContent( $userCreateStruct, $locationCreateStructs );
-        $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+        // Search for the first ezuser field type in content type
+        $userFieldDefinition = null;
+        foreach ( $userCreateStruct->contentType->getFieldDefinitions() as $fieldDefinition )
+        {
+            if ( $fieldDefinition->fieldTypeIdentifier == 'ezuser' )
+            {
+                $userFieldDefinition = $fieldDefinition;
+                break;
+            }
+        }
 
-        $spiUser = $this->persistenceHandler->userHandler()->create(
-            new SPIUser(
-                array(
-                    'id' => $publishedContent->id,
-                    'login' => $userCreateStruct->login,
-                    'email' => $userCreateStruct->email,
-                    'passwordHash' => $this->createPasswordHash(
-                        $userCreateStruct->login,
-                        $userCreateStruct->password,
-                        $this->settings['siteName'],
-                        $this->settings['hashType']
-                    ),
-                    'hashAlgorithm' => $this->settings['hashType'],
-                    'isEnabled' => $userCreateStruct->enabled,
-                    'maxLogin' => 0
+        if ( $userFieldDefinition === null )
+        {
+            throw new ContentValidationException( "Provided content type does not contain ezuser field type" );
+        }
+
+        $fixUserFieldType = true;
+        foreach ( $userCreateStruct->fields as $index => $field )
+        {
+            if ( $field->fieldDefIdentifier == $userFieldDefinition->identifier )
+            {
+                if ( $field->value instanceof UserValue )
+                {
+                    $userCreateStruct->fields[$index]->value->login = $userCreateStruct->login;
+                }
+                else
+                {
+                    $userCreateStruct->fields[$index]->value = new UserValue(
+                        array(
+                            'login' => $userCreateStruct->login
+                        )
+                    );
+                }
+
+                $fixUserFieldType = false;
+            }
+        }
+
+        if ( $fixUserFieldType )
+        {
+            $userCreateStruct->setField(
+                $userFieldDefinition->identifier,
+                new UserValue(
+                    array(
+                        'login' => $userCreateStruct->login
+                    )
                 )
-            )
-        );
+            );
+        }
 
-        return $this->buildDomainUserObject( $spiUser, $publishedContent );
+        $this->repository->beginTransaction();
+        try
+        {
+            $contentDraft = $contentService->createContent( $userCreateStruct, $locationCreateStructs );
+            $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+
+            $spiUser = $this->persistenceHandler->userHandler()->create(
+                new SPIUser(
+                    array(
+                        'id' => $publishedContent->id,
+                        'login' => $userCreateStruct->login,
+                        'email' => $userCreateStruct->email,
+                        'passwordHash' => $this->createPasswordHash(
+                            $userCreateStruct->login,
+                            $userCreateStruct->password,
+                            $this->settings['siteName'],
+                            $this->settings['hashType']
+                        ),
+                        'hashAlgorithm' => $this->settings['hashType'],
+                        'isEnabled' => $userCreateStruct->enabled,
+                        'maxLogin' => 0
+                    )
+                )
+            );
+
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
+
+        return $this->buildDomainUserObject(
+            $spiUser,
+            $publishedContent
+        );
     }
 
     /**
@@ -498,7 +605,17 @@ class UserService implements UserServiceInterface
 
         $loadedUser = $this->loadUser( $user->id );
 
-        $this->repository->getContentService()->deleteContent( $loadedUser->getVersionInfo()->getContentInfo() );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->repository->getContentService()->deleteContent( $loadedUser->getVersionInfo()->getContentInfo() );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -521,6 +638,26 @@ class UserService implements UserServiceInterface
         if ( !is_numeric( $user->id ) )
             throw new InvalidArgumentValue( "id", $user->id, "User" );
 
+        // We need to determine if we have anything to update.
+        // UserUpdateStruct is specific as some of the new content is in
+        // content update struct and some of it is in additional fields like
+        // email, password and so on
+        $doUpdate = false;
+        foreach ( $userUpdateStruct as $propertyValue )
+        {
+            if ( $propertyValue !== null )
+            {
+                $doUpdate = true;
+                break;
+            }
+        }
+
+        if ( !$doUpdate )
+        {
+            // Nothing to update, so we just quit
+            return $user;
+        }
+
         if ( $userUpdateStruct->email !== null )
         {
             if ( !is_string( $userUpdateStruct->email ) || empty( $userUpdateStruct->email ) )
@@ -540,50 +677,58 @@ class UserService implements UserServiceInterface
             throw new InvalidArgumentValue( "maxLogin", $userUpdateStruct->maxLogin, "UserUpdateStruct" );
 
         $contentService = $this->repository->getContentService();
-
         $loadedUser = $this->loadUser( $user->id );
 
-        $publishedContent = $loadedUser;
-        if ( $userUpdateStruct->contentUpdateStruct !== null )
+        $this->repository->beginTransaction();
+        try
         {
-            $contentDraft = $contentService->createContentDraft( $loadedUser->getVersionInfo()->getContentInfo() );
+            $publishedContent = $loadedUser;
+            if ( $userUpdateStruct->contentUpdateStruct !== null )
+            {
+                $contentDraft = $contentService->createContentDraft( $loadedUser->getVersionInfo()->getContentInfo() );
+                $contentDraft = $contentService->updateContent(
+                    $contentDraft->getVersionInfo(),
+                    $userUpdateStruct->contentUpdateStruct
+                );
+                $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+            }
 
-            $contentDraft = $contentService->updateContent(
-                $contentDraft->getVersionInfo(),
-                $userUpdateStruct->contentUpdateStruct
-            );
+            if ( $userUpdateStruct->contentMetadataUpdateStruct !== null )
+            {
+                $contentService->updateContentMetadata(
+                    $publishedContent->getVersionInfo()->getContentInfo(),
+                    $userUpdateStruct->contentMetadataUpdateStruct
+                );
+            }
 
-            $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
-        }
-
-        if ( $userUpdateStruct->contentMetadataUpdateStruct !== null )
-        {
-            $contentService->updateContentMetadata(
-                $publishedContent->getVersionInfo()->getContentInfo(),
-                $userUpdateStruct->contentMetadataUpdateStruct
-            );
-        }
-
-        $this->persistenceHandler->userHandler()->update(
-            new SPIUser(
-                array(
-                    'id' => $loadedUser->id,
-                    'login' => $loadedUser->login,
-                    'email' => $userUpdateStruct->email ?: $loadedUser->email,
-                    'passwordHash' => $userUpdateStruct->password ?
-                        $this->createPasswordHash(
-                            $loadedUser->login,
-                            $userUpdateStruct->password,
-                            $this->settings['siteName'],
-                            $this->settings['hashType']
-                        ) :
-                        $loadedUser->passwordHash,
-                    'hashAlgorithm' => $this->settings['hashType'],
-                    'isEnabled' => $userUpdateStruct->isEnabled !== null ? $userUpdateStruct->isEnabled : $loadedUser->isEnabled,
-                    'maxLogin' => $userUpdateStruct->maxLogin !== null ? (int) $userUpdateStruct->maxLogin : $loadedUser->maxLogin
+            $this->persistenceHandler->userHandler()->update(
+                new SPIUser(
+                    array(
+                        'id' => $loadedUser->id,
+                        'login' => $loadedUser->login,
+                        'email' => $userUpdateStruct->email ?: $loadedUser->email,
+                        'passwordHash' => $userUpdateStruct->password ?
+                            $this->createPasswordHash(
+                                $loadedUser->login,
+                                $userUpdateStruct->password,
+                                $this->settings['siteName'],
+                                $this->settings['hashType']
+                            ) :
+                            $loadedUser->passwordHash,
+                        'hashAlgorithm' => $this->settings['hashType'],
+                        'isEnabled' => $userUpdateStruct->isEnabled !== null ? $userUpdateStruct->isEnabled : $loadedUser->isEnabled,
+                        'maxLogin' => $userUpdateStruct->maxLogin !== null ? (int) $userUpdateStruct->maxLogin : $loadedUser->maxLogin
+                    )
                 )
-            )
-        );
+            );
+
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->loadUser( $loadedUser->id );
     }
@@ -627,10 +772,20 @@ class UserService implements UserServiceInterface
 
         $locationCreateStruct = $locationService->newLocationCreateStruct( $groupMainLocation->id );
 
-        $locationService->createLocation(
-            $loadedUser->getVersionInfo()->getContentInfo(),
-            $locationCreateStruct
-        );
+        $this->repository->beginTransaction();
+        try
+        {
+            $locationService->createLocation(
+                $loadedUser->getVersionInfo()->getContentInfo(),
+                $locationCreateStruct
+            );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -666,8 +821,18 @@ class UserService implements UserServiceInterface
         {
             if ( $userLocation->parentLocationId == $groupMainLocation->id )
             {
-                $locationService->deleteLocation( $userLocation );
-                return;
+                $this->repository->beginTransaction();
+                try
+                {
+                    $locationService->deleteLocation( $userLocation );
+                    $this->repository->commit();
+                    return;
+                }
+                catch ( \Exception $e )
+                {
+                    $this->repository->rollback();
+                    throw $e;
+                }
             }
         }
 
@@ -711,12 +876,12 @@ class UserService implements UserServiceInterface
             )
         );
 
-        $searchResult = $this->repository->getContentService()->findContent( $searchQuery, array() );
+        $searchResult = $this->repository->getSearchService()->findContent( $searchQuery, array() );
 
         $userGroups = array();
-        foreach ( $searchResult->items as $resultItem )
+        foreach ( $searchResult->searchHits as $resultItem )
         {
-            $userGroups = $this->buildDomainUserGroupObject( $resultItem );
+            $userGroups[] = $this->buildDomainUserGroupObject( $resultItem->valueObject );
         }
 
         return $userGroups;
@@ -759,15 +924,14 @@ class UserService implements UserServiceInterface
             $this->getSortClauseBySortField( $mainGroupLocation->sortField, $mainGroupLocation->sortOrder )
         );
 
-        $searchResult = $this->repository->getContentService()->findContent( $searchQuery, array() );
+        $searchResult = $this->repository->getSearchService()->findContent( $searchQuery, array() );
 
         $users = array();
-        foreach ( $searchResult->items as $resultItem )
+        foreach ( $searchResult->searchHits as $resultItem )
         {
-            /** @var $resultItem \eZ\Publish\API\Repository\Values\Content\Content */
-            $spiUser = $this->persistenceHandler->userHandler()->load( $resultItem->getVersionInfo()->getContentInfo()->id );
+            $spiUser = $this->persistenceHandler->userHandler()->load( $resultItem->valueObject->id );
 
-            $users[] = $this->buildDomainUserObject( $spiUser, $resultItem );
+            $users[] = $this->buildDomainUserObject( $spiUser, $resultItem->valueObject );
         }
 
         return $users;
@@ -859,24 +1023,25 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      */
-    protected function buildDomainUserGroupObject( Content $content )
+    protected function buildDomainUserGroupObject( APIContent $content )
     {
+        $locationService = $this->repository->getLocationService();
+
         $contentInfo = $content->getVersionInfo()->getContentInfo();
-        $mainLocation = $this->repository->getLocationService()->loadMainLocation( $contentInfo );
+        $mainLocation = $locationService->loadMainLocation( $contentInfo );
+        $parentLocation = $locationService->loadLocation( $mainLocation->parentLocationId );
 
         $subGroupCount = 0;
         if ( $mainLocation !== null )
         {
             $subGroups = $this->searchSubGroups( $mainLocation->id, null, Location::SORT_ORDER_ASC, 0, 0 );
-            $subGroupCount = $subGroups->count;
+            $subGroupCount = $subGroups->totalCount;
         }
 
         return new UserGroup(
             array(
-                'versionInfo' => $content->getVersionInfo(),
-                'fields' => $content->getFields(),
-                'relations' => $content->getRelations(),
-                'parentId' => $mainLocation ? $mainLocation->parentLocationId : null,
+                'content' => $content,
+                'parentId' => $parentLocation ? $parentLocation->contentId : null,
                 'subGroupCount' => $subGroupCount
             )
         );
@@ -890,16 +1055,14 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    protected function buildDomainUserObject( SPIUser $spiUser, Content $content = null )
+    protected function buildDomainUserObject( SPIUser $spiUser, APIContent $content = null )
     {
         if ( $content === null )
             $content = $this->repository->getContentService()->loadContent( $spiUser->id );
 
         return new User(
             array(
-                'versionInfo' => $content->getVersionInfo(),
-                'fields' => $content->getFields(),
-                'relations' => $content->getRelations(),
+                'content' => $content,
                 'login' => $spiUser->login,
                 'email' => $spiUser->email,
                 'passwordHash' => $spiUser->passwordHash,

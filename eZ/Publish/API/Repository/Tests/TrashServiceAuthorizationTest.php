@@ -14,6 +14,7 @@ namespace eZ\Publish\API\Repository\Tests;
  *
  * @see eZ\Publish\API\Repository\TrashService
  * @group integration
+ * @group authorization
  */
 class TrashServiceAuthorizationTest extends BaseTrashServiceTest
 {
@@ -59,23 +60,23 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         $repository = $this->getRepository();
 
         /* BEGIN: Inline */
-        // remoteId of the "Community" page main location
-        $communityRemoteId = 'c4604fb2e100a6681a4f53fbe6e5eeae';
+        // remoteId of the "Media" page main location
+        $mediaRemoteId = '75c715a51699d2d309a924eca6a95145';
 
         $userService = $repository->getUserService();
         $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
-        // Load "Community" page location
-        $communityLocation = $locationService->loadLocationByRemoteId(
-            $communityRemoteId
+        // Load "Media" page location
+        $mediaLocation = $locationService->loadLocationByRemoteId(
+            $mediaRemoteId
         );
 
         // Set "Anonymous" as current user
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
 
         // This call will fail with an "UnauthorizedException"
-        $trashService->trash( $communityLocation );
+        $trashService->trash( $mediaLocation );
         /* END: Inline */
     }
 

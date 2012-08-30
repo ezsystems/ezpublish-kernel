@@ -42,8 +42,8 @@ function generateContentTypeGroupFixture( array $fixture )
         $groups[$data['id']] = array(
             'id' => $data['id'],
             'identifier' => $data['name'],
-            'creationDate' => 'new \DateTime( "@' . $data['created'] . '" )',
-            'modificationDate' => 'new \DateTime( "@' . $data['modified'] . '" )',
+            'creationDate' => dateCreateCall( $data['created'] ),
+            'modificationDate' =>  dateCreateCall( $data['modified'] ),
             'creatorId' => $data['creator_id'],
             'modifierId' => $data['modifier_id']
         );
@@ -94,8 +94,8 @@ function generateContentTypeFixture( array $fixture )
             'id' => $data['id'],
             'status' => 0, // Type::STATUS_DEFINED
             'identifier' => $data['identifier'],
-            'creationDate' => 'new \DateTime( "@' . $data['created'] . '" )',
-            'modificationDate' => 'new \DateTime( "@' . $data['modified'] . '" )',
+            'creationDate' => dateCreateCall( $data['created'] ),
+            'modificationDate' => dateCreateCall( $data['modified'] ),
             'creatorId' => $data['creator_id'],
             'modifierId' => $data['modifier_id'],
             'remoteId' => $data['remote_id'],
@@ -156,7 +156,7 @@ function getContentTypeFieldDefinition( array $fixture )
             'names' => $names,
             'descriptions' => $description,
             'fieldSettings' => array(),
-            'validators' => array(),
+            'validatorConfiguration' => array(),
         );
 
         $nextFieldId = max( $nextFieldId, $data['id'] );
@@ -187,9 +187,23 @@ function generateSectionFixture( array $fixture )
         $nextId = max( $nextId, $data['id'] );
     }
 
+    $assignedContents = array();
+
+    foreach ( getFixtureTable( 'ezcontentobject', $fixture ) as $data )
+    {
+        $sectionId = (int) $data['section_id'];
+
+        if ( !isset( $assignedContents[$sectionId] ) )
+        {
+            $assignedContents[$sectionId] = array();
+        }
+        $assignedContents[$sectionId][(int) $data['id']] = true;
+    }
+
     return generateReturnArray(
         generateValueObjects( '\eZ\Publish\API\Repository\Values\Content\Section', $sections ),
         generateMapping( $identifiers ),
+        generateMapping( $assignedContents ),
         $nextId
     );
 }
@@ -237,8 +251,8 @@ function generateContentInfoFixture( array $fixture )
             'currentVersionNo' => $data['current_version'],
             'published' => ( $data['published'] != 0 ),
             'ownerId' => $data['owner_id'],
-            'modificationDate' => 'new \DateTime( "@' . $data['modified'] . '" )',
-            'publishedDate' => 'new \DateTime( "@' . $data['published'] . '" )',
+            'modificationDate' => dateCreateCall( $data['modified'] ),
+            'publishedDate' => dateCreateCall( $data['published'] ),
             'alwaysAvailable' => (boolean) ( $data['language_mask'] & 1 ),
             'remoteId' => $data['remote_id'],
             'mainLanguageCode' => $languageCodes[$data['initial_language_id']],
@@ -325,9 +339,9 @@ function generateContentInfoFixture( array $fixture )
             'contentId' => $data['contentobject_id'],
             'status' => $data['status'] <= 2 ? $data['status'] : 1,
             'versionNo' => $data['version'],
-            'modificationDate' => 'new \DateTime( "@' . $data['modified'] . '" )',
+            'modificationDate' => dateCreateCall( $data['modified'] ),
             'creatorId' => $data['creator_id'],
-            'creationDate' => 'new \DateTime( "@' . $data['created'] . '" )',
+            'creationDate' => dateCreateCall( $data['created'] ),
             'initialLanguageCode' => $languageCodes[$data['initial_language_id']],
             'languageCodes' => array(), // TODO: Extract language codes from fields
             'repository' => '$this',
@@ -424,7 +438,7 @@ function generateLocationFixture( array $fixture )
             ) ),
             'parentLocationId' => $data['parent_node_id'],
             'pathString' => $data['path_string'],
-            'modifiedSubLocationDate' => $data['modified_subnode'],
+            'modifiedSubLocationDate' => dateCreateCall( $data['modified_subnode'] ),
             'depth' => $data['depth'],
             'sortField' => $data['sort_field'],
             'sortOrder' => $data['sort_order'],
@@ -451,6 +465,14 @@ function createRepoCall( $serviceName, $methodName, array $params )
         $serviceName,
         $methodName,
         implode( ', ', $params )
+    );
+}
+
+function dateCreateCall( $timestamp )
+{
+    return sprintf(
+        '$this->createDateTime( %s )',
+        $timestamp
     );
 }
 
@@ -764,7 +786,7 @@ function generateObjectStateFixture( array $fixture )
         {
             $groupStateMap[$groupId] = array();
         }
-        $groupStateMap[$groupId][] = $data['id'];
+        $groupStateMap[$groupId][$data['id']] = $data['id'];
 
         // For internal use only
         $stateGroupMap[$data['id']] = $groupId;

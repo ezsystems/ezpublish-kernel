@@ -39,8 +39,8 @@ return array(
         6 => new \eZ\Publish\API\Repository\Values\Content\Section(
             array(
                 "id" => 6,
-                "name" => "Protected",
-                "identifier" => "protected",
+                "name" => "Restricted",
+                "identifier" => "",
             )
         ),
     ),
@@ -50,7 +50,36 @@ return array(
         "media" => 3,
         "setup" => 4,
         "design" => 5,
-        "protected" => 6,
+    ),
+    array(
+        "2" => array(
+                    4 => true,
+                    10 => true,
+                    11 => true,
+                    12 => true,
+                    13 => true,
+                    14 => true,
+                    42 => true,
+                    59 => true,
+                ),
+        "3" => array(
+                    41 => true,
+                    49 => true,
+                    50 => true,
+                    51 => true,
+                ),
+        "4" => array(
+                    45 => true,
+                    52 => true,
+                ),
+        "5" => array(
+                    54 => true,
+                    56 => true,
+                ),
+        "1" => array(
+                    57 => true,
+                    58 => true,
+                ),
     ),
     6
 );

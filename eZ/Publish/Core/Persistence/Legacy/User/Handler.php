@@ -14,7 +14,6 @@ use eZ\Publish\SPI\Persistence\User,
     eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
     eZ\Publish\SPI\Persistence\User\Policy,
     eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway as RoleGateway,
-    RuntimeException,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
@@ -23,14 +22,14 @@ use eZ\Publish\SPI\Persistence\User,
 class Handler implements BaseUserHandler
 {
     /**
-     * Gaateway for storing user data
+     * Gateway for storing user data
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\User\Gateway
      */
     protected $userGateway;
 
     /**
-     * Gaateway for storing role data
+     * Gateway for storing role data
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway
      */
@@ -48,7 +47,7 @@ class Handler implements BaseUserHandler
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\User\Gateway $userGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway $roleGateway
-     * @return void
+     * @param \eZ\Publish\Core\Persistence\Legacy\User\Mapper $mapper
      */
     public function __construct( Gateway $userGateway, RoleGateway $roleGateway, Mapper $mapper )
     {
@@ -268,7 +267,7 @@ class Handler implements BaseUserHandler
     {
         // Each policy can only be associated to exactly one role. Thus it is
         // sufficient to use the policyId for identification and just remove
-        // the policiy completely.
+        // the policy completely.
         $this->roleGateway->removePolicy( $policyId );
     }
 
@@ -286,9 +285,9 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Assign role to user group with given limitation
+     * Assign role to a user or user group with given limitations
      *
-     * The limitation array may look like:
+     * The limitation array looks like:
      * <code>
      *  array(
      *      'Subtree' => array(
@@ -303,24 +302,38 @@ class Handler implements BaseUserHandler
      * Where the keys are the limitation identifiers, and the respective values
      * are an array of limitation values. The limitation parameter is optional.
      *
-     * @param mixed $groupId
+     * @param mixed $contentId The groupId or userId to assign the role to.
      * @param mixed $roleId
      * @param array $limitation
      */
-    public function assignRole( $groupId, $roleId, array $limitation = null )
+    public function assignRole( $contentId, $roleId, array $limitation = null )
     {
         $limitation = $limitation ?: array( '' => array( '' ) );
-        $this->userGateway->assignRole( $groupId, $roleId, $limitation );
+        $this->userGateway->assignRole( $contentId, $roleId, $limitation );
     }
 
     /**
      * Un-assign a role
      *
-     * @param mixed $groupId The group / user Id to un-assign a role from
+     * @param mixed $contentId The user or user group Id to un-assign the role from.
      * @param mixed $roleId
      */
-    public function unAssignRole( $groupId, $roleId )
+    public function unAssignRole( $contentId, $roleId )
     {
-        $this->userGateway->removeRole( $groupId, $roleId );
+        $this->userGateway->removeRole( $contentId, $roleId );
+    }
+
+    /**
+     * Returns a list of role assignments for the given user or user group id
+     *
+     * @param mixed $contentId
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
+     */
+    public function getRoleAssignments( $contentId )
+    {
+        $data = $this->userGateway->loadRoleAssignments( $contentId );
+
+        return $this->mapper->mapRoleAssignments( $data );
     }
 }

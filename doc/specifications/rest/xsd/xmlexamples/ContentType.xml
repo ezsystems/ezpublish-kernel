@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentType href="/content/types/32/draft" media-type="application/vnd.ez.api.ContentType+xml">
+  <id>32</id>
+  <status>DRAFT</status>
+  <identifier>newContentType</identifier>
+  <names>
+    <value languageCode="eng-US">New Content Type</value>
+  </names>
+  <descriptions>
+    <value languageCode="eng-US">This is a description</value>
+  </descriptions>
+  <creationDate>2001-01-01T16:37:00</creationDate>
+  <modificationDate>2001-01-01T16:37:00</modificationDate>
+  <Creator href="/user/users/13" media-type="application/vnd.ez.api.User+xml"/>
+  <Modifier href="/user/users/13" media-type="application/vnd.ez.api.User+xml"/>
+  <remoteId>remoteId-qwert548</remoteId>
+  <urlAliasSchema>&lt;title&gt;</urlAliasSchema>
+  <nameSchema>&lt;title&gt;</nameSchema>
+  <isContainer>true</isContainer>
+  <mainLanguageCode>eng-US</mainLanguageCode>
+  <defaultAlwaysAvailable>true</defaultAlwaysAvailable>
+  <defaultSortField>PATH</defaultSortField>
+  <defaultSortOrder>ASC</defaultSortOrder>
+  <FieldDefinitions href="/content/types/32/draft/fielddefinitions" media-type="application/vnd.ez.api.FieldDefinitionList+xml">
+    <FieldDefinition href="/content/types/32/draft/fielddefinitions/34" media-type="application/vnd.ez.api.FieldDefinition+xml">
+      <id>34</id>
+      <identifier>title</identifier>
+      <fieldType>ezstring</fieldType>
+      <fieldGroup>content</fieldGroup>
+      <position>1</position>
+      <isTranslatable>true</isTranslatable>
+      <isRequired>true</isRequired>
+      <isInfoCollector>false</isInfoCollector>
+      <defaultValue>New Title</defaultValue>
+      <isSearchable>true</isSearchable>
+      <names>
+        <value languageCode="eng-US">Title</value>
+      </names>
+      <descriptions>
+        <value languageCode="eng-US">This is the title</value>
+      </descriptions>
+    </FieldDefinition>
+    <FieldDefinition href="/content/types/32/draft/fielddefinitions/36" media-type="application/vnd.ez.api.FieldDefinition+xml">
+      <id>36</id>
+      <identifier>summary</identifier>
+      <fieldType>ezxmltext</fieldType>
+      <fieldGroup>content</fieldGroup>
+      <position>2</position>
+      <isTranslatable>true</isTranslatable>
+      <isRequired>false</isRequired>
+      <isInfoCollector>false</isInfoCollector>
+      <defaultValue></defaultValue>
+      <isSearchable>true</isSearchable>
+      <names>
+        <value languageCode="eng-US">Summary</value>
+      </names>
+      <descriptions>
+        <value languageCode="eng-US">This is the summary</value>
+      </descriptions>
+    </FieldDefinition>
+  </FieldDefinitions>
+</ContentType>

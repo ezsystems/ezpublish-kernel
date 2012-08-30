@@ -8,17 +8,14 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use eZ\Publish\Core\Repository\FieldType\Selection\Value as SelectionValue,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings,
+use eZ\Publish\Core\FieldType\FieldSettings,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection as SelectionConverter,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
-    PHPUnit_Framework_TestCase,
-    DOMDocument,
-    DOMXPath;
+    PHPUnit_Framework_TestCase;
 
 /**
  * Test case for Selection converter in Legacy storage
@@ -36,14 +33,28 @@ class SelectionTest extends PHPUnit_Framework_TestCase
         $this->converter = new SelectionConverter;
     }
 
-    protected function assertXpathMatch( $expected, $xpath, DOMDocument $doc, $message = null )
+    /**
+     * @group fieldType
+     * @group selection
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection::toStorageValue
+     */
+    public function testToStorageValue()
     {
-        $xpathObj = new DOMXPath( $doc );
+        $fieldValue = new FieldValue();
+        $fieldValue->data = array( 1, 3 );
+        $fieldValue->sortKey = '1-3';
+
+        $expectedStorageFieldValue = new StorageFieldValue();
+        $expectedStorageFieldValue->dataText = '1-3';
+        $expectedStorageFieldValue->sortKeyString = '1-3';
+
+        $actualStorageFieldValue = new StorageFieldValue();
+
+        $this->converter->toStorageValue( $fieldValue, $actualStorageFieldValue );
 
         $this->assertEquals(
-            $expected,
-            $xpathObj->evaluate( $xpath ),
-            $message
+            $expectedStorageFieldValue,
+            $actualStorageFieldValue
         );
     }
 
@@ -52,55 +63,23 @@ class SelectionTest extends PHPUnit_Framework_TestCase
      * @group selection
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection::toStorageValue
      */
-    public function testToStorageValue()
+    public function testToStorageValueEmpty()
     {
-        $value = new FieldValue;
-        $value->data = array( "Choice1", "Choice2" );
-        $value->fieldSettings = new FieldSettings(
-            array(
-                "isMultiple" => true,
-                "options" => array(
-                    "Choice0",
-                    "Choice1",
-                    "Choice2",
-                    "Choice3",
-                ),
-            )
-        );
-        $storageFieldValue = new StorageFieldValue;
+        $fieldValue = new FieldValue();
+        $fieldValue->data = array();
+        $fieldValue->sortKey = '';
 
-        $this->converter->toStorageValue( $value, $storageFieldValue );
-        $this->assertSame( "1-2", $storageFieldValue->dataText );
-        $this->assertSame( "1-2", $storageFieldValue->sortKeyString );
-    }
+        $expectedStorageFieldValue = new StorageFieldValue();
+        $expectedStorageFieldValue->dataText = '';
+        $expectedStorageFieldValue->sortKeyString = '';
 
-    /**
-     * @group fieldType
-     * @group selection
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection::toFieldValue
-     */
-    public function testToFieldValueMultiple()
-    {
-        $storageFieldValue = new StorageFieldValue;
-        $storageFieldValue->dataText = "0-1-3";
-        $storageFieldValue->sortKeyString = "0-1-3";
-        $fieldValue = new FieldValue;
-        $fieldValue->fieldSettings = new FieldSettings(
-            array(
-                "isMultiple" => true,
-                "options" => array(
-                    "Choice0",
-                    "Choice1",
-                    "Choice2",
-                    "Choice3",
-                ),
-            )
-        );
+        $actualStorageFieldValue = new StorageFieldValue();
 
-        $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
+        $this->converter->toStorageValue( $fieldValue, $actualStorageFieldValue );
+
         $this->assertEquals(
-            array( "Choice0", "Choice1", "Choice3" ),
-            $fieldValue->data
+            $expectedStorageFieldValue,
+            $actualStorageFieldValue
         );
     }
 
@@ -111,26 +90,21 @@ class SelectionTest extends PHPUnit_Framework_TestCase
      */
     public function testToFieldValue()
     {
-        $storageFieldValue = new StorageFieldValue;
-        $storageFieldValue->dataText = "0";
-        $storageFieldValue->sortKeyString = "0";
-        $fieldValue = new FieldValue;
-        $fieldValue->fieldSettings = new FieldSettings(
-            array(
-                "isMultiple" => false,
-                "options" => array(
-                    "Choice0",
-                    "Choice1",
-                    "Choice2",
-                    "Choice3",
-                ),
-            )
-        );
+        $storageFieldValue = new StorageFieldValue();
+        $storageFieldValue->dataText = '1-3';
+        $storageFieldValue->sortKeyString = '1-3';
 
-        $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
+        $expectedFieldValue = new FieldValue();
+        $expectedFieldValue->data = array( 1, 3 );
+        $expectedFieldValue->sortKey = '1-3';
+
+        $actualFieldValue = new FieldValue();
+
+        $this->converter->toFieldValue( $storageFieldValue, $actualFieldValue );
+
         $this->assertEquals(
-            array( "Choice0" ),
-            $fieldValue->data
+            $expectedFieldValue,
+            $actualFieldValue
         );
     }
 
@@ -141,26 +115,21 @@ class SelectionTest extends PHPUnit_Framework_TestCase
      */
     public function testToFieldValueEmpty()
     {
-        $storageFieldValue = new StorageFieldValue;
-        $storageFieldValue->dataText = "";
-        $storageFieldValue->sortKeyString = "";
-        $fieldValue = new FieldValue;
-        $fieldValue->fieldSettings = new FieldSettings(
-            array(
-                "isMultiple" => true,
-                "options" => array(
-                    "Choice0",
-                    "Choice1",
-                    "Choice2",
-                    "Choice3",
-                ),
-            )
-        );
+        $storageFieldValue = new StorageFieldValue();
+        $storageFieldValue->dataText = '';
+        $storageFieldValue->sortKeyString = '';
 
-        $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
+        $expectedFieldValue = new FieldValue();
+        $expectedFieldValue->data = array();
+        $expectedFieldValue->sortKey = '';
+
+        $actualFieldValue = new FieldValue();
+
+        $this->converter->toFieldValue( $storageFieldValue, $actualFieldValue );
+
         $this->assertEquals(
-            array(),
-            $fieldValue->data
+            $expectedFieldValue,
+            $actualFieldValue
         );
     }
 
@@ -171,58 +140,32 @@ class SelectionTest extends PHPUnit_Framework_TestCase
      */
     public function testToStorageFieldDefinitionMultiple()
     {
-        $fieldTypeConstraints = new FieldTypeConstraints;
-        $fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
-                "isMultiple" => true,
-                "options" => array(
-                    "Choice1",
-                    "Choice2",
-                    "Choice3",
-                ),
-            )
-        );
+        $fieldDefinition = new PersistenceFieldDefinition( array(
+            'fieldTypeConstraints' => new FieldTypeConstraints( array(
+                'fieldSettings' => new FieldSettings( array(
+                    'isMultiple' => true,
+                    'options' => array(
+                        0 => 'First',
+                        1 => 'Second',
+                        2 => 'Third'
+                    )
+                ) )
+            ) )
+        ) );
 
-        $storageFieldDef = new StorageFieldDefinition;
-        $this->converter->toStorageFieldDefinition(
-            new PersistenceFieldDefinition(
-                array(
-                    "fieldTypeConstraints" => $fieldTypeConstraints,
-                )
-            ),
-            $storageFieldDef
-        );
-        self::assertSame(
-            1,
-            $storageFieldDef->dataInt1
-        );
-        $dataText5 = new DOMDocument;
-        $dataText5->loadXML( $storageFieldDef->dataText5 );
-        self::assertXpathMatch(
-            1,
-            "count(/ezselection/options)",
-            $dataText5
-        );
-        self::assertXpathMatch(
-            3,
-            "count(/ezselection/options/option)",
-            $dataText5
-        );
-        self::assertXpathMatch(
-            1,
-            "count(/ezselection/options/option[@id=0 and @name='Choice1'])",
-            $dataText5
-        );
-        self::assertXpathMatch(
-            1,
-            "count(/ezselection/options/option[@id=1 and @name='Choice2'])",
-            $dataText5
-        );
-        self::assertXpathMatch(
-            1,
-            "count(/ezselection/options/option[@id=2 and @name='Choice3'])",
-            $dataText5
-        );
+        $expectedStorageFieldDefinition = new StorageFieldDefinition();
+        $expectedStorageFieldDefinition->dataInt1 = 1;
+        $expectedStorageFieldDefinition->dataText5 = <<<EOT
+<?xml version="1.0" encoding="utf-8"?>
+<ezselection><options><option id="0" name="First"/><option id="1" name="Second"/><option id="2" name="Third"/></options></ezselection>
+
+EOT;
+
+        $actualStorageFieldDefinition = new StorageFieldDefinition();
+
+        $this->converter->toStorageFieldDefinition( $fieldDefinition, $actualStorageFieldDefinition );
+
+        $this->assertEquals( $expectedStorageFieldDefinition, $actualStorageFieldDefinition );
     }
 
     /**
@@ -232,58 +175,30 @@ class SelectionTest extends PHPUnit_Framework_TestCase
      */
     public function testToStorageFieldDefinitionSingle()
     {
-        $fieldTypeConstraints = new FieldTypeConstraints;
-        $fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
-                "isMultiple" => false,
-                "options" => array(
-                    "Choice1",
-                    "Choice2",
-                    "Choice3",
-                ),
-            )
-        );
+        $fieldDefinition = new PersistenceFieldDefinition( array(
+            'fieldTypeConstraints' => new FieldTypeConstraints( array(
+                'fieldSettings' => new FieldSettings( array(
+                    'isMultiple' => false,
+                    'options' => array(
+                        0 => 'First',
+                    )
+                ) )
+            ) )
+        ) );
 
-        $storageFieldDef = new StorageFieldDefinition;
-        $this->converter->toStorageFieldDefinition(
-            new PersistenceFieldDefinition(
-                array(
-                    "fieldTypeConstraints" => $fieldTypeConstraints,
-                )
-            ),
-            $storageFieldDef
-        );
-        self::assertSame(
-            0,
-            $storageFieldDef->dataInt1
-        );
-        $dataText5 = new DOMDocument;
-        $dataText5->loadXML( $storageFieldDef->dataText5 );
-        self::assertXpathMatch(
-            1,
-            "count(/ezselection/options)",
-            $dataText5
-        );
-        self::assertXpathMatch(
-            3,
-            "count(/ezselection/options/option)",
-            $dataText5
-        );
-        self::assertXpathMatch(
-            1,
-            "count(/ezselection/options/option[@id=0 and @name='Choice1'])",
-            $dataText5
-        );
-        self::assertXpathMatch(
-            1,
-            "count(/ezselection/options/option[@id=1 and @name='Choice2'])",
-            $dataText5
-        );
-        self::assertXpathMatch(
-            1,
-            "count(/ezselection/options/option[@id=2 and @name='Choice3'])",
-            $dataText5
-        );
+        $expectedStorageFieldDefinition = new StorageFieldDefinition();
+        $expectedStorageFieldDefinition->dataInt1 = 0;
+        $expectedStorageFieldDefinition->dataText5 = <<<EOT
+<?xml version="1.0" encoding="utf-8"?>
+<ezselection><options><option id="0" name="First"/></options></ezselection>
+
+EOT;
+
+        $actualStorageFieldDefinition = new StorageFieldDefinition();
+
+        $this->converter->toStorageFieldDefinition( $fieldDefinition, $actualStorageFieldDefinition );
+
+        $this->assertEquals( $expectedStorageFieldDefinition, $actualStorageFieldDefinition );
     }
 
     /**
@@ -293,29 +208,39 @@ class SelectionTest extends PHPUnit_Framework_TestCase
      */
     public function testToFieldDefinitionMultiple()
     {
-        $fieldDef = new PersistenceFieldDefinition;
 
-        $this->converter->toFieldDefinition(
-            new StorageFieldDefinition(
-                array(
-                    "dataInt1" => 1,
-                    "dataText5" => '<?xml version="1.0" encoding="utf-8"?><ezselection><options><option id="0" name="Choice1"/><option id="1" name="Choice2"/><option id="2" name="Choice3"/></options></ezselection>'
-                )
-            ),
-            $fieldDef
-        );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
-        self::assertTrue(
-            $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"]
-        );
-        self::assertSame(
-            array(
-                "Choice1",
-                "Choice2",
-                "Choice3",
-            ),
-            $fieldDef->fieldTypeConstraints->fieldSettings["options"]
-        );
+        $storageFieldDefinition = new StorageFieldDefinition();
+        $storageFieldDefinition->dataInt1 = 1;
+        $storageFieldDefinition->dataText5 = <<<EOT
+<?xml version="1.0" encoding="utf-8"?>
+<ezselection>
+  <options>
+    <option id="0" name="First"/>
+    <option id="1" name="Second"/>
+    <option id="2" name="Third"/>
+  </options>
+</ezselection>
+EOT;
+
+        $expectedFieldDefinition = new PersistenceFieldDefinition( array(
+            'fieldTypeConstraints' => new FieldTypeConstraints( array(
+                'fieldSettings' => new FieldSettings( array(
+                    'isMultiple' => true,
+                    'options' => array(
+                        0 => 'First',
+                        1 => 'Second',
+                        2 => 'Third'
+                    )
+                ) )
+            ) )
+        ) );
+
+        $actualFieldDefinition = new PersistenceFieldDefinition();
+
+        $this->converter->toFieldDefinition( $storageFieldDefinition, $actualFieldDefinition );
+
+        $this->assertEquals( $expectedFieldDefinition, $actualFieldDefinition );
+
     }
 
     /**
@@ -325,28 +250,5 @@ class SelectionTest extends PHPUnit_Framework_TestCase
      */
     public function testToFieldDefinitionSingle()
     {
-        $fieldDef = new PersistenceFieldDefinition;
-
-        $this->converter->toFieldDefinition(
-            new StorageFieldDefinition(
-                array(
-                    "dataInt1" => 0,
-                    "dataText5" => '<?xml version="1.0" encoding="utf-8"?><ezselection><options><option id="0" name="Choice1"/><option id="1" name="Choice2"/><option id="2" name="Choice3"/></options></ezselection>'
-                )
-            ),
-            $fieldDef
-        );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
-        self::assertFalse(
-            $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"]
-        );
-        self::assertSame(
-            array(
-                "Choice1",
-                "Choice2",
-                "Choice3",
-            ),
-            $fieldDef->fieldTypeConstraints->fieldSettings["options"]
-        );
     }
 }

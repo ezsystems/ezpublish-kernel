@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use eZ\Publish\Core\Repository\FieldType\TextBlock\Value as TextBlockValue,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings,
+use eZ\Publish\Core\FieldType\TextBlock\Value as TextBlockValue,
+    eZ\Publish\Core\FieldType\FieldSettings,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
@@ -53,12 +53,12 @@ EOT;
     {
         $value = new FieldValue;
         $value->data = $this->longText;
-        $value->sortKey = array( 'sort_key_string' => 'Now that we know who you are' );
+        $value->sortKey = 'Now that we know who you are';
         $storageFieldValue = new StorageFieldValue;
 
         $this->converter->toStorageValue( $value, $storageFieldValue );
         self::assertSame( $value->data, $storageFieldValue->dataText );
-        self::assertSame( $value->sortKey['sort_key_string'], $storageFieldValue->sortKeyString );
+        self::assertSame( $value->sortKey, $storageFieldValue->sortKeyString );
         self::assertSame( 0, $storageFieldValue->sortKeyInt );
     }
 
@@ -76,7 +76,7 @@ EOT;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
         self::assertSame( $storageFieldValue->dataText, $fieldValue->data );
-        self::assertSame( $storageFieldValue->sortKeyString, $fieldValue->sortKey['sort_key_string'] );
+        self::assertSame( $storageFieldValue->sortKeyString, $fieldValue->sortKey );
     }
 
     /**
@@ -90,7 +90,7 @@ EOT;
         $fieldTypeConstraints = new FieldTypeConstraints;
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                'textColumns' => 15
+                "textRows" => 15
             )
         );
         $fieldDef = new PersistenceFieldDefinition(
@@ -123,9 +123,9 @@ EOT;
 
         $this->converter->toFieldDefinition( $storageDef, $fieldDef );
         self::assertNull( $fieldDef->fieldTypeConstraints->validators );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertSame(
-            array( 'textColumns' => 20 ),
+            array( "textRows" => 20 ),
             $fieldDef->fieldTypeConstraints->fieldSettings->getArrayCopy()
         );
     }

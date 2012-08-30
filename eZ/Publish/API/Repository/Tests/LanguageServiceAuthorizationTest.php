@@ -9,14 +9,13 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Tests\BaseTest;
-
 /**
  * Test case for operations in the LanguageService using in memory storage.
  *
  * @see \eZ\Publish\API\Repository\LanguageService
  * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadAnonymousUser
  * @group integration
+ * @group authorization
  */
 class LanguageServiceAuthorizationTest extends BaseTest
 {

@@ -6,6 +6,35 @@ CREATE TABLE 'ezbinaryfile' (
 	'original_filename' text(255) NOT NULL,
 	'version' integer NOT NULL DEFAULT 0
 );
+CREATE TABLE 'ezmedia' (
+  'contentobject_attribute_id' integer NOT NULL DEFAULT 0,
+  'controls' text(50) DEFAULT NULL,
+  'filename' text(255) NOT NULL DEFAULT '',
+  'has_controller' integer DEFAULT 0,
+  'height' integer DEFAULT NULL,
+  'is_autoplay' integer DEFAULT 0,
+  'is_loop' integer DEFAULT 0,
+  'mime_type' text(50) NOT NULL DEFAULT '',
+  'original_filename' text(255) NOT NULL DEFAULT '',
+  'pluginspage' text(255) DEFAULT NULL,
+  'quality' text(50) DEFAULT NULL,
+  'version' integer NOT NULL DEFAULT 0,
+  'width' integer DEFAULT NULL,
+  PRIMARY KEY ('contentobject_attribute_id','version')
+);
+CREATE TABLE 'ezimagefile' (
+	'contentobject_attribute_id' integer NOT NULL DEFAULT 0,
+	'filepath' text NOT NULL,
+	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT
+);
+CREATE TABLE 'ezgmaplocation' (
+  'contentobject_attribute_id' integer NOT NULL DEFAULT 0,
+  'contentobject_version' integer NOT NULL DEFAULT 0,
+  'latitude' real NOT NULL DEFAULT 0,
+  'longitude' real NOT NULL DEFAULT 0,
+  'address' text(150) DEFAULT NULL,
+  PRIMARY KEY ('contentobject_attribute_id','contentobject_version')
+);
 CREATE TABLE 'ezcobj_state' (
 	'default_language_id' integer NOT NULL DEFAULT 0,
 	'group_id' integer NOT NULL DEFAULT 0,
@@ -24,8 +53,9 @@ CREATE TABLE 'ezcobj_state_group_language' (
 	'contentobject_state_group_id' integer NOT NULL DEFAULT 0,
 	'description' text NOT NULL,
 	'language_id' integer NOT NULL DEFAULT 0,
+	'real_language_id' integer NOT NULL DEFAULT 0,
 	'name' text(45) NOT NULL DEFAULT '',
-	PRIMARY KEY ( contentobject_state_group_id, language_id )
+	PRIMARY KEY ( contentobject_state_group_id, real_language_id )
 );
 CREATE TABLE 'ezcobj_state_language' (
 	'contentobject_state_id' integer NOT NULL DEFAULT 0,
@@ -84,7 +114,7 @@ CREATE TABLE 'ezcontentclass_attribute' (
 	'data_text4' text(255),
 	'data_text5' clob,
 	'data_type_string' text(50) NOT NULL,
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+	'id' integer NOT NULL DEFAULT 0,
 	'identifier' text(50) NOT NULL,
 	'is_information_collector' integer NOT NULL DEFAULT 0,
 	'is_required' integer NOT NULL DEFAULT 0,
@@ -142,7 +172,7 @@ CREATE TABLE 'ezcontentobject_attribute' (
 	'language_code' text(20) NOT NULL,
 	'language_id' integer NOT NULL DEFAULT 0,
 	'sort_key_int' integer NOT NULL DEFAULT 0,
-	'sort_key_string' text(255) NOT NULL,
+	'sort_key_string' text(255) NOT NULL COLLATE NOCASE,
 	'version' integer NOT NULL DEFAULT 0,
     PRIMARY KEY ( id, version )
 );
@@ -264,6 +294,12 @@ CREATE TABLE 'ezurlalias_ml' (
 CREATE TABLE 'ezurlalias_ml_incr' (
 	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT
 );
+CREATE TABLE 'ezurlwildcard' (
+	'destination_url' clob NOT NULL,
+	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+	'source_url' clob NOT NULL,
+	'type' integer NOT NULL DEFAULT 0
+);
 CREATE TABLE 'ezuser' (
 	'contentobject_id' integer NOT NULL DEFAULT 0,
 	'email' text(150) NOT NULL,
@@ -325,7 +361,7 @@ CREATE TABLE 'ezsearch_object_word_link' (
 CREATE TABLE 'ezsearch_word' (
       'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
       'object_count' integer NOT NULL DEFAULT '0',
-      'word' text(150) DEFAULT NULL
+      'word' text(150) DEFAULT NULL COLLATE NOCASE
 );
 CREATE TABLE 'ezsection' (
   'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -347,7 +383,26 @@ CREATE TABLE 'ezuser_accountkey' (
   'time' integer NOT NULL DEFAULT '0',
   'user_id' integer NOT NULL DEFAULT '0'
 );
+
+CREATE TABLE 'ezkeyword' (
+  'class_id' integer NOT NULL DEFAULT '0',
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'keyword' text(255) DEFAULT NULL
+);
+
+DROP TABLE IF EXISTS 'ezkeyword_attribute_link';
+CREATE TABLE 'ezkeyword_attribute_link' (
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'keyword_id' integer NOT NULL DEFAULT '0',
+  'objectattribute_id' integer NOT NULL DEFAULT '0'
+);
+
 CREATE UNIQUE INDEX 'ezbinaryfile_pri' ON 'ezbinaryfile' ( 'contentobject_attribute_id', 'version' );
+CREATE UNIQUE INDEX 'ezimagefile_pri' ON 'ezimagefile' ( 'id' );
+CREATE UNIQUE INDEX 'ezgmaplocation_pri' ON 'ezgmaplocation' ( 'contentobject_attribute_id','contentobject_version' );
+CREATE INDEX 'ezgmaplocation_latlon' ON 'ezgmaplocation' ( 'latitude','longitude' );
+CREATE INDEX 'ezimagefile_coid' ON 'ezimagefile' ( 'contentobject_attribute_id' );
+CREATE INDEX 'ezimagefile_file' ON 'ezimagefile' ( 'filepath' );
 CREATE UNIQUE INDEX 'ezcobj_state_identifier' ON 'ezcobj_state' ( 'group_id', 'identifier' );
 CREATE INDEX 'ezcobj_state_lmask' ON 'ezcobj_state' ( 'language_mask' );
 CREATE INDEX 'ezcobj_state_priority' ON 'ezcobj_state' ( 'priority' );
@@ -435,3 +490,10 @@ CREATE INDEX 'ezsearch_object_word_link_object' ON 'ezsearch_object_word_link' (
 CREATE INDEX 'ezsearch_object_word_link_word' ON 'ezsearch_object_word_link' ( 'word_id' );
 CREATE INDEX 'ezsearch_word_obj_count' ON 'ezsearch_word' ( 'object_count' );
 CREATE INDEX 'ezsearch_word_word_i' ON 'ezsearch_word' ( 'word' );
+
+CREATE INDEX 'ezkeyword_keyword' ON 'ezkeyword' ( 'keyword' );
+CREATE INDEX 'ezkeyword_id' ON 'ezkeyword' ( 'keyword', 'id' );
+
+CREATE INDEX 'ezkeyword_attr_link_keyword_id' ON 'ezkeyword_attribute_link' ( 'keyword_id' );
+CREATE INDEX 'ezkeyword_attr_link_kid_oaid' ON 'ezkeyword_attribute_link' ( 'keyword_id', 'objectattribute_id' );
+CREATE INDEX 'ezkeyword_attr_link_oaid' ON 'ezkeyword_attribute_link' ( 'objectattribute_id' );

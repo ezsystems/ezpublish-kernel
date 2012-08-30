@@ -8,18 +8,15 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Service\InMemory;
-use eZ\Publish\Core\Repository\Tests\Service\ContentTypeBase as BaseContentTypeServiceTest,
-    eZ\Publish\Core\Repository\Repository,
-    eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
-    eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler;
+use eZ\Publish\Core\Repository\Tests\Service\ContentTypeBase as BaseContentTypeServiceTest;
 
 /**
  * Test case for ContentType Service using InMemory storage class
  */
 class ContentTypeTest extends BaseContentTypeServiceTest
 {
-    protected function getRepository( array $serviceSettings )
+    protected function getRepository()
     {
-        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler(), $serviceSettings );
+        return Utils::getRepository();
     }
 }

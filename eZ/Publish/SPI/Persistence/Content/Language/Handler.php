@@ -61,7 +61,7 @@ interface Handler
     /**
      * Delete a language
      *
-     * @todo Might throw an exception if the language is still associated with some content / types / (...) ?
+     * @throws \LogicException If language could not be deleted
      *
      * @param mixed $id
      */

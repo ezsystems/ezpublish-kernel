@@ -9,11 +9,7 @@
 
 namespace eZ\Publish\Core\IO\Tests;
 use eZ\Publish\Core\IO\LegacyHandler as Legacy,
-    eZ\Publish\SPI\IO\BinaryFile,
-    eZ\Publish\SPI\IO\BinaryFileCreateStruct,
-    eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
     eZ\Publish\Core\IO\Tests\Base as BaseHandlerTest,
-    eZClusterFileHandler,
     ezcBaseFile;
 
 /**
@@ -21,44 +17,39 @@ use eZ\Publish\Core\IO\LegacyHandler as Legacy,
  */
 class LegacyTest extends BaseHandlerTest
 {
+    protected $legacyPath;
+    protected $originalDir;
+
     /**
      * @return \eZ\Publish\SPI\IO\Handler
      */
     protected function getIoHandler()
     {
-        // Include mock dependencies
-        $dependenciesPath = __DIR__ . DIRECTORY_SEPARATOR . basename( __FILE__, '.php' ) . DIRECTORY_SEPARATOR;
-        include_once $dependenciesPath  . 'ezexecution.php';
-        include_once $dependenciesPath  . 'ezpextensionoptions.php';
-        include_once $dependenciesPath  . 'ezextension.php';
-        include_once $dependenciesPath  . 'ezdebugsetting.php';
-        include_once $dependenciesPath  . 'ezdebug.php';
-        include_once $dependenciesPath  . 'ezini.php';
-
-        // First check if eZClusterFileHandler was loaded by autoloader
-        if ( !class_exists( 'eZClusterFileHandler' ) )
+        if ( !isset( $_ENV['legacyKernel'] ) )
         {
-            // Secondly include manually using deprecated symlink structure
-            if ( !file_exists( 'ezpublish/kernel/classes/ezclusterfilehandler.php' ) )
-            {
-                self::markTestSkipped( "Cluster files could not be loaded, place api inside eZ Publish, update config.php 'repositories' and run using eg: phpunit -c extension/api/phpunit.xml" );
-            }
-
-            include 'ezpublish/lib/ezfile/classes/ezfile.php';
-            include 'ezpublish/lib/ezfile/classes/ezdir.php';
-            include 'ezpublish/lib/ezfile/classes/ezfilehandler.php';
-            include 'ezpublish/kernel/classes/ezclusterfilehandler.php';
-            include 'ezpublish/kernel/classes/clusterfilehandlers/ezfsfilehandler.php';
+            self::markTestSkipped(
+                'Legacy kernel is needed to run these tests. Please ensure that "legacyKernel" environment variable is properly set with a eZ\\Publish\\Legacy\\Kernel instance'
+            );
         }
-        return new Legacy();
+
+        return new Legacy( $_ENV['legacyKernel'] );
+    }
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->legacyPath = $_ENV['legacyPath'];
+        $this->originalDir = getcwd();
     }
 
     protected function tearDown()
     {
+        chdir( $this->legacyPath );
         if ( file_exists( 'var/test' ) )
         {
             ezcBaseFile::removeRecursive( 'var/test' );
         }
+        chdir( $this->originalDir );
         parent::tearDown();
     }
 

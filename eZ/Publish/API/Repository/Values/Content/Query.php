@@ -10,8 +10,6 @@
 namespace eZ\Publish\API\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
  * This class is used to perform a query
@@ -35,21 +33,21 @@ class Query extends ValueObject
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause[]
      */
-    public $sortClauses;
+    public $sortClauses = array();
 
     /**
      * An array of facet builders
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder[]
      */
-    public $facetBuilders;
+    public $facetBuilders = array();
 
     /**
      * Query offset
      *
      * @var integer
      */
-    public $offset;
+    public $offset = 0;
 
     /**
      * Query limit

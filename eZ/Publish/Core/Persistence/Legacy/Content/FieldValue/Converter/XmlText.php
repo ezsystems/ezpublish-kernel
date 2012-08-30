@@ -13,11 +13,23 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\Repository\FieldType\XmlText\Value as XmlTextValue,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings;
+    eZ\Publish\Core\FieldType\FieldSettings;
 
 class XmlText implements Converter
 {
+    /**
+     * Factory for current class
+     *
+     * @note Class should instead be configured as service if it gains dependencies.
+     *
+     * @static
+     * @return XmlText
+     */
+    public static function create()
+    {
+        return new self;
+    }
+
     /**
      * Converts data from $value to $storageFieldValue
      *
@@ -50,6 +62,7 @@ class XmlText implements Converter
     {
         $storageDefinition->dataInt1 = $fieldDefinition->fieldTypeConstraints->fieldSettings['numRows'];
         $storageDefinition->dataText2 = $fieldDefinition->fieldTypeConstraints->fieldSettings['tagPreset'];
+        $storageDefinition->dataText1 = $fieldDefinition->defaultValue->data;
     }
 
     /**
@@ -63,10 +76,10 @@ class XmlText implements Converter
         $fieldDefinition->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
                 'numRows' => $storageDefinition->dataInt1,
-                'tagPreset' => $storageDefinition->dataText2,
-                'defaultText' => $storageDefinition->dataText1
+                'tagPreset' => $storageDefinition->dataText2
             )
         );
+        $fieldDefinition->defaultValue->data = isset( $storageDefinition->dataText1 ) ? $storageDefinition->dataText1 : '';
     }
 
     /**

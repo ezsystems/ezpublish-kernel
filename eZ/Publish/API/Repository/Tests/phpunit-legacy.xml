@@ -9,6 +9,7 @@
     <php>
 		<env name="setupFactory" value="eZ\Publish\API\Repository\Tests\SetupFactory\Legacy" />
         <env name="backendVersion" value="5" />
+        <env name="fixtureDir" value="Legacy" />
     </php>
     <testsuites>
         <testsuite name="eZ\Publish\API\Repository">
@@ -25,6 +26,7 @@
             <file>IOServiceTest/testNewBinaryCreateStructFromUploadedFile.phpt</file>
             <file>URLAliasServiceTest.php</file>
             <file>URLWildcardServiceTest.php</file>
+            <file>ObjectStateServiceTest.php</file>
             <file>SectionServiceAuthorizationTest.php</file>
             <file>LanguageServiceAuthorizationTest.php</file>
             <file>ContentTypeServiceAuthorizationTest.php</file>
@@ -35,7 +37,9 @@
             <file>TrashServiceAuthorizationTest.php</file>
             <file>URLWildcardServiceAuthorizationTest.php</file>
             <file>ObjectStateServiceAuthorizationTest.php</file>
-            <file>FieldType/UserIntegrationTest.php</file>
+            <file>SearchServiceTest.php</file>
+            <file>SearchServiceAuthorizationTest.php</file>
+            <directory>FieldType/</directory>
         </testsuite>
     </testsuites>
     <filter>

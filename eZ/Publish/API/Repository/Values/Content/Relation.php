@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Values\Content;
 use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 /**
  * Class representing a relation between content.

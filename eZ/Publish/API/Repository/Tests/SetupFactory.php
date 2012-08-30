@@ -28,4 +28,13 @@ abstract class SetupFactory
      * @return \eZ\Publish\API\Repository\Tests\IdManager
      */
     abstract public function getIdManager();
+
+    /**
+     * Returns a config value for $configKey.
+     *
+     * @param string $configKey
+     * @return mixed
+     * @throws Exception if $configKey could not be found.
+     */
+    abstract public function getConfigValue( $configKey );
 }

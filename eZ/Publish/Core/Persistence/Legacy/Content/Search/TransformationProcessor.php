@@ -43,14 +43,31 @@ class TransformationProcessor
     protected $compiledRules = null;
 
     /**
-     * Construct
+     * Construct instance of TransformationProcessor
      *
-     * @return void
+     * Through the $rules array, a list of files with full text
+     * transformation rules is given. These files are parsed by
+     * {@link \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationParser}
+     * and then used for normalization in the full text search.
+     *
+     * @param TransformationParser $parser
+     * @param TransformationPcreCompiler $compiler
+     * @param array $rules
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor
      */
-    public function __construct( TransformationParser $parser, TransformationPcreCompiler $compiler )
+    public function __construct(
+        TransformationParser $parser,
+        TransformationPcreCompiler $compiler,
+        array $rules = array()
+    )
     {
         $this->parser = $parser;
         $this->compiler = $compiler;
+        foreach( $rules as $file )
+        {
+            $this->loadRules( $file );
+        }
     }
 
     /**
@@ -89,6 +106,13 @@ class TransformationProcessor
 
         foreach ( $ruleNames as $ruleName )
         {
+            if ( !isset( $this->compiledRules[$ruleName] ) )
+            {
+                // Just continue on unknow rules, or should we throw an error
+                // here?
+                continue;
+            }
+
             foreach ( $this->compiledRules[$ruleName] as $rule )
             {
                 $string = preg_replace_callback(

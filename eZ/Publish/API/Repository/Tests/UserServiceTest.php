@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Tests\BaseTest;
-
 use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use \eZ\Publish\API\Repository\Values\User\User;
 
@@ -19,6 +17,7 @@ use \eZ\Publish\API\Repository\Values\User\User;
  *
  * @see eZ\Publish\API\Repository\UserService
  * @group integration
+ * @group user
  */
 class UserServiceTest extends BaseTest
 {
@@ -303,6 +302,40 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::createUserGroup()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUserGroup
+     */
+    public function testCreateUserGroupThrowsInvalidArgumentExceptionFieldTypeNotAccept()
+    {
+        $repository = $this->getRepository();
+
+        $mainGroupId = $this->generateId( 'group', 4 );
+        /* BEGIN: Use Case */
+        // $mainGroupId is the ID of the main "Users" group
+
+        $userService = $repository->getUserService();
+
+        // Load main group
+        $parentUserGroup = $userService->loadUserGroup( $mainGroupId );
+
+        // Instantiate a new create struct
+        $userGroupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
+        $userGroupCreate->setField( 'name', new \stdClass() );
+
+        // This call will fail with an "InvalidArgumentException", because the
+        // specified remoteId is already used for the "Members" user group.
+        $userService->createUserGroup(
+            $userGroupCreate,
+            $parentUserGroup
+        );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the createUserGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::createUserGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUserGroup
      */
@@ -349,18 +382,27 @@ class UserServiceTest extends BaseTest
 
         $repository->beginTransaction();
 
-        // Load main group
-        $parentUserGroup = $userService->loadUserGroup( $mainGroupId );
+        try
+        {
+            // Load main group
+            $parentUserGroup = $userService->loadUserGroup( $mainGroupId );
 
-        // Instantiate a new create struct
-        $userGroupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
-        $userGroupCreate->setField( 'name', 'Example Group' );
+            // Instantiate a new create struct
+            $userGroupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
+            $userGroupCreate->setField( 'name', 'Example Group' );
 
-        // Create the new user group
-        $createdUserGroupId = $userService->createUserGroup(
-            $userGroupCreate,
-            $parentUserGroup
-        )->id;
+            // Create the new user group
+            $createdUserGroupId = $userService->createUserGroup(
+                $userGroupCreate,
+                $parentUserGroup
+            )->id;
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         $repository->rollback();
 
@@ -437,8 +479,16 @@ class UserServiceTest extends BaseTest
         );
         /* END: Use Case */
 
+        $subUserGroupIds = array_map(
+            function ( $content )
+            {
+                return $content->id;
+            },
+            $subUserGroups
+        );
+
         $this->assertEquals( $membersGroupId, $userGroup->parentId );
-        $this->assertEquals( array( $userGroup ), $subUserGroups );
+        $this->assertEquals( array( $userGroup->id ), $subUserGroupIds );
     }
 
     /**
@@ -651,10 +701,10 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::updateUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUserGroup
      */
-    public function testUpdateUserGroupThrowsContentValidationException()
+    public function testUpdateUserGroupThrowsInvalidArgumentExceptionOnFieldTypeNotAccept()
     {
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
@@ -667,14 +717,15 @@ class UserServiceTest extends BaseTest
 
         // Create a content update struct and update the group name
         $contentUpdate = $contentService->newContentUpdateStruct();
-        $contentUpdate->setField( 'name', null, 'eng-US' );
+        // An object of stdClass is not accepted as a value by the field "name"
+        $contentUpdate->setField( 'name', new \stdClass(), 'eng-US' );
 
         // Create a group update struct and set content update struct
         $groupUpdate = $userService->newUserGroupUpdateStruct();
         $groupUpdate->contentUpdateStruct = $contentUpdate;
 
-        // This call will fail with a "ContentValidationException", because the
-        // mandatory field "name" is set to an empty value
+        // This call will fail with an InvalidArgumentException, because the
+        // field "name" does not accept the given value
         $userService->updateUserGroup( $userGroup, $groupUpdate );
         /* END: Use Case */
     }
@@ -868,6 +919,46 @@ class UserServiceTest extends BaseTest
     /**
      * Test for the createUser() method.
      *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::createUser()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     */
+    public function testCreateUserThrowsInvalidArgumentExceptionOnFieldTypeNotAccept()
+    {
+        $repository = $this->getRepository();
+
+        $editorsGroupId = $this->generateId( 'group', 13 );
+        /* BEGIN: Use Case */
+        // $editorsGroupId is the ID of the "Editors" user group in an eZ
+        // Publish demo installation
+
+        $userService = $repository->getUserService();
+
+        // Instantiate a create struct with mandatory properties
+        $userCreate = $userService->newUserCreateStruct(
+            'user',
+            'user@example.com',
+            'secret',
+            'eng-US'
+        );
+
+        // An object of stdClass is not a valid value for the field first_name
+        $userCreate->setField( 'first_name', new \stdClass() );
+        $userCreate->setField( 'last_name', 'User' );
+
+        // Load parent group for the user
+        $group = $userService->loadUserGroup( $editorsGroupId );
+
+        // This call will fail with an "InvalidArgumentException", because the
+        // value for the firled "first_name" is not accepted by the field type.
+        $userService->createUser( $userCreate, array( $group ) );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the createUser() method.
+     *
      * @return \eZ\Publish\API\Repository\Values\User\User
      * @see \eZ\Publish\API\Repository\UserService::createUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
@@ -882,7 +973,16 @@ class UserServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $repository->beginTransaction();
 
-        $user = $this->createUserVersion1();
+        try
+        {
+            $user = $this->createUserVersion1();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
 
         $repository->rollback();
 
@@ -1169,19 +1269,6 @@ class UserServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
      */
-    public function testUpdateUserIncrementsVersionNumber( $user )
-    {
-        $this->assertEquals( 2, $user->getVersionInfo()->versionNo );
-    }
-
-    /**
-     * Test for the updateUser() method.
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @return void
-     * @see \eZ\Publish\API\Repository\UserService::updateUser()
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
-     */
     public function testUpdateUserReturnsPublishedVersion( $user )
     {
         $this->assertEquals(
@@ -1253,9 +1340,6 @@ class UserServiceTest extends BaseTest
         $contentUpdate->setField( 'first_name', 'Hello', 'eng-US' );
         $contentUpdate->setField( 'last_name', 'World', 'eng-US' );
 
-        // Required field
-        $contentUpdate->setField( 'user_account', $user );
-
         // Create a new update struct instance
         $userUpdate = $userService->newUserUpdateStruct();
 
@@ -1307,6 +1391,43 @@ class UserServiceTest extends BaseTest
 
         // This call will fail with a "ContentValidationException" because the
         // mandary field "first_name" is set to an empty value.
+        $userService->updateUser( $user, $userUpdate );
+
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateUser() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::updateUser()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUser
+     */
+    public function testUpdateUserThrowsInvalidArgumentExceptionOnFieldTypeNotAccept()
+    {
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Get the ContentService implementation
+        $contentService = $repository->getContentService();
+
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        // An object of stdClass is not valid for the field first_name
+        $contentUpdate->setField( 'first_name', new \stdClass(), 'eng-US' );
+
+        // Create a new update struct instance
+        $userUpdate = $userService->newUserUpdateStruct();
+
+        // Set the content update struct.
+        $userUpdate->contentUpdateStruct = $contentUpdate;
+
+        // This call will fail with a "InvalidArgumentException" because the
+        // the field "first_name" does not accept the given value.
         $userService->updateUser( $user, $userUpdate );
 
         /* END: Use Case */

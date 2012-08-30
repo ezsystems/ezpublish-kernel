@@ -11,9 +11,9 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use \PHPUnit_Framework_TestCase;
 
-use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\Values\ValueObject;
 use \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
+use \eZ\Publish\Core\REST\Client\Sessionable;
 
 /**
  * Base class for api specific tests.
@@ -49,7 +49,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             // Set session if we are testing the REST backend to make it
             // possible to persist data in the memory backend during multiple
             // requests.
-            if ( $repository instanceof \eZ\Publish\API\REST\Client\Sessionable )
+            if ( $repository instanceof Sessionable )
             {
                 $repository->setSession( $id = md5( microtime() ) );
             }
@@ -58,10 +58,9 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         {
             $this->markTestSkipped(
                 'Cannot create a repository with predefined user. ' .
-                'Check the UserService or RoleService implmenentation. ' .
+                'Check the UserService or RoleService implementation. ' .
                  PHP_EOL . PHP_EOL.
-                'Exception trace: ' .
-                $e->getTraceAsString()
+                'Exception: ' . $e
             );
         }
     }
@@ -115,6 +114,17 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Returns a config setting provided by the setup factory
+     *
+     * @param string $configKey
+     * @return mixed
+     */
+    protected function getConfigValue( $configKey )
+    {
+        return $this->getSetupFactory()->getConfigValue( $configKey );
+    }
+
+    /**
      * Tests if the currently tested api is based on a V4 implementation.
      *
      * @return boolean
@@ -145,7 +155,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     /**
      * @return \eZ\Publish\API\Repository\Tests\SetupFactory
      */
-    private function getSetupFactory()
+    protected function getSetupFactory()
     {
         if ( null === $this->setupFactory )
         {
@@ -296,7 +306,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             $userGroup,
             new SubtreeLimitation(
                 array(
-                    'limitationValues' => array( '/1/43/' )
+                    'limitationValues' => array( '/1/48/' )
                 )
             )
         );

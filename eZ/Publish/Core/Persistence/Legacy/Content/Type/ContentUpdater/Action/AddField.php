@@ -85,16 +85,42 @@ class AddField extends Action
             $storageValue
         );
 
-        $this->storageHandler->storeFieldData( $field );
+        // If the storage handler returns true, it means that $field value has been modified
+        // So we need to update it in order to store those modifications
+        // Field converter is called once again via the Mapper
+        if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
+        {
+            $storageValue = new StorageFieldValue();
+            $this->fieldValueConverter->toStorageValue(
+                $field->value,
+                $storageValue
+            );
+
+            if ( $this->fieldDefinition->isTranslatable )
+            {
+                $this->contentGateway->updateField(
+                    $field,
+                    $storageValue
+                );
+            }
+            else
+            {
+                $this->contentGateway->updateNonTranslatableField(
+                    $field,
+                    $storageValue,
+                    $content->contentInfo->id
+                );
+            }
+        }
 
         $content->fields[] = $field;
     }
 
     /**
+     * @param \eZ\Publish\SPI\Persistence\Content $content
      *
+     * @return \eZ\Publish\SPI\Persistence\Content\Field
      *
-     * @param Content $content
-     * @return void
      * @todo Handle ->languageCode
      */
     protected function createField( Content $content )

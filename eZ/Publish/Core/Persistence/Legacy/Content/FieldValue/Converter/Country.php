@@ -9,28 +9,37 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\InvalidValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings,
-    eZ\Publish\Core\Repository\FieldType\Country\Value as CountryValue,
-    DOMDocument;
+    eZ\Publish\Core\FieldType\FieldSettings;
 
 class Country implements Converter
 {
+    /**
+     * Factory for current class
+     *
+     * @note Class should instead be configured as service if it gains dependencies.
+     *
+     * @static
+     * @return Country
+     */
+    public static function create()
+    {
+        return new self;
+    }
+
     /**
      * Converts data from $value to $storageFieldValue
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue
-     * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\InvalidValue if a value cannot be converted
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
         $storageFieldValue->dataText = $value->data;
-        $storageFieldValue->sortKeyString = $value->sortKey['sort_key_string'];
+        $storageFieldValue->sortKeyString = $value->sortKey;
     }
 
     /**
@@ -52,15 +61,12 @@ class Country implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        $fieldSettings = $fieldDef->fieldTypeConstraints->fieldSettings;
-
-        if ( isset( $fieldSettings["isMultiple"] ) )
-            $storageDef->dataInt1 = (int)$fieldSettings["isMultiple"];
-
-        if ( !empty( $fieldSettings["defaultValue"] ) )
+        if ( isset( $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"] ) )
         {
-            $storageDef->dataText5 = $fieldSettings["defaultValue"]->data;
+            $storageDef->dataInt1 = (int)$fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"];
         }
+
+        $storageDef->dataText5 = $fieldDef->defaultValue->data;
     }
 
     /**
@@ -73,10 +79,11 @@ class Country implements Converter
     {
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false,
-                "default" => !empty( $storageDef->dataText5 ) ? $storageDef->dataText5 : null,
+                "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false
             )
         );
+
+        $fieldDef->defaultValue->data = !empty( $storageDef->dataText5 ) ? $storageDef->dataText5 : null;
     }
 
     /**

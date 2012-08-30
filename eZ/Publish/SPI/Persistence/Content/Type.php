@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\SPI\Persistence\Content;
-use eZ\Publish\SPI\Persistence\ValueObject,
-    eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * @todo What about sort_field and sort_order?

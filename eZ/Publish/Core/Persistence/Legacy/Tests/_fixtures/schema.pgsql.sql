@@ -182,6 +182,30 @@ CREATE SEQUENCE ezuser_role_s
     MINVALUE 1
     CACHE 1;
 
+DROP SEQUENCE IF EXISTS ezkeyword_s;
+CREATE SEQUENCE ezkeyword_s
+    START 1
+    INCREMENT 1
+    MAXVALUE 9223372036854775807
+    MINVALUE 1
+    CACHE 1;
+
+DROP SEQUENCE IF EXISTS ezkeyword_attribute_link_s;
+CREATE SEQUENCE ezkeyword_attribute_link_s
+    START 1
+    INCREMENT 1
+    MAXVALUE 9223372036854775807
+    MINVALUE 1
+    CACHE 1;
+
+DROP SEQUENCE IF EXISTS ezimagefile_s;
+CREATE SEQUENCE ezimagefile_s
+    START 1
+    INCREMENT 1
+    MAXVALUE 9223372036854775807
+    MINVALUE 1
+    CACHE 1;
+
 DROP TABLE IF EXISTS ezbinaryfile;
 CREATE TABLE ezbinaryfile (
     contentobject_attribute_id integer DEFAULT 0 NOT NULL,
@@ -190,6 +214,40 @@ CREATE TABLE ezbinaryfile (
     mime_type character varying(255) DEFAULT ''::character varying NOT NULL,
     original_filename character varying(255) DEFAULT ''::character varying NOT NULL,
     "version" integer DEFAULT 0 NOT NULL
+);
+
+DROP TABLE IF EXISTS ezmedia;
+CREATE TABLE ezmedia (
+    contentobject_attribute_id integer DEFAULT 0 NOT NULL,
+    download_count integer DEFAULT 0 NOT NULL,
+    filename character varying(255) DEFAULT ''::character varying NOT NULL,
+    mime_type character varying(255) DEFAULT ''::character varying NOT NULL,
+    original_filename character varying(255) DEFAULT ''::character varying NOT NULL,
+    "version" integer DEFAULT 0 NOT NULL,
+    "controls" character varying(50) DEFAULT ''::character varying NOT NULL,
+    "has_controller" integer DEFAULT 0 NOT NULL,
+    "height" integer DEFAULT 0 NOT NULL,
+    "is_autoplay" integer DEFAULT 0 NOT NULL,
+    "is_loop" integer DEFAULT 0 NOT NULL,
+    "pluginspage" character varying(255) DEFAULT ''::character varying NOT NULL,
+    "quality" character varying(50) DEFAULT ''::character varying NOT NULL,
+    "width" integer DEFAULT NULL
+);
+
+DROP TABLE IF EXISTS ezimagefile;
+CREATE TABLE ezimagefile (
+    contentobject_attribute_id integer DEFAULT 0 NOT NULL,
+    filepath text NOT NULL,
+    id integer DEFAULT nextval('ezimagefile_s'::text) NOT NULL
+);
+
+DROP TABLE IF EXISTS ezgmaplocation;
+CREATE TABLE ezgmaplocation (
+  contentobject_attribute_id integer DEFAULT '0' NOT NULL,
+  contentobject_version integer DEFAULT '0' NOT NULL,
+  latitude double precision DEFAULT '0' NOT NULL,
+  longitude double precision DEFAULT '0' NOT NULL,
+  address varying(150) DEFAULT NULL
 );
 
 DROP TABLE IF EXISTS ezcobj_state;
@@ -217,6 +275,7 @@ CREATE TABLE ezcobj_state_group_language (
     contentobject_state_group_id integer NOT NULL DEFAULT 0,
     description text NOT NULL,
     language_id integer NOT NULL DEFAULT 0,
+    real_language_id integer NOT NULL DEFAULT 0,
     name character varying(45) NOT NULL DEFAULT ''::character varying
 );
 
@@ -610,6 +669,26 @@ CREATE TABLE ezuser_setting (
     user_id integer DEFAULT 0 NOT NULL
 );
 
+DROP TABLE IF EXISTS ezkeyword;
+CREATE TABLE ezkeyword (
+  class_id integer DEFAULT 0 NOT NULL,
+  id integer DEFAULT nextval('ezkeyword_s'::text) NOT NULL,
+  keyword character varying(255) DEFAULT NULL
+);
+
+DROP TABLE IF EXISTS ezkeyword_attribute_link;
+CREATE TABLE ezkeyword_attribute_link (
+  id integer nextval('ezkeyword_attribute_link_s'::text) NOT NULL,
+  keyword_id integer DEFAULT 0 NOT NULL,
+  objectattribute_id integer DEFAULT 0 NOT NULL
+);
+
+CREATE INDEX ezimagefile_coid ON ezimagefile USING btree (contentobject_attribute_id);
+
+CREATE INDEX ezimagefile_file ON ezimagefile USING btree (filepath);
+
+CREATE INDEX ezgmaplocation_file ON ezgmaplocation USING btree (latitude,longitude);
+
 CREATE UNIQUE INDEX ezcobj_state_identifier ON ezcobj_state USING btree (group_id, identifier);
 
 CREATE INDEX ezcobj_state_lmask ON ezcobj_state USING btree (language_mask);
@@ -774,14 +853,33 @@ CREATE INDEX ezuser_role_contentobject_id ON ezuser_role USING btree (contentobj
 
 CREATE INDEX ezuser_role_role_id ON ezuser_role USING btree (role_id);
 
+CREATE INDEX ezkeyword_keyword ON ezkeyword USING btree (keyword);
+CREATE INDEX ezkeyword_id ON ezkeyword USING btree (keyword,id);
+
+CREATE INDEX ezkeyword_attr_link_keyword_id ON ezkeyword USING btree (keyword_id);
+CREATE INDEX ezkeyword_attr_link_kid_oaid ON ezkeyword USING btree (keyword_id,objectattribute_id);
+CREATE INDEX ezkeyword_attr_link_oaid ON ezkeyword USING btree (objectattribute_id);
+
 ALTER TABLE ONLY ezcobj_state
     ADD CONSTRAINT ezcobj_state_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY ezimagefile
+    ADD CONSTRAINT ezimagefile_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY ezgmaplocation
+    ADD CONSTRAINT ezgmaplocation_pkey PRIMARY KEY (contentobject_attribute_id,contentobject_version);
+
+ALTER TABLE ONLY ezbinaryfile
+    ADD CONSTRAINT ezbinaryfile_pkey PRIMARY KEY (contentobject_attribute_id, "version");
+
+ALTER TABLE ONLY ezmedia
+    ADD CONSTRAINT ezmedia_pkey PRIMARY KEY (contentobject_attribute_id, "version");
 
 ALTER TABLE ONLY ezcobj_state_group
     ADD CONSTRAINT ezcobj_state_group_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY ezcobj_state_group_language
-    ADD CONSTRAINT ezcobj_state_group_language_pkey PRIMARY KEY (contentobject_state_group_id, language_id);
+    ADD CONSTRAINT ezcobj_state_group_language_pkey PRIMARY KEY (contentobject_state_group_id, real_language_id);
 
 ALTER TABLE ONLY ezcobj_state_language
     ADD CONSTRAINT ezcobj_state_language_pkey PRIMARY KEY (contentobject_state_id, language_id);
@@ -881,3 +979,9 @@ ALTER TABLE ONLY ezuser_role
 
 ALTER TABLE ONLY ezuser_setting
     ADD CONSTRAINT ezuser_setting_pkey PRIMARY KEY (user_id);
+
+ALTER TABLE ONLY ezkeyword
+    ADD CONSTRAINT ezkeyword_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY ezkeyword_attribute_link
+    ADD CONSTRAINT ezkeyword_attribute_link_pkey PRIMARY KEY (id);

@@ -36,8 +36,8 @@ interface Repository
     /**
      *
      *
-     * @param string $module
-     * @param string $function
+     * @param string $module The module, aka controller identifier to check permissions on
+     * @param string $function The function, aka the controller action to check permissions on
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @return boolean|array if limitations are on this function an array of limitations is returned
      */
@@ -47,12 +47,24 @@ interface Repository
      * Indicates if the current user is allowed to perform an action given by the function on the given
      * objects
      *
-     * @param string $module
-     * @param string $function
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $value
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $target
+     * Example: canUser( 'content', 'edit', $content, $location );
+     *          This will check edit permission on content given the specific location, if skipped if will check on all
+     *          locations.
+     *
+     * Example2: canUser( 'section', 'assign', $content, $section );
+     *           Check if user has access to assign $content to $section.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
+     *
+     * @param string $module The module, aka controller identifier to check permissions on
+     * @param string $function The function, aka the controller action to check permissions on
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
+     *
+     * @return boolean
      */
-    public function canUser( $module, $function, ValueObject $value, ValueObject $target = null );
+    public function canUser( $module, $function, ValueObject $object, ValueObject $target = null );
 
     /**
      * Get Content Service
@@ -112,6 +124,15 @@ interface Repository
     public function getSectionService();
 
     /**
+     * Get Search Service
+     *
+     * Get search service that lets you find content objects
+     *
+     * @return \eZ\Publish\API\Repository\SearchService
+     */
+    public function getSearchService();
+
+    /**
      * Get User Service
      *
      * Get service object to perform operations on Users and UserGroup
@@ -156,6 +177,13 @@ interface Repository
      * @return \eZ\Publish\API\Repository\RoleService
      */
     public function getRoleService();
+
+    /**
+     * Get FieldTypeService
+     *
+     * @return \eZ\Publish\API\Repository\FieldTypeService
+     */
+    public function getFieldTypeService();
 
     /**
      * Begin transaction

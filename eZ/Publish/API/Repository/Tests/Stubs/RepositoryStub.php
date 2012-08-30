@@ -102,6 +102,11 @@ class RepositoryStub implements Repository
     private $objectStateService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\FieldTypeServiceStub
+     */
+    private $fieldTypeService;
+
+    /**
      * @var integer
      */
     private $transactionDepth = 0;
@@ -202,13 +207,17 @@ class RepositoryStub implements Repository
      * Indicates if the current user is allowed to perform an action given by the function on the given
      * objects
      *
-     * @param string $module
-     * @param string $function
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $value
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $target
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
+     *
+     * @param string $module The module, aka controller identifier to check permissions on
+     * @param string $function The function, aka the controller action to check permissions on
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $target The location, parent or "assignment" value object
+     *
      * @return boolean
      */
-    public function canUser( $module, $function, ValueObject $value, ValueObject $target = null )
+    public function canUser( $module, $function, ValueObject $object, ValueObject $target = null )
     {
         if ( $this->permissionChecks > 0 )
         {
@@ -225,21 +234,21 @@ class RepositoryStub implements Repository
 
         $locations = null;
         $contentInfoValue = null;
-        if ( $value instanceof ContentInfo )
+        if ( $object instanceof ContentInfo )
         {
-            $contentInfoValue = $value;
+            $contentInfoValue = $object;
         }
-        else if ( $value instanceof Content )
+        else if ( $object instanceof Content )
         {
-            $contentInfoValue = $value->contentInfo;
+            $contentInfoValue = $object->contentInfo;
         }
-        else if ( $value instanceof VersionInfo )
+        else if ( $object instanceof VersionInfo )
         {
-            $contentInfoValue = $value->contentInfo;
+            $contentInfoValue = $object->contentInfo;
         }
-        else if ( $value instanceof Location )
+        else if ( $object instanceof Location )
         {
-            $locations = array( $value );
+            $locations = array( $object );
         }
 
         if ( null !== $contentInfoValue && true === $contentInfoValue->published )
@@ -386,6 +395,18 @@ class RepositoryStub implements Repository
     }
 
     /**
+     * Get Search Service
+     *
+     * Get search service that lets you find content objects
+     *
+     * @return \eZ\Publish\API\Repository\SearchService
+     */
+    public function getSearchService()
+    {
+        throw new \RuntimeException( '@TODO: Implememt.' );
+    }
+
+    /**
      * Get User Service
      *
      * Get service object to perform operations on Users and UserGroup
@@ -471,6 +492,20 @@ class RepositoryStub implements Repository
             $this->objectStateService = new ObjectStateServiceStub( $this );
         }
         return $this->objectStateService;
+    }
+
+    /**
+     * Get FieldTypeService
+     *
+     * @return \eZ\Publish\API\Repository\FieldTypeService
+     */
+    public function getFieldTypeService()
+    {
+        if ( null === $this->fieldTypeService )
+        {
+            $this->fieldTypeService = new FieldTypeServiceStub( $this );
+        }
+        return $this->fieldTypeService;
     }
 
     /**
@@ -589,5 +624,23 @@ class RepositoryStub implements Repository
     public function enableUserPermissions()
     {
         --$this->permissionChecks;
+    }
+
+    /**
+     * Only for internal use.
+     *
+     * Creates a \DateTime object for $timestamp in the current time zone
+     *
+     * @param int $timestamp
+     * @return \DateTime
+     */
+    public function createDateTime( $timestamp = null )
+    {
+        $dateTime = new \DateTime();
+        if ( $timestamp !== null )
+        {
+            $dateTime->setTimestamp( $timestamp );
+        }
+        return $dateTime;
     }
 }

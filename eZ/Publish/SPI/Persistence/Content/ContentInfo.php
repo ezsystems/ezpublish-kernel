@@ -90,7 +90,7 @@ class ContentInfo extends ValueObject
      *
      * @var boolean
      */
-    public $isAlwaysAvailable;
+    public $alwaysAvailable;
 
     /**
      * Remote identifier used as a custom identifier for the object

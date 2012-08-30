@@ -18,6 +18,19 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
 class Author implements Converter
 {
     /**
+     * Factory for current class
+     *
+     * @note Class should instead be configured as service if it gains dependencies.
+     *
+     * @static
+     * @return Author
+     */
+    public static function create()
+    {
+        return new self;
+    }
+
+    /**
      * Converts data from $value to $storageFieldValue
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
@@ -108,7 +121,7 @@ class Author implements Converter
      * Restores an author Value object from $xmlString
      *
      * @param string $xmlString XML String stored in storage engine
-     * @return \eZ\Publish\Core\Repository\FieldType\Author\Value
+     * @return \eZ\Publish\Core\FieldType\Author\Value
      */
     private function restoreValueFromXmlString( $xmlString )
     {

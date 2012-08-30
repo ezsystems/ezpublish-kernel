@@ -183,16 +183,20 @@ conditions[routes][content][item][controller]=%contentItem-controller::doList
 [contentItem:controller]
 class=eZ\\Publish\\Core\\ContentItemController
 
-[controller]
+[LocationItem:contentItem:controller]
 public=true
 regex[]=?<name>\w+
 regex[]=?P<name>\w+
 regex[]=?\'name\'\w+
-regex[]=(?<name>\w+)
-regex[]=(?P<name>\w+)
-regex[]=(?\'name\'\w+)
+#regex[]=(?<name>\w+)
+#regex[]=(?P<name>\w+)
+#regex[]=(?\'name\'\w+)
 regex[]=content/location/?<name>\w+
 regex[]=content/location/{?<name>\w+}
+
+[parameters]
+dsn=sqlite://:memory:
+legacy.dsn=sqlite://:memory:
 ';
         $expects = array(
             'test' => array(
@@ -215,18 +219,22 @@ regex[]=content/location/{?<name>\w+}
                 )
             ),
             'contentItem:controller' => array( 'class' => 'eZ\\Publish\\Core\\ContentItemController' ),
-            'controller' => array(
+            'LocationItem:contentItem:controller' => array(
                 'public' => true,
                 'regex' => array(
                     '?<name>\w+',
                     '?P<name>\w+',
-                    '?name\w+',
-                    '?<name>\w+',
-                    '?P<name>\w+',
-                    '?name\w+',
+                    '?\'name\'\w+',
+                    //'(?<name>\w+)',
+                    //'(?P<name>\w+)',
+                    //'(?\'name\'\w+)',
                     'content/location/?<name>\w+',
                     'content/location/{?<name>\w+}',
                 ),
+            ),
+            'parameters' => array(
+                'dsn'        => 'sqlite://:memory:',
+                'legacy.dsn' => 'sqlite://:memory:',
             ),
         );
 
@@ -263,6 +271,64 @@ two[one][]
             $expects,
             $result,
             'ini parser did not properly clear array'
+        );
+    }
+
+    /**
+     * Test that complex hash structures with utf8 values work
+     *
+     * Also tests two dimensional arrays
+     *
+     * @covers \eZ\Publish\Core\Base\Configuration\Parser\Ini::parseFilePhp
+     * @covers \eZ\Publish\Core\Base\Configuration\Parser\Ini::parseFileEzc
+     * @covers \eZ\Publish\Core\Base\Configuration\Parser\Ini::parserPhpDimensionArraySupport
+     * @covers \eZ\Publish\Core\Base\Configuration\Parser\Ini::parsePhpPostFilter
+     */
+    public function testUTF8Hash()
+    {
+        $iniString = "
+[test]
+CR[Name]=Costa Rica
+CR[Alpha2]=CR
+CR[Alpha3]=CRI
+CR[IDC]=506
+CI[Name]=Côte d'Ivoire
+CI[Alpha2]=CI
+CI[Alpha3]=CIV
+CI[IDC]=255
+VA[Name]=\"Holy See (Vatican City State)\"
+VA[Alpha2]=VA
+VA[Alpha3]=VAT
+VA[IDC]=3906
+";
+        $expects = array(
+            'test' => array(
+                'CR' => array(
+                    'Name' => 'Costa Rica',
+                    'Alpha2' => 'CR',
+                    'Alpha3' => 'CRI',
+                    'IDC' => 506,
+                ),
+                'CI' => array(
+                    'Name' => 'Côte d\'Ivoire',
+                    'Alpha2' => 'CI',
+                    'Alpha3' => 'CIV',
+                    'IDC' => 255,
+                ),
+                'VA' => array(
+                    'Name' => 'Holy See (Vatican City State)',
+                    'Alpha2' => 'VA',
+                    'Alpha3' => 'VAT',
+                    'IDC' => 3906,
+                ),
+            ),
+        );
+
+        $result = $this->parser->parse( 'DoesNotExist.ini', $iniString );
+        $this->assertEquals(
+            $expects,
+            $result,
+            'ini parser did not parse complex utf8 hash'
         );
     }
 }

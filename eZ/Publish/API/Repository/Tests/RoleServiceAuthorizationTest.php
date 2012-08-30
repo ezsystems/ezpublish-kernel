@@ -9,14 +9,14 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Tests\BaseTest;
-
 use \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 
 /**
  * Test case for operations in the RoleService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\RoleService
+ * @group integration
+ * @group authorization
  */
 class RoleServiceAuthorizationTest extends BaseTest
 {

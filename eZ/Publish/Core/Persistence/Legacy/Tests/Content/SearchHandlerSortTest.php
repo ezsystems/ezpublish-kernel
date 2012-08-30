@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\ContentSearchHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandlerSortTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,17 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
     eZ\Publish\Core\Persistence\Legacy\Content,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     eZ\Publish\SPI\Persistence\Content as ContentObject,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
-    eZ\Publish\SPI\Persistence\Content\Language,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\SPI\Persistence;
+    eZ\Publish\API\Repository\Values\Content\Query;
 
 /**
  * Test case for ContentSearchHandler
@@ -30,19 +26,9 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
     /**
      * Field registry mock
      *
-     * @var \eZ\Publish\SPI\Persistence\Content\FieldValue\Converter\Registry
+     * @var \eZ\Publish\SPI\Persistence\Content\FieldValue\ConverterRegistry
      */
     protected $fieldRegistry;
-
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingLanguageHandler
-     */
-    protected $languageHandler;
-
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
-     */
-    protected $languageMaskGenerator;
 
     /**
      * Returns the test suite with all tests declared in this class.
@@ -123,7 +109,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                     )
                 ),
                 new QueryBuilder( $this->getDatabaseHandler() ),
-                $this->getLanguageHandlerMock(),
+                $this->getLanguageHandler(),
                 $this->getLanguageMaskGenerator()
             ),
             $this->getContentMapperMock(),
@@ -150,7 +136,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                     false
                 ),
                 $this->getFieldRegistry(),
-                $this->getLanguageHandlerMock()
+                $this->getLanguageHandler()
             )
         );
         $mapperMock->expects( $this->any() )
@@ -179,74 +165,18 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a language handler mock
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingLanguageHandler
-     */
-    protected function getLanguageHandlerMock()
-    {
-        if ( !isset( $this->languageHandler ) )
-        {
-            $innerLanguageHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
-            $innerLanguageHandler->expects( $this->any() )
-                ->method( 'loadAll' )
-                ->will(
-                    $this->returnValue(
-                        array(
-                            new Language( array(
-                                'id' => 2,
-                                'languageCode' => 'eng-GB',
-                                'name' => 'British english'
-                            ) ),
-                            new Language( array(
-                                'id' => 4,
-                                'languageCode' => 'eng-US',
-                                'name' => 'US english'
-                            ) ),
-                            new Language( array(
-                                'id' => 8,
-                                'languageCode' => 'fre-FR',
-                                'name' => 'Français franchouillard'
-                            ) )
-                        )
-                    )
-                );
-            $this->languageHandler = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
-                array( 'getByLocale', 'getById' ),
-                array(
-                    $innerLanguageHandler,
-                    $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Cache' )
-                )
-            );
-            $this->languageHandler->expects( $this->any() )
-                ->method( 'getById' )
-                ->will(
-                    $this->returnValue(
-                        new Language(
-                            array(
-                                'id' => 2,
-                                'languageCode' => 'eng-GB',
-                                'name' => 'British english'
-                            )
-                        )
-                    )
-                );
-        }
-        return $this->languageHandler;
-    }
-
-    /**
      * Returns a field registry mock object
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue\Converter\Registry
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected function getFieldRegistry()
     {
         if ( !isset( $this->fieldRegistry ) )
         {
             $this->fieldRegistry = $this->getMock(
-                '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Registry'
+                '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\ConverterRegistry',
+                array(),
+                array( array() )
             );
         }
         return $this->fieldRegistry;
@@ -268,42 +198,22 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * Returns a language mask generator
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
-     */
-    protected function getLanguageMaskGenerator()
-    {
-        if ( !isset( $this->languageMaskGenerator ) )
-        {
-            $this->languageMaskGenerator = new LanguageMaskGenerator(
-                $this->getLanguageLookupMock()
-            );
-        }
-        return $this->languageMaskGenerator;
-    }
-
     public function testNoSorting()
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\SectionId(
-                array( 2 )
-            ),
-            0, 10,
-            array()
-        );
+        $result = $locator->findContent( new Query( array(
+            'criterion'   => new Criterion\SectionId( array( 2 ) ),
+            'offset'      => 0,
+            'limit'       => 10,
+            'sortClauses' => array()
+        ) ) );
 
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 42 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->contentInfo->id;
-                },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -312,24 +222,18 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\SectionId(
-                array( 2 )
-            ),
-            0, 10,
-            array(
-                new SortClause\LocationPathString( Query::SORT_DESC ),
-            )
-        );
+        $result = $locator->findContent( new Query( array(
+            'criterion'   => new Criterion\SectionId( array( 2 ) ),
+            'offset'      => 0,
+            'limit'       => 10,
+            'sortClauses' => array( new SortClause\LocationPathString( Query::SORT_DESC ) )
+        ) ) );
 
         $this->assertEquals(
             array( 10, 42, 13, 14, 12, 11, 4 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->contentInfo->id;
-                },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -338,24 +242,18 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\SectionId(
-                array( 2 )
-            ),
-            0, 10,
-            array(
-                new SortClause\LocationDepth( Query::SORT_ASC ),
-            )
-        );
+        $result = $locator->findContent( new Query( array(
+            'criterion'   => new Criterion\SectionId( array( 2 ) ),
+            'offset'      => 0,
+            'limit'       => 10,
+            'sortClauses' => array( new SortClause\LocationDepth( Query::SORT_ASC ) )
+        ) ) );
 
         $this->assertEquals(
             array( 4, 11, 12, 13, 42, 10, 14 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->contentInfo->id;
-                },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -364,25 +262,21 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\SectionId(
-                array( 2 )
-            ),
-            0, 10,
-            array(
+        $result = $locator->findContent( new Query( array(
+            'criterion'   => new Criterion\SectionId( array( 2 ) ),
+            'offset'      => 0,
+            'limit'       => 10,
+            'sortClauses' => array(
                 new SortClause\LocationDepth( Query::SORT_ASC ),
                 new SortClause\LocationPathString( Query::SORT_DESC ),
             )
-        );
+        ) ) );
 
         $this->assertEquals(
             array( 4, 42, 13, 12, 11, 10, 14 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->contentInfo->id;
-                },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -391,24 +285,20 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\SectionId(
-                array( 2 )
-            ),
-            0, 10,
-            array(
+        $result = $locator->findContent( new Query( array(
+            'criterion'   => new Criterion\SectionId( array( 2 ) ),
+            'offset'      => 0,
+            'limit'       => 10,
+            'sortClauses' => array(
                 new SortClause\LocationPriority( Query::SORT_DESC ),
             )
-        );
+        ) ) );
 
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 42 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->contentInfo->id;
-                },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -417,24 +307,20 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\SectionId(
-                array( 2 )
-            ),
-            0, 10,
-            array(
+        $result = $locator->findContent( new Query( array(
+            'criterion'   => new Criterion\SectionId( array( 2 ) ),
+            'offset'      => 0,
+            'limit'       => 10,
+            'sortClauses' => array(
                 new SortClause\DateModified(),
             )
-        );
+        ) ) );
 
         $this->assertEquals(
             array( 4, 12, 13, 42, 10, 14, 11 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->contentInfo->id;
-                },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -443,24 +329,20 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\SectionId(
-                array( 2 )
-            ),
-            0, 10,
-            array(
+        $result = $locator->findContent( new Query( array(
+            'criterion'   => new Criterion\SectionId( array( 2 ) ),
+            'offset'      => 0,
+            'limit'       => 10,
+            'sortClauses' => array(
                 new SortClause\DatePublished(),
             )
-        );
+        ) ) );
 
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 42 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->contentInfo->id;
-                },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -469,15 +351,14 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\SectionId(
-                array( 4, 2, 6, 3 )
-            ),
-            0, null,
-            array(
+        $result = $locator->findContent( new Query( array(
+            'criterion'   => new Criterion\SectionId( array( 4, 2, 6, 3 ) ),
+            'offset'      => 0,
+            'limit'       => null,
+            'sortClauses' => array(
                 new SortClause\SectionIdentifier(),
             )
-        );
+        ) ) );
 
         // First, results of section 2 should appear, then the ones of 3, 4 and 6
         // From inside a specific section, no particular order should be defined
@@ -490,11 +371,8 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             6 => array( 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164 ),
         );
         $contentIds = array_map(
-            function ( $content )
-            {
-                return $content->contentInfo->id;
-            },
-            $result->content
+            function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+            $result->searchHits
         );
         $index = 0;
 
@@ -514,15 +392,14 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\SectionId(
-                array( 4, 2, 6, 3 )
-            ),
-            0, null,
-            array(
+        $result = $locator->findContent( new Query( array(
+            'criterion'   => new Criterion\SectionId( array( 4, 2, 6, 3 ) ),
+            'offset'      => 0,
+            'limit'       => null,
+            'sortClauses' => array(
                 new SortClause\SectionName(),
             )
-        );
+        ) ) );
 
         // First, results of section "Media" should appear, then the ones of "Protected",
         // "Setup" and "Users"
@@ -536,11 +413,8 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             "users" => array( 4, 10, 11, 12, 13, 14, 42 ),
         );
         $contentIds = array_map(
-            function ( $content )
-            {
-                return $content->contentInfo->id;
-            },
-            $result->content
+            function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+            $result->searchHits
         );
         $index = 0;
 
@@ -560,24 +434,20 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\SectionId(
-                array( 2, 3 )
-            ),
-            0, null,
-            array(
+        $result = $locator->findContent( new Query( array(
+            'criterion'   => new Criterion\SectionId( array( 2, 3 ) ),
+            'offset'      => 0,
+            'limit'       => null,
+            'sortClauses' => array(
                 new SortClause\ContentName(),
             )
-        );
+        ) ) );
 
         $this->assertEquals(
             array( 14, 12, 10, 42, 57, 13, 50, 49, 41, 11, 51, 62, 4, 58, 59, 61, 60, 64, 63, 200, 66, 201 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->contentInfo->id;
-                },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }
@@ -586,15 +456,14 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\SectionId(
-                array( 1 )
-            ),
-            0, null,
-            array(
+        $result = $locator->findContent( new Query( array(
+            'criterion'   => new Criterion\SectionId( array( 1 ) ),
+            'offset'      => 0,
+            'limit'       => null,
+            'sortClauses' => array(
                 new SortClause\Field( "article", "title" ),
             )
-        );
+        ) ) );
 
         // There are several identical titles, need to take care about this
         $idMapSet = array(
@@ -626,11 +495,8 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             "tutorials for" => array( 106 ),
         );
         $contentIds = array_map(
-            function ( $content )
-            {
-                return $content->contentInfo->id;
-            },
-            $result->content
+            function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+            $result->searchHits
         );
         $index = 0;
 
@@ -650,24 +516,20 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $result = $locator->find(
-            new Criterion\SectionId(
-                array( 1 )
-            ),
-            0, null,
-            array(
+        $result = $locator->findContent( new Query( array(
+            'criterion'   => new Criterion\SectionId( array( 1 ) ),
+            'offset'      => 0,
+            'limit'       => null,
+            'sortClauses' => array(
                 new SortClause\Field( "product", "price" ),
             )
-        );
+        ) ) );
 
         $this->assertEquals(
             array( 73, 71, 72, 69 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->contentInfo->id;
-                },
-                $result->content
+                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                $result->searchHits
             )
         );
     }

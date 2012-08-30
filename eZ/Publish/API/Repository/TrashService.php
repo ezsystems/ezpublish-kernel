@@ -11,9 +11,7 @@
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\API\Repository\Values\Content\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
-use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\Query;
 
 /**

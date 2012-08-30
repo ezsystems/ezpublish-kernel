@@ -8,18 +8,15 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Service\InMemory;
-use eZ\Publish\Core\Repository\Tests\Service\UserBase as BaseUserServiceTest,
-    eZ\Publish\Core\Repository\Repository,
-    eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
-    eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler;
+use eZ\Publish\Core\Repository\Tests\Service\UserBase as BaseUserServiceTest;
 
 /**
  * Test case for User Service using InMemory storage class
  */
 class UserTest extends BaseUserServiceTest
 {
-    protected function getRepository( array $serviceSettings )
+    protected function getRepository()
     {
-        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler(), $serviceSettings );
+        return Utils::getRepository();
     }
 }

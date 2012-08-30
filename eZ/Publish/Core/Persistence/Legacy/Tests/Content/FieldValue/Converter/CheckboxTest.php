@@ -8,14 +8,11 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use eZ\Publish\Core\Repository\FieldType\Checkbox\Value as CheckboxValue,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
+use eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Checkbox as CheckboxConverter,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
-    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings,
     PHPUnit_Framework_TestCase;
 
 /**
@@ -43,12 +40,12 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     {
         $value = new FieldValue;
         $value->data = true;
-        $value->sortKey = array( 'sort_key_int' => 1 );
+        $value->sortKey = 1;
         $storageFieldValue = new StorageFieldValue;
 
         $this->converter->toStorageValue( $value, $storageFieldValue );
         self::assertSame( (int)$value->data, $storageFieldValue->dataInt );
-        self::assertSame( $value->sortKey['sort_key_int'], $storageFieldValue->sortKeyInt );
+        self::assertSame( $value->sortKey, $storageFieldValue->sortKeyInt );
         self::assertSame( '', $storageFieldValue->sortKeyString );
     }
 
@@ -67,7 +64,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
         self::assertSame( (bool)$storageFieldValue->dataInt, $fieldValue->data );
-        self::assertSame( $storageFieldValue->sortKeyInt, $fieldValue->sortKey['sort_key_int'] );
+        self::assertSame( $storageFieldValue->sortKeyInt, $fieldValue->sortKey );
     }
 
     /**
@@ -81,22 +78,15 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
         $storageFieldDef = new StorageFieldDefinition;
         $defaultValue = new FieldValue;
         $defaultValue->data = $defaultBool;
-        $fieldTypeConstraints = new FieldTypeConstraints;
-        $fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
-                'defaultValue' => $defaultBool
-            )
-        );
         $fieldDef = new PersistenceFieldDefinition(
             array(
-                'fieldTypeConstraints' => $fieldTypeConstraints,
                 'defaultValue' => $defaultValue
             )
         );
 
         $this->converter->toStorageFieldDefinition( $fieldDef, $storageFieldDef );
         self::assertSame(
-            (int)$fieldDef->fieldTypeConstraints->fieldSettings['defaultValue'],
+            (int)$fieldDef->defaultValue->data,
             $storageFieldDef->dataInt3
         );
     }
@@ -118,10 +108,6 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
 
         $this->converter->toFieldDefinition( $storageDef, $fieldDef );
         self::assertSame( $defaultBool, $fieldDef->defaultValue->data );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
-        self::assertSame(
-            array( 'defaultValue' => $defaultBool ),
-            $fieldDef->fieldTypeConstraints->fieldSettings->getArrayCopy()
-        );
+        self::assertNull( $fieldDef->fieldTypeConstraints->fieldSettings );
     }
 }

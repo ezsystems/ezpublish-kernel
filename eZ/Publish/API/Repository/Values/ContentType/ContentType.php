@@ -9,9 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ValueObject,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * this class represents a content type value
@@ -184,8 +182,8 @@ abstract class ContentType extends ValueObject
     protected $mainLanguageCode;
 
     /**
-     * if an instance of acontent type is created the always available flag is set
-     * by default this this value.
+     * if an instance of a content type is created the always available flag is set
+     * by default to this value.
      *
      * @var boolean
      */

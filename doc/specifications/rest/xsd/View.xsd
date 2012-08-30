@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:include schemaLocation="CommonDefinitions.xsd" />
+  <xsd:include schemaLocation="Content.xsd" />
+  <xsd:simpleType name="fieldOperatorType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="IN" />
+      <xsd:enumeration value="LIKE" />
+      <xsd:enumeration value="EQ" />
+      <xsd:enumeration value="LT" />
+      <xsd:enumeration value="LTE" />
+      <xsd:enumeration value="GT" />
+      <xsd:enumeration value="GTE" />
+      <xsd:enumeration value="BETWEEN" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="dateOperatorType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="EQ" />
+      <xsd:enumeration value="LT" />
+      <xsd:enumeration value="LTE" />
+      <xsd:enumeration value="GT" />
+      <xsd:enumeration value="GTE" />
+      <xsd:enumeration value="BETWEEN" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="dateMetaDataType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="CREATED" />
+      <xsd:enumeration value="MODIFIED" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="urlAliasOperatorType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="EQ" />
+      <xsd:enumeration value="IN" />
+      <xsd:enumeration value="LIKE" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="userMetaDataType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="CREATOR" />
+      <xsd:enumeration value="MODIFIER" />
+      <xsd:enumeration value="OWNER" />
+      <xsd:enumeration value="GROUP" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="sortClauseEnumType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="PATH" />
+      <xsd:enumeration value="PATHSTRING" />
+      <xsd:enumeration value="MODIFIED" />
+      <xsd:enumeration value="CREATED" />
+      <xsd:enumeration value="SECTIONIDENTIFER" />
+      <xsd:enumeration value="SECTIONID" />
+      <xsd:enumeration value="FIELD" />
+      <xsd:enumeration value="PRIORITY" />
+      <xsd:enumeration value="NAME" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="fieldCriterionType">
+    <xsd:all>
+      <xsd:element name="target" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>
+            The identifier of the field i.e identifier
+            of the corresponding field
+            definition 
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="operator" type="fieldOperatorType" />
+      <xsd:element name="value" type="xsd:anyType" />
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="dateCriterionType">
+    <xsd:all>
+      <xsd:element name="target" type="dateMetaDataType">
+      </xsd:element>
+      <xsd:element name="operator" type="dateOperatorType" />
+      <xsd:element name="value" type="dateList" />
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="urlaliasCriterionType">
+    <xsd:all>
+      <xsd:element name="operator" type="urlAliasOperatorType" />
+      <xsd:element name="value" type="stringList" />
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="userMetaDataCriterionType">
+    <xsd:all>
+      <xsd:element name="target" type="userMetaDataType">
+      </xsd:element>
+      <xsd:element name="value" type="dateList" />
+    </xsd:all>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="criterionType">
+    <xsd:choice minOccurs="1" maxOccurs="unbounded">
+      <xsd:element name="AND" type="criterionType" />
+      <xsd:element name="OR" type="criterionType" />
+      <xsd:element name="NOT" type="criterionType" />
+      <xsd:element name="ContentIdCriterion" type="intList" />
+      <xsd:element name="ContentRemoteIdCriterion" type="stringList" />
+      <xsd:element name="ContentTypeGroupIdCriterion" type="xsd:int" />
+      <xsd:element name="ContentTypeIdCriterion" type="xsd:int" />
+      <xsd:element name="ContentTypeIdentifierCriterion"
+        type="xsd:string" />
+      <xsd:element name="FieldCritierion" type="fieldCriterionType" />
+      <xsd:element name="DateMetaDataCritierion" type="dateCriterionType" />
+      <xsd:element name="FullTextCriterion" type="xsd:string" />
+      <xsd:element name="LocationIdCriterion" type="intList" />
+      <xsd:element name="LocationRemoteIdCriterion" type="stringList" />
+      <xsd:element name="ParentLocationIdCriterion" type="intList" />
+      <xsd:element name="ParentLocationRemoteIdCriterion"
+        type="stringList" />
+      <xsd:element name="SectionIdCriterion" type="xsd:int" />
+      <xsd:element name="SectionIdentifierCriterion" type="xsd:string" />
+      <xsd:element name="VersionStatusCriterion" type="versionStatus" />
+      <xsd:element name="SubtreeCriterion" type="stringList" />
+      <xsd:element name="URLAliasCriterion" type="urlaliasCriterionType" />
+      <xsd:element name="UserMetaDataCriterion" type="userMetaDataCriterionType" />
+    </xsd:choice>
+  </xsd:complexType>
+
+  <xsd:complexType name="sortClauseType">
+    <xsd:sequence>
+      <xsd:element name="SortClause">
+        <xsd:complexType>
+          <xsd:all>
+            <xsd:element name="SortField" type="sortClauseEnumType" />
+            <xsd:element name="TargetData" type="xsd:anyType"
+              minOccurs="0" />
+          </xsd:all>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="facetBuilderType">
+    <xsd:sequence>
+      <xsd:element name="criterion" type="criterionType"
+        minOccurs="0" maxOccurs="1" />
+    </xsd:sequence>
+    <xsd:attribute name="name" type="xsd:string" />
+    <xsd:attribute name="global" type="xsd:boolean" />
+    <xsd:attribute name="limit" type="xsd:int" />
+    <xsd:attribute name="minCount" type="xsd:int" />
+  </xsd:complexType>
+
+
+  <xsd:simpleType name="dateRangeFacetSelector">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="CREATED" />
+      <xsd:enumeration value="MODIFIED" />
+      <xsd:enumeration value="PUBLISHED" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+
+  <xsd:complexType name="dateRangeType">
+    <xsd:attribute name="from" type="xsd:dateTime" />
+    <xsd:attribute name="to" type="xsd:dateTime" />
+  </xsd:complexType>
+
+  <xsd:complexType name="dateRangeFacetBuilderType">
+    <xsd:complexContent>
+      <xsd:extension base="facetBuilderType">
+        <xsd:sequence>
+          <xsd:element name="unboundedFrom" type="xsd:dateTime"
+            minOccurs="0" maxOccurs="1" />
+          <xsd:element name="range" type="dateRangeType"
+            minOccurs="0" maxOccurs="unbounded" />
+          <xsd:element name="unboundedTo" type="xsd:dateTime"
+            minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attribute name="select" type="dateRangeFacetSelector"
+          default="PUBLISHED" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:simpleType name="fieldFacetSortType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="TERM_ASC" />
+      <xsd:enumeration value="TERM_DESC" />
+      <xsd:enumeration value="COUNT_ASC" />
+      <xsd:enumeration value="COUNT_DESC" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="fieldFacetBuilderType">
+    <xsd:complexContent>
+      <xsd:extension base="facetBuilderType">
+        <xsd:sequence>
+          <xsd:element name="fieldPath" type="xsd:string"
+            minOccurs="1" maxOccurs="unbounded" />
+          <xsd:element name="regExpFilter" type="xsd:string"
+            minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attribute name="sort" type="fieldFacetSortType" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="fieldRangeType">
+    <xsd:attribute name="from" type="xsd:anySimpleType" />
+    <xsd:attribute name="to" type="xsd:anySimpleType" />
+  </xsd:complexType>
+
+  <xsd:complexType name="fieldRangeFacetBuilderType">
+    <xsd:complexContent>
+      <xsd:extension base="facetBuilderType">
+        <xsd:sequence>
+          <xsd:element name="unboundedFrom" type="xsd:anySimpleType"
+            minOccurs="0" maxOccurs="1" />
+          <xsd:element name="range" type="fieldRangeType"
+            minOccurs="0" maxOccurs="unbounded" />
+          <xsd:element name="unboundedTo" type="xsd:anySimpleType"
+            minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attribute name="fieldPath" type="xsd:string" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="locationFacetBuilderType">
+    <xsd:complexContent>
+      <xsd:extension base="facetBuilderType">
+        <xsd:sequence>
+          <xsd:element name="location" type="ref" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:simpleType name="userFacetSelector">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="OWNER" />
+      <xsd:enumeration value="CREATTOR" />
+      <xsd:enumeration value="MODIFIER" />
+      <xsd:enumeration value="GROUP" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="userFacetBuilderType">
+    <xsd:complexContent>
+      <xsd:extension base="facetBuilderType">
+        <xsd:attribute name="select" type="userFacetSelector"
+          default="OWNER" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="facetBuilderListType">
+    <xsd:sequence>
+      <xsd:choice>
+        <xsd:element name="contentTypeFacetBuilder" type="facetBuilderType" />
+        <xsd:element name="criterionFacetBuilder" type="facetBuilderType" />
+        <xsd:element name="dateRangeFacetBulder" type="dateRangeFacetBuilderType" />
+        <xsd:element name="fieldFacetBuilder" type="fieldFacetBuilderType"></xsd:element>
+        <xsd:element name="fieldRangeFacetBuilder" type="fieldRangeFacetBuilderType"></xsd:element>
+        <xsd:element name="locationFacetBuilder" type="locationFacetBuilderType" />
+        <xsd:element name="sectionFacetBuilder" type="facetBuilderType" />
+        <xsd:element name="termFacetBuilder" type="facetBuilderType" />
+        <xsd:element name="userFacetBuilder" type="userFacetBuilderType" />
+      </xsd:choice>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="queryType">
+    <xsd:all>
+      <xsd:element name="Criterion" type="criterionType" />
+      <xsd:element name="limit" type="xsd:int" />
+      <xsd:element name="offset" type="xsd:int" />
+      <xsd:element name="FacetBuilders" type="facetBuilderListType" />
+      <xsd:element name="SortClauses" type="sortClauseType" />
+      <xsd:element name="spellcheck" type="xsd:boolean" />
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="facetType">
+    <xsd:attribute name="name" type="xsd:string" />
+  </xsd:complexType>
+
+  <xsd:complexType name="contentTypeFacetEntryType">
+    <xsd:all>
+      <xsd:element name="contentType" type="ref" />
+      <xsd:element name="count" type="xsd:int" />
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="contentTypeFacetType">
+    <xsd:complexContent>
+      <xsd:extension base="facetType">
+        <xsd:sequence>
+          <xsd:element name="contentTypeFacetEntry" type="contentTypeFacetEntryType" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="sectionFacetEntryType">
+    <xsd:all>
+      <xsd:element name="section" type="ref" />
+      <xsd:element name="count" type="xsd:int" />
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="sectionFacetType">
+    <xsd:complexContent>
+      <xsd:extension base="facetType">
+        <xsd:sequence>
+          <xsd:element name="sectionFacetEntry" type="sectionFacetEntryType" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="locationFacetEntryType">
+    <xsd:all>
+      <xsd:element name="location" type="ref" />
+      <xsd:element name="count" type="xsd:int" />
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="locationFacetType">
+    <xsd:complexContent>
+      <xsd:extension base="facetType">
+        <xsd:sequence>
+          <xsd:element name="locationFacetEntry" type="locationFacetEntryType" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="userFacetEntryType">
+    <xsd:all>
+      <xsd:element name="user" type="ref" />
+      <xsd:element name="count" type="xsd:int" />
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="userFacetType">
+    <xsd:complexContent>
+      <xsd:extension base="facetType">
+        <xsd:sequence>
+          <xsd:element name="userFacetEntry" type="userFacetEntryType" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="criterionFacetType">
+    <xsd:complexContent>
+      <xsd:extension base="facetType">
+        <xsd:all>
+          <xsd:element name="criterion" type="criterionType" />
+          <xsd:element name="count" type="xsd:int" />
+        </xsd:all>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="rangeFacetEntryType">
+    <xsd:all>
+      <xsd:element name="from" type="xsd:anySimpleType" />
+      <xsd:element name="to" type="xsd:anySimpleType" />
+      <xsd:element name="totalCount" type="xsd:int" />
+      <xsd:element name="min" type="xsd:int" />
+      <xsd:element name="max" type="xsd:int" />
+      <xsd:element name="mean" type="xsd:int" />
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="dateRangeFacetType">
+    <xsd:complexContent>
+      <xsd:extension base="facetType">
+        <xsd:sequence>
+          <xsd:element name="dateRangeFacetEntry" type="rangeFacetEntryType" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="fieldRangeFacetType">
+    <xsd:complexContent>
+      <xsd:extension base="facetType">
+        <xsd:sequence>
+          <xsd:element name="fieldRangeFacetEntry" type="rangeFacetEntryType" />
+        </xsd:sequence>
+        <xsd:attribute name="totalCount" type="xsd:int" />
+        <xsd:attribute name="otherCount" type="xsd:int" />
+        <xsd:attribute name="missingCount" type="xsd:int" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="termFacetEntryType">
+    <xsd:all>
+      <xsd:element name="term" type="xsd:string" />
+      <xsd:element name="count" type="xsd:int" />
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="fieldFacetType">
+    <xsd:complexContent>
+      <xsd:extension base="facetType">
+        <xsd:sequence>
+          <xsd:element name="fieldFacetEntry" type="termFacetEntryType" />
+        </xsd:sequence>
+        <xsd:attribute name="totalCount" type="xsd:int" />
+        <xsd:attribute name="otherCount" type="xsd:int" />
+        <xsd:attribute name="missingCount" type="xsd:int" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="termFacetType">
+    <xsd:complexContent>
+      <xsd:extension base="facetType">
+        <xsd:sequence>
+          <xsd:element name="termFacetEntry" type="termFacetEntryType" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="facetTyoe">
+    <xsd:choice>
+      <xsd:element name="sectionFacet" type="sectionFacetType" />
+      <xsd:element name="locationFacet" type="locationFacetType" />
+      <xsd:element name="userFacet" type="userFacetType" />
+      <xsd:element name="contentTypeFacet" type="contentTypeFacetType" />
+      <xsd:element name="fieldFacet" type="fieldFacetType" />
+      <xsd:element name="fieldRangeFacet" type="fieldRangeFacetType" />
+      <xsd:element name="dateRangeFacet" type="dateRangeFacetType" />
+      <xsd:element name="criterionFacet" type="criterionFacetType" />
+      <xsd:element name="termFacet" type="termFacetType" />
+    </xsd:choice>
+  </xsd:complexType>
+
+  <xsd:complexType name="searchHitType">
+    <xsd:all>
+      <xsd:element name="value" type="xsd:anyType" />
+      <xsd:element name="hightlight" type="xsd:string" />
+    </xsd:all>
+    <xsd:attribute name="score" type="xsd:float" />
+    <xsd:attribute name="index" type="xsd:string" />
+  </xsd:complexType>
+
+  <xsd:complexType name="searchHitListType">
+    <xsd:sequence>
+      <xsd:element name="searchHit" type="searchHitType" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="facetListType">
+    <xsd:sequence>
+      <xsd:element name="facet" type="facetType" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="resultType">
+    <xsd:complexContent>
+      <xsd:extension base="ref">
+        <xsd:all>
+          <xsd:element name="searchHits" type="searchHitListType" />
+          <xsd:element name="facets" type="facetListType" />
+          <xsd:element name="spellcorrection" type="criterionType" />
+        </xsd:all>
+        <xsd:attribute name="count" type="xsd:int" />
+        <xsd:attribute name="time" type="xsd:int" />
+        <xsd:attribute name="timedOut" type="xsd:boolean" />
+        <xsd:attribute name="maxScore" type="xsd:float" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="viewInputType">
+    <xsd:all>
+      <xsd:element name="identifier" type="xsd:string"
+        minOccurs="0" />
+      <xsd:element name="public" type="xsd:boolean" default="false" />
+      <xsd:element name="Query" type="queryType" />
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="viewType">
+    <xsd:complexContent>
+      <xsd:extension base="ref">
+        <xsd:all>
+          <xsd:element name="identifier" type="xsd:string" />
+          <xsd:element name="User" type="ref" />
+          <xsd:element name="public" type="xsd:boolean" />
+          <xsd:element name="Query" type="queryType" />
+          <xsd:element name="Result" type="resultType" />
+        </xsd:all>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ViewInput" type="viewInputType" />
+  <xsd:element name="FacetBuilder" type="facetBuilderListType" />
+  <xsd:element name="View" type="viewType" />
+</xsd:schema>

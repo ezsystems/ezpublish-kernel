@@ -1,8 +1,8 @@
 <?php
 /**
- * File containing the bootstrapping of eZ Publish Next
+ * File containing the bootstrapping of eZ Publish API
  *
- * Returns instance of Service Container setup with configuration service and setups autoloader.
+ * Setups class loading.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,51 +10,47 @@
  */
 
 
-use eZ\Publish\Core\Base\ClassLoader,
-    eZ\Publish\Core\Base\ConfigurationManager,
-    eZ\Publish\Core\Base\ServiceContainer;
+use eZ\Publish\Core\Base\ClassLoader;
+use eZ\Publish\Legacy\Kernel as LegacyKernel;
+use eZ\Publish\Legacy\Kernel\CLIHandler as LegacyKernelCLI;
 
-// Setup autoloaders
+// Get globl config.php settings
 if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
 {
-    die( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
+    throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
 }
 
-require __DIR__ . '/eZ/Publish/Core/Base/ClassLoader.php';
-$loader = new ClassLoader( $settings['base']['ClassLoader']['Repositories'] );
-spl_autoload_register( array( $loader, 'load' ) );
+// Setup class loader
+require_once __DIR__ . '/eZ/Publish/Core/Base/ClassLoader.php';
 
-// Zeta Components
-require $settings['base']['ClassLoader']['ezcBase'];
-spl_autoload_register( array( 'ezcBase', 'autoload' ) );
-
-
-$configManager = new ConfigurationManager(
-    $settings,
-    $settings['base']['Configuration']['Paths']
+$classLoader = new ClassLoader(
+    include $settings['base']['ClassLoader']['NamespaceMap'],
+    include $settings['base']['ClassLoader']['ClassMap'],
+    $settings['service']['parameters']['legacy_dir']
 );
+spl_autoload_register( array( $classLoader, 'load' ) );
 
-// Access matching before we get active modules or opposite?
-// anyway access matching should use event filters hence be optional.
+$classLoader = require_once __DIR__ . "/vendor/autoload.php";
 
-// Setup configuration for modules
-/*$paths = array();
-foreach ( $settings['base']['ClassLoader']['Repositories'] as $ns => $nsPath )
+if ( $classLoader instanceof Composer\Autoload\ClassLoader )
+    $classLoader->register();
+
+// Bootstrap eZ Publish legacy kernel if configured
+if ( !empty( $settings['service']['parameters']['legacy_dir'] ) )
 {
-    foreach ( glob( "{$nsPath}/*", GLOB_ONLYDIR ) as $path )//@todo Take from configuration
-    {
-        $paths[] = "{$path}/settings/";
-    }
+    $legacyKernel = new LegacyKernel( new LegacyKernelCLI, $settings['service']['parameters']['legacy_dir'], getcwd() );
+    set_exception_handler( null );
+    // Avoid "Fatal error" text from legacy kernel if not called
+    $legacyKernel->runCallback(
+        function ()
+        {
+            eZExecution::setCleanExit();
+        }
+    );
+
+    // Exposing in env variables in order be able to use them in test cases.
+    $_ENV['legacyKernel'] = $legacyKernel;
+    $_ENV['legacyPath'] = $settings['service']['parameters']['legacy_dir'];
 }
 
-$configManager->setGlobalDirs( $paths, 'modules' );*/
-
-$sc = new ServiceContainer(
-    $configManager->getConfiguration('service')->getAll(),
-    array(
-        '$classLoader' => $loader,
-        '$configurationManager' => $configManager,
-    )
-);
-
-return $sc;
+return include 'container.php';

@@ -42,7 +42,7 @@ interface Handler
     /**
      * Load user(s) with user login / email.
      *
-     * Optimized for login use (hence the possibility to match email and resturn several users).
+     * Optimized for login use (hence the possibility to match email and return several users).
      *
      * @param string $login
      * @param boolean $alsoMatchEmail Also match user email, caller must verify that $login is a valid email address.
@@ -163,9 +163,9 @@ interface Handler
     public function loadPoliciesByUserId( $userId );
 
     /**
-     * Assign role to user group with given limitation
+     * Assign role to a user or user group with given limitations
      *
-     * The limitation array may look like:
+     * The limitation array looks like:
      * <code>
      *  array(
      *      'Subtree' => array(
@@ -180,23 +180,26 @@ interface Handler
      * Where the keys are the limitation identifiers, and the respective values
      * are an array of limitation values. The limitation parameter is optional.
      *
-     * @todo It has been discussed to not support assigning roles with limitations, as it is kind of flawed in eZ Publish
-     *       Hence you would simplify the design and reduce future bugs by forcing use of policy limitations instead.
-     * @param mixed $groupId The group Id to assign the role to.
-     *                       In Legacy storage engine this is the content object id of the group to assign to.
-     *                       By the nature of legacy storage engine, it is therefor possible to use $userId as well here.
+     * @param mixed $contentId The groupId or userId to assign the role to.
      * @param mixed $roleId
      * @param array $limitation
      */
-    public function assignRole( $groupId, $roleId, array $limitation = null );
+    public function assignRole( $contentId, $roleId, array $limitation = null );
 
     /**
      * Un-assign a role
      *
-     * @param mixed $groupId The group Id to un-assign the role from.
-     *                       In Legacy storage engine this is the content object id of the group to un-assign from.
-     *                       By the nature of legacy storage engine, it is therefor possible to use $userId as well here.
+     * @param mixed $contentId The user or user group Id to un-assign the role from.
      * @param mixed $roleId
      */
-    public function unAssignRole( $groupId, $roleId );
+    public function unAssignRole( $contentId, $roleId );
+
+    /**
+     * Returns a list of role assignments for the given user or user group id
+     *
+     * @param mixed $contentId
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
+     */
+    public function getRoleAssignments( $contentId );
 }

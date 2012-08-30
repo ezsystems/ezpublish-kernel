@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
@@ -107,7 +106,6 @@ abstract class ContentTypeCreateStruct extends ValueObject
      * @var array an array of string
      */
     public $descriptions;
-
 
     /**
      * adds a new field definition

@@ -13,7 +13,9 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandlerInterface,
-    eZ\Publish\SPI\Persistence\Content\Search\Result,
+    eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
+    eZ\Publish\API\Repository\Values\Content\Search\SearchHit,
+    eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId,
@@ -24,7 +26,6 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\UserMetadata,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
@@ -75,14 +76,22 @@ class SearchHandler extends SearchHandlerInterface
         $this->backend = $backend;
     }
 
-    /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Search\Handler
+     /**
+     * finds content objects for the given query.
+     *
+     * @TODO define structs for the field filters
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
+     * @param array  $fieldFilters - a map of filters for the returned fields.
+     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, $translations = null )
+    public function findContent( Query $query, array $fieldFilters = array() )
     {
         // Only some criteria are supported as getting full support for all in InMemory engine is not a priority
         $match = array();
-        self::generateMatchByCriteria( array( $criterion ), $match );
+        self::generateMatchByCriteria( array( $query->criterion ), $match );
 
         if ( empty( $match ) )
         {
@@ -127,29 +136,66 @@ class SearchHandler extends SearchHandlerInterface
             }
         }
 
-        $result = new Result();
-        $result->count = count( $resultList );
+        $result = new SearchResult();
+        $result->time = 0;
+        $result->totalCount = count( $resultList );
 
-        if ( empty( $resultList ) || ( $limit === null && $offset === 0 ) )
-            $result->content = $resultList;
-        else if ( $limit === null )
-             $result->content = array_slice( $resultList, $offset );
+        if ( empty( $resultList ) || ( $query->limit === null && $query->offset === 0 ) )
+            $result->searchHits = $resultList;
+        else if ( $query->limit === null )
+             $result->searchHits = array_slice( $resultList, $query->offset );
         else
-            $result->content = array_slice( $resultList, $offset, $limit );
+            $result->searchHits = array_slice( $resultList, $query->offset, $query->limit );
+
+        $result->searchHits = array_map(
+            function ( $content )
+            {
+                return new SearchHit( array(
+                    'valueObject' => $content,
+                ) );
+            },
+            $result->searchHits
+        );
 
         return $result;
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Search\Handler
+     * Performs a query for a single content object
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
+     *
+     * @TODO define structs for the field filters
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param array  $fieldFilters - a map of filters for the returned fields.
+     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function findSingle( Criterion $criterion, $translations = null )
+    public function findSingle( Criterion $criterion, array $fieldFilters = array() )
     {
-        $list = $this->find( $criterion, 0, 1, null, $translations );
-        if ( !$list->count )
+        $list = $this->findContent( new Query( array(
+            'criterion' => $criterion,
+        ) ) );
+
+        if ( !$list->totalCount )
             throw new NotFound( 'Content', var_export( $criterion, true ) );
 
-        return $list->content[0];
+        return $list->searchHits[0]->valueObject;
+    }
+
+    /**
+     * Suggests a list of values for the given prefix
+     *
+     * @param string $prefix
+     * @param string[] $fieldpath
+     * @param int $limit
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
+     */
+    public function suggest( $prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null )
+    {
+        throw new \Exception( "Not implemented yet." );
     }
 
     /**
@@ -157,7 +203,7 @@ class SearchHandler extends SearchHandlerInterface
      */
     public function indexContent( Content $content )
     {
-        throw new Exception( "Not implemented yet." );
+        throw new \Exception( "Not implemented yet." );
     }
 
     /**

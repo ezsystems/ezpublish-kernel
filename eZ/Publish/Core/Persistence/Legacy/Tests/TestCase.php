@@ -8,15 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql as EzcDbHandlerPgsql,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Sqlite as EzcDbHandlerSqlite,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     ezcQuerySelect;
 
 /**
  * Base test case for database related tests
  */
-class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
     /**
      * DSN used for the DB backend
@@ -24,6 +22,13 @@ class TestCase extends \PHPUnit_Framework_TestCase
      * @var string
      */
     protected $dsn;
+
+    /**
+     * Name of the DB, extracted from DSN
+     *
+     * @var string
+     */
+    protected $db;
 
     /**
      * Database handler -- to not be constructed twice for one test
@@ -70,22 +75,9 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     public function getDatabaseHandler()
     {
-        $connection = \ezcDbFactory::create( $this->getDsn() );
         if ( !$this->handler )
         {
-            switch ( $this->db )
-            {
-                case 'pgsql':
-                    $this->handler = new EzcDbHandlerPgsql( $connection );
-                    break;
-
-                case 'sqlite':
-                    $this->handler = new EzcDbHandlerSqlite( $connection );
-                    break;
-
-                default:
-                    $this->handler = new EzcDbHandler( $connection );
-            }
+            $this->handler = EzcDbHandler::create( $this->getDsn() );
         }
 
         return $this->handler;

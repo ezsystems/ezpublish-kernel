@@ -8,19 +8,13 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
-use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler,
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
     eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Relation,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
-    eZ\Publish\SPI\Persistence\Content\Relation\UpdateStruct as RelationUpdateStruct,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
@@ -127,24 +121,18 @@ class Handler implements BaseContentHandler
             $content,
             $versionNo,
             $struct->fields,
-            $content->contentInfo->mainLanguageCode
+            $content->contentInfo->mainLanguageCode,
+            $struct->ownerId
         );
         $content->versionInfo->creationDate = $struct->modified;
         $content->versionInfo->modificationDate = $struct->modified;
         $content->versionInfo->id = $this->contentGateway->insertVersion(
-            $content->versionInfo, $struct->fields, $content->contentInfo->isAlwaysAvailable
+            $content->versionInfo, $struct->fields, $content->contentInfo->alwaysAvailable
         );
         $content->fields = $struct->fields;
         $content->versionInfo->names = $struct->name;
 
-        if ( $copy )
-        {
-            $this->fieldHandler->copyFields( $content );
-        }
-        else
-        {
-            $this->fieldHandler->createNewFields( $content );
-        }
+        $this->fieldHandler->createNewFields( $content );
 
         // Create node assignments
         foreach ( $struct->locations as $location )
@@ -164,7 +152,8 @@ class Handler implements BaseContentHandler
             $this->contentGateway->setName(
                 $content->contentInfo->id,
                 $content->versionInfo->versionNo,
-                $name, $language
+                $name,
+                $language
             );
         }
 
@@ -179,6 +168,7 @@ class Handler implements BaseContentHandler
      * - Create location nodes based on the node assignments
      * - Update the content object using the provided metadata update struct
      * - Update the node assignments
+     * - Update location nodes of the content with the new published version
      * - Set content and version status to published
      *
      * @param int $contentId
@@ -189,11 +179,20 @@ class Handler implements BaseContentHandler
      */
     public function publish( $contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct )
     {
+        // Archive currently published version
+        $contentInfo = $this->loadContentInfo( $contentId );
+        if ( $contentInfo->currentVersionNo != $versionNo )
+        {
+            $this->setStatus( $contentId, VersionInfo::STATUS_ARCHIVED, $contentInfo->currentVersionNo );
+        }
+
         $this->contentGateway->updateContent( $contentId, $metaDataUpdateStruct );
         $this->locationGateway->createLocationsFromNodeAssignments(
             $contentId,
             $versionNo
         );
+
+        $this->locationGateway->updateLocationsContentVersionNo( $contentId, $versionNo );
         $this->setStatus( $contentId, VersionInfo::STATUS_PUBLISHED, $versionNo );
 
         return $this->load( $contentId, $versionNo );
@@ -209,11 +208,13 @@ class Handler implements BaseContentHandler
      * also be an entry in the `eznode_assignment` created for the draft. This
      * is ignored in this implementation.
      *
-     * @param int $contentId
-     * @param int $srcVersion
+     * @param mixed $contentId
+     * @param mixed $srcVersion
+     * @param mixed $userId
+     *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function createDraftFromVersion( $contentId, $srcVersion )
+    public function createDraftFromVersion( $contentId, $srcVersion, $userId )
     {
         $content = $this->load( $contentId, $srcVersion );
 
@@ -224,12 +225,13 @@ class Handler implements BaseContentHandler
             $content,
             $this->contentGateway->getLastVersionNumber( $contentId ) + 1,
             $fields,
-            $content->versionInfo->initialLanguageCode
+            $content->versionInfo->initialLanguageCode,
+            $userId
         );
         $content->versionInfo->id = $this->contentGateway->insertVersion(
             $content->versionInfo,
             $content->fields,
-            $content->contentInfo->isAlwaysAvailable
+            $content->contentInfo->alwaysAvailable
         );
 
         // Clone fields from previous version and append them to the new one
@@ -240,7 +242,8 @@ class Handler implements BaseContentHandler
             $newField->versionNo = $content->versionInfo->versionNo;
             $content->fields[] = $newField;
         }
-        $this->fieldHandler->createNewFields( $content );
+        $content->fields;
+        $this->fieldHandler->createExistingFieldsInNewVersion( $content );
 
         // Create name
         foreach ( $content->versionInfo->names as $language => $name )
@@ -277,7 +280,9 @@ class Handler implements BaseContentHandler
         $rows = $this->contentGateway->load( $id, $version, $translations );
 
         if ( empty( $rows ) )
+        {
             throw new NotFound( 'content', "contentId: $id, versionNo: $version" );
+        }
 
         $contentObjects = $this->mapper->extractContentFromRows( $rows );
         $content = $contentObjects[0];
@@ -305,6 +310,7 @@ class Handler implements BaseContentHandler
      *
      * @param int|string $contentId
      * @param int $versionNo Version number to load
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
      */
     public function loadVersionInfo( $contentId, $versionNo )
@@ -362,19 +368,22 @@ class Handler implements BaseContentHandler
      *
      * @param int $contentId
      * @param int $versionNo
-     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $content
+     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $updateStruct
+     *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function updateContent( $contentId, $versionNo, UpdateStruct $content )
+    public function updateContent( $contentId, $versionNo, UpdateStruct $updateStruct )
     {
-        $this->contentGateway->updateVersion( $contentId, $versionNo, $content );
-        $this->fieldHandler->updateFields( $contentId, $versionNo, $content );
-        foreach ( $content->name as $language => $name )
+        $content = $this->load( $contentId, $versionNo );
+        $this->contentGateway->updateVersion( $contentId, $versionNo, $updateStruct );
+        $this->fieldHandler->updateFields( $content, $updateStruct );
+        foreach ( $updateStruct->name as $language => $name )
         {
             $this->contentGateway->setName(
                 $contentId,
                 $versionNo,
-                $name, $language
+                $name,
+                $language
             );
         }
 
@@ -392,9 +401,17 @@ class Handler implements BaseContentHandler
      */
     public function deleteContent( $contentId )
     {
-        foreach ( $this->contentGateway->getAllLocationIds( $contentId ) as $locationId )
+        $contentLocations = $this->contentGateway->getAllLocationIds( $contentId );
+        if ( empty( $contentLocations ) )
         {
-            $this->locationHandler->removeSubtree( $locationId );
+            $this->removeRawContent( $contentId );
+        }
+        else
+        {
+            foreach ( $contentLocations as $locationId )
+            {
+                $this->locationHandler->removeSubtree( $locationId );
+            }
         }
     }
 
@@ -405,7 +422,12 @@ class Handler implements BaseContentHandler
      */
     public function removeRawContent( $contentId )
     {
-        $this->fieldHandler->deleteFields( $contentId );
+        $versionInfos = $this->listVersions( $contentId );
+
+        foreach ( $versionInfos as $versionInfo )
+        {
+            $this->fieldHandler->deleteFields( $contentId, $versionInfo );
+        }
         $this->contentGateway->deleteRelations( $contentId );
         $this->contentGateway->deleteVersions( $contentId );
         $this->contentGateway->deleteNames( $contentId );
@@ -424,8 +446,12 @@ class Handler implements BaseContentHandler
      */
     public function deleteVersion( $contentId, $versionNo )
     {
+        $versionInfo = $this->loadVersionInfo( $contentId, $versionNo );
+
         $this->locationGateway->deleteNodeAssignment( $contentId, $versionNo );
-        $this->fieldHandler->deleteFields( $contentId, $versionNo );
+
+        $this->fieldHandler->deleteFields( $contentId, $versionInfo );
+
         $this->contentGateway->deleteRelations( $contentId, $versionNo );
         $this->contentGateway->deleteVersions( $contentId, $versionNo );
         $this->contentGateway->deleteNames( $contentId, $versionNo );
@@ -491,10 +517,10 @@ class Handler implements BaseContentHandler
                 $versionContent->versionInfo->id = $this->contentGateway->insertVersion(
                     $versionContent->versionInfo,
                     $versionContent->fields,
-                    $versionContent->contentInfo->isAlwaysAvailable
+                    $versionContent->contentInfo->alwaysAvailable
                 );
 
-                $this->fieldHandler->copyFields( $versionContent );
+                $this->fieldHandler->createNewFields( $versionContent );
 
                 // Create name
                 foreach ( $versionContent->versionInfo->names as $language => $name )
@@ -518,12 +544,13 @@ class Handler implements BaseContentHandler
      *
      * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
      *
-     * @param  \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $relation
+     * @param \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $createStruct
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation
      */
     public function addRelation( RelationCreateStruct $createStruct )
     {
-        $relation = $this->mapper->createRelationFromCreateStruct( $createStruct);
+        $relation = $this->mapper->createRelationFromCreateStruct( $createStruct );
 
         $relation->id = $this->contentGateway->insertRelation( $createStruct );
 

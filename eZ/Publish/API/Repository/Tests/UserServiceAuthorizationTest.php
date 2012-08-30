@@ -9,13 +9,12 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Tests\BaseTest;
-
 /**
  * Test case for operations in the UserService using in memory storage.
  *
  * @see eZ\Publish\API\Repository\UserService
  * @group integration
+ * @group authorization
  */
 class UserServiceAuthorizationTest extends BaseTest
 {
@@ -225,8 +224,11 @@ class UserServiceAuthorizationTest extends BaseTest
             'test',
             'test@example.com',
             'password',
-            'eng-US'
+            'eng-GB'
         );
+
+        $userCreateStruct->setField('first_name', 'Christian');
+        $userCreateStruct->setField('last_name', 'Bacher');
 
         $parentUserGroup = $userService->loadUserGroup( $editorsGroupId );
 

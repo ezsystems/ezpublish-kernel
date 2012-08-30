@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the BinaryFile converter
+ * File containing the Image converter
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -11,34 +11,43 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 class BinaryFile implements Converter
 {
-    const FILESIZE_VALIDATOR_FQN = 'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator';
+    /**
+     * Factory for current class
+     *
+     * @note Class should instead be configured as service if it gains dependencies.
+     *
+     * @static
+     * @return Image
+     */
+    public static function create()
+    {
+        return new self;
+    }
 
     /**
-     * Converts data from $value to $storageFieldValue.
-     * Nothing has to be stored for eZBinaryFile, as everything has to be stored in an external table.
+     * Converts data from $value to $storageFieldValue
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        // Nothing is stored here for ezbinaryfile
     }
 
     /**
      * Converts data from $value to $fieldValue
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $fieldValue
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        // Nothing to restore
     }
 
     /**
@@ -49,10 +58,9 @@ class BinaryFile implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::FILESIZE_VALIDATOR_FQN]['maxFileSize'] ) )
-        {
-            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::FILESIZE_VALIDATOR_FQN]['maxFileSize'];
-        }
+        $storageDef->dataInt1 = ( isset( $fieldDef->fieldTypeConstraints->validators['FileSizeValidator']['maxFileSize'] )
+            ? $fieldDef->fieldTypeConstraints->validators['FileSizeValidator']['maxFileSize']
+            : 0 );
     }
 
     /**
@@ -63,12 +71,15 @@ class BinaryFile implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        if ( !empty( $storageDef->dataInt1 ) )
-        {
-            $fieldDef->fieldTypeConstraints->validators = array(
-                self::FILESIZE_VALIDATOR_FQN => array( 'maxFileSize' => $storageDef->dataInt1 )
-            );
-        }
+        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints( array(
+            'validators' => array(
+                'FileSizeValidator' => array(
+                    'maxFileSize' => ( $storageDef->dataInt1 != 0
+                        ? $storageDef->dataInt1
+                        : false ),
+                )
+            )
+        ) );
     }
 
     /**
@@ -82,7 +93,7 @@ class BinaryFile implements Converter
      */
     public function getIndexColumn()
     {
-        return false;
+        // @TODO: Correct?
+        return 'sort_key_string';
     }
-
 }

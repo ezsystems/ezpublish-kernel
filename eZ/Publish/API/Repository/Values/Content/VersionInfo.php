@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Values\Content;
 
-use eZ\Publish\API\Repository\Values\ValueObject,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class holds version information data. It also contains the corresponding {@link Content} to
@@ -57,7 +56,6 @@ abstract class VersionInfo extends ValueObject
     abstract public function getContentInfo();
 
     /**
-     *
      * Returns the names computed from the name schema in the available languages.
      *
      * @return string[]
@@ -65,7 +63,6 @@ abstract class VersionInfo extends ValueObject
     abstract public function getNames();
 
     /**
-     *
      * Returns the name computed from the name schema in the given language.
      * If no language is given the name in initial language of the version if present, otherwise null.
      *

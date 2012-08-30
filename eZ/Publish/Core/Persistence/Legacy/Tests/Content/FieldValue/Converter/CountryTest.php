@@ -8,18 +8,17 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use eZ\Publish\Core\Repository\FieldType\Country\Value as CountryValue,
-    eZ\Publish\Core\Repository\FieldType\Country\Type as CountryType,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings,
+use eZ\Publish\Core\FieldType\Country\Type as CountryType,
+    eZ\Publish\Core\FieldType\FieldSettings,
+    eZ\Publish\Core\Repository\ValidatorService,
+    eZ\Publish\Core\Repository\FieldTypeTools,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country as CountryConverter,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
-    PHPUnit_Framework_TestCase,
-    DOMDocument,
-    DOMXPath;
+    PHPUnit_Framework_TestCase;
 
 /**
  * Test case for Country converter in Legacy storage
@@ -27,7 +26,7 @@ use eZ\Publish\Core\Repository\FieldType\Country\Value as CountryValue,
 class CountryTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\Repository\FieldType\Country\Type
+     * @var \eZ\Publish\Core\FieldType\Country\Type
      */
     protected $type;
 
@@ -40,6 +39,8 @@ class CountryTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->type = new CountryType(
+            new ValidatorService,
+            new FieldTypeTools,
             array(
                 "BE" => array(
                     "Name" => "Belgium",
@@ -67,7 +68,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
     {
         $value = new FieldValue;
         $value->data = "BE,FR";
-        $value->sortKey = array( "sort_key_string" => "belgium,france" );
+        $value->sortKey = "belgium,france";
         $storageFieldValue = new StorageFieldValue;
 
         $this->converter->toStorageValue( $value, $storageFieldValue );
@@ -103,8 +104,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
         $fieldTypeConstraints = new FieldTypeConstraints;
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                "isMultiple" => true,
-                "defaultValue" => $defaultValue,
+                "isMultiple" => true
             )
         );
 
@@ -113,6 +113,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
             new PersistenceFieldDefinition(
                 array(
                     "fieldTypeConstraints" => $fieldTypeConstraints,
+                    "defaultValue" => $defaultValue,
                 )
             ),
             $storageFieldDef
@@ -177,13 +178,13 @@ class CountryTest extends PHPUnit_Framework_TestCase
             ),
             $fieldDef
         );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertTrue(
             $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"]
         );
         self::assertEquals(
             $this->type->buildValue( array( "BE", "FR" ) ),
-            $fieldDef->fieldTypeConstraints->fieldSettings["default"]
+            $fieldDef->defaultValue->data
         );
     }
 
@@ -205,12 +206,12 @@ class CountryTest extends PHPUnit_Framework_TestCase
             ),
             $fieldDef
         );
-        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertFalse(
             $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"]
         );
         self::assertNull(
-            $fieldDef->fieldTypeConstraints->fieldSettings["default"]
+            $fieldDef->defaultValue->data
         );
     }
 }

@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\Language,
 /**
  * Language Handler
  */
-class CachingHandler implements BaseLanguageHandler, Lookup
+class CachingHandler implements BaseLanguageHandler
 {
     /**
      * Inner Language handler
@@ -65,34 +65,6 @@ class CachingHandler implements BaseLanguageHandler, Lookup
             }
             $this->isCacheInitialized = true;
         }
-    }
-
-    /**
-     * Returns the Language with $id from the cache
-     *
-     * @param mixed $id
-     * @return \eZ\Publish\SPI\Persistence\Content\Language
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     *         if the Language could not be found
-     */
-    public function getById( $id )
-    {
-        $this->initializeCache();
-        return $this->languageCache->getById( $id );
-    }
-
-    /**
-     * Returns the Language with $languageCode from the cache
-     *
-     * @param string $languageCode
-     * @return \eZ\Publish\SPI\Persistence\Content\Language
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     *         if the Language could not be found
-     */
-    public function getByLocale( $languageCode )
-    {
-        $this->initializeCache();
-        return $this->languageCache->getByLocale( $languageCode );
     }
 
     /**

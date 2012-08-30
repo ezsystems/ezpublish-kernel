@@ -31,12 +31,14 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId as CriterionLocationRemoteId,
+    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
 
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\BadStateException;
+    eZ\Publish\Core\Base\Exceptions\BadStateException,
+
+    DateTime;
 
 /**
  * Location service, used for complex subtree operations
@@ -106,10 +108,20 @@ class LocationService implements LocationServiceInterface
         if ( stripos( $loadedTargetLocation->pathString, $loadedSubtree->pathString ) !== false )
             throw new InvalidArgumentException("targetParentLocation", "target parent location is a sub location of the given subtree");
 
-        $newLocation = $this->persistenceHandler->locationHandler()->copySubtree(
-            $loadedSubtree->id,
-            $loadedTargetLocation->id
-        );
+        $this->repository->beginTransaction();
+        try
+        {
+            $newLocation = $this->persistenceHandler->locationHandler()->copySubtree(
+                $loadedSubtree->id,
+                $loadedTargetLocation->id
+            );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->buildDomainLocationObject( $newLocation );
     }
@@ -149,24 +161,27 @@ class LocationService implements LocationServiceInterface
         if ( !is_string( $remoteId ) )
             throw new InvalidArgumentValue( "remoteId", $remoteId );
 
-        $searchCriterion = new CriterionLogicalAnd(
+        $query = new Query(
             array(
-                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
-                new CriterionLocationRemoteId( $remoteId )
+                'criterion' => new CriterionLogicalAnd(
+                    array(
+                        new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+                        new CriterionLocationRemoteId( $remoteId )
+                    )
+                )
             )
         );
 
-        $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
-
-        if ( $searchResult->count == 0 )
+        $searchResult = $this->persistenceHandler->searchHandler()->findContent( $query );
+        if ( $searchResult->totalCount == 0 )
             throw new NotFoundException( "location", $remoteId );
 
-        if ( $searchResult->count > 1 )
+        if ( $searchResult->totalCount > 1 )
             throw new BadStateException( "remoteId", "more than one location with specified remote ID found" );
 
-        if ( is_array( $searchResult->content[0]->locations ) )
+        if ( is_array( $searchResult->searchHits[0]->valueObject->locations ) )
         {
-            foreach ( $searchResult->content[0]->locations as $spiLocation )
+            foreach ( $searchResult->searchHits[0]->valueObject->locations as $spiLocation )
             {
                 if ( $spiLocation->remoteId === $remoteId )
                     return $this->buildDomainLocationObject( $spiLocation );
@@ -191,19 +206,25 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $contentInfo->id ) )
             throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
 
-        $searchCriterion = new CriterionLogicalAnd(
+        $query = new Query(
             array(
-                new CriterionContentId( $contentInfo->id ),
-                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+                'criterion' => new CriterionLogicalAnd(
+                    array(
+                        new CriterionContentId( $contentInfo->id ),
+                        new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+                    )
+                )
             )
         );
 
-        $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
-        if ( $searchResult->count == 0 )
+        $searchResult = $this->persistenceHandler->searchHandler()->findContent( $query );
+        if ( $searchResult->totalCount == 0 )
             throw new BadStateException( "contentInfo", 'content info has no published versions yet' );
+        if ( $searchResult->totalCount > 1 )
+            throw new BadStateException( "contentInfo", 'several content info exists for id:' . $contentInfo->id );
 
-        $spiLocations = $searchResult->content[0]->locations;
-        if ( !is_array( $spiLocations ) || empty( $spiLocations ) )
+        $spiLocations = $searchResult->searchHits[0]->valueObject->locations;
+        if ( empty( $spiLocations ) || !is_array( $spiLocations ) )
             return null;
 
         foreach ( $spiLocations as $spiLocation )
@@ -236,18 +257,24 @@ class LocationService implements LocationServiceInterface
         if ( $rootLocation !== null && !is_string( $rootLocation->pathString ) )
             throw new InvalidArgumentValue( "pathString", $rootLocation->pathString, "Location" );
 
-        $searchCriterion = new CriterionLogicalAnd(
+        $query = new Query(
             array(
-                new CriterionContentId( $contentInfo->id ),
-                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+                'criterion' => new CriterionLogicalAnd(
+                    array(
+                        new CriterionContentId( $contentInfo->id ),
+                        new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+                    )
+                )
             )
         );
 
-        $searchResult = $this->persistenceHandler->searchHandler()->find( $searchCriterion );
-        if ( $searchResult->count == 0 )
+        $searchResult = $this->persistenceHandler->searchHandler()->findContent( $query );
+        if ( $searchResult->totalCount == 0 )
             throw new BadStateException( "contentInfo", 'content info has no published versions yet' );
+        if ( $searchResult->totalCount > 1 )
+            throw new BadStateException( "contentInfo", 'several content info exists for id:' . $contentInfo->id );
 
-        $spiLocations = $searchResult->content[0]->locations;
+        $spiLocations = $searchResult->searchHits[0]->valueObject->locations;
         if ( !is_array( $spiLocations ) || empty( $spiLocations ) )
             return array();
 
@@ -296,15 +323,15 @@ class LocationService implements LocationServiceInterface
             $limit
         );
 
-        if ( $searchResult->count == 0 )
+        if ( $searchResult->totalCount == 0 )
             return array();
 
         $childLocations = array();
-        foreach ( $searchResult->content as $spiContent )
+        foreach ( $searchResult->searchHits as $spiSearchHit )
         {
-            if ( is_array( $spiContent->locations ) )
+            if ( is_array( $spiSearchHit->valueObject->locations ) )
             {
-                foreach ( $spiContent->locations as $spiLocation )
+                foreach ( $spiSearchHit->valueObject->locations as $spiLocation )
                 {
                     if ( $spiLocation->parentId == $location->id )
                         $childLocations[] = $this->buildDomainLocationObject( $spiLocation );
@@ -324,27 +351,27 @@ class LocationService implements LocationServiceInterface
      * @param int $offset
      * @param int $limit
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\Search\Result
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
     protected function searchChildrenLocations( $parentLocationId, $sortField = null, $sortOrder = APILocation::SORT_ORDER_ASC, $offset = 0, $limit = -1 )
     {
-        $searchCriterion = new CriterionLogicalAnd(
+        $query = new Query(
             array(
-                new CriterionParentLocationId( $parentLocationId ),
-                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+                'criterion' => new CriterionLogicalAnd(
+                    array(
+                        new CriterionParentLocationId( $parentLocationId ),
+                        new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+                    )
+                ),
+                'offset' => ( $offset >= 0 ? (int) $offset : 0 ),
+                'limit' => ( $limit  >= 0 ? (int) $limit  : null )
             )
         );
 
-        $sortClause = null;
         if ( $sortField !== null )
-            $sortClause = array( $this->getSortClauseBySortField( $sortField, $sortOrder ) );
+            $query->sortClauses = array( $this->getSortClauseBySortField( $sortField, $sortOrder ) );
 
-        return $this->persistenceHandler->searchHandler()->find(
-            $searchCriterion,
-            $offset >= 0 ? (int) $offset : 0,
-            $limit  >= 0 ? (int) $limit  : null,
-            $sortClause
-        );
+        return $this->persistenceHandler->searchHandler()->findContent( $query );
     }
 
     /**
@@ -450,7 +477,18 @@ class LocationService implements LocationServiceInterface
         $createStruct->sortOrder = $locationCreateStruct->sortOrder !== null ? (int) $locationCreateStruct->sortOrder : APILocation::SORT_ORDER_ASC;
         $createStruct->parentId = $loadedParentLocation->id;
 
-        $newLocation = $this->persistenceHandler->locationHandler()->create( $createStruct );
+        $this->repository->beginTransaction();
+        try
+        {
+            $newLocation = $this->persistenceHandler->locationHandler()->create( $createStruct );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
+
         return $this->buildDomainLocationObject( $newLocation );
     }
 
@@ -501,7 +539,17 @@ class LocationService implements LocationServiceInterface
         $updateStruct->sortField = $locationUpdateStruct->sortField !== null ? (int) $locationUpdateStruct->sortField : $loadedLocation->sortField;
         $updateStruct->sortOrder = $locationUpdateStruct->sortOrder !== null ? (int) $locationUpdateStruct->sortOrder : $loadedLocation->sortOrder;
 
-        $this->persistenceHandler->locationHandler()->update( $updateStruct, $loadedLocation->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->locationHandler()->update( $updateStruct, $loadedLocation->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
 
         return $this->loadLocation( $loadedLocation->id );
     }
@@ -525,7 +573,17 @@ class LocationService implements LocationServiceInterface
         $loadedLocation1 = $this->loadLocation( $location1->id );
         $loadedLocation2 = $this->loadLocation( $location2->id );
 
-        $this->persistenceHandler->locationHandler()->swap( $loadedLocation1->id, $loadedLocation2->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->locationHandler()->swap( $loadedLocation1->id, $loadedLocation2->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -542,7 +600,18 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
-        $this->persistenceHandler->locationHandler()->hide( $location->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->locationHandler()->hide( $location->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
+
         return $this->loadLocation( $location->id );
     }
 
@@ -563,7 +632,18 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
-        $this->persistenceHandler->locationHandler()->unHide( $location->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->locationHandler()->unHide( $location->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
+
         return $this->loadLocation( $location->id );
     }
 
@@ -586,7 +666,17 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $newParentLocation->id ) )
             throw new InvalidArgumentValue( "id", $newParentLocation->id, "Location" );
 
-        $this->persistenceHandler->locationHandler()->move( $location->id, $newParentLocation->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->locationHandler()->move( $location->id, $newParentLocation->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -601,7 +691,17 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
-        $this->persistenceHandler->locationHandler()->removeSubtree( $location->id );
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->locationHandler()->removeSubtree( $location->id );
+            $this->repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
 
@@ -640,14 +740,13 @@ class LocationService implements LocationServiceInterface
      */
     protected function buildDomainLocationObject( SPILocation $spiLocation )
     {
-        if ( $spiLocation->id === 1 )// Workaround for missing ContentInfo on root location
+        if ( $spiLocation->id == 1 )// Workaround for missing ContentInfo on root location
             $contentInfo = new ContentInfo(
                 array(
                     'id' => 0,
                     'name' => 'Top Level Nodes',
                     'sectionId' => 1,
-                    'mainLocationId' => 1,
-                    'contentTypeId' => 1
+                    'mainLocationId' => 1
                 )
             );
         else
@@ -665,13 +764,27 @@ class LocationService implements LocationServiceInterface
                 'remoteId' => $spiLocation->remoteId,
                 'parentLocationId' => (int) $spiLocation->parentId,
                 'pathString' => $spiLocation->pathString,
-                'modifiedSubLocationDate' => new \DateTime( '@' . (int) $spiLocation->modifiedSubLocation ),
+                'modifiedSubLocationDate' => $this->getDateTime( $spiLocation->modifiedSubLocation ),
                 'depth' => (int) $spiLocation->depth,
                 'sortField' => (int) $spiLocation->sortField,
                 'sortOrder' => (int) $spiLocation->sortOrder,
-                'childCount' => $childrenLocations->count
+                'childCount' => $childrenLocations->totalCount
             )
         );
+    }
+
+    /**
+     *
+     *
+     * @param int|null $timestamp
+     *
+     * @return \DateTime|null
+     */
+    protected function getDateTime( $timestamp )
+    {
+        $dateTime = new DateTime();
+        $dateTime->setTimestamp( $timestamp );
+        return $dateTime;
     }
 
     /**

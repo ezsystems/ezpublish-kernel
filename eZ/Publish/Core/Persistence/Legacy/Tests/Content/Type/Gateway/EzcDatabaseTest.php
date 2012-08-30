@@ -9,14 +9,10 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
-    eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\Gateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache as LanguageCache,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
 
     // For SORT_ORDER_* constants
     eZ\Publish\SPI\Persistence\Content\Location,
-    eZ\Publish\SPI\Persistence\Content\Language,
 
     eZ\Publish\SPI\Persistence\Content\Type,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
@@ -1310,40 +1306,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::isFieldTranslatable
-     */
-    public function testIsFieldTranslatableTrue()
-    {
-        $this->insertDatabaseFixture(
-            __DIR__ . '/_fixtures/existing_types.php'
-        );
-
-        $gateway = $this->getGateway();
-
-        $this->assertTrue(
-            $gateway->isFieldTranslatable( 119, 0 )
-        );
-    }
-
-    /**
-     * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::isFieldTranslatable
-     */
-    public function testIsFieldTranslatableFalse()
-    {
-        $this->insertDatabaseFixture(
-            __DIR__ . '/_fixtures/existing_types.php'
-        );
-
-        $gateway = $this->getGateway();
-
-        $this->assertFalse(
-            $gateway->isFieldTranslatable( 158, 0 )
-        );
-    }
-
-    /**
      * Returns the EzcDatabase gateway to test
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase
@@ -1358,16 +1320,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             );
         }
         return $this->gateway;
-    }
-
-    /**
-     * Returns a Language MaskGenerator
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
-     */
-    protected function getLanguageMaskGenerator()
-    {
-        return new LanguageMaskGenerator( $this->getLanguageLookupMock() );
     }
 
     /**

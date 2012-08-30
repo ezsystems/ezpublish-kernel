@@ -17,66 +17,49 @@ namespace eZ\Publish\Core\Base;
  * spl_autoload_register( array( new eZ\Publish\Core\Base\ClassLoader(
  *     array(
  *         'Vendor\\Module' => 'Vendor/Module'
- *     )[,
- *     eZ\Publish\Core\Base\ClassLoader::PSR_0_STRICT_MODE] // PSR-0 Strict mode (no PEAR compat)
+ *     )
  * ), 'load' ) );
  */
 class ClassLoader
 {
-    /**
-     * Mode for disabling PEAR autoloader compatibility (and PSR-0 compat)
-     *
-     * @var int
-     */
-    const PSR_0_STRICT_MODE = 1;
-
-    /**
-     * Mode to not check if file exists before loading class name that matches prefix
-     *
-     * @var int
-     */
-    const PSR_0_NO_FILECHECK = 2;
-
     /**
      * @var array Contains namespace/class prefix as key and sub path as value
      */
     protected $paths;
 
     /**
-     * @var int
+     * Hash indexed by class FQN. Value is the file path (should be absolute)
+     *
+     * @var array
      */
-    protected $mode;
+    protected $classMap;
+
+    /**
+     * @var null|string
+     */
+    protected $legacyDir;
 
     /**
      * @var array
      */
-    protected $lazyClassLoaders;
+    protected $legacyClassMap;
 
     /**
      * Construct a loader instance
      *
      * @param array $paths Containing class/namespace prefix as key and sub path as value
-     * @param int $mode One or more of of the MODE constants, these are opt-in
-     * @param \Closure[] $lazyClassLoaders Hash with class name prefix as key and callback as function to setup loader
-     *          Example:
-     *          array(
-     *              'ezc' => function( $className ){
-     *                  require 'ezc/Base/base.php';
-     *                  spl_autoload_register( array( 'ezcBase', 'autoload' ) );
-     *                  return true;
-     *              }
-     *          )
-     *          Return true signals that autoloader was successfully registered and can be removed from $loders.
+     * @param array $classMap
+     * @param string|null $legacyDir
      */
-    public function __construct( array $paths, $mode = 0, array $lazyClassLoaders = array() )
+    public function __construct( array $paths, array $classMap = array(), $legacyDir = null )
     {
         $this->paths = $paths;
-        $this->mode = $mode;
-        $this->lazyClassLoaders = $lazyClassLoaders;
+        $this->classMap = $classMap;
+        $this->legacyDir = $legacyDir;
     }
 
     /**
-     * Load classes/interfaces following PSR-0 naming
+     * Load classes/interfaces following PSR-0 naming and class map
      *
      * @param string $className
      * @param bool $returnFileName For testing, returns file name instead of loading it
@@ -88,62 +71,103 @@ class ClassLoader
         if ( $className[0] === '\\' )
             $className = substr( $className, 1 );
 
-        foreach ( $this->paths as $prefix => $subPath )
+        // Try to match against the class map
+        if ( isset( $this->classMap[$className] ) )
+        {
+            if ( $returnFileName )
+                return $this->classMap[$className];
+
+            require $this->classMap[$className];
+            return true;
+        }
+
+        // Try to match against PSR-0 namespace map
+        $pearMode = stripos( $className, '_' ) !== false;
+        foreach ( $this->paths as $prefix => $path )
         {
             if ( strpos( $className, $prefix ) !== 0 )
                 continue;
 
-            if ( !( $this->mode & self::PSR_0_STRICT_MODE ) ) // Normal PSR-0 PEAR compat
+            if ( $pearMode ) // PSR-0 PEAR compatibility mode
             {
                 $lastNsPos = strripos( $className, '\\' );
-                $prefixLen = strlen( $prefix ) + 1;
-                $fileName = $subPath . DIRECTORY_SEPARATOR;
+                $fileName = $path;
 
-                if ( $lastNsPos > $prefixLen )
-                {
-                    // Replacing '\' to '/' in namespace part
-                    $fileName .= str_replace(
-                        '\\',
-                        DIRECTORY_SEPARATOR,
-                        substr( $className, $prefixLen, $lastNsPos - $prefixLen )
-                    ) . DIRECTORY_SEPARATOR;
-                }
+                // Replacing '\' to '/' in namespace part
+                $fileName .= str_replace(
+                    '\\',
+                    DIRECTORY_SEPARATOR,
+                    substr( $className, 0, $lastNsPos )
+                ) . DIRECTORY_SEPARATOR;
 
                 // Replacing '_' to '/' in className part and append '.php'
                 $fileName .= str_replace( '_', DIRECTORY_SEPARATOR, substr( $className, $lastNsPos + 1 ) ) . '.php';
             }
-            else // Strict PSR mode
+            else // PSR-0 NS strict mode
             {
-                $fileName = $subPath . DIRECTORY_SEPARATOR .
-                    str_replace( '\\', DIRECTORY_SEPARATOR, substr( $className , strlen( $prefix ) +1 ) ) .
+                $fileName = $path .
+                    str_replace( '\\', DIRECTORY_SEPARATOR, $className ) .
                     '.php';
             }
 
-            if ( !( $this->mode & self::PSR_0_NO_FILECHECK ) &&
-                 ( $fileName = stream_resolve_include_path( $fileName ) ) === false )
-                return false;
-
-
             if ( $returnFileName )
                 return $fileName;
+
+            if ( ( $fileName = stream_resolve_include_path( $fileName ) ) === false )
+                continue;
 
             require $fileName;
             return true;
         }
 
-        if ( empty( $this->lazyClassLoaders ) )
-            return null;
-
-        // No match where found, see if we have any lazy loaded closures that should register other autoloaders
-        foreach ( $this->lazyClassLoaders as $prefix => $callable )
+        // If legacy dir is provided, then try to load using legacy class map
+        if ( $this->legacyDir !== null )
         {
-            if ( strpos( $className, $prefix ) !== 0 )
-                continue;
+            // Lazy load legacy class map
+            if ( $this->legacyClassMap === null )
+            {
+                $this->legacyClassMap = self::getEzpLegacyClassMap( $this->legacyDir );
+            }
 
-            if ( $callable( $className ) )
-                unset( $this->lazyClassLoaders[$prefix] );
+            // Load legacy class if it exists
+            if ( isset( $this->legacyClassMap[$className] ) )
+            {
+                if ( $returnFileName )
+                    return $this->legacyDir . '/' . $this->legacyClassMap[$className];
 
-            return true;
+                require $this->legacyDir . '/' . $this->legacyClassMap[$className];
+                return true;
+            }
         }
+
+        return false;
+    }
+
+    /**
+     * Merges all eZ Publish 4.x autoload files and return result
+     *
+     * @param string $legacyDir
+     *
+     * @return array
+     */
+    protected static function getEzpLegacyClassMap( $legacyDir )
+    {
+        $ezpKernelClasses = require "{$legacyDir}/autoload/ezp_kernel.php";
+        if ( file_exists( "{$legacyDir}/var/autoload/ezp_extension.php" ) )
+            $ezpExtensionClasses = require "{$legacyDir}/var/autoload/ezp_extension.php";
+        else
+            $ezpExtensionClasses = array();
+
+        if ( file_exists( "{$legacyDir}/var/autoload/ezp_tests.php" ) )
+            $ezpTestClasses = require "{$legacyDir}/var/autoload/ezp_tests.php";
+        else
+            $ezpTestClasses = array();
+
+        if ( file_exists( "{$legacyDir}/var/autoload/ezp_override.php" ) )
+            $ezpKernelOverrideClasses = require "{$legacyDir}/var/autoload/ezp_override.php";
+        else
+            $ezpKernelOverrideClasses = array();
+
+        return $ezpKernelOverrideClasses + $ezpTestClasses + $ezpExtensionClasses + $ezpKernelClasses;
     }
 }

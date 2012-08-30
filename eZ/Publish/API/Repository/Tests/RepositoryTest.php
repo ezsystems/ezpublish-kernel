@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Tests\BaseTest;
-
 /**
  * Test case for operations in the Repository using in memory storage.
  *
@@ -23,6 +21,8 @@ class RepositoryTest extends BaseTest
      * Test for the getContentService() method.
      *
      * @return void
+     * @group content
+     * @group user
      * @see \eZ\Publish\API\Repository\Repository::getContentService()
      */
     public function testGetContentService()
@@ -38,6 +38,7 @@ class RepositoryTest extends BaseTest
      * Test for the getContentLanguageService() method.
      *
      * @return void
+     * @group content-language
      * @see \eZ\Publish\API\Repository\Repository::getContentLanguageService()
      */
     public function testGetContentLanguageService()
@@ -53,6 +54,9 @@ class RepositoryTest extends BaseTest
      * Test for the getContentTypeService() method.
      *
      * @return void
+     * @group content-type
+     * @group field-type
+     * @group user
      * @see \eZ\Publish\API\Repository\Repository::getContentTypeService()
      *
      */
@@ -69,6 +73,7 @@ class RepositoryTest extends BaseTest
      * Test for the getLocationService() method.
      *
      * @return void
+     * @group location
      * @see \eZ\Publish\API\Repository\Repository::getLocationService()
      *
      */
@@ -85,6 +90,7 @@ class RepositoryTest extends BaseTest
      * Test for the getTrashService() method.
      *
      * @return void
+     * @group trash
      * @see \eZ\Publish\API\Repository\Repository::getTrashService()
      *
      */
@@ -101,6 +107,7 @@ class RepositoryTest extends BaseTest
      * Test for the getSectionService() method.
      *
      * @return void
+     * @group section
      * @see \eZ\Publish\API\Repository\Repository::getSectionService()
      */
     public function testGetSectionService()
@@ -116,6 +123,7 @@ class RepositoryTest extends BaseTest
      * Test for the getUserService() method.
      *
      * @return void
+     * @group user
      * @see \eZ\Publish\API\Repository\Repository::getUserService()
      */
     public function testGetUserService()
@@ -131,6 +139,7 @@ class RepositoryTest extends BaseTest
      * Test for the getRoleService() method.
      *
      * @return void
+     * @group role
      * @see \eZ\Publish\API\Repository\Repository::getRoleService()
      */
     public function testGetRoleService()
@@ -146,6 +155,7 @@ class RepositoryTest extends BaseTest
      * Test for the getUrlAliasService() method.
      *
      * @return void
+     * @group url-alias
      * @see \eZ\Publish\API\Repository\Repository::getUrlAliasService()
      */
     public function testGetURLAliasService()
@@ -161,6 +171,7 @@ class RepositoryTest extends BaseTest
      * Test for the getUrlWildcardService() method.
      *
      * @return void
+     * @group url-wildcard
      * @see \eZ\Publish\API\Repository\Repository::getUrlWildcardService()
      */
     public function testGetURLWildcardService()
@@ -176,6 +187,7 @@ class RepositoryTest extends BaseTest
      * Test for the getObjectStateService()
      *
      * @return void
+     * @group object-state
      * @see \eZ\Publish\API\Repository\Repository::getObjectStateService()
      */
     public function testGetObjectStateService()
@@ -188,9 +200,26 @@ class RepositoryTest extends BaseTest
     }
 
     /**
+     * Test for the getFieldTypeService()
+     *
+     * @return void
+     * @group object-state
+     * @see \eZ\Publish\API\Repository\Repository::getFieldTypeService()
+     */
+    public function testGetFieldTypeService()
+    {
+        $repository = $this->getRepository();
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\FieldTypeService',
+            $repository->getFieldTypeService()
+        );
+    }
+
+    /**
      * Test for the getIOService() method.
      *
      * @return void
+     * @group io
      * @see \eZ\Publish\API\Repository\Repository::getIOService()
      */
     public function testGetIOService()
@@ -203,6 +232,28 @@ class RepositoryTest extends BaseTest
     }
 
     /**
+     * Test for the getSearchService() method.
+     *
+     * @return void
+     * @group search
+     * @see \eZ\Publish\API\Repository\Repository::getSearchService()
+     */
+    public function testGetSearchService()
+    {
+        $repository = $this->getRepository();
+
+        if ( $repository instanceof \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub )
+        {
+            $this->markTestSkipped( 'SearchService is not available in the memory implementation.' );
+        }
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\SearchService',
+            $repository->getSearchService()
+        );
+    }
+
+    /**
      * Test for the commit() method.
      *
      * @return void
@@ -211,8 +262,18 @@ class RepositoryTest extends BaseTest
     public function testCommit()
     {
         $repository = $this->getRepository();
-        $repository->beginTransaction();
-        $repository->commit();
+
+        try
+        {
+            $repository->beginTransaction();
+            $repository->commit();
+        }
+        catch ( \Exception $e )
+        {
+            // Cleanup hanging transaction on error
+            $repository->rollback();
+            throw $e;
+        }
     }
 
     /**

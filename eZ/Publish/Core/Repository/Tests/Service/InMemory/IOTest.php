@@ -8,12 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Service\InMemory;
-use eZ\Publish\Core\Repository\Tests\Service\IOBase as BaseIOServiceTest,
-    eZ\Publish\Core\Repository\Repository,
-    eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
-    eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler,
-
-    eZ\Publish\Core\Repository\Tests\Service\InMemory\IOUploadPHPT;
+use eZ\Publish\Core\Repository\Tests\Service\IOBase as BaseIOServiceTest;
 
 /**
  * Test case for IO Service using InMemory storage class
@@ -28,8 +23,8 @@ class IOTest extends BaseIOServiceTest
         return new IOUploadPHPT();
     }
 
-    protected function getRepository( array $serviceSettings )
+    protected function getRepository()
     {
-        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIOHandler(), $serviceSettings );
+        return Utils::getRepository();
     }
 }

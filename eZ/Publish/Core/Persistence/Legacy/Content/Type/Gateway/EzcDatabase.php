@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway,
     eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator,
     eZ\Publish\SPI\Persistence\Content\Type,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
@@ -334,17 +333,19 @@ class EzcDatabase extends Gateway
             $q->bindValue( $type->creatorId, null, \PDO::PARAM_INT )
         );
         $this->setCommonTypeColumns( $q, $type );
+
         $q->prepare()->execute();
 
-        if ( isset( $typeId ) )
-            $type->id = $typeId;
-        else
-            $type->id = $this->dbHandler->lastInsertId(
+        if ( empty( $typeId ) )
+        {
+            $typeId = $this->dbHandler->lastInsertId(
                 $this->dbHandler->getSequenceName( 'ezcontentclass', 'id' )
             );
-        $this->insertTypeNameData( $type->id, $type->status, $type->name );
+        }
 
-        return $type->id;
+        $this->insertTypeNameData( $typeId, $type->status, $type->name );
+
+        return $typeId;
     }
 
     /**
@@ -590,10 +591,13 @@ class EzcDatabase extends Gateway
      * @param int $status
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
+     *
      * @return mixed Field definition ID
      */
     public function insertFieldDefinition(
-        $typeId, $status, FieldDefinition $fieldDefinition,
+        $typeId,
+        $status,
+        FieldDefinition $fieldDefinition,
         StorageFieldDefinition $storageFieldDef
     )
     {
@@ -601,7 +605,9 @@ class EzcDatabase extends Gateway
         $q->insertInto( $this->dbHandler->quoteTable( 'ezcontentclass_attribute' ) );
         $q->set(
             $this->dbHandler->quoteColumn( 'id' ),
-            $this->dbHandler->getAutoIncrementValue( 'ezcontentclass_attribute', 'id' )
+            isset( $fieldDefinition->id ) ?
+                $q->bindValue( $fieldDefinition->id, null, \PDO::PARAM_INT ) :
+                $this->dbHandler->getAutoIncrementValue( 'ezcontentclass_attribute', 'id' )
         )->set(
             $this->dbHandler->quoteColumn( 'contentclass_id' ),
             $q->bindValue( $typeId, null, \PDO::PARAM_INT )
@@ -613,9 +619,14 @@ class EzcDatabase extends Gateway
 
         $q->prepare()->execute();
 
-        return $this->dbHandler->lastInsertId(
-            $this->dbHandler->getSequenceName( 'ezcontentclass_attribute', 'id' )
-        );
+        if ( !isset( $fieldDefinition->id ) )
+        {
+            return $this->dbHandler->lastInsertId(
+                $this->dbHandler->getSequenceName( 'ezcontentclass_attribute', 'id' )
+            );
+        }
+
+        return $fieldDefinition->id;
     }
 
     /**
@@ -642,7 +653,7 @@ class EzcDatabase extends Gateway
             $q->bindValue( $fieldDefinition->identifier )
         )->set(
             $this->dbHandler->quoteColumn( 'category' ),
-            $q->bindValue( $fieldDefinition->fieldGroup )
+            $q->bindValue( $fieldDefinition->fieldGroup, null, \PDO::PARAM_STR )
         )->set(
             $this->dbHandler->quoteColumn( 'placement' ),
             $q->bindValue( $fieldDefinition->position, null, \PDO::PARAM_INT )
@@ -1264,39 +1275,6 @@ class EzcDatabase extends Gateway
         );
 
         $query->prepare()->execute();
-    }
-
-    /**
-     * Returns if the field identified by $fieldDefinitionId and $status is
-     * translatable
-     *
-     * @param mixed $fieldDefinitionId
-     * @param int $status
-     * @return bool
-     */
-    public function isFieldTranslatable( $fieldDefinitionId, $status )
-    {
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $this->dbHandler->quoteColumn( 'can_translate' )
-        )->from(
-            $this->dbHandler->quoteTable( 'ezcontentclass_attribute' )
-        )->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'id' ),
-                    $query->bindValue( $fieldDefinitionId, null, \PDO::PARAM_INT )
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'version' ),
-                    $query->bindValue( $status, null, \PDO::PARAM_INT )
-                )
-            )
-        );
-        $stmt = $query->prepare();
-        $stmt->execute();
-
-        return ( 1 == $stmt->fetchColumn() );
     }
 
     /**

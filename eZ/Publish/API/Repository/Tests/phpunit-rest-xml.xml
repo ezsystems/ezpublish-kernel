@@ -6,7 +6,7 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true">
     <php>
-        <env name="setupFactory" value="\eZ\Publish\API\REST\Client\Tests\SetupFactory" />
+        <env name="setupFactory" value="\eZ\Publish\Core\REST\Client\Tests\SetupFactory" />
         <env name="backendVersion" value="5" />
         <env name="backendEncoding" value="xml" />
     </php>
@@ -27,6 +27,7 @@
             <file>URLWildcardServiceTest.php</file>
             <file>SectionServiceAuthorizationTest.php</file>
             <file>LanguageServiceAuthorizationTest.php</file>
+            <file>ObjectStateServiceTest.php</file>
             <file>ContentTypeServiceAuthorizationTest.php</file>
             <file>ContentServiceAuthorizationTest.php</file>
             <file>LocationServiceAuthorizationTest.php</file>
@@ -35,7 +36,7 @@
             <file>TrashServiceAuthorizationTest.php</file>
             <file>URLWildcardServiceAuthorizationTest.php</file>
             <file>ObjectStateServiceAuthorizationTest.php</file>
-            <file>FieldType/UserIntegrationTest.php</file>
+            <directory>FieldType/</directory>
         </testsuite>
     </testsuites>
     <filter>

@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use \eZ\Publish\API\Repository\Tests\BaseTest;
-
 use \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use \eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
 use \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
@@ -33,6 +31,7 @@ use \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
  * <ul>
  *
  * @see eZ\Publish\API\Repository\RoleService
+ * @group role
  */
 class RoleServiceTest extends BaseTest
 {
@@ -89,6 +88,7 @@ class RoleServiceTest extends BaseTest
 
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct( 'roleName' );
+        $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole( $roleCreate );
 
@@ -116,6 +116,7 @@ class RoleServiceTest extends BaseTest
 
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct( 'Editor' );
+        $roleCreate->mainLanguageCode = 'eng-US';
 
         // This call will fail with an InvalidArgumentException, because Editor exists
         $roleService->createRole( $roleCreate );
@@ -141,6 +142,7 @@ class RoleServiceTest extends BaseTest
         $repository->beginTransaction();
 
         $roleCreate = $roleService->newRoleCreateStruct( 'roleName' );
+        $roleCreate->mainLanguageCode = 'eng-US';
 
         $createdRoleId = $roleService->createRole( $roleCreate )->id;
 
@@ -175,6 +177,7 @@ class RoleServiceTest extends BaseTest
 
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct( 'roleName' );
+        $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleId = $roleService->createRole( $roleCreate )->id;
 
@@ -224,6 +227,7 @@ class RoleServiceTest extends BaseTest
 
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct( 'roleName' );
+        $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleService->createRole( $roleCreate );
 
@@ -273,6 +277,7 @@ class RoleServiceTest extends BaseTest
         // First create a custom role
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct( 'roleName' );
+        $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole( $roleCreate );
 
@@ -363,6 +368,7 @@ class RoleServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
+        $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole( $roleCreate );
 
@@ -393,6 +399,7 @@ class RoleServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
+        $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole( $roleCreate );
 
@@ -419,6 +426,7 @@ class RoleServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
+        $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole( $roleCreate );
 
@@ -485,6 +493,8 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
 
         $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
+        $roleCreate->mainLanguageCode = 'eng-US';
+
         $role = $roleService->createRole( $roleCreate );
 
         $role = $roleService->addPolicy(
@@ -539,6 +549,8 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
 
         $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
+        $roleCreate->mainLanguageCode = 'eng-US';
+
         $role = $roleService->createRole( $roleCreate );
 
         $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
@@ -597,6 +609,7 @@ class RoleServiceTest extends BaseTest
 
         // Instantiate a new create struct
         $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
+        $roleCreate->mainLanguageCode = 'eng-US';
 
         // Add some role policies
         $roleCreate->addPolicy(
@@ -688,6 +701,8 @@ class RoleServiceTest extends BaseTest
 
         // Instantiate a role create and add the policy create
         $roleCreate = $roleService->newRoleCreateStruct( 'myRole' );
+        $roleCreate->mainLanguageCode = 'eng-US';
+
         $roleCreate->addPolicy( $policyCreate );
 
         // Create a new role instance.
@@ -800,6 +815,7 @@ class RoleServiceTest extends BaseTest
 
         // Instantiate a new role create
         $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
+        $roleCreate->mainLanguageCode = 'eng-US';
 
         // Create a new role with two policies
         $role = $roleService->createRole(
@@ -842,14 +858,10 @@ class RoleServiceTest extends BaseTest
 
         /* END: Use Case */
 
-        $this->assertEquals( 2, count( $roleAssignments ) );
+        $this->assertEquals( 1, count( $roleAssignments ) );
         $this->assertInstanceOf(
             '\eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment',
             reset( $roleAssignments )
-        );
-        $this->assertInstanceOf(
-            '\eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment',
-            end( $roleAssignments )
         );
 
         return $roleAssignments;
@@ -867,14 +879,8 @@ class RoleServiceTest extends BaseTest
     public function testGetRoleAssignmentsContainExpectedLimitation( array $roleAssignments )
     {
         $this->assertEquals(
-            array(
-                'Subtree',
-                'Subtree',
-            ),
-            array(
-                reset( $roleAssignments )->limitation->getIdentifier(),
-                end( $roleAssignments )->limitation->getIdentifier(),
-            )
+            'Subtree',
+            reset( $roleAssignments )->limitation->getIdentifier()
         );
     }
 
@@ -1040,6 +1046,8 @@ class RoleServiceTest extends BaseTest
 
         // Instantiate a role create and add some policies
         $roleCreate = $roleService->newRoleCreateStruct( 'Example Role' );
+        $roleCreate->mainLanguageCode = 'eng-US';
+
         $roleCreate->addPolicy(
             $roleService->newPolicyCreateStruct( 'user', 'login' )
         );
@@ -1230,6 +1238,8 @@ class RoleServiceTest extends BaseTest
 
         // Instantiate a role create and add some policies
         $roleCreate = $roleService->newRoleCreateStruct( 'Example Role' );
+        $roleCreate->mainLanguageCode = 'eng-US';
+
         $roleCreate->addPolicy(
             $roleService->newPolicyCreateStruct( 'user', 'login' )
         );
@@ -1281,6 +1291,8 @@ class RoleServiceTest extends BaseTest
 
         // Instantiate a role create and add some policies
         $roleCreate = $roleService->newRoleCreateStruct( 'User Role' );
+        $roleCreate->mainLanguageCode = 'eng-US';
+
         $roleCreate->addPolicy(
             $roleService->newPolicyCreateStruct( 'notification', 'use' )
         );
@@ -1314,9 +1326,11 @@ class RoleServiceTest extends BaseTest
                 array( 1, 'rss', 'feed' ),
                 array( 1, 'user', 'login' ),
                 array( 1, 'user', 'login' ),
-                array( 6, 'notification', 'use' ),
-                array( 6, 'user', 'password' ),
-                array( 6, 'user', 'selfedit' ),
+                array( 1, 'user', 'login' ),
+                array( 1, 'user', 'login' ),
+                array( $role->id, 'notification', 'use' ),
+                array( $role->id, 'user', 'password' ),
+                array( $role->id, 'user', 'selfedit' ),
             ),
             $policies
         );

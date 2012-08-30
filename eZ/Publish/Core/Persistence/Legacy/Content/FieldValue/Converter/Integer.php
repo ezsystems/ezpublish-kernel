@@ -12,17 +12,28 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\Repository\FieldType\Integer\Value as IntegerValue,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings;
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 class Integer implements Converter
 {
-    const INTEGER_VALIDATOR_FQN = 'eZ\\Publish\\Core\\Repository\\FieldType\\Integer\\IntegerValueValidator';
+    const FLOAT_VALIDATOR_IDENTIFIER = "IntegerValueValidator";
 
     const NO_MIN_MAX_VALUE = 0;
     const HAS_MIN_VALUE = 1;
     const HAS_MAX_VALUE = 2;
+
+    /**
+     * Factory for current class
+     *
+     * @note Class should instead be configured as service if it gains dependencies.
+     *
+     * @static
+     * @return Integer
+     */
+    public static function create()
+    {
+        return new self;
+    }
 
     /**
      * Converts data from $value to $storageFieldValue
@@ -33,7 +44,7 @@ class Integer implements Converter
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
         $storageFieldValue->dataInt = $value->data;
-        $storageFieldValue->sortKeyInt = $value->sortKey['sort_key_int'];
+        $storageFieldValue->sortKeyInt = $value->sortKey;
     }
 
     /**
@@ -45,7 +56,7 @@ class Integer implements Converter
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
         $fieldValue->data = $value->dataInt;
-        $fieldValue->sortKey = array( 'sort_key_int' => $value->sortKeyInt );
+        $fieldValue->sortKey = $value->sortKeyInt;
     }
 
     /**
@@ -56,19 +67,19 @@ class Integer implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::INTEGER_VALIDATOR_FQN]['minIntegerValue'] ) )
+        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'] ) )
         {
-            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::INTEGER_VALIDATOR_FQN]['minIntegerValue'];
+            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'];
         }
 
-        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::INTEGER_VALIDATOR_FQN]['maxIntegerValue'] ) )
+        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'] ) )
         {
-            $storageDef->dataInt2 = $fieldDef->fieldTypeConstraints->validators[self::INTEGER_VALIDATOR_FQN]['maxIntegerValue'];
+            $storageDef->dataInt2 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'];
         }
 
         // Defining dataInt4 which holds the validator state (min value/max value/minMax value)
         $storageDef->dataInt4 = $this->getStorageDefValidatorState( $storageDef->dataInt1, $storageDef->dataInt2 );
-        $storageDef->dataInt3 = $fieldDef->fieldTypeConstraints->fieldSettings['defaultValue'];
+        $storageDef->dataInt3 = $fieldDef->defaultValue->data;
     }
 
     /**
@@ -79,32 +90,26 @@ class Integer implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
+        $fieldDef->fieldTypeConstraints->validators = array(
+            self::FLOAT_VALIDATOR_IDENTIFIER => array( 'minIntegerValue' => false, 'maxIntegerValue' => false )
+        );
+
         if ( $storageDef->dataInt4 !== self::NO_MIN_MAX_VALUE )
         {
-            $fieldDef->fieldTypeConstraints->validators = array(
-                self::INTEGER_VALIDATOR_FQN => array( 'minIntegerValue' => false, 'maxIntegerValue' => false )
-            );
-
             if ( !empty( $storageDef->dataInt1 ) )
             {
                 $fieldDef->fieldTypeConstraints
-                         ->validators[self::INTEGER_VALIDATOR_FQN]['minIntegerValue'] = $storageDef->dataInt1;
+                         ->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'] = $storageDef->dataInt1;
             }
 
             if ( !empty( $storageDef->dataInt2 ) )
             {
                 $fieldDef->fieldTypeConstraints
-                         ->validators[self::INTEGER_VALIDATOR_FQN]['maxIntegerValue'] = $storageDef->dataInt2;
+                         ->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'] = $storageDef->dataInt2;
             }
         }
 
-        $defaultValue = isset( $storageDef->dataInt3 ) ? $storageDef->dataInt3 : 0;
-        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
-                'defaultValue' => $defaultValue
-            )
-        );
-        $fieldDef->defaultValue->data = $defaultValue;
+        $fieldDef->defaultValue->data = isset( $storageDef->dataInt3 ) ? $storageDef->dataInt3 : 0;
     }
 
     /**

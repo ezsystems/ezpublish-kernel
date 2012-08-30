@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location;
-use eZ\Publish\SPI\Persistence\Content,
-    eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
+use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 
 /**
@@ -103,6 +102,16 @@ abstract class Gateway
      * @return void
      */
     abstract public function createLocationsFromNodeAssignments( $contentId, $versionNo );
+
+    /**
+     * Updates all Locations of content identified with $contentId with $versionNo
+     *
+     * @param mixed $contentId
+     * @param mixed $versionNo
+     *
+     * @return void
+     */
+    abstract public function updateLocationsContentVersionNo( $contentId, $versionNo );
 
     /**
      * Sets a location to be hidden, and it self + all children to invisible.

@@ -12,12 +12,11 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\Field,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\Version,
     eZ\Publish\SPI\Persistence\Content\Relation,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
-    eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as LanguageHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry,
+    eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
@@ -28,7 +27,7 @@ class Mapper
     /**
      * FieldValue converter registry
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected $converterRegistry;
 
@@ -50,7 +49,7 @@ class Mapper
      * Creates a new mapper.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry $converterRegistry
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $converterRegistry
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler $languageHandler
      */
     public function __construct( LocationMapper $locationMapper, Registry $converterRegistry, LanguageHandler $languageHandler )
@@ -76,9 +75,9 @@ class Mapper
         $contentInfo->contentTypeId = $struct->typeId;
         $contentInfo->sectionId = $struct->sectionId;
         $contentInfo->ownerId = $struct->ownerId;
-        $contentInfo->isAlwaysAvailable = $struct->alwaysAvailable;
+        $contentInfo->alwaysAvailable = $struct->alwaysAvailable;
         $contentInfo->remoteId = $struct->remoteId;
-        $contentInfo->mainLanguageCode = $this->languageHandler->getById( $struct->initialLanguageId )->languageCode;
+        $contentInfo->mainLanguageCode = $this->languageHandler->load( $struct->initialLanguageId )->languageCode;
         // For drafts published and modified timestamps should be 0
         $contentInfo->publicationDate = 0;
         $contentInfo->modificationDate = 0;
@@ -94,20 +93,21 @@ class Mapper
      * Creates a new version for the given $content
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
-     * @param int $versionNo
+     * @param mixed $versionNo
      * @param array $fields
      * @param string $initialLanguageCode
+     * @param mixed $userId
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
      * @todo: created, modified, initial_language_id, status, user_id?
      */
-    public function createVersionInfoForContent( Content $content, $versionNo, array $fields, $initialLanguageCode )
+    public function createVersionInfoForContent( Content $content, $versionNo, array $fields, $initialLanguageCode, $userId )
     {
         $versionInfo = new VersionInfo;
 
         $versionInfo->contentId = $content->contentInfo->id;
         $versionInfo->versionNo = $versionNo;
-        $versionInfo->creatorId = $content->contentInfo->ownerId;
+        $versionInfo->creatorId = $userId;
         $versionInfo->status = VersionInfo::STATUS_DRAFT;
         $versionInfo->initialLanguageCode = $initialLanguageCode;
         $versionInfo->creationDate = time();
@@ -240,7 +240,7 @@ class Mapper
         $contentInfo->ownerId = (int)$row["{$prefix}owner_id"];
         $contentInfo->publicationDate = (int)$row["{$prefix}published"];
         $contentInfo->modificationDate = (int)$row["{$prefix}modified"];
-        $contentInfo->isAlwaysAvailable = $row["{$prefix}always_available"];
+        $contentInfo->alwaysAvailable = $row["{$prefix}always_available"];
         $contentInfo->mainLanguageCode = $row["{$prefix}main_language_code"];
         $contentInfo->remoteId = $row["{$prefix}remote_id"];
 
@@ -301,8 +301,8 @@ class Mapper
                 $versionInfo->creatorId = (int)$row["ezcontentobject_version_creator_id"];
                 $versionInfo->creationDate = (int)$row["ezcontentobject_version_created"];
                 $versionInfo->modificationDate = (int)$row["ezcontentobject_version_modified"];
-                $versionInfo->initialLanguageCode = $this->languageHandler->getById( $row["ezcontentobject_version_initial_language_id"] )->languageCode;
-                $versionInfo->languageIds = array();
+                $versionInfo->initialLanguageCode = $this->languageHandler->load( $row["ezcontentobject_version_initial_language_id"] )->languageCode;
+                $versionInfo->languageIds = $this->extractLanguageIdsFromMask( (int)$row["ezcontentobject_version_language_mask"] );//array();
                 $versionInfo->status = (int)$row["ezcontentobject_version_status"];
                 $versionInfo->names = array();
                 $versionInfoList[$versionId] = $versionInfo;
@@ -312,19 +312,32 @@ class Mapper
             {
                 $versionInfoList[$versionId]->names[$row['ezcontentobject_name_content_translation']] = $row['ezcontentobject_name_name'];
             }
-
-            if (
-                !in_array(
-                    $row['ezcontentobject_attribute_language_id'] & ~1,// lang_id can include always available flag, eg:
-                    $versionInfoList[$versionId]->languageIds          // eng-US can be either 2 or 3, see fixture data
-                )
-            )
-            {
-                $versionInfoList[$versionId]->languageIds[] =
-                    $row['ezcontentobject_attribute_language_id'] & ~1;
-            }
         }
         return array_values( $versionInfoList );
+    }
+
+    /**
+     * @todo use langmask handler for this
+     *
+     * @param $languageMask
+     *
+     * @return array
+     */
+    public function extractLanguageIdsFromMask( $languageMask )
+    {
+        $exp = 2;
+        $result = array();
+
+        // Decomposition of $languageMask into its binary components.
+        while ( $exp <= $languageMask )
+        {
+            if ( $languageMask & $exp )
+                $result[] = $exp;
+
+            $exp *= 2;
+        }
+
+        return $result;
     }
 
     /**
@@ -360,9 +373,16 @@ class Mapper
     {
         $storageValue = new StorageFieldValue();
 
-        $storageValue->dataFloat = (float)$row['ezcontentobject_attribute_data_float'];
-        $storageValue->dataInt = (int)$row['ezcontentobject_attribute_data_int'];
+        // Nullable field
+        $storageValue->dataFloat = isset( $row['ezcontentobject_attribute_data_float'] )
+            ? (float)$row['ezcontentobject_attribute_data_float']
+            : null;
+        // Nullable field
+        $storageValue->dataInt = isset( $row['ezcontentobject_attribute_data_int'] )
+            ? (int)$row['ezcontentobject_attribute_data_int']
+            : null;
         $storageValue->dataText = $row['ezcontentobject_attribute_data_text'];
+        // Not nullable field
         $storageValue->sortKeyInt = (int)$row['ezcontentobject_attribute_sort_key_int'];
         $storageValue->sortKeyString = $row['ezcontentobject_attribute_sort_key_string'];
 
@@ -388,9 +408,9 @@ class Mapper
         $struct->sectionId = $content->contentInfo->sectionId;
         $struct->ownerId = $content->contentInfo->ownerId;
         $struct->locations = array();
-        $struct->alwaysAvailable = $content->contentInfo->isAlwaysAvailable;
+        $struct->alwaysAvailable = $content->contentInfo->alwaysAvailable;
         $struct->remoteId = md5( uniqid( get_class( $this ), true ) );
-        $struct->initialLanguageId = $this->languageHandler->getByLocale( $content->versionInfo->initialLanguageCode )->id;
+        $struct->initialLanguageId = $this->languageHandler->loadByLanguageCode( $content->versionInfo->initialLanguageCode )->id;
         $struct->modified = time();
 
         foreach ( $content->fields as $field )

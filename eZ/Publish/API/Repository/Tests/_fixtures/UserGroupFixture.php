@@ -36,11 +36,11 @@ return array(
                 "content" => $this->getContentService()->loadContent( 42 ),
             )
         ),
-        225 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub(
+        59 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub(
             array(
                 "parentId" => 4,
                 "subGroupCount" => 0,
-                "content" => $this->getContentService()->loadContent( 225 ),
+                "content" => $this->getContentService()->loadContent( 59 ),
             )
         ),
     )

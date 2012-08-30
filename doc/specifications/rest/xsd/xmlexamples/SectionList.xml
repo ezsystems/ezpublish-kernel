@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SectionList href="/content/sections" media-type="application/vnd.ez.api.SectionList+xml">
+  <Section href="/content/sections/1" media-type="application/vnd.ez.api.Section+xml">
+    <sectionId>1</sectionId>
+    <identifier>standard</identifier>
+    <name>Standard</name>
+  </Section>
+  <Section href="/content/sections/2" media-type="application/vnd.ez.api.Section+xml">
+    <sectionId>2</sectionId>
+    <identifier>users</identifier>
+    <name>Users</name>
+  </Section>
+  <Section href="/content/sections/3" media-type="application/vnd.ez.api.Section+xml">
+    <sectionId>3</sectionId>
+    <identifier>media</identifier>
+    <name>Media</name>
+  </Section>
+  <Section href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml">
+    <sectionId>4</sectionId>
+    <identifier>setup</identifier>
+    <name>Setup</name>
+  </Section>
+</SectionList>

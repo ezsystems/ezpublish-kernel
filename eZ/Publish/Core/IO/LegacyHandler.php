@@ -15,6 +15,7 @@ use eZ\Publish\SPI\IO\Handler as IoHandlerInterface,
     eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    eZ\Publish\Legacy\Kernel as LegacyKernel,
     eZClusterFileHandler,
     DateTime,
     finfo;
@@ -42,9 +43,24 @@ class LegacyHandler implements IoHandlerInterface
     private $clusterHandler = null;
 
     /**
+     * @var \eZ\Publish\Legacy\Kernel
+     */
+    private $legacyKernel;
+
+    /**
+     * Created Legacy handler instance
+     *
+     * @param \eZ\Publish\Legacy\Kernel $legacyKernel
+     */
+    public function __construct( LegacyKernel $legacyKernel )
+    {
+        $this->legacyKernel = $legacyKernel;
+    }
+
+    /**
      * Creates and stores a new BinaryFile based on the BinaryFileCreateStruct $file
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the target path already exists
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If the target path already exists
      *
      * @param \eZ\Publish\SPI\IO\BinaryFileCreateStruct $createFilestruct
      *
@@ -60,13 +76,20 @@ class LegacyHandler implements IoHandlerInterface
             );
         }
 
-        // @todo Build a path / scope mapper
-        $scope = 'todo';
-        $this->getClusterHandler()->fileStoreContents(
-            $createFilestruct->path,
-            fread( $createFilestruct->getInputStream(), $createFilestruct->size ),
-            $createFilestruct->mimeType,
-            $scope
+        $clusterHandler = $this->getClusterHandler();
+        $this->legacyKernel->runCallback(
+            function () use ( $createFilestruct, $clusterHandler )
+            {
+                // @todo Build a path / scope mapper
+                $scope = 'todo';
+                $clusterHandler->fileStoreContents(
+                    $createFilestruct->path,
+                    fread( $createFilestruct->getInputStream(), $createFilestruct->size ),
+                    $createFilestruct->mimeType,
+                    $scope
+                );
+            },
+            false
         );
 
         return $this->load( $createFilestruct->path );
@@ -75,25 +98,32 @@ class LegacyHandler implements IoHandlerInterface
     /**
      * Deletes the existing BinaryFile with path $path
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the file doesn't exist
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If the file doesn't exist
      *
      * @param string $path
      */
     public function delete( $path )
     {
-        if ( !$this->getClusterHandler()->fileExists( $path ) )
+        if ( !$this->exists( $path ) )
         {
             throw new NotFoundException( 'BinaryFile', $path );
         }
 
-        $this->getClusterHandler()->fileDelete( $path );
+        $clusterHandler = $this->getClusterHandler();
+        $this->legacyKernel->runCallback(
+            function () use ( $path, $clusterHandler )
+            {
+                $clusterHandler->fileDelete( $path );
+            },
+            false
+        );
     }
 
     /**
      * Updates the file identified by $path with data from $updateFile
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the source path doesn't exist
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the target path already exists
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If the source path doesn't exist
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If the target path already exists
      *
      * @param string $path
      * @param \eZ\Publish\SPI\IO\BinaryFileUpdateStruct $updateFileStruct
@@ -102,40 +132,47 @@ class LegacyHandler implements IoHandlerInterface
      */
     public function update( $path, BinaryFileUpdateStruct $updateFileStruct )
     {
-        $clusterHandler = $this->getClusterHandler();
-        if ( !$clusterHandler->fileExists( $path ) )
+        if ( !$this->exists( $path ) )
         {
             throw new NotFoundException( 'BinaryFile', $path );
         }
 
-        // path
-        if ( $updateFileStruct->path !== null && $updateFileStruct->path != $path )
-        {
-            if ( $clusterHandler->fileExists( $updateFileStruct->path ) )
+        $clusterHandler = $this->getClusterHandler();
+        $path = $this->legacyKernel->runCallback(
+            function () use ( $path, $updateFileStruct, $clusterHandler )
             {
-                throw new InvalidArgumentException(
-                    "\$updateFileStruct->path",
-                    "file '{$updateFileStruct->path}' already exists"
-                );
-            }
-            $clusterHandler->fileMove( $path, $updateFileStruct->path );
+                // path
+                if ( $updateFileStruct->path !== null && $updateFileStruct->path != $path )
+                {
+                    if ( $clusterHandler->fileExists( $updateFileStruct->path ) )
+                    {
+                        throw new InvalidArgumentException(
+                            "\$updateFileStruct->path",
+                            "file '{$updateFileStruct->path}' already exists"
+                        );
+                    }
+                    $clusterHandler->fileMove( $path, $updateFileStruct->path );
 
-            // update the path we are working on
-            $path = $updateFileStruct->path;
-        }
+                    // update the path we are working on
+                    $path = $updateFileStruct->path;
+                }
 
-        $resource = $updateFileStruct->getInputStream();
-        if ( $resource !== null )
-        {
-            $binaryUpdateData = fread( $resource, $updateFileStruct->size );
-            $clusterFile = eZClusterFileHandler::instance( $path );
-            $metaData = $clusterFile->metaData;
-            $scope = isset( $metaData['scope'] ) ? $metaData['scope'] : false;
-            $datatype = isset( $metaData['datatype'] ) ? $metaData['datatype'] : false;
-            $clusterFile->storeContents( $binaryUpdateData, $scope, $datatype );
-        }
+                $resource = $updateFileStruct->getInputStream();
+                if ( $resource !== null )
+                {
+                    $binaryUpdateData = fread( $resource, $updateFileStruct->size );
+                    $clusterFile = eZClusterFileHandler::instance( $path );
+                    $metaData = $clusterFile->metaData;
+                    $scope = isset( $metaData['scope'] ) ? $metaData['scope'] : false;
+                    $datatype = isset( $metaData['datatype'] ) ? $metaData['datatype'] : false;
+                    $clusterFile->storeContents( $binaryUpdateData, $scope, $datatype );
+                }
 
-        // mtime and ctime have no effect as mtime isn't modifiable, and ctime isn't really supported (=mtime)
+                // mtime and ctime have no effect as mtime isn't modifiable, and ctime isn't really supported (=mtime)
+                return $path;
+            },
+            false
+        );
 
         return $this->load( $path );
     }
@@ -149,13 +186,20 @@ class LegacyHandler implements IoHandlerInterface
      */
     public function exists( $path )
     {
-        return $this->getClusterHandler()->fileExists( $path );
+        $clusterHandler = $this->getClusterHandler();
+        return $this->legacyKernel->runCallback(
+            function () use ( $clusterHandler, $path )
+            {
+                return $clusterHandler->fileExists( $path );
+            },
+            false
+        );
     }
 
     /**
      * Loads the BinaryFile identified by $path
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If no file identified by $path exists
      *
      * @param string $path
      *
@@ -168,9 +212,14 @@ class LegacyHandler implements IoHandlerInterface
             throw new NotFoundException( 'BinaryFile', $path );
         }
 
-        $clusterFile = eZClusterFileHandler::instance( $path );
-
-        $metaData = $clusterFile->metaData;
+        $metaData = $this->legacyKernel->runCallback(
+            function () use ( $path )
+            {
+                $clusterFile = eZClusterFileHandler::instance( $path );
+                return $clusterFile->metaData;
+            },
+            false
+        );
 
         $file = new BinaryFile();
         $file->path = $path;
@@ -194,14 +243,13 @@ class LegacyHandler implements IoHandlerInterface
         }
 
         $file->uri = $file->path;
+        $file->originalFile = basename( $file->path );
 
         return $file;
     }
 
     /**
      * Returns a file resource to the BinaryFile identified by $path
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
      *
      * @param string $path
      *
@@ -215,7 +263,7 @@ class LegacyHandler implements IoHandlerInterface
     /**
      * Returns the contents of the BinaryFile identified by $path
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the file couldn't be found
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException if the file couldn't be found
      *
      * @param string $path
      *
@@ -223,18 +271,26 @@ class LegacyHandler implements IoHandlerInterface
      */
     public function getFileContents( $path )
     {
-        if ( !$this->getClusterHandler()->fileExists( $path ) )
+        if ( !$this->exists( $path ) )
         {
             throw new NotFoundException( 'BinaryFile', $path );
         }
 
-        return $this->getClusterHandler()->fileFetchContents( $path );
+        $clusterHandler = $this->getClusterHandler();
+        return $this->legacyKernel->runCallback(
+            function () use ( $path, $clusterHandler )
+            {
+                return $clusterHandler->fileFetchContents( $path );
+            },
+            false
+        );
     }
 
     /**
      * Returns the appropriate FileResourceProvider depending on the cluster handler in use
      *
-     * @return \eZ\Publish\Core\IO\Legacy\FileResourceProvider
+     * @return \eZ\Publish\Core\IO\LegacyHandler\FileResourceProvider
+     * @throws \Exception
      */
     private function getFileResourceProvider()
     {
@@ -246,6 +302,7 @@ class LegacyHandler implements IoHandlerInterface
                 throw new \Exception( "FileResourceProvider $class couldn't be found" );
             }
             $this->fileResourceProvider = new $class;
+            $this->fileResourceProvider->setLegacyKernel( $this->legacyKernel );
         }
 
         return $this->fileResourceProvider;
@@ -259,14 +316,23 @@ class LegacyHandler implements IoHandlerInterface
     private function getClusterHandler()
     {
         if ( $this->clusterHandler === null )
-            $this->clusterHandler = eZClusterFileHandler::instance();
+        {
+            $this->clusterHandler = $this->legacyKernel->runCallback(
+                function ()
+                {
+                    return eZClusterFileHandler::instance();
+                },
+                false
+            );
+        }
+
         return $this->clusterHandler;
     }
 
     /**
      * Returns a mimeType from a file path, using fileinfo
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If file does not exist
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If file does not exist
      *
      * @param string $path
      *

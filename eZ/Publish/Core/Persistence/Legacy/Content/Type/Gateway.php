@@ -140,6 +140,7 @@ abstract class Gateway
      * @param int $status
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
+     *
      * @return mixed Field definition ID
      */
     abstract public function insertFieldDefinition(
@@ -221,8 +222,6 @@ abstract class Gateway
     /**
      * Deletes a Type completely.
      *
-     * Does no delete the field definitions!
-     *
      * @param mixed $typeId
      * @param int $status
      * @return void
@@ -268,14 +267,4 @@ abstract class Gateway
      * @return void
      */
     abstract public function publishTypeAndFields( $typeId, $sourceStatus, $targetStatus );
-
-    /**
-     * Returns if the field identified by $fieldDefinitionId and $status is
-     * translateable
-     *
-     * @param mixed $fieldDefinitionId
-     * @param int $status
-     * @return bool
-     */
-    abstract public function isFieldTranslatable( $fieldDefinitionId, $status );
 }

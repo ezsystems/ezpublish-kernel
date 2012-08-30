@@ -1,0 +1,6 @@
+# Internal routes
+_ezpublishLocation:
+    pattern: /content/location/{locationId}/{viewType}
+    defaults:
+        _controller: ezpublish.controller.content.view:viewLocation
+        viewType: full

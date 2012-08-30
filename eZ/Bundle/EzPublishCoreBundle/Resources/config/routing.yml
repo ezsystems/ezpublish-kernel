@@ -1,0 +1,50 @@
+parameters:
+    # Redefining the default router class to implement the RequestMatcherInterface
+    router.class: eZ\Bundle\EzPublishCoreBundle\Routing\DefaultRouter
+    ezpublish.chain_router.class: eZ\Publish\MVC\Routing\ChainRouter
+    ezpublish.url_generator.base.class: eZ\Publish\MVC\Routing\Generator
+    ezpublish.urlalias_router.class: eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter
+    ezpublish.urlalias_generator.class: eZ\Publish\MVC\Routing\Generator\UrlAliasGenerator
+    ezpublish.siteaccess_router.class: eZ\Publish\MVC\SiteAccess\Router
+    ezpublish.siteaccess_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\SiteAccessListener
+    ezpublish.request_redirect_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\RequestEventListener
+
+services:
+    ezpublish.chain_router:
+        class: %ezpublish.chain_router.class%
+        arguments: [@ezpublish.siteaccess_router, @event_dispatcher, @router.request_context]
+
+    ezpublish.url_generator.base:
+        class: %ezpublish.url_generator.base.class%
+        abstract: true
+        calls:
+            - [setRequestContext, [@router.request_context]]
+
+    ezpublish.urlalias_router:
+        class: %ezpublish.urlalias_router.class%
+        arguments: [@ezpublish.api.repository, @ezpublish.urlalias_generator, @?router.request_context, @?logger]
+        tags:
+            - {name: router, priority: 200}
+
+    ezpublish.urlalias_generator:
+        class: %ezpublish.urlalias_generator.class%
+        arguments: [@ezpublish.api.repository]
+        parent: ezpublish.url_generator.base
+
+    ezpublish.siteaccess_router:
+        class: %ezpublish.siteaccess_router.class%
+        arguments: [%ezpublish.siteaccess.default%, %ezpublish.siteaccess.match_config%]
+        calls:
+            - [setSiteAccess, [@ezpublish.siteaccess]]
+
+    ezpublish.siteaccess_listener:
+        class: %ezpublish.siteaccess_listener.class%
+        arguments: [@service_container]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish.request_redirect_listener:
+        class: %ezpublish.request_redirect_listener.class%
+        arguments: [@http_kernel, @?logger]
+        tags:
+            - { name: kernel.event_subscriber }

@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    ezcQuerySelect;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    ezcQuerySelect,
+    RuntimeException;
 
 /**
  * Content locator gateway implementation using the zeta database component.
@@ -20,14 +20,14 @@ class CriteriaConverter
     /**
      * Criterion handlers
      *
-     * @var array(CriterionHandler)
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler[]
      */
     protected $handler;
 
     /**
      * Construct from an optional array of Criterion handlers
      *
-     * @param array $handler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler[] $handler
      * @return void
      */
     public function __construct( array $handler )
@@ -52,7 +52,7 @@ class CriteriaConverter
             }
         }
 
-        throw new \RuntimeException( 'No conversion for criterion found.' );
+        throw new RuntimeException( 'No conversion for criterion found.' );
     }
 }
 

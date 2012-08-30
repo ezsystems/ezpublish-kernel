@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Media converter
+ * File containing the Image converter
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,39 +8,26 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
+
+use eZ\Publish\Core\FieldType\Media\Type as MediaType,
+    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\Repository\FieldType\Media\Value as MediaValue,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings;
+    eZ\Publish\Core\FieldType\FieldSettings;
 
-class Media implements Converter
+class Media extends BinaryFile
 {
-    const FILESIZE_VALIDATOR_FQN = 'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator';
-
     /**
-     * Converts data from $value to $storageFieldValue.
-     * Nothing has to be stored for eZMedia, as everything has to be stored in an external table.
+     * Factory for current class
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue
-     */
-    public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
-    {
-        // Nothing is stored here for ezmedia
-    }
-
-    /**
-     * Converts data from $value to $fieldValue
+     * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $fieldValue
+     * @static
+     * @return Image
      */
-    public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
+    public static function create()
     {
-        // Nothing to restore
+        return new self;
     }
 
     /**
@@ -51,12 +38,11 @@ class Media implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::FILESIZE_VALIDATOR_FQN]['maxFileSize'] ) )
-        {
-            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::FILESIZE_VALIDATOR_FQN]['maxFileSize'];
-        }
+        parent::toStorageFieldDefinition( $fieldDef, $storageDef );
 
-        $storageDef->dataText1 = $fieldDef->fieldTypeConstraints->fieldSettings['mediaType'];
+        $storageDef->dataText1 = ( isset( $fieldDef->fieldTypeConstraints->fieldSettings['mediaType'] )
+            ? $fieldDef->fieldTypeConstraints->fieldSettings['mediaType']
+            : MediaType::TYPE_HTML5_VIDEO );
     }
 
     /**
@@ -67,30 +53,9 @@ class Media implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        if ( !empty( $storageDef->dataInt1 ) )
-        {
-            $fieldDef->fieldTypeConstraints->validators = array(
-                self::FILESIZE_VALIDATOR_FQN => array( 'maxFileSize' => $storageDef->dataInt1 )
-            );
-        }
-
-        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array( 'mediaType' => $storageDef->dataText1 )
-        );
+        parent::toFieldDefinition( $storageDef, $fieldDef );
+        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings( array(
+                'mediaType' => $storageDef->dataText1,
+        ) );
     }
-
-    /**
-     * Returns the name of the index column in the attribute table
-     *
-     * Returns the name of the index column the datatype uses, which is either
-     * "sort_key_int" or "sort_key_string". This column is then used for
-     * filtering and sorting for this type.
-     *
-     * @return string
-     */
-    public function getIndexColumn()
-    {
-        return false;
-    }
-
 }

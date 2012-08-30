@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Version href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml">
+  <VersionInfo>
+    <id>45</id>
+    <versionNo>4</versionNo>
+    <status>DRAFT</status>
+    <modificationDate>2012-02-20T12:00:00</modificationDate>
+    <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml" />
+    <creationDate>22012-02-20T12:00:00</creationDate>
+    <initialLanguageCode>ger-DE</initialLanguageCode>
+    <names>
+      <value languageCode="eng-US">Name</value>
+      <value languageCode="ger-DE">Name</value>
+    </names>
+    <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
+  </VersionInfo>
+  <Fields>
+    <field>
+      <id>1234</id>
+      <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
+      <languageCode>ger-DE</languageCode>
+      <value>Titel</value>
+    </field>
+    <field>
+      <id>1235</id>
+      <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
+      <languageCode>ger-DE</languageCode>
+      <value>Dies ist eine Zusammenfassungy</value>
+    </field>
+    <field>
+      <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
+      <languageCode>ger-DE</languageCode>
+      <value>
+        <authors>
+          <author name="Klaus Mustermann" email="klaus.mustermann@example.net" />
+        </authors>
+      </value>
+    </field>
+  </Fields>
+  <Relations>
+    <Relation href="/content/objects/23/relations" media-type="application/vnd.ez.api.RelationList+xml">
+      <SourceContent href="/content/objects/23"
+        media-type="application/vnd.ez.api.ContentInfo+xml" />
+      <DestinationContent href="/content/objects/45"
+        media-type="application/vnd.ez.api.ContentInfo+xml" />
+      <RelationType>COMMON</RelationType>
+    </Relation>
+  </Relations>
+</Version>

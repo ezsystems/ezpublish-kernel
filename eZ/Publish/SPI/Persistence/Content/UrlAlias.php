@@ -7,7 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\SPI\Persistence;
+namespace eZ\Publish\SPI\Persistence\Content;
+
+use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * UrlAlias models one url alias path element separated by '/' in urls.
@@ -35,16 +37,15 @@ class UrlAlias extends ValueObject
     public $type;
 
     /**
-     * If type = URLAlias::LOCATION the loactionId
+     * If type = URLAlias::LOCATION the locationId
      * otherwise a string (e.g. /content/search)
      *
      * @var mixed
      */
     public $destination;
 
-
     /**
-     * Lanuage code of url alias entry.
+     * Language code of url alias entry.
      *
      * @var string[]
      */

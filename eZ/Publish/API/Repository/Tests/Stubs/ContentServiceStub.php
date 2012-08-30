@@ -17,14 +17,10 @@ use \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
-use \eZ\Publish\API\Repository\Values\Content\Location;
 use \eZ\Publish\API\Repository\Values\Content\Relation;
-use \eZ\Publish\API\Repository\Values\Content\SearchResult;
 use \eZ\Publish\API\Repository\Values\Content\TranslationInfo;
 use \eZ\Publish\API\Repository\Values\Content\TranslationValues;
 use \eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use \eZ\Publish\API\Repository\Values\Content\Query;
-use \eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use \eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use \eZ\Publish\API\Repository\Values\User\User;
 
@@ -52,11 +48,11 @@ class ContentServiceStub implements ContentService
     private $repository;
 
     /**
-     * Field handle, which handles special fields
+     * Exmulation of external storages in the in-memory stub.
      *
-     * @var \eZ\Publish\API\Repository\Tests\Stubs\FieldHandler
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\PseudoExternalStorage
      */
-    private $fieldHandler;
+    private $pseudoExternalStorage;
 
     /**
      * @var integer
@@ -89,6 +85,13 @@ class ContentServiceStub implements ContentService
     private $fieldNextId = 0;
 
     /**
+     * Locations to be created on first publish of an object
+     *
+     * @var LocationCreateStruct[][]
+     */
+    private $locationsOnPublish = array();
+
+    /**
      * Instantiates a new content service stub.
      *
      * @param \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub $repository
@@ -96,9 +99,11 @@ class ContentServiceStub implements ContentService
     public function __construct( RepositoryStub $repository )
     {
         $this->repository   = $repository;
-        $this->fieldHandler = new FieldHandler( array(
-            'ezuser' => new FieldHandler\User( $repository ),
-        ) );
+        $this->pseudoExternalStorage = new PseudoExternalStorage\StorageDispatcher(
+            array(
+                'ezuser' => new PseudoExternalStorage\User( $repository ),
+            )
+        );
         $this->initFromFixture();
     }
 
@@ -190,7 +195,7 @@ class ContentServiceStub implements ContentService
     public function loadVersionInfoById( $contentId, $versionNo = null )
     {
         $versions = array();
-        foreach ( $this->versionInfo as $versionInfo )
+        foreach ( $this->versionInfo as $index => $versionInfo )
         {
             if ( $versionInfo->contentId !== $contentId )
             {
@@ -330,7 +335,8 @@ class ContentServiceStub implements ContentService
             {
                 if ( $fieldDefinition->identifier === $field->fieldDefIdentifier )
                 {
-                    $this->fieldHandler->handleLoad(
+                    // @TODO: Refactore out of here for clarity!
+                    $this->pseudoExternalStorage->handleLoad(
                         $fieldDefinition,
                         $field,
                         $content
@@ -427,6 +433,9 @@ class ContentServiceStub implements ContentService
         // Complete missing fields
         $allFields = $this->createCompleteFields( $contentCreateStruct->contentType, $fields, $languageCodes, $contentCreateStruct->mainLanguageCode );
 
+        // Perform some fake validation to emulate validation exceptions
+        $this->fakeFieldValidation( $contentCreateStruct->contentType, $allFields );
+
         $content = new ContentStub(
             array(
                 'id' => ++$this->contentNextId,
@@ -482,7 +491,7 @@ class ContentServiceStub implements ContentService
             {
                 if ( $fieldDefinition->identifier === $field->fieldDefIdentifier )
                 {
-                    $this->fieldHandler->handleCreate(
+                    $this->pseudoExternalStorage->handleCreate(
                         $fieldDefinition,
                         $field,
                         $content
@@ -495,11 +504,86 @@ class ContentServiceStub implements ContentService
         $this->contentInfo[$contentInfo->id] = $contentInfo;
         $this->versionInfo[$versionInfo->id] = $versionInfo;
 
-        $this->index[$contentInfo->id]['versionId'][$versionInfo->id] = $versionInfo->id;
-        $this->index[$contentInfo->id]['contentId'][count( $this->content ) - 1] = count( $this->content ) - 1;
+        $this->locationsOnPublish[$contentInfo->id] = $locationCreateStructs;
+
+        return $content;
+    }
+
+    /**
+     * Performs specific fake validations on the given $fields
+     *
+     * Checks:
+     *
+     * - String length <= 100 for folder::short_name
+     *
+     * @param ContentType $contentType
+     * @param array $fields
+     * @return void
+     * @throws ContentFieldValidationException if any of the fake rules are
+     *         violated
+     */
+    private function fakeFieldValidation( ContentType $contentType, array $fields )
+    {
+        foreach ( $fields as $field )
+        {
+            switch ( $contentType->identifier )
+            {
+                case 'folder':
+                    switch ( $field->fieldDefIdentifier )
+                    {
+                        case 'short_name':
+                            if ( strlen( $field->value ) > 100 )
+                            {
+                                throw new Exceptions\ContentFieldValidationExceptionStub();
+                            }
+                            break;
+                    }
+                    break;
+
+                case 'forum':
+                case 'user_group':
+                    switch ( $field->fieldDefIdentifier )
+                    {
+                        case 'name':
+                            if ( !is_string( $field->value ) && $field->value !== null )
+                            {
+                                throw new Exceptions\InvalidArgumentExceptionStub();
+                            }
+                            break;
+                    }
+                    break;
+
+                case 'user':
+                    switch ( $field->fieldDefIdentifier )
+                    {
+                        case 'first_name':
+                            if ( !is_string( $field->value ) && $field->value !== null )
+                            {
+                                throw new Exceptions\InvalidArgumentExceptionStub();
+                            }
+                            break;
+                    }
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Creates locations on publish, which had been specified on content create
+     *
+     * @param ContentInfo $contentInfo
+     * @return void
+     */
+    private function createLocationsOnFirstPublish( ContentInfo $contentInfo )
+    {
+        if ( !isset( $this->locationsOnPublish[$contentInfo->id] ) )
+        {
+            // Already published
+            return;
+        }
 
         $locationService = $this->repository->getLocationService();
-        foreach ( $locationCreateStructs as $locationCreateStruct )
+        foreach ( $this->locationsOnPublish[$contentInfo->id] as $locationCreateStruct )
         {
             $locationService->createLocation(
                 $contentInfo,
@@ -507,7 +591,7 @@ class ContentServiceStub implements ContentService
             );
         }
 
-        return $content;
+        unset( $this->locationsOnPublish[$contentInfo->id] );
     }
 
     /**
@@ -697,7 +781,9 @@ class ContentServiceStub implements ContentService
                         $allFields[$fieldId] = new FieldStub(
                             array(
                                 'id' => $fieldId,
-                                'value' => $fieldDefinition->defaultValue,
+                                // 'value' => $fieldDefinition->defaultValue,
+                                // No default value in memory!
+                                'value' => 'Pseudo default value from memory stuff.',
                                 'languageCode' => $languageCode,
                                 'fieldDefIdentifier' => $fieldDefinition->identifier
                             )
@@ -726,7 +812,9 @@ class ContentServiceStub implements ContentService
                     $allFields[$fieldId] = new FieldStub(
                         array(
                             'id' => $fieldId,
-                            'value' => $fieldDefinition->defaultValue,
+                            // 'value' => $fieldDefinition->defaultValue,
+                            // No default value in memory!
+                            'value' => 'Pseudo default value from memory stuff.',
                             'languageCode' => null,
                             'fieldDefIdentifier' => $fieldDefinition->identifier
                         )
@@ -886,6 +974,14 @@ class ContentServiceStub implements ContentService
 
         unset( $this->contentInfo[$contentInfo->id] );
 
+        // @HACK: See Asana TODO -- drafts and locations are not handled
+        // correctly
+        if ( ( $versionInfo->status === VersionInfo::STATUS_DRAFT ) &&
+             ( $versionInfo->versionNo === 1 ) )
+        {
+            return;
+        }
+
         // Delete all locations for the given $contentInfo
         $locations = $locationService->loadLocations( $contentInfo );
         foreach ( $locations as $location )
@@ -1030,16 +1126,24 @@ class ContentServiceStub implements ContentService
         $content = $this->loadContentByVersionInfo( $versionInfo );
         $contentType = $content->contentType;
 
-        $mainLanguageCode = $contentUpdateStruct->initialLanguageCode;
+        $initialLanguageCode = $contentUpdateStruct->initialLanguageCode;
+        $mainLanguageCode = $versionInfo->getContentInfo()->mainLanguageCode;
 
-        $languageCodes = $this->getLanguageCodes( $contentUpdateStruct->fields, $mainLanguageCode );
-        $fields = $this->getFieldsByTypeAndLanguageCode( $contentType, $contentUpdateStruct->fields, $mainLanguageCode );
+        $oldAndNewFields = array_merge( $content->fields, $contentUpdateStruct->fields );
 
-        // Validate all required fields available in each language;
+        $languageCodes = $this->getLanguageCodes( $oldAndNewFields, $initialLanguageCode );
+
+        // Automatically overwrites old with new fields
+        $fields = $this->getFieldsByTypeAndLanguageCode( $contentType, $oldAndNewFields, $initialLanguageCode );
+
+        // Validate all required fields available in each language
         $this->checkRequiredFields( $contentType, $fields, $languageCodes, $mainLanguageCode );
 
         // Complete missing fields
         $allFields = $this->createCompleteFields( $contentType, $fields, $languageCodes, $mainLanguageCode );
+
+        // Perform some fake validation to emulate validation exceptions
+        $this->fakeFieldValidation( $contentType, $allFields );
 
         $draftedContent = new ContentStub(
             array(
@@ -1077,7 +1181,7 @@ class ContentServiceStub implements ContentService
             {
                 if ( $fieldDefinition->identifier === $field->fieldDefIdentifier )
                 {
-                    $this->fieldHandler->handleUpdate(
+                    $this->pseudoExternalStorage->handleUpdate(
                         $fieldDefinition,
                         $field,
                         $draftedContent
@@ -1123,7 +1227,8 @@ class ContentServiceStub implements ContentService
 
         $contentInfo = $versionInfo->getContentInfo();
 
-        $versionNo = max( $versionInfo->versionNo, $contentInfo->currentVersionNo );
+        // Newer versions will be ignored
+        $versionNo = $versionInfo->versionNo;
 
         $publishedContentInfo = new ContentInfoStub(
             array(
@@ -1161,26 +1266,26 @@ class ContentServiceStub implements ContentService
         );
 
         // Set all published versions of this content object to ARCHIVED
-        foreach ( $this->versionInfo as $versionId => $versionInfo )
+        foreach ( $this->versionInfo as $existingVersionId => $existingVersionInfo )
         {
-            if ( $versionInfo->contentId !== $contentInfo->id )
+            if ( $existingVersionInfo->contentId !== $contentInfo->id )
             {
                 continue;
             }
-            if ( $versionInfo->status !== VersionInfo::STATUS_PUBLISHED )
+            if ( $existingVersionInfo->status !== VersionInfo::STATUS_PUBLISHED )
             {
                 continue;
             }
 
-            $this->versionInfo[$versionId] = new VersionInfoStub(
+            $this->versionInfo[$existingVersionId] = new VersionInfoStub(
                 array(
-                    'id' => $versionInfo->id,
+                    'id' => $existingVersionInfo->id,
                     'status' => VersionInfo::STATUS_ARCHIVED,
-                    'versionNo' => $versionInfo->versionNo,
-                    'creatorId' => $versionInfo->creatorId,
-                    'initialLanguageCode' => $versionInfo->initialLanguageCode,
-                    'languageCodes' => $versionInfo->languageCodes,
-                    'names' => $versionInfo->getNames(),
+                    'versionNo' => $existingVersionInfo->versionNo,
+                    'creatorId' => $existingVersionInfo->creatorId,
+                    'initialLanguageCode' => $existingVersionInfo->initialLanguageCode,
+                    'languageCodes' => $existingVersionInfo->languageCodes,
+                    'names' => $existingVersionInfo->getNames(),
                     'modificationDate' => new \DateTime(),
 
                     'contentId' => $contentInfo->id,
@@ -1188,6 +1293,9 @@ class ContentServiceStub implements ContentService
                 )
             );
         }
+
+        // Creates locations specified on content created, if necessary
+        $this->createLocationsOnFirstPublish( $publishedContentInfo );
 
         $this->contentInfo[$contentInfo->id] = $publishedContentInfo;
         $this->versionInfo[$versionInfo->id] = $publishedVersionInfo;
@@ -1380,126 +1488,6 @@ class ContentServiceStub implements ContentService
         $this->repository->getUrlAliasService()->_createAliasesForLocation( $location );
 
         return $this->loadContent( $this->contentNextId );
-    }
-
-    /**
-     * finds content objects for the given query.
-     *
-     * @TODO define structs for the field filters
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array  $fieldFilters - a map of filters for the returned fields.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
-     * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
-     */
-    public function findContent( Query $query, array $fieldFilters, $filterOnUserPermissions = true )
-    {
-        $callbacks = array();
-        foreach ( $query->criterion->criteria as $criteria )
-        {
-            if ( $criteria->operator === Criterion\Operator::LIKE )
-            {
-                $regexp = '(' . str_replace( '\*', '.*', preg_quote( $criteria->value ) ) . ')i';
-                $identifier = $criteria->target;
-
-                $callbacks[] = function( Content $content ) use ( $identifier, $regexp ) {
-                    foreach ( $content->getFields() as $field )
-                    {
-                        if ( $field->fieldDefIdentifier !== $identifier )
-                        {
-                            continue;
-                        }
-
-                        if ( preg_match( $regexp, $field->value ) )
-                        {
-
-                            return true;
-                        }
-                    }
-                    return false;
-                };
-            }
-        }
-
-        if ( false === $filterOnUserPermissions )
-        {
-            $this->repository->disableUserPermissions();
-        }
-
-        $result = array();
-        foreach ( $this->content as $content )
-        {
-            if ( $filterOnUserPermissions && false === $this->repository->canUser( 'content', 'read', $content ) )
-            {
-                continue;
-            }
-            if ( $content->getVersionInfo()->status !== VersionInfo::STATUS_PUBLISHED )
-            {
-                continue;
-            }
-
-            foreach ( $callbacks as $callback )
-            {
-                if ( false === $callback( $content ) )
-                {
-                    continue 2;
-                }
-            }
-
-            $result[] = $content;
-        }
-
-        if ( isset( $fieldFilters['languages'] ) )
-        {
-            foreach ( $result as $i => $content )
-            {
-                $result[$i] = $this->filterFieldsByLanguages(
-                    $content,
-                    $fieldFilters['languages']
-                );
-            }
-        }
-
-        $this->repository->enableUserPermissions();
-
-        return new SearchResult(
-            array(
-                'query' => $query,
-                'count' => count( $result ),
-                'items' => $result
-            )
-        );
-    }
-
-    /**
-     * Performs a query for a single content object
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the query would return more than one result
-     *
-     * @TODO define structs for the field filters
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array  $fieldFilters - a map of filters for the returned fields.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
-     * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    public function findSingle( Query $query, array $fieldFilters, $filterOnUserPermissions = true )
-    {
-        $searchResult = $this->findContent( $query, $fieldFilters, $filterOnUserPermissions );
-
-        if ( $searchResult->count === 1 )
-        {
-            return reset( $searchResult->items );
-        }
-        if ( $searchResult->count > 1 )
-        {
-            throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
-        }
-        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**

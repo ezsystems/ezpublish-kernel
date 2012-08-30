@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway,
-    eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
+    eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 
 /**
  * DeferredLegacy based type update handler

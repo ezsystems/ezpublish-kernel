@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\SPI\IO;
 
-use eZ\Publish\SPI\IO\BinaryFile;
-
 /**
  * Update struct for BinaryFile objects
  */

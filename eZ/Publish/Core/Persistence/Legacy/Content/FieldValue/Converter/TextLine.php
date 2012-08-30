@@ -12,13 +12,24 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue,
-    eZ\Publish\Core\Repository\FieldType\FieldSettings;
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 class TextLine implements Converter
 {
-    const STRING_LENGTH_VALIDATOR_FQN = 'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\StringLengthValidator';
+    const STRING_LENGTH_VALIDATOR_IDENTIFIER = "StringLengthValidator";
+
+    /**
+     * Factory for current class
+     *
+     * @note Class should instead be configured as service if it gains dependencies.
+     *
+     * @static
+     * @return TextLine
+     */
+    public static function create()
+    {
+        return new self;
+    }
 
     /**
      * Converts data from $value to $storageFieldValue
@@ -28,10 +39,8 @@ class TextLine implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataText = $value->data;
-        $storageFieldValue->sortKeyString = $value->sortKey['sort_key_string'];
-        // @TODO: This shouldn't be done here, a converter shouldn't add missing data, it should only convert.
-        $storageFieldValue->sortKeyInt = 0;
+        $storageFieldValue->dataText      = $value->data;
+        $storageFieldValue->sortKeyString = $value->sortKey;
     }
 
     /**
@@ -42,9 +51,8 @@ class TextLine implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = $value->dataText;
-        // @todo: Feel there is room for some improvement here, to generalize this code across field types.
-        $fieldValue->sortKey = array( 'sort_key_string' => $value->sortKeyString );
+        $fieldValue->data    = $value->dataText;
+        $fieldValue->sortKey = $value->sortKeyString;
     }
 
     /**
@@ -55,19 +63,18 @@ class TextLine implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_FQN]['maxStringLength'] ) )
+        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_IDENTIFIER]['maxStringLength'] ) )
         {
-            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_FQN]['maxStringLength'];
+            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_IDENTIFIER]['maxStringLength'];
         }
         else
         {
             $storageDef->dataInt1 = 0;
         }
 
-        // @todo: temporary to fix the tests
-        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_FQN]['minStringLength'] ) )
+        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_IDENTIFIER]['minStringLength'] ) )
         {
-            $storageDef->dataInt2 = $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_FQN]['minStringLength'];
+            $storageDef->dataInt2 = $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_IDENTIFIER]['minStringLength'];
         }
         else
         {
@@ -85,24 +92,18 @@ class TextLine implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        if ( !empty( $storageDef->dataInt1 ) )
+        $validatorConstraints = array();
+
+        if ( isset( $storageDef->dataInt1 ) )
         {
-            $fieldDef->fieldTypeConstraints->validators = array(
-                self::STRING_LENGTH_VALIDATOR_FQN => array( 'maxStringLength' => $storageDef->dataInt1 )
-            );
+            $validatorConstraints[self::STRING_LENGTH_VALIDATOR_IDENTIFIER]["maxStringLength"] = (int)$storageDef->dataInt1;
+        }
+        if ( isset( $storageDef->dataInt2 ) )
+        {
+            $validatorConstraints[self::STRING_LENGTH_VALIDATOR_IDENTIFIER]["minStringLength"] = (int)$storageDef->dataInt2;
         }
 
-        // @todo: temporary to fix the tests
-        if ( !empty( $storageDef->dataInt2 ) )
-        {
-            if ( isset( $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_FQN] ) )
-                $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_FQN]["minStringLength"] = $storageDef->dataInt2;
-            else
-                $fieldDef->fieldTypeConstraints->validators = array(
-                    self::STRING_LENGTH_VALIDATOR_FQN => array( 'minStringLength' => $storageDef->dataInt2 )
-                );
-        }
-
+        $fieldDef->fieldTypeConstraints->validators = $validatorConstraints;
         $fieldDef->defaultValue->data = isset( $storageDef->dataText1 ) ? $storageDef->dataText1 : '';
     }
 

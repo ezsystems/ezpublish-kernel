@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Exceptions;
 
-use RuntimeException;
+use Exception;
 
 /**
  * An Exception which is thrown if an operation cannot be performed by a service
@@ -17,6 +17,6 @@ use RuntimeException;
  *
  * @package eZ\Publish\API\Repository\Exceptions
  */
-abstract class ForbiddenException extends RuntimeException
+abstract class ForbiddenException extends Exception
 {
 }

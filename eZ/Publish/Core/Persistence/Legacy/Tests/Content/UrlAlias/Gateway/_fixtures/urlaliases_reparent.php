@@ -1,0 +1,88 @@
+<?php
+
+return array (
+    'ezurlalias_ml' => array (
+        0 => array (
+            'action' => 'eznode:2',
+            'action_type' => 'eznode',
+            'alias_redirects' => '1',
+            'id' => '1',
+            'is_alias' => '0',
+            'is_original' => '1',
+            'lang_mask' => '3',
+            'link' => '1',
+            'parent' => '0',
+            'text' => '',
+            'text_md5' => 'd41d8cd98f00b204e9800998ecf8427e',
+        ),
+        1 => array (
+            'action' => 'eznode:314',
+            'action_type' => 'eznode',
+            'alias_redirects' => '1',
+            'id' => '2',
+            'is_alias' => '0',
+            'is_original' => '1',
+            'lang_mask' => '2',
+            'link' => '2',
+            'parent' => '0',
+            'text' => 'new-parent-location',
+            'text_md5' => 'b4b3d842c2df6834d493359386763492',
+        ),
+        2 => array (
+            'action' => 'eznode:315',
+            'action_type' => 'eznode',
+            'alias_redirects' => '1',
+            'id' => '3',
+            'is_alias' => '0',
+            'is_original' => '1',
+            'lang_mask' => '2',
+            'link' => '3',
+            'parent' => '2',
+            'text' => 'new-location',
+            'text_md5' => '1cdf796099b4596aed1c1c86c102526f',
+        ),
+        3 => array (
+            'action' => 'eznode:315',
+            'action_type' => 'eznode',
+            'alias_redirects' => '1',
+            'id' => '4',
+            'is_alias' => '0',
+            'is_original' => '0',
+            'lang_mask' => '2',
+            'link' => '4',
+            'parent' => '0',
+            'text' => 'old-location-historized',
+            'text_md5' => 'e504bfae32f8c3ecd2922bcd1b9a8b6a',
+        ),
+        4 => array (
+            'action' => 'eznode:316',
+            'action_type' => 'eznode',
+            'alias_redirects' => '1',
+            'id' => '5',
+            'is_alias' => '0',
+            'is_original' => '1',
+            'lang_mask' => '2',
+            'link' => '5',
+            'parent' => '4',
+            'text' => 'to-be-reparented',
+            'text_md5' => '97d0d0299c217478587ca24fcc5bdb2e',
+        ),
+    ),
+    'ezurlalias_ml_incr' => array (
+        0 => array (
+            'id' => '1',
+        ),
+        1 => array (
+            'id' => '2',
+        ),
+        2 => array (
+            'id' => '3',
+        ),
+        3 => array (
+            'id' => '4',
+        ),
+        4 => array (
+            'id' => '5',
+        ),
+    ),
+);

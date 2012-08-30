@@ -15,12 +15,8 @@ use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandlerInterfa
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
     eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
-    eZ\Publish\SPI\Persistence\Content\Type\Group,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
-    eZ\Publish\Core\Base\Exceptions\BadStateException,
-    eZ\Publish\Core\Persistence\InMemory\Handler,
-    eZ\Publish\Core\Persistence\InMemory\Backend,
-    RuntimeException;
+    eZ\Publish\Core\Base\Exceptions\BadStateException;
 
 /**
  * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler
@@ -296,7 +292,11 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         {
             $contentTypeObj->fieldDefinitions[] = $this->backend->create(
                 'Content\\Type\\FieldDefinition',
-                array( '_typeId' => $contentTypeObj->id, '_status' => $contentTypeObj->status ) + (array)$field
+                array(
+                    '_typeId' => $contentTypeObj->id,
+                    '_status' => $contentTypeObj->status
+                ) + (array)$field,
+                false
             );
         }
         return $contentTypeObj;

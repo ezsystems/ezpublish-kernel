@@ -12,13 +12,11 @@ namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
 use eZ\Publish\API\Repository\Values\Content\TranslationValues;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
@@ -51,7 +49,7 @@ interface ContentService
      *
      * To load fields use loadContent
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the content in the given location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the content
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content with the given remote id does not exist
      *
      * @param string $remoteId
@@ -162,9 +160,10 @@ interface ContentService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the content in the given location
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is a provided remoteId which exists in the system
-     *                                                            or (4.x) there is no location provided
+     *                                                                        or there is no location provided (4.x) or multiple locations
+     *                                                                        are under the same parent or if the a field value is not accepted by the field type
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $contentCreateStruct is not valid
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing or is set to an emtpy value
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing or is set to an empty value
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct $contentCreateStruct
      * @param array $locationCreateStructs an array of {@link \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct} for each location parent under which a location should be created for the content
@@ -256,6 +255,7 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $contentUpdateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a field value is not accepted by the field type
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct $contentUpdateStruct
@@ -312,38 +312,6 @@ interface ContentService
     public function copyContent( ContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, VersionInfo $versionInfo = null);
 
     /**
-     * @deprecated use search service instead
-     * finds content objects for the given query.
-     *
-     * @TODO define structs for the field filters
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array  $fieldFilters - a map of filters for the returned fields.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
-     * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
-     */
-    public function findContent( Query $query, array $fieldFilters, $filterOnUserPermissions = true );
-
-    /**
-     * @deprecated use search service instead
-     * Performs a query for a single content object
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the query would return more than one result
-     *
-     * @TODO define structs for the field filters
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array  $fieldFilters - a map of filters for the returned fields.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
-     * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    public function findSingle( Query $query, array $fieldFilters, $filterOnUserPermissions = true );
-
-    /**
      * load all outgoing relations for the given version
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read this version
@@ -357,8 +325,7 @@ interface ContentService
     /**
      * Loads all incoming relations for a content object.
      *
-     * The relations come only
-     * from published versions of the source content objects
+     * The relations come only from published versions of the source content objects
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read this version
      *
@@ -371,11 +338,11 @@ interface ContentService
     /**
      * Adds a relation of type common.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
-     *
      * The source of the relation is the content and version
      * referenced by $versionInfo.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit this version
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent the destination of the relation
@@ -394,7 +361,7 @@ interface ContentService
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent
      */
-    public function deleteRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent);
+    public function deleteRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent );
 
     /**
      * add translation information to the content object

@@ -73,16 +73,16 @@ class FieldDefinitionUpdateStruct extends ValueObject
     public $isInfoCollector;
 
     /**
-     * If set this array of validators  replace the complete validator collection
+     * If set this validator configuration supported by the field type replaces the existing one
      *
-     * @var array an array of {@link eZ\Publish\API\Repository\Values\ContentType\Validator}
+     * @var mixed
      */
-    public $validators;
+    public $validatorConfiguration;
 
     /**
-     * If set this array of fieldSettings replace the complete field settings collection
+     * If set this settings supported by the field type replaces the existing ones
      *
-     * @var array an array of mixed
+     * @var mixed
      */
     public $fieldSettings;
 
