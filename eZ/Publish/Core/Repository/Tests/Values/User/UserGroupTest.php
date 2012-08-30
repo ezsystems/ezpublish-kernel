@@ -22,6 +22,7 @@ class UserGroupTest extends PHPUnit_Framework_TestCase
      */
     public function testObjectProperties()
     {
+        self::markTestIncomplete( "Design issues in User, awaiting changes regarding it extending Content" );
         $object = new UserGroup;
         $properties = $object->attributes();
         self::assertNotContains( 'internalFields', $properties, 'Internal property found ' );
