@@ -14,6 +14,13 @@ use eZ\Publish\Core\REST\Common\Exceptions;
 
 /**
  * Pattern based URL Handler
+ *
+ * Alles 2 types of patterns to be used in an URL:
+ *
+ * - {foo} matches anything but a slash and is used to match the typical URL
+ *   variable (e.g. an ID)
+ * - {&foo} matches the slash, too, and is used to match only those URL
+ *   variables, which may have a slash
  */
 class Pattern implements UrlHandler
 {
@@ -34,7 +41,12 @@ class Pattern implements UrlHandler
     /**
      * Pattern regular sub-expression
      */
-    const PATTERN_REGEXP ='\{([A-Za-z-_]+)\}';
+    const STANDARD_VARIABLE_REGEX ='\{([A-Za-z-_]+)\}';
+
+    /**
+     * Pattern regular sub-expression that might contain slashes
+     */
+    const SLASHES_VARIABLE_REGEX ='\{(?:\&\s*)([A-Za-z-_]+)\}';
 
     /**
      * Construct from optional initial map
@@ -115,7 +127,12 @@ class Pattern implements UrlHandler
                     $pcre   .= preg_quote( $match[0] );
                     break;
 
-                case preg_match( '(^' . self::PATTERN_REGEXP . ')', $pattern, $match ):
+                case preg_match( '(^' . self::STANDARD_VARIABLE_REGEX . ')', $pattern, $match ):
+                    $pattern = substr( $pattern, strlen( $match[0] ) );
+                    $pcre   .= "(?P<" . $match[1] . ">[^/]+)";
+                    break;
+
+                case preg_match( '(^' . self::SLASHES_VARIABLE_REGEX . ')', $pattern, $match ):
                     $pattern = substr( $pattern, strlen( $match[0] ) );
                     $pcre   .= "(?P<" . $match[1] . ">.+)";
                     break;
@@ -146,16 +163,26 @@ class Pattern implements UrlHandler
         }
 
         $url = $this->map[$type];
-        preg_match_all( '(' . self::PATTERN_REGEXP . ')', $url, $matches, PREG_SET_ORDER );
+        preg_match_all(
+            '('
+                . self::STANDARD_VARIABLE_REGEX
+                . '|'
+                . self::SLASHES_VARIABLE_REGEX
+            . ')',
+            $url,
+            $matches,
+            PREG_SET_ORDER
+        );
         foreach ( $matches as $matchSet )
         {
-            if ( !isset( $values[$matchSet[1]] ) )
+            $variableName = empty( $matchSet[1] ) ? $matchSet[2] : $matchSet[1];
+            if ( !isset( $values[$variableName] ) )
             {
-                throw new Exceptions\InvalidArgumentException( "No value provided for '{$matchSet[1]}'." );
+                throw new Exceptions\InvalidArgumentException( "No value provided for '{$variableName}'." );
             }
 
-            $url = str_replace( $matchSet[0], $values[$matchSet[1]], $url );
-            unset( $values[$matchSet[1]] );
+            $url = str_replace( $matchSet[0], $values[$variableName], $url );
+            unset( $values[$variableName] );
         }
 
         if ( count( $values ) )
