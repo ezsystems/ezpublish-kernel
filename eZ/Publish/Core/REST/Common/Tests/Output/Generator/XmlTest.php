@@ -197,23 +197,4 @@ class XmlTest extends GeneratorTest
             $generator->getMediaType( 'Section' )
         );
     }
-
-    public function testGenerateFieldTypeHash()
-    {
-        $this->getFieldTypeHashGeneratorMock()
-            ->expects( $this->once() )
-            ->method( 'generateHashValue' )
-            ->with(
-                $this->isInstanceOf( 'XMLWriter' ),
-                $this->equalTo( 'fieldValue' ),
-                $this->equalTo( array() )
-            );
-
-        $this->getXmlGenerator()->startDocument( 'foo' );
-
-        $this->getXmlGenerator()->generateFieldTypeHash(
-            'fieldValue',
-            array()
-        );
-    }
 }

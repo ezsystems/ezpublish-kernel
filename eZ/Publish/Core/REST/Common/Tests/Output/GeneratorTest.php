@@ -17,7 +17,7 @@ use eZ\Publish\Core\REST\Common;
 abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
 {
     protected $xmlGenerator;
-    protected $fieldTypeHashGeneratorMock;
+    protected $jsonGenerator;
 
     /**
      * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
@@ -79,7 +79,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGeneratorMultipleElements()
     {
-        $generator = new Common\Output\Generator\Json();
+        $generator = $this->getJsonGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -94,7 +94,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGeneratorMultipleStackedElements()
     {
-        $generator = new Common\Output\Generator\Json();
+        $generator = $this->getJsonGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -225,24 +225,32 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
         if ( !isset( $this->xmlGenerator ) )
         {
             $this->xmlGenerator = new Common\Output\Generator\Xml(
-                $this->getFieldTypeHashGeneratorMock()
+                $this->getMock(
+                    'eZ\\Publish\\Core\\REST\\Common\\Output\\Generator\\Xml\\FieldTypeHashGenerator',
+                    array(),
+                    array(),
+                    '',
+                    false
+                )
             );
         }
         return $this->xmlGenerator;
     }
 
-    protected function getFieldTypeHashGeneratorMock()
+    protected function getJsonGenerator()
     {
-        if ( !isset( $this->fieldTypeHashGeneratorMock ) )
+        if ( !isset( $this->jsonGenerator ) )
         {
-            $this->fieldTypeHashGeneratorMock = $this->getMock(
-                'eZ\\Publish\\Core\\REST\\Common\\Output\\Generator\\Xml\\FieldTypeHashGenerator',
-                array(),
-                array(),
-                '',
-                false
+            $this->jsonGenerator = new Common\Output\Generator\Json(
+                $this->getMock(
+                    'eZ\\Publish\\Core\\REST\\Common\\Output\\Generator\\Json\\FieldTypeHashGenerator',
+                    array(),
+                    array(),
+                    '',
+                    false
+                )
             );
         }
-        return $this->fieldTypeHashGeneratorMock;
+        return $this->jsonGenerator;
     }
 }

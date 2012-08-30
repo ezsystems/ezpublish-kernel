@@ -19,9 +19,11 @@ require_once __DIR__ . '/../GeneratorTest.php';
  */
 class JsonTest extends GeneratorTest
 {
+    protected $generator;
+
     public function testGeneratorDocument()
     {
-        $generator = new Common\Output\Generator\Json();
+        $generator = $this->getJsonGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -33,7 +35,7 @@ class JsonTest extends GeneratorTest
 
     public function testGeneratorElement()
     {
-        $generator = new Common\Output\Generator\Json();
+        $generator = $this->getJsonGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -48,7 +50,7 @@ class JsonTest extends GeneratorTest
 
     public function testGeneratorElementMediaTypeOverwrite()
     {
-        $generator = new Common\Output\Generator\Json();
+        $generator = $this->getJsonGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -63,7 +65,7 @@ class JsonTest extends GeneratorTest
 
     public function testGeneratorStackedElement()
     {
-        $generator = new Common\Output\Generator\Json();
+        $generator = $this->getJsonGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -82,7 +84,7 @@ class JsonTest extends GeneratorTest
 
     public function testGeneratorAttribute()
     {
-        $generator = new Common\Output\Generator\Json();
+        $generator = $this->getJsonGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -101,7 +103,7 @@ class JsonTest extends GeneratorTest
 
     public function testGeneratorMultipleAttributes()
     {
-        $generator = new Common\Output\Generator\Json();
+        $generator = $this->getJsonGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -123,7 +125,7 @@ class JsonTest extends GeneratorTest
 
     public function testGeneratorValueElement()
     {
-        $generator = new Common\Output\Generator\Json();
+        $generator = $this->getJsonGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -142,7 +144,7 @@ class JsonTest extends GeneratorTest
 
     public function testGeneratorElementList()
     {
-        $generator = new Common\Output\Generator\Json();
+        $generator = $this->getJsonGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -168,7 +170,7 @@ class JsonTest extends GeneratorTest
 
     public function testGeneratorHashElement()
     {
-        $generator = new Common\Output\Generator\Json();
+        $generator = $this->getJsonGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -190,7 +192,7 @@ class JsonTest extends GeneratorTest
 
     public function testGetMediaType()
     {
-        $generator = new Common\Output\Generator\Json();
+        $generator = $this->getJsonGenerator();
 
         $this->assertEquals(
             'application/vnd.ez.api.Section+json',
