@@ -9,8 +9,8 @@
  */
 
 namespace eZ\Publish\API\Repository\Values;
-use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException,
-    eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
+use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
+use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
 
 /**
  * The base class for all value objects and structs
@@ -38,6 +38,29 @@ abstract class ValueObject
         {
             $this->$property = $value;
         }
+    }
+
+    /**
+     * Function where list of properties are returned
+     *
+     * Used by {@see getIterator()} and {@see attributes()}, override to add dynamic properties
+     * @uses __isset()
+     *
+     * @todo Make object traversable and reuse this function there (hence why this is not exposed)
+     *
+     * @param array $dynamicProperties Additional dynamic properties exposed on the object
+     *
+     * @return array
+     */
+    protected function getProperties( $dynamicProperties = array() )
+    {
+        $properties = $dynamicProperties;
+        foreach ( get_object_vars( $this ) as $property => $propertyValue )
+        {
+            if ( $this->__isset( $property ) )
+                $properties[] = $property;
+        }
+        return $properties;
     }
 
     /**
@@ -126,5 +149,51 @@ abstract class ValueObject
     static public function __set_state( array $array )
     {
         return new static( $array );
+    }
+
+    /**
+     * Internal function for Legacy template engine compatibility to get property value
+     *
+     * @access private
+     * @deprecated Since 5.0, available purely for legacy eZTemplate compatibility
+     * @uses __get()
+     *
+     * @param $property
+     *
+     * @return mixed
+     */
+    final public function attribute( $property )
+    {
+        return $this->__get( $property );
+    }
+
+    /**
+     * Internal function for Legacy template engine compatibility to get properties
+     *
+     * @access private
+     * @deprecated Since 5.0, available purely for legacy eZTemplate compatibility
+     * @uses __isset()
+     *
+     * @return array
+     */
+    final public function attributes()
+    {
+        return $this->getProperties();
+    }
+
+    /**
+     * Internal function for Legacy template engine compatibility to check existence of property
+     *
+     * @access private
+     * @deprecated Since 5.0, available purely for legacy eZTemplate compatibility
+     * @uses __isset()
+     *
+     * @param $property
+     *
+     * @return bool
+     */
+    final public function hasAttribute( $property )
+    {
+        return $this->__isset( $property );
     }
 }
