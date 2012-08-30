@@ -9,214 +9,30 @@
 
 namespace eZ\Publish\Core\REST\Common\Tests\Output\Generator\Xml;
 
-use eZ\Publish\Core\REST\Common;
+use eZ\Publish\Core\REST\Common,
+    eZ\Publish\Core\REST\Common\Tests\Output\Generator\FieldTypeHashGeneratorBaseTest;
 
-class FieldTypeHashGeneratorTest extends \PHPUnit_Framework_TestCase
+class FieldTypeHashGeneratorTest extends FieldTypeHashGeneratorBaseTest
 {
-    protected $xmlWriter;
-
-    protected $fieldTypeHashGenerator;
-
-    public function testGenerateNull()
+    /**
+     * Initializes the field type hash generator
+     *
+     * @return FieldTypeHashGenerator
+     */
+    protected function initializeFieldTypeHashGenerator()
     {
-        $this->getFieldTypeHashGenerator()->generateHashValue(
-            $this->getXmlWriter(),
-            'fieldValue',
-            null
-        );
-
-        $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $this->getXmlString()
-        );
+        return new Common\Output\Generator\Xml\FieldTypeHashGenerator();
     }
 
-    public function testGenerateBoolValue()
+    /**
+     * Initializes the generator
+     *
+     * @return eZ\Publish\Core\REST\Common\Output\Generator
+     */
+    protected function initializeGenerator()
     {
-        $this->getFieldTypeHashGenerator()->generateHashValue(
-            $this->getXmlWriter(),
-            'fieldValue',
-            true
+        return new Common\Output\Generator\Xml(
+            $this->getFieldTypeHashGenerator()
         );
-
-        $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $this->getXmlString()
-        );
-    }
-
-    public function testGenerateIntegerValue()
-    {
-        $this->getFieldTypeHashGenerator()->generateHashValue(
-            $this->getXmlWriter(),
-            'fieldValue',
-            23
-        );
-
-        $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $this->getXmlString()
-        );
-    }
-
-    public function testGenerateFloatValue()
-    {
-        $this->getFieldTypeHashGenerator()->generateHashValue(
-            $this->getXmlWriter(),
-            'fieldValue',
-            23.424242424242424242
-        );
-
-        $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $this->getXmlString()
-        );
-    }
-
-    public function testGenerateStringValue()
-    {
-        $this->getFieldTypeHashGenerator()->generateHashValue(
-            $this->getXmlWriter(),
-            'fieldValue',
-            'Sindelfingen'
-        );
-
-        $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $this->getXmlString()
-        );
-    }
-
-    public function testGenerateEmptyStringValue()
-    {
-        $this->getFieldTypeHashGenerator()->generateHashValue(
-            $this->getXmlWriter(),
-            'fieldValue',
-            ''
-        );
-
-        $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $this->getXmlString()
-        );
-    }
-
-    public function testGenerateStringValueWithSpecialChars()
-    {
-        $this->getFieldTypeHashGenerator()->generateHashValue(
-            $this->getXmlWriter(),
-            'fieldValue',
-            '<?xml version="1.0" encoding="UTF-8"?><ezxml>Sindelfingen</ezxml>'
-        );
-
-        $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $this->getXmlString()
-        );
-    }
-
-    public function testGenerateListArrayValue()
-    {
-        $this->getFieldTypeHashGenerator()->generateHashValue(
-            $this->getXmlWriter(),
-            'fieldValue',
-            array(
-                23,
-                true,
-                'Sindelfingen',
-                null
-            )
-        );
-
-        $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $this->getXmlString()
-        );
-    }
-
-    public function testGenerateHashArrayValue()
-    {
-        $this->getFieldTypeHashGenerator()->generateHashValue(
-            $this->getXmlWriter(),
-            'fieldValue',
-            array(
-                'age' => 23,
-                'married' => true,
-                'city' => 'Sindelfingen',
-                'cause' => null
-            )
-        );
-
-        $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $this->getXmlString()
-        );
-    }
-
-    public function testGenerateHashArrayMixedValue()
-    {
-        $this->getFieldTypeHashGenerator()->generateHashValue(
-            $this->getXmlWriter(),
-            'fieldValue',
-            array(
-                23,
-                'married' => true,
-                'Sindelfingen',
-                'cause' => null
-            )
-        );
-
-        $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $this->getXmlString()
-        );
-    }
-
-    public function testGenerateComplexValueAuthor()
-    {
-        $this->getFieldTypeHashGenerator()->generateHashValue(
-            $this->getXmlWriter(),
-            'fieldValue',
-            array(
-                array( 'id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com' ),
-                array( 'id' => 2, 'name' => 'Joe Bielefeld', 'email' => 'bielefeld@example.com' ),
-            )
-        );
-
-        $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $this->getXmlString()
-        );
-    }
-
-    protected function getFieldTypeHashGenerator()
-    {
-        if ( !isset( $this->fieldTypeHashGenerator ) )
-        {
-            $this->fieldTypeHashGenerator = new Common\Output\Generator\Xml\FieldTypeHashGenerator();
-        }
-        return $this->fieldTypeHashGenerator;
-    }
-
-    protected function getXmlWriter()
-    {
-        if ( !isset( $this->xmlWriter ) )
-        {
-            $this->xmlWriter = new Common\Output\Generator\Xml(
-                $this->getFieldTypeHashGenerator()
-            );
-
-            $this->xmlWriter = new \XMLWriter();
-            $this->xmlWriter->openMemory();
-            $this->xmlWriter->setIndent( true );
-            $this->xmlWriter->startDocument( '1.0', 'UTF-8' );
-        }
-        return $this->xmlWriter;
-    }
-
-    protected function getXmlString()
-    {
-        $this->getXmlWriter()->endDocument();
-        return $this->getXmlWriter()->outputMemory();
     }
 }
