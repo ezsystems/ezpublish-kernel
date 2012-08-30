@@ -15,6 +15,13 @@ use eZ\Publish\Core\REST\Common;
 
 use Qafoo\RMF;
 
+if ( !isset( $_ENV['DATABASE'] ) )
+{
+    echo "The REST test server does only work with a persistent database.\n";
+    echo "Please specify a database DSN in the environment variable DATABASE.\n";
+    exit( 1 );
+}
+
 require_once __DIR__ . '/../../../../../bootstrap.php';
 
 /*
@@ -25,29 +32,31 @@ require_once __DIR__ . '/../../../../../bootstrap.php';
  * and 2. updated.
  *
  * The test framework therefore issues an X-Test-Session header, with the same
- * session ID for a dedicated test method. The complete repository (including
- * fixture data) is stored serialized at the end of this file.
+ * session ID for a dedicated test method. If a session was already started,
+ * the database is not reset for this request. NOTE: This does NOT work with
+ * SQLite in-memory databases, since these are automatically cleared on request
+ * shutdown!
  */
 
 $stateDir    = __DIR__ . '/_state/';
-$sessionFile = null;
-$repository  = null;
+
+$reInitializeRepository = true;
 if ( isset( $_SERVER['HTTP_X_TEST_SESSION'] ) )
 {
-    // Check if we are in a test session and if, for this session, a repository
-    // state file already exists.
-    $sessionFile = $stateDir . $_SERVER['HTTP_X_TEST_SESSION'] . '.php';
-    if ( is_file( $sessionFile ) )
-    {
-        $repository = unserialize( file_get_contents( $sessionFile ) );
-    }
+    $sessionFile = $stateDir . $_SERVER['HTTP_X_TEST_SESSION'] . '.session';
+
+    // Only re-initialize the repository, if for the current session no session
+    // file exists
+    $reInitializeRepository = ( !is_file( $sessionFile ) );
+
+    // TODO: Remove orphan session files here!
+
+    // Create session file for next request with this session
+    touch( $sessionFile );
 }
 
-if ( !$repository )
-{
-    $setupFactory = new \eZ\Publish\API\Repository\Tests\SetupFactory\Memory();
-    $repository   = $setupFactory->getRepository();
-}
+$setupFactory = new \eZ\Publish\API\Repository\Tests\SetupFactory\Legacy();
+$repository   = $setupFactory->getRepository( $reInitializeRepository );
 
 /*
  * Handlers are used to parse the input body (XML or JSON) into a common array
