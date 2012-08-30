@@ -187,9 +187,25 @@ abstract class FieldTypeHashGeneratorBaseTest extends \PHPUnit_Framework_TestCas
 
     private function assertSerializationSame( $functionName )
     {
+        $fixtureFile = $this->getFixtureFile( $functionName );
+        $actualResult = $this->getGeneratorOutput();
+
+        // file_put_contents( $fixtureFile, $actualResult );
+        // $this->markTestIncomplete( "Wrote fixture to '{$fixtureFile}'." );
+
         $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . $this->getRelativeClassIdentifier() . '__' . $functionName . '.out' ),
-            $this->getGeneratorOutput()
+            file_get_contents( $this->getFixtureFile( $functionName ) ),
+            $actualResult
+        );
+    }
+
+    private function getFixtureFile( $functionName )
+    {
+        return sprintf(
+            '%s/_fixtures/%s__%s.out',
+            __DIR__,
+            $this->getRelativeClassIdentifier(),
+            $functionName
         );
     }
 
