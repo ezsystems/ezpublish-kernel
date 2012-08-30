@@ -13,6 +13,10 @@ use eZ\Publish\API\Repository\SearchService as SearchServiceInterface,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
+    eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
+
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
+
     eZ\Publish\SPI\Persistence\Handler;
 
 /**
@@ -65,7 +69,16 @@ class SearchService implements SearchServiceInterface
      */
     public function findContent( Query $query, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
-        // @TODO: Apply permission checks
+        $limitations = $this->repository->hasAccess( 'content', 'read' );
+        if ( $limitations === false )
+        {
+            return new SearchResult( array( 'time' => 0, 'totalCount' => 0 ) );
+        }
+        else if ( $filterOnUserPermissions && $limitations !== true )
+        {
+            $query->criterion = $this->addPermissionsCriterion( $query->criterion, $limitations );
+        }
+
         $result = $this->persistenceHandler->searchHandler()->findContent( $query, $fieldFilters );
         foreach ( $result->searchHits as $hit )
         {
@@ -93,7 +106,16 @@ class SearchService implements SearchServiceInterface
      */
     public function findSingle( Criterion $criterion, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
-        // @TODO: Apply permission checks
+        $limitations = $this->repository->hasAccess( 'content', 'read' );
+        if ( $limitations === false )
+        {
+            throw new NotFoundException( 'Content', '*' );
+        }
+        else if ( $filterOnUserPermissions && $limitations !== true )
+        {
+            $criterion = $this->addPermissionsCriterion( $criterion, $limitations );
+        }
+
         return $this->repository->getContentService()->buildContentDomainObject(
             $this->persistenceHandler->searchHandler()->findSingle( $criterion, $fieldFilters )
         );
@@ -110,5 +132,34 @@ class SearchService implements SearchServiceInterface
     public function suggest( $prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null )
     {
 
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
+     */
+    private function addPermissionsCriterion( Criterion $criterion, array $limitations )
+    {
+        if ( empty( $limitations ) )
+            return $criterion;
+
+        $roleService = $this->repository->getRoleService();
+        foreach ( $limitations as $limitationSet )
+        {
+            /**
+             * @var \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
+             */
+            foreach ( $limitationSet as $limitationValue )
+            {
+                if ( !$criterion instanceof Criterion\LogicalAnd )
+                    $criterion = new Criterion\LogicalAnd( array( $criterion ) );
+
+                $type = $roleService->getLimitationType( $limitationValue->getIdentifier() );
+                $criterion->criteria[] = $type->getCriterion( $limitationValue, $this->repository );
+            }
+        }
+
+        return $criterion;
     }
 }

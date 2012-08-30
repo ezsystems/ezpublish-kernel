@@ -17,6 +17,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\SiteAccessLimitation as APISiteAccessLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * SiteAccessLimitation is a User limitation

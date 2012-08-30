@@ -17,6 +17,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation as APILocationLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * LocationLimitation is a Content limitation
@@ -121,7 +122,14 @@ class LocationLimitationType implements SPILimitationTypeInterface
      */
     public function getCriterion( APILimitationValue $value, Repository $repository )
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( 'getCriterion' );
+        if ( empty( $value->limitationValues )  )// no limitation values
+            throw new \RuntimeException( "\$value->limitationValues is empty, it should not have been stored in the first place" );
+
+        if ( !isset( $value->limitationValues[1] ) )// 1 limitation value: EQ operation
+            return new Criterion\LocationId( $value->limitationValues[0] );
+
+        // several limitation values: IN operation
+        return new Criterion\LocationId( $value->limitationValues );
     }
 
     /**

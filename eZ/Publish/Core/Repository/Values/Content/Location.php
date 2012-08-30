@@ -39,6 +39,21 @@ class Location extends APILocation
     }
 
     /**
+     * Function where list of properties are returned
+     *
+     * Override to add dynamic properties
+     * @uses parent::getProperties()
+     *
+     * @param array $dynamicProperties
+     *
+     * @return array
+     */
+    protected function getProperties( $dynamicProperties = array( 'contentId'  ) )
+    {
+        return parent::getProperties( $dynamicProperties );
+    }
+
+    /**
      * Magic getter for retrieving convenience properties
      *
      * @param string $property The name of the property to retrieve

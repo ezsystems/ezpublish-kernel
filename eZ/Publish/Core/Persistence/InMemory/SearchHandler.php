@@ -137,6 +137,7 @@ class SearchHandler extends SearchHandlerInterface
         }
 
         $result = new SearchResult();
+        $result->time = 0;
         $result->totalCount = count( $resultList );
 
         if ( empty( $resultList ) || ( $query->limit === null && $query->offset === 0 ) )

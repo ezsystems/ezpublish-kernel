@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * This class represents a location in the repository
  *
  * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo calls getContentInfo()
- * @property-read mixed $contentId calls getContent()->id
+ * @property-read mixed $contentId calls getContentInfo()->id
  * @property-read mixed $id the id of the location
  * @property-read int $priority Position of the Location among its siblings when sorted using priority
  * @property-read boolean $hidden Indicates that the Location is implicitly marked as hidden by a parent location.

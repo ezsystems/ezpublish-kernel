@@ -170,6 +170,21 @@ class Content extends APIContent
     }
 
     /**
+     * Function where list of properties are returned
+     *
+     * Override to add dynamic properties
+     * @uses parent::getProperties()
+     *
+     * @param array $dynamicProperties
+     *
+     * @return array
+     */
+    protected function getProperties( $dynamicProperties = array( 'id', 'contentInfo', 'contentType' ) )
+    {
+        return parent::getProperties( $dynamicProperties );
+    }
+
+    /**
      * Magic getter for retrieving convenience properties
      *
      * @param string $property The name of the property to retrieve

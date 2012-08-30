@@ -18,6 +18,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation as APIOwnerLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * OwnerLimitation is a Content limitation
@@ -71,7 +72,7 @@ class OwnerLimitationType implements SPILimitationTypeInterface
      *
      * @return bool
      *
-     * @todo Add support for $limitationValues[0] == 2 when session values can be injected somehow
+     * @todo Add support for $limitationValues[0] == 2 when session values can be injected somehow, or deprecate
      */
     public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null )
     {
@@ -104,10 +105,27 @@ class OwnerLimitationType implements SPILimitationTypeInterface
      * @param \eZ\Publish\API\Repository\Repository $repository
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
+     *
+     * @todo Add support for $limitationValues[0] == 2 when session values can be injected somehow, or deprecate
      */
     public function getCriterion( APILimitationValue $value, Repository $repository )
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( 'getCriterion' );
+        if ( empty( $value->limitationValues )  )// no limitation values
+            throw new \RuntimeException( "\$value->limitationValues is empty, it should not have been stored in the first place" );
+
+        if ( $value->limitationValues[0] != 1 && $value->limitationValues[0] != 2 )
+        {
+            throw new BadStateException(
+                'Parent User Group limitation',
+                'expected limitation value to be 1 but got:' . $value->limitationValues[0]
+            );
+        }
+
+        return new Criterion\UserMetadata(
+            Criterion\UserMetadata::OWNER,
+            Criterion\Operator::EQ,
+            $repository->getCurrentUser()->id
+        );
     }
 
     /**

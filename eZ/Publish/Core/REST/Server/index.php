@@ -153,17 +153,25 @@ $trashController = new Controller\Trash(
  */
 
 $valueObjectVisitors = array(
-    '\\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException'       => new Output\ValueObjectVisitor\InvalidArgumentException( $urlHandler,  true ),
-    '\\eZ\Publish\API\Repository\Exceptions\NotFoundException'              => new Output\ValueObjectVisitor\NotFoundException( $urlHandler,  true ),
-    '\\eZ\Publish\API\Repository\Exceptions\BadStateException'              => new Output\ValueObjectVisitor\BadStateException( $urlHandler,  true ),
+    // Errors
+
+    '\\eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'  => new Output\ValueObjectVisitor\InvalidArgumentException( $urlHandler,  true ),
+    '\\eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException'         => new Output\ValueObjectVisitor\NotFoundException( $urlHandler,  true ),
+    '\\eZ\\Publish\\API\Repository\\Exceptions\\BadStateException'          => new Output\ValueObjectVisitor\BadStateException( $urlHandler,  true ),
     '\\Exception'                                                           => new Output\ValueObjectVisitor\Exception( $urlHandler,  true ),
+
+    // Section
 
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\SectionList'                => new Output\ValueObjectVisitor\SectionList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedSection'             => new Output\ValueObjectVisitor\CreatedSection( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section'              => new Output\ValueObjectVisitor\Section( $urlHandler ),
 
+    // Content
+
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentList'                => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo'          => new Output\ValueObjectVisitor\ContentInfo( $urlHandler ),
+
+    // User
 
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleList'                   => new Output\ValueObjectVisitor\RoleList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedRole'                => new Output\ValueObjectVisitor\CreatedRole( $urlHandler ),
@@ -172,8 +180,14 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PolicyList'                 => new Output\ValueObjectVisitor\PolicyList( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation'              => new Output\ValueObjectVisitor\Limitation( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleAssignmentList'         => new Output\ValueObjectVisitor\RoleAssignmentList( $urlHandler ),
+
+    // Location
+
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location'             => new Output\ValueObjectVisitor\Location( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\LocationList'               => new Output\ValueObjectVisitor\LocationList( $urlHandler ),
+
+    // Object State
+
     '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup' => new Output\ValueObjectVisitor\ObjectStateGroup( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectStateGroupList'       => new Output\ValueObjectVisitor\ObjectStateGroupList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Common\\Values\\ObjectState'                => new Output\ValueObjectVisitor\ObjectState( $urlHandler ),
@@ -199,6 +213,9 @@ $valueObjectVisitors = array(
 
 $dispatcher = new AuthenticatingDispatcher(
     new RMF\Router\Regexp( array(
+
+    // /content/sections
+
         '(^/content/sections$)' => array(
             'GET'  => array( $sectionController, 'listSections' ),
             'POST' => array( $sectionController, 'createSection' ),
@@ -211,6 +228,9 @@ $dispatcher = new AuthenticatingDispatcher(
             'PATCH'  => array( $sectionController, 'updateSection' ),
             'DELETE' => array( $sectionController, 'deleteSection' ),
         ),
+
+    // /content/objects
+
         '(^/content/objects\?remoteId=[0-9a-z]+$)' => array(
             'GET'   => array( $contentController, 'loadContentInfoByRemoteId' ),
         ),
@@ -225,6 +245,9 @@ $dispatcher = new AuthenticatingDispatcher(
             'GET' => array( $objectStateController, 'getObjectStatesForContent' ),
             'PATCH' => array( $objectStateController, 'setObjectStatesForContent' ),
         ),
+
+    // /content/objectstategroups
+
         '(^/content/objectstategroups$)' => array(
             'GET' => array( $objectStateController, 'loadObjectStateGroups' ),
             'POST' => array( $objectStateController, 'createObjectStateGroup' ),
@@ -243,6 +266,9 @@ $dispatcher = new AuthenticatingDispatcher(
             'PATCH' => array( $objectStateController, 'updateObjectState' ),
             'DELETE' => array( $objectStateController, 'deleteObjectState' ),
         ),
+
+    // content/locations
+
         '(^/content/locations\?remoteId=[0-9a-z]+$)' => array(
             'GET' => array( $locationController, 'loadLocationByRemoteId' ),
         ),
@@ -253,6 +279,9 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/content/locations/[0-9/]+/children$)' => array(
             'GET'    => array( $locationController, 'loadLocationChildren' ),
         ),
+
+    // /content/trash
+
         '(^/content/trash$)' => array(
             'GET'    => array( $trashController, 'loadTrashItems' ),
             'DELETE' => array( $trashController, 'emptyTrash' ),
@@ -261,6 +290,9 @@ $dispatcher = new AuthenticatingDispatcher(
             'GET'    => array( $trashController, 'loadTrashItem' ),
             'DELETE' => array( $trashController, 'deleteTrashItem' ),
         ),
+
+    // /user
+
         '(^/user/policies\?userId=[0-9]+$)' => array(
             'GET' => array( $roleController, 'listPoliciesForUser' ),
         ),
@@ -295,9 +327,9 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/user/groups/[0-9/]+/roles$)' => array(
             'GET'  => array( $roleController, 'loadRoleAssignmentsForUserGroup' ),
             'POST'  => array( $roleController, 'assignRoleToUserGroup' ),
+        ),
         '(^/user/groups/[0-9/]+/roles/[0-9]+$)' => array(
             'DELETE'  => array( $roleController, 'unassignRoleFromUserGroup' ),
-        ),
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(
