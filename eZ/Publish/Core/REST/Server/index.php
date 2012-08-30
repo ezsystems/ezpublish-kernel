@@ -335,7 +335,9 @@ $dispatcher = new AuthenticatingDispatcher(
     new RMF\View\AcceptHeaderViewDispatcher( array(
         '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+json$)' => new View\Visitor(
             new Common\Output\Visitor(
-                new Common\Output\Generator\Json(),
+                new Common\Output\Generator\Json(
+                    new Common\Output\Generator\Json\FieldTypeHashGenerator()
+                ),
                 $valueObjectVisitors
             )
         ),

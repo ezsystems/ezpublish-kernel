@@ -23,6 +23,21 @@ class Json extends Generator
     protected $json;
 
     /**
+     * Generator for field type hash values
+     *
+     * @var eZ\Publish\Core\REST\Common\Output\Generator\Json\FieldTypeHashGenerator
+     */
+    protected $fieldTypeHashGenerator;
+
+    /**
+     * @param eZ\Publish\Core\REST\Common\Output\Generator\Json\FieldTypeHashGenerator $fieldTypeHashGenerator
+     */
+    public function __construct( Json\FieldTypeHashGenerator $fieldTypeHashGenerator )
+    {
+        $this->fieldTypeHashGenerator = $fieldTypeHashGenerator;
+    }
+
+    /**
      * Start document
      *
      * @param mixed $data
@@ -287,6 +302,10 @@ class Json extends Generator
      */
     public function generateFieldTypeHash( $hashElementName, $hashValue )
     {
-        throw new \Exception( "TODO: Implement." );
+        $this->fieldTypeHashGenerator->generateHashValue(
+            $this->json,
+            $hashElementName,
+            $hashValue
+        );
     }
 }
