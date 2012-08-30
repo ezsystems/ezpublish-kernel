@@ -19,8 +19,12 @@ namespace eZ\Publish\Core\REST;
 // phpunit.xml files. This defines what encoding will be generated and thus send
 // to the server.
 $generator = getenv( 'backendEncoding' ) === 'xml' ?
-    new Common\Output\Generator\Xml() :
-    new Common\Output\Generator\Json();
+    new Common\Output\Generator\Xml(
+        new Common\Output\Generator\Xml\FieldTypeHashGenerator()
+    ) :
+    new Common\Output\Generator\Json(
+        new Common\Output\Generator\Json\FieldTypeHashGenerator()
+    );
 
 // The URL Handler is responsible for URL parsing and generation. It will be
 // used in the output generators and in some parsing handlers.
