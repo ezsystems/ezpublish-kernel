@@ -21,9 +21,11 @@ class Memory extends SetupFactory
     /**
      * Returns a configured repository for testing.
      *
+     * @param bool $initializeFromScratch if the back end should be initialized
+     *                                    from scratch or re-used
      * @return \eZ\Publish\API\Repository\Repository
      */
-    public function getRepository()
+    public function getRepository( $initializeFromScratch = true )
     {
         $repository = new RepositoryStub(
             __DIR__ . '/../_fixtures',

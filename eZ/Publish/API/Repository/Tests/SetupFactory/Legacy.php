@@ -82,12 +82,17 @@ class Legacy extends SetupFactory
     /**
      * Returns a configured repository for testing.
      *
+     * @param bool $initializeFromScratch if the back end should be initialized
+     *                                    from scratch or re-used
      * @return \eZ\Publish\API\Repository\Repository
      */
-    public function getRepository()
+    public function getRepository( $initializeFromScratch = true )
     {
-        $this->initializeSchema();
-        $this->insertData();
+        if ( $initializeFromScratch )
+        {
+            $this->initializeSchema();
+            $this->insertData();
+        }
 
         $repository = $this->getServiceContainer()->getRepository();
         $repository->setCurrentUser(

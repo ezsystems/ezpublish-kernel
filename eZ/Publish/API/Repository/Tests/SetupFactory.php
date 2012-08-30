@@ -18,9 +18,11 @@ abstract class SetupFactory
     /**
      * Returns a configured repository for testing.
      *
+     * @param bool $initializeFromScratch if the back end should be initialized
+     *                                    from scratch or re-used
      * @return \eZ\Publish\API\Repository\Repository
      */
-    abstract public function getRepository();
+    abstract public function getRepository( $initializeFromScratch = true );
 
     /**
      * Returns a repository specific ID manager.
