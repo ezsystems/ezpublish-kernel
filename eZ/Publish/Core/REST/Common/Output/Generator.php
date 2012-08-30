@@ -332,6 +332,17 @@ abstract class Generator
     }
 
     /**
+     * Generates a generic representation of the scalar, hash or list given in
+     * $hashValue into the document, using an element of $hashElementName as
+     * its parent
+     *
+     * @param string $hashElementName
+     * @param mixed $hashValue
+     * @return void
+     */
+    abstract public function generateFieldTypeHash( $hashElementName, $hashValue );
+
+    /**
      * Check close / end operation
      *
      * @param string $type

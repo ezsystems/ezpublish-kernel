@@ -341,7 +341,9 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+xml$)'  => new View\Visitor(
             new Common\Output\Visitor(
-                new Common\Output\Generator\Xml(),
+                new Common\Output\Generator\Xml(
+                    new Common\Output\Generator\Xml\FieldTypeHashGenerator()
+                ),
                 $valueObjectVisitors
             )
         ),

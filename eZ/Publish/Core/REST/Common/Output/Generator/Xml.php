@@ -23,6 +23,21 @@ class Xml extends Generator
     protected $xmlWriter;
 
     /**
+     * Generator for field type hash values
+     *
+     * @var eZ\Publish\Core\REST\Common\Output\Generator\Xml\FieldTypeHashGenerator
+     */
+    protected $hashGenerator;
+
+    /**
+     * @param eZ\Publish\Core\REST\Common\Output\Generator\Xml\FieldTypeHashGenerator $hashGenerator
+     */
+    public function __construct( Xml\FieldTypeHashGenerator $hashGenerator )
+    {
+        $this->hashGenerator = $hashGenerator;
+    }
+
+    /**
      * Start document
      *
      * @param mixed $data
@@ -223,5 +238,19 @@ class Xml extends Generator
     public function getMediaType( $name )
     {
         return $this->generateMediaType( $name, 'xml' );
+    }
+
+    /**
+     * Generates a generic representation of the scalar, hash or list given in
+     * $hashValue into the document, using an element of $hashElementName as
+     * its parent
+     *
+     * @param string $hashElementName
+     * @param mixed $hashValue
+     * @return void
+     */
+    public function generateFieldTypeHash( $hashElementName, $hashValue )
+    {
+        $this->hashGenerator->generateHashValue( $this->xmlWriter, $hashElementName, $hashValue );
     }
 }

@@ -275,4 +275,18 @@ class Json extends Generator
     {
         return $this->generateMediaType( $name, 'json' );
     }
+
+    /**
+     * Generates a generic representation of the scalar, hash or list given in
+     * $hashValue into the document, using an element of $hashElementName as
+     * its parent
+     *
+     * @param string $hashElementName
+     * @param mixed $hashValue
+     * @return void
+     */
+    public function generateFieldTypeHash( $hashElementName, $hashValue )
+    {
+        throw new \Exception( "TODO: Implement." );
+    }
 }

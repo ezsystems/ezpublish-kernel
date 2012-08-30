@@ -16,12 +16,15 @@ use eZ\Publish\Core\REST\Common;
  */
 abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
 {
+    protected $xmlGenerator;
+    protected $fieldTypeHashGeneratorMock;
+
     /**
      * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
     public function testInvalidDocumentStart()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
         $generator->startDocument( 'test' );
@@ -29,7 +32,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testValidDocumentStartAfterReset()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
         $generator->reset();
@@ -43,7 +46,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidDocumentNameEnd()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
         $generator->endDocument( 'invalid' );
@@ -54,7 +57,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidOuterElementStart()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startObjectElement( 'element' );
     }
@@ -64,7 +67,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidElementEnd()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
         $generator->startObjectElement( 'element' );
@@ -108,7 +111,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidDocumentEnd()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
         $generator->startObjectElement( 'element' );
@@ -120,7 +123,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidAttributeOuterStart()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startAttribute( 'attribute', 'value' );
     }
@@ -130,7 +133,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidAttributeDocumentStart()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
         $generator->startAttribute( 'attribute', 'value' );
@@ -141,7 +144,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidAttributeListStart()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
         $generator->startObjectElement( 'element' );
@@ -154,7 +157,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidValueElementOuterStart()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startValueElement( 'element', 'value' );
     }
@@ -164,7 +167,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidValueElementDocumentStart()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
         $generator->startValueElement( 'element', 'value' );
@@ -175,7 +178,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidValueElementListStart()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
         $generator->startObjectElement( 'element' );
@@ -188,7 +191,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidListOuterStart()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startList( 'list' );
     }
@@ -198,7 +201,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidListDocumentStart()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
         $generator->startList( 'list' );
@@ -209,11 +212,37 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidListListStart()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
         $generator->startObjectElement( 'element' );
         $generator->startList( 'list' );
         $generator->startList( 'attribute', 'value' );
+    }
+
+    protected function getXmlGenerator()
+    {
+        if ( !isset( $this->xmlGenerator ) )
+        {
+            $this->xmlGenerator = new Common\Output\Generator\Xml(
+                $this->getFieldTypeHashGeneratorMock()
+            );
+        }
+        return $this->xmlGenerator;
+    }
+
+    protected function getFieldTypeHashGeneratorMock()
+    {
+        if ( !isset( $this->fieldTypeHashGeneratorMock ) )
+        {
+            $this->fieldTypeHashGeneratorMock = $this->getMock(
+                'eZ\\Publish\\Core\\REST\\Common\\Output\\Generator\\Xml\\FieldTypeHashGenerator',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->fieldTypeHashGeneratorMock;
     }
 }

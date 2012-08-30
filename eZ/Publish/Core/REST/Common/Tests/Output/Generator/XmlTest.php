@@ -21,7 +21,7 @@ class XmlTest extends GeneratorTest
 {
     public function testGeneratorDocument()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -33,7 +33,7 @@ class XmlTest extends GeneratorTest
 
     public function testGeneratorElement()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -48,7 +48,7 @@ class XmlTest extends GeneratorTest
 
     public function testGeneratorElementMediaTypeOverwrite()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -63,7 +63,7 @@ class XmlTest extends GeneratorTest
 
     public function testGeneratorStackedElement()
     {
-        $generator = new Common\Output\Generator\XML();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -82,7 +82,7 @@ class XmlTest extends GeneratorTest
 
     public function testGeneratorAttribute()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -101,7 +101,7 @@ class XmlTest extends GeneratorTest
 
     public function testGeneratorMultipleAttributes()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -123,7 +123,7 @@ class XmlTest extends GeneratorTest
 
     public function testGeneratorValueElement()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -142,7 +142,7 @@ class XmlTest extends GeneratorTest
 
     public function testGeneratorElementList()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -168,7 +168,7 @@ class XmlTest extends GeneratorTest
 
     public function testGeneratorHashElement()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -190,11 +190,30 @@ class XmlTest extends GeneratorTest
 
     public function testGetMediaType()
     {
-        $generator = new Common\Output\Generator\Xml();
+        $generator = $this->getXmlGenerator();
 
         $this->assertEquals(
             'application/vnd.ez.api.Section+xml',
             $generator->getMediaType( 'Section' )
+        );
+    }
+
+    public function testGenerateFieldTypeHash()
+    {
+        $this->getFieldTypeHashGeneratorMock()
+            ->expects( $this->once() )
+            ->method( 'generateHashValue' )
+            ->with(
+                $this->isInstanceOf( 'XMLWriter' ),
+                $this->equalTo( 'fieldValue' ),
+                $this->equalTo( array() )
+            );
+
+        $this->getXmlGenerator()->startDocument( 'foo' );
+
+        $this->getXmlGenerator()->generateFieldTypeHash(
+            'fieldValue',
+            array()
         );
     }
 }
