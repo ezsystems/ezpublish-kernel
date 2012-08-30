@@ -543,17 +543,17 @@ JSON Example
             {
               "fieldDefinitionIdentifer": "title",
               "languageCode": "eng-US",
-              "value": "This is a title"
+              "fieldValue": "This is a title"
             },
             {
               "fieldDefinitionIdentifer": "summary",
               "languageCode": "eng-US",
-              "value": "This is a summary"
+              "fieldValue": "This is a summary"
             },
             {
               "fieldDefinitionIdentifer": "authors",
               "languageCode": "eng-US",
-              "value": [
+              "fieldValue": [
                     {
                       "name": "John Doe",
                       "email": "john.doe@example.net"
@@ -623,18 +623,18 @@ JSON Example
                   "id": "1234",
                   "fieldDefinitionIdentifer": "title",
                   "languageCode": "eng-UK",
-                  "value": "This is a title"
+                  "fieldValue": "This is a title"
                 },
                 {
                   "id": "1235",
                   "fieldDefinitionIdentifer": "summary",
                   "languageCode": "eng-UK",
-                  "value": "This is a summary"
+                  "fieldValue": "This is a summary"
                 },
                 {
                   "fieldDefinitionIdentifer": "authors",
                   "languageCode": "eng-US",
-                  "value": 
+                  "fieldValue": 
                   [
                     {
                       "name": "John Doe",
