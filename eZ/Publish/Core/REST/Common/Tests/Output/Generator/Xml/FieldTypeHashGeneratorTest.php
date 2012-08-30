@@ -21,6 +21,7 @@ class FieldTypeHashGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->getFieldTypeHashGenerator()->generateHashValue(
             $this->getXmlWriter(),
+            'fieldValue',
             null
         );
 
@@ -34,6 +35,7 @@ class FieldTypeHashGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->getFieldTypeHashGenerator()->generateHashValue(
             $this->getXmlWriter(),
+            'fieldValue',
             true
         );
 
@@ -47,6 +49,7 @@ class FieldTypeHashGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->getFieldTypeHashGenerator()->generateHashValue(
             $this->getXmlWriter(),
+            'fieldValue',
             23
         );
 
@@ -60,6 +63,7 @@ class FieldTypeHashGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->getFieldTypeHashGenerator()->generateHashValue(
             $this->getXmlWriter(),
+            'fieldValue',
             23.424242424242424242
         );
 
@@ -73,6 +77,7 @@ class FieldTypeHashGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->getFieldTypeHashGenerator()->generateHashValue(
             $this->getXmlWriter(),
+            'fieldValue',
             'Sindelfingen'
         );
 
@@ -86,6 +91,7 @@ class FieldTypeHashGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->getFieldTypeHashGenerator()->generateHashValue(
             $this->getXmlWriter(),
+            'fieldValue',
             ''
         );
 
@@ -99,6 +105,7 @@ class FieldTypeHashGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->getFieldTypeHashGenerator()->generateHashValue(
             $this->getXmlWriter(),
+            'fieldValue',
             '<?xml version="1.0" encoding="UTF-8"?><ezxml>Sindelfingen</ezxml>'
         );
 
@@ -112,6 +119,7 @@ class FieldTypeHashGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->getFieldTypeHashGenerator()->generateHashValue(
             $this->getXmlWriter(),
+            'fieldValue',
             array(
                 23,
                 true,
@@ -130,6 +138,7 @@ class FieldTypeHashGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->getFieldTypeHashGenerator()->generateHashValue(
             $this->getXmlWriter(),
+            'fieldValue',
             array(
                 'age' => 23,
                 'married' => true,
@@ -148,6 +157,7 @@ class FieldTypeHashGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->getFieldTypeHashGenerator()->generateHashValue(
             $this->getXmlWriter(),
+            'fieldValue',
             array(
                 23,
                 'married' => true,
@@ -166,6 +176,7 @@ class FieldTypeHashGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->getFieldTypeHashGenerator()->generateHashValue(
             $this->getXmlWriter(),
+            'fieldValue',
             array(
                 array( 'id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com' ),
                 array( 'id' => 2, 'name' => 'Joe Bielefeld', 'email' => 'bielefeld@example.com' ),

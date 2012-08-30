@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<value>
- <value key="age">23</value>
- <value key="married">true</value>
- <value key="city">Sindelfingen</value>
- <value key="cause"/>
-</value>
+<fieldValue>
+ <value>
+  <value key="age">23</value>
+  <value key="married">true</value>
+  <value key="city">Sindelfingen</value>
+  <value key="cause"/>
+ </value>
+</fieldValue>

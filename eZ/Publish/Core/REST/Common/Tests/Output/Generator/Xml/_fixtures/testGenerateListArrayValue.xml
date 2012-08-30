@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<value>
- <value>23</value>
- <value>true</value>
- <value>Sindelfingen</value>
- <value/>
-</value>
+<fieldValue>
+ <value>
+  <value>23</value>
+  <value>true</value>
+  <value>Sindelfingen</value>
+  <value/>
+ </value>
+</fieldValue>
