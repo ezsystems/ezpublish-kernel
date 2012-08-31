@@ -16,15 +16,16 @@ use eZ\Publish\Core\REST\Common;
  */
 abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
 {
-    protected $xmlGenerator;
-    protected $jsonGenerator;
+    protected $generator;
+
+    abstract protected function getGenerator();
 
     /**
      * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
     public function testInvalidDocumentStart()
     {
-        $generator = $this->getXmlGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startDocument( 'test' );
         $generator->startDocument( 'test' );
@@ -32,7 +33,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testValidDocumentStartAfterReset()
     {
-        $generator = $this->getXmlGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startDocument( 'test' );
         $generator->reset();
@@ -46,7 +47,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidDocumentNameEnd()
     {
-        $generator = $this->getXmlGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startDocument( 'test' );
         $generator->endDocument( 'invalid' );
@@ -57,7 +58,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidOuterElementStart()
     {
-        $generator = $this->getXmlGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startObjectElement( 'element' );
     }
@@ -67,7 +68,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidElementEnd()
     {
-        $generator = $this->getXmlGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startDocument( 'test' );
         $generator->startObjectElement( 'element' );
@@ -77,41 +78,9 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
-    public function testGeneratorMultipleElements()
-    {
-        $generator = $this->getJsonGenerator();
-
-        $generator->startDocument( 'test' );
-
-        $generator->startObjectElement( 'element' );
-        $generator->endObjectElement( 'element' );
-
-        $generator->startObjectElement( 'element' );
-    }
-
-    /**
-     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
-     */
-    public function testGeneratorMultipleStackedElements()
-    {
-        $generator = $this->getJsonGenerator();
-
-        $generator->startDocument( 'test' );
-
-        $generator->startObjectElement( 'element' );
-
-        $generator->startObjectElement( 'stacked' );
-        $generator->endObjectElement( 'stacked' );
-
-        $generator->startObjectElement( 'stacked' );
-    }
-
-    /**
-     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
-     */
     public function testInvalidDocumentEnd()
     {
-        $generator = $this->getXmlGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startDocument( 'test' );
         $generator->startObjectElement( 'element' );
@@ -123,7 +92,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidAttributeOuterStart()
     {
-        $generator = $this->getXmlGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startAttribute( 'attribute', 'value' );
     }
@@ -133,7 +102,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidAttributeDocumentStart()
     {
-        $generator = $this->getXmlGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startDocument( 'test' );
         $generator->startAttribute( 'attribute', 'value' );
@@ -144,7 +113,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidAttributeListStart()
     {
-        $generator = $this->getXmlGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startDocument( 'test' );
         $generator->startObjectElement( 'element' );
@@ -157,7 +126,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidValueElementOuterStart()
     {
-        $generator = $this->getXmlGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startValueElement( 'element', 'value' );
     }
@@ -167,7 +136,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidValueElementDocumentStart()
     {
-        $generator = $this->getXmlGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startDocument( 'test' );
         $generator->startValueElement( 'element', 'value' );
@@ -176,22 +145,9 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
      */
-    public function testInvalidValueElementListStart()
-    {
-        $generator = $this->getXmlGenerator();
-
-        $generator->startDocument( 'test' );
-        $generator->startObjectElement( 'element' );
-        $generator->startList( 'list' );
-        $generator->startValueElement( 'attribute', 'value' );
-    }
-
-    /**
-     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
-     */
     public function testInvalidListOuterStart()
     {
-        $generator = $this->getXmlGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startList( 'list' );
     }
@@ -201,7 +157,7 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidListDocumentStart()
     {
-        $generator = $this->getXmlGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startDocument( 'test' );
         $generator->startList( 'list' );
@@ -212,45 +168,11 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidListListStart()
     {
-        $generator = $this->getXmlGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startDocument( 'test' );
         $generator->startObjectElement( 'element' );
         $generator->startList( 'list' );
         $generator->startList( 'attribute', 'value' );
-    }
-
-    protected function getXmlGenerator()
-    {
-        if ( !isset( $this->xmlGenerator ) )
-        {
-            $this->xmlGenerator = new Common\Output\Generator\Xml(
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Common\\Output\\Generator\\Xml\\FieldTypeHashGenerator',
-                    array(),
-                    array(),
-                    '',
-                    false
-                )
-            );
-        }
-        return $this->xmlGenerator;
-    }
-
-    protected function getJsonGenerator()
-    {
-        if ( !isset( $this->jsonGenerator ) )
-        {
-            $this->jsonGenerator = new Common\Output\Generator\Json(
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Common\\Output\\Generator\\Json\\FieldTypeHashGenerator',
-                    array(),
-                    array(),
-                    '',
-                    false
-                )
-            );
-        }
-        return $this->jsonGenerator;
     }
 }

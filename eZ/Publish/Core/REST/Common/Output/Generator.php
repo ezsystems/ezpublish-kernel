@@ -91,7 +91,7 @@ abstract class Generator
      */
     protected function checkStartObjectElement( $data )
     {
-        $this->checkStart( 'objectElement', $data, array( 'document', 'objectElement', 'list' ) );
+        $this->checkStart( 'objectElement', $data, array( 'document', 'objectElement', 'hashElement', 'list' ) );
 
         $last = count( $this->stack ) - 2;
         if ( $this->stack[$last][0] !== 'list' )
@@ -138,7 +138,7 @@ abstract class Generator
      */
     protected function checkStartHashElement( $data )
     {
-        $this->checkStart( 'hashElement', $data, array( 'document', 'objectElement', 'list' ) );
+        $this->checkStart( 'hashElement', $data, array( 'document', 'objectElement', 'hashElement', 'list' ) );
 
         $last = count( $this->stack ) - 2;
         if ( $this->stack[$last][0] !== 'list' )
@@ -186,7 +186,7 @@ abstract class Generator
      */
     protected function checkStartValueElement( $data )
     {
-        $this->checkStart( 'valueElement', $data, array( 'objectElement' ) );
+        $this->checkStart( 'valueElement', $data, array( 'objectElement', 'hashElement', 'list' ) );
     }
 
     /**
@@ -207,42 +207,6 @@ abstract class Generator
     }
 
     /**
-     * Start hash value element
-     *
-     * @param string $name
-     * @param string $value
-     * @param array $attributes
-     */
-    abstract public function startHashValueElement( $name, $value, $attributes = array() );
-
-    /**
-     * Check start hash value element
-     *
-     * @param mixed $data
-     */
-    protected function checkStartHashValueElement( $data )
-    {
-        $this->checkStart( 'hashValueElement', $data, array( 'hashElement' ) );
-    }
-
-    /**
-     * End hash value element
-     *
-     * @param string $name
-     */
-    abstract public function endHashValueElement( $name );
-
-    /**
-     * Check end hash value element
-     *
-     * @param mixed $data
-     */
-    protected function checkEndHashValueElement( $data )
-    {
-        $this->checkEnd( 'hashValueElement', $data );
-    }
-
-    /**
      * Start list
      *
      * @param string $name
@@ -256,7 +220,7 @@ abstract class Generator
      */
     protected function checkStartList( $data )
     {
-        $this->checkStart( 'list', $data, array( 'objectElement' ) );
+        $this->checkStart( 'list', $data, array( 'objectElement', 'hashElement' ) );
     }
 
     /**
@@ -291,7 +255,7 @@ abstract class Generator
      */
     protected function checkStartAttribute( $data )
     {
-        $this->checkStart( 'attribute', $data, array( 'objectElement' ) );
+        $this->checkStart( 'attribute', $data, array( 'objectElement', 'hashElement' ) );
     }
 
     /**

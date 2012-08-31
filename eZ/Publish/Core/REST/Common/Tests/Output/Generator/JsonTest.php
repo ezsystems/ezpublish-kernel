@@ -23,7 +23,7 @@ class JsonTest extends GeneratorTest
 
     public function testGeneratorDocument()
     {
-        $generator = $this->getJsonGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -35,7 +35,7 @@ class JsonTest extends GeneratorTest
 
     public function testGeneratorElement()
     {
-        $generator = $this->getJsonGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -50,7 +50,7 @@ class JsonTest extends GeneratorTest
 
     public function testGeneratorElementMediaTypeOverwrite()
     {
-        $generator = $this->getJsonGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -65,7 +65,7 @@ class JsonTest extends GeneratorTest
 
     public function testGeneratorStackedElement()
     {
-        $generator = $this->getJsonGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -84,7 +84,7 @@ class JsonTest extends GeneratorTest
 
     public function testGeneratorAttribute()
     {
-        $generator = $this->getJsonGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -103,7 +103,7 @@ class JsonTest extends GeneratorTest
 
     public function testGeneratorMultipleAttributes()
     {
-        $generator = $this->getJsonGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -125,7 +125,7 @@ class JsonTest extends GeneratorTest
 
     public function testGeneratorValueElement()
     {
-        $generator = $this->getJsonGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -144,7 +144,7 @@ class JsonTest extends GeneratorTest
 
     public function testGeneratorElementList()
     {
-        $generator = $this->getJsonGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startDocument( 'test' );
 
@@ -170,33 +170,101 @@ class JsonTest extends GeneratorTest
 
     public function testGeneratorHashElement()
     {
-        $generator = $this->getJsonGenerator();
+        $generator = $this->getGenerator();
 
         $generator->startDocument( 'test' );
 
         $generator->startHashElement( 'elements' );
 
-        $generator->startHashValueElement( 'element', 'element value 1', array( 'attribute' => 'attribute value 1' ) );
-        $generator->endHashValueElement( 'element' );
-
-        $generator->startHashValueElement( 'element', 'element value 2', array( 'attribute' => 'attribute value 2' ) );
-        $generator->endHashValueElement( 'element' );
+        $generator->startValueElement( 'element', 'element value 1', array( 'attribute' => 'attribute value 1' ) );
+        $generator->endValueElement( 'element' );
 
         $generator->endHashElement( 'elements' );
 
         $this->assertSame(
-            '{"elements":{"element":[{"_attribute":"attribute value 1","#text":"element value 1"},{"_attribute":"attribute value 2","#text":"element value 2"}]}}',
+            '{"elements":{"element":{"_attribute":"attribute value 1","#text":"element value 1"}}}',
+            $generator->endDocument( 'test' )
+        );
+    }
+
+    public function testGeneratorValueList()
+    {
+        $generator = $this->getGenerator();
+
+        $generator->startDocument( 'test' );
+        $generator->startObjectElement( 'element' );
+        $generator->startList( 'simpleValue' );
+
+        $generator->startValueElement( 'simpleValue', 'value1' );
+        $generator->endValueElement( 'simpleValue' );
+        $generator->startValueElement( 'simpleValue', 'value2' );
+        $generator->endValueElement( 'simpleValue' );
+
+        $generator->endList( 'simpleValue' );
+        $generator->endObjectElement( 'element' );
+
+        $this->assertSame(
+            '{"element":{"_media-type":"application\/vnd.ez.api.element+json","simpleValue":["value1","value2"]}}',
             $generator->endDocument( 'test' )
         );
     }
 
     public function testGetMediaType()
     {
-        $generator = $this->getJsonGenerator();
+        $generator = $this->getGenerator();
 
         $this->assertEquals(
             'application/vnd.ez.api.Section+json',
             $generator->getMediaType( 'Section' )
         );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
+     */
+    public function testGeneratorMultipleElements()
+    {
+        $generator = $this->getGenerator();
+
+        $generator->startDocument( 'test' );
+
+        $generator->startObjectElement( 'element' );
+        $generator->endObjectElement( 'element' );
+
+        $generator->startObjectElement( 'element' );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\Core\REST\Common\Output\Exceptions\OutputGeneratorException
+     */
+    public function testGeneratorMultipleStackedElements()
+    {
+        $generator = $this->getGenerator();
+
+        $generator->startDocument( 'test' );
+
+        $generator->startObjectElement( 'element' );
+
+        $generator->startObjectElement( 'stacked' );
+        $generator->endObjectElement( 'stacked' );
+
+        $generator->startObjectElement( 'stacked' );
+    }
+
+    protected function getGenerator()
+    {
+        if ( !isset( $this->generator ) )
+        {
+            $this->generator = new Common\Output\Generator\Json(
+                $this->getMock(
+                    'eZ\\Publish\\Core\\REST\\Common\\Output\\Generator\\Json\\FieldTypeHashGenerator',
+                    array(),
+                    array(),
+                    '',
+                    false
+                )
+            );
+        }
+        return $this->generator;
     }
 }

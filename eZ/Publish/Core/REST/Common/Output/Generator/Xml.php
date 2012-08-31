@@ -127,37 +127,11 @@ class Xml extends Generator
      *
      * @param string $name
      * @param string $value
-     */
-    public function startValueElement( $name, $value )
-    {
-        $this->checkStartValueElement( $name );
-
-        $this->xmlWriter->startElement( $name );
-        $this->xmlWriter->text( $value );
-    }
-
-    /**
-     * End value element
-     *
-     * @param string $name
-     */
-    public function endValueElement( $name )
-    {
-        $this->checkEndValueElement( $name );
-
-        $this->xmlWriter->endElement();
-    }
-
-    /**
-     * Start hash value element
-     *
-     * @param string $name
-     * @param string $value
      * @param array $attributes
      */
-    public function startHashValueElement( $name, $value, $attributes = array() )
+    public function startValueElement( $name, $value, $attributes = array() )
     {
-        $this->checkStartHashValueElement( $name );
+        $this->checkStartValueElement( $name );
 
         $this->xmlWriter->startElement( $name );
 
@@ -172,13 +146,13 @@ class Xml extends Generator
     }
 
     /**
-     * End hash value element
+     * End value element
      *
      * @param string $name
      */
-    public function endHashValueElement( $name )
+    public function endValueElement( $name )
     {
-        $this->checkEndHashValueElement( $name );
+        $this->checkEndValueElement( $name );
 
         $this->xmlWriter->endElement();
     }

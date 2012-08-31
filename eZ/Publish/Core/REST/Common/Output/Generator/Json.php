@@ -178,12 +178,36 @@ class Json extends Generator
      *
      * @param string $name
      * @param string $value
+     * @param array $attributes
      */
-    public function startValueElement( $name, $value )
+    public function startValueElement( $name, $value, $attributes = array() )
     {
         $this->checkStartValueElement( $name );
 
-        $this->json->$name = $value;
+        $jsonValue = null;
+
+        if ( count( $attributes ) === 0 )
+        {
+            $jsonValue = $value;
+        }
+        else
+        {
+            $jsonValue = new Json\Object( $this->json );
+            foreach ( $attributes as $attributeName => $attributeValue )
+            {
+                $jsonValue->{'_' . $attributeName} = $attributeValue;
+            }
+            $jsonValue->{'#text'} = $value;
+        }
+
+        if ( $this->json instanceof Json\ArrayObject )
+        {
+            $this->json[] = $jsonValue;
+        }
+        else
+        {
+            $this->json->$name = $jsonValue;
+        }
     }
 
     /**
@@ -194,40 +218,6 @@ class Json extends Generator
     public function endValueElement( $name )
     {
         $this->checkEndValueElement( $name );
-    }
-
-    /**
-     * Start hash value element
-     *
-     * @param string $name
-     * @param string $value
-     * @param array $attributes
-     */
-    public function startHashValueElement( $name, $value, $attributes = array() )
-    {
-        $this->checkStartHashValueElement( $name );
-
-        $object = new Json\Object( $this->json );
-        foreach ( $attributes as $attributeName => $attributeValue )
-        {
-            $object->{'_' . $attributeName} = $attributeValue;
-        }
-        $object->{'#text'} = $value;
-
-        if ( !isset( $this->json->$name ) )
-            $this->json->$name = new Json\ArrayObject( $this->json->getParent() );
-
-        $this->json->$name->append( $object );
-    }
-
-    /**
-     * End hash value element
-     *
-     * @param string $name
-     */
-    public function endHashValueElement( $name )
-    {
-        $this->checkEndHashValueElement( $name );
     }
 
     /**

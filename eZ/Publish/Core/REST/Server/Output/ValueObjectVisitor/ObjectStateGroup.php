@@ -49,8 +49,8 @@ class ObjectStateGroup extends ValueObjectVisitor
 
         foreach ( $data->getNames() as $languageCode => $name )
         {
-            $generator->startHashValueElement( 'value', $name, array( 'languageCode' => $languageCode ) );
-            $generator->endHashValueElement( 'value' );
+            $generator->startValueElement( 'value', $name, array( 'languageCode' => $languageCode ) );
+            $generator->endValueElement( 'value' );
         }
 
         $generator->endHashElement( 'names' );
@@ -59,8 +59,8 @@ class ObjectStateGroup extends ValueObjectVisitor
 
         foreach ( $data->getDescriptions() as $languageCode => $description )
         {
-            $generator->startHashValueElement( 'value', $description, array( 'languageCode' => $languageCode ) );
-            $generator->endHashValueElement( 'value' );
+            $generator->startValueElement( 'value', $description, array( 'languageCode' => $languageCode ) );
+            $generator->endValueElement( 'value' );
         }
 
         $generator->endHashElement( 'descriptions' );
