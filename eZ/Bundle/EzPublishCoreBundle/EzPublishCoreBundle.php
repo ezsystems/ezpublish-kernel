@@ -9,14 +9,15 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterStorageEnginePass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\TwigTweaksPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ContentViewPass;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass,
+    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterStorageEnginePass,
+    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterLimitationTypePass,
+    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass,
+    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass,
+    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\TwigTweaksPass,
+    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ContentViewPass,
+    Symfony\Component\HttpKernel\Bundle\Bundle,
+    Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class EzPublishCoreBundle extends Bundle
 {
@@ -25,6 +26,7 @@ class EzPublishCoreBundle extends Bundle
         parent::build( $container );
         $container->addCompilerPass( new ChainRoutingPass );
         $container->addCompilerPass( new AddFieldTypePass );
+        $container->addCompilerPass( new RegisterLimitationTypePass );
         $container->addCompilerPass( new RegisterStorageEnginePass );
         $container->addCompilerPass( new LegacyStorageEnginePass );
         $container->addCompilerPass( new TwigTweaksPass );

@@ -69,6 +69,8 @@ class EzPublishCoreExtension extends Extension
         $loader->load( 'fieldtypes.yml' );
         // Built-in storage engines
         $loader->load( 'storage_engines.yml' );
+        // Roles and limitations
+        $loader->load( 'roles.yml' );
     }
 
     /**
