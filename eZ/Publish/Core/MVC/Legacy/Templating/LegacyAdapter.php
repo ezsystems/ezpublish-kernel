@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy\Templating;
+namespace eZ\Publish\Core\MVC\Legacy\Templating;
 
 /**
  * Generic legacy compatible object.

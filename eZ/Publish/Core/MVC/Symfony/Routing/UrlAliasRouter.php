@@ -7,14 +7,14 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\Routing;
+namespace eZ\Publish\Core\MVC\Symfony\Routing;
 
 use eZ\Publish\API\Repository\Repository,
     eZ\Publish\API\Repository\Values\Content\URLAlias,
     eZ\Publish\API\Repository\Exceptions\NotFoundException,
     eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\MVC\View\Manager as ViewManager,
-    eZ\Publish\MVC\Routing\Generator\UrlAliasGenerator,
+    eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager,
+    eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator,
     Symfony\Component\Routing\RouterInterface,
     Symfony\Component\Routing\Matcher\RequestMatcherInterface,
     Symfony\Component\HttpFoundation\Request,
@@ -44,7 +44,7 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
     protected $repository;
 
     /**
-     * @var \eZ\Publish\MVC\Routing\Generator\UrlAliasGenerator
+     * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator
      */
     protected $generator;
 

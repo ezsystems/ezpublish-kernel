@@ -17,8 +17,8 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface,
  * The ContentViewPass adds DIC compiler pass related to content view.
  * This includes adding ContentViewProvider implementations.
  *
- * @see \eZ\Publish\MVC\View\Manager
- * @see \eZ\Publish\MVC\View\ContentViewProvider
+ * @see \eZ\Publish\Core\MVC\Symfony\View\Manager
+ * @see \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider
  */
 class ContentViewPass implements CompilerPassInterface
 {

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy\Templating\Twig\Node;
+namespace eZ\Publish\Core\MVC\Legacy\Templating\Twig\Node;
 use \Twig_Node,
     \Twig_Node_Expression,
     \Twig_Compiler;

@@ -7,12 +7,12 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\View;
+namespace eZ\Publish\Core\MVC\Symfony\View;
 
 use eZ\Publish\API\Repository\Values\Content\Content,
     eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\MVC\MVCEvents,
-    eZ\Publish\MVC\Event\PreContentViewEvent,
+    eZ\Publish\Core\MVC\Symfony\MVCEvents,
+    eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent,
     Symfony\Component\Templating\EngineInterface,
     Symfony\Component\HttpKernel\Log\LoggerInterface,
     Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -40,7 +40,7 @@ class Manager
     protected $viewProviders = array();
 
     /**
-     * @var \eZ\Publish\MVC\View\ContentViewProvider[]
+     * @var \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider[]
      */
     protected $sortedViewProviders;
 
@@ -60,7 +60,7 @@ class Manager
      * Registers $viewProvider as a valid view provider.
      * When this view provider will be called in the chain depends on $priority. The highest $priority is, the earliest the router will be called.
      *
-     * @param \eZ\Publish\MVC\View\ContentViewProvider $viewProvider
+     * @param \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider $viewProvider
      * @param int $priority
      */
     public function addViewProvider( ContentViewProvider $viewProvider, $priority = 0 )
@@ -73,7 +73,7 @@ class Manager
     }
 
     /**
-     * @return \eZ\Publish\MVC\View\ContentViewProvider[]
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider[]
      */
     public function getAllViewProviders()
     {
@@ -87,7 +87,7 @@ class Manager
      * Sort the registered view providers by priority.
      * The highest priority number is the highest priority (reverse sorting)
      *
-     * @return \eZ\Publish\MVC\View\ContentViewProvider[]
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider[]
      */
     protected function sortViewProviders()
     {
@@ -160,7 +160,7 @@ class Manager
      * Renders passed ContentView object via the template engine.
      * If $view's template identifier is a closure, then it is called directly and the result is returned as is.
      *
-     * @param \eZ\Publish\MVC\View\ContentViewInterface $view
+     * @param \eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface $view
      * @param array $defaultParams
      * @return string
      */

@@ -1,18 +1,18 @@
 <?php
 /**
- * File containing the eZ\Publish\MVC\SiteAccess\Matcher\Map\URI class.
+ * File containing the eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\SiteAccess\Matcher\Map;
+namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map;
 
-use eZ\Publish\MVC\SiteAccess\Matcher,
-    eZ\Publish\MVC\SiteAccess\Matcher\Map,
-    eZ\Publish\MVC\Routing\SimplifiedRequest,
-    eZ\Publish\MVC\SiteAccess\URILexer;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher,
+    eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map,
+    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest,
+    eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 
 class URI extends Map implements Matcher, URILexer
 {
@@ -29,7 +29,7 @@ class URI extends Map implements Matcher, URILexer
     /**
      * Injects the request object to match against.
      *
-     * @param \eZ\Publish\MVC\Routing\SimplifiedRequest $request
+     * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
      * @return void
      */
     public function setRequest( SimplifiedRequest $request )

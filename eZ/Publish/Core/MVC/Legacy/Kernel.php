@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy;
+namespace eZ\Publish\Core\MVC\Legacy;
 use \ezpKernel,
     \ezpKernelHandler;
 

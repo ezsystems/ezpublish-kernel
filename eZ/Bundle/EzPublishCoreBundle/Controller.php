@@ -32,7 +32,7 @@ class Controller extends BaseController
     /**
      * Returns the legacy kernel object.
      *
-     * @return \eZ\Publish\Legacy\Kernel
+     * @return \eZ\Publish\Core\MVC\Legacy\Kernel
      */
     final protected function getLegacyKernel()
     {

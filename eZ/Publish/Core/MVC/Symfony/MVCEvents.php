@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC;
+namespace eZ\Publish\Core\MVC\Symfony;
 
 final class MVCEvents
 {
@@ -15,7 +15,7 @@ final class MVCEvents
      * The SITEACCESS event occurs after the SiteAccess matching has occurred.
      * This event gives further control on the matched SiteAccess.
      *
-     * The event listener method receives a \eZ\Publish\MVC\Event\PostSiteAccessMatchEvent
+     * The event listener method receives a \eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent
      */
     const SITEACCESS = 'ezpublish.siteaccess';
 
@@ -23,8 +23,8 @@ final class MVCEvents
      * The PRE_CONTENT_VIEW event occurs right before a view is rendered for a content, via the content view controller.
      * This event is triggered by the view manager and allows you to inject additional parameters to the content view template.
      *
-     * The event listener method receives a \eZ\Publish\MVC\Event\PreContentViewEvent
-     * @see eZ\Publish\MVC\View\Manager
+     * The event listener method receives a \eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent
+     * @see eZ\Publish\Core\MVC\Symfony\View\Manager
      */
     const PRE_CONTENT_VIEW = 'ezpublish.pre_content_view';
 
@@ -33,7 +33,7 @@ final class MVCEvents
      * (missing field type, internal error...).
      * It allows further programmatic handling (like rendering a custom view) for the exception thrown.
      *
-     * The event listener method receives an \eZ\Publish\MVC\Event\APIContentExceptionEvent.
+     * The event listener method receives an \eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent.
      */
     const API_CONTENT_EXCEPTION = 'ezpublish.api.contentException';
 }

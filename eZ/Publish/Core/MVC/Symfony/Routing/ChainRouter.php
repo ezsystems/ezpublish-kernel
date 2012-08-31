@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\Routing;
+namespace eZ\Publish\Core\MVC\Symfony\Routing;
 
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
@@ -19,10 +19,10 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use eZ\Publish\MVC\SiteAccess;
-use eZ\Publish\MVC\SiteAccess\Router as SiteAccessRouter;
-use eZ\Publish\MVC\Event\PostSiteAccessMatchEvent;
-use eZ\Publish\MVC\MVCEvents;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router as SiteAccessRouter;
+use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
+use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 
 /**
  * The ChainRouter is an aggregation of valid routers and allows URL matching against multiple routers.
@@ -53,7 +53,7 @@ class ChainRouter implements RouterInterface, WarmableInterface, RequestMatcherI
     protected $routeCollection;
 
     /**
-     * @var \eZ\Publish\MVC\SiteAccess\Router
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router
      */
     protected $siteAccessRouter;
 

@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\Event;
+namespace eZ\Publish\Core\MVC\Symfony\Event;
 
 use Symfony\Component\EventDispatcher\Event,
     Symfony\Component\HttpFoundation\Request,
-    eZ\Publish\MVC\SiteAccess;
+    eZ\Publish\Core\MVC\Symfony\SiteAccess;
 
 /**
  * This event is triggered after SiteAccess matching process and allows further control on it and the associated request.
@@ -19,7 +19,7 @@ use Symfony\Component\EventDispatcher\Event,
 class PostSiteAccessMatchEvent extends Event
 {
     /**
-     * @var \eZ\Publish\MVC\SiteAccess
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
      */
     private $siteAccess;
 
@@ -45,7 +45,7 @@ class PostSiteAccessMatchEvent extends Event
     /**
      * Returns matched SiteAccess instance
      *
-     * @return \eZ\Publish\MVC\SiteAccess
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess
      */
     public function getSiteAccess()
     {

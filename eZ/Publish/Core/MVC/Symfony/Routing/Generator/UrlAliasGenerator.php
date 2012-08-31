@@ -7,16 +7,16 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\Routing\Generator;
+namespace eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 
-use eZ\Publish\MVC\Routing\Generator,
+use eZ\Publish\Core\MVC\Symfony\Routing\Generator,
     eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\API\Repository\Repository;
 
 /**
  * URL generator for UrlAlias based links
  *
- * @see \eZ\Publish\MVC\Routing\UrlAliasRouter
+ * @see \eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter
  */
 class UrlAliasGenerator extends Generator
 {

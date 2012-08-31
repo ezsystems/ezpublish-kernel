@@ -7,21 +7,21 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy\EventListener;
+namespace eZ\Publish\Core\MVC\Legacy\EventListener;
 
-use eZ\Publish\MVC\Event\APIContentExceptionEvent,
-    eZ\Publish\MVC\MVCEvents,
+use eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent,
+    eZ\Publish\Core\MVC\Symfony\MVCEvents,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound as ConverterNotFound,
     eZ\Publish\Core\Repository\Values\Content\Location,
     eZ\Publish\Core\Repository\Values\Content\ContentInfo,
-    eZ\Publish\Legacy\View\ContentViewProvider as LegacyContentViewProvider,
+    eZ\Publish\Core\MVC\Legacy\View\ContentViewProvider as LegacyContentViewProvider,
     Symfony\Component\EventDispatcher\EventSubscriberInterface,
     Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 class APIContentExceptionListener implements EventSubscriberInterface
 {
     /**
-     * @var eZ\Publish\Legacy\View\ContentViewProvider
+     * @var eZ\Publish\Core\MVC\Legacy\View\ContentViewProvider
      */
     protected $legacyCVP;
 

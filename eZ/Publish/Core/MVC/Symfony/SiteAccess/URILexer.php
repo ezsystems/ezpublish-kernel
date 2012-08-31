@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\SiteAccess;
+namespace eZ\Publish\Core\MVC\Symfony\SiteAccess;
 
 /**
  * Interface for SiteAccess matchers that need to alter the URI after matching.

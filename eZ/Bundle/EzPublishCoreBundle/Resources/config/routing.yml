@@ -1,11 +1,11 @@
 parameters:
     # Redefining the default router class to implement the RequestMatcherInterface
     router.class: eZ\Bundle\EzPublishCoreBundle\Routing\DefaultRouter
-    ezpublish.chain_router.class: eZ\Publish\MVC\Routing\ChainRouter
-    ezpublish.url_generator.base.class: eZ\Publish\MVC\Routing\Generator
+    ezpublish.chain_router.class: eZ\Publish\Core\MVC\Symfony\Routing\ChainRouter
+    ezpublish.url_generator.base.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator
     ezpublish.urlalias_router.class: eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter
-    ezpublish.urlalias_generator.class: eZ\Publish\MVC\Routing\Generator\UrlAliasGenerator
-    ezpublish.siteaccess_router.class: eZ\Publish\MVC\SiteAccess\Router
+    ezpublish.urlalias_generator.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator
+    ezpublish.siteaccess_router.class: eZ\Publish\Core\MVC\Symfony\SiteAccess\Router
     ezpublish.siteaccess_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\SiteAccessListener
     ezpublish.request_redirect_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\RequestEventListener
 

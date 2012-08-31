@@ -10,7 +10,7 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\Routing;
 
 use eZModule,
-    eZ\Publish\MVC\Routing\Generator,
+    eZ\Publish\Core\MVC\Symfony\Routing\Generator,
     Symfony\Component\Routing\RequestContext;
 
 class UrlGenerator extends Generator
@@ -26,7 +26,7 @@ class UrlGenerator extends Generator
     }
 
     /**
-     * @return \eZ\Publish\Legacy\Kernel
+     * @return \eZ\Publish\Core\MVC\Legacy\Kernel
      */
     public function getLegacyKernel()
     {

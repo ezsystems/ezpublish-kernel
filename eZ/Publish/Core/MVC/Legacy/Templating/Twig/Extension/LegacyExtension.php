@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy\Templating\Twig\Extension;
+namespace eZ\Publish\Core\MVC\Legacy\Templating\Twig\Extension;
 
-use eZ\Publish\Legacy\Templating\Twig\TokenParser\LegacyIncludeParser;
-use eZ\Publish\Legacy\Templating\LegacyCompatible;
-use eZ\Publish\Legacy\Templating\Converter\MultipleObjectConverter;
+use eZ\Publish\Core\MVC\Legacy\Templating\Twig\TokenParser\LegacyIncludeParser;
+use eZ\Publish\Core\MVC\Legacy\Templating\LegacyCompatible;
+use eZ\Publish\Core\MVC\Legacy\Templating\Converter\MultipleObjectConverter;
 use eZTemplate;
 use Twig_Extension;
 
@@ -28,7 +28,7 @@ class LegacyExtension extends Twig_Extension
     private $legacyKernelClosure;
 
     /**
-     * @var \eZ\Publish\Legacy\Templating\Converter\MultipleObjectConverter
+     * @var \eZ\Publish\Core\MVC\Legacy\Templating\Converter\MultipleObjectConverter
      */
     private $objectConverter;
 
@@ -79,7 +79,7 @@ class LegacyExtension extends Twig_Extension
     /**
      * Returns the legacy kernel object.
      *
-     * @return \eZ\Publish\Legacy\Kernel
+     * @return \eZ\Publish\Core\MVC\Legacy\Kernel
      */
     final protected function getLegacyKernel()
     {

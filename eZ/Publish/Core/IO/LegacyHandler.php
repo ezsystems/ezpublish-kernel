@@ -15,7 +15,7 @@ use eZ\Publish\SPI\IO\Handler as IoHandlerInterface,
     eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Legacy\Kernel as LegacyKernel,
+    eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel,
     eZClusterFileHandler,
     DateTime,
     finfo;
@@ -43,14 +43,14 @@ class LegacyHandler implements IoHandlerInterface
     private $clusterHandler = null;
 
     /**
-     * @var \eZ\Publish\Legacy\Kernel
+     * @var \eZ\Publish\Core\MVC\Legacy\Kernel
      */
     private $legacyKernel;
 
     /**
      * Created Legacy handler instance
      *
-     * @param \eZ\Publish\Legacy\Kernel $legacyKernel
+     * @param \eZ\Publish\Core\MVC\Legacy\Kernel $legacyKernel
      */
     public function __construct( LegacyKernel $legacyKernel )
     {

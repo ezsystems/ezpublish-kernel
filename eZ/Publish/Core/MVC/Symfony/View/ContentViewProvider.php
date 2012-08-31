@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\View;
+namespace eZ\Publish\Core\MVC\Symfony\View;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo,
     eZ\Publish\API\Repository\Values\Content\Location;
@@ -24,7 +24,7 @@ interface ContentViewProvider
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param string $viewType Variation of display for your content
-     * @return \eZ\Publish\MVC\View\ContentView|void
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|void
      */
     public function getViewForContent( ContentInfo $contentInfo, $viewType );
 
@@ -33,7 +33,7 @@ interface ContentViewProvider
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $viewType Variation of display for your content.
-     * @return \eZ\Publish\MVC\View\ContentView|void
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|void
      */
     public function getViewForLocation( Location $location, $viewType );
 }

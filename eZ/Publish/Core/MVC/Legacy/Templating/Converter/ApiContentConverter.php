@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy\Templating\Converter;
+namespace eZ\Publish\Core\MVC\Legacy\Templating\Converter;
 
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -35,7 +35,7 @@ class ApiContentConverter implements MultipleObjectConverter
     }
 
     /**
-     * @return \eZ\Publish\Legacy\Kernel
+     * @return \eZ\Publish\Core\MVC\Legacy\Kernel
      */
     final protected function getLegacyKernel()
     {
@@ -47,7 +47,7 @@ class ApiContentConverter implements MultipleObjectConverter
      * Converts $object to make it compatible with eZTemplate API.
      *
      * @param $object
-     * @return mixed|\eZ\Publish\Legacy\Templating\LegacyCompatible
+     * @return mixed|\eZ\Publish\Core\MVC\Legacy\Templating\LegacyCompatible
      * @throws \InvalidArgumentException If $object is actually not an object
      */
     public function convert( $object )
@@ -90,7 +90,7 @@ class ApiContentConverter implements MultipleObjectConverter
     /**
      * Converts all registered objects and returns them in a hash where the object's alias is the key.
      *
-     * @return array|\eZ\Publish\Legacy\Templating\LegacyCompatible[]
+     * @return array|\eZ\Publish\Core\MVC\Legacy\Templating\LegacyCompatible[]
      */
     public function convertAll()
     {

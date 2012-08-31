@@ -1,21 +1,21 @@
 <?php
 /**
- * File containing the eZ\Publish\MVC\SiteAccess\Matcher\HostElement class.
+ * File containing the eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\HostElement class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\SiteAccess\Matcher;
+namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 
-use eZ\Publish\MVC\SiteAccess\Matcher,
-    eZ\Publish\MVC\Routing\SimplifiedRequest;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher,
+    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 
 class HostElement implements Matcher
 {
     /**
-     * @var \eZ\Publish\MVC\Routing\SimplifiedRequest
+     * @var \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest
      */
     private $request;
 
@@ -56,7 +56,7 @@ class HostElement implements Matcher
     /**
      * Injects the request object to match against.
      *
-     * @param \eZ\Publish\MVC\Routing\SimplifiedRequest $request
+     * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
      * @return void
      */
     public function setRequest( SimplifiedRequest $request )

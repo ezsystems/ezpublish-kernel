@@ -7,12 +7,12 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy\Kernel;
+namespace eZ\Publish\Core\MVC\Legacy\Kernel;
 
 use ezpKernelHandler,
     eZScript,
     RuntimeException,
-    eZ\Publish\MVC\SiteAccess;
+    eZ\Publish\Core\MVC\Symfony\SiteAccess;
 
 class CLIHandler implements ezpKernelHandler
 {
@@ -25,7 +25,7 @@ class CLIHandler implements ezpKernelHandler
      * Constructor
      *
      * @param array $settings Settings to pass to \eZScript constructor.
-     * @param \eZ\Publish\MVC\SiteAccess $siteAccess
+     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
      */
     public function __construct( array $settings = array(), SiteAccess $siteAccess = null )
     {

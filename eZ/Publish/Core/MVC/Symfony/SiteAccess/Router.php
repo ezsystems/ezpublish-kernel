@@ -1,16 +1,16 @@
 <?php
 /**
- * File containing the eZ\Publish\MVC\SiteAccess\Router class.
+ * File containing the eZ\Publish\Core\MVC\Symfony\SiteAccess\Router class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\SiteAccess;
+namespace eZ\Publish\Core\MVC\Symfony\SiteAccess;
 
-use eZ\Publish\MVC\SiteAccess,
-    eZ\Publish\MVC\Routing\SimplifiedRequest;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess,
+    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 
 class Router
 {
@@ -40,7 +40,7 @@ class Router
      *         "ezpublish.admin.dev" => "ezdemo_site_admin",
      *     ),
      *     // Using a custom matcher (class must begin with a '\', as a full qualifed class name).
-     *     // The custom matcher must implement eZ\Publish\MVC\SiteAccess\Matcher interface.
+     *     // The custom matcher must implement eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher interface.
      *     "\\My\\Custom\\Matcher" => array(
      *         "something_to_match_against" => "siteaccess_name"
      *     )
@@ -51,7 +51,7 @@ class Router
     protected $siteAccessesConfiguration;
 
     /**
-     * @var \eZ\Publish\MVC\SiteAccess
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
      */
     protected $siteAccess;
 
@@ -68,7 +68,7 @@ class Router
     }
 
     /**
-     * @param \eZ\Publish\MVC\SiteAccess $siteAccess
+     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
      */
     public function setSiteAccess( SiteAccess $siteAccess )
     {
@@ -78,9 +78,9 @@ class Router
     /**
      * Performs SiteAccess matching given the $request.
      *
-     * @param \eZ\Publish\MVC\Routing\SimplifiedRequest $request
+     * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
      *
-     * @return \eZ\Publish\MVC\SiteAccess
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess
      */
     public function match( SimplifiedRequest $request )
     {

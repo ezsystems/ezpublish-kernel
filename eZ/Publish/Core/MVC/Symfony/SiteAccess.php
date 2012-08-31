@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC;
+namespace eZ\Publish\Core\MVC\Symfony;
 
 /**
  * Base struct for a siteaccess representation
@@ -32,7 +32,7 @@ class SiteAccess
     /**
      * The matcher instance that has been used to discover the siteaccess.
      *
-     * @var \eZ\Publish\MVC\SiteAccess\Matcher
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher
      */
     public $matcher;
 

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy;
+namespace eZ\Publish\Core\MVC\Legacy;
 
 /**
  * Interface for "legacy kernel aware" services.
@@ -18,7 +18,7 @@ interface LegacyKernelAware
      * Injects the legacy kernel instance.
      *
      * @abstract
-     * @param \eZ\Publish\Legacy\Kernel $legacyKernel
+     * @param \eZ\Publish\Core\MVC\Legacy\Kernel $legacyKernel
      * @return void
      */
     public function setLegacyKernel( Kernel $legacyKernel );

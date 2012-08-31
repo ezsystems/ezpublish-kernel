@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\View\Tests;
+namespace eZ\Publish\Core\MVC\Symfony\View\Tests;
 
-use eZ\Publish\MVC\View\ContentView;
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 
 /**
  * @group mvc
@@ -18,9 +18,9 @@ class ContentViewTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider constructProvider
-     * @covers \eZ\Publish\MVC\View\ContentView::__construct
-     * @covers \eZ\Publish\MVC\View\ContentView::getTemplateIdentifier
-     * @covers \eZ\Publish\MVC\View\ContentView::getParameters
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::getTemplateIdentifier
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::getParameters
      */
     public function testConstruct( $templateIdentifier, array $params )
     {
@@ -43,7 +43,7 @@ class ContentViewTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider constructFailProvider
      * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
-     * @covers \eZ\Publish\MVC\View\ContentView::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::__construct
      */
     public function testConstructFail( $templateIdentifier )
     {
@@ -60,9 +60,9 @@ class ContentViewTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\MVC\View\ContentView::__construct
-     * @covers \eZ\Publish\MVC\View\ContentView::setParameters
-     * @covers \eZ\Publish\MVC\View\ContentView::getParameters
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::setParameters
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::getParameters
      */
     public function testGetSetParameters()
     {
@@ -73,9 +73,9 @@ class ContentViewTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\MVC\View\ContentView::__construct
-     * @covers \eZ\Publish\MVC\View\ContentView::setParameters
-     * @covers \eZ\Publish\MVC\View\ContentView::getParameters
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::setParameters
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::getParameters
      */
     public function testAddParameters()
     {
@@ -88,9 +88,9 @@ class ContentViewTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\MVC\View\ContentView::__construct
-     * @covers \eZ\Publish\MVC\View\ContentView::setParameters
-     * @covers \eZ\Publish\MVC\View\ContentView::getParameters
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::setParameters
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::getParameters
      */
     public function testHasParameter()
     {
@@ -102,9 +102,9 @@ class ContentViewTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testHasParameter
-     * @covers \eZ\Publish\MVC\View\ContentView::__construct
-     * @covers \eZ\Publish\MVC\View\ContentView::setParameters
-     * @covers \eZ\Publish\MVC\View\ContentView::getParameters
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::setParameters
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::getParameters
      */
     public function testGetParameter( ContentView $contentView )
     {
@@ -115,9 +115,9 @@ class ContentViewTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testGetParameter
      * @expectedException \InvalidArgumentException
-     * @covers \eZ\Publish\MVC\View\ContentView::__construct
-     * @covers \eZ\Publish\MVC\View\ContentView::setParameters
-     * @covers \eZ\Publish\MVC\View\ContentView::getParameters
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::setParameters
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::getParameters
      */
     public function testGetParameterFail( ContentView $contentView )
     {

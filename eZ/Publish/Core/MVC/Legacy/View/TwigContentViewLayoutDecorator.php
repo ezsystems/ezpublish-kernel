@@ -7,17 +7,17 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy\View;
+namespace eZ\Publish\Core\MVC\Legacy\View;
 
-use eZ\Publish\MVC\View\ContentViewInterface,
-    eZ\Publish\MVC\View\ContentView,
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface,
+    eZ\Publish\Core\MVC\Symfony\View\ContentView,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     Twig_Environment;
 
 class TwigContentViewLayoutDecorator implements ContentViewInterface
 {
     /**
-     * @var \eZ\Publish\MVC\View\ContentView
+     * @var \eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
     protected $contentView;
 
@@ -37,7 +37,7 @@ class TwigContentViewLayoutDecorator implements ContentViewInterface
     /**
      * Injects the content view object to decorate.
      *
-     * @param \eZ\Publish\MVC\View\ContentView $contentView
+     * @param \eZ\Publish\Core\MVC\Symfony\View\ContentView $contentView
      */
     public function setContentView( ContentView $contentView )
     {

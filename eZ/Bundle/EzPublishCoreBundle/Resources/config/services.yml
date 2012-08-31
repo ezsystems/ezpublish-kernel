@@ -5,8 +5,8 @@ parameters:
     binaryfile_identifier_prefix:
 
     ezpublish.siteaccess.class: eZ\Bundle\EzPublishCoreBundle\SiteAccess
-    ezpublish.controller.base.class: eZ\Publish\MVC\Controller\Controller
-    ezpublish.controller.content.view.class: eZ\Publish\MVC\Controller\Content\ViewController
+    ezpublish.controller.base.class: eZ\Publish\Core\MVC\Symfony\Controller\Controller
+    ezpublish.controller.content.view.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController
     ezpublish.controller.content.view.options: {}
 
 services:

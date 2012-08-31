@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy\Templating\Twig\TokenParser;
-use eZ\Publish\Legacy\Templating\Twig\Node\LegacyIncludeNode,
+namespace eZ\Publish\Core\MVC\Legacy\Templating\Twig\TokenParser;
+use eZ\Publish\Core\MVC\Legacy\Templating\Twig\Node\LegacyIncludeNode,
     \Twig_Token,
     \Twig_Node_Expression_Array;
 

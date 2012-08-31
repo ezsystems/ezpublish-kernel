@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\Controller\Tests;
+namespace eZ\Publish\Core\MVC\Symfony\Controller\Tests;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ControllerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\MVC\Controller\Controller
+     * @var \eZ\Publish\Core\MVC\Symfony\Controller\Controller
      */
     protected $controller;
 
@@ -35,7 +35,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $this->templateEngineMock = $this->getMock( 'Symfony\\Component\\Templating\\EngineInterface' );
         $this->containerMock = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
-        $this->controller = $this->getMockForAbstractClass( 'eZ\\Publish\\MVC\\Controller\\Controller' );
+        $this->controller = $this->getMockForAbstractClass( 'eZ\\Publish\\Core\\MVC\\Symfony\\Controller\\Controller' );
         $this->controller->setContainer( $this->containerMock );
         $this->containerMock
             ->expects( $this->any() )
@@ -45,8 +45,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         ;
     }
     /**
-     * @covers \eZ\Publish\MVC\Controller::setTemplateEngine
-     * @covers \eZ\Publish\MVC\Controller::render
+     * @covers \eZ\Publish\Core\MVC\Symfony\Controller::setTemplateEngine
+     * @covers \eZ\Publish\Core\MVC\Symfony\Controller::render
      */
     public function testRender()
     {

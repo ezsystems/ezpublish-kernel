@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\Routing;
+namespace eZ\Publish\Core\MVC\Symfony\Routing;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
 
@@ -70,7 +70,7 @@ class SimplifiedRequest extends ValueObject
      *
      * @static
      * @param $url
-     * @return \eZ\Publish\MVC\Routing\SimplifiedRequest
+     * @return \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest
      * @internal
      */
     public static function fromUrl( $url )

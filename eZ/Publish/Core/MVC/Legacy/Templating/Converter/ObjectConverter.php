@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy\Templating\Converter;
+namespace eZ\Publish\Core\MVC\Legacy\Templating\Converter;
 
 /**
  * Interface for object converters.
@@ -20,7 +20,7 @@ interface ObjectConverter
      *
      * @abstract
      * @param $object
-     * @return mixed|\eZ\Publish\Legacy\Templating\LegacyCompatible
+     * @return mixed|\eZ\Publish\Core\MVC\Legacy\Templating\LegacyCompatible
      * @throws \InvalidArgumentException If $object is actually not an object
      */
     public function convert( $object );

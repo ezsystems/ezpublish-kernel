@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy\View;
+namespace eZ\Publish\Core\MVC\Legacy\View;
 
-use eZ\Publish\MVC\View\ContentViewProvider as ContentViewProviderInterface,
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider as ContentViewProviderInterface,
     eZ\Publish\API\Repository\Values\Content\ContentInfo,
     eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\MVC\View\ContentView,
-    eZ\Publish\Legacy\View\TwigContentViewLayoutDecorator,
+    eZ\Publish\Core\MVC\Symfony\View\ContentView,
+    eZ\Publish\Core\MVC\Legacy\View\TwigContentViewLayoutDecorator,
     eZModule,
     Symfony\Component\HttpKernel\Log\LoggerInterface;
 
@@ -30,7 +30,7 @@ class ContentViewProvider implements ContentViewProviderInterface
     private $logger;
 
     /**
-     * @var \eZ\Publish\Legacy\View\TwigContentViewLayoutDecorator
+     * @var \eZ\Publish\Core\MVC\Legacy\View\TwigContentViewLayoutDecorator
      */
     private $decorator;
 
@@ -42,7 +42,7 @@ class ContentViewProvider implements ContentViewProviderInterface
     }
 
     /**
-     * @return \eZ\Publish\Legacy\Kernel
+     * @return \eZ\Publish\Core\MVC\Legacy\Kernel
      */
     protected function getLegacyKernel()
     {
@@ -55,7 +55,7 @@ class ContentViewProvider implements ContentViewProviderInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param string $viewType Variation of display for your content
-     * @return \eZ\Publish\MVC\View\ContentView|void
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|void
      */
     public function getViewForContent( ContentInfo $contentInfo, $viewType )
     {
@@ -68,7 +68,7 @@ class ContentViewProvider implements ContentViewProviderInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $viewType Variation of display for your content.
-     * @return \eZ\Publish\MVC\View\ContentView|void
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|void
      */
     public function getViewForLocation( Location $location, $viewType )
     {

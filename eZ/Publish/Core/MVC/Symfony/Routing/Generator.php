@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\Routing;
+namespace eZ\Publish\Core\MVC\Symfony\Routing;
 
 use Symfony\Component\Routing\RequestContext;
 

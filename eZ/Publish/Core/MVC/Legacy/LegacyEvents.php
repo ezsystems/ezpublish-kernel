@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy;
+namespace eZ\Publish\Core\MVC\Legacy;
 
 final class LegacyEvents
 {
@@ -17,7 +17,7 @@ final class LegacyEvents
      * handler.
      *
      * The event listener method receives a
-     * \eZ\Publish\Legacy\Event\PreBuildKernelWebHandlerEvent
+     * \eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent
      */
     const PRE_BUILD_LEGACY_KERNEL_WEB = 'ezpublish_legacy.build_kernel_web_handler';
 }

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy\Event;
+namespace eZ\Publish\Core\MVC\Legacy\Event;
 
 use Symfony\Component\EventDispatcher\Event,
     Symfony\Component\HttpFoundation\Request,

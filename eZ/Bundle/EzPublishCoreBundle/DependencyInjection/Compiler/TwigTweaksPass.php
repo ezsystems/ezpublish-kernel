@@ -36,7 +36,7 @@ class TwigTweaksPass implements CompilerPassInterface
         }
 
         // Adding base templates directory in the twig environment
-        $reflContentExtensionClass = new ReflectionClass( 'eZ\\Publish\\MVC\\Templating\\Twig\\Extension\\ContentExtension' );
+        $reflContentExtensionClass = new ReflectionClass( 'eZ\\Publish\\Core\\MVC\\Symfony\\Templating\\Twig\\Extension\\ContentExtension' );
         $tplDir = dirname( $reflContentExtensionClass->getFileName() ) . '/../../../Resources/views';
         $container->getDefinition( 'twig.loader.filesystem' )->addMethodCall(
             'addPath',

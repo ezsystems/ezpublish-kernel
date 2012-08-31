@@ -7,12 +7,12 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\Controller\Content;
+namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
-use eZ\Publish\MVC\Controller\Controller,
-    eZ\Publish\MVC\View\Manager as ViewManager,
-    eZ\Publish\MVC\MVCEvents,
-    eZ\Publish\MVC\Event\APIContentExceptionEvent,
+use eZ\Publish\Core\MVC\Symfony\Controller\Controller,
+    eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager,
+    eZ\Publish\Core\MVC\Symfony\MVCEvents,
+    eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent,
     Symfony\Component\HttpFoundation\Response,
     Symfony\Component\OptionsResolver\OptionsResolver,
     Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -20,7 +20,7 @@ use eZ\Publish\MVC\Controller\Controller,
 class ViewController extends Controller
 {
     /**
-     * @var \eZ\Publish\MVC\View\Manager
+     * @var \eZ\Publish\Core\MVC\Symfony\View\Manager
      */
     private $viewManager;
 

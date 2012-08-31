@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy\Templating\Converter;
+namespace eZ\Publish\Core\MVC\Legacy\Templating\Converter;
 
-use eZ\Publish\Legacy\Templating\LegacyAdapter;
+use eZ\Publish\Core\MVC\Legacy\Templating\LegacyAdapter;
 
 /**
  * Generic converter.
@@ -20,7 +20,7 @@ class GenericConverter implements ObjectConverter
      * Converts $object to make it compatible with eZTemplate API.
      *
      * @param mixed $object
-     * @return mixed|\eZ\Publish\Legacy\Templating\LegacyCompatible
+     * @return mixed|\eZ\Publish\Core\MVC\Legacy\Templating\LegacyCompatible
      * @throws \InvalidArgumentException If $object is actually not an object
      */
     public function convert( $object )

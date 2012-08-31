@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\Routing\Tests;
+namespace eZ\Publish\Core\MVC\Symfony\Routing\Tests;
 
-use eZ\Publish\MVC\Routing\SimplifiedRequest;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 
 class SimplifiedRequestTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,7 +17,7 @@ class SimplifiedRequestTest extends \PHPUnit_Framework_TestCase
      * @param $url
      * @param $expectedRequest
      * @dataProvider fromUrlProvider
-     * @covers \eZ\Publish\MVC\Routing\SimplifiedRequest::fromUrl
+     * @covers \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest::fromUrl
      */
     public function testFromUrl( $url, $expectedRequest )
     {

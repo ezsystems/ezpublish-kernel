@@ -3,7 +3,7 @@ parameters:
     #ezpublish_legacy.enabled: false
     #ezpublish_legacy.root_dir: ~
 
-    ezpublish_legacy.kernel.lazy_loader.class: eZ\Publish\Legacy\Kernel\Loader
+    ezpublish_legacy.kernel.lazy_loader.class: eZ\Publish\Core\MVC\Legacy\Kernel\Loader
     ezpublish_legacy.kernel_handler.class: ezpKernelHandler
     ezpublish_legacy.kernel_handler.web.class: ezpKernelWeb
     ezpublish_legacy.kernel_handler.treemenu.class: ezpKernelTreeMenu
@@ -16,7 +16,7 @@ parameters:
     ezpublish_legacy.url_generator.class: eZ\Bundle\EzPublishLegacyBundle\Routing\UrlGenerator
     ezpublish_legacy.siteaccess_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess
     ezpublish_legacy.session_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Session
-    ezpublish_legacy.content_exception_handler.class: eZ\Publish\Legacy\EventListener\APIContentExceptionListener
+    ezpublish_legacy.content_exception_handler.class: eZ\Publish\Core\MVC\Legacy\EventListener\APIContentExceptionListener
 
 services:
     ezpublish_legacy.kernel:

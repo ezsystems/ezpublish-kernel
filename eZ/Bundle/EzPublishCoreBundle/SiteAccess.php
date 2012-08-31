@@ -9,7 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle;
 
-use eZ\Publish\MVC\SiteAccess as BaseSiteAccess,
+use eZ\Publish\Core\MVC\Symfony\SiteAccess as BaseSiteAccess,
     Symfony\Component\HttpFoundation\ParameterBag;
 
 class SiteAccess extends BaseSiteAccess

@@ -7,12 +7,12 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy\Templating\Converter;
+namespace eZ\Publish\Core\MVC\Legacy\Templating\Converter;
 
 class DelegatingConverter implements MultipleObjectConverter
 {
     /**
-     * @var \eZ\Publish\Legacy\Templating\Converter\ObjectConverter[]
+     * @var \eZ\Publish\Core\MVC\Legacy\Templating\Converter\ObjectConverter[]
      */
     private $convertersMap;
 
@@ -20,7 +20,7 @@ class DelegatingConverter implements MultipleObjectConverter
      * Generic converter.
      * Will be used if no converter has been register for an object.
      *
-     * @var \eZ\Publish\Legacy\Templating\Converter\ObjectConverter
+     * @var \eZ\Publish\Core\MVC\Legacy\Templating\Converter\ObjectConverter
      */
     private $genericConverter;
 
@@ -41,7 +41,7 @@ class DelegatingConverter implements MultipleObjectConverter
     /**
      * Registers $converter for classes contained in $classes
      *
-     * @param \eZ\Publish\Legacy\Templating\Converter\ObjectConverter $converter
+     * @param \eZ\Publish\Core\MVC\Legacy\Templating\Converter\ObjectConverter $converter
      * @param $class Class the converter is for
      */
     public function addConverter( ObjectConverter $converter, $class )
@@ -66,7 +66,7 @@ class DelegatingConverter implements MultipleObjectConverter
     /**
      * Converts all registered objects and returns them in a hash where the object's alias is the key.
      *
-     * @return array|\eZ\Publish\Legacy\Templating\LegacyCompatible[]
+     * @return array|\eZ\Publish\Core\MVC\Legacy\Templating\LegacyCompatible[]
      */
     public function convertAll()
     {
@@ -110,7 +110,7 @@ class DelegatingConverter implements MultipleObjectConverter
      * Converts $object to make it compatible with eZTemplate API.
      *
      * @param $object
-     * @return mixed|\eZ\Publish\Legacy\Templating\LegacyCompatible
+     * @return mixed|\eZ\Publish\Core\MVC\Legacy\Templating\LegacyCompatible
      * @throws \InvalidArgumentException If $object is actually not an object
      */
     public function convert( $object )

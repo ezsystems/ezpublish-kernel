@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\View\Tests;
+namespace eZ\Publish\Core\MVC\Symfony\View\Tests;
 
-use eZ\Publish\MVC\View\Manager,
-    eZ\Publish\MVC\View\ContentView;
+use eZ\Publish\Core\MVC\Symfony\View\Manager,
+    eZ\Publish\Core\MVC\Symfony\View\ContentView;
 
 /**
  * @group mvc
@@ -18,7 +18,7 @@ use eZ\Publish\MVC\View\Manager,
 class ViewManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\MVC\View\Manager
+     * @var \eZ\Publish\Core\MVC\Symfony\View\Manager
      */
     private $viewManager;
 
@@ -44,21 +44,21 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\MVC\View\Manager::addViewProvider
-     * @covers \eZ\Publish\MVC\View\Manager::getAllViewProviders
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Manager::addViewProvider
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Manager::getAllViewProviders
      */
     public function testAddViewProvider()
     {
         self::assertSame( array(), $this->viewManager->getAllViewProviders() );
-        $viewProvider = $this->getMock( 'eZ\\Publish\\MVC\\View\\ContentViewProvider' );
+        $viewProvider = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider' );
         $this->viewManager->addViewProvider( $viewProvider );
         self::assertSame( array( $viewProvider ), $this->viewManager->getAllViewProviders() );
     }
 
     /**
-     * @covers \eZ\Publish\MVC\View\Manager::addViewProvider
-     * @covers \eZ\Publish\MVC\View\Manager::sortViewProviders
-     * @covers \eZ\Publish\MVC\View\Manager::getAllViewProviders
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Manager::addViewProvider
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Manager::sortViewProviders
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Manager::getAllViewProviders
      */
     public function testViewProvidersPriority()
     {
@@ -73,12 +73,12 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\MVC\View\Manager::renderContent
-     * @covers \eZ\Publish\MVC\View\Manager::renderContentView
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Manager::renderContent
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Manager::renderContentView
      */
     public function testRenderContent()
     {
-        $viewProvider = $this->getMock( 'eZ\\Publish\\MVC\\View\\ContentViewProvider' );
+        $viewProvider = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider' );
         $this->viewManager->addViewProvider( $viewProvider );
 
         // Configuring content mocks
@@ -123,12 +123,12 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\MVC\View\Manager::renderContent
-     * @covers \eZ\Publish\MVC\View\Manager::renderContentView
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Manager::renderContent
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Manager::renderContentView
      */
     public function testRenderContentWithClosure()
     {
-        $viewProvider = $this->getMock( 'eZ\\Publish\\MVC\\View\\ContentViewProvider' );
+        $viewProvider = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider' );
         $this->viewManager->addViewProvider( $viewProvider );
 
         // Configuring content mocks
@@ -175,12 +175,12 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\MVC\View\Manager::renderLocation
-     * @covers \eZ\Publish\MVC\View\Manager::renderContentView
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Manager::renderLocation
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Manager::renderContentView
      */
     public function testRenderLocation()
     {
-        $viewProvider = $this->getMock( 'eZ\\Publish\\MVC\\View\\ContentViewProvider' );
+        $viewProvider = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider' );
         $this->viewManager->addViewProvider( $viewProvider );
 
         $location = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
@@ -213,12 +213,12 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\MVC\View\Manager::renderLocation
-     * @covers \eZ\Publish\MVC\View\Manager::renderContentView
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Manager::renderLocation
+     * @covers \eZ\Publish\Core\MVC\Symfony\View\Manager::renderContentView
      */
     public function testRenderLocationWithClosure()
     {
-        $viewProvider = $this->getMock( 'eZ\\Publish\\MVC\\View\\ContentViewProvider' );
+        $viewProvider = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider' );
         $this->viewManager->addViewProvider( $viewProvider );
 
         $location = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
@@ -255,9 +255,9 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
     private function createViewProviderMocks()
     {
         return array(
-            $this->getMock( 'eZ\\Publish\\MVC\\View\\ContentViewProvider' ),
-            $this->getMock( 'eZ\\Publish\\MVC\\View\\ContentViewProvider' ),
-            $this->getMock( 'eZ\\Publish\\MVC\\View\\ContentViewProvider' ),
+            $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider' ),
+            $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider' ),
+            $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider' ),
         );
     }
 }

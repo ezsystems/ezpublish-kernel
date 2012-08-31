@@ -1,21 +1,21 @@
 <?php
 /**
- * File containing the eZ\Publish\MVC\SiteAccess\Tests\RouterPortHostURITest class
+ * File containing the eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests\RouterPortHostURITest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\SiteAccess\Tests;
+namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 use PHPUnit_Framework_TestCase,
-    eZ\Publish\MVC\SiteAccess\Router,
-    eZ\Publish\MVC\Routing\SimplifiedRequest;
+    eZ\Publish\Core\MVC\Symfony\SiteAccess\Router,
+    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 
 class RouterPortHostURITest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \eZ\Publish\MVC\SiteAccess\Router::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::__construct
      */
     public function testConstruct()
     {
@@ -46,20 +46,20 @@ class RouterPortHostURITest extends PHPUnit_Framework_TestCase
     /**
      * @depends testConstruct
      * @dataProvider matchProvider
-     * @covers \eZ\Publish\MVC\SiteAccess\Router::match
-     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map::__construct
-     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map::match
-     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\URI::__construct
-     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\URI::setRequest
-     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\Host::__construct
-     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\Host::setRequest
-     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\Port::__construct
-     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\Port::setRequest
+     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::match
+     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map::match
+     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI::setRequest
+     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Host::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Host::setRequest
+     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Port::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Port::setRequest
      */
     public function testMatch( $request, $siteAccess, $router )
     {
         $sa = $router->match( $request );
-        $this->assertInstanceOf( 'eZ\\Publish\\MVC\\SiteAccess', $sa );
+        $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa );
         $this->assertSame( $siteAccess, $sa->name );
     }
 

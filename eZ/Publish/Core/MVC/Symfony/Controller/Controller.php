@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\Controller;
+namespace eZ\Publish\Core\MVC\Symfony\Controller;
 
 use Symfony\Component\DependencyInjection\ContainerAware,
     Symfony\Component\DependencyInjection\ContainerInterface,

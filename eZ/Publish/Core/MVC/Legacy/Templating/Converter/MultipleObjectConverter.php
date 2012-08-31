@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy\Templating\Converter;
+namespace eZ\Publish\Core\MVC\Legacy\Templating\Converter;
 
 /**
  * Interface for multiple object converters.
@@ -31,7 +31,7 @@ interface MultipleObjectConverter extends ObjectConverter
      * Converts all registered objects and returns them in a hash where the object's alias is the key.
      *
      * @abstract
-     * @return array|\eZ\Publish\Legacy\Templating\LegacyCompatible[]
+     * @return array|\eZ\Publish\Core\MVC\Legacy\Templating\LegacyCompatible[]
      */
     public function convertAll();
 }

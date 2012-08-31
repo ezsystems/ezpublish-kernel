@@ -11,8 +11,8 @@
 
 
 use eZ\Publish\Core\Base\ClassLoader;
-use eZ\Publish\Legacy\Kernel as LegacyKernel;
-use eZ\Publish\Legacy\Kernel\CLIHandler as LegacyKernelCLI;
+use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
+use eZ\Publish\Core\MVC\Legacy\Kernel\CLIHandler as LegacyKernelCLI;
 
 // Get globl config.php settings
 if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )

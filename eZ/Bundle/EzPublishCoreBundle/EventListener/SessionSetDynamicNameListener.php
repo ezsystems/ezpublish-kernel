@@ -9,8 +9,8 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
-use eZ\Publish\MVC\MVCEvents,
-    eZ\Publish\MVC\Event\PostSiteAccessMatchEvent,
+use eZ\Publish\Core\MVC\Symfony\MVCEvents,
+    eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent,
     Symfony\Component\EventDispatcher\EventSubscriberInterface,
     Symfony\Component\DependencyInjection\ContainerInterface;
 

@@ -9,8 +9,8 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 
-use eZ\Publish\MVC\Controller\Controller,
-    eZ\Publish\Legacy\Kernel\Loader,
+use eZ\Publish\Core\MVC\Symfony\Controller\Controller,
+    eZ\Publish\Core\MVC\Legacy\Kernel\Loader,
     ezpKernelTreeMenu,
     Symfony\Component\HttpFoundation\Response,
     Symfony\Component\OptionsResolver\OptionsResolver;

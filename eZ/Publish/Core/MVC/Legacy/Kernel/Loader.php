@@ -7,12 +7,12 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy\Kernel;
+namespace eZ\Publish\Core\MVC\Legacy\Kernel;
 
-use eZ\Publish\Legacy\Kernel as LegacyKernel,
-    eZ\Publish\Legacy\LegacyEvents,
-    eZ\Publish\Legacy\Event\PreBuildKernelWebHandlerEvent,
-    eZ\Publish\MVC\SiteAccess,
+use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel,
+    eZ\Publish\Core\MVC\Legacy\LegacyEvents,
+    eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent,
+    eZ\Publish\Core\MVC\Symfony\SiteAccess,
     ezpKernelHandler,
     ezpKernelWeb,
     ezpKernelTreeMenu,

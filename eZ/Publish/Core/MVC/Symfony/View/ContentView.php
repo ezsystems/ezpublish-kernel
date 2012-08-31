@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\View;
+namespace eZ\Publish\Core\MVC\Symfony\View;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 

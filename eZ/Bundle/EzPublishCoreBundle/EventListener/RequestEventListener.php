@@ -16,8 +16,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface,
     Symfony\Bundle\FrameworkBundle\HttpKernel,
     Symfony\Component\HttpKernel\Log\LoggerInterface,
     Symfony\Component\HttpFoundation\RedirectResponse,
-    eZ\Publish\MVC\SiteAccess,
-    eZ\Publish\MVC\SiteAccess\URILexer;
+    eZ\Publish\Core\MVC\Symfony\SiteAccess,
+    eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 
 class RequestEventListener implements EventSubscriberInterface
 {
@@ -79,7 +79,7 @@ class RequestEventListener implements EventSubscriberInterface
      * Note: The event propagation will be stopped to ensure that no response can be set later and override the redirection.
      *
      * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
-     * @see \eZ\Publish\MVC\Routing\UrlAliasRouter
+     * @see \eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter
      */
     public function onKernelRequestRedirect( GetResponseEvent $event )
     {

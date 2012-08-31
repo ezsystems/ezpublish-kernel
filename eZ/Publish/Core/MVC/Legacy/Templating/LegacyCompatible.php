@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy\Templating;
+namespace eZ\Publish\Core\MVC\Legacy\Templating;
 
 /**
  * This interface must be implemented to make objects compatible with legacy eZ Template engine.

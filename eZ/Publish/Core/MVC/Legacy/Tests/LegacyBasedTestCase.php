@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Legacy\Tests;
+namespace eZ\Publish\Core\MVC\Legacy\Tests;
 
 /**
  * Base test case for legacy based tests.
@@ -22,7 +22,7 @@ abstract class LegacyBasedTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \eZ\Publish\Legacy\Kernel
+     * @return \eZ\Publish\Core\MVC\Legacy\Kernel
      */
     protected function getLegacyKernel()
     {

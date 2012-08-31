@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\Event;
+namespace eZ\Publish\Core\MVC\Symfony\Event;
 
 use Symfony\Component\EventDispatcher\Event,
-    eZ\Publish\MVC\View\ContentViewInterface;
+    eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface;
 
 /**
  * The PreContentViewEvent allows you to inject additional parameters to a content view template.
@@ -38,7 +38,7 @@ use Symfony\Component\EventDispatcher\Event,
 class PreContentViewEvent extends Event
 {
     /**
-     * @var \eZ\Publish\MVC\View\ContentView
+     * @var \eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
     private $contentView;
 
@@ -48,7 +48,7 @@ class PreContentViewEvent extends Event
     }
 
     /**
-     * @return \eZ\Publish\MVC\View\ContentView
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
     public function getContentView()
     {

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\Templating\Twig\Extension;
+namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
 use \Twig_Extension;
 use \Twig_Environment;

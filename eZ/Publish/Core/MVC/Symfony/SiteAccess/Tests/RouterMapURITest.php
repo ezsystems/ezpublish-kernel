@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\SiteAccess\Tests;
+namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
-use eZ\Publish\MVC\SiteAccess\Matcher\Map\URI as URIMapMatcher,
-    eZ\Publish\MVC\Routing\SimplifiedRequest;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI as URIMapMatcher,
+    eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 
 class RouterMapURITest extends \PHPUnit_Framework_TestCase
 {
@@ -18,7 +18,7 @@ class RouterMapURITest extends \PHPUnit_Framework_TestCase
      * @param $uri
      * @param $expectedFixedUpURI
      * @dataProvider fixupURIProvider
-     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\URI::analyseURI
+     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI::analyseURI
      */
     public function testAnalyseURI( $uri, $expectedFixedUpURI )
     {
@@ -33,7 +33,7 @@ class RouterMapURITest extends \PHPUnit_Framework_TestCase
      * @param $fullUri
      * @param $linkUri
      * @dataProvider fixupURIProvider
-     * @covers \eZ\Publish\MVC\SiteAccess\Matcher\Map\URI::analyseLink
+     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI::analyseLink
      */
     public function testAnalyseLink( $fullUri, $linkUri )
     {
