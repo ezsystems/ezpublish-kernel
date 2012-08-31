@@ -47,6 +47,8 @@ parameters:
     ezpublish.fieldType.ezgmaplocation.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezcomcomments.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezobjectrelationlist.class: eZ\Publish\Core\FieldType\TextLine\Type
+    ezpublish.fieldType.ezuser.class: eZ\Publish\Core\FieldType\User\Type
+    ezpublish.fieldType.ezuser.externalStorage.class: eZ\Publish\Core\FieldType\User\UserStorage
 
 services:
     ezpublish.api.fieldTypeValidator:
@@ -236,3 +238,15 @@ services:
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezobjectrelationlist}
+
+    ezpublish.fieldType.ezuser:
+        class: %ezpublish.fieldType.ezuser.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezuser}
+
+    ezpublish.fieldType.ezuser.externalStorage:
+        class: %ezpublish.fieldType.ezuser.externalStorage.class%
+        arguments: [[]]
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezuser}

@@ -43,6 +43,8 @@ parameters:
     ezpublish.fieldType.ezsrrating.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating
     ezpublish.fieldType.ezurl.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url
     ezpublish.fieldType.ezurl.storage_gateway.class: eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage
+    ezpublish.fieldType.ezuser.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
+    ezpublish.fieldType.ezuser.storage_gateway.class: eZ\Publish\Core\FieldType\User\UserStorage\Gateway\LegacyStorage
 
     # Temporary workaround for ezpage, ezemail, ezimage, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
     # a ezstring until proper implementation will be in place
@@ -214,3 +216,13 @@ services:
         class: %ezpublish.fieldType.ezobjectrelationlist.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezobjectrelationlist, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezurl.converter:
+        class: %ezpublish.fieldType.ezuser.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezuser, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezuser.storage_gateway:
+        class: %ezpublish.fieldType.ezuser.storage_gateway.class%
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezuser, identifier: LegacyStorage}
