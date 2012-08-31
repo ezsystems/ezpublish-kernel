@@ -69,14 +69,9 @@ class SearchService implements SearchServiceInterface
      */
     public function findContent( Query $query, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
-        $limitations = $this->repository->hasAccess( 'content', 'read' );
-        if ( $limitations === false )
+        if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $query->criterion ) )
         {
             return new SearchResult( array( 'time' => 0, 'totalCount' => 0 ) );
-        }
-        else if ( $filterOnUserPermissions && $limitations !== true )
-        {
-            $query->criterion = $this->addPermissionsCriterion( $query->criterion, $limitations );
         }
 
         $result = $this->persistenceHandler->searchHandler()->findContent( $query, $fieldFilters );
@@ -106,14 +101,9 @@ class SearchService implements SearchServiceInterface
      */
     public function findSingle( Criterion $criterion, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
-        $limitations = $this->repository->hasAccess( 'content', 'read' );
-        if ( $limitations === false )
+        if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $criterion ) )
         {
             throw new NotFoundException( 'Content', '*' );
-        }
-        else if ( $filterOnUserPermissions && $limitations !== true )
-        {
-            $criterion = $this->addPermissionsCriterion( $criterion, $limitations );
         }
 
         return $this->repository->getContentService()->buildContentDomainObject(
@@ -138,28 +128,51 @@ class SearchService implements SearchServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
+     * @todo Known issue: Whole permissions system need to be change accommodate role limitations.
      */
-    private function addPermissionsCriterion( Criterion $criterion, array $limitations )
+    private function addPermissionsCriterion( Criterion &$criterion )
     {
-        if ( empty( $limitations ) )
-            return $criterion;
+        $limitations = $this->repository->hasAccess( 'content', 'read' );
+        if ( $limitations === false || $limitations === true )
+        {
+            return $limitations;
+        }
 
+        if ( empty( $limitations ) )
+            throw new \RuntimeException( "Got an empty array of limitations from hasAccess()" );
+
+        // Create OR conditions for every "policy" that contains AND conditions for limitations
+        $orCriteria = array();
         $roleService = $this->repository->getRoleService();
         foreach ( $limitations as $limitationSet )
         {
+            $andCriteria = array();
             /**
              * @var \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
              */
             foreach ( $limitationSet as $limitationValue )
             {
-                if ( !$criterion instanceof Criterion\LogicalAnd )
-                    $criterion = new Criterion\LogicalAnd( array( $criterion ) );
-
                 $type = $roleService->getLimitationType( $limitationValue->getIdentifier() );
-                $criterion->criteria[] = $type->getCriterion( $limitationValue, $this->repository );
+                $andCriteria[] = $type->getCriterion( $limitationValue, $this->repository );
             }
+            $orCriteria[] = isset( $andCriteria[1] ) ? new Criterion\LogicalAnd( $andCriteria ) : $andCriteria[0];
         }
 
-        return $criterion;
+        // Merge with $criterion
+        if ( $criterion instanceof Criterion\LogicalAnd )
+        {
+            $criterion->criteria[] = isset( $orCriteria[1] ) ? new Criterion\LogicalOr( $orCriteria ) : $orCriteria[0];
+        }
+        else
+        {
+            $criterion = new Criterion\LogicalAnd(
+                array(
+                    $criterion,
+                    (isset( $orCriteria[1] ) ? new Criterion\LogicalOr( $orCriteria ) : $orCriteria[0])
+                )
+            );
+        }
+
+        return true;
     }
 }

@@ -30,6 +30,33 @@ use eZ\Publish\API\Repository\SearchService as SearchServiceInterface,
 class SearchServiceAuthorizationTest extends BaseTest
 {
     /**
+     * Test for the findContent() method but with anonymous user.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testFindContent
+     */
+    public function testFindContent()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $searchService = $repository->getSearchService();
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // Should return Content with location id: 2 as the anonymous user should have access to standard section
+        $searchResult = $searchService->findContent( new Query( array( 'criterion' => new Criterion\LocationId( 2 ) ) ) );
+        /* END: Use Case */
+
+        self::assertEquals( 1, $searchResult->totalCount, "Search query should return totalCount of 1" );
+        self::assertNotEmpty( $searchResult->searchHits, "\$searchResult->searchHits should not be empty" );
+        self::assertEquals( "Home", $searchResult->searchHits[0]->valueObject->contentInfo->name );
+    }
+
+    /**
      * Test for the findContent() method.
      *
      * @return void
@@ -49,10 +76,14 @@ class SearchServiceAuthorizationTest extends BaseTest
 
         // This call will return an empty search result
         $searchResult = $searchService->findContent( new Query( array( 'criterion' => new Criterion\LocationId( 5 ) ) ) );
-
-        self::assertEquals( 0, $searchResult->totalCount, "Search query on User location returned hits, should be 0" );
-        self::assertEmpty( $searchResult->searchHits );
         /* END: Use Case */
+
+        self::assertEmpty(
+            $searchResult->searchHits,
+            "Expected Not Found exception, got content with name: " .
+            (!empty($searchResult->searchHits) ? $searchResult->searchHits[0]->valueObject->contentInfo->name : '')
+        );
+        self::assertEquals( 0, $searchResult->totalCount, "Search query should return totalCount of 0" );
     }
 
     /**
