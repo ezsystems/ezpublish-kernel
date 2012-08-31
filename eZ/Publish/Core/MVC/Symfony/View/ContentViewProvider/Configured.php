@@ -34,6 +34,9 @@ class Configured implements ContentViewProvider
      */
     protected $contentMatchConfig;
 
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher[]
+     */
     protected $matchers;
 
     /**
@@ -58,8 +61,6 @@ class Configured implements ContentViewProvider
      */
     public function getViewForContent( ContentInfo $contentInfo, $viewType )
     {
-        if ( !isset( $this->contentMatchConfig ) )
-            return;
     }
 
     /**
@@ -72,9 +73,6 @@ class Configured implements ContentViewProvider
      */
     public function getViewForLocation( Location $location, $viewType )
     {
-        if ( !isset( $this->locationMatchConfig ) )
-            return;
-
         foreach ( $this->locationMatchConfig as $configHash )
         {
             if ( $configHash['viewType'] === $viewType )
