@@ -120,8 +120,7 @@ class Handler implements HandlerInterface
      */
     public function urlAliasHandler()
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
-
+        return $this->serviceHandler( 'eZ\\Publish\\Core\\Persistence\\InMemory\\UrlAliasHandler' );
     }
 
     /**
@@ -129,7 +128,7 @@ class Handler implements HandlerInterface
      */
     public function urlWildcardHandler()
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+        return $this->serviceHandler( 'eZ\\Publish\\Core\\Persistence\\InMemory\\UrlWildcardHandler' );
     }
 
     /**

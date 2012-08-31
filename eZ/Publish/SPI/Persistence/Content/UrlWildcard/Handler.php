@@ -59,7 +59,4 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard[]
      */
     public function loadAll( $offset = 0, $limit = -1 );
-
-
-
 }
