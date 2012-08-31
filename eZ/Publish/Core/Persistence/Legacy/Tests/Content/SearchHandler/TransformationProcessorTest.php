@@ -19,13 +19,13 @@ class TransformationProcessorTest extends TestCase
     public function getProcessor()
     {
         $processor = new Search\TransformationProcessor(
-            new Search\TransformationParser(),
+            new Search\TransformationParser( self::getInstallationDir() ),
             new Search\TransformationPcreCompiler( new Search\Utf8Converter() )
         );
 
         foreach ( glob( __DIR__ . '/_fixtures/transformations/*.tr' ) as $file )
         {
-            $processor->loadRules( $file );
+            $processor->loadRules( str_replace( self::getInstallationDir(), '', $file ) );
         }
         return $processor;
     }
