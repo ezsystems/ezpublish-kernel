@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\View\ContentViewProvider\Configured\Matcher;
+namespace eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher;
 
-use eZ\Publish\MVC\RepositoryAware,
-    eZ\Publish\MVC\View\ContentViewProvider\Configured\Matcher;
+use eZ\Publish\Core\MVC\RepositoryAware,
+    eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher;
 
 abstract class MultipleValued extends RepositoryAware implements Matcher
 {

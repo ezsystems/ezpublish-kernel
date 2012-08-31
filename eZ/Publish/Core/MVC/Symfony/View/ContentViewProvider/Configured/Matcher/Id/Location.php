@@ -1,19 +1,19 @@
 <?php
 /**
- * File containing the ContentType matcher class.
+ * File containing the Location matcher class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\View\ContentViewProvider\Configured\Matcher\Identifier;
+namespace eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id;
 
-use eZ\Publish\MVC\View\ContentViewProvider\Configured\Matcher\MultipleValued,
-    eZ\Publish\API\Repository\Values\Content\Location,
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued,
+    eZ\Publish\API\Repository\Values\Content\Location as APILocation,
     eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
-class ContentType extends MultipleValued
+class Location extends MultipleValued
 {
     /**
      * Checks if a Location object matches.
@@ -21,9 +21,9 @@ class ContentType extends MultipleValued
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @return bool
      */
-    public function matchLocation( Location $location )
+    public function matchLocation( APILocation $location )
     {
-        return isset( $this->values[$location->getContentInfo()->getContentType()->identifier] );
+        return isset( $this->values[$location->id] );
     }
 
     /**
@@ -34,6 +34,6 @@ class ContentType extends MultipleValued
      */
     public function matchContentInfo( ContentInfo $contentInfo )
     {
-        return isset( $this->values[$contentInfo->getContentType()->identifier] );
+        return isset( $this->values[$contentInfo->mainLocationId] );
     }
 }

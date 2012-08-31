@@ -7,15 +7,15 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\View\ContentViewProvider;
+namespace eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider;
 
-use eZ\Publish\MVC\View\ContentViewProvider,
-    eZ\Publish\MVC\View\ContentViewProvider\Configured\Matcher,
-    eZ\Publish\MVC\RepositoryAware,
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider,
+    eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher,
+    eZ\Publish\Core\MVC\Symfony\RepositoryAware,
     eZ\Publish\API\Repository\Repository,
     eZ\Publish\API\Repository\Values\Content\ContentInfo,
     eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\MVC\View\ContentView;
+    eZ\Publish\Core\MVC\Symfony\View\ContentView;
 
 class Configured implements ContentViewProvider
 {
@@ -54,7 +54,7 @@ class Configured implements ContentViewProvider
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param string $viewType Variation of display for your content
-     * @return \eZ\Publish\MVC\View\ContentView|void
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|void
      */
     public function getViewForContent( ContentInfo $contentInfo, $viewType )
     {
@@ -68,7 +68,7 @@ class Configured implements ContentViewProvider
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $viewType Variation of display for your content.
      * @throws \InvalidArgumentException
-     * @return \eZ\Publish\MVC\View\ContentView|void
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|void
      */
     public function getViewForLocation( Location $location, $viewType )
     {
@@ -113,7 +113,7 @@ class Configured implements ContentViewProvider
      * Returns the matcher object.
      *
      * @param string $matcherIdentifier The matcher class. If it begins with a '\' it means it's a FQ class name, otherwise it is relative to this namespace.
-     * @return \eZ\Publish\MVC\View\ContentViewProvider\Configured\Matcher
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher
      */
     protected function getMatcher( $matcherIdentifier )
     {

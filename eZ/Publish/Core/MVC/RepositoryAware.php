@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC;
+namespace eZ\Publish\Core\MVC;
 
 use eZ\Publish\API\Repository\Repository;
 

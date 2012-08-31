@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\MVC\View\ContentViewProvider\Configured;
+namespace eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured;
 
 use eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\API\Repository\Values\Content\ContentInfo;
