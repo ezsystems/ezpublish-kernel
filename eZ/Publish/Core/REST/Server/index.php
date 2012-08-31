@@ -15,6 +15,8 @@ use eZ\Publish\Core\REST\Common;
 
 use Qafoo\RMF;
 
+ini_set( 'html_errors', 0 );
+
 if ( !isset( $_ENV['DATABASE'] ) )
 {
     echo "The REST test server does only work with a persistent database.\n";
