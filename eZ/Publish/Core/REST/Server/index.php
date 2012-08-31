@@ -391,12 +391,3 @@ $request->addHandler( 'testUser', new RMF\Request\PropertyHandler\Server( 'HTTP_
  * This triggers working of the MVC.
  */
 $dispatcher->dispatch( $request );
-
-/*
- * The session state is stored, if a session file was specified at the
- * beginning of the script. This is only necessary for the test setup.
- */
-if ( $sessionFile )
-{
-    file_put_contents( $sessionFile, serialize( $repository ) );
-}
