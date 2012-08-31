@@ -54,12 +54,22 @@ class TransformationParser
     protected $tokenSpecifications = null;
 
     /**
+     * Directory to load rules relative from.
+     *
+     * @var string
+     */
+    protected $installDir;
+
+    /**
      * Construct
      *
+     * @param string $installDir Base dir for rule loading
      * @return void
      */
-    public function __construct()
+    public function __construct( $installDir )
     {
+        $this->installDir = $installDir;
+
         $character = '(?:U\\+[0-9a-fA-F]{4}|remove|keep|[0-9a-fA-F]+|"(?:[^\\\\"]+|\\\\\\\\|\\\\\'|\\\\")*?")';
 
         $this->tokenSpecifications = array(
@@ -90,7 +100,9 @@ class TransformationParser
      */
     public function parse( $file )
     {
-        return $this->parseString( file_get_contents( $file ) );
+        return $this->parseString( file_get_contents(
+            $this->installDir . '/' . $file
+        ) );
     }
 
     /**
