@@ -181,6 +181,18 @@ $valueObjectVisitors = array(
 
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentList'                => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo'          => new Output\ValueObjectVisitor\ContentInfo( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo'          => new Output\ValueObjectVisitor\VersionInfo( $urlHandler ),
+    // Includes vitising of VersionInfo, which can be extracted for re-use, if
+    // neccessary
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content'              => new Output\ValueObjectVisitor\Content(
+        $urlHandler,
+        new Common\Output\FieldValueSerializer( $repository->getFieldTypeService() )
+    ),
+
+    // Relation
+
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RelationList'               => new Output\ValueObjectVisitor\RelationList( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Relation'             => new Output\ValueObjectVisitor\Relation( $urlHandler ),
 
     // User
 
@@ -247,6 +259,9 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^/content/objects/[0-9]+$)' => array(
             'PATCH' => array( $contentController, 'updateContentMetadata' ),
+        ),
+        '(^/content/objects/[0-9]+/versions/[0-9+]$)' => array(
+            'GET' => array( $contentController, 'loadContentInVersion' ),
         ),
         '(^/content/objects/[0-9]+/locations$)' => array(
             'GET' => array( $locationController, 'loadLocationsForContent' ),

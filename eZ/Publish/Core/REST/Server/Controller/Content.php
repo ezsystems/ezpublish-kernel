@@ -117,4 +117,21 @@ class Content
         // Since by now only used for section assign, we return null
         return null;
     }
+
+    /**
+     * Loads a specific version of a given content object
+     *
+     * @param RMF\Request $request
+     * @return void
+     */
+    public function loadContentInVersion( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'objectVersion', $request->path );
+
+        return $this->contentService->loadContent(
+            $urlValues['object'],
+            null,               // TODO: Implement using language filter on request URI
+            $urlValues['version']
+        );
+    }
 }
