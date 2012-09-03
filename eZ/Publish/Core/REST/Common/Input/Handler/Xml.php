@@ -43,6 +43,9 @@ class Xml extends Handler
         'LocationList' => array(
             'Location'
         ),
+        'names' => array(
+            'value'
+        )
     );
 
     protected $fieldTypeHashElements = array(
