@@ -12,6 +12,9 @@ namespace eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matche
 use eZ\Publish\Core\MVC\RepositoryAware,
     eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher;
 
+/**
+ * Abstract class for basic matchers to be used with ContentViewProvider\Configured, accepting multiple values to match against.
+ */
 abstract class MultipleValued extends RepositoryAware implements Matcher
 {
     /**
@@ -31,5 +34,23 @@ abstract class MultipleValued extends RepositoryAware implements Matcher
     {
         $matchingConfig = !is_array( $matchingConfig ) ? array( $matchingConfig ) : $matchingConfig;
         $this->values = array_fill_keys( $matchingConfig, true );
+    }
+
+    /**
+     * Returns matcher's values
+     *
+     * @return array
+     */
+    public function getValues()
+    {
+        return $this->values;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Repository
+     */
+    public function getRepository()
+    {
+        return $this->repository;
     }
 }

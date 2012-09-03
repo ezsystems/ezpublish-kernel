@@ -7,25 +7,14 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider;
+namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured;
 
 use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured,
     eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher,
     eZ\Publish\API\Repository\Values\Content\Location;
 
-class ConfiguredTest extends \PHPUnit_Framework_TestCase
+class ConfiguredTest extends BaseTest
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $repositoryMock;
-
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->repositoryMock = $this->getRepositoryMock();
-    }
-
     /**
      * @expectedException \InvalidArgumentException
      */
@@ -112,34 +101,5 @@ class ConfiguredTest extends \PHPUnit_Framework_TestCase
         }
 
         return $arguments;
-    }
-
-    /**
-     * @param array $locationMatchingConfig
-     * @param array $contentMatchingConfig
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getPartiallyMockedContentViewProvider( array $locationMatchingConfig = array(), $contentMatchingConfig = array() )
-    {
-        return $this
-            ->getMockBuilder( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider\\Configured' )
-            ->setConstructorArgs(
-            array(
-                 $this->repositoryMock,
-                 $locationMatchingConfig,
-                 $contentMatchingConfig )
-            )
-            ->setMethods( array( 'getMatcher' ) )
-            ->getMock()
-        ;
-    }
-
-    private function getRepositoryMock()
-    {
-        return $this
-            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\Repository' )
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
     }
 }
