@@ -9,6 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured;
 
+use eZ\Publish\API\Repository\Values\Content\Location,
+    eZ\Publish\API\Repository\Values\Content\ContentInfo;
+
 abstract class BaseTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -32,22 +35,52 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
         return $this
             ->getMockBuilder( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider\\Configured' )
             ->setConstructorArgs(
-            array(
-                 $this->repositoryMock,
-                 $locationMatchingConfig,
-                 $contentMatchingConfig )
+                array(
+                    $this->repositoryMock,
+                    $locationMatchingConfig,
+                    $contentMatchingConfig
+                )
             )
             ->setMethods( array( 'getMatcher' ) )
             ->getMock()
-            ;
+        ;
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function getRepositoryMock()
     {
         return $this
             ->getMockBuilder( 'eZ\\Publish\\API\\Repository\Repository' )
             ->disableOriginalConstructor()
             ->getMock()
-            ;
+        ;
+    }
+
+    /**
+     * @param array $properties
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getLocationMock( array $properties = array() )
+    {
+        return $this
+            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' )
+            ->setConstructorArgs( array( $properties ) )
+            ->getMockForAbstractClass()
+        ;
+    }
+
+    /**
+     * @param array $properties
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getContentInfoMock( array $properties = array() )
+    {
+        return $this->
+            getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' )
+            ->setConstructorArgs( array( $properties ) )
+            ->getMockForAbstractClass()
+        ;
     }
 }
