@@ -263,6 +263,9 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/content/objects/[0-9]+/versions/[0-9+]$)' => array(
             'GET' => array( $contentController, 'loadContentInVersion' ),
         ),
+        '(^/content/objects/[0-9]+/currentversion$)' => array(
+            'GET' => array( $contentController, 'loadContentInCurrentVersion' ),
+        ),
         '(^/content/objects/[0-9]+/locations$)' => array(
             'GET' => array( $locationController, 'loadLocationsForContent' ),
             'POST' => array( $locationController, 'createLocation' ),

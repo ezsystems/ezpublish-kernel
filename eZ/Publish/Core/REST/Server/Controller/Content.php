@@ -134,4 +134,20 @@ class Content
             $urlValues['version']
         );
     }
+
+    /**
+     * Loads a specific version of a given content object
+     *
+     * @param RMF\Request $request
+     * @return void
+     */
+    public function loadContentInCurrentVersion( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'objectCurrentVersion', $request->path );
+
+        return $this->contentService->loadContent(
+            $urlValues['object'],
+            null                // TODO: Implement using language filter on request URI
+        );
+    }
 }
