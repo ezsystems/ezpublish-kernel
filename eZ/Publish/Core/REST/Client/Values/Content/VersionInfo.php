@@ -20,26 +20,14 @@ namespace eZ\Publish\Core\REST\Client\Values\Content;
 class VersionInfo extends \eZ\Publish\API\Repository\Values\Content\VersionInfo
 {
     /**
-     * @var \eZ\Publish\API\Repository\Repository
+     * @var eZ\Publish\Core\REST\Client\Content\ContentInfo
      */
-    protected $repository;
+    protected $contentInfo;
 
     /**
-     * @var integer
+     * @var string[]
      */
-    protected $contentId;
-
-    public function __construct( array $properties = array() )
-    {
-        parent::__construct( $properties );
-
-        if ( $properties['status'] > 2 ) {
-            echo "\nalert(", $properties['contentId'], ")\n";
-            $trace = debug_backtrace();
-            echo $trace[0]['file'], ' +', $trace[0]['line'], PHP_EOL;
-        }
-    }
-
+    protected $names;
 
     /**
      * Content of the content this version belongs to.
@@ -48,7 +36,7 @@ class VersionInfo extends \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
     public function getContentInfo()
     {
-        return $this->repository->getContentService()->loadContentInfo( $this->contentId );
+        return $this->contentInfo;
     }
 
     /**
@@ -59,7 +47,7 @@ class VersionInfo extends \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
     public function getNames()
     {
-        // TODO: Implement getNames() method.
+        return $this->names;
     }
 
     /**
@@ -73,17 +61,10 @@ class VersionInfo extends \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
     public function getName( $languageCode = null )
     {
-        // TODO: Implement getName() method.
-    }
-
-    public function __get( $property )
-    {
-        switch ( $property )
+        if ( $languageCode === null )
         {
-            case 'contentInfo':
-                return $this->getContentInfo();
+            $languageCode = $this->initialLanguageCode;
         }
-
-        return parent::__get( $property );
+        return $this->names[$languageCode];
     }
 }
