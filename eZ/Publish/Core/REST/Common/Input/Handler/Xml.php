@@ -45,6 +45,10 @@ class Xml extends Handler
         ),
     );
 
+    protected $fieldTypeHashElements = array(
+        'fieldValue',
+    );
+
     /**
      * Converts the given string to an array structure
      *
@@ -112,7 +116,11 @@ class Xml extends Handler
                 case XML_ELEMENT_NODE:
                     $tagName = $childNode->tagName;
 
-                    if ( !isset( $current[$tagName]  ) )
+                    if ( in_array( $tagName, $this->fieldTypeHashElements ) )
+                    {
+                        $current[$tagName] = $this->parseFieldTypeHash( $childNode );
+                    }
+                    elseif ( !isset( $current[$tagName]  ) )
                     {
                         if ( isset( $this->forceList[$parentTagName] ) &&
                              in_array( $tagName, $this->forceList[$parentTagName], true ) )
@@ -168,5 +176,104 @@ class Xml extends Handler
         }
 
         return $current;
+    }
+
+    protected function parseFieldTypeHash( \DOMElement $domElement )
+    {
+        $result = $this->parseFieldTypeValues( $domElement->childNodes );
+
+        if ( is_array( $result ) && count( $result ) === 1 && isset( $result[0] ) )
+        {
+            // Return plain value on first level
+            $result = $result[0];
+        }
+
+        if ( is_array( $result ) && count( $result ) === 0 )
+        {
+            // No child values means null
+            return null;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Parses a node list of <value> elements
+     *
+     * @param \DOMNodeList $valueNodes
+     * @return array|string
+     */
+    protected function parseFieldTypeValues( \DOMNodeList $valueNodes )
+    {
+        $resultValues = array();
+        $resultString = '';
+
+        foreach ( $valueNodes as $valueNode )
+        {
+            switch ( $valueNode->nodeType )
+            {
+                case XML_ELEMENT_NODE:
+                    if ( $valueNode->tagName !== 'value' )
+                    {
+                        throw new \RuntimeException(
+                            sprintf(
+                                'Invalid value tag: <%s>.',
+                                $value->tagName
+                            )
+                        );
+                    }
+
+                    $parsedValue = $this->parseFieldTypeValues( $valueNode->childNodes );
+                    if ( $valueNode->hasAttribute( 'key' ) )
+                    {
+                        $resultValues[$valueNode->getAttribute( 'key' )] = $parsedValue;
+                    }
+                    else
+                    {
+                        $resultValues[] = $parsedValue;
+                    }
+                    break;
+
+                case XML_TEXT_NODE:
+                    $resultString .= $valueNode->wholeText;
+                    break;
+
+                case XML_CDATA_SECTION_NODE:
+                    $resultString .= $valueNode->data;
+                    break;
+            }
+        }
+
+        $resultString = trim( $resultString );
+        if ( $resultString !== '' )
+        {
+            return $this->castScalarValue( $resultString );
+        }
+        return $resultValues;
+    }
+
+    /**
+     * Attempts to cast the given $stringValue into a sensible scalar type
+     *
+     * @param string $stringValue
+     * @return mixed
+     */
+    protected function castScalarValue( $stringValue )
+    {
+        switch ( true )
+        {
+            case ( ctype_digit( $stringValue ) ):
+                return (int)$stringValue;
+
+            case ( preg_match( '(^[0-9\.]+$)', $stringValue ) === 1 ):
+                return (float)$stringValue;
+
+            case ( strtolower( $stringValue ) === 'true' ):
+                return true;
+
+            case ( strtolower( $stringValue ) === 'false' ):
+                return false;
+        }
+        return $stringValue;
     }
 }
