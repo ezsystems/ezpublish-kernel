@@ -71,6 +71,7 @@ class SectionTest extends BaseTest
      * @dataProvider matchSectionProvider
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Identifier\Section::matchLocation
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
+     * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
      *
      * @param $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -127,6 +128,7 @@ class SectionTest extends BaseTest
      * @dataProvider matchSectionProvider
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Identifier\Section::matchContentInfo
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
+     * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
      *
      * @param $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
