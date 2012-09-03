@@ -87,6 +87,12 @@ interface FieldType
      */
     public function getValidatorConfigurationSchema();
 
+    /**
+     * Returns a human readable string representation from the given $value
+     *
+     * @param mixed $value
+     * @return string
+     */
     public function getName( $value );
 
     /**
