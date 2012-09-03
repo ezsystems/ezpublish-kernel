@@ -48,34 +48,9 @@ $repository = new Client\IntegrationTestRepository(
         )
     ),
     new Common\Input\Dispatcher(
-        // The parsing dispatcher configures which parsers are used for which
-        // mime type. The mime types (content types) are provided *WITHOUT* an
-        // encoding type (+json / +xml).
-        //
-        // For each mime type you specify an instance of the parser which
-        // should be used to process the given mime type.
-        new Common\Input\ParsingDispatcher(
-            array(
-                'application/vnd.ez.api.ContentList'          => new Client\Input\Parser\ContentList(),
-                'application/vnd.ez.api.ContentInfo'          => new Client\Input\Parser\ContentInfo(),
-                'application/vnd.ez.api.SectionList'          => new Client\Input\Parser\SectionList(),
-                'application/vnd.ez.api.Section'              => new Client\Input\Parser\Section(),
-                'application/vnd.ez.api.ErrorMessage'         => new Client\Input\Parser\ErrorMessage(),
-                'application/vnd.ez.api.RoleList'             => new Client\Input\Parser\RoleList(),
-                'application/vnd.ez.api.Role'                 => new Client\Input\Parser\Role(),
-                'application/vnd.ez.api.Policy'               => new Client\Input\Parser\Policy(),
-                'application/vnd.ez.api.limitation'           => new Client\Input\Parser\Limitation(),
-                'application/vnd.ez.api.PolicyList'           => new Client\Input\Parser\PolicyList(),
-                'application/vnd.ez.api.RoleAssignmentList'   => new Client\Input\Parser\RoleAssignmentList(),
-                'application/vnd.ez.api.RoleAssignment'       => new Client\Input\Parser\RoleAssignment(),
-                'application/vnd.ez.api.Location'             => new Client\Input\Parser\Location(),
-                'application/vnd.ez.api.LocationList'         => new Client\Input\Parser\LocationList(),
-                'application/vnd.ez.api.ObjectStateGroup'     => new Client\Input\Parser\ObjectStateGroup(),
-                'application/vnd.ez.api.ObjectStateGroupList' => new Client\Input\Parser\ObjectStateGroupList(),
-                'application/vnd.ez.api.ObjectState'          => new Client\Input\Parser\ObjectState(),
-                'application/vnd.ez.api.ObjectStateList'      => new Client\Input\Parser\ObjectStateList(),
-            )
-        ),
+        // The parsing dispatcher is configured after the repository has been
+        // created due to circular references
+        $parsingDispatcher = new Common\Input\ParsingDispatcher(),
         array(
             // Defines the available data format encoding handlers. used to
             // process the input data and convert it into an array structure
@@ -117,6 +92,47 @@ $repository = new Client\IntegrationTestRepository(
     $urlHandler,
     $authenticator
 );
+
+// The parsing dispatcher configures which parsers are used for which
+// mime type. The mime types (content types) are provided *WITHOUT* an
+// encoding type (+json / +xml).
+//
+// For each mime type you specify an instance of the parser which
+// should be used to process the given mime type.
+$inputParsers = array(
+    'application/vnd.ez.api.Version'              => new Client\Input\Parser\Content(
+        // Circular reference, since REST does not transmit content info when
+        // loading the VersionInfo (which is included in the content)
+        new Client\Input\Parser\VersionInfo( $repository->getContentService() )
+    ),
+    'application/vnd.ez.api.ContentList'          => new Client\Input\Parser\ContentList(),
+    'application/vnd.ez.api.ContentInfo'          => new Client\Input\Parser\ContentInfo(),
+    'application/vnd.ez.api.SectionList'          => new Client\Input\Parser\SectionList(),
+    'application/vnd.ez.api.Section'              => new Client\Input\Parser\Section(),
+    'application/vnd.ez.api.ErrorMessage'         => new Client\Input\Parser\ErrorMessage(),
+    'application/vnd.ez.api.RoleList'             => new Client\Input\Parser\RoleList(),
+    'application/vnd.ez.api.Role'                 => new Client\Input\Parser\Role(),
+    'application/vnd.ez.api.Policy'               => new Client\Input\Parser\Policy(),
+    'application/vnd.ez.api.limitation'           => new Client\Input\Parser\Limitation(),
+    'application/vnd.ez.api.PolicyList'           => new Client\Input\Parser\PolicyList(),
+    'application/vnd.ez.api.Relation'             => new Client\Input\Parser\Relation(
+        // Circular reference, since REST does not transmit content info when
+        // fetching relations
+        $repository->getContentService()
+    ),
+    'application/vnd.ez.api.RoleAssignmentList'   => new Client\Input\Parser\RoleAssignmentList(),
+    'application/vnd.ez.api.RoleAssignment'       => new Client\Input\Parser\RoleAssignment(),
+    'application/vnd.ez.api.Location'             => new Client\Input\Parser\Location(),
+    'application/vnd.ez.api.LocationList'         => new Client\Input\Parser\LocationList(),
+    'application/vnd.ez.api.ObjectStateGroup'     => new Client\Input\Parser\ObjectStateGroup(),
+    'application/vnd.ez.api.ObjectStateGroupList' => new Client\Input\Parser\ObjectStateGroupList(),
+    'application/vnd.ez.api.ObjectState'          => new Client\Input\Parser\ObjectState(),
+    'application/vnd.ez.api.ObjectStateList'      => new Client\Input\Parser\ObjectStateList(),
+);
+foreach ( $inputParsers as $mimeType => $parser )
+{
+    $parsingDispatcher->addParser( $mimeType, $parser );
+}
 
 // Force sets the used user. This will be refactored most likely, since this is
 // not really valid for a REST client.
