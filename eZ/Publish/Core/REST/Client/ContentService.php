@@ -207,10 +207,44 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      * @param int $versionNo the version number. If not given the current version is returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @todo Handle $versionNo = null
+     * @todo Handle language filters
      */
     public function loadContent( $contentId, array $languages = null, $versionNo = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        // $contentId should already be a URL!
+        $contentIdValues = $this->urlHandler->parse( 'object', $contentId );
+
+        $url = '';
+        if ( $versionNo === null )
+        {
+            $url = $this->urlHandler->generate(
+                'objectCurrentVersion',
+                array(
+                    'object' => $contentIdValues['object'],
+                )
+            );
+        }
+        else
+        {
+            $url = $this->urlHandler->generate(
+                'objectVersion',
+                array(
+                    'object' => $contentIdValues['object'],
+                    'version' => $versionNo,
+                )
+            );
+        }
+
+        return $this->inputDispatcher->parse(
+            $this->client->request(
+                'GET',
+                $url,
+                new Message(
+                    array( 'Accept' => $this->outputVisitor->getMediaType( 'Version' ) )
+                )
+            )
+        );
     }
 
     /**
