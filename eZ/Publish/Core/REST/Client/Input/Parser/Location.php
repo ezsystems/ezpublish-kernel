@@ -13,7 +13,7 @@ use eZ\Publish\Core\REST\Common\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
-use eZ\Publish\Core\Repository\Values\Content;
+use eZ\Publish\Core\Repository\Values;
 
 /**
  * Parser for Location
@@ -35,7 +35,7 @@ class Location extends Parser
 
         $content = $parsingDispatcher->parse( $data['Content'], 'Content' );
 
-        return new Content\Location(
+        return new Values\Content\Location(
             array(
                 'contentInfo' => $content instanceof APIContent ? $content->getVersionInfo()->getContentInfo() : null,
                 'id' => $data['_href'],
