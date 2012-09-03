@@ -83,9 +83,9 @@ class Content extends Parser
     {
         $fields = array();
 
-        if ( isset( $rawFieldsData['Field'] ) )
+        if ( isset( $rawFieldsData['field'] ) )
         {
-            foreach ( $rawFieldsData['Field'] as $rawFieldData )
+            foreach ( $rawFieldsData['field'] as $rawFieldData )
             {
                 $fields[] = new Field(
                     array(

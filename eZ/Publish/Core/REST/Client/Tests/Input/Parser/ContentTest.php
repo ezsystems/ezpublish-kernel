@@ -33,7 +33,7 @@ class ContentTest extends BaseTest
             '_href' => '/content/objects/10/versions/2',
             'VersionInfo' => array(),
             'Fields' => array(
-                'Field' => array(
+                'field' => array(
                     0 => array(
                         'id' => 19,
                         'fieldDefinitionIdentifier' => 'first_name',
