@@ -73,6 +73,7 @@ class ParentLocationTest extends BaseTest
      * @dataProvider matchContentInfoProvider
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Id\ParentLocation::matchContentInfo
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
+     * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
      *
      * @param $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
