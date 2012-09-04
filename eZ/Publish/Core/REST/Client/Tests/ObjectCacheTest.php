@@ -78,6 +78,8 @@ class ObjectCacheTest extends \PHPUnit_Framework_TestCase
         $cache->store( 'some-key', $object );
         $cache->store( 'other-key', $object );
 
+        $cache->clearAll();
+
         $this->assertNull( $cache->restore( 'some-key' ) );
         $this->assertNull( $cache->restore( 'other-key' ) );
     }
