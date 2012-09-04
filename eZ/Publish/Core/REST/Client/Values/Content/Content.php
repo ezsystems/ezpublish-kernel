@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\Content;
 
+use eZ\Publish\Core\REST\Client\ContentService;
+
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Values\Content\Content}
  * class.
@@ -31,9 +33,9 @@ class Content extends \eZ\Publish\API\Repository\Values\Content\Content
     protected $fields;
 
     /**
-     * @var Closure
+     * @var string
      */
-    protected $relationListLoader;
+    protected $relationListId;
 
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
@@ -46,13 +48,20 @@ class Content extends \eZ\Publish\API\Repository\Values\Content\Content
     private $internalFields;
 
     /**
+     * @var \eZ\Publish\Core\REST\Client\ContentService
+     */
+    protected $contentService;
+
+    /**
      * Creates a new struct from the given $data array
      *
+     * @param ContentService $contentService
      * @param array $data
      * @access protected
      */
-    function __construct( array $data = array() )
+    function __construct( ContentService $contentService, array $data = array() )
     {
+        $this->contentService = $contentService;
         foreach ( $data as $propertyName => $propertyValue )
         {
             $this->$propertyName = $propertyValue;
@@ -107,7 +116,7 @@ class Content extends \eZ\Publish\API\Repository\Values\Content\Content
      */
     public function getRelations()
     {
-        return $this->relationListLoader()->relations;
+        return $this->contentService->loadRelationsByListId( $this->relationListId );
     }
 
     /**

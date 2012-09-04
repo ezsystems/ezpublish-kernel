@@ -74,17 +74,12 @@ class Content extends Parser
         );
         $fields = $this->parseFields( $data['Fields'] );
 
-        $relationListLoader = $this->parserTools->createLoadingClosure(
-            $this->contentService,
-            'loadRelationList',
-            array( $data['Relations']['_href'] )
-        );
-
         return new Values\Content\Content(
+            $this->contentService,
             array(
                 'versionInfo' => $versionInfo,
                 'internalFields' => $fields,
-                'relationListLoader' => $relationListLoader,
+                'relationListId' => $data['Relations']['_href'],
             )
         );
     }

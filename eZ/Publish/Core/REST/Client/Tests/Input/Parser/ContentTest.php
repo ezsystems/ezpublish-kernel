@@ -99,10 +99,11 @@ class ContentTest extends BaseTest
     /**
      * @depends testParse
      */
-    public function testParsedRelationLoader( $parsedContent )
+    public function testParsedRelationListId( $parsedContent )
     {
-        $this->assertTrue(
-            is_callable( $parsedContent->relationListLoader )
+        $this->assertEquals(
+            '/content/objects/10/relations',
+            $parsedContent->relationListId
         );
     }
 

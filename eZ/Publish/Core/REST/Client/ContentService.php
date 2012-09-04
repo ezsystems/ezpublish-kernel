@@ -96,6 +96,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function loadContentInfo( $contentId )
     {
+        return 'MockedContentInfo';
         throw new \Exception( "@TODO: Implement." );
     }
 
@@ -484,6 +485,20 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[] an array of {@link Relation}
      */
     public function loadRelations( VersionInfo $versionInfo )
+    {
+        throw new \Exception( "@TODO: Implement." );
+    }
+
+    /**
+     * Loads relations by their relation list ID
+     *
+     * NOTE: This method is not part of the API!
+     *
+     * @param string $relationListId
+     * @return eZ\Publish\API\Repository\Values\Content\Relation[]
+     * @access protected
+     */
+    public function loadRelationsByListId( $relationListId )
     {
         throw new \Exception( "@TODO: Implement." );
     }
