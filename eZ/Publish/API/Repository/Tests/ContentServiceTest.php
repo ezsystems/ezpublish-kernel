@@ -453,7 +453,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $anonymousUserId = $this->generateId( 'object', 10 );
         /* BEGIN: Use Case */
         $contentService = $repository->getContentService();
 
@@ -541,7 +541,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $anonymousUserId = $this->generateId( 'object', 10 );
         /* BEGIN: Use Case */
         // $anonymousUserId contains the ID of the "Anonymous User"
 
@@ -571,7 +571,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $anonymousUserId = $this->generateId( 'object', 10 );
         /* BEGIN: Use Case */
         // $anonymousUserId contains the ID of the "Anonymous User"
 
@@ -619,7 +619,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $anonymousUserId = $this->generateId( 'object', 10 );
         /* BEGIN: Use Case */
         // $anonymousUserId contains the ID of the "Anonymous User"
 
@@ -649,7 +649,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $anonymousUserId = $this->generateId( 'object', 10 );
         /* BEGIN: Use Case */
         // $anonymousUserId contains the ID of the "Anonymous User"
 
@@ -684,7 +684,7 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $anonymousUserId = $this->generateId( 'object', 10 );
         /* BEGIN: Use Case */
         // $anonymousUserId contains the ID of the "Anonymous User"
 
