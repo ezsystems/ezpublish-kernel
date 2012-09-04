@@ -53,9 +53,7 @@ class VersionInfo extends Parser
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
-        $this->parserTools->parseObjectElement( $data['Content'], $parsingDispatcher );
-
-        $contentInfoId = $data['Content']['_href'];
+        $contentInfoId = $this->parserTools->parseObjectElement( $data['Content'], $parsingDispatcher );
 
         return new Values\Content\VersionInfo(
             $this->contentService,
