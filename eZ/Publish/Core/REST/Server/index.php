@@ -17,6 +17,11 @@ use Qafoo\RMF;
 
 ini_set( 'html_errors', 0 );
 
+/*
+ * Configuration magic, this should actually be taken from services.ini in the
+ * future.
+ */
+
 $configFile = __DIR__ . '/database.cnf';
 
 if ( is_file( $configFile ) )
@@ -65,8 +70,16 @@ if ( isset( $_SERVER['HTTP_X_TEST_SESSION'] ) )
     touch( $sessionFile );
 }
 
+/*
+ * The setup factory, which is also used for setting up the normal repository
+ * for the integration tests, is re-used here.
+ */
 $setupFactory = new \eZ\Publish\API\Repository\Tests\SetupFactory\Legacy();
 $repository   = $setupFactory->getRepository( $reInitializeRepository );
+
+/*
+ * The following reflects a standard REST server setup
+ */
 
 /*
  * Handlers are used to parse the input body (XML or JSON) into a common array
