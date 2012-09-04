@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
-use eZ\Publish\Core\REST\Client\Input\Parser;
+use eZ\Publish\Core\REST\Client\Input;
 use eZ\Publish\API\Repository\Values;
 
 class ContentTest extends BaseTest
@@ -18,6 +18,11 @@ class ContentTest extends BaseTest
      * @var eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo
      */
     protected $versionInfoParserMock;
+
+    /**
+     * @var eZ\Publish\Core\REST\Client\ContentService
+     */
+    protected $contentServiceMock;
 
     /**
      * Tests the section parser
@@ -49,6 +54,8 @@ class ContentTest extends BaseTest
                 ),
             ),
             'Relations' => array(
+                '_media-type' => 'application/vnd.ez.api.RelationList+json',
+                '_href'       => '/content/objects/10/relations',
                 'Relation' => array(
                     0 => array(
                         '_media-type' => 'application/vnd.ez.api.Relation+xml'
@@ -67,9 +74,8 @@ class ContentTest extends BaseTest
                 $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher' )
             )->will( $this->returnValue( 'VersionInfoMock' ) );
 
-        $this->getParsingDispatcherMock()->expects( $this->exactly( 2 ) )
-            ->method( 'parse' )
-            ->will( $this->returnValue( 'RelationMock' ) );
+        $this->getParsingDispatcherMock()->expects( $this->exactly( 1 ) )
+            ->method( 'parse' );
 
         $result = $relationParser->parse( $inputArray, $this->getParsingDispatcherMock() );
 
@@ -93,12 +99,10 @@ class ContentTest extends BaseTest
     /**
      * @depends testParse
      */
-    public function testParsedRelations( $parsedContent )
+    public function testParsedRelationLoader( $parsedContent )
     {
-        $this->assertEquals(
-            // Mocked result
-            array( 'RelationMock', 'RelationMock' ),
-            $parsedContent->relations
+        $this->assertTrue(
+            is_callable( $parsedContent->relationListLoader )
         );
     }
 
@@ -143,7 +147,11 @@ class ContentTest extends BaseTest
      */
     protected function getParser()
     {
-        return new Parser\Content( $this->getVersionInfoParserMock() );
+        return new Input\Parser\Content(
+            new Input\ParserTools(),
+            $this->getContenServiceMock(),
+            $this->getVersionInfoParserMock()
+        );
     }
 
     /**
@@ -151,9 +159,9 @@ class ContentTest extends BaseTest
      */
     protected function getVersionInfoParserMock()
     {
-        if ( !isset( $this->contentServiceMock ) )
+        if ( !isset( $this->versionInfoParserMock ) )
         {
-            $this->contentServiceMock = $this->getMock(
+            $this->versionInfoParserMock = $this->getMock(
                 'eZ\\Publish\\Core\\REST\\Client\\Input\\Parser\\VersionInfo',
                 array(),
                 array(),
@@ -161,6 +169,24 @@ class ContentTest extends BaseTest
                 false
             );
         }
-        return $this->contentServiceMock;
+        return $this->versionInfoParserMock;
+    }
+
+    /**
+     * @return eZ\Publish\Core\REST\Client\ContentService
+     */
+    protected function getContenServiceMock()
+    {
+        if ( !isset( $this->contenServiceMock ) )
+        {
+            $this->contenServiceMock = $this->getMock(
+                'eZ\\Publish\\Core\\REST\\Client\\ContentService',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->contenServiceMock;
     }
 }

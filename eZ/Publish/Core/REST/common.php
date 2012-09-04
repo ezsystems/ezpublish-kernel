@@ -103,6 +103,8 @@ $repository = new Client\IntegrationTestRepository(
 // should be used to process the given mime type.
 $inputParsers = array(
     'application/vnd.ez.api.Version'              => new Client\Input\Parser\Content(
+        new Client\Input\ParserTools(),
+        $repository->getContentService(),
         // Circular reference, since REST does not transmit content info when
         // loading the VersionInfo (which is included in the content)
         new Client\Input\Parser\VersionInfo( $repository->getContentService() )
