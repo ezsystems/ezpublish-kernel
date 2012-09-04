@@ -95,6 +95,10 @@ $repository = new Client\IntegrationTestRepository(
     $authenticator
 );
 
+
+// Object with convenience methods for parsers
+$parserTools = new Client\Input\ParserTools();
+
 // The parsing dispatcher configures which parsers are used for which
 // mime type. The mime types (content types) are provided *WITHOUT* an
 // encoding type (+json / +xml).
@@ -103,11 +107,11 @@ $repository = new Client\IntegrationTestRepository(
 // should be used to process the given mime type.
 $inputParsers = array(
     'application/vnd.ez.api.Version'              => new Client\Input\Parser\Content(
-        new Client\Input\ParserTools(),
+        $parserTools,
         $repository->getContentService(),
         // Circular reference, since REST does not transmit content info when
         // loading the VersionInfo (which is included in the content)
-        new Client\Input\Parser\VersionInfo( $repository->getContentService() )
+        new Client\Input\Parser\VersionInfo( $parserTools, $repository->getContentService() )
     ),
     'application/vnd.ez.api.ContentList'          => new Client\Input\Parser\ContentList(),
     'application/vnd.ez.api.ContentInfo'          => new Client\Input\Parser\ContentInfo(),
