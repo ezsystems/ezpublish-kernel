@@ -9,9 +9,6 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured;
 
-use eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\API\Repository\Values\Content\ContentInfo;
-
 abstract class BaseTest extends \PHPUnit_Framework_TestCase
 {
     /**
