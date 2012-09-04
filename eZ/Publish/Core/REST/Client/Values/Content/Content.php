@@ -31,9 +31,9 @@ class Content extends \eZ\Publish\API\Repository\Values\Content\Content
     protected $fields;
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Relation[]
+     * @var Closure
      */
-    protected $relations;
+    protected $relationListLoader;
 
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
@@ -107,7 +107,7 @@ class Content extends \eZ\Publish\API\Repository\Values\Content\Content
      */
     public function getRelations()
     {
-        return $this->relations;
+        return $this->relationListLoader()->relations;
     }
 
     /**
@@ -172,5 +172,25 @@ class Content extends \eZ\Publish\API\Repository\Values\Content\Content
         }
 
         return null;
+    }
+
+    public function __get( $propertyName )
+    {
+        switch( $propertyName )
+        {
+            case 'relations':
+                return $this->getRelations();
+        }
+        return parent::__get( $propertyName );
+    }
+
+    public function __isset( $propertyName )
+    {
+        switch( $propertyName )
+        {
+            case 'relations':
+                return true;
+        }
+        return parent::__isset( $propertyName );
     }
 }
