@@ -43,7 +43,7 @@ abstract class MultipleValued extends RepositoryAware implements Matcher
      */
     public function getValues()
     {
-        return $this->values;
+        return array_keys( $this->values );
     }
 
     /**
