@@ -16,23 +16,6 @@ use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 class ParserTools
 {
     /**
-     * Creates a closure to load an object which will execute $method on
-     * $service using $parameters
-     *
-     * @param object $service
-     * @param string $method
-     * @param array $parameters
-     * @return Closure
-     */
-    public function createLoadingClosure( $service, $method, array $parameters )
-    {
-        return function() use ( $service, $method, $parameters )
-        {
-            return call_user_func_array( array( $service, $method ), $parameters );
-        };
-    }
-
-    /**
      * Parses the given $objectElement, if it contains embedded data
      *
      * @param array $objectElement
@@ -48,6 +31,7 @@ class ParserTools
                 $objectElement['_media-type']
             );
         }
+        return $objectElement['_media-type'];
     }
 
     /**

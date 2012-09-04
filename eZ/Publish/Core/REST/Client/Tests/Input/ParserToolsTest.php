@@ -14,35 +14,6 @@ use eZ\Publish\Core\REST\Client\Input\ParserTools;
 class ParserToolsTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function testCreateLoadingClosure()
-    {
-        $parserTools = $this->getParserTools();
-
-        $serviceMock = $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' );
-        $serviceMock->expects( $this->once() )
-            ->method( 'loadContent' )
-            ->with(
-                $this->equalTo( 23 ),
-                $this->equalTo( null ),
-                $this->equalTo( 5 )
-            )->will( $this->returnValue( 'ServiceResultMock' ) );
-
-        $loadingClosure = $parserTools->createLoadingClosure(
-            $serviceMock,
-            'loadContent',
-            array(
-                23, null, 5
-            )
-        );
-
-        $this->assertTrue( is_callable( $loadingClosure ) );
-
-        $this->assertEquals(
-            'ServiceResultMock',
-            $loadingClosure()
-        );
-    }
-
     public function testIsEmbeddedObjectReturnsTrue()
     {
         $parserTools = $this->getParserTools();
