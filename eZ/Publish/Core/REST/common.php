@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\REST;
 
+define( 'HTTP_BASE_URL', 'http://localhost:8042/' );
+
 /**
  * This file includes the configuration of the REST SDK client.
  *
@@ -44,7 +46,7 @@ $repository = new Client\IntegrationTestRepository(
         new Client\HttpClient\Stream(
             // Server address to communicate with. You might want to make this
             // configurable using environment variables, or something alike.
-            'http://localhost:8042/'
+            HTTP_BASE_URL
         )
     ),
     new Common\Input\Dispatcher(
