@@ -31,7 +31,7 @@ class ParserTools
                 $objectElement['_media-type']
             );
         }
-        return $objectElement['_media-type'];
+        return $objectElement['_href'];
     }
 
     /**
