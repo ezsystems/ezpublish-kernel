@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\Content;
 
+use eZ\Publish\Core\REST\Client\ContentService;
 
 /**
  * This class holds version information data. It also contains the corresponding {@link Content} to
@@ -29,14 +30,26 @@ namespace eZ\Publish\Core\REST\Client\Values\Content;
 class VersionInfo extends \eZ\Publish\API\Repository\Values\Content\VersionInfo
 {
     /**
-     * @var callable
+     * @var eZ\Publish\Core\REST\Client\ContentService
      */
-    protected $contentInfoLoader;
+    protected $contentService;
+
+    /**
+     * @var string
+     */
+    protected $contentInfoId;
 
     /**
      * @var string[]
      */
     protected $names;
+
+    public function __construct( ContentService $contentService, array $data = array() )
+    {
+        parent::__construct( $data );
+
+        $this->contentService = $contentService;
+    }
 
     /**
      * Content of the content this version belongs to.
@@ -45,8 +58,7 @@ class VersionInfo extends \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
     public function getContentInfo()
     {
-        $callback = $this->contentInfoLoader;
-        return $callback();
+        return $this->contentService->loadContentInfo( $this->contentInfoId );
     }
 
     /**

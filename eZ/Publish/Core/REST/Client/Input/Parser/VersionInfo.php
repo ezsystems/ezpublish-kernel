@@ -55,13 +55,10 @@ class VersionInfo extends Parser
     {
         $this->parserTools->parseObjectElement( $data['Content'], $parsingDispatcher );
 
-        $contentInfoLoader = $this->parserTools->createLoadingClosure(
-            $this->contentService,
-            'loadContentInfo',
-            array( $data['Content']['_href'] )
-        );
+        $contentInfoId = $data['Content']['_href'];
 
         return new Values\Content\VersionInfo(
+            $this->contentService,
             array(
                 'id' => $data['id'],
                 'versionNo' => $data['versionNo'],
@@ -71,7 +68,7 @@ class VersionInfo extends Parser
                 'creationDate' => new \DateTime( $data['creationDate'] ),
                 'initialLanguageCode' => $data['initialLanguageCode'],
                 'names' => $this->processNames( $data['names']['value'] ),
-                'contentInfoLoader' => $contentInfoLoader,
+                'contentInfoId' => $contentInfoId,
             )
         );
     }

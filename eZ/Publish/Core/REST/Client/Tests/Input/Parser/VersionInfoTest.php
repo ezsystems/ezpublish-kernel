@@ -153,10 +153,11 @@ class VersionInfoTest extends BaseTest
     /**
      * @depends testParse
      */
-    public function testParsedContentInfo( $parsedVersionInfo )
+    public function testParsedContentInfoId( $parsedVersionInfo )
     {
-        $this->assertTrue(
-            is_callable( $parsedVersionInfo->contentInfoLoader )
+        $this->assertEquals(
+            '/content/objects/10',
+            $parsedVersionInfo->contentInfoId
         );
     }
 
