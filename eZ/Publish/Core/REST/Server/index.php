@@ -17,10 +17,18 @@ use Qafoo\RMF;
 
 ini_set( 'html_errors', 0 );
 
+$configFile = __DIR__ . '/database.cnf';
+
+if ( is_file( $configFile ) )
+{
+    $_ENV['DATABASE'] = trim( file_get_contents( $configFile ) );
+}
+
 if ( !isset( $_ENV['DATABASE'] ) )
 {
     echo "The REST test server does only work with a persistent database.\n";
     echo "Please specify a database DSN in the environment variable DATABASE.\n";
+    echo "Or create a database.cnf file with it in the same directory as index.php\n";
     exit( 1 );
 }
 
