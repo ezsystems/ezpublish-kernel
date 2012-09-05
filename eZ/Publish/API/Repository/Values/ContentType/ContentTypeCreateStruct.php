@@ -20,7 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 abstract class ContentTypeCreateStruct extends ValueObject
 {
     /**
-     * String identifier of a type
+     * String unique identifier of a type
      *
      * @required
      *
