@@ -393,15 +393,18 @@ $dispatcher = new AuthenticatingDispatcher(
                 $valueObjectVisitors
             )
         ),
-        '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+xml$)'  => new View\Visitor(
+        '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+xml$)'  => ( $xmlVisitor = new View\Visitor(
             new Common\Output\Visitor(
                 new Common\Output\Generator\Xml(
                     new Common\Output\Generator\Xml\FieldTypeHashGenerator()
                 ),
                 $valueObjectVisitors
             )
-        ),
-        '(^.*/.*$)'  => new View\InvalidApiUse(),
+        ) ),
+        // '(^.*/.*$)'  => new View\InvalidApiUse(),
+        // Fall back gracefully to XML visiting. Also helps support responses
+        // without Accept header (e.g. DELETE reqeustes).
+        '(^.*/.*$)'  => $xmlVisitor,
     ) ),
     // This is just used for integration tests, DO NOT USE IN PRODUCTION
     new Authenticator\IntegrationTest( $repository )
