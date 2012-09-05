@@ -26,7 +26,7 @@ class Xml extends Handler
      */
     protected $forceList = array(
         'ContentList' => array(
-            'ContentInfo',
+            'Content',
         ),
         'SectionList' => array(
             'Section',
