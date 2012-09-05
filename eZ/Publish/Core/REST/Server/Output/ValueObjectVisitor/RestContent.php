@@ -14,9 +14,9 @@ use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
- * ContentInfo value object visitor
+ * Visits the RestContent value object
  */
-class ContentInfo extends ValueObjectVisitor
+class RestContent extends ValueObjectVisitor
 {
     /**
      * Visit struct returned by controllers
@@ -27,30 +27,127 @@ class ContentInfo extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $generator->startObjectElement( 'ContentInfo' );
-        $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'ContentInfo' ) );
+        $restContent = $data;
+        $contentInfo = $restContent->contentInfo;
+        $mainLocation = $restContent->mainLocation;
+        $currentVersion = $restContent->currentVersion;
+
+        $mediaType = ( $restContent->currentVersion === null ? 'ContentInfo' : 'Content' );
+
+        $generator->startObjectElement( 'Content', $mediaType );
+
+        $visitor->setHeader( 'Content-Type', $generator->getMediaType( $mediaType ) );
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'object', array( 'object' => $data->id ) )
+            $this->urlHandler->generate( 'object', array( 'object' => $contentInfo->id ) )
         );
         $generator->endAttribute( 'href' );
 
-        $generator->startAttribute( 'id', $data->id );
+        $generator->startAttribute( 'remoteId', $contentInfo->remoteId );
+        $generator->endAttribute( 'remoteId' );
+        $generator->startAttribute( 'id', $contentInfo->id );
         $generator->endAttribute( 'id' );
 
         $generator->startObjectElement( 'ContentType' );
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'type', array( 'type' => $data->getContentType()->id ) )
+            $this->urlHandler->generate(
+                'type',
+                array( 'type' => $contentInfo->contentType->id )
+            )
         );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'ContentType' );
 
-        $generator->startValueElement( 'name', $data->name );
-        $generator->endValueElement( 'name' );
+        $generator->startValueElement( 'Name', $contentInfo->name );
+        $generator->endValueElement( 'Name' );
 
-        $generator->endObjectElement( 'ContentInfo' );
+        $generator->startObjectElement( 'Versions', 'VersionList' );
+        $generator->startAttribute(
+            'href',
+            $this->urlHandler->generate( 'objectVersions', array( 'object' => $contentInfo->id ) )
+        );
+        $generator->endAttribute( 'href' );
+        $generator->endObjectElement( 'Versions' );
+
+        $generator->startObjectElement( 'CurrentVersion', 'Version' );
+        $generator->startAttribute(
+            'href',
+            $this->urlHandler->generate(
+                'objectCurrentVersion',
+                array( 'object' => $contentInfo->id )
+            )
+        );
+        $generator->endAttribute( 'href' );
+
+        // Embed current version, if available
+        if ( $currentVersion !== null )
+        {
+            $visitor->visitValueObject( $currentVersion );
+        }
+
+        $generator->endObjectElement( 'CurrentVersion' );
+
+        $generator->startObjectElement( 'Section' );
+        $generator->startAttribute(
+            'href',
+            $this->urlHandler->generate( 'section', array( 'section' => $contentInfo->sectionId ) )
+        );
+        $generator->endAttribute( 'href' );
+        $generator->endObjectElement( 'Section' );
+
+        $generator->startObjectElement( 'MainLocation', 'Location' );
+        $generator->startAttribute(
+            'href',
+            $this->urlHandler->generate( 'location', array( 'location' => $mainLocation->pathString ) )
+        );
+        $generator->endAttribute( 'href' );
+        $generator->endObjectElement( 'MainLocation' );
+
+        $generator->startObjectElement( 'Locations', 'LocationList' );
+        $generator->startAttribute(
+            'href',
+            $this->urlHandler->generate( 'objectLocations', array( 'object' => $contentInfo->id ) )
+        );
+        $generator->endAttribute( 'href' );
+        $generator->endObjectElement( 'Locations' );
+
+        $generator->startObjectElement( 'Owner', 'User' );
+        $generator->startAttribute(
+            'href',
+            $this->urlHandler->generate( 'user', array( 'user' => $contentInfo->ownerId ) )
+        );
+        $generator->endAttribute( 'href' );
+        $generator->endObjectElement( 'Owner' );
+
+        $generator->startValueElement(
+            'lastModificationDate',
+            $contentInfo->modificationDate->format( 'c' )
+        );
+        $generator->endValueElement( 'lastModificationDate' );
+
+        $generator->startValueElement(
+            'publishedDate',
+            ( $contentInfo->publishedDate !== null
+                ? $contentInfo->publishedDate->format( 'c' )
+                : null )
+        );
+        $generator->endValueElement( 'publishedDate' );
+
+        $generator->startValueElement(
+            'mainLanguageCode',
+            $contentInfo->mainLanguageCode
+        );
+        $generator->endValueElement( 'mainLanguageCode' );
+
+        $generator->startValueElement(
+            'alwaysAvailable',
+            ( $contentInfo->alwaysAvailable ? 'true' : 'false' )
+        );
+        $generator->endValueElement( 'alwaysAvailable' );
+
+        $generator->endObjectElement( 'Content' );
     }
 }
 

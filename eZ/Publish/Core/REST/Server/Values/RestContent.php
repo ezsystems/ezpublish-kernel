@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
  * REST Content, as received by /content/objects/<ID>
@@ -25,13 +26,19 @@ class RestContent
     public $contentInfo;
 
     /**
+     * @var eZ\Publish\API\Repository\Values\Content\Location
+     */
+    public $mainLocation;
+
+    /**
      * @var eZ\Publish\API\Repository\Values\Content\Content
      */
     public $currentVersion;
 
-    public function __construct( ContentInfo $contentInfo, Content $currentVersion = null )
+    public function __construct( ContentInfo $contentInfo, Location $mainLocation, Content $currentVersion = null )
     {
         $this->contentInfo = $contentInfo;
         $this->currentVersion = $currentVersion;
+        $this->mainLocation = $mainLocation;
     }
 }
