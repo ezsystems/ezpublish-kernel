@@ -63,9 +63,8 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      */
-    public function __construct( ContentService $contentService, HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
     {
-        $this->contentService  = $contentService;
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
         $this->outputVisitor   = $outputVisitor;
