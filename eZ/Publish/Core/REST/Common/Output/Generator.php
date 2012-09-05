@@ -40,6 +40,13 @@ abstract class Generator
     abstract public function startDocument( $data );
 
     /**
+     * Returns if the document is empty or already contains data
+     *
+     * @return bool
+     */
+    abstract public function isEmpty();
+
+    /**
      * Check start document
      *
      * @param mixed $data

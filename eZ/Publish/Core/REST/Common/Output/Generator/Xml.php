@@ -30,6 +30,13 @@ class Xml extends Generator
     protected $hashGenerator;
 
     /**
+     * Keeps track if the document received some content
+     *
+     * @var bool
+     */
+    protected $isEmpty = true;
+
+    /**
      * @param eZ\Publish\Core\REST\Common\Output\Generator\Xml\FieldTypeHashGenerator $hashGenerator
      */
     public function __construct( Xml\FieldTypeHashGenerator $hashGenerator )
@@ -46,10 +53,22 @@ class Xml extends Generator
     {
         $this->checkStartDocument( $data );
 
+        $this->isEmpty = true;
+
         $this->xmlWriter = new \XMLWriter();
         $this->xmlWriter->openMemory();
         $this->xmlWriter->setIndent( true );
         $this->xmlWriter->startDocument( '1.0', 'UTF-8' );
+    }
+
+    /**
+     * Returns if the document is empty or already contains data
+     *
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return $this->isEmpty;
     }
 
     /**
@@ -77,6 +96,8 @@ class Xml extends Generator
     public function startObjectElement( $name, $mediaTypeName = null )
     {
         $this->checkStartObjectElement( $name );
+
+        $this->isEmpty = false;
 
         $mediaTypeName = $mediaTypeName ?: $name;
 
@@ -106,6 +127,8 @@ class Xml extends Generator
     public function startHashElement( $name )
     {
         $this->checkStartHashElement( $name );
+
+        $this->isEmpty = false;
 
         $this->xmlWriter->startElement( $name );
     }
