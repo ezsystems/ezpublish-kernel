@@ -460,7 +460,7 @@ XML Example
             <versionNo>1</versionNo>
             <status>DRAFT</status>
             <modificationDate>2012-02-12T12:30:00</modificationDate>
-            <Creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+            <Creator href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
             <creationDate>2012-02-12T12:30:00</creationDate>
             <initialLanguageCode>eng-US</initialLanguageCode>
             <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
@@ -499,7 +499,7 @@ XML Example
       <Section href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
       <MainLocation href="/content/locations/1/4/65" media-type="application/vnd.ez.api.Location+xml" />
       <Locations href="/content/objects/23/locations" media-type="application/vnd.ez.api.LocationList+xml" />
-      <Owner href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+      <Owner href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
       <mainLanguageCode>eng-US</mainLanguageCode>
       <alwaysAvailable>true</alwaysAvailable>
@@ -607,7 +607,7 @@ JSON Example
               "status": "DRAFT",
               "modificationDate": "2012-02-12T12:30:00",
               "creator": {
-                "_href": "/users/user/14",
+                "_href": "/user/users/14",
                 "_media-type": "application/vnd.ez.api.User+json"
               },
               "creationDate": "2012-02-12T12:30:00",
@@ -663,7 +663,7 @@ JSON Example
           "_media-type": "application/vnd.ez.api.LocationList+json"
         },
         "Owner": {
-          "_href": "/users/user/14",
+          "_href": "/user/users/14",
           "_media-type": "application/vnd.ez.api.User+json"
         },
         "lastModificationDate": "2012-02-12T12:30:00",
@@ -750,7 +750,7 @@ XML Example
       <Section href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
       <MainLocation href="/content/locations/1/4/65" media-type="application/vnd.ez.api.Location+xml" />
       <Locations href="/content/objects/23/locations" media-type="application/vnd.ez.api.LocationList+xml" />
-      <Owner href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+      <Owner href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
       <publishedDate>2012-02-12T15:30:00</publishedDate>
       <mainLanguageCode>eng-US</mainLanguageCode>
@@ -844,7 +844,7 @@ In this example
       <Section href="/content/sections/3" media-type="application/vnd.ez.api.Section+xml" />
       <MainLocation href="/content/locations/1/13/55" media-type="application/vnd.ez.api.Location+xml" />
       <Locations href="/content/objects/23/locations" media-type="application/vnd.ez.api.LocationList+xml" />
-      <Owner href="/users/user/13" media-type="application/vnd.ez.api.User+xml" />
+      <Owner href="/user/users/13" media-type="application/vnd.ez.api.User+xml" />
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
       <publishedDate>2012-02-12T15:30:00</publishedDate>
       <mainLanguageCode>ger-DE</mainLanguageCode>
@@ -961,7 +961,7 @@ XML Example
           <versionNo>1</versionNo>
           <status>ARCHIVED</status>
           <modificationDate>2012-02-15T12:00:00</modificationDate>
-          <Creator href="/users/user/8" media-type="application/vnd.ez.api.User+xml" />
+          <Creator href="/user/users/8" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>22012-02-15T12:00:00</creationDate>
           <initialLanguageCode>eng-US</initialLanguageCode>
           <names>
@@ -977,7 +977,7 @@ XML Example
           <versionNo>2</versionNo>
           <status>PUBLISHED</status>
           <modificationDate>2012-02-17T12:00:00</modificationDate>
-          <Creator href="/users/user/8" media-type="application/vnd.ez.api.User+xml" />
+          <Creator href="/user/users/8" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>22012-02-17T12:00:00</creationDate>
           <initialLanguageCode>eng-US</initialLanguageCode>
           <names>
@@ -993,7 +993,7 @@ XML Example
           <versionNo>3</versionNo>
           <status>DRAFT</status>
           <modificationDate>2012-02-19T12:00:00</modificationDate>
-          <Creator href="/users/user/65" media-type="application/vnd.ez.api.User+xml" />
+          <Creator href="/user/users/65" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>22012-02-19T12:00:00</creationDate>
           <initialLanguageCode>fra-FR</initialLanguageCode>
           <names>
@@ -1010,7 +1010,7 @@ XML Example
           <versionNo>4</versionNo>
           <status>DRAFT</status>
           <modificationDate>2012-02-20T12:00:00</modificationDate>
-          <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml" />
+          <Creator href="/user/users/44" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>22012-02-20T12:00:00</creationDate>
           <initialLanguageCode>ger-DE</initialLanguageCode>
           <names>
@@ -1079,7 +1079,7 @@ XML Example
         <versionNo>4</versionNo>
         <status>DRAFT</status>
         <modificationDate>2012-02-20T12:00:00</modificationDate>
-        <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml" />
+        <Creator href="/user/users/44" media-type="application/vnd.ez.api.User+xml" />
         <creationDate>22012-02-20T12:00:00</creationDate>
         <initialLanguageCode>ger-DE</initialLanguageCode>
         <names>
@@ -1208,7 +1208,7 @@ XML Example
         <versionNo>4</versionNo>
         <status>DRAFT</status>
         <modificationDate>2012-02-20T12:00:00</modificationDate>
-        <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml" />
+        <Creator href="/user/users/44" media-type="application/vnd.ez.api.User+xml" />
         <creationDate>22012-02-20T12:00:00</creationDate>
         <initialLanguageCode>ger-DE</initialLanguageCode>
         <names>
@@ -4699,7 +4699,7 @@ XML Example
           <versionNo>1</versionNo>
           <status>PUBLISHED</status>
           <modificationDate>2001-04-01T12:00:00</modificationDate>
-          <Creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+          <Creator href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>2001-04-01T12:00:00</creationDate>
           <initialLanguageCode>eng-UK</initialLanguageCode>
           <Content href="/content/objects/79" media-type="application/vnd.ez.api.ContentInfo+xml" />
