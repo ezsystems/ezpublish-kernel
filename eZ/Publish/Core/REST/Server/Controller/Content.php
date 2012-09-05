@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
 
 use \eZ\Publish\API\Repository\ContentService;
+use \eZ\Publish\API\Repository\LocationService;
 use \eZ\Publish\API\Repository\SectionService;
 
 use Qafoo\RMF;
@@ -45,6 +46,13 @@ class Content
     protected $contentService;
 
     /**
+     * Location service
+     *
+     * @var \eZ\Publish\API\Repository\LocationService
+     */
+    protected $locationService;
+
+    /**
      * Section service
      *
      * @var \eZ\Publish\API\Repository\SectionService
@@ -59,11 +67,12 @@ class Content
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\SectionService $sectionService
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, ContentService $contentService, SectionService $sectionService )
+    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, ContentService $contentService, LocationService $locationService, SectionService $sectionService )
     {
         $this->inputDispatcher = $inputDispatcher;
         $this->urlHandler      = $urlHandler;
         $this->contentService  = $contentService;
+        $this->locationService = $locationService;
         $this->sectionService  = $sectionService;
     }
 
@@ -75,12 +84,39 @@ class Content
      */
     public function loadContentInfoByRemoteId( RMF\Request $request )
     {
+        $contentInfo = $this->contentService->loadContentInfoByRemoteId(
+            // GET variable
+            $request->variables['remoteId']
+        );
+
         return new Values\ContentList( array(
-            $this->contentService->loadContentInfoByRemoteId(
-                // GET variable
-                $request->variables['remoteId']
+            new Values\RestContent(
+                $contentInfo,
+                $this->locationService->loadLocation( $contentInfo->mainLocationId )
             )
         ) );
+    }
+
+    /**
+     * Loads a content info, potentially with the current version embedded
+     *
+     * @param RMF\Request $request
+     * @return  EmbeddingContentInfo
+     */
+    public function loadContent( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'object', $request->path );
+
+        $contentInfo = $this->service->loadContentInfo( $urlValues['object'] );
+        $mainLocation = $this->locationService->loadLocation( $contentInfo->mainLocationId );
+
+        $contentVersion = null;
+        if ( strpos( $request->contentType, 'application/vnd.ez.api.Content+' ) === 0 )
+        {
+            $contentVersion = $this->loadContent( $urlValues['object'] );
+        }
+
+        return new Values\RestContent( $contentInfo, $contentVersion );
     }
 
     /**
@@ -91,7 +127,7 @@ class Content
      */
     public function updateContentMetadata( RMF\Request $request )
     {
-        $values = $this->urlHandler->parse( 'content', $request->path );
+        $values = $this->urlHandler->parse( 'object', $request->path );
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
                 array( 'Content-Type' => $request->contentType ),

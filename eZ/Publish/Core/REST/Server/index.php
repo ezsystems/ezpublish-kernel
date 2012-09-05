@@ -142,6 +142,7 @@ $contentController = new Controller\Content(
     $inputDispatcher,
     $urlHandler,
     $repository->getContentService(),
+    $repository->getLocationService(),
     $repository->getSectionService()
 );
 
@@ -201,7 +202,7 @@ $valueObjectVisitors = array(
     // Content
 
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentList'                => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\RestContent'          => new Output\ValueObjectVisitor\RestContent( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestContent'                => new Output\ValueObjectVisitor\RestContent( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo'          => new Output\ValueObjectVisitor\VersionInfo( $urlHandler ),
     // Includes vitising of VersionInfo, which can be extracted for re-use, if
     // neccessary

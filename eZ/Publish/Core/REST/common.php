@@ -9,7 +9,11 @@
 
 namespace eZ\Publish\Core\REST;
 
-define( 'HTTP_BASE_URL', 'http://localhost:8042/' );
+
+if ( !defined( 'HTTP_BASE_URL' ) )
+{
+    define( 'HTTP_BASE_URL', 'http://localhost:8042/' );
+}
 
 /**
  * This file includes the configuration of the REST SDK client.
@@ -114,7 +118,10 @@ $inputParsers = array(
         new Client\Input\Parser\VersionInfo( $parserTools, $repository->getContentService() )
     ),
     'application/vnd.ez.api.ContentList'          => new Client\Input\Parser\ContentList(),
-    'application/vnd.ez.api.ContentInfo'          => new Client\Input\Parser\ContentInfo(),
+    'application/vnd.ez.api.ContentInfo'          => new Client\Input\Parser\ContentInfo(
+        $parserTools,
+        $repository->getContentTypeService()
+     ),
     'application/vnd.ez.api.SectionList'          => new Client\Input\Parser\SectionList(),
     'application/vnd.ez.api.Section'              => new Client\Input\Parser\Section(),
     'application/vnd.ez.api.ErrorMessage'         => new Client\Input\Parser\ErrorMessage(),

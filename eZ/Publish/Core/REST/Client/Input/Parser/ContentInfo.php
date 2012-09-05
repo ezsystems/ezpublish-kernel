@@ -8,11 +8,13 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
+use eZ\Publish\Core\REST\Client\Input\ParserTools;
+use eZ\Publish\Core\REST\Client\ContentTypeService;
 
 use eZ\Publish\Core\REST\Common\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 
-use eZ\Publish\API\Repository\Tests\Stubs\Values;
+use eZ\Publish\Core\REST\Client\Values;
 
 /**
  * Parser for ContentInfo
@@ -20,19 +22,64 @@ use eZ\Publish\API\Repository\Tests\Stubs\Values;
 class ContentInfo extends Parser
 {
     /**
+     * @var eZ\Publish\Core\REST\Client\Input\ParserTools
+     */
+    protected $parserTools;
+
+    /**
+     * @var eZ\Publish\Core\REST\Client\ContentTypeService
+     */
+    protected $contentTypeService;
+
+    /**
+     * @param eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo $versionInfoParser
+     */
+    public function __construct( ParserTools $parserTools, ContentTypeService $contentTypeService )
+    {
+        $this->parserTools = $parserTools;
+        $this->contentTypeService = $contentTypeService;
+    }
+
+    /**
      * Parse input structure
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      * @todo Error handling
+     * @todo What about missing properties? Set them here, using the service to
+     *       load? Or better set them in the service, since loading is really
+     *       unsuitable here?
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
-        return new Values\Content\ContentInfoStub(
+
+        $contentTypeId = $this->parserTools->parseObjectElement( $data['ContentType'], $parsingDispatcher );
+        $ownerId = $this->parserTools->parseObjectElement( $data['Owner'], $parsingDispatcher );
+        $mainLocationId = $this->parserTools->parseObjectElement( $data['MainLocation'], $parsingDispatcher );
+        $sectionId = $this->parserTools->parseObjectElement( $data['Section'], $parsingDispatcher );
+
+        if ( isset( $data['CurrentVersion']['Version'] ) )
+        {
+            $this->parserTools->parseObjectElement( $data['CurrentVersion']['Version'], $parsingDispatcher );
+        }
+
+        return new Values\Content\ContentInfo(
+            $this->contentTypeService,
             array(
                 'id'   => $data['_href'],
-                'name' => $data['name'],
+                'name' => $data['Name'],
+                'contentTypeId' => $contentTypeId,
+                // TODO: What to do with $currentVersionNo?
+                // TODO: What to do with $published?
+                'ownerId' => $ownerId,
+                'modificationDate' => new \DateTime( $data['lastModificationDate'] ),
+                // TODO: What to do with $publishedDate?
+                'alwaysAvailable' => ( strtolower( $data['alwaysAvailable'] ) === 'true' ),
+                'remoteId' => $data['_remoteId'],
+                'mainLanguageCode' => $data['mainLanguageCode'],
+                'mainLocationId' => $mainLocationId,
+                'sectionId' => $sectionId,
             )
         );
     }
