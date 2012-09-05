@@ -73,36 +73,37 @@ class Configured implements ContentViewProvider
      */
     public function getViewForLocation( Location $location, $viewType )
     {
-        foreach ( $this->locationMatchConfig as $configHash )
+        if ( !isset( $this->locationMatchConfig[$viewType] ) )
+            return;
+
+        foreach ( $this->locationMatchConfig[$viewType] as $configHash )
         {
-            if ( $configHash['viewType'] === $viewType )
+            $hasMatched = true;
+            foreach ( $configHash['match'] as $matcherIdentifier => $value )
             {
-                $hasMatched = false;
-                foreach ( $configHash['match'] as $matcherIdentifier => $value )
+                // Caching the matcher instance in memory
+                if ( !isset( $this->matchers[$matcherIdentifier] ) )
                 {
-                    // Caching the matcher instance in memory
-                    if ( !isset( $this->matchers[$matcherIdentifier] ) )
-                    {
-                        $this->matchers[$matcherIdentifier] = $this->getMatcher( $matcherIdentifier );
-                    }
-                    $matcher = $this->matchers[$matcherIdentifier];
-
-                    if ( !$matcher instanceof Matcher )
-                        throw new \InvalidArgumentException(
-                            'Matcher for ContentViewProvider\\Configured must implement eZ\\Publish\\MVC\\View\\ContentViewProvider\\Configured\\Matcher interface.'
-                        );
-
-                    if ( $matcher instanceof RepositoryAwareInterface )
-                        $matcher->setRepository( $this->repository );
-
-                    $matcher->setMatchingConfig( $value );
-                    $hasMatched = $matcher->matchLocation( $location );
+                    $this->matchers[$matcherIdentifier] = $this->getMatcher( $matcherIdentifier );
                 }
+                $matcher = $this->matchers[$matcherIdentifier];
 
-                if ( $hasMatched )
-                {
-                    return new ContentView( $configHash['matchTemplate'] );
-                }
+                if ( !$matcher instanceof Matcher )
+                    throw new \InvalidArgumentException(
+                        'Matcher for ContentViewProvider\\Configured must implement eZ\\Publish\\MVC\\View\\ContentViewProvider\\Configured\\Matcher interface.'
+                    );
+
+                if ( $matcher instanceof RepositoryAwareInterface )
+                    $matcher->setRepository( $this->repository );
+
+                $matcher->setMatchingConfig( $value );
+                if ( !$matcher->matchLocation( $location ) )
+                    $hasMatched = false;
+            }
+
+            if ( $hasMatched )
+            {
+                return new ContentView( $configHash['template'] );
             }
         }
     }
