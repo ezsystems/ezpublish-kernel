@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider;
 
 use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider,
     eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher,
-    eZ\Publish\Core\MVC\Symfony\RepositoryAware,
+    eZ\Publish\Core\MVC\RepositoryAwareInterface,
     eZ\Publish\API\Repository\Repository,
     eZ\Publish\API\Repository\Values\Content\ContentInfo,
     eZ\Publish\API\Repository\Values\Content\Location,
@@ -92,7 +92,7 @@ class Configured implements ContentViewProvider
                             'Matcher for ContentViewProvider\\Configured must implement eZ\\Publish\\MVC\\View\\ContentViewProvider\\Configured\\Matcher interface.'
                         );
 
-                    if ( $matcher instanceof RepositoryAware )
+                    if ( $matcher instanceof RepositoryAwareInterface )
                         $matcher->setRepository( $this->repository );
 
                     $matcher->setMatchingConfig( $value );
