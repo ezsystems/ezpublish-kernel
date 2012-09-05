@@ -59,27 +59,37 @@ class ContentInfo extends Parser
         $mainLocationId = $this->parserTools->parseObjectElement( $data['MainLocation'], $parsingDispatcher );
         $sectionId = $this->parserTools->parseObjectElement( $data['Section'], $parsingDispatcher );
 
+        $locationListReference = $this->parserTools->parseObjectElement( $data['Locations'], $parsingDispatcher );
+        $versionListReference = $this->parserTools->parseObjectElement( $data['Versions'], $parsingDispatcher );
+        $currentVersionReference = $this->parserTools->parseObjectElement( $data['CurrentVersion'], $parsingDispatcher );
+
         if ( isset( $data['CurrentVersion']['Version'] ) )
         {
             $this->parserTools->parseObjectElement( $data['CurrentVersion']['Version'], $parsingDispatcher );
         }
 
-        return new Values\Content\ContentInfo(
-            $this->contentTypeService,
+        return new Values\RestContentInfo(
             array(
                 'id'   => $data['_href'],
                 'name' => $data['Name'],
                 'contentTypeId' => $contentTypeId,
-                // TODO: What to do with $currentVersionNo?
-                // TODO: What to do with $published?
                 'ownerId' => $ownerId,
                 'modificationDate' => new \DateTime( $data['lastModificationDate'] ),
-                // TODO: What to do with $publishedDate?
+
+                'publishedDate' => ( $publishedDate = ( !empty( $data['publishedDate'] )
+                    ? new \DateTime( $data['publishedDate'] )
+                    : null ) ),
+
+                'published' => ( $publishedDate !== null ),
                 'alwaysAvailable' => ( strtolower( $data['alwaysAvailable'] ) === 'true' ),
                 'remoteId' => $data['_remoteId'],
                 'mainLanguageCode' => $data['mainLanguageCode'],
                 'mainLocationId' => $mainLocationId,
                 'sectionId' => $sectionId,
+
+                'versionListReference' => $versionListReference,
+                'locationListReference' => $locationListReference,
+                'currentVersionReference' => $currentVersionReference,
             )
         );
     }

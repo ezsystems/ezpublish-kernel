@@ -196,7 +196,8 @@ class Repository implements \eZ\Publish\API\Repository\Repository
                 $this->client,
                 $this->inputDispatcher,
                 $this->outputVisitor,
-                $this->urlHandler
+                $this->urlHandler,
+                $this->getContentTypeService()
             );
         }
         return $this->contentService;
@@ -238,7 +239,6 @@ class Repository implements \eZ\Publish\API\Repository\Repository
         if ( null === $this->contentTypeService )
         {
             $this->contentTypeService = new ContentTypeService(
-                $this->getContentService(),
                 $this->client,
                 $this->inputDispatcher,
                 $this->outputVisitor,

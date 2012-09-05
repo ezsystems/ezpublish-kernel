@@ -26,6 +26,8 @@ use \eZ\Publish\Core\REST\Common\Input;
 use \eZ\Publish\Core\REST\Common\Output;
 use \eZ\Publish\Core\REST\Common\Message;
 
+use \eZ\Publish\Core\REST\Client\Values;
+
 /**
  * @example Examples/contenttype.php
  */
@@ -52,17 +54,24 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
     private $urlHandler;
 
     /**
+     * @var \eZ\Publish\Common\REST\Client\ContentTypeService
+     */
+    private $contentTypeService;
+
+    /**
      * @param \eZ\Publish\Core\REST\Client\HttpClient $client
      * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Common\REST\Client\ContentTypeService
      */
-    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler, ContentTypeService $contentTypeService )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
         $this->outputVisitor   = $outputVisitor;
         $this->urlHandler      = $urlHandler;
+        $this->contentTypeService = $contentTypeService;
     }
 
     /**
@@ -122,7 +131,49 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
             )
         );
         $contentList = $this->inputDispatcher->parse( $response );
-        return reset( $contentList );
+
+        if ( count( $contentList ) === 0 )
+        {
+            throw new NotFoundException( "@TODO: Error message." );
+        }
+
+        return $this->completeContentInfo( reset( $contentList ) );
+    }
+
+    /**
+     * Returns a complete ContentInfo based on $restContentInfo
+     *
+     * @param RestContentInfo $restContentInfo
+     * @return eZ\Publish\Core\REST\Client\Values\Content\ContentInfo
+     */
+    protected function completeContentInfo( Values\RestContentInfo $restContentInfo )
+    {
+        $versionResponse = $this->client->request(
+            'GET',
+            $restContentInfo->currentVersionReference
+        );
+
+        $versionUrlValues = $this->urlHandler->parse( 'objectVersion', $versionResponse->headers['Location'] );
+
+        return new Values\Content\ContentInfo(
+            $this->contentTypeService,
+            array(
+                'id' => $restContentInfo->id,
+                'name' => $restContentInfo->name,
+                'contentTypeId' => $restContentInfo->contentTypeId,
+                'ownerId' => $restContentInfo->ownerId,
+                'modificationDate' => $restContentInfo->modificationDate,
+                'publishedDate' => $restContentInfo->publishedDate,
+                'published' => $restContentInfo->published,
+                'alwaysAvailable' => $restContentInfo->alwaysAvailable,
+                'remoteId' => $restContentInfo->remoteId,
+                'mainLanguageCode' => $restContentInfo->mainLanguageCode,
+                'mainLocationId' => $restContentInfo->mainLocationId,
+                'sectionId' => $restContentInfo->sectionId,
+
+                'currentVersionNo' => $versionUrlValues['version'],
+            )
+        );
     }
 
     /**
