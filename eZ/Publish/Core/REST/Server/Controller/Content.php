@@ -160,31 +160,21 @@ class Content
      * @param RMF\Request $request
      * @return void
      */
-    public function loadContentInVersion( RMF\Request $request )
-    {
-        $urlValues = $this->urlHandler->parse( 'objectVersion', $request->path );
-
-        return $this->contentService->loadContent(
-            $urlValues['object'],
-            null,               // TODO: Implement using language filter on request URI
-            $urlValues['version']
-        );
-    }
-
-    /**
-     * Loads a specific version of a given content object
-     *
-     * @param RMF\Request $request
-     * @return void
-     * @todo Fix this to return a redirect to the actual version URI!
-     */
-    public function loadContentInCurrentVersion( RMF\Request $request )
+    public function redirectCurrentVersion( RMF\Request $request )
     {
         $urlValues = $this->urlHandler->parse( 'objectCurrentVersion', $request->path );
 
-        return $this->contentService->loadContent(
-            $urlValues['object'],
-            null                // TODO: Implement using language filter on request URI
+        $contentInfo = $this->contentService->loadContentInfo( $urlValues['object'] );
+
+        return new Values\ResourceRedirect(
+            $this->urlHandler->generate(
+                'objectVersion',
+                array(
+                    'object' => $urlValues['object'],
+                    'version' => $contentInfo->currentVersionNo
+                )
+            ),
+            'Version'
         );
     }
 }
