@@ -140,6 +140,7 @@ class Content
      *
      * @param RMF\Request $request
      * @return void
+     * @todo Fix this to return a redirect to the actual version URI!
      */
     public function loadContentInCurrentVersion( RMF\Request $request )
     {
