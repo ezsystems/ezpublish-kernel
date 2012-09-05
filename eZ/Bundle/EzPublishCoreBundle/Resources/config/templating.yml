@@ -42,6 +42,6 @@ services:
 
     ezpublish.content_view_provider.configured:
         class: %ezpublish.content_view_provider.configured.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.siteaccess, @ezpublish.api.repository, @service_container]
         tags:
             - {name: ezpublish.content_view_provider, priority: 10}
