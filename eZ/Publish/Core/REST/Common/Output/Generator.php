@@ -30,6 +30,7 @@ abstract class Generator
     public function reset()
     {
         $this->stack = array();
+        $this->isEmpty = true;
     }
 
     /**
