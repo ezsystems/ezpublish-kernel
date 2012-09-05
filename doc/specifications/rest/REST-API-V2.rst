@@ -954,7 +954,8 @@ XML Example
 
     <?xml version="1.0" encoding="UTF-8"?>
     <VersionList href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml">
-      <Version href="/content/objects/23/versions/1" media-type="application/vnd.ez.api.Version+xml">
+      <VersionItem>
+        <Version href="/content/objects/23/versions/1" media-type="application/vnd.ez.api.Version+xml"/>
         <VersionInfo>
           <id>12</id>
           <versionNo>1</versionNo>
@@ -968,8 +969,9 @@ XML Example
           </names>
           <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
         </VersionInfo>
-      </Version>
-      <Version href="/content/objects/23/versions/2" media-type="application/vnd.ez.api.Version+xml">
+      </VersionItem>
+      <VersionItem>
+        <Version href="/content/objects/23/versions/2" media-type="application/vnd.ez.api.Version+xml"/>
         <VersionInfo>
           <id>22</id>
           <versionNo>2</versionNo>
@@ -983,8 +985,9 @@ XML Example
           </names>
           <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
         </VersionInfo>
-      </Version>
-      <Version href="/content/objects/23/versions/3" media-type="application/vnd.ez.api.Version+xml">
+      </VersionItem>
+      <VersionItem>
+        <Version href="/content/objects/23/versions/3" media-type="application/vnd.ez.api.Version+xml"/>
         <VersionInfo>
           <id>44</id>
           <versionNo>3</versionNo>
@@ -999,8 +1002,9 @@ XML Example
           </names>
           <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
         </VersionInfo>
-      </Version>
-      <Version href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml">
+      </VersionItem>
+      <VersionItem>
+        <Version href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml"/>
         <VersionInfo>
           <id>45</id>
           <versionNo>4</versionNo>
@@ -1015,7 +1019,7 @@ XML Example
           </names>
           <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
         </VersionInfo>
-      </Version>
+      </VersionItem>
     </VersionList>
 
 Load Version
@@ -6074,18 +6078,23 @@ VersionList XML Schema
       xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
       <xsd:include schemaLocation="Version.xsd" />
       <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:complexType name="versionListItemType">
+        <xsd:all>
+          <xsd:element name="Version" type="ref"></xsd:element>
+          <xsd:element name="VersionInfo" type="versionInfoType"></xsd:element>
+        </xsd:all>
+      </xsd:complexType>
       <xsd:complexType name="vnd.ez.api.VersionList">
         <xsd:complexContent>
           <xsd:extension base="ref">
             <xsd:sequence>
-              <xsd:element name="Version" type="vnd.ez.api.Version"/>
+              <xsd:element name="VersionItem" type="versionListItemType"/>
             </xsd:sequence>
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
       <xsd:element name="VersionList" type="vnd.ez.api.VersionList"></xsd:element>
     </xsd:schema>
-
 
 
 .. _VersionUpdate:
