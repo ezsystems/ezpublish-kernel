@@ -35,6 +35,11 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
 
         $generator
             ->expects( $this->at( 2 ) )
+            ->method( 'isEmpty' )
+            ->will( $this->returnValue( false ) );
+
+        $generator
+            ->expects( $this->at( 3 ) )
             ->method( 'endDocument' )
             ->with( $data )
             ->will( $this->returnValue( 'Hello world!' ) );
@@ -47,6 +52,37 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             new Common\Message( array(), 'Hello world!' ),
+            $visitor->visit( $data )
+        );
+    }
+
+    public function testVisitEmptyDocument()
+    {
+        $data = new \stdClass();
+
+        $generator = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' );
+        $generator
+            ->expects( $this->at( 1 ) )
+            ->method( 'startDocument' )
+            ->with( $data );
+
+        $generator
+            ->expects( $this->at( 2 ) )
+            ->method( 'isEmpty' )
+            ->will( $this->returnValue( true ) );
+
+        $generator
+            ->expects( $this->never() )
+            ->method( 'endDocument' );
+
+        $visitor = $this->getMock(
+            '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
+            array( 'visitValueObject' ),
+            array( $generator, array() )
+        );
+
+        $this->assertEquals(
+            new Common\Message( array() ),
             $visitor->visit( $data )
         );
     }
