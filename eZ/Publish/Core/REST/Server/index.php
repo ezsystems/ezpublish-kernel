@@ -58,16 +58,15 @@ $stateDir    = __DIR__ . '/_state/';
 $reInitializeRepository = true;
 if ( isset( $_SERVER['HTTP_X_TEST_SESSION'] ) )
 {
-    $sessionFile = $stateDir . $_SERVER['HTTP_X_TEST_SESSION'] . '.session';
+    $sessionId = $_SERVER['HTTP_X_TEST_SESSION'];
+
+    $sessionFile = __DIR__ . '/.session';
 
     // Only re-initialize the repository, if for the current session no session
     // file exists
-    $reInitializeRepository = ( !is_file( $sessionFile ) );
+    $reInitializeRepository = ( !is_file( $sessionFile )  || file_get_contents( $sessionFile ) !== $sessionId );
 
-    // TODO: Remove orphan session files here!
-
-    // Create session file for next request with this session
-    touch( $sessionFile );
+    file_put_contents( $sessionFile, $sessionId );
 }
 
 /*
