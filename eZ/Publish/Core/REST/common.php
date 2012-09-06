@@ -9,7 +9,11 @@
 
 namespace eZ\Publish\Core\REST;
 
-define( 'HTTP_BASE_URL', 'http://localhost:8042/' );
+
+if ( !defined( 'HTTP_BASE_URL' ) )
+{
+    define( 'HTTP_BASE_URL', 'http://localhost:8042/' );
+}
 
 /**
  * This file includes the configuration of the REST SDK client.
@@ -95,6 +99,10 @@ $repository = new Client\IntegrationTestRepository(
     $authenticator
 );
 
+
+// Object with convenience methods for parsers
+$parserTools = new Client\Input\ParserTools();
+
 // The parsing dispatcher configures which parsers are used for which
 // mime type. The mime types (content types) are provided *WITHOUT* an
 // encoding type (+json / +xml).
@@ -103,12 +111,17 @@ $repository = new Client\IntegrationTestRepository(
 // should be used to process the given mime type.
 $inputParsers = array(
     'application/vnd.ez.api.Version'              => new Client\Input\Parser\Content(
+        $parserTools,
+        $repository->getContentService(),
         // Circular reference, since REST does not transmit content info when
         // loading the VersionInfo (which is included in the content)
-        new Client\Input\Parser\VersionInfo( $repository->getContentService() )
+        new Client\Input\Parser\VersionInfo( $parserTools, $repository->getContentService() )
     ),
     'application/vnd.ez.api.ContentList'          => new Client\Input\Parser\ContentList(),
-    'application/vnd.ez.api.ContentInfo'          => new Client\Input\Parser\ContentInfo(),
+    'application/vnd.ez.api.ContentInfo'          => new Client\Input\Parser\ContentInfo(
+        $parserTools,
+        $repository->getContentTypeService()
+     ),
     'application/vnd.ez.api.SectionList'          => new Client\Input\Parser\SectionList(),
     'application/vnd.ez.api.Section'              => new Client\Input\Parser\Section(),
     'application/vnd.ez.api.ErrorMessage'         => new Client\Input\Parser\ErrorMessage(),

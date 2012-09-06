@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
-use eZ\Publish\Core\REST\Client\Input\Parser;
+use eZ\Publish\Core\REST\Client\Input;
 use eZ\Publish\API\Repository\Values;
 
 class VersionInfoTest extends BaseTest
@@ -52,11 +52,6 @@ class VersionInfoTest extends BaseTest
                 '_href' => '/content/objects/10',
             ),
         );
-
-        $this->getContentServiceMock()->expects( $this->once() )
-            ->method( 'loadContentInfo' )
-            ->with( $this->equalTo( '/content/objects/10' ) )
-            ->will( $this->returnValue( 'ContentInfo' ) );
 
         $result = $relationParser->parse( $inputArray, $this->getParsingDispatcherMock() );
 
@@ -158,12 +153,11 @@ class VersionInfoTest extends BaseTest
     /**
      * @depends testParse
      */
-    public function testParsedContentInfo( $parsedVersionInfo )
+    public function testParsedContentInfoId( $parsedVersionInfo )
     {
         $this->assertEquals(
-            // Mock result
-            'ContentInfo',
-            $parsedVersionInfo->contentInfo
+            '/content/objects/10',
+            $parsedVersionInfo->contentInfoId
         );
     }
 
@@ -174,7 +168,10 @@ class VersionInfoTest extends BaseTest
      */
     protected function getParser()
     {
-        return new Parser\VersionInfo( $this->getContentServiceMock() );
+        return new Input\Parser\VersionInfo(
+            new Input\ParserTools(),
+            $this->getContentServiceMock()
+        );
     }
 
     /**

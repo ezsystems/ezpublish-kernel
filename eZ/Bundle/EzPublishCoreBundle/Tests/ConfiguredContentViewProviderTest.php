@@ -83,11 +83,12 @@ class ConfiguredContentViewProviderTest extends BaseTest
             ->will(
                 $this->returnValue(
                     array(
-                        'matchRule' => array(
-                            'viewType'         => 'full',
-                            'matchTemplate'    => 'my_template.html.twig',
-                            'match'            => array(
-                                $matcherServiceIdentifier   => 'someValue'
+                        'full' => array(
+                            'matchRule' => array(
+                                'template'    => 'my_template.html.twig',
+                                'match'            => array(
+                                    $matcherServiceIdentifier   => 'someValue'
+                                )
                             )
                         )
                     )

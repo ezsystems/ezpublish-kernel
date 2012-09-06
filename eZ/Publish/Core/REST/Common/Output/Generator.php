@@ -30,6 +30,7 @@ abstract class Generator
     public function reset()
     {
         $this->stack = array();
+        $this->isEmpty = true;
     }
 
     /**
@@ -38,6 +39,13 @@ abstract class Generator
      * @param mixed $data
      */
     abstract public function startDocument( $data );
+
+    /**
+     * Returns if the document is empty or already contains data
+     *
+     * @return bool
+     */
+    abstract public function isEmpty();
 
     /**
      * Check start document

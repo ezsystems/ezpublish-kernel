@@ -175,4 +175,23 @@ abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
         $generator->startList( 'list' );
         $generator->startList( 'attribute', 'value' );
     }
+
+    public function testEmptyDocument()
+    {
+        $generator = $this->getGenerator();
+
+        $generator->startDocument( 'test' );
+
+        $this->assertTrue( $generator->isEmpty() );
+    }
+
+    public function testNonEmptyDocument()
+    {
+        $generator = $this->getGenerator();
+
+        $generator->startDocument( 'test' );
+        $generator->startObjectElement( 'element' );
+
+        $this->assertFalse( $generator->isEmpty() );
+    }
 }
