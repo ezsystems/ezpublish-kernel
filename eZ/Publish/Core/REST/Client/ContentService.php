@@ -105,8 +105,16 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function loadContentInfo( $contentId )
     {
-        return 'MockedContentInfo';
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $contentId,
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'ContentInfo' ) )
+            )
+        );
+
+        $restContentInfo = $this->inputDispatcher->parse( $response );
+        return $this->completeContentInfo( $restContentInfo );
     }
 
     /**
@@ -148,12 +156,10 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     protected function completeContentInfo( Values\RestContentInfo $restContentInfo )
     {
-        $versionResponse = $this->client->request(
-            'GET',
-            $restContentInfo->currentVersionReference
+        $versionUrlValues = $this->urlHandler->parse(
+            'objectVersion',
+            $this->fetchCurrentVersionUrl( $restContentInfo->currentVersionReference )
         );
-
-        $versionUrlValues = $this->urlHandler->parse( 'objectVersion', $versionResponse->headers['Location'] );
 
         return new Values\Content\ContentInfo(
             $this->contentTypeService,
@@ -173,6 +179,41 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
 
                 'currentVersionNo' => $versionUrlValues['version'],
             )
+        );
+    }
+
+    /**
+     * Returns the URL of the current version referenced by
+     * $currentVersionReference
+     *
+     * @param string $currentVersionReference
+     * @return string
+     */
+    protected function fetchCurrentVersionUrl( $currentVersionReference )
+    {
+        $versionResponse = $this->client->request(
+            'GET',
+            $currentVersionReference
+        );
+
+        if ( $this->isErrorResponse( $versionResponse ) )
+        {
+            return $this->inputDispatcher->parse( $versionResponse );
+        }
+
+        return $versionResponse->headers['Location'];
+    }
+
+    /**
+     * Checks if the given response is an error
+     *
+     * @param Message $response
+     * @return bool
+     */
+    protected function isErrorResponse( Message $response )
+    {
+        return (
+            strpos( $response->headers['Content-Type'], 'application/vnd.ez.api.ErrorMessage' ) === 0
         );
     }
 
@@ -228,7 +269,11 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function loadContentByContentInfo( ContentInfo $contentInfo, array $languages = null, $versionNo = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        return $this->loadContent(
+            $contentInfo->id,
+            $languages,
+            $versionNo
+        );
     }
 
     /**
@@ -243,7 +288,9 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function loadContentByVersionInfo( VersionInfo $versionInfo, array $languages = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $contentInfo = $versionInfo->getContentInfo();
+
+        return $this->loadContent( $contentInfo->id, $languages, $versionInfo->versionNo );
     }
 
     /**
@@ -270,10 +317,12 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
         $url = '';
         if ( $versionNo === null )
         {
-            $url = $this->urlHandler->generate(
-                'objectCurrentVersion',
-                array(
-                    'object' => $contentIdValues['object'],
+            $url = $this->fetchCurrentVersionUrl(
+                $this->urlHandler->generate(
+                    'objectCurrentVersion',
+                    array(
+                        'object' => $contentIdValues['object'],
+                    )
                 )
             );
         }
@@ -288,15 +337,15 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
             );
         }
 
-        return $this->inputDispatcher->parse(
-            $this->client->request(
-                'GET',
-                $url,
-                new Message(
-                    array( 'Accept' => $this->outputVisitor->getMediaType( 'Version' ) )
-                )
+        $response = $this->client->request(
+            'GET',
+            $url,
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'Version' ) )
             )
         );
+
+        return $this->inputDispatcher->parse( $response );
     }
 
     /**
@@ -315,7 +364,9 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $contentInfo = $this->loadContentInfoByRemoteId( $remoteId );
+
+        return $this->loadContentByContentInfo( $contentInfo, $languages, $versionNo );
     }
 
     /**

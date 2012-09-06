@@ -107,16 +107,34 @@ class Content
     {
         $urlValues = $this->urlHandler->parse( 'object', $request->path );
 
-        $contentInfo = $this->service->loadContentInfo( $urlValues['object'] );
+        $contentInfo = $this->contentService->loadContentInfo( $urlValues['object'] );
         $mainLocation = $this->locationService->loadLocation( $contentInfo->mainLocationId );
 
         $contentVersion = null;
-        if ( strpos( $request->contentType, 'application/vnd.ez.api.Content+' ) === 0 )
+        if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.Content' )
         {
             $contentVersion = $this->loadContent( $urlValues['object'] );
         }
 
-        return new Values\RestContent( $contentInfo, $contentVersion );
+        return new Values\RestContent( $contentInfo, $mainLocation, $contentVersion );
+    }
+
+    /**
+     * Extracts the requested media type from $request
+     *
+     * @param RMF\Request $request
+     * @return string
+     */
+    protected function getMediaType( RMF\Request $request )
+    {
+        foreach ( $request->mimetype as $mimeType )
+        {
+            if ( preg_match( '(^([a-z0-9-/.]+)\+.*$)', $mimeType['value'], $matches ) )
+            {
+                return $matches[1];
+            }
+        }
+        return 'unknown/unknown';
     }
 
     /**
@@ -175,6 +193,23 @@ class Content
                 )
             ),
             'Version'
+        );
+    }
+
+    /**
+     * Loads a specific version of a given content object
+     *
+     * @param RMF\Request $request
+     * @return void
+     */
+    public function loadContentInVersion( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'objectVersion', $request->path );
+
+        return $this->contentService->loadContent(
+            $urlValues['object'],
+            null,               // TODO: Implement using language filter on request URI
+            $urlValues['version']
         );
     }
 }
