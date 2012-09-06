@@ -40,4 +40,49 @@ abstract class ValueObjectVisitor
      * @param mixed $data
      */
     abstract public function visit( Visitor $visitor, Generator $generator, $data );
+
+    /**
+     * Visits the given list of $names
+     *
+     * @param Generator $generator
+     * @param array $names
+     * @return void
+     */
+    protected function visitNamesList( Generator $generator, array $names )
+    {
+        $this->visitTranslatedList( $generator, $names, 'names' );
+    }
+
+    /**
+     * Visits the given list of $descriptions
+     *
+     * @param Generator $generator
+     * @param array $descriptions
+     * @return void
+     */
+    protected function visitDescriptionsList( Generator $generator, array $descriptions )
+    {
+        $this->visitTranslatedList( $generator, $descriptions, 'descriptions' );
+    }
+
+    /**
+     * Visits a list of translated elements
+     *
+     * @param Generator $generator
+     * @param array $translatedElements
+     * @param mixed $listName
+     * @return void
+     */
+    protected function visitTranslatedList( Generator $generator, array $translatedElements, $listName )
+    {
+        $generator->startHashElement( $listName );
+        $generator->startList( 'value' );
+        foreach ( $translatedElements as $languageCode => $element )
+        {
+            $generator->startValueElement( 'value', $element, array( 'languageCode' => $languageCode ) );
+            $generator->endValueElement( 'value' );
+        }
+        $generator->endList( 'value' );
+        $generator->endHashElement( $listName );
+    }
 }
