@@ -52,7 +52,7 @@ class eZPublish extends Pattern
         ''                     => '/content/typegroups/{typegroup}/types',
         'types'                => '/content/types',
         'type'                 => '/content/types/{type}',
-        ''                     => '/content/types/{type}/draft',
+        'typeDraft'            => '/content/types/{type}/draft',
         ''                     => '/content/types/{type}/draft/fieldDefinitions',
         ''                     => '/content/types/{type}/draft/fieldDefinitions/{fieldDefinition}',
         ''                     => '/content/types/{type}/groups',
