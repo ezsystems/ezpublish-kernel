@@ -1,0 +1,141 @@
+<?php
+/**
+ * File containing the DynamicConfigResolver class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
+namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration;
+
+use eZ\Publish\Core\MVC\ConfigResolverInterface,
+    eZ\Publish\Core\MVC\Symfony\SiteAccess,
+    eZ\Publish\Core\MVC\Exception\ParameterNotFoundException,
+    Symfony\Component\DependencyInjection\ContainerInterface;
+
+/**
+ * This class will help you to get settings for a specific scope.
+ * This is useful to get a setting for a specific siteaccess for example.
+ *
+ * It will check the different scopes available for a given namespace to find the appropriate parameter.
+ * To work, the dynamic setting must comply internally to the following name format : "<namespace>.<scope>.parameter.name".
+ *
+ * - <namespace> is the namespace for your dynamic setting. Defaults to "ezsettings", but can be anything.
+ * - <scope> is basically the siteaccess name you want your parameter value to apply to.
+ *   Can also be "global" for a global override.
+ *   Another scope is used internally: "default". This is the generic fallback.
+ *
+ * The resolve scope order is the following:
+ * 1. "global"
+ * 2. SiteAccess name
+ * 3. "default"
+ */
+class DynamicConfigResolver implements ConfigResolverInterface
+{
+    const SCOPE_GLOBAL = 'global',
+          SCOPE_DEFAULT = 'default';
+
+    const UNDEFINED_STRATEGY_EXCEPTION = 1,
+          UNDEFINED_STRATEGY_NULL = 2;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
+     */
+    protected $siteAccess;
+
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * @var string
+     */
+    protected $defaultNamespace;
+
+    /**
+     * @var int
+     */
+    protected $undefinedStrategy;
+
+    /**
+     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param string $defaultNamespace The default namespace
+     * @param int $undefinedStrategy Strategy to use when encountering undefined parameters.
+     *                               Must be one of
+     *                                  - DynamicConfigResolver::UNDEFINED_STRATEGY_EXCEPTION (throw an exception)
+     *                                  - DynamicConfigResolver::UNDEFINED_STRATEGY_NULL (return null)
+     */
+    public function __construct( SiteAccess $siteAccess, ContainerInterface $container, $defaultNamespace, $undefinedStrategy = self::UNDEFINED_STRATEGY_EXCEPTION )
+    {
+        $this->siteAccess = $siteAccess;
+        $this->container = $container;
+        $this->defaultNamespace = $defaultNamespace;
+        $this->undefinedStrategy = $undefinedStrategy;
+    }
+
+    public function setUndefinedStrategy( $undefinedStrategy )
+    {
+        $this->undefinedStrategy = $undefinedStrategy;
+    }
+
+    public function getUndefinedStrategy()
+    {
+        return $this->undefinedStrategy;
+    }
+
+    /**
+     * Returns value for $paramName, in $namespace.
+     *
+     * @param string $paramName The parameter name, without $prefix and the current scope (i.e. siteaccess name).
+     * @param string $namespace Namespace for the parameter name. If null, the default namespace will be used.
+     *
+     * @throws \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException
+     * @return mixed
+     */
+    public function getParameter( $paramName, $namespace = null )
+    {
+        $namespace = $namespace ?: $this->defaultNamespace;
+        $triedScopes = array();
+
+        // Global scope
+        $globalScopeParamName = "$namespace." . self::SCOPE_GLOBAL . ".$paramName";
+        if ( $this->container->hasParameter( $globalScopeParamName ) )
+        {
+            return $this->container->getParameter( $globalScopeParamName );
+        }
+        $triedScopes[] = self::SCOPE_GLOBAL;
+        unset( $globalScopeParamName );
+
+        // Relative scope (i.e. siteaccess relative)
+        $relativeScopeParamName = "$namespace.{$this->siteAccess->name}.$paramName";
+        if ( $this->container->hasParameter( $relativeScopeParamName ) )
+        {
+            return $this->container->getParameter( $relativeScopeParamName );
+        }
+        $triedScopes[] = $this->siteAccess->name;
+        unset( $relativeScopeParamName );
+
+        // Default scope
+        $defaultScopeParamName = "$namespace." . self::SCOPE_DEFAULT . ".$paramName";
+        if ( $this->container->hasParameter( $defaultScopeParamName ) )
+        {
+            return $this->container->getParameter( $defaultScopeParamName );
+        }
+        $triedScopes[] = $this->defaultNamespace;
+        unset( $defaultScopeParamName );
+
+        // Undefined parameter
+        switch ( $this->undefinedStrategy )
+        {
+            case self::UNDEFINED_STRATEGY_NULL:
+                return null;
+
+            case self::UNDEFINED_STRATEGY_EXCEPTION:
+            default:
+                throw new ParameterNotFoundException( $paramName, $namespace, $triedScopes );
+        }
+    }
+}
