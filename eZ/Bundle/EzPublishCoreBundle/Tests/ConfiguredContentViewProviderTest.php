@@ -33,7 +33,7 @@ class ConfiguredContentViewProviderTest extends BaseTest
     public function testGetMatcherForLocation()
     {
         $matcherServiceIdentifier = 'my.matcher.service';
-        $container = $this->getContainerMock( $matcherServiceIdentifier );
+        $container = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
 
         // The following should happen in getMatcher()
         $container
@@ -50,7 +50,8 @@ class ConfiguredContentViewProviderTest extends BaseTest
             )
         ;
 
-        $cvp = new Configured( $this->siteAccess, $this->repositoryMock, $container );
+        $resolverMock = $this->getResolverMock( $matcherServiceIdentifier );
+        $cvp = new Configured( $resolverMock, $this->repositoryMock, $container );
         $cvp->getViewForLocation(
             $this->getLocationMock(),
             'full'
@@ -58,44 +59,32 @@ class ConfiguredContentViewProviderTest extends BaseTest
     }
 
     /**
-     * Returns a properly configured DIC instance.
-     *
      * @param $matcherServiceIdentifier
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getContainerMock( $matcherServiceIdentifier )
+    private function getResolverMock( $matcherServiceIdentifier )
     {
-        $container = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
-        $configIdConstraint = $this->logicalAnd(
-            $this->stringStartsWith( 'ezpublish.' ),
-            $this->stringEndsWith( '_view.' . $this->siteAccess->name )
-        );
-        $container
-            ->expects( $this->atLeastOnce() )
-            ->method( 'hasParameter' )
-            ->with( $configIdConstraint )
-            ->will( $this->returnValue( true ) )
-        ;
-        $container
+        $resolverMock = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
+        $resolverMock
             ->expects( $this->atLeastOnce() )
             ->method( 'getParameter' )
-            ->with( $configIdConstraint )
+            ->with( $this->logicalOr( 'location_view', 'content_view' ) )
             ->will(
                 $this->returnValue(
                     array(
-                        'full' => array(
-                            'matchRule' => array(
-                                'template'    => 'my_template.html.twig',
-                                'match'            => array(
-                                    $matcherServiceIdentifier   => 'someValue'
-                                )
-                            )
-                        )
+                         'full' => array(
+                             'matchRule' => array(
+                                 'template'    => 'my_template.html.twig',
+                                 'match'            => array(
+                                     $matcherServiceIdentifier   => 'someValue'
+                                 )
+                             )
+                         )
                     )
                 )
             )
         ;
 
-        return $container;
+        return $resolverMock;
     }
 }
