@@ -2409,6 +2409,9 @@ List TrashItems
 :Resource: /content/trash
 :Method: GET
 :Description: Returns a list of all trash items
+:Parameters:
+    :limit:    only <limit> items will be returned started by offset
+    :offset:   offset of the result set
 :Headers:
     :Accept:
          :application/vnd.ez.api.Trash+xml:  if set the new location is returned in xml format (see Trash_)
