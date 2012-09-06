@@ -2411,8 +2411,8 @@ List TrashItems
 :Description: Returns a list of all trash items
 :Headers:
     :Accept:
-         :application/vnd.ez.api.LocationList+xml:  if set the new location is returned in xml format (see Location_)
-         :application/vnd.ez.api.LocationList+json:  if set the new location is returned in json format (see Location_)
+         :application/vnd.ez.api.Trash+xml:  if set the new location is returned in xml format (see Trash_)
+         :application/vnd.ez.api.Trash+json:  if set the new location is returned in json format (see Trash_)
 :Response: 
 
 .. code:: http
@@ -2421,7 +2421,7 @@ List TrashItems
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Location_  (locationListType)     
+          Trash_
 
 :ErrorCodes: 
     :401: If the user has no permission to read the trash
@@ -2433,8 +2433,8 @@ Get TrashItem
 :Description: Returns the trash item given by id
 :Headers:
     :Accept:
-         :application/vnd.ez.api.Location+xml:  if set the new location is returned in xml format (see Location_)
-         :application/vnd.ez.api.Location+json:  if set the new location is returned in json format (see Location_)
+         :application/vnd.ez.api.TrashItem+xml:  if set the new trash item is returned in xml format (see Trash_)
+         :application/vnd.ez.api.TrashItem+json:  if set the new trash item is returned in json format (see Trash_)
 :Response: 
 
 .. code:: http
@@ -2443,7 +2443,7 @@ Get TrashItem
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Location_      
+          Trash_      
 
 :Error Codes:
     :401: If the user has no permission to read the trash item
@@ -6927,6 +6927,126 @@ Location XML Schema
       <xsd:element name="Location" type="vnd.ez.api.Location" />
       <xsd:element name="LocationList" type="vnd.ez.api.LocationList" />
     </xsd:schema>
+
+
+.. _Trash:
+
+Trash XML Schema
+----------------
+
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:include schemaLocation="Location.xsd" />
+
+      <xsd:complexType name="vnd.ez.api.TrashItem">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:element name="id" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Location ID.
+                              </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="priority" type="xsd:int">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Location priority
+                    Position of the
+                    Location among its siblings when sorted using priority
+                    sort order.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="hidden" type="xsd:boolean">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Indicates that the Location entity has
+                    been explicitly marked as hidden.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="invisible" type="xsd:boolean">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Indicates that the Location is
+                    implicitly marked as hidden by a parent
+                    location.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="ParentLocation" type="ref">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    The parent location
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="pathString" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    The materialized path of the location
+                    entry, eg: /1/2/
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="subLocationModificationDate"
+                type="xsd:dateTime">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Timestamp of the latest update of a
+                    content object in a sub location.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="depth" type="xsd:int">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Depth location has in the location
+                    tree.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="childCount" type="xsd:int">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    the number of chidren visible to the
+                    authenticated user which has
+                    loaded this instance.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="remoteId" type="xsd:string"
+                minOccurs="0" />
+              <xsd:element name="Content" type="ref" />
+              <xsd:element name="sortField" type="sortFieldType" />
+              <xsd:element name="sortOrder" type="sortOrderType" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="vnd.ez.api.Trash">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:sequence>
+              <xsd:element name="trashItem" type="vnd.ez.api.TrashItem"></xsd:element>
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:element name="trash" type="vnd.ez.api.Trash" />
+    </xsd:schema>
+
+
+
+
 
 .. _UrlAlias:
 
