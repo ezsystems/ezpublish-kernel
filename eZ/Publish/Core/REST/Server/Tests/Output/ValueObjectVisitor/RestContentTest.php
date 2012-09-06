@@ -17,20 +17,6 @@ use eZ\Publish\Core\REST\Common;
 
 class RestContentTest extends ValueObjectVisitorBaseTest
 {
-    protected function assertXPath( \DOMNode $domNode, $xpathExpression )
-    {
-        $ownerDocument = ( $domNode instanceof \DOMDOcument
-            ? $domNode
-            : $domNode->ownerDocument );
-
-        $xpath = new \DOMXPath( $ownerDocument );
-
-        $this->assertTrue(
-            $xpath->evaluate( "boolean({$xpathExpression})", $domNode ),
-            "XPath expression '{$xpathExpression}' resulted in an empty node set."
-        );
-    }
-
     /**
      * @return DOMDocument
      */
