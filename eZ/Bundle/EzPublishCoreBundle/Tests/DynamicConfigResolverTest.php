@@ -48,6 +48,10 @@ class DynamicConfigResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertSame( $strategy, $resolver->getUndefinedStrategy() );
         $resolver->setUndefinedStrategy( DynamicConfigResolver::UNDEFINED_STRATEGY_EXCEPTION );
         $this->assertSame( DynamicConfigResolver::UNDEFINED_STRATEGY_EXCEPTION, $resolver->getUndefinedStrategy() );
+
+        $this->assertSame( $defaultNS, $resolver->getDefaultNamespace() );
+        $resolver->setDefaultNamespace( 'anotherNamespace' );
+        $this->assertSame( 'anotherNamespace', $resolver->getDefaultNamespace() );
     }
 
     /**

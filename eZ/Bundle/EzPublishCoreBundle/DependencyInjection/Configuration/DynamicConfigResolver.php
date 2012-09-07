@@ -138,4 +138,22 @@ class DynamicConfigResolver implements ConfigResolverInterface
                 throw new ParameterNotFoundException( $paramName, $namespace, $triedScopes );
         }
     }
+
+    /**
+     * Changes the default namespace to look parameter into.
+     *
+     * @param string $defaultNamespace
+     */
+    public function setDefaultNamespace( $defaultNamespace )
+    {
+        $this->defaultNamespace = $defaultNamespace;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultNamespace()
+    {
+        return $this->defaultNamespace;
+    }
 }
