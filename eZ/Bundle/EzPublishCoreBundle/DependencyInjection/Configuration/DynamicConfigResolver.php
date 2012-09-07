@@ -76,11 +76,24 @@ class DynamicConfigResolver implements ConfigResolverInterface
         $this->undefinedStrategy = $undefinedStrategy;
     }
 
+    /**
+     * Sets the strategy to use if an undefined parameter is being asked.
+     * Can be one of:
+     *  - DynamicConfigResolver::UNDEFINED_STRATEGY_EXCEPTION (throw an exception)
+     *  - DynamicConfigResolver::UNDEFINED_STRATEGY_NULL (return null)
+     *
+     * Defaults to DynamicConfigResolver::UNDEFINED_STRATEGY_EXCEPTION.
+     *
+     * @param int $undefinedStrategy
+     */
     public function setUndefinedStrategy( $undefinedStrategy )
     {
         $this->undefinedStrategy = $undefinedStrategy;
     }
 
+    /**
+     * @return int
+     */
     public function getUndefinedStrategy()
     {
         return $this->undefinedStrategy;
