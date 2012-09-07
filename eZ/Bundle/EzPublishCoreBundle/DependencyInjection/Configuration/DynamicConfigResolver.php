@@ -104,15 +104,19 @@ class DynamicConfigResolver implements ConfigResolverInterface
      *
      * @param string $paramName
      * @param string $namespace If null, the default namespace should be used.
+     * @param string $scope The scope you need $paramName value for. It's typically the siteaccess name.
+     *                      If null, the current siteaccess name will be used.
+     *
      * @return bool
      */
-    public function hasParameter( $paramName, $namespace = null )
+    public function hasParameter( $paramName, $namespace = null, $scope = null )
     {
-        $namespace= $namespace ?: $this->defaultNamespace;
+        $namespace = $namespace ?: $this->defaultNamespace;
+        $scope = $scope ?: $this->siteAccess->name;
 
         $defaultScopeParamName = "$namespace." . self::SCOPE_DEFAULT . ".$paramName";
         $globalScopeParamName = "$namespace." . self::SCOPE_GLOBAL . ".$paramName";
-        $relativeScopeParamName = "$namespace.{$this->siteAccess->name}.$paramName";
+        $relativeScopeParamName = "$namespace.$scope.$paramName";
         return
             $this->container->hasParameter( $defaultScopeParamName )
             || $this->container->hasParameter( $relativeScopeParamName )
@@ -125,13 +129,16 @@ class DynamicConfigResolver implements ConfigResolverInterface
      *
      * @param string $paramName The parameter name, without $prefix and the current scope (i.e. siteaccess name).
      * @param string $namespace Namespace for the parameter name. If null, the default namespace will be used.
+     * @param string $scope The scope you need $paramName value for. It's typically the siteaccess name.
+     *                      If null, the current siteaccess name will be used.
      *
      * @throws \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException
      * @return mixed
      */
-    public function getParameter( $paramName, $namespace = null )
+    public function getParameter( $paramName, $namespace = null, $scope = null )
     {
         $namespace = $namespace ?: $this->defaultNamespace;
+        $scope = $scope ?: $this->siteAccess->name;
         $triedScopes = array();
 
         // Global scope
@@ -144,7 +151,7 @@ class DynamicConfigResolver implements ConfigResolverInterface
         unset( $globalScopeParamName );
 
         // Relative scope (i.e. siteaccess relative)
-        $relativeScopeParamName = "$namespace.{$this->siteAccess->name}.$paramName";
+        $relativeScopeParamName = "$namespace.$scope.$paramName";
         if ( $this->container->hasParameter( $relativeScopeParamName ) )
         {
             return $this->container->getParameter( $relativeScopeParamName );

@@ -175,6 +175,40 @@ class DynamicConfigResolverTest extends \PHPUnit_Framework_TestCase
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::_construct
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::getParameter
      */
+    public function testGetParameterSpecificScope( $paramName, $expectedValue )
+    {
+        $scope = 'some_siteaccess';
+        $relativeScopeParameter = "ezsettings.$scope.$paramName";
+        $this->containerMock
+            ->expects( $this->exactly( 2 ) )
+            ->method( 'hasParameter' )
+            ->with(
+            $this->logicalOr(
+                "ezsettings.global.$paramName",
+                $relativeScopeParameter
+            )
+        )
+        // First call is for "global" scope, second is the right one
+            ->will( $this->onConsecutiveCalls( false, true ) )
+        ;
+        $this->containerMock
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( $relativeScopeParameter )
+            ->will( $this->returnValue( $expectedValue ) )
+        ;
+
+        $this->assertSame(
+            $expectedValue,
+            $this->getResolver()->getParameter( $paramName, 'ezsettings', $scope )
+        );
+    }
+
+    /**
+     * @dataProvider parameterProvider
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::getParameter
+     */
     public function testGetParameterDefaultScope( $paramName, $expectedValue )
     {
         $defaultScopeParameter = "ezsettings.default.$paramName";
@@ -183,12 +217,12 @@ class DynamicConfigResolverTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->exactly( 3 ) )
             ->method( 'hasParameter' )
             ->with(
-            $this->logicalOr(
-                "ezsettings.global.$paramName",
-                $relativeScopeParameter,
-                $defaultScopeParameter
+                $this->logicalOr(
+                    "ezsettings.global.$paramName",
+                    $relativeScopeParameter,
+                    $defaultScopeParameter
+                )
             )
-        )
             // First call is for "global" scope, second is the right one
             ->will( $this->onConsecutiveCalls( false, false, true ) )
         ;
@@ -200,5 +234,66 @@ class DynamicConfigResolverTest extends \PHPUnit_Framework_TestCase
         ;
 
         $this->assertSame( $expectedValue, $this->getResolver()->getParameter( $paramName ) );
+    }
+
+    public function hasParameterProvider()
+    {
+        return array(
+            array( true, true, true, true ),
+            array( true, true, false, true ),
+            array( true, false, false, true ),
+            array( false, false, false, false ),
+            array( false, true, false, true ),
+            array( false, false, true, true ),
+            array( false, true, true, true ),
+        );
+    }
+
+    /**
+     * @dataProvider hasParameterProvider
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::hasParameter
+     */
+    public function testHasParameterNoNamespace( $defaultMatch, $scopeMatch, $globalMatch, $expectedResult )
+    {
+        $paramName = 'foo.bar';
+        $this->containerMock->expects( $this->atLeastOnce() )
+            ->method( 'hasParameter' )
+            ->with(
+                $this->logicalOr(
+                    "ezsettings.global.$paramName",
+                    "ezsettings.{$this->siteAccess->name}.$paramName",
+                    "ezsettings.default.$paramName"
+                )
+            )
+            ->will( $this->onConsecutiveCalls( $defaultMatch, $scopeMatch, $globalMatch ) )
+        ;
+
+        $this->assertSame( $expectedResult, $this->getResolver()->hasParameter( $paramName ) );
+    }
+
+    /**
+     * @dataProvider hasParameterProvider
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::hasParameter
+     */
+    public function testHasParameterWithNamespaceAndScope( $defaultMatch, $scopeMatch, $globalMatch, $expectedResult )
+    {
+        $paramName = 'foo.bar';
+        $namespace = 'my.namespace';
+        $scope = "another_siteaccess";
+        $this->containerMock->expects( $this->atLeastOnce() )
+            ->method( 'hasParameter' )
+            ->with(
+                $this->logicalOr(
+                    "$namespace.global.$paramName",
+                    "$namespace.$scope.$paramName",
+                    "$namespace.default.$paramName"
+                )
+            )
+            ->will( $this->onConsecutiveCalls( $defaultMatch, $scopeMatch, $globalMatch ) )
+        ;
+
+        $this->assertSame( $expectedResult, $this->getResolver()->hasParameter( $paramName, $namespace, $scope ) );
     }
 }

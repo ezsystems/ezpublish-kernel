@@ -19,20 +19,22 @@ interface ConfigResolverInterface
      *
      * @param string $paramName The parameter name, without $prefix and the current scope (i.e. siteaccess name).
      * @param string $namespace Namespace for the parameter name. If null, the default namespace should be used.
+     * @param string $scope The scope you need $paramName value for.
      *
-     * @throws \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException
      * @return mixed
      */
-    public function getParameter( $paramName, $namespace = null );
+    public function getParameter( $paramName, $namespace = null, $scope = null );
 
     /**
      * Checks if $paramName exists in $namespace
      *
      * @param string $paramName
      * @param string $namespace If null, the default namespace should be used.
+     * @param string $scope The scope you need $paramName value for.
+     *
      * @return bool
      */
-    public function hasParameter( $paramName, $namespace = null );
+    public function hasParameter( $paramName, $namespace = null, $scope = null );
 
     /**
      * Changes the default namespace to look parameter into.
