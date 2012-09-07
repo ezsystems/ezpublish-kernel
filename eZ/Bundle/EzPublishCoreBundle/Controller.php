@@ -20,6 +20,7 @@ class Controller extends BaseController
 
     /**
      * @return \eZ\Publish\API\Repository\Repository
+     * @throws \LogicException
      */
     public function getRepository()
     {
@@ -41,5 +42,21 @@ class Controller extends BaseController
 
         $legacyKernelClosure = $this->legacyKernelClosure;
         return $legacyKernelClosure();
+    }
+
+    /**
+     * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver
+     */
+    protected function getConfigResolver()
+    {
+        return $this->container->get( 'ezpublish.config.resolver' );
+    }
+
+    /**
+     * @return \eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver
+     */
+    protected function getLegacyConfigResolver()
+    {
+        return $this->container->get( 'ezpublish_legacy.config.resolver' );
     }
 }
