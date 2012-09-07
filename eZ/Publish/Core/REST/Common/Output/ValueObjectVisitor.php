@@ -42,6 +42,17 @@ abstract class ValueObjectVisitor
     abstract public function visit( Visitor $visitor, Generator $generator, $data );
 
     /**
+     * Returns a string representation for the given $boolValue
+     *
+     * @param bool $boolValue
+     * @return string
+     */
+    protected function serializeBool( $boolValue )
+    {
+        return ( $boolValue ? 'true' : 'false' );
+    }
+
+    /**
      * Visits the given list of $names
      *
      * @param Generator $generator
