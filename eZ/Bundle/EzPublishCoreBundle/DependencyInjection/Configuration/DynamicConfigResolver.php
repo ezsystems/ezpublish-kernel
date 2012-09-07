@@ -15,7 +15,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface,
     Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * This class will help you to get settings for a specific scope.
+ * This class will help you get settings for a specific scope.
  * This is useful to get a setting for a specific siteaccess for example.
  *
  * It will check the different scopes available for a given namespace to find the appropriate parameter.
@@ -97,6 +97,27 @@ class DynamicConfigResolver implements ConfigResolverInterface
     public function getUndefinedStrategy()
     {
         return $this->undefinedStrategy;
+    }
+
+    /**
+     * Checks if $paramName exists in $namespace
+     *
+     * @param string $paramName
+     * @param string $namespace If null, the default namespace should be used.
+     * @return bool
+     */
+    public function hasParameter( $paramName, $namespace = null )
+    {
+        $namespace= $namespace ?: $this->defaultNamespace;
+
+        $defaultScopeParamName = "$namespace." . self::SCOPE_DEFAULT . ".$paramName";
+        $globalScopeParamName = "$namespace." . self::SCOPE_GLOBAL . ".$paramName";
+        $relativeScopeParamName = "$namespace.{$this->siteAccess->name}.$paramName";
+        return
+            $this->container->hasParameter( $defaultScopeParamName )
+            || $this->container->hasParameter( $relativeScopeParamName )
+            || $this->container->hasParameter( $globalScopeParamName )
+        ;
     }
 
     /**
