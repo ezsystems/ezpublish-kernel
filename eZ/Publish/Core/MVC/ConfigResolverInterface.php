@@ -11,6 +11,12 @@ namespace eZ\Publish\Core\MVC;
 
 /**
  * Interface for config resolvers.
+ *
+ * Classes implementing this interface will help you get settings for a specific scope.
+ * In eZ Publish context, this is useful to get a setting for a specific siteaccess for example.
+ *
+ * The idea is to check the different scopes available for a given namespace to find the appropriate parameter.
+ * To work, the dynamic setting must comply internally to the following name format : "<namespace>.<scope>.parameter.name".
  */
 interface ConfigResolverInterface
 {
