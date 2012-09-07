@@ -9,17 +9,19 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+
 /**
  * FieldDefinition list view model
  */
 class FieldDefinitionList
 {
     /**
-     * ID of the content object the fieldDefinitions belong to
+     * ContentType the field definitions belong to
      *
-     * @var mixed
+     * @var ContentType
      */
-    public $contentTypeId;
+    public $contentType;
 
     /**
      * FieldDefinitions
@@ -31,11 +33,12 @@ class FieldDefinitionList
     /**
      * Construct
      *
+     * @param ContentType $contentType
      * @param array $fieldDefinitions
      */
-    public function __construct( $contentTypeId, array $fieldDefinitions )
+    public function __construct( ContentType $contentType, array $fieldDefinitions )
     {
-        $this->contentTypeId = $contentTypeId;
+        $this->contentType = $contentType;
         $this->fieldDefinitions = $fieldDefinitions;
     }
 }
