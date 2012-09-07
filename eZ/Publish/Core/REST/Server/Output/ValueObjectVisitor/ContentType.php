@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\UrlHandler,
-    eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor,
     eZ\Publish\Core\REST\Common\Output\Generator,
     eZ\Publish\Core\REST\Common\Output\Visitor,
     eZ\Publish\Core\REST\Common\Output\FieldValueSerializer,
@@ -21,7 +20,7 @@ use eZ\Publish\Core\REST\Common\UrlHandler,
 /**
  * ContentInfo value object visitor
  */
-class ContentType extends ValueObjectVisitor
+class ContentType extends ContentTypeBase
 {
     /**
      * Visit struct returned by controllers
@@ -124,27 +123,6 @@ class ContentType extends ValueObjectVisitor
         );
 
         $generator->endObjectElement( 'ContentType' );
-    }
-
-    /**
-     * Returns a suffix for the URL type to generate
-     *
-     * @param int $status
-     * @return string
-     */
-    public function getUrlTypeSuffix( $status )
-    {
-        switch ( $status )
-        {
-            case Values\ContentType\ContentType::STATUS_DEFINED:
-                return '';
-
-            case Values\ContentType\ContentType::STATUS_DRAFT:
-                return 'Draft';
-
-            case Values\ContentType\ContentType::STATUS_MODIFIED:
-                return 'Modified';
-        }
     }
 
     /**
