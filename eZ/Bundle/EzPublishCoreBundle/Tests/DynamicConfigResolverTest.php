@@ -36,7 +36,7 @@ class DynamicConfigResolverTest extends \PHPUnit_Framework_TestCase
      * @param int $undefinedStrategy
      * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver
      */
-    private function getResolver( $defaultNS, $undefinedStrategy )
+    private function getResolver( $defaultNS = 'ezsettings', $undefinedStrategy = DynamicConfigResolver::UNDEFINED_STRATEGY_EXCEPTION )
     {
         return new DynamicConfigResolver(
             $this->siteAccess,
@@ -89,30 +89,116 @@ class DynamicConfigResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertNull( $resolver->getParameter( 'foo' ) );
     }
 
-    /**
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::_construct
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::getParameter
-     */
-    public function testGetParameterGlobalScope()
+    public function parameterProvider()
     {
-        $this->markTestIncomplete();
+        return array(
+            array( 'foo', 'bar' ),
+            array( 'some.parameter', true ),
+            array( 'some.other.parameter', array( 'foo', 'bar', 'baz' ) ),
+            array( 'a.hash.parameter', array( 'foo' => 'bar', 'tata' => 'toto' ) ),
+            array(
+                'a.deep.hash', array(
+                    'foo' => 'bar',
+                    'tata' => 'toto',
+                    'deeper_hash' => array(
+                        'likeStarWars'   => true,
+                        'jedi'     => array( 'Obi-Wan Kenobi', 'Mace Windu', 'Luke Skywalker', 'Leïa Skywalker (yes! Read episodes 7-8-9!)' ),
+                        'sith'     => array( 'Darth Vader', 'Darth Maul', 'Palpatine' ),
+                        'roles'    => array(
+                            'Amidala'   => array( 'Queen' ),
+                            'Palpatine' => array( 'Senator', 'Emperor', 'Villain' ),
+                            'C3PO'      => array( 'Droid', 'Annoying guy' ),
+                            'Jar-Jar'   => array( 'Still wondering his role', 'Annoying guy' )
+                        )
+                    )
+                )
+            ),
+        );
     }
 
     /**
+     * @dataProvider parameterProvider
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::_construct
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::getParameter
      */
-    public function testGetParameterRelativeScope()
+    public function testGetParameterGlobalScope( $paramName, $expectedValue )
     {
-        $this->markTestIncomplete();
+        $globalScopeParameter = "ezsettings.global.$paramName";
+        $this->containerMock
+            ->expects( $this->once() )
+            ->method( 'hasParameter' )
+            ->with( $globalScopeParameter )
+            ->will( $this->returnValue( true ) )
+        ;
+        $this->containerMock
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( $globalScopeParameter )
+            ->will( $this->returnValue( $expectedValue ) )
+        ;
+
+        $this->assertSame( $expectedValue, $this->getResolver()->getParameter( $paramName ) );
     }
 
     /**
+     * @dataProvider parameterProvider
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::_construct
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::getParameter
      */
-    public function testGetParameterDefaultScope()
+    public function testGetParameterRelativeScope( $paramName, $expectedValue )
     {
-        $this->markTestIncomplete();
+        $relativeScopeParameter = "ezsettings.{$this->siteAccess->name}.$paramName";
+        $this->containerMock
+            ->expects( $this->exactly( 2 ) )
+            ->method( 'hasParameter' )
+            ->with(
+                $this->logicalOr(
+                    "ezsettings.global.$paramName",
+                    $relativeScopeParameter
+                )
+            )
+            // First call is for "global" scope, second is the right one
+            ->will( $this->onConsecutiveCalls( false, true ) )
+        ;
+        $this->containerMock
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( $relativeScopeParameter )
+            ->will( $this->returnValue( $expectedValue ) )
+        ;
+
+        $this->assertSame( $expectedValue, $this->getResolver()->getParameter( $paramName ) );
+    }
+
+    /**
+     * @dataProvider parameterProvider
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::getParameter
+     */
+    public function testGetParameterDefaultScope( $paramName, $expectedValue )
+    {
+        $defaultScopeParameter = "ezsettings.default.$paramName";
+        $relativeScopeParameter = "ezsettings.{$this->siteAccess->name}.$paramName";
+        $this->containerMock
+            ->expects( $this->exactly( 3 ) )
+            ->method( 'hasParameter' )
+            ->with(
+            $this->logicalOr(
+                "ezsettings.global.$paramName",
+                $relativeScopeParameter,
+                $defaultScopeParameter
+            )
+        )
+            // First call is for "global" scope, second is the right one
+            ->will( $this->onConsecutiveCalls( false, false, true ) )
+        ;
+        $this->containerMock
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( $defaultScopeParameter )
+            ->will( $this->returnValue( $expectedValue ) )
+        ;
+
+        $this->assertSame( $expectedValue, $this->getResolver()->getParameter( $paramName ) );
     }
 }
