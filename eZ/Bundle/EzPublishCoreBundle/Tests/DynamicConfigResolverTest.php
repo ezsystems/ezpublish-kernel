@@ -32,19 +32,33 @@ class DynamicConfigResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $defaultNS
+     * @param int $undefinedStrategy
+     * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver
+     */
+    private function getResolver( $defaultNS, $undefinedStrategy )
+    {
+        return new DynamicConfigResolver(
+            $this->siteAccess,
+            $this->containerMock,
+            $defaultNS,
+            $undefinedStrategy
+        );
+    }
+
+    /**
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::_construct
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::getUndefinedStrategy
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::setUndefinedStrategy
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::getDefaultNamespace
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::setDefaultNamespace
      */
     public function testGetSetUndefinedStrategy()
     {
         $strategy = DynamicConfigResolver::UNDEFINED_STRATEGY_NULL;
-        $resolver = new DynamicConfigResolver(
-            $this->siteAccess,
-            $this->containerMock,
-            'ezsettings',
-            $strategy
-        );
+        $defaultNS = 'ezsettings';
+        $resolver = $this->getResolver( $defaultNS, $strategy );
+
         $this->assertSame( $strategy, $resolver->getUndefinedStrategy() );
         $resolver->setUndefinedStrategy( DynamicConfigResolver::UNDEFINED_STRATEGY_EXCEPTION );
         $this->assertSame( DynamicConfigResolver::UNDEFINED_STRATEGY_EXCEPTION, $resolver->getUndefinedStrategy() );
@@ -61,12 +75,7 @@ class DynamicConfigResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetParameterFailedWithException()
     {
-        $resolver = new DynamicConfigResolver(
-            $this->siteAccess,
-            $this->containerMock,
-            'ezsettings',
-            DynamicConfigResolver::UNDEFINED_STRATEGY_EXCEPTION
-        );
+        $resolver = $this->getResolver( 'ezsettings', DynamicConfigResolver::UNDEFINED_STRATEGY_EXCEPTION );
         $resolver->getParameter( 'foo' );
     }
 
@@ -76,12 +85,7 @@ class DynamicConfigResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetParameterFailedNull()
     {
-        $resolver = new DynamicConfigResolver(
-            $this->siteAccess,
-            $this->containerMock,
-            'ezsettings',
-            DynamicConfigResolver::UNDEFINED_STRATEGY_NULL
-        );
+        $resolver = $this->getResolver( 'ezsettings', DynamicConfigResolver::UNDEFINED_STRATEGY_NULL );
         $this->assertNull( $resolver->getParameter( 'foo' ) );
     }
 
