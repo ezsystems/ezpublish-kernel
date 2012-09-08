@@ -31,7 +31,8 @@
         "zetacomponents/php-generator": "dev-master",
         "zetacomponents/signal-slot": "dev-master",
         "zetacomponents/system-information": "dev-master",
-        "zetacomponents/webdav": "1.1.0-rc1"
+        "zetacomponents/webdav": "1.1.0-rc1",
+        "symfony-cmf/routing": "1.0.*"
     },
     "require-dev": {
         "symfony/symfony": "2.1.0-RC2",
