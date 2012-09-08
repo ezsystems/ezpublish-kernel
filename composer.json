@@ -36,7 +36,8 @@
     "require-dev": {
         "symfony/symfony": "2.1.0-RC2",
         "Qafoo/RMF": "dev-master",
-        "ezsystems/ezpublish-legacy": "dev-master"
+        "ezsystems/ezpublish-legacy": "dev-master",
+        "symfony-cmf/routing":"1.0.*"
     },
     "autoload": {
         "psr-0": {
