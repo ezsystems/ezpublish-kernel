@@ -15,6 +15,11 @@ use eZ\Publish\Core\FieldType\XmlText\Input\Parser\OnlineEditor as Parser,
 
 class OnlineEditorTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \eZ\Publish\Core\FieldType\XmlText\Input\Parser
+     */
+    private $parser;
+
     public function setUp()
     {
         $this->parser = new Parser( new Schema );
@@ -39,9 +44,4 @@ class OnlineEditorTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"/>
 ' ) );
     }
-
-    /**
-     * @var \eZ\Publish\Core\FieldType\XmlText\Input\Parser
-     */
-    private $parser;
 }
