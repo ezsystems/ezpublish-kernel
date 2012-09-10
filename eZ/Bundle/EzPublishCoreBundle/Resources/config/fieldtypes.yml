@@ -39,9 +39,12 @@ parameters:
     #         underline:
     #             isInline: true
     ezpublish.fieldType.ezcountry.class: eZ\Publish\Core\FieldType\Country\Type
-    # Temporary workaround for ezpage, ezemail, ezimage, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
+    ezpublish.fieldType.ezpage.class: eZ\Publish\Core\FieldType\Page\Type
+    ezpublish.fieldType.ezpage.pageService.class: eZ\Publish\Core\FieldType\Page\Service
+    ezpublish.fieldtype.ezpage.zoneDefinition: {}
+    ezpublish.fieldType.ezpage.blockDefinition: {}
+    # Temporary workaround for ezemail, ezimage, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
     # a ezstring until proper implementation will be in place
-    ezpublish.fieldType.ezpage.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezemail.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezimage.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezgmaplocation.class: eZ\Publish\Core\FieldType\TextLine\Type
@@ -201,13 +204,19 @@ services:
             - %ezpublish.fieldType.ezxmltext.xmlSchema.options%
         public: false
 
-    # Temporary workaround for ezpage, ezemail, ezimage, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
-    # a ezstring until proper implementation will be in place
     ezpublish.fieldType.ezpage:
         class: %ezpublish.fieldType.ezpage.class%
         parent: ezpublish.fieldType
+        arguments: [@ezpublish.fieldType.ezpage.pageService]
         tags:
             - {name: ezpublish.fieldType, alias: ezpage}
+
+    ezpublish.fieldType.ezpage.pageService:
+        class: %ezpublish.fieldType.ezpage.pageService.class%
+        arguments: [%ezpublish.fieldtype.ezpage.zoneDefinition%, %ezpublish.fieldtype.ezpage.blockDefinition%]
+
+    # Temporary workaround for ezemail, ezimage, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
+    # a ezstring until proper implementation will be in place
 
     ezpublish.fieldType.ezemail:
         class: %ezpublish.fieldType.ezemail.class%
