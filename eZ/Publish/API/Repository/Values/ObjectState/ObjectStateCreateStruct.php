@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 class ObjectStateCreateStruct extends ValueObject
 {
     /**
-     * Readable string identifier of a group
+     * Readable unique string identifier of a group
      *
      * @required
      *

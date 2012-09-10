@@ -30,6 +30,13 @@ class Json extends Generator
     protected $fieldTypeHashGenerator;
 
     /**
+     * Keeps track if the document is still empty
+     *
+     * @var bool
+     */
+    protected $isEmpty = true;
+
+    /**
      * @param eZ\Publish\Core\REST\Common\Output\Generator\Json\FieldTypeHashGenerator $fieldTypeHashGenerator
      */
     public function __construct( Json\FieldTypeHashGenerator $fieldTypeHashGenerator )
@@ -46,7 +53,19 @@ class Json extends Generator
     {
         $this->checkStartDocument( $data );
 
+        $this->isEmpty = true;
+
         $this->json = new Json\Object();
+    }
+
+    /**
+     * Returns if the document is empty or already contains data
+     *
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return $this->isEmpty;
     }
 
     /**
@@ -107,6 +126,8 @@ class Json extends Generator
     {
         $this->checkStartObjectElement( $name );
 
+        $this->isEmpty = false;
+
         $mediaTypeName = $mediaTypeName ?: $name;
 
         $object = new Json\Object( $this->json );
@@ -146,6 +167,8 @@ class Json extends Generator
     public function startHashElement( $name )
     {
         $this->checkStartHashElement( $name );
+
+        $this->isEmpty = false;
 
         $object = new Json\Object( $this->json );
 

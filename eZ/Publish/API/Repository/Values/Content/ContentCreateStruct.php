@@ -51,6 +51,8 @@ abstract class ContentCreateStruct extends ValueObject
     /**
      * Remote identifier used as a custom identifier for the object
      *
+     * Needs to be a unique Content->remoteId string value.
+     *
      * @var string
      */
     public $remoteId;

@@ -34,7 +34,9 @@ class LocationCreateStruct extends ValueObject
     public $hidden = false;
 
     /**
-     * An universally unique identifier.
+     * An universally unique string identifier.
+     *
+     * Needs to be a unique Location->remoteId string value.
      *
      * @var mixed
      */

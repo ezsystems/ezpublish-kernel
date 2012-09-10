@@ -17,10 +17,23 @@ use Qafoo\RMF;
 
 ini_set( 'html_errors', 0 );
 
+/*
+ * Configuration magic, this should actually be taken from services.ini in the
+ * future.
+ */
+
+$configFile = __DIR__ . '/database.cnf';
+
+if ( is_file( $configFile ) )
+{
+    $_ENV['DATABASE'] = trim( file_get_contents( $configFile ) );
+}
+
 if ( !isset( $_ENV['DATABASE'] ) )
 {
     echo "The REST test server does only work with a persistent database.\n";
     echo "Please specify a database DSN in the environment variable DATABASE.\n";
+    echo "Or create a database.cnf file with it in the same directory as index.php\n";
     exit( 1 );
 }
 
@@ -45,20 +58,27 @@ $stateDir    = __DIR__ . '/_state/';
 $reInitializeRepository = true;
 if ( isset( $_SERVER['HTTP_X_TEST_SESSION'] ) )
 {
-    $sessionFile = $stateDir . $_SERVER['HTTP_X_TEST_SESSION'] . '.session';
+    $sessionId = $_SERVER['HTTP_X_TEST_SESSION'];
+
+    $sessionFile = __DIR__ . '/.session';
 
     // Only re-initialize the repository, if for the current session no session
     // file exists
-    $reInitializeRepository = ( !is_file( $sessionFile ) );
+    $reInitializeRepository = ( !is_file( $sessionFile )  || file_get_contents( $sessionFile ) !== $sessionId );
 
-    // TODO: Remove orphan session files here!
-
-    // Create session file for next request with this session
-    touch( $sessionFile );
+    file_put_contents( $sessionFile, $sessionId );
 }
 
+/*
+ * The setup factory, which is also used for setting up the normal repository
+ * for the integration tests, is re-used here.
+ */
 $setupFactory = new \eZ\Publish\API\Repository\Tests\SetupFactory\Legacy();
 $repository   = $setupFactory->getRepository( $reInitializeRepository );
+
+/*
+ * The following reflects a standard REST server setup
+ */
 
 /*
  * Handlers are used to parse the input body (XML or JSON) into a common array
@@ -121,6 +141,7 @@ $contentController = new Controller\Content(
     $inputDispatcher,
     $urlHandler,
     $repository->getContentService(),
+    $repository->getLocationService(),
     $repository->getSectionService()
 );
 
@@ -180,7 +201,7 @@ $valueObjectVisitors = array(
     // Content
 
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentList'                => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo'          => new Output\ValueObjectVisitor\ContentInfo( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestContent'                => new Output\ValueObjectVisitor\RestContent( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo'          => new Output\ValueObjectVisitor\VersionInfo( $urlHandler ),
     // Includes vitising of VersionInfo, which can be extracted for re-use, if
     // neccessary
@@ -216,6 +237,9 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Common\\Values\\ObjectState'                => new Output\ValueObjectVisitor\ObjectState( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectStateList'            => new Output\ValueObjectVisitor\ObjectStateList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentObjectStates'        => new Output\ValueObjectVisitor\ContentObjectStates( $urlHandler ),
+
+    // REST specific
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceRedirect'           => new Output\ValueObjectVisitor\ResourceRedirect( $urlHandler ),
 );
 
 /*
@@ -259,12 +283,13 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^/content/objects/[0-9]+$)' => array(
             'PATCH' => array( $contentController, 'updateContentMetadata' ),
+            'GET' => array( $contentController, 'loadContent' )
         ),
         '(^/content/objects/[0-9]+/versions/[0-9+]$)' => array(
             'GET' => array( $contentController, 'loadContentInVersion' ),
         ),
         '(^/content/objects/[0-9]+/currentversion$)' => array(
-            'GET' => array( $contentController, 'loadContentInCurrentVersion' ),
+            'GET' => array( $contentController, 'redirectCurrentVersion' )
         ),
         '(^/content/objects/[0-9]+/locations$)' => array(
             'GET' => array( $locationController, 'loadLocationsForContent' ),
@@ -370,15 +395,18 @@ $dispatcher = new AuthenticatingDispatcher(
                 $valueObjectVisitors
             )
         ),
-        '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+xml$)'  => new View\Visitor(
+        '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+xml$)'  => ( $xmlVisitor = new View\Visitor(
             new Common\Output\Visitor(
                 new Common\Output\Generator\Xml(
                     new Common\Output\Generator\Xml\FieldTypeHashGenerator()
                 ),
                 $valueObjectVisitors
             )
-        ),
-        '(^.*/.*$)'  => new View\InvalidApiUse(),
+        ) ),
+        // '(^.*/.*$)'  => new View\InvalidApiUse(),
+        // Fall back gracefully to XML visiting. Also helps support responses
+        // without Accept header (e.g. DELETE reqeustes).
+        '(^.*/.*$)'  => $xmlVisitor,
     ) ),
     // This is just used for integration tests, DO NOT USE IN PRODUCTION
     new Authenticator\IntegrationTest( $repository )

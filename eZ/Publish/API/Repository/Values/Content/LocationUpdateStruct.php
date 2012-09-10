@@ -23,7 +23,9 @@ class LocationUpdateStruct extends ValueObject
     public $priority;
 
     /**
-     * if set the location gets a new remoteId.
+     * If set the location gets a new remoteId.
+     *
+     * Needs to be a unique Location->remoteId string value.
      *
      * @var mixed
      */

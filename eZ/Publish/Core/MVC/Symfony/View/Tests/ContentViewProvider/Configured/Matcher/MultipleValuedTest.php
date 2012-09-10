@@ -28,7 +28,7 @@ class MultipleValuedTest extends BaseTest
         $matchingConfig = is_array( $matchingConfig ) ? $matchingConfig : array( $matchingConfig );
         foreach ( $matchingConfig as $val )
         {
-            $this->assertArrayHasKey( $val, $values );
+            $this->assertContains( $val, $values );
         }
     }
 

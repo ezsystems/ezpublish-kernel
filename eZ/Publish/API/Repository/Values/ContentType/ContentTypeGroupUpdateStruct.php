@@ -17,7 +17,7 @@ class ContentTypeGroupUpdateStruct extends ValueObject
 {
 
     /**
-     * Readable string identifier of a group
+     * Readable and unique string identifier of a group
      *
      * @var string
      */

@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use eZ\Publish\Core\REST\Client\Input\ParserTools;
 
 use eZ\Publish\Core\REST\Client\Values;
 use eZ\Publish\Core\REST\Client\ContentService;
@@ -21,6 +22,11 @@ use eZ\Publish\Core\REST\Client\ContentService;
 class VersionInfo extends Parser
 {
     /**
+     * @var eZ\Publish\Core\REST\Client\Input\ParserTools
+     */
+    protected $parserTools;
+
+    /**
      * Content Service
      *
      * @var eZ\Publish\Core\REST\Input\ContentService
@@ -28,10 +34,12 @@ class VersionInfo extends Parser
     protected $contentService;
 
     /**
+     * @param eZ\Publish\Core\REST\Input\ParserTools $parserTools
      * @param eZ\Publish\Core\REST\Input\ContentService $contentService
      */
-    public function __construct( ContentService $contentService )
+    public function __construct( ParserTools $parserTools, ContentService $contentService )
     {
+        $this->parserTools = $parserTools;
         $this->contentService = $contentService;
     }
 
@@ -45,7 +53,10 @@ class VersionInfo extends Parser
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
+        $contentInfoId = $this->parserTools->parseObjectElement( $data['Content'], $parsingDispatcher );
+
         return new Values\Content\VersionInfo(
+            $this->contentService,
             array(
                 'id' => $data['id'],
                 'versionNo' => $data['versionNo'],
@@ -55,8 +66,7 @@ class VersionInfo extends Parser
                 'creationDate' => new \DateTime( $data['creationDate'] ),
                 'initialLanguageCode' => $data['initialLanguageCode'],
                 'names' => $this->processNames( $data['names']['value'] ),
-                // TODO: Handle potential embedding of Content?
-                'contentInfo' => $this->contentService->loadContentInfo( $data['Content']['_href'] ),
+                'contentInfoId' => $contentInfoId,
             )
         );
     }

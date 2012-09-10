@@ -5,7 +5,7 @@ return array (
   array (
     '_media-type' => 'application/vnd.ez.api.ContentList+xml',
     '_href' => '/content/objects',
-    'ContentInfo' => 
+    'Content' => 
     array (
       0 => 
       array (

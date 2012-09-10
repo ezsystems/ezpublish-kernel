@@ -10,6 +10,8 @@
 namespace eZ\Bundle\EzPublishCoreBundle\View\ContentViewProvider;
 
 use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured as BaseConfigured,
+    eZ\Publish\Core\MVC\Symfony\SiteAccess,
+    eZ\Publish\API\Repository\Repository,
     Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Configured extends BaseConfigured
@@ -23,13 +25,16 @@ class Configured extends BaseConfigured
      * Constructor.
      * Will get the matching configuration from the service container dynamically, with the siteaccess name.
      *
+     * @todo Instead of using the container to retrieve the matching config, it would be better to get it with some ConfigResolver object
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
+     * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
-    public function __construct( ContainerInterface $container )
+    public function __construct( SiteAccess $siteAccess, Repository $repository, ContainerInterface $container )
     {
         $this->container = $container;
 
-        $siteAccess = $this->container->get( 'ezpublish.siteaccess' );
         $locationMatchConfig = array();
         if ( $this->container->hasParameter( "ezpublish.location_view.$siteAccess->name" ) )
         {
@@ -39,10 +44,10 @@ class Configured extends BaseConfigured
         $contentMatchConfig = array();
         if ( $this->container->hasParameter( "ezpublish.content_view.$siteAccess->name" ) )
         {
-            $locationMatchConfig = $this->container->getParameter( "ezpublish.content_view.$siteAccess->name" );
+            $contentMatchConfig = $this->container->getParameter( "ezpublish.content_view.$siteAccess->name" );
         }
 
-        parent::__construct( $this->container->get( 'ezpublish.api.repository' ), $locationMatchConfig, $contentMatchConfig );
+        parent::__construct( $repository, $locationMatchConfig, $contentMatchConfig );
     }
 
     /**

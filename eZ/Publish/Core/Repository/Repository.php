@@ -557,6 +557,7 @@ class Repository implements RepositoryInterface
     /**
      * Get NameSchemaResolverService
      *
+     * @access private Internal service for the Core Services
      * @return \eZ\Publish\Core\Repository\NameSchemaService
      */
     public function getNameSchemaService()

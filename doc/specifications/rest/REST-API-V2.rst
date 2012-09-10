@@ -460,7 +460,7 @@ XML Example
             <versionNo>1</versionNo>
             <status>DRAFT</status>
             <modificationDate>2012-02-12T12:30:00</modificationDate>
-            <Creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+            <Creator href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
             <creationDate>2012-02-12T12:30:00</creationDate>
             <initialLanguageCode>eng-US</initialLanguageCode>
             <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
@@ -499,7 +499,7 @@ XML Example
       <Section href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
       <MainLocation href="/content/locations/1/4/65" media-type="application/vnd.ez.api.Location+xml" />
       <Locations href="/content/objects/23/locations" media-type="application/vnd.ez.api.LocationList+xml" />
-      <Owner href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+      <Owner href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
       <mainLanguageCode>eng-US</mainLanguageCode>
       <alwaysAvailable>true</alwaysAvailable>
@@ -607,7 +607,7 @@ JSON Example
               "status": "DRAFT",
               "modificationDate": "2012-02-12T12:30:00",
               "creator": {
-                "_href": "/users/user/14",
+                "_href": "/user/users/14",
                 "_media-type": "application/vnd.ez.api.User+json"
               },
               "creationDate": "2012-02-12T12:30:00",
@@ -663,7 +663,7 @@ JSON Example
           "_media-type": "application/vnd.ez.api.LocationList+json"
         },
         "Owner": {
-          "_href": "/users/user/14",
+          "_href": "/user/users/14",
           "_media-type": "application/vnd.ez.api.User+json"
         },
         "lastModificationDate": "2012-02-12T12:30:00",
@@ -750,7 +750,7 @@ XML Example
       <Section href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
       <MainLocation href="/content/locations/1/4/65" media-type="application/vnd.ez.api.Location+xml" />
       <Locations href="/content/objects/23/locations" media-type="application/vnd.ez.api.LocationList+xml" />
-      <Owner href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+      <Owner href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
       <publishedDate>2012-02-12T15:30:00</publishedDate>
       <mainLanguageCode>eng-US</mainLanguageCode>
@@ -844,7 +844,7 @@ In this example
       <Section href="/content/sections/3" media-type="application/vnd.ez.api.Section+xml" />
       <MainLocation href="/content/locations/1/13/55" media-type="application/vnd.ez.api.Location+xml" />
       <Locations href="/content/objects/23/locations" media-type="application/vnd.ez.api.LocationList+xml" />
-      <Owner href="/users/user/13" media-type="application/vnd.ez.api.User+xml" />
+      <Owner href="/user/users/13" media-type="application/vnd.ez.api.User+xml" />
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
       <publishedDate>2012-02-12T15:30:00</publishedDate>
       <mainLanguageCode>ger-DE</mainLanguageCode>
@@ -954,13 +954,14 @@ XML Example
 
     <?xml version="1.0" encoding="UTF-8"?>
     <VersionList href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml">
-      <Version href="/content/objects/23/versions/1" media-type="application/vnd.ez.api.Version+xml">
+      <VersionItem>
+        <Version href="/content/objects/23/versions/1" media-type="application/vnd.ez.api.Version+xml"/>
         <VersionInfo>
           <id>12</id>
           <versionNo>1</versionNo>
           <status>ARCHIVED</status>
           <modificationDate>2012-02-15T12:00:00</modificationDate>
-          <Creator href="/users/user/8" media-type="application/vnd.ez.api.User+xml" />
+          <Creator href="/user/users/8" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>22012-02-15T12:00:00</creationDate>
           <initialLanguageCode>eng-US</initialLanguageCode>
           <names>
@@ -968,14 +969,15 @@ XML Example
           </names>
           <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
         </VersionInfo>
-      </Version>
-      <Version href="/content/objects/23/versions/2" media-type="application/vnd.ez.api.Version+xml">
+      </VersionItem>
+      <VersionItem>
+        <Version href="/content/objects/23/versions/2" media-type="application/vnd.ez.api.Version+xml"/>
         <VersionInfo>
           <id>22</id>
           <versionNo>2</versionNo>
           <status>PUBLISHED</status>
           <modificationDate>2012-02-17T12:00:00</modificationDate>
-          <Creator href="/users/user/8" media-type="application/vnd.ez.api.User+xml" />
+          <Creator href="/user/users/8" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>22012-02-17T12:00:00</creationDate>
           <initialLanguageCode>eng-US</initialLanguageCode>
           <names>
@@ -983,14 +985,15 @@ XML Example
           </names>
           <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
         </VersionInfo>
-      </Version>
-      <Version href="/content/objects/23/versions/3" media-type="application/vnd.ez.api.Version+xml">
+      </VersionItem>
+      <VersionItem>
+        <Version href="/content/objects/23/versions/3" media-type="application/vnd.ez.api.Version+xml"/>
         <VersionInfo>
           <id>44</id>
           <versionNo>3</versionNo>
           <status>DRAFT</status>
           <modificationDate>2012-02-19T12:00:00</modificationDate>
-          <Creator href="/users/user/65" media-type="application/vnd.ez.api.User+xml" />
+          <Creator href="/user/users/65" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>22012-02-19T12:00:00</creationDate>
           <initialLanguageCode>fra-FR</initialLanguageCode>
           <names>
@@ -999,14 +1002,15 @@ XML Example
           </names>
           <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
         </VersionInfo>
-      </Version>
-      <Version href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml">
+      </VersionItem>
+      <VersionItem>
+        <Version href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml"/>
         <VersionInfo>
           <id>45</id>
           <versionNo>4</versionNo>
           <status>DRAFT</status>
           <modificationDate>2012-02-20T12:00:00</modificationDate>
-          <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml" />
+          <Creator href="/user/users/44" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>22012-02-20T12:00:00</creationDate>
           <initialLanguageCode>ger-DE</initialLanguageCode>
           <names>
@@ -1015,7 +1019,7 @@ XML Example
           </names>
           <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
         </VersionInfo>
-      </Version>
+      </VersionItem>
     </VersionList>
 
 Load Version
@@ -1075,7 +1079,7 @@ XML Example
         <versionNo>4</versionNo>
         <status>DRAFT</status>
         <modificationDate>2012-02-20T12:00:00</modificationDate>
-        <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml" />
+        <Creator href="/user/users/44" media-type="application/vnd.ez.api.User+xml" />
         <creationDate>22012-02-20T12:00:00</creationDate>
         <initialLanguageCode>ger-DE</initialLanguageCode>
         <names>
@@ -1204,7 +1208,7 @@ XML Example
         <versionNo>4</versionNo>
         <status>DRAFT</status>
         <modificationDate>2012-02-20T12:00:00</modificationDate>
-        <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml" />
+        <Creator href="/user/users/44" media-type="application/vnd.ez.api.User+xml" />
         <creationDate>22012-02-20T12:00:00</creationDate>
         <initialLanguageCode>ger-DE</initialLanguageCode>
         <names>
@@ -2405,10 +2409,13 @@ List TrashItems
 :Resource: /content/trash
 :Method: GET
 :Description: Returns a list of all trash items
+:Parameters:
+    :limit:    only <limit> items will be returned started by offset
+    :offset:   offset of the result set
 :Headers:
     :Accept:
-         :application/vnd.ez.api.LocationList+xml:  if set the new location is returned in xml format (see Location_)
-         :application/vnd.ez.api.LocationList+json:  if set the new location is returned in json format (see Location_)
+         :application/vnd.ez.api.Trash+xml:  if set the new location is returned in xml format (see Trash_)
+         :application/vnd.ez.api.Trash+json:  if set the new location is returned in json format (see Trash_)
 :Response: 
 
 .. code:: http
@@ -2417,7 +2424,7 @@ List TrashItems
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Location_  (locationListType)     
+          Trash_
 
 :ErrorCodes: 
     :401: If the user has no permission to read the trash
@@ -2429,8 +2436,8 @@ Get TrashItem
 :Description: Returns the trash item given by id
 :Headers:
     :Accept:
-         :application/vnd.ez.api.Location+xml:  if set the new location is returned in xml format (see Location_)
-         :application/vnd.ez.api.Location+json:  if set the new location is returned in json format (see Location_)
+         :application/vnd.ez.api.TrashItem+xml:  if set the new trash item is returned in xml format (see Trash_)
+         :application/vnd.ez.api.TrashItem+json:  if set the new trash item is returned in json format (see Trash_)
 :Response: 
 
 .. code:: http
@@ -2439,7 +2446,7 @@ Get TrashItem
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Location_      
+          Trash_      
 
 :Error Codes:
     :401: If the user has no permission to read the trash item
@@ -4695,7 +4702,7 @@ XML Example
           <versionNo>1</versionNo>
           <status>PUBLISHED</status>
           <modificationDate>2001-04-01T12:00:00</modificationDate>
-          <Creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+          <Creator href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>2001-04-01T12:00:00</creationDate>
           <initialLanguageCode>eng-UK</initialLanguageCode>
           <Content href="/content/objects/79" media-type="application/vnd.ez.api.ContentInfo+xml" />
@@ -6074,18 +6081,23 @@ VersionList XML Schema
       xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
       <xsd:include schemaLocation="Version.xsd" />
       <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:complexType name="versionListItemType">
+        <xsd:all>
+          <xsd:element name="Version" type="ref"></xsd:element>
+          <xsd:element name="VersionInfo" type="versionInfoType"></xsd:element>
+        </xsd:all>
+      </xsd:complexType>
       <xsd:complexType name="vnd.ez.api.VersionList">
         <xsd:complexContent>
           <xsd:extension base="ref">
             <xsd:sequence>
-              <xsd:element name="Version" type="vnd.ez.api.Version"/>
+              <xsd:element name="VersionItem" type="versionListItemType"/>
             </xsd:sequence>
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
       <xsd:element name="VersionList" type="vnd.ez.api.VersionList"></xsd:element>
     </xsd:schema>
-
 
 
 .. _VersionUpdate:
@@ -6918,6 +6930,126 @@ Location XML Schema
       <xsd:element name="Location" type="vnd.ez.api.Location" />
       <xsd:element name="LocationList" type="vnd.ez.api.LocationList" />
     </xsd:schema>
+
+
+.. _Trash:
+
+Trash XML Schema
+----------------
+
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:include schemaLocation="Location.xsd" />
+
+      <xsd:complexType name="vnd.ez.api.TrashItem">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:element name="id" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Location ID.
+                              </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="priority" type="xsd:int">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Location priority
+                    Position of the
+                    Location among its siblings when sorted using priority
+                    sort order.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="hidden" type="xsd:boolean">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Indicates that the Location entity has
+                    been explicitly marked as hidden.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="invisible" type="xsd:boolean">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Indicates that the Location is
+                    implicitly marked as hidden by a parent
+                    location.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="ParentLocation" type="ref">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    The parent location
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="pathString" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    The materialized path of the location
+                    entry, eg: /1/2/
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="subLocationModificationDate"
+                type="xsd:dateTime">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Timestamp of the latest update of a
+                    content object in a sub location.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="depth" type="xsd:int">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Depth location has in the location
+                    tree.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="childCount" type="xsd:int">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    the number of chidren visible to the
+                    authenticated user which has
+                    loaded this instance.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="remoteId" type="xsd:string"
+                minOccurs="0" />
+              <xsd:element name="Content" type="ref" />
+              <xsd:element name="sortField" type="sortFieldType" />
+              <xsd:element name="sortOrder" type="sortOrderType" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="vnd.ez.api.Trash">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:sequence>
+              <xsd:element name="trashItem" type="vnd.ez.api.TrashItem"></xsd:element>
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:element name="trash" type="vnd.ez.api.Trash" />
+    </xsd:schema>
+
+
+
+
 
 .. _UrlAlias:
 

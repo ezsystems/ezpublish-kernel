@@ -14,6 +14,7 @@ use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
 
 use \eZ\Publish\API\Repository\ContentService;
+use \eZ\Publish\API\Repository\LocationService;
 use \eZ\Publish\API\Repository\SectionService;
 
 use Qafoo\RMF;
@@ -45,6 +46,13 @@ class Content
     protected $contentService;
 
     /**
+     * Location service
+     *
+     * @var \eZ\Publish\API\Repository\LocationService
+     */
+    protected $locationService;
+
+    /**
      * Section service
      *
      * @var \eZ\Publish\API\Repository\SectionService
@@ -59,11 +67,12 @@ class Content
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\SectionService $sectionService
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, ContentService $contentService, SectionService $sectionService )
+    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, ContentService $contentService, LocationService $locationService, SectionService $sectionService )
     {
         $this->inputDispatcher = $inputDispatcher;
         $this->urlHandler      = $urlHandler;
         $this->contentService  = $contentService;
+        $this->locationService = $locationService;
         $this->sectionService  = $sectionService;
     }
 
@@ -75,12 +84,57 @@ class Content
      */
     public function loadContentInfoByRemoteId( RMF\Request $request )
     {
+        $contentInfo = $this->contentService->loadContentInfoByRemoteId(
+            // GET variable
+            $request->variables['remoteId']
+        );
+
         return new Values\ContentList( array(
-            $this->contentService->loadContentInfoByRemoteId(
-                // GET variable
-                $request->variables['remoteId']
+            new Values\RestContent(
+                $contentInfo,
+                $this->locationService->loadLocation( $contentInfo->mainLocationId )
             )
         ) );
+    }
+
+    /**
+     * Loads a content info, potentially with the current version embedded
+     *
+     * @param RMF\Request $request
+     * @return  EmbeddingContentInfo
+     */
+    public function loadContent( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'object', $request->path );
+
+        $contentInfo = $this->contentService->loadContentInfo( $urlValues['object'] );
+        $mainLocation = $this->locationService->loadLocation( $contentInfo->mainLocationId );
+
+        $contentVersion = null;
+        if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.Content' )
+        {
+            $contentVersion = $this->loadContent( $urlValues['object'] );
+        }
+
+        return new Values\RestContent( $contentInfo, $mainLocation, $contentVersion );
+    }
+
+    /**
+     * Extracts the requested media type from $request
+     *
+     * @param RMF\Request $request
+     * @return string
+     */
+    protected function getMediaType( RMF\Request $request )
+    {
+        foreach ( $request->mimetype as $mimeType )
+        {
+            if ( preg_match( '(^([a-z0-9-/.]+)\+.*$)', $mimeType['value'], $matches ) )
+            {
+                return $matches[1];
+            }
+        }
+        return 'unknown/unknown';
     }
 
     /**
@@ -91,7 +145,7 @@ class Content
      */
     public function updateContentMetadata( RMF\Request $request )
     {
-        $values = $this->urlHandler->parse( 'content', $request->path );
+        $values = $this->urlHandler->parse( 'object', $request->path );
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
                 array( 'Content-Type' => $request->contentType ),
@@ -124,14 +178,21 @@ class Content
      * @param RMF\Request $request
      * @return void
      */
-    public function loadContentInVersion( RMF\Request $request )
+    public function redirectCurrentVersion( RMF\Request $request )
     {
-        $urlValues = $this->urlHandler->parse( 'objectVersion', $request->path );
+        $urlValues = $this->urlHandler->parse( 'objectCurrentVersion', $request->path );
 
-        return $this->contentService->loadContent(
-            $urlValues['object'],
-            null,               // TODO: Implement using language filter on request URI
-            $urlValues['version']
+        $contentInfo = $this->contentService->loadContentInfo( $urlValues['object'] );
+
+        return new Values\ResourceRedirect(
+            $this->urlHandler->generate(
+                'objectVersion',
+                array(
+                    'object' => $urlValues['object'],
+                    'version' => $contentInfo->currentVersionNo
+                )
+            ),
+            'Version'
         );
     }
 
@@ -141,13 +202,14 @@ class Content
      * @param RMF\Request $request
      * @return void
      */
-    public function loadContentInCurrentVersion( RMF\Request $request )
+    public function loadContentInVersion( RMF\Request $request )
     {
-        $urlValues = $this->urlHandler->parse( 'objectCurrentVersion', $request->path );
+        $urlValues = $this->urlHandler->parse( 'objectVersion', $request->path );
 
         return $this->contentService->loadContent(
             $urlValues['object'],
-            null                // TODO: Implement using language filter on request URI
+            null,               // TODO: Implement using language filter on request URI
+            $urlValues['version']
         );
     }
 }

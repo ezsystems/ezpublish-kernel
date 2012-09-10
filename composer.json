@@ -15,15 +15,27 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3"
+        "php": ">=5.3.3",
+        "zetacomponents/archive": "dev-master",
+        "zetacomponents/authentication": "dev-master",
+        "zetacomponents/cache": "dev-master",
+        "zetacomponents/configuration": "dev-master",
+        "zetacomponents/console-tools": "dev-master",
+        "zetacomponents/database": "dev-master",
+        "zetacomponents/debug": "dev-master",
+        "zetacomponents/feed": "dev-master",
+        "zetacomponents/mail": "dev-master",
+        "zetacomponents/mvc-tools": "dev-master",
+        "zetacomponents/mvc-authentication-tiein": "dev-master",
+        "zetacomponents/persistent-object": "dev-master",
+        "zetacomponents/php-generator": "dev-master",
+        "zetacomponents/signal-slot": "dev-master",
+        "zetacomponents/system-information": "dev-master",
+        "zetacomponents/webdav": "1.1.0-rc1",
+        "symfony-cmf/routing": "1.0.*"
     },
     "require-dev": {
         "symfony/symfony": "2.1.0-RC2",
-        "zetacomponents/cache": "dev-master",
-        "zetacomponents/php-generator": "dev-master",
-        "zetacomponents/configuration": "dev-master",
-        "zetacomponents/database": "dev-master",
-        "zetacomponents/mail": "dev-master",
         "Qafoo/RMF": "dev-master",
         "ezsystems/ezpublish-legacy": "dev-master"
     },

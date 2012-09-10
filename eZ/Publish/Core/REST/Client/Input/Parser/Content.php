@@ -8,6 +8,8 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
+use eZ\Publish\Core\REST\Client\Input\ParserTools;
+use eZ\Publish\Core\REST\Client\ContentService;
 
 use eZ\Publish\Core\REST\Common\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
@@ -31,10 +33,22 @@ class Content extends Parser
     protected $versionInfoParser;
 
     /**
+     * @var eZ\Publish\Core\REST\Client\Input\ParserTools
+     */
+    protected $parserTools;
+
+    /**
+     * @var eZ\Publish\Core\REST\Client\ContentService
+     */
+    protected $contentService;
+
+    /**
      * @param eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo $versionInfoParser
      */
-    public function __construct( VersionInfo $versionInfoParser )
+    public function __construct( ParserTools $parserTools, ContentService $contentService, VersionInfo $versionInfoParser )
     {
+        $this->parserTools = $parserTools;
+        $this->contentService = $contentService;
         $this->versionInfoParser = $versionInfoParser;
     }
 
@@ -48,27 +62,20 @@ class Content extends Parser
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
-        $relations = array();
+        $relationListUrl = $this->parserTools->parseObjectElement( $data['Relations'], $parsingDispatcher );
 
-        if ( isset( $data['Relations']['Relation'] ) )
-        {
-            foreach ( $data['Relations']['Relation'] as $rawRelationData )
-            {
-                $relations[] = $parsingDispatcher->parse(
-                    $rawRelationData,
-                    $rawRelationData['_media-type']
-                );
-            }
-        }
+        $versionInfo = $this->versionInfoParser->parse(
+            $data['VersionInfo'],
+            $parsingDispatcher
+        );
+        $fields = $this->parseFields( $data['Fields'] );
 
         return new Values\Content\Content(
+            $this->contentService,
             array(
-                'versionInfo' => $this->versionInfoParser->parse(
-                    $data['VersionInfo'],
-                    $parsingDispatcher
-                ),
-                'internalFields' => $this->parseFields( $data['Fields'] ),
-                'relations' => $relations,
+                'versionInfo' => $versionInfo,
+                'internalFields' => $fields,
+                'relationListId' => $data['Relations']['_href'],
             )
         );
     }

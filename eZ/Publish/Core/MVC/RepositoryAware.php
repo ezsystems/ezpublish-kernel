@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\MVC;
 
 use eZ\Publish\API\Repository\Repository;
 
-abstract class RepositoryAware
+abstract class RepositoryAware implements RepositoryAwareInterface
 {
     /**
      * @var \eZ\Publish\API\Repository\Repository
