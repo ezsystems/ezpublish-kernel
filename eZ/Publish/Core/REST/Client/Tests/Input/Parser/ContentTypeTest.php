@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 use eZ\Publish\Core\REST\Client\Input;
 use eZ\Publish\API\Repository\Values;
 
-class ContentTest extends BaseTest
+class ContentTypeTest extends BaseTest
 {
     /**
      * @var eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo
