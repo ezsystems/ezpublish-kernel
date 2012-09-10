@@ -714,6 +714,8 @@ class ContentTypeService implements ContentTypeServiceInterface
                 (array)$constraints
             ) + $validators;
         }
+        /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
+        $fieldType = $this->repository->getFieldTypeService()->buildFieldType( $spiFieldDefinition->fieldType );
         $fieldDefinition = new FieldDefinition(
             array(
                 "names" => $spiFieldDefinition->name,
@@ -726,7 +728,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "isTranslatable" => $spiFieldDefinition->isTranslatable,
                 "isRequired" => $spiFieldDefinition->isRequired,
                 "isInfoCollector" => $spiFieldDefinition->isInfoCollector,
-                "defaultValue" => $spiFieldDefinition->defaultValue->data,
+                "defaultValue" => $fieldType->fromPersistenceValue( $spiFieldDefinition->defaultValue ),
                 "isSearchable" => $spiFieldDefinition->isSearchable,
                 "fieldSettings" => (array)$spiFieldDefinition->fieldTypeConstraints->fieldSettings,
                 "validatorConfiguration" => $validators,
