@@ -53,4 +53,39 @@ class ParserTools
         }
         return false;
     }
+
+    /**
+     * Parses a translatable list, like names or descriptions
+     *
+     * @param array $listElement
+     * @return array
+     */
+    public function parseTranslatableList( array $listElement )
+    {
+        $listItems = array();
+        foreach ( $listElement['value'] as $valueRow )
+        {
+            $listItems[$valueRow['_languageCode']] = $valueRow['#text'];
+        }
+        return $listItems;
+    }
+
+    /**
+     * Parses a boolean from $stringValue
+     *
+     * @param string $stringValue
+     * @return bool
+     */
+    public function parseBooleanValue( $stringValue )
+    {
+        switch ( strtolower( $stringValue ) )
+        {
+            case 'true':
+                return true;
+            case 'false':
+                return false;
+        }
+
+        throw new RuntimeException( "Unknown boolean value '{$stringValue}'." );
+    }
 }
