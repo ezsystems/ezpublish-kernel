@@ -37,6 +37,8 @@ if ( !isset( $_ENV['DATABASE'] ) )
     exit( 1 );
 }
 
+// Exposing $legacyKernelHandler to be a web handler (to be used in bootstrap.php)
+$legacyKernelHandler = new \ezpKernelWeb;
 require_once __DIR__ . '/../../../../../bootstrap.php';
 
 /*
