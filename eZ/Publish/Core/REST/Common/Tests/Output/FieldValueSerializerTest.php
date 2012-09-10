@@ -26,7 +26,7 @@ class FieldValueSerializerTest extends \PHPUnit_Framework_TestCase
 
     protected $generatorMock;
 
-    public function testVisitDocument()
+    public function testSerializeFieldValue()
     {
         $serializer = new Common\Output\FieldValueSerializer(
             $this->getFieldTypeServiceMock()
@@ -79,6 +79,46 @@ class FieldValueSerializerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testSerializeFieldDefaultValue()
+    {
+        $serializer = new Common\Output\FieldValueSerializer(
+            $this->getFieldTypeServiceMock()
+        );
+
+        $this->getGeneratorMock()->expects( $this->once() )
+            ->method( 'generateFieldTypeHash' )
+            ->with(
+                $this->equalTo( 'defaultValue' ),
+                $this->equalTo( array( 23, 42 ) )
+            );
+
+        $fieldTypeMock = $this->getFieldTypeMock();
+        $this->getFieldTypeServiceMock()->expects( $this->once() )
+            ->method( 'getFieldType' )
+            ->with( $this->equalTo( 'myFancyFieldType' ) )
+            ->will( $this->returnCallback(
+                function () use ( $fieldTypeMock )
+                {
+                    return $fieldTypeMock;
+                }
+            ) );
+
+        $fieldTypeMock->expects( $this->once() )
+            ->method( 'toHash' )
+            ->with( $this->equalTo( 'my-field-value' ) )
+            ->will( $this->returnValue( array( 23, 42 ) ) );
+
+        $fieldDefinition = new FieldDefinition( array(
+            'fieldTypeIdentifier' => 'myFancyFieldType',
+        ) );
+
+        $serializer->serializeFieldDefaultValue(
+            $this->getGeneratorMock(),
+            $fieldDefinition,
+            'my-field-value'
+        );
+    }
+
     protected function getFieldTypeServiceMock()
     {
         if ( !isset( $this->fieldTypeServiceMock ) )
@@ -114,7 +154,7 @@ class FieldValueSerializerTest extends \PHPUnit_Framework_TestCase
         if ( !isset( $this->fieldTypeMock ) )
         {
             $this->fieldTypeMock = $this->getMock(
-                'eZ\\Publish\\SPI\\FieldType\\FieldType',
+                'eZ\\Publish\\API\\Repository\\FieldType',
                 array(),
                 array(),
                 '',
