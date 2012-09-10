@@ -65,8 +65,8 @@ class ContentType extends Parser
                 'id'   => $data['_href'],
                 'status' => $this->parseStatus( $data['status'] ),
                 'identifier' => $data['identifier'],
-                'names' => $this->parseTranslateableList( $data['names'] ),
-                'descriptions' => $this->parseTranslateableList( $data['descriptions'] ),
+                'names' => $this->parseTranslatableList( $data['names'] ),
+                'descriptions' => $this->parseTranslatableList( $data['descriptions'] ),
                 'creationDate' => new \DateTime( $data['creationDate'] ),
                 'modificationDate' => new \DateTime( $data['modificationDate'] ),
                 'creatorId' => $creatorId,
@@ -83,22 +83,6 @@ class ContentType extends Parser
                 'fieldDefinitionListReference' => $fieldDefinitionListReference,
             )
         );
-    }
-
-    /**
-     * Parses a translatable list, like names or descriptions
-     *
-     * @param array $listElement
-     * @return array
-     */
-    protected function parseTranslateableList( array $listElement )
-    {
-        $listItems = array();
-        foreach ( $listElement['value'] as $valueRow )
-        {
-            $listItems['_languageCode'] = $valueRow['#text'];
-        }
-        return $listItems;
     }
 
     /**
@@ -120,25 +104,6 @@ class ContentType extends Parser
         }
 
         throw new \RuntimeException( "Unknown ContentType status '{$contentTypeStatus}.'" );
-    }
-
-    /**
-     * Parses a boolean from $stringValue
-     *
-     * @param string $stringValue
-     * @return bool
-     */
-    protected function parseBooleanValue( $stringValue )
-    {
-        switch ( strtolower( $stringValue ) )
-        {
-            case 'true':
-                return true;
-            case 'false':
-                return false;
-        }
-
-        throw new RuntimeException( "Unknown boolean value '{$stringValue}'." );
     }
 
     /**

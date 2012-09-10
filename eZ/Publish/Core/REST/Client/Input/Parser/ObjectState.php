@@ -29,20 +29,11 @@ class ObjectState extends Parser
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
-        $names = array();
-        foreach ( $data['names']['value'] as $nameData )
-        {
-            $names[$nameData['_languageCode']] = $nameData['#text'];
-        }
+        $names = $this->parseTranslatableList( $data['names'] );
 
-        $descriptions = array();
-        if ( array_key_exists( 'descriptions', $data ) )
-        {
-            foreach ( $data['descriptions']['value'] as $descriptionData )
-            {
-                $descriptions[$descriptionData['_languageCode']] = $descriptionData['#text'];
-            }
-        }
+        $descriptions = isset( $data['descriptions'] )
+            ? $this->parseTranslatableList( $data['descriptions'] )
+            : array();
 
         return new CoreObjectState(
             array(
