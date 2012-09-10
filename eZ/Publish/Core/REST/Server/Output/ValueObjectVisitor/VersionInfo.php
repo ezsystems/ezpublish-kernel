@@ -72,15 +72,7 @@ class VersionInfo extends ValueObjectVisitor
         );
         $generator->endValueElement( 'initialLanguageCode' );
 
-        $generator->startHashElement( 'names' );
-        $generator->startList( 'value' );
-        foreach ( $versionInfo->getNames() as $languageCode => $name )
-        {
-            $generator->startValueElement( 'value', $name, array( 'languageCode' => $languageCode ) );
-            $generator->endValueElement( 'value' );
-        }
-        $generator->endList( 'value' );
-        $generator->endHashElement( 'names' );
+        $this->visitNamesList( $generator, $versionInfo->names );
 
         $generator->startObjectElement( 'Content', 'ContentInfo' );
         $generator->startAttribute(
