@@ -95,8 +95,9 @@ class ContentTypeTest extends BaseTest
     public function testParsedProperties( $propertyName, $expectedValue, $parsedContentType )
     {
         $this->assertEquals(
-            '/content/types/1',
-            $parsedContentType->id
+            $expectedValue,
+            $parsedContentType->$propertyName,
+            "Property \${$propertyName} parsed incorrectly."
         );
     }
 
