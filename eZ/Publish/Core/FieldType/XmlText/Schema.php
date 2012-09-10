@@ -414,30 +414,6 @@ class Schema
      *
      * @return array
      */
-    public function attributeDefaultValues( DOMNode $element )
-    {
-        // Use specific custom tag setting if set
-        if ( $element->nodeName === 'custom' && $element instanceof DOMElement )
-        {
-            $name = $element->getAttribute( 'name' );
-            if ( isset( $this->schema['custom']['tags'][$name]['attributesDefaults'] ) )
-            {
-                return $this->schema['custom']['tags'][$name]['attributesDefaults'];
-            }
-            // fallback to settings on base custom tag
-        }
-
-        if ( isset( $this->schema[$element->nodeName]['attributesDefaults'] ) )
-            return $this->schema[$element->nodeName]['attributesDefaults'];
-
-        return array();
-    }
-
-    /**
-     * @param \DOMNode|\DOMElement $element
-     *
-     * @return array
-     */
     public function customAttributes( DOMNode $element )
     {
         // Use specific custom tag setting if set
