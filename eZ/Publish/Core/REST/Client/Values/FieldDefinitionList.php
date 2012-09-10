@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\REST\Client\Values;
 
+use eZ\Publish\Core\REST\Client\ContentTypeService;
+
 /**
  * FieldDefinitonList
  */
@@ -35,7 +37,7 @@ class FieldDefinitionList
     public function __construct( ContentTypeService $contentTypeService, array $fieldDefinitionReferences )
     {
         $this->contentTypeService = $contentTypeService;
-        $this->fieldDefinitionReferences;
+        $this->fieldDefinitionReferences = $fieldDefinitionReferences;
     }
 
     /**
