@@ -14,9 +14,9 @@ namespace eZ\Publish\Core\MVC\Exception;
  */
 class ParameterNotFoundException extends \InvalidArgumentException
 {
-    public function __construct( $paramName, $prefix, array $triedScopes = array() )
+    public function __construct( $paramName, $namespace, array $triedScopes = array() )
     {
-        $this->message = "Parameter '$paramName' with prefix '$prefix' could not be found.";
+        $this->message = "Parameter '$paramName' with namespace '$namespace' could not be found.";
         if ( !empty( $triedScopes ) )
             $this->message .= " Tried scopes: " . implode( ', ', $triedScopes );
     }

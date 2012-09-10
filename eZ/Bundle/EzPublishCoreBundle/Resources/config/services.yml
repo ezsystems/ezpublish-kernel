@@ -11,12 +11,14 @@ services:
     ezpublish.siteaccess:
         class: %ezpublish.siteaccess.class%
 
-    ezpublish.config.resolver.dynamic:
+    ezpublish.config.resolver.core:
         class: %ezpublish.config.resolver.dynamic.class%
         arguments: [@ezpublish.siteaccess, @service_container, %ezpublish.config.default_scope%]
+        tags:
+            - { name: ezpublish.config.resolver, priority: 200 }
 
     ezpublish.config.resolver:
-        alias: ezpublish.config.resolver.dynamic
+        alias: ezpublish.config.resolver.core
 
     ezpublish.controller.base:
         class: %ezpublish.controller.base.class%

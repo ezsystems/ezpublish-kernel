@@ -14,6 +14,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass,
     eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterLimitationTypePass,
     eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass,
     eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass,
+    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainConfigResolverPass,
     eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\TwigTweaksPass,
     eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ContentViewPass,
     Symfony\Component\HttpKernel\Bundle\Bundle,
@@ -25,6 +26,7 @@ class EzPublishCoreBundle extends Bundle
     {
         parent::build( $container );
         $container->addCompilerPass( new ChainRoutingPass );
+        $container->addCompilerPass( new ChainConfigResolverPass );
         $container->addCompilerPass( new AddFieldTypePass );
         $container->addCompilerPass( new RegisterLimitationTypePass );
         $container->addCompilerPass( new RegisterStorageEnginePass );

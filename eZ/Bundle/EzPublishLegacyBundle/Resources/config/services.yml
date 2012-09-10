@@ -97,3 +97,5 @@ services:
     ezpublish_legacy.config.resolver:
         class: %ezpublish_legacy.config.resolver.class%
         arguments: [@ezpublish_legacy.kernel, %ezpublish_legacy.config.default_scope%]
+        tags:
+            - { name: ezpublish.config.resolver }
