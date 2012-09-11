@@ -31,13 +31,14 @@ class ChainConfigResolver implements ConfigResolverInterface
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $resolver
      * @param int $priority
      */
-    public function addResolver( ConfigResolverInterface $resolver, $priority )
+    public function addResolver( ConfigResolverInterface $resolver, $priority = 0 )
     {
         $priority = (int)$priority;
         if ( !isset( $this->resolvers[$priority] ) )
             $this->resolvers[$priority] = array();
 
         $this->resolvers[$priority][] = $resolver;
+        $this->sortedResolvers = array();
     }
 
     /**
