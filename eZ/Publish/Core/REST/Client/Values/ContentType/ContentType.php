@@ -62,7 +62,11 @@ class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentT
      */
     protected $fieldDefinitionListReference;
 
-    function __construct( ContentTypeService $contentTypeService, array $data = array() )
+    /**
+     * @param ContentTypeService $contentTypeService
+     * @param array $data
+     */
+    public function __construct( ContentTypeService $contentTypeService, array $data = array() )
     {
         $this->contentTypeService = $contentTypeService;
 
