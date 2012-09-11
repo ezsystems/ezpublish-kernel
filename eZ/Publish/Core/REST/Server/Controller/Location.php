@@ -103,6 +103,22 @@ class Location
     }
 
     /**
+     * Deletes a location
+     *
+     * @param \Qafoo\RMF\Request $request
+     * @return void
+     */
+    public function deleteSubtree( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'location', $request->path );
+        $locationId = array_pop( explode( '/', $values['location'] ) );
+        $location = $this->locationService->loadLocation( $locationId );
+        $this->locationService->deleteLocation( $location );
+
+        return new Values\ResourceDeleted();
+    }
+
+    /**
      * Loads a location by remote ID
      *
      * @param RMF\Request $request
