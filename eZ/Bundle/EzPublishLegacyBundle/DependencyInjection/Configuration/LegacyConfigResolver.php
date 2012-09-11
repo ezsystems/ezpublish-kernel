@@ -10,6 +10,7 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface,
+    eZ\Publish\Core\MVC\Exception\ParameterNotFoundException,
     eZINI;
 
 /**
@@ -64,6 +65,7 @@ class LegacyConfigResolver implements ConfigResolverInterface
      * @param string $namespace The legacy INI file name, without the suffix (i.e. without ".ini").
      * @param string $scope A specific siteaccess to look into. Defaults to the current siteaccess.
      *
+     * @throws \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException
      * @return mixed
      */
     public function getParameter( $paramName, $namespace = null, $scope = null )
@@ -83,6 +85,9 @@ class LegacyConfigResolver implements ConfigResolverInterface
                 {
                     $ini = eZINI::instance( "$namespace.ini" );
                 }
+
+                if ( !$ini->hasVariable( $iniGroup, $paramName ) )
+                    throw new ParameterNotFoundException( $paramName, "$namespace.ini" );
 
                 return $ini->variable( $iniGroup, $paramName );
             },
