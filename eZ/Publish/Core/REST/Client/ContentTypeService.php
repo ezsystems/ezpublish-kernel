@@ -89,16 +89,6 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
     }
 
     /**
-     * Initialize array of reflected group properties
-     *
-     * @return void
-     */
-    protected function initGroupProperties()
-    {
-        throw new \Exception( "@TODO: Implement." );
-    }
-
-    /**
      * Create a Content Type Group object
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create a content type group
@@ -109,17 +99,6 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
     public function createContentTypeGroup( ContentTypeGroupCreateStruct  $contentTypeGroupCreateStruct )
-    {
-        throw new \Exception( "@TODO: Implement." );
-    }
-
-    /**
-     * Sets the group internally
-     *
-     * @param \eZ\Publish\Core\REST\Client\Values\ContentType\ContentTypeGroup $group
-     * @return void
-     */
-    protected function setGroup( ContentTypeGroup $group )
     {
         throw new \Exception( "@TODO: Implement." );
     }
@@ -192,17 +171,6 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
     }
 
     /**
-     * Checks of $contentTypeGroup has types assigned
-     *
-     * @param ContentTypeGroup $contentTypeGroup
-     * @return bool
-     */
-    protected function groupHasTypes( ContentTypeGroup $contentTypeGroup )
-    {
-        throw new \Exception( "@TODO: Implement." );
-    }
-
-    /**
      * Create a Content Type object. 
      * 
      * The content type is created in the state STATUS_DRAFT.
@@ -216,31 +184,6 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
     public function createContentType( ContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups )
-    {
-        throw new \Exception( "@TODO: Implement." );
-    }
-
-    /**
-     * Checks that the given $contentTypeCreateStruct is valid
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the identifier or remoteId in the content type create struct already exists
-     *         or there is a dublicate field identifier
-     *
-     * @param ContentTypeCreateStruct $contentTypeCreateStruct
-     * @return void
-     */
-    protected function checkContentTypeCreate( ContentTypeCreateStruct $contentTypeCreateStruct )
-    {
-        throw new \Exception( "@TODO: Implement." );
-    }
-
-    /**
-     * Creates a FieldDefinition from $fieldDefinitionCreate
-     *
-     * @param FieldDefinitionCreateStruct $fieldDefinitionCreate
-     * @return FieldDefinition
-     */
-    protected function createFieldDefinition( FieldDefinitionCreateStruct $fieldDefinitionCreate )
     {
         throw new \Exception( "@TODO: Implement." );
     }
@@ -276,31 +219,6 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
     }
 
     /**
-     * Returns the properties of $contentType in form of an array
-     *
-     * @param ContentType $contentType
-     * @return array
-     */
-    protected function getTypeAsArray( ContentType $contentType )
-    {
-        throw new \Exception( "@TODO: Implement." );
-    }
-
-    /**
-     * Checks that the given $contentTypeUpdateStruct is valid
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the identifier or remoteId in the content type create struct already exists
-     *         or there is a dublicate field identifier
-     *
-     * @param ContentTypeCreateStruct $contentTypeCreateStruct
-     * @return void
-     */
-    protected function checkContentTypeUpdate( ContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct )
-    {
-        throw new \Exception( "@TODO: Implement." );
-    }
-
-    /**
      * Adds a new field definition to an existing content type. 
      * 
      * The content type must be in state DRAFT.
@@ -331,17 +249,6 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
     }
 
     /**
-     * Creates and sets a new ContentTypeDraft from $data
-     *
-     * @param array $data
-     * @return \eZ\Publish\API\Repository\Values\ContentTypeDraft
-     */
-    protected function setContentTypeDraft( array $data )
-    {
-        throw new \Exception( "@TODO: Implement." );
-    }
-
-    /**
      * Update a field definition
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the field id in the update struct is not found or does not belong to the content type
@@ -353,30 +260,6 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
      */
     public function updateFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct )
-    {
-        throw new \Exception( "@TODO: Implement." );
-    }
-
-    /**
-     * Checks the given update combination for validity
-     *
-     * @param ContentTypeDraft $contentTypeDraft
-     * @param FieldDefinition $fieldDefinition
-     * @param FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
-     * @return void
-     */
-    protected function checkFieldDefinitionUpdate( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct )
-    {
-        throw new \Exception( "@TODO: Implement." );
-    }
-
-    /**
-     * Returns the data of $fieldDefinition as an array
-     *
-     * @param FieldDefinition $fieldDefinition
-     * @return array
-     */
-    protected function getFieldDefinitionAsArray( FieldDefinition $fieldDefinition )
     {
         throw new \Exception( "@TODO: Implement." );
     }
