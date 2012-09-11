@@ -144,7 +144,10 @@ class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentT
      */
     public function getFieldDefinitions()
     {
-        // @todo: Implement
+        $fieldDefinitionList = $this->contentTypeService->loadFieldDefinitionList(
+            $this->fieldDefinitionListReference
+        );
+        return $fieldDefinitionList->getFieldDefinitions();
     }
 
     /**
@@ -155,6 +158,14 @@ class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentT
      */
     public function getFieldDefinition( $fieldDefinitionIdentifier )
     {
-        // @todo: Implement
+        $fieldDefinitions = $this->getFieldDefinitions();
+        foreach ( $fieldDefinitions as $fieldDefinition )
+        {
+            if ( $fieldDefinition->identifier === $fieldDefinitionIdentifier )
+            {
+                return $fieldDefinition;
+            }
+        }
+        return null;
     }
 }
