@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client;
 use eZ\Publish\API\Repository;
+use eZ\Publish\SPI;
 
 class FieldType implements Repository\FieldType
 {
@@ -20,9 +21,9 @@ class FieldType implements Repository\FieldType
     protected $innerFieldType;
 
     /**
-     * @param eZ\Publish\API\Repository\FieldType $innerFieldType
+     * @param eZ\Publish\SPI\FieldType\FieldType $innerFieldType
      */
-    public function __construct( Repository\FieldType $innerFieldType )
+    public function __construct( SPI\FieldType\FieldType $innerFieldType )
     {
         $this->innerFieldType = $innerFieldType;
     }

@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\REST\Client;
-use eZ\Publish\API\Repository;
+use eZ\Publish\API;
 
-class FieldTypeService implements Repository\FieldTypeService
+class FieldTypeService implements API\Repository\FieldTypeService
 {
     /**
      * FieldTypes by identifier
