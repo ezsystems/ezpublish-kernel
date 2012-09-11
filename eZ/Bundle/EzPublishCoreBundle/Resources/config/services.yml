@@ -1,6 +1,7 @@
 parameters:
     ezpublish.siteaccess.class: eZ\Bundle\EzPublishCoreBundle\SiteAccess
     ezpublish.config.resolver.dynamic.class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver
+    ezpublish.config.resolver.chain.class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver
     ezpublish.config.default_scope: ezsettings
     ezpublish.controller.base.class: eZ\Publish\Core\MVC\Symfony\Controller\Controller
     ezpublish.controller.content.view.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController
@@ -17,8 +18,11 @@ services:
         tags:
             - { name: ezpublish.config.resolver, priority: 200 }
 
+    ezpublish.config.resolver.chain:
+        class: %ezpublish.config.resolver.chain.class%
+
     ezpublish.config.resolver:
-        alias: ezpublish.config.resolver.core
+        alias: ezpublish.config.resolver.chain
 
     ezpublish.controller.base:
         class: %ezpublish.controller.base.class%
