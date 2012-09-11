@@ -2,7 +2,6 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\REST\Client\ContentTypeService;
 
 /**
