@@ -35,7 +35,7 @@
         "symfony-cmf/routing": "1.0.*"
     },
     "require-dev": {
-        "symfony/symfony": "2.1.0-RC2",
+        "symfony/symfony": "2.1.1",
         "Qafoo/RMF": "dev-master",
         "ezsystems/ezpublish-legacy": "dev-master"
     },
