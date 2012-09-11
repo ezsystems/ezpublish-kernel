@@ -132,7 +132,7 @@ class UserIntegrationTest extends BaseIntegrationTest
             'email' => 'hans@example.com',
             'passwordHash' => '*',
             'passwordHashType' => 0,
-            'isEnabled' => true,
+            'enabled' => true,
             'maxLogin' => 1000,
         );
 
@@ -158,7 +158,7 @@ class UserIntegrationTest extends BaseIntegrationTest
                 'email'              => 'change', // Change is intended to not get through
                 'passwordHash'      => 'change', // Change is intended to not get through
                 'passwordHashType' => 'change', // Change is intended to not get through
-                'isEnabled'         => 'changed', // Change is intended to not get through
+                'enabled'         => 'changed', // Change is intended to not get through
                 'maxLogin'          => 'changed', // Change is intended to not get through
             ),
             'sortKey'      => 'user',

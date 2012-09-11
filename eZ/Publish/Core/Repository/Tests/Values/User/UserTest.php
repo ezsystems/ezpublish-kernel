@@ -36,7 +36,7 @@ class UserTest extends PHPUnit_Framework_TestCase
         self::assertContains( 'email', $properties, 'Property not found' );
         self::assertContains( 'passwordHash', $properties, 'Property not found' );
         self::assertContains( 'hashAlgorithm', $properties, 'Property not found' );
-        self::assertContains( 'isEnabled', $properties, 'Property not found' );
+        self::assertContains( 'enabled', $properties, 'Property not found' );
         self::assertContains( 'maxLogin', $properties, 'Property not found' );
 
         // check for duplicates and double check existence of property

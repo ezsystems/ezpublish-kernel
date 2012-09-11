@@ -1215,7 +1215,7 @@ class UserServiceTest extends BaseTest
         // Set new values for password and maxLogin
         $userUpdate->password = 'my-new-password';
         $userUpdate->maxLogin = 42;
-        $userUpdate->isEnabled = false;
+        $userUpdate->enabled = false;
 
         // Updated the user record.
         $userVersion2 = $userService->updateUser( $user, $userUpdate );
@@ -1249,14 +1249,14 @@ class UserServiceTest extends BaseTest
                     $user->hashAlgorithm
                 ),
                 'maxLogin' => 42,
-                'isEnabled' => false
+                'enabled' => false
             ),
             array(
                 'login' => $user->login,
                 'email' => $user->email,
                 'passwordHash' => $user->passwordHash,
                 'maxLogin' => $user->maxLogin,
-                'isEnabled' => $user->isEnabled
+                'enabled' => $user->enabled
             )
         );
     }

@@ -62,7 +62,7 @@ class Value extends BaseValue
      *
      * @var bool
      */
-    public $isEnabled;
+    public $enabled;
 
     /**
      * Max login
