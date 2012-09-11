@@ -168,15 +168,21 @@ class RelationList implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
+        // default settings
         $fieldDef->fieldTypeConstraints->fieldSettings = array(
             'selectionMethod' => 0,
             'selectionDefaultLocation' => null,
             'selectionContentTypes' => array()
         );
 
+        // default value
+        $fieldDef->defaultValue = new FieldValue();
+        $fieldDef->defaultValue->data = array( 'destinationContentIds' => array() );
+
         if ( $storageDef->dataText5 === null )
             return;
 
+        // read settings from storage
         $fieldSettings =& $fieldDef->fieldTypeConstraints->fieldSettings;
         $dom = new DOMDocument( '1.0', 'utf-8' );
         if ( $dom->loadXML( $storageDef->dataText5 ) !== true )
