@@ -362,6 +362,12 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/content/types/[0-9]+$)' => array(
             'GET'   => array( $contentTypeController, 'loadContentType' ),
         ),
+        '(^/content/types/[0-9]+/fieldDefinitions$)' => array(
+            'GET'   => array( $contentTypeController, 'loadFieldDefinitionList' ),
+        ),
+        '(^/content/types/[0-9]+/fieldDefinitions/[0-9]+$)' => array(
+            'GET'   => array( $contentTypeController, 'loadFieldDefinition' ),
+        ),
 
     // /content/trash
 

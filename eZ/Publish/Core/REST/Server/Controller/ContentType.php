@@ -69,4 +69,48 @@ class ContentType
 
         return $this->contentTypeServcie->loadContentType( $urlValues['type'] );
     }
+
+    /**
+     * Loads FieldDefinitions for a given type
+     *
+     * @param RMF\Request $request
+     * @return FieldDefinitionList
+     */
+    public function loadFieldDefinitionList( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'typeFieldDefinitions', $request->path );
+
+        $contentType = $this->contentTypeServcie->loadContentType( $urlValues['type'] );
+
+        return new Values\FieldDefinitionList(
+            $contentType,
+            $contentType->getFieldDefinitions()
+        );
+    }
+
+    /**
+     * Loads a single FieldDefinition
+     *
+     * @param RMF\Request $request
+     * @return FieldDefinition
+     */
+    public function loadFieldDefinition( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'typeFieldDefinition', $request->path );
+
+        $contentType = $this->contentTypeServcie->loadContentType( $urlValues['type'] );
+
+        foreach ( $contentType->getFieldDefinitions() as $fieldDefinition )
+        {
+            if ( $fieldDefinition->id == $urlValues['fieldDefinition'] )
+            {
+                return new Values\RestFieldDefinition(
+                    $contentType,
+                    $fieldDefinition
+                );
+            }
+        }
+
+        throw new Exceptions\NotFound( "Field definition not found: '{$request->path}'." );
+    }
 }
