@@ -224,6 +224,14 @@ class Type extends FieldType
      */
     public function fromPersistenceValue( FieldValue $fieldValue )
     {
-        return new Value( $fieldValue->externalData, $fieldValue->data['text'] );
+        if ( $fieldValue->externalData === null )
+        {
+            return null;
+        }
+
+        return new Value(
+            $fieldValue->externalData,
+            $fieldValue->data['text']
+        );
     }
 }

@@ -78,6 +78,9 @@ class Url implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
+        // TODO: Is it possible to store a default value in the DB?
+        $fieldDef->defaultValue = new FieldValue();
+        $fieldDef->defaultValue->data = array( 'text' => null );
     }
 
     /**
