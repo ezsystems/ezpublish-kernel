@@ -65,33 +65,4 @@ class FieldDefinition extends Parser
             'defaultValue' => $data['defaultValue'],
         ) );
     }
-
-    /**
-     * Parses the fields from the given $rawFieldsData
-     *
-     * @param array $rawFieldsData
-     * @return \eZ\Publish\API\Repository\Values\Content\Field[]
-     */
-    protected function parseFields( array $rawFieldsData )
-    {
-        $fields = array();
-
-        if ( isset( $rawFieldsData['field'] ) )
-        {
-            foreach ( $rawFieldsData['field'] as $rawFieldData )
-            {
-                $fields[] = new Field(
-                    array(
-                        'id' => $rawFieldData['id'],
-                        'fieldDefIdentifier' => $rawFieldData['fieldDefinitionIdentifier'],
-                        'languageCode' => $rawFieldData['languageCode'],
-                        // @TODO: Here the field type fromHash() needs to hook in!
-                        'value' => $rawFieldData['fieldValue'],
-                    )
-                );
-            }
-        }
-
-        return $fields;
-    }
 }
