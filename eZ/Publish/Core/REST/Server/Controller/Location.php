@@ -102,7 +102,7 @@ class Location
     {
         $values = $this->urlHandler->parse( 'location', $request->path );
         return $this->locationService->loadLocation(
-            array_pop( explode( '/', $values['location'] ) )
+            $this->extractLocationIdFromPath( $values['location'] )
         );
     }
 
@@ -115,8 +115,7 @@ class Location
     public function deleteSubtree( RMF\Request $request )
     {
         $values = $this->urlHandler->parse( 'location', $request->path );
-        $locationId = array_pop( explode( '/', $values['location'] ) );
-        $location = $this->locationService->loadLocation( $locationId );
+        $location = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $values['location'] ) );
         $this->locationService->deleteLocation( $location );
 
         return new Values\ResourceDeleted();
@@ -171,7 +170,7 @@ class Location
         return new Values\LocationList(
             $this->locationService->loadLocationChildren(
                 $this->locationService->loadLocation(
-                    array_pop( explode( '/', $values['location'] ) )
+                    $this->extractLocationIdFromPath( $values['location'] )
                 )
             ),
             $request->path
@@ -190,7 +189,7 @@ class Location
 
         return $this->locationService->updateLocation(
             $this->locationService->loadLocation(
-                array_pop( explode( '/', $values['location'] ) )
+                $this->extractLocationIdFromPath( $values['location'] )
             ),
             $this->inputDispatcher->parse(
                 new Message(
@@ -199,5 +198,16 @@ class Location
                 )
             )
         );
+    }
+
+    /**
+     * Extracts and returns an item id from a path, e.g. /1/2/58 => 58
+     *
+     * @param string $path
+     * @return mixed
+     */
+    private function extractLocationIdFromPath( $path )
+    {
+        return array_pop( explode('/', $path ) );
     }
 }
