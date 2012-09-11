@@ -9,6 +9,9 @@
 
 namespace eZ\Publish\Core\FieldType\Float;
 use eZ\Publish\Core\FieldType\FieldType,
+    eZ\Publish\Core\FieldType\ValidationError,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
@@ -18,9 +21,147 @@ use eZ\Publish\Core\FieldType\FieldType,
  */
 class Type extends FieldType
 {
-    protected $allowedValidators = array(
-        "FloatValueValidator"
+    protected $validatorConfigurationSchema = array(
+        'FloatValueValidator' => array(
+            'minFloatValue' => array(
+                'type' => 'float',
+                'default' => false
+            ),
+            'maxFloatValue' => array(
+                'type' => 'float',
+                'default' => false
+            )
+        )
     );
+
+    /**
+     * Returns a schema for supported validator configurations.
+     *
+     * This implementation returns a three dimensional map containing for each validator configuration
+     * referenced by identifier a map of supported parameters which are defined by a type and a default value
+     * (see example).
+     * Example:
+     * <code>
+     *  array(
+     *      'stringLength' => array(
+     *          'minStringLength' => array(
+     *              'type'    => 'int',
+     *              'default' => 0,
+     *          ),
+     *          'maxStringLength' => array(
+     *              'type'    => 'int'
+     *              'default' => null,
+     *          )
+     *      ),
+     *  );
+     * </code>
+     * The validator identifier is mapped to a Validator class which can be retrieved via the
+     * ValidatorService.
+     */
+    public function getValidatorConfigurationSchema()
+    {
+        return $this->validatorConfigurationSchema;
+    }
+
+    /**
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $validatorConfiguration
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValidatorConfiguration( $validatorConfiguration )
+    {
+        $validationErrors = array();
+
+        foreach ( (array)$validatorConfiguration as $validatorIdentifier => $constraints )
+        {
+            if ( $validatorIdentifier !== 'FloatValueValidator' )
+            {
+                $validationErrors[] = new ValidationError(
+                    "Validator '%validator%' is unknown",
+                    null,
+                    array(
+                        "validator" => $validatorIdentifier
+                    )
+                );
+
+                continue;
+            }
+
+            foreach ( $constraints as $name => $value )
+            {
+                switch ( $name )
+                {
+                    case "minFloatValue":
+                    case "maxFloatValue":
+                        if ( $value !== false && !is_numeric( $value ) )
+                        {
+                            $validationErrors[] = new ValidationError(
+                                "Validator parameter '%parameter%' value must be of numeric type",
+                                null,
+                                array(
+                                    "parameter" => $name
+                                )
+                            );
+                        }
+                        break;
+                    default:
+                        $validationErrors[] = new ValidationError(
+                            "Validator parameter '%parameter%' is unknown",
+                            null,
+                            array(
+                                "parameter" => $name
+                            )
+                        );
+                }
+            }
+        }
+
+        return $validationErrors;
+    }
+
+    /**
+     * Validates a field based on the validators in the field definition
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
+     * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field for which an action is performed
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validate( FieldDefinition $fieldDefinition, $fieldValue )
+    {
+        $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
+        $constraints = $validatorConfiguration['FloatValueValidator'];
+
+        $validationErrors = array();
+
+        if ( $constraints['maxFloatValue'] !== false && $fieldValue->value > $constraints['maxFloatValue'] )
+        {
+            $validationErrors[] = new ValidationError(
+                "The value can not be higher than %size%.",
+                null,
+                array(
+                    "size" => $constraints['maxFloatValue']
+                )
+            );
+        }
+
+        if ( $constraints['minFloatValue'] !== false && $fieldValue->value < $constraints['minFloatValue'] )
+        {
+            $validationErrors[] = new ValidationError(
+                "The value can not be lower than %size%.",
+                null,
+                array(
+                    "size" => $constraints['minFloatValue']
+                )
+            );
+        }
+
+        return $validationErrors;
+    }
 
     /**
      * Return the field type identifier for this field type
