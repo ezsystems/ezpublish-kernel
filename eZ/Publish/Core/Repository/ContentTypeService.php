@@ -706,14 +706,6 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     protected function buildFieldDefinitionDomainObject( SPIFieldDefinition $spiFieldDefinition )
     {
-        $validators = array();
-        foreach ( (array)$spiFieldDefinition->fieldTypeConstraints->validators as $identifier => $constraints )
-        {
-            $validators = $this->repository->getValidatorService()->getValidatorConfiguration(
-                $identifier,
-                (array)$constraints
-            ) + $validators;
-        }
         /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
         $fieldType = $this->repository->getFieldTypeService()->buildFieldType( $spiFieldDefinition->fieldType );
         $fieldDefinition = new FieldDefinition(
@@ -731,7 +723,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "defaultValue" => $fieldType->fromPersistenceValue( $spiFieldDefinition->defaultValue ),
                 "isSearchable" => $spiFieldDefinition->isSearchable,
                 "fieldSettings" => (array)$spiFieldDefinition->fieldTypeConstraints->fieldSettings,
-                "validatorConfiguration" => $validators,
+                "validatorConfiguration" => (array)$spiFieldDefinition->fieldTypeConstraints->validators,
             )
         );
 

@@ -104,11 +104,14 @@ class Type extends FieldType
     public function validate( FieldDefinition $fieldDefinition, $fieldValue )
     {
         $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
-        $constraints = $validatorConfiguration['IntegerValueValidator'];
+        $constraints = isset($validatorConfiguration['IntegerValueValidator']) ?
+            $validatorConfiguration['IntegerValueValidator'] :
+            array();
 
         $validationErrors = array();
 
-        if ( $constraints['maxIntegerValue'] !== false && $fieldValue->value > $constraints['maxIntegerValue'] )
+        if ( isset( $constraints['maxIntegerValue'] ) &&
+            $constraints['maxIntegerValue'] !== false && $fieldValue->value > $constraints['maxIntegerValue'] )
         {
             $validationErrors[] = new ValidationError(
                 "The value can not be higher than %size%.",
@@ -119,7 +122,8 @@ class Type extends FieldType
             );
         }
 
-        if ( $constraints['minIntegerValue'] !== false && $fieldValue->value < $constraints['minIntegerValue'] )
+        if ( isset( $constraints['minIntegerValue'] ) &&
+            $constraints['minIntegerValue'] !== false && $fieldValue->value < $constraints['minIntegerValue'] )
         {
             $validationErrors[] = new ValidationError(
                 "The value can not be lower than %size%.",

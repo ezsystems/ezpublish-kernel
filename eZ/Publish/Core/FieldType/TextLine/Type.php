@@ -104,11 +104,14 @@ class Type extends FieldType
     public function validate( FieldDefinition $fieldDefinition, $fieldValue )
     {
         $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
-        $constraints = $validatorConfiguration['StringLengthValidator'];
+        $constraints = isset($validatorConfiguration['StringLengthValidator']) ?
+            $validatorConfiguration['StringLengthValidator'] :
+            array();
 
         $validationErrors = array();
 
-        if ( $constraints['maxStringLength'] !== false &&
+        if ( isset( $constraints['maxStringLength'] ) &&
+            $constraints['maxStringLength'] !== false &&
             $constraints['maxStringLength'] !== 0 &&
             strlen( $fieldValue->text ) > $constraints['maxStringLength'] )
         {
@@ -121,7 +124,8 @@ class Type extends FieldType
             );
         }
 
-        if ( $constraints['minStringLength'] !== false &&
+        if ( isset( $constraints['minStringLength'] ) &&
+            $constraints['minStringLength'] !== false &&
             $constraints['minStringLength'] !== 0 &&
             strlen( $fieldValue->text ) < $constraints['minStringLength'] )
         {

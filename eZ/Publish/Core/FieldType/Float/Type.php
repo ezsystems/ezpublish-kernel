@@ -105,11 +105,14 @@ class Type extends FieldType
     public function validate( FieldDefinition $fieldDefinition, $fieldValue )
     {
         $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
-        $constraints = $validatorConfiguration['FloatValueValidator'];
+        $constraints = isset($validatorConfiguration['FloatValueValidator']) ?
+            $validatorConfiguration['FloatValueValidator'] :
+            array();
 
         $validationErrors = array();
 
-        if ( $constraints['maxFloatValue'] !== false && $fieldValue->value > $constraints['maxFloatValue'] )
+        if ( isset( $constraints['maxFloatValue'] ) &&
+            $constraints['maxFloatValue'] !== false && $fieldValue->value > $constraints['maxFloatValue'] )
         {
             $validationErrors[] = new ValidationError(
                 "The value can not be higher than %size%.",
@@ -120,7 +123,8 @@ class Type extends FieldType
             );
         }
 
-        if ( $constraints['minFloatValue'] !== false && $fieldValue->value < $constraints['minFloatValue'] )
+        if ( isset( $constraints['minFloatValue'] ) &&
+            $constraints['minFloatValue'] !== false && $fieldValue->value < $constraints['minFloatValue'] )
         {
             $validationErrors[] = new ValidationError(
                 "The value can not be lower than %size%.",
