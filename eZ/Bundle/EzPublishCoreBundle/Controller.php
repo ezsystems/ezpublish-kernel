@@ -45,7 +45,7 @@ class Controller extends BaseController
     }
 
     /**
-     * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver
+     * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver
      */
     protected function getConfigResolver()
     {
