@@ -45,6 +45,19 @@ abstract class FieldType implements FieldTypeInterface
     protected $settingsSchema = array();
 
     /**
+     * The validator configuration schema
+     *
+     * This is a base implementation, containing an empty array() that indicates
+     * that no validators are supported. Overwrite in derived types, if
+     * validation is supported.
+     *
+     * @see getValidatorConfigurationSchema()
+     *
+     * @var mixed
+     */
+    protected $validatorConfigurationSchema = array();
+
+    /**
      * This method is called on occurring events. Implementations can perform corresponding actions
      *
      * @param \eZ\Publish\SPI\FieldType\Event $event
@@ -68,17 +81,14 @@ abstract class FieldType implements FieldTypeInterface
     }
 
     /**
-     * Returns a schema for supported validator configurations.
+     * Returns a schema for the validator configuration expected by the FieldType
      *
-     * This is a base implementation, returning an empty array() that indicates
-     * that no validators are supported. Overwrite in derived types, if
-     * validation is supported.
+     * @see FieldTypeInterface::getValidatorConfigurationSchema()
      *
      * This implementation returns a three dimensional map containing for each validator configuration
      * referenced by identifier a map of supported parameters which are defined by a type and a default value
      * (see example).
      *
-     * Example:
      * <code>
      *  array(
      *      'stringLength' => array(
@@ -94,12 +104,11 @@ abstract class FieldType implements FieldTypeInterface
      *  );
      * </code>
      *
-     * The validator identifier is mapped to a Validator class which can be retrieved via the
-     * ValidatorService.
+     * @return mixed
      */
     public function getValidatorConfigurationSchema()
     {
-        return array();
+        return $this->validatorConfigurationSchema;
     }
 
     /**

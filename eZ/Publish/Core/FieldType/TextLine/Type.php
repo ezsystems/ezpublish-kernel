@@ -35,35 +35,6 @@ class Type extends FieldType
     );
 
     /**
-     * Returns a schema for supported validator configurations.
-     *
-     * This implementation returns a three dimensional map containing for each validator configuration
-     * referenced by identifier a map of supported parameters which are defined by a type and a default value
-     * (see example).
-     * Example:
-     * <code>
-     *  array(
-     *      'stringLength' => array(
-     *          'minStringLength' => array(
-     *              'type'    => 'int',
-     *              'default' => 0,
-     *          ),
-     *          'maxStringLength' => array(
-     *              'type'    => 'int'
-     *              'default' => null,
-     *          )
-     *      ),
-     *  );
-     * </code>
-     * The validator identifier is mapped to a Validator class which can be retrieved via the
-     * ValidatorService.
-     */
-    public function getValidatorConfigurationSchema()
-    {
-        return $this->validatorConfigurationSchema;
-    }
-
-    /**
      * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
      *
      * @param mixed $validatorConfiguration
