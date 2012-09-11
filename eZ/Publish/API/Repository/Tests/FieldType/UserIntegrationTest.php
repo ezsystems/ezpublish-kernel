@@ -132,7 +132,6 @@ class UserIntegrationTest extends BaseIntegrationTest
             'email' => 'hans@example.com',
             'passwordHash' => '680869a9873105e365d39a6d14e68e46',
             'passwordHashType' => 2,
-            'isLoggedIn' => true,
             'isEnabled' => true,
         );
 
@@ -258,7 +257,6 @@ class UserIntegrationTest extends BaseIntegrationTest
             'email' => null,
             'passwordHash' => null,
             'passwordHashType' => null,
-            'isLoggedIn' => true,
             'isEnabled' => false,
             'maxLogin' => null,
         );
@@ -302,7 +300,6 @@ class UserIntegrationTest extends BaseIntegrationTest
                     'email' => null,
                     'passwordHash' => null,
                     'passwordHashType' => null,
-                    'isLoggedIn' => null,
                     'isEnabled' => null,
                     'maxLogin' => null,
                 ),

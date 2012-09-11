@@ -31,7 +31,6 @@ class LegacyStorage extends Gateway
         'email'              => null,
         'passwordHash'      => null,
         'passwordHashType' => null,
-        'isLoggedIn'       => true,
         'isEnabled'         => false,
         'maxLogin'          => null,
     );
@@ -67,10 +66,6 @@ class LegacyStorage extends Gateway
             'password_hash_type' => array(
                 'name' => 'passwordHashType',
                 'cast' => 'strval'
-            ),
-            'is_logged_in' => array(
-                'name' => 'isLoggedIn',
-                'cast' => function ( $input ) { return ( $input == "1" ); }
             ),
             'is_enabled' => array(
                 'name' => 'isEnabled',
@@ -114,7 +109,6 @@ class LegacyStorage extends Gateway
      * - email
      * - passwordHash
      * - passwordHashType
-     * - isLoggedIn
      * - isEnabled
      * - maxLogin
      *

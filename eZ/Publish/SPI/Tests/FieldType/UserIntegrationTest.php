@@ -132,7 +132,6 @@ class UserIntegrationTest extends BaseIntegrationTest
             'email' => 'hans@example.com',
             'passwordHash' => '*',
             'passwordHashType' => 0,
-            'isLoggedIn' => true,
             'isEnabled' => true,
             'maxLogin' => 1000,
         );

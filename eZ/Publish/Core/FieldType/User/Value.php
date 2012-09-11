@@ -58,13 +58,6 @@ class Value extends BaseValue
     public $passwordHashType;
 
     /**
-     * Is logged in
-     *
-     * @var bool
-     */
-    public $isLoggedIn;
-
-    /**
      * Is enabled
      *
      * @var bool

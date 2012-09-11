@@ -34,7 +34,6 @@ class User extends PseudoExternalStorage
         'email'            => null,
         'passwordHash'     => null,
         'passwordHashType' => null,
-        'isLoggedIn'       => true,
         'isEnabled'        => false,
         'maxLogin'         => null,
     );

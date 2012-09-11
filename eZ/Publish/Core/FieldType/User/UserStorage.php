@@ -32,7 +32,6 @@ use eZ\Publish\Core\FieldType\GatewayBasedStorage,
  * type in eZ Publish 4:
  *  - account_key
  *  - has_stored_login
- *  - is_logged_in
  *  - is_enabled
  *  - is_locked
  *  - last_visit
