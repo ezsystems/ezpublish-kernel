@@ -51,12 +51,4 @@ class Controller extends BaseController
     {
         return $this->container->get( 'ezpublish.config.resolver' );
     }
-
-    /**
-     * @return \eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver
-     */
-    protected function getLegacyConfigResolver()
-    {
-        return $this->container->get( 'ezpublish_legacy.config.resolver' );
-    }
 }
