@@ -11,7 +11,4 @@ namespace eZ\Publish\Core\REST\Server\Values;
 
 class ResourceDeleted
 {
-    public function __construct()
-    {
-    }
 }
