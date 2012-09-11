@@ -2288,7 +2288,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages, $versionNo)
-     * @expectedE_xception \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentWithThirdParameter
      */
     public function testLoadContentThrowsNotFoundExceptionWithThirdParameter()
