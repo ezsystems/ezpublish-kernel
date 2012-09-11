@@ -111,9 +111,9 @@ class Content
         $mainLocation = $this->locationService->loadLocation( $contentInfo->mainLocationId );
 
         $contentVersion = null;
-        if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.Content' )
+        if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.content' )
         {
-            $contentVersion = $this->loadContent( $urlValues['object'] );
+            $contentVersion = $this->contentService->loadContent( $urlValues['object'] );
         }
 
         return new Values\RestContent( $contentInfo, $mainLocation, $contentVersion );
