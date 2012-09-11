@@ -24,6 +24,9 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 use \eZ\Publish\Core\REST\Common\UrlHandler;
 use \eZ\Publish\Core\REST\Common\Input;
 use \eZ\Publish\Core\REST\Common\Output;
+use \eZ\Publish\Core\REST\Common\Message;
+
+use \eZ\Publish\Core\REST\Client\Values;
 
 /**
  * @example Examples/contenttype.php
@@ -290,7 +293,14 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function loadContentType( $contentTypeId )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $contentTypeId,
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'ContentType' ) )
+            )
+        );
+        return $this->inputDispatcher->parse( $response );
     }
 
     /**
@@ -305,7 +315,14 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function loadFieldDefinition( $fieldDefinitionId )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $fieldDefinitionId,
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'FieldDefinition' ) )
+            )
+        );
+        return $this->inputDispatcher->parse( $response );
     }
 
     /**
@@ -319,7 +336,14 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
      */
     public function loadFieldDefinitionList( $fieldDefinitionListReference )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $fieldDefinitionListReference,
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'FieldDefinitionList' ) )
+            )
+        );
+        return $this->inputDispatcher->parse( $response );
     }
 
     /**

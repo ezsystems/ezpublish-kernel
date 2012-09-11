@@ -12,6 +12,7 @@ use eZ\Publish\Core\REST\Client\Input\ParserTools;
 use eZ\Publish\Core\REST\Client\ContentService;
 
 use eZ\Publish\Core\REST\Common\Input\Parser;
+use eZ\Publish\Core\REST\Common\Input\FieldValueParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 
 use eZ\Publish\Core\REST\Client\Values;
@@ -43,13 +44,19 @@ class Content extends Parser
     protected $contentService;
 
     /**
+     * @var eZ\Publish\Core\REST\Common\Input\FieldValueParser
+     */
+    protected $fieldValueParser;
+
+    /**
      * @param eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo $versionInfoParser
      */
-    public function __construct( ParserTools $parserTools, ContentService $contentService, VersionInfo $versionInfoParser )
+    public function __construct( ParserTools $parserTools, ContentService $contentService, VersionInfo $versionInfoParser, FieldValueParser $fieldValueParser )
     {
         $this->parserTools = $parserTools;
         $this->contentService = $contentService;
         $this->versionInfoParser = $versionInfoParser;
+        $this->fieldValueParser = $fieldValueParser;
     }
 
     /**
@@ -68,7 +75,7 @@ class Content extends Parser
             $data['VersionInfo'],
             $parsingDispatcher
         );
-        $fields = $this->parseFields( $data['Fields'] );
+        $fields = $this->parseFields( $data['Fields'], $versionInfo->contentInfoId );
 
         return new Values\Content\Content(
             $this->contentService,
@@ -84,15 +91,16 @@ class Content extends Parser
      * Parses the fields from the given $rawFieldsData
      *
      * @param array $rawFieldsData
+     * @param string $contentId
      * @return \eZ\Publish\API\Repository\Values\Content\Field[]
      */
-    protected function parseFields( array $rawFieldsData )
+    protected function parseFields( array $rawFieldsData, $contentId )
     {
         $fields = array();
 
-        if ( isset( $rawFieldsData['field'] ) )
+        if ( isset( $rawFieldsData['Field'] ) )
         {
-            foreach ( $rawFieldsData['field'] as $rawFieldData )
+            foreach ( $rawFieldsData['Field'] as $rawFieldData )
             {
                 $fields[] = new Field(
                     array(
@@ -100,7 +108,11 @@ class Content extends Parser
                         'fieldDefIdentifier' => $rawFieldData['fieldDefinitionIdentifier'],
                         'languageCode' => $rawFieldData['languageCode'],
                         // @TODO: Here the field type fromHash() needs to hook in!
-                        'value' => $rawFieldData['fieldValue'],
+                        'value' => $this->fieldValueParser->parseFieldValue(
+                            $contentId,
+                            $rawFieldData['fieldDefinitionIdentifier'],
+                            $rawFieldData['fieldValue']
+                        )
                     )
                 );
             }
