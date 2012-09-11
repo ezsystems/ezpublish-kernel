@@ -24,7 +24,7 @@ class ConnectionException extends \RuntimeException
     public function __construct( $server, $path, $method )
     {
         parent::__construct(
-            "Could not connect to server $server."
+            "Could not connect to server '$server' and retrieve '$path' with '$method'."
         );
     }
 }
