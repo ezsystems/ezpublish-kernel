@@ -31,8 +31,6 @@ class BinaryFileTest extends BinaryBaseTest
     protected function createFieldTypeUnderTest()
     {
         return new BinaryFileType(
-            $this->getValidatorServiceMock(),
-            $this->getFieldTypeToolsMock(),
             $this->getFileServiceMock(),
             $this->getMimeTypeDetectorMock()
         );

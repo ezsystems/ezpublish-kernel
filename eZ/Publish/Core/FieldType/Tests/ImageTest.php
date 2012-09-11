@@ -64,8 +64,6 @@ class ImageTest extends StandardizedFieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         return new ImageType(
-            $this->getValidatorServiceMock(),
-            $this->getFieldTypeToolsMock(),
             $this->getFileServiceMock()
         );
     }

@@ -31,8 +31,6 @@ class MediaTest extends BinaryBaseTest
     protected function createFieldTypeUnderTest()
     {
         return new MediaType(
-            $this->getValidatorServiceMock(),
-            $this->getFieldTypeToolsMock(),
             $this->getFileServiceMock(),
             $this->getMimeTypeDetectorMock()
         );

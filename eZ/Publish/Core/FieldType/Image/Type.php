@@ -46,9 +46,8 @@ class Type extends FieldType
      *
      * @param FileService $fileService
      */
-    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools, FileService $fileService )
+    public function __construct( FileService $fileService )
     {
-        parent::__construct( $validatorService, $fieldTypeTools );
         $this->fileService = $fileService;
     }
 

@@ -51,14 +51,11 @@ abstract class Type extends FieldType
     /**
      * Creates a new Image FieldType
      *
-     * @param ValidatorService $validatorService
-     * @param FieldTypeTools $fieldTypeTools
      * @param FileService $fileService
      * @param MimeTypeDetector $mimeTypeDetector
      */
-    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools, FileService $fileService, MimeTypeDetector $mimeTypeDetector )
+    public function __construct( FileService $fileService, MimeTypeDetector $mimeTypeDetector )
     {
-        parent::__construct( $validatorService, $fieldTypeTools );
         $this->fileService = $fileService;
         $this->mimeTypeDetector = $mimeTypeDetector;
     }

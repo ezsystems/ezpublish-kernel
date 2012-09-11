@@ -45,40 +45,6 @@ abstract class FieldType implements FieldTypeInterface
     protected $settingsSchema = array();
 
     /**
-     * An array of validator identifiers which are allowed for this FieldType
-     *
-     * @var string[]
-     */
-    protected $allowedValidators = array();
-
-    /**
-     * Tool object for field types
-     *
-     * @var \eZ\Publish\API\Repository\FieldTypeTools
-     */
-    protected $fieldTypeTools;
-
-    /**
-     * Holds an instance of validator service
-     *
-     * @var \eZ\Publish\Core\Repository\ValidatorService
-     */
-    protected $validatorService;
-
-    /**
-     * Constructs field type object, initializing internal data structures.
-     *
-     * @param \eZ\Publish\Core\Repository\ValidatorService $validatorService
-     * @param \eZ\Publish\API\Repository\FieldTypeTools $fieldTypeTools
-     * @return void
-     */
-    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools )
-    {
-        $this->fieldTypeTools = $fieldTypeTools;
-        $this->validatorService = $validatorService;
-    }
-
-    /**
      * This method is called on occurring events. Implementations can perform corresponding actions
      *
      * @param \eZ\Publish\SPI\FieldType\Event $event
@@ -104,9 +70,14 @@ abstract class FieldType implements FieldTypeInterface
     /**
      * Returns a schema for supported validator configurations.
      *
+     * This is a base implementation, returning an empty array() that indicates
+     * that no validators are supported. Overwrite in derived types, if
+     * validation is supported.
+     *
      * This implementation returns a three dimensional map containing for each validator configuration
      * referenced by identifier a map of supported parameters which are defined by a type and a default value
      * (see example).
+     *
      * Example:
      * <code>
      *  array(
@@ -122,23 +93,21 @@ abstract class FieldType implements FieldTypeInterface
      *      ),
      *  );
      * </code>
+     *
      * The validator identifier is mapped to a Validator class which can be retrieved via the
      * ValidatorService.
      */
     public function getValidatorConfigurationSchema()
     {
-        $validatorConfigurationSchema = array();
-        foreach ( $this->allowedValidators as $validatorIdentifier )
-        {
-            $validator = $this->validatorService->getValidator( $validatorIdentifier );
-            $validatorConfigurationSchema[$validatorIdentifier] = $validator->getConstraintsSchema();
-        }
-
-        return $validatorConfigurationSchema;
+        return array();
     }
 
     /**
      * Validates a field based on the validators in the field definition
+     *
+     * This is a base implementation, returning an empty array() that indicates
+     * that no validation errors occured. Overwrite in derived types, if
+     * validation is supported.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
@@ -149,21 +118,15 @@ abstract class FieldType implements FieldTypeInterface
      */
     public function validate( FieldDefinition $fieldDefinition, $fieldValue )
     {
-        $errors = array();
-        foreach ( (array)$fieldDefinition->getValidatorConfiguration() as $validatorIdentifier => $parameters )
-        {
-            $validator = $this->validatorService->getValidator( $validatorIdentifier );
-            $validator->initializeWithConstraints( $parameters );
-            if ( !$validator->validate( $fieldValue ) )
-            {
-                $errors[] = $validator->getMessage();
-            }
-        }
-        return $errors;
+        return array();
     }
 
     /**
      * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * This is a base implementation, returning a validation error for each
+     * specified validator, since by default no validators are supported.
+     * Overwrite in derived types, if validation is supported.
      *
      * @param mixed $validatorConfiguration
      *
@@ -173,29 +136,15 @@ abstract class FieldType implements FieldTypeInterface
     {
         $validationErrors = array();
 
-        // @TODO: Is it supposed to be handled this way?
-        if ( $validatorConfiguration === false )
-        {
-            return $validationErrors;
-        }
-
         foreach ( (array)$validatorConfiguration as $validatorIdentifier => $constraints )
         {
-            if ( in_array( $validatorIdentifier, $this->allowedValidators ) )
-            {
-                $validator = $this->validatorService->getValidator( $validatorIdentifier );
-                $validationErrors += $validator->validateConstraints( $constraints );
-            }
-            else
-            {
-                $validationErrors[] = new ValidationError(
-                    "Validator '%validator%' is unknown",
-                    null,
-                    array(
-                        "validator" => $validatorIdentifier
-                    )
-                );
-            }
+            $validationErrors[] = new ValidationError(
+                "Validator '%validator%' is unknown",
+                null,
+                array(
+                    "validator" => $validatorIdentifier
+                )
+            );
         }
 
         return $validationErrors;
