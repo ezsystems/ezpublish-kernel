@@ -230,7 +230,7 @@ class UserIntegrationTest extends BaseIntegrationTest
         return array(
             array(
                 null,
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType'
+                'eZ\\Publish\\Core\\Base\\Exceptions\\ContentValidationException'
             ),
             // TODO: Define more failure cases ...
         );
