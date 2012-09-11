@@ -30,8 +30,8 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::newContentCreateStruct()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
      * @group user
      * @group field-type
      */
@@ -58,7 +58,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentCreateStruct
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentCreateStruct
      * @group user
      * @group field-type
      */
@@ -222,7 +222,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testCreateContentThrowsInvalidArgumentException()
     {
@@ -266,7 +266,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testCreateContentThrowsInvalidArgumentExceptionOnFieldTypeNotAccept()
     {
@@ -294,7 +294,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testCreateContentThrowsContentFieldValidationException()
     {
@@ -323,7 +323,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testCreateContentThrowsContentValidationException()
     {
@@ -356,7 +356,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
      * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationByRemoteId
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @group user
      */
@@ -383,7 +383,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
      */
     public function testCreateContentThrowsInvalidArgumentExceptionWithLocationCreateParameter()
     {
@@ -446,7 +446,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentInfo()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      * @group user
      */
     public function testLoadContentInfo()
@@ -473,7 +473,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentInfo()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      */
     public function testLoadContentInfoThrowsNotFoundException()
     {
@@ -493,7 +493,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentInfoByRemoteId()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      */
     public function testLoadContentInfoByRemoteId()
     {
@@ -515,7 +515,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentInfoByRemoteId()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfoByRemoteId
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfoByRemoteId
      */
     public function testLoadContentInfoByRemoteIdThrowsNotFoundException()
     {
@@ -534,7 +534,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfo()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      * @group user
      */
     public function testLoadVersionInfo()
@@ -565,7 +565,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfoById()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      */
     public function testLoadVersionInfoById()
     {
@@ -593,7 +593,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfoById()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoById
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoById
      */
     public function testLoadVersionInfoByIdThrowsNotFoundException()
     {
@@ -613,7 +613,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      */
     public function testLoadContentByContentInfo()
     {
@@ -643,7 +643,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByVersionInfo()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfo
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfo
      */
     public function testLoadContentByVersionInfo()
     {
@@ -676,7 +676,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContent()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      * @group user
      * @group field-type
      */
@@ -706,7 +706,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      */
     public function testLoadContentThrowsNotFoundException()
     {
@@ -726,7 +726,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      */
     public function testLoadContentByRemoteId()
     {
@@ -754,7 +754,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByRemoteId
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByRemoteId
      */
     public function testLoadContentByRemoteIdThrowsNotFoundException()
     {
@@ -774,10 +774,10 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfo
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfo
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
      * @group user
      * @group field-type
      */
@@ -874,8 +874,8 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
     public function testPublishVersionCreatesLocationsDefinedOnCreate()
     {
@@ -925,7 +925,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
     public function testPublishVersionThrowsBadStateException()
     {
@@ -950,7 +950,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      * @group user
      */
     public function testCreateContentDraft()
@@ -1097,8 +1097,8 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
      */
     public function testCreateContentDraftLoadContentStillLoadsPublishedVersion()
     {
@@ -1124,8 +1124,8 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByRemoteId
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByRemoteId
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
      */
     public function testCreateContentDraftLoadContentByRemoteIdStillLoadsPublishedVersion()
     {
@@ -1151,8 +1151,8 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfo
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfo
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
      */
     public function testCreateContentDraftLoadContentByContentInfoStillLoadsPublishedVersion()
     {
@@ -1178,7 +1178,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::newContentUpdateStruct()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      * @group user
      */
     public function testNewContentUpdateStruct()
@@ -1202,8 +1202,8 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentUpdateStruct
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentUpdateStruct
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
      * @group user
      * @group field-type
      */
@@ -1278,7 +1278,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
     public function testUpdateContentThrowsBadStateException()
     {
@@ -1311,7 +1311,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
     public function testUpdateContentThrowsInvalidArgumentExceptionWhenFieldTypeDoesNotAccept()
     {
@@ -1342,7 +1342,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
     public function testUpdateContentThrowsContentValidationExceptionWhenInitialLanguageCodeIsNotSet()
     {
@@ -1376,7 +1376,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
     public function testUpdateContentThrowsContentValidationExceptionWhenMandatoryFieldIsEmpty()
     {
@@ -1409,7 +1409,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
     public function testUpdateContentThrowsContentFieldValidationException()
     {
@@ -1441,7 +1441,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
     public function testUpdateContentWithNotUpdatingMandatoryField()
     {
@@ -1489,7 +1489,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContentDraft($contentInfo, $versionInfo)
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
     public function testCreateContentDraftWithSecondParameter()
     {
@@ -1515,8 +1515,8 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
     public function testPublishVersionFromContentDraft()
     {
@@ -1547,7 +1547,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
     public function testPublishVersionFromContentDraftArchivesOldVersion()
     {
@@ -1578,7 +1578,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
     public function testPublishVersionFromContentDraftUpdatesContentInfoCurrentVersion()
     {
@@ -1594,7 +1594,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
     public function testPublishVersionFromOldContentDraftArchivesNewerVersionNo()
     {
@@ -1627,7 +1627,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::newContentMetadataUpdateStruct()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      * @group user
      */
     public function testNewContentMetadataUpdateStruct()
@@ -1656,8 +1656,8 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentMetadataUpdateStruct
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentMetadataUpdateStruct
      * @group user
      */
     public function testUpdateContentMetadata()
@@ -1752,7 +1752,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
      */
     public function testUpdateContentMetadataThrowsInvalidArgumentException()
     {
@@ -1785,7 +1785,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
     public function testDeleteContent()
     {
@@ -1815,7 +1815,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentService
      */
     public function testLoadContentDraftsReturnsEmptyArrayByDefault()
     {
@@ -1835,7 +1835,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentDrafts()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
      */
     public function testLoadContentDrafts()
     {
@@ -1940,7 +1940,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfo($contentInfo, $versionNo)
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
     public function testLoadVersionInfoWithSecondParameter()
     {
@@ -1964,7 +1964,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfo($contentInfo, $versionNo)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoWithSecondParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoWithSecondParameter
      */
     public function testLoadVersionInfoThrowsNotFoundExceptionWithSecondParameter()
     {
@@ -1986,7 +1986,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfoById($contentId, $versionNo)
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoWithSecondParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoWithSecondParameter
      */
     public function testLoadVersionInfoByIdWithSecondParameter()
     {
@@ -2031,8 +2031,8 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByVersionInfo($versionInfo, $languages)
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByVersionInfo
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByVersionInfo
      */
     public function testLoadContentByVersionInfoWithSecondParameter()
     {
@@ -2119,7 +2119,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages)
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfo
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfo
      */
     public function testLoadContentByContentInfoWithSecondParameter()
     {
@@ -2188,7 +2188,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages, $versionNo)
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfo
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfo
      * @todo Fix method name to be more descriptive
      */
     public function testLoadContentByContentInfoWithThirdParameter()
@@ -2220,7 +2220,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages, $versionNo)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfoWithThirdParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfoWithThirdParameter
      */
     public function testLoadContentByContentInfoThrowsNotFoundExceptionWithThirdParameter()
     {
@@ -2242,7 +2242,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages)
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
     public function testLoadContentWithSecondParameter()
     {
@@ -2265,7 +2265,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages, $versionNo)
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
     public function testLoadContentWithThirdParameter()
     {
@@ -2289,7 +2289,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages, $versionNo)
      * @expectedE_xception \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentWithThirdParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentWithThirdParameter
      */
     public function testLoadContentThrowsNotFoundExceptionWithThirdParameter()
     {
@@ -2311,7 +2311,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages)
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
     public function testLoadContentByRemoteIdWithSecondParameter()
     {
@@ -2339,7 +2339,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages, $versionNo)
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
     public function testLoadContentByRemoteIdWithThirdParameter()
     {
@@ -2367,7 +2367,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages, $versionNo)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByRemoteIdWithThirdParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByRemoteIdWithThirdParameter
      */
     public function testLoadContentByRemoteIdThrowsNotFoundExceptionWithThirdParameter()
     {
@@ -2394,8 +2394,8 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testDeleteVersion()
     {
@@ -2419,8 +2419,8 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteVersion
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteVersion
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
     public function testDeleteVersionThrowsBadStateException()
     {
@@ -2442,7 +2442,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadVersions()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
     public function testLoadVersions()
     {
@@ -2487,7 +2487,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::copyContent()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      * @group field-type
      */
     public function testCopyContent()
@@ -2548,7 +2548,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::copyContent($contentInfo, $destinationLocationCreateStruct, $versionInfo)
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCopyContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCopyContent
      * @todo Fix to more descriptive name
      */
     public function testCopyContentWithThirdParameter()
@@ -2608,7 +2608,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @see \eZ\Publish\API\Repository\ContentService::addRelation()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
     public function testAddRelation()
     {
@@ -2688,7 +2688,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::addRelation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
      */
     public function testAddRelationThrowsBadStateException()
     {
@@ -2718,7 +2718,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadRelations()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
      */
     public function testLoadRelations()
     {
@@ -2790,7 +2790,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadReverseRelations()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
      */
     public function testLoadReverseRelations()
     {
@@ -2868,7 +2868,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteRelation()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadRelations
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadRelations
      */
     public function testDeleteRelation()
     {
@@ -2907,7 +2907,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteRelation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteRelation
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteRelation
      */
     public function testDeleteRelationThrowsBadStateException()
     {
@@ -2950,7 +2950,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteRelation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteRelation
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteRelation
      */
     public function testDeleteRelationThrowsInvalidArgumentException()
     {
@@ -2981,9 +2981,9 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      */
     public function testCreateContentInTransactionWithRollback()
     {
@@ -3045,9 +3045,9 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      */
     public function testCreateContentInTransactionWithCommit()
     {
@@ -3101,9 +3101,9 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentThrowsNotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentThrowsNotFoundException
      */
     public function testCreateContentWithLocationCreateParameterInTransactionWithRollback()
     {
@@ -3150,9 +3150,9 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentThrowsNotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentThrowsNotFoundException
      */
     public function testCreateContentWithLocationCreateParameterInTransactionWithCommit()
     {
@@ -3192,9 +3192,9 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      */
     public function testCreateContentDraftInTransactionWithRollback()
     {
@@ -3250,9 +3250,9 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      */
     public function testCreateContentDraftInTransactionWithCommit()
     {
@@ -3303,9 +3303,9 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      */
     public function testPublishVersionInTransactionWithRollback()
     {
@@ -3363,9 +3363,9 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfo
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfo
      */
     public function testPublishVersionInTransactionWithCommit()
     {
@@ -3416,10 +3416,10 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      */
     public function testUpdateContentInTransactionWithRollback()
     {
@@ -3477,10 +3477,10 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      */
     public function testUpdateContentInTransactionWithCommit()
     {
@@ -3538,9 +3538,9 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      */
     public function testUpdateContentMetadataInTransactionWithRollback()
     {
@@ -3596,9 +3596,9 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      */
     public function testUpdateContentMetadataInTransactionWithCommit()
     {
@@ -3654,10 +3654,10 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentDrafts
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentDrafts
      */
     public function testDeleteVersionInTransactionWithRollback()
     {
@@ -3704,10 +3704,10 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentDrafts
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentDrafts
      */
     public function testDeleteVersionInTransactionWithCommit()
     {
@@ -3754,9 +3754,9 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteContent()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteContent
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      */
     public function testDeleteContentInTransactionWithRollback()
     {
@@ -3803,9 +3803,9 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteContent()
-     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteContent
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      */
     public function testDeleteContentInTransactionWithCommit()
     {
@@ -3859,7 +3859,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::copyContent()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCopyContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCopyContent
      * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
      * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildren
      * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
@@ -3921,7 +3921,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::copyContent()
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCopyContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCopyContent
      * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
      * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildren
      * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
