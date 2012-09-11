@@ -39,8 +39,6 @@ class CountryTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->type = new CountryType(
-            new ValidatorService,
-            new FieldTypeTools,
             array(
                 "BE" => array(
                     "Name" => "Belgium",

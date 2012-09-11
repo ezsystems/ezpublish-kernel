@@ -39,9 +39,8 @@ class Type extends FieldType
      * @param \eZ\Publish\API\Repository\FieldTypeTools $fieldTypeTools
      * @param array $countriesInfo Array of countries data
      */
-    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools, array $countriesInfo )
+    public function __construct( array $countriesInfo )
     {
-        parent::__construct( $validatorService, $fieldTypeTools );
         $this->countriesInfo = $countriesInfo;
     }
 
