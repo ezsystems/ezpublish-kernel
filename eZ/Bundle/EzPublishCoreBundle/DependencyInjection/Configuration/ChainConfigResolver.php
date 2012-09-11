@@ -46,7 +46,7 @@ class ChainConfigResolver implements ConfigResolverInterface
     public function getAllResolvers()
     {
         if ( empty( $this->sortedResolvers ) )
-            $this->sortedResolvers = $this->sortMappers();
+            $this->sortedResolvers = $this->sortResolvers();
 
         return $this->sortedResolvers;
     }

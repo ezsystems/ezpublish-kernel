@@ -23,10 +23,10 @@ class ChainConfigResolverPass implements CompilerPassInterface
      */
     public function process( ContainerBuilder $container )
     {
-        if ( !$container->hasDefinition( 'ezpublish.config.chain_resolver' ) )
+        if ( !$container->hasDefinition( 'ezpublish.config.resolver.chain' ) )
             return;
 
-        $chainMapper = $container->getDefinition( 'ezpublish.config.chain_resolver' );
+        $chainResolver = $container->getDefinition( 'ezpublish.config.resolver.chain' );
 
         foreach ( $container->findTaggedServiceIds( 'ezpublish.config.resolver' ) as $id => $attributes )
         {
@@ -37,7 +37,7 @@ class ChainConfigResolverPass implements CompilerPassInterface
             if ( $priority < -255 )
                 $priority = -255;
 
-            $chainMapper->addMethodCall(
+            $chainResolver->addMethodCall(
                 'addResolver',
                 array(
                      new Reference( $id ),
