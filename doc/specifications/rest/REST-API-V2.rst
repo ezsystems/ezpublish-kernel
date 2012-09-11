@@ -804,7 +804,8 @@ In this example
 
 .. code:: http
  
-    PATCH /content/objects/23 HTTP/1.1
+    POST /content/objects/23 HTTP/1.1
+    X-HTTP-Method-Override: PATCH
     Host: www.example.net
     If-Match: "12345678"
     Accept: application/vnd.ez.api.ContentInfo+xml
@@ -1161,7 +1162,8 @@ XML Example
 
 .. code:: http
 
-    PATCH /content/objects/23/versions/4 HTTP/1.1
+    POST /content/objects/23/versions/4 HTTP/1.1
+    X-HTTP-Method-Override: PATCH
     Host: www.example.net
     If-Match: "a3f2e5b7"
     Accept: application/vnd.ez.api.Version+xml
@@ -1723,7 +1725,8 @@ XML Example
 
 .. code:: http
 
-    PATCH /content/locations/1/5/73/133 HTTP/1.1
+    POST /content/locations/1/5/73/133 HTTP/1.1
+    X-HTTP-Method-Override: PATCH
     Host: www.example.net
     If-Match: "12345678"
     Accept: application/vnd.ez.api.Location+xml
@@ -3236,7 +3239,8 @@ XML Example
 
 .. code:: http
 
-    PATCH /content/typegroups/7 HTTP/1.1
+    POST /content/typegroups/7 HTTP/1.1
+    X-HTTP-Method-Override: PATCH
     Host: api.example.net
     If-Match: "958764986593830900"
     Accept: application/vnd.ez.api.ContentTypeGroup+xml
@@ -3288,6 +3292,30 @@ Delete Content Type Group
     :401: If the user is not authorized to delete this content type
     :403: If the content type group is not empty
     :404: If the content type does not exist
+
+List Content Types for Group
+````````````````````````````
+:Resource: /content/typegroups/<ID>/types
+:Method: GET
+:Description: Returns a list of content types of the group
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ContentTypeInfoList+xml:  if set the list of content type info objects is returned in xml format (see ContentType_)
+         :application/vnd.ez.api.ContentTypeInfoList+json:  if set the list of content type info objects is returned in json format (see ContentType_)
+         :application/vnd.ez.api.ContentTypeList+xml:  if set the list of content type objects (including field definitions) is returned in xml format (see ContentType_)
+         :application/vnd.ez.api.ContentTypeList+json:  if set the list content type objects (including field definitions) is returned in json format (see ContentType_)
+:Response: 
+
+.. code:: http
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+          ContentType_      
+
+:Error Codes:
+    :401: If the user has no permission to read the content types
 
 
 Managing Content Types
@@ -3343,7 +3371,7 @@ XML Example
 
 .. code:: http
 
-    POST /content/typegroups/<ID> HTTP/1.1
+    POST /content/typegroups/<ID>/types HTTP/1.1
     Accept: application/vnd.ez.api.ContentType
     Content-Type: application/vnd.ez.api.ContentTypeCreate
     Content-Length: xxx
@@ -3619,7 +3647,8 @@ XML Example
 
 .. code:: http
 
-    PATCH /content/types/32/draft HTTO/1.1
+    POST /content/types/32/draft HTTP/1.1
+    X-HTTP-Method-Override: PATCH
     Accept: application/vnd.ez.api.ContentTypeInfo+xml 
     Content-Type: application/vnd.ez.api.ContentTypeUpdate+xml
     Content-Length: xxx
@@ -3787,6 +3816,22 @@ Publish content type
     :403: If the content type draft is not complete e.g. there is no field definition provided
     :404: If there is no draft or content type with the given ID
 
+Delete Content Type Draft
+`````````````````````````
+:Resource: /content/types/<ID>/draft
+:Method: DELETE
+:Description: the given content type draft is deleted
+:Response: 
+
+.. code:: http
+  
+        HTTP/1.1 204 No Content
+
+:Error Codes:
+    :401: If the user is not authorized to delete this content type draft
+    :404: If the content type/draft does not exist
+
+
 Delete Content Type
 ```````````````````
 :Resource: /content/types/<ID>
@@ -3832,7 +3877,7 @@ XML Example
 
 .. code:: http
 
-    GET /content/types/32/groups
+    GET /content/types/32/groups HTTP/1.1
     Accept: application/vnd.ez.api.ContentTypeGroupRefList+xml
     
 .. code:: http
@@ -4084,7 +4129,7 @@ Create User Group
 .. _UserGroupExample:
 
 
-XNL Example
+XML Example
 '''''''''''
 
 Creating a top level group
@@ -4264,7 +4309,8 @@ XML Example
 
 .. code:: http
 
-    PATCH /user/groups/1/5/65 HTTP/1.1
+    POST /user/groups/1/5/65 HTTP/1.1
+    X-HTTP-Method-Override: PATCH
     Accept: application/vnd.ez.api.UserGroup+xml
     If-Match: "348506873463455"
     Content-Type: application/vnd.ez.api.UserGroupUpdate+xml
@@ -4644,7 +4690,8 @@ XML Example
 
 .. code:: http
 
-    PATCH /user/users/99HTTP/1.1
+    POST /user/users/99 HTTP/1.1
+    X-HTTP-Method-Override: PATCH
     Accept: application/vnd.ez.api.User+xml
     Content-Type: application/vnd.ez.api.UserUpdate+xml
     Content-Length: xxx
@@ -4999,6 +5046,7 @@ Load Roles
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+          ETag: "<Etag>"
 .. parsed-literal::
           Role_      
 
@@ -5020,8 +5068,11 @@ Load Role
 .. code:: http
 
           HTTP/1.1 200 OK
+          Accept-Patch:  application/vnd.ez.api.RoleInput+(json|xml)
+          ETag: "<Etag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+
 .. parsed-literal::
           Role_      
 
@@ -5560,7 +5611,8 @@ XML Example
 
 .. code:: http
 
-    PATCH /user/roles/7/policies/55 HTTP/1.1
+    POST /user/roles/7/policies/55 HTTP/1.1
+    X-HTTP-Method-Override: PATCH
     Accept: application/vnd.ez.api.Policy+xml
     If-Match: "697850469873043236666"
     Content-Type: application/vnd.ez.api.PolicyUpdate+xml
