@@ -58,7 +58,7 @@ class ChainConfigResolver implements ConfigResolverInterface
      *
      * @return \eZ\Publish\Core\MVC\ConfigResolverInterface[]
      */
-    private function sortResolvers()
+    protected function sortResolvers()
     {
         $sortedResolvers = array();
         krsort( $this->resolvers );
