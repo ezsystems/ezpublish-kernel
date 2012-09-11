@@ -411,6 +411,21 @@ class ContentTypeService implements \eZ\Publish\API\Repository\ContentTypeServic
     }
 
     /**
+     * Loads a single field definition by $fieldDefinitionId
+     *
+     * ATTENTION: This is not an API method and only meant for internal use in
+     * the REST Client implementation.
+     *
+     * @param string $fieldDefinitionId
+     * @return FieldDefinition
+     * @access protected
+     */
+    public function loadFieldDefinition( $fieldDefinitionId )
+    {
+        throw new \Exception( "@TODO: Implement." );
+    }
+
+    /**
      * Get a Content Type object by identifier
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If content type with the given identifier and status DEFINED can not be found

@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use eZ\Publish\Core\REST\Client\Input\ParserTools;
 
 use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState as CoreObjectState;
 
@@ -19,6 +20,16 @@ use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState as CoreObjectState
  */
 class ObjectState extends Parser
 {
+    /**
+     * @var eZ\Publish\Core\REST\Client\Input\ParserTools
+     */
+    protected $parserTools;
+
+    public function __construct( ParserTools $parserTools )
+    {
+        $this->parserTools = $parserTools;
+    }
+
     /**
      * Parse input structure
      *
@@ -29,20 +40,11 @@ class ObjectState extends Parser
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
-        $names = array();
-        foreach ( $data['names']['value'] as $nameData )
-        {
-            $names[$nameData['_languageCode']] = $nameData['#text'];
-        }
+        $names = $this->parserTools->parseTranslatableList( $data['names'] );
 
-        $descriptions = array();
-        if ( array_key_exists( 'descriptions', $data ) )
-        {
-            foreach ( $data['descriptions']['value'] as $descriptionData )
-            {
-                $descriptions[$descriptionData['_languageCode']] = $descriptionData['#text'];
-            }
-        }
+        $descriptions = isset( $data['descriptions'] )
+            ? $this->parserTools->parseTranslatableList( $data['descriptions'] )
+            : array();
 
         return new CoreObjectState(
             array(

@@ -139,9 +139,13 @@ $inputParsers = array(
     'application/vnd.ez.api.RoleAssignment'       => new Client\Input\Parser\RoleAssignment(),
     'application/vnd.ez.api.Location'             => new Client\Input\Parser\Location(),
     'application/vnd.ez.api.LocationList'         => new Client\Input\Parser\LocationList(),
-    'application/vnd.ez.api.ObjectStateGroup'     => new Client\Input\Parser\ObjectStateGroup(),
+    'application/vnd.ez.api.ObjectStateGroup'     => new Client\Input\Parser\ObjectStateGroup(
+        $parserTools
+    ),
     'application/vnd.ez.api.ObjectStateGroupList' => new Client\Input\Parser\ObjectStateGroupList(),
-    'application/vnd.ez.api.ObjectState'          => new Client\Input\Parser\ObjectState(),
+    'application/vnd.ez.api.ObjectState'          => new Client\Input\Parser\ObjectState(
+        $parserTools
+    ),
     'application/vnd.ez.api.ObjectStateList'      => new Client\Input\Parser\ObjectStateList(),
 );
 foreach ( $inputParsers as $mimeType => $parser )

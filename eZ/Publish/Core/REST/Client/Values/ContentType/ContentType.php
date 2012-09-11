@@ -2,8 +2,8 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\ContentType;
 
-
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\REST\Client\ContentTypeService;
 
 /**
  * this class represents a content type value
@@ -27,9 +27,19 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
  * @property-read boolean $defaultAlwaysAvailable if an instance of acontent type is created the always available flag is set by default this this value.
  * @property-read int $defaultSortField Specifies which property the child locations should be sorted on by default when created. Valid values are found at {@link Location::SORT_FIELD_*}
  * @property-read int $defaultSortOrder Specifies whether the sort order should be ascending or descending by default when created. Valid values are {@link Location::SORT_ORDER_*}
+ *
+ * @todo Implement access to field definitions (array and by identifier)
+ * @todo Implement fetching of content type groups
  */
 class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentType
 {
+    /**
+     * Content type service to fetch additional information from
+     *
+     * @var eZ\Publish\Core\REST\Client\ContentTypeService
+     */
+    protected $contentTypeService;
+
     /**
      * Contains the human readable name in all provided languages of the
      * content type
@@ -46,35 +56,19 @@ class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentT
     protected $descriptions;
 
     /**
-     * Contains the content type groups this content type is assigned to
+     * Carries the URL for the list of FieldDefinitions for the type
      *
-     * @var array an array of {@link ContentTypeGroup}
+     * @var string
      */
-    protected $contentTypeGroups;
+    protected $fieldDefinitionListReference;
 
-    /**
-     * Contains the content type field definitions from this type
-     *
-     * @var array an array of {@link FieldDefinition}
-     */
-    protected $fieldDefinitions;
-
-    /**
-     * Field definitions indexed by identifier
-     *
-     * @var array an array of {@link FieldDefinition}
-     */
-    private $fieldDefinitionsByIdentifier;
-
-    function __construct( array $data = array() )
+    function __construct( ContentTypeService $contentTypeService, array $data = array() )
     {
+        $this->contentTypeService = $contentTypeService;
+
         foreach ( $data as $propertyName => $propertyValue )
         {
             $this->$propertyName = $propertyValue;
-        }
-        foreach ( $this->fieldDefinitions as $fieldDefinition )
-        {
-            $this->fieldDefinitionsByIdentifier[$fieldDefinition->identifier] = $fieldDefinition;
         }
     }
 
@@ -136,7 +130,7 @@ class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentT
      */
     public function getContentTypeGroups()
     {
-        return $this->contentTypeGroups;
+        // @TODO: Implement!
     }
 
     /**
@@ -146,7 +140,7 @@ class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentT
      */
     public function getFieldDefinitions()
     {
-        return $this->fieldDefinitions;
+        // @todo: Implement
     }
 
     /**
@@ -157,6 +151,6 @@ class ContentType extends \eZ\Publish\API\Repository\Values\ContentType\ContentT
      */
     public function getFieldDefinition( $fieldDefinitionIdentifier )
     {
-        return $this->fieldDefinitionsByIdentifier[$fieldDefinitionIdentifier];
+        // @todo: Implement
     }
 }

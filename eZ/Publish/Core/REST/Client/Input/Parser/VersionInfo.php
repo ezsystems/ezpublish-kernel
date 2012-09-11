@@ -65,26 +65,10 @@ class VersionInfo extends Parser
                 'creatorId' => $data['Creator']['_href'],
                 'creationDate' => new \DateTime( $data['creationDate'] ),
                 'initialLanguageCode' => $data['initialLanguageCode'],
-                'names' => $this->processNames( $data['names']['value'] ),
+                'names' => $this->parserTools->parseTranslatableList( $data['names'] ),
                 'contentInfoId' => $contentInfoId,
             )
         );
-    }
-
-    /**
-     * Processes the $rawNames array into the name lookup structure
-     *
-     * @param array $rawNames
-     * @return array
-     */
-    protected function processNames( array $rawNames )
-    {
-        $names = array();
-        foreach ( $rawNames as $nameSet );
-        {
-            $names[$nameSet['_languageCode']] = $nameSet['#text'];
-        }
-        return $names;
     }
 
     /**

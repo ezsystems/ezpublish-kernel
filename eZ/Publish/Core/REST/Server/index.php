@@ -37,6 +37,11 @@ if ( !isset( $_ENV['DATABASE'] ) )
     exit( 1 );
 }
 
+// Exposing $legacyKernelHandler to be a web handler (to be used in bootstrap.php)
+$legacyKernelHandler = function ()
+{
+    return new \ezpKernelWeb;
+};
 require_once __DIR__ . '/../../../../../bootstrap.php';
 
 /*
@@ -145,6 +150,12 @@ $contentController = new Controller\Content(
     $repository->getSectionService()
 );
 
+$contentTypeController = new Controller\ContentType(
+    $inputDispatcher,
+    $urlHandler,
+    $repository->getContentTypeService()
+);
+
 $roleController = new Controller\Role(
     $inputDispatcher,
     $urlHandler,
@@ -206,6 +217,18 @@ $valueObjectVisitors = array(
     // Includes vitising of VersionInfo, which can be extracted for re-use, if
     // neccessary
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content'              => new Output\ValueObjectVisitor\Content(
+        $urlHandler,
+        new Common\Output\FieldValueSerializer( $repository->getFieldTypeService() )
+    ),
+
+    // ContentType
+    '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' => new Output\ValueObjectVisitor\ContentType(
+        $urlHandler
+    ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\FieldDefinitionList' => new Output\ValueObjectVisitor\FieldDefinitionList(
+        $urlHandler
+    ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestFieldDefinition' => new Output\ValueObjectVisitor\RestFieldDefinition(
         $urlHandler,
         new Common\Output\FieldValueSerializer( $repository->getFieldTypeService() )
     ),
@@ -332,6 +355,12 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
         '(^/content/locations/[0-9/]+/children$)' => array(
             'GET'    => array( $locationController, 'loadLocationChildren' ),
+        ),
+
+    // /content/types
+
+        '(^/content/types/[0-9]+$)' => array(
+            'GET'   => array( $contentTypeController, 'loadContentType' ),
         ),
 
     // /content/trash
