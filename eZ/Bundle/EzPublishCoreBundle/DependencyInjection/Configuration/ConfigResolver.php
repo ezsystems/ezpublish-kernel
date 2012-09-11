@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the DynamicConfigResolver class.
+ * File containing the ConfigResolver class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -31,7 +31,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface,
  * 2. SiteAccess name
  * 3. "default"
  */
-class DynamicConfigResolver implements ConfigResolverInterface
+class ConfigResolver implements ConfigResolverInterface
 {
     const SCOPE_GLOBAL = 'global',
           SCOPE_DEFAULT = 'default';
@@ -65,8 +65,8 @@ class DynamicConfigResolver implements ConfigResolverInterface
      * @param string $defaultNamespace The default namespace
      * @param int $undefinedStrategy Strategy to use when encountering undefined parameters.
      *                               Must be one of
-     *                                  - DynamicConfigResolver::UNDEFINED_STRATEGY_EXCEPTION (throw an exception)
-     *                                  - DynamicConfigResolver::UNDEFINED_STRATEGY_NULL (return null)
+     *                                  - ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION (throw an exception)
+     *                                  - ConfigResolver::UNDEFINED_STRATEGY_NULL (return null)
      */
     public function __construct( SiteAccess $siteAccess, ContainerInterface $container, $defaultNamespace, $undefinedStrategy = self::UNDEFINED_STRATEGY_EXCEPTION )
     {
@@ -79,10 +79,10 @@ class DynamicConfigResolver implements ConfigResolverInterface
     /**
      * Sets the strategy to use if an undefined parameter is being asked.
      * Can be one of:
-     *  - DynamicConfigResolver::UNDEFINED_STRATEGY_EXCEPTION (throw an exception)
-     *  - DynamicConfigResolver::UNDEFINED_STRATEGY_NULL (return null)
+     *  - ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION (throw an exception)
+     *  - ConfigResolver::UNDEFINED_STRATEGY_NULL (return null)
      *
-     * Defaults to DynamicConfigResolver::UNDEFINED_STRATEGY_EXCEPTION.
+     * Defaults to ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION.
      *
      * @param int $undefinedStrategy
      */

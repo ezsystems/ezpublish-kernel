@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the DynamicConfigResolverTest class.
+ * File containing the ConfigResolverTest class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,9 +10,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess,
-    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver;
+    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 
-class DynamicConfigResolverTest extends \PHPUnit_Framework_TestCase
+class ConfigResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
@@ -34,11 +34,11 @@ class DynamicConfigResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $defaultNS
      * @param int $undefinedStrategy
-     * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver
+     * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver
      */
-    private function getResolver( $defaultNS = 'ezsettings', $undefinedStrategy = DynamicConfigResolver::UNDEFINED_STRATEGY_EXCEPTION )
+    private function getResolver( $defaultNS = 'ezsettings', $undefinedStrategy = ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION )
     {
-        return new DynamicConfigResolver(
+        return new ConfigResolver(
             $this->siteAccess,
             $this->containerMock,
             $defaultNS,
@@ -47,21 +47,21 @@ class DynamicConfigResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::_construct
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::getUndefinedStrategy
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::setUndefinedStrategy
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::getDefaultNamespace
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::setDefaultNamespace
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::getUndefinedStrategy
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::setUndefinedStrategy
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::getDefaultNamespace
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::setDefaultNamespace
      */
     public function testGetSetUndefinedStrategy()
     {
-        $strategy = DynamicConfigResolver::UNDEFINED_STRATEGY_NULL;
+        $strategy = ConfigResolver::UNDEFINED_STRATEGY_NULL;
         $defaultNS = 'ezsettings';
         $resolver = $this->getResolver( $defaultNS, $strategy );
 
         $this->assertSame( $strategy, $resolver->getUndefinedStrategy() );
-        $resolver->setUndefinedStrategy( DynamicConfigResolver::UNDEFINED_STRATEGY_EXCEPTION );
-        $this->assertSame( DynamicConfigResolver::UNDEFINED_STRATEGY_EXCEPTION, $resolver->getUndefinedStrategy() );
+        $resolver->setUndefinedStrategy( ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION );
+        $this->assertSame( ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION, $resolver->getUndefinedStrategy() );
 
         $this->assertSame( $defaultNS, $resolver->getDefaultNamespace() );
         $resolver->setDefaultNamespace( 'anotherNamespace' );
@@ -70,22 +70,22 @@ class DynamicConfigResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::_construct
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::getParameter
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::getParameter
      */
     public function testGetParameterFailedWithException()
     {
-        $resolver = $this->getResolver( 'ezsettings', DynamicConfigResolver::UNDEFINED_STRATEGY_EXCEPTION );
+        $resolver = $this->getResolver( 'ezsettings', ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION );
         $resolver->getParameter( 'foo' );
     }
 
     /**
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::_construct
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::getParameter
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::getParameter
      */
     public function testGetParameterFailedNull()
     {
-        $resolver = $this->getResolver( 'ezsettings', DynamicConfigResolver::UNDEFINED_STRATEGY_NULL );
+        $resolver = $this->getResolver( 'ezsettings', ConfigResolver::UNDEFINED_STRATEGY_NULL );
         $this->assertNull( $resolver->getParameter( 'foo' ) );
     }
 
@@ -118,8 +118,8 @@ class DynamicConfigResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider parameterProvider
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::_construct
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::getParameter
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::getParameter
      */
     public function testGetParameterGlobalScope( $paramName, $expectedValue )
     {
@@ -142,8 +142,8 @@ class DynamicConfigResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider parameterProvider
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::_construct
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::getParameter
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::getParameter
      */
     public function testGetParameterRelativeScope( $paramName, $expectedValue )
     {
@@ -172,8 +172,8 @@ class DynamicConfigResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider parameterProvider
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::_construct
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::getParameter
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::getParameter
      */
     public function testGetParameterSpecificScope( $paramName, $expectedValue )
     {
@@ -206,8 +206,8 @@ class DynamicConfigResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider parameterProvider
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::_construct
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::getParameter
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::getParameter
      */
     public function testGetParameterDefaultScope( $paramName, $expectedValue )
     {
@@ -251,8 +251,8 @@ class DynamicConfigResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider hasParameterProvider
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::_construct
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::hasParameter
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::hasParameter
      */
     public function testHasParameterNoNamespace( $defaultMatch, $scopeMatch, $globalMatch, $expectedResult )
     {
@@ -274,8 +274,8 @@ class DynamicConfigResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider hasParameterProvider
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::_construct
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\DynamicConfigResolver::hasParameter
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::hasParameter
      */
     public function testHasParameterWithNamespaceAndScope( $defaultMatch, $scopeMatch, $globalMatch, $expectedResult )
     {
