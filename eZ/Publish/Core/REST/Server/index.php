@@ -270,6 +270,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceRedirect'           => new Output\ValueObjectVisitor\ResourceRedirect( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceDeleted'            => new Output\ValueObjectVisitor\ResourceDeleted( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceCreated'            => new Output\ValueObjectVisitor\ResourceCreated( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceSwapped'            => new Output\ValueObjectVisitor\ResourceSwapped( $urlHandler ),
 );
 
 /*
@@ -362,6 +363,7 @@ $dispatcher = new AuthenticatingDispatcher(
             'DELETE' => array( $locationController, 'deleteSubtree' ),
             'COPY'   => array( $locationController, 'copySubtree' ),
             'MOVE'   => array( $locationController, 'moveSubtree' ),
+            'SWAP'   => array( $locationController, 'swapLocation' ),
         ),
         '(^/content/locations/[0-9/]+/children$)' => array(
             'GET'    => array( $locationController, 'loadLocationChildren' ),

@@ -179,6 +179,28 @@ class Location
     }
 
     /**
+     * Swaps a location with another one
+     *
+     * @param \QaFoo\RMF\Request $request
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceSwapped
+     */
+    public function swapLocation( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'location', $request->path );
+
+        $locationId = $this->extractLocationIdFromPath($values['location']);
+        $location = $this->locationService->loadLocation( $locationId );
+
+        $destinationValues = $this->urlHandler->parse( 'location', $request->destination );
+        $destinationLocation = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $destinationValues['location'] ) );
+
+        $this->locationService->swapLocation( $location, $destinationLocation );
+
+        return new Values\ResourceSwapped();
+    }
+
+    /**
      * Loads a location by remote ID
      *
      * @param RMF\Request $request
