@@ -37,7 +37,7 @@ class Type extends FieldType
          * Used only if defaultValueType is set to DEFAULT_CURRENT_DATE_ADJUSTED
          */
         "dateInterval" => array(
-            "type" => "date",
+            "type" => "dateInterval",
             "default" => null
         )
     );
