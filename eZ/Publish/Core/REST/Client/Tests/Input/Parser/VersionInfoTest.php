@@ -39,6 +39,7 @@ class VersionInfoTest extends BaseTest
             ),
             'creationDate' => '2003-12-23T12:52:17+01:00',
             'initialLanguageCode' => 'eng-US',
+            'languageCodes' => 'eng-US,ger-DE',
             'names' => array(
                 'value' => array(
                     0 => array(
@@ -134,6 +135,17 @@ class VersionInfoTest extends BaseTest
         $this->assertEquals(
             'eng-US',
             $parsedVersionInfo->initialLanguageCode
+        );
+    }
+
+    /**
+     * @depends testParse
+     */
+    public function testParsedLanguageCodes( $parsedVersionInfo )
+    {
+        $this->assertEquals(
+            array( 'eng-US', 'ger-DE' ),
+            $parsedVersionInfo->languageCodes
         );
     }
 
