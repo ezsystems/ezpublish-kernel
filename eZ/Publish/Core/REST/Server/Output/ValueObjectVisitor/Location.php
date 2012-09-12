@@ -53,8 +53,11 @@ class Location extends ValueObjectVisitor
         $generator->startObjectElement( 'ParentLocation', 'Location' );
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'location', array(
-                'location' => '/' . implode( '/', array_slice( $data->path, 0, count( $data->path ) - 1 ) )
+            $this->urlHandler->generate(
+                'location',
+                array(
+                    'location' => '/' . implode( '/', array_slice( $data->path, 0, count( $data->path ) - 1 ) )
+                )
             )
         );
         $generator->endAttribute( 'href' );
