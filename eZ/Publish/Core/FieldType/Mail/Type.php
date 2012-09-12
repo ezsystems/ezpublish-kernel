@@ -9,12 +9,10 @@
 
 namespace eZ\Publish\Core\FieldType\Mail;
 use eZ\Publish\Core\FieldType\FieldType,
-    ez\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+    eZ\Publish\Core\FieldType\ValidationError,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\FieldType\ValidationError;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+    eZ\Publish\Core\FieldType\Validator\EMailAddressValidator;
 
 /**
  * The Mail field type.
@@ -23,9 +21,65 @@ use eZ\Publish\Core\FieldType\FieldType,
  */
 class Type extends FieldType
 {
-    protected $allowedValidators = array(
-        "EMailAddressValidator"
+    protected $validatorConfigurationSchema = array(
+        'EMailAddressValidator' => array()
     );
+
+    /**
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $validatorConfiguration
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValidatorConfiguration( $validatorConfiguration )
+    {
+        $validationErrors = array();
+        $validator = new EMailAddressValidator();
+
+        foreach ( (array)$validatorConfiguration as $validatorIdentifier => $constraints )
+        {
+            if ( $validatorIdentifier !== 'EMailAddressValidator' )
+            {
+                $validationErrors[] = new ValidationError(
+                    "Validator '%validator%' is unknown",
+                    null,
+                    array(
+                        "validator" => $validatorIdentifier
+                    )
+                );
+                continue;
+            }
+            $validationErrors += $validator->validateConstraints( $constraints );
+        }
+
+        return $validationErrors;
+    }
+
+    /**
+     * Validates a field based on the validators in the field definition
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
+     * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field for which an action is performed
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validate( FieldDefinition $fieldDefinition, $fieldValue )
+    {
+        $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
+        $constraints = isset($validatorConfiguration['EMailAddressValidator']) ?
+            $validatorConfiguration['EMailAddressValidator'] :
+            array();
+        $validator = new EMailAddressValidator();
+        $validator->initializeWithConstraints( $constraints );
+
+        if ( !$validator->validate( $fieldValue ) )
+            return $validator->getMessage();
+
+        return array();
+    }
 
     /**
      * Return the field type identifier for this field type
@@ -49,8 +103,12 @@ class Type extends FieldType
      */
     public function getName( $value )
     {
-        $value = $this->acceptValue( $value );
+        if ( $value === null )
+        {
+            return '';
+        }
 
+        $value = $this->acceptValue( $value );
         return (string)$value->email;
     }
 
@@ -62,7 +120,7 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value( '' );
+        return null;
     }
 
     /**
@@ -79,6 +137,11 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( $inputValue === null )
+        {
+            return null;
+        }
+
         if ( is_string( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
@@ -113,6 +176,10 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
+        if ( $value === null )
+        {
+            return '';
+        }
         return $value->email;
     }
 
@@ -125,6 +192,10 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
+        if ( $hash === null )
+        {
+            return null;
+        }
         return new Value( $hash );
     }
 
@@ -137,6 +208,10 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
+        if ( $value === null )
+        {
+            return null;
+        }
         return $value->email;
     }
 

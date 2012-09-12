@@ -31,7 +31,13 @@ class EMailAddressValidator extends Validator
         )
     );
 
-
+    /**
+     * @abstract
+     *
+     * @param mixed $constraints
+     *
+     * @return mixed
+     */
     public function validateConstraints( $constraints )
     {
         $validationErrors = array();
@@ -67,26 +73,34 @@ class EMailAddressValidator extends Validator
     }
 
     /**
-     * Checks if email address is well formed.
+     * Perform validation on $value.
      *
+     * Will return true when all constraints are matched. If one or more
+     * constraints fail, the method will return false.
      *
-     * @param \eZ\Publish\Core\FieldType\Mail\Value $value
+     * When a check against a constraint has failed, an entry will be added to the
+     * $errors array.
      *
-     * @return bool
+     * @abstract
+     *
+     * @param \eZ\Publish\Core\FieldType\Value $value
+     *
+     * @return boolean
      */
     public function validate( BaseValue $value )
     {
-
-
         $pattern = '/^((\"[^\"\f\n\r\t\v\b]+\")|([A-Za-z0-9_\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+(\.[A-Za-z0-9_\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+)*))@((\[(((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))\])|(((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))|((([A-Za-z0-9\-])+\.)+[A-Za-z\-]{2,}))$/';
 
         if ( preg_match( $pattern, $value->email ) )
         {
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        $this->errors[] = new ValidationError(
+            "The value must be a valid email address.",
+            null,
+            array()
+        );
+        return false;
     }
 }
