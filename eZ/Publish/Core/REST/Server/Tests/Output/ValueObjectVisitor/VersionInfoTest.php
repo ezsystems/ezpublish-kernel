@@ -46,6 +46,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
             'creatorId' => 14,
             'modificationDate' => $this->modificationDate,
             'initialLanguageCode' => 'eng-US',
+            'languageCodes' => array( 'eng-US', 'ger-DE' ),
             'names' => array(
                 'eng-US' => 'Sindelfingen',
                 'eng-GB' => 'Bielefeld',
@@ -76,8 +77,8 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'VersionInfo',
                 'children' => array(
-                    'less_than'    => 10,
-                    'greater_than' => 8,
+                    'less_than'    => 11,
+                    'greater_than' => 9,
                 )
             ),
             $result,
@@ -184,6 +185,23 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
             ),
             $result,
             'Invalid <initialLanguageCode> value.',
+            false
+        );
+    }
+
+    /**
+     * @param string $result
+     * @depends testVisit
+     */
+    public function testVersionInfoLanguageCodesElement( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag'      => 'languageCodes',
+                'content'  => 'eng-US,ger-DE',
+            ),
+            $result,
+            'Invalid <languageCodes> value.',
             false
         );
     }
