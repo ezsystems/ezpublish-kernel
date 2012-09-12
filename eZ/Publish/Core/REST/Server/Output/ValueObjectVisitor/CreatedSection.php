@@ -27,6 +27,13 @@ class CreatedSection extends Section
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
         parent::visit( $visitor, $generator, $data->section );
+        $visitor->setHeader(
+            'Location',
+            $this->urlHandler->generate(
+                'section',
+                array( 'section' => $data->section->id )
+            )
+        );
         $visitor->setStatus( 201 );
     }
 }

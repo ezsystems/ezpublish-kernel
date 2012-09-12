@@ -96,13 +96,17 @@ class Section
      */
     public function createSection( RMF\Request $request )
     {
-        return new Values\CreatedSection( array(
-            'section' => $this->sectionService->createSection(
-                $this->inputDispatcher->parse( new Message(
-                    array( 'Content-Type' => $request->contentType ),
-                    $request->body
-                ) )
-            ) )
+        return new Values\CreatedSection(
+            array(
+                'section' => $this->sectionService->createSection(
+                    $this->inputDispatcher->parse(
+                        new Message(
+                            array( 'Content-Type' => $request->contentType ),
+                            $request->body
+                        )
+                    )
+                )
+            )
         );
     }
 
