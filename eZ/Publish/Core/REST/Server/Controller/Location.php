@@ -148,6 +148,37 @@ class Location
     }
 
     /**
+     * Moves a subtree to a new location
+     *
+     * @param \QaFoo\RMF\Request $request
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
+     */
+    public function moveSubtree( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'location', $request->path );
+
+        $locationId = $this->extractLocationIdFromPath($values['location']);
+        $location = $this->locationService->loadLocation( $locationId );
+
+        $destinationValues = $this->urlHandler->parse( 'location', $request->destination );
+        $destinationLocation = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $destinationValues['location'] ) );
+
+        $this->locationService->moveSubtree( $location, $destinationLocation );
+
+        $location = $this->locationService->loadLocation( $locationId );
+
+        return new Values\ResourceCreated(
+            $this->urlHandler->generate(
+                'location',
+                array(
+                    'location' => rtrim( $location->pathString, '/' ),
+                )
+            )
+        );
+    }
+
+    /**
      * Loads a location by remote ID
      *
      * @param RMF\Request $request

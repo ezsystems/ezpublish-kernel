@@ -361,6 +361,7 @@ $dispatcher = new AuthenticatingDispatcher(
             'PATCH'  => array( $locationController, 'updateLocation' ),
             'DELETE' => array( $locationController, 'deleteSubtree' ),
             'COPY'   => array( $locationController, 'copySubtree' ),
+            'MOVE'   => array( $locationController, 'moveSubtree' ),
         ),
         '(^/content/locations/[0-9/]+/children$)' => array(
             'GET'    => array( $locationController, 'loadLocationChildren' ),
