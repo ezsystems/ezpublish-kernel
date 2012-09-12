@@ -37,7 +37,7 @@ class LocationTest extends ValueObjectVisitorBaseTest
                 'invisible' => true,
                 'remoteId' => 'remote-id',
                 'parentLocationId' => 21,
-                'pathString' => '/1/2/21/42',
+                'pathString' => '/1/2/21/42/',
                 'modifiedSubLocationDate' => new \DateTime( "@0" ),
                 'depth' => 3,
                 'sortField' => Location::SORT_FIELD_PATH,
@@ -293,7 +293,7 @@ class LocationTest extends ValueObjectVisitorBaseTest
         $this->assertTag(
             array(
                 'tag'      => 'pathString',
-                'content'  => '/1/2/21/42'
+                'content'  => '/1/2/21/42/'
             ),
             $result,
             'Invalid or non-existing <Location> pathString value element.',
