@@ -34,7 +34,7 @@ class Location extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'location', array( 'location' => '/' . trim( $data->pathString, '/' ) ) )
+            $this->urlHandler->generate( 'location', array( 'location' => rtrim( $data->pathString, '/' ) ) )
         );
         $generator->endAttribute( 'href' );
 

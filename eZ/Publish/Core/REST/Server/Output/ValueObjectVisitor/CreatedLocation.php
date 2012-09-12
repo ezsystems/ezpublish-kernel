@@ -31,7 +31,7 @@ class CreatedLocation extends Location
             'Location',
             $this->urlHandler->generate(
                 'location',
-                array( 'location' => '/' . trim( $data->location->pathString, '/' ) )
+                array( 'location' => rtrim( $data->location->pathString, '/' ) )
             )
         );
         $visitor->setStatus( 201 );
