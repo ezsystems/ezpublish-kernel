@@ -125,7 +125,7 @@ class Location
      * Copies a subtree to a new destination
      *
      * @param \Qafoo\RMF\Request $request
-     * @return void
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
     public function copySubtree( RMF\Request $request )
     {
@@ -141,7 +141,7 @@ class Location
             $this->urlHandler->generate(
                 'location',
                 array(
-                    'location' => $newLocation->pathString,
+                    'location' => rtrim( $newLocation->pathString, '/' ),
                 )
             )
         );
