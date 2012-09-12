@@ -254,6 +254,10 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location'             => new Output\ValueObjectVisitor\Location( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\LocationList'               => new Output\ValueObjectVisitor\LocationList( $urlHandler ),
 
+    // Trash
+
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\Trash'                      => new Output\ValueObjectVisitor\Trash( $urlHandler ),
+
     // Object State
 
     '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup' => new Output\ValueObjectVisitor\ObjectStateGroup( $urlHandler ),

@@ -66,7 +66,7 @@ class Trash
      */
     public function loadTrashItems( RMF\Request $request )
     {
-        return new Values\LocationList(
+        return new Values\Trash(
             $this->trashService->findTrashItems(
                 new Query()
             )->items,
