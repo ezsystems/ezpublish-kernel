@@ -77,8 +77,10 @@ class LocationCreate extends Base
         }
 
         $locationHref = $this->urlHandler->parse( 'location', $data['ParentLocation']['_href'] );
+        $locationHrefParts = explode( '/', $locationHref['location'] );
+
         $locationCreateStruct = $this->locationService->newLocationCreateStruct(
-            array_pop( explode( '/', $locationHref['location'] ) )
+            array_pop( $locationHrefParts )
         );
 
         $locationCreateStruct->priority = (int) $data['priority'];
