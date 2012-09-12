@@ -79,7 +79,7 @@ class Location
 
         $locationCreateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type', $request->contentType ),
+                array( 'Content-Type' => $request->contentType ),
                 $request->body
             )
         );
@@ -174,7 +174,7 @@ class Location
             ),
             $this->inputDispatcher->parse(
                 new Message(
-                    array( 'Content-Type', $request->contentType ),
+                    array( 'Content-Type' => $request->contentType ),
                     $request->body
                 )
             )
