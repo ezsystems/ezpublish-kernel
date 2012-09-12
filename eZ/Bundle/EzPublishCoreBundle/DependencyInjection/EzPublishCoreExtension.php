@@ -45,6 +45,11 @@ class EzPublishCoreExtension extends Extension
         $this->handleSessionLoading( $container, $loader );
     }
 
+    public function getAlias()
+    {
+        return 'ezpublish';
+    }
+
     /**
      * Handle routing parameters
      *
