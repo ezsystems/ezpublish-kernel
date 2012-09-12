@@ -709,7 +709,7 @@ class LocationService implements LocationServiceInterface
     /**
      * Instantiates a new location create class
      *
-     * @param int $parentLocationId the parent under which the new location should be created
+     * @param mixed $parentLocationId the parent under which the new location should be created
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      */
