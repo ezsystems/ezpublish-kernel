@@ -40,9 +40,8 @@ class Value extends BaseValue
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $dateTime does not comply to a valid dateTime or string
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $dateTime does not comply to a valid date format string
      */
-    public function __construct( \DateTime $dateTime )
+    public function __construct( DateTime $dateTime )
     {
-
         $this->value = $dateTime;
     }
 
@@ -50,13 +49,13 @@ class Value extends BaseValue
      * Creates a Value from the given $dateString
      *
      * @param string $dateString
-     * @return eZ\Publish\Core\FieldType\DateAndTime\Value
+     * @return \eZ\Publish\Core\FieldType\DateAndTime\Value
      */
     public static function fromString( $dateString )
     {
         try
         {
-            return new static( new \DateTime( $dateString ) );
+            return new static( new DateTime( $dateString ) );
         }
         catch ( Exception $e )
         {
@@ -68,13 +67,13 @@ class Value extends BaseValue
      * Creates a Value from the given $timestamp
      *
      * @param int $timestamp
-     * @return eZ\Publish\Core\FieldType\DateAndTime\Value
+     * @return \eZ\Publish\Core\FieldType\DateAndTime\Value
      */
     public static function fromTimestamp( $timestamp )
     {
         try
         {
-            return new static( new \DateTime( "@{$timestamp}" ) );
+            return new static( new DateTime( "@{$timestamp}" ) );
         }
         catch ( Exception $e )
         {
