@@ -424,14 +424,14 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(
-        '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+json$)' => new View\Visitor(
+        '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+json$)' => ( $jsonVisitor = new View\Visitor(
             new Common\Output\Visitor(
                 new Common\Output\Generator\Json(
                     new Common\Output\Generator\Json\FieldTypeHashGenerator()
                 ),
                 $valueObjectVisitors
             )
-        ),
+        ) ),
         '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+xml$)'  => ( $xmlVisitor = new View\Visitor(
             new Common\Output\Visitor(
                 new Common\Output\Generator\Xml(
@@ -440,6 +440,8 @@ $dispatcher = new AuthenticatingDispatcher(
                 $valueObjectVisitors
             )
         ) ),
+        '(^application/json$)'  => $jsonVisitor,
+        '(^application/xml$)'  => $xmlVisitor,
         // '(^.*/.*$)'  => new View\InvalidApiUse(),
         // Fall back gracefully to XML visiting. Also helps support responses
         // without Accept header (e.g. DELETE reqeustes).
