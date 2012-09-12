@@ -31,10 +31,7 @@ class TextBlockTest extends StandardizedFieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new TextBlockType(
-            $this->getValidatorServiceMock(),
-            $this->getFieldTypeToolsMock()
-        );
+        return new TextBlockType();
     }
 
     /**

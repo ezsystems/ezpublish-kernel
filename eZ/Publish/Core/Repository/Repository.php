@@ -131,13 +131,6 @@ class Repository implements RepositoryInterface
     protected $fieldTypeService;
 
     /**
-     * Instance of validator service
-     *
-     * @var \eZ\Publish\Core\Repository\ValidatorService
-     */
-    protected $validatorService;
-
-    /**
      * Instance of name schema resolver service
      *
      * @var \eZ\Publish\Core\Repository\NameSchemaService
@@ -538,20 +531,6 @@ class Repository implements RepositoryInterface
 
         $this->fieldTypeService = new FieldTypeService( $this, $this->persistenceHandler, $this->serviceSettings['fieldType'] );
         return $this->fieldTypeService;
-    }
-
-    /**
-     * Get ValidatorService
-     *
-     * @return \eZ\Publish\Core\Repository\ValidatorService
-     */
-    public function getValidatorService()
-    {
-        if ( $this->validatorService !== null )
-            return $this->validatorService;
-
-        $this->validatorService = new ValidatorService();
-        return $this->validatorService;
     }
 
     /**

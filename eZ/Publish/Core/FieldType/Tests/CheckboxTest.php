@@ -32,7 +32,7 @@ class CheckboxTest extends StandardizedFieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Checkbox( $this->getValidatorServiceMock(), $this->getFieldTypeToolsMock() );
+        return new Checkbox();
     }
 
     /**

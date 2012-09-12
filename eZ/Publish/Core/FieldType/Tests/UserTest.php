@@ -31,10 +31,7 @@ class UserTest extends StandardizedFieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new UserType(
-            $this->getValidatorServiceMock(),
-            $this->getFieldTypeToolsMock()
-        );
+        return new UserType();
     }
 
     /**

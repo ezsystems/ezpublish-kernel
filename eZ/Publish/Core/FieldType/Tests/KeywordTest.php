@@ -31,10 +31,7 @@ class KeywordTest extends StandardizedFieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new KeywordType(
-            $this->getValidatorServiceMock(),
-            $this->getFieldTypeToolsMock()
-        );
+        return new KeywordType();
     }
 
     /**

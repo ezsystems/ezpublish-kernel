@@ -8,9 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType;
-use eZ\Publish\API\Repository\FieldTypeTools,
-    eZ\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface,
+use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\SPI\FieldType\Event;

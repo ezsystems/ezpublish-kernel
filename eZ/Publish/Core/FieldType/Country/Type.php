@@ -11,8 +11,6 @@ namespace eZ\Publish\Core\FieldType\Country;
 use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\FieldType\Country\Exception\InvalidValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\API\Repository\FieldTypeTools,
     eZ\Publish\Core\FieldType\ValidationError;
 
 /**
@@ -35,8 +33,6 @@ class Type extends FieldType
     protected $countriesInfo;
 
     /**
-     * @param \eZ\Publish\Core\Repository\ValidatorService $validatorService
-     * @param \eZ\Publish\API\Repository\FieldTypeTools $fieldTypeTools
      * @param array $countriesInfo Array of countries data
      */
     public function __construct( array $countriesInfo )

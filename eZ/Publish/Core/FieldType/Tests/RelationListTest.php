@@ -30,10 +30,7 @@ class RelationListTest extends StandardizedFieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new RelationList(
-            $this->getValidatorServiceMock(),
-            $this->getFieldTypeToolsMock()
-        );
+        return new RelationList();
     }
 
     /**

@@ -10,8 +10,6 @@
 namespace eZ\Publish\Core\FieldType\BinaryBase;
 use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\FieldType\FileService,
-    eZ\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\Core\Repository\FieldTypeTools,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\Core\FieldType\ValidationError,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,

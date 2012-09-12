@@ -31,10 +31,7 @@ class RatingTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Rating(
-            $this->getValidatorServiceMock(),
-            $this->getFieldTypeToolsMock()
-        );
+        return new Rating();
     }
 
     /**

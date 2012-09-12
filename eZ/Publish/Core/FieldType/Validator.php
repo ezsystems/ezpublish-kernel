@@ -73,8 +73,7 @@ abstract class Validator
      *      ),
      *  );
      * </code>
-     * The validator identifier is mapped to a Validator class which can be retrieved via the
-     * ValidatorService.
+     * The validator identifier.
      */
     public function getConstraintsSchema()
     {

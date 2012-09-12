@@ -26,10 +26,7 @@ class MapLocationTest extends StandardizedFieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new MapLocation\Type(
-            $this->getValidatorServiceMock(),
-            $this->getFieldTypeToolsMock()
-        );
+        return new MapLocation\Type();
     }
 
     /**

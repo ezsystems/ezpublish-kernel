@@ -31,10 +31,7 @@ class TextLineTest extends StandardizedFieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new TextLineType(
-            $this->validatorService,
-            $this->getFieldTypeToolsMock()
-        );
+        return new TextLineType();
     }
 
     /**

@@ -31,10 +31,7 @@ class UrlTest extends StandardizedFieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new UrlType(
-            $this->getValidatorServiceMock(),
-            $this->getFieldTypeToolsMock()
-        );
+        return new UrlType();
     }
 
     /**

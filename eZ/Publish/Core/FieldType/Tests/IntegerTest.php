@@ -31,11 +31,7 @@ class IntegerTest extends StandardizedFieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Integer(
-            // TODO: Get rid of this
-            $this->validatorService,
-            $this->getFieldTypeToolsMock()
-        );
+        return new Integer();
     }
 
     /**

@@ -46,10 +46,7 @@ class AuthorTest extends StandardizedFieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new AuthorType(
-            $this->getValidatorServiceMock(),
-            $this->getFieldTypeToolsMock()
-        );
+        return new AuthorType();
     }
 
     /**

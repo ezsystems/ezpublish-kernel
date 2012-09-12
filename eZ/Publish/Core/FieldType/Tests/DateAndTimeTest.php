@@ -32,7 +32,7 @@ class DateAndTimeTest extends StandardizedFieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new DateAndTime( $this->getValidatorServiceMock(), $this->getFieldTypeToolsMock() );
+        return new DateAndTime();
     }
 
     /**

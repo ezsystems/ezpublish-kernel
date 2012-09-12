@@ -12,7 +12,8 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\FieldTypeTools as FieldTypeToolsInterface,
     eZ\Publish\API\Repository\Values\Content\VersionInfo,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
+    eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
  * This class provides service methods available to FieldTypes
@@ -49,6 +50,10 @@ class FieldTypeTools implements FieldTypeToolsInterface
                                  $destinationContentId,
                                  FieldDefinition $fieldDefinition = null )
     {
-
+        throw new NotImplementedException(
+        // @todo Figure out if this is needed or not, there is a need for it in xmltext and relation fieldtypes to avoid using db directly for this
+            __METHOD__ .
+            " not implemented, & unclear if it should as relation handing is done in gateways in relation field types"
+        );
     }
 }
