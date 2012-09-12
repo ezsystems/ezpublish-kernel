@@ -110,7 +110,7 @@ class Location
      * Deletes a location
      *
      * @param \Qafoo\RMF\Request $request
-     * @return void
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
     public function deleteSubtree( RMF\Request $request )
     {
