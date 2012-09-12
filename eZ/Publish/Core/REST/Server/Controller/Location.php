@@ -85,7 +85,11 @@ class Location
         );
 
         $contentInfo = $this->contentService->loadContentInfo( $values['object'] );
-        return $this->locationService->createLocation( $contentInfo, $locationCreateStruct );
+        return new Values\CreatedLocation(
+            array(
+                'location' => $this->locationService->createLocation( $contentInfo, $locationCreateStruct )
+            )
+        );
     }
 
     /**

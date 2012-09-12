@@ -250,6 +250,7 @@ $valueObjectVisitors = array(
 
     // Location
 
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedLocation'            => new Output\ValueObjectVisitor\CreatedLocation( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location'             => new Output\ValueObjectVisitor\Location( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\LocationList'               => new Output\ValueObjectVisitor\LocationList( $urlHandler ),
 
