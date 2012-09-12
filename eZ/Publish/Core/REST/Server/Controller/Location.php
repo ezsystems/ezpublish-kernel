@@ -97,11 +97,9 @@ class Location
     public function loadLocation( RMF\Request $request )
     {
         $values = $this->urlHandler->parse( 'location', $request->path );
-
-        $locationId = explode( '/', $values['location'] );
-        $locationId = implode( '', array_slice( $locationId, 0, count( $locationId ) - 1 ) );
-
-        return $this->locationService->loadLocation( $locationId );
+        return $this->locationService->loadLocation(
+            array_pop( explode( '/', $values['location'] ) )
+        );
     }
 
     /**
@@ -150,12 +148,11 @@ class Location
     {
         $values = $this->urlHandler->parse( 'locationChildren', $request->path );
 
-        $locationId = explode( '/', $values['location'] );
-        $locationId = implode( '', array_slice( $locationId, 0, count( $locationId ) - 1 ) );
-
         return new Values\LocationList(
             $this->locationService->loadLocationChildren(
-                $this->locationService->loadLocation( $locationId )
+                $this->locationService->loadLocation(
+                    array_pop( explode( '/', $values['location'] ) )
+                )
             ),
             $request->path
         );
@@ -171,11 +168,10 @@ class Location
     {
         $values = $this->urlHandler->parse( 'location', $request->path );
 
-        $locationId = explode( '/', $values['location'] );
-        $locationId = implode( '', array_slice( $locationId, 0, count( $locationId ) - 1 ) );
-
         return $this->locationService->updateLocation(
-            $this->locationService->loadLocation( $locationId ),
+            $this->locationService->loadLocation(
+                array_pop( explode( '/', $values['location'] ) )
+            ),
             $this->inputDispatcher->parse(
                 new Message(
                     array( 'Content-Type', $request->contentType ),
