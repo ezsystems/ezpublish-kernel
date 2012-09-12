@@ -80,12 +80,14 @@ class Section
      */
     public function loadSectionByIdentifier( RMF\Request $request )
     {
-        return new Values\SectionList( array(
-            $this->sectionService->loadSectionByIdentifier(
-                // GET variable
-                $request->variables['identifier']
+        return new Values\SectionList(
+            array(
+                $this->sectionService->loadSectionByIdentifier(
+                    // GET variable
+                    $request->variables['identifier']
+                )
             )
-        ) );
+        );
     }
 
     /**
