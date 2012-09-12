@@ -207,8 +207,9 @@ class ExceptionConversion extends Gateway
     /**
      * Inserts a new field.
      *
-     * Only used when a new content object is created. After that, field IDs
-     * need to stay the same, only the version number changes.
+     * Only used when a new field is created (i.e. a new object or a field in a
+     * new language!). After that, field IDs need to stay the same, only the
+     * version number changes.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
@@ -227,6 +228,34 @@ class ExceptionConversion extends Gateway
         }
         catch ( \PDOException $e )
         {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
+     * Inserts an existing field.
+     *
+     * Used to insert a field with an exsting ID but a new version number.
+     *
+     * @param Content $content
+     * @param Field $field
+     * @param StorageFieldValue $value
+     * @return void
+     */
+    public function insertExistingField( Content $content, Field $field, StorageFieldValue $value )
+    {
+        try
+        {
+            return $this->innerGateway->insertExistingField( $content, $field, $value );
+        }
+        catch ( \ezcDbException $e )
+        {
+            throw $e;
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( \PDOException $e )
+        {
+            throw $e;
             throw new \RuntimeException( 'Database error', 0, $e );
         }
     }

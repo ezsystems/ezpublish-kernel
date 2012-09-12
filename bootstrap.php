@@ -11,8 +11,8 @@
 
 
 use eZ\Publish\Core\Base\ClassLoader;
-use eZ\Publish\Legacy\Kernel as LegacyKernel;
-use eZ\Publish\Legacy\Kernel\CLIHandler as LegacyKernelCLI;
+use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
+use eZ\Publish\Core\MVC\Legacy\Kernel\CLIHandler as LegacyKernelCLI;
 
 // Get globl config.php settings
 if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
@@ -38,7 +38,18 @@ if ( $classLoader instanceof Composer\Autoload\ClassLoader )
 // Bootstrap eZ Publish legacy kernel if configured
 if ( !empty( $settings['service']['parameters']['legacy_dir'] ) )
 {
-    $legacyKernel = new LegacyKernel( new LegacyKernelCLI, $settings['service']['parameters']['legacy_dir'], getcwd() );
+    // Define $legacyKernelHandler to whatever you need before loading this bootstrap file.
+    // CLI handler is used by defaut, but you must use \ezpKernelWeb if not in CLI context (i.e. REST server)
+    // $legacyKernelHandler can be a closure returning the appropriate kernel handler (to avoid autoloading issues)
+    if ( isset( $legacyKernelHandler ) )
+    {
+        $legacyKernelHandler = $legacyKernelHandler instanceof \Closure ? $legacyKernelHandler() : $legacyKernelHandler;
+    }
+    else
+    {
+        $legacyKernelHandler = new LegacyKernelCLI;
+    }
+    $legacyKernel = new LegacyKernel( $legacyKernelHandler, $settings['service']['parameters']['legacy_dir'], getcwd() );
     set_exception_handler( null );
     // Avoid "Fatal error" text from legacy kernel if not called
     $legacyKernel->runCallback(

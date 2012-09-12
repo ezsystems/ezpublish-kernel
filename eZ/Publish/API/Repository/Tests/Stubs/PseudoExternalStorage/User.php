@@ -34,8 +34,7 @@ class User extends PseudoExternalStorage
         'email'            => null,
         'passwordHash'     => null,
         'passwordHashType' => null,
-        'isLoggedIn'       => true,
-        'isEnabled'        => false,
+        'enabled'        => false,
         'maxLogin'         => null,
     );
 
@@ -202,7 +201,7 @@ class User extends PseudoExternalStorage
         $data->email            = $userData->email;
         $data->passwordHash     = $userData->passwordHash;
         $data->passwordHashType = $userData->hashAlgorithm;
-        $data->isEnabled        = $userData->isEnabled;
+        $data->enabled          = $userData->enabled;
 
         return $data;
     }

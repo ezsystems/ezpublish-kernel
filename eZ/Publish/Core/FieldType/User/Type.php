@@ -51,11 +51,10 @@ class Type extends FieldType
      * value is provided in the field definition in content types.
      *
      * @return \eZ\Publish\Core\FieldType\User\Value
-     * @TODO: Implement.
      */
     public function getEmptyValue()
     {
-        return new Value();
+        return null;
     }
 
     /**
@@ -81,6 +80,11 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( $inputValue === null )
+        {
+            return null;
+        }
+
         if ( is_array( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
@@ -117,6 +121,10 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
+        if ( $hash === null )
+        {
+            return null;
+        }
         return new Value( $hash );
     }
 
@@ -126,10 +134,13 @@ class Type extends FieldType
      * @param \eZ\Publish\Core\FieldType\User\Value $value
      *
      * @return mixed
-     * @TODO: Implement.
      */
     public function toHash( $value )
     {
+        if ( $value === null )
+        {
+            return null;
+        }
         return (array) $value;
     }
 

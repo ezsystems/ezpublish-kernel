@@ -1,0 +1,9 @@
+parameters:
+    # Kernel related params
+    webroot_dir: %kernel.root_dir%/../web
+    binaryfile_storage_dir: var/files
+    binaryfile_identifier_prefix:
+
+    # ezsettings namespace, default scope
+    ezsettings.default.location_view: {}
+    ezsettings.default.content_view: {}

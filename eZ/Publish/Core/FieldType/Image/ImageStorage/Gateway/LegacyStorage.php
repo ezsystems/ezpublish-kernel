@@ -133,10 +133,11 @@ class LegacyStorage extends Gateway
     /**
      * Returns a the XML content stored for the given $fieldIds
      *
+     * @parent int $versionNo
      * @param array $fieldIds
      * @return array
      */
-    public function getXmlForImages( array $fieldIds )
+    public function getXmlForImages( $versionNo, array $fieldIds )
     {
         $connection = $this->getConnection();
 
@@ -174,7 +175,7 @@ class LegacyStorage extends Gateway
      * @param mixed $fieldId
      * @return void
      */
-    public function removeImageReferences( $path, $fieldId )
+    public function removeImageReferences( $path, $versionNo, $fieldId )
     {
         $connection = $this->getConnection();
 

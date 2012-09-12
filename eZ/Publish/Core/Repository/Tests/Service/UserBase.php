@@ -42,7 +42,7 @@ abstract class UserBase extends BaseServiceTest
                 'passwordHash' => null,
                 'hashAlgorithm' => null,
                 'maxLogin' => null,
-                'isEnabled' => null
+                'enabled' => null
             ),
             $user
         );
@@ -562,7 +562,7 @@ abstract class UserBase extends BaseServiceTest
                 'email' => 'spam@ez.no',
                 'passwordHash' => 'c78e3b0f3d9244ed8c6d1c29464bdff9',
                 'hashAlgorithm' => User::PASSWORD_HASH_MD5_USER,
-                'isEnabled' => true,
+                'enabled' => true,
                 'maxLogin' => 10
             ),
             $loadedUser
@@ -897,7 +897,7 @@ abstract class UserBase extends BaseServiceTest
             array(
                 'email' => null,
                 'password' => null,
-                'isEnabled' => null,
+                'enabled' => null,
                 'maxLogin' => null
             ),
             $userUpdateStruct

@@ -74,12 +74,13 @@ class StorageHandler
      * Deletes data for field $ids from external storage of $fieldType
      *
      * @param string $fieldType
+     * @param eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param mixed[] $ids
      * @return void
      */
-    public function deleteFieldData( $fieldType, array $ids )
+    public function deleteFieldData( $fieldType, VersionInfo $versionInfo, array $ids )
     {
         $this->storageRegistry->getStorage( $fieldType )
-            ->deleteFieldData( $ids, $this->context );
+            ->deleteFieldData( $versionInfo, $ids, $this->context );
     }
 }

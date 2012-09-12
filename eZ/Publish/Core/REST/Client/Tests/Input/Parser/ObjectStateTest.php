@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input\Parser;
+use eZ\Publish\Core\REST\Client\Input\ParserTools;
 
 class ObjectStateTest extends BaseTest
 {
@@ -186,6 +187,8 @@ class ObjectStateTest extends BaseTest
      */
     protected function getParser()
     {
-        return new Parser\ObjectState();
+        return new Parser\ObjectState(
+            new ParserTools()
+        );
     }
 }

@@ -90,8 +90,9 @@ abstract class Gateway
     /**
      * Inserts a new field.
      *
-     * Only used when a new content object is created. After that, field IDs
-     * need to stay the same, only the version number changes.
+     * Only used when a new field is created (i.e. a new object or a field in a
+     * new language!). After that, field IDs need to stay the same, only the
+     * version number changes.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
@@ -99,6 +100,18 @@ abstract class Gateway
      * @return int ID
      */
     abstract public function insertNewField( Content $content, Field $field, StorageFieldValue $value );
+
+    /**
+     * Inserts an existing field.
+     *
+     * Used to insert a field with an exsting ID but a new version number.
+     *
+     * @param Content $content
+     * @param Field $field
+     * @param StorageFieldValue $value
+     * @return void
+     */
+    abstract public function insertExistingField( Content $content, Field $field, StorageFieldValue $value );
 
     /**
      * Updates an existing field

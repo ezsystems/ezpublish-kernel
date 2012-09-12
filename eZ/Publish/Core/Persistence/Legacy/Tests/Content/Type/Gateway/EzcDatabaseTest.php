@@ -1306,40 +1306,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::isFieldTranslatable
-     */
-    public function testIsFieldTranslatableTrue()
-    {
-        $this->insertDatabaseFixture(
-            __DIR__ . '/_fixtures/existing_types.php'
-        );
-
-        $gateway = $this->getGateway();
-
-        $this->assertTrue(
-            $gateway->isFieldTranslatable( 119, 0 )
-        );
-    }
-
-    /**
-     * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::isFieldTranslatable
-     */
-    public function testIsFieldTranslatableFalse()
-    {
-        $this->insertDatabaseFixture(
-            __DIR__ . '/_fixtures/existing_types.php'
-        );
-
-        $gateway = $this->getGateway();
-
-        $this->assertFalse(
-            $gateway->isFieldTranslatable( 158, 0 )
-        );
-    }
-
-    /**
      * Returns the EzcDatabase gateway to test
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase

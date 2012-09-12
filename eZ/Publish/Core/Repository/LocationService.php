@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
     eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo,
     eZ\Publish\Core\Repository\Values\Content\Location,
     eZ\Publish\Core\Repository\Values\Content\ContentInfo,
+    eZ\Publish\Core\Repository\Values\ContentType\ContentType,
     eZ\Publish\API\Repository\Values\Content\Location as APILocation,
 
     eZ\Publish\SPI\Persistence\Content\Location as SPILocation,
@@ -708,7 +709,7 @@ class LocationService implements LocationServiceInterface
     /**
      * Instantiates a new location create class
      *
-     * @param int $parentLocationId the parent under which the new location should be created
+     * @param mixed $parentLocationId the parent under which the new location should be created
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      */
@@ -746,7 +747,14 @@ class LocationService implements LocationServiceInterface
                     'id' => 0,
                     'name' => 'Top Level Nodes',
                     'sectionId' => 1,
-                    'mainLocationId' => 1
+                    'mainLocationId' => 1,
+                    'contentType' => new ContentType(
+                        array(
+                             'identifier' => 'folder',
+                             'isContainer' => true,
+                             'fieldDefinitions' => array()
+                        )
+                    )
                 )
             );
         else

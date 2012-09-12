@@ -35,6 +35,8 @@ class EzPublishCoreExtension extends Extension
         );
         // Base services override
         $loader->load( 'services.yml' );
+        // Default settings
+        $loader->load( 'default_settings.yml' );
         // Routing
         $this->handleRouting( $container, $loader );
         // Public API loading
@@ -69,6 +71,8 @@ class EzPublishCoreExtension extends Extension
         $loader->load( 'fieldtypes.yml' );
         // Built-in storage engines
         $loader->load( 'storage_engines.yml' );
+        // Roles and limitations
+        $loader->load( 'roles.yml' );
     }
 
     /**

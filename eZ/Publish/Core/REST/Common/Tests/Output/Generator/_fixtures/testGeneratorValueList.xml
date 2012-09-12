@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element media-type="application/vnd.ez.api.element+xml">
+ <simpleValue>value1</simpleValue>
+ <simpleValue>value2</simpleValue>
+</element>

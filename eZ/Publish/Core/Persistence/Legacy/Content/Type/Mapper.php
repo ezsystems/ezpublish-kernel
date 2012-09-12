@@ -202,14 +202,30 @@ class Mapper
     {
         $storageFieldDef = new StorageFieldDefinition();
 
-        $storageFieldDef->dataFloat1 = (float)$row['ezcontentclass_attribute_data_float1'];
-        $storageFieldDef->dataFloat2 = (float)$row['ezcontentclass_attribute_data_float2'];
-        $storageFieldDef->dataFloat3 = (float)$row['ezcontentclass_attribute_data_float3'];
-        $storageFieldDef->dataFloat4 = (float)$row['ezcontentclass_attribute_data_float4'];
-        $storageFieldDef->dataInt1 = (int)$row['ezcontentclass_attribute_data_int1'];
-        $storageFieldDef->dataInt2 = (int)$row['ezcontentclass_attribute_data_int2'];
-        $storageFieldDef->dataInt3 = (int)$row['ezcontentclass_attribute_data_int3'];
-        $storageFieldDef->dataInt4 = (int)$row['ezcontentclass_attribute_data_int4'];
+        $storageFieldDef->dataFloat1 = isset( $row['ezcontentclass_attribute_data_float1'] )
+            ? (float)$row['ezcontentclass_attribute_data_float1']
+            : null;
+        $storageFieldDef->dataFloat2 = isset( $row['ezcontentclass_attribute_data_float2'] )
+            ? (float)$row['ezcontentclass_attribute_data_float2']
+            : null;
+        $storageFieldDef->dataFloat3 = isset( $row['ezcontentclass_attribute_data_float3'] )
+            ? (float)$row['ezcontentclass_attribute_data_float3']
+            : null;
+        $storageFieldDef->dataFloat4 = isset( $row['ezcontentclass_attribute_data_float4'] )
+            ? (float)$row['ezcontentclass_attribute_data_float4']
+            : null;
+        $storageFieldDef->dataInt1 = isset( $row['ezcontentclass_attribute_data_int1'] )
+            ? (int)$row['ezcontentclass_attribute_data_int1']
+            : null;
+        $storageFieldDef->dataInt2 = isset( $row['ezcontentclass_attribute_data_int2'] )
+            ? (int)$row['ezcontentclass_attribute_data_int2']
+            : null;
+        $storageFieldDef->dataInt3 = isset( $row['ezcontentclass_attribute_data_int3'] )
+            ? (int)$row['ezcontentclass_attribute_data_int3']
+            : null;
+        $storageFieldDef->dataInt4 = isset( $row['ezcontentclass_attribute_data_int4'] )
+            ? (int)$row['ezcontentclass_attribute_data_int4']
+            : null;
         $storageFieldDef->dataText1 = $row['ezcontentclass_attribute_data_text1'];
         $storageFieldDef->dataText2 = $row['ezcontentclass_attribute_data_text2'];
         $storageFieldDef->dataText3 = $row['ezcontentclass_attribute_data_text3'];

@@ -36,9 +36,10 @@ abstract class Gateway extends StorageGateway
      * Removes all file references for the given $fieldIds
      *
      * @param array $fieldIds
+     * @param int $versionNo
      * @return void
      */
-    abstract public function removeFileReferences( array $fieldIds );
+    abstract public function removeFileReferences( array $fieldIds, $versionNo );
 
     /**
      * Removes a specific file reference for $fieldId and $versionId
@@ -53,9 +54,10 @@ abstract class Gateway extends StorageGateway
      * Returns a map of files referenced by the given $fieldIds
      *
      * @param array $fieldIds
+     * @param int $versionNo
      * @return array
      */
-    abstract public function getReferencedFiles( array $fieldIds );
+    abstract public function getReferencedFiles( array $fieldIds, $versionNo );
 
     /**
      * Returns a map with the number of refereces each file from $files has

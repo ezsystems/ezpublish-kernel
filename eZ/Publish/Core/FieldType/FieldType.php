@@ -8,9 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType;
-use eZ\Publish\API\Repository\FieldTypeTools,
-    eZ\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface,
+use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\SPI\FieldType\Event;
@@ -45,38 +43,17 @@ abstract class FieldType implements FieldTypeInterface
     protected $settingsSchema = array();
 
     /**
-     * An array of validator identifiers which are allowed for this FieldType
+     * The validator configuration schema
      *
-     * @var string[]
-     */
-    protected $allowedValidators = array();
-
-    /**
-     * Tool object for field types
+     * This is a base implementation, containing an empty array() that indicates
+     * that no validators are supported. Overwrite in derived types, if
+     * validation is supported.
      *
-     * @var \eZ\Publish\API\Repository\FieldTypeTools
-     */
-    protected $fieldTypeTools;
-
-    /**
-     * Holds an instance of validator service
+     * @see getValidatorConfigurationSchema()
      *
-     * @var \eZ\Publish\Core\Repository\ValidatorService
+     * @var mixed
      */
-    protected $validatorService;
-
-    /**
-     * Constructs field type object, initializing internal data structures.
-     *
-     * @param \eZ\Publish\Core\Repository\ValidatorService $validatorService
-     * @param \eZ\Publish\API\Repository\FieldTypeTools $fieldTypeTools
-     * @return void
-     */
-    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools )
-    {
-        $this->fieldTypeTools = $fieldTypeTools;
-        $this->validatorService = $validatorService;
-    }
+    protected $validatorConfigurationSchema = array();
 
     /**
      * This method is called on occurring events. Implementations can perform corresponding actions
@@ -102,12 +79,14 @@ abstract class FieldType implements FieldTypeInterface
     }
 
     /**
-     * Returns a schema for supported validator configurations.
+     * Returns a schema for the validator configuration expected by the FieldType
+     *
+     * @see FieldTypeInterface::getValidatorConfigurationSchema()
      *
      * This implementation returns a three dimensional map containing for each validator configuration
      * referenced by identifier a map of supported parameters which are defined by a type and a default value
      * (see example).
-     * Example:
+     *
      * <code>
      *  array(
      *      'stringLength' => array(
@@ -122,23 +101,20 @@ abstract class FieldType implements FieldTypeInterface
      *      ),
      *  );
      * </code>
-     * The validator identifier is mapped to a Validator class which can be retrieved via the
-     * ValidatorService.
+     *
+     * @return mixed
      */
     public function getValidatorConfigurationSchema()
     {
-        $validatorConfigurationSchema = array();
-        foreach ( $this->allowedValidators as $validatorIdentifier )
-        {
-            $validator = $this->validatorService->getValidator( $validatorIdentifier );
-            $validatorConfigurationSchema[$validatorIdentifier] = $validator->getConstraintsSchema();
-        }
-
-        return $validatorConfigurationSchema;
+        return $this->validatorConfigurationSchema;
     }
 
     /**
      * Validates a field based on the validators in the field definition
+     *
+     * This is a base implementation, returning an empty array() that indicates
+     * that no validation errors occured. Overwrite in derived types, if
+     * validation is supported.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
@@ -149,21 +125,15 @@ abstract class FieldType implements FieldTypeInterface
      */
     public function validate( FieldDefinition $fieldDefinition, $fieldValue )
     {
-        $errors = array();
-        foreach ( (array)$fieldDefinition->getValidatorConfiguration() as $validatorIdentifier => $parameters )
-        {
-            $validator = $this->validatorService->getValidator( $validatorIdentifier );
-            $validator->initializeWithConstraints( $parameters );
-            if ( !$validator->validate( $fieldValue ) )
-            {
-                $errors[] = $validator->getMessage();
-            }
-        }
-        return $errors;
+        return array();
     }
 
     /**
      * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * This is a base implementation, returning a validation error for each
+     * specified validator, since by default no validators are supported.
+     * Overwrite in derived types, if validation is supported.
      *
      * @param mixed $validatorConfiguration
      *
@@ -173,29 +143,15 @@ abstract class FieldType implements FieldTypeInterface
     {
         $validationErrors = array();
 
-        // @TODO: Is it supposed to be handled this way?
-        if ( $validatorConfiguration === false )
-        {
-            return $validationErrors;
-        }
-
         foreach ( (array)$validatorConfiguration as $validatorIdentifier => $constraints )
         {
-            if ( in_array( $validatorIdentifier, $this->allowedValidators ) )
-            {
-                $validator = $this->validatorService->getValidator( $validatorIdentifier );
-                $validationErrors += $validator->validateConstraints( $constraints );
-            }
-            else
-            {
-                $validationErrors[] = new ValidationError(
-                    "Validator '%validator%' is unknown",
-                    null,
-                    array(
-                        "validator" => $validatorIdentifier
-                    )
-                );
-            }
+            $validationErrors[] = new ValidationError(
+                "Validator '%validator%' is unknown",
+                null,
+                array(
+                    "validator" => $validatorIdentifier
+                )
+            );
         }
 
         return $validationErrors;

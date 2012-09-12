@@ -52,7 +52,7 @@ class ChainRoutingPass implements CompilerPassInterface
                 $priority = -255;
 
             $chainRouter->addMethodCall(
-                'addRouter',
+                'add',
                 array(
                      new Reference( $id ),
                      $priority

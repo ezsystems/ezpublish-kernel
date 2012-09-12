@@ -670,8 +670,8 @@ class UserService implements UserServiceInterface
         if ( $userUpdateStruct->password !== null && ( !is_string( $userUpdateStruct->password ) || empty( $userUpdateStruct->password ) ) )
             throw new InvalidArgumentValue( "password", $userUpdateStruct->password, "UserUpdateStruct" );
 
-        if ( $userUpdateStruct->isEnabled !== null && !is_bool( $userUpdateStruct->isEnabled ) )
-            throw new InvalidArgumentValue( "isEnabled", $userUpdateStruct->isEnabled, "UserUpdateStruct" );
+        if ( $userUpdateStruct->enabled !== null && !is_bool( $userUpdateStruct->enabled ) )
+            throw new InvalidArgumentValue( "enabled", $userUpdateStruct->enabled, "UserUpdateStruct" );
 
         if ( $userUpdateStruct->maxLogin !== null && !is_numeric( $userUpdateStruct->maxLogin ) )
             throw new InvalidArgumentValue( "maxLogin", $userUpdateStruct->maxLogin, "UserUpdateStruct" );
@@ -716,7 +716,7 @@ class UserService implements UserServiceInterface
                             ) :
                             $loadedUser->passwordHash,
                         'hashAlgorithm' => $this->settings['hashType'],
-                        'isEnabled' => $userUpdateStruct->isEnabled !== null ? $userUpdateStruct->isEnabled : $loadedUser->isEnabled,
+                        'isEnabled' => $userUpdateStruct->enabled !== null ? $userUpdateStruct->enabled : $loadedUser->enabled,
                         'maxLogin' => $userUpdateStruct->maxLogin !== null ? (int) $userUpdateStruct->maxLogin : $loadedUser->maxLogin
                     )
                 )
@@ -1067,7 +1067,7 @@ class UserService implements UserServiceInterface
                 'email' => $spiUser->email,
                 'passwordHash' => $spiUser->passwordHash,
                 'hashAlgorithm' => $spiUser->hashAlgorithm,
-                'isEnabled' => $spiUser->isEnabled,
+                'enabled' => $spiUser->isEnabled,
                 'maxLogin' => $spiUser->maxLogin,
             )
         );

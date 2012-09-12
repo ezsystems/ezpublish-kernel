@@ -27,7 +27,7 @@ class LegacyKernelController
     /**
      * The legacy kernel instance (eZ Publish 4)
      *
-     * @var \eZ\Publish\Legacy\Kernel
+     * @var \eZ\Publish\Core\MVC\Legacy\Kernel
      */
     private $kernel;
 
@@ -117,7 +117,7 @@ class LegacyKernelController
         }
 
         return new Response(
-            $result->content
+            $result->getContent()
         );
     }
 }

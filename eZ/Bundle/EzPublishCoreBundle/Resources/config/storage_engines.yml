@@ -14,13 +14,13 @@ parameters:
     # Transormation rules resources.
     # TODO: Should they be somewhat configurable for the developer?
     ezpublish.api.storage_engine.legacy.transformation_rules.resources:
-        - %kernel.root_dir%/../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/ascii.tr
-        - %kernel.root_dir%/../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/basic.tr
-        - %kernel.root_dir%/../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/cyrillic.tr
-        - %kernel.root_dir%/../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/greek.tr
-        - %kernel.root_dir%/../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/hebrew.tr
-        - %kernel.root_dir%/../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/latin.tr
-        - %kernel.root_dir%/../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/search.tr
+        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/ascii.tr
+        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/basic.tr
+        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/cyrillic.tr
+        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/greek.tr
+        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/hebrew.tr
+        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/latin.tr
+        - ../vendor/ezsystems/ezpublish/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/search.tr
     # Value converters
     ezpublish.fieldType.ezauthor.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Author
     ezpublish.fieldType.ezbinaryfile.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\BinaryFile
@@ -43,6 +43,8 @@ parameters:
     ezpublish.fieldType.ezsrrating.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating
     ezpublish.fieldType.ezurl.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url
     ezpublish.fieldType.ezurl.storage_gateway.class: eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage
+    ezpublish.fieldType.ezuser.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
+    ezpublish.fieldType.ezuser.storage_gateway.class: eZ\Publish\Core\FieldType\User\UserStorage\Gateway\LegacyStorage
 
     # Temporary workaround for ezpage, ezemail, ezimage, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
     # a ezstring until proper implementation will be in place
@@ -76,6 +78,7 @@ services:
 
     ezpublish.api.storage_engine.legacy.transformation_parser:
         class: %ezpublish.api.storage_engine.legacy.transformation_parser.class%
+        arguments: [%kernel.root_dir%]
 
     ezpublish.api.storage_engine.legacy.pcre_compiler:
         class: %ezpublish.api.storage_engine.legacy.pcre_compiler.class%
@@ -213,3 +216,13 @@ services:
         class: %ezpublish.fieldType.ezobjectrelationlist.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezobjectrelationlist, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezurl.converter:
+        class: %ezpublish.fieldType.ezuser.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezuser, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezuser.storage_gateway:
+        class: %ezpublish.fieldType.ezuser.storage_gateway.class%
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezuser, identifier: LegacyStorage}

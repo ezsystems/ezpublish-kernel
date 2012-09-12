@@ -22,8 +22,8 @@ use eZ\Publish\API\Repository\IOService as IOServiceInterface,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
 
-    eZ\Publish\Legacy\LegacyKernelAware,
-    eZ\Publish\Legacy\Kernel as LegacyKernel;
+    eZ\Publish\Core\MVC\Legacy\LegacyKernelAware,
+    eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 
 
 /**
@@ -49,7 +49,7 @@ class IOService implements IOServiceInterface, LegacyKernelAware
     protected $settings;
 
     /**
-     * @var \eZ\Publish\Legacy\Kernel
+     * @var \eZ\Publish\Core\MVC\Legacy\Kernel
      */
     protected $legacyKernel;
 
@@ -70,7 +70,7 @@ class IOService implements IOServiceInterface, LegacyKernelAware
     /**
      * Injects the legacy kernel instance.
      *
-     * @param \eZ\Publish\Legacy\Kernel $legacyKernel
+     * @param \eZ\Publish\Core\MVC\Legacy\Kernel $legacyKernel
      * @return void
      */
     public function setLegacyKernel( LegacyKernel $legacyKernel )
@@ -81,7 +81,7 @@ class IOService implements IOServiceInterface, LegacyKernelAware
     /**
      * Gets the legacy kernel instance.
      *
-     * @return \eZ\Publish\Legacy\Kernel
+     * @return \eZ\Publish\Core\MVC\Legacy\Kernel
      */
     protected function getLegacyKernel()
     {

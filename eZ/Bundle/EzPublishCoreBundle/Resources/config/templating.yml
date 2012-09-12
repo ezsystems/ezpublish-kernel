@@ -2,10 +2,11 @@ parameters:
     twig.loader.chain.class: Twig_Loader_Chain
     twig.loader.string.class: Twig_Loader_String
 
-    ezpublish.twig.extension.content.class: eZ\Publish\MVC\Templating\Twig\Extension\ContentExtension
+    ezpublish.twig.extension.content.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ContentExtension
     ezpublish.twig.content_helper.resources: [content_fields.html.twig]
 
-    ezpublish.view_manager.class: eZ\Publish\MVC\View\Manager
+    ezpublish.view_manager.class: eZ\Publish\Core\MVC\Symfony\View\Manager
+    ezpublish.content_view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\ContentViewProvider\Configured
 
 services:
     # Redefining twig loader to use the chain loader instead of only the file system loader.
@@ -38,3 +39,9 @@ services:
     ezpublish.view_manager:
         class: %ezpublish.view_manager.class%
         arguments: [@templating, @event_dispatcher, @?logger]
+
+    ezpublish.content_view_provider.configured:
+        class: %ezpublish.content_view_provider.configured.class%
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository, @service_container]
+        tags:
+            - {name: ezpublish.content_view_provider, priority: 10}

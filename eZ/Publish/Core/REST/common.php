@@ -8,6 +8,13 @@
  */
 
 namespace eZ\Publish\Core\REST;
+use eZ\Publish\Core\FieldType;
+
+
+if ( !defined( 'HTTP_BASE_URL' ) )
+{
+    define( 'HTTP_BASE_URL', 'http://localhost:8042/' );
+}
 
 /**
  * This file includes the configuration of the REST SDK client.
@@ -19,13 +26,38 @@ namespace eZ\Publish\Core\REST;
 // phpunit.xml files. This defines what encoding will be generated and thus send
 // to the server.
 $generator = getenv( 'backendEncoding' ) === 'xml' ?
-    new Common\Output\Generator\Xml() :
-    new Common\Output\Generator\Json();
+    new Common\Output\Generator\Xml(
+        new Common\Output\Generator\Xml\FieldTypeHashGenerator()
+    ) :
+    new Common\Output\Generator\Json(
+        new Common\Output\Generator\Json\FieldTypeHashGenerator()
+    );
 
 // The URL Handler is responsible for URL parsing and generation. It will be
 // used in the output generators and in some parsing handlers.
 $urlHandler = new Common\UrlHandler\eZPublish();
 
+
+// FieldTypes to be used in integration tests. The field types are only used
+// in terms of conversions from and to hash values.
+$fieldTypes = array(
+    new Client\FieldType( new FieldType\Author\Type() ),
+    new Client\FieldType( new FieldType\Checkbox\Type() ),
+    new Client\FieldType( new FieldType\DateAndTime\Type() ),
+    new Client\FieldType( new FieldType\Float\Type() ),
+    new Client\FieldType( new FieldType\Integer\Type() ),
+    new Client\FieldType( new FieldType\Keyword\Type() ),
+    new Client\FieldType( new FieldType\MapLocation\Type() ),
+    new Client\FieldType( new FieldType\Relation\Type() ),
+    new Client\FieldType( new FieldType\RelationList\Type() ),
+    new Client\FieldType( new FieldType\Selection\Type() ),
+    new Client\FieldType( new FieldType\TextBlock\Type() ),
+    new Client\FieldType( new FieldType\TextLine\Type() ),
+    new Client\FieldType( new FieldType\Url\Type() ),
+    new Client\FieldType( new FieldType\User\Type() ),
+    new Client\FieldType( new FieldType\Null\Type( 'ezxmltext' ) ),         // FIXME: Add correct type
+    new Client\FieldType( new FieldType\Null\Type( 'ezpage' ) ),            // FIXME: Add correct type
+);
 
 // The IntegrationTestRepository is only meant for integration tests. It
 // handles sessions which run throughout a single test case run and submission
@@ -40,38 +72,13 @@ $repository = new Client\IntegrationTestRepository(
         new Client\HttpClient\Stream(
             // Server address to communicate with. You might want to make this
             // configurable using environment variables, or something alike.
-            'http://localhost:8042/'
+            HTTP_BASE_URL
         )
     ),
     new Common\Input\Dispatcher(
-        // The parsing dispatcher configures which parsers are used for which
-        // mime type. The mime types (content types) are provided *WITHOUT* an
-        // encoding type (+json / +xml).
-        //
-        // For each mime type you specify an instance of the parser which
-        // should be used to process the given mime type.
-        new Common\Input\ParsingDispatcher(
-            array(
-                'application/vnd.ez.api.ContentList'          => new Client\Input\Parser\ContentList(),
-                'application/vnd.ez.api.ContentInfo'          => new Client\Input\Parser\ContentInfo(),
-                'application/vnd.ez.api.SectionList'          => new Client\Input\Parser\SectionList(),
-                'application/vnd.ez.api.Section'              => new Client\Input\Parser\Section(),
-                'application/vnd.ez.api.ErrorMessage'         => new Client\Input\Parser\ErrorMessage(),
-                'application/vnd.ez.api.RoleList'             => new Client\Input\Parser\RoleList(),
-                'application/vnd.ez.api.Role'                 => new Client\Input\Parser\Role(),
-                'application/vnd.ez.api.Policy'               => new Client\Input\Parser\Policy(),
-                'application/vnd.ez.api.limitation'           => new Client\Input\Parser\Limitation(),
-                'application/vnd.ez.api.PolicyList'           => new Client\Input\Parser\PolicyList(),
-                'application/vnd.ez.api.RoleAssignmentList'   => new Client\Input\Parser\RoleAssignmentList(),
-                'application/vnd.ez.api.RoleAssignment'       => new Client\Input\Parser\RoleAssignment(),
-                'application/vnd.ez.api.Location'             => new Client\Input\Parser\Location(),
-                'application/vnd.ez.api.LocationList'         => new Client\Input\Parser\LocationList(),
-                'application/vnd.ez.api.ObjectStateGroup'     => new Client\Input\Parser\ObjectStateGroup(),
-                'application/vnd.ez.api.ObjectStateGroupList' => new Client\Input\Parser\ObjectStateGroupList(),
-                'application/vnd.ez.api.ObjectState'          => new Client\Input\Parser\ObjectState(),
-                'application/vnd.ez.api.ObjectStateList'      => new Client\Input\Parser\ObjectStateList(),
-            )
-        ),
+        // The parsing dispatcher is configured after the repository has been
+        // created due to circular references
+        $parsingDispatcher = new Common\Input\ParsingDispatcher(),
         array(
             // Defines the available data format encoding handlers. used to
             // process the input data and convert it into an array structure
@@ -103,7 +110,7 @@ $repository = new Client\IntegrationTestRepository(
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\PolicyCreateStruct'                       => new Client\Output\ValueObjectVisitor\PolicyCreateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation'                               => new Client\Output\ValueObjectVisitor\Limitation( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\PolicyUpdateStruct'                       => new Client\Output\ValueObjectVisitor\PolicyUpdateStruct( $urlHandler ),
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\LocationCreateStruct'                     => new Client\Output\ValueObjectVisitor\LocationCreateStruct( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationCreateStruct'                  => new Client\Output\ValueObjectVisitor\LocationCreateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroupCreateStruct'      => new Client\Output\ValueObjectVisitor\ObjectStateGroupCreateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroupUpdateStruct'      => new Client\Output\ValueObjectVisitor\ObjectStateGroupUpdateStruct( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateCreateStruct'           => new Client\Output\ValueObjectVisitor\ObjectStateCreateStruct( $urlHandler ),
@@ -111,8 +118,82 @@ $repository = new Client\IntegrationTestRepository(
         )
     ),
     $urlHandler,
+    $fieldTypes,
     $authenticator
 );
+
+
+// Object with convenience methods for parsers
+$parserTools = new Client\Input\ParserTools();
+
+// Parser for field values (using FieldTypes for toHash()/fromHash() operations)
+$fieldValueParser = new Common\Input\FieldValueParser(
+    $repository->getContentService(),
+    $repository->getContentTypeService(),
+    $repository->getFieldTypeService()
+);
+
+// The parsing dispatcher configures which parsers are used for which
+// mime type. The mime types (content types) are provided *WITHOUT* an
+// encoding type (+json / +xml).
+//
+// For each mime type you specify an instance of the parser which
+// should be used to process the given mime type.
+$inputParsers = array(
+    'application/vnd.ez.api.Version'              => new Client\Input\Parser\Content(
+        $parserTools,
+        $repository->getContentService(),
+        // Circular reference, since REST does not transmit content info when
+        // loading the VersionInfo (which is included in the content)
+        new Client\Input\Parser\VersionInfo( $parserTools, $repository->getContentService() ),
+        $fieldValueParser
+    ),
+    'application/vnd.ez.api.ContentList'          => new Client\Input\Parser\ContentList(),
+    'application/vnd.ez.api.ContentInfo'          => new Client\Input\Parser\ContentInfo(
+        $parserTools,
+        $repository->getContentTypeService()
+     ),
+    'application/vnd.ez.api.ContentType'          => new Client\Input\Parser\ContentType(
+        $parserTools,
+        $repository->getContentTypeService()
+    ),
+    'application/vnd.ez.api.FieldDefinitionList'  => new Client\Input\Parser\FieldDefinitionList(
+        $parserTools,
+        $repository->getContentTypeService()
+    ),
+    'application/vnd.ez.api.FieldDefinition'      => new Client\Input\Parser\FieldDefinition(
+        $parserTools
+        // TODO: Add FieldValueParser
+    ),
+    'application/vnd.ez.api.SectionList'          => new Client\Input\Parser\SectionList(),
+    'application/vnd.ez.api.Section'              => new Client\Input\Parser\Section(),
+    'application/vnd.ez.api.ErrorMessage'         => new Client\Input\Parser\ErrorMessage(),
+    'application/vnd.ez.api.RoleList'             => new Client\Input\Parser\RoleList(),
+    'application/vnd.ez.api.Role'                 => new Client\Input\Parser\Role(),
+    'application/vnd.ez.api.Policy'               => new Client\Input\Parser\Policy(),
+    'application/vnd.ez.api.limitation'           => new Client\Input\Parser\Limitation(),
+    'application/vnd.ez.api.PolicyList'           => new Client\Input\Parser\PolicyList(),
+    'application/vnd.ez.api.RelationList'         => new Client\Input\Parser\RelationList(),
+    'application/vnd.ez.api.Relation'             => new Client\Input\Parser\Relation(
+        $repository->getContentService()
+    ),
+    'application/vnd.ez.api.RoleAssignmentList'   => new Client\Input\Parser\RoleAssignmentList(),
+    'application/vnd.ez.api.RoleAssignment'       => new Client\Input\Parser\RoleAssignment(),
+    'application/vnd.ez.api.Location'             => new Client\Input\Parser\Location(),
+    'application/vnd.ez.api.LocationList'         => new Client\Input\Parser\LocationList(),
+    'application/vnd.ez.api.ObjectStateGroup'     => new Client\Input\Parser\ObjectStateGroup(
+        $parserTools
+    ),
+    'application/vnd.ez.api.ObjectStateGroupList' => new Client\Input\Parser\ObjectStateGroupList(),
+    'application/vnd.ez.api.ObjectState'          => new Client\Input\Parser\ObjectState(
+        $parserTools
+    ),
+    'application/vnd.ez.api.ObjectStateList'      => new Client\Input\Parser\ObjectStateList(),
+);
+foreach ( $inputParsers as $mimeType => $parser )
+{
+    $parsingDispatcher->addParser( $mimeType, $parser );
+}
 
 // Force sets the used user. This will be refactored most likely, since this is
 // not really valid for a REST client.

@@ -18,7 +18,9 @@ class LanguageCreateStruct extends ValueObject
 {
 
     /**
-     * the languageCode code
+     * The languageCode code
+     *
+     * Needs to be a unique.
      *
      * @var string
      */

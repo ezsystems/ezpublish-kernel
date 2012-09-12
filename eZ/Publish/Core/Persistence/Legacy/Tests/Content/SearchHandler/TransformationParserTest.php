@@ -32,12 +32,12 @@ class TransformationParserTest extends TestCase
      */
     public function testParse( $file )
     {
-        $parser = new Search\TransformationParser();
+        $parser = new Search\TransformationParser( self::getInstallationDir() );
 
         $fixture = include $file . '.result';
         $this->assertEquals(
             $fixture,
-            $parser->parse( $file )
+            $parser->parse( str_replace( self::getInstallationDir(), '', $file ) )
         );
     }
 }

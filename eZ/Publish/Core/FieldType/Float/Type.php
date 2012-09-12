@@ -9,6 +9,9 @@
 
 namespace eZ\Publish\Core\FieldType\Float;
 use eZ\Publish\Core\FieldType\FieldType,
+    eZ\Publish\Core\FieldType\ValidationError,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
@@ -18,9 +21,122 @@ use eZ\Publish\Core\FieldType\FieldType,
  */
 class Type extends FieldType
 {
-    protected $allowedValidators = array(
-        "FloatValueValidator"
+    protected $validatorConfigurationSchema = array(
+        'FloatValueValidator' => array(
+            'minFloatValue' => array(
+                'type' => 'float',
+                'default' => false
+            ),
+            'maxFloatValue' => array(
+                'type' => 'float',
+                'default' => false
+            )
+        )
     );
+
+    /**
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $validatorConfiguration
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValidatorConfiguration( $validatorConfiguration )
+    {
+        $validationErrors = array();
+
+        foreach ( (array)$validatorConfiguration as $validatorIdentifier => $constraints )
+        {
+            if ( $validatorIdentifier !== 'FloatValueValidator' )
+            {
+                $validationErrors[] = new ValidationError(
+                    "Validator '%validator%' is unknown",
+                    null,
+                    array(
+                        "validator" => $validatorIdentifier
+                    )
+                );
+
+                continue;
+            }
+
+            foreach ( $constraints as $name => $value )
+            {
+                switch ( $name )
+                {
+                    case "minFloatValue":
+                    case "maxFloatValue":
+                        if ( $value !== false && !is_numeric( $value ) )
+                        {
+                            $validationErrors[] = new ValidationError(
+                                "Validator parameter '%parameter%' value must be of numeric type",
+                                null,
+                                array(
+                                    "parameter" => $name
+                                )
+                            );
+                        }
+                        break;
+                    default:
+                        $validationErrors[] = new ValidationError(
+                            "Validator parameter '%parameter%' is unknown",
+                            null,
+                            array(
+                                "parameter" => $name
+                            )
+                        );
+                }
+            }
+        }
+
+        return $validationErrors;
+    }
+
+    /**
+     * Validates a field based on the validators in the field definition
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
+     * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field for which an action is performed
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validate( FieldDefinition $fieldDefinition, $fieldValue )
+    {
+        $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
+        $constraints = isset($validatorConfiguration['FloatValueValidator']) ?
+            $validatorConfiguration['FloatValueValidator'] :
+            array();
+
+        $validationErrors = array();
+
+        if ( isset( $constraints['maxFloatValue'] ) &&
+            $constraints['maxFloatValue'] !== false && $fieldValue->value > $constraints['maxFloatValue'] )
+        {
+            $validationErrors[] = new ValidationError(
+                "The value can not be higher than %size%.",
+                null,
+                array(
+                    "size" => $constraints['maxFloatValue']
+                )
+            );
+        }
+
+        if ( isset( $constraints['minFloatValue'] ) &&
+            $constraints['minFloatValue'] !== false && $fieldValue->value < $constraints['minFloatValue'] )
+        {
+            $validationErrors[] = new ValidationError(
+                "The value can not be lower than %size%.",
+                null,
+                array(
+                    "size" => $constraints['minFloatValue']
+                )
+            );
+        }
+
+        return $validationErrors;
+    }
 
     /**
      * Return the field type identifier for this field type
@@ -57,7 +173,7 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value();
+        return null;
     }
 
     /**
@@ -83,6 +199,15 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( $inputValue === null )
+        {
+            return null;
+        }
+
+        if ( is_int( $inputValue ) )
+        {
+            $inputValue = (float)$inputValue;
+        }
         if ( is_float( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
@@ -129,6 +254,10 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
+        if ( empty( $hash ) )
+        {
+            return null;
+        }
         return new Value( $hash );
     }
 
@@ -141,6 +270,10 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
+        if ( $value === null )
+        {
+            return null;
+        }
         return $value->value;
     }
 }

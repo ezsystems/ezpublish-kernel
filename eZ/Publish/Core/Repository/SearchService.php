@@ -13,6 +13,10 @@ use eZ\Publish\API\Repository\SearchService as SearchServiceInterface,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
+    eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
+
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
+
     eZ\Publish\SPI\Persistence\Handler;
 
 /**
@@ -65,7 +69,11 @@ class SearchService implements SearchServiceInterface
      */
     public function findContent( Query $query, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
-        // @TODO: Apply permission checks
+        if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $query->criterion ) )
+        {
+            return new SearchResult( array( 'time' => 0, 'totalCount' => 0 ) );
+        }
+
         $result = $this->persistenceHandler->searchHandler()->findContent( $query, $fieldFilters );
         foreach ( $result->searchHits as $hit )
         {
@@ -93,7 +101,11 @@ class SearchService implements SearchServiceInterface
      */
     public function findSingle( Criterion $criterion, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
-        // @TODO: Apply permission checks
+        if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $criterion ) )
+        {
+            throw new NotFoundException( 'Content', '*' );
+        }
+
         return $this->repository->getContentService()->buildContentDomainObject(
             $this->persistenceHandler->searchHandler()->findSingle( $criterion, $fieldFilters )
         );
@@ -110,5 +122,57 @@ class SearchService implements SearchServiceInterface
     public function suggest( $prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null )
     {
 
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
+     * @todo Known issue: Whole permissions system need to be change accommodate role limitations.
+     */
+    private function addPermissionsCriterion( Criterion &$criterion )
+    {
+        $limitations = $this->repository->hasAccess( 'content', 'read' );
+        if ( $limitations === false || $limitations === true )
+        {
+            return $limitations;
+        }
+
+        if ( empty( $limitations ) )
+            throw new \RuntimeException( "Got an empty array of limitations from hasAccess()" );
+
+        // Create OR conditions for every "policy" that contains AND conditions for limitations
+        $orCriteria = array();
+        $roleService = $this->repository->getRoleService();
+        foreach ( $limitations as $limitationSet )
+        {
+            $andCriteria = array();
+            /**
+             * @var \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
+             */
+            foreach ( $limitationSet as $limitationValue )
+            {
+                $type = $roleService->getLimitationType( $limitationValue->getIdentifier() );
+                $andCriteria[] = $type->getCriterion( $limitationValue, $this->repository );
+            }
+            $orCriteria[] = isset( $andCriteria[1] ) ? new Criterion\LogicalAnd( $andCriteria ) : $andCriteria[0];
+        }
+
+        // Merge with $criterion
+        if ( $criterion instanceof Criterion\LogicalAnd )
+        {
+            $criterion->criteria[] = isset( $orCriteria[1] ) ? new Criterion\LogicalOr( $orCriteria ) : $orCriteria[0];
+        }
+        else
+        {
+            $criterion = new Criterion\LogicalAnd(
+                array(
+                    $criterion,
+                    (isset( $orCriteria[1] ) ? new Criterion\LogicalOr( $orCriteria ) : $orCriteria[0])
+                )
+            );
+        }
+
+        return true;
     }
 }

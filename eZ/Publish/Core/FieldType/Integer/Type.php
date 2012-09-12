@@ -9,6 +9,9 @@
 
 namespace eZ\Publish\Core\FieldType\Integer;
 use eZ\Publish\Core\FieldType\FieldType,
+    eZ\Publish\Core\FieldType\ValidationError,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
@@ -18,9 +21,121 @@ use eZ\Publish\Core\FieldType\FieldType,
  */
 class Type extends FieldType
 {
-    protected $allowedValidators = array(
-        "IntegerValueValidator"
+    protected $validatorConfigurationSchema = array(
+        'IntegerValueValidator' => array(
+            'minIntegerValue' => array(
+                'type' => 'int',
+                'default' => 0
+            ),
+            'maxIntegerValue' => array(
+                'type' => 'int',
+                'default' => false
+            )
+        )
     );
+
+    /**
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $validatorConfiguration
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValidatorConfiguration( $validatorConfiguration )
+    {
+        $validationErrors = array();
+
+        foreach ( (array)$validatorConfiguration as $validatorIdentifier => $constraints )
+        {
+            if ( $validatorIdentifier !== 'IntegerValueValidator' )
+            {
+                $validationErrors[] = new ValidationError(
+                    "Validator '%validator%' is unknown",
+                    null,
+                    array(
+                        "validator" => $validatorIdentifier
+                    )
+                );
+
+                continue;
+            }
+            foreach ( $constraints as $name => $value )
+            {
+                switch ( $name )
+                {
+                    case "minIntegerValue":
+                    case "maxIntegerValue":
+                        if ( $value !== false && !is_integer( $value ) )
+                        {
+                            $validationErrors[] = new ValidationError(
+                                "Validator parameter '%parameter%' value must be of integer type",
+                                null,
+                                array(
+                                    "parameter" => $name
+                                )
+                            );
+                        }
+                        break;
+                    default:
+                        $validationErrors[] = new ValidationError(
+                            "Validator parameter '%parameter%' is unknown",
+                            null,
+                            array(
+                                "parameter" => $name
+                            )
+                        );
+                }
+            }
+        }
+
+        return $validationErrors;
+    }
+
+    /**
+     * Validates a field based on the validators in the field definition
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
+     * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field for which an action is performed
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validate( FieldDefinition $fieldDefinition, $fieldValue )
+    {
+        $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
+        $constraints = isset($validatorConfiguration['IntegerValueValidator']) ?
+            $validatorConfiguration['IntegerValueValidator'] :
+            array();
+
+        $validationErrors = array();
+
+        if ( isset( $constraints['maxIntegerValue'] ) &&
+            $constraints['maxIntegerValue'] !== false && $fieldValue->value > $constraints['maxIntegerValue'] )
+        {
+            $validationErrors[] = new ValidationError(
+                "The value can not be higher than %size%.",
+                null,
+                array(
+                    "size" => $constraints['maxIntegerValue']
+                )
+            );
+        }
+
+        if ( isset( $constraints['minIntegerValue'] ) &&
+            $constraints['minIntegerValue'] !== false && $fieldValue->value < $constraints['minIntegerValue'] )
+        {
+            $validationErrors[] = new ValidationError(
+                "The value can not be lower than %size%.",
+                null,
+                array(
+                    "size" => $constraints['minIntegerValue']
+                )
+            );
+        }
+
+        return $validationErrors;
+    }
 
     /**
      * Return the field type identifier for this field type
@@ -57,7 +172,7 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value( 0 );
+        return null;
     }
 
     /**
@@ -83,7 +198,12 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
-        if ( is_int( $inputValue ) || $inputValue === null )
+        if ( $inputValue === null )
+        {
+            return null;
+        }
+
+        if ( is_int( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
         }
@@ -116,6 +236,10 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
+        if ( $value === null )
+        {
+            return null;
+        }
         return $value->value;
     }
 
@@ -128,6 +252,10 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
+        if ( $hash === null )
+        {
+            return null;
+        }
         return new Value( $hash );
     }
 
@@ -140,6 +268,10 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
+        if ( $value === null )
+        {
+            return null;
+        }
         return $value->value;
     }
 

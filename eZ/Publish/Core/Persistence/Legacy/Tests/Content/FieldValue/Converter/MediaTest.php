@@ -18,8 +18,6 @@ use eZ\Publish\Core\FieldType\Media\Type as MediaType,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     eZ\Publish\Core\Repository\Repository,
-    eZ\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\Core\Repository\FieldTypeTools,
     eZ\Publish\Core\IO\InMemoryHandler as InMemoryIOHandler,
     eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler;
 

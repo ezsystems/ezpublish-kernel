@@ -15,6 +15,33 @@ use eZ\Publish\Core\REST\Common;
 
 use Qafoo\RMF;
 
+ini_set( 'html_errors', 0 );
+
+/*
+ * Configuration magic, this should actually be taken from services.ini in the
+ * future.
+ */
+
+$configFile = __DIR__ . '/database.cnf';
+
+if ( is_file( $configFile ) )
+{
+    $_ENV['DATABASE'] = trim( file_get_contents( $configFile ) );
+}
+
+if ( !isset( $_ENV['DATABASE'] ) )
+{
+    echo "The REST test server does only work with a persistent database.\n";
+    echo "Please specify a database DSN in the environment variable DATABASE.\n";
+    echo "Or create a database.cnf file with it in the same directory as index.php\n";
+    exit( 1 );
+}
+
+// Exposing $legacyKernelHandler to be a web handler (to be used in bootstrap.php)
+$legacyKernelHandler = function ()
+{
+    return new \ezpKernelWeb;
+};
 require_once __DIR__ . '/../../../../../bootstrap.php';
 
 /*
@@ -25,29 +52,38 @@ require_once __DIR__ . '/../../../../../bootstrap.php';
  * and 2. updated.
  *
  * The test framework therefore issues an X-Test-Session header, with the same
- * session ID for a dedicated test method. The complete repository (including
- * fixture data) is stored serialized at the end of this file.
+ * session ID for a dedicated test method. If a session was already started,
+ * the database is not reset for this request. NOTE: This does NOT work with
+ * SQLite in-memory databases, since these are automatically cleared on request
+ * shutdown!
  */
 
 $stateDir    = __DIR__ . '/_state/';
-$sessionFile = null;
-$repository  = null;
+
+$reInitializeRepository = true;
 if ( isset( $_SERVER['HTTP_X_TEST_SESSION'] ) )
 {
-    // Check if we are in a test session and if, for this session, a repository
-    // state file already exists.
-    $sessionFile = $stateDir . $_SERVER['HTTP_X_TEST_SESSION'] . '.php';
-    if ( is_file( $sessionFile ) )
-    {
-        $repository = unserialize( file_get_contents( $sessionFile ) );
-    }
+    $sessionId = $_SERVER['HTTP_X_TEST_SESSION'];
+
+    $sessionFile = __DIR__ . '/.session';
+
+    // Only re-initialize the repository, if for the current session no session
+    // file exists
+    $reInitializeRepository = ( !is_file( $sessionFile )  || file_get_contents( $sessionFile ) !== $sessionId );
+
+    file_put_contents( $sessionFile, $sessionId );
 }
 
-if ( !$repository )
-{
-    $setupFactory = new \eZ\Publish\API\Repository\Tests\SetupFactory\Memory();
-    $repository   = $setupFactory->getRepository();
-}
+/*
+ * The setup factory, which is also used for setting up the normal repository
+ * for the integration tests, is re-used here.
+ */
+$setupFactory = new \eZ\Publish\API\Repository\Tests\SetupFactory\Legacy();
+$repository   = $setupFactory->getRepository( $reInitializeRepository );
+
+/*
+ * The following reflects a standard REST server setup
+ */
 
 /*
  * Handlers are used to parse the input body (XML or JSON) into a common array
@@ -76,6 +112,11 @@ $inputDispatcher = new Common\Input\Dispatcher(
         'application/vnd.ez.api.ContentUpdate'          => new Input\Parser\ContentUpdate( $urlHandler ),
         'application/vnd.ez.api.PolicyCreate'           => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService() ),
         'application/vnd.ez.api.PolicyUpdate'           => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService() ),
+        // FIXME: There is no resource specified for Limitation, therefore,
+        // parsing of limitations cannot be bound to the media type. Please fix
+        // this to have the parser for limitation structs triggered directly
+        // from the points where limitations occur. The parser can e.g. be
+        // aggregated by the parsers for PolicyCreate and PolicyUpdate.
         'application/vnd.ez.api.limitation'             => new Input\Parser\Limitation( $urlHandler ),
         'application/vnd.ez.api.RoleAssignInput'        => new Input\Parser\RoleAssignInput( $urlHandler ),
         'application/vnd.ez.api.LocationCreate'         => new Input\Parser\LocationCreate( $urlHandler, $repository->getLocationService() ),
@@ -105,7 +146,14 @@ $contentController = new Controller\Content(
     $inputDispatcher,
     $urlHandler,
     $repository->getContentService(),
+    $repository->getLocationService(),
     $repository->getSectionService()
+);
+
+$contentTypeController = new Controller\ContentType(
+    $inputDispatcher,
+    $urlHandler,
+    $repository->getContentTypeService()
 );
 
 $roleController = new Controller\Role(
@@ -148,17 +196,49 @@ $trashController = new Controller\Trash(
  */
 
 $valueObjectVisitors = array(
-    '\\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException'       => new Output\ValueObjectVisitor\InvalidArgumentException( $urlHandler,  true ),
-    '\\eZ\Publish\API\Repository\Exceptions\NotFoundException'              => new Output\ValueObjectVisitor\NotFoundException( $urlHandler,  true ),
-    '\\eZ\Publish\API\Repository\Exceptions\BadStateException'              => new Output\ValueObjectVisitor\BadStateException( $urlHandler,  true ),
+    // Errors
+
+    '\\eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'  => new Output\ValueObjectVisitor\InvalidArgumentException( $urlHandler,  true ),
+    '\\eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException'         => new Output\ValueObjectVisitor\NotFoundException( $urlHandler,  true ),
+    '\\eZ\\Publish\\API\Repository\\Exceptions\\BadStateException'          => new Output\ValueObjectVisitor\BadStateException( $urlHandler,  true ),
     '\\Exception'                                                           => new Output\ValueObjectVisitor\Exception( $urlHandler,  true ),
+
+    // Section
 
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\SectionList'                => new Output\ValueObjectVisitor\SectionList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedSection'             => new Output\ValueObjectVisitor\CreatedSection( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section'              => new Output\ValueObjectVisitor\Section( $urlHandler ),
 
+    // Content
+
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentList'                => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo'          => new Output\ValueObjectVisitor\ContentInfo( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestContent'                => new Output\ValueObjectVisitor\RestContent( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo'          => new Output\ValueObjectVisitor\VersionInfo( $urlHandler ),
+    // Includes vitising of VersionInfo, which can be extracted for re-use, if
+    // neccessary
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content'              => new Output\ValueObjectVisitor\Content(
+        $urlHandler,
+        new Common\Output\FieldValueSerializer( $repository->getFieldTypeService() )
+    ),
+
+    // ContentType
+    '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' => new Output\ValueObjectVisitor\ContentType(
+        $urlHandler
+    ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\FieldDefinitionList' => new Output\ValueObjectVisitor\FieldDefinitionList(
+        $urlHandler
+    ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestFieldDefinition' => new Output\ValueObjectVisitor\RestFieldDefinition(
+        $urlHandler,
+        new Common\Output\FieldValueSerializer( $repository->getFieldTypeService() )
+    ),
+
+    // Relation
+
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RelationList'               => new Output\ValueObjectVisitor\RelationList( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Relation'             => new Output\ValueObjectVisitor\Relation( $urlHandler ),
+
+    // User
 
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleList'                   => new Output\ValueObjectVisitor\RoleList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedRole'                => new Output\ValueObjectVisitor\CreatedRole( $urlHandler ),
@@ -167,13 +247,22 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PolicyList'                 => new Output\ValueObjectVisitor\PolicyList( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation'              => new Output\ValueObjectVisitor\Limitation( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleAssignmentList'         => new Output\ValueObjectVisitor\RoleAssignmentList( $urlHandler ),
+
+    // Location
+
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location'             => new Output\ValueObjectVisitor\Location( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\LocationList'               => new Output\ValueObjectVisitor\LocationList( $urlHandler ),
+
+    // Object State
+
     '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup' => new Output\ValueObjectVisitor\ObjectStateGroup( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectStateGroupList'       => new Output\ValueObjectVisitor\ObjectStateGroupList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Common\\Values\\ObjectState'                => new Output\ValueObjectVisitor\ObjectState( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectStateList'            => new Output\ValueObjectVisitor\ObjectStateList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentObjectStates'        => new Output\ValueObjectVisitor\ContentObjectStates( $urlHandler ),
+
+    // REST specific
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceRedirect'           => new Output\ValueObjectVisitor\ResourceRedirect( $urlHandler ),
 );
 
 /*
@@ -194,6 +283,9 @@ $valueObjectVisitors = array(
 
 $dispatcher = new AuthenticatingDispatcher(
     new RMF\Router\Regexp( array(
+
+    // /content/sections
+
         '(^/content/sections$)' => array(
             'GET'  => array( $sectionController, 'listSections' ),
             'POST' => array( $sectionController, 'createSection' ),
@@ -206,11 +298,21 @@ $dispatcher = new AuthenticatingDispatcher(
             'PATCH'  => array( $sectionController, 'updateSection' ),
             'DELETE' => array( $sectionController, 'deleteSection' ),
         ),
+
+    // /content/objects
+
         '(^/content/objects\?remoteId=[0-9a-z]+$)' => array(
             'GET'   => array( $contentController, 'loadContentInfoByRemoteId' ),
         ),
         '(^/content/objects/[0-9]+$)' => array(
             'PATCH' => array( $contentController, 'updateContentMetadata' ),
+            'GET' => array( $contentController, 'loadContent' )
+        ),
+        '(^/content/objects/[0-9]+/versions/[0-9+]$)' => array(
+            'GET' => array( $contentController, 'loadContentInVersion' ),
+        ),
+        '(^/content/objects/[0-9]+/currentversion$)' => array(
+            'GET' => array( $contentController, 'redirectCurrentVersion' )
         ),
         '(^/content/objects/[0-9]+/locations$)' => array(
             'GET' => array( $locationController, 'loadLocationsForContent' ),
@@ -220,6 +322,9 @@ $dispatcher = new AuthenticatingDispatcher(
             'GET' => array( $objectStateController, 'getObjectStatesForContent' ),
             'PATCH' => array( $objectStateController, 'setObjectStatesForContent' ),
         ),
+
+    // /content/objectstategroups
+
         '(^/content/objectstategroups$)' => array(
             'GET' => array( $objectStateController, 'loadObjectStateGroups' ),
             'POST' => array( $objectStateController, 'createObjectStateGroup' ),
@@ -238,6 +343,9 @@ $dispatcher = new AuthenticatingDispatcher(
             'PATCH' => array( $objectStateController, 'updateObjectState' ),
             'DELETE' => array( $objectStateController, 'deleteObjectState' ),
         ),
+
+    // content/locations
+
         '(^/content/locations\?remoteId=[0-9a-z]+$)' => array(
             'GET' => array( $locationController, 'loadLocationByRemoteId' ),
         ),
@@ -248,6 +356,21 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/content/locations/[0-9/]+/children$)' => array(
             'GET'    => array( $locationController, 'loadLocationChildren' ),
         ),
+
+    // /content/types
+
+        '(^/content/types/[0-9]+$)' => array(
+            'GET'   => array( $contentTypeController, 'loadContentType' ),
+        ),
+        '(^/content/types/[0-9]+/fieldDefinitions$)' => array(
+            'GET'   => array( $contentTypeController, 'loadFieldDefinitionList' ),
+        ),
+        '(^/content/types/[0-9]+/fieldDefinitions/[0-9]+$)' => array(
+            'GET'   => array( $contentTypeController, 'loadFieldDefinition' ),
+        ),
+
+    // /content/trash
+
         '(^/content/trash$)' => array(
             'GET'    => array( $trashController, 'loadTrashItems' ),
             'DELETE' => array( $trashController, 'emptyTrash' ),
@@ -256,6 +379,9 @@ $dispatcher = new AuthenticatingDispatcher(
             'GET'    => array( $trashController, 'loadTrashItem' ),
             'DELETE' => array( $trashController, 'deleteTrashItem' ),
         ),
+
+    // /user
+
         '(^/user/policies\?userId=[0-9]+$)' => array(
             'GET' => array( $roleController, 'listPoliciesForUser' ),
         ),
@@ -290,25 +416,32 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/user/groups/[0-9/]+/roles$)' => array(
             'GET'  => array( $roleController, 'loadRoleAssignmentsForUserGroup' ),
             'POST'  => array( $roleController, 'assignRoleToUserGroup' ),
+        ),
         '(^/user/groups/[0-9/]+/roles/[0-9]+$)' => array(
             'DELETE'  => array( $roleController, 'unassignRoleFromUserGroup' ),
-        ),
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(
         '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+json$)' => new View\Visitor(
             new Common\Output\Visitor(
-                new Common\Output\Generator\Json(),
+                new Common\Output\Generator\Json(
+                    new Common\Output\Generator\Json\FieldTypeHashGenerator()
+                ),
                 $valueObjectVisitors
             )
         ),
-        '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+xml$)'  => new View\Visitor(
+        '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+xml$)'  => ( $xmlVisitor = new View\Visitor(
             new Common\Output\Visitor(
-                new Common\Output\Generator\Xml(),
+                new Common\Output\Generator\Xml(
+                    new Common\Output\Generator\Xml\FieldTypeHashGenerator()
+                ),
                 $valueObjectVisitors
             )
-        ),
-        '(^.*/.*$)'  => new View\InvalidApiUse(),
+        ) ),
+        // '(^.*/.*$)'  => new View\InvalidApiUse(),
+        // Fall back gracefully to XML visiting. Also helps support responses
+        // without Accept header (e.g. DELETE reqeustes).
+        '(^.*/.*$)'  => $xmlVisitor,
     ) ),
     // This is just used for integration tests, DO NOT USE IN PRODUCTION
     new Authenticator\IntegrationTest( $repository )
@@ -324,7 +457,10 @@ $dispatcher = new AuthenticatingDispatcher(
 
 $request = new RMF\Request\HTTP();
 $request->addHandler( 'body', new RMF\Request\PropertyHandler\RawBody() );
-$request->addHandler( 'contentType', new RMF\Request\PropertyHandler\Server( 'CONTENT_TYPE' ) );
+$request->addHandler( 'contentType', new RMF\Request\PropertyHandler\Override( array(
+    new RMF\Request\PropertyHandler\Server( 'CONTENT_TYPE' ),
+    new RMF\Request\PropertyHandler\Server( 'HTTP_CONTENT_TYPE' ),
+) ) );
 $request->addHandler( 'method', new RMF\Request\PropertyHandler\Override( array(
     new RMF\Request\PropertyHandler\Server( 'HTTP_X_HTTP_METHOD_OVERRIDE' ),
     new RMF\Request\PropertyHandler\Server( 'REQUEST_METHOD' ),
@@ -341,12 +477,3 @@ $request->addHandler( 'testUser', new RMF\Request\PropertyHandler\Server( 'HTTP_
  * This triggers working of the MVC.
  */
 $dispatcher->dispatch( $request );
-
-/*
- * The session state is stored, if a session file was specified at the
- * beginning of the script. This is only necessary for the test setup.
- */
-if ( $sessionFile )
-{
-    file_put_contents( $sessionFile, serialize( $repository ) );
-}

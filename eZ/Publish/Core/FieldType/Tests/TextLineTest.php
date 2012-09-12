@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\TextLine\Type as TextLine,
+use eZ\Publish\Core\FieldType\TextLine\Type as TextLineType,
     eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue,
     ReflectionObject;
 
@@ -16,117 +16,252 @@ use eZ\Publish\Core\FieldType\TextLine\Type as TextLine,
  * @group fieldType
  * @group ezstring
  */
-class TextLineTest extends FieldTypeTest
+class TextLineTest extends StandardizedFieldTypeTest
 {
     /**
-     * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
+     * Returns the field type under test.
+     *
+     * This method is used by all test cases to retrieve the field type under
+     * test. Just create the FieldType instance using mocks from the provided
+     * get*Mock() methods and/or custom get*Mock() implementations. You MUST
+     * NOT take care for test case wide caching of the field type, just return
+     * a new instance from this method!
+     *
+     * @return FieldType
      */
-    public function testTextLineValidatorConfigurationSchema()
+    protected function createFieldTypeUnderTest()
     {
-        $ft = new TextLine( $this->validatorService, $this->fieldTypeTools );;
-        self::assertSame(
-            array(
-                "StringLengthValidator" => array(
-                    "minStringLength" => array(
-                        "type" => "int",
-                        "default" => 0
-                    ),
-                    "maxStringLength" => array(
-                        "type" => "int",
-                        "default" => null
-                    )
+        return new TextLineType();
+    }
+
+    /**
+     * Returns the validator configuration schema expected from the field type.
+     *
+     * @return array
+     */
+    protected function getValidatorConfigurationSchemaExpectation()
+    {
+        return array(
+            'StringLengthValidator' => array(
+                'minStringLength' => array(
+                    'type' => 'int',
+                    'default' => 0
+                ),
+                'maxStringLength' => array(
+                    'type' => 'int',
+                    'default' => null
                 )
+            )
+        );
+    }
+
+    /**
+     * Returns the settings schema expected from the field type.
+     *
+     * @return array
+     */
+    protected function getSettingsSchemaExpectation()
+    {
+        return array();
+    }
+
+    /**
+     * Returns the empty value expected from the field type.
+     *
+     * @return void
+     */
+    protected function getEmptyValueExpectation()
+    {
+        return null;
+    }
+
+    /**
+     * Data provider for invalid input to acceptValue().
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The invalid
+     * input to acceptValue(), 2. The expected exception type as a string. For
+     * example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          new \stdClass(),
+     *          'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+     *      ),
+     *      array(
+     *          array(),
+     *          'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInvalidInputForAcceptValue()
+    {
+        return array(
+            array(
+                23,
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
-            $ft->getValidatorConfigurationSchema(),
-            "The validator configuration schema does not match what is expected."
+            array(
+                new TextLineValue( 23 ),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
         );
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
+     * Data provider for valid input to acceptValue().
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The valid
+     * input to acceptValue(), 2. The expected return value from acceptValue().
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          null,
+     *          null
+     *      ),
+     *      array(
+     *          __FILE__,
+     *          new BinaryFileValue( array(
+     *              'path' => __FILE__,
+     *              'fileName' => basename( __FILE__ ),
+     *              'fileSize' => filesize( __FILE__ ),
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'text/plain',
+     *          ) )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
      */
-    public function testTextLineAllowedSettings()
+    public function provideValidInputForAcceptValue()
     {
-        $ft = new TextLine( $this->validatorService, $this->fieldTypeTools );;
-        self::assertEmpty(
-            $ft->getSettingsSchema(),
-            "The set of allowed settings does not match what is expected."
+        return array(
+            array(
+                null,
+                null,
+            ),
+            array(
+                'sindelfingen',
+                new TextLineValue( 'sindelfingen' ),
+            ),
+            array(
+                new TextLineValue( 'sindelfingen' ),
+                new TextLineValue( 'sindelfingen' ),
+            ),
         );
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\TextLine\Type::acceptValue
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * Provide input for the toHash() method
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The valid
+     * input to toHash(), 2. The expected return value from toHash().
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          null,
+     *          null
+     *      ),
+     *      array(
+     *          new BinaryFileValue( array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ) ),
+     *          array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
      */
-    public function testAcceptValueInvalidFormat()
+    public function provideInputForToHash()
     {
-        $ft = new TextLine( $this->validatorService, $this->fieldTypeTools );;
-        $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'acceptValue' );
-        $refMethod->setAccessible( true );
-        $refMethod->invoke( $ft, new TextLineValue( 42 ) );
+        return array(
+            array(
+                null,
+                null
+            ),
+            array(
+                new TextLineValue(),
+                '',
+            ),
+            array(
+                new TextLineValue( 'sindelfingen' ),
+                'sindelfingen',
+            ),
+        );
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\TextLine\Type::acceptValue
+     * Provide input to fromHash() method
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The valid
+     * input to fromHash(), 2. The expected return value from fromHash().
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          null,
+     *          null
+     *      ),
+     *      array(
+     *          array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ),
+     *          new BinaryFileValue( array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ) )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
      */
-    public function testAcceptValueValidFormat()
+    public function provideInputForFromHash()
     {
-        $ft = new TextLine( $this->validatorService, $this->fieldTypeTools );;
-        $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( 'acceptValue' );
-        $refMethod->setAccessible( true );
-
-        $value = new TextLineValue( 'Strings work just fine.' );
-        self::assertSame( $value, $refMethod->invoke( $ft, $value ) );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\TextLine\Type::toPersistenceValue
-     */
-    public function testToPersistenceValue()
-    {
-        $string = 'Test of FieldValue';
-        $ft = new TextLine( $this->validatorService, $this->fieldTypeTools );;
-        $fieldValue = $ft->toPersistenceValue( new TextLineValue( $string ) );
-
-        self::assertSame( $string, $fieldValue->data );
-        self::assertSame( $string, $fieldValue->sortKey );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\TextLine\Value::__construct
-     */
-    public function testBuildFieldValueWithParam()
-    {
-        $text = 'According to developers, strings are good for women health.';
-        $value = new TextLineValue( $text );
-        self::assertSame( $text, $value->text );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\TextLine\Value::__construct
-     */
-    public function testBuildFieldValueWithoutParam()
-    {
-        $value = new TextLineValue;
-        self::assertSame( '', $value->text );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\TextLine\Value::__toString
-     */
-    public function testFieldValueToString()
-    {
-        $string = "Believe it or not, but most geeks find strings very comfortable to work with";
-        $value = new TextLineValue( $string );
-        self::assertSame( $string, (string)$value );
-
-        $value2 = new TextLineValue( (string)$value );
-        self::assertSame(
-            $string,
-            $value2->text,
-            'fromString() and __toString() must be compatible'
+        return array(
+            array(
+                null,
+                null,
+            ),
+            array(
+                '',
+                new TextLineValue(),
+            ),
+            array(
+                'sindelfingen',
+                new TextLineValue( 'sindelfingen' ),
+            ),
         );
     }
 }

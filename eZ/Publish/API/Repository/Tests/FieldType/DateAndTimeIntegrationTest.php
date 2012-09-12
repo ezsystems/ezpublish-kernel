@@ -119,7 +119,7 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
     {
         // We may only create times from timestamps here, since storing will
         // loose information about the timezone.
-        return new DateAndTimeValue( "@123456" );
+        return DateAndTimeValue::fromTimestamp( 123456 );
     }
 
     /**
@@ -184,7 +184,7 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
      */
     public function getValidUpdateFieldData()
     {
-        return new DateAndTimeValue( "@12345678" );
+        return DateAndTimeValue::fromTimestamp( 12345678 );
     }
 
     /**
@@ -301,7 +301,7 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new DateAndTimeValue( '@123456' ),
+                DateAndTimeValue::fromTimestamp( 123456 ),
                 array(
                     'timestamp' => 123456,
                     'rfc850'    => 'Friday, 02-Jan-70 10:17:36 GMT+0000',
@@ -325,7 +325,7 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
                     'timestamp' => 123456,
                     'rfc850'    => 'Friday, 02-Jan-70 10:17:36 GMT+0000',
                 ),
-                new DateAndTimeValue( '@123456' )
+                DateAndTimeValue::fromTimestamp( 123456 )
             ),
         );
     }

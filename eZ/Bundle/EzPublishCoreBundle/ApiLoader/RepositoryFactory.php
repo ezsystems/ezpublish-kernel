@@ -9,9 +9,10 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
-use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
-use eZ\Publish\SPI\IO\Handler as IoHandler;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
+    eZ\Publish\SPI\IO\Handler as IoHandler,
+    eZ\Publish\SPI\Limitation\Type as SPILimitationType,
+    Symfony\Component\DependencyInjection\ContainerInterface;
 
 class RepositoryFactory
 {
@@ -34,6 +35,13 @@ class RepositoryFactory
      */
     protected $externalStorages = array();
 
+    /**
+     * Collection of limitation types for the RoleService.
+     *
+     * @var \eZ\Publish\SPI\Limitation\Type[]
+     */
+    protected $roleLimitations = array();
+
     public function __construct( ContainerInterface $container )
     {
         $this->container = $container;
@@ -53,7 +61,10 @@ class RepositoryFactory
             $persistenceHandler,
             $ioHandler,
             array(
-                'fieldType' => $this->fieldTypes
+                'fieldType'     => $this->fieldTypes,
+                'role'          => array(
+                    'limitationTypes'   => $this->roleLimitations
+                )
             )
         );
     }
@@ -72,6 +83,33 @@ class RepositoryFactory
         {
             return $container->get( $fieldTypeServiceId );
         };
+    }
+
+    /**
+     * Registers an external storage handler for a field type, identified by $fieldTypeAlias.
+     * They are being registered as closures so that they will be lazy loaded.
+     *
+     * @param string $serviceId The external storage handler service Id
+     * @param string $fieldTypeAlias The field type alias (e.g. "ezstring")
+     */
+    public function registerExternalStorageHandler( $serviceId, $fieldTypeAlias )
+    {
+        $container = $this->container;
+        $this->externalStorages[$fieldTypeAlias] = function () use ( $container, $serviceId )
+        {
+            return $container->get( $serviceId );
+        };
+    }
+
+    /**
+     * Registers a limitation type for the RoleService.
+     *
+     * @param string $limitationName
+     * @param \eZ\Publish\SPI\Limitation\Type $limitationType
+     */
+    public function registerLimitationType( $limitationName, SPILimitationType $limitationType )
+    {
+        $this->roleLimitations[$limitationName] = $limitationType;
     }
 
     /**

@@ -31,8 +31,6 @@ class BinaryFileTest extends BinaryBaseTest
     protected function createFieldTypeUnderTest()
     {
         return new BinaryFileType(
-            $this->getValidatorServiceMock(),
-            $this->getFieldTypeToolsMock(),
             $this->getFileServiceMock(),
             $this->getMimeTypeDetectorMock()
         );
@@ -120,6 +118,130 @@ class BinaryFileTest extends BinaryBaseTest
                     'mimeType' => 'application/text+php',
                 ) )
             ),
+        );
+    }
+
+    /**
+     * Provide input for the toHash() method
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The valid
+     * input to toHash(), 2. The expected return value from toHash().
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          null,
+     *          null
+     *      ),
+     *      array(
+     *          new BinaryFileValue( array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ) ),
+     *          array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInputForToHash()
+    {
+        return array(
+            array(
+                null,
+                null
+            ),
+            array(
+                new BinaryFileValue( array(
+                    'path' => 'some/file/here',
+                    'fileName' => 'sindelfingen.jpg',
+                    'fileSize' => 2342,
+                    'downloadCount' => 0,
+                    'mimeType' => 'image/jpeg',
+                ) ),
+                array(
+                    'path' => 'some/file/here',
+                    'fileName' => 'sindelfingen.jpg',
+                    'fileSize' => 2342,
+                    'downloadCount' => 0,
+                    'mimeType' => 'image/jpeg',
+                )
+            ),
+            // ...
+        );
+    }
+
+    /**
+     * Provide input to fromHash() method
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The valid
+     * input to fromHash(), 2. The expected return value from fromHash().
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          null,
+     *          null
+     *      ),
+     *      array(
+     *          array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ),
+     *          new BinaryFileValue( array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ) )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInputForFromHash()
+    {
+        return array(
+            array(
+                null,
+                null
+            ),
+            array(
+                array(
+                    'path' => 'some/file/here',
+                    'fileName' => 'sindelfingen.jpg',
+                    'fileSize' => 2342,
+                    'downloadCount' => 0,
+                    'mimeType' => 'image/jpeg',
+                ),
+                new BinaryFileValue( array(
+                    'path' => 'some/file/here',
+                    'fileName' => 'sindelfingen.jpg',
+                    'fileSize' => 2342,
+                    'downloadCount' => 0,
+                    'mimeType' => 'image/jpeg',
+                ) )
+            ),
+            // TODO: Provide upload struct (via REST)!
         );
     }
 }

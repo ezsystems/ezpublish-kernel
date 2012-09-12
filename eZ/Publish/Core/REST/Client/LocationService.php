@@ -81,7 +81,7 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
     /**
      * Instantiates a new location create class
      *
-     * @param int $parentLocationId the parent under which the new location should be created
+     * @param mixed $parentLocationId the parent under which the new location should be created
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      */
@@ -89,7 +89,7 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
     {
         return new LocationCreateStruct(
             array(
-                'parentLocationId' => (int) $parentLocationId
+                'parentLocationId' => $parentLocationId
             )
         );
     }
@@ -112,9 +112,10 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
         $inputMessage = $this->outputVisitor->visit( $locationCreateStruct );
         $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Location' );
 
+        $values = $this->urlHandler->parse( 'object', $contentInfo->id );
         $result = $this->client->request(
             'POST',
-            $contentInfo->id,
+            $this->urlHandler->generate( 'objectLocations', array( 'object' => $values['object'] ) ),
             $inputMessage
         );
 

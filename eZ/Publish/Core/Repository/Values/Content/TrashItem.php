@@ -34,6 +34,21 @@ class TrashItem extends APITrashItem
     }
 
     /**
+     * Function where list of properties are returned
+     *
+     * Override to add dynamic properties
+     * @uses parent::getProperties()
+     *
+     * @param array $dynamicProperties
+     *
+     * @return array
+     */
+    protected function getProperties( $dynamicProperties = array( 'contentId', 'path' ) )
+    {
+        return parent::getProperties( $dynamicProperties );
+    }
+
+    /**
      * Magic getter for retrieving convenience properties
      *
      * @param string $property The name of the property to retrieve
@@ -46,6 +61,13 @@ class TrashItem extends APITrashItem
         {
             case 'contentId':
                 return $this->contentInfo->id;
+            case 'path':
+                if ( $this->path !== null )
+                    return $this->path;
+                else if ( isset( $this->pathString[1] ) && $this->pathString[0] === '/' )
+                    return $this->path = explode( '/', trim( $this->pathString, '/' ) );
+                else
+                    return $this->path = array();
         }
 
         return parent::__get( $property );
@@ -60,7 +82,7 @@ class TrashItem extends APITrashItem
      */
     public function __isset( $property )
     {
-        if ( $property === 'contentId' )
+        if ( $property === 'contentId' || $property === 'path' )
             return true;
 
         return parent::__isset( $property );

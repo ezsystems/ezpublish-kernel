@@ -42,7 +42,7 @@ class IOTest extends BaseIOServiceTest
             if ( !isset( $_ENV['legacyKernel'] ) )
             {
                 self::markTestSkipped(
-                    'Legacy kernel is needed to run these tests. Please ensure that "legacyKernel" environment variable is properly set with a eZ\\Publish\\Legacy\\Kernel instance'
+                    'Legacy kernel is needed to run these tests. Please ensure that "legacyKernel" environment variable is properly set with a eZ\\Publish\\Core\\MVC\\Legacy\\Kernel instance'
                 );
             }
 

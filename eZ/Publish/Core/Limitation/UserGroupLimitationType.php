@@ -17,6 +17,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\UserGroupLimitation as APIUserGroupLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * UserGroupLimitation is a Content Limitation
@@ -61,7 +62,7 @@ class UserGroupLimitationType implements SPILimitationTypeInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
      *         Example: If LimitationValue is instance of ContentTypeLimitationValue, and Type is SectionLimitationType.
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
-     *         Example if OwnerLimitationValue->limitationValues[0] is not one of: [ 1,  2 ]
+     *         Example if OwnerLimitationValue->limitationValues[0] is not one of: [ 1 ]
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -121,7 +122,26 @@ class UserGroupLimitationType implements SPILimitationTypeInterface
      */
     public function getCriterion( APILimitationValue $value, Repository $repository )
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( 'getCriterion' );
+        if ( empty( $value->limitationValues )  )// no limitation values
+            throw new \RuntimeException( "\$value->limitationValues is empty, it should not have been stored in the first place" );
+
+        if ( $value->limitationValues[0] != 1 )
+        {
+            throw new BadStateException(
+                'Parent User Group limitation',
+                'expected limitation value to be 1 but got:' . $value->limitationValues[0]
+            );
+        }
+
+        $groupIds = array();
+        foreach ( $repository->getUserService()->loadUserGroupsOfUser( $repository->getCurrentUser() ) as $group )
+            $groupIds[] = $group->id;
+
+        return new Criterion\UserMetadata(
+            Criterion\UserMetadata::GROUP,
+            Criterion\Operator::IN,
+            $groupIds
+        );
     }
 
     /**

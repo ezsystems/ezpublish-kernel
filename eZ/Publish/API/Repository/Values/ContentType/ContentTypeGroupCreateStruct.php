@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 class ContentTypeGroupCreateStruct extends ValueObject
 {
     /**
-     * Readable string identifier of a group
+     * Readable & unique string identifier of a group
      *
      * @required
      *

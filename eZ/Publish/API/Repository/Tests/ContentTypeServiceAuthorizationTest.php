@@ -41,7 +41,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         );
         // $creatorId is the ID of the administrator user
         $groupCreate->creatorId = $creatorId;
-        $groupCreate->creationDate = $this->getRepository()->createDateTime();
+        $groupCreate->creationDate = $this->createDateTime();
         $groupCreate->mainLanguageCode = 'ger-DE';
         $groupCreate->names = array( 'eng-GB' => 'A name.' );
         $groupCreate->descriptions = array( 'eng-GB' => 'A description.' );
@@ -78,7 +78,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $groupUpdate->identifier = 'Teardown';
         // $modifierId is the ID of a random user
         $groupUpdate->modifierId = $modifierId;
-        $groupUpdate->modificationDate = $this->getRepository()->createDateTime();
+        $groupUpdate->modificationDate = $this->createDateTime();
         $groupUpdate->mainLanguageCode = 'eng-GB';
 
         $groupUpdate->names = array(
@@ -158,7 +158,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $typeUpdate->defaultAlwaysAvailable = false;
         // $modifierId is the ID of a random user
         $typeUpdate->modifierId = $modifierId;
-        $typeUpdate->modificationDate = $this->getRepository()->createDateTime();
+        $typeUpdate->modificationDate = $this->createDateTime();
         $typeUpdate->names = array(
             'eng-GB' => 'News article',
             'ger-DE' => 'Nachrichten-Artikel',

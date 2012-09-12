@@ -232,7 +232,8 @@ EOT;
                         2 => 'Third'
                     )
                 ) )
-            ) )
+            ) ),
+            'defaultValue' => new FieldValue( array( 'data' => array() ) )
         ) );
 
         $actualFieldDefinition = new PersistenceFieldDefinition();

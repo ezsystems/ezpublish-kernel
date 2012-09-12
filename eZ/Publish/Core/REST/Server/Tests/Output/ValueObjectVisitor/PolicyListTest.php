@@ -29,7 +29,7 @@ class PolicyListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $policyList = new PolicyList( 42, array() );
+        $policyList = new PolicyList( array(), 42 );
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -95,11 +95,11 @@ class PolicyListTest extends ValueObjectVisitorBaseTest
         $generator->startDocument( null );
 
         $policyList = new PolicyList(
-            42,
             array(
                 new User\Policy(),
                 new User\Policy(),
-            )
+            ),
+            42
         );
 
         $this->getVisitorMock()->expects( $this->exactly( 2 ) )

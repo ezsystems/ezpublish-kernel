@@ -20,9 +20,10 @@ class SetupFactory extends Repository\Tests\SetupFactory
     /**
      * Returns a configured repository for testing.
      *
+     * @param bool $initializeFromScratch
      * @return \eZ\Publish\API\Repository\Repository
      */
-    public function getRepository()
+    public function getRepository( $initializeFromScratch = true )
     {
         return require __DIR__ . '/../../common.php';
     }

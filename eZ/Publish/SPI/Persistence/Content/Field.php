@@ -54,11 +54,4 @@ class Field extends ValueObject
      * @todo Normally we would use a create struct here
      */
     public $versionNo;
-
-    public function __clone()
-    {
-        $this->id = null;
-        if ( isset( $this->value ) )
-            $this->value = clone $this->value;
-    }
 }

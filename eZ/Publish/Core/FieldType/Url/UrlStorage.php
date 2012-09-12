@@ -45,11 +45,12 @@ class UrlStorage extends GatewayBasedStorage
     }
 
     /**
-     * @param array $fieldId
+     * @param VersionInfo $versionInfo
+     * @param array $fieldIds
      * @param array $context
      * @return bool
      */
-    public function deleteFieldData( array $fieldId, array $context )
+    public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
     }
 

@@ -38,9 +38,10 @@ abstract class Gateway extends StorageGateway
     /**
      * Deletes the data for all given $fieldIds
      *
+     * @param VersionInfo $versionInfo
      * @param array $fieldIds
      * @return void
      */
-    abstract public function deleteFieldData( array $fieldIds );
+    abstract public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds );
 }
 

@@ -32,7 +32,6 @@ use eZ\Publish\Core\FieldType\GatewayBasedStorage,
  * type in eZ Publish 4:
  *  - account_key
  *  - has_stored_login
- *  - is_logged_in
  *  - is_enabled
  *  - is_locked
  *  - last_visit
@@ -102,11 +101,12 @@ class UserStorage extends GatewayBasedStorage
     }
 
     /**
-     * @param array $fieldId Array of field Ids
+     * @param VersionInfo $versionInfo
+     * @param array $fieldIds Array of field Ids
      * @param array $context
      * @return bool
      */
-    public function deleteFieldData( array $fieldId, array $context )
+    public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
         // Only the UserService may update user data
     }

@@ -1,7 +1,4 @@
 parameters:
-    ezpublish.api.fieldTypeValidator.class: eZ\Publish\Core\Repository\ValidatorService
-    ezpublish.api.fieldTypeTools.class: eZ\Publish\Core\Repository\FieldTypeTools
-
     ezpublish.fieldType.class: eZ\Publish\Core\FieldType\FieldType
     ezpublish.fieldType.ezauthor.class: eZ\Publish\Core\FieldType\Author\Type
     ezpublish.fieldType.ezbinaryfile.class: eZ\Publish\Core\FieldType\BinaryFile\Type
@@ -47,17 +44,12 @@ parameters:
     ezpublish.fieldType.ezgmaplocation.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezcomcomments.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezobjectrelationlist.class: eZ\Publish\Core\FieldType\TextLine\Type
+    ezpublish.fieldType.ezuser.class: eZ\Publish\Core\FieldType\User\Type
+    ezpublish.fieldType.ezuser.externalStorage.class: eZ\Publish\Core\FieldType\User\UserStorage
 
 services:
-    ezpublish.api.fieldTypeValidator:
-        class: %ezpublish.api.fieldTypeValidator.class%
-
-    ezpublish.api.fieldTypeTools:
-        class: %ezpublish.api.fieldTypeTools.class%
-
     ezpublish.fieldType:
         class: %ezpublish.fieldType.class%
-        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
         abstract: true
 
     ezpublish.fieldType.ezauthor:
@@ -69,7 +61,7 @@ services:
     ezpublish.fieldType.ezbinaryfile:
         class: %ezpublish.fieldType.ezbinaryfile.class%
         parent: ezpublish.fieldType
-        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools, @ezpublish.fieldType.ezbinaryfile.fileService]
+        arguments: [@ezpublish.fieldType.ezbinaryfile.fileService]
         tags:
             - {name: ezpublish.fieldType, alias: ezbinaryfile}
 
@@ -122,7 +114,6 @@ services:
     #ezpublish.fieldType.ezimage:
     #    class: %ezpublish.fieldType.ezimage.class%
     #    parent: ezpublish.fieldType
-    #    parameters: [@ezpublish.api.repository, @ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools]
     #    tags:
     #        - {name: ezpublish.fieldType, alias: ezimage}
 
@@ -141,7 +132,6 @@ services:
     ezpublish.fieldType.ezmedia:
         class: %ezpublish.fieldType.ezmedia.class%
         parent: ezpublish.fieldType
-        arguments: [@ezpublish.api.fieldTypeValidator, @ezpublish.api.fieldTypeTools, @ezpublish.api.repository]
         tags:
             - {name: ezpublish.fieldType, alias: ezmedia}
 
@@ -242,3 +232,15 @@ services:
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezobjectrelationlist}
+
+    ezpublish.fieldType.ezuser:
+        class: %ezpublish.fieldType.ezuser.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezuser}
+
+    ezpublish.fieldType.ezuser.externalStorage:
+        class: %ezpublish.fieldType.ezuser.externalStorage.class%
+        arguments: [[]]
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezuser}

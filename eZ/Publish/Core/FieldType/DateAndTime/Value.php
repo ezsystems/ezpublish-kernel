@@ -36,41 +36,49 @@ class Value extends BaseValue
     /**
      * Construct a new Value object and initialize with $dateTime
      *
-     * @param \DateTime|string $dateTime Date/Time as a DateTime object or a string understood by the DateTime class
+     * @param \DateTime $dateTime Date/Time as a DateTime object or a string understood by the DateTime class
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $dateTime does not comply to a valid dateTime or string
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $dateTime does not comply to a valid date format string
      */
-    public function __construct( $dateTime = "now" )
+    public function __construct( \DateTime $dateTime )
     {
-        if ( $dateTime !== null && $dateTime !== 0 )
+
+        $this->value = $dateTime;
+    }
+
+    /**
+     * Creates a Value from the given $dateString
+     *
+     * @param string $dateString
+     * @return eZ\Publish\Core\FieldType\DateAndTime\Value
+     */
+    public static function fromString( $dateString )
+    {
+        try
         {
-            if ( is_string( $dateTime ) )
-            {
-                try
-                {
-                    $dateTime = new DateTime( $dateTime );
-                }
-                catch ( Exception $e )
-                {
-                    throw new InvalidArgumentValue( '$dateTime', $dateTime, __CLASS__, $e );
-                }
-            }
-            else if ( is_int( $dateTime ) )
-            {
-                try
-                {
-                    $dateTime = new DateTime( "@{$dateTime}" );
-                }
-                catch ( Exception $e )
-                {
-                    throw new InvalidArgumentValue( '$dateTime', $dateTime, __CLASS__, $e );
-                }
-            }
+            return new static( new \DateTime( $dateString ) );
+        }
+        catch ( Exception $e )
+        {
+            throw new InvalidArgumentValue( '$dateString', $dateString, __CLASS__, $e );
+        }
+    }
 
-            if ( ! $dateTime instanceof DateTime )
-                throw new InvalidArgumentType( '$dateTime', "DateTime", $dateTime );
-
-            $this->value = $dateTime;
+    /**
+     * Creates a Value from the given $timestamp
+     *
+     * @param int $timestamp
+     * @return eZ\Publish\Core\FieldType\DateAndTime\Value
+     */
+    public static function fromTimestamp( $timestamp )
+    {
+        try
+        {
+            return new static( new \DateTime( "@{$timestamp}" ) );
+        }
+        catch ( Exception $e )
+        {
+            throw new InvalidArgumentValue( '$timestamp', $timestamp, __CLASS__, $e );
         }
     }
 

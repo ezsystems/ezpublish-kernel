@@ -23,6 +23,28 @@ class Xml extends Generator
     protected $xmlWriter;
 
     /**
+     * Generator for field type hash values
+     *
+     * @var eZ\Publish\Core\REST\Common\Output\Generator\Xml\FieldTypeHashGenerator
+     */
+    protected $hashGenerator;
+
+    /**
+     * Keeps track if the document received some content
+     *
+     * @var bool
+     */
+    protected $isEmpty = true;
+
+    /**
+     * @param eZ\Publish\Core\REST\Common\Output\Generator\Xml\FieldTypeHashGenerator $hashGenerator
+     */
+    public function __construct( Xml\FieldTypeHashGenerator $hashGenerator )
+    {
+        $this->hashGenerator = $hashGenerator;
+    }
+
+    /**
      * Start document
      *
      * @param mixed $data
@@ -31,10 +53,22 @@ class Xml extends Generator
     {
         $this->checkStartDocument( $data );
 
+        $this->isEmpty = true;
+
         $this->xmlWriter = new \XMLWriter();
         $this->xmlWriter->openMemory();
         $this->xmlWriter->setIndent( true );
         $this->xmlWriter->startDocument( '1.0', 'UTF-8' );
+    }
+
+    /**
+     * Returns if the document is empty or already contains data
+     *
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return $this->isEmpty;
     }
 
     /**
@@ -62,6 +96,8 @@ class Xml extends Generator
     public function startObjectElement( $name, $mediaTypeName = null )
     {
         $this->checkStartObjectElement( $name );
+
+        $this->isEmpty = false;
 
         $mediaTypeName = $mediaTypeName ?: $name;
 
@@ -92,6 +128,8 @@ class Xml extends Generator
     {
         $this->checkStartHashElement( $name );
 
+        $this->isEmpty = false;
+
         $this->xmlWriter->startElement( $name );
     }
 
@@ -112,37 +150,11 @@ class Xml extends Generator
      *
      * @param string $name
      * @param string $value
-     */
-    public function startValueElement( $name, $value )
-    {
-        $this->checkStartValueElement( $name );
-
-        $this->xmlWriter->startElement( $name );
-        $this->xmlWriter->text( $value );
-    }
-
-    /**
-     * End value element
-     *
-     * @param string $name
-     */
-    public function endValueElement( $name )
-    {
-        $this->checkEndValueElement( $name );
-
-        $this->xmlWriter->endElement();
-    }
-
-    /**
-     * Start hash value element
-     *
-     * @param string $name
-     * @param string $value
      * @param array $attributes
      */
-    public function startHashValueElement( $name, $value, $attributes = array() )
+    public function startValueElement( $name, $value, $attributes = array() )
     {
-        $this->checkStartHashValueElement( $name );
+        $this->checkStartValueElement( $name );
 
         $this->xmlWriter->startElement( $name );
 
@@ -157,13 +169,13 @@ class Xml extends Generator
     }
 
     /**
-     * End hash value element
+     * End value element
      *
      * @param string $name
      */
-    public function endHashValueElement( $name )
+    public function endValueElement( $name )
     {
-        $this->checkEndHashValueElement( $name );
+        $this->checkEndValueElement( $name );
 
         $this->xmlWriter->endElement();
     }
@@ -223,5 +235,19 @@ class Xml extends Generator
     public function getMediaType( $name )
     {
         return $this->generateMediaType( $name, 'xml' );
+    }
+
+    /**
+     * Generates a generic representation of the scalar, hash or list given in
+     * $hashValue into the document, using an element of $hashElementName as
+     * its parent
+     *
+     * @param string $hashElementName
+     * @param mixed $hashValue
+     * @return void
+     */
+    public function generateFieldTypeHash( $hashElementName, $hashValue )
+    {
+        $this->hashGenerator->generateHashValue( $this->xmlWriter, $hashElementName, $hashValue );
     }
 }

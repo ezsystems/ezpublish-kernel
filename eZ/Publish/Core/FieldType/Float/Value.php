@@ -27,10 +27,9 @@ class Value extends BaseValue
      *
      * @param float $value
      */
-    public function __construct( $value = null )
+    public function __construct( $value )
     {
-        if ( $value !== null )
-            $this->value = $value;
+        $this->value = $value;
     }
 
     /**

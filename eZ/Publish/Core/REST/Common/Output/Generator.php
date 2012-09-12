@@ -30,6 +30,7 @@ abstract class Generator
     public function reset()
     {
         $this->stack = array();
+        $this->isEmpty = true;
     }
 
     /**
@@ -38,6 +39,13 @@ abstract class Generator
      * @param mixed $data
      */
     abstract public function startDocument( $data );
+
+    /**
+     * Returns if the document is empty or already contains data
+     *
+     * @return bool
+     */
+    abstract public function isEmpty();
 
     /**
      * Check start document
@@ -91,7 +99,7 @@ abstract class Generator
      */
     protected function checkStartObjectElement( $data )
     {
-        $this->checkStart( 'objectElement', $data, array( 'document', 'objectElement', 'list' ) );
+        $this->checkStart( 'objectElement', $data, array( 'document', 'objectElement', 'hashElement', 'list' ) );
 
         $last = count( $this->stack ) - 2;
         if ( $this->stack[$last][0] !== 'list' )
@@ -138,7 +146,7 @@ abstract class Generator
      */
     protected function checkStartHashElement( $data )
     {
-        $this->checkStart( 'hashElement', $data, array( 'document', 'objectElement', 'list' ) );
+        $this->checkStart( 'hashElement', $data, array( 'document', 'objectElement', 'hashElement', 'list' ) );
 
         $last = count( $this->stack ) - 2;
         if ( $this->stack[$last][0] !== 'list' )
@@ -186,7 +194,7 @@ abstract class Generator
      */
     protected function checkStartValueElement( $data )
     {
-        $this->checkStart( 'valueElement', $data, array( 'objectElement' ) );
+        $this->checkStart( 'valueElement', $data, array( 'objectElement', 'hashElement', 'list' ) );
     }
 
     /**
@@ -207,42 +215,6 @@ abstract class Generator
     }
 
     /**
-     * Start hash value element
-     *
-     * @param string $name
-     * @param string $value
-     * @param array $attributes
-     */
-    abstract public function startHashValueElement( $name, $value, $attributes = array() );
-
-    /**
-     * Check start hash value element
-     *
-     * @param mixed $data
-     */
-    protected function checkStartHashValueElement( $data )
-    {
-        $this->checkStart( 'hashValueElement', $data, array( 'hashElement' ) );
-    }
-
-    /**
-     * End hash value element
-     *
-     * @param string $name
-     */
-    abstract public function endHashValueElement( $name );
-
-    /**
-     * Check end hash value element
-     *
-     * @param mixed $data
-     */
-    protected function checkEndHashValueElement( $data )
-    {
-        $this->checkEnd( 'hashValueElement', $data );
-    }
-
-    /**
      * Start list
      *
      * @param string $name
@@ -256,7 +228,7 @@ abstract class Generator
      */
     protected function checkStartList( $data )
     {
-        $this->checkStart( 'list', $data, array( 'objectElement' ) );
+        $this->checkStart( 'list', $data, array( 'objectElement', 'hashElement' ) );
     }
 
     /**
@@ -291,7 +263,7 @@ abstract class Generator
      */
     protected function checkStartAttribute( $data )
     {
-        $this->checkStart( 'attribute', $data, array( 'objectElement' ) );
+        $this->checkStart( 'attribute', $data, array( 'objectElement', 'hashElement' ) );
     }
 
     /**
@@ -330,6 +302,17 @@ abstract class Generator
     {
         return "application/vnd.ez.api.{$name}+{$type}";
     }
+
+    /**
+     * Generates a generic representation of the scalar, hash or list given in
+     * $hashValue into the document, using an element of $hashElementName as
+     * its parent
+     *
+     * @param string $hashElementName
+     * @param mixed $hashValue
+     * @return void
+     */
+    abstract public function generateFieldTypeHash( $hashElementName, $hashValue );
 
     /**
      * Check close / end operation

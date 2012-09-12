@@ -54,6 +54,8 @@ class ContentMetadataUpdateStruct extends ValueObject
     /**
      * if set this value changes the remoteId.
      *
+     * Needs to be a unique Content->remoteId string value.
+     *
      * @var string
      */
     public $remoteId;

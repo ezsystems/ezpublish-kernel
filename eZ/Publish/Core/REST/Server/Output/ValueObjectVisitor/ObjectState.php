@@ -62,8 +62,8 @@ class ObjectState extends ValueObjectVisitor
 
         foreach ( $data->objectState->getNames() as $languageCode => $name )
         {
-            $generator->startHashValueElement( 'value', $name, array( 'languageCode' => $languageCode ) );
-            $generator->endHashValueElement( 'value' );
+            $generator->startValueElement( 'value', $name, array( 'languageCode' => $languageCode ) );
+            $generator->endValueElement( 'value' );
         }
 
         $generator->endHashElement( 'names' );
@@ -72,8 +72,8 @@ class ObjectState extends ValueObjectVisitor
 
         foreach ( $data->objectState->getDescriptions() as $languageCode => $description )
         {
-            $generator->startHashValueElement( 'value', $description, array( 'languageCode' => $languageCode ) );
-            $generator->endHashValueElement( 'value' );
+            $generator->startValueElement( 'value', $description, array( 'languageCode' => $languageCode ) );
+            $generator->endValueElement( 'value' );
         }
 
         $generator->endHashElement( 'descriptions' );

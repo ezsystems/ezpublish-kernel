@@ -131,13 +131,6 @@ class Repository implements RepositoryInterface
     protected $fieldTypeService;
 
     /**
-     * Instance of validator service
-     *
-     * @var \eZ\Publish\Core\Repository\ValidatorService
-     */
-    protected $validatorService;
-
-    /**
      * Instance of name schema resolver service
      *
      * @var \eZ\Publish\Core\Repository\NameSchemaService
@@ -541,22 +534,9 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Get ValidatorService
-     *
-     * @return \eZ\Publish\Core\Repository\ValidatorService
-     */
-    public function getValidatorService()
-    {
-        if ( $this->validatorService !== null )
-            return $this->validatorService;
-
-        $this->validatorService = new ValidatorService();
-        return $this->validatorService;
-    }
-
-    /**
      * Get NameSchemaResolverService
      *
+     * @access private Internal service for the Core Services
      * @return \eZ\Publish\Core\Repository\NameSchemaService
      */
     public function getNameSchemaService()

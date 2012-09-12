@@ -267,14 +267,4 @@ abstract class Gateway
      * @return void
      */
     abstract public function publishTypeAndFields( $typeId, $sourceStatus, $targetStatus );
-
-    /**
-     * Returns if the field identified by $fieldDefinitionId and $status is
-     * translateable
-     *
-     * @param mixed $fieldDefinitionId
-     * @param int $status
-     * @return bool
-     */
-    abstract public function isFieldTranslatable( $fieldDefinitionId, $status );
 }

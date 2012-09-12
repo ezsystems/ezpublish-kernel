@@ -31,8 +31,6 @@ class MediaTest extends BinaryBaseTest
     protected function createFieldTypeUnderTest()
     {
         return new MediaType(
-            $this->getValidatorServiceMock(),
-            $this->getFieldTypeToolsMock(),
             $this->getFileServiceMock(),
             $this->getMimeTypeDetectorMock()
         );
@@ -238,6 +236,145 @@ class MediaTest extends BinaryBaseTest
                     'height' => 42,
                 ) )
             ),
+        );
+    }
+
+    /**
+     * Provide input for the toHash() method
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The valid
+     * input to toHash(), 2. The expected return value from toHash().
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          null,
+     *          null
+     *      ),
+     *      array(
+     *          new BinaryFileValue( array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ) ),
+     *          array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInputForToHash()
+    {
+        return array(
+            array(
+                null,
+                null
+            ),
+            array(
+                new MediaValue( array(
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => filesize( __FILE__ ),
+                    'mimeType' => 'text/plain',
+                    'hasController' => false,
+                    'autoplay' => false,
+                    'loop' => true,
+                    'width' => 0,
+                    'height' => 0,
+                ) ),
+                array(
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => filesize( __FILE__ ),
+                    'mimeType' => 'text/plain',
+                    'hasController' => false,
+                    'autoplay' => false,
+                    'loop' => true,
+                    'width' => 0,
+                    'height' => 0,
+                )
+            ),
+        );
+    }
+
+    /**
+     * Provide input to fromHash() method
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The valid
+     * input to fromHash(), 2. The expected return value from fromHash().
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          null,
+     *          null
+     *      ),
+     *      array(
+     *          array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ),
+     *          new BinaryFileValue( array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ) )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInputForFromHash()
+    {
+        return array(
+            array(
+                null,
+                null
+            ),
+            array(
+                array(
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => filesize( __FILE__ ),
+                    'mimeType' => 'text/plain',
+                    'hasController' => false,
+                    'autoplay' => false,
+                    'loop' => true,
+                    'width' => 0,
+                    'height' => 0,
+                ),
+                new MediaValue( array(
+                    'path' => __FILE__,
+                    'fileName' => basename( __FILE__ ),
+                    'fileSize' => filesize( __FILE__ ),
+                    'mimeType' => 'text/plain',
+                    'hasController' => false,
+                    'autoplay' => false,
+                    'loop' => true,
+                    'width' => 0,
+                    'height' => 0,
+                ) ),
+            ),
+            // TODO: Test for REST upload hash
         );
     }
 }

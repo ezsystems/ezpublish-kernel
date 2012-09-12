@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 class ContentTypeUpdateStruct extends ValueObject
 {
     /**
-     * If set the identifier of a type is changed to this value
+     * If set the unique identifier of a type is changed to this value
      *
      * @var string
      */

@@ -9,6 +9,9 @@
 
 namespace eZ\Publish\Core\FieldType\TextLine;
 use eZ\Publish\Core\FieldType\FieldType,
+    eZ\Publish\Core\FieldType\ValidationError,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
@@ -18,9 +21,125 @@ use eZ\Publish\Core\FieldType\FieldType,
  */
 class Type extends FieldType
 {
-    protected $allowedValidators = array(
-        "StringLengthValidator"
+    protected $validatorConfigurationSchema = array(
+        'StringLengthValidator' => array(
+            'minStringLength' => array(
+                'type' => 'int',
+                'default' => 0
+            ),
+            'maxStringLength' => array(
+                'type' => 'int',
+                'default' => null
+            )
+        )
     );
+
+    /**
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $validatorConfiguration
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValidatorConfiguration( $validatorConfiguration )
+    {
+        $validationErrors = array();
+
+        foreach ( (array)$validatorConfiguration as $validatorIdentifier => $constraints )
+        {
+            if ( $validatorIdentifier !== 'StringLengthValidator' )
+            {
+                $validationErrors[] = new ValidationError(
+                    "Validator '%validator%' is unknown",
+                    null,
+                    array(
+                        "validator" => $validatorIdentifier
+                    )
+                );
+
+                continue;
+            }
+            foreach ( $constraints as $name => $value )
+            {
+                switch ( $name )
+                {
+                    case "minStringLength":
+                    case "maxStringLength":
+                        if ( $value !== false && !is_integer( $value ) )
+                        {
+                            $validationErrors[] = new ValidationError(
+                                "Validator parameter '%parameter%' value must be of integer type",
+                                null,
+                                array(
+                                    "parameter" => $name
+                                )
+                            );
+                        }
+                        break;
+                    default:
+                        $validationErrors[] = new ValidationError(
+                            "Validator parameter '%parameter%' is unknown",
+                            null,
+                            array(
+                                "parameter" => $name
+                            )
+                        );
+                }
+            }
+        }
+
+        return $validationErrors;
+    }
+
+    /**
+     * Validates a field based on the validators in the field definition
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
+     * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field for which an action is performed
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validate( FieldDefinition $fieldDefinition, $fieldValue )
+    {
+        $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
+        $constraints = isset($validatorConfiguration['StringLengthValidator']) ?
+            $validatorConfiguration['StringLengthValidator'] :
+            array();
+
+        $validationErrors = array();
+
+        if ( isset( $constraints['maxStringLength'] ) &&
+            $constraints['maxStringLength'] !== false &&
+            $constraints['maxStringLength'] !== 0 &&
+            strlen( $fieldValue->text ) > $constraints['maxStringLength'] )
+        {
+            $validationErrors[] = new ValidationError(
+                "The string can not exceed %size% character.",
+                "The string can not exceed %size% characters.",
+                array(
+                    "size" => $constraints['maxStringLength']
+                )
+            );
+        }
+
+        if ( isset( $constraints['minStringLength'] ) &&
+            $constraints['minStringLength'] !== false &&
+            $constraints['minStringLength'] !== 0 &&
+            strlen( $fieldValue->text ) < $constraints['minStringLength'] )
+        {
+            $validationErrors[] = new ValidationError(
+                "The string can not be shorter than %size% character.",
+                "The string can not be shorter than %size% characters.",
+                array(
+                    "size" => $constraints['minStringLength']
+                )
+            );
+        }
+
+        return $validationErrors;
+    }
 
     /**
      * Return the field type identifier for this field type

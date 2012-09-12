@@ -336,4 +336,19 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
             $refl->getProperties( ReflectionProperty::IS_PUBLIC )
         );
     }
+
+    /**
+     * @static
+     * @return string
+     */
+    static protected function getInstallationDir()
+    {
+        static $installDir = null;
+        if ($installDir === null)
+        {
+            $config = require 'config.php';
+            $installDir = $config['service']['parameters']['install_dir'];
+        }
+        return $installDir;
+    }
 }

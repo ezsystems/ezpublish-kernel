@@ -10,8 +10,6 @@
 namespace eZ\Publish\Core\FieldType\Image;
 use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\FieldType\FileService,
-    eZ\Publish\Core\Repository\ValidatorService,
-    eZ\Publish\Core\Repository\FieldTypeTools,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\Core\FieldType\ValidationError,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
@@ -46,9 +44,8 @@ class Type extends FieldType
      *
      * @param FileService $fileService
      */
-    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools, FileService $fileService )
+    public function __construct( FileService $fileService )
     {
-        parent::__construct( $validatorService, $fieldTypeTools );
         $this->fileService = $fileService;
     }
 
@@ -85,35 +82,6 @@ class Type extends FieldType
     public function getEmptyValue()
     {
         return null;
-    }
-
-    /**
-     * Returns a schema for supported validator configurations.
-     *
-     * This implementation returns a three dimensional map containing for each validator configuration
-     * referenced by identifier a map of supported parameters which are defined by a type and a default value
-     * (see example).
-     * Example:
-     * <code>
-     *  array(
-     *      'stringLength' => array(
-     *          'minStringLength' => array(
-     *              'type'    => 'int',
-     *              'default' => 0,
-     *          ),
-     *          'maxStringLength' => array(
-     *              'type'    => 'int'
-     *              'default' => null,
-     *          )
-     *      ),
-     *  );
-     * </code>
-     * The validator identifier is mapped to a Validator class which can be retrieved via the
-     * ValidatorService.
-     */
-    public function getValidatorConfigurationSchema()
-    {
-        return $this->validatorConfigurationSchema;
     }
 
     /**

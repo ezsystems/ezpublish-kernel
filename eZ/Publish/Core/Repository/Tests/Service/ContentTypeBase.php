@@ -142,7 +142,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testCreateContentTypeGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::createContentTypeGroup() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -566,7 +566,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testUpdateContentTypeGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateContentTypeGroup() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -669,7 +669,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testDeleteContentTypeGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::deleteContentTypeGroup() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -810,7 +810,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testNewContentTypeCreateStructThrowsInvalidArgumentValue()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::newContentTypeCreateStruct() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -880,7 +880,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testNewFieldDefinitionCreateStructThrowsInvalidArgumentValue()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::newContentTypeCreateStruct() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -1718,7 +1718,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testLoadContentTypeThrowsInvalidArgumentValue()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadContentType() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -1794,7 +1794,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testLoadContentTypeByIdentifierThrowsInvalidArgumentValue()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadContentTypeByIdentifier() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -1932,7 +1932,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testLoadContentTypeDraftThrowsInvalidArgumentValue()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadContentTypeByIdentifier() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -2025,7 +2025,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testPublishContentTypeDraftThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::publishContentTypeDraft() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -2232,7 +2232,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testCreateContentTypeDraftThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::createContentTypeDraft() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -2384,7 +2384,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testUpdateContentTypeDraftThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateContentTypeDraft() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -2526,7 +2526,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testDeleteContentTypeThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::deleteContentType() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -2673,7 +2673,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testCopyContentTypeThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::copyContentType() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -2725,7 +2725,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testAssignContentTypeGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::assignContentTypeGroup() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -2807,7 +2807,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testUnassignContentTypeGroupThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::unassignContentTypeGroup() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -3072,7 +3072,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testAddFieldDefinitionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::addFieldDefinition() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -3207,7 +3207,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testRemoveFieldDefinitionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::removeFieldDefinition() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -3382,7 +3382,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testUpdateFieldDefinitionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateFieldDefinition() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**

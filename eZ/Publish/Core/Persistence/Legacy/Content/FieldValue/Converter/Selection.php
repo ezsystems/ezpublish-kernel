@@ -117,6 +117,10 @@ class Selection implements Converter
             "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false,
             "options" => $options,
         ) );
+
+        // TODO: Can Selection store a default value in the DB?
+        $fieldDef->defaultValue = new FieldValue();
+        $fieldDef->defaultValue->data = array();
     }
 
     /**

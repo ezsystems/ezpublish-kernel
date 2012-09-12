@@ -87,6 +87,11 @@ class Repository implements \eZ\Publish\API\Repository\Repository
     private $ioService;
 
     /**
+     * @var \eZ\Publish\Core\REST\Client\FieldTypeService
+     */
+    private $fieldTypeService;
+
+    /**
      * Client
      *
      * @var \eZ\Publish\Core\REST\Client\HttpClient
@@ -111,19 +116,26 @@ class Repository implements \eZ\Publish\API\Repository\Repository
     private $urlHandler;
 
     /**
+     * @var \eZ\Publish\SPI\FieldType\FieldType[]
+     */
+    private $fieldTypes;
+
+    /**
      * Instantiates the REST Client repository.
      *
      * @param \eZ\Publish\Core\REST\Client\HttpClient $client
      * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\SPI\FieldType\FieldType[] $fieldTypes
      */
-    public function __construct( HttpClient $client, Common\Input\Dispatcher $inputDispatcher, Common\Output\Visitor $outputVisitor, Common\UrlHandler $urlHandler )
+    public function __construct( HttpClient $client, Common\Input\Dispatcher $inputDispatcher, Common\Output\Visitor $outputVisitor, Common\UrlHandler $urlHandler, array $fieldTypes )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
         $this->outputVisitor   = $outputVisitor;
         $this->urlHandler      = $urlHandler;
+        $this->fieldTypes      = $fieldTypes;
     }
 
     /**
@@ -196,7 +208,8 @@ class Repository implements \eZ\Publish\API\Repository\Repository
                 $this->client,
                 $this->inputDispatcher,
                 $this->outputVisitor,
-                $this->urlHandler
+                $this->urlHandler,
+                $this->getContentTypeService()
             );
         }
         return $this->contentService;
@@ -238,7 +251,6 @@ class Repository implements \eZ\Publish\API\Repository\Repository
         if ( null === $this->contentTypeService )
         {
             $this->contentTypeService = new ContentTypeService(
-                $this->getContentService(),
                 $this->client,
                 $this->inputDispatcher,
                 $this->outputVisitor,
@@ -442,7 +454,11 @@ class Repository implements \eZ\Publish\API\Repository\Repository
      */
     public function getFieldTypeService()
     {
-        throw new \RuntimeException( '@TODO: Implement.' );
+        if ( null === $this->fieldTypeService )
+        {
+            $this->fieldTypeService = new FieldTypeService( $this->fieldTypes );
+        }
+        return $this->fieldTypeService;
     }
 
     /**

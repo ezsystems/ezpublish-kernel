@@ -38,11 +38,13 @@ class ObjectStateGroupCreateStruct extends ValueObjectVisitor
 
         $generator->startHashElement( 'names' );
 
+        $generator->startList( 'value' );
         foreach ( $data->names as $languageCode => $name )
         {
-            $generator->startHashValueElement( 'value', $name, array( 'languageCode' => $languageCode ) );
-            $generator->endHashValueElement( 'value' );
+            $generator->startValueElement( 'value', $name, array( 'languageCode' => $languageCode ) );
+            $generator->endValueElement( 'value' );
         }
+        $generator->endList( 'value' );
 
         $generator->endHashElement( 'names' );
 
@@ -50,8 +52,8 @@ class ObjectStateGroupCreateStruct extends ValueObjectVisitor
 
         foreach ( $data->descriptions as $languageCode => $description )
         {
-            $generator->startHashValueElement( 'value', $description, array( 'languageCode' => $languageCode ) );
-            $generator->endHashValueElement( 'value' );
+            $generator->startValueElement( 'value', $description, array( 'languageCode' => $languageCode ) );
+            $generator->endValueElement( 'value' );
         }
 
         $generator->endHashElement( 'descriptions' );

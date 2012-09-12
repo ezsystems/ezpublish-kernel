@@ -1,16 +1,27 @@
 parameters:
-    ezpublish.chain_router.class: eZ\Publish\MVC\Routing\ChainRouter
-    ezpublish.url_generator.base.class: eZ\Publish\MVC\Routing\Generator
+    # Redefining the default router class to implement the RequestMatcherInterface
+    router.class: eZ\Bundle\EzPublishCoreBundle\Routing\DefaultRouter
+    ezpublish.chain_router.class: Symfony\Cmf\Component\Routing\ChainRouter
+    ezpublish.url_generator.base.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator
     ezpublish.urlalias_router.class: eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter
-    ezpublish.urlalias_generator.class: eZ\Publish\MVC\Routing\Generator\UrlAliasGenerator
-    ezpublish.siteaccess_router.class: eZ\Publish\MVC\SiteAccess\Router
+    ezpublish.urlalias_generator.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator
+    ezpublish.siteaccess_router.class: eZ\Publish\Core\MVC\Symfony\SiteAccess\Router
     ezpublish.siteaccess_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\SiteAccessListener
     ezpublish.request_redirect_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\RequestEventListener
+    ezpublish.siteaccess_match_listener.class: eZ\Publish\Core\MVC\Symfony\EventListener\SiteAccessMatchListener
 
 services:
     ezpublish.chain_router:
         class: %ezpublish.chain_router.class%
-        arguments: [@ezpublish.siteaccess_router, @event_dispatcher, @router.request_context]
+        arguments: [@?logger]
+        calls:
+            - [setContext, [@router.request_context]]
+
+    ezpublish.siteaccess_match_listener:
+        class: %ezpublish.siteaccess_match_listener.class%
+        arguments: [@ezpublish.siteaccess_router, @event_dispatcher]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 200 }
 
     ezpublish.url_generator.base:
         class: %ezpublish.url_generator.base.class%

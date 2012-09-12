@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  * @property-read string $email
  * @property-read string $passwordHash
  * @property-read string $hashAlgorithm Hash algorithm used to has the password
- * @property-read boolean $isEnabled User can not login if false
+ * @property-read boolean $enabled User can not login if false
  * @property-read int $maxLogin Max number of time user is allowed to login
  */
 abstract class User extends Content
@@ -45,7 +45,7 @@ abstract class User extends Content
     protected $passwordHash;
 
     /**
-     * Hash algorithm used to has the password
+     * Hash algorithm used to hash the password
      *
      * @var int
      */
@@ -58,7 +58,7 @@ abstract class User extends Content
      *
      * @var boolean
      */
-    protected $isEnabled = false;
+    protected $enabled = false;
 
     /**
      * Max number of time user is allowed to login

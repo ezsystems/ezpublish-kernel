@@ -27,11 +27,11 @@
       <directory>eZ/Publish/Core/IO/Tests</directory>
     </testsuite>
     <testsuite name="eZ Publish HMVC test suite">
-      <directory>eZ/Publish/MVC</directory>
+      <directory>eZ/Publish/Core/MVC/Symfony</directory>
       <directory>eZ/Bundle</directory>
     </testsuite>
     <testsuite name="eZ Publish legacy test suite">
-        <directory>eZ/Publish/Legacy</directory>
+        <directory>eZ/Publish/Core/MVC/Legacy</directory>
     </testsuite>
   </testsuites>
   <filter>

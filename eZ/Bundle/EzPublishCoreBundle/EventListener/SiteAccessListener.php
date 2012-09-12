@@ -9,9 +9,9 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
-use eZ\Publish\MVC\MVCEvents,
-    eZ\Publish\MVC\Event\PostSiteAccessMatchEvent,
-    eZ\Publish\MVC\SiteAccess\URILexer,
+use eZ\Publish\Core\MVC\Symfony\MVCEvents,
+    eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent,
+    eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer,
     Symfony\Component\EventDispatcher\EventSubscriberInterface,
     Symfony\Component\DependencyInjection\ContainerInterface;
 

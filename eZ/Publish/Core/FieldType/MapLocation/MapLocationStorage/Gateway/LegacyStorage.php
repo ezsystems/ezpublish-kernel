@@ -73,7 +73,7 @@ class LegacyStorage extends Gateway
         if ( $field->value->externalData === null )
         {
             // Store empty value and return
-            $this->deleteFieldData( array( $field->id ) );
+            $this->deleteFieldData( $versionInfo, array( $field->id ) );
             $field->value->data = array(
                 'sortKey' => null,
                 'hasData' => false,
@@ -235,10 +235,11 @@ class LegacyStorage extends Gateway
     /**
      * Deletes the data for all given $fieldIds
      *
+     * @param VersionInfo $versionInfo
      * @param array $fieldIds
      * @return void
      */
-    public function deleteFieldData( array $fieldIds )
+    public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds )
     {
         if ( count( $fieldIds ) === 0 )
         {
@@ -252,9 +253,15 @@ class LegacyStorage extends Gateway
         $deleteQuery->deleteFrom(
             $connection->quoteTable( 'ezgmaplocation' )
         )->where(
-            $deleteQuery->expr->in(
-                $connection->quoteColumn( 'contentobject_attribute_id' ),
-                $fieldIds
+            $deleteQuery->expr->lAnd(
+                $deleteQuery->expr->in(
+                    $connection->quoteColumn( 'contentobject_attribute_id' ),
+                    $fieldIds
+                ),
+                $deleteQuery->expr->eq(
+                    $connection->quoteColumn( 'contentobject_version' ),
+                    $deleteQuery->bindValue( $versionInfo->versionNo, null, \PDO::PARAM_INT )
+                )
             )
         );
 

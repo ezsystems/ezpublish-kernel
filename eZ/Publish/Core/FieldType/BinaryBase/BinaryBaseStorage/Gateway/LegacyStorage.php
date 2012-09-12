@@ -284,7 +284,7 @@ abstract class LegacyStorage extends Gateway
      * @param array $fieldIds
      * @return void
      */
-    public function removeFileReferences( array $fieldIds )
+    public function removeFileReferences( array $fieldIds, $versionNo )
     {
         $connection = $this->getConnection();
 
@@ -292,9 +292,15 @@ abstract class LegacyStorage extends Gateway
         $deleteQuery->deleteFrom(
             $connection->quoteTable( $this->getStorageTable() )
         )->where(
-            $deleteQuery->expr->in(
-                $connection->quoteColumn( 'contentobject_attribute_id' ),
-                $fieldIds
+            $deleteQuery->expr->lAnd(
+                $deleteQuery->expr->in(
+                    $connection->quoteColumn( 'contentobject_attribute_id' ),
+                    $fieldIds
+                ),
+                $deleteQuery->expr->eq(
+                    $connection->quoteColumn( 'version' ),
+                    $deleteQuery->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                )
             )
         );
 
@@ -337,7 +343,7 @@ abstract class LegacyStorage extends Gateway
      * @param array $fieldIds
      * @return array
      */
-    public function getReferencedFiles( array $fieldIds )
+    public function getReferencedFiles( array $fieldIds, $versionNo )
     {
         $connection = $this->getConnection();
 
@@ -348,9 +354,15 @@ abstract class LegacyStorage extends Gateway
         )->from(
             $connection->quoteTable( $this->getStorageTable() )
         )->where(
-            $selectQuery->expr->in(
-                $connection->quoteColumn( 'contentobject_attribute_id' ),
-                $fieldIds
+            $selectQuery->expr->lAnd(
+                $selectQuery->expr->in(
+                    $connection->quoteColumn( 'contentobject_attribute_id' ),
+                    $fieldIds
+                ),
+                $selectQuery->expr->eq(
+                    $connection->quoteColumn( 'version' ),
+                    $selectQuery->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                )
             )
         );
 

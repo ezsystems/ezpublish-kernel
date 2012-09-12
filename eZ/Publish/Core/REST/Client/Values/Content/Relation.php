@@ -29,6 +29,11 @@ class Relation extends \eZ\Publish\API\Repository\Values\Content\Relation
     protected $destinationContentInfo;
 
     /**
+     * @var int
+     */
+    protected $type;
+
+    /**
      * the content of the source content of the relation
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
@@ -47,5 +52,4 @@ class Relation extends \eZ\Publish\API\Repository\Values\Content\Relation
     {
         return $this->destinationContentInfo;
     }
-
 }

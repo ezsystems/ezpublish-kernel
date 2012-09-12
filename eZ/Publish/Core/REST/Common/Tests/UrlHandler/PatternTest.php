@@ -93,6 +93,20 @@ class PatternTest extends \PHPUnit_Framework_TestCase
                     'version' => '23',
                 )
             ),
+            array(
+                'location',
+                '/content/locations/23/42/100',
+                array(
+                    'location' => '23/42/100',
+                )
+            ),
+            array(
+                'locationChildren',
+                '/content/locations/23/42/100/children',
+                array(
+                    'location' => '23/42/100',
+                )
+            )
         );
     }
 
@@ -177,8 +191,10 @@ class PatternTest extends \PHPUnit_Framework_TestCase
     protected function getWorkingUrlHandler()
     {
         return new Common\UrlHandler\Pattern( array(
-            'section'       => '/content/section/{section}',
-            'objectversion' => '/content/object/{object}/{version}',
+            'section'          => '/content/section/{section}',
+            'objectversion'    => '/content/object/{object}/{version}',
+            'locationChildren' => '/content/locations/{&location}/children',
+            'location'         => '/content/locations/{&location}',
         ) );
     }
 }

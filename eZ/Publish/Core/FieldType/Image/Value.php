@@ -87,6 +87,14 @@ class Value extends BaseValue
      */
     public static function fromString( $path )
     {
+        if ( !file_exists( $path ) )
+        {
+            throw new InvalidArgumentType(
+                '$path',
+                'existing file',
+                $path
+            );
+        }
         return new static(
             array(
                 'path' => $path,

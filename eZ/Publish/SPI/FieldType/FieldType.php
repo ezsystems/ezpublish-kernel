@@ -23,6 +23,11 @@ interface FieldType
     /**
      * Return the field type identifier for this field type
      *
+     * This identifier should be globally unique and the implementor of a
+     * FieldType must take care for the uniqueness. It is therefore recommended
+     * to prefix the field-type identifier by a unique string that identifies
+     * the implementor.
+     *
      * @return string
      */
     public function getFieldTypeIdentifier();

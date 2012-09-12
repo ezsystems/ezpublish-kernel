@@ -195,7 +195,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentInfoThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentInfo() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -266,7 +266,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentInfoByRemoteIdThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentInfoByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -377,7 +377,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadVersionInfoByIdThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersionInfo() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -492,7 +492,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContent() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -686,7 +686,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentByRemoteIdThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentByRemoteId() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -1053,7 +1053,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testCreateContentThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContent() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -1374,7 +1374,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContentMetadataThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentService::updateContentMetadata() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -1609,7 +1609,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContentThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentService::testUpdateContent() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -1861,7 +1861,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testPublishVersionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentService::publishVersion() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -2051,7 +2051,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testCreateContentDraftThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentService::createContentDraft() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -2123,7 +2123,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentDraftsThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadContentDrafts() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -2234,7 +2234,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadVersionsThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentService::loadVersions() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -2296,7 +2296,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testDeleteVersionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentService::deleteVersion() is not implemented." );
+        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**

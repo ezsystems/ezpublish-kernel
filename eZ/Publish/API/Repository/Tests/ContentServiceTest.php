@@ -453,12 +453,12 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $mediaFolderId = $this->generateId( 'object', 41 );
         /* BEGIN: Use Case */
         $contentService = $repository->getContentService();
 
-        // Load the ContentInfo for "Anonymous User"
-        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
+        // Load the ContentInfo for "Media" folder
+        $contentInfo = $contentService->loadContentInfo( $mediaFolderId );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -502,7 +502,7 @@ class ContentServiceTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         $contentService = $repository->getContentService();
 
-        // Load the ContentInfo for "Anonymous User"
+        // Load the ContentInfo for "Media" folder
         $contentInfo = $contentService->loadContentInfoByRemoteId( 'faaeb9be3bd98ed09f606fc16d144eca' );
         /* END: Use Case */
 
@@ -541,16 +541,16 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $mediaFolderId = $this->generateId( 'object', 41 );
         /* BEGIN: Use Case */
-        // $anonymousUserId contains the ID of the "Anonymous User"
+        // $mediaFolderId contains the ID of the "Media" folder
 
         $contentService = $repository->getContentService();
 
-        // Load the ContentInfo for "Anonymous User"
-        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
+        // Load the ContentInfo for "Media" folder
+        $contentInfo = $contentService->loadContentInfo( $mediaFolderId );
 
-        // Now load the current version info of the "Anonymous User"
+        // Now load the current version info of the "Media" folder
         $versionInfo = $contentService->loadVersionInfo( $contentInfo );
         /* END: Use Case */
 
@@ -571,14 +571,14 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $mediaFolderId = $this->generateId( 'object', 41 );
         /* BEGIN: Use Case */
-        // $anonymousUserId contains the ID of the "Anonymous User"
+        // $mediaFolderId contains the ID of the "Media" folder
 
         $contentService = $repository->getContentService();
 
-        // Load the VersionInfo for "Anonymous User"
-        $versionInfo = $contentService->loadVersionInfoById( $anonymousUserId );
+        // Load the VersionInfo for "Media" folder
+        $versionInfo = $contentService->loadVersionInfoById( $mediaFolderId );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -619,14 +619,14 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $mediaFolderId = $this->generateId( 'object', 41 );
         /* BEGIN: Use Case */
-        // $anonymousUserId contains the ID of the "Anonymous User"
+        // $mediaFolderId contains the ID of the "Media" folder
 
         $contentService = $repository->getContentService();
 
-        // Load the ContentInfo for "Anonymous User"
-        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
+        // Load the ContentInfo for "Media" folder
+        $contentInfo = $contentService->loadContentInfo( $mediaFolderId );
 
         // Now load the current content version for the info instance
         $content = $contentService->loadContentByContentInfo( $contentInfo );
@@ -649,14 +649,14 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $mediaFolderId = $this->generateId( 'object', 41 );
         /* BEGIN: Use Case */
-        // $anonymousUserId contains the ID of the "Anonymous User"
+        // $mediaFolderId contains the ID of the "Media" folder
 
         $contentService = $repository->getContentService();
 
-        // Load the ContentInfo for "Anonymous User"
-        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
+        // Load the ContentInfo for "Media" folder
+        $contentInfo = $contentService->loadContentInfo( $mediaFolderId );
 
         // Load the current VersionInfo
         $versionInfo = $contentService->loadVersionInfo( $contentInfo );
@@ -684,14 +684,14 @@ class ContentServiceTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $mediaFolderId = $this->generateId( 'object', 41 );
         /* BEGIN: Use Case */
-        // $anonymousUserId contains the ID of the "Anonymous User"
+        // $mediaFolderId contains the ID of the "Media" folder
 
         $contentService = $repository->getContentService();
 
-        // Load the Content for "Anonymous User", any language and current version
-        $content = $contentService->loadContent( $anonymousUserId );
+        // Load the Content for "Media" folder, any language and current version
+        $content = $contentService->loadContent( $mediaFolderId );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -733,13 +733,13 @@ class ContentServiceTest extends BaseContentServiceTest
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
-        // Remote id of the "Anonymous" user in a eZ Publish demo installation
-        $anonymousRemoteId = 'faaeb9be3bd98ed09f606fc16d144eca';
+        // Remote id of the "Media" folder
+        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
 
         $contentService = $repository->getContentService();
 
-        // Load the Content for "Anonymous User"
-        $content = $contentService->loadContentByRemoteId( $anonymousRemoteId );
+        // Load the Content for "Media" folder
+        $content = $contentService->loadContentByRemoteId( $mediaRemoteId );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -1675,8 +1675,8 @@ class ContentServiceTest extends BaseContentServiceTest
         $metadataUpdate->remoteId = 'aaaabbbbccccddddeeeeffff11112222';
         $metadataUpdate->mainLanguageCode = 'eng-GB';
         $metadataUpdate->alwaysAvailable = false;
-        $metadataUpdate->publishedDate = $this->getRepository()->createDateTime( 441759600 ); // 1984/01/01
-        $metadataUpdate->modificationDate = $this->getRepository()->createDateTime( 441759600 ); // 1984/01/01
+        $metadataUpdate->publishedDate = $this->createDateTime( 441759600 ); // 1984/01/01
+        $metadataUpdate->modificationDate = $this->createDateTime( 441759600 ); // 1984/01/01
 
         // Update the metadata of the published content object
         $content = $contentService->updateContentMetadata(
@@ -1713,10 +1713,10 @@ class ContentServiceTest extends BaseContentServiceTest
                 'alwaysAvailable' => false,
                 'currentVersionNo' => 1,
                 'mainLanguageCode' => 'eng-GB',
-                'modificationDate' => $this->getRepository()->createDateTime( 441759600 ),
+                'modificationDate' => $this->createDateTime( 441759600 ),
                 'ownerId' => $this->getRepository()->getCurrentUser()->id,
                 'published' => true,
-                'publishedDate' => $this->getRepository()->createDateTime( 441759600 ),
+                'publishedDate' => $this->createDateTime( 441759600 ),
             ),
             array(
                 'remoteId' => $contentInfo->remoteId,
@@ -4155,6 +4155,31 @@ class ContentServiceTest extends BaseContentServiceTest
                 ),
             ),
             $aliases
+        );
+    }
+
+    /**
+     * Test to ensure that old versions are not affected by updates to newer
+     * drafts.
+     *
+     * @return void
+     */
+    public function testUpdatingDraftDoesNotUpdateOldVersions()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        $contentService = $repository->getContentService();
+
+        $contentVersion2 = $this->createContentVersion2();
+
+        $loadedContent1 = $contentService->loadContent( $contentVersion2->id, null, 1 );
+        $loadedContent2 = $contentService->loadContent( $contentVersion2->id, null, 2 );
+
+        $this->assertNotEquals(
+            $loadedContent1->getFieldValue( 'name', 'eng-US' ),
+            $loadedContent2->getFieldValue( 'name', 'eng-US' )
         );
     }
 

@@ -77,7 +77,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
     protected function getContentSearchHandler( array $fullTextSearchConfiguration = array() )
     {
         $processor = new Content\Search\TransformationProcessor(
-            new Content\Search\TransformationParser(),
+            new Content\Search\TransformationParser( self::getInstallationDir() ),
             new Content\Search\TransformationPcreCompiler(
                 new Content\Search\Utf8Converter()
             )
@@ -85,7 +85,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
 
         foreach ( glob( __DIR__ . '/SearchHandler/_fixtures/transformations/*.tr' ) as $file )
         {
-            $processor->loadRules( $file );
+            $processor->loadRules( str_replace( self::getInstallationDir(), '', $file ) );
         }
 
         return new Content\Search\Handler(

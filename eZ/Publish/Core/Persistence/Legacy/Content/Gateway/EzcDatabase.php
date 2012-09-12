@@ -539,8 +539,9 @@ class EzcDatabase extends Gateway
     /**
      * Inserts a new field.
      *
-     * Only used when a new content object is created. After that, field IDs
-     * need to stay the same, only the version number changes.
+     * Only used when a new field is created (i.e. a new object or a field in a
+     * new language!). After that, field IDs need to stay the same, only the
+     * version number changes.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
@@ -550,11 +551,59 @@ class EzcDatabase extends Gateway
     public function insertNewField( Content $content, Field $field, StorageFieldValue $value )
     {
         $q = $this->dbHandler->createInsertQuery();
-        $q->insertInto(
-            $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
-        )->set(
+
+        $this->setInsertFieldValues( $q, $content, $field, $value );
+
+        // Insert with auto increment ID
+        $q->set(
             $this->dbHandler->quoteColumn( 'id' ),
             $this->dbHandler->getAutoIncrementValue( 'ezcontentobject_attribute', 'id' )
+        );
+
+        $q->prepare()->execute();
+
+        return $this->dbHandler->lastInsertId(
+            $this->dbHandler->getSequenceName( 'ezcontentobject_attribute', 'id' )
+        );
+    }
+
+    /**
+     * Inserts an existing field.
+     *
+     * Used to insert a field with an exsting ID but a new version number.
+     *
+     * @param Content $content
+     * @param Field $field
+     * @param StorageFieldValue $value
+     * @return void
+     */
+    public function insertExistingField( Content $content, Field $field, StorageFieldValue $value )
+    {
+        $q = $this->dbHandler->createInsertQuery();
+
+        $this->setInsertFieldValues( $q, $content, $field, $value );
+
+        $q->set(
+            $this->dbHandler->quoteColumn( 'id' ),
+            $q->bindValue( $field->id, null, \PDO::PARAM_INT )
+        );
+
+        $q->prepare()->execute();
+    }
+
+    /**
+     * Inserts $field with $newFieldId or not
+     *
+     * @param Content $content
+     * @param Field $field
+     * @param StorageFieldValue $value
+     * @param mixed $newFieldId
+     * @return int|null Maybe a new field ID
+     */
+    protected function setInsertFieldValues( \ezcQueryInsert $q, Content $content, Field $field, StorageFieldValue $value )
+    {
+        $q->insertInto(
+            $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
         )->set(
             $this->dbHandler->quoteColumn( 'contentobject_id' ),
             $q->bindValue( $content->contentInfo->id, null, \PDO::PARAM_INT )
@@ -597,12 +646,6 @@ class EzcDatabase extends Gateway
                 null,
                 \PDO::PARAM_INT
             )
-        );
-
-        $q->prepare()->execute();
-
-        return $this->dbHandler->lastInsertId(
-            $this->dbHandler->getSequenceName( 'ezcontentobject_attribute', 'id' )
         );
     }
 

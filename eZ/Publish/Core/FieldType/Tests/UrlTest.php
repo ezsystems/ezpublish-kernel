@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Url\Type as Url,
+use eZ\Publish\Core\FieldType\Url\Type as UrlType,
     eZ\Publish\Core\FieldType\Url\Value as UrlValue,
     ReflectionObject;
 
@@ -16,104 +16,253 @@ use eZ\Publish\Core\FieldType\Url\Type as Url,
  * @group fieldType
  * @group ezurl
  */
-class UrlTest extends FieldTypeTest
+class UrlTest extends StandardizedFieldTypeTest
 {
     /**
-     * @covers \eZ\Publish\Core\FieldType\FieldType::getValidatorConfigurationSchema
+     * Returns the field type under test.
+     *
+     * This method is used by all test cases to retrieve the field type under
+     * test. Just create the FieldType instance using mocks from the provided
+     * get*Mock() methods and/or custom get*Mock() implementations. You MUST
+     * NOT take care for test case wide caching of the field type, just return
+     * a new instance from this method!
+     *
+     * @return FieldType
      */
-    public function testValidatorConfigurationSchema()
+    protected function createFieldTypeUnderTest()
     {
-        $ft = new Url( $this->validatorService, $this->fieldTypeTools );
-        self::assertEmpty(
-            $ft->getValidatorConfigurationSchema(),
-            "The validator configuration schema does not match what is expected."
+        return new UrlType();
+    }
+
+    /**
+     * Returns the validator configuration schema expected from the field type.
+     *
+     * @return array
+     */
+    protected function getValidatorConfigurationSchemaExpectation()
+    {
+        return array();
+    }
+
+    /**
+     * Returns the settings schema expected from the field type.
+     *
+     * @return array
+     */
+    protected function getSettingsSchemaExpectation()
+    {
+        return array();
+    }
+
+    /**
+     * Returns the empty value expected from the field type.
+     *
+     * @return void
+     */
+    protected function getEmptyValueExpectation()
+    {
+        return null;
+    }
+
+    /**
+     * Data provider for invalid input to acceptValue().
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The invalid
+     * input to acceptValue(), 2. The expected exception type as a string. For
+     * example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          new \stdClass(),
+     *          'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+     *      ),
+     *      array(
+     *          array(),
+     *          'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInvalidInputForAcceptValue()
+    {
+        return array(
+            array(
+                23,
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
+            array(
+                new UrlValue( 23 ),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+            ),
         );
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
+     * Data provider for valid input to acceptValue().
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The valid
+     * input to acceptValue(), 2. The expected return value from acceptValue().
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          null,
+     *          null
+     *      ),
+     *      array(
+     *          __FILE__,
+     *          new BinaryFileValue( array(
+     *              'path' => __FILE__,
+     *              'fileName' => basename( __FILE__ ),
+     *              'fileSize' => filesize( __FILE__ ),
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'text/plain',
+     *          ) )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
      */
-    public function testSettingsSchema()
+    public function provideValidInputForAcceptValue()
     {
-        $ft = new Url( $this->validatorService, $this->fieldTypeTools );
-        self::assertEmpty(
-            $ft->getSettingsSchema(),
-            "The settings schema does not match what is expected."
+        return array(
+            array(
+                null,
+                null,
+            ),
+            array(
+                'http://example.com/sindelfingen',
+                new UrlValue( 'http://example.com/sindelfingen' ),
+            ),
+            array(
+                new UrlValue( 'http://example.com/sindelfingen', 'Sindelfingen!' ),
+                new UrlValue( 'http://example.com/sindelfingen', 'Sindelfingen!' ),
+            ),
         );
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\Url\Type::acceptValue
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * Provide input for the toHash() method
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The valid
+     * input to toHash(), 2. The expected return value from toHash().
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          null,
+     *          null
+     *      ),
+     *      array(
+     *          new BinaryFileValue( array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ) ),
+     *          array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
      */
-    public function testAcceptValueInvalidFormat()
+    public function provideInputForToHash()
     {
-        $ft = new Url( $this->validatorService, $this->fieldTypeTools );
-        $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "acceptValue" );
-        $refMethod->setAccessible( true );
-        $refMethod->invoke( $ft, new UrlValue( 42 ) );
+        return array(
+            array(
+                null,
+                null
+            ),
+            array(
+                new UrlValue( 'http://example.com/sindelfingen' ),
+                array(
+                    'link' => 'http://example.com/sindelfingen',
+                    'text' => '',
+                ),
+            ),
+            array(
+                new UrlValue( 'http://example.com/sindelfingen', 'Sindelfingen!' ),
+                array(
+                    'link' => 'http://example.com/sindelfingen',
+                    'text' => 'Sindelfingen!',
+                ),
+            ),
+        );
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\Url\Type::acceptValue
+     * Provide input to fromHash() method
+     *
+     * Returns an array of data provider sets with 2 arguments: 1. The valid
+     * input to fromHash(), 2. The expected return value from fromHash().
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          null,
+     *          null
+     *      ),
+     *      array(
+     *          array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ),
+     *          new BinaryFileValue( array(
+     *              'path' => 'some/file/here',
+     *              'fileName' => 'sindelfingen.jpg',
+     *              'fileSize' => 2342,
+     *              'downloadCount' => 0,
+     *              'mimeType' => 'image/jpeg',
+     *          ) )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
      */
-    public function testAcceptValueValidFormat()
+    public function provideInputForFromHash()
     {
-        $ft = new Url( $this->validatorService, $this->fieldTypeTools );
-        $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "acceptValue" );
-        $refMethod->setAccessible( true );
-
-        $value = new UrlValue( "http://ez.no/" );
-        self::assertSame( $value, $refMethod->invoke( $ft, $value ) );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Url\Type::toPersistenceValue
-     */
-    public function testToPersistenceValue()
-    {
-        $link = "http://ez.no/";
-        $ft = new Url( $this->validatorService, $this->fieldTypeTools );
-        $fieldValue = $ft->toPersistenceValue( new UrlValue( $link ) );
-
-        self::assertSame( array( "urlId" => null, "text" => null ), $fieldValue->data );
-        self::assertSame( $link, $fieldValue->externalData );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Url\Type::fromPersistenceValue
-     */
-    public function testFromPersistenceValue()
-    {
-        $this->markTestIncomplete( "Test for \\eZ\\Publish\\Core\\FieldType\\Url\\Type::fromPersistenceValue() is not implemented." );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Url\Value::__construct
-     */
-    public function testBuildFieldValueWithParam()
-    {
-        $link = "http://ez.no/";
-        $value = new UrlValue( $link );
-        self::assertSame( $link, $value->link );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Url\Value::__toString
-     */
-    public function testFieldValueToString()
-    {
-        $link = "http://ez.no/";
-        $value = new UrlValue( $link );
-        self::assertSame( $link, (string)$value );
-
-        $value2 = new UrlValue( (string)$value );
-        self::assertSame(
-            $link,
-            $value2->link,
-            "fromString() and __toString() must be compatible"
+        return array(
+            array(
+                null,
+                null
+            ),
+            array(
+                array(
+                    'link' => 'http://example.com/sindelfingen',
+                    'text' => null,
+                ),
+                new UrlValue( 'http://example.com/sindelfingen' ),
+            ),
+            array(
+                array(
+                    'link' => 'http://example.com/sindelfingen',
+                    'text' => 'Sindelfingen!',
+                ),
+                new UrlValue( 'http://example.com/sindelfingen', 'Sindelfingen!' ),
+            ),
         );
     }
 }

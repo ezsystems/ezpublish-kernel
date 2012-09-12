@@ -19,6 +19,11 @@ use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType,
  */
 class XmlTextTypeTest extends FieldTypeTest
 {
+    public function setUp()
+    {
+        $this->markTestSkipped( 'TODO: Needs test suite refactoring.' );
+    }
+
     /**
      * Normally this should be enough:
      *

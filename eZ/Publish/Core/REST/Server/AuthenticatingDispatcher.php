@@ -48,7 +48,8 @@ class AuthenticatingDispatcher extends RMF\Dispatcher\Simple
      */
     public function dispatch( RMF\Request $request )
     {
-        try {
+        try
+        {
             $this->authenticator->authenticate( $request );
         }
         catch ( \Exception $e )

@@ -25,8 +25,8 @@ The API is still very much work in progress, and so is documentation, hence why 
 * [eZ/Publish/Core/IO/LegacyHandler.php](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/IO/)  *Legacy Io (file) Handler*
 * [eZ/Publish/Core/IO/InMemoryHandler.php](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/IO/)  *InMemory Io handler (for unit testing)*
 
-* [eZ/Publish/MVC](/ezsystems/ezp-next/tree/master/eZ/Publish/MVC/)  *MVC components that integrate with Symfony*
-* [eZ/Publish/Legacy](/ezsystems/ezp-next/tree/master/eZ/Publish/Legacy/)  *eZ Publish Legacy components integration*
+* [eZ/Publish/Core/MVC/Symfony](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/MVC/Symfony/)  *MVC components that integrate with Symfony*
+* [eZ/Publish/Core/MVC/Legacy](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/MVC/Legacy/)  *eZ Publish Legacy components integration*
 * [eZ/Bundle](/ezsystems/ezp-next/tree/master/eZ/Bundle/)  *Bundles that wrap eZ Publish components into Symfony*
 
 * [design/](/ezsystems/ezp-next/tree/master/design/)	 *Early uml class diagrams*

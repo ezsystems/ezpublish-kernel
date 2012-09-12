@@ -35,7 +35,7 @@ abstract class UserCreateStruct extends ContentCreateStruct
     public $email;
 
     /**
-     * the plain password
+     * The plain password
      *
      * @required
      *
@@ -44,8 +44,8 @@ abstract class UserCreateStruct extends ContentCreateStruct
     public $password;
 
     /**
+     * Indicates if the user is enabled after creation
      *
-     * indicates if the user is enabled after creation
      * @var boolean
      */
     public $enabled = true;

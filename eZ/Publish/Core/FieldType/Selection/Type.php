@@ -168,7 +168,7 @@ class Type extends FieldType
     {
         if ( is_array( $inputValue ) )
         {
-            $inputValue = new Value();
+            $inputValue = new Value( $inputValue );
         }
 
         if ( !$inputValue instanceof Value )

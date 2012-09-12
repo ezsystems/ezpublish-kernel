@@ -57,8 +57,36 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     {
         if ( !isset( $this->generator ) )
         {
-            $this->generator = new Generator\Xml();
+            $this->generator = new Generator\Xml(
+                new Generator\Xml\FieldTypeHashGenerator()
+            );
         }
         return $this->generator;
+    }
+
+    /**
+     * Asserts that the given $xpathExpression returns a non empty node set
+     * with $domNode as its context.
+     *
+     * This method asserts that $xpathExpression results in a non-empty node
+     * set in cotext of $domNode, by wrapping the "boolean()" function around
+     * it and evaluating it on the document owning $domNode.
+     *
+     * @param \DOMNode $domNode
+     * @param string $xpathExpression
+     * @return void
+     */
+    protected function assertXPath( \DOMNode $domNode, $xpathExpression )
+    {
+        $ownerDocument = ( $domNode instanceof \DOMDOcument
+            ? $domNode
+            : $domNode->ownerDocument );
+
+        $xpath = new \DOMXPath( $ownerDocument );
+
+        $this->assertTrue(
+            $xpath->evaluate( "boolean({$xpathExpression})", $domNode ),
+            "XPath expression '{$xpathExpression}' resulted in an empty node set."
+        );
     }
 }

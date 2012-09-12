@@ -23,6 +23,28 @@ class Json extends Generator
     protected $json;
 
     /**
+     * Generator for field type hash values
+     *
+     * @var eZ\Publish\Core\REST\Common\Output\Generator\Json\FieldTypeHashGenerator
+     */
+    protected $fieldTypeHashGenerator;
+
+    /**
+     * Keeps track if the document is still empty
+     *
+     * @var bool
+     */
+    protected $isEmpty = true;
+
+    /**
+     * @param eZ\Publish\Core\REST\Common\Output\Generator\Json\FieldTypeHashGenerator $fieldTypeHashGenerator
+     */
+    public function __construct( Json\FieldTypeHashGenerator $fieldTypeHashGenerator )
+    {
+        $this->fieldTypeHashGenerator = $fieldTypeHashGenerator;
+    }
+
+    /**
      * Start document
      *
      * @param mixed $data
@@ -31,7 +53,19 @@ class Json extends Generator
     {
         $this->checkStartDocument( $data );
 
+        $this->isEmpty = true;
+
         $this->json = new Json\Object();
+    }
+
+    /**
+     * Returns if the document is empty or already contains data
+     *
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return $this->isEmpty;
     }
 
     /**
@@ -92,6 +126,8 @@ class Json extends Generator
     {
         $this->checkStartObjectElement( $name );
 
+        $this->isEmpty = false;
+
         $mediaTypeName = $mediaTypeName ?: $name;
 
         $object = new Json\Object( $this->json );
@@ -132,6 +168,8 @@ class Json extends Generator
     {
         $this->checkStartHashElement( $name );
 
+        $this->isEmpty = false;
+
         $object = new Json\Object( $this->json );
 
         if ( $this->json instanceof Json\ArrayObject )
@@ -163,12 +201,36 @@ class Json extends Generator
      *
      * @param string $name
      * @param string $value
+     * @param array $attributes
      */
-    public function startValueElement( $name, $value )
+    public function startValueElement( $name, $value, $attributes = array() )
     {
         $this->checkStartValueElement( $name );
 
-        $this->json->$name = $value;
+        $jsonValue = null;
+
+        if ( count( $attributes ) === 0 )
+        {
+            $jsonValue = $value;
+        }
+        else
+        {
+            $jsonValue = new Json\Object( $this->json );
+            foreach ( $attributes as $attributeName => $attributeValue )
+            {
+                $jsonValue->{'_' . $attributeName} = $attributeValue;
+            }
+            $jsonValue->{'#text'} = $value;
+        }
+
+        if ( $this->json instanceof Json\ArrayObject )
+        {
+            $this->json[] = $jsonValue;
+        }
+        else
+        {
+            $this->json->$name = $jsonValue;
+        }
     }
 
     /**
@@ -179,40 +241,6 @@ class Json extends Generator
     public function endValueElement( $name )
     {
         $this->checkEndValueElement( $name );
-    }
-
-    /**
-     * Start hash value element
-     *
-     * @param string $name
-     * @param string $value
-     * @param array $attributes
-     */
-    public function startHashValueElement( $name, $value, $attributes = array() )
-    {
-        $this->checkStartHashValueElement( $name );
-
-        $object = new Json\Object( $this->json );
-        foreach ( $attributes as $attributeName => $attributeValue )
-        {
-            $object->{'_' . $attributeName} = $attributeValue;
-        }
-        $object->{'#text'} = $value;
-
-        if ( !isset( $this->json->$name ) )
-            $this->json->$name = new Json\ArrayObject( $this->json->getParent() );
-
-        $this->json->$name->append( $object );
-    }
-
-    /**
-     * End hash value element
-     *
-     * @param string $name
-     */
-    public function endHashValueElement( $name )
-    {
-        $this->checkEndHashValueElement( $name );
     }
 
     /**
@@ -274,5 +302,23 @@ class Json extends Generator
     public function getMediaType( $name )
     {
         return $this->generateMediaType( $name, 'json' );
+    }
+
+    /**
+     * Generates a generic representation of the scalar, hash or list given in
+     * $hashValue into the document, using an element of $hashElementName as
+     * its parent
+     *
+     * @param string $hashElementName
+     * @param mixed $hashValue
+     * @return void
+     */
+    public function generateFieldTypeHash( $hashElementName, $hashValue )
+    {
+        $this->fieldTypeHashGenerator->generateHashValue(
+            $this->json,
+            $hashElementName,
+            $hashValue
+        );
     }
 }

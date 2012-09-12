@@ -358,7 +358,7 @@ class UserServiceStub implements UserService
                     2
                 ),
                 'hashAlgorithm' => 2,
-                'isEnabled' => $userCreateStruct->enabled,
+                'enabled' => $userCreateStruct->enabled,
                 'content' => $content
             )
         );
@@ -515,7 +515,7 @@ class UserServiceStub implements UserService
             array(
                 'login' => $user->login,
                 'email' => $userUpdateStruct->email ?: $user->email,
-                'isEnabled' => is_null( $userUpdateStruct->isEnabled ) ? $user->isEnabled : $userUpdateStruct->isEnabled,
+                'enabled' => is_null( $userUpdateStruct->enabled ) ? $user->enabled : $userUpdateStruct->enabled,
                 'maxLogin' => is_null( $userUpdateStruct->maxLogin ) ? $user->maxLogin : $userUpdateStruct->maxLogin,
                 'hashAlgorithm' => $user->hashAlgorithm,
                 'passwordHash' => $userUpdateStruct->password ?

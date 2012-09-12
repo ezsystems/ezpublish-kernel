@@ -64,7 +64,10 @@ class Type extends FieldType
      */
     public function getName( $value )
     {
-        $value = $this->acceptValue( $value );
+        if ( $value === null )
+        {
+            return '';
+        }
 
         return $value->value->format( 'D Y-d-m H:i:s' );
     }
@@ -77,7 +80,7 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value();
+        return null;
     }
 
     /**
@@ -103,7 +106,20 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
-        if ( ( $inputValue instanceof \DateTime ) || is_string( $inputValue ) )
+        if ( $inputValue === null )
+        {
+            return null;
+        }
+
+        if ( is_string( $inputValue ) )
+        {
+            $inputValue = Value::fromString( $inputValue );
+        }
+        if ( is_int( $inputValue ) )
+        {
+            $inputValue = Value::fromTimestamp( $inputValue );
+        }
+        if ( $inputValue instanceof \DateTime )
         {
             $inputValue = new Value( $inputValue );
         }
@@ -138,11 +154,11 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
-        $timestamp = 0;
-        if ( $value->value instanceof DateTime )
-            $timestamp = $value->value->getTimestamp();
-
-        return $timestamp;
+        if ( $value === null )
+        {
+            return null;
+        }
+        return $value->value->getTimestamp();
     }
 
     /**
@@ -154,12 +170,17 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
-        if ( isset( $hash['rfc850'] ) && $hash['rfc850'] )
+        if ( $hash === null )
         {
-            return new Value( $hash['rfc850'] );
+            return null;
         }
 
-        return new Value( "@" . $hash['timestamp'] );
+        if ( isset( $hash['rfc850'] ) && $hash['rfc850'] )
+        {
+            return Value::fromString( $hash['rfc850'] );
+        }
+
+        return Value::fromTimestamp( (int)$hash['timestamp'] );
     }
 
     /**
@@ -171,6 +192,11 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
+        if ( $value === null )
+        {
+            return null;
+        }
+
         if ( $value->value instanceof DateTime )
         {
             return array(

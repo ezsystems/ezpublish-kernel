@@ -90,7 +90,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             'new-group'
         );
         $groupCreate->creatorId = $repository->getCurrentUser()->id;
-        $groupCreate->creationDate = $this->getRepository()->createDateTime();
+        $groupCreate->creationDate = $this->createDateTime();
         $groupCreate->mainLanguageCode = 'ger-DE';
         $groupCreate->names = array( 'eng-GB' => 'A name.' );
         $groupCreate->descriptions = array( 'eng-GB' => 'A description.' );
@@ -224,8 +224,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             array(
                 'id' => $this->generateId( 'typegroup', 2 ),
                 'identifier' => 'Users',
-                'creationDate' => $this->getRepository()->createDateTime( 1031216941 ),
-                'modificationDate' => $this->getRepository()->createDateTime( 1033922113 ),
+                'creationDate' => $this->createDateTime( 1031216941 ),
+                'modificationDate' => $this->createDateTime( 1033922113 ),
                 'creatorId' => $this->generateId( 'user', 14 ),
                 'modifierId' => $this->generateId( 'user', 14 ),
             ),
@@ -422,7 +422,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         $groupUpdate->identifier = 'Teardown';
         $groupUpdate->modifierId = $modifierId;
-        $groupUpdate->modificationDate = $this->getRepository()->createDateTime();
+        $groupUpdate->modificationDate = $this->createDateTime();
         $groupUpdate->mainLanguageCode = 'eng-GB';
 
         $groupUpdate->names = array(
@@ -732,7 +732,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             'ger-DE' => 'Ein Blog-Eintrag',
         );
         $typeCreate->creatorId = $repository->getCurrentUser()->id;
-        $typeCreate->creationDate = $this->getRepository()->createDateTime();
+        $typeCreate->creationDate = $this->createDateTime();
 
         $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
             'title', 'ezstring'
@@ -1126,7 +1126,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $typeUpdate->mainLanguageCode = 'ger-DE';
         $typeUpdate->defaultAlwaysAvailable = false;
         $typeUpdate->modifierId = $modifierId;
-        $typeUpdate->modificationDate = $this->getRepository()->createDateTime();
+        $typeUpdate->modificationDate = $this->createDateTime();
         $typeUpdate->names = array(
             'eng-GB' => 'News article',
             'ger-DE' => 'Nachrichten-Artikel',
@@ -1676,10 +1676,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
+        $userGroupId = $this->generateId( 'type', 3 );
         /* BEGIN: Use Case */
+        // $userGroupId is the ID of the "user_group" type
         $contentTypeService = $repository->getContentTypeService();
         // Loads the standard "user_group" type
-        $userGroupType = $contentTypeService->loadContentType( 3 );
+        $userGroupType = $contentTypeService->loadContentType( $userGroupId );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -1707,8 +1709,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'id' => $this->generateId( 'type', 3 ),
                 'status' => 0,
                 'identifier' => 'user_group',
-                'creationDate' => $this->getRepository()->createDateTime( 1024392098 ),
-                'modificationDate' => $this->getRepository()->createDateTime( 1048494743 ),
+                'creationDate' => $this->createDateTime( 1024392098 ),
+                'modificationDate' => $this->createDateTime( 1048494743 ),
                 'creatorId' => $this->generateId( 'user', 14 ),
                 'modifierId' => $this->generateId( 'user', 14 ),
                 'remoteId' => '25b4268cdcd01921b808a0d854b877ef',

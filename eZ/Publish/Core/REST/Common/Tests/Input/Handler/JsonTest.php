@@ -21,7 +21,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertJson()
     {
-        $handler = new Common\Input\Handler\Json();
+        $handler = $this->getHandler();
 
         $this->assertSame(
             array(
@@ -29,5 +29,37 @@ class JsonTest extends \PHPUnit_Framework_TestCase
             ),
             $handler->convert( '{"text":"Hello world!"}' )
         );
+    }
+
+    public function testConvertFieldValue()
+    {
+        $handler = $this->getHandler();
+
+        $this->assertSame(
+              array(
+                'Field' => array(
+                    'fieldValue' => array(
+                        array(
+                            'id' => 1,
+                            'name' => 'Joe Sindelfingen',
+                            'email' => 'sindelfingen@example.com',
+                        ),
+                        array(
+                            'id' => 2,
+                            'name' => 'Joe Bielefeld',
+                            'email' => 'bielefeld@example.com',
+                        ),
+                    )
+                )
+            ),
+            $this->getHandler()->convert(
+                '{"Field":{"fieldValue":[{"id":1,"name":"Joe Sindelfingen","email":"sindelfingen@example.com"},{"id":2,"name":"Joe Bielefeld","email":"bielefeld@example.com"}]}}'
+            )
+        );
+    }
+
+    protected function getHandler()
+    {
+        return new Common\Input\Handler\Json();
     }
 }

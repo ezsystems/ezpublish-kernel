@@ -26,6 +26,8 @@ use \eZ\Publish\Core\REST\Common\Input;
 use \eZ\Publish\Core\REST\Common\Output;
 use \eZ\Publish\Core\REST\Common\Message;
 
+use \eZ\Publish\Core\REST\Client\Values;
+
 /**
  * @example Examples/contenttype.php
  */
@@ -52,17 +54,24 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
     private $urlHandler;
 
     /**
+     * @var \eZ\Publish\Common\REST\Client\ContentTypeService
+     */
+    private $contentTypeService;
+
+    /**
      * @param \eZ\Publish\Core\REST\Client\HttpClient $client
      * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Common\REST\Client\ContentTypeService
      */
-    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler )
+    public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler, ContentTypeService $contentTypeService )
     {
         $this->client          = $client;
         $this->inputDispatcher = $inputDispatcher;
         $this->outputVisitor   = $outputVisitor;
         $this->urlHandler      = $urlHandler;
+        $this->contentTypeService = $contentTypeService;
     }
 
     /**
@@ -96,7 +105,16 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function loadContentInfo( $contentId )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $response = $this->client->request(
+            'GET',
+            $contentId,
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'ContentInfo' ) )
+            )
+        );
+
+        $restContentInfo = $this->inputDispatcher->parse( $response );
+        return $this->completeContentInfo( $restContentInfo );
     }
 
     /**
@@ -121,7 +139,82 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
             )
         );
         $contentList = $this->inputDispatcher->parse( $response );
-        return reset( $contentList );
+
+        if ( count( $contentList ) === 0 )
+        {
+            throw new NotFoundException( "@TODO: Error message." );
+        }
+
+        return $this->completeContentInfo( reset( $contentList ) );
+    }
+
+    /**
+     * Returns a complete ContentInfo based on $restContentInfo
+     *
+     * @param RestContentInfo $restContentInfo
+     * @return eZ\Publish\Core\REST\Client\Values\Content\ContentInfo
+     */
+    protected function completeContentInfo( Values\RestContentInfo $restContentInfo )
+    {
+        $versionUrlValues = $this->urlHandler->parse(
+            'objectVersion',
+            $this->fetchCurrentVersionUrl( $restContentInfo->currentVersionReference )
+        );
+
+        return new Values\Content\ContentInfo(
+            $this->contentTypeService,
+            array(
+                'id' => $restContentInfo->id,
+                'name' => $restContentInfo->name,
+                'contentTypeId' => $restContentInfo->contentTypeId,
+                'ownerId' => $restContentInfo->ownerId,
+                'modificationDate' => $restContentInfo->modificationDate,
+                'publishedDate' => $restContentInfo->publishedDate,
+                'published' => $restContentInfo->published,
+                'alwaysAvailable' => $restContentInfo->alwaysAvailable,
+                'remoteId' => $restContentInfo->remoteId,
+                'mainLanguageCode' => $restContentInfo->mainLanguageCode,
+                'mainLocationId' => $restContentInfo->mainLocationId,
+                'sectionId' => $restContentInfo->sectionId,
+
+                'currentVersionNo' => $versionUrlValues['version'],
+            )
+        );
+    }
+
+    /**
+     * Returns the URL of the current version referenced by
+     * $currentVersionReference
+     *
+     * @param string $currentVersionReference
+     * @return string
+     */
+    protected function fetchCurrentVersionUrl( $currentVersionReference )
+    {
+        $versionResponse = $this->client->request(
+            'GET',
+            $currentVersionReference
+        );
+
+        if ( $this->isErrorResponse( $versionResponse ) )
+        {
+            return $this->inputDispatcher->parse( $versionResponse );
+        }
+
+        return $versionResponse->headers['Location'];
+    }
+
+    /**
+     * Checks if the given response is an error
+     *
+     * @param Message $response
+     * @return bool
+     */
+    protected function isErrorResponse( Message $response )
+    {
+        return (
+            strpos( $response->headers['Content-Type'], 'application/vnd.ez.api.ErrorMessage' ) === 0
+        );
     }
 
     /**
@@ -176,7 +269,11 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function loadContentByContentInfo( ContentInfo $contentInfo, array $languages = null, $versionNo = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        return $this->loadContent(
+            $contentInfo->id,
+            $languages,
+            $versionNo
+        );
     }
 
     /**
@@ -191,7 +288,9 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function loadContentByVersionInfo( VersionInfo $versionInfo, array $languages = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $contentInfo = $versionInfo->getContentInfo();
+
+        return $this->loadContent( $contentInfo->id, $languages, $versionInfo->versionNo );
     }
 
     /**
@@ -207,10 +306,46 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      * @param int $versionNo the version number. If not given the current version is returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @todo Handle $versionNo = null
+     * @todo Handle language filters
      */
     public function loadContent( $contentId, array $languages = null, $versionNo = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        // $contentId should already be a URL!
+        $contentIdValues = $this->urlHandler->parse( 'object', $contentId );
+
+        $url = '';
+        if ( $versionNo === null )
+        {
+            $url = $this->fetchCurrentVersionUrl(
+                $this->urlHandler->generate(
+                    'objectCurrentVersion',
+                    array(
+                        'object' => $contentIdValues['object'],
+                    )
+                )
+            );
+        }
+        else
+        {
+            $url = $this->urlHandler->generate(
+                'objectVersion',
+                array(
+                    'object' => $contentIdValues['object'],
+                    'version' => $versionNo,
+                )
+            );
+        }
+
+        $response = $this->client->request(
+            'GET',
+            $url,
+            new Message(
+                array( 'Accept' => $this->outputVisitor->getMediaType( 'Version' ) )
+            )
+        );
+
+        return $this->inputDispatcher->parse( $response );
     }
 
     /**
@@ -229,7 +364,9 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      */
     public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null )
     {
-        throw new \Exception( "@TODO: Implement." );
+        $contentInfo = $this->loadContentInfoByRemoteId( $remoteId );
+
+        return $this->loadContentByContentInfo( $contentInfo, $languages, $versionNo );
     }
 
     /**
@@ -450,6 +587,20 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[] an array of {@link Relation}
      */
     public function loadRelations( VersionInfo $versionInfo )
+    {
+        throw new \Exception( "@TODO: Implement." );
+    }
+
+    /**
+     * Loads relations by their relation list ID
+     *
+     * NOTE: This method is not part of the API!
+     *
+     * @param string $relationListId
+     * @return eZ\Publish\API\Repository\Values\Content\Relation[]
+     * @access protected
+     */
+    public function loadRelationsByListId( $relationListId )
     {
         throw new \Exception( "@TODO: Implement." );
     }

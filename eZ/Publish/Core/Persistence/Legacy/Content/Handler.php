@@ -242,7 +242,8 @@ class Handler implements BaseContentHandler
             $newField->versionNo = $content->versionInfo->versionNo;
             $content->fields[] = $newField;
         }
-        $this->fieldHandler->createNewFields( $content );
+        $content->fields;
+        $this->fieldHandler->createExistingFieldsInNewVersion( $content );
 
         // Create name
         foreach ( $content->versionInfo->names as $language => $name )
@@ -421,7 +422,12 @@ class Handler implements BaseContentHandler
      */
     public function removeRawContent( $contentId )
     {
-        $this->fieldHandler->deleteFields( $contentId );
+        $versionInfos = $this->listVersions( $contentId );
+
+        foreach ( $versionInfos as $versionInfo )
+        {
+            $this->fieldHandler->deleteFields( $contentId, $versionInfo );
+        }
         $this->contentGateway->deleteRelations( $contentId );
         $this->contentGateway->deleteVersions( $contentId );
         $this->contentGateway->deleteNames( $contentId );
@@ -440,8 +446,12 @@ class Handler implements BaseContentHandler
      */
     public function deleteVersion( $contentId, $versionNo )
     {
+        $versionInfo = $this->loadVersionInfo( $contentId, $versionNo );
+
         $this->locationGateway->deleteNodeAssignment( $contentId, $versionNo );
-        $this->fieldHandler->deleteFields( $contentId, $versionNo );
+
+        $this->fieldHandler->deleteFields( $contentId, $versionInfo );
+
         $this->contentGateway->deleteRelations( $contentId, $versionNo );
         $this->contentGateway->deleteVersions( $contentId, $versionNo );
         $this->contentGateway->deleteNames( $contentId, $versionNo );

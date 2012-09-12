@@ -20,6 +20,7 @@ class Controller extends BaseController
 
     /**
      * @return \eZ\Publish\API\Repository\Repository
+     * @throws \LogicException
      */
     public function getRepository()
     {
@@ -32,7 +33,7 @@ class Controller extends BaseController
     /**
      * Returns the legacy kernel object.
      *
-     * @return \eZ\Publish\Legacy\Kernel
+     * @return \eZ\Publish\Core\MVC\Legacy\Kernel
      */
     final protected function getLegacyKernel()
     {
@@ -41,5 +42,13 @@ class Controller extends BaseController
 
         $legacyKernelClosure = $this->legacyKernelClosure;
         return $legacyKernelClosure();
+    }
+
+    /**
+     * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver
+     */
+    protected function getConfigResolver()
+    {
+        return $this->container->get( 'ezpublish.config.resolver' );
     }
 }

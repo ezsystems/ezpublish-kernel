@@ -151,13 +151,12 @@ class ImageStorage extends GatewayBasedStorage
      * @param array $fieldIds
      * @param array $context
      * @return bool
-     * @TODO Delete only when no references in ezimage table exist anymore
      */
-    public function deleteFieldData( array $fieldIds, array $context )
+    public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
         $gateway = $this->getGateway( $context );
 
-        $fieldXmls = $gateway->getXmlForImages( $fieldIds );
+        $fieldXmls = $gateway->getXmlForImages( $versionInfo->versionNo, $fieldIds );
 
         foreach ( $fieldXmls as $fieldId => $xml )
         {
@@ -168,7 +167,7 @@ class ImageStorage extends GatewayBasedStorage
                 continue;
             }
 
-            $gateway->removeImageReferences( $fieldStorageIdentifier, $fieldId );
+            $gateway->removeImageReferences( $fieldStorageIdentifier, $versionInfo->versionNo, $fieldId );
 
             if ( $gateway->countImageReferences( $fieldStorageIdentifier ) === 0 )
             {

@@ -9,10 +9,10 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Tests\SiteAccess;
 
-use eZ\Publish\Legacy\Tests\LegacyBasedTestCase,
+use eZ\Publish\Core\MVC\Legacy\Tests\LegacyBasedTestCase,
     eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess as LegacyMapper,
-    eZ\Publish\MVC\SiteAccess,
-    eZ\Publish\Legacy\Event\PreBuildKernelWebHandlerEvent;
+    eZ\Publish\Core\MVC\Symfony\SiteAccess,
+    eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent;
 
 class LegacyMapperTest extends LegacyBasedTestCase
 {

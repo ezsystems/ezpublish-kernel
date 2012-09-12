@@ -19,6 +19,8 @@ class SectionUpdateStruct extends ValueObject
     /**
      * If set the Unique identifier of the section is changes
      *
+     * Needs to be a unique Section->identifier string value.
+     *
      * @var string
      */
     public $identifier;

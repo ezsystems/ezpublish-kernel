@@ -9,7 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Routing;
 
-use eZ\Publish\MVC\Routing\UrlAliasRouter as BaseUrlAliasRouter,
+use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter as BaseUrlAliasRouter,
     eZ\Bundle\EzPublishCoreBundle\SiteAccess,
     Symfony\Component\HttpFoundation\Request,
     Symfony\Component\Routing\Exception\ResourceNotFoundException;

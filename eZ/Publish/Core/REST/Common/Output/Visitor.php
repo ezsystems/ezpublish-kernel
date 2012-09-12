@@ -189,7 +189,9 @@ class Visitor
 
         $result = new Message(
             $this->headers,
-            $this->generator->endDocument( $data )
+            ( $this->generator->isEmpty()
+                ? null
+                : $this->generator->endDocument( $data ) )
         );
 
         $this->headers = array();

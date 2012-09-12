@@ -411,22 +411,26 @@ XML Example
         <field>
           <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
           <languageCode>eng-US</languageCode>
-          <value xsi:type="xsd:string">This is a title</value>
+          <fieldValue>This is a title</fieldValue>
         </field>
         <field>
           <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
           <languageCode>eng-US</languageCode>
-          <value xsi:type="xsd:string">This is a summary</value>
+          <fieldValue>This is a summary</fieldValue>
         </field>
         <field>
           <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
           <languageCode>eng-US</languageCode>
-          <value xsi:type="authorsInputType">
-            <authors>
-              <author name="John Doe" email="john.doe@example.net"/>
-              <author name="Bruce Willis" email="bruce.willis@example.net"/>
-            </authors>
-          </value>
+          <fieldValue>
+            <value>
+              <value key="name">John Doe</value>
+              <value key="email">john.doe@example.net</value>
+            </value>
+            <value>
+              <value key="name">Bruce Willis</value>
+              <value key="email">bruce.willis@example.net</value>
+            </value>
+          </fieldValue>
         </field>
       </fields>
     </ContentCreate>
@@ -456,7 +460,7 @@ XML Example
             <versionNo>1</versionNo>
             <status>DRAFT</status>
             <modificationDate>2012-02-12T12:30:00</modificationDate>
-            <Creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+            <Creator href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
             <creationDate>2012-02-12T12:30:00</creationDate>
             <initialLanguageCode>eng-US</initialLanguageCode>
             <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
@@ -466,23 +470,27 @@ XML Example
               <id>1234</id>
               <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
               <languageCode>eng-UK</languageCode>
-              <value xsi:type="xsd:string">This is a title</value>
+              <fieldValue>This is a title</fieldValue>
             </field>
             <field>
               <id>1235</id>
               <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
               <languageCode>eng-UK</languageCode>
-              <value xsi:type="xsd:string">This is a summary</value>
+              <fieldValue>This is a summary</fieldValue>
             </field>
             <field>
               <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
               <languageCode>eng-US</languageCode>
-              <value xsi:type="authorsType">
-                <authors>
-                  <author id="1" name="John Doe" email="john.doe@example.net" />
-                  <author id="2" name="Bruce Willis" email="bruce.willis@example.net" />
-                </authors>
-              </value>
+              <fieldValue>
+                <value>
+                  <value key="name">John Doe</value>
+                  <value key="email">john.doe@example.net</value>
+                </value>
+                <value>
+                  <value key="name">Bruce Willis</value>
+                  <value key="email">bruce.willis@example.net</value>
+                </value>
+              </fieldValue>
             </field>
           </fields>
           <Relations href="/content/objects/23/versions/1/relations" media-type="application/vnd.ez.api.RelationList+xml" />
@@ -491,7 +499,7 @@ XML Example
       <Section href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
       <MainLocation href="/content/locations/1/4/65" media-type="application/vnd.ez.api.Location+xml" />
       <Locations href="/content/objects/23/locations" media-type="application/vnd.ez.api.LocationList+xml" />
-      <Owner href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+      <Owner href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
       <mainLanguageCode>eng-US</mainLanguageCode>
       <alwaysAvailable>true</alwaysAvailable>
@@ -535,30 +543,26 @@ JSON Example
             {
               "fieldDefinitionIdentifer": "title",
               "languageCode": "eng-US",
-              "value": "This is a title"
+              "fieldValue": "This is a title"
             },
             {
               "fieldDefinitionIdentifer": "summary",
               "languageCode": "eng-US",
-              "value": "This is a summary"
+              "fieldValue": "This is a summary"
             },
             {
               "fieldDefinitionIdentifer": "authors",
               "languageCode": "eng-US",
-              "value": {
-                "authors": {
-                  "author": [
+              "fieldValue": [
                     {
-                      "_name": "John Doe",
-                      "_email": "john.doe@example.net"
+                      "name": "John Doe",
+                      "email": "john.doe@example.net"
                     },
                     {
-                      "_name": "Bruce Willis",
-                      "_email": "bruce.willis@example.net"
+                      "name": "Bruce Willis",
+                      "email": "bruce.willis@example.net"
                     }
                   ]
-                }
-              }
             }
           ]
         }
@@ -603,7 +607,7 @@ JSON Example
               "status": "DRAFT",
               "modificationDate": "2012-02-12T12:30:00",
               "creator": {
-                "_href": "/users/user/14",
+                "_href": "/user/users/14",
                 "_media-type": "application/vnd.ez.api.User+json"
               },
               "creationDate": "2012-02-12T12:30:00",
@@ -619,31 +623,28 @@ JSON Example
                   "id": "1234",
                   "fieldDefinitionIdentifer": "title",
                   "languageCode": "eng-UK",
-                  "value": "This is a title"
+                  "fieldValue": "This is a title"
                 },
                 {
                   "id": "1235",
                   "fieldDefinitionIdentifer": "summary",
                   "languageCode": "eng-UK",
-                  "value": "This is a summary"
+                  "fieldValue": "This is a summary"
                 },
                 {
                   "fieldDefinitionIdentifer": "authors",
                   "languageCode": "eng-US",
-                  "value": {
-                    "authors": {
-                      "author": [
-                        {
-                          "_name": "John Doe",
-                          "_email": "john.doe@example.net"
-                        },
-                        {
-                          "_name": "Bruce Willis",
-                          "_email": "bruce.willis@example.net"
-                        }
-                      ]
+                  "fieldValue": 
+                  [
+                    {
+                      "name": "John Doe",
+                      "email": "john.doe@example.net"
+                    },
+                    {
+                      "name": "Bruce Willis",
+                      "email": "bruce.willis@example.net"
                     }
-                  }
+                  ]
                 }
               ]
             }
@@ -662,7 +663,7 @@ JSON Example
           "_media-type": "application/vnd.ez.api.LocationList+json"
         },
         "Owner": {
-          "_href": "/users/user/14",
+          "_href": "/user/users/14",
           "_media-type": "application/vnd.ez.api.User+json"
         },
         "lastModificationDate": "2012-02-12T12:30:00",
@@ -749,7 +750,7 @@ XML Example
       <Section href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
       <MainLocation href="/content/locations/1/4/65" media-type="application/vnd.ez.api.Location+xml" />
       <Locations href="/content/objects/23/locations" media-type="application/vnd.ez.api.LocationList+xml" />
-      <Owner href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+      <Owner href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
       <publishedDate>2012-02-12T15:30:00</publishedDate>
       <mainLanguageCode>eng-US</mainLanguageCode>
@@ -803,7 +804,8 @@ In this example
 
 .. code:: http
  
-    PATCH /content/objects/23 HTTP/1.1
+    POST /content/objects/23 HTTP/1.1
+    X-HTTP-Method-Override: PATCH
     Host: www.example.net
     If-Match: "12345678"
     Accept: application/vnd.ez.api.ContentInfo+xml
@@ -843,7 +845,7 @@ In this example
       <Section href="/content/sections/3" media-type="application/vnd.ez.api.Section+xml" />
       <MainLocation href="/content/locations/1/13/55" media-type="application/vnd.ez.api.Location+xml" />
       <Locations href="/content/objects/23/locations" media-type="application/vnd.ez.api.LocationList+xml" />
-      <Owner href="/users/user/13" media-type="application/vnd.ez.api.User+xml" />
+      <Owner href="/user/users/13" media-type="application/vnd.ez.api.User+xml" />
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
       <publishedDate>2012-02-12T15:30:00</publishedDate>
       <mainLanguageCode>ger-DE</mainLanguageCode>
@@ -953,13 +955,14 @@ XML Example
 
     <?xml version="1.0" encoding="UTF-8"?>
     <VersionList href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml">
-      <Version href="/content/objects/23/versions/1" media-type="application/vnd.ez.api.Version+xml">
+      <VersionItem>
+        <Version href="/content/objects/23/versions/1" media-type="application/vnd.ez.api.Version+xml"/>
         <VersionInfo>
           <id>12</id>
           <versionNo>1</versionNo>
           <status>ARCHIVED</status>
           <modificationDate>2012-02-15T12:00:00</modificationDate>
-          <Creator href="/users/user/8" media-type="application/vnd.ez.api.User+xml" />
+          <Creator href="/user/users/8" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>22012-02-15T12:00:00</creationDate>
           <initialLanguageCode>eng-US</initialLanguageCode>
           <names>
@@ -967,14 +970,15 @@ XML Example
           </names>
           <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
         </VersionInfo>
-      </Version>
-      <Version href="/content/objects/23/versions/2" media-type="application/vnd.ez.api.Version+xml">
+      </VersionItem>
+      <VersionItem>
+        <Version href="/content/objects/23/versions/2" media-type="application/vnd.ez.api.Version+xml"/>
         <VersionInfo>
           <id>22</id>
           <versionNo>2</versionNo>
           <status>PUBLISHED</status>
           <modificationDate>2012-02-17T12:00:00</modificationDate>
-          <Creator href="/users/user/8" media-type="application/vnd.ez.api.User+xml" />
+          <Creator href="/user/users/8" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>22012-02-17T12:00:00</creationDate>
           <initialLanguageCode>eng-US</initialLanguageCode>
           <names>
@@ -982,14 +986,15 @@ XML Example
           </names>
           <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
         </VersionInfo>
-      </Version>
-      <Version href="/content/objects/23/versions/3" media-type="application/vnd.ez.api.Version+xml">
+      </VersionItem>
+      <VersionItem>
+        <Version href="/content/objects/23/versions/3" media-type="application/vnd.ez.api.Version+xml"/>
         <VersionInfo>
           <id>44</id>
           <versionNo>3</versionNo>
           <status>DRAFT</status>
           <modificationDate>2012-02-19T12:00:00</modificationDate>
-          <Creator href="/users/user/65" media-type="application/vnd.ez.api.User+xml" />
+          <Creator href="/user/users/65" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>22012-02-19T12:00:00</creationDate>
           <initialLanguageCode>fra-FR</initialLanguageCode>
           <names>
@@ -998,14 +1003,15 @@ XML Example
           </names>
           <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
         </VersionInfo>
-      </Version>
-      <Version href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml">
+      </VersionItem>
+      <VersionItem>
+        <Version href="/content/objects/23/versions/4" media-type="application/vnd.ez.api.Version+xml"/>
         <VersionInfo>
           <id>45</id>
           <versionNo>4</versionNo>
           <status>DRAFT</status>
           <modificationDate>2012-02-20T12:00:00</modificationDate>
-          <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml" />
+          <Creator href="/user/users/44" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>22012-02-20T12:00:00</creationDate>
           <initialLanguageCode>ger-DE</initialLanguageCode>
           <names>
@@ -1014,7 +1020,7 @@ XML Example
           </names>
           <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
         </VersionInfo>
-      </Version>
+      </VersionItem>
     </VersionList>
 
 Load Version
@@ -1074,7 +1080,7 @@ XML Example
         <versionNo>4</versionNo>
         <status>DRAFT</status>
         <modificationDate>2012-02-20T12:00:00</modificationDate>
-        <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml" />
+        <Creator href="/user/users/44" media-type="application/vnd.ez.api.User+xml" />
         <creationDate>22012-02-20T12:00:00</creationDate>
         <initialLanguageCode>ger-DE</initialLanguageCode>
         <names>
@@ -1087,22 +1093,23 @@ XML Example
           <id>1234</id>
           <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <value xsi:type="xsd:string">Titel</value>
+          <fieldValue>Titel</fieldValue>
         </field>
         <field>
           <id>1235</id>
           <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <value xsi:type="xsd:string">Dies ist eine Zusammenfassungy</value>
+          <fieldValue>Dies ist eine Zusammenfassungy</fieldValue>
         </field>
         <field>
           <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <value xsi:type="autorsType">
-            <authors>
-              <author name="Klaus Mustermann" email="klaus.mustermann@example.net" />
-            </authors>
-          </value>
+          <fieldValue>
+            <value>
+              <value key="name">Karl Mustermann</value>
+              <value key="email">karl.mustermann@example.net</value>
+            </value>
+          </fieldValue>
         </field>
       </Fields>
       <Relations  href="/content/objects/23/relations"  media-type="application/vnd.ez.api.RelationList+xml">>
@@ -1155,7 +1162,8 @@ XML Example
 
 .. code:: http
 
-    PATCH /content/objects/23/versions/4 HTTP/1.1
+    POST /content/objects/23/versions/4 HTTP/1.1
+    X-HTTP-Method-Override: PATCH
     Host: www.example.net
     If-Match: "a3f2e5b7"
     Accept: application/vnd.ez.api.Version+xml
@@ -1174,13 +1182,13 @@ XML Example
           <id>1234</id>
           <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <value xsi:type="xsd:string">Neuer Titel</value>
+          <fieldValue>Neuer Titel</fieldValue>
         </field>
         <field>
           <id>1235</id>
           <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <value xsi:type="xsd:string">Dies ist eine neue Zusammenfassungy</value>
+          <fieldValue>Dies ist eine neue Zusammenfassungy</fieldValue>
         </field>
       </fields>
     </VersionUpdate>
@@ -1202,7 +1210,7 @@ XML Example
         <versionNo>4</versionNo>
         <status>DRAFT</status>
         <modificationDate>2012-02-20T12:00:00</modificationDate>
-        <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml" />
+        <Creator href="/user/users/44" media-type="application/vnd.ez.api.User+xml" />
         <creationDate>22012-02-20T12:00:00</creationDate>
         <initialLanguageCode>ger-DE</initialLanguageCode>
         <names>
@@ -1215,22 +1223,22 @@ XML Example
           <id>1234</id>
           <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <value xsi:type="xsd:string">Neuer Titel</value>
+          <fieldValue>Neuer Titel</fieldValue>
         </field>
         <field>
           <id>1235</id>
           <fieldDefinitionIdentifer>summary</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <value xsi:type="xsd:string">Dies ist eine neuse Zusammenfassungy</value>
+          <fieldValue>Dies ist eine neuse Zusammenfassungy</fieldValue>
         </field>
         <field>
           <fieldDefinitionIdentifer>authors</fieldDefinitionIdentifer>
           <languageCode>ger-DE</languageCode>
-          <value xsi:type="authorsType">
+          <fieldValue>
             <authors>
               <author name="Klaus Mustermann" email="klaus.mustermann@example.net" />
             </authors>
-          </value>
+          </fieldValue>
         </field>
       </Fields>
       <Relations>
@@ -1717,7 +1725,8 @@ XML Example
 
 .. code:: http
 
-    PATCH /content/locations/1/5/73/133 HTTP/1.1
+    POST /content/locations/1/5/73/133 HTTP/1.1
+    X-HTTP-Method-Override: PATCH
     Host: www.example.net
     If-Match: "12345678"
     Accept: application/vnd.ez.api.Location+xml
@@ -2015,14 +2024,14 @@ Perform a query on articles with a specific title.
                         <id>1234</id>
                         <fieldDefinitionIdentifer>title</fieldDefinitionIdentifer>
                         <languageCode>eng-UK</languageCode>
-                        <value>Title</value>
+                        <fieldValue>Title</fieldValue>
                       </field>
                       <field>
                         <id>1235</id>
                         <fieldDefinitionIdentifer>summary
                         </fieldDefinitionIdentifer>
                         <languageCode>eng-UK</languageCode>
-                        <value>This is a summary</value>
+                        <fieldValue>This is a summary</fieldValue>
                       </field>
                     </Fields>
                     <Relations />
@@ -2403,10 +2412,13 @@ List TrashItems
 :Resource: /content/trash
 :Method: GET
 :Description: Returns a list of all trash items
+:Parameters:
+    :limit:    only <limit> items will be returned started by offset
+    :offset:   offset of the result set
 :Headers:
     :Accept:
-         :application/vnd.ez.api.LocationList+xml:  if set the new location is returned in xml format (see Location_)
-         :application/vnd.ez.api.LocationList+json:  if set the new location is returned in json format (see Location_)
+         :application/vnd.ez.api.Trash+xml:  if set the new location is returned in xml format (see Trash_)
+         :application/vnd.ez.api.Trash+json:  if set the new location is returned in json format (see Trash_)
 :Response: 
 
 .. code:: http
@@ -2415,7 +2427,7 @@ List TrashItems
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Location_  (locationListType)     
+          Trash_
 
 :ErrorCodes: 
     :401: If the user has no permission to read the trash
@@ -2427,8 +2439,8 @@ Get TrashItem
 :Description: Returns the trash item given by id
 :Headers:
     :Accept:
-         :application/vnd.ez.api.Location+xml:  if set the new location is returned in xml format (see Location_)
-         :application/vnd.ez.api.Location+json:  if set the new location is returned in json format (see Location_)
+         :application/vnd.ez.api.TrashItem+xml:  if set the new trash item is returned in xml format (see Trash_)
+         :application/vnd.ez.api.TrashItem+json:  if set the new trash item is returned in json format (see Trash_)
 :Response: 
 
 .. code:: http
@@ -2437,7 +2449,7 @@ Get TrashItem
           Content-Type: <depending on accept header>
           Content-Length: <length>
 .. parsed-literal::
-          Location_      
+          Trash_      
 
 :Error Codes:
     :401: If the user has no permission to read the trash item
@@ -3227,7 +3239,8 @@ XML Example
 
 .. code:: http
 
-    PATCH /content/typegroups/7 HTTP/1.1
+    POST /content/typegroups/7 HTTP/1.1
+    X-HTTP-Method-Override: PATCH
     Host: api.example.net
     If-Match: "958764986593830900"
     Accept: application/vnd.ez.api.ContentTypeGroup+xml
@@ -3279,6 +3292,30 @@ Delete Content Type Group
     :401: If the user is not authorized to delete this content type
     :403: If the content type group is not empty
     :404: If the content type does not exist
+
+List Content Types for Group
+````````````````````````````
+:Resource: /content/typegroups/<ID>/types
+:Method: GET
+:Description: Returns a list of content types of the group
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.ContentTypeInfoList+xml:  if set the list of content type info objects is returned in xml format (see ContentType_)
+         :application/vnd.ez.api.ContentTypeInfoList+json:  if set the list of content type info objects is returned in json format (see ContentType_)
+         :application/vnd.ez.api.ContentTypeList+xml:  if set the list of content type objects (including field definitions) is returned in xml format (see ContentType_)
+         :application/vnd.ez.api.ContentTypeList+json:  if set the list content type objects (including field definitions) is returned in json format (see ContentType_)
+:Response: 
+
+.. code:: http
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+          ContentType_      
+
+:Error Codes:
+    :401: If the user has no permission to read the content types
 
 
 Managing Content Types
@@ -3334,7 +3371,7 @@ XML Example
 
 .. code:: http
 
-    POST /content/typegroups/<ID> HTTP/1.1
+    POST /content/typegroups/<ID>/types HTTP/1.1
     Accept: application/vnd.ez.api.ContentType
     Content-Type: application/vnd.ez.api.ContentTypeCreate
     Content-Length: xxx
@@ -3610,7 +3647,8 @@ XML Example
 
 .. code:: http
 
-    PATCH /content/types/32/draft HTTO/1.1
+    POST /content/types/32/draft HTTP/1.1
+    X-HTTP-Method-Override: PATCH
     Accept: application/vnd.ez.api.ContentTypeInfo+xml 
     Content-Type: application/vnd.ez.api.ContentTypeUpdate+xml
     Content-Length: xxx
@@ -3778,6 +3816,22 @@ Publish content type
     :403: If the content type draft is not complete e.g. there is no field definition provided
     :404: If there is no draft or content type with the given ID
 
+Delete Content Type Draft
+`````````````````````````
+:Resource: /content/types/<ID>/draft
+:Method: DELETE
+:Description: the given content type draft is deleted
+:Response: 
+
+.. code:: http
+  
+        HTTP/1.1 204 No Content
+
+:Error Codes:
+    :401: If the user is not authorized to delete this content type draft
+    :404: If the content type/draft does not exist
+
+
 Delete Content Type
 ```````````````````
 :Resource: /content/types/<ID>
@@ -3823,7 +3877,7 @@ XML Example
 
 .. code:: http
 
-    GET /content/types/32/groups
+    GET /content/types/32/groups HTTP/1.1
     Accept: application/vnd.ez.api.ContentTypeGroupRefList+xml
     
 .. code:: http
@@ -4075,7 +4129,7 @@ Create User Group
 .. _UserGroupExample:
 
 
-XNL Example
+XML Example
 '''''''''''
 
 Creating a top level group
@@ -4116,13 +4170,13 @@ Creating a top level group
             <id>1234</id>
             <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
             <languageCode>eng-UK</languageCode>
-            <value>Users</value>
+            <fieldValue>Users</fieldValue>
           </field>
           <field>
             <id>1235</id>
             <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
             <languageCode>eng-UK</languageCode>
-            <value>Main Group</value>
+            <fieldValue>Main Group</fieldValue>
           </field>
         </Fields>
         <Relations />
@@ -4149,12 +4203,12 @@ Creating a top level group
         <field>
           <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
           <languageCode>eng-US</languageCode>
-          <value>UserGroup</value>
+          <fieldValue>UserGroup</fieldValue>
         </field>
         <field>
           <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
           <languageCode>eng-US</languageCode>
-          <value>This is the description of the user group</value>
+          <fieldValue>This is the description of the user group</fieldValue>
         </field>
       </fields>
     </UserGroupCreate>
@@ -4199,13 +4253,13 @@ Creating a top level group
             <id>1234</id>
             <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
             <languageCode>eng-UK</languageCode>
-            <value>UserGroup</value>
+            <fieldValue>UserGroup</fieldValue>
           </field>
           <field>
             <id>1235</id>
             <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
             <languageCode>eng-UK</languageCode>
-            <value>This is the description of the user group</value>
+            <fieldValue>This is the description of the user group</fieldValue>
           </field>
         </Fields>
         <Relations />
@@ -4255,7 +4309,8 @@ XML Example
 
 .. code:: http
 
-    PATCH /user/groups/1/5/65 HTTP/1.1
+    POST /user/groups/1/5/65 HTTP/1.1
+    X-HTTP-Method-Override: PATCH
     Accept: application/vnd.ez.api.UserGroup+xml
     If-Match: "348506873463455"
     Content-Type: application/vnd.ez.api.UserGroupUpdate+xml
@@ -4269,7 +4324,7 @@ XML Example
         <field>
           <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
           <languageCode>eng-US</languageCode>
-          <value>This is another description</value>
+          <fieldValue>This is another description</fieldValue>
         </field>
       </fields>
     </UserGroupUpdate>
@@ -4313,13 +4368,13 @@ XML Example
             <id>1234</id>
             <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
             <languageCode>eng-UK</languageCode>
-            <value>UserGroup</value>
+            <fieldValue>UserGroup</fieldValue>
           </field>
           <field>
             <id>1235</id>
             <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
             <languageCode>eng-UK</languageCode>
-            <value>This is another description of the user group</value>
+            <fieldValue>This is another description of the user group</fieldValue>
           </field>
         </Fields>
         <Relations />
@@ -4473,12 +4528,12 @@ XML Example
         <field>
           <fieldDefinitionIdentifer>first_name</fieldDefinitionIdentifer>
           <languageCode>eng-US</languageCode>
-          <value>John</value>
+          <fieldValue>John</fieldValue>
         </field>
         <field>
           <fieldDefinitionIdentifer>last_name</fieldDefinitionIdentifer>
           <languageCode>eng-US</languageCode>
-          <value>Doe</value>
+          <fieldValue>Doe</fieldValue>
         </field>
       </fields>
     </UserCreate>
@@ -4527,12 +4582,12 @@ XML Example
           <field>
             <fieldDefinitionIdentifer>first_name</fieldDefinitionIdentifer>
             <languageCode>eng-US</languageCode>
-            <value>John</value>
+            <fieldValue>John</fieldValue>
           </field>
           <field>
             <fieldDefinitionIdentifer>last_name</fieldDefinitionIdentifer>
             <languageCode>eng-US</languageCode>
-            <value>Doe</value>
+            <fieldValue>Doe</fieldValue>
           </field>
         </fields>
       </Content>
@@ -4635,7 +4690,8 @@ XML Example
 
 .. code:: http
 
-    PATCH /user/users/99HTTP/1.1
+    POST /user/users/99 HTTP/1.1
+    X-HTTP-Method-Override: PATCH
     Accept: application/vnd.ez.api.User+xml
     Content-Type: application/vnd.ez.api.UserUpdate+xml
     Content-Length: xxx
@@ -4649,12 +4705,12 @@ XML Example
         <field>
           <fieldDefinitionIdentifer>signature</fieldDefinitionIdentifer>
           <languageCode>eng-US</languageCode>
-          <value>
+          <fieldValue>
           John Doe
           Example Systems
           john.doe@mooglemail.com
           skype: johndoe
-          </value>
+          </fieldValue>
         </field>
       </fields>
     </UserUpdate>
@@ -4693,7 +4749,7 @@ XML Example
           <versionNo>1</versionNo>
           <status>PUBLISHED</status>
           <modificationDate>2001-04-01T12:00:00</modificationDate>
-          <Creator href="/users/user/14" media-type="application/vnd.ez.api.User+xml" />
+          <Creator href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
           <creationDate>2001-04-01T12:00:00</creationDate>
           <initialLanguageCode>eng-UK</initialLanguageCode>
           <Content href="/content/objects/79" media-type="application/vnd.ez.api.ContentInfo+xml" />
@@ -4702,23 +4758,23 @@ XML Example
           <field>
             <fieldDefinitionIdentifer>first_name</fieldDefinitionIdentifer>
             <languageCode>eng-US</languageCode>
-            <value>John</value>
+            <fieldValue>John</fieldValue>
           </field>
           <field>
             <fieldDefinitionIdentifer>last_name</fieldDefinitionIdentifer>
             <languageCode>eng-US</languageCode>
-            <value>Doe</value>
+            <fieldValue>Doe</fieldValue>
           </field>
         </fields>
         <field>
           <fieldDefinitionIdentifer>signature</fieldDefinitionIdentifer>
           <languageCode>eng-US</languageCode>
-          <value>
+          <fieldValue>
           John Doe
           Example Systems
           john.doe@mooglemail.com
           skype: johndoe
-          </value>
+          </fieldValue>
         </field>
       </Content>
       <Roles href="/user/users/99/roles" media-type="application/vnd.ez.api.RoleAssignmentList+xml" />
@@ -4990,6 +5046,7 @@ Load Roles
           HTTP/1.1 200 OK
           Content-Type: <depending on accept header>
           Content-Length: <length>
+          ETag: "<Etag>"
 .. parsed-literal::
           Role_      
 
@@ -5011,8 +5068,11 @@ Load Role
 .. code:: http
 
           HTTP/1.1 200 OK
+          Accept-Patch:  application/vnd.ez.api.RoleInput+(json|xml)
+          ETag: "<Etag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+
 .. parsed-literal::
           Role_      
 
@@ -5111,7 +5171,10 @@ XML Example
       </RoleAssignment>
       <RoleAssignment href="/user/groups/1/5/65/roles/7" media-type="application/vnd.ez.api.RoleAssignment+xml">
         <limitation identifier="Subtree">
-          <values>/1/23/88 /1/32/67</values>
+          <values>
+              <ref href="/content/locations/1/23/88" media-type="application/vnd.ez.api.Location+xml" />
+              <ref href="/content/locations/1/32/67" media-type="application/vnd.ez.api.Location+xml" />
+          </values>
         </limitation>
         <Role href="/user/roles/7" media-type="application/vnd.ez.api.Role+xml"/>
       </RoleAssignment>
@@ -5161,7 +5224,10 @@ XML Example
     <RoleAssignInput>
       <Role href="/user/role/11" media-type="application/vnd.ez.api.RoleAssignInput+xml"/>
       <limitation identifier="Section">
-        <values>1 4</values>
+          <values>
+              <ref href="/content/sections/1" media-type="application/vnd.ez.api.Section+xml" />
+              <ref href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
+          </values>
       </limitation>
     </RoleAssignInput>
 
@@ -5180,13 +5246,19 @@ XML Example
       </RoleAssignment>
       <RoleAssignment href="/user/groups/1/5/65/roles/7" media-type="application/vnd.ez.api.RoleAssignment+xml">
         <limitation identifier="Subtree">
-          <values>/1/23/88 /1/32/67</values>
+          <values>
+              <ref href="/content/locations/1/23/88" media-type="application/vnd.ez.api.Location+xml" />
+              <ref href="/content/locations/1/32/67" media-type="application/vnd.ez.api.Location+xml" />
+          </values>
         </limitation>
         <Role href="/user/roles/7" media-type="application/vnd.ez.api.Role+xml"/>
       </RoleAssignment>
       <RoleAssignment href="/user/groups/1/5/65/roles/11" media-type="application/vnd.ez.api.RoleAssignment+xml">
         <limitation identifier="Section">
-          <values>1 4</values>
+          <values>
+              <ref href="/content/sections/1" media-type="application/vnd.ez.api.Section+xml" />
+              <ref href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
+          </values>
         </limitation>
         <Role href="/user/roles/11" media-type="application/vnd.ez.api.Role+xml"/>
       </RoleAssignment>
@@ -5241,7 +5313,10 @@ XML Example
       </RoleAssignment>
       <RoleAssignment href="/user/groups/1/5/65/roles/11" media-type="application/vnd.ez.api.RoleAssignment+xml">
         <limitation identifier="Section">
-          <values>1 4</values>
+          <values>
+              <ref href="/content/sections/1" media-type="application/vnd.ez.api.Section+xml" />
+              <ref href="/content/sections/4" media-type="application/vnd.ez.api.Section+xml" />
+          </values>
         </limitation>
         <Role href="/user/roles/11" media-type="application/vnd.ez.api.Role+xml"/>
       </RoleAssignment>
@@ -5536,7 +5611,8 @@ XML Example
 
 .. code:: http
 
-    PATCH /user/roles/7/policies/55 HTTP/1.1
+    POST /user/roles/7/policies/55 HTTP/1.1
+    X-HTTP-Method-Override: PATCH
     Accept: application/vnd.ez.api.Policy+xml
     If-Match: "697850469873043236666"
     Content-Type: application/vnd.ez.api.PolicyUpdate+xml
@@ -5675,6 +5751,19 @@ Common definition which are used from multiple schema definitions
         <xsd:attribute name="method" type="xsd:string" />
       </xsd:complexType>
 
+      <xsd:complexType name="valueType" mixed="true">
+        <xsd:sequence>
+          <xsd:element name="value" type="valueType" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="key" type="xsd:string" />
+      </xsd:complexType>
+
+      <xsd:complexType name="fieldValueType" mixed="true">
+        <xsd:sequence>
+          <xsd:element name="value" type="valueType" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+
       <xsd:complexType name="fieldInputValueType">
         <xsd:annotation>
           <xsd:documentation>
@@ -5685,7 +5774,7 @@ Common definition which are used from multiple schema definitions
         <xsd:all>
           <xsd:element name="fieldDefinitionIdentifer" type="xsd:string" />
           <xsd:element name="languageCode" type="xsd:string" />
-          <xsd:element name="value" type="xsd:anyType" />
+          <xsd:element name="fieldValue" type="fieldValueType" />
         </xsd:all>
       </xsd:complexType>
 
@@ -5991,12 +6080,12 @@ Version
       xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
       <xsd:include schemaLocation="VersionInfo.xsd" />
       <xsd:include schemaLocation="Relation.xsd" />
-      <xsd:complexType name="fieldValueType">
+      <xsd:complexType name="fieldOutputValueType">
         <xsd:all>
           <xsd:element name="id" type="xsd:integer" />
           <xsd:element name="fieldDefinitionIdentifer" type="xsd:string" />
           <xsd:element name="languageCode" type="xsd:string" />
-          <xsd:element name="value" type="xsd:anyType" />
+          <xsd:element name="value" type="fieldValueType" />
         </xsd:all>
       </xsd:complexType>
       <xsd:complexType name="vnd.ez.api.Version">
@@ -6044,18 +6133,23 @@ VersionList XML Schema
       xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
       <xsd:include schemaLocation="Version.xsd" />
       <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:complexType name="versionListItemType">
+        <xsd:all>
+          <xsd:element name="Version" type="ref"></xsd:element>
+          <xsd:element name="VersionInfo" type="versionInfoType"></xsd:element>
+        </xsd:all>
+      </xsd:complexType>
       <xsd:complexType name="vnd.ez.api.VersionList">
         <xsd:complexContent>
           <xsd:extension base="ref">
             <xsd:sequence>
-              <xsd:element name="Version" type="vnd.ez.api.Version"/>
+              <xsd:element name="VersionItem" type="versionListItemType"/>
             </xsd:sequence>
           </xsd:extension>
         </xsd:complexContent>
       </xsd:complexType>
       <xsd:element name="VersionList" type="vnd.ez.api.VersionList"></xsd:element>
     </xsd:schema>
-
 
 
 .. _VersionUpdate:
@@ -6151,447 +6245,6 @@ ContentUpdate XML Schema
       </xsd:complexType>
       <xsd:element name="ContentUpdate" type="contentUpdateType"></xsd:element>
     </xsd:schema>
-
-
-Specific Field type formats
----------------------------
-
-Author
-~~~~~~
-
-.. code:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
-      <xsd:include schemaLocation="CommonDefinitions.xsd" />
-      <xsd:simpleType name="emailAddress">
-        <xsd:restriction base="xsd:string">
-          <xsd:pattern
-            value="^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$" />
-        </xsd:restriction>
-      </xsd:simpleType>
-      <xsd:complexType name="authorInputType">
-        <xsd:all>
-          <xsd:element name="name" type="xsd:string" />
-          <xsd:element name="email" type="emailAddress"></xsd:element>
-        </xsd:all>
-      </xsd:complexType>
-
-      <xsd:complexType name="authorOutputType">
-        <xsd:all>
-          <xsd:element name="id" type="xsd:int" />
-          <xsd:element name="name" type="xsd:string" />
-          <xsd:element name="email" type="emailAddress"></xsd:element>
-        </xsd:all>
-      </xsd:complexType>
-
-      <xsd:complexType name="authorsInputType">
-        <xsd:all>
-          <xsd:element name="authors">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="author" type="authorInputType"
-                  maxOccurs="unbounded" />
-              </xsd:sequence>
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:all>
-      </xsd:complexType>
-
-      <xsd:complexType name="authorsType">
-        <xsd:all>
-          <xsd:element name="authors">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="author" type="authorOutputType"
-                  maxOccurs="unbounded" />
-              </xsd:sequence>
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:all>
-      </xsd:complexType>
-
-    </xsd:schema>
-
-XML Example
-```````````
-
-::
-
-    <value xsi:type="authorsInputType">
-      <authors>
-        <author name="John Doe" email="john.doe@example.net"/>
-        <author name="Bruce Willis" email="bruce.willis@example.net"/>
-      </authors>
-    </value>
-
-
-StringList Types
-~~~~~~~~~~~~~~~~
-
-.. code:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-
-    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
-      <xsd:include schemaLocation="CommonDefinitions.xsd" />
-      <xsd:include schemaLocation="ISOCountryCodeType-V2006.xsd" />
-
-      <xsd:complexType name="selectionType">
-        <xsd:sequence>
-          <xsd:element name="selection" type="xsd:string"
-            maxOccurs="unbounded" />
-        </xsd:sequence>
-      </xsd:complexType>
-
-      <xsd:complexType name="keywordType">
-        <xsd:sequence>
-          <xsd:element name="selection" type="xsd:string"
-            maxOccurs="unbounded" />
-        </xsd:sequence>
-      </xsd:complexType>
-
-      <xsd:complexType name="countryType">
-        <xsd:sequence>
-          <xsd:element name="country" type="ISOCountryCodeType"
-            maxOccurs="unbounded" />
-        </xsd:sequence>
-      </xsd:complexType>
-     
-    </xsd:schema>
-
-XML Example
-```````````
-
-::
-
-    <value xsi:type="selectionType">
-      <selection>Selection1</selection>
-      <selection>Selection2</selection>
-    </value>
- 
-
-RelationListInput
-~~~~~~~~~~~~~~~~~
-
-.. code:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
-      <xsd:include schemaLocation="CommonDefinitions.xsd" />
-
-      <xsd:complexType name="relationListType">
-        <xsd:sequence>
-          <xsd:element name="relation" type="ref"></xsd:element>
-        </xsd:sequence>
-      </xsd:complexType>
-
-    </xsd:schema>
-
-XML Example
-```````````
-
-::
-
-    <value xsi:type="relationListType">
-      <relation href="/content/objects/34" media-type="vnd.ez.api.ContentInfo+xml"/>  
-      <relation href="/content/objects/55" media-type="vnd.ez.api.ContentInfo+xml"/>  
-      <relation href="/content/objects/89" media-type="vnd.ez.api.ContentInfo+xml"/>  
-    </value>
- 
-
-
-Binary field types 
-~~~~~~~~~~~~~~~~~~
-
-Creating and Updating
-`````````````````````
-
-Inputschema
-'''''''''''
-
-.. code:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
-      <xsd:include schemaLocation="CommonDefinitions.xsd" />
-
-      <xsd:complexType name="binaryBaseType">
-        <xsd:sequence>
-          <xsd:element name="data" type="xsd:base64Binary" />
-        </xsd:sequence>
-        <xsd:attribute name="originalFileName" type="xsd:string" />
-        <xsd:attribute name="contentType" type="xsd:string" />
-      </xsd:complexType>
-
-      <xsd:complexType name="fileFieldInputType">
-        <xsd:all>
-          <xsd:element name="file" type="binaryBaseType">
-          </xsd:element>
-        </xsd:all>
-      </xsd:complexType>
-
-      <xsd:complexType name="imageFieldInputType">
-        <xsd:all>
-          <xsd:element name="image">
-            <xsd:complexType>
-              <xsd:complexContent>
-                <xsd:extension base="binaryBaseType">
-                  <xsd:sequence>
-                    <xsd:element name="alternativeText" type="xsd:string" />
-                  </xsd:sequence>
-                </xsd:extension>
-              </xsd:complexContent>
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:all>
-      </xsd:complexType>
-
-      <xsd:complexType name="mediaFieldInputType">
-        <xsd:all>
-          <xsd:element name="media">
-            <xsd:complexType>
-              <xsd:complexContent>
-                <xsd:extension base="binaryBaseType">
-                  <xsd:sequence>
-                    <xsd:element name="width" type="xsd:int" />
-                    <xsd:element name="height" type="xsd:int" />
-                    <xsd:element name="controller" type="xsd:boolean" />
-                    <xsd:element name="autoplay" type="xsd:boolean" />
-                    <xsd:element name="loop" type="xsd:boolean" />
-                  </xsd:sequence>
-                </xsd:extension>
-              </xsd:complexContent>
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:all>
-      </xsd:complexType>
-    </xsd:schema>
-
-XML Example
-'''''''''''
-
-::
-
-    POST /content/objects HTTP/1.1
-    Host: www.example.net
-    Accept: application/vnd.ez.api.Content+xml
-    Content-Type: application/vnd.ez.api.ContentCreate+xml
-    Content-Length: xxx
-
-    <ContentCreate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-      <ContentType href="/content/types/54"/>
-      <mainLanguageCode>eng-US</mainLanguageCode>
-      <LocationCreate>
-        <ParentLocation href="/content/locations/1/4/163" />
-        <priority>0</priority>
-        <hidden>false</hidden>
-        <sortField>PATH</sortField>
-        <sortOrder>ASC</sortOrder>
-      </LocationCreate>
-      <Section href="/content/sections/4"/>
-      <alwaysAvailable>true</alwaysAvailable>
-      <remoteId>remoteId12345678</remoteId>
-      <fields>
-        <field>
-          <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
-          <languageCode>eng-US</languageCode>
-          <value>name</value>
-        </field>
-        <field>
-          <fieldDefinitionIdentifer>file</fieldDefinitionIdentifer>
-          <languageCode>eng-US</languageCode>
-          <value xsi:type="fileFieldInputType">
-            <file originalFileName="test.pdf" contentType="application/pdf">
-              <data>
-                T2xkIE1hY0RvbmFsZCBoYWQgYSBmYXJtCkUgSS
-                BFIEkgTwpBbmQgb24gaGlzIGZhcm0gaGUgaGFk
-                IHNvbWUgZHVja3MKRSBJIEUgSSBPCldpdGggYS
-                ...
-                BxdWFjayBxdWFjayBoZXJlLAphIHF1YWNrIHF1
-                YWNrIHRoZXJlLApldmVyeSB3aGVyZSBhIHF1YW
-                NrIHF1YWNrCkUgSSBFIEkgTwo=
-              </data>
-            </file>  
-          </value>
-        </field>
-        <field>
-          <fieldDefinitionIdentifer>image</fieldDefinitionIdentifer>
-          <languageCode>eng-US</languageCode>
-          <value xsi:type="imageFieldInputType">
-            <image originalFileName="image.png" contentType="image/png">
-              <alternativeText>An image</alternativeText>
-              <data>
-              <!-- encoded png image -->
-              </data>
-            </image>  
-          </value>
-        </field>
-        <field>
-          <fieldDefinitionIdentifer>swf</fieldDefinitionIdentifer>
-          <languageCode>eng-US</languageCode>
-          <value xsi:type="mediaFieldInputType">
-            <media originalFileName="test.swf" contentType="application/shockwave-flash">
-              <data>
-              <!-- encoded swf -->
-              </data>
-              <width>2400</width>
-              <height>180</height>
-              <controller>true</controller>
-              <autoplay>false</autoplay>
-              <loop>false</loop>
-            </media>  
-          </value>
-        </field>
-      </fields>
-    </ContentCreate>
- 
-Retrieving Binary Types
-```````````````````````
-
-Output Schema
-'''''''''''''
-
-.. code:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
-      <xsd:include schemaLocation="CommonDefinitions.xsd" />
-      <xsd:complexType name="fileFieldType">
-        <xsd:all>
-          <xsd:element name="file" type="ref" />
-        </xsd:all>
-      </xsd:complexType>
-
-      <xsd:complexType name="imageFieldType">
-        <xsd:all>
-          <xsd:element name="image">
-            <xsd:complexType>
-              <xsd:complexContent>
-                <xsd:extension base="ref">
-                  <xsd:sequence>
-                    <xsd:element name="variant">
-                      <xsd:complexType>
-                        <xsd:attribute name="identifer" type="xsd:string" />
-                        <xsd:attribute name="href" type="xsd:string" />
-                        <xsd:attribute name="contentTypes"
-                          type="xsd:string" />
-                      </xsd:complexType>
-                    </xsd:element>
-                  </xsd:sequence>
-                </xsd:extension>
-              </xsd:complexContent>
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:all>
-      </xsd:complexType>
-
-      <xsd:complexType name="mediaFieldType">
-        <xsd:all>
-          <xsd:element name="media">
-            <xsd:complexType>
-              <xsd:complexContent>
-                <xsd:extension base="ref">
-                  <xsd:sequence>
-                    <xsd:element name="width" type="xsd:int" />
-                    <xsd:element name="height" type="xsd:int" />
-                    <xsd:element name="controller" type="xsd:boolean" />
-                    <xsd:element name="autoplay" type="xsd:boolean" />
-                    <xsd:element name="loop" type="xsd:boolean" />
-                  </xsd:sequence>
-                </xsd:extension>
-              </xsd:complexContent>
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:all>
-      </xsd:complexType>
-    </xsd:schema>
-
-XML Example
-'''''''''''
-
-
-
-.. code:: http
-
-    GET /content/objects/123/versions/4 HTTP/1.1
-    Host: api.example.com
-    If-None-Match: "1758f762"
-    Accept: application/vnd.ez.api.Version+xml
-       
-.. code:: http
-
-    HTTP/1.1 200 OK
-    Accept-Patch: application/vnd.ez.api.VersionUpdate+xml
-    ETag: "a3f2e5b7"
-    Content-Type: application/vnd.ez.api.Version+xml
-    Content-Length: xxx
-
-.. code:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <Version href="/content/objects/123/versions/4" media-type="application/vnd.ez.api.Version+xml" 
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-      <VersionInfo>
-        <id>45</id>
-        <versionNo>4</versionNo>
-        <status>PUBLISHED</status>
-        <modificationDate>2012-02-20T12:00:00</modificationDate>
-        <Creator href="/users/user/44" media-type="application/vnd.ez.api.User+xml" />
-        <creationDate>22012-02-20T12:00:00</creationDate>
-        <initialLanguageCode>ger-DE</initialLanguageCode>
-        <names>
-          <value languageCode="ger-DE">Name</value>
-        </names>
-        <Content href="/content/objects/23" media-type="application/vnd.ez.api.ContentInfo+xml" />
-      </VersionInfo>
-      <Fields>
-        <field>
-          <id>1234</id>
-          <fieldDefinitionIdentifer>file</fieldDefinitionIdentifer>
-          <languageCode>ger-DE</languageCode>
-          <value xsi:type="fileFieldType">
-            <file href="/binary/files/255757d0697869da6683a9fee9185b275b5a4492" media-type="application/pdf"/>
-          </value>
-        </field>
-        <field>
-          <id>1235</id>
-          <fieldDefinitionIdentifer>image</fieldDefinitionIdentifer>
-          <languageCode>ger-DE</languageCode>
-          <value xsi:type="imageFieldType">
-            <image href="/binary/images/69e0acc9dd4ee29e6e1132258250225b7c41ba5d" media-type="vnd.ez.api.ImageVariantList+xml">
-               <variant identifier="original" href="/binary/images/69e0acc9dd4ee29e6e1132258250225b7c41ba5d/original" contentTypes="image/jpeg,image/png,image/tif"/>
-               <variant identifier="reference" href="/binary/images/69e0acc9dd4ee29e6e1132258250225b7c41ba5d/reference" contentTypes="image/jpeg,image/png"/>
-               <variant identifier="small" href="/binary/images/69e0acc9dd4ee29e6e1132258250225b7c41ba5d/small" contentTypes="image/jpeg,image/png"/>
-               <variant identifier="tiny" href="/binary/images/69e0acc9dd4ee29e6e1132258250225b7c41ba5d/tiny" contentTypes="image/jpeg,image/png"/>
-               <variant identifier="medium" href="/binary/images/69e0acc9dd4ee29e6e1132258250225b7c41ba5d/medium" contentTypes="image/jpeg,image/png"/>
-               <variant identifier="large" href="/binary/images/69e0acc9dd4ee29e6e1132258250225b7c41ba5d/large" contentTypes="image/jpeg,image/png"/>
-               <variant identifier="rss" href="/binary/images/69e0acc9dd4ee29e6e1132258250225b7c41ba5d/rss" contentTypes="image/jpeg,image/png"/>
-            </image>
-          </value>
-        </field>
-        <field>
-          <id>1236</id>
-          <fieldDefinitionIdentifer>media</fieldDefinitionIdentifer>
-          <languageCode>ger-DE</languageCode>
-          <value xsi:type="fileFieldType">
-            <media href="/binary/media/59cc3e1eccd2f963ce9e5efc364717aa4045d652" media-type="video/quicktime">
-              <width>2400</width>
-              <height>180</height>
-              <controller>true</controller>
-              <autoplay>false</autoplay>
-              <loop>false</loop>
-            </media>
-          </value>
-        </field>
-      </Fields>
-      <Relations/>
-    </Version>
 
 
 .. _View:
@@ -7329,6 +6982,126 @@ Location XML Schema
       <xsd:element name="Location" type="vnd.ez.api.Location" />
       <xsd:element name="LocationList" type="vnd.ez.api.LocationList" />
     </xsd:schema>
+
+
+.. _Trash:
+
+Trash XML Schema
+----------------
+
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+      <xsd:include schemaLocation="CommonDefinitions.xsd" />
+      <xsd:include schemaLocation="Location.xsd" />
+
+      <xsd:complexType name="vnd.ez.api.TrashItem">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:all>
+              <xsd:element name="id" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Location ID.
+                              </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="priority" type="xsd:int">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Location priority
+                    Position of the
+                    Location among its siblings when sorted using priority
+                    sort order.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="hidden" type="xsd:boolean">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Indicates that the Location entity has
+                    been explicitly marked as hidden.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="invisible" type="xsd:boolean">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Indicates that the Location is
+                    implicitly marked as hidden by a parent
+                    location.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="ParentLocation" type="ref">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    The parent location
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="pathString" type="xsd:string">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    The materialized path of the location
+                    entry, eg: /1/2/
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="subLocationModificationDate"
+                type="xsd:dateTime">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Timestamp of the latest update of a
+                    content object in a sub location.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="depth" type="xsd:int">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Depth location has in the location
+                    tree.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="childCount" type="xsd:int">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    the number of chidren visible to the
+                    authenticated user which has
+                    loaded this instance.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="remoteId" type="xsd:string"
+                minOccurs="0" />
+              <xsd:element name="Content" type="ref" />
+              <xsd:element name="sortField" type="sortFieldType" />
+              <xsd:element name="sortOrder" type="sortOrderType" />
+            </xsd:all>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="vnd.ez.api.Trash">
+        <xsd:complexContent>
+          <xsd:extension base="ref">
+            <xsd:sequence>
+              <xsd:element name="trashItem" type="vnd.ez.api.TrashItem"></xsd:element>
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:element name="trash" type="vnd.ez.api.Trash" />
+    </xsd:schema>
+
+
+
+
 
 .. _UrlAlias:
 

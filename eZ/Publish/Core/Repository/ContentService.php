@@ -293,7 +293,7 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        if ( isset( $languages ) )
+        if ( !empty( $languages ) )
         {
             foreach ( $languages as $languageCode )
             {
@@ -334,7 +334,7 @@ class ContentService implements ContentServiceInterface
     public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null )
     {
         $content = $this->repository->getSearchService()->findSingle( new CriterionRemoteId( $remoteId ), array(), false );
-        if ( $languages !== null || $versionNo !== null )
+        if ( !empty( $languages ) || $versionNo !== null )
         {
             $content = $this->loadContent( $content->id, $languages, $versionNo );
         }
@@ -383,7 +383,7 @@ class ContentService implements ContentServiceInterface
 
         // @todo: check for user permissions
 
-        if ( isset( $contentCreateStruct->remoteId ) )
+        if ( !empty( $contentCreateStruct->remoteId ) )
         {
             try
             {
@@ -407,7 +407,7 @@ class ContentService implements ContentServiceInterface
         // If location create structs are not valid throw exception early
         $spiLocationCreateStructs = $this->buildSPILocationCreateStructs( $locationCreateStructs );
 
-        if ( !isset( $contentCreateStruct->sectionId ) )
+        if ( empty( $contentCreateStruct->sectionId ) )
         {
             $contentCreateStruct->sectionId = 1;
         }
@@ -690,7 +690,7 @@ class ContentService implements ContentServiceInterface
         {
             if ( $propertyCount > 1 || empty( $contentMetadataUpdateStruct->mainLocationId ) )
             {
-                if ( isset( $contentMetadataUpdateStruct->remoteId ) )
+                if ( !empty( $contentMetadataUpdateStruct->remoteId ) )
                 {
                     try
                     {
@@ -734,7 +734,7 @@ class ContentService implements ContentServiceInterface
                 );
             }
 
-            if ( isset( $contentMetadataUpdateStruct->mainLocationId ) )
+            if ( !empty( $contentMetadataUpdateStruct->mainLocationId ) )
             {
                 $this->persistenceHandler->locationHandler()->changeMainLocation(
                     $contentInfo->id,
@@ -791,12 +791,12 @@ class ContentService implements ContentServiceInterface
      */
     public function createContentDraft( APIContentInfo $contentInfo, APIVersionInfo $versionInfo = null, User $user = null )
     {
-        if ( !isset( $user ) )
+        if ( $user === null )
         {
             $user = $this->repository->getCurrentUser();
         }
 
-        if ( isset( $versionInfo ) )
+        if ( $versionInfo !== null )
         {
             if ( !in_array( $versionInfo->status, array( VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED ) ) )
             {
@@ -854,7 +854,7 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentDrafts( User $user = null )
     {
-        if ( !isset( $user ) )
+        if ( $user === null )
         {
             $user = $this->repository->getCurrentUser();
         }
