@@ -16,6 +16,7 @@ use eZ\Publish\Core\REST\Server\Values;
 use \eZ\Publish\API\Repository\SectionService;
 use \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
+use \eZ\Publish\Core\REST\Server\Values\ResourceDeleted;
 
 use Qafoo\RMF;
 
@@ -149,14 +150,16 @@ class Section
      * Delete a section by ID
      *
      * @param RMF\Request $request
-     * @return void
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
     public function deleteSection( RMF\Request $request )
     {
         $values = $this->urlHandler->parse( 'section', $request->path );
-        return $this->sectionService->deleteSection(
+        $this->sectionService->deleteSection(
             $this->sectionService->loadSection( $values['section'] )
         );
+
+        return new ResourceDeleted();
     }
 
     /**
