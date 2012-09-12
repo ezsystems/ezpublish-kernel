@@ -112,9 +112,10 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
         $inputMessage = $this->outputVisitor->visit( $locationCreateStruct );
         $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Location' );
 
+        $values = $this->urlHandler->parse( 'object', $contentInfo->id );
         $result = $this->client->request(
             'POST',
-            $contentInfo->id,
+            $this->urlHandler->generate( 'objectLocations', array( 'object' => $values['object'] ) ),
             $inputMessage
         );
 
