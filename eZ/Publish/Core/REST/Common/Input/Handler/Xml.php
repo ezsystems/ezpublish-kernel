@@ -185,12 +185,6 @@ class Xml extends Handler
     {
         $result = $this->parseFieldTypeValues( $domElement->childNodes );
 
-        if ( is_array( $result ) && count( $result ) === 1 && isset( $result[0] ) )
-        {
-            // Return plain value on first level
-            $result = $result[0];
-        }
-
         if ( is_array( $result ) && count( $result ) === 0 )
         {
             // No child values means null
