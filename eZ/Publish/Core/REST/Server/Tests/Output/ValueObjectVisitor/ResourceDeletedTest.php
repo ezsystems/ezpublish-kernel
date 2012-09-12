@@ -23,22 +23,16 @@ class ResourceDeletedTest extends ValueObjectVisitorBaseTest
      */
     public function testVisit()
     {
-        $visitor   = $this->getResourceRedirectVisitor();
+        $visitor   = $this->getResourceDeletedVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
 
-        $redirect = new Values\ResourceRedirect(
-            '/some/redirect/uri',
-            'Version'
-        );
+        $redirect = new Values\ResourceDeleted();
 
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'setStatus' )
-            ->with( $this->equalTo( 307 ) );
-        $this->getVisitorMock()->expects( $this->once() )
-            ->method( 'setHeader' )
-            ->with( $this->equalTo( 'Location' ), $this->equalTo( '/some/redirect/uri' ) );
+            ->with( $this->equalTo( 204 ) );
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -52,11 +46,11 @@ class ResourceDeletedTest extends ValueObjectVisitorBaseTest
     /**
      * Get the ResourceRedirect visitor
      *
-     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ResourceRedirect
+     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ResourceDeleted
      */
-    protected function getResourceRedirectVisitor()
+    protected function getResourceDeletedVisitor()
     {
-        return new ValueObjectVisitor\ResourceRedirect(
+        return new ValueObjectVisitor\ResourceDeleted(
             new Common\UrlHandler\eZPublish()
         );
     }

@@ -30,6 +30,5 @@ class ResourceCreated extends ValueObjectVisitor
     {
         $visitor->setStatus( 201 );
         $visitor->setHeader( 'Location', $data->redirectUri );
-
     }
 }

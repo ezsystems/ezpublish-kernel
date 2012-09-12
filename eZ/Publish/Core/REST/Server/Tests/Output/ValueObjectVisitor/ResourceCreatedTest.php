@@ -14,28 +14,27 @@ use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Common;
 
-class ResourceRedirectTest extends ValueObjectVisitorBaseTest
+class ResourceCreatedTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the ResourceRedirect visitor
+     * Test the ResourceCreated visitor
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getResourceRedirectVisitor();
+        $visitor   = $this->getResourceCreatedVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
 
-        $redirect = new Values\ResourceRedirect(
-            '/some/redirect/uri',
-            'Version'
+        $redirect = new Values\ResourceCreated(
+            '/some/redirect/uri'
         );
 
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'setStatus' )
-            ->with( $this->equalTo( 307 ) );
+            ->with( $this->equalTo( 201 ) );
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'setHeader' )
             ->with( $this->equalTo( 'Location' ), $this->equalTo( '/some/redirect/uri' ) );
@@ -52,11 +51,11 @@ class ResourceRedirectTest extends ValueObjectVisitorBaseTest
     /**
      * Get the ResourceRedirect visitor
      *
-     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ResourceRedirect
+     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ResourceCreated
      */
-    protected function getResourceRedirectVisitor()
+    protected function getResourceCreatedVisitor()
     {
-        return new ValueObjectVisitor\ResourceRedirect(
+        return new ValueObjectVisitor\ResourceCreated(
             new Common\UrlHandler\eZPublish()
         );
     }
