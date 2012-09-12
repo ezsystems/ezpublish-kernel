@@ -122,6 +122,32 @@ class Location
     }
 
     /**
+     * Copies a subtree to a new destination
+     *
+     * @param \Qafoo\RMF\Request $request
+     * @return void
+     */
+    public function copySubtree( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'location', $request->path );
+        $location = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $values['location'] ) );
+
+        $destinationValues = $this->urlHandler->parse( 'location', $request->destination );
+        $destinationLocation = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $destinationValues['location'] ) );
+
+        $newLocation = $this->locationService->copySubtree( $location, $destinationLocation );
+
+        return new Values\ResourceCreated(
+            $this->urlHandler->generate(
+                'location',
+                array(
+                    'location' => $newLocation->pathString,
+                )
+            )
+        );
+    }
+
+    /**
      * Loads a location by remote ID
      *
      * @param RMF\Request $request
@@ -208,6 +234,6 @@ class Location
      */
     private function extractLocationIdFromPath( $path )
     {
-        return array_pop( explode('/', $path ) );
+        return array_pop( explode( '/', $path ) );
     }
 }

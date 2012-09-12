@@ -265,6 +265,7 @@ $valueObjectVisitors = array(
     // REST specific
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceRedirect'           => new Output\ValueObjectVisitor\ResourceRedirect( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceDeleted'            => new Output\ValueObjectVisitor\ResourceDeleted( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceCreated'            => new Output\ValueObjectVisitor\ResourceCreated( $urlHandler ),
 );
 
 /*
@@ -355,6 +356,7 @@ $dispatcher = new AuthenticatingDispatcher(
             'GET'    => array( $locationController, 'loadLocation' ),
             'PATCH'  => array( $locationController, 'updateLocation' ),
             'DELETE' => array( $locationController, 'deleteSubtree' ),
+            'COPY'   => array( $locationController, 'copySubtree' ),
         ),
         '(^/content/locations/[0-9/]+/children$)' => array(
             'GET'    => array( $locationController, 'loadLocationChildren' ),
@@ -470,6 +472,9 @@ $request->addHandler( 'method', new RMF\Request\PropertyHandler\Override( array(
     new RMF\Request\PropertyHandler\Server( 'HTTP_X_HTTP_METHOD_OVERRIDE' ),
     new RMF\Request\PropertyHandler\Server( 'REQUEST_METHOD' ),
 ) ) );
+
+// ATTENTION: Only used for test setup
+$request->addHandler( 'destination', new RMF\Request\PropertyHandler\Server( 'HTTP_DESTINATION' ) );
 
 // ATTENTION: Only used for test setup
 $request->addHandler( 'testUser', new RMF\Request\PropertyHandler\Server( 'HTTP_X_TEST_USER' ) );
