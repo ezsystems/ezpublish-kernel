@@ -200,14 +200,16 @@ class ObjectState
      * The given object state is deleted
      *
      * @param RMF\Request $request
-     * @return void
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
     public function deleteObjectState( RMF\Request $request )
     {
         $values = $this->urlHandler->parse( 'objectstate', $request->path );
-        return $this->objectStateService->deleteObjectState(
+        $this->objectStateService->deleteObjectState(
             $this->objectStateService->loadObjectState( $values['objectstate'] )
         );
+
+        return new Values\ResourceDeleted();
     }
 
     /**
