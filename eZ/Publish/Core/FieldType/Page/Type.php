@@ -25,7 +25,7 @@ class Type extends FieldType
     /**
      * @param \eZ\Publish\Core\Repository\ValidatorService $validatorService
      * @param \eZ\Publish\API\Repository\FieldTypeTools $fieldTypeTools
-     * @param Service $pageService
+     * @param \eZ\Publish\Core\FieldType\Page\Service $pageService
      */
     public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools, Service $pageService )
     {
@@ -53,7 +53,7 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value( "" );
+        return new Value();
     }
 
     /**
@@ -85,7 +85,7 @@ class Type extends FieldType
         {
             return null;
         }
-        return $value->text;
+        return $value->page;
     }
 
     /**
@@ -150,7 +150,7 @@ class Type extends FieldType
             return null;
         }
 
-        if ( is_string( $inputValue ) )
+        if ( is_object( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
         }
@@ -164,12 +164,12 @@ class Type extends FieldType
             );
         }
 
-        if ( !is_string( $inputValue->text ) )
+        if ( !is_object( $inputValue->page ) )
         {
             throw new InvalidArgumentType(
-                '$inputValue->xml',
-                'string',
-                $inputValue->xml
+                '$inputValue->page',
+                'eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Page',
+                $inputValue->page
             );
         }
 

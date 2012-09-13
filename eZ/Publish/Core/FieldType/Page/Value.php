@@ -13,20 +13,21 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 class Value extends BaseValue
 {
     /**
-     * Page XML definition
+     * Container for page definition
      *
-     * @var string
+     * @var \eZ\Publish\Core\FieldType\Page\Parts\Page
      */
-    public $xml;
+    public $page;
 
     /**
-     * Construct a new Value object and initialize it $xml
+     * Construct a new Value object
      *
-     * @param string $xml
+     * @param \eZ\Publish\Core\FieldType\Page\Parts\Page $page
      */
-    public function __construct( $xml = '' )
+    public function __construct( $page = null )
     {
-        $this->xml = $xml;
+        $this->page = $page;
+
     }
 
     /**
@@ -38,6 +39,6 @@ class Value extends BaseValue
      */
     public function __toString()
     {
-        return (string)$this->value;
+        return '';
     }
 }
