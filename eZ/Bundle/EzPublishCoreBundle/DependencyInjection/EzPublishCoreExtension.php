@@ -20,19 +20,24 @@ class EzPublishCoreExtension extends Extension
     /**
      * Loads a specific configuration.
      *
-     * @param array            $config    An array of configuration values
+     * @param array            $configs    An array of configuration values
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container A ContainerBuilder instance
      *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
      *
      * @api
      */
-    public function load( array $config, ContainerBuilder $container )
+    public function load( array $configs, ContainerBuilder $container )
     {
         $loader = new Loader\YamlFileLoader(
             $container,
             new FileLocator( __DIR__ . '/../Resources/config' )
         );
+        $configuration = $this->getConfiguration( $configs, $container );
+        $config = $this->processConfiguration( $configuration, $configs );
+
+        $this->registerSiteAcccessConfiguration( $config, $container );
+
         // Base services override
         $loader->load( 'services.yml' );
         // Default settings
@@ -48,6 +53,13 @@ class EzPublishCoreExtension extends Extension
     public function getAlias()
     {
         return 'ezpublish';
+    }
+
+    private function registerSiteAcccessConfiguration( array $config, ContainerBuilder $container )
+    {
+        $container->setParameter( 'ezpublish.siteaccess.list', $config['siteaccess']['list'] );
+        $container->setParameter( 'ezpublish.siteaccess.default', $config['siteaccess']['default_siteaccess'] );
+        $container->setParameter( 'ezpublish.siteaccess.match_config', $config['siteaccess']['match'] );
     }
 
     /**
