@@ -183,6 +183,171 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
     abstract public function provideInputForFromHash();
 
     /**
+     * Provide data sets with field settings which are considered valid by the
+     * {@link validateFieldSettings()} method.
+     *
+     * ATTENTION: This is a default implementation, which must be overwritten
+     * if a FieldType supports field settings!
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of field settings.
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(),
+     *      ),
+     *      array(
+     *          array( 'rows' => 2 )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideValidFieldSettings()
+    {
+        return array(
+            array(
+                array()
+            ),
+        );
+    }
+
+    /**
+     * Provide data sets with field settings which are considered invalid by the
+     * {@link validateFieldSettings()} method. The method must return a
+     * non-empty array of validation error when receiving such field settings.
+     *
+     * ATTENTION: This is a default implementation, which must be overwritten
+     * if a FieldType supports field settings!
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of field settings.
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          true,
+     *      ),
+     *      array(
+     *          array( 'nonExistentKey' => 2 )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInValidFieldSettings()
+    {
+        return array(
+            array(
+                array( 'nonempty' )
+            ),
+        );
+    }
+
+    /**
+     * Provide data sets with validator configurations which are considered
+     * valid by the {@link validateValidatorConfiguration()} method.
+     *
+     * ATTENTION: This is a default implementation, which must be overwritten
+     * if a FieldType supports validators!
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of validator configurations.
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(),
+     *      ),
+     *      array(
+     *          array(
+     *              'IntegerValueValidator' => array(
+     *                  'minIntegerValue' => 0,
+     *                  'maxIntegerValue' => 23,
+     *              )
+     *          )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideValidValidatorConfiguration()
+    {
+        return array(
+            array(
+                array()
+            ),
+        );
+    }
+
+    /**
+     * Provide data sets with validator configurations which are considered
+     * invalid by the {@link validateValidatorConfiguration()} method. The
+     * method must return a non-empty array of valiation errors when receiving
+     * one of the provided values.
+     *
+     * ATTENTION: This is a default implementation, which must be overwritten
+     * if a FieldType supports validators!
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of validator configurations.
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(
+     *              'NonExistentValidator' => array(),
+     *          ),
+     *      ),
+     *      array(
+     *          array(
+     *              // Typos
+     *              'InTEgervALUeVALIdator' => array(
+     *                  'minIntegerValue' => 0,
+     *                  'maxIntegerValue' => 23,
+     *              )
+     *          )
+     *      ),
+     *      array(
+     *          array(
+     *              'IntegerValueValidator' => array(
+     *                  // Incorrect value types
+     *                  'minIntegerValue' => true,
+     *                  'maxIntegerValue' => false,
+     *              )
+     *          )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInvalidValidatorConfiguration()
+    {
+        return array(
+            array(
+                array(
+                    'NonExistentValidator' => array(),
+                ),
+            )
+        );
+    }
+
+    /**
      * Retrieves a test wide cached version of the field type under test.
      *
      * Uses {@link createFieldTypeUnderTest()} to create the instance
@@ -327,6 +492,118 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
         $this->assertTrue(
             $fieldType->isEmptyValue( $fieldType->getEmptyValue() )
         );
+    }
+
+    /**
+     * @param mixed $inputSettings
+     * @return void
+     * @dataProvider provideValidFieldSettings
+     */
+    public function testValidateFieldSettingsValid( $inputSettings )
+    {
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        $validationResult = $fieldType->validateFieldSettings( $inputSettings );
+
+        $this->assertInternalType(
+            'array',
+            $validationResult,
+            'The method validateFieldSettings() must return an array.'
+        );
+        $this->assertEquals(
+            array(),
+            $validationResult,
+            'validateFieldSettings() did not consider the input settings valid.'
+        );
+    }
+
+    /**
+     * @param mixed $inputSettings
+     * @return void
+     * @dataProvider provideInvalidFieldSettings
+     */
+    public function testValidateFieldSettingsInvalid( $inputSettings )
+    {
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        $validationResult = $fieldType->validateFieldSettings( $inputSettings );
+
+        $this->assertInternalType(
+            'array',
+            $validationResult,
+            'The method validateFieldSettings() must return an array.'
+        );
+
+        $this->assertNotEquals(
+            array(),
+            $validationResult,
+            'validateFieldSettings() did consider the input settings valid, which should be invalid.'
+        );
+
+        foreach ( $validationResult as $actualResultElement )
+        {
+            $this->assertInstanceOf(
+                'eZ\\Publish\\SPI\\FieldType\\ValidationError',
+                $actualResultElement,
+                'Validation result of incorrect type.'
+            );
+        }
+    }
+
+    /**
+     * @param mixed $inputConfiguration
+     * @return void
+     * @dataProvider provideValidValidatorConfiguration
+     */
+    public function testValidateValidatorConfigurationValid( $inputConfiguration )
+    {
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        $validationResult = $fieldType->validateValidatorConfiguration( $inputConfiguration );
+
+        $this->assertInternalType(
+            'array',
+            $validationResult,
+            'The method validateValidatorConfiguration() must return an array.'
+        );
+        $this->assertEquals(
+            array(),
+            $validationResult,
+            'validateValidatorConfiguration() did not consider the input configuration valid.'
+        );
+    }
+
+    /**
+     * @param mixed $inputConfiguration
+     * @return void
+     * @dataProvider provideInvalidValidatorConfiguration
+     */
+    public function testValidateValidatorConfigurationInvalid( $inputConfiguration )
+    {
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        $validationResult = $fieldType->validateValidatorConfiguration( $inputConfiguration );
+
+        $this->assertInternalType(
+            'array',
+            $validationResult,
+            'The method validateValidatorConfiguration() must return an array.'
+        );
+
+        $this->assertNotEquals(
+            array(),
+            $validationResult,
+            'validateValidatorConfiguration() did consider the input settings valid, which should be invalid.'
+        );
+
+        foreach ( $validationResult as $actualResultElement )
+        {
+            $this->assertInstanceOf(
+                'eZ\\Publish\\SPI\\FieldType\\ValidationError',
+                $actualResultElement,
+                'Validation result of incorrect type.'
+            );
+        }
     }
 
     // @TODO: More test methods …
