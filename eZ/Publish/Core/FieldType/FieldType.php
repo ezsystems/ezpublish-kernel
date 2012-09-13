@@ -197,7 +197,10 @@ abstract class FieldType implements FieldTypeInterface
      * @param mixed $value
      * @return mixed
      */
-    abstract protected function getSortInfo( $value );
+    protected function getSortInfo( $value )
+    {
+        throw new \RuntimeException( "Not implemented, yet." );
+    }
 
     /**
      * Converts a $value to a persistence value
@@ -255,5 +258,70 @@ abstract class FieldType implements FieldTypeInterface
     public function isEmptyValue( $value )
     {
         return ( $value == $this->getEmptyValue() );
+    }
+
+    /**
+     * Converts the given $fieldSettings to a simple hash format
+     *
+     * This is the default implementation, which just returns the given
+     * $fieldSettings, assuming they are already in a hash format. Overwrite
+     * this in your specific implementation, if neccessary.
+     *
+     * @param mixed $fieldSettings
+     * @return array|hash|scalar|null
+     */
+    public function fieldSettingsToHash( $fieldSettings )
+    {
+        return $fieldSettings;
+    }
+
+    /**
+     * Converts the given $fieldSettingsHash to field settings of the type
+     *
+     * This is the reverse operation of {@link fieldSettingsToHash()}.
+     *
+     * This is the default implementation, which just returns the given
+     * $fieldSettingsHash, assuming the supported field settings are already in
+     * a hash format. Overwrite this in your specific implementation, if
+     * neccessary.
+     *
+     * @param array|hash|scalar|null $fieldSettingsHash
+     * @return mixed
+     */
+    public function fieldSettingsFromHash( $fieldSettingsHash )
+    {
+        return $fieldSettingsHash;
+    }
+
+    /**
+     * Converts the given $validatorConfiguration to a simple hash format
+     *
+     * Default implementation, which just returns the given
+     * $validatorConfiguration, which is by convention an array for all
+     * internal field types. Overwrite this method, if necessary.
+     *
+     * @param mixed $validatorConfiguration
+     * @return array|hash|scalar|null
+     */
+    public function validatorConfigurationToHash( $validatorConfiguration )
+    {
+        return $validatorConfiguration;
+    }
+
+    /**
+     * Converts the given $validatorConfigurationHash to a validator
+     * configuration of the type
+     *
+     * Default implementation, which just returns the given
+     * $validatorConfigurationHash, since the validator configuration is by
+     * convention an array for all internal field types. Overwrite this method,
+     * if necessary.
+     *
+     * @param array|hash|scalar|null $validatorConfigurationHash
+     * @return mixed
+     */
+    public function validatorConfigurationFromHash( $validatorConfigurationHash )
+    {
+        return $validatorConfigurationHash;
     }
 }
