@@ -40,6 +40,9 @@ class Xml extends Handler
         'limitations' => array(
             'limitation'
         ),
+        'values' => array(
+            'ref'
+        ),
         'LocationList' => array(
             'Location'
         ),
