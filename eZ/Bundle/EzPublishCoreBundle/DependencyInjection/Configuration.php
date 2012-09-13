@@ -16,6 +16,16 @@ use Symfony\Component\Config\Definition\ConfigurationInterface,
 class Configuration implements ConfigurationInterface
 {
     /**
+     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser[]
+     */
+    private $configParsers;
+
+    public function __construct( array $configParsers )
+    {
+        $this->configParsers = $configParsers;
+    }
+
+    /**
      * Generates the configuration tree builder.
      *
      * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder The tree builder
@@ -26,6 +36,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root( 'ezpublish' );
 
         $this->addSiteaccessSection( $rootNode );
+        $this->addSystemSection( $rootNode );
 
         return $treeBuilder;
     }
@@ -39,7 +50,7 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->arrayNode( 'list' )
                             ->info( 'Available SiteAccess list' )
-                            ->example( array( 'my_siteaccess', 'my_admin_siteaccess' ) )
+                            ->example( array( 'ezdemo_site', 'ezdemo_site_admin' ) )
                             ->isRequired()
                             ->requiresAtLeastOneElement()
                             ->prototype( 'scalar' )->end()
@@ -47,7 +58,7 @@ class Configuration implements ConfigurationInterface
                         ->arrayNode( 'groups' )
                             ->useAttributeAsKey( 'key' )
                             ->info( 'SiteAccess groups. Useful to share settings between Siteaccess' )
-                            ->example( array( 'my_group' => array( 'my_siteaccess', 'my_admin_siteaccess' ) ) )
+                            ->example( array( 'ezdemo_group' => array( 'ezdemo_site', 'ezdemo_site_admin' ) ) )
                             ->prototype( 'array' )
                                 ->requiresAtLeastOneElement()
                                 ->prototype( 'scalar' )->end()
@@ -86,5 +97,46 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
         ;
+    }
+
+    private function addSystemSection( ArrayNodeDefinition $rootNode )
+    {
+        $systemNodeBuilder = $rootNode
+            ->children()
+                ->arrayNode( 'system' )
+                    ->info( 'System configuration. First key is always a siteaccess or siteaccess group name' )
+                    ->example(
+                        array(
+                             'ezdemo_site'      => array(
+                                 'languages'        => array( 'eng-GB', 'fre-FR' ),
+                                 'content'          => array(
+                                     'view_cache'   => true,
+                                     'ttl_cache'    => true,
+                                     'default_ttl'  => 30
+                                 )
+                             ),
+                             'ezdemo_group'     => array(
+                                 'database' => array(
+                                     'type'             => 'mysql',
+                                     'server'           => 'localhost',
+                                     'port'             => 3306,
+                                     'user'             => 'root',
+                                     'password'         => 'root',
+                                     'database_name'    => 'ezdemo'
+                                 )
+                             )
+                        )
+                    )
+                    ->useAttributeAsKey( 'key' )
+                    ->requiresAtLeastOneElement()
+                    ->prototype( 'array' )
+                        ->children()
+        ;
+
+        // Delegate to configuration parsers
+        foreach ( $this->configParsers as $parser )
+        {
+            $parser->addSemanticConfig( $systemNodeBuilder );
+        }
     }
 }

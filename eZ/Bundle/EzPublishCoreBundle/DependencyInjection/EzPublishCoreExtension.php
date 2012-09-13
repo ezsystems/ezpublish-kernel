@@ -18,6 +18,26 @@ use Symfony\Component\Config\FileLocator;
 class EzPublishCoreExtension extends Extension
 {
     /**
+     * @var array
+     */
+    private $siteAccessGroups;
+
+    /**
+     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser[]
+     */
+    private $configParsers;
+
+    public function __construct( array $configParsers = array() )
+    {
+        $this->configParsers = $configParsers;
+    }
+
+    public function getAlias()
+    {
+        return 'ezpublish';
+    }
+
+    /**
      * Loads a specific configuration.
      *
      * @param array            $configs    An array of configuration values
@@ -50,9 +70,14 @@ class EzPublishCoreExtension extends Extension
         $this->handleSessionLoading( $container, $loader );
     }
 
-    public function getAlias()
+    /**
+     * @param array $config
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration
+     */
+    public function getConfiguration( array $config, ContainerBuilder $container )
     {
-        return 'ezpublish';
+        return new Configuration( $this->configParsers );
     }
 
     private function registerSiteAcccessConfiguration( array $config, ContainerBuilder $container )
@@ -60,6 +85,8 @@ class EzPublishCoreExtension extends Extension
         $container->setParameter( 'ezpublish.siteaccess.list', $config['siteaccess']['list'] );
         $container->setParameter( 'ezpublish.siteaccess.default', $config['siteaccess']['default_siteaccess'] );
         $container->setParameter( 'ezpublish.siteaccess.match_config', $config['siteaccess']['match'] );
+        $this->siteAccessGroups = $config['siteaccess']['groups'];
+        $container->setParameter( 'ezpublish.siteaccess.groups', $this->siteAccessGroups );
     }
 
     /**

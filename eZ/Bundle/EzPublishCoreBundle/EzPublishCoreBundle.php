@@ -18,6 +18,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass,
     eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\TwigTweaksPass,
     eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ContentViewPass,
     eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension,
+    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser as ConfigParser,
     Symfony\Component\HttpKernel\Bundle\Bundle,
     Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -40,7 +41,13 @@ class EzPublishCoreBundle extends Bundle
     {
         if ( !isset( $this->extension ) )
         {
-            $this->extension = new EzPublishCoreExtension();
+            $this->extension = new EzPublishCoreExtension(
+                array(
+                     new ConfigParser\LocationView,
+                     new ConfigParser\Common,
+                     new ConfigParser\Content,
+                )
+            );
         }
 
         return $this->extension;
