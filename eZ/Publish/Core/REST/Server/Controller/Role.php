@@ -152,13 +152,16 @@ class Role
      * Delete a role by ID
      *
      * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
     public function deleteRole( RMF\Request $request )
     {
         $values = $this->urlHandler->parse( 'role', $request->path );
-        return $this->roleService->deleteRole(
+        $this->roleService->deleteRole(
             $this->roleService->loadRole( $values['role'] )
         );
+
+        return new Values\ResourceDeleted();
     }
 
     /**
@@ -261,6 +264,7 @@ class Role
      * Delete a policy from role
      *
      * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
     public function deletePolicy( RMF\Request $request )
     {
@@ -279,7 +283,10 @@ class Role
         }
 
         if ( $policy !== null )
+        {
             $this->roleService->removePolicy( $role, $policy );
+            return new Values\ResourceDeleted();
+        }
     }
 
     /**
