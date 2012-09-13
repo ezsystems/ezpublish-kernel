@@ -180,7 +180,8 @@ $objectStateController = new Controller\ObjectState(
 $trashController = new Controller\Trash(
     $inputDispatcher,
     $urlHandler,
-    $repository->getTrashService()
+    $repository->getTrashService(),
+    $repository->getLocationService()
 );
 
 /*
@@ -393,6 +394,7 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/content/trash/[0-9]+$)' => array(
             'GET'    => array( $trashController, 'loadTrashItem' ),
             'DELETE' => array( $trashController, 'deleteTrashItem' ),
+            'MOVE'   => array( $trashController, 'restoreTrashItem' ),
         ),
 
     // /user
