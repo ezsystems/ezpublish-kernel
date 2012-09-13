@@ -123,6 +123,8 @@ $inputDispatcher = new Common\Input\Dispatcher(
         'application/vnd.ez.api.ObjectStateGroupUpdate' => new Input\Parser\ObjectStateGroupUpdate( $urlHandler, $repository->getObjectStateService() ),
         'application/vnd.ez.api.ObjectStateCreate'      => new Input\Parser\ObjectStateCreate( $urlHandler, $repository->getObjectStateService() ),
         'application/vnd.ez.api.ObjectStateUpdate'      => new Input\Parser\ObjectStateUpdate( $urlHandler, $repository->getObjectStateService() ),
+        'application/vnd.ez.api.ContentObjectStates'    => new Input\Parser\ContentObjectStates( $urlHandler ),
+        'application/vnd.ez.api.ObjectState'            => new Input\Parser\ObjectState( $urlHandler ),
     ) ),
     $handler
 );
@@ -264,7 +266,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Common\\Values\\ObjectState'                => new Output\ValueObjectVisitor\ObjectState( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedObjectState'         => new Output\ValueObjectVisitor\CreatedObjectState( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectStateList'            => new Output\ValueObjectVisitor\ObjectStateList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentObjectStates'        => new Output\ValueObjectVisitor\ContentObjectStates( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Common\\Values\\ContentObjectStates'        => new Output\ValueObjectVisitor\ContentObjectStates( $urlHandler ),
 
     // REST specific
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceRedirect'           => new Output\ValueObjectVisitor\ResourceRedirect( $urlHandler ),

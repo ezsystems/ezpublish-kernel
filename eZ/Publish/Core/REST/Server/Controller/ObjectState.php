@@ -310,7 +310,7 @@ class ObjectState
         foreach ( $newObjectStates as $newObjectState )
         {
             $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $newObjectState->groupId );
-            $this->objectStateService->setObjectState( $contentInfo, $objectStateGroup->id, $newObjectState->objectState );
+            $this->objectStateService->setObjectState( $contentInfo, $objectStateGroup, $newObjectState->objectState );
             $contentObjectStates[(int) $objectStateGroup->id] = $newObjectState;
         }
 

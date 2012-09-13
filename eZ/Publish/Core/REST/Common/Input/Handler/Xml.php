@@ -43,6 +43,9 @@ class Xml extends Handler
         'LocationList' => array(
             'Location'
         ),
+        'ContentObjectStates' => array(
+            'ObjectState'
+        ),
         'names' => array(
             'value'
         ),
