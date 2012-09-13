@@ -258,4 +258,121 @@ class RelationListTest extends StandardizedFieldTypeTest
             ),
         );
     }
+
+    /**
+     * Provide data sets with field settings which are considered valid by the
+     * {@link validateFieldSettings()} method.
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of field settings.
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(),
+     *      ),
+     *      array(
+     *          array( 'rows' => 2 )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideValidFieldSettings()
+    {
+        return array(
+            array(
+                array(
+                    'selectionMethod' => RelationList::SELECTION_BROWSE,
+                    'selectionDefaultLocation' => 23,
+                )
+            ),
+            array(
+                array(
+                    'selectionMethod' => RelationList::SELECTION_DROPDOWN,
+                    'selectionDefaultLocation' => 'foo',
+                )
+            ),
+            array(
+                array(
+                    'selectionMethod' => RelationList::SELECTION_DROPDOWN,
+                    'selectionDefaultLocation' => 'foo',
+                    'selectionContentTypes' => array( 1, 2, 3 )
+                )
+            ),
+        );
+    }
+
+    /**
+     * Provide data sets with field settings which are considered invalid by the
+     * {@link validateFieldSettings()} method. The method must return a
+     * non-empty array of validation error when receiving such field settings.
+     *
+     * ATTENTION: This is a default implementation, which must be overwritten
+     * if a FieldType supports field settings!
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of field settings.
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          true,
+     *      ),
+     *      array(
+     *          array( 'nonExistentKey' => 2 )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInValidFieldSettings()
+    {
+        return array(
+            array(
+                // Missing mandatory keys 'selectionMethod' and 'selectionDefaultLocation'
+                array()
+            ),
+            array(
+                // Missing mandatory key 'selectionDefaultLocation'
+                array(
+                    'selectionMethod' => RelationList::SELECTION_DROPDOWN,
+                )
+            ),
+            array(
+                // Missing mandatory key 'selectionMethod'
+                array(
+                    'selectionDefaultLocation' => 23
+                )
+            ),
+            array(
+                // Invalid value for 'selectionMethod'
+                array(
+                    'selectionMethod' => true,
+                    'selectionDefaultLocation' => 23
+                )
+            ),
+            array(
+                // Invalid value for 'selectionDefaultLocation'
+                array(
+                    'selectionMethod' => RelationList::SELECTION_DROPDOWN,
+                    'selectionDefaultLocation' => array()
+                )
+            ),
+            array(
+                // Invalid value for 'selectionContentTypes'
+                array(
+                    'selectionMethod' => RelationList::SELECTION_DROPDOWN,
+                    'selectionDefaultLocation' => 23,
+                    'selectionContentTypes' => true,
+                )
+            ),
+        );
+    }
 }
