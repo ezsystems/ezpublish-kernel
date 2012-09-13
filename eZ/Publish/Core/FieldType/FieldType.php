@@ -241,4 +241,19 @@ abstract class FieldType implements FieldTypeInterface
     {
         return false;
     }
+
+    /**
+     * Returns if the given $value is considered empty by the field type
+     *
+     * Default implementation, which performs a "==" check with the value
+     * returned by {@link getEmptyValue()}. Overwrite in the specific field
+     * type, if necessary.
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    public function isEmptyValue( $value )
+    {
+        return ( $value == $this->getEmptyValue() );
+    }
 }
