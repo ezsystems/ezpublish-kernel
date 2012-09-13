@@ -83,7 +83,7 @@ class Trash
     public function loadTrashItem( RMF\Request $request )
     {
         $values = $this->urlHandler->parse( 'trash', $request->path );
-        $this->trashService->loadTrashItem( $values['trash'] );
+        return $this->trashService->loadTrashItem( $values['trash'] );
     }
 
     /**

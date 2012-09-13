@@ -257,6 +257,7 @@ $valueObjectVisitors = array(
     // Trash
 
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\Trash'                      => new Output\ValueObjectVisitor\Trash( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem'            => new Output\ValueObjectVisitor\TrashItem( $urlHandler ),
 
     // Object State
 
