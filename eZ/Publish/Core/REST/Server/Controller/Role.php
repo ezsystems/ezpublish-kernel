@@ -249,7 +249,11 @@ class Role
                 $policyToReturn = $policies[$i];
         }
 
-        return $policyToReturn;
+        return new Values\CreatedPolicy(
+            array(
+                'policy' => $policyToReturn
+            )
+        );
     }
 
     /**
