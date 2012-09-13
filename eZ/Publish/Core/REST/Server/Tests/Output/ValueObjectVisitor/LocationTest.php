@@ -76,7 +76,7 @@ class LocationTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'Location',
                 'children' => array(
-                    'count' => 13
+                    'count' => 14
                 )
             ),
             $result,
@@ -198,6 +198,46 @@ class LocationTest extends ValueObjectVisitorBaseTest
             ),
             $result,
             'Invalid or non-existing <Location> remoteId value element.',
+            false
+        );
+    }
+
+    /**
+     * Test if result contains Children element
+     *
+     * @param string $result
+     * @depends testVisit
+     */
+    public function testResultContainsChildrenElement( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag'      => 'Children'
+            ),
+            $result,
+            'Invalid <Children> element.',
+            false
+        );
+    }
+
+    /**
+     * Test if result contains Children element attributes
+     *
+     * @param string $result
+     * @depends testVisit
+     */
+    public function testResultContainsChildrenAttributes( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag'      => 'Children',
+                'attributes' => array(
+                    'media-type' => 'application/vnd.ez.api.LocationList+xml',
+                    'href'       => '/content/locations/1/2/21/42/children',
+                )
+            ),
+            $result,
+            'Invalid <Children> attributes.',
             false
         );
     }

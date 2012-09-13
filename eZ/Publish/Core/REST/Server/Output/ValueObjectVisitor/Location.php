@@ -79,6 +79,19 @@ class Location extends ValueObjectVisitor
         $generator->startValueElement( 'remoteId', $data->remoteId );
         $generator->endValueElement( 'remoteId' );
 
+        $generator->startObjectElement( 'Children', 'LocationList' );
+        $generator->startAttribute(
+            'href',
+            $this->urlHandler->generate(
+                'locationChildren',
+                array(
+                    'location' => rtrim( $data->pathString, '/' )
+                )
+            )
+        );
+        $generator->endAttribute( 'href' );
+        $generator->endObjectElement( 'Children' );
+
         $generator->startObjectElement( 'Content' );
         $generator->startAttribute( 'href', $this->urlHandler->generate( 'object', array( 'object' => $data->contentId ) ) );
         $generator->endAttribute( 'href' );
