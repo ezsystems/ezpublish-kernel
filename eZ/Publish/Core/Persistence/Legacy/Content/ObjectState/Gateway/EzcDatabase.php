@@ -127,7 +127,7 @@ class EzcDatabase extends Gateway
     public function loadObjectStateGroupListData( $offset, $limit )
     {
         $query = $this->createObjectStateGroupFindQuery();
-        $query->limit( $limit, $offset );
+        $query->limit( $limit > 0 ? $limit : PHP_INT_MAX, $offset );
 
         $statement = $query->prepare();
         $statement->execute();
