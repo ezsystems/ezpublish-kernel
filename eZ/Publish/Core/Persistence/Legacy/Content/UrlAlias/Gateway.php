@@ -19,11 +19,21 @@ abstract class Gateway
      *
      * @param mixed $locationId
      * @param boolean $custom
-     * @param array $prioritizedLanguageCodes
      *
      * @return array
      */
-    abstract public function loadUrlAliasListDataByLocationId( $locationId, $custom = false, array $prioritizedLanguageCodes );
+    abstract public function loadUrlAliasListDataByLocationId( $locationId, $custom = false );
+
+    /**
+     * @todo docuemtn
+     *
+     * @param string|null $languageCode
+     * @param int $offset
+     * @param int|null $limit
+     *
+     * @return array
+     */
+    abstract public function loadGlobalUrlAliasListData( $languageCode, $offset = 0, $limit = -1 );
 
     /**
      *
@@ -50,15 +60,6 @@ abstract class Gateway
 
     /**
      *
-     * @param mixed $parentId
-     * @param string $textMD5
-     *
-     * @return void
-     */
-    abstract public function updateToNopRow( $parentId, $textMD5 );
-
-    /**
-     *
      *
      * @param array $values
      *
@@ -76,16 +77,6 @@ abstract class Gateway
     abstract public function insertNopRow( $parentId, $text, $textMD5 );
 
     /**
-     * Updates single row data matched by composite primary key
-     *
-     * @param mixed $parentId
-     * @param string $textMD5
-     *
-     * @return void
-     */
-    abstract public function deleteRow( $parentId, $textMD5 );
-
-    /**
      * Loads single row data matched by composite primary key
      *
      * @param mixed $parentId
@@ -94,17 +85,6 @@ abstract class Gateway
      * @return array
      */
     abstract public function loadRow( $parentId, $textMD5 );
-
-    /**
-     *
-     *
-     * @param string $action
-     * @param bool $original
-     * @param bool $alias
-     *
-     * @return mixed
-     */
-    abstract public function loadRowByAction( $action, $original = true, $alias = false );
 
     /**
      *
@@ -132,7 +112,7 @@ abstract class Gateway
     abstract public function relink( $action, $languageId, $newId, $parentId, $textMD5 );
 
     /**
-     *
+     * Updates parent ids of children entries when location is moved.
      *
      * @param string $action
      * @param mixed $languageId
@@ -141,8 +121,6 @@ abstract class Gateway
      * @param string $textMD5
      *
      * @return void
-     *
-     * @todo not clear why this behaviour is desired
      */
     abstract public function reparent( $action, $languageId, $newParentId, $parentId, $textMD5 );
 
@@ -150,25 +128,19 @@ abstract class Gateway
      *
      *
      * @param mixed $id
-     * @param string[] $prioritizedLanguageCodes
      *
-     * @return string
+     * @return array
      */
-    abstract public function getPath( $id, array $prioritizedLanguageCodes );
+    abstract public function loadPathData( $id );
 
     /**
      * Loads basic URL alias data
      *
-     * Note: columns for end URL part row are not aliased
-     *
-     * @param string[] $urlElements URL string broken into array of URL parts
-     * @param string[] $languageCodes Languages to match against
+     * @param string[] $urlHashes URL string hashes
      *
      * @return array
      */
-    abstract public function loadBasicUrlAliasData( array $urlElements, array $languageCodes );
-
-    abstract public function getLocationUrlAliasLanguageCodes( array $actions, array $prioritizedLanguageCodes );
+    abstract public function loadUrlAliasData( array $urlHashes );
 
     /**
      *
@@ -178,15 +150,6 @@ abstract class Gateway
      * @return int
      */
     abstract public function loadLocationEntryIdByAction( $action );
-
-    /**
-     *
-     *
-     * @param string $action
-     *
-     * @return array
-     */
-    abstract public function loadLocationEntryByAction( $action );
 
     /**
      *
@@ -203,11 +166,10 @@ abstract class Gateway
      *
      * @param mixed $parentId
      * @param string $textMD5
-     * @param integer $languageId
      *
-     * @return void
+     * @return boolean
      */
-    abstract public function removeTranslation( $parentId, $textMD5, $languageId );
+    abstract public function removeCustomAlias( $parentId, $textMD5 );
 
     /**
      *

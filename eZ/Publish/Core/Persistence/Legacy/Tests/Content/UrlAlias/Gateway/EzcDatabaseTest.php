@@ -46,298 +46,219 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * Test for the loadBasicUrlAliasData() method.
+     * Test for the loadUrlAliasData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadBasicUrlAliasData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadUrlAliasData
      */
-    public function testLoadBasicUrlaliasDataNonExistent()
+    public function testLoadUrlaliasDataNonExistent()
     {
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_simple.php" );
         $gateway = $this->getGateway();
 
-        $rows = $gateway->loadBasicUrlAliasData( array( "tri" ), array( "cro-HR" ) );
+        $rows = $gateway->loadUrlAliasData( array( md5( "tri" ) ) );
 
         self::assertEmpty( $rows );
     }
 
-    protected function getSimpleFixtureResult()
-    {
-        return array(
-            "id" =>  "3",
-            "link" =>  "3",
-            "is_alias" => "0",
-            "alias_redirects" => "1",
-            "action" => "eznode:315",
-            "is_original" => "1",
-            "ezurlalias_ml0_text" => "jedan",
-            "ezurlalias_ml1_text" => "dva",
-            "lang_mask" => "3",
-            "language_codes" => array( "cro-HR" ),
-            "parent" => "2",
-            "text_md5" => "c67ed9a09ab136fae610b6a087d82e21",
-            "ezurlalias_ml0_action" => "eznode:314",
-            "ezurlalias_ml1_action" => "eznode:315"
-        );
-    }
-
     /**
-     * Test for the loadBasicUrlAliasData() method.
+     * Test for the loadUrlAliasData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadBasicUrlAliasData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadUrlAliasData
      */
-    public function testLoadBasicUrlaliasData()
+    public function testLoadUrlaliasData()
     {
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_simple.php" );
         $gateway = $this->getGateway();
 
-        $row = $gateway->loadBasicUrlAliasData( array( "jedan", "dva" ), array( "cro-HR" ) );
+        $row = $gateway->loadUrlAliasData( array( md5( "jedan" ), md5( "dva" ) ) );
 
         self::assertEquals(
-            $this->getSimpleFixtureResult(),
+            array(
+                "ezurlalias_ml0_id" => "2",
+                "ezurlalias_ml0_link" => "2",
+                "ezurlalias_ml0_is_alias" => "0",
+                "ezurlalias_ml0_alias_redirects" => "1",
+                "ezurlalias_ml0_is_original" => "1",
+                "ezurlalias_ml0_action" => "eznode:314",
+                "ezurlalias_ml0_lang_mask" => "2",
+                "ezurlalias_ml0_text" => "jedan",
+                "ezurlalias_ml0_parent" => "0",
+                "ezurlalias_ml0_text_md5" => "6896260129051a949051c3847c34466f",
+                "ezurlalias_ml1_id" => "3",
+                "ezurlalias_ml1_link" => "3",
+                "ezurlalias_ml1_is_alias" => "0",
+                "ezurlalias_ml1_alias_redirects" => "1",
+                "ezurlalias_ml1_is_original" => "1",
+                "ezurlalias_ml1_action" => "eznode:315",
+                "ezurlalias_ml1_lang_mask" => "3",
+                "ezurlalias_ml1_text" => "dva",
+                "ezurlalias_ml1_parent" => "2",
+                "ezurlalias_ml1_text_md5" => "c67ed9a09ab136fae610b6a087d82e21",
+            ),
             $row
         );
     }
 
     /**
-     * Test for the loadBasicUrlAliasData() method.
+     * Test for the loadUrlAliasData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadBasicUrlAliasData
+     * Test with fixture containing language mask with multiple languages.
+     *
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadUrlAliasData
      */
-    public function testLoadBasicUrlaliasDataIsCaseInsensitive()
+    public function testLoadUrlaliasDataMultipleLanguages()
     {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_simple.php" );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_multilang.php" );
         $gateway = $this->getGateway();
 
-        $row = $gateway->loadBasicUrlAliasData( array( "JEDAN", "DVA" ), array( "cro-HR" ) );
+        $row = $gateway->loadUrlAliasData( array( md5( "jedan" ), md5( "dva" ) ) );
 
         self::assertEquals(
-            $this->getSimpleFixtureResult(),
+            array(
+                "ezurlalias_ml0_id" => "2",
+                "ezurlalias_ml0_link" => "2",
+                "ezurlalias_ml0_is_alias" => "0",
+                "ezurlalias_ml0_alias_redirects" => "1",
+                "ezurlalias_ml0_is_original" => "1",
+                "ezurlalias_ml0_action" => "eznode:314",
+                "ezurlalias_ml0_lang_mask" => "3",
+                "ezurlalias_ml0_text" => "jedan",
+                "ezurlalias_ml0_parent" => "0",
+                "ezurlalias_ml0_text_md5" => "6896260129051a949051c3847c34466f",
+                "ezurlalias_ml1_id" => "3",
+                "ezurlalias_ml1_link" => "3",
+                "ezurlalias_ml1_is_alias" => "0",
+                "ezurlalias_ml1_alias_redirects" => "1",
+                "ezurlalias_ml1_is_original" => "1",
+                "ezurlalias_ml1_action" => "eznode:315",
+                "ezurlalias_ml1_lang_mask" => "6",
+                "ezurlalias_ml1_text" => "dva",
+                "ezurlalias_ml1_parent" => "2",
+                "ezurlalias_ml1_text_md5" => "c67ed9a09ab136fae610b6a087d82e21",
+            ),
             $row
         );
     }
 
-    /**
-     * Test for the loadBasicUrlAliasData() method.
-     *
-     * Test with fixture containing language mask with multiple languages.
-     *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadBasicUrlAliasData
-     */
-    public function testLoadBasicUrlaliasDataMultipleLanguages()
-    {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_multilang.php" );
-        $gateway = $this->getGateway();
-        $expectedResult = array(
-            "id" =>  "3",
-            "link" =>  "3",
-            "is_alias" => "0",
-            "alias_redirects" => "1",
-            "action" => "eznode:315",
-            "is_original" => "1",
-            "ezurlalias_ml0_text" => "jedan",
-            "ezurlalias_ml1_text" => "dva",
-            "lang_mask" => "6",
-            "language_codes" => array( "cro-HR", "eng-GB" ),
-            "parent" => "2",
-            "text_md5" => "c67ed9a09ab136fae610b6a087d82e21",
-            "ezurlalias_ml0_action" => "eznode:314",
-            "ezurlalias_ml1_action" => "eznode:315"
-        );
-
-        $row1 = $gateway->loadBasicUrlAliasData( array( "jedan", "dva" ), array( "cro-HR" ) );
-        $row2 = $gateway->loadBasicUrlAliasData( array( "jedan", "dva" ), array( "eng-GB" ) );
-        $row3 = $gateway->loadBasicUrlAliasData( array( "jedan", "dva" ), array( "cro-HR", "eng-GB" ) );
-
-        self::assertEquals( $expectedResult, $row1 );
-        self::assertEquals( $expectedResult, $row2 );
-        self::assertEquals( $expectedResult, $row3 );
-    }
-
-    public function providerForTestGetPath()
+    public function providerForTestLoadPathData()
     {
         return array(
             array(
                 2,
-                array( "cro-HR" ),
-                "jedan"
+                array(
+                    array(
+                        array( "id" => "2", "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
+                    ),
+                )
             ),
             array(
-                2,
-                array( "eng-GB" ),
-                "jedan"
-            ),
-            array(
-                2,
-                array( "ger-DE" ),
-                "jedan"
-            ),
-            array(
-                2,
-                array( "kli-KR" ),
-                "jedan"
-            ),
-            array(
-                4,
-                array( "cro-HR" ),
-                "jedan/dva/tri"
+                3,
+                array(
+                    array(
+                        array( "id" => "2", "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
+                    ),
+                    array(
+                        array( "id" => "3", "parent" => "2", "lang_mask" => "5", "text" => "two" ),
+                        array( "id" => "3", "parent" => "2", "lang_mask" => "3", "text" => "dva" ),
+                    ),
+                )
             ),
             array(
                 4,
-                array( "cro-HR", "eng-GB", "ger-DE" ),
-                "jedan/dva/tri"
+                array(
+                    array(
+                        array( "id" => "2", "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
+                    ),
+                    array(
+                        array( "id" => "3", "parent" => "2", "lang_mask" => "5", "text" => "two" ),
+                        array( "id" => "3", "parent" => "2", "lang_mask" => "3", "text" => "dva" ),
+                    ),
+                    array(
+                        array( "id" => "4", "parent" => "3", "lang_mask" => "9", "text" => "drei" ),
+                        array( "id" => "4", "parent" => "3", "lang_mask" => "5", "text" => "three" ),
+                        array( "id" => "4", "parent" => "3", "lang_mask" => "3", "text" => "tri" ),
+                    ),
+                )
             ),
-            array(
-                4,
-                array( "cro-HR", "ger-DE", "eng-GB" ),
-                "jedan/dva/tri"
-            ),
-            array(
-                4,
-                array( "eng-GB" ),
-                "jedan/two/three"
-            ),
-            array(
-                4,
-                array( "eng-GB", "cro-HR", "ger-DE" ),
-                "jedan/two/three"
-            ),
-            array(
-                4,
-                array( "eng-GB", "ger-DE", "cro-HR" ),
-                "jedan/two/three"
-            ),
-            array(
-                4,
-                array( "ger-DE", "cro-HR" ),
-                "jedan/dva/drei"
-            ),
-            array(
-                4,
-                array( "ger-DE", "cro-HR", "eng-GB" ),
-                "jedan/dva/drei"
-            ),
-            array(
-                4,
-                array( "ger-DE", "eng-GB", "cro-HR" ),
-                "jedan/two/drei"
-            )
         );
     }
 
     /**
-     * Test for the getPath() method.
+     * Test for the loadPathData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::getPath
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::choosePrioritizedRow
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::languageScore
-     * @dataProvider providerForTestGetPath
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadPathData
+     * @dataProvider providerForTestLoadPathData
      */
-    public function testGetPath( $id, array $prioritizedLanguageCodes, $expectedPath )
+    public function testLoadPathData( $id, $pathData )
     {
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_fallback.php" );
         $gateway = $this->getGateway();
 
+        $loadedPathData = $gateway->loadPathData( $id );
+
         self::assertEquals(
-            $expectedPath,
-            $gateway->getPath( $id, $prioritizedLanguageCodes )
+            $pathData,
+            $loadedPathData
         );
     }
 
-    public function providerForTestGetPathMultipleLanguages()
+    public function providerForTestLoadPathDataMultipleLanguages()
     {
         return array(
             array(
-                3,
-                array( "eng-GB" ),
-                "jedan/dva"
+                2,
+                array(
+                    array(
+                        array( "id" => "2", "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
+                    ),
+                )
             ),
             array(
                 3,
-                array( "cro-HR" ),
-                "jedan/dva"
-            ),
-            array(
-                3,
-                array( "cro-HR", "eng-GB" ),
-                "jedan/dva"
-            ),
-            array(
-                3,
-                array( "eng-GB", "cro-HR" ),
-                "jedan/dva"
+                array(
+                    array(
+                        array( "id" => "2", "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
+                    ),
+                    array(
+                        array( "id" => "3", "parent" => "2", "lang_mask" => "6", "text" => "dva" ),
+                    ),
+                )
             ),
             array(
                 4,
-                array( "cro-HR" ),
-                "jedan/dva/tri"
-            ),
-            array(
-                4,
-                array( "eng-GB" ),
-                "jedan/dva/three"
-            ),
-            array(
-                4,
-                array( "eng-GB", "cro-HR" ),
-                "jedan/dva/three"
-            ),
-            array(
-                4,
-                array( "cro-HR", "eng-GB" ),
-                "jedan/dva/tri"
+                array(
+                    array(
+                        array( "id" => "2", "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
+                    ),
+                    array(
+                        array( "id" => "3", "parent" => "2", "lang_mask" => "6", "text" => "dva" ),
+                    ),
+                    array(
+                        array( "id" => "4", "parent" => "3", "lang_mask" => "4", "text" => "three" ),
+                        array( "id" => "4", "parent" => "3", "lang_mask" => "2", "text" => "tri" ),
+                    ),
+                )
             ),
         );
     }
 
     /**
-     * Test for the getPath() method.
+     * Test for the loadPathData() method.
      *
-     * Test with fixture containing language mask with multiple languages.
-     *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::getPath
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::choosePrioritizedRow
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::languageScore
-     * @dataProvider providerForTestGetPathMultipleLanguages
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadPathData
+     * @dataProvider providerForTestLoadPathDataMultipleLanguages
      */
-    public function testGetPathMultipleLanguages( $id, array $prioritizedLanguageCodes, $expectedPath )
+    public function testLoadPathDataMultipleLanguages( $id, $pathData )
     {
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_multilang.php" );
         $gateway = $this->getGateway();
 
+        $loadedPathData = $gateway->loadPathData( $id );
+
         self::assertEquals(
-            $expectedPath,
-            $gateway->getPath( $id, $prioritizedLanguageCodes )
+            $pathData,
+            $loadedPathData
         );
-    }
-
-    /**
-     * Test for the getPath() method.
-     *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::getPath
-     */
-    public function testGetPathWithFallbackToArbitraryLanguage()
-    {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_fallback.php" );
-        $gateway = $this->getGateway();
-
-        $klingonFriendlyPath = $gateway->getPath( 3, array( "kli-KR" ) );
-        $hasMatched = false;
-
-        switch ( $klingonFriendlyPath )
-        {
-            case "jedan/dva";
-                $hasMatched = true;
-                break;
-
-            case "jedan/two";
-                $hasMatched = true;
-                break;
-        }
-
-        if ( !$hasMatched )
-        {
-            self::fail( "Fallback to arbitrary language not matched" );
-        }
     }
 
     public function providerForTestDowngradeMarksAsHistory()
@@ -555,7 +476,6 @@ class EzcDatabaseTest extends TestCase
             );
             $this->gateway = new EzcDatabase(
                 $this->getDatabaseHandler(),
-                $languageHandler,
                 new LanguageMaskGenerator( $languageHandler )
             );
         }

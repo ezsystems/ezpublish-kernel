@@ -1150,6 +1150,7 @@ class ContentService implements ContentServiceInterface
             {
                 $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
                     $spiLocation->id,
+                    $spiLocation->parentId,
                     $name,
                     $languageCode,
                     $languageCode === $alwaysAvailableLanguageCode
