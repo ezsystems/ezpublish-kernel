@@ -197,6 +197,26 @@ class Role
     }
 
     /**
+     * Loads a policy
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\PolicyList
+     */
+    public function loadPolicy( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'policy', $request->path );
+
+        $loadedRole = $this->roleService->loadRole( $values['role'] );
+        foreach ( $loadedRole->getPolicies() as $policy )
+        {
+            if ( $policy->id == $values['policy'] )
+                return $policy;
+        }
+
+        // @todo return not found?
+    }
+
+    /**
      * Adds a policy to role
      *
      * @param RMF\Request $request
@@ -257,7 +277,7 @@ class Role
             }
         }
 
-        return null;
+        // @todo return not found?
     }
 
     /**
@@ -287,6 +307,8 @@ class Role
             $this->roleService->removePolicy( $role, $policy );
             return new Values\ResourceDeleted();
         }
+
+        // @todo return not found?
     }
 
     /**

@@ -420,6 +420,7 @@ $dispatcher = new AuthenticatingDispatcher(
             'DELETE' => array( $roleController, 'deletePolicies' ),
         ),
         '(^/user/roles/[0-9]+/policies/[0-9]+$)' => array(
+            'GET'    => array( $roleController, 'loadPolicy' ),
             'PATCH'  => array( $roleController, 'updatePolicy' ),
             'DELETE' => array( $roleController, 'deletePolicy' ),
         ),
