@@ -62,7 +62,8 @@ class Type extends FieldType
                 );
             }
         }
-        if ( $fieldSettings['selectionMethod'] != self::SELECTION_BROWSE && $fieldSettings['selectionMethod'] != self::SELECTION_DROPDOWN )
+        if ( !isset( $fieldSettings['selectionMethod'] ) ||
+            ( $fieldSettings['selectionMethod'] != self::SELECTION_BROWSE && $fieldSettings['selectionMethod'] != self::SELECTION_DROPDOWN ) )
         {
             $validationResult[] = new ValidationError(
                 "Setting selection method must be either %selection_browse% or %selection_dropdown%",
@@ -71,7 +72,8 @@ class Type extends FieldType
             );
         }
 
-        if ( !is_string( $fieldSettings['selectionRoot'] ) && !is_numeric( $fieldSettings['selectionRoot'] ) )
+        if ( !isset( $fieldSettings['selectionRoot'] ) ||
+            ( !is_string( $fieldSettings['selectionRoot'] ) && !is_numeric( $fieldSettings['selectionRoot'] ) ) )
         {
             $validationResult[] = new ValidationError(
                 "Setting selection root must be either a string or numeric integer"
