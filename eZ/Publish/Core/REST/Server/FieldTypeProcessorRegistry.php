@@ -60,7 +60,7 @@ class FieldTypeProcessorRegistry
      *
      * @param mixed $fieldTypeIdentifier
      * @return \eZ\Publish\Core\REST\Server\FieldTypeProcessor
-     * @throws NotFoundException if not processor is registered for
+     * @throws RuntimeException if not processor is registered for
      *                           $fieldTypeIdentifier
      */
     public function getProcessor( $fieldTypeIdentifier )
