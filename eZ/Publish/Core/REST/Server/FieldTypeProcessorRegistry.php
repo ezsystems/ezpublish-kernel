@@ -41,7 +41,7 @@ class FieldTypeProcessorRegistry
      */
     public function registerProcessor( $fieldTypeIdentifier, FieldTypeProcessor $processor )
     {
-        throw new \RuntimeException( '@TODO: Implement.' );
+        $this->processors[$fieldTypeIdentifier] = $processor;
     }
 
     /**
@@ -52,7 +52,7 @@ class FieldTypeProcessorRegistry
      */
     public function hasProcessor( $fieldTypeIdentifier )
     {
-        throw new \RuntimeException( '@TODO: Implement.' );
+        return ( isset( $this->processors[$fieldTypeIdentifier] ) );
     }
 
     /**
@@ -65,6 +65,12 @@ class FieldTypeProcessorRegistry
      */
     public function getProcessor( $fieldTypeIdentifier )
     {
-        throw new \RuntimeException( '@TODO: Implement.' );
+        if ( !$this->hasProcessor( $fieldTypeIdentifier ) )
+        {
+            throw new \RuntimeException(
+                "No field type processor for '{$fieldTypeIdentifier}' found."
+            );
+        }
+        return $this->processors[$fieldTypeIdentifier];
     }
 }
