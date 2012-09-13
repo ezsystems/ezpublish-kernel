@@ -79,11 +79,15 @@ class ObjectState
      */
     public function createObjectStateGroup( RMF\Request $request )
     {
-        return $this->objectStateService->createObjectStateGroup(
-            $this->inputDispatcher->parse(
-                new Message(
-                    array( 'Content-Type' => $request->contentType ),
-                    $request->body
+        return new Values\CreatedObjectStateGroup(
+            array(
+                'objectStateGroup' => $this->objectStateService->createObjectStateGroup(
+                    $this->inputDispatcher->parse(
+                        new Message(
+                            array( 'Content-Type' => $request->contentType ),
+                            $request->body
+                        )
+                    )
                 )
             )
         );

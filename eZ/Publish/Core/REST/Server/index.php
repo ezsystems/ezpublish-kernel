@@ -58,8 +58,6 @@ require_once __DIR__ . '/../../../../../bootstrap.php';
  * shutdown!
  */
 
-$stateDir    = __DIR__ . '/_state/';
-
 $reInitializeRepository = true;
 if ( isset( $_SERVER['HTTP_X_TEST_SESSION'] ) )
 {
@@ -215,7 +213,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestContent'                => new Output\ValueObjectVisitor\RestContent( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo'          => new Output\ValueObjectVisitor\VersionInfo( $urlHandler ),
     // Includes vitising of VersionInfo, which can be extracted for re-use, if
-    // neccessary
+    // necessary
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content'              => new Output\ValueObjectVisitor\Content(
         $urlHandler,
         new Common\Output\FieldValueSerializer( $repository->getFieldTypeService() )
@@ -261,6 +259,7 @@ $valueObjectVisitors = array(
     // Object State
 
     '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup' => new Output\ValueObjectVisitor\ObjectStateGroup( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedObjectStateGroup'    => new Output\ValueObjectVisitor\CreatedObjectStateGroup( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectStateGroupList'       => new Output\ValueObjectVisitor\ObjectStateGroupList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Common\\Values\\ObjectState'                => new Output\ValueObjectVisitor\ObjectState( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectStateList'            => new Output\ValueObjectVisitor\ObjectStateList( $urlHandler ),
@@ -454,7 +453,7 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^application/xml$)'  => $xmlVisitor,
         // '(^.*/.*$)'  => new View\InvalidApiUse(),
         // Fall back gracefully to XML visiting. Also helps support responses
-        // without Accept header (e.g. DELETE reqeustes).
+        // without Accept header (e.g. DELETE requests).
         '(^.*/.*$)'  => $xmlVisitor,
     ) ),
     // This is just used for integration tests, DO NOT USE IN PRODUCTION
