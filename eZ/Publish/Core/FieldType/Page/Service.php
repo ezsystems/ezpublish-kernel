@@ -57,4 +57,14 @@ class Service
     {
         return $this->blockDefinition;
     }
+
+    /**
+     * Returns list of available zone definitions
+     *
+     * @return array
+     */
+    public function getAvailableZoneTypes()
+    {
+        return array_keys( $this->zoneDefinition );
+    }
 }

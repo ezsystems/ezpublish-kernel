@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\FieldType\Page\Parts;
 
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException,
-    eZ\Publish\Core\FieldType\Page\Service;
+    eZ\Publish\Core\FieldType\Page\Service as PageService;
 
 class Base
 {
@@ -33,7 +33,7 @@ class Base
      *
      * @param \eZ\Publish\Core\FieldType\Page\Service $pageService
      */
-    public function __construct( Service $pageService )
+    public function __construct( PageService $pageService )
     {
         $this->pageService = $pageService;
     }

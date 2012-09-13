@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\Page\Type as PageType,
-    eZ\Publish\Core\FieldType\Page\Value as PageValue;
+    eZ\Publish\Core\FieldType\Page\Value as PageValue,
+    eZ\Publish\Core\FieldType\Page\Parts\Page as Page;
 
 /**
  * @group fieldType
@@ -67,7 +68,7 @@ class PageTest extends StandardizedFieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        // TODO: Implement getValidatorConfigurationSchemaExpectation() method.
+        return array();
     }
 
     /**
@@ -77,7 +78,12 @@ class PageTest extends StandardizedFieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-        // TODO: Implement getSettingsSchemaExpectation() method.
+        return array(
+            'defaultLayout' => array(
+                'type' => 'string',
+                'default' => '',
+            )
+        );
     }
 
     /**
@@ -115,7 +121,16 @@ class PageTest extends StandardizedFieldTypeTest
      */
     public function provideInvalidInputForAcceptValue()
     {
-        // TODO: Implement provideInvalidInputForAcceptValue() method.
+        return array(
+            array(
+                new \stdClass(),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException'
+            ),
+            array(
+                null,
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException'
+            ),
+        );
     }
 
     /**
@@ -151,8 +166,12 @@ class PageTest extends StandardizedFieldTypeTest
     {
         return array(
             array(
-                '',
+                new PageValue(),
                 new PageValue()
+            ),
+            array(
+                new PageValue( new Page( $this->getPageServiceMock() ) ),
+                new PageValue( new Page( $this->getPageServiceMock() ) )
             )
         );
     }
@@ -194,7 +213,16 @@ class PageTest extends StandardizedFieldTypeTest
      */
     public function provideInputForToHash()
     {
-        // TODO: Implement provideInputForToHash() method.
+        return array(
+            array(
+                null,
+                null
+            ),
+            array(
+                new PageValue( new Page( $this->getPageServiceMock() ) ),
+                new Page( $this->getPageServiceMock() ),
+            )
+        );
     }
 
     /**
@@ -234,6 +262,15 @@ class PageTest extends StandardizedFieldTypeTest
      */
     public function provideInputForFromHash()
     {
-        // TODO: Implement provideInputForFromHash() method.
+        return array(
+            array(
+                null,
+                null
+            ),
+            array(
+                new Page( $this->getPageServiceMock() ),
+                new PageValue( new Page( $this->getPageServiceMock() ) )
+            )
+        );
     }
 }

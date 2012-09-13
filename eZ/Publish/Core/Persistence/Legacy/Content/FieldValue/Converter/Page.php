@@ -12,6 +12,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
+    eZ\Publish\Core\FieldType\FieldSettings,
     eZ\Publish\Core\FieldType\Page\Parts,
     eZ\Publish\Core\FieldType\Page\Service,
     DOMDocument,
@@ -66,7 +67,9 @@ class Page implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        // Nothing to store
+        $storageDef->dataText1 = ( isset( $fieldDef->fieldTypeConstraints->fieldSettings['defaultLayout'] )
+            ? $fieldDef->fieldTypeConstraints->fieldSettings['defaultLayout']
+            : '' );
     }
 
     /**
@@ -77,7 +80,9 @@ class Page implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $fieldDef->defaultValue->data = array();
+        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings( array(
+                'defaultLayout' => $storageDef->dataText1,
+        ) );
     }
 
     /**

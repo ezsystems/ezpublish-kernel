@@ -8,7 +8,8 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Page;
-use eZ\Publish\Core\FieldType\Value as BaseValue;
+use eZ\Publish\Core\FieldType\Value as BaseValue,
+    eZ\Publish\Core\FieldType\Page\Parts\Page as Page;
 
 class Value extends BaseValue
 {
@@ -24,7 +25,7 @@ class Value extends BaseValue
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Page $page
      */
-    public function __construct( $page = null )
+    public function __construct( Page $page = null )
     {
         $this->page = $page;
 

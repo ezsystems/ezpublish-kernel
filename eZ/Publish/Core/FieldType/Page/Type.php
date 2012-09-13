@@ -10,13 +10,23 @@
 namespace eZ\Publish\Core\FieldType\Page;
 use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\API\Repository\FieldTypeTools,
-    eZ\Publish\Core\FieldType\Page\Service,
+    eZ\Publish\Core\FieldType\Page\Service as PageService,
     eZ\Publish\Core\Repository\ValidatorService,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 
 class Type extends FieldType
 {
+    /**
+     * @var array
+     */
+    protected $settingsSchema = array(
+        'defaultLayout' => array(
+            'type' => 'string',
+            'default' => '',
+        )
+    );
+
     /**
      * @var Service
      */
@@ -27,7 +37,7 @@ class Type extends FieldType
      * @param \eZ\Publish\API\Repository\FieldTypeTools $fieldTypeTools
      * @param \eZ\Publish\Core\FieldType\Page\Service $pageService
      */
-    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools, Service $pageService )
+    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools, PageService $pageService )
     {
         parent::__construct( $validatorService, $fieldTypeTools );
         $this->pageService = $pageService;
@@ -41,6 +51,52 @@ class Type extends FieldType
     public function getFieldTypeIdentifier()
     {
         return "ezpage";
+    }
+
+    /**
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings( $fieldSettings )
+    {
+        $validationErrors = array();
+
+        foreach ( $fieldSettings as $name => $value )
+        {
+            if ( isset( $this->settingsSchema[$name] ) )
+            {
+                switch ( $name )
+                {
+                    case 'defaultLayout':
+                        if ( !in_array( $value, $this->pageService->getAvailableZoneTypes() ) )
+                        {
+                            $validationErrors[] = new ValidationError(
+                                "Setting '%setting%' is of unknown type",
+                                null,
+                                array(
+                                    'setting' => $name
+                                )
+                            );
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                $validationErrors[] = new ValidationError(
+                    "Setting '%setting%' is unknown",
+                    null,
+                    array(
+                        'setting' => $name
+                    )
+                );
+            }
+        }
+
+        return $validationErrors;
     }
 
     /**
@@ -145,31 +201,12 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
-        if ( $inputValue === null )
-        {
-            return null;
-        }
-
-        if ( is_object( $inputValue ) )
-        {
-            $inputValue = new Value( $inputValue );
-        }
-
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
                 '$inputValue',
                 'eZ\\Publish\\Core\\FieldType\\Page\\Value',
                 $inputValue
-            );
-        }
-
-        if ( !is_object( $inputValue->page ) )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->page',
-                'eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Page',
-                $inputValue->page
             );
         }
 
