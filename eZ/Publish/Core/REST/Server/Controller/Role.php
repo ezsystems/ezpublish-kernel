@@ -183,6 +183,7 @@ class Role
      * Deletes all policies from a role
      *
      * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
     public function deletePolicies( RMF\Request $request )
     {
@@ -194,6 +195,8 @@ class Role
         {
             $this->roleService->removePolicy( $loadedRole, $rolePolicy );
         }
+
+        return new Values\ResourceDeleted();
     }
 
     /**
