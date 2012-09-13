@@ -320,5 +320,14 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
         );
     }
 
+    public function testEmptyValueIsEmpty()
+    {
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        $this->assertTrue(
+            $fieldType->isEmptyValue( $fieldType->getEmptyValue() )
+        );
+    }
+
     // @TODO: More test methods …
 }
