@@ -105,17 +105,21 @@ class ObjectState
 
         $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] );
 
-        return new CommonObjectState(
-            $this->objectStateService->createObjectState(
-                $objectStateGroup,
-                $this->inputDispatcher->parse(
-                    new Message(
-                        array( 'Content-Type' => $request->contentType ),
-                        $request->body
-                    )
+        return new Values\CreatedObjectState(
+            array(
+                'objectState' => new CommonObjectState(
+                    $this->objectStateService->createObjectState(
+                        $objectStateGroup,
+                        $this->inputDispatcher->parse(
+                            new Message(
+                                array( 'Content-Type' => $request->contentType ),
+                                $request->body
+                            )
+                        )
+                    ),
+                    $objectStateGroup->id
                 )
-            ),
-            $objectStateGroup->id
+            )
         );
     }
 
