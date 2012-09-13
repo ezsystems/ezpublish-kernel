@@ -90,10 +90,13 @@ class Trash
      * Empties the trash
      *
      * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
     public function emptyTrash( RMF\Request $request )
     {
-        return $this->trashService->emptyTrash();
+        $this->trashService->emptyTrash();
+
+        return new Values\ResourceDeleted();
     }
 
     /**
