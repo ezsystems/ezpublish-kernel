@@ -1568,7 +1568,7 @@ XML Example
       <depth>4</depth>
       <childCount>0</childCount>
       <remoteId>remoteId-qwert567</remoteId>
-      <Children href="/content/locations/1/5/73/133/children"
+      <Children href="/content/locations/1/5/73/133/children" media-type="application/vnd.ez.api.LocationList+xml"/>
       <Content href="/content/objects/23" media-type="application/vnd.ez.api.Content+xml"/>
       <sortField>PATH</sortField>
       <sortOrder>ASC</sortOrder>
@@ -1684,7 +1684,7 @@ XML Example
       <depth>4</depth>
       <childCount>0</childCount>
       <remoteId>remoteId-qwert567</remoteId>
-      <Children href="/content/locations/1/5/73/133/children"
+      <Children href="/content/locations/1/5/73/133/children" media-type="application/vnd.ez.api.LocationList+xml"/>
       <Content href="/content/objects/23" media-type="application/vnd.ez.api.Content+xml"/>
       <sortField>PATH</sortField>
       <sortOrder>ASC</sortOrder>
@@ -1768,7 +1768,7 @@ XML Example
       <depth>4</depth>
       <childCount>0</childCount>
       <remoteId>remoteId-qwert999</remoteId>
-      <Children href="/content/locations/1/5/73/133/children"
+      <Children href="/content/locations/1/5/73/133/children" media-type="application/vnd.ez.api.LocationList+xml"/>
       <Content href="/content/objects/23" media-type="application/vnd.ez.api.Content+xml"/>
       <sortField>CLASS</sortField>
       <sortOrder>ASC</sortOrder>
