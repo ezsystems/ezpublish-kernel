@@ -62,7 +62,7 @@ class DateAndTimeTest extends StandardizedFieldTypeTest
                 "default" => DateAndTime::DEFAULT_EMPTY
             ),
             "dateInterval" => array(
-                "type" => "date",
+                "type" => "dateInterval",
                 "default" => null
             )
         );
