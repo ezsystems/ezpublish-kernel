@@ -287,6 +287,7 @@ class Location
      */
     private function extractLocationIdFromPath( $path )
     {
-        return array_pop( explode( '/', $path ) );
+        $pathParts = explode( '/', $path );
+        return array_pop( $pathParts );
     }
 }
