@@ -56,24 +56,6 @@ class FieldTypeSerializer
     }
 
     /**
-     * Serializes the given $value for $fieldType with $generator into
-     * $elementName
-     *
-     * @param string $elementName
-     * @param Generator $generator
-     * @param FieldType $fieldType
-     * @param mixed $value
-     * @return void
-     */
-    protected function serializeValue( $elementName, Generator $generator, FieldType $fieldType, $value )
-    {
-        $generator->generateFieldTypeHash(
-            $elementName,
-            $fieldType->toHash( $value )
-        );
-    }
-
-    /**
      * Serializes the $defaultValue for $fieldDefIdentifier through $generator
      *
      * @param Generator $generator
@@ -86,10 +68,69 @@ class FieldTypeSerializer
         $this->serializeValue(
             'defaultValue',
             $generator,
-            $this->fieldTypeService->getFieldType(
-                $fieldDefinition->fieldTypeIdentifier
-            ),
+            $this->getFieldType( $fieldDefinition->fieldTypeIdentifier ),
             $defaultValue
         );
+    }
+
+    /**
+     * Serializeds $settings as fieldSettings for $fieldDefinition using
+     * $generator
+     *
+     * @param Generator $generator
+     * @param FieldDefinition $fieldDefinition
+     * @param mixed $settings
+     * @return void
+     */
+    public function serializeFieldSettings( Generator $generator, FieldDefinition $fieldDefinition, $settings )
+    {
+        $this->serializeHash(
+            'fieldSettings',
+            $generator,
+            $this->getFieldType(
+                $fieldDefinition->fieldTypeIdentifier
+            )->fieldSettingsToHash( $settings )
+        );
+    }
+
+    /**
+     * Returns the field type with $fieldTypeIdentifier
+     *
+     * @param string $fieldTypeIdentifier
+     * @return FieldType
+     */
+    protected function getFieldType( $fieldTypeIdentifier )
+    {
+        return $this->fieldTypeService->getFieldType(
+            $fieldTypeIdentifier
+        );
+    }
+
+    /**
+     * Serializes the given $value for $fieldType with $generator into
+     * $elementName
+     *
+     * @param string $elementName
+     * @param Generator $generator
+     * @param FieldType $fieldType
+     * @param mixed $value
+     * @return void
+     */
+    protected function serializeValue( $elementName, Generator $generator, FieldType $fieldType, $value )
+    {
+        $this->serializeHash( $elementName, $generator, $fieldType->toHash( $value ) );
+    }
+
+    /**
+     * Serializes the given $hash with $generator into $elementName
+     *
+     * @param string $elementName
+     * @param Generator $generator
+     * @param mixed $hash
+     * @return void
+     */
+    protected function serializeHash( $elementName, Generator $generator, $hash )
+    {
+        $generator->generateFieldTypeHash( $elementName, $hash );
     }
 }

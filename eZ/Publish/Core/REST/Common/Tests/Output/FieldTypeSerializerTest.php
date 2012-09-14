@@ -119,6 +119,46 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testSerializeFieldSettings()
+    {
+        $serializer = new Common\Output\FieldTypeSerializer(
+            $this->getFieldTypeServiceMock()
+        );
+
+        $this->getGeneratorMock()->expects( $this->once() )
+            ->method( 'generateFieldTypeHash' )
+            ->with(
+                $this->equalTo( 'fieldSettings' ),
+                $this->equalTo( array( 'foo' => 'bar' ) )
+            );
+
+        $fieldTypeMock = $this->getFieldTypeMock();
+        $this->getFieldTypeServiceMock()->expects( $this->once() )
+            ->method( 'getFieldType' )
+            ->with( $this->equalTo( 'myFancyFieldType' ) )
+            ->will( $this->returnCallback(
+                function () use ( $fieldTypeMock )
+                {
+                    return $fieldTypeMock;
+                }
+            ) );
+
+        $fieldTypeMock->expects( $this->once() )
+            ->method( 'fieldSettingsToHash' )
+            ->with( $this->equalTo( 'my-field-settings' ) )
+            ->will( $this->returnValue( array( 'foo'=> 'bar' ) ) );
+
+        $fieldDefinition = new FieldDefinition( array(
+            'fieldTypeIdentifier' => 'myFancyFieldType',
+        ) );
+
+        $serializer->serializeFieldSettings(
+            $this->getGeneratorMock(),
+            $fieldDefinition,
+            'my-field-settings'
+        );
+    }
+
     protected function getFieldTypeServiceMock()
     {
         if ( !isset( $this->fieldTypeServiceMock ) )
