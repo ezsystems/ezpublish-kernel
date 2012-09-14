@@ -48,7 +48,7 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
     /**
      * Returns the empty value expected from the field type.
      *
-     * @return void
+     * @return mixed
      */
     abstract protected function getEmptyValueExpectation();
 
@@ -188,7 +188,7 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
      * Uses {@link createFieldTypeUnderTest()} to create the instance
      * initially.
      *
-     * @return FieldType
+     * @return \eZ\Publish\SPI\FieldType\FieldType
      */
     protected function getFieldTypeUnderTest()
     {

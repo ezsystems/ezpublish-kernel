@@ -31,11 +31,7 @@ class FloatTest extends StandardizedFieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Float(
-            // TODO: Get rid of these
-            $this->validatorService,
-            $this->fieldTypeTools
-        );
+        return new Float();
     }
 
     /**

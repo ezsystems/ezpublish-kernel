@@ -29,8 +29,6 @@ class CountryTest extends FieldTypeTest
         $this->markTestIncomplete( 'Country FieldType needs clarification and potentially refactoring.' );
         parent::setUp();
         $this->ft = new Country(
-            $this->validatorService,
-            $this->fieldTypeTools,
             array(
                 "BE" => array(
                     "Name" => "Belgium",

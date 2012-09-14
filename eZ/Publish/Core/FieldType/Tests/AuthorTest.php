@@ -72,7 +72,7 @@ class AuthorTest extends StandardizedFieldTypeTest
     /**
      * Returns the empty value expected from the field type.
      *
-     * @return void
+     * @return \eZ\Publish\Core\FieldType\Author\Value
      */
     protected function getEmptyValueExpectation()
     {
@@ -214,7 +214,7 @@ class AuthorTest extends StandardizedFieldTypeTest
      *  );
      * </code>
      *
-     * @return void
+     * @return array
      */
     public function provideInputForToHash()
     {
@@ -281,7 +281,7 @@ class AuthorTest extends StandardizedFieldTypeTest
      *  );
      * </code>
      *
-     * @return void
+     * @return array
      */
     public function provideInputForFromHash()
     {
@@ -326,7 +326,7 @@ class AuthorTest extends StandardizedFieldTypeTest
      */
     public function testValidatorConfigurationSchema()
     {
-        $ft = new AuthorType( $this->validatorService, $this->fieldTypeTools );
+        $ft = new AuthorType();
         self::assertEmpty(
             $ft->getValidatorConfigurationSchema(),
             "The validator configuration schema does not match what is expected."
@@ -338,7 +338,7 @@ class AuthorTest extends StandardizedFieldTypeTest
      */
     public function testSettingsSchema()
     {
-        $ft = new AuthorType( $this->validatorService, $this->fieldTypeTools );
+        $ft = new AuthorType();
         self::assertEmpty(
             $ft->getSettingsSchema(),
             "The settings schema does not match what is expected."
@@ -351,7 +351,7 @@ class AuthorTest extends StandardizedFieldTypeTest
      */
     public function testAcceptValueInvalidType()
     {
-        $ft = new AuthorType( $this->validatorService, $this->fieldTypeTools );
+        $ft = new AuthorType();
         $ft->acceptValue( $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Value' ) );
     }
 
@@ -361,7 +361,7 @@ class AuthorTest extends StandardizedFieldTypeTest
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new AuthorType( $this->validatorService, $this->fieldTypeTools );
+        $ft = new AuthorType();
         $value = new AuthorValue;
         $value->authors = 'This is not a valid author collection';
         $ft->acceptValue( $value );
@@ -372,7 +372,7 @@ class AuthorTest extends StandardizedFieldTypeTest
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new AuthorType( $this->validatorService, $this->fieldTypeTools );
+        $ft = new AuthorType();
         $author = new Author;
         $author->name = 'Boba Fett';
         $author->email = 'boba.fett@bountyhunters.com';
