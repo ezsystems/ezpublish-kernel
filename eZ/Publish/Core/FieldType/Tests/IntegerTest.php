@@ -264,4 +264,151 @@ class IntegerTest extends StandardizedFieldTypeTest
             ),
         );
     }
+
+    /**
+     * Provide data sets with validator configurations which are considered
+     * valid by the {@link validateValidatorConfiguration()} method.
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of validator configurations.
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(),
+     *      ),
+     *      array(
+     *          array(
+     *              'IntegerValueValidator' => array(
+     *                  'minIntegerValue' => 0,
+     *                  'maxIntegerValue' => 23,
+     *              )
+     *          )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideValidValidatorConfiguration()
+    {
+        return array(
+            array(
+                array()
+            ),
+            array(
+                array(
+                    'IntegerValueValidator' => array(
+                        'minIntegerValue' => false,
+                    )
+                )
+            ),
+            array(
+                array(
+                    'IntegerValueValidator' => array(
+                        'minIntegerValue' => 23,
+                    )
+                )
+            ),
+            array(
+                array(
+                    'IntegerValueValidator' => array(
+                        'maxIntegerValue' => false,
+                    )
+                )
+            ),
+            array(
+                array(
+                    'IntegerValueValidator' => array(
+                        'maxIntegerValue' => 23,
+                    )
+                )
+            ),
+            array(
+                array(
+                    'IntegerValueValidator' => array(
+                        'minIntegerValue' => 23,
+                        'maxIntegerValue' => 42,
+                    )
+                )
+            ),
+        );
+    }
+
+    /**
+     * Provide data sets with validator configurations which are considered
+     * invalid by the {@link validateValidatorConfiguration()} method. The
+     * method must return a non-empty array of valiation errors when receiving
+     * one of the provided values.
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of validator configurations.
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(
+     *              'NonExistentValidator' => array(),
+     *          ),
+     *      ),
+     *      array(
+     *          array(
+     *              // Typos
+     *              'InTEgervALUeVALIdator' => array(
+     *                  'iinIntegerValue' => 0,
+     *                  'maxIntegerValue' => 23,
+     *              )
+     *          )
+     *      ),
+     *      array(
+     *          array(
+     *              'IntegerValueValidator' => array(
+     *                  // Incorrect value types
+     *                  'minIntegerValue' => true,
+     *                  'maxIntegerValue' => false,
+     *              )
+     *          )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInvalidValidatorConfiguration()
+    {
+        return array(
+            array(
+                array(
+                    'NonExistentValidator' => array(),
+                ),
+            ),
+            array(
+                array(
+                    'IntegerValueValidator' => array(
+                        'nonExistentValue' => 23
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    'IntegerValueValidator' => array(
+                        'minIntegerValue' => .23,
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    'IntegerValueValidator' => array(
+                        'maxIntegerValue' => .42,
+                    ),
+                )
+            ),
+        );
+    }
 }
