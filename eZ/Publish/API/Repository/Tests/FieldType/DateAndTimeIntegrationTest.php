@@ -46,7 +46,7 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
                 "default" => 0
             ),
             "dateInterval" => array(
-                "type"    => "date",
+                "type"    => "dateInterval",
                 "default" => null
             )
         );
