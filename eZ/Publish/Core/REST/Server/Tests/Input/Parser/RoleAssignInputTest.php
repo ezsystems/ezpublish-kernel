@@ -23,7 +23,7 @@ class RoleAssignInputTest extends BaseTest
                 '_href' => '/user/roles/42'
             ),
             'limitation' => array(
-                '_identifier' => 'Class',
+                '_identifier' => 'Section',
                 'values' => array(
                     'ref' => array(
                         array(
@@ -56,13 +56,13 @@ class RoleAssignInputTest extends BaseTest
         );
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation\\RoleLimitation',
             $result->limitation,
             'Limitation not created correctly.'
         );
 
         $this->assertEquals(
-            'Class',
+            'Section',
             $result->limitation->getIdentifier(),
             'Limitation identifier not created correctly.'
         );
@@ -84,7 +84,7 @@ class RoleAssignInputTest extends BaseTest
     {
         $inputArray = array(
             'limitation' => array(
-                '_identifier' => 'Class',
+                '_identifier' => 'Section',
                 'values' => array(
                     'ref' => array(
                         array(
@@ -116,7 +116,7 @@ class RoleAssignInputTest extends BaseTest
         $inputArray = array(
             'Role' => array(),
             'limitation' => array(
-                '_identifier' => 'Class',
+                '_identifier' => 'Section',
                 'values' => array(
                     'ref' => array(
                         array(
@@ -183,7 +183,7 @@ class RoleAssignInputTest extends BaseTest
                 '_href' => '/user/roles/42'
             ),
             'limitation' => array(
-                '_identifier' => 'Class'
+                '_identifier' => 'Section'
             )
         );
 
