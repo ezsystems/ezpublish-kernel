@@ -158,60 +158,6 @@ class UserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if UserGroupRoleAssignment visitor visits the children
-     */
-    public function testRoleAssignmentListVisitsChildren()
-    {
-        $visitor   = $this->getUserGroupRoleAssignmentVisitor();
-        $generator = $this->getGenerator();
-
-        $generator->startDocument( null );
-
-        $limitation = new APISectionLimitationValue();
-        $limitation->limitationValues = array( 1, 2, 3 );
-
-        $userGroupRoleAssignment = new User\UserGroupRoleAssignment(
-            array(
-                'limitation' => $limitation,
-                'role' => new User\Role(
-                    array(
-                        'id'         => 42,
-                        'identifier' => 'some-role'
-                    )
-                ),
-                'userGroup' => new User\UserGroup(
-                    array(
-                        'content' => new Content(
-                            array(
-                                'versionInfo' => new VersionInfo(
-                                    array(
-                                        'contentInfo' => new ContentInfo(
-                                            array(
-                                                'id' => 14
-                                            )
-                                        )
-                                    )
-                                ),
-                                'internalFields' => array()
-                            )
-                        )
-                    )
-                )
-            )
-        );
-
-        $this->getVisitorMock()->expects( $this->exactly( 1 ) )
-            ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\User\\Limitation' ) );
-
-        $visitor->visit(
-            $this->getVisitorMock(),
-            $generator,
-            $userGroupRoleAssignment
-        );
-    }
-
-    /**
      * Get the UserGroupRoleAssignment visitor
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\UserGroupRoleAssignment

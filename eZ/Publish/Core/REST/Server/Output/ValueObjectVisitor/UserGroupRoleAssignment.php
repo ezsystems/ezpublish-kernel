@@ -48,7 +48,7 @@ class UserGroupRoleAssignment extends ValueObjectVisitor
         $roleLimitation = $data->getRoleLimitation();
         if ( $roleLimitation instanceof RoleLimitation )
         {
-            $visitor->visitValueObject( $roleLimitation );
+            $this->visitLimitation( $generator, $roleLimitation );
         }
 
         $generator->startObjectElement( 'Role' );

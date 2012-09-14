@@ -96,4 +96,34 @@ abstract class ValueObjectVisitor
         $generator->endList( 'value' );
         $generator->endHashElement( $listName );
     }
+
+    /**
+     * Visits a limitation
+     *
+     * @param Generator $generator
+     * @param mixed $limitation
+     */
+    protected function visitLimitation( Generator $generator, $limitation )
+    {
+        $generator->startHashElement( 'limitation' );
+
+        $generator->startAttribute( 'identifier', $limitation->getIdentifier() );
+        $generator->endAttribute( 'identifier' );
+
+        $generator->startHashElement( 'values' );
+        $generator->startList( 'values' );
+
+        foreach ( $limitation->limitationValues as $limitationValue )
+        {
+            $generator->startObjectElement( 'ref' );
+            $generator->startAttribute( 'href', $limitationValue );
+            $generator->endAttribute( 'href' );
+            $generator->endObjectElement( 'ref' );
+        }
+
+        $generator->endList( 'values' );
+        $generator->endHashElement( 'values' );
+
+        $generator->endHashElement( 'limitation' );
+    }
 }

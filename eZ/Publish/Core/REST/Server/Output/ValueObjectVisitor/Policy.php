@@ -48,16 +48,16 @@ class Policy extends ValueObjectVisitor
         $limitations = $data->getLimitations();
         if ( !empty( $limitations ) )
         {
-            $generator->startObjectElement( 'limitations' );
+            $generator->startHashElement( 'limitations' );
             $generator->startList( 'limitations' );
 
             foreach ( $limitations as $limitation )
             {
-                $visitor->visitValueObject( $limitation );
+                $this->visitLimitation( $generator, $limitation );
             }
 
             $generator->endList( 'limitations' );
-            $generator->endObjectElement( 'limitations' );
+            $generator->endHashElement( 'limitations' );
         }
 
         $generator->endObjectElement( 'Policy' );

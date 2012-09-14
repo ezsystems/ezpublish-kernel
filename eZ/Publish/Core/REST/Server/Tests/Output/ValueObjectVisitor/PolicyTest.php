@@ -185,10 +185,7 @@ class PolicyTest extends ValueObjectVisitorBaseTest
     {
         $this->assertTag(
             array(
-                'tag'      => 'limitations',
-                'attributes' => array(
-                    'media-type' => 'application/vnd.ez.api.limitations+xml',
-                )
+                'tag'      => 'limitations'
             ),
             $result,
             'Invalid <limitations> attributes.',

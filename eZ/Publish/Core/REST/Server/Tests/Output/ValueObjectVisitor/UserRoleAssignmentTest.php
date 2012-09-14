@@ -158,60 +158,6 @@ class UserRoleAssignmentTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if UserRoleAssignment visitor visits the children
-     */
-    public function testRoleAssignmentListVisitsChildren()
-    {
-        $visitor   = $this->getUserRoleAssignmentVisitor();
-        $generator = $this->getGenerator();
-
-        $generator->startDocument( null );
-
-        $limitation = new APISectionLimitationValue();
-        $limitation->limitationValues = array( 1, 2, 3 );
-
-        $userRoleAssignment = new User\UserRoleAssignment(
-            array(
-                'limitation' => $limitation,
-                'role' => new User\Role(
-                    array(
-                        'id'         => 42,
-                        'identifier' => 'some-role'
-                    )
-                ),
-                'user' => new User\User(
-                    array(
-                        'content' => new Content(
-                            array(
-                                'versionInfo' => new VersionInfo(
-                                    array(
-                                        'contentInfo' => new ContentInfo(
-                                            array(
-                                                'id' => 14
-                                            )
-                                        )
-                                    )
-                                ),
-                                'internalFields' => array()
-                            )
-                        )
-                    )
-                )
-            )
-        );
-
-        $this->getVisitorMock()->expects( $this->exactly( 1 ) )
-            ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\User\\Limitation' ) );
-
-        $visitor->visit(
-            $this->getVisitorMock(),
-            $generator,
-            $userRoleAssignment
-        );
-    }
-
-    /**
      * Get the UserRoleAssignment visitor
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\UserRoleAssignment
