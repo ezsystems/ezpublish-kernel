@@ -80,7 +80,9 @@ class NameSchemaService
     public function resolveUrlAliasSchema( Content $content )
     {
         return $this->resolve(
-            $content->contentType->urlAliasSchema ?: $content->contentType->nameSchema,
+            strlen( $content->contentType->urlAliasSchema ) === 0
+                ? $content->contentType->nameSchema
+                : $content->contentType->urlAliasSchema,
             $content->contentType,
             $content->fields,
             $content->versionInfo->languageCodes
