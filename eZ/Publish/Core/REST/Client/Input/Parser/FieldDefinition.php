@@ -68,10 +68,17 @@ class FieldDefinition extends Parser
             'names' => $this->parserTools->parseTranslatableList( $data['names'] ),
             'descriptions' => $this->parserTools->parseTranslatableList( $data['descriptions'] ),
 
-            // TODO: Call fromHash() here
             'defaultValue' => $this->fieldTypeParser->parseValue(
                 $data['fieldType'],
                 $data['defaultValue']
+            ),
+            'fieldSettings' => $this->fieldTypeParser->parseFieldSettings(
+                $data['fieldType'],
+                $data['fieldSettings']
+            ),
+            'validators' => $this->fieldTypeParser->parseFieldSettings(
+                $data['fieldType'],
+                $data['validatorConfiguration']
             ),
         ) );
     }
