@@ -606,5 +606,104 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
         }
     }
 
+    /**
+     * @param mixed $inputConfiguration
+     * @return void
+     * @dataProvider provideValidFieldSettings
+     */
+    public function testFieldSettingsToHash( $inputSettings )
+    {
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        $hash = $fieldType->fieldSettingsToHash( $inputSettings );
+
+        $this->assertIsValidHashValue( $hash );
+    }
+
+    /**
+     * @param mixed $inputConfiguration
+     * @return void
+     * @dataProvider provideValidValidatorConfiguration
+     */
+    public function testValidatorConfigurationToHash( $inputConfiguration )
+    {
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        $hash = $fieldType->validatorConfigurationToHash( $inputConfiguration );
+
+        $this->assertIsValidHashValue( $hash );
+    }
+
+    /**
+     * @param mixed $inputConfiguration
+     * @return void
+     * @dataProvider provideValidFieldSettings
+     */
+    public function testFieldSettingsFromHash( $inputSettings )
+    {
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        $hash = $fieldType->fieldSettingsToHash( $inputSettings );
+        $restoredSettings = $fieldType->fieldSettingsFromHash( $hash );
+
+        $this->assertEquals( $inputSettings, $restoredSettings );
+    }
+
+    /**
+     * @param mixed $inputConfiguration
+     * @return void
+     * @dataProvider provideValidValidatorConfiguration
+     */
+    public function testValidatorConfigurationFromHash( $inputConfiguration )
+    {
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        $hash = $fieldType->validatorConfigurationToHash( $inputConfiguration );
+        $restoredConfiguration = $fieldType->validatorConfigurationFromHash( $hash );
+
+        $this->assertEquals( $inputConfiguration, $restoredConfiguration );
+    }
+
+    /**
+     * Asserts that the given $actualHash complies to the rules for hashes
+     *
+     * @param mixed $actualHash
+     * @param array $keyChain
+     * @return void
+     */
+    protected function assertIsValidHashValue( $actualHash, $keyChain = array() )
+    {
+        switch( ( $actualHashType = gettype( $actualHash ) ) )
+        {
+            case 'boolead':
+            case 'integer':
+            case 'double':
+            case 'string':
+            case 'NULL':
+                // All valid, just return
+                return;
+
+            case 'array':
+                foreach ( $actualHash as $key => $childHash )
+                {
+                    $this->assertIsValidHashValue(
+                        $childHash,
+                        array_merge( $keyChain, array( $key ) )
+                    );
+                }
+                return;
+
+            case 'resource':
+            case 'object':
+                $this->fail(
+                    sprintf(
+                        'Value for $hash[%s] is of invalid type "%s".',
+                        implode( '][', $keyChain ),
+                        $actualHashType
+                    )
+                );
+        }
+    }
+
     // @TODO: More test methods …
 }
