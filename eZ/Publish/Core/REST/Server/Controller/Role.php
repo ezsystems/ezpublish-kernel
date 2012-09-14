@@ -176,7 +176,7 @@ class Role
 
         $loadedRole = $this->roleService->loadRole( $values['role'] );
 
-        return new Values\PolicyList( $loadedRole->getPolicies(), $loadedRole->id );
+        return new Values\PolicyList( $loadedRole->getPolicies(), $request->path );
     }
 
     /**
@@ -203,7 +203,7 @@ class Role
      * Loads a policy
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\Core\REST\Server\Values\PolicyList
+     * @return \eZ\Publish\API\Repository\Values\User\Policy
      */
     public function loadPolicy( RMF\Request $request )
     {
@@ -456,7 +456,8 @@ class Role
         return new Values\PolicyList(
             $this->roleService->loadPoliciesByUserId(
                 $request->variables['userId']
-            )
+            ),
+            $request->path
         );
     }
 

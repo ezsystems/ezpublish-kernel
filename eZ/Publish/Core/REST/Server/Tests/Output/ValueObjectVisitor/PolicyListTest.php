@@ -29,7 +29,7 @@ class PolicyListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $policyList = new PolicyList( array(), 42 );
+        $policyList = new PolicyList( array(), '/user/roles/42/policies' );
 
         $visitor->visit(
             $this->getVisitorMock(),
