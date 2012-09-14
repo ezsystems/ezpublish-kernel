@@ -127,4 +127,39 @@ interface FieldType
      * @return mixed
      */
     public function toHash( $value );
+
+    /**
+     * Converts the given $fieldSettings to a simple hash format
+     *
+     * @param mixed $fieldSettings
+     * @return array|hash|scalar|null
+     */
+    public function fieldSettingsToHash( $fieldSettings );
+
+    /**
+     * Converts the given $fieldSettingsHash to field settings of the type
+     *
+     * This is the reverse operation of {@link fieldSettingsToHash()}.
+     *
+     * @param array|hash|scalar|null $fieldSettingsHash
+     * @return mixed
+     */
+    public function fieldSettingsFromHash( $fieldSettingsHash );
+
+    /**
+     * Converts the given $validatorConfiguration to a simple hash format
+     *
+     * @param mixed $validatorConfiguration
+     * @return array|hash|scalar|null
+     */
+    public function validatorConfigurationToHash( $validatorConfiguration );
+
+    /**
+     * Converts the given $validatorConfigurationHash to a validator
+     * configuration of the type
+     *
+     * @param array|hash|scalar|null $validatorConfigurationHash
+     * @return mixed
+     */
+    public function validatorConfigurationFromHash( $validatorConfigurationHash );
 }
