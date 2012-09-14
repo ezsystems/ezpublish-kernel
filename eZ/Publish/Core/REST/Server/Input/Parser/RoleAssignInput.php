@@ -60,7 +60,7 @@ class RoleAssignInput extends Base
         $limitation = null;
         if ( array_key_exists( 'limitation', $data ) && is_array( $data['limitation'] ) )
         {
-            $limitation = $parsingDispatcher->parse( $data['limitation'], $data['_media-type'] );
+            $limitation = $parsingDispatcher->parse( $data['limitation'], $data['limitation']['_media-type'] );
         }
 
         return new RoleAssignment( $matches['role'], $limitation );

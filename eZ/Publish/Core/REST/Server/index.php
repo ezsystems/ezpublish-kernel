@@ -160,7 +160,8 @@ $roleController = new Controller\Role(
     $inputDispatcher,
     $urlHandler,
     $repository->getRoleService(),
-    $repository->getUserService()
+    $repository->getUserService(),
+    $repository->getLocationService()
 );
 
 $locationController = new Controller\Location(

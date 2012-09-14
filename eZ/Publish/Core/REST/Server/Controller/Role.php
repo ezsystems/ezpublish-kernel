@@ -15,6 +15,7 @@ use eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\RoleService;
 use eZ\Publish\API\Repository\UserService;
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 
@@ -54,19 +55,30 @@ class Role
     protected $userService;
 
     /**
+     * Location service
+     *
+     * @var \eZ\Publish\API\Repository\LocationService
+     */
+    protected $locationService;
+
+    /**
      * Construct controller
      *
      * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\RoleService $roleService
      * @param \eZ\Publish\API\Repository\UserService $userService
+     * @param \eZ\Publish\API\Repository\LocationService $locationService
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, RoleService $roleService, UserService $userService )
+    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler,
+                                 RoleService $roleService, UserService $userService,
+                                 LocationService $locationService )
     {
         $this->inputDispatcher = $inputDispatcher;
         $this->urlHandler      = $urlHandler;
         $this->roleService     = $roleService;
         $this->userService     = $userService;
+        $this->locationService = $locationService;
     }
 
     /**
@@ -352,7 +364,7 @@ class Role
      */
     public function assignRoleToUserGroup( RMF\Request $request )
     {
-        $values = $this->urlHandler->parse( 'userGroupRoleAssignments', $request->path );
+        $values = $this->urlHandler->parse( 'groupRoleAssignments', $request->path );
 
         $roleAssignment = $this->inputDispatcher->parse(
             new Message(
@@ -361,13 +373,15 @@ class Role
             )
         );
 
-        $userGroup = $this->userService->loadUserGroup( array_pop( explode( '/', $values['group'] ) ) );
-        $role = $this->roleService->loadRole( $roleAssignment->roleId );
+        $groupLocationId = array_pop( explode( '/', $values['group'] ) );
+        $groupLocation = $this->locationService->loadLocation( $groupLocationId );
+        $userGroup = $this->userService->loadUserGroup( $groupLocation->contentId );
 
+        $role = $this->roleService->loadRole( $roleAssignment->roleId );
         $this->roleService->assignRoleToUserGroup( $role, $userGroup, $roleAssignment->limitation );
 
         $roleAssignments = $this->roleService->getRoleAssignmentsForUserGroup( $userGroup );
-        return new Values\RoleAssignmentList( $roleAssignments, $userGroup->id, true );
+        return new Values\RoleAssignmentList( $roleAssignments, $values['group'], true );
     }
 
     /**
@@ -399,15 +413,15 @@ class Role
     {
         $values = $this->urlHandler->parse( 'groupRoleAssignment', $request->path );
 
-        $groupPathId = trim($values['group'], '/');
-        $groupId = array_pop( explode( '/', $groupPathId ) );
-        $userGroup = $this->userService->loadUserGroup( $groupId );
-        $role = $this->roleService->loadRole( $values['role'] );
+        $groupLocationId = array_pop( explode( '/', $values['group'] ) );
+        $groupLocation = $this->locationService->loadLocation( $groupLocationId );
+        $userGroup = $this->userService->loadUserGroup( $groupLocation->contentId );
 
+        $role = $this->roleService->loadRole( $values['role'] );
         $this->roleService->unassignRoleFromUserGroup( $role, $userGroup );
 
         $roleAssignments = $this->roleService->getRoleAssignmentsForUserGroup( $userGroup );
-        return new Values\RoleAssignmentList( $roleAssignments, $groupPathId, true );
+        return new Values\RoleAssignmentList( $roleAssignments, $values['group'], true );
     }
 
     /**
@@ -436,13 +450,13 @@ class Role
     {
         $values = $this->urlHandler->parse( 'groupRoleAssignments', $request->path );
 
-        $groupPathId = trim($values['group'], '/');
-        $groupId = array_pop( explode( '/', $groupPathId ) );
-        $userGroup = $this->userService->loadUserGroup( $groupId );
+        $groupLocationId = array_pop( explode( '/', $values['group'] ) );
+        $groupLocation = $this->locationService->loadLocation( $groupLocationId );
+        $userGroup = $this->userService->loadUserGroup( $groupLocation->contentId );
 
         $roleAssignments = $this->roleService->getRoleAssignmentsForUserGroup( $userGroup );
 
-        return new Values\RoleAssignmentList( $roleAssignments, $groupPathId, true );
+        return new Values\RoleAssignmentList( $roleAssignments, $values['group'], true );
     }
 
     /**
