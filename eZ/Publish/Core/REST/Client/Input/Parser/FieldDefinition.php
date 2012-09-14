@@ -76,7 +76,7 @@ class FieldDefinition extends Parser
                 $data['fieldType'],
                 $data['fieldSettings']
             ),
-            'validators' => $this->fieldTypeParser->parseFieldSettings(
+            'validators' => $this->fieldTypeParser->parseValidatorConfiguration(
                 $data['fieldType'],
                 $data['validatorConfiguration']
             ),

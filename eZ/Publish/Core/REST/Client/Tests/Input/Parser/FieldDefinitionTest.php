@@ -14,6 +14,20 @@ use eZ\Publish\API\Repository\Values;
 
 class FieldDefinitionTest extends BaseTest
 {
+    protected $fieldTypeParserMock;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->fieldTypeParserMock = $this->getMock(
+            'eZ\\Publish\\Core\\REST\\Common\\Input\\FieldTypeParser',
+            array(),
+            array(),
+            '',
+            false
+        );
+    }
+
     /**
      * Tests the section parser
      *
@@ -34,8 +48,9 @@ class FieldDefinitionTest extends BaseTest
             'isTranslatable' => 'true',
             'isRequired' => 'false',
             'isInfoCollector' => 'false',
-            'defaultValue' => array(
-            ),
+            'defaultValue' => array( 'ValueMock' ),
+            'fieldSettings' => array( 'SettingsMock' ),
+            'validatorConfiguration' => array( 'ValidatorMock' ),
             'isSearchable' => 'false',
             'names' => array(
                 'value' => array(
@@ -54,6 +69,28 @@ class FieldDefinitionTest extends BaseTest
                 ),
             )
         );
+
+        $this->fieldTypeParserMock->expects( $this->once() )
+            ->method( 'parseValue' )
+            ->with(
+                $this->equalTo( 'ezkeyword' ),
+                $this->equalTo( array( 'ValueMock' ) )
+            )
+            ->will( $this->returnValue( 'ParsedValueMock' ) );
+
+        $this->fieldTypeParserMock->expects( $this->once() )
+            ->method( 'parseFieldSettings' )
+            ->with(
+                $this->equalTo( 'ezkeyword' ),
+                $this->equalTo( array( 'SettingsMock' ) )
+            )->will( $this->returnValue( 'ParsedSettingsMock' ) );
+
+        $this->fieldTypeParserMock->expects( $this->once() )
+            ->method( 'parseValidatorConfiguration' )
+            ->with(
+                $this->equalTo( 'ezkeyword' ),
+                $this->equalTo( array( 'ValidatorMock' ) )
+            )->will( $this->returnValue( 'ParsedValidatorMock' ) );
 
         $result = $fieldDefinitionParser->parse( $inputArray, $this->getParsingDispatcherMock() );
 
@@ -116,7 +153,7 @@ class FieldDefinitionTest extends BaseTest
             ),
             array(
                 'defaultValue',
-                array(),
+                'ParsedValueMock',
             ),
             array(
                 'names',
@@ -137,7 +174,8 @@ class FieldDefinitionTest extends BaseTest
     protected function getParser()
     {
         return new Input\Parser\FieldDefinition(
-            new Input\ParserTools()
+            new Input\ParserTools(),
+            $this->fieldTypeParserMock
         );
     }
 }
