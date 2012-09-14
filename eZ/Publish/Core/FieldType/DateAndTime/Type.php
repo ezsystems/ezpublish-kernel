@@ -311,4 +311,53 @@ class Type extends FieldType
 
         return $validationErrors;
     }
+
+    /**
+     * Converts the given $fieldSettings to a simple hash format
+     *
+     * This is the default implementation, which just returns the given
+     * $fieldSettings, assuming they are already in a hash format. Overwrite
+     * this in your specific implementation, if neccessary.
+     *
+     * @param mixed $fieldSettings
+     * @return array|hash|scalar|null
+     */
+    public function fieldSettingsToHash( $fieldSettings )
+    {
+        $fieldSettingsHash = parent::fieldSettingsToHash( $fieldSettings );
+
+        if ( isset( $fieldSettingsHash['dateInterval'] ) )
+        {
+            $fieldSettingsHash['dateInterval'] = $fieldSettingsHash['dateInterval']->format(
+                'P%r%yY%r%mM%r%dDT%r%hH%iM%r%sS'
+            );
+        }
+
+        return $fieldSettingsHash;
+    }
+
+    /**
+     * Converts the given $fieldSettingsHash to field settings of the type
+     *
+     * This is the reverse operation of {@link fieldSettingsToHash()}.
+     *
+     * This is the default implementation, which just returns the given
+     * $fieldSettingsHash, assuming the supported field settings are already in
+     * a hash format. Overwrite this in your specific implementation, if
+     * neccessary.
+     *
+     * @param array|hash|scalar|null $fieldSettingsHash
+     * @return mixed
+     */
+    public function fieldSettingsFromHash( $fieldSettingsHash )
+    {
+        $fieldSettings = parent::fieldSettingsFromHash( $fieldSettingsHash );
+
+        if ( isset( $fieldSettings['dateInterval'] ) )
+        {
+            $fieldSettings['dateInterval'] = new \DateInterval( $fieldSettings['dateInterval'] );
+        }
+
+        return $fieldSettings;
+    }
 }
