@@ -74,4 +74,32 @@ class FieldTypeParser
         $fieldType = $this->fieldTypeService->getFieldType( $fieldTypeIdentifier );
         return $fieldType->fromHash( $value );
     }
+
+    /**
+     * Parses the givend $settingsHash using the FieldType identified by
+     * $fieldTypeIdentifier
+     *
+     * @param string $fieldTypeIdentifier
+     * @param mixed $settingsHash
+     * @return mixed
+     */
+    public function parseFieldSettings( $fieldTypeIdentifier, $settingsHash )
+    {
+        $fieldType = $this->fieldTypeService->getFieldType( $fieldTypeIdentifier );
+        return $fieldType->fieldSettingsFromHash( $settingsHash );
+    }
+
+    /**
+     * Parses the givend $configurationHash using the FieldType identified by
+     * $fieldTypeIdentifier
+     *
+     * @param string $fieldTypeIdentifier
+     * @param mixed $configurationHash
+     * @return mixed
+     */
+    public function parseValidatorConfiguration( $fieldTypeIdentifier, $configurationHash )
+    {
+        $fieldType = $this->fieldTypeService->getFieldType( $fieldTypeIdentifier );
+        return $fieldType->validatorConfigurationFromHash( $configurationHash );
+    }
 }

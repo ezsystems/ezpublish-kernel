@@ -161,6 +161,66 @@ class FieldTypeParserTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testParseFieldSettings()
+    {
+        $fieldTypeParser = $this->getFieldTypeParser();
+
+        $fieldTypeMock = $this->fieldTypeMock;
+        $this->fieldTypeServiceMock->expects( $this->once() )
+            ->method( 'getFieldType' )
+            ->with( $this->equalTo( 'some-fancy-field-type' ) )
+            ->will( $this->returnCallback(
+                // Avoid PHPUnit cloning
+                function () use ( $fieldTypeMock )
+                {
+                    return $fieldTypeMock;
+                }
+            ) );
+
+        $fieldTypeMock->expects( $this->once() )
+            ->method( 'fieldSettingsFromHash' )
+            ->with( $this->equalTo( array( 1, 2, 3 ) ) )
+            ->will( $this->returnValue( array( 'foo', 'bar' ) ) );
+
+        $this->assertEquals(
+            array( 'foo', 'bar' ),
+            $fieldTypeParser->parseFieldSettings(
+                'some-fancy-field-type',
+                array( 1, 2, 3 )
+            )
+        );
+    }
+
+    public function testParseValidatorConfiguration()
+    {
+        $fieldTypeParser = $this->getFieldTypeParser();
+
+        $fieldTypeMock = $this->fieldTypeMock;
+        $this->fieldTypeServiceMock->expects( $this->once() )
+            ->method( 'getFieldType' )
+            ->with( $this->equalTo( 'some-fancy-field-type' ) )
+            ->will( $this->returnCallback(
+                // Avoid PHPUnit cloning
+                function () use ( $fieldTypeMock )
+                {
+                    return $fieldTypeMock;
+                }
+            ) );
+
+        $fieldTypeMock->expects( $this->once() )
+            ->method( 'validatorConfigurationFromHash' )
+            ->with( $this->equalTo( array( 1, 2, 3 ) ) )
+            ->will( $this->returnValue( array( 'foo', 'bar' ) ) );
+
+        $this->assertEquals(
+            array( 'foo', 'bar' ),
+            $fieldTypeParser->parseValidatorConfiguration(
+                'some-fancy-field-type',
+                array( 1, 2, 3 )
+            )
+        );
+    }
+
     protected function getFieldTypeParser()
     {
         return new FieldTypeParser(
