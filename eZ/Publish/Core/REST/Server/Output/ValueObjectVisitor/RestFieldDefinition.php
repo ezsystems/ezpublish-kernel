@@ -108,6 +108,12 @@ class RestFieldDefinition extends ContentTypeBase
             $fieldDefinition->getFieldSettings()
         );
 
+        $this->fieldTypeSerializer->serializeValidatorConfiguration(
+            $generator,
+            $fieldDefinition,
+            $fieldDefinition->getValidatorConfiguration()
+        );
+
         $generator->endObjectElement( 'FieldDefinition' );
     }
 }
