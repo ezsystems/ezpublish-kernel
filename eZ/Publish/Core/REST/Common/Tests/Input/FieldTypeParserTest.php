@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the FieldValueParserTest class
+ * File containing the FieldTypeParserTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,14 +9,14 @@
 
 namespace eZ\Publish\Core\REST\Common\Tests\Input;
 
-use eZ\Publish\Core\REST\Common\Input\FieldValueParser;
+use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Client\Values\Content\ContentInfo;
 use eZ\Publish\Core\REST\Client\Values\ContentType\FieldDefinition;
 
 /**
- * FieldValueParser test class
+ * FieldTypeParser test class
  */
-class FieldValueParserTest extends \PHPUnit_Framework_TestCase
+class FieldTypeParserTest extends \PHPUnit_Framework_TestCase
 {
     protected $contentServiceMock;
 
@@ -69,7 +69,7 @@ class FieldValueParserTest extends \PHPUnit_Framework_TestCase
 
     public function testParseFieldValue()
     {
-        $fieldValueParser = $this->getFieldValueParser();
+        $fieldTypeParser = $this->getFieldTypeParser();
 
         $this->contentServiceMock->expects( $this->once() )
             ->method( 'loadContentInfo' )
@@ -123,7 +123,7 @@ class FieldValueParserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array( 'foo', 'bar' ),
-            $fieldValueParser->parseFieldValue(
+            $fieldTypeParser->parseFieldValue(
                 '/content/23',
                 'my-field-definition',
                 array( 1, 2, 3 )
@@ -133,7 +133,7 @@ class FieldValueParserTest extends \PHPUnit_Framework_TestCase
 
     public function testParseValue()
     {
-        $fieldValueParser = $this->getFieldValueParser();
+        $fieldTypeParser = $this->getFieldTypeParser();
 
         $fieldTypeMock = $this->fieldTypeMock;
         $this->fieldTypeServiceMock->expects( $this->once() )
@@ -154,16 +154,16 @@ class FieldValueParserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array( 'foo', 'bar' ),
-            $fieldValueParser->parseValue(
+            $fieldTypeParser->parseValue(
                 'some-fancy-field-type',
                 array( 1, 2, 3 )
             )
         );
     }
 
-    protected function getFieldValueParser()
+    protected function getFieldTypeParser()
     {
-        return new FieldValueParser(
+        return new FieldTypeParser(
             $this->contentServiceMock,
             $this->contentTypeServiceMock,
             $this->fieldTypeServiceMock

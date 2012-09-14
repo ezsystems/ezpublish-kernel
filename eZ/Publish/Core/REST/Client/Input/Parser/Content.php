@@ -12,7 +12,7 @@ use eZ\Publish\Core\REST\Client\Input\ParserTools;
 use eZ\Publish\Core\REST\Client\ContentService;
 
 use eZ\Publish\Core\REST\Common\Input\Parser;
-use eZ\Publish\Core\REST\Common\Input\FieldValueParser;
+use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 
 use eZ\Publish\Core\REST\Client\Values;
@@ -44,19 +44,19 @@ class Content extends Parser
     protected $contentService;
 
     /**
-     * @var eZ\Publish\Core\REST\Common\Input\FieldValueParser
+     * @var eZ\Publish\Core\REST\Common\Input\FieldTypeParser
      */
-    protected $fieldValueParser;
+    protected $fieldTypeParser;
 
     /**
      * @param eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo $versionInfoParser
      */
-    public function __construct( ParserTools $parserTools, ContentService $contentService, VersionInfo $versionInfoParser, FieldValueParser $fieldValueParser )
+    public function __construct( ParserTools $parserTools, ContentService $contentService, VersionInfo $versionInfoParser, FieldTypeParser $fieldTypeParser )
     {
         $this->parserTools = $parserTools;
         $this->contentService = $contentService;
         $this->versionInfoParser = $versionInfoParser;
-        $this->fieldValueParser = $fieldValueParser;
+        $this->fieldTypeParser = $fieldTypeParser;
     }
 
     /**
@@ -107,7 +107,7 @@ class Content extends Parser
                         'id' => $rawFieldData['id'],
                         'fieldDefIdentifier' => $rawFieldData['fieldDefinitionIdentifier'],
                         'languageCode' => $rawFieldData['languageCode'],
-                        'value' => $this->fieldValueParser->parseFieldValue(
+                        'value' => $this->fieldTypeParser->parseFieldValue(
                             $contentId,
                             $rawFieldData['fieldDefinitionIdentifier'],
                             $rawFieldData['fieldValue']

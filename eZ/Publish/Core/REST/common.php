@@ -127,7 +127,7 @@ $repository = new Client\IntegrationTestRepository(
 $parserTools = new Client\Input\ParserTools();
 
 // Parser for field values (using FieldTypes for toHash()/fromHash() operations)
-$fieldValueParser = new Common\Input\FieldValueParser(
+$fieldTypeParser = new Common\Input\FieldTypeParser(
     $repository->getContentService(),
     $repository->getContentTypeService(),
     $repository->getFieldTypeService()
@@ -146,7 +146,7 @@ $inputParsers = array(
         // Circular reference, since REST does not transmit content info when
         // loading the VersionInfo (which is included in the content)
         new Client\Input\Parser\VersionInfo( $parserTools, $repository->getContentService() ),
-        $fieldValueParser
+        $fieldTypeParser
     ),
     'application/vnd.ez.api.ContentList'          => new Client\Input\Parser\ContentList(),
     'application/vnd.ez.api.ContentInfo'          => new Client\Input\Parser\ContentInfo(
@@ -163,7 +163,7 @@ $inputParsers = array(
     ),
     'application/vnd.ez.api.FieldDefinition'      => new Client\Input\Parser\FieldDefinition(
         $parserTools
-        // TODO: Add FieldValueParser
+        // TODO: Add FieldTypeParser
     ),
     'application/vnd.ez.api.SectionList'          => new Client\Input\Parser\SectionList(),
     'application/vnd.ez.api.Section'              => new Client\Input\Parser\Section(),

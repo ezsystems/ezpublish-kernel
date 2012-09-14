@@ -25,9 +25,9 @@ class ContentTest extends BaseTest
     protected $contentServiceMock;
 
     /**
-     * @var eZ\Publish\Core\REST\Common\Input\FieldValueParser
+     * @var eZ\Publish\Core\REST\Common\Input\FieldTypeParser
      */
-    protected $fieldValueParserMock;
+    protected $fieldTypeParserMock;
 
     /**
      * Tests the section parser
@@ -85,7 +85,7 @@ class ContentTest extends BaseTest
         $this->getParsingDispatcherMock()->expects( $this->exactly( 1 ) )
             ->method( 'parse' );
 
-        $this->getFieldValueParserMock()->expects( $this->exactly( 2 ) )
+        $this->getFieldTypeParserMock()->expects( $this->exactly( 2 ) )
             ->method( 'parseFieldValue' )
             ->will( $this->returnValue( 'MockedValue' ) );
 
@@ -164,7 +164,7 @@ class ContentTest extends BaseTest
             new Input\ParserTools(),
             $this->getContenServiceMock(),
             $this->getVersionInfoParserMock(),
-            $this->getFieldValueParserMock()
+            $this->getFieldTypeParserMock()
         );
     }
 
@@ -205,20 +205,20 @@ class ContentTest extends BaseTest
     }
 
     /**
-     * @return eZ\Publish\Core\REST\Common\Input\FieldValueParser
+     * @return eZ\Publish\Core\REST\Common\Input\FieldTypeParser
      */
-    protected function getFieldValueParserMock()
+    protected function getFieldTypeParserMock()
     {
-        if ( !isset( $this->fieldValueParserMock ) )
+        if ( !isset( $this->fieldTypeParserMock ) )
         {
-            $this->fieldValueParserMock = $this->getMock(
-                'eZ\\Publish\\Core\\REST\\Common\\Input\\FieldValueParser',
+            $this->fieldTypeParserMock = $this->getMock(
+                'eZ\\Publish\\Core\\REST\\Common\\Input\\FieldTypeParser',
                 array(),
                 array(),
                 '',
                 false
             );
         }
-        return $this->fieldValueParserMock;
+        return $this->fieldTypeParserMock;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Input FieldValueParser class
+ * File containing the Input FieldTypeParser class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\FieldTypeService;
 
-class FieldValueParser
+class FieldTypeParser
 {
     /**
      * @var eZ\Publish\API\Repository\ContentService
