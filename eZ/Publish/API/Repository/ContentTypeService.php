@@ -283,11 +283,11 @@ interface ContentTypeService
     /**
      * Publish the content type and update content objects.
      *
+     * This method updates content objects, depending on the changed field definitions.
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If the content type has no draft
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the content type has no field definitions
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish a content type
-     *
-     * This method updates content objects, depending on the changed field definitions.
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      */
