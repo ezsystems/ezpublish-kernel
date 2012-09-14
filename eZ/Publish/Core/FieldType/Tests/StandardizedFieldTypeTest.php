@@ -460,6 +460,8 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
 
         $actualResult = $fieldType->toHash( $inputValue );
 
+        $this->assertIsValidHashValue( $actualResult );
+
         $this->assertEquals(
             $expectedResult,
             $actualResult,
@@ -474,6 +476,8 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
      */
     public function testFromHash( $inputHash, $expectedResult )
     {
+        $this->assertIsValidHashValue( $inputHash );
+
         $fieldType = $this->getFieldTypeUnderTest();
 
         $actualResult = $fieldType->fromHash( $inputHash );
