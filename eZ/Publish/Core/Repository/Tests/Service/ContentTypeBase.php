@@ -2018,6 +2018,64 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the publishContentTypeDraft() method.
      *
      * @depends testPublishContentTypeDraft
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::publishContentTypeDraft
+     *
+     * @return void
+     */
+    public function testPublishContentTypeDraftThrowsInvalidArgumentException()
+    {
+        $contentTypeService = $this->repository->getContentTypeService();
+        $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct( 'new-type' );
+        $typeCreateStruct->names = array( 'eng-GB' => 'Type title' );
+        $typeCreateStruct->mainLanguageCode = 'eng-GB';
+        $type = $contentTypeService->createContentType(
+            $typeCreateStruct,
+            $this->createGroups()
+        );
+
+        // Throws an exception because type has no field definitions
+        $contentTypeService->publishContentTypeDraft( $type );
+    }
+
+    /**
+     * Test for the publishContentTypeDraft() method.
+     *
+     * @depends testPublishContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::publishContentTypeDraft
+     *
+     * @return void
+     */
+    public function testPublishContentTypeDraftSetsNameSchema()
+    {
+        $contentTypeService = $this->repository->getContentTypeService();
+        $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(
+            'new-type'
+        );
+        $typeCreateStruct->names = array(
+            'eng-GB' => 'Type title'
+        );
+        $typeCreateStruct->mainLanguageCode = 'eng-GB';
+
+        $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct( 'title', 'ezstring' );
+        $typeCreateStruct->addFieldDefinition( $titleFieldCreate );
+
+        $type = $contentTypeService->createContentType(
+            $typeCreateStruct,
+            $this->createGroups()
+        );
+
+        $contentTypeService->publishContentTypeDraft( $type );
+
+        $loadedContentType = $contentTypeService->loadContentType( $type->id );
+
+        $this->assertEquals( "<title>", $loadedContentType->nameSchema );
+    }
+
+    /**
+     * Test for the publishContentTypeDraft() method.
+     *
+     * @depends testPublishContentTypeDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::publishContentTypeDraft
      *
