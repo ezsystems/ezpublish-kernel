@@ -122,12 +122,4 @@ class Value extends BaseValue
     {
         return (string)$this->fileName;
     }
-
-    /**
-     * @see \eZ\Publish\Core\FieldType\Value::getTitle()
-     */
-    public function getTitle()
-    {
-        return !empty( $this->alternativeText ) ? $this->alternativeText : $this->fileName;
-    }
 }

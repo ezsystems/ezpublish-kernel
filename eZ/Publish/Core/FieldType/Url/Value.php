@@ -50,12 +50,4 @@ class Value extends BaseValue
     {
         return (string)$this->link;
     }
-
-    /**
-     * @see \eZ\Publish\Core\FieldType\Value::getTitle()
-     */
-    public function getTitle()
-    {
-        throw new \RuntimeException( 'Implement this method' );
-    }
 }

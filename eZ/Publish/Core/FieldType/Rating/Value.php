@@ -39,12 +39,4 @@ class Value extends BaseValue
     {
         return $this->isDisabled ? "1" : "0";
     }
-
-    /**
-     * @see \eZ\Publish\Core\FieldType\Value::getTitle()
-     */
-    public function getTitle()
-    {
-        throw new \RuntimeException( 'Implement this method' );
-    }
 }

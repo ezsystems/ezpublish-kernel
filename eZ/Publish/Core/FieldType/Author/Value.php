@@ -52,12 +52,4 @@ class Value extends BaseValue
 
         return implode( ', ', $authorNames );
     }
-
-    /**
-     * @see \eZ\Publish\Core\FieldType\Value::getTitle()
-     */
-    public function getTitle()
-    {
-        return isset( $this->authors[0] ) ? $this->authors[0]->name : "";
-    }
 }

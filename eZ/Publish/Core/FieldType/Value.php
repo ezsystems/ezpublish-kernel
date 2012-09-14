@@ -17,18 +17,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 abstract class Value extends ValueObject
 {
     /**
-     * Returns the title of the current field value.
-     * It will be used to generate content name and url alias if current field is designated
-     * to be used in the content name/urlAlias pattern.
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->__toString();
-    }
-
-    /**
      * Returns a string representation of the field value.
      *
      * @return string

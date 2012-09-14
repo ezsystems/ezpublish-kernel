@@ -91,13 +91,4 @@ class Value extends BaseValue
 
         return $this->value->format( $this->stringFormat );
     }
-
-    /**
-     * @see \eZ\Publish\Core\FieldType\Value::getTitle()
-     * @todo Return format taken from locale settings (via ctor injection)
-     */
-    public function getTitle()
-    {
-        return $this->value->format( 'D Y-d-m H:i:s' );
-    }
 }

@@ -51,14 +51,6 @@ class Value extends BaseValue
     }
 
     /**
-     * @see \eZ\Publish\Core\FieldType\Value::getTitle()
-     */
-    public function getTitle()
-    {
-        throw new \RuntimeException( 'Implement this method' );
-    }
-
-    /**
      * Returns the input handler depending on the input value type
      *
      * @return \eZ\Publish\Core\FieldType\XmlText\Input\Handler
