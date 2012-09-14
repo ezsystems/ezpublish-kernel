@@ -56,7 +56,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
-    public function publishUrlAliasForLocation( $locationId, $name, $languageCode, $alwaysAvailable = false )
+    public function publishUrlAliasForLocation( $locationId, $parentLocationId, $name, $languageCode, $alwaysAvailable = false )
     {
       throw new NotImplementedException( __METHOD__ );
     }
@@ -76,7 +76,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
-    public function createCustomUrlAlias( $locationId, $path, array $prioritizedLanguageCodes, $forwarding = false, $languageName = null, $alwaysAvailable = false )
+    public function createCustomUrlAlias( $locationId, $path, $forwarding = false, $languageName = null, $alwaysAvailable = false )
     {
       throw new NotImplementedException( __METHOD__ );
     }
@@ -103,6 +103,20 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
     }
 
     /**
+     * @todo document
+     *
+     * @param string|null $languageCode
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias[]
+     */
+    public function listGlobalURLAliases( $languageCode = null, $offset = 0, $limit = -1 )
+    {
+        throw new NotImplementedException( __METHOD__ );
+    }
+
+    /**
      * List of url entries of $urlType, pointing to $locationId.
      *
      * @param mixed $locationId
@@ -111,9 +125,9 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias[]
      */
-    public function listURLAliasesForLocation( $locationId, $custom = false, array $prioritizedLanguageCodes )
+    public function listURLAliasesForLocation( $locationId, $custom = false )
     {
-      throw new NotImplementedException( __METHOD__ );
+        throw new NotImplementedException( __METHOD__ );
     }
 
     /**
@@ -140,20 +154,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
-    public function lookup( $url, array $prioritizedLanguageCodes )
-    {
-      throw new NotImplementedException( __METHOD__ );
-    }
-
-    /**
-     * Returns all URL alias pointing to the the given location
-     *
-     * @param mixed $locationId
-     * @param array $prioritizedLanguageCodes
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias[]
-     */
-    public function reverseLookup( $locationId, array $prioritizedLanguageCodes )
+    public function lookup( $url )
     {
       throw new NotImplementedException( __METHOD__ );
     }
