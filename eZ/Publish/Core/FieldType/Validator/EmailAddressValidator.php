@@ -18,7 +18,7 @@ use eZ\Publish\Core\FieldType\Validator,
  * @property int $maxStringLength The maximum allowed length of the string.
  * @property int $minStringLength The minimum allowed length of the string.
  */
-class EMailAddressValidator extends Validator
+class EmailAddressValidator extends Validator
 {
     protected $constraints = array(
         "Extent" => false,

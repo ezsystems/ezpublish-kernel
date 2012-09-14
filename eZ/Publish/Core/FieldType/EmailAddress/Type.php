@@ -12,7 +12,7 @@ use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\FieldType\ValidationError,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\Core\FieldType\Validator\EMailAddressValidator;
+    eZ\Publish\Core\FieldType\Validator\EmailAddressValidator;
 
 /**
  * The EMailAddress field type.

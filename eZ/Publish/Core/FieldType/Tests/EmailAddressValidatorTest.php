@@ -17,7 +17,7 @@ use eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue,
  * @group fieldType
  * @group validator
  */
-class EMailAddressValidatorTest extends FieldTypeTest
+class EmailAddressValidatorTest extends FieldTypeTest
 {
 
     /**
@@ -27,7 +27,7 @@ class EMailAddressValidatorTest extends FieldTypeTest
     {
         $this->assertInstanceOf(
             "eZ\\Publish\\Core\\FieldType\\Validator",
-            new EMailAddressValidator
+            new EmailAddressValidator
         );
     }
 
@@ -42,7 +42,7 @@ class EMailAddressValidatorTest extends FieldTypeTest
         $constraints = array(
             "Extent" => "regex",
         );
-        $validator = new EMailAddressValidator;
+        $validator = new EmailAddressValidator;
         $validator->initializeWithConstraints(
             $constraints
         );
@@ -63,7 +63,7 @@ class EMailAddressValidatorTest extends FieldTypeTest
                 "default" => "regex"
             ),
         );
-        $validator = new EMailAddressValidator;
+        $validator = new EmailAddressValidator;
         $this->assertSame( $constraintsSchema, $validator->getConstraintsSchema() );
     }
 
@@ -78,7 +78,7 @@ class EMailAddressValidatorTest extends FieldTypeTest
         $constraints = array(
             "Extent" => "regex",
         );
-        $validator = new EMailAddressValidator;
+        $validator = new EmailAddressValidator;
         $validator->Extent = $constraints["Extent"];
         $this->assertSame( $constraints["Extent"], $validator->Extent );
     }
@@ -86,7 +86,7 @@ class EMailAddressValidatorTest extends FieldTypeTest
 
     public function testValidateCorrectEmailAddresses()
     {
-        $validator = new EMailAddressValidator;
+        $validator = new EmailAddressValidator;
         $validator->Extent = 'regex';
         $emailAddresses = array( 'john.doe@example.com', 'Info@eZ.No' );
         foreach ( $emailAddresses as $value )
@@ -107,7 +107,7 @@ class EMailAddressValidatorTest extends FieldTypeTest
      */
     public function testValidateWrongEmailAddresses( )
     {
-        $validator = new EMailAddressValidator;
+        $validator = new EmailAddressValidator;
         $validator->Extent = "regex";
         $emailAddresses = array( '.john.doe@example.com', 'Info-at-eZ.No' );
         foreach ( $emailAddresses as $value )
