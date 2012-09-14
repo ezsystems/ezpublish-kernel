@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\Mail;
+namespace eZ\Publish\Core\FieldType\EmailAddress;
 use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\FieldType\ValidationError,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
@@ -116,7 +116,7 @@ class Type extends FieldType
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
-     * @return \eZ\Publish\Core\FieldType\Mail\Value
+     * @return \eZ\Publish\Core\FieldType\EmailAddress\Value
      */
     public function getEmptyValue()
     {
@@ -131,9 +131,9 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
      *
-     * @param \eZ\Publish\Core\FieldType\Mail\Value $inputValue
+     * @param \eZ\Publish\Core\FieldType\EmailAddress\Value $inputValue
      *
-     * @return \eZ\Publish\Core\FieldType\Mail\Value
+     * @return \eZ\Publish\Core\FieldType\EmailAddress\Value
      */
     public function acceptValue( $inputValue )
     {
@@ -151,7 +151,7 @@ class Type extends FieldType
         {
             throw new InvalidArgumentType(
                 '$inputValue',
-                'eZ\\Publish\\Core\\FieldType\\Mail\\Value',
+                'eZ\\Publish\\Core\\FieldType\\EmailAddress\\Value',
                 $inputValue
             );
         }
@@ -188,7 +188,7 @@ class Type extends FieldType
      *
      * @param mixed $hash
      *
-     * @return \eZ\Publish\Core\FieldType\Mail\Value $value
+     * @return \eZ\Publish\Core\FieldType\EmailAddress\Value $value
      */
     public function fromHash( $hash )
     {
@@ -202,7 +202,7 @@ class Type extends FieldType
     /**
      * Converts a $Value to a hash
      *
-     * @param \eZ\Publish\Core\FieldType\Mail\Value $value
+     * @param \eZ\Publish\Core\FieldType\EmailAddress\Value $value
      *
      * @return mixed
      */

@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
-use eZ\Publish\Core\FieldType\Mail\Value as MailValue,
+use eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue,
     eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
@@ -17,7 +17,7 @@ use eZ\Publish\Core\FieldType\Mail\Value as MailValue,
  * @group integration
  * @group field-type
  */
-class MailIntegrationTest extends BaseIntegrationTest
+class EmailAddressIntegrationTest extends BaseIntegrationTest
 {
     /**
      * Get name of tested field tyoe
@@ -106,7 +106,7 @@ class MailIntegrationTest extends BaseIntegrationTest
      */
     public function getValidCreationFieldData()
     {
-        return new MailValue( 'spam@ez.no' );
+        return new EmailAddressValue( 'spam@ez.no' );
     }
 
     /**
@@ -121,7 +121,7 @@ class MailIntegrationTest extends BaseIntegrationTest
     public function assertFieldDataLoadedCorrect( Field $field)
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Mail\\Value',
+            'eZ\\Publish\\Core\\FieldType\\EmailAddress\\Value',
             $field->value
         );
 
@@ -167,19 +167,19 @@ class MailIntegrationTest extends BaseIntegrationTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
             array(
-                new MailValue( str_repeat( '.', 64 ) ),
+                new EmailAddressValue( str_repeat( '.', 64 ) ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
             ),
             array(
-                new MailValue( 'spam@' ),
+                new EmailAddressValue( 'spam@' ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
             ),
             array(
-                new MailValue( '@ez.no' ),
+                new EmailAddressValue( '@ez.no' ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
             ),
             array(
-                new MailValue( 'spam@ez-no' ),
+                new EmailAddressValue( 'spam@ez-no' ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
             ),
         );
@@ -192,7 +192,7 @@ class MailIntegrationTest extends BaseIntegrationTest
      */
     public function getValidUpdateFieldData()
     {
-        return new MailValue( 'spam_name@ez-some-thing.no' );
+        return new EmailAddressValue( 'spam_name@ez-some-thing.no' );
     }
 
     /**
@@ -205,7 +205,7 @@ class MailIntegrationTest extends BaseIntegrationTest
     public function assertUpdatedFieldDataLoadedCorrect( Field $field )
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Mail\\Value',
+            'eZ\\Publish\\Core\\FieldType\\EmailAddress\\Value',
             $field->value
         );
 
@@ -255,7 +255,7 @@ class MailIntegrationTest extends BaseIntegrationTest
     public function assertCopiedFieldDataLoadedCorrectly( Field $field )
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Mail\\Value',
+            'eZ\\Publish\\Core\\FieldType\\EmailAddress\\Value',
             $field->value
         );
 
@@ -292,7 +292,7 @@ class MailIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new MailValue( 'spam@exmaple.no' ),
+                new EmailAddressValue( 'spam@exmaple.no' ),
                 'spam@exmaple.no',
             ),
         );
@@ -310,7 +310,7 @@ class MailIntegrationTest extends BaseIntegrationTest
         return array(
             array(
                 'spam@exmaple.no',
-                new MailValue( 'spam@exmaple.no' )
+                new EmailAddressValue( 'spam@exmaple.no' )
             ),
         );
     }

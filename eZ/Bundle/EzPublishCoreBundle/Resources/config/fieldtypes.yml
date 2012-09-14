@@ -8,7 +8,7 @@ parameters:
     ezpublish.fieldType.ezbinaryfile.pathGenerator.class: eZ\Publish\Core\FieldType\BinaryBase\PathGenerator\LegacyPathGenerator
     ezpublish.fieldType.ezboolean.class: eZ\Publish\Core\FieldType\Checkbox\Type
     ezpublish.fieldType.ezdatetime.class: eZ\Publish\Core\FieldType\DateAndTime\Type
-    ezpublish.fieldType.ezemail.class: eZ\Publish\Core\FieldType\Mail\Type
+    ezpublish.fieldType.ezemail.class: eZ\Publish\Core\FieldType\EmailAddress\Type
     ezpublish.fieldType.ezfloat.class: eZ\Publish\Core\FieldType\Float\Type
     ezpublish.fieldType.ezinteger.class: eZ\Publish\Core\FieldType\Integer\Type
     #ezpublish.fieldType.ezimage.class: eZ\Publish\Core\FieldType\Image\Type

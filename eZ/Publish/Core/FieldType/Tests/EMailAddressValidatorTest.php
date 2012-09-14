@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the StringLengthValidatorTest class
+ * File containing the EmailAddressValueValidatorTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Mail\Value as MailValue,
+use eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue,
     eZ\Publish\Core\FieldType\Validator\EmailAddressValidator;
 
 /**
@@ -91,7 +91,7 @@ class EMailAddressValidatorTest extends FieldTypeTest
         $emailAddresses = array( 'john.doe@example.com', 'Info@eZ.No' );
         foreach ( $emailAddresses as $value )
         {
-            $this->assertTrue( $validator->validate( new MailValue( $value ) ) );
+            $this->assertTrue( $validator->validate( new EmailAddressValue( $value ) ) );
             $this->assertSame( array(), $validator->getMessage() );
         }
 
@@ -112,7 +112,7 @@ class EMailAddressValidatorTest extends FieldTypeTest
         $emailAddresses = array( '.john.doe@example.com', 'Info-at-eZ.No' );
         foreach ( $emailAddresses as $value )
         {
-            $this->assertFalse( $validator->validate( new MailValue( $value ) ) );
+            $this->assertFalse( $validator->validate( new EmailAddressValue( $value ) ) );
         }
     }
 

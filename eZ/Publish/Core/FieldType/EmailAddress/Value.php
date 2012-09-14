@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\Mail;
+namespace eZ\Publish\Core\FieldType\EmailAddress;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**

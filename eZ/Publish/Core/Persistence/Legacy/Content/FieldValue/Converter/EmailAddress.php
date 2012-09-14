@@ -14,7 +14,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
-class Mail implements Converter
+class EmailAddress implements Converter
 {
     const VALIDATOR_IDENTIFIER = "EMailAddressValidator";
 

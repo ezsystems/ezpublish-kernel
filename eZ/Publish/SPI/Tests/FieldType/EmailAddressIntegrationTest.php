@@ -32,7 +32,7 @@ use eZ\Publish\Core\Persistence\Legacy,
  *
  * @group integration
  */
-class MailIntegrationTest extends BaseIntegrationTest
+class EmailAddressIntegrationTest extends BaseIntegrationTest
 {
     /**
      * Get name of tested field type
@@ -59,7 +59,7 @@ class MailIntegrationTest extends BaseIntegrationTest
         );
         $handler->getFieldValueConverterRegistry()->register(
             'ezemail',
-            new Legacy\Content\FieldValue\Converter\Mail()
+            new Legacy\Content\FieldValue\Converter\EmailAddress()
         );
 
         return $handler;

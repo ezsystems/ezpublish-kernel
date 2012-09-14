@@ -28,7 +28,7 @@ parameters:
     ezpublish.fieldType.ezboolean.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Checkbox
     #ezpublish.fieldType.ezcountry.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country
     ezpublish.fieldType.ezdatetime.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime
-    ezpublish.fieldType.ezemail.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Mail
+    ezpublish.fieldType.ezemail.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\EmailAddress
     ezpublish.fieldType.ezfloat.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Float
     ezpublish.fieldType.ezinteger.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer
     #ezpublish.fieldType.ezimage.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Image

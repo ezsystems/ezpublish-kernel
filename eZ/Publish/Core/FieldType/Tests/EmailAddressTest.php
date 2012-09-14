@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the MailTest class
+ * File containing the EmailAddressValueTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,15 +8,15 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\Mail\Type as MailType,
-    eZ\Publish\Core\FieldType\Mail\Value as MailValue,
+use eZ\Publish\Core\FieldType\EmailAddress\Type as EmailAddressType,
+    eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue,
     ReflectionObject;
 
 /**
  * @group fieldType
  * @group ezemail
  */
-class MailTest extends StandardizedFieldTypeTest
+class EmailAddressTest extends StandardizedFieldTypeTest
 {
     /**
      * Returns the field type under test.
@@ -31,7 +31,7 @@ class MailTest extends StandardizedFieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new MailType();
+        return new EmailAddressType();
     }
 
     /**
@@ -97,7 +97,7 @@ class MailTest extends StandardizedFieldTypeTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                new MailValue( 23 ),
+                new EmailAddressValue( 23 ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
@@ -141,11 +141,11 @@ class MailTest extends StandardizedFieldTypeTest
             ),
             array(
                 'spam_mail@ex-something.no',
-                new MailValue( 'spam_mail@ex-something.no' ),
+                new EmailAddressValue( 'spam_mail@ex-something.no' ),
             ),
             array(
-                new MailValue( 'spam_mail@ex-something.no' ),
-                new MailValue( 'spam_mail@ex-something.no' ),
+                new EmailAddressValue( 'spam_mail@ex-something.no' ),
+                new EmailAddressValue( 'spam_mail@ex-something.no' ),
             ),
         );
     }
@@ -193,11 +193,11 @@ class MailTest extends StandardizedFieldTypeTest
                 null
             ),
             array(
-                new MailValue(),
+                new EmailAddressValue(),
                 '',
             ),
             array(
-                new MailValue( 'spam_mail@ex-something.no' ),
+                new EmailAddressValue( 'spam_mail@ex-something.no' ),
                 'spam_mail@ex-something.no',
             ),
         );
@@ -247,11 +247,11 @@ class MailTest extends StandardizedFieldTypeTest
             ),
             array(
                 '',
-                new MailValue(),
+                new EmailAddressValue(),
             ),
             array(
                 'spam_mail@ex-something.no',
-                new MailValue( 'spam_mail@ex-something.no' ),
+                new EmailAddressValue( 'spam_mail@ex-something.no' ),
             ),
         );
     }
