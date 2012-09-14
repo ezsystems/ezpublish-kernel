@@ -939,7 +939,9 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function updateContentTypeDraft( APIContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct )
     {
         if ( $this->repository->hasAccess( 'class', 'update' ) !== true )
+        {
             throw new UnauthorizedException( 'ContentType', 'update' );
+        }
 
         try
         {
@@ -954,7 +956,8 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
         }
 
-        if ( $loadedContentTypeDraft->identifier != $contentTypeUpdateStruct->identifier )
+        if ( $contentTypeUpdateStruct->identifier !== null
+            && $contentTypeUpdateStruct->identifier != $loadedContentTypeDraft->identifier )
         {
             try
             {
@@ -971,7 +974,8 @@ class ContentTypeService implements ContentTypeServiceInterface
             }
         }
 
-        if ( $loadedContentTypeDraft->remoteId != $contentTypeUpdateStruct->remoteId )
+        if ( $contentTypeUpdateStruct->remoteId !== null
+            && $contentTypeUpdateStruct->remoteId != $loadedContentTypeDraft->remoteId )
         {
             try
             {
@@ -988,47 +992,54 @@ class ContentTypeService implements ContentTypeServiceInterface
             }
         }
 
-        $initialLanguageId = $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
-            $contentTypeUpdateStruct->mainLanguageCode
+        $updateStruct = new SPIContentTypeUpdateStruct();
+
+        $updateStruct->identifier = $contentTypeUpdateStruct->identifier !== null
+            ? $contentTypeUpdateStruct->identifier
+            : $loadedContentTypeDraft->identifier;
+        $updateStruct->remoteId = $contentTypeUpdateStruct->remoteId !== null
+            ? $contentTypeUpdateStruct->remoteId
+            : $loadedContentTypeDraft->remoteId;
+
+        $updateStruct->name = $contentTypeUpdateStruct->names !== null
+            ? $contentTypeUpdateStruct->names
+            : $loadedContentTypeDraft->names;
+        $updateStruct->description = $contentTypeUpdateStruct->descriptions !== null
+            ? $contentTypeUpdateStruct->descriptions
+            : $loadedContentTypeDraft->descriptions;
+
+        $updateStruct->modified = $contentTypeUpdateStruct->modificationDate !== null
+            ? $contentTypeUpdateStruct->modificationDate->getTimestamp()
+            : time();
+        $updateStruct->modifierId = $contentTypeUpdateStruct->modifierId !== null
+            ? $contentTypeUpdateStruct->modifierId
+            : $this->repository->getCurrentUser()->id;
+
+        $updateStruct->urlAliasSchema = $contentTypeUpdateStruct->urlAliasSchema !== null
+            ? $contentTypeUpdateStruct->urlAliasSchema
+            : $loadedContentTypeDraft->urlAliasSchema;
+        $updateStruct->nameSchema = $contentTypeUpdateStruct->nameSchema !== null
+            ? $contentTypeUpdateStruct->nameSchema
+            : $loadedContentTypeDraft->nameSchema;
+
+        $updateStruct->isContainer = $contentTypeUpdateStruct->isContainer !== null
+            ? $contentTypeUpdateStruct->isContainer
+            : $loadedContentTypeDraft->isContainer;
+        $updateStruct->sortField = $contentTypeUpdateStruct->defaultSortField !== null
+            ? $contentTypeUpdateStruct->defaultSortField
+            : $loadedContentTypeDraft->defaultSortField;
+        $updateStruct->sortOrder = $contentTypeUpdateStruct->defaultSortOrder !== null
+            ? (int)$contentTypeUpdateStruct->defaultSortOrder
+            : $loadedContentTypeDraft->defaultSortOrder;
+
+        $updateStruct->defaultAlwaysAvailable = $contentTypeUpdateStruct->defaultAlwaysAvailable !== null
+            ? $contentTypeUpdateStruct->defaultAlwaysAvailable
+            : $loadedContentTypeDraft->defaultAlwaysAvailable;
+        $updateStruct->initialLanguageId = $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
+            $contentTypeUpdateStruct->mainLanguageCode !== null
+                ? $contentTypeUpdateStruct->mainLanguageCode
+                : $loadedContentTypeDraft->mainLanguageCode
         )->id;
-
-        if ( empty( $contentTypeUpdateStruct->modifierId ) )
-            $userId = $this->repository->getCurrentUser()->id;
-        else
-            $userId = $contentTypeUpdateStruct->modifierId;
-
-        if ( empty( $contentTypeUpdateStruct->modificationDate ) )
-            $timestamp = time();
-        else
-            $timestamp = $contentTypeUpdateStruct->modificationDate->getTimestamp();
-
-        if ( empty( $contentTypeUpdateStruct->defaultSortField ) )
-            $defaultSortField = Location::SORT_FIELD_PUBLISHED;
-        else
-            $defaultSortField = $contentTypeUpdateStruct->defaultSortField;
-
-        if ( empty( $contentTypeUpdateStruct->defaultSortOrder ) )
-            $defaultSortOrder = Location::SORT_ORDER_DESC;
-        else
-            $defaultSortOrder = $contentTypeUpdateStruct->defaultSortOrder;
-
-        $spiContentTypeUpdateStruct = new SPIContentTypeUpdateStruct(
-            array(
-                "name" => $contentTypeUpdateStruct->names,
-                "description" => $contentTypeUpdateStruct->descriptions,
-                "identifier" => $contentTypeUpdateStruct->identifier,
-                "modified" => $timestamp,
-                "modifierId" => $userId,
-                "remoteId" => $contentTypeUpdateStruct->remoteId,
-                "urlAliasSchema" => $contentTypeUpdateStruct->urlAliasSchema,
-                "nameSchema" => $contentTypeUpdateStruct->nameSchema,
-                "isContainer" => $contentTypeUpdateStruct->isContainer,
-                "initialLanguageId" => $initialLanguageId,
-                "sortField" => $defaultSortField,
-                "sortOrder" => $defaultSortOrder,
-                "defaultAlwaysAvailable" => $contentTypeUpdateStruct->defaultAlwaysAvailable
-            )
-        );
 
         $this->repository->beginTransaction();
         try
@@ -1036,7 +1047,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             $this->persistenceHandler->contentTypeHandler()->update(
                 $contentTypeDraft->id,
                 $contentTypeDraft->status,
-                $spiContentTypeUpdateStruct
+                $updateStruct
             );
             $this->repository->commit();
         }
@@ -1384,17 +1395,20 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * Publish the content type and update content objects.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If the content type has no draft
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish a content type
-     *
      * This method updates content objects, depending on the changed field definitions.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If the content type has no draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the content type has no field definitions
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish a content type
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      */
     public function publishContentTypeDraft( APIContentTypeDraft $contentTypeDraft )
     {
         if ( $this->repository->hasAccess( 'class', 'update' ) !== true )
+        {
             throw new UnauthorizedException( 'ContentType', 'update' );
+        }
 
         try
         {
@@ -1404,14 +1418,35 @@ class ContentTypeService implements ContentTypeServiceInterface
         {
             throw new BadStateException(
                 "\$contentTypeDraft",
-                "The content type does not have a draft",
+                "The content type does not have a draft.",
                 $e
+            );
+        }
+
+        if ( count( $loadedContentTypeDraft->getFieldDefinitions() ) === 0 )
+        {
+            throw new InvalidArgumentException(
+                "\$contentTypeDraft",
+                "The content type draft should have at least one field definition."
             );
         }
 
         $this->repository->beginTransaction();
         try
         {
+            if ( empty( $loadedContentTypeDraft->nameSchema ) )
+            {
+                $fieldDefinitions = $loadedContentTypeDraft->getFieldDefinitions();
+                $this->updateContentTypeDraft(
+                    $loadedContentTypeDraft,
+                    new ContentTypeUpdateStruct(
+                        array(
+                            "nameSchema" => "<" . $fieldDefinitions[0]->identifier . ">"
+                        )
+                    )
+                );
+            }
+
             $this->persistenceHandler->contentTypeHandler()->publish(
                 $loadedContentTypeDraft->id
             );
