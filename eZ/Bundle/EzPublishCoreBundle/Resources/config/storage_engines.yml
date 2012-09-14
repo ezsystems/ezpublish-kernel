@@ -28,6 +28,7 @@ parameters:
     ezpublish.fieldType.ezboolean.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Checkbox
     #ezpublish.fieldType.ezcountry.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country
     ezpublish.fieldType.ezdatetime.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime
+    ezpublish.fieldType.ezemail.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\EmailAddress
     ezpublish.fieldType.ezfloat.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Float
     ezpublish.fieldType.ezinteger.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer
     #ezpublish.fieldType.ezimage.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Image
@@ -46,10 +47,9 @@ parameters:
     ezpublish.fieldType.ezuser.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
     ezpublish.fieldType.ezuser.storage_gateway.class: eZ\Publish\Core\FieldType\User\UserStorage\Gateway\LegacyStorage
 
-    # Temporary workaround for ezpage, ezemail, ezimage, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
+    # Temporary workaround for ezpage, ezimage, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
     # a ezstring until proper implementation will be in place
     ezpublish.fieldType.ezpage.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
-    ezpublish.fieldType.ezemail.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
     ezpublish.fieldType.ezimage.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
     ezpublish.fieldType.ezgmaplocation.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
     ezpublish.fieldType.ezcomcomments.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
@@ -185,8 +185,6 @@ services:
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezurl, identifier: LegacyStorage}
 
-    # Temporary workaround for ezpage, ezemail, ezimage, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
-    # a ezstring until proper implementation will be in place
     ezpublish.fieldType.ezpage.converter:
         class: %ezpublish.fieldType.ezpage.converter.class%
         tags:
