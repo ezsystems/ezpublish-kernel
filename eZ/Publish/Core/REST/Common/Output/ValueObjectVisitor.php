@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Common\Output;
 use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\API\Repository\Values\User\Limitation;
 
 /**
  * Basic ValueObjectVisitor
@@ -55,9 +56,8 @@ abstract class ValueObjectVisitor
     /**
      * Visits the given list of $names
      *
-     * @param Generator $generator
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param array $names
-     * @return void
      */
     protected function visitNamesList( Generator $generator, array $names )
     {
@@ -67,9 +67,8 @@ abstract class ValueObjectVisitor
     /**
      * Visits the given list of $descriptions
      *
-     * @param Generator $generator
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param array $descriptions
-     * @return void
      */
     protected function visitDescriptionsList( Generator $generator, array $descriptions )
     {
@@ -79,10 +78,9 @@ abstract class ValueObjectVisitor
     /**
      * Visits a list of translated elements
      *
-     * @param Generator $generator
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param array $translatedElements
      * @param mixed $listName
-     * @return void
      */
     protected function visitTranslatedList( Generator $generator, array $translatedElements, $listName )
     {
@@ -100,10 +98,10 @@ abstract class ValueObjectVisitor
     /**
      * Visits a limitation
      *
-     * @param Generator $generator
-     * @param mixed $limitation
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
      */
-    protected function visitLimitation( Generator $generator, $limitation )
+    protected function visitLimitation( Generator $generator, Limitation $limitation )
     {
         $generator->startHashElement( 'limitation' );
 
