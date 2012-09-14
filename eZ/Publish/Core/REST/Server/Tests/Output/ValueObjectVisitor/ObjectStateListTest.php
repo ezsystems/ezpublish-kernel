@@ -96,8 +96,8 @@ class ObjectStateListTest extends ValueObjectVisitorBaseTest
         $generator->startDocument( null );
 
         $objectStateList = new ObjectStateList( array(
-            new ObjectState( new CoreObjectState(), 42 ),
-            new ObjectState( new CoreObjectState(), 42 ),
+            new CoreObjectState(),
+            new CoreObjectState(),
         ), 42 );
 
         $this->getVisitorMock()->expects( $this->exactly( 2 ) )
