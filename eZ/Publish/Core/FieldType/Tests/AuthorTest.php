@@ -422,8 +422,9 @@ class AuthorTest extends StandardizedFieldTypeTest
      */
     public function testFieldValueTitle()
     {
+        $ft = new AuthorType();
         $value = new AuthorValue( $this->authors );
-        self::assertSame( $this->authors[0]->name , $value->getTitle() );
+        self::assertSame( $this->authors[0]->name , $ft->getName( $value ) );
     }
 
     /**
