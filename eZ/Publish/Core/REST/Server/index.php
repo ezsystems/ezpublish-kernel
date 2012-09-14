@@ -220,7 +220,7 @@ $valueObjectVisitors = array(
     // necessary
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content'              => new Output\ValueObjectVisitor\Content(
         $urlHandler,
-        new Common\Output\FieldValueSerializer( $repository->getFieldTypeService() )
+        new Common\Output\FieldTypeSerializer( $repository->getFieldTypeService() )
     ),
 
     // ContentType
@@ -232,7 +232,7 @@ $valueObjectVisitors = array(
     ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestFieldDefinition' => new Output\ValueObjectVisitor\RestFieldDefinition(
         $urlHandler,
-        new Common\Output\FieldValueSerializer( $repository->getFieldTypeService() )
+        new Common\Output\FieldTypeSerializer( $repository->getFieldTypeService() )
     ),
 
     // Relation

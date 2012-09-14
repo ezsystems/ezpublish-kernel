@@ -16,11 +16,9 @@ use eZ\Publish\API\Repository\FieldTypeService,
     eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
- * Serializes field values using field types.
- *
- * @TODO: Rename?
+ * Serializes FieldType related data for REST output.
  */
-class FieldValueSerializer
+class FieldTypeSerializer
 {
     /**
      * FieldTypeService

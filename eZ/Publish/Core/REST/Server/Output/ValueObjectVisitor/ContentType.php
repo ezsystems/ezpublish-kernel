@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\UrlHandler,
     eZ\Publish\Core\REST\Common\Output\Generator,
     eZ\Publish\Core\REST\Common\Output\Visitor,
-    eZ\Publish\Core\REST\Common\Output\FieldValueSerializer,
+    eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer,
 
     eZ\Publish\API\Repository\Values,
     eZ\Publish\Core\REST\Server\Values\FieldDefinitionList;

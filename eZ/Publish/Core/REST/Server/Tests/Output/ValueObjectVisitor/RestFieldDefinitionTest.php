@@ -24,7 +24,7 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
     public function setUp()
     {
         $this->fieldValueSerializerMock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Common\\Output\\FieldValueSerializer',
+            'eZ\\Publish\\Core\\REST\\Common\\Output\\FieldTypeSerializer',
             array(),
             array(),
             '',

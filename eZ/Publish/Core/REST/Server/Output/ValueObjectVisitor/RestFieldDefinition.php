@@ -13,7 +13,7 @@ use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
-use eZ\Publish\Core\REST\Common\Output\FieldValueSerializer;
+use eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer;
 
 /**
  * RestFieldDefinition value object visitor
@@ -23,15 +23,15 @@ use eZ\Publish\Core\REST\Common\Output\FieldValueSerializer;
 class RestFieldDefinition extends ContentTypeBase
 {
     /**
-     * @var \eZ\Publish\Core\REST\Common\Output\FieldValueSerializer
+     * @var \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer
      */
     protected $fieldValueSerializer;
 
     /**
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
-     * @param \eZ\Publish\Core\REST\Common\Output\FieldValueSerializer $fieldValueSerializer
+     * @param \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer $fieldValueSerializer
      */
-    public function __construct( UrlHandler $urlHandler, FieldValueSerializer $fieldValueSerializer )
+    public function __construct( UrlHandler $urlHandler, FieldTypeSerializer $fieldValueSerializer )
     {
         parent::__construct( $urlHandler );
         $this->fieldValueSerializer = $fieldValueSerializer;

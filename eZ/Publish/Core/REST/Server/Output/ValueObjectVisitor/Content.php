@@ -13,7 +13,7 @@ use eZ\Publish\Core\REST\Common\UrlHandler,
     eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor,
     eZ\Publish\Core\REST\Common\Output\Generator,
     eZ\Publish\Core\REST\Common\Output\Visitor,
-    eZ\Publish\Core\REST\Common\Output\FieldValueSerializer,
+    eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer,
 
     eZ\Publish\Core\REST\Server\Values\RelationList,
 
@@ -26,15 +26,15 @@ use eZ\Publish\Core\REST\Common\UrlHandler,
 class Content extends ValueObjectVisitor
 {
     /**
-     * @var \eZ\Publish\Core\REST\Common\Output\FieldValueSerializer
+     * @var \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer
      */
     protected $fieldValueSerializer;
 
     /**
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
-     * @param \eZ\Publish\Core\REST\Common\Output\FieldValueSerializer $fieldValueSerializer
+     * @param \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer $fieldValueSerializer
      */
-    public function __construct( UrlHandler $urlHandler, FieldValueSerializer $fieldValueSerializer )
+    public function __construct( UrlHandler $urlHandler, FieldTypeSerializer $fieldValueSerializer )
     {
         parent::__construct( $urlHandler );
         $this->fieldValueSerializer = $fieldValueSerializer;
