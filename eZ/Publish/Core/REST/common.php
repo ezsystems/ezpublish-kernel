@@ -162,8 +162,8 @@ $inputParsers = array(
         $repository->getContentTypeService()
     ),
     'application/vnd.ez.api.FieldDefinition'      => new Client\Input\Parser\FieldDefinition(
-        $parserTools
-        // TODO: Add FieldTypeParser
+        $parserTools,
+        $fieldTypeParser
     ),
     'application/vnd.ez.api.SectionList'          => new Client\Input\Parser\SectionList(),
     'application/vnd.ez.api.Section'              => new Client\Input\Parser\Section(),

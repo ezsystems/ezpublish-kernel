@@ -13,6 +13,7 @@ use eZ\Publish\Core\REST\Client\ContentTypeService;
 
 use eZ\Publish\Core\REST\Common\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 
 use eZ\Publish\Core\REST\Client\Values;
 use eZ\Publish\API\Repository\Values\Content\Field;
@@ -20,7 +21,6 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 /**
  * Parser for Version
  *
- * @todo Integrate FieldType fromHash()
  * @todo Caching for extracted embedded objects
  */
 class FieldDefinition extends Parser
@@ -31,11 +31,18 @@ class FieldDefinition extends Parser
     protected $parserTools;
 
     /**
-     * @param eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo $versionInfoParser
+     * @var eZ\Publish\Core\REST\Common\Input\FieldTypeParser
      */
-    public function __construct( ParserTools $parserTools )
+    protected $fieldTypeParser;
+
+    /**
+     * @param eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo $versionInfoParser
+     * @param eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser
+     */
+    public function __construct( ParserTools $parserTools, FieldTypeParser $fieldTypeParser )
     {
         $this->parserTools = $parserTools;
+        $this->fieldTypeParser = $fieldTypeParser;
     }
 
     /**
@@ -62,7 +69,10 @@ class FieldDefinition extends Parser
             'descriptions' => $this->parserTools->parseTranslatableList( $data['descriptions'] ),
 
             // TODO: Call fromHash() here
-            'defaultValue' => $data['defaultValue'],
+            'defaultValue' => $this->fieldTypeParser->parseValue(
+                $data['fieldType'],
+                $data['defaultValue']
+            ),
         ) );
     }
 }
