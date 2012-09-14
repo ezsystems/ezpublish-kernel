@@ -992,21 +992,51 @@ class ContentTypeService implements ContentTypeServiceInterface
             }
         }
 
+        $this->repository->beginTransaction();
+        try
+        {
+            $this->persistenceHandler->contentTypeHandler()->update(
+                $contentTypeDraft->id,
+                $contentTypeDraft->status,
+                $this->buildSPIContentTypeUpdateStruct(
+                    $loadedContentTypeDraft,
+                    $contentTypeUpdateStruct
+                )
+            );
+            $this->repository->commit();
+        }
+        catch ( Exception $e )
+        {
+            $this->repository->rollback();
+            throw $e;
+        }
+    }
+
+    /**
+     * Builds ContentType update struct for storage layer
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct $contentTypeUpdateStruct
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct
+     */
+    protected function buildSPIContentTypeUpdateStruct( APIContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct )
+    {
         $updateStruct = new SPIContentTypeUpdateStruct();
 
         $updateStruct->identifier = $contentTypeUpdateStruct->identifier !== null
             ? $contentTypeUpdateStruct->identifier
-            : $loadedContentTypeDraft->identifier;
+            : $contentTypeDraft->identifier;
         $updateStruct->remoteId = $contentTypeUpdateStruct->remoteId !== null
             ? $contentTypeUpdateStruct->remoteId
-            : $loadedContentTypeDraft->remoteId;
+            : $contentTypeDraft->remoteId;
 
         $updateStruct->name = $contentTypeUpdateStruct->names !== null
             ? $contentTypeUpdateStruct->names
-            : $loadedContentTypeDraft->names;
+            : $contentTypeDraft->names;
         $updateStruct->description = $contentTypeUpdateStruct->descriptions !== null
             ? $contentTypeUpdateStruct->descriptions
-            : $loadedContentTypeDraft->descriptions;
+            : $contentTypeDraft->descriptions;
 
         $updateStruct->modified = $contentTypeUpdateStruct->modificationDate !== null
             ? $contentTypeUpdateStruct->modificationDate->getTimestamp()
@@ -1017,45 +1047,31 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         $updateStruct->urlAliasSchema = $contentTypeUpdateStruct->urlAliasSchema !== null
             ? $contentTypeUpdateStruct->urlAliasSchema
-            : $loadedContentTypeDraft->urlAliasSchema;
+            : $contentTypeDraft->urlAliasSchema;
         $updateStruct->nameSchema = $contentTypeUpdateStruct->nameSchema !== null
             ? $contentTypeUpdateStruct->nameSchema
-            : $loadedContentTypeDraft->nameSchema;
+            : $contentTypeDraft->nameSchema;
 
         $updateStruct->isContainer = $contentTypeUpdateStruct->isContainer !== null
             ? $contentTypeUpdateStruct->isContainer
-            : $loadedContentTypeDraft->isContainer;
+            : $contentTypeDraft->isContainer;
         $updateStruct->sortField = $contentTypeUpdateStruct->defaultSortField !== null
             ? $contentTypeUpdateStruct->defaultSortField
-            : $loadedContentTypeDraft->defaultSortField;
+            : $contentTypeDraft->defaultSortField;
         $updateStruct->sortOrder = $contentTypeUpdateStruct->defaultSortOrder !== null
             ? (int)$contentTypeUpdateStruct->defaultSortOrder
-            : $loadedContentTypeDraft->defaultSortOrder;
+            : $contentTypeDraft->defaultSortOrder;
 
         $updateStruct->defaultAlwaysAvailable = $contentTypeUpdateStruct->defaultAlwaysAvailable !== null
             ? $contentTypeUpdateStruct->defaultAlwaysAvailable
-            : $loadedContentTypeDraft->defaultAlwaysAvailable;
+            : $contentTypeDraft->defaultAlwaysAvailable;
         $updateStruct->initialLanguageId = $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
             $contentTypeUpdateStruct->mainLanguageCode !== null
                 ? $contentTypeUpdateStruct->mainLanguageCode
-                : $loadedContentTypeDraft->mainLanguageCode
+                : $contentTypeDraft->mainLanguageCode
         )->id;
 
-        $this->repository->beginTransaction();
-        try
-        {
-            $this->persistenceHandler->contentTypeHandler()->update(
-                $contentTypeDraft->id,
-                $contentTypeDraft->status,
-                $updateStruct
-            );
-            $this->repository->commit();
-        }
-        catch ( Exception $e )
-        {
-            $this->repository->rollback();
-            throw $e;
-        }
+        return $updateStruct;
     }
 
     /**
@@ -1437,11 +1453,15 @@ class ContentTypeService implements ContentTypeServiceInterface
             if ( empty( $loadedContentTypeDraft->nameSchema ) )
             {
                 $fieldDefinitions = $loadedContentTypeDraft->getFieldDefinitions();
-                $this->updateContentTypeDraft(
-                    $loadedContentTypeDraft,
-                    new ContentTypeUpdateStruct(
-                        array(
-                            "nameSchema" => "<" . $fieldDefinitions[0]->identifier . ">"
+                $this->persistenceHandler->contentTypeHandler()->update(
+                    $contentTypeDraft->id,
+                    $contentTypeDraft->status,
+                    $this->buildSPIContentTypeUpdateStruct(
+                        $loadedContentTypeDraft,
+                        new ContentTypeUpdateStruct(
+                            array(
+                                "nameSchema" => "<" . $fieldDefinitions[0]->identifier . ">"
+                            )
                         )
                     )
                 );
