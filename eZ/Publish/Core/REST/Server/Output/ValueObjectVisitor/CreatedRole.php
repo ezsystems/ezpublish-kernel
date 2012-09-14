@@ -27,6 +27,13 @@ class CreatedRole extends Role
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
         parent::visit( $visitor, $generator, $data->role );
+        $visitor->setHeader(
+            'Location',
+            $this->urlHandler->generate(
+                'role',
+                array( 'role' => $data->role->id )
+            )
+        );
         $visitor->setStatus( 201 );
     }
 }

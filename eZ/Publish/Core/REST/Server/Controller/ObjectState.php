@@ -79,11 +79,15 @@ class ObjectState
      */
     public function createObjectStateGroup( RMF\Request $request )
     {
-        return $this->objectStateService->createObjectStateGroup(
-            $this->inputDispatcher->parse(
-                new Message(
-                    array( 'Content-Type' => $request->contentType ),
-                    $request->body
+        return new Values\CreatedObjectStateGroup(
+            array(
+                'objectStateGroup' => $this->objectStateService->createObjectStateGroup(
+                    $this->inputDispatcher->parse(
+                        new Message(
+                            array( 'Content-Type' => $request->contentType ),
+                            $request->body
+                        )
+                    )
                 )
             )
         );
@@ -101,17 +105,21 @@ class ObjectState
 
         $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] );
 
-        return new CommonObjectState(
-            $this->objectStateService->createObjectState(
-                $objectStateGroup,
-                $this->inputDispatcher->parse(
-                    new Message(
-                        array( 'Content-Type' => $request->contentType ),
-                        $request->body
-                    )
+        return new Values\CreatedObjectState(
+            array(
+                'objectState' => new CommonObjectState(
+                    $this->objectStateService->createObjectState(
+                        $objectStateGroup,
+                        $this->inputDispatcher->parse(
+                            new Message(
+                                array( 'Content-Type' => $request->contentType ),
+                                $request->body
+                            )
+                        )
+                    ),
+                    $objectStateGroup->id
                 )
-            ),
-            $objectStateGroup->id
+            )
         );
     }
 
@@ -163,7 +171,7 @@ class ObjectState
      */
     public function loadObjectStates( RMF\Request $request )
     {
-        $values = $this->urlHandler->parse( 'objectstate', $request->path );
+        $values = $this->urlHandler->parse( 'objectstates', $request->path );
 
         $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] );
         return new Values\ObjectStateList(
@@ -176,28 +184,32 @@ class ObjectState
      * The given object state group including the object states is deleted
      *
      * @param RMF\Request $request
-     * @return void
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
     public function deleteObjectStateGroup( RMF\Request $request )
     {
         $values = $this->urlHandler->parse( 'objectstategroup', $request->path );
-        return $this->objectStateService->deleteObjectStateGroup(
+        $this->objectStateService->deleteObjectStateGroup(
             $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] )
         );
+
+        return new Values\ResourceDeleted();
     }
 
     /**
      * The given object state is deleted
      *
      * @param RMF\Request $request
-     * @return void
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
     public function deleteObjectState( RMF\Request $request )
     {
         $values = $this->urlHandler->parse( 'objectstate', $request->path );
-        return $this->objectStateService->deleteObjectState(
+        $this->objectStateService->deleteObjectState(
             $this->objectStateService->loadObjectState( $values['objectstate'] )
         );
+
+        return new Values\ResourceDeleted();
     }
 
     /**
@@ -298,7 +310,7 @@ class ObjectState
         foreach ( $newObjectStates as $newObjectState )
         {
             $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $newObjectState->groupId );
-            $this->objectStateService->setObjectState( $contentInfo, $objectStateGroup->id, $newObjectState->objectState );
+            $this->objectStateService->setObjectState( $contentInfo, $objectStateGroup, $newObjectState->objectState );
             $contentObjectStates[(int) $objectStateGroup->id] = $newObjectState;
         }
 

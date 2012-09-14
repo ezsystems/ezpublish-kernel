@@ -58,7 +58,7 @@ class CheckboxTest extends StandardizedFieldTypeTest
     /**
      * Returns the empty value expected from the field type.
      *
-     * @return void
+     * @return \eZ\Publish\Core\FieldType\Checkbox\Value
      */
     protected function getEmptyValueExpectation()
     {
@@ -248,7 +248,7 @@ class CheckboxTest extends StandardizedFieldTypeTest
      */
     public function testToPersistenceValue()
     {
-        $ft = new Checkbox( $this->validatorService, $this->fieldTypeTools );;
+        $ft = new Checkbox();
         $fieldValue = $ft->toPersistenceValue( new CheckboxValue( true ) );
 
         self::assertSame( true, $fieldValue->data );

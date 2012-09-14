@@ -34,7 +34,7 @@ class Location extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'location', array( 'location' => $data->pathString ) )
+            $this->urlHandler->generate( 'location', array( 'location' => rtrim( $data->pathString, '/' ) ) )
         );
         $generator->endAttribute( 'href' );
 
@@ -53,8 +53,11 @@ class Location extends ValueObjectVisitor
         $generator->startObjectElement( 'ParentLocation', 'Location' );
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'location', array(
-                'location' => '/' . implode( '/', array_slice( $data->path, 0, count( $data->path ) - 1 ) ) )
+            $this->urlHandler->generate(
+                'location',
+                array(
+                    'location' => '/' . implode( '/', array_slice( $data->path, 0, count( $data->path ) - 1 ) )
+                )
             )
         );
         $generator->endAttribute( 'href' );
@@ -75,6 +78,19 @@ class Location extends ValueObjectVisitor
 
         $generator->startValueElement( 'remoteId', $data->remoteId );
         $generator->endValueElement( 'remoteId' );
+
+        $generator->startObjectElement( 'Children', 'LocationList' );
+        $generator->startAttribute(
+            'href',
+            $this->urlHandler->generate(
+                'locationChildren',
+                array(
+                    'location' => rtrim( $data->pathString, '/' )
+                )
+            )
+        );
+        $generator->endAttribute( 'href' );
+        $generator->endObjectElement( 'Children' );
 
         $generator->startObjectElement( 'Content' );
         $generator->startAttribute( 'href', $this->urlHandler->generate( 'object', array( 'object' => $data->contentId ) ) );

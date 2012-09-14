@@ -72,6 +72,12 @@ class VersionInfo extends ValueObjectVisitor
         );
         $generator->endValueElement( 'initialLanguageCode' );
 
+        $generator->startValueElement(
+            'languageCodes',
+            implode( ',', $versionInfo->languageCodes )
+        );
+        $generator->endValueElement( 'languageCodes' );
+
         $this->visitNamesList( $generator, $versionInfo->names );
 
         $generator->startObjectElement( 'Content', 'ContentInfo' );

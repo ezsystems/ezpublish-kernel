@@ -23,9 +23,7 @@ class FieldTypeHashGenerator
      */
     public function generateHashValue( \XMLWriter $writer, $hashElementName, $hashValue )
     {
-        $writer->startElement( $hashElementName );
-        $this->generateValue( $writer, $hashValue );
-        $writer->endElement();
+        $this->generateValue( $writer, $hashValue, null, $hashElementName );
     }
 
     /**
@@ -36,32 +34,32 @@ class FieldTypeHashGenerator
      * @param string|null $key
      * @return void
      */
-    protected function generateValue( \XmlWriter $writer, $value, $key = null )
+    protected function generateValue( \XmlWriter $writer, $value, $key = null, $elementName = 'value' )
     {
         switch( ( $hashValueType = gettype( $value ) ) )
         {
             case 'NULL':
-                $this->generateNullValue( $writer, $key );
+                $this->generateNullValue( $writer, $key, $elementName );
                 break;
 
             case 'boolean':
-                $this->generateBooleanValue( $writer, $value, $key );
+                $this->generateBooleanValue( $writer, $value, $key, $elementName );
                 break;
 
             case 'integer':
-                $this->generateIntegerValue( $writer, $value, $key );
+                $this->generateIntegerValue( $writer, $value, $key, $elementName );
                 break;
 
             case 'double':
-                $this->generateFloatValue( $writer, $value, $key );
+                $this->generateFloatValue( $writer, $value, $key, $elementName );
                 break;
 
             case 'string':
-                $this->generateStringValue( $writer, $value, $key );
+                $this->generateStringValue( $writer, $value, $key, $elementName );
                 break;
 
             case 'array':
-                $this->generateArrayValue( $writer, $value, $key );
+                $this->generateArrayValue( $writer, $value, $key, $elementName );
                 break;
 
             default:
@@ -75,17 +73,18 @@ class FieldTypeHashGenerator
      * @param \XmlWriter $writer
      * @param array $value
      * @param string|null $key
+     * @param string $elementName
      * @return void
      */
-    protected function generateArrayValue( \XmlWriter $writer, $value, $key )
+    protected function generateArrayValue( \XmlWriter $writer, $value, $key, $elementName = 'value' )
     {
         if ( $this->isNumericArray( $value ) )
         {
-            $this->generateListArray( $writer, $value, $key );
+            $this->generateListArray( $writer, $value, $key, $elementName );
         }
         else
         {
-            $this->generateHashArray( $writer, $value, $key );
+            $this->generateHashArray( $writer, $value, $key, $elementName );
         }
     }
 
@@ -95,11 +94,12 @@ class FieldTypeHashGenerator
      * @param \XmlWriter $writer
      * @param array $value
      * @param string|null $key
+     * @param string $elementName
      * @return void
      */
-    protected function generateHashArray( \XmlWriter $writer, $value, $key = null )
+    protected function generateHashArray( \XmlWriter $writer, $value, $key = null, $elementName = 'value' )
     {
-        $writer->startElement( 'value' );
+        $writer->startElement( $elementName );
         $this->generateKeyAttribute( $writer, $key );
 
         foreach ( $value as $hashKey => $hashItemValue )
@@ -116,11 +116,12 @@ class FieldTypeHashGenerator
      * @param \XmlWriter $writer
      * @param array $value
      * @param string|null $key
+     * @param string $elementName
      * @return void
      */
-    protected function generateListArray( \XmlWriter $writer, $value, $key = null )
+    protected function generateListArray( \XmlWriter $writer, $value, $key = null, $elementName = 'value' )
     {
-        $writer->startElement( 'value' );
+        $writer->startElement( $elementName );
         $this->generateKeyAttribute( $writer, $key );
 
         foreach ( $value as $listItemValue )
@@ -154,11 +155,12 @@ class FieldTypeHashGenerator
      *
      * @param \XmlWriter $writer
      * @param string|null $key
+     * @param string $elementName
      * @return void
      */
-    protected function generateNullValue( \XmlWriter $writer, $key = null )
+    protected function generateNullValue( \XmlWriter $writer, $key = null, $elementName = 'value' )
     {
-        $writer->startElement( 'value' );
+        $writer->startElement( $elementName );
         $this->generateKeyAttribute( $writer, $key );
         // TODO: xsi:type?
         $writer->endElement();
@@ -170,11 +172,12 @@ class FieldTypeHashGenerator
      * @param \XmlWriter $writer
      * @param bool $value
      * @param string|null $key
+     * @param string $elementName
      * @return void
      */
-    protected function generateBooleanValue( \XmlWriter $writer, $value, $key = null )
+    protected function generateBooleanValue( \XmlWriter $writer, $value, $key = null, $elementName = 'value' )
     {
-        $writer->startElement( 'value' );
+        $writer->startElement( $elementName );
         $this->generateKeyAttribute( $writer, $key );
         $writer->text( $value ? 'true' : 'false' );
         $writer->endElement();
@@ -186,11 +189,12 @@ class FieldTypeHashGenerator
      * @param \XmlWriter $writer
      * @param integer $value
      * @param string|null $key
+     * @param string $elementName
      * @return void
      */
-    protected function generateIntegerValue( \XmlWriter $writer, $value, $key = null )
+    protected function generateIntegerValue( \XmlWriter $writer, $value, $key = null, $elementName = 'value' )
     {;
-        $writer->startElement( 'value' );
+        $writer->startElement( $elementName );
         $this->generateKeyAttribute( $writer, $key );
         $writer->text( $value );
         $writer->endElement();
@@ -202,11 +206,12 @@ class FieldTypeHashGenerator
      * @param \XmlWriter $writer
      * @param float $value
      * @param string|null $key
+     * @param string $elementName
      * @return void
      */
-    protected function generateFloatValue( \XmlWriter $writer, $value, $key = null )
+    protected function generateFloatValue( \XmlWriter $writer, $value, $key = null, $elementName = 'value' )
     {
-        $writer->startElement( 'value' );
+        $writer->startElement( $elementName );
         $this->generateKeyAttribute( $writer, $key );
         $writer->text( sprintf( '%F', $value ) );
         $writer->endElement();
@@ -218,11 +223,12 @@ class FieldTypeHashGenerator
      * @param \XmlWriter $writer
      * @param string $value
      * @param string|null $key
+     * @param string $elementName
      * @return void
      */
-    protected function generateStringValue( \XmlWriter $writer, $value, $key = null )
+    protected function generateStringValue( \XmlWriter $writer, $value, $key = null, $elementName = 'value' )
     {
-        $writer->startElement( 'value' );
+        $writer->startElement( $elementName );
         $this->generateKeyAttribute( $writer, $key );
         $writer->text( $value );
         $writer->endElement();
@@ -233,6 +239,7 @@ class FieldTypeHashGenerator
      *
      * @param \XmlWriter $writer
      * @param string|null $key
+     * @param string $elementName
      * @return void
      */
     protected function generateKeyAttribute( \XmlWriter $writer, $key = null )

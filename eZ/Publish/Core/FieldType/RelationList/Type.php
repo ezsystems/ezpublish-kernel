@@ -70,7 +70,9 @@ class Type extends FieldType
                 );
             }
         }
-        if ( $fieldSettings['selectionMethod'] != self::SELECTION_BROWSE && $fieldSettings['selectionMethod'] != self::SELECTION_DROPDOWN )
+
+        if ( !isset( $fieldSettings['selectionMethod'] )
+            || ( $fieldSettings['selectionMethod'] !== self::SELECTION_BROWSE && $fieldSettings['selectionMethod'] !== self::SELECTION_DROPDOWN ) )
         {
             $validationResult[] = new ValidationError(
                 "Setting selection method must be either %selection_browse% or %selection_dropdown%",
@@ -79,7 +81,8 @@ class Type extends FieldType
             );
         }
 
-        if ( !is_string( $fieldSettings['selectionDefaultLocation'] ) && !is_numeric( $fieldSettings['selectionDefaultLocation'] ) )
+        if ( !isset( $fieldSettings['selectionDefaultLocation'] )
+            || ( !is_string( $fieldSettings['selectionDefaultLocation'] ) && !is_numeric( $fieldSettings['selectionDefaultLocation'] ) ) )
         {
             $validationResult[] = new ValidationError(
                 "Setting selectionDefaultLocation must be either a string or numeric integer"

@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Field>
- <fieldValue>
-  <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;ezxml&gt;Sindelfingen&lt;/ezxml&gt;</value>
- </fieldValue>
+ <fieldValue>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;ezxml&gt;Sindelfingen&lt;/ezxml&gt;</fieldValue>
 </Field>

@@ -15,13 +15,6 @@ namespace eZ\Publish\Core\REST\Server\Values;
 class PolicyList
 {
     /**
-     * Role ID
-     *
-     * @var mixed
-     */
-    public $roleId;
-
-    /**
      * Policies
      *
      * @var array
@@ -29,15 +22,22 @@ class PolicyList
     public $policies;
 
     /**
+     * Path which was used to fetch the list of policies
+     *
+     * @var string
+     */
+    public $path;
+
+    /**
      * Construct
      *
      * @param array $policies
-     * @param mixed $roleId
+     * @param string $path
      */
-    public function __construct( array $policies, $roleId = null )
+    public function __construct( array $policies, $path )
     {
         $this->policies = $policies;
-        $this->roleId = $roleId;
+        $this->path = $path;
     }
 }
 

@@ -16,7 +16,17 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
 /**
  * The field type interface which all field types have to implement.
  *
- * @package FieldTypeProviderInterface
+ *
+ * Hashes:
+ *
+ * The {@link toHash()} method in this class is meant to generate a simple
+ * representation of a value of this field type. This representation must be
+ * usable, to transfer the value over plain text encoding formats, like e.g.
+ * XML. As a result, the returned "hash" must either be a scalar value, a hash
+ * array (associative array) a pure numeric array or a nested combination of
+ * these. It must by no means contain objects, resources or cyclic references.
+ * The corresponding {@link fromHash()} method must convert such a
+ * representation back into a value, which is understood by the FieldType.
  */
 interface FieldType
 {
@@ -26,14 +36,18 @@ interface FieldType
      * This identifier should be globally unique and the implementor of a
      * FieldType must take care for the uniqueness. It is therefore recommended
      * to prefix the field-type identifier by a unique string that identifies
-     * the implementor.
+     * the implementor. A good identifier could for example take your companies main
+     * domain name as a prefix in reverse order.
      *
      * @return string
      */
     public function getFieldTypeIdentifier();
 
     /**
-     * This method is called on occurring events. Implementations can perform corresponding actions
+     * This method is called on occurring events.
+     *
+     * This method is called on occurring events in the Core to allow
+     * FieldTypes to react to such events.
      *
      * @param \eZ\Publish\SPI\FieldType\Event $event
      */
@@ -42,11 +56,13 @@ interface FieldType
     /**
      * Returns the name of the given field value.
      *
-     * It will be used to generate content name and url alias if current field is designated
-     * to be used in the content name/urlAlias pattern.
+     * It will be used to generate content name and url alias if current field
+     * is designated to be used in the content name/urlAlias pattern.
+     *
+     * The used $value can be assumed to be already accepted by {@link
+     * acceptValue()}.
      *
      * @param mixed $value
-     *
      * @return mixed
      */
     public function getName( $value );
@@ -114,7 +130,7 @@ interface FieldType
     public function getValidatorConfigurationSchema();
 
     /**
-     * Validates a field based on the validators in the field definition
+     * Validates a field based on the validator configuration in the field definition
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
@@ -128,6 +144,10 @@ interface FieldType
     /**
      * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
      *
+     * This methods determines if the given $validatorConfiguration is
+     * structurally correct and complies to the validator configuration schema
+     * returned by {@link getValidatorConfigurationSchema()}.
+     *
      * @param mixed $validatorConfiguration
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
@@ -136,6 +156,10 @@ interface FieldType
 
     /**
      * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * This methods determines if the given $fieldSettings are structurally
+     * correct and comply to the settings schema returned by {@link
+     * getSettingsSchema()}.
      *
      * @param mixed $fieldSettings
      *
@@ -154,11 +178,25 @@ interface FieldType
      * Returns the empty value for this field type.
      *
      * This value will be used, if no value was provided for a field of this
-     * type and no default value was specified in the field definition.
+     * type and no default value was specified in the field definition. It is
+     * also used to determine that a user intentionally (or unintentionally) did not
+     * set a non-empty value.
      *
      * @return mixed
      */
     public function getEmptyValue();
+
+    /**
+     * Returns if the given $value is considered empty by the field type
+     *
+     * Usually, only the value returned by {@link getEmptyValue()} is
+     * considered empty. The given $value can be safely assumed to have already
+     * been processed by {@link acceptValue()}.
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    public function isEmptyValue( $value );
 
     /**
      * Potentially builds and checks the type and structure of the $inputValue.
@@ -174,6 +212,9 @@ interface FieldType
      * from validators, but only plausibility checks for the general data
      * format.
      *
+     * Note that this method must also cope with the empty value for the field
+     * type as e.g. returned by {@link getEmptyValue()}.
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
      *
@@ -186,15 +227,23 @@ interface FieldType
     /**
      * Converts an $hash to the Value defined by the field type
      *
-     * @param mixed $hash
+     * This is the reverse operation to {@link toHash()}. At least the hash
+     * format generated by {@link toHash()} must be converted in reverse.
+     * Additional formats might be supported in the rare case that this is
+     * necessary.
      *
+     * @param mixed $hash
      * @return mixed
-     * @TODO May support different formats, but best practice is only 1
      */
     public function fromHash( $hash );
 
     /**
-     * Converts a Value to a hash
+     * Converts the given $value into a plain hash format
+     *
+     * Converts the given $value into a plain hash format, which can be used to
+     * transfer the value through plain text formats, e.g. XML, which do not
+     * support complex structures like objects. See the class level doc block
+     * for additional information.
      *
      * @param mixed $value
      *
@@ -202,6 +251,41 @@ interface FieldType
      * @TODO May support different formats, but best practice is only 1
      */
     public function toHash( $value );
+
+    /**
+     * Converts the given $fieldSettings to a simple hash format
+     *
+     * @param mixed $fieldSettings
+     * @return array|hash|scalar|null
+     */
+    public function fieldSettingsToHash( $fieldSettings );
+
+    /**
+     * Converts the given $fieldSettingsHash to field settings of the type
+     *
+     * This is the reverse operation of {@link fieldSettingsToHash()}.
+     *
+     * @param array|hash|scalar|null $fieldSettingsHash
+     * @return mixed
+     */
+    public function fieldSettingsFromHash( $fieldSettingsHash );
+
+    /**
+     * Converts the given $validatorConfiguration to a simple hash format
+     *
+     * @param mixed $validatorConfiguration
+     * @return array|hash|scalar|null
+     */
+    public function validatorConfigurationToHash( $validatorConfiguration );
+
+    /**
+     * Converts the given $validatorConfigurationHash to a validator
+     * configuration of the type
+     *
+     * @param array|hash|scalar|null $validatorConfigurationHash
+     * @return mixed
+     */
+    public function validatorConfigurationFromHash( $validatorConfigurationHash );
 
     /**
      * Converts a $value to a persistence value.

@@ -65,6 +65,7 @@ class VersionInfo extends Parser
                 'creatorId' => $data['Creator']['_href'],
                 'creationDate' => new \DateTime( $data['creationDate'] ),
                 'initialLanguageCode' => $data['initialLanguageCode'],
+                'languageCodes' => explode( ',', $data['languageCodes'] ),
                 'names' => $this->parserTools->parseTranslatableList( $data['names'] ),
                 'contentInfoId' => $contentInfoId,
             )

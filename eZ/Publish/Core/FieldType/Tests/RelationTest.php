@@ -249,4 +249,107 @@ class RelationTest extends StandardizedFieldTypeTest
             ),
         );
     }
+
+    /**
+     * Provide data sets with field settings which are considered valid by the
+     * {@link validateFieldSettings()} method.
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of field settings.
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(),
+     *      ),
+     *      array(
+     *          array( 'rows' => 2 )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideValidFieldSettings()
+    {
+        return array(
+            array(
+                array(
+                    'selectionMethod' => Relation::SELECTION_BROWSE,
+                    'selectionRoot' => 42,
+                )
+            ),
+            array(
+                array(
+                    'selectionMethod' => Relation::SELECTION_DROPDOWN,
+                    'selectionRoot' => 'some-key',
+                )
+            ),
+        );
+    }
+
+    /**
+     * Provide data sets with field settings which are considered invalid by the
+     * {@link validateFieldSettings()} method. The method must return a
+     * non-empty array of validation error when receiving such field settings.
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of field settings.
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          true,
+     *      ),
+     *      array(
+     *          array( 'nonExistentKey' => 2 )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInValidFieldSettings()
+    {
+        return array(
+            array(
+                // Unknown key
+                array(
+                    'unknownKey' => 23,
+                    'selectionMethod' => Relation::SELECTION_BROWSE,
+                    'selectionRoot' => 42
+                )
+            ),
+            array(
+                // Missing selectionMethod
+                array(
+                    'selectionRoot' => 42
+                )
+            ),
+            array(
+                // Missing selectionRoot
+                array(
+                    'selectionMethod' => Relation::SELECTION_BROWSE,
+                )
+            ),
+            array(
+                // Invalid selectionMethod
+                array(
+                    'selectionMethod' => 2342,
+                    'selectionRoot' => 42
+                )
+            ),
+            array(
+                // Invalid selectionRoot
+                array(
+                    'selectionMethod' => Relation::SELECTION_DROPDOWN,
+                    'selectionRoot' => array()
+                )
+            ),
+        );
+    }
 }

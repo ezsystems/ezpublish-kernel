@@ -16,6 +16,7 @@ use eZ\Publish\Core\REST\Server\Values;
 use \eZ\Publish\API\Repository\SectionService;
 use \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
+use \eZ\Publish\Core\REST\Server\Values\ResourceDeleted;
 
 use Qafoo\RMF;
 
@@ -80,12 +81,14 @@ class Section
      */
     public function loadSectionByIdentifier( RMF\Request $request )
     {
-        return new Values\SectionList( array(
-            $this->sectionService->loadSectionByIdentifier(
-                // GET variable
-                $request->variables['identifier']
+        return new Values\SectionList(
+            array(
+                $this->sectionService->loadSectionByIdentifier(
+                    // GET variable
+                    $request->variables['identifier']
+                )
             )
-        ) );
+        );
     }
 
     /**
@@ -96,13 +99,17 @@ class Section
      */
     public function createSection( RMF\Request $request )
     {
-        return new Values\CreatedSection( array(
-            'section' => $this->sectionService->createSection(
-                $this->inputDispatcher->parse( new Message(
-                    array( 'Content-Type' => $request->contentType ),
-                    $request->body
-                ) )
-            ) )
+        return new Values\CreatedSection(
+            array(
+                'section' => $this->sectionService->createSection(
+                    $this->inputDispatcher->parse(
+                        new Message(
+                            array( 'Content-Type' => $request->contentType ),
+                            $request->body
+                        )
+                    )
+                )
+            )
         );
     }
 
@@ -143,14 +150,16 @@ class Section
      * Delete a section by ID
      *
      * @param RMF\Request $request
-     * @return void
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
     public function deleteSection( RMF\Request $request )
     {
         $values = $this->urlHandler->parse( 'section', $request->path );
-        return $this->sectionService->deleteSection(
+        $this->sectionService->deleteSection(
             $this->sectionService->loadSection( $values['section'] )
         );
+
+        return new ResourceDeleted();
     }
 
     /**

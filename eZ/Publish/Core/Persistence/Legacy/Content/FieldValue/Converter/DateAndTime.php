@@ -111,7 +111,7 @@ class DateAndTime implements Converter
         switch ( $fieldDef->fieldTypeConstraints->fieldSettings['defaultType'] )
         {
             case DateAndTimeType::DEFAULT_CURRENT_DATE:
-                $date = new DateTime;
+                $timestamp = time();
                 break;
 
             case DateAndTimeType::DEFAULT_CURRENT_DATE_ADJUSTED:
@@ -119,12 +119,17 @@ class DateAndTime implements Converter
                     $dateInterval->s = 0;
                 $date = new DateTime;
                 $date->add( $dateInterval );
+                $timestamp = $date->getTimestamp();
                 break;
 
             default:
-                $date = null;
+                $timestamp = null;
         }
-        $fieldDef->defaultValue->data = $date;
+
+        $fieldDef->defaultValue->data = array(
+            'rfc850'    => null,
+            'timestamp' => $timestamp,
+        );
     }
 
     /**

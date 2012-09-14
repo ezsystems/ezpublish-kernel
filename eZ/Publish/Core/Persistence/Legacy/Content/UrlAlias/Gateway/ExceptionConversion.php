@@ -8,31 +8,54 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway,
+    ezcDbException,
+    PDOException;
 
 /**
- * Section Handler
+ * UrlAlias Handler
  */
 class ExceptionConversion extends Gateway
 {
     /**
      * The wrapped gateway
      *
-     * @var Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway
      */
     protected $innerGateway;
+
+    /**
+     * Creates a new exception conversion gateway around $innerGateway
+     *
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway $innerGateway
+     */
+    public function __construct( Gateway $innerGateway )
+    {
+        $this->innerGateway = $innerGateway;
+    }
 
     /**
      *
      *
      * @param mixed $locationId
      * @param boolean $custom
-     * @param array $prioritizedLanguageCodes
      *
      * @return array
      */
-    public function loadUrlAliasListDataByLocationId( $locationId, $custom = false, array $prioritizedLanguageCodes )
+    public function loadUrlAliasListDataByLocationId( $locationId, $custom = false )
     {
+        try
+        {
+            return $this->innerGateway->loadUrlAliasListDataByLocationId( $locationId, $custom );
+        }
+        catch ( ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
     }
 
     /**
@@ -44,22 +67,43 @@ class ExceptionConversion extends Gateway
      */
     public function isRootEntry( $id )
     {
+        try
+        {
+            return $this->innerGateway->isRootEntry( $id );
+        }
+        catch ( ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
     }
 
     /**
      *
-     * @param mixed $newElementId
      * @param string $action
-     * @param mixed $parentId
-     * @param $newTextMD5
      * @param mixed $languageId
+     * @param mixed $parentId
+     * @param string $textMD5
      *
-     * @internal param string $textMD5
-     * @return mixed|void
+     * @return void
      */
-    public function downgrade( $newElementId, $action, $parentId, $newTextMD5, $languageId )
+    public function downgrade( $action, $languageId, $parentId, $textMD5 )
     {
-
+        try
+        {
+            $this->innerGateway->downgrade( $action, $languageId, $parentId, $textMD5 );
+        }
+        catch ( ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
     }
 
     /**
@@ -74,6 +118,18 @@ class ExceptionConversion extends Gateway
      */
     public function relink( $newElementId, $action, $parentId, $newTextMD5, $languageId )
     {
+        try
+        {
+            $this->innerGateway->relink( $newElementId, $action, $parentId, $newTextMD5, $languageId );
+        }
+        catch ( ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
     }
 
     /**
@@ -86,11 +142,21 @@ class ExceptionConversion extends Gateway
      * @param mixed $languageId
      *
      * @return void
-     *
-     * @todo not clear why this behaviour is desired
      */
     public function reparent( $newElementId, $action, $parentId, $newTextMD5, $languageId )
     {
+        try
+        {
+            $this->innerGateway->reparent( $newElementId, $action, $parentId, $newTextMD5, $languageId );
+        }
+        catch ( ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
     }
 
     /**
@@ -107,17 +173,18 @@ class ExceptionConversion extends Gateway
      */
     public function updateRow( $parentId, $textMD5, array $values, $languageMaskMatch = null )
     {
-    }
-
-    /**
-     *
-     * @param mixed $parentId
-     * @param string $textMD5
-     *
-     * @return void
-     */
-    public function updateToNopRow( $parentId, $textMD5 )
-    {
+        try
+        {
+            $this->innerGateway->updateRow( $parentId, $textMD5, $values, $languageMaskMatch );
+        }
+        catch ( ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
     }
 
     /**
@@ -130,29 +197,41 @@ class ExceptionConversion extends Gateway
      */
     public function insertRow( array $values )
     {
+        try
+        {
+            return $this->innerGateway->insertRow( $values );
+        }
+        catch ( ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
     }
 
     /**
-     * @param $parentId
-     * @param $pathElement
+     * @param mixed $parentId
+     * @param string $text
+     * @param string $textMD5
      *
      * @return mixed
      */
-    public function insertNopRow( $parentId, $pathElement )
+    public function insertNopRow( $parentId, $text, $textMD5 )
     {
-    }
-
-    /**
-     * Deletes single row data matched by composite primary key
-     *
-     * @param mixed $parentId
-     * @param string $textMD5
-     *
-     * @return void
-     */
-    public function deleteRow( $parentId, $textMD5 )
-    {
-
+        try
+        {
+            return $this->innerGateway->insertNopRow( $parentId, $text, $textMD5 );
+        }
+        catch ( ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
     }
 
     /**
@@ -165,84 +244,18 @@ class ExceptionConversion extends Gateway
      */
     public function loadRow( $parentId, $textMD5 )
     {
-    }
-
-    /**
-     * @param string $action
-     * @param bool $original
-     * @param bool $alias
-     *
-     * @return mixed
-     */
-    public function loadRowByAction( $action, $original = true, $alias = false )
-    {
-
-    }
-
-    /**
-     * @param string $text
-     *
-     * @return string
-     *
-     * @todo use utility method to downcase
-     */
-    protected function getHash( $text )
-    {
-    }
-
-    /**
-     * Loads basic URL alias data
-     *
-     * Note that columns for end URL part row are not aliased
-     *
-     * @param string[] $urlElements URL string broken into array of URL parts
-     * @param string[] $languageCodes Languages to match against
-     *
-     * @return array
-     */
-    public function loadBasicUrlAliasData( array $urlElements, array $languageCodes )
-    {
-    }
-
-    /**
-     *
-     *
-     * @param string $action
-     *
-     * @return int
-     */
-    public function getDestinationIdByAction( $action )
-    {
-    }
-
-    /**
-     * Generates a language mask from array of language objects
-     *
-     * @param string[] $languageCodes
-     * @param boolean $alwaysAvailable
-     *
-     * @return int
-     *
-     * @todo move to lang mask generator
-     */
-    protected function generateLanguageMask( array $languageCodes, $alwaysAvailable )
-    {
-    }
-
-    /**
-     *
-     *
-     * @param mixed $id
-     * @param string[] $prioritizedLanguageCodes
-     *
-     * @return string|null path found or null if path is not found
-     */
-    public function getPath( $id, array $prioritizedLanguageCodes )
-    {
-    }
-
-    public function getLocationUrlAliasLanguageCodes( array $actions, array $prioritizedLanguageCodes )
-    {
+        try
+        {
+            return $this->innerGateway->loadRow( $parentId, $textMD5 );
+        }
+        catch ( ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
     }
 
     /**
@@ -254,17 +267,18 @@ class ExceptionConversion extends Gateway
      */
     public function loadLocationEntryIdByAction( $action )
     {
-    }
-
-    /**
-     *
-     *
-     * @param string $action
-     *
-     * @return array
-     */
-    public function loadLocationEntryByAction( $action )
-    {
+        try
+        {
+            return $this->innerGateway->loadLocationEntryIdByAction( $action );
+        }
+        catch ( ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
     }
 
     /**
@@ -277,19 +291,18 @@ class ExceptionConversion extends Gateway
      */
     public function loadLocationEntryByParentIdAndAction( $parentId, $action )
     {
-    }
-
-    /**
-     *
-     *
-     * @param mixed $parentId
-     * @param string $textMD5
-     * @param integer $languageId
-     *
-     * @return void
-     */
-    public function removeTranslation( $parentId, $textMD5, $languageId )
-    {
+        try
+        {
+            return $this->innerGateway->loadLocationEntryByParentIdAndAction( $parentId, $action );
+        }
+        catch ( ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
     }
 
     /**
@@ -302,6 +315,103 @@ class ExceptionConversion extends Gateway
      */
     public function removeByAction( $actionName, $actionValue )
     {
+        try
+        {
+            $this->innerGateway->removeByAction( $actionName, $actionValue );
+        }
+        catch ( ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+    }
 
+    public function loadGlobalUrlAliasListData( $languageCode, $offset = 0, $limit = -1 )
+    {
+        try
+        {
+            return $this->innerGateway->loadGlobalUrlAliasListData( $languageCode, $offset, $limit );
+        }
+        catch ( ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
+     *
+     *
+     * @param mixed $parentId
+     * @param string $textMD5
+     *
+     * @return boolean
+     */
+    public function removeCustomAlias( $parentId, $textMD5 )
+    {
+        try
+        {
+            return $this->innerGateway->removeCustomAlias( $parentId, $textMD5 );
+        }
+        catch ( ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
+     * Loads basic URL alias data
+     *
+     * @param string[] $urlHashes URL string hashes
+     *
+     * @return array
+     */
+    public function loadUrlAliasData( array $urlHashes )
+    {
+        try
+        {
+            return $this->innerGateway->loadUrlAliasData( $urlHashes );
+        }
+        catch ( ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
+     *
+     *
+     * @param mixed $id
+     *
+     * @return array
+     */
+    public function loadPathData( $id )
+    {
+        try
+        {
+            return $this->innerGateway->loadPathData( $id );
+        }
+        catch ( ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
     }
 }

@@ -37,7 +37,7 @@ class LocationTest extends ValueObjectVisitorBaseTest
                 'invisible' => true,
                 'remoteId' => 'remote-id',
                 'parentLocationId' => 21,
-                'pathString' => '/1/2/21/42',
+                'pathString' => '/1/2/21/42/',
                 'modifiedSubLocationDate' => new \DateTime( "@0" ),
                 'depth' => 3,
                 'sortField' => Location::SORT_FIELD_PATH,
@@ -76,7 +76,7 @@ class LocationTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'Location',
                 'children' => array(
-                    'count' => 13
+                    'count' => 14
                 )
             ),
             $result,
@@ -203,6 +203,46 @@ class LocationTest extends ValueObjectVisitorBaseTest
     }
 
     /**
+     * Test if result contains Children element
+     *
+     * @param string $result
+     * @depends testVisit
+     */
+    public function testResultContainsChildrenElement( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag'      => 'Children'
+            ),
+            $result,
+            'Invalid <Children> element.',
+            false
+        );
+    }
+
+    /**
+     * Test if result contains Children element attributes
+     *
+     * @param string $result
+     * @depends testVisit
+     */
+    public function testResultContainsChildrenAttributes( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag'      => 'Children',
+                'attributes' => array(
+                    'media-type' => 'application/vnd.ez.api.LocationList+xml',
+                    'href'       => '/content/locations/1/2/21/42/children',
+                )
+            ),
+            $result,
+            'Invalid <Children> attributes.',
+            false
+        );
+    }
+
+    /**
      * Test if result contains ParentLocation element
      *
      * @param string $result
@@ -293,7 +333,7 @@ class LocationTest extends ValueObjectVisitorBaseTest
         $this->assertTag(
             array(
                 'tag'      => 'pathString',
-                'content'  => '/1/2/21/42'
+                'content'  => '/1/2/21/42/'
             ),
             $result,
             'Invalid or non-existing <Location> pathString value element.',

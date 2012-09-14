@@ -487,8 +487,7 @@ class ContentService implements ContentServiceInterface
                     $fieldValue = $fieldType->acceptValue( $fieldDefinition->defaultValue );
                 }
 
-                // ... && !$fieldType->hasContent( $fieldValue )
-                if ( $fieldDefinition->isRequired && (string)$fieldValue === "" )
+                if ( $fieldDefinition->isRequired && $fieldType->isEmptyValue( $fieldValue ) )
                 {
                     throw new ContentValidationException( "Required field '{$fieldDefinition->identifier}' value is empty" );
                 }
@@ -1012,7 +1011,7 @@ class ContentService implements ContentServiceInterface
                     $fieldValue = $fieldType->acceptValue( $fieldDefinition->defaultValue );
                 }
 
-                if ( $fieldDefinition->isRequired && (string)$fieldValue === "" )
+                if ( $fieldDefinition->isRequired && $fieldType->isEmptyValue( $fieldValue ) )
                 {
                     throw new ContentValidationException( "Required field '{$fieldDefinition->identifier}' value is empty" );
                 }
@@ -1151,6 +1150,7 @@ class ContentService implements ContentServiceInterface
             {
                 $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
                     $spiLocation->id,
+                    $spiLocation->parentId,
                     $name,
                     $languageCode,
                     $languageCode === $alwaysAvailableLanguageCode

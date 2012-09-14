@@ -40,10 +40,19 @@ class Xml extends Handler
         'limitations' => array(
             'limitation'
         ),
+        'values' => array(
+            'ref'
+        ),
         'LocationList' => array(
             'Location'
         ),
+        'ContentObjectStates' => array(
+            'ObjectState'
+        ),
         'names' => array(
+            'value'
+        ),
+        'descriptions' => array(
             'value'
         )
     );
@@ -184,12 +193,6 @@ class Xml extends Handler
     protected function parseFieldTypeHash( \DOMElement $domElement )
     {
         $result = $this->parseFieldTypeValues( $domElement->childNodes );
-
-        if ( is_array( $result ) && count( $result ) === 1 && isset( $result[0] ) )
-        {
-            // Return plain value on first level
-            $result = $result[0];
-        }
 
         if ( is_array( $result ) && count( $result ) === 0 )
         {

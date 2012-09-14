@@ -2,16 +2,14 @@
 <Field>
  <fieldValue>
   <value>
-   <value>
-    <value key="id">1</value>
-    <value key="name">Joe Sindelfingen</value>
-    <value key="email">sindelfingen@example.com</value>
-   </value>
-   <value>
-    <value key="id">2</value>
-    <value key="name">Joe Bielefeld</value>
-    <value key="email">bielefeld@example.com</value>
-   </value>
+   <value key="id">1</value>
+   <value key="name">Joe Sindelfingen</value>
+   <value key="email">sindelfingen@example.com</value>
+  </value>
+  <value>
+   <value key="id">2</value>
+   <value key="name">Joe Bielefeld</value>
+   <value key="email">bielefeld@example.com</value>
   </value>
  </fieldValue>
 </Field>

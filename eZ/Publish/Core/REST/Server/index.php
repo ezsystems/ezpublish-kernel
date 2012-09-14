@@ -58,8 +58,6 @@ require_once __DIR__ . '/../../../../../bootstrap.php';
  * shutdown!
  */
 
-$stateDir    = __DIR__ . '/_state/';
-
 $reInitializeRepository = true;
 if ( isset( $_SERVER['HTTP_X_TEST_SESSION'] ) )
 {
@@ -125,6 +123,8 @@ $inputDispatcher = new Common\Input\Dispatcher(
         'application/vnd.ez.api.ObjectStateGroupUpdate' => new Input\Parser\ObjectStateGroupUpdate( $urlHandler, $repository->getObjectStateService() ),
         'application/vnd.ez.api.ObjectStateCreate'      => new Input\Parser\ObjectStateCreate( $urlHandler, $repository->getObjectStateService() ),
         'application/vnd.ez.api.ObjectStateUpdate'      => new Input\Parser\ObjectStateUpdate( $urlHandler, $repository->getObjectStateService() ),
+        'application/vnd.ez.api.ContentObjectStates'    => new Input\Parser\ContentObjectStates( $urlHandler ),
+        'application/vnd.ez.api.ObjectState'            => new Input\Parser\ObjectState( $urlHandler ),
     ) ),
     $handler
 );
@@ -160,7 +160,8 @@ $roleController = new Controller\Role(
     $inputDispatcher,
     $urlHandler,
     $repository->getRoleService(),
-    $repository->getUserService()
+    $repository->getUserService(),
+    $repository->getLocationService()
 );
 
 $locationController = new Controller\Location(
@@ -180,7 +181,8 @@ $objectStateController = new Controller\ObjectState(
 $trashController = new Controller\Trash(
     $inputDispatcher,
     $urlHandler,
-    $repository->getTrashService()
+    $repository->getTrashService(),
+    $repository->getLocationService()
 );
 
 /*
@@ -215,7 +217,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestContent'                => new Output\ValueObjectVisitor\RestContent( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo'          => new Output\ValueObjectVisitor\VersionInfo( $urlHandler ),
     // Includes vitising of VersionInfo, which can be extracted for re-use, if
-    // neccessary
+    // necessary
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content'              => new Output\ValueObjectVisitor\Content(
         $urlHandler,
         new Common\Output\FieldValueSerializer( $repository->getFieldTypeService() )
@@ -244,25 +246,39 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedRole'                => new Output\ValueObjectVisitor\CreatedRole( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role'                    => new Output\ValueObjectVisitor\Role( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy'                  => new Output\ValueObjectVisitor\Policy( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedPolicy'              => new Output\ValueObjectVisitor\CreatedPolicy( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PolicyList'                 => new Output\ValueObjectVisitor\PolicyList( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation'              => new Output\ValueObjectVisitor\Limitation( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleAssignmentList'         => new Output\ValueObjectVisitor\RoleAssignmentList( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserRoleAssignment'      => new Output\ValueObjectVisitor\UserRoleAssignment( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupRoleAssignment' => new Output\ValueObjectVisitor\UserGroupRoleAssignment( $urlHandler ),
 
     // Location
 
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedLocation'            => new Output\ValueObjectVisitor\CreatedLocation( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location'             => new Output\ValueObjectVisitor\Location( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\LocationList'               => new Output\ValueObjectVisitor\LocationList( $urlHandler ),
+
+    // Trash
+
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\Trash'                      => new Output\ValueObjectVisitor\Trash( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem'            => new Output\ValueObjectVisitor\TrashItem( $urlHandler ),
 
     // Object State
 
     '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup' => new Output\ValueObjectVisitor\ObjectStateGroup( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedObjectStateGroup'    => new Output\ValueObjectVisitor\CreatedObjectStateGroup( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectStateGroupList'       => new Output\ValueObjectVisitor\ObjectStateGroupList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Common\\Values\\ObjectState'                => new Output\ValueObjectVisitor\ObjectState( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedObjectState'         => new Output\ValueObjectVisitor\CreatedObjectState( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectStateList'            => new Output\ValueObjectVisitor\ObjectStateList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentObjectStates'        => new Output\ValueObjectVisitor\ContentObjectStates( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Common\\Values\\ContentObjectStates'        => new Output\ValueObjectVisitor\ContentObjectStates( $urlHandler ),
 
     // REST specific
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceRedirect'           => new Output\ValueObjectVisitor\ResourceRedirect( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceDeleted'            => new Output\ValueObjectVisitor\ResourceDeleted( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceCreated'            => new Output\ValueObjectVisitor\ResourceCreated( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceSwapped'            => new Output\ValueObjectVisitor\ResourceSwapped( $urlHandler ),
 );
 
 /*
@@ -352,6 +368,10 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/content/locations/[0-9/]+$)' => array(
             'GET'    => array( $locationController, 'loadLocation' ),
             'PATCH'  => array( $locationController, 'updateLocation' ),
+            'DELETE' => array( $locationController, 'deleteSubtree' ),
+            'COPY'   => array( $locationController, 'copySubtree' ),
+            'MOVE'   => array( $locationController, 'moveSubtree' ),
+            'SWAP'   => array( $locationController, 'swapLocation' ),
         ),
         '(^/content/locations/[0-9/]+/children$)' => array(
             'GET'    => array( $locationController, 'loadLocationChildren' ),
@@ -378,6 +398,7 @@ $dispatcher = new AuthenticatingDispatcher(
         '(^/content/trash/[0-9]+$)' => array(
             'GET'    => array( $trashController, 'loadTrashItem' ),
             'DELETE' => array( $trashController, 'deleteTrashItem' ),
+            'MOVE'   => array( $trashController, 'restoreTrashItem' ),
         ),
 
     // /user
@@ -403,6 +424,7 @@ $dispatcher = new AuthenticatingDispatcher(
             'DELETE' => array( $roleController, 'deletePolicies' ),
         ),
         '(^/user/roles/[0-9]+/policies/[0-9]+$)' => array(
+            'GET'    => array( $roleController, 'loadPolicy' ),
             'PATCH'  => array( $roleController, 'updatePolicy' ),
             'DELETE' => array( $roleController, 'deletePolicy' ),
         ),
@@ -422,14 +444,14 @@ $dispatcher = new AuthenticatingDispatcher(
         ),
     ) ),
     new RMF\View\AcceptHeaderViewDispatcher( array(
-        '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+json$)' => new View\Visitor(
+        '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+json$)' => ( $jsonVisitor = new View\Visitor(
             new Common\Output\Visitor(
                 new Common\Output\Generator\Json(
                     new Common\Output\Generator\Json\FieldTypeHashGenerator()
                 ),
                 $valueObjectVisitors
             )
-        ),
+        ) ),
         '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+xml$)'  => ( $xmlVisitor = new View\Visitor(
             new Common\Output\Visitor(
                 new Common\Output\Generator\Xml(
@@ -438,9 +460,11 @@ $dispatcher = new AuthenticatingDispatcher(
                 $valueObjectVisitors
             )
         ) ),
+        '(^application/json$)'  => $jsonVisitor,
+        '(^application/xml$)'  => $xmlVisitor,
         // '(^.*/.*$)'  => new View\InvalidApiUse(),
         // Fall back gracefully to XML visiting. Also helps support responses
-        // without Accept header (e.g. DELETE reqeustes).
+        // without Accept header (e.g. DELETE requests).
         '(^.*/.*$)'  => $xmlVisitor,
     ) ),
     // This is just used for integration tests, DO NOT USE IN PRODUCTION
@@ -465,6 +489,9 @@ $request->addHandler( 'method', new RMF\Request\PropertyHandler\Override( array(
     new RMF\Request\PropertyHandler\Server( 'HTTP_X_HTTP_METHOD_OVERRIDE' ),
     new RMF\Request\PropertyHandler\Server( 'REQUEST_METHOD' ),
 ) ) );
+
+// ATTENTION: Only used for test setup
+$request->addHandler( 'destination', new RMF\Request\PropertyHandler\Server( 'HTTP_DESTINATION' ) );
 
 // ATTENTION: Only used for test setup
 $request->addHandler( 'testUser', new RMF\Request\PropertyHandler\Server( 'HTTP_X_TEST_USER' ) );

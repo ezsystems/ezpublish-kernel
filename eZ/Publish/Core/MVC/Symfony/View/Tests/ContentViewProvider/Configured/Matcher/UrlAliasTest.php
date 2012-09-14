@@ -73,7 +73,7 @@ class UrlAliasTest extends BaseTest
         );
 
         $urlAliasServiceMock = $this
-            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\UrlAliasService' )
+            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\URLAliasService' )
             ->disableOriginalConstructor()
             ->getMock()
         ;

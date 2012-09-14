@@ -259,7 +259,7 @@ class RatingTest extends FieldTypeTest
      */
     public function testValidatorConfigurationSchema()
     {
-        $ft = new Rating( $this->validatorService, $this->fieldTypeTools );
+        $ft = new Rating();
         self::assertEmpty(
             $ft->getValidatorConfigurationSchema(),
             "The validator configuration schema does not match what is expected."
@@ -271,7 +271,7 @@ class RatingTest extends FieldTypeTest
      */
     public function testSettingsSchema()
     {
-        $ft = new Rating( $this->validatorService, $this->fieldTypeTools );
+        $ft = new Rating();
         self::assertEmpty(
             $ft->getSettingsSchema(),
             "The settings schema does not match what is expected."
@@ -284,7 +284,7 @@ class RatingTest extends FieldTypeTest
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new Rating( $this->validatorService, $this->fieldTypeTools );
+        $ft = new Rating();
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -298,7 +298,7 @@ class RatingTest extends FieldTypeTest
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new Rating( $this->validatorService, $this->fieldTypeTools );
+        $ft = new Rating();
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
@@ -313,7 +313,7 @@ class RatingTest extends FieldTypeTest
     public function testToPersistenceValue()
     {
         $rating = false;
-        $ft = new Rating( $this->validatorService, $this->fieldTypeTools );
+        $ft = new Rating();
         $fieldValue = $ft->toPersistenceValue( $fv = new RatingValue( $rating ) );
 
         self::assertSame( $rating, $fieldValue->data );

@@ -1568,6 +1568,7 @@ XML Example
       <depth>4</depth>
       <childCount>0</childCount>
       <remoteId>remoteId-qwert567</remoteId>
+      <Children href="/content/locations/1/5/73/133/children" media-type="application/vnd.ez.api.LocationList+xml"/>
       <Content href="/content/objects/23" media-type="application/vnd.ez.api.Content+xml"/>
       <sortField>PATH</sortField>
       <sortOrder>ASC</sortOrder>
@@ -1683,6 +1684,7 @@ XML Example
       <depth>4</depth>
       <childCount>0</childCount>
       <remoteId>remoteId-qwert567</remoteId>
+      <Children href="/content/locations/1/5/73/133/children" media-type="application/vnd.ez.api.LocationList+xml"/>
       <Content href="/content/objects/23" media-type="application/vnd.ez.api.Content+xml"/>
       <sortField>PATH</sortField>
       <sortOrder>ASC</sortOrder>
@@ -1766,6 +1768,7 @@ XML Example
       <depth>4</depth>
       <childCount>0</childCount>
       <remoteId>remoteId-qwert999</remoteId>
+      <Children href="/content/locations/1/5/73/133/children" media-type="application/vnd.ez.api.LocationList+xml"/>
       <Content href="/content/objects/23" media-type="application/vnd.ez.api.Content+xml"/>
       <sortField>CLASS</sortField>
       <sortOrder>ASC</sortOrder>
@@ -6962,6 +6965,7 @@ Location XML Schema
               </xsd:element>
               <xsd:element name="remoteId" type="xsd:string"
                 minOccurs="0" />
+              <xsd:element name="Children" type="ref" />
               <xsd:element name="Content" type="ref" />
               <xsd:element name="sortField" type="sortFieldType" />
               <xsd:element name="sortOrder" type="sortOrderType" />

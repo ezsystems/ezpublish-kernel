@@ -488,7 +488,8 @@ class Backend
                     }
 
                     $fieldTypeClassName = "$fieldTypeNS\\Type";
-                    $fieldType = new $fieldTypeClassName( $this->validatorService, $this->fieldTypeTools );
+                    /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
+                    $fieldType = new $fieldTypeClassName();
                     $value = $fieldType->toPersistenceValue( $fieldTypeValue );
                 }
                 else if ( $type === "Content\\Type\\FieldDefinition" && $prop === "fieldTypeConstraints" && !$data["fieldTypeConstraints"] instanceof FieldTypeConstraints )

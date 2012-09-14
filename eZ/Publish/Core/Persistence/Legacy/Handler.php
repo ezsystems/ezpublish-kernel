@@ -28,6 +28,7 @@ use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
     eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler as UrlAliasHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper as UrlAliasMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase as UrlAliasGateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\ExceptionConversion as UrlAliasExceptionConversionGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler as UrlWildcardHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper as UrlWildcardMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase as UrlWildcardGateway,
@@ -755,7 +756,6 @@ class Handler implements HandlerInterface
             $this->urlAliasHandler = new UrlAliasHandler(
                 $this->getUrlAliasGateway(),
                 $this->getUrlAliasMapper(),
-                $this->getLocationGateway(),
                 $this->contentLanguageHandler(),
                 $this->getLanguageMaskGenerator()
             );
@@ -773,10 +773,11 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->urlAliasGateway ) )
         {
-            $this->urlAliasGateway = new UrlAliasGateway(
-                $this->dbHandler,
-                $this->contentLanguageHandler(),
-                $this->getLanguageMaskGenerator()
+            $this->urlAliasGateway = new UrlAliasExceptionConversionGateway(
+                new UrlAliasGateway(
+                    $this->dbHandler,
+                    $this->getLanguageMaskGenerator()
+                )
             );
         }
         return $this->urlAliasGateway;

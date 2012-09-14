@@ -30,8 +30,6 @@ abstract class Value extends ValueObject
 
     /**
      * Returns a string representation of the field value.
-     * This string representation must be compatible with format accepted via
-     * {@link \eZ\Publish\SPI\FieldType\FieldType::buildValue}
      *
      * @return string
      */

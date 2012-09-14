@@ -79,13 +79,17 @@ class Location
 
         $locationCreateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type', $request->contentType ),
+                array( 'Content-Type' => $request->contentType ),
                 $request->body
             )
         );
 
         $contentInfo = $this->contentService->loadContentInfo( $values['object'] );
-        return $this->locationService->createLocation( $contentInfo, $locationCreateStruct );
+        return new Values\CreatedLocation(
+            array(
+                'location' => $this->locationService->createLocation( $contentInfo, $locationCreateStruct )
+            )
+        );
     }
 
     /**
@@ -97,11 +101,103 @@ class Location
     public function loadLocation( RMF\Request $request )
     {
         $values = $this->urlHandler->parse( 'location', $request->path );
+        return $this->locationService->loadLocation(
+            $this->extractLocationIdFromPath( $values['location'] )
+        );
+    }
 
-        $locationId = explode( '/', $values['location'] );
-        $locationId = implode( '', array_slice( $locationId, 0, count( $locationId ) - 1 ) );
+    /**
+     * Deletes a location
+     *
+     * @param \Qafoo\RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     */
+    public function deleteSubtree( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'location', $request->path );
+        $location = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $values['location'] ) );
+        $this->locationService->deleteLocation( $location );
 
-        return $this->locationService->loadLocation( $locationId );
+        return new Values\ResourceDeleted();
+    }
+
+    /**
+     * Copies a subtree to a new destination
+     *
+     * @param \Qafoo\RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
+     */
+    public function copySubtree( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'location', $request->path );
+        $location = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $values['location'] ) );
+
+        $destinationValues = $this->urlHandler->parse( 'location', $request->destination );
+        $destinationLocation = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $destinationValues['location'] ) );
+
+        $newLocation = $this->locationService->copySubtree( $location, $destinationLocation );
+
+        return new Values\ResourceCreated(
+            $this->urlHandler->generate(
+                'location',
+                array(
+                    'location' => rtrim( $newLocation->pathString, '/' ),
+                )
+            )
+        );
+    }
+
+    /**
+     * Moves a subtree to a new location
+     *
+     * @param \QaFoo\RMF\Request $request
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
+     */
+    public function moveSubtree( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'location', $request->path );
+
+        $locationId = $this->extractLocationIdFromPath($values['location']);
+        $location = $this->locationService->loadLocation( $locationId );
+
+        $destinationValues = $this->urlHandler->parse( 'location', $request->destination );
+        $destinationLocation = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $destinationValues['location'] ) );
+
+        $this->locationService->moveSubtree( $location, $destinationLocation );
+
+        $location = $this->locationService->loadLocation( $locationId );
+
+        return new Values\ResourceCreated(
+            $this->urlHandler->generate(
+                'location',
+                array(
+                    'location' => rtrim( $location->pathString, '/' ),
+                )
+            )
+        );
+    }
+
+    /**
+     * Swaps a location with another one
+     *
+     * @param \QaFoo\RMF\Request $request
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceSwapped
+     */
+    public function swapLocation( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'location', $request->path );
+
+        $locationId = $this->extractLocationIdFromPath($values['location']);
+        $location = $this->locationService->loadLocation( $locationId );
+
+        $destinationValues = $this->urlHandler->parse( 'location', $request->destination );
+        $destinationLocation = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $destinationValues['location'] ) );
+
+        $this->locationService->swapLocation( $location, $destinationLocation );
+
+        return new Values\ResourceSwapped();
     }
 
     /**
@@ -150,12 +246,11 @@ class Location
     {
         $values = $this->urlHandler->parse( 'locationChildren', $request->path );
 
-        $locationId = explode( '/', $values['location'] );
-        $locationId = implode( '', array_slice( $locationId, 0, count( $locationId ) - 1 ) );
-
         return new Values\LocationList(
             $this->locationService->loadLocationChildren(
-                $this->locationService->loadLocation( $locationId )
+                $this->locationService->loadLocation(
+                    $this->extractLocationIdFromPath( $values['location'] )
+                )
             ),
             $request->path
         );
@@ -171,17 +266,28 @@ class Location
     {
         $values = $this->urlHandler->parse( 'location', $request->path );
 
-        $locationId = explode( '/', $values['location'] );
-        $locationId = implode( '', array_slice( $locationId, 0, count( $locationId ) - 1 ) );
-
         return $this->locationService->updateLocation(
-            $this->locationService->loadLocation( $locationId ),
+            $this->locationService->loadLocation(
+                $this->extractLocationIdFromPath( $values['location'] )
+            ),
             $this->inputDispatcher->parse(
                 new Message(
-                    array( 'Content-Type', $request->contentType ),
+                    array( 'Content-Type' => $request->contentType ),
                     $request->body
                 )
             )
         );
+    }
+
+    /**
+     * Extracts and returns an item id from a path, e.g. /1/2/58 => 58
+     *
+     * @param string $path
+     * @return mixed
+     */
+    private function extractLocationIdFromPath( $path )
+    {
+        $pathParts = explode( '/', $path );
+        return array_pop( $pathParts );
     }
 }

@@ -264,4 +264,151 @@ class TextLineTest extends StandardizedFieldTypeTest
             ),
         );
     }
+
+    /**
+     * Provide data sets with validator configurations which are considered
+     * valid by the {@link validateValidatorConfiguration()} method.
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of validator configurations.
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(),
+     *      ),
+     *      array(
+     *          array(
+     *              'StringLengthValidator' => array(
+     *                  'minStringLength' => 0,
+     *                  'maxStringLength' => 23,
+     *              )
+     *          )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideValidValidatorConfiguration()
+    {
+        return array(
+            array(
+                array()
+            ),
+            array(
+                array(
+                    'StringLengthValidator' => array(
+                        'minStringLength' => false,
+                    )
+                )
+            ),
+            array(
+                array(
+                    'StringLengthValidator' => array(
+                        'minStringLength' => 23,
+                    )
+                )
+            ),
+            array(
+                array(
+                    'StringLengthValidator' => array(
+                        'maxStringLength' => false,
+                    )
+                )
+            ),
+            array(
+                array(
+                    'StringLengthValidator' => array(
+                        'maxStringLength' => 23,
+                    )
+                )
+            ),
+            array(
+                array(
+                    'StringLengthValidator' => array(
+                        'minStringLength' => 23,
+                        'maxStringLength' => 42,
+                    )
+                )
+            ),
+        );
+    }
+
+    /**
+     * Provide data sets with validator configurations which are considered
+     * invalid by the {@link validateValidatorConfiguration()} method. The
+     * method must return a non-empty array of valiation errors when receiving
+     * one of the provided values.
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of validator configurations.
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(
+     *              'NonExistentValidator' => array(),
+     *          ),
+     *      ),
+     *      array(
+     *          array(
+     *              // Typos
+     *              'InTEgervALUeVALIdator' => array(
+     *                  'iinStringLength' => 0,
+     *                  'maxStringLength' => 23,
+     *              )
+     *          )
+     *      ),
+     *      array(
+     *          array(
+     *              'StringLengthValidator' => array(
+     *                  // Incorrect value types
+     *                  'minStringLength' => true,
+     *                  'maxStringLength' => false,
+     *              )
+     *          )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInvalidValidatorConfiguration()
+    {
+        return array(
+            array(
+                array(
+                    'NonExistentValidator' => array(),
+                ),
+            ),
+            array(
+                array(
+                    'StringLengthValidator' => array(
+                        'nonExistentValue' => 23
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    'StringLengthValidator' => array(
+                        'minStringLength' => .23,
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    'StringLengthValidator' => array(
+                        'maxStringLength' => .42,
+                    ),
+                )
+            ),
+        );
+    }
 }

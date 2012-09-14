@@ -30,14 +30,8 @@ class PolicyList extends ValueObjectVisitor
         $generator->startObjectElement( 'PolicyList' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'PolicyList' ) );
 
-        if ( $data->roleId !== null )
-        {
-            $generator->startAttribute(
-                'href',
-                $this->urlHandler->generate( 'policies', array( 'role' => $data->roleId ) )
-            );
-            $generator->endAttribute( 'href' );
-        }
+        $generator->startAttribute( 'href', $data->path );
+        $generator->endAttribute( 'href' );
 
         $generator->startList( 'Policy' );
         foreach ( $data->policies as $policy )
