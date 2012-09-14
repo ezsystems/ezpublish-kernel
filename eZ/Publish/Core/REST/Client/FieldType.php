@@ -164,7 +164,7 @@ class FieldType implements Repository\FieldType
      */
     public function fieldSettingsToHash( $fieldSettings )
     {
-        return $this->internalFieldType->fieldSettingsToHash( $fieldSettings );
+        return $this->innerFieldType->fieldSettingsToHash( $fieldSettings );
     }
 
     /**
@@ -177,7 +177,7 @@ class FieldType implements Repository\FieldType
      */
     public function fieldSettingsFromHash( $fieldSettingsHash )
     {
-        return $this->internalFieldType->fieldSettingsFromHash( $fieldSettingsHash );
+        return $this->innerFieldType->fieldSettingsFromHash( $fieldSettingsHash );
     }
 
     /**
@@ -188,7 +188,7 @@ class FieldType implements Repository\FieldType
      */
     public function validatorConfigurationToHash( $validatorConfiguration )
     {
-        return $this->internalFieldType->validatorConfigurationToHash( $validatorConfiguration );
+        return $this->innerFieldType->validatorConfigurationToHash( $validatorConfiguration );
     }
 
     /**
@@ -200,6 +200,6 @@ class FieldType implements Repository\FieldType
      */
     public function validatorConfigurationFromHash( $validatorConfigurationHash )
     {
-        return $this->internalFieldType->validatorConfigurationFromHash( $validatorConfigurationHash );
+        return $this->innerFieldType->validatorConfigurationFromHash( $validatorConfigurationHash );
     }
 }
