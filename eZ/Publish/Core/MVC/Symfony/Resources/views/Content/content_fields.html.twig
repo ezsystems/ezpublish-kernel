@@ -21,6 +21,18 @@
 {% endspaceless %}
 {% endblock %}
 
+{% block ezauthor_field %}
+{% spaceless %}
+    {% if field.value|length() > 0 %}
+        <ul {{ block( 'field_attributes' ) }}>
+        {% for author in field.value.authors %}
+            <li><a href="mailto:{{ author.email }}">{{ author.name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endspaceless %}
+{% endblock %}
+
 {# The simple_block_field block is a shorthand html block-based fields (like eztext or ezxmltext) #}
 {# You can define a field_value variable before rendering this one if you need special operation for rendering content (i.e. nl2br) #}
 {% block simple_block_field %}
