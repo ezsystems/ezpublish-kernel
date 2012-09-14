@@ -102,6 +102,12 @@ class RestFieldDefinition extends ContentTypeBase
         $this->visitNamesList( $generator, $fieldDefinition->getNames() );
         $this->visitDescriptionsList( $generator, $fieldDefinition->getDescriptions() );
 
+        $this->fieldTypeSerializer->serializeFieldSettings(
+            $generator,
+            $fieldDefinition,
+            $fieldDefinition->getFieldSettings()
+        );
+
         $generator->endObjectElement( 'FieldDefinition' );
     }
 }
