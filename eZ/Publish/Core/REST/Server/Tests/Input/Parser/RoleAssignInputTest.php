@@ -15,7 +15,6 @@ class RoleAssignInputTest extends BaseTest
 {
     /**
      * Tests the RoleAssignInput parser
-     * @todo test with limitations
      */
     public function testParse()
     {
@@ -23,6 +22,22 @@ class RoleAssignInputTest extends BaseTest
             'Role' => array(
                 '_href' => '/user/roles/42'
             ),
+            'limitation' => array(
+                '_identifier' => 'Class',
+                'values' => array(
+                    'ref' => array(
+                        array(
+                            '_href' => 1
+                        ),
+                        array(
+                            '_href' => 2
+                        ),
+                        array(
+                            '_href' => 3
+                        )
+                    )
+                )
+            )
         );
 
         $roleAssignInput = $this->getRoleAssignInput();
@@ -39,6 +54,24 @@ class RoleAssignInputTest extends BaseTest
             $result->roleId,
             'RoleAssignment roleId property not created correctly.'
         );
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation',
+            $result->limitation,
+            'Limitation not created correctly.'
+        );
+
+        $this->assertEquals(
+            'Class',
+            $result->limitation->getIdentifier(),
+            'Limitation identifier not created correctly.'
+        );
+
+        $this->assertEquals(
+            array( 1, 2, 3 ),
+            $result->limitation->limitationValues,
+            'Limitation values not created correctly.'
+        );
     }
 
     /**
@@ -49,7 +82,24 @@ class RoleAssignInputTest extends BaseTest
      */
     public function testParseExceptionOnMissingRole()
     {
-        $inputArray = array();
+        $inputArray = array(
+            'limitation' => array(
+                '_identifier' => 'Class',
+                'values' => array(
+                    'ref' => array(
+                        array(
+                            '_href' => 1
+                        ),
+                        array(
+                            '_href' => 2
+                        ),
+                        array(
+                            '_href' => 3
+                        )
+                    )
+                )
+            )
+        );
 
         $roleAssignInput = $this->getRoleAssignInput();
         $roleAssignInput->parse( $inputArray, $this->getParsingDispatcherMock() );
@@ -64,7 +114,77 @@ class RoleAssignInputTest extends BaseTest
     public function testParseExceptionOnInvalidRole()
     {
         $inputArray = array(
-            'Role' => array()
+            'Role' => array(),
+            'limitation' => array(
+                '_identifier' => 'Class',
+                'values' => array(
+                    'ref' => array(
+                        array(
+                            '_href' => 1
+                        ),
+                        array(
+                            '_href' => 2
+                        ),
+                        array(
+                            '_href' => 3
+                        )
+                    )
+                )
+            )
+        );
+
+        $roleAssignInput = $this->getRoleAssignInput();
+        $roleAssignInput->parse( $inputArray, $this->getParsingDispatcherMock() );
+    }
+
+    /**
+     * Test Limitation parser throwing exception on missing identifier
+     *
+     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedExceptionMessage Missing '_identifier' attribute for Limitation.
+     */
+    public function testParseExceptionOnMissingLimitationIdentifier()
+    {
+        $inputArray = array(
+            'Role' => array(
+                '_href' => '/user/roles/42'
+            ),
+            'limitation' => array(
+                'values' => array(
+                    'ref' => array(
+                        array(
+                            '_href' => 1
+                        ),
+                        array(
+                            '_href' => 2
+                        ),
+                        array(
+                            '_href' => 3
+                        )
+                    )
+                )
+            )
+        );
+
+        $roleAssignInput = $this->getRoleAssignInput();
+        $roleAssignInput->parse( $inputArray, $this->getParsingDispatcherMock() );
+    }
+
+    /**
+     * Test Limitation parser throwing exception on missing values
+     *
+     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedExceptionMessage Invalid format for limitation values in Limitation.
+     */
+    public function testParseExceptionOnMissingLimitationValues()
+    {
+        $inputArray = array(
+            'Role' => array(
+                '_href' => '/user/roles/42'
+            ),
+            'limitation' => array(
+                '_identifier' => 'Class'
+            )
         );
 
         $roleAssignInput = $this->getRoleAssignInput();

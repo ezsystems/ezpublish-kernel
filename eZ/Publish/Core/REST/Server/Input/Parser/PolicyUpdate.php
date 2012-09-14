@@ -63,9 +63,7 @@ class PolicyUpdate extends Base
             foreach ( $data['limitations']['limitation'] as $limitationData )
             {
                 $policyUpdate->addLimitation(
-                    $parsingDispatcher->parse(
-                        $limitationData, $limitationData['_media-type']
-                    )
+                    $this->parseLimitation( $limitationData )
                 );
             }
         }
@@ -73,4 +71,3 @@ class PolicyUpdate extends Base
         return $policyUpdate;
     }
 }
-

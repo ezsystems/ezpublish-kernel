@@ -21,7 +21,27 @@ class PolicyCreateTest extends BaseTest
     {
         $inputArray = array(
             'module' => 'content',
-            'function' => 'delete'
+            'function' => 'delete',
+            'limitations' => array(
+                'limitation' => array(
+                    array(
+                        '_identifier' => 'Class',
+                        'values' => array(
+                            'ref' => array(
+                                array(
+                                    '_href' => 1
+                                ),
+                                array(
+                                    '_href' => 2
+                                ),
+                                array(
+                                    '_href' => 3
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         );
 
         $policyCreate = $this->getPolicyCreate();
@@ -44,6 +64,40 @@ class PolicyCreateTest extends BaseTest
             $result->function,
             'PolicyCreateStruct function property not created correctly.'
         );
+
+        /*
+        $parsedLimitations = $result->getLimitations();
+
+        $this->assertInternalType(
+            'array',
+            $parsedLimitations,
+            'PolicyCreateStruct limitations not created correctly'
+        );
+
+        $this->assertCount(
+            1,
+            $parsedLimitations,
+            'PolicyCreateStruct limitations not created correctly'
+        );
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation',
+            $parsedLimitations[0],
+            'Limitation not created correctly.'
+        );
+
+        $this->assertEquals(
+            'Class',
+            $parsedLimitations[0]->getIdentifier(),
+            'Limitation identifier not created correctly.'
+        );
+
+        $this->assertEquals(
+            array( 1, 2, 3 ),
+            $parsedLimitations[0]->limitationValues,
+            'Limitation values not created correctly.'
+        );
+        */
     }
 
     /**
@@ -55,7 +109,27 @@ class PolicyCreateTest extends BaseTest
     public function testParseExceptionOnMissingModule()
     {
         $inputArray = array(
-            'function' => 'delete'
+            'function' => 'delete',
+            'limitations' => array(
+                'limitation' => array(
+                    array(
+                        '_identifier' => 'Class',
+                        'values' => array(
+                            'ref' => array(
+                                array(
+                                    '_href' => 1
+                                ),
+                                array(
+                                    '_href' => 2
+                                ),
+                                array(
+                                    '_href' => 3
+                                )
+                            )
+                        )
+                    )
+                )
+            )
         );
 
         $policyCreate = $this->getPolicyCreate();
@@ -71,7 +145,89 @@ class PolicyCreateTest extends BaseTest
     public function testParseExceptionOnMissingFunction()
     {
         $inputArray = array(
-            'module' => 'content'
+            'module' => 'content',
+            'limitations' => array(
+                'limitation' => array(
+                    array(
+                        '_identifier' => 'Class',
+                        'values' => array(
+                            'ref' => array(
+                                array(
+                                    '_href' => 1
+                                ),
+                                array(
+                                    '_href' => 2
+                                ),
+                                array(
+                                    '_href' => 3
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $policyCreate = $this->getPolicyCreate();
+        $policyCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+    }
+
+    /**
+     * Test Limitation parser throwing exception on missing identifier
+     *
+     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedExceptionMessage Missing '_identifier' attribute for Limitation.
+     */
+    public function testParseExceptionOnMissingLimitationIdentifier()
+    {
+        $this->markTestSkipped( '@todo PolicyCreateStruct stub does not support limitations' );
+        $inputArray = array(
+            'module' => 'content',
+            'function' => 'delete',
+            'limitations' => array(
+                'limitation' => array(
+                    array(
+                        'values' => array(
+                            'ref' => array(
+                                array(
+                                    '_href' => 1
+                                ),
+                                array(
+                                    '_href' => 2
+                                ),
+                                array(
+                                    '_href' => 3
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        $policyCreate = $this->getPolicyCreate();
+        $policyCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+    }
+
+    /**
+     * Test Limitation parser throwing exception on missing values
+     *
+     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedExceptionMessage Invalid format for limitation values in Limitation.
+     */
+    public function testParseExceptionOnMissingLimitationValues()
+    {
+        $this->markTestSkipped( '@todo PolicyCreateStruct stub does not support limitations' );
+        $inputArray = array(
+            'module' => 'content',
+            'function' => 'delete',
+            'limitations' => array(
+                'limitation' => array(
+                    array(
+                        '_identifier' => 'Class'
+                    )
+                )
+            )
         );
 
         $policyCreate = $this->getPolicyCreate();
