@@ -107,7 +107,6 @@ class Content extends Parser
                         'id' => $rawFieldData['id'],
                         'fieldDefIdentifier' => $rawFieldData['fieldDefinitionIdentifier'],
                         'languageCode' => $rawFieldData['languageCode'],
-                        // @TODO: Here the field type fromHash() needs to hook in!
                         'value' => $this->fieldValueParser->parseFieldValue(
                             $contentId,
                             $rawFieldData['fieldDefinitionIdentifier'],
