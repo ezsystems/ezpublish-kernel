@@ -94,6 +94,25 @@ class FieldTypeSerializer
     }
 
     /**
+     * Serializeds $validatorConfiguration for $fieldDefinition using $generator
+     *
+     * @param Generator $generator
+     * @param FieldDefinition $fieldDefinition
+     * @param mixed $validatorConfiguration
+     * @return void
+     */
+    public function serializeValidatorConfiguration( Generator $generator, FieldDefinition $fieldDefinition, $validatorConfiguration )
+    {
+        $this->serializeHash(
+            'validatorConfiguration',
+            $generator,
+            $this->getFieldType(
+                $fieldDefinition->fieldTypeIdentifier
+            )->validatorConfigurationToHash( $validatorConfiguration )
+        );
+    }
+
+    /**
      * Returns the field type with $fieldTypeIdentifier
      *
      * @param string $fieldTypeIdentifier
