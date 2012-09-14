@@ -19,11 +19,11 @@ use eZ\Publish\Core\Repository\Values;
 
 class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
 {
-    protected $fieldValueSerializerMock;
+    protected $fieldTypeSerializerMock;
 
     public function setUp()
     {
-        $this->fieldValueSerializerMock = $this->getMock(
+        $this->fieldTypeSerializerMock = $this->getMock(
             'eZ\\Publish\\Core\\REST\\Common\\Output\\FieldTypeSerializer',
             array(),
             array(),
@@ -44,7 +44,7 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
 
         $restFieldDefinition = $this->getBasicRestFieldDefinition();
 
-        $this->fieldValueSerializerMock->expects( $this->once() )
+        $this->fieldTypeSerializerMock->expects( $this->once() )
             ->method( 'serializeFieldDefaultValue' )
             ->with(
                 $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' ),
@@ -145,7 +145,7 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
     {
         return new ValueObjectVisitor\RestFieldDefinition(
             new Common\UrlHandler\eZPublish(),
-            $this->fieldValueSerializerMock
+            $this->fieldTypeSerializerMock
 
         );
     }

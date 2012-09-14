@@ -18,11 +18,11 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 
 class ContentTest extends ValueObjectVisitorBaseTest
 {
-    protected $fieldValueSerializerMock;
+    protected $fieldTypeSerializerMock;
 
     public function setUp()
     {
-        $this->fieldValueSerializerMock = $this->getMock(
+        $this->fieldTypeSerializerMock = $this->getMock(
             'eZ\\Publish\\Core\\REST\\Common\\Output\\FieldTypeSerializer',
             array(),
             array(),
@@ -69,7 +69,7 @@ class ContentTest extends ValueObjectVisitorBaseTest
             'relations' => array(),
         ) );
 
-        $this->fieldValueSerializerMock->expects( $this->exactly( 2 ) )
+        $this->fieldTypeSerializerMock->expects( $this->exactly( 2 ) )
             ->method( 'serializeFieldValue' )
             ->with(
                 $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' ),
@@ -162,7 +162,7 @@ class ContentTest extends ValueObjectVisitorBaseTest
     {
         return new ValueObjectVisitor\Content(
             new Common\UrlHandler\eZPublish(),
-            $this->fieldValueSerializerMock
+            $this->fieldTypeSerializerMock
         );
     }
 }

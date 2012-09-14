@@ -25,16 +25,16 @@ class RestFieldDefinition extends ContentTypeBase
     /**
      * @var \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer
      */
-    protected $fieldValueSerializer;
+    protected $fieldTypeSerializer;
 
     /**
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
-     * @param \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer $fieldValueSerializer
+     * @param \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer $fieldTypeSerializer
      */
-    public function __construct( UrlHandler $urlHandler, FieldTypeSerializer $fieldValueSerializer )
+    public function __construct( UrlHandler $urlHandler, FieldTypeSerializer $fieldTypeSerializer )
     {
         parent::__construct( $urlHandler );
-        $this->fieldValueSerializer = $fieldValueSerializer;
+        $this->fieldTypeSerializer = $fieldTypeSerializer;
     }
     /**
      * Visit struct returned by controllers
@@ -90,7 +90,7 @@ class RestFieldDefinition extends ContentTypeBase
         $generator->startValueElement( 'isInfoCollector', $this->serializeBool( $fieldDefinition->isInfoCollector ) );
         $generator->endValueElement( 'isInfoCollector' );
 
-        $this->fieldValueSerializer->serializeFieldDefaultValue(
+        $this->fieldTypeSerializer->serializeFieldDefaultValue(
             $generator,
             $fieldDefinition,
             $fieldDefinition->defaultValue

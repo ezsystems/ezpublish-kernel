@@ -28,16 +28,16 @@ class Content extends ValueObjectVisitor
     /**
      * @var \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer
      */
-    protected $fieldValueSerializer;
+    protected $fieldTypeSerializer;
 
     /**
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
-     * @param \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer $fieldValueSerializer
+     * @param \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer $fieldTypeSerializer
      */
-    public function __construct( UrlHandler $urlHandler, FieldTypeSerializer $fieldValueSerializer )
+    public function __construct( UrlHandler $urlHandler, FieldTypeSerializer $fieldTypeSerializer )
     {
         parent::__construct( $urlHandler );
-        $this->fieldValueSerializer = $fieldValueSerializer;
+        $this->fieldTypeSerializer = $fieldTypeSerializer;
     }
 
     /**
@@ -109,7 +109,7 @@ class Content extends ValueObjectVisitor
         $generator->startValueElement( 'languageCode', $field->languageCode );
         $generator->endValueElement( 'languageCode' );
 
-        $this->fieldValueSerializer->serializeFieldValue(
+        $this->fieldTypeSerializer->serializeFieldValue(
             $generator,
             $contentType,
             $field
