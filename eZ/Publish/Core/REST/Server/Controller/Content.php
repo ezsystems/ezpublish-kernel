@@ -65,6 +65,7 @@ class Content
      * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\ContentService $contentService
+     * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\SectionService $sectionService
      */
     public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, ContentService $contentService, LocationService $locationService, SectionService $sectionService )
@@ -80,7 +81,7 @@ class Content
      * Load a content info by remote ID
      *
      * @param RMF\Request $request
-     * @return Content
+     * @return \eZ\Publish\Core\REST\Server\Values\ContentList
      */
     public function loadContentInfoByRemoteId( RMF\Request $request )
     {
@@ -89,19 +90,21 @@ class Content
             $request->variables['remoteId']
         );
 
-        return new Values\ContentList( array(
-            new Values\RestContent(
-                $contentInfo,
-                $this->locationService->loadLocation( $contentInfo->mainLocationId )
+        return new Values\ContentList(
+            array(
+                new Values\RestContent(
+                    $contentInfo,
+                    $this->locationService->loadLocation( $contentInfo->mainLocationId )
+                )
             )
-        ) );
+        );
     }
 
     /**
      * Loads a content info, potentially with the current version embedded
      *
      * @param RMF\Request $request
-     * @return  EmbeddingContentInfo
+     * @return \eZ\Publish\Core\REST\Server\Values\RestContent
      */
     public function loadContent( RMF\Request $request )
     {
@@ -176,7 +179,7 @@ class Content
      * Loads a specific version of a given content object
      *
      * @param RMF\Request $request
-     * @return void
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceRedirect
      */
     public function redirectCurrentVersion( RMF\Request $request )
     {
@@ -200,7 +203,7 @@ class Content
      * Loads a specific version of a given content object
      *
      * @param RMF\Request $request
-     * @return void
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
     public function loadContentInVersion( RMF\Request $request )
     {
