@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
-use eZ\Publish\Core\REST\Client\Input\ParserTools;
+use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Client\ContentTypeService;
 
 use eZ\Publish\Core\REST\Common\Input\Parser;
@@ -22,12 +22,12 @@ use eZ\Publish\Core\REST\Client\Values;
 class FieldDefinitionList extends Parser
 {
     /**
-     * @var eZ\Publish\Core\REST\Client\Input\ParserTools
+     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
      */
     protected $parserTools;
 
     /**
-     * @var eZ\Publish\Core\REST\Client\ContentTypeService
+     * @var \eZ\Publish\Core\REST\Client\ContentTypeService
      */
     protected $contentTypeService;
 
@@ -46,7 +46,7 @@ class FieldDefinitionList extends Parser
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\API\Repository\Values\Content\ContentType
+     * @return \eZ\Publish\Core\REST\Client\Values\FieldDefinitionList
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
@@ -123,7 +123,7 @@ class FieldDefinitionList extends Parser
                 return Values\Content\Location::SORT_FIELD_CONTENTOBJECT_ID;
         }
 
-        throw new \RuntimeException( "Unknown default sort field: '{$defaultSortField}'." );
+        throw new \RuntimeException( "Unknown default sort field: '{$defaultSortFieldString}'." );
     }
 
     /**

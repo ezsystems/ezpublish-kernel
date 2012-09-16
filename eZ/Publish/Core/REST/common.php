@@ -123,7 +123,7 @@ $repository = new Client\IntegrationTestRepository(
 
 
 // Object with convenience methods for parsers
-$parserTools = new Client\Input\ParserTools();
+$parserTools = new Common\Input\ParserTools();
 
 // Parser for field values (using FieldTypes for toHash()/fromHash() operations)
 $fieldTypeParser = new Common\Input\FieldTypeParser(

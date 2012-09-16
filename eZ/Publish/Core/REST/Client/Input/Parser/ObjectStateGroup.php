@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Client\Input\ParserTools;
+use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\Repository\Values\ObjectState\ObjectStateGroup as CoreObjectStateGroup;
 
 /**
@@ -20,7 +20,7 @@ use eZ\Publish\Core\Repository\Values\ObjectState\ObjectStateGroup as CoreObject
 class ObjectStateGroup extends Parser
 {
     /**
-     * @var eZ\Publish\Core\REST\Client\Input\ParserTools
+     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
      */
     protected $parserTools;
 

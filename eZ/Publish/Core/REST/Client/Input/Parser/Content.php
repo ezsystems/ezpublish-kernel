@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
-use eZ\Publish\Core\REST\Client\Input\ParserTools;
+use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Client\ContentService;
 
 use eZ\Publish\Core\REST\Common\Input\Parser;
@@ -29,27 +29,30 @@ class Content extends Parser
     /**
      * VersionInfo parser
      *
-     * @var eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo
+     * @var \eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo
      */
     protected $versionInfoParser;
 
     /**
-     * @var eZ\Publish\Core\REST\Client\Input\ParserTools
+     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
      */
     protected $parserTools;
 
     /**
-     * @var eZ\Publish\Core\REST\Client\ContentService
+     * @var \eZ\Publish\Core\REST\Client\ContentService
      */
     protected $contentService;
 
     /**
-     * @var eZ\Publish\Core\REST\Common\Input\FieldTypeParser
+     * @var \eZ\Publish\Core\REST\Common\Input\FieldTypeParser
      */
     protected $fieldTypeParser;
 
     /**
-     * @param eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo $versionInfoParser
+     * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
+     * @param \eZ\Publish\Core\REST\Client\ContentService $contentService
+     * @param \eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo $versionInfoParser
+     * @param \eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser
      */
     public function __construct( ParserTools $parserTools, ContentService $contentService, VersionInfo $versionInfoParser, FieldTypeParser $fieldTypeParser )
     {
@@ -64,7 +67,7 @@ class Content extends Parser
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\API\Repository\Values\Content\Version
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @todo Error handling
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )

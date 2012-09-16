@@ -10,22 +10,23 @@
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input;
+use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\API\Repository\Values;
 
 class ContentTest extends BaseTest
 {
     /**
-     * @var eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo
+     * @var \eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo
      */
     protected $versionInfoParserMock;
 
     /**
-     * @var eZ\Publish\Core\REST\Client\ContentService
+     * @var \eZ\Publish\Core\REST\Client\ContentService
      */
     protected $contentServiceMock;
 
     /**
-     * @var eZ\Publish\Core\REST\Common\Input\FieldTypeParser
+     * @var \eZ\Publish\Core\REST\Common\Input\FieldTypeParser
      */
     protected $fieldTypeParserMock;
 
@@ -161,15 +162,15 @@ class ContentTest extends BaseTest
     protected function getParser()
     {
         return new Input\Parser\Content(
-            new Input\ParserTools(),
-            $this->getContenServiceMock(),
+            new ParserTools(),
+            $this->getContentServiceMock(),
             $this->getVersionInfoParserMock(),
             $this->getFieldTypeParserMock()
         );
     }
 
     /**
-     * @return eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo
+     * @return \eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo
      */
     protected function getVersionInfoParserMock()
     {
@@ -187,11 +188,11 @@ class ContentTest extends BaseTest
     }
 
     /**
-     * @return eZ\Publish\Core\REST\Client\ContentService
+     * @return \eZ\Publish\Core\REST\Client\ContentService
      */
-    protected function getContenServiceMock()
+    protected function getContentServiceMock()
     {
-        if ( !isset( $this->contenServiceMock ) )
+        if ( !isset( $this->contentServiceMock ) )
         {
             $this->contenServiceMock = $this->getMock(
                 'eZ\\Publish\\Core\\REST\\Client\\ContentService',
@@ -201,11 +202,11 @@ class ContentTest extends BaseTest
                 false
             );
         }
-        return $this->contenServiceMock;
+        return $this->contentServiceMock;
     }
 
     /**
-     * @return eZ\Publish\Core\REST\Common\Input\FieldTypeParser
+     * @return \eZ\Publish\Core\REST\Common\Input\FieldTypeParser
      */
     protected function getFieldTypeParserMock()
     {

@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Client\Input\ParserTools;
+use eZ\Publish\Core\REST\Common\Input\ParserTools;
 
 use eZ\Publish\Core\REST\Client\Values;
 use eZ\Publish\Core\REST\Client\ContentService;
@@ -22,20 +22,20 @@ use eZ\Publish\Core\REST\Client\ContentService;
 class VersionInfo extends Parser
 {
     /**
-     * @var eZ\Publish\Core\REST\Client\Input\ParserTools
+     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
      */
     protected $parserTools;
 
     /**
      * Content Service
      *
-     * @var eZ\Publish\Core\REST\Input\ContentService
+     * @var \eZ\Publish\Core\REST\Client\ContentService
      */
     protected $contentService;
 
     /**
-     * @param eZ\Publish\Core\REST\Input\ParserTools $parserTools
-     * @param eZ\Publish\Core\REST\Input\ContentService $contentService
+     * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
+     * @param \eZ\Publish\Core\REST\Client\ContentService $contentService
      */
     public function __construct( ParserTools $parserTools, ContentService $contentService )
     {

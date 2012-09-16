@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Client\Tests\Input;
+namespace eZ\Publish\Core\REST\Common\Tests\Input;
 
-use eZ\Publish\Core\REST\Client\Input\ParserTools;
+use eZ\Publish\Core\REST\Common\Input\ParserTools;
 
 class ParserToolsTest extends \PHPUnit_Framework_TestCase
 {

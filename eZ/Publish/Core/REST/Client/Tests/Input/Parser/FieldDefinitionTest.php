@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input;
+use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\API\Repository\Values;
 
 class FieldDefinitionTest extends BaseTest
@@ -174,7 +175,7 @@ class FieldDefinitionTest extends BaseTest
     protected function getParser()
     {
         return new Input\Parser\FieldDefinition(
-            new Input\ParserTools(),
+            new ParserTools(),
             $this->fieldTypeParserMock
         );
     }

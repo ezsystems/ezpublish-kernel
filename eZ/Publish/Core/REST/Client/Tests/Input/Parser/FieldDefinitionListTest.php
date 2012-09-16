@@ -10,12 +10,13 @@
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input;
+use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\API\Repository\Values;
 
 class FieldDefinitionListTest extends BaseTest
 {
     /**
-     * @var eZ\Publish\Core\REST\Client\ContentService
+     * @var \eZ\Publish\Core\REST\Client\ContentService
      */
     protected $contentTypeServiceMock;
 
@@ -63,13 +64,13 @@ class FieldDefinitionListTest extends BaseTest
     protected function getParser()
     {
         return new Input\Parser\FieldDefinitionList(
-            new Input\ParserTools(),
+            new ParserTools(),
             $this->getContentTypeServiceMock()
         );
     }
 
     /**
-     * @return eZ\Publish\Core\REST\Client\ContentService
+     * @return \eZ\Publish\Core\REST\Client\ContentService
      */
     protected function getContentTypeServiceMock()
     {

@@ -7,8 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Client\Input;
-use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+namespace eZ\Publish\Core\REST\Common\Input;
+use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher,
+    RuntimeException;
 
 /**
  * Tools object to be used in Input Parsers
@@ -20,7 +21,7 @@ class ParserTools
      *
      * @param array $objectElement
      * @param ParsingDispatcher $parsingDispatcher
-     * @return void
+     * @return mixed
      */
     public function parseObjectElement( array $objectElement, ParsingDispatcher $parsingDispatcher )
     {

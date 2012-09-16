@@ -16,24 +16,24 @@ use eZ\Publish\API\Repository\FieldTypeService;
 class FieldTypeParser
 {
     /**
-     * @var eZ\Publish\API\Repository\ContentService
+     * @var \eZ\Publish\API\Repository\ContentService
      */
     protected $contentService;
 
     /**
-     * @var eZ\Publish\API\Repository\ContentTypeService
+     * @var \eZ\Publish\API\Repository\ContentTypeService
      */
     protected $contentTypeService;
 
     /**
-     * @var eZ\Publish\API\Repository\FieldTypeService
+     * @var \eZ\Publish\API\Repository\FieldTypeService
      */
     protected $fieldTypeService;
 
     /**
-     * @param eZ\Publish\API\Repository\ContentService $contentService
-     * @param eZ\Publish\API\Repository\ContentTypeService $contentTypeService
-     * @param eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
+     * @param \eZ\Publish\API\Repository\ContentService $contentService
+     * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
+     * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
      */
     public function __construct( ContentService $contentService, ContentTypeService $contentTypeService, FieldTypeService $fieldTypeService )
     {
@@ -62,12 +62,12 @@ class FieldTypeParser
     }
 
     /**
-     * Parses the givend $value using the FieldType identified by
+     * Parses the given $value using the FieldType identified by
      * $fieldTypeIdentifier
      *
      * @param mixed $fieldTypeIdentifier
      * @param mixed $value
-     * @return void
+     * @return mixed
      */
     public function parseValue( $fieldTypeIdentifier, $value )
     {
@@ -76,7 +76,7 @@ class FieldTypeParser
     }
 
     /**
-     * Parses the givend $settingsHash using the FieldType identified by
+     * Parses the given $settingsHash using the FieldType identified by
      * $fieldTypeIdentifier
      *
      * @param string $fieldTypeIdentifier
@@ -90,7 +90,7 @@ class FieldTypeParser
     }
 
     /**
-     * Parses the givend $configurationHash using the FieldType identified by
+     * Parses the given $configurationHash using the FieldType identified by
      * $fieldTypeIdentifier
      *
      * @param string $fieldTypeIdentifier

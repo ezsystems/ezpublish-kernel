@@ -10,12 +10,13 @@
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input;
+use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\API\Repository\Values;
 
 class VersionInfoTest extends BaseTest
 {
     /**
-     * @var eZ\Publish\Core\REST\Client\ContentService
+     * @var \eZ\Publish\Core\REST\Client\ContentService
      */
     protected $contentServiceMock;
 
@@ -181,13 +182,13 @@ class VersionInfoTest extends BaseTest
     protected function getParser()
     {
         return new Input\Parser\VersionInfo(
-            new Input\ParserTools(),
+            new ParserTools(),
             $this->getContentServiceMock()
         );
     }
 
     /**
-     * @return eZ\Publish\Core\REST\Client\ContentService
+     * @return \eZ\Publish\Core\REST\Client\ContentService
      */
     protected function getContentServiceMock()
     {

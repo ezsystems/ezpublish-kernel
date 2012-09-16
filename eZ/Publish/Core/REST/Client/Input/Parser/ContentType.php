@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
-use eZ\Publish\Core\REST\Client\Input\ParserTools;
+use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Client\ContentTypeService;
 
 use eZ\Publish\Core\REST\Common\Input\Parser;
@@ -22,18 +22,18 @@ use eZ\Publish\Core\REST\Client\Values;
 class ContentType extends Parser
 {
     /**
-     * @var eZ\Publish\Core\REST\Client\Input\ParserTools
+     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
      */
     protected $parserTools;
 
     /**
-     * @var eZ\Publish\Core\REST\Client\ContentTypeService
+     * @var \eZ\Publish\Core\REST\Client\ContentTypeService
      */
     protected $contentTypeService;
 
     /**
-     * @param ParserTools $parserTools
-     * @param ContentTypeService $contentTypeService
+     * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
+     * @param \eZ\Publish\Core\REST\Client\ContentTypeService $contentTypeService
      */
     public function __construct( ParserTools $parserTools, ContentTypeService $contentTypeService )
     {
@@ -46,7 +46,7 @@ class ContentType extends Parser
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\API\Repository\Values\Content\ContentType
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      * @todo Error handling
      * @todo What about missing properties? Set them here, using the service to
      *       load? Or better set them in the service, since loading is really
@@ -142,7 +142,7 @@ class ContentType extends Parser
                 return Values\Content\Location::SORT_FIELD_CONTENTOBJECT_ID;
         }
 
-        throw new \RuntimeException( "Unknown default sort field: '{$defaultSortField}'." );
+        throw new \RuntimeException( "Unknown default sort field: '{$defaultSortFieldString}'." );
     }
 
     /**

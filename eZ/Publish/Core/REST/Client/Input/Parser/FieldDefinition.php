@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
-use eZ\Publish\Core\REST\Client\Input\ParserTools;
+use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Client\ContentTypeService;
 
 use eZ\Publish\Core\REST\Common\Input\Parser;
@@ -26,18 +26,18 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 class FieldDefinition extends Parser
 {
     /**
-     * @var eZ\Publish\Core\REST\Client\Input\ParserTools
+     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
      */
     protected $parserTools;
 
     /**
-     * @var eZ\Publish\Core\REST\Common\Input\FieldTypeParser
+     * @var \eZ\Publish\Core\REST\Common\Input\FieldTypeParser
      */
     protected $fieldTypeParser;
 
     /**
-     * @param eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo $versionInfoParser
-     * @param eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser
+     * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
+     * @param \eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser
      */
     public function __construct( ParserTools $parserTools, FieldTypeParser $fieldTypeParser )
     {

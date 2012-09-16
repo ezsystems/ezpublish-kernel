@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
-use eZ\Publish\Core\REST\Client\Input\ParserTools;
+use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Client\ContentTypeService;
 
 use eZ\Publish\Core\REST\Common\Input\Parser;
@@ -22,17 +22,18 @@ use eZ\Publish\Core\REST\Client\Values;
 class ContentInfo extends Parser
 {
     /**
-     * @var eZ\Publish\Core\REST\Client\Input\ParserTools
+     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
      */
     protected $parserTools;
 
     /**
-     * @var eZ\Publish\Core\REST\Client\ContentTypeService
+     * @var \eZ\Publish\Core\REST\Client\ContentTypeService
      */
     protected $contentTypeService;
 
     /**
-     * @param eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo $versionInfoParser
+     * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
+     * @param \eZ\Publish\Core\REST\Client\ContentTypeService $contentTypeService
      */
     public function __construct( ParserTools $parserTools, ContentTypeService $contentTypeService )
     {
