@@ -104,7 +104,7 @@ class RoleAssignmentListTest extends ValueObjectVisitorBaseTest
 
         $this->getVisitorMock()->expects( $this->exactly( 2 ) )
             ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\User\\UserRoleAssignment' ) );
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserRoleAssignment' ) );
 
         $visitor->visit(
             $this->getVisitorMock(),

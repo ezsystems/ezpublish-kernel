@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Values;
 
 /**
  * RoleAssignmentList value object visitor
@@ -41,7 +42,11 @@ class RoleAssignmentList extends ValueObjectVisitor
         $generator->startList( 'RoleAssignment' );
         foreach ( $data->roleAssignments as $roleAssignment )
         {
-            $visitor->visitValueObject( $roleAssignment );
+            $visitor->visitValueObject(
+                $data->isGroupAssignment ?
+                    new Values\RestUserGroupRoleAssignment( $roleAssignment, $data->id ) :
+                    new Values\RestUserRoleAssignment( $roleAssignment, $data->id )
+            );
         }
         $generator->endList( 'RoleAssignment' );
 

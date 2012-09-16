@@ -10,13 +10,13 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
-use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation as APISectionLimitationValue;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\User;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\REST\Common;
+use eZ\Publish\Core\REST\Server\Values;
 
 class UserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
 {
@@ -32,33 +32,18 @@ class UserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $userGroupRoleAssignment = new User\UserGroupRoleAssignment(
-            array(
-                'role' => new User\Role(
-                    array(
-                        'id'         => 42,
-                        'identifier' => 'some-role'
-                    )
-                ),
-                'userGroup' => new User\UserGroup(
-                    array(
-                        'content' => new Content(
-                            array(
-                                'versionInfo' => new VersionInfo(
-                                    array(
-                                        'contentInfo' => new ContentInfo(
-                                            array(
-                                                'id' => 14
-                                            )
-                                        )
-                                    )
-                                ),
-                                'internalFields' => array()
-                            )
+        $userGroupRoleAssignment = new Values\RestUserGroupRoleAssignment(
+            new User\UserGroupRoleAssignment(
+                array(
+                    'role' => new User\Role(
+                        array(
+                            'id'         => 42,
+                            'identifier' => 'some-role'
                         )
                     )
                 )
-            )
+            ),
+            '1/5/14'
         );
 
         $visitor->visit(
@@ -108,7 +93,7 @@ class UserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
                 'tag'      => 'RoleAssignment',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.RoleAssignment+xml',
-                    'href'       => '/user/groups/14/roles/42',
+                    'href'       => '/user/groups/1/5/14/roles/42',
                 )
             ),
             $result,

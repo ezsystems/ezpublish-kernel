@@ -32,20 +32,21 @@ class UserGroupRoleAssignment extends ValueObjectVisitor
         $generator->startObjectElement( 'RoleAssignment' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'RoleAssignment' ) );
 
-        $role = $data->getRole();
+        $roleAssignment = $data->roleAssignment;
+        $role = $roleAssignment->getRole();
 
         $generator->startAttribute(
             'href',
             $this->urlHandler->generate(
                 'groupRoleAssignment', array(
-                    'group' => $data->getUserGroup()->getVersionInfo()->getContentInfo()->id,
+                    'group' => $data->id,
                     'role' => $role->id
                 )
             )
         );
         $generator->endAttribute( 'href' );
 
-        $roleLimitation = $data->getRoleLimitation();
+        $roleLimitation = $roleAssignment->getRoleLimitation();
         if ( $roleLimitation instanceof RoleLimitation )
         {
             $this->visitLimitation( $generator, $roleLimitation );

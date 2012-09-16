@@ -10,13 +10,13 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
-use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation as APISectionLimitationValue;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\User;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\REST\Common;
+use eZ\Publish\Core\REST\Server\Values;
 
 class UserRoleAssignmentTest extends ValueObjectVisitorBaseTest
 {
@@ -32,33 +32,18 @@ class UserRoleAssignmentTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $userRoleAssignment = new User\UserRoleAssignment(
-            array(
-                'role' => new User\Role(
-                    array(
-                        'id'         => 42,
-                        'identifier' => 'some-role'
-                    )
-                ),
-                'user' => new User\User(
-                    array(
-                        'content' => new Content(
-                            array(
-                                'versionInfo' => new VersionInfo(
-                                    array(
-                                        'contentInfo' => new ContentInfo(
-                                            array(
-                                                'id' => 14
-                                            )
-                                        )
-                                    )
-                                ),
-                                'internalFields' => array()
-                            )
+        $userRoleAssignment = new Values\RestUserRoleAssignment(
+            new User\UserRoleAssignment(
+                array(
+                    'role' => new User\Role(
+                        array(
+                            'id'         => 42,
+                            'identifier' => 'some-role'
                         )
                     )
                 )
-            )
+            ),
+            14
         );
 
         $visitor->visit(

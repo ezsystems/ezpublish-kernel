@@ -245,8 +245,8 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedPolicy'              => new Output\ValueObjectVisitor\CreatedPolicy( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PolicyList'                 => new Output\ValueObjectVisitor\PolicyList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleAssignmentList'         => new Output\ValueObjectVisitor\RoleAssignmentList( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserRoleAssignment'      => new Output\ValueObjectVisitor\UserRoleAssignment( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupRoleAssignment' => new Output\ValueObjectVisitor\UserGroupRoleAssignment( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserRoleAssignment'     => new Output\ValueObjectVisitor\UserRoleAssignment( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserGroupRoleAssignment' => new Output\ValueObjectVisitor\UserGroupRoleAssignment( $urlHandler ),
 
     // Location
 
