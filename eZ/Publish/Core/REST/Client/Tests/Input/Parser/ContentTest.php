@@ -194,7 +194,7 @@ class ContentTest extends BaseTest
     {
         if ( !isset( $this->contentServiceMock ) )
         {
-            $this->contenServiceMock = $this->getMock(
+            $this->contentServiceMock = $this->getMock(
                 'eZ\\Publish\\Core\\REST\\Client\\ContentService',
                 array(),
                 array(),
