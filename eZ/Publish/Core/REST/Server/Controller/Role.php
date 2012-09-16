@@ -373,8 +373,8 @@ class Role
             )
         );
 
-        $groupLocationId = array_pop( explode( '/', $values['group'] ) );
-        $groupLocation = $this->locationService->loadLocation( $groupLocationId );
+        $groupLocationParts = explode( '/', $values['group'] );
+        $groupLocation = $this->locationService->loadLocation( array_pop( $groupLocationParts ) );
         $userGroup = $this->userService->loadUserGroup( $groupLocation->contentId );
 
         $role = $this->roleService->loadRole( $roleAssignment->roleId );
@@ -413,8 +413,8 @@ class Role
     {
         $values = $this->urlHandler->parse( 'groupRoleAssignment', $request->path );
 
-        $groupLocationId = array_pop( explode( '/', $values['group'] ) );
-        $groupLocation = $this->locationService->loadLocation( $groupLocationId );
+        $groupLocationParts = explode( '/', $values['group'] );
+        $groupLocation = $this->locationService->loadLocation( array_pop( $groupLocationParts ) );
         $userGroup = $this->userService->loadUserGroup( $groupLocation->contentId );
 
         $role = $this->roleService->loadRole( $values['role'] );
@@ -450,8 +450,8 @@ class Role
     {
         $values = $this->urlHandler->parse( 'groupRoleAssignments', $request->path );
 
-        $groupLocationId = array_pop( explode( '/', $values['group'] ) );
-        $groupLocation = $this->locationService->loadLocation( $groupLocationId );
+        $groupLocationParts = explode( '/', $values['group'] );
+        $groupLocation = $this->locationService->loadLocation( array_pop( $groupLocationParts ) );
         $userGroup = $this->userService->loadUserGroup( $groupLocation->contentId );
 
         $roleAssignments = $this->roleService->getRoleAssignmentsForUserGroup( $userGroup );
