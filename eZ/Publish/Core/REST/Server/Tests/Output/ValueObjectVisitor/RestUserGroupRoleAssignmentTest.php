@@ -18,16 +18,16 @@ use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\REST\Common;
 use eZ\Publish\Core\REST\Server\Values;
 
-class UserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
+class RestUserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the UserGroupRoleAssignment visitor
+     * Test the RestUserGroupRoleAssignment visitor
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getUserGroupRoleAssignmentVisitor();
+        $visitor   = $this->getRestUserGroupRoleAssignmentVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
@@ -143,13 +143,13 @@ class UserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the UserGroupRoleAssignment visitor
+     * Get the RestUserGroupRoleAssignment visitor
      *
-     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\UserGroupRoleAssignment
+     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestUserGroupRoleAssignment
      */
-    protected function getUserGroupRoleAssignmentVisitor()
+    protected function getRestUserGroupRoleAssignmentVisitor()
     {
-        return new ValueObjectVisitor\UserGroupRoleAssignment(
+        return new ValueObjectVisitor\RestUserGroupRoleAssignment(
             new Common\UrlHandler\eZPublish()
         );
     }

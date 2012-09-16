@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the UserRoleAssignment ValueObjectVisitor class
+ * File containing the RestUserRoleAssignment ValueObjectVisitor class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -16,9 +16,9 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 
 /**
- * User role assignment value object visitor
+ * REST user role assignment value object visitor
  */
-class UserRoleAssignment extends ValueObjectVisitor
+class RestUserRoleAssignment extends ValueObjectVisitor
 {
     /**
      * Visit struct returned by controllers

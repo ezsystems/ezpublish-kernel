@@ -220,6 +220,7 @@ $valueObjectVisitors = array(
     ),
 
     // ContentType
+
     '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'      => new Output\ValueObjectVisitor\ContentType(
         $urlHandler
     ),
@@ -236,7 +237,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RelationList'               => new Output\ValueObjectVisitor\RelationList( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Relation'             => new Output\ValueObjectVisitor\Relation( $urlHandler ),
 
-    // User
+    // Role
 
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleList'                   => new Output\ValueObjectVisitor\RoleList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedRole'                => new Output\ValueObjectVisitor\CreatedRole( $urlHandler ),
@@ -245,8 +246,8 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedPolicy'              => new Output\ValueObjectVisitor\CreatedPolicy( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PolicyList'                 => new Output\ValueObjectVisitor\PolicyList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleAssignmentList'         => new Output\ValueObjectVisitor\RoleAssignmentList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserRoleAssignment'     => new Output\ValueObjectVisitor\UserRoleAssignment( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserGroupRoleAssignment' => new Output\ValueObjectVisitor\UserGroupRoleAssignment( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserRoleAssignment'     => new Output\ValueObjectVisitor\RestUserRoleAssignment( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserGroupRoleAssignment' => new Output\ValueObjectVisitor\RestUserGroupRoleAssignment( $urlHandler ),
 
     // Location
 
@@ -259,7 +260,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\Trash'                      => new Output\ValueObjectVisitor\Trash( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem'            => new Output\ValueObjectVisitor\TrashItem( $urlHandler ),
 
-    // Object State
+    // Object state
 
     '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup' => new Output\ValueObjectVisitor\ObjectStateGroup( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedObjectStateGroup'    => new Output\ValueObjectVisitor\CreatedObjectStateGroup( $urlHandler ),
