@@ -40,4 +40,3 @@ class PolicyList
         $this->path = $path;
     }
 }
-

@@ -31,4 +31,3 @@ class ContentList
         $this->contents = $contents;
     }
 }
-

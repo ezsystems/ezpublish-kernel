@@ -42,4 +42,3 @@ class RoleAssignment
         $this->limitation = $limitation;
     }
 }
-

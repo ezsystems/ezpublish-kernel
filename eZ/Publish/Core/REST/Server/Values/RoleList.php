@@ -31,4 +31,3 @@ class RoleList
         $this->roles = $roles;
     }
 }
-

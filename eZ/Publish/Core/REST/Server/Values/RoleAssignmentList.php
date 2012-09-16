@@ -49,4 +49,3 @@ class RoleAssignmentList
         $this->isGroupAssignment = $isGroupAssignment;
     }
 }
-

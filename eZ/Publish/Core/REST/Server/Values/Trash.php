@@ -31,4 +31,3 @@ class Trash
         $this->trashItems = $trashItems;
     }
 }
-

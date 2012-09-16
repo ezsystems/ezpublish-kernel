@@ -38,7 +38,7 @@ if ( !isset( $_ENV['DATABASE'] ) )
 }
 
 // Exposing $legacyKernelHandler to be a web handler (to be used in bootstrap.php)
-$legacyKernelHandler = function ()
+$legacyKernelHandler = function()
 {
     return new \ezpKernelWeb;
 };
@@ -104,22 +104,24 @@ $urlHandler = new Common\UrlHandler\eZPublish();
  */
 
 $inputDispatcher = new Common\Input\Dispatcher(
-    new Common\Input\ParsingDispatcher( array(
-        'application/vnd.ez.api.RoleInput'              => new Input\Parser\RoleInput( $urlHandler, $repository->getRoleService() ),
-        'application/vnd.ez.api.SectionInput'           => new Input\Parser\SectionInput( $urlHandler, $repository->getSectionService() ),
-        'application/vnd.ez.api.ContentUpdate'          => new Input\Parser\ContentUpdate( $urlHandler ),
-        'application/vnd.ez.api.PolicyCreate'           => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService() ),
-        'application/vnd.ez.api.PolicyUpdate'           => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService() ),
-        'application/vnd.ez.api.RoleAssignInput'        => new Input\Parser\RoleAssignInput( $urlHandler ),
-        'application/vnd.ez.api.LocationCreate'         => new Input\Parser\LocationCreate( $urlHandler, $repository->getLocationService() ),
-        'application/vnd.ez.api.LocationUpdate'         => new Input\Parser\LocationUpdate( $urlHandler, $repository->getLocationService() ),
-        'application/vnd.ez.api.ObjectStateGroupCreate' => new Input\Parser\ObjectStateGroupCreate( $urlHandler, $repository->getObjectStateService() ),
-        'application/vnd.ez.api.ObjectStateGroupUpdate' => new Input\Parser\ObjectStateGroupUpdate( $urlHandler, $repository->getObjectStateService() ),
-        'application/vnd.ez.api.ObjectStateCreate'      => new Input\Parser\ObjectStateCreate( $urlHandler, $repository->getObjectStateService() ),
-        'application/vnd.ez.api.ObjectStateUpdate'      => new Input\Parser\ObjectStateUpdate( $urlHandler, $repository->getObjectStateService() ),
-        'application/vnd.ez.api.ContentObjectStates'    => new Input\Parser\ContentObjectStates( $urlHandler ),
-        'application/vnd.ez.api.ObjectState'            => new Input\Parser\ObjectState( $urlHandler ),
-    ) ),
+    new Common\Input\ParsingDispatcher(
+        array(
+            'application/vnd.ez.api.RoleInput'              => new Input\Parser\RoleInput( $urlHandler, $repository->getRoleService() ),
+            'application/vnd.ez.api.SectionInput'           => new Input\Parser\SectionInput( $urlHandler, $repository->getSectionService() ),
+            'application/vnd.ez.api.ContentUpdate'          => new Input\Parser\ContentUpdate( $urlHandler ),
+            'application/vnd.ez.api.PolicyCreate'           => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService() ),
+            'application/vnd.ez.api.PolicyUpdate'           => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService() ),
+            'application/vnd.ez.api.RoleAssignInput'        => new Input\Parser\RoleAssignInput( $urlHandler ),
+            'application/vnd.ez.api.LocationCreate'         => new Input\Parser\LocationCreate( $urlHandler, $repository->getLocationService() ),
+            'application/vnd.ez.api.LocationUpdate'         => new Input\Parser\LocationUpdate( $urlHandler, $repository->getLocationService() ),
+            'application/vnd.ez.api.ObjectStateGroupCreate' => new Input\Parser\ObjectStateGroupCreate( $urlHandler, $repository->getObjectStateService() ),
+            'application/vnd.ez.api.ObjectStateGroupUpdate' => new Input\Parser\ObjectStateGroupUpdate( $urlHandler, $repository->getObjectStateService() ),
+            'application/vnd.ez.api.ObjectStateCreate'      => new Input\Parser\ObjectStateCreate( $urlHandler, $repository->getObjectStateService() ),
+            'application/vnd.ez.api.ObjectStateUpdate'      => new Input\Parser\ObjectStateUpdate( $urlHandler, $repository->getObjectStateService() ),
+            'application/vnd.ez.api.ContentObjectStates'    => new Input\Parser\ContentObjectStates( $urlHandler ),
+            'application/vnd.ez.api.ObjectState'            => new Input\Parser\ObjectState( $urlHandler ),
+        )
+    ),
     $handler
 );
 
@@ -218,13 +220,13 @@ $valueObjectVisitors = array(
     ),
 
     // ContentType
-    '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' => new Output\ValueObjectVisitor\ContentType(
+    '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'      => new Output\ValueObjectVisitor\ContentType(
         $urlHandler
     ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\FieldDefinitionList' => new Output\ValueObjectVisitor\FieldDefinitionList(
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\FieldDefinitionList'        => new Output\ValueObjectVisitor\FieldDefinitionList(
         $urlHandler
     ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestFieldDefinition' => new Output\ValueObjectVisitor\RestFieldDefinition(
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestFieldDefinition'        => new Output\ValueObjectVisitor\RestFieldDefinition(
         $urlHandler,
         new Common\Output\FieldTypeSerializer( $repository->getFieldTypeService() )
     ),
@@ -291,175 +293,182 @@ $valueObjectVisitors = array(
  */
 
 $dispatcher = new AuthenticatingDispatcher(
-    new RMF\Router\Regexp( array(
+    new RMF\Router\Regexp(
+        array(
+            // /content/sections
 
-    // /content/sections
+            '(^/content/sections$)' => array(
+                'GET'  => array( $sectionController, 'listSections' ),
+                'POST' => array( $sectionController, 'createSection' ),
+            ),
+            '(^/content/sections\?identifier=.*$)' => array(
+                'GET'  => array( $sectionController, 'loadSectionByIdentifier' ),
+            ),
+            '(^/content/sections/[0-9]+$)' => array(
+                'GET'    => array( $sectionController, 'loadSection' ),
+                'PATCH'  => array( $sectionController, 'updateSection' ),
+                'DELETE' => array( $sectionController, 'deleteSection' ),
+            ),
 
-        '(^/content/sections$)' => array(
-            'GET'  => array( $sectionController, 'listSections' ),
-            'POST' => array( $sectionController, 'createSection' ),
-        ),
-        '(^/content/sections\?identifier=.*$)' => array(
-            'GET'  => array( $sectionController, 'loadSectionByIdentifier' ),
-        ),
-        '(^/content/sections/[0-9]+$)' => array(
-            'GET'    => array( $sectionController, 'loadSection' ),
-            'PATCH'  => array( $sectionController, 'updateSection' ),
-            'DELETE' => array( $sectionController, 'deleteSection' ),
-        ),
+            // /content/objects
 
-    // /content/objects
+            '(^/content/objects\?remoteId=[0-9a-z]+$)' => array(
+                'GET'   => array( $contentController, 'loadContentInfoByRemoteId' ),
+            ),
+            '(^/content/objects/[0-9]+$)' => array(
+                'PATCH' => array( $contentController, 'updateContentMetadata' ),
+                'GET' => array( $contentController, 'loadContent' )
+            ),
+            '(^/content/objects/[0-9]+/versions/[0-9]+$)' => array(
+                'GET' => array( $contentController, 'loadContentInVersion' ),
+            ),
+            '(^/content/objects/[0-9]+/currentversion$)' => array(
+                'GET' => array( $contentController, 'redirectCurrentVersion' )
+            ),
+            '(^/content/objects/[0-9]+/locations$)' => array(
+                'GET' => array( $locationController, 'loadLocationsForContent' ),
+                'POST' => array( $locationController, 'createLocation' ),
+            ),
+            '(^/content/objects/[0-9]+/objectstates$)' => array(
+                'GET' => array( $objectStateController, 'getObjectStatesForContent' ),
+                'PATCH' => array( $objectStateController, 'setObjectStatesForContent' ),
+            ),
 
-        '(^/content/objects\?remoteId=[0-9a-z]+$)' => array(
-            'GET'   => array( $contentController, 'loadContentInfoByRemoteId' ),
-        ),
-        '(^/content/objects/[0-9]+$)' => array(
-            'PATCH' => array( $contentController, 'updateContentMetadata' ),
-            'GET' => array( $contentController, 'loadContent' )
-        ),
-        '(^/content/objects/[0-9]+/versions/[0-9+]$)' => array(
-            'GET' => array( $contentController, 'loadContentInVersion' ),
-        ),
-        '(^/content/objects/[0-9]+/currentversion$)' => array(
-            'GET' => array( $contentController, 'redirectCurrentVersion' )
-        ),
-        '(^/content/objects/[0-9]+/locations$)' => array(
-            'GET' => array( $locationController, 'loadLocationsForContent' ),
-            'POST' => array( $locationController, 'createLocation' ),
-        ),
-        '(^/content/objects/[0-9]+/objectstates$)' => array(
-            'GET' => array( $objectStateController, 'getObjectStatesForContent' ),
-            'PATCH' => array( $objectStateController, 'setObjectStatesForContent' ),
-        ),
+            // /content/objectstategroups
 
-    // /content/objectstategroups
+            '(^/content/objectstategroups$)' => array(
+                'GET' => array( $objectStateController, 'loadObjectStateGroups' ),
+                'POST' => array( $objectStateController, 'createObjectStateGroup' ),
+            ),
+            '(^/content/objectstategroups/[0-9]+$)' => array(
+                'GET' => array( $objectStateController, 'loadObjectStateGroup' ),
+                'PATCH' => array( $objectStateController, 'updateObjectStateGroup' ),
+                'DELETE' => array( $objectStateController, 'deleteObjectStateGroup' ),
+            ),
+            '(^/content/objectstategroups/[0-9]+/objectstates$)' => array(
+                'GET' => array( $objectStateController, 'loadObjectStates' ),
+                'POST' => array( $objectStateController, 'createObjectState' ),
+            ),
+            '(^/content/objectstategroups/[0-9]+/objectstates/[0-9]+$)' => array(
+                'GET' => array( $objectStateController, 'loadObjectState' ),
+                'PATCH' => array( $objectStateController, 'updateObjectState' ),
+                'DELETE' => array( $objectStateController, 'deleteObjectState' ),
+            ),
 
-        '(^/content/objectstategroups$)' => array(
-            'GET' => array( $objectStateController, 'loadObjectStateGroups' ),
-            'POST' => array( $objectStateController, 'createObjectStateGroup' ),
-        ),
-        '(^/content/objectstategroups/[0-9]+$)' => array(
-            'GET' => array( $objectStateController, 'loadObjectStateGroup' ),
-            'PATCH' => array( $objectStateController, 'updateObjectStateGroup' ),
-            'DELETE' => array( $objectStateController, 'deleteObjectStateGroup' ),
-        ),
-        '(^/content/objectstategroups/[0-9]+/objectstates$)' => array(
-            'GET' => array( $objectStateController, 'loadObjectStates' ),
-            'POST' => array( $objectStateController, 'createObjectState' ),
-        ),
-        '(^/content/objectstategroups/[0-9]+/objectstates/[0-9]+$)' => array(
-            'GET' => array( $objectStateController, 'loadObjectState' ),
-            'PATCH' => array( $objectStateController, 'updateObjectState' ),
-            'DELETE' => array( $objectStateController, 'deleteObjectState' ),
-        ),
+            // content/locations
 
-    // content/locations
+            '(^/content/locations\?remoteId=[0-9a-z]+$)' => array(
+                'GET' => array( $locationController, 'loadLocationByRemoteId' ),
+            ),
+            '(^/content/locations/[0-9/]+$)' => array(
+                'GET'    => array( $locationController, 'loadLocation' ),
+                'PATCH'  => array( $locationController, 'updateLocation' ),
+                'DELETE' => array( $locationController, 'deleteSubtree' ),
+                'COPY'   => array( $locationController, 'copySubtree' ),
+                'MOVE'   => array( $locationController, 'moveSubtree' ),
+                'SWAP'   => array( $locationController, 'swapLocation' ),
+            ),
+            '(^/content/locations/[0-9/]+/children$)' => array(
+                'GET'    => array( $locationController, 'loadLocationChildren' ),
+            ),
 
-        '(^/content/locations\?remoteId=[0-9a-z]+$)' => array(
-            'GET' => array( $locationController, 'loadLocationByRemoteId' ),
-        ),
-        '(^/content/locations/[0-9/]+$)' => array(
-            'GET'    => array( $locationController, 'loadLocation' ),
-            'PATCH'  => array( $locationController, 'updateLocation' ),
-            'DELETE' => array( $locationController, 'deleteSubtree' ),
-            'COPY'   => array( $locationController, 'copySubtree' ),
-            'MOVE'   => array( $locationController, 'moveSubtree' ),
-            'SWAP'   => array( $locationController, 'swapLocation' ),
-        ),
-        '(^/content/locations/[0-9/]+/children$)' => array(
-            'GET'    => array( $locationController, 'loadLocationChildren' ),
-        ),
+            // /content/types
 
-    // /content/types
+            '(^/content/types/[0-9]+$)' => array(
+                'GET'   => array( $contentTypeController, 'loadContentType' ),
+            ),
+            '(^/content/types/[0-9]+/fieldDefinitions$)' => array(
+                'GET'   => array( $contentTypeController, 'loadFieldDefinitionList' ),
+            ),
+            '(^/content/types/[0-9]+/fieldDefinitions/[0-9]+$)' => array(
+                'GET'   => array( $contentTypeController, 'loadFieldDefinition' ),
+            ),
 
-        '(^/content/types/[0-9]+$)' => array(
-            'GET'   => array( $contentTypeController, 'loadContentType' ),
-        ),
-        '(^/content/types/[0-9]+/fieldDefinitions$)' => array(
-            'GET'   => array( $contentTypeController, 'loadFieldDefinitionList' ),
-        ),
-        '(^/content/types/[0-9]+/fieldDefinitions/[0-9]+$)' => array(
-            'GET'   => array( $contentTypeController, 'loadFieldDefinition' ),
-        ),
+            // /content/trash
 
-    // /content/trash
+            '(^/content/trash$)' => array(
+                'GET'    => array( $trashController, 'loadTrashItems' ),
+                'DELETE' => array( $trashController, 'emptyTrash' ),
+            ),
+            '(^/content/trash/[0-9]+$)' => array(
+                'GET'    => array( $trashController, 'loadTrashItem' ),
+                'DELETE' => array( $trashController, 'deleteTrashItem' ),
+                'MOVE'   => array( $trashController, 'restoreTrashItem' ),
+            ),
 
-        '(^/content/trash$)' => array(
-            'GET'    => array( $trashController, 'loadTrashItems' ),
-            'DELETE' => array( $trashController, 'emptyTrash' ),
-        ),
-        '(^/content/trash/[0-9]+$)' => array(
-            'GET'    => array( $trashController, 'loadTrashItem' ),
-            'DELETE' => array( $trashController, 'deleteTrashItem' ),
-            'MOVE'   => array( $trashController, 'restoreTrashItem' ),
-        ),
+            // /user
 
-    // /user
-
-        '(^/user/policies\?userId=[0-9]+$)' => array(
-            'GET' => array( $roleController, 'listPoliciesForUser' ),
-        ),
-        '(^/user/roles$)' => array(
-            'GET' => array( $roleController, 'listRoles' ),
-            'POST' => array( $roleController, 'createRole' ),
-        ),
-        '(^/user/roles\?identifier=.*$)' => array(
-            'GET'  => array( $roleController, 'loadRoleByIdentifier' ),
-        ),
-        '(^/user/roles/[0-9]+$)' => array(
-            'GET'    => array( $roleController, 'loadRole' ),
-            'PATCH'  => array( $roleController, 'updateRole' ),
-            'DELETE' => array( $roleController, 'deleteRole' ),
-        ),
-        '(^/user/roles/[0-9]+/policies$)' => array(
-            'GET'    => array( $roleController, 'loadPolicies' ),
-            'POST'   => array( $roleController, 'addPolicy' ),
-            'DELETE' => array( $roleController, 'deletePolicies' ),
-        ),
-        '(^/user/roles/[0-9]+/policies/[0-9]+$)' => array(
-            'GET'    => array( $roleController, 'loadPolicy' ),
-            'PATCH'  => array( $roleController, 'updatePolicy' ),
-            'DELETE' => array( $roleController, 'deletePolicy' ),
-        ),
-        '(^/user/users/[0-9]+/roles$)' => array(
-            'GET'  => array( $roleController, 'loadRoleAssignmentsForUser' ),
-            'POST'  => array( $roleController, 'assignRoleToUser' ),
-        ),
-        '(^/user/users/[0-9]+/roles/[0-9]+$)' => array(
-            'DELETE'  => array( $roleController, 'unassignRoleFromUser' ),
-        ),
-        '(^/user/groups/[0-9/]+/roles$)' => array(
-            'GET'  => array( $roleController, 'loadRoleAssignmentsForUserGroup' ),
-            'POST'  => array( $roleController, 'assignRoleToUserGroup' ),
-        ),
-        '(^/user/groups/[0-9/]+/roles/[0-9]+$)' => array(
-            'DELETE'  => array( $roleController, 'unassignRoleFromUserGroup' ),
-        ),
-    ) ),
-    new RMF\View\AcceptHeaderViewDispatcher( array(
-        '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+json$)' => ( $jsonVisitor = new View\Visitor(
-            new Common\Output\Visitor(
-                new Common\Output\Generator\Json(
-                    new Common\Output\Generator\Json\FieldTypeHashGenerator()
-                ),
-                $valueObjectVisitors
-            )
-        ) ),
-        '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+xml$)'  => ( $xmlVisitor = new View\Visitor(
-            new Common\Output\Visitor(
-                new Common\Output\Generator\Xml(
-                    new Common\Output\Generator\Xml\FieldTypeHashGenerator()
-                ),
-                $valueObjectVisitors
-            )
-        ) ),
-        '(^application/json$)'  => $jsonVisitor,
-        '(^application/xml$)'  => $xmlVisitor,
-        // '(^.*/.*$)'  => new View\InvalidApiUse(),
-        // Fall back gracefully to XML visiting. Also helps support responses
-        // without Accept header (e.g. DELETE requests).
-        '(^.*/.*$)'  => $xmlVisitor,
-    ) ),
+            '(^/user/policies\?userId=[0-9]+$)' => array(
+                'GET' => array( $roleController, 'listPoliciesForUser' ),
+            ),
+            '(^/user/roles$)' => array(
+                'GET' => array( $roleController, 'listRoles' ),
+                'POST' => array( $roleController, 'createRole' ),
+            ),
+            '(^/user/roles\?identifier=.*$)' => array(
+                'GET'  => array( $roleController, 'loadRoleByIdentifier' ),
+            ),
+            '(^/user/roles/[0-9]+$)' => array(
+                'GET'    => array( $roleController, 'loadRole' ),
+                'PATCH'  => array( $roleController, 'updateRole' ),
+                'DELETE' => array( $roleController, 'deleteRole' ),
+            ),
+            '(^/user/roles/[0-9]+/policies$)' => array(
+                'GET'    => array( $roleController, 'loadPolicies' ),
+                'POST'   => array( $roleController, 'addPolicy' ),
+                'DELETE' => array( $roleController, 'deletePolicies' ),
+            ),
+            '(^/user/roles/[0-9]+/policies/[0-9]+$)' => array(
+                'GET'    => array( $roleController, 'loadPolicy' ),
+                'PATCH'  => array( $roleController, 'updatePolicy' ),
+                'DELETE' => array( $roleController, 'deletePolicy' ),
+            ),
+            '(^/user/users/[0-9]+/roles$)' => array(
+                'GET'  => array( $roleController, 'loadRoleAssignmentsForUser' ),
+                'POST'  => array( $roleController, 'assignRoleToUser' ),
+            ),
+            '(^/user/users/[0-9]+/roles/[0-9]+$)' => array(
+                'DELETE'  => array( $roleController, 'unassignRoleFromUser' ),
+            ),
+            '(^/user/groups/[0-9/]+/roles$)' => array(
+                'GET'  => array( $roleController, 'loadRoleAssignmentsForUserGroup' ),
+                'POST'  => array( $roleController, 'assignRoleToUserGroup' ),
+            ),
+            '(^/user/groups/[0-9/]+/roles/[0-9]+$)' => array(
+                'DELETE'  => array( $roleController, 'unassignRoleFromUserGroup' ),
+            ),
+        )
+    ),
+    new RMF\View\AcceptHeaderViewDispatcher(
+        array(
+            '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+json$)' => (
+                $jsonVisitor = new View\Visitor(
+                    new Common\Output\Visitor(
+                        new Common\Output\Generator\Json(
+                            new Common\Output\Generator\Json\FieldTypeHashGenerator()
+                        ),
+                        $valueObjectVisitors
+                    )
+                )
+            ),
+            '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+xml$)'  => (
+                $xmlVisitor = new View\Visitor(
+                    new Common\Output\Visitor(
+                        new Common\Output\Generator\Xml(
+                            new Common\Output\Generator\Xml\FieldTypeHashGenerator()
+                        ),
+                        $valueObjectVisitors
+                    )
+                )
+            ),
+            '(^application/json$)'  => $jsonVisitor,
+            '(^application/xml$)'  => $xmlVisitor,
+            // '(^.*/.*$)'  => new View\InvalidApiUse(),
+            // Fall back gracefully to XML visiting. Also helps support responses
+            // without Accept header (e.g. DELETE requests).
+            '(^.*/.*$)'  => $xmlVisitor,
+        )
+    ),
     // This is just used for integration tests, DO NOT USE IN PRODUCTION
     new Authenticator\IntegrationTest( $repository )
     // For productive use, e.g. use
@@ -474,16 +483,27 @@ $dispatcher = new AuthenticatingDispatcher(
 
 $request = new RMF\Request\HTTP();
 $request->addHandler( 'body', new RMF\Request\PropertyHandler\RawBody() );
-$request->addHandler( 'contentType', new RMF\Request\PropertyHandler\Override( array(
-    new RMF\Request\PropertyHandler\Server( 'CONTENT_TYPE' ),
-    new RMF\Request\PropertyHandler\Server( 'HTTP_CONTENT_TYPE' ),
-) ) );
-$request->addHandler( 'method', new RMF\Request\PropertyHandler\Override( array(
-    new RMF\Request\PropertyHandler\Server( 'HTTP_X_HTTP_METHOD_OVERRIDE' ),
-    new RMF\Request\PropertyHandler\Server( 'REQUEST_METHOD' ),
-) ) );
 
-// ATTENTION: Only used for test setup
+$request->addHandler(
+    'contentType',
+    new RMF\Request\PropertyHandler\Override(
+        array(
+            new RMF\Request\PropertyHandler\Server( 'CONTENT_TYPE' ),
+            new RMF\Request\PropertyHandler\Server( 'HTTP_CONTENT_TYPE' ),
+        )
+    )
+);
+
+$request->addHandler(
+    'method',
+    new RMF\Request\PropertyHandler\Override(
+        array(
+            new RMF\Request\PropertyHandler\Server( 'HTTP_X_HTTP_METHOD_OVERRIDE' ),
+            new RMF\Request\PropertyHandler\Server( 'REQUEST_METHOD' ),
+        )
+    )
+);
+
 $request->addHandler( 'destination', new RMF\Request\PropertyHandler\Server( 'HTTP_DESTINATION' ) );
 
 // ATTENTION: Only used for test setup

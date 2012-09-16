@@ -31,4 +31,3 @@ class SectionList
         $this->sections = $sections;
     }
 }
-

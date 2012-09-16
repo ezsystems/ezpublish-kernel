@@ -40,4 +40,3 @@ class LocationList
         $this->path = $path;
     }
 }
-

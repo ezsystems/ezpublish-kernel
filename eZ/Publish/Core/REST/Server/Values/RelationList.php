@@ -31,6 +31,7 @@ class RelationList
     /**
      * Construct
      *
+     * @param mixed $contentId
      * @param array $relations
      */
     public function __construct( $contentId, array $relations )
