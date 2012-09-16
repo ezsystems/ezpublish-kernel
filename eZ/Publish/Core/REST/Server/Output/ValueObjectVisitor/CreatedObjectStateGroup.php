@@ -37,4 +37,3 @@ class CreatedObjectStateGroup extends ObjectStateGroup
         $visitor->setStatus( 201 );
     }
 }
-

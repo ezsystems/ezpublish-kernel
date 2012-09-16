@@ -40,4 +40,3 @@ class CreatedPolicy extends Policy
         $visitor->setStatus( 201 );
     }
 }
-

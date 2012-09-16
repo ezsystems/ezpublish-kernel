@@ -100,4 +100,3 @@ class Relation extends ValueObjectVisitor
         throw new \Exception( 'Unknown relation type ' . $relationType . '.' );
     }
 }
-

@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ContentInfo ValueObjectVisitor class
+ * File containing the RestContent ValueObjectVisitor class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -14,7 +14,7 @@ use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
- * Visits the RestContent value object
+ * RestContent value object visitor
  */
 class RestContent extends ValueObjectVisitor
 {
@@ -150,4 +150,3 @@ class RestContent extends ValueObjectVisitor
         $generator->endObjectElement( 'Content' );
     }
 }
-

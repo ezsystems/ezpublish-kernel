@@ -16,7 +16,7 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 
 /**
- * REST user role assignment value object visitor
+ * RestUserRoleAssignment value object visitor
  */
 class RestUserRoleAssignment extends ValueObjectVisitor
 {

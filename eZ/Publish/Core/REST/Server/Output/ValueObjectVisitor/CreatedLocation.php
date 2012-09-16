@@ -37,4 +37,3 @@ class CreatedLocation extends Location
         $visitor->setStatus( 201 );
     }
 }
-

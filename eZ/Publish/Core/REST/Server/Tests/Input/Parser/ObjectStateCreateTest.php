@@ -14,7 +14,7 @@ use eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateCreate;
 class ObjectStateCreateTest extends BaseTest
 {
     /**
-     * Tests the ObjectStateCreateTest parser
+     * Tests the ObjectStateCreate parser
      */
     public function testParse()
     {

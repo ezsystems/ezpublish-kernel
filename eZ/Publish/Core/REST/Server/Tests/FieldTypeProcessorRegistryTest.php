@@ -60,7 +60,7 @@ class FieldTypeProcessorRegistryTest extends BaseTest
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function testGetProcessorNotFoundException()
     {

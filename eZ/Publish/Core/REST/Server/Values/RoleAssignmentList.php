@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Values;
 
 /**
- * Role assignment list view model
+ * RoleAssignment list view model
  */
 class RoleAssignmentList
 {

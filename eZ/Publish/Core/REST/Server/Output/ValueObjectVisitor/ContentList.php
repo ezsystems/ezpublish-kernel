@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ContentList visitor class
+ * File containing the ContentList ValueObjectVisitor class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -46,4 +46,3 @@ class ContentList extends ValueObjectVisitor
         $generator->endObjectElement( 'ContentList' );
     }
 }
-

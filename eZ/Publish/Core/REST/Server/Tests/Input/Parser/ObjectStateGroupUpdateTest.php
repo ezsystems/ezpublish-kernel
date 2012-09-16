@@ -14,7 +14,7 @@ use eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateGroupUpdate;
 class ObjectStateGroupUpdateTest extends BaseTest
 {
     /**
-     * Tests the ObjectStateGroupUpdateTest parser
+     * Tests the ObjectStateGroupUpdate parser
      */
     public function testParse()
     {

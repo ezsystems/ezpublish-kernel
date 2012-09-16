@@ -15,7 +15,7 @@ use eZ\Publish\Core\REST\Common\Values\SectionIncludingContentMetadataUpdateStru
 class ContentUpdateTest extends BaseTest
 {
     /**
-     * Test the parser for SectionIncludingContentMetadataUpdateStruct
+     * Test the parser for ContentUpdate
      *
      * @return \eZ\Publish\Core\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct
      */
@@ -108,7 +108,7 @@ class ContentUpdateTest extends BaseTest
     /**
      * Test for missing Section element throws exception
      *
-     * @expectedException eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing <Section> element in <ContentUpdate>.
      */
     public function testParseFailureMissingSection()
@@ -127,7 +127,7 @@ class ContentUpdateTest extends BaseTest
     /**
      * Test for invalid Section _href attribute throws exception
      *
-     * @expectedException eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Invalid format for <Section> reference in <ContentUpdate>.
      */
     public function testParseFailureInvalidSectionHref()
@@ -146,7 +146,7 @@ class ContentUpdateTest extends BaseTest
     /**
      * Test for missing Owner element throws exception
      *
-     * @expectedException eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing <Owner> element in <ContentUpdate>.
      */
     public function testParseFailureMissingOwner()
@@ -165,7 +165,7 @@ class ContentUpdateTest extends BaseTest
     /**
      * Test for invalid Owner _href attribute throws exception
      *
-     * @expectedException eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Invalid format for <Owner> reference in <ContentUpdate>.
      */
     public function testParseFailureInvalidOwnerHref()

@@ -20,7 +20,7 @@ use eZ\Publish\Core\Repository\Values;
 class FieldDefinitionListTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * @return DOMDocument
+     * @return \DOMDocument
      */
     public function testVisitFieldDefinitionList()
     {
@@ -83,8 +83,8 @@ class FieldDefinitionListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
+     * @param string $xpath
      * @param \DOMDocument $dom
-     * @return void
      * @depends testVisitFieldDefinitionList
      * @dataProvider provideXpathAssertions
      */
@@ -92,7 +92,6 @@ class FieldDefinitionListTest extends ValueObjectVisitorBaseTest
     {
         $this->assertXPath( $dom, $xpath );
     }
-
 
     /**
      * Get the Content visitor

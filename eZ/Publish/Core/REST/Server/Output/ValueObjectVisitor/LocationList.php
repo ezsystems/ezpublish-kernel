@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the LocationList visitor class
+ * File containing the LocationList ValueObjectVisitor class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -51,4 +51,3 @@ class LocationList extends ValueObjectVisitor
         $generator->endObjectElement( 'LocationList' );
     }
 }
-

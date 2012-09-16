@@ -32,7 +32,7 @@ class IntegrationTestTest extends BaseTest
     /**
      * @return void
      */
-    public function testAuthnticate()
+    public function testAuthenticate()
     {
         $auth = new IntegrationTest( $this->getRepositoryMock() );
 
@@ -85,7 +85,7 @@ class IntegrationTestTest extends BaseTest
     }
 
     /**
-     * @return eZ\Publish\API\Repository\UserService
+     * @return \eZ\Publish\API\Repository\UserService
      */
     protected function getUserServiceMock()
     {

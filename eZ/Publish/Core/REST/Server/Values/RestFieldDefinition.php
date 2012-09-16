@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 
 /**
- * FieldDefinition view model
+ * RestFieldDefinition view model
  */
 class RestFieldDefinition
 {

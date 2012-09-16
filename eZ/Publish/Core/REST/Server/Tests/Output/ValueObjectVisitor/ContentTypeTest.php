@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-use eZ\Publish\Core\REST\Server\Values\ContentType;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values;
@@ -18,7 +17,7 @@ use eZ\Publish\Core\REST\Common;
 class ContentTypeTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * @return DOMDocument
+     * @return \DOMDocument
      */
     public function testVisitDefinedType()
     {

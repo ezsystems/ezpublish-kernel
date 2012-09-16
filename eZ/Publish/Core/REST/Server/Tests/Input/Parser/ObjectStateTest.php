@@ -14,7 +14,7 @@ use eZ\Publish\Core\REST\Server\Input\Parser\ObjectState;
 class ObjectStateTest extends BaseTest
 {
     /**
-     * Tests the ObjectStatTest parser
+     * Tests the ObjectStat parser
      */
     public function testParse()
     {

@@ -18,7 +18,7 @@ use eZ\Publish\Core\REST\Common;
 class RestContentTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * @return DOMDocument
+     * @return \DOMDocument
      */
     public function testVisitWithoutEmbeddedVersion()
     {
@@ -297,7 +297,7 @@ class RestContentTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * @return DOMDocument
+     * @return \DOMDocument
      */
     public function testVisitWithEmbeddedVersion()
     {

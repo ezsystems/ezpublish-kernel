@@ -48,4 +48,3 @@ class Section extends ValueObjectVisitor
         $generator->endObjectElement( 'Section' );
     }
 }
-

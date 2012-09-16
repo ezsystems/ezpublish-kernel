@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Parser class
+ * File containing the RoleInput parser class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -14,7 +14,7 @@ use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\RoleService;
 
 /**
- * Base class for input parser
+ * Parser for RoleInput
  */
 class RoleInput extends Base
 {
@@ -54,4 +54,3 @@ class RoleInput extends Base
         return $this->roleService->newRoleCreateStruct( $data['identifier'] );
     }
 }
-

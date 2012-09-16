@@ -40,4 +40,3 @@ class CreatedObjectState extends RestObjectState
         $visitor->setStatus( 201 );
     }
 }
-

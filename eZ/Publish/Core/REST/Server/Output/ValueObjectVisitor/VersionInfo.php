@@ -115,4 +115,3 @@ class VersionInfo extends ValueObjectVisitor
         throw new \Exception( 'Undefined version status: ' . $status );
     }
 }
-

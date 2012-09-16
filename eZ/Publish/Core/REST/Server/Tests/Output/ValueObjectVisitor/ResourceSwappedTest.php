@@ -17,7 +17,7 @@ use eZ\Publish\Core\REST\Common;
 class ResourceSwappedTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the ResourceRedirect visitor
+     * Test the ResourceSwapped visitor
      *
      * @return string
      */

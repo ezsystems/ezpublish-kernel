@@ -16,22 +16,22 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 /**
  * REST Content, as received by /content/objects/<ID>
  *
- * Might have a "Version" (aka Content in the PAPI) embedded
+ * Might have a "Version" (aka Content in the Public API) embedded
  */
 class RestContent
 {
     /**
-     * @var eZ\Publish\API\Repository\Values\Content\ContentInfo
+     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
     public $contentInfo;
 
     /**
-     * @var eZ\Publish\API\Repository\Values\Content\Location
+     * @var \eZ\Publish\API\Repository\Values\Content\Location
      */
     public $mainLocation;
 
     /**
-     * @var eZ\Publish\API\Repository\Values\Content\Content
+     * @var \eZ\Publish\API\Repository\Values\Content\Content
      */
     public $currentVersion;
 

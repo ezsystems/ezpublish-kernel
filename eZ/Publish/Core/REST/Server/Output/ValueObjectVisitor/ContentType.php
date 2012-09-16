@@ -206,4 +206,3 @@ class ContentType extends ContentTypeBase
         throw new \RuntimeException( "Unknown default sort order: '{$defaultSortOrder}'." );
     }
 }
-

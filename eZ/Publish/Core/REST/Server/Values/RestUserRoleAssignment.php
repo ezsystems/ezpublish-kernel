@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\API\Repository\Values\User\UserRoleAssignment;
 
 /**
- * RestUserRoleAssignment assignment view model
+ * RestUserRoleAssignment view model
  */
 class RestUserRoleAssignment
 {

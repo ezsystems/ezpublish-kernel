@@ -33,7 +33,7 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * @return DOMDocument
+     * @return \DOMDocument
      */
     public function testVisitRestFieldDefinition()
     {
@@ -126,8 +126,8 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
+     * @param string $xpath
      * @param \DOMDocument $dom
-     * @return void
      * @depends testVisitRestFieldDefinition
      * @dataProvider provideXpathAssertions
      */

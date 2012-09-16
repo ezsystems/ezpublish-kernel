@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Values;
 
 /**
- * ObjectStateList view model
+ * ObjectState list view model
  */
 class ObjectStateList
 {

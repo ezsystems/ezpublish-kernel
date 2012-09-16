@@ -17,7 +17,7 @@ use eZ\Publish\Core\REST\Common;
 class ResourceDeletedTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the ResourceRedirect visitor
+     * Test the ResourceDeleted visitor
      *
      * @return string
      */
