@@ -189,76 +189,16 @@ class ObjectStateUpdateTest extends BaseTest
     }
 
     /**
-     * Test ObjectStateUpdate parser throwing exception on invalid names structure with missing language code
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing '_languageCode' attribute for ObjectStateUpdate name.
-     */
-    public function testParseExceptionOnInvalidNamesNoLanguageCode()
-    {
-        $inputArray = array(
-            'identifier' => 'test-state',
-            'defaultLanguageCode' => 'eng-GB',
-            'names' => array(
-                'value' => array(
-                    array(
-                        '#text' => 'Test state'
-                    )
-                )
-            ),
-            'descriptions' => array(
-                'value' => array(
-                    array(
-                        '_languageCode' => 'eng-GB',
-                        '#text' => 'Test description'
-                    )
-                )
-            )
-        );
-
-        $objectStateUpdate = $this->getObjectStateUpdate();
-        $objectStateUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
-    }
-
-    /**
-     * Test ObjectStateUpdate parser throwing exception on invalid names structure with missing value
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing value for ObjectStateUpdate name.
-     */
-    public function testParseExceptionOnInvalidNamesNoValue()
-    {
-        $inputArray = array(
-            'identifier' => 'test-state',
-            'defaultLanguageCode' => 'eng-GB',
-            'names' => array(
-                'value' => array(
-                    array(
-                        '_languageCode' => 'eng-GB'
-                    )
-                )
-            ),
-            'descriptions' => array(
-                'value' => array(
-                    array(
-                        '_languageCode' => 'eng-GB',
-                        '#text' => 'Test description'
-                    )
-                )
-            )
-        );
-
-        $objectStateUpdate = $this->getObjectStateUpdate();
-        $objectStateUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
-    }
-
-    /**
      * Returns the ObjectStateUpdate parser
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateUpdate
      */
     protected function getObjectStateUpdate()
     {
-        return new ObjectStateUpdate( $this->getUrlHandler(), $this->getRepository()->getObjectStateService() );
+        return new ObjectStateUpdate(
+            $this->getUrlHandler(),
+            $this->getRepository()->getObjectStateService(),
+            $this->getParserTools()
+        );
     }
 }

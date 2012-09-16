@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\ObjectStateService;
 
@@ -26,15 +27,22 @@ class ObjectStateGroupUpdate extends Base
     protected $objectStateService;
 
     /**
+     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
+     */
+    protected $parserTools;
+
+    /**
      * Construct from object state service
      *
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\ObjectStateService $objectStateService
+     * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( UrlHandler $urlHandler, ObjectStateService $objectStateService )
+    public function __construct( UrlHandler $urlHandler, ObjectStateService $objectStateService, ParserTools $parserTools )
     {
         parent::__construct( $urlHandler );
         $this->objectStateService = $objectStateService;
+        $this->parserTools = $parserTools;
     }
 
     /**
@@ -70,40 +78,10 @@ class ObjectStateGroupUpdate extends Base
         $objectStateGroupUpdateStruct->identifier = $data['identifier'];
         $objectStateGroupUpdateStruct->defaultLanguageCode = $data['defaultLanguageCode'];
 
-        foreach ( $data['names']['value'] as $nameData )
-        {
-            if ( !array_key_exists( '_languageCode', $nameData ) )
-            {
-                throw new Exceptions\Parser( "Missing '_languageCode' attribute for ObjectStateGroupUpdate name." );
-            }
-
-            if ( !array_key_exists( '#text', $nameData ) )
-            {
-                throw new Exceptions\Parser( "Missing value for ObjectStateGroupUpdate name." );
-            }
-
-            $objectStateGroupUpdateStruct->names[$nameData['_languageCode']] = $nameData['#text'];
-        }
-
+        $objectStateGroupUpdateStruct->names = $this->parserTools->parseTranslatableList( $data['names'] );
         if ( array_key_exists( 'descriptions', $data ) && is_array( $data['descriptions'] ) )
         {
-            if ( array_key_exists( 'value', $data['descriptions'] ) && is_array( $data['descriptions']['value'] ) )
-            {
-                foreach ( $data['descriptions']['value'] as $descriptionData )
-                {
-                    if ( !array_key_exists( '_languageCode', $descriptionData ) )
-                    {
-                        throw new Exceptions\Parser( "Missing '_languageCode' attribute for ObjectStateGroupUpdate description." );
-                    }
-
-                    if ( !array_key_exists( '#text', $descriptionData ) )
-                    {
-                        throw new Exceptions\Parser( "Missing value for ObjectStateGroupUpdate description." );
-                    }
-
-                    $objectStateGroupUpdateStruct->descriptions[$descriptionData['_languageCode']] = $descriptionData['#text'];
-                }
-            }
+            $objectStateGroupUpdateStruct->descriptions = $this->parserTools->parseTranslatableList( $data['descriptions'] );
         }
 
         return $objectStateGroupUpdateStruct;

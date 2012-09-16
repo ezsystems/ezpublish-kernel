@@ -189,76 +189,16 @@ class ObjectStateGroupUpdateTest extends BaseTest
     }
 
     /**
-     * Test ObjectStateGroupUpdate parser throwing exception on invalid names structure with missing language code
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing '_languageCode' attribute for ObjectStateGroupUpdate name.
-     */
-    public function testParseExceptionOnInvalidNamesNoLanguageCode()
-    {
-        $inputArray = array(
-            'identifier' => 'test-group',
-            'defaultLanguageCode' => 'eng-GB',
-            'names' => array(
-                'value' => array(
-                    array(
-                        '#text' => 'Test group'
-                    )
-                )
-            ),
-            'descriptions' => array(
-                'value' => array(
-                    array(
-                        '_languageCode' => 'eng-GB',
-                        '#text' => 'Test group description'
-                    )
-                )
-            )
-        );
-
-        $objectStateGroupUpdate = $this->getObjectStateGroupUpdate();
-        $objectStateGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
-    }
-
-    /**
-     * Test ObjectStateGroupUpdate parser throwing exception on invalid names structure with missing value
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing value for ObjectStateGroupUpdate name.
-     */
-    public function testParseExceptionOnInvalidNamesNoValue()
-    {
-        $inputArray = array(
-            'identifier' => 'test-group',
-            'defaultLanguageCode' => 'eng-GB',
-            'names' => array(
-                'value' => array(
-                    array(
-                        '_languageCode' => 'eng-GB'
-                    )
-                )
-            ),
-            'descriptions' => array(
-                'value' => array(
-                    array(
-                        '_languageCode' => 'eng-GB',
-                        '#text' => 'Test group description'
-                    )
-                )
-            )
-        );
-
-        $objectStateGroupUpdate = $this->getObjectStateGroupUpdate();
-        $objectStateGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
-    }
-
-    /**
      * Returns the ObjectStateGroupUpdate parser
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateGroupUpdate
      */
     protected function getObjectStateGroupUpdate()
     {
-        return new ObjectStateGroupUpdate( $this->getUrlHandler(), $this->getRepository()->getObjectStateService() );
+        return new ObjectStateGroupUpdate(
+            $this->getUrlHandler(),
+            $this->getRepository()->getObjectStateService(),
+            $this->getParserTools()
+        );
     }
 }

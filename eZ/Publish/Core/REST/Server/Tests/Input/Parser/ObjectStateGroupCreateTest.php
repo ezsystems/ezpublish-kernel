@@ -189,76 +189,16 @@ class ObjectStateGroupCreateTest extends BaseTest
     }
 
     /**
-     * Test ObjectStateGroupCreate parser throwing exception on invalid names structure with missing language code
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing '_languageCode' attribute for ObjectStateGroupCreate name.
-     */
-    public function testParseExceptionOnInvalidNamesNoLanguageCode()
-    {
-        $inputArray = array(
-            'identifier' => 'test-group',
-            'defaultLanguageCode' => 'eng-GB',
-            'names' => array(
-                'value' => array(
-                    array(
-                        '#text' => 'Test group'
-                    )
-                )
-            ),
-            'descriptions' => array(
-                'value' => array(
-                    array(
-                        '_languageCode' => 'eng-GB',
-                        '#text' => 'Test group description'
-                    )
-                )
-            )
-        );
-
-        $objectStateGroupCreate = $this->getObjectStateGroupCreate();
-        $objectStateGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
-    }
-
-    /**
-     * Test ObjectStateGroupCreate parser throwing exception on invalid names structure with missing value
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing value for ObjectStateGroupCreate name.
-     */
-    public function testParseExceptionOnInvalidNamesNoValue()
-    {
-        $inputArray = array(
-            'identifier' => 'test-group',
-            'defaultLanguageCode' => 'eng-GB',
-            'names' => array(
-                'value' => array(
-                    array(
-                        '_languageCode' => 'eng-GB'
-                    )
-                )
-            ),
-            'descriptions' => array(
-                'value' => array(
-                    array(
-                        '_languageCode' => 'eng-GB',
-                        '#text' => 'Test group description'
-                    )
-                )
-            )
-        );
-
-        $objectStateGroupCreate = $this->getObjectStateGroupCreate();
-        $objectStateGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
-    }
-
-    /**
      * Returns the ObjectStateGroupCreate parser
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateGroupCreate
      */
     protected function getObjectStateGroupCreate()
     {
-        return new ObjectStateGroupCreate( $this->getUrlHandler(), $this->getRepository()->getObjectStateService() );
+        return new ObjectStateGroupCreate(
+            $this->getUrlHandler(),
+            $this->getRepository()->getObjectStateService(),
+            $this->getParserTools()
+        );
     }
 }

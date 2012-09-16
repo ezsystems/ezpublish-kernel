@@ -233,78 +233,16 @@ class ObjectStateCreateTest extends BaseTest
     }
 
     /**
-     * Test ObjectStateCreate parser throwing exception on invalid names structure with missing language code
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing '_languageCode' attribute for ObjectStateCreate name.
-     */
-    public function testParseExceptionOnInvalidNamesNoLanguageCode()
-    {
-        $inputArray = array(
-            'identifier' => 'test-state',
-            'priority' => '0',
-            'defaultLanguageCode' => 'eng-GB',
-            'names' => array(
-                'value' => array(
-                    array(
-                        '#text' => 'Test state'
-                    )
-                )
-            ),
-            'descriptions' => array(
-                'value' => array(
-                    array(
-                        '_languageCode' => 'eng-GB',
-                        '#text' => 'Test description'
-                    )
-                )
-            )
-        );
-
-        $objectStateCreate = $this->getObjectStateCreate();
-        $objectStateCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
-    }
-
-    /**
-     * Test ObjectStateCreate parser throwing exception on invalid names structure with missing value
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing value for ObjectStateCreate name.
-     */
-    public function testParseExceptionOnInvalidNamesNoValue()
-    {
-        $inputArray = array(
-            'identifier' => 'test-state',
-            'priority' => '0',
-            'defaultLanguageCode' => 'eng-GB',
-            'names' => array(
-                'value' => array(
-                    array(
-                        '_languageCode' => 'eng-GB'
-                    )
-                )
-            ),
-            'descriptions' => array(
-                'value' => array(
-                    array(
-                        '_languageCode' => 'eng-GB',
-                        '#text' => 'Test description'
-                    )
-                )
-            )
-        );
-
-        $objectStateCreate = $this->getObjectStateCreate();
-        $objectStateCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
-    }
-
-    /**
      * Returns the ObjectStateCreate parser
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateCreate
      */
     protected function getObjectStateCreate()
     {
-        return new ObjectStateCreate( $this->getUrlHandler(), $this->getRepository()->getObjectStateService() );
+        return new ObjectStateCreate(
+            $this->getUrlHandler(),
+            $this->getRepository()->getObjectStateService(),
+            $this->getParserTools()
+        );
     }
 }
