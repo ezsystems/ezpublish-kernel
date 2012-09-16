@@ -178,7 +178,9 @@ $inputParsers = array(
     ),
     'application/vnd.ez.api.RoleAssignmentList'   => new Client\Input\Parser\RoleAssignmentList(),
     'application/vnd.ez.api.RoleAssignment'       => new Client\Input\Parser\RoleAssignment(),
-    'application/vnd.ez.api.Location'             => new Client\Input\Parser\Location(),
+    'application/vnd.ez.api.Location'             => new Client\Input\Parser\Location(
+        $parserTools
+    ),
     'application/vnd.ez.api.LocationList'         => new Client\Input\Parser\LocationList(),
     'application/vnd.ez.api.ObjectStateGroup'     => new Client\Input\Parser\ObjectStateGroup(
         $parserTools

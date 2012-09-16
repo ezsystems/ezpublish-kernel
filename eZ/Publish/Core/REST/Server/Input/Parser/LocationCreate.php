@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\LocationService;
 
@@ -26,15 +27,24 @@ class LocationCreate extends Base
     protected $locationService;
 
     /**
+     * Parser tools
+     *
+     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
+     */
+    protected $parserTools;
+
+    /**
      * Construct from location service
      *
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\LocationService $locationService
+     * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( UrlHandler $urlHandler, LocationService $locationService )
+    public function __construct( UrlHandler $urlHandler, LocationService $locationService, ParserTools $parserTools )
     {
         parent::__construct( $urlHandler );
         $this->locationService = $locationService;
+        $this->parserTools = $parserTools;
     }
 
     /**
@@ -85,10 +95,9 @@ class LocationCreate extends Base
 
         $locationCreateStruct->priority = (int) $data['priority'];
         $locationCreateStruct->hidden = $data['hidden'] === 'true' ? true : false;
-        $locationCreateStruct->sortField = constant( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location::SORT_FIELD_' . $data['sortField'] );
-        $locationCreateStruct->sortOrder = constant( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location::SORT_ORDER_' . $data['sortOrder'] );
+        $locationCreateStruct->sortField = $this->parserTools->parseDefaultSortField( $data['sortField'] );
+        $locationCreateStruct->sortOrder = $this->parserTools->parseDefaultSortOrder( $data['sortOrder'] );
 
         return $locationCreateStruct;
     }
 }
-

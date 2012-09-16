@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use eZ\Publish\Core\REST\Common\Input\ParserTools;
 
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 use eZ\Publish\Core\Repository\Values;
@@ -20,6 +21,19 @@ use eZ\Publish\Core\Repository\Values;
  */
 class Location extends Parser
 {
+    /**
+     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
+     */
+    protected $parserTools;
+
+    /**
+     * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
+     */
+    public function __construct( ParserTools $parserTools )
+    {
+        $this->parserTools = $parserTools;
+    }
+
     /**
      * Parse input structure
      *
@@ -47,8 +61,8 @@ class Location extends Parser
                 'pathString' => $data['pathString'],
                 'modifiedSubLocationDate' => $modifiedSubLocationDate,
                 'depth' => (int) $data['depth'],
-                'sortField' => constant( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location::SORT_FIELD_' . $data['sortField'] ),
-                'sortOrder' => constant( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location::SORT_ORDER_' . $data['sortOrder'] ),
+                'sortField' => $this->parserTools->parseDefaultSortField( $data['sortField'] ),
+                'sortOrder' => $this->parserTools->parseDefaultSortOrder( $data['sortOrder'] ),
                 'childCount' => (int) $data['childCount']
             )
         );

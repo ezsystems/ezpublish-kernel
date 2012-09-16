@@ -199,6 +199,10 @@ class LocationCreateTest extends BaseTest
      */
     protected function getLocationCreate()
     {
-        return new LocationCreate( $this->getUrlHandler(), $this->getRepository()->getLocationService() );
+        return new LocationCreate(
+            $this->getUrlHandler(),
+            $this->getRepository()->getLocationService(),
+            $this->getParserTools()
+        );
     }
 }

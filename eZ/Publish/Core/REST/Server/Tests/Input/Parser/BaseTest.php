@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input;
 
 /**
  * Base test for input parsers.
@@ -24,6 +25,11 @@ abstract class BaseTest extends \eZ\Publish\Core\REST\Server\Tests\BaseTest
      * @var \eZ\Publish\Core\REST\Common\UrlHandler\eZPublish
      */
     protected $urlHandler;
+
+    /**
+     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
+     */
+    protected $parserTools;
 
     /**
      * @var \eZ\Publish\API\Repository\Repository
@@ -62,6 +68,20 @@ abstract class BaseTest extends \eZ\Publish\Core\REST\Server\Tests\BaseTest
             $this->urlHandler = new UrlHandler\eZPublish;
         }
         return $this->urlHandler;
+    }
+
+    /**
+     * Get the parser tools
+     *
+     * @return \eZ\Publish\Core\REST\Common\Input\ParserTools;
+     */
+    protected function getParserTools()
+    {
+        if ( !isset( $this->parserTools ) )
+        {
+            $this->parserTools = new Input\ParserTools;
+        }
+        return $this->parserTools;
     }
 
     /**

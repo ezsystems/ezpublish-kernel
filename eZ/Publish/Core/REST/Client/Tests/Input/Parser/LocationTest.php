@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input\Parser;
+use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
 class LocationTest extends BaseTest
@@ -239,6 +240,6 @@ class LocationTest extends BaseTest
      */
     protected function getParser()
     {
-        return new Parser\Location();
+        return new Parser\Location( new ParserTools() );
     }
 }

@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\RoleService;
 
@@ -26,15 +27,24 @@ class PolicyCreate extends Base
     protected $roleService;
 
     /**
+     * Parser tools
+     *
+     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
+     */
+    protected $parserTools;
+
+    /**
      * Construct from role service
      *
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\RoleService $roleService
+     * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( UrlHandler $urlHandler, RoleService $roleService )
+    public function __construct( UrlHandler $urlHandler, RoleService $roleService, ParserTools $parserTools )
     {
         parent::__construct( $urlHandler );
         $this->roleService = $roleService;
+        $this->parserTools = $parserTools;
     }
 
     /**
@@ -73,7 +83,7 @@ class PolicyCreate extends Base
             foreach ( $data['limitations']['limitation'] as $limitationData )
             {
                 $policyCreate->addLimitation(
-                    $this->parseLimitation( $limitationData )
+                    $this->parserTools->parseLimitation( $limitationData )
                 );
             }
         }

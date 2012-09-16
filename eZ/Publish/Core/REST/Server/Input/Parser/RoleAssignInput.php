@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Exceptions;
 
 use eZ\Publish\Core\REST\Server\Values\RoleAssignment;
@@ -20,13 +21,22 @@ use eZ\Publish\Core\REST\Server\Values\RoleAssignment;
 class RoleAssignInput extends Base
 {
     /**
+     * Parser tools
+     *
+     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
+     */
+    protected $parserTools;
+
+    /**
      * Constructor
      *
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( UrlHandler $urlHandler )
+    public function __construct( UrlHandler $urlHandler, ParserTools $parserTools )
     {
         parent::__construct( $urlHandler );
+        $this->parserTools = $parserTools;
     }
 
     /**
@@ -60,7 +70,7 @@ class RoleAssignInput extends Base
         $limitation = null;
         if ( array_key_exists( 'limitation', $data ) && is_array( $data['limitation'] ) )
         {
-            $limitation = $this->parseLimitation( $data['limitation'] );
+            $limitation = $this->parserTools->parseLimitation( $data['limitation'] );
         }
 
         return new RoleAssignment( $matches['role'], $limitation );
