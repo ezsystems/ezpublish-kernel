@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Client\Exceptions;
+namespace eZ\Publish\Core\REST\Common\Exceptions;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\Exceptions\NotFoundException}
@@ -17,4 +17,8 @@ namespace eZ\Publish\Core\REST\Client\Exceptions;
  */
 class NotFoundException extends \eZ\Publish\API\Repository\Exceptions\NotFoundException
 {
+    function __construct( $message )
+    {
+        parent::__construct( $message );
+    }
 }

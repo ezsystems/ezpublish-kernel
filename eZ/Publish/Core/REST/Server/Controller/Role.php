@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Controller;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
+use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\RoleService;
@@ -228,7 +229,7 @@ class Role
                 return $policy;
         }
 
-        // @todo return not found?
+        throw new Exceptions\NotFoundException( "Policy not found: '{$request->path}'." );
     }
 
     /**
@@ -296,7 +297,7 @@ class Role
             }
         }
 
-        // @todo return not found?
+        throw new Exceptions\NotFoundException( "Policy not found: '{$request->path}'." );
     }
 
     /**
@@ -327,7 +328,7 @@ class Role
             return new Values\ResourceDeleted();
         }
 
-        // @todo return not found?
+        throw new Exceptions\NotFoundException( "Policy not found: '{$request->path}'." );
     }
 
     /**

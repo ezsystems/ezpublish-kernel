@@ -25,6 +25,7 @@ use \eZ\Publish\Core\REST\Common\UrlHandler;
 use \eZ\Publish\Core\REST\Common\Input;
 use \eZ\Publish\Core\REST\Common\Output;
 use \eZ\Publish\Core\REST\Common\Message;
+use \eZ\Publish\Core\REST\Common\Exceptions;
 
 use \eZ\Publish\Core\REST\Client\Values;
 
@@ -54,7 +55,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
     private $urlHandler;
 
     /**
-     * @var \eZ\Publish\Common\REST\Client\ContentTypeService
+     * @var \eZ\Publish\Core\REST\Client\ContentTypeService
      */
     private $contentTypeService;
 
@@ -63,7 +64,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
-     * @param \eZ\Publish\Common\REST\Client\ContentTypeService
+     * @param \eZ\Publish\Core\REST\Client\ContentTypeService $contentTypeService
      */
     public function __construct( HttpClient $client, Input\Dispatcher $inputDispatcher, Output\Visitor $outputVisitor, UrlHandler $urlHandler, ContentTypeService $contentTypeService )
     {
@@ -79,8 +80,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      *
      * Only for testing
      *
-     * @param mixed tringid
-     * @return void
+     * @param mixed $id
      * @private
      */
     public function setSession( $id )
@@ -142,7 +142,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
 
         if ( count( $contentList ) === 0 )
         {
-            throw new NotFoundException( "@TODO: Error message." );
+            throw new Exceptions\NotFoundException( "@TODO: Error message." );
         }
 
         return $this->completeContentInfo( reset( $contentList ) );
@@ -151,8 +151,8 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
     /**
      * Returns a complete ContentInfo based on $restContentInfo
      *
-     * @param RestContentInfo $restContentInfo
-     * @return eZ\Publish\Core\REST\Client\Values\Content\ContentInfo
+     * @param \eZ\Publish\Core\REST\Client\Values\RestContentInfo $restContentInfo
+     * @return \eZ\Publish\Core\REST\Client\Values\Content\ContentInfo
      */
     protected function completeContentInfo( Values\RestContentInfo $restContentInfo )
     {
@@ -597,7 +597,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
      * NOTE: This method is not part of the API!
      *
      * @param string $relationListId
-     * @return eZ\Publish\API\Repository\Values\Content\Relation[]
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      * @access protected
      */
     public function loadRelationsByListId( $relationListId )
@@ -768,6 +768,4 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
     {
         throw new \Exception( "@TODO: Implement." );
     }
-
-    // @codeCoverageIgnoreEnd
 }

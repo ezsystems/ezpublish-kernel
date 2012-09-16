@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Controller;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
+use eZ\Publish\Core\REST\Common\Exceptions;
 
 use eZ\Publish\Core\REST\Server\Values;
 
@@ -112,6 +113,6 @@ class ContentType
             }
         }
 
-        throw new Exceptions\NotFound( "Field definition not found: '{$request->path}'." );
+        throw new Exceptions\NotFoundException( "Field definition not found: '{$request->path}'." );
     }
 }
