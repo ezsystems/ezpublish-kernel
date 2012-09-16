@@ -13,7 +13,7 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
-use eZ\Publish\Core\REST\Common\Values\ObjectState as CommonObjectState;
+use eZ\Publish\Core\REST\Common\Values\RestObjectState as RestObjectStateValue;
 
 /**
  * ObjectStateList value object visitor
@@ -39,7 +39,7 @@ class ObjectStateList extends ValueObjectVisitor
         foreach ( $data->states as $state )
         {
             $visitor->visitValueObject(
-                new CommonObjectState( $state, $data->groupId )
+                new RestObjectStateValue( $state, $data->groupId )
             );
         }
         $generator->endList( 'ObjectState' );

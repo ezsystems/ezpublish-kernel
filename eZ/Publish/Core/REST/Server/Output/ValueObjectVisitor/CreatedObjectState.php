@@ -15,7 +15,7 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 /**
  * CreatedObjectState value object visitor
  */
-class CreatedObjectState extends ObjectState
+class CreatedObjectState extends RestObjectState
 {
     /**
      * Visit struct returned by controllers

@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ObjectState class
+ * File containing the RestObjectState class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,12 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Common\Values;
 
-use eZ\Publish\API\Repository\Values\ObjectState\ObjectState as APIObjectState;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 
 /**
  * This class wraps the object state with added groupId property
  */
-class ObjectState
+class RestObjectState
 {
     /**
      * Wrapped object state
@@ -36,7 +36,7 @@ class ObjectState
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      * @param int $groupId
      */
-    public function __construct( APIObjectState $objectState, $groupId )
+    public function __construct( ObjectState $objectState, $groupId )
     {
         $this->objectState = $objectState;
         $this->groupId = $groupId;

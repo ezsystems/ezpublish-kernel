@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
-use eZ\Publish\Core\REST\Common\Values\ObjectState as CommonObjectState;
+use eZ\Publish\Core\REST\Common\Values\RestObjectState;
 use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState as CoreObjectState;
 
 /**
@@ -23,7 +23,7 @@ class ObjectState extends Base
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\Core\REST\Common\Values\ObjectState
+     * @return \eZ\Publish\Core\REST\Common\Values\RestObjectState
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
@@ -34,7 +34,7 @@ class ObjectState extends Base
 
         $values = $this->urlHandler->parse( 'objectstate', $data['_href'] );
 
-        return new CommonObjectState(
+        return new RestObjectState(
             new CoreObjectState(
                 array(
                     'id' => $values['objectstate']

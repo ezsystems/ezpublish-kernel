@@ -26,7 +26,7 @@ class ObjectStateTest extends BaseTest
         $result = $objectState->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\Core\\REST\\Common\\Values\\ObjectState',
+            '\\eZ\\Publish\\Core\\REST\\Common\\Values\\RestObjectState',
             $result,
             'ObjectState not created correctly.'
         );

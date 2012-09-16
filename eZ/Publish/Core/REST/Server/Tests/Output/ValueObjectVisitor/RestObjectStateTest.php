@@ -11,14 +11,14 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
-use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState as CoreObjectState;
+use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\Core\REST\Common\Values;
 use eZ\Publish\Core\REST\Common;
 
-class ObjectStateTest extends ValueObjectVisitorBaseTest
+class RestObjectStateTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the ObjectState visitor
+     * Test the RestObjectState visitor
      *
      * @return string
      */
@@ -29,8 +29,8 @@ class ObjectStateTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $objectState = new Values\ObjectState(
-            new CoreObjectState(
+        $objectState = new Values\RestObjectState(
+            new ObjectState(
                 array(
                     'id'         => 42,
                     'identifier' => 'test-state',
@@ -267,11 +267,11 @@ class ObjectStateTest extends ValueObjectVisitorBaseTest
     /**
      * Get the ObjectState visitor
      *
-     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ObjectState
+     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestObjectState
      */
     protected function getObjectStateVisitor()
     {
-        return new ValueObjectVisitor\ObjectState(
+        return new ValueObjectVisitor\RestObjectState(
             new Common\UrlHandler\eZPublish()
         );
     }

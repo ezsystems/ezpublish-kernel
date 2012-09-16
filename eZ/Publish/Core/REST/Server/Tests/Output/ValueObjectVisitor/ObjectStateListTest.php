@@ -12,8 +12,8 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\ObjectStateList;
-use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState as CoreObjectState;
-use eZ\Publish\Core\REST\Common\Values\ObjectState;
+use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
+use eZ\Publish\Core\REST\Common\Values\RestObjectState;
 use eZ\Publish\Core\REST\Common;
 
 class ObjectStateListTest extends ValueObjectVisitorBaseTest
@@ -96,13 +96,13 @@ class ObjectStateListTest extends ValueObjectVisitorBaseTest
         $generator->startDocument( null );
 
         $objectStateList = new ObjectStateList( array(
-            new CoreObjectState(),
-            new CoreObjectState(),
+            new ObjectState(),
+            new ObjectState(),
         ), 42 );
 
         $this->getVisitorMock()->expects( $this->exactly( 2 ) )
             ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Common\\Values\\ObjectState' ) );
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Common\\Values\\RestObjectState' ) );
 
         $visitor->visit(
             $this->getVisitorMock(),
