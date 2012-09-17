@@ -123,24 +123,6 @@ class Content
     }
 
     /**
-     * Extracts the requested media type from $request
-     *
-     * @param RMF\Request $request
-     * @return string
-     */
-    protected function getMediaType( RMF\Request $request )
-    {
-        foreach ( $request->mimetype as $mimeType )
-        {
-            if ( preg_match( '(^([a-z0-9-/.]+)\+.*$)', $mimeType['value'], $matches ) )
-            {
-                return $matches[1];
-            }
-        }
-        return 'unknown/unknown';
-    }
-
-    /**
      * Performs an update on the content meta data.
      *
      * @param RMF\Request $request
@@ -294,5 +276,42 @@ class Content
                 array( 'object' => $copiedContent->id )
             )
         );
+    }
+
+    /**
+     * Returns a list of all versions of the content. This method does not
+     * include fields and relations in the Version elements of the response.
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\VersionList
+     */
+    public function loadContentVersions( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'objectVersions', $request->path );
+
+        return new Values\VersionList(
+            $this->contentService->loadVersions(
+                $this->contentService->loadContentInfo( $urlValues['object'] )
+            ),
+            $urlValues['object']
+        );
+    }
+
+    /**
+     * Extracts the requested media type from $request
+     *
+     * @param RMF\Request $request
+     * @return string
+     */
+    protected function getMediaType( RMF\Request $request )
+    {
+        foreach ( $request->mimetype as $mimeType )
+        {
+            if ( preg_match( '(^([a-z0-9-/.]+)\+.*$)', $mimeType['value'], $matches ) )
+            {
+                return $matches[1];
+            }
+        }
+        return 'unknown/unknown';
     }
 }

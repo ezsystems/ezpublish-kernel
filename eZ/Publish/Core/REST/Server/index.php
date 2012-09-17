@@ -230,6 +230,8 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentList'                => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestContent'                => new Output\ValueObjectVisitor\RestContent( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedContent'             => new Output\ValueObjectVisitor\CreatedContent( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\VersionList'                => new Output\ValueObjectVisitor\VersionList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\Version'                    => new Output\ValueObjectVisitor\Version( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo'          => new Output\ValueObjectVisitor\VersionInfo( $urlHandler ),
     // Includes vitising of VersionInfo, which can be extracted for re-use, if
     // necessary
@@ -343,6 +345,9 @@ $dispatcher = new AuthenticatingDispatcher(
                 'GET' => array( $contentController, 'loadContent' ),
                 'DELETE' => array( $contentController, 'deleteContent' ),
                 'COPY' => array( $contentController, 'copyContent' ),
+            ),
+            '(^/content/objects/[0-9]+/versions$)' => array(
+                'GET' => array( $contentController, 'loadContentVersions' ),
             ),
             '(^/content/objects/[0-9]+/versions/[0-9]+$)' => array(
                 'GET' => array( $contentController, 'loadContentInVersion' ),
