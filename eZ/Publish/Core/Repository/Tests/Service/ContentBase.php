@@ -1653,8 +1653,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentUpdateStruct->initialLanguageCode = "eng-US";
         $contentUpdateStruct->setField(
             "test_required_empty",
-            "a string that is too long and will not validate 12345678901234567890123456789012345678901234567890",
-            "eng-GB"
+            "a string that is too long and will not validate 12345678901234567890123456789012345678901234567890"
         );
 
         // Throws an exception because "test_required_empty" field value is too long and fails
