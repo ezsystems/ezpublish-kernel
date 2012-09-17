@@ -96,7 +96,7 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
                 case UrlAlias::LOCATION:
                     $params += array(
                         '_controller'   => 'ezpublish.controller.content.view:viewLocation',
-                        'locationId'    => $urlAlias->destination,
+                        'locationId'    => $urlAlias->destination->id,
                         'viewType'      => ViewManager::VIEW_TYPE_FULL
                     );
 
