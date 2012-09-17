@@ -14,7 +14,7 @@ services:
 
     ezpublish.config.resolver.core:
         class: %ezpublish.config.resolver.dynamic.class%
-        arguments: [@ezpublish.siteaccess, @service_container, %ezpublish.config.default_scope%]
+        arguments: [@ezpublish.siteaccess, %ezpublish.siteaccess.groups_by_siteaccess%, @service_container, %ezpublish.config.default_scope%]
         tags:
             - { name: ezpublish.config.resolver, priority: 200 }
 
