@@ -298,6 +298,77 @@ class Content
     }
 
     /**
+     * The version is deleted
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     */
+    public function deleteContentVersion( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'objectVersion', $request->path );
+
+        $this->contentService->deleteVersion(
+            $this->contentService->loadVersionInfo(
+                $this->contentService->loadContentInfo( $urlValues['object'] ),
+                $urlValues['version']
+            )
+        );
+
+        return new Values\ResourceDeleted();
+    }
+
+    /**
+     * The system creates a new draft version as a copy from the given version
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
+     */
+    public function createDraftFromVersion( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'objectVersion', $request->path );
+
+        $contentInfo = $this->contentService->loadContentInfo( $urlValues['object'] );
+        $contentDraft = $this->contentService->createContentDraft(
+            $contentInfo,
+            $this->contentService->loadVersionInfo(
+                $contentInfo, $urlValues['version']
+            )
+        );
+
+        return new Values\CreatedVersion(
+            array(
+                'version' => new Values\Version(
+                    $contentDraft->versionInfo,
+                    $urlValues['object']
+                )
+            )
+        );
+    }
+
+    /**
+     * The system creates a new draft version as a copy from the current version
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
+     */
+    public function createDraftFromCurrentVersion( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'objectVersions', $request->path );
+
+        $contentInfo = $this->contentService->loadContentInfo( $urlValues['object'] );
+        $contentDraft = $this->contentService->createContentDraft( $contentInfo );
+
+        return new Values\CreatedVersion(
+            array(
+                'version' => new Values\Version(
+                    $contentDraft->versionInfo,
+                    $urlValues['object']
+                )
+            )
+        );
+    }
+
+    /**
      * Extracts the requested media type from $request
      *
      * @param RMF\Request $request
