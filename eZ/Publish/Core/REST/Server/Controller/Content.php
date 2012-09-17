@@ -369,6 +369,26 @@ class Content
     }
 
     /**
+     * The content version is published
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
+     */
+    public function publishVersion( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'objectVersion', $request->path );
+
+        $this->contentService->publishVersion(
+            $this->contentService->loadVersionInfo(
+                $this->contentService->loadContentInfo( $urlValues['object'] ),
+                $urlValues['version']
+            )
+        );
+
+        return new Values\NoContent();
+    }
+
+    /**
      * Extracts the requested media type from $request
      *
      * @param RMF\Request $request

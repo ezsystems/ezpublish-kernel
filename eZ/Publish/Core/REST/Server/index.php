@@ -297,6 +297,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceDeleted'            => new Output\ValueObjectVisitor\ResourceDeleted( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceCreated'            => new Output\ValueObjectVisitor\ResourceCreated( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceSwapped'            => new Output\ValueObjectVisitor\ResourceSwapped( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\NoContent'                  => new Output\ValueObjectVisitor\NoContent( $urlHandler ),
 );
 
 /*
@@ -355,6 +356,7 @@ $dispatcher = new AuthenticatingDispatcher(
                 'GET' => array( $contentController, 'loadContentInVersion' ),
                 'DELETE' => array( $contentController, 'deleteContentVersion' ),
                 'COPY' => array( $contentController, 'createDraftFromVersion' ),
+                'PUBLISH' => array( $contentController, 'publishVersion' ),
             ),
             '(^/content/objects/[0-9]+/currentversion$)' => array(
                 'GET' => array( $contentController, 'redirectCurrentVersion' )
