@@ -47,13 +47,18 @@ class LocationView implements Parser
     /**
      * Translates parsed semantic config values from $config to internal key/value pairs.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param array $config
-     * @param array $siteAccessGroupDefinition
-     * @return mixed
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @return void
      */
-    public function registerInternalConfig( ContainerBuilder $container, array $config, array $siteAccessGroupDefinition )
+    public function registerInternalConfig( array $config, ContainerBuilder $container )
     {
-        // TODO: Implement registerInternalConfig() method.
+        foreach ( $config['system'] as $sa => $settings )
+        {
+            if ( isset( $settings['location_view'] ) )
+            {
+                $container->setParameter( "ezsettings.$sa.location_view", $settings['location_view'] );
+            }
+        }
     }
 }
