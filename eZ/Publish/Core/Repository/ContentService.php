@@ -923,8 +923,9 @@ class ContentService implements ContentServiceInterface
             );
         }
 
+        /** @var \eZ\Publish\API\Repository\Values\Content\Field[] $fields */
         $fields = array();
-        $languageCodes = array();
+        $languageCodes = $content->versionInfo->languageCodes;
         $initialLanguageCode = $contentUpdateStruct->initialLanguageCode ?: $content->contentInfo->mainLanguageCode;
 
         foreach ( $contentUpdateStruct->fields as $field )
@@ -952,21 +953,21 @@ class ContentService implements ContentServiceInterface
             }
             else
             {
-                if ( isset( $fields[$field->fieldDefIdentifier][$content->contentInfo->mainLanguageCode] ) )
+                if ( isset( $fields[$field->fieldDefIdentifier][$initialLanguageCode] ) )
                 {
                     throw new ContentValidationException(
                         "More than one field is set for non translatable field definition '{$field->fieldDefIdentifier}'"
                     );
                 }
 
-                if ( $fieldLanguageCode != $content->contentInfo->mainLanguageCode )
+                if ( $fieldLanguageCode != $initialLanguageCode )
                 {
                     throw new ContentValidationException(
-                        "A translation '{$content->contentInfo->mainLanguageCode}/{$fieldLanguageCode}' is set for non translatable field definition '{$field->fieldDefIdentifier}'"
+                        "A translation '{$fieldLanguageCode}' is set for non translatable field definition '{$field->fieldDefIdentifier}'"
                     );
                 }
 
-                $fields[$field->fieldDefIdentifier][$content->contentInfo->mainLanguageCode] = $field;
+                $fields[$field->fieldDefIdentifier][$initialLanguageCode] = $field;
             }
 
             $languageCodes[] = $fieldLanguageCode;
@@ -987,24 +988,30 @@ class ContentService implements ContentServiceInterface
             foreach ( $languageCodes as $languageCode )
             {
                 $isLanguageNew = !in_array( $languageCode, $content->versionInfo->languageCodes );
-                $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $content->contentInfo->mainLanguageCode;
-                $existingField = $content->getField( $fieldDefinition->identifier, $valueLanguageCode );
-                $updateField = isset( $fields[$fieldDefinition->identifier][$valueLanguageCode] )
-                    ? $fields[$fieldDefinition->identifier][$valueLanguageCode]
-                    : null;
+                $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $initialLanguageCode;
+                $isFieldUpdated = isset( $fields[$fieldDefinition->identifier][$valueLanguageCode] );
 
-                if ( !isset( $updateField ) && !$isLanguageNew )
+                if ( !$isFieldUpdated && !$isLanguageNew )
                 {
                     continue;
                 }
 
-                if ( isset( $existingField ) && !isset( $updateField ) && $isLanguageNew && !$fieldDefinition->isTranslatable )
-                 {
-                    $fieldValue = $fieldType->acceptValue( $existingField->value );
-                }
-                elseif ( isset( $updateField ) )
+                if ( !$isFieldUpdated && $isLanguageNew && !$fieldDefinition->isTranslatable )
                 {
-                    $fieldValue = $fieldType->acceptValue( $updateField->value );
+                    $fieldValue = $fieldType->acceptValue(
+                        $content->getField(
+                            $fieldDefinition->identifier,
+                            $fieldDefinition->isTranslatable
+                                ? $languageCode
+                                : $content->contentInfo->mainLanguageCode
+                        )->value
+                    );
+                }
+                elseif ( $isFieldUpdated )
+                {
+                    $fieldValue = $fieldType->acceptValue(
+                        $fields[$fieldDefinition->identifier][$valueLanguageCode]->value
+                    );
                 }
                 else
                 {
@@ -1032,7 +1039,9 @@ class ContentService implements ContentServiceInterface
                 $fieldValues[$fieldDefinition->identifier][$languageCode] = $fieldValue;
                 $spiFields[] = new SPIField(
                     array(
-                        "id" => ( isset( $existingField ) && !$isLanguageNew ) ? $existingField->id : null,
+                        "id" => $isLanguageNew
+                            ? null
+                            : $content->getField( $fieldDefinition->identifier, $languageCode )->id,
                         "fieldDefinitionId" => $fieldDefinition->id,
                         "type" => $fieldDefinition->fieldTypeIdentifier,
                         "value" => $fieldType->toPersistenceValue( $fieldValue ),
