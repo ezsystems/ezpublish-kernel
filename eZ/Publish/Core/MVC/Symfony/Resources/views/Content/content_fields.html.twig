@@ -48,6 +48,15 @@
 {% endspaceless %}
 {% endblock %}
 
+{% block ezemail_field %}
+{% spaceless %}
+    {% if field.value.email|length() > 0 %}
+        {% set field_value = field.value.email %}
+        <a href="mailto:{{ field.value.email|escape }}" {{ block( 'field_attributes' ) }}>{{ field.value.email|escape }}</a>
+    {% endif %}
+{% endspaceless %}
+{% endblock %}
+
 {# The simple_block_field block is a shorthand html block-based fields (like eztext or ezxmltext) #}
 {# You can define a field_value variable before rendering this one if you need special operation for rendering content (i.e. nl2br) #}
 {% block simple_block_field %}
