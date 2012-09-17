@@ -32,7 +32,7 @@ class Content implements Parser
                 ->children()
                     ->booleanNode( 'view_cache' )->defaultValue( true )->end()
                     ->booleanNode( 'ttl_cache' )->defaultValue( false )->end()
-                    ->scalarNode( 'default_ttl' )->info( 'Default value for TTL cache, in seconds' )->defaultValue( 30 )->end()
+                    ->scalarNode( 'default_ttl' )->info( 'Default value for TTL cache, in seconds' )->defaultValue( 60 )->end()
                 ->end()
             ->end()
         ;
@@ -47,6 +47,14 @@ class Content implements Parser
      */
     public function registerInternalConfig( array $config, ContainerBuilder $container )
     {
-        // TODO: Implement registerInternalConfig() method.
+        foreach ( $config['system'] as $sa => $settings )
+        {
+            if ( !empty( $settings['content'] ) )
+            {
+                $container->setParameter( "ezsettings.$sa.content.view_cache", $settings['content']['view_cache'] );
+                $container->setParameter( "ezsettings.$sa.content.ttl_cache", $settings['content']['ttl_cache'] );
+                $container->setParameter( "ezsettings.$sa.content.default_ttl", $settings['content']['default_ttl'] );
+            }
+        }
     }
 }

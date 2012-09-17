@@ -18,6 +18,13 @@ parameters:
     ezsettings.default.url_alias_router: true      # Use UrlAliasRouter by default
     ezsettings.default.languages: ["eng-GB"]
 
+    # Content settings
+    ezsettings.default.content.view_cache: true
+    ezsettings.default.content.ttl_cache: false
+    ezsettings.default.content.view_cache: 60
+
+    ###
     # Internal settings
+    ###
     ezpublish.siteaccess.groups: {}
     ezpublish.siteaccess.groups_by_siteaccess: {}

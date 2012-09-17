@@ -5,7 +5,6 @@ parameters:
     ezpublish.config.default_scope: ezsettings
     ezpublish.controller.base.class: eZ\Publish\Core\MVC\Symfony\Controller\Controller
     ezpublish.controller.content.view.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController
-    ezpublish.controller.content.view.options: {}
 
 services:
     # Siteaccess is injected in the container at runtime
@@ -32,7 +31,7 @@ services:
 
     ezpublish.controller.content.view:
         class: %ezpublish.controller.content.view.class%
-        arguments: [@ezpublish.view_manager, %ezpublish.controller.content.view.options%]
+        arguments: [@ezpublish.view_manager]
         parent: ezpublish.controller.base
         scope: request
 
