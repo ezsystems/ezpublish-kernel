@@ -53,13 +53,35 @@ class Common implements Parser
     /**
      * Translates parsed semantic config values from $config to internal key/value pairs.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param array $config
-     * @param array $siteAccessGroupDefinition
-     * @return mixed
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @return void
      */
-    public function registerInternalConfig(ContainerBuilder $container, array $config, array $siteAccessGroupDefinition)
+    public function registerInternalConfig( array $config, ContainerBuilder $container )
     {
-        // TODO: Implement registerInternalConfig() method.
+        foreach ( $config['system'] as $sa => $settings )
+        {
+            if ( isset( $settings['languages'] ) )
+            {
+                $container->setParameter( "ezsettings.$sa.languages", $settings['languages'] );
+            }
+
+            if ( isset( $settings['database'] ) )
+            {
+                if ( isset( $settings['database']['dsn'] ) )
+                {
+                    $dsn = $settings['database']['dsn'];
+                }
+                else
+                {
+                    $port = '';
+                    if ( isset( $settings['database']['port'] ) && !empty( $settings['database']['port'] ) )
+                        $port = ":{$settings['database']['port']}";
+
+                    $dsn = "{$settings['database']['type']}://{$settings['database']['user']}:{$settings['database']['password']}@{$settings['database']['server']}$port/{$settings['database']['database_name']}";
+                    $container->setParameter( "ezsettings.$sa.database.dsn", $dsn );
+                }
+            }
+        }
     }
 }

@@ -12,10 +12,16 @@ namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
+    eZ\Publish\Core\MVC\ConfigResolverInterface,
     Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LegacyStorageEngineFactory
 {
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    protected $configResolver;
+
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
@@ -23,8 +29,9 @@ class LegacyStorageEngineFactory
 
     protected $converters = array();
 
-    public function __construct( ContainerInterface $container )
+    public function __construct( ConfigResolverInterface $configResolver, ContainerInterface $container )
     {
+        $this->configResolver = $configResolver;
         $this->container = $container;
     }
 
@@ -43,15 +50,16 @@ class LegacyStorageEngineFactory
     /**
      * Builds the Legacy Storage Engine
      *
-     * @param string $dsn <database_type>://<user>:<password>@<host>/<database_name>
      * @param $deferTypeUpdate
      * @return \eZ\Publish\Core\Persistence\Legacy\Handler
      */
-    public function buildLegacyEngine( $dsn, $deferTypeUpdate )
+    public function buildLegacyEngine( $deferTypeUpdate )
     {
         $legacyEngineClass = $this->container->getParameter( 'ezpublish.api.storage_engine.legacy.class' );
         return new $legacyEngineClass(
-            EzcDbHandler::create( $dsn ),
+            EzcDbHandler::create(
+                $this->configResolver->getParameter( 'database.dsn' )
+            ),
             new ConverterRegistry( $this->converters ),
             new StorageRegistry(
                 $this->container->get( 'ezpublish.api.repository.factory' )->getExternalStorageHandlers()

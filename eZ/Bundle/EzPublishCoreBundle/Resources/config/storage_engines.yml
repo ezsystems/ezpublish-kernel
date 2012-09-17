@@ -64,14 +64,13 @@ services:
     # Legacy storage engine
     ezpublish.api.storage_engine.legacy.factory:
         class: %ezpublish.api.storage_engine.legacy.factory.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.config.resolver, @service_container]
 
     ezpublish.api.storage_engine.legacy:
         class: %ezpublish.api.storage_engine.legacy.class%
         factory_service: ezpublish.api.storage_engine.legacy.factory
         factory_method: buildLegacyEngine
         arguments:
-            - %ezpublish.api.storage_engine.legacy.dsn%
             - %ezpublish.api.storage_engine.legacy.defer_type_update%
         tags:
             - {name: ezpublish.storageEngine, alias: legacy}
