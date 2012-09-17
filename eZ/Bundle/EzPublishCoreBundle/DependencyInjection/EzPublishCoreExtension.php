@@ -9,19 +9,14 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection;
 
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader;
-use Symfony\Component\DependencyInjection\Loader\FileLoader;
-use Symfony\Component\Config\FileLocator;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension,
+    Symfony\Component\DependencyInjection\ContainerBuilder,
+    Symfony\Component\DependencyInjection\Loader,
+    Symfony\Component\DependencyInjection\Loader\FileLoader,
+    Symfony\Component\Config\FileLocator;
 
 class EzPublishCoreExtension extends Extension
 {
-    /**
-     * @var array
-     */
-    private $siteAccessGroups;
-
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser[]
      */
@@ -56,18 +51,24 @@ class EzPublishCoreExtension extends Extension
         $configuration = $this->getConfiguration( $configs, $container );
         $config = $this->processConfiguration( $configuration, $configs );
 
-        $this->registerSiteAcccessConfiguration( $config, $container );
-
         // Base services override
         $loader->load( 'services.yml' );
         // Default settings
         $loader->load( 'default_settings.yml' );
+        $this->registerSiteAcccessConfiguration( $config, $container );
+
         // Routing
         $this->handleRouting( $container, $loader );
         // Public API loading
         $this->handleApiLoading( $container, $loader );
         $this->handleTemplating( $container, $loader );
         $this->handleSessionLoading( $container, $loader );
+
+        // Map settings
+        foreach ( $this->configParsers as $configParser )
+        {
+            $configParser->registerInternalConfig( $config, $container );
+        }
     }
 
     /**
@@ -85,8 +86,21 @@ class EzPublishCoreExtension extends Extension
         $container->setParameter( 'ezpublish.siteaccess.list', $config['siteaccess']['list'] );
         $container->setParameter( 'ezpublish.siteaccess.default', $config['siteaccess']['default_siteaccess'] );
         $container->setParameter( 'ezpublish.siteaccess.match_config', $config['siteaccess']['match'] );
-        $this->siteAccessGroups = $config['siteaccess']['groups'];
-        $container->setParameter( 'ezpublish.siteaccess.groups', $this->siteAccessGroups );
+
+        // Register siteaccess groups + reverse
+        $container->setParameter( 'ezpublish.siteaccess.groups', $config['siteaccess']['groups'] );
+        $groupsBySiteaccess = array();
+        foreach ( $config['siteaccess']['groups'] as $groupName => $groupMembers )
+        {
+            foreach ( $groupMembers as $member )
+            {
+                if ( !isset( $groupsBySiteaccess[$member] ) )
+                    $groupsBySiteaccess[$member] = array();
+
+                $groupsBySiteaccess[$member][] = $groupName;
+            }
+        }
+        $container->setParameter( 'ezpublish.siteaccess.groups_by_siteaccess', $groupsBySiteaccess );
     }
 
     /**
