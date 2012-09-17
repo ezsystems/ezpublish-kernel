@@ -40,6 +40,8 @@ class SiteAccessListener implements EventSubscriberInterface
     public function onSiteAccessMatch( PostSiteAccessMatchEvent $event )
     {
         $siteAccess = $event->getSiteAccess();
+        $this->container->set( 'ezpublish.siteaccess', $siteAccess );
+
         // Analyse the pathinfo if needed since it might contain the siteaccess (i.e. like in URI mode)
         $pathinfo = $event->getRequest()->getPathInfo();
         if ( $siteAccess->matcher instanceof URILexer )

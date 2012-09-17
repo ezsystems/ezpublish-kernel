@@ -20,14 +20,20 @@ use eZ\Publish\Core\MVC\Symfony\Routing\Generator,
  */
 class UrlAliasGenerator extends Generator
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    private $repository;
+    private $lazyRepository;
 
-    public function __construct( Repository $repository )
+    public function __construct( \Closure $lazyRepository )
     {
-        $this->repository = $repository;
+        $this->lazyRepository = $lazyRepository;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Repository
+     */
+    protected function getRepository()
+    {
+        $lazyRepository = $this->lazyRepository;
+        return $lazyRepository();
     }
 
     /**
@@ -40,7 +46,7 @@ class UrlAliasGenerator extends Generator
      */
     public function doGenerate( $location, array $parameters )
     {
-        $urlAliases = $this->repository->getURLAliasService()->listLocationAliases(
+        $urlAliases = $this->getRepository()->getURLAliasService()->listLocationAliases(
             $location,
             false,
             // TODO : Don't hardcode language. Build the Repository with configured prioritized languages instead.

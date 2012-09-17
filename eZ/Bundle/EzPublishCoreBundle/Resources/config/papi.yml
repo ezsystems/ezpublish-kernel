@@ -3,7 +3,8 @@ parameters:
     ezpublish.api.repository.class: eZ\Publish\Core\Repository\Repository
     ezpublish.api.io_handler.class: eZ\Publish\Core\IO\InMemoryHandler
     ezpublish.api.storage_engine.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory
-    ezpublish.api.storage_engine.default: inMemory
+    # Using legacy storage engine for data compatibility with 4.x
+    ezpublish.api.storage_engine.default: legacy
 
     ezpublish.api.content.class: eZ\Publish\Core\Repository\Values\Content\Content
     ezpublish.api.location.class: eZ\Publish\Core\Repository\Values\Content\Location
@@ -20,6 +21,11 @@ services:
         arguments:
             - @ezpublish.api.persistence_handler
             - @ezpublish.api.io_handler
+
+    ezpublish.api.repository.lazy:
+        class: Closure
+        factory_service: ezpublish.api.repository.factory
+        factory_method: buildLazyRepository
 
     ezpublish.api.io_handler:
         class: %ezpublish.api.io_handler.class%

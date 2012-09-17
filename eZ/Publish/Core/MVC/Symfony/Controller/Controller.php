@@ -15,45 +15,38 @@ use Symfony\Component\DependencyInjection\ContainerAware,
 
 abstract class Controller extends ContainerAware
 {
-    private $options;
-
-    public function __construct( array $options = array() )
-    {
-        $this->options = $options;
-    }
-
     /**
-     * Returns value for $optionName and fallbacks to $defaultValue if not defined
+     * Returns value for $parameterName and fallbacks to $defaultValue if not defined
      *
-     * @param string $optionName
+     * @param string $parameterName
      * @param mixed $defaultValue
      * @return mixed
      */
-    public function getOption( $optionName, $defaultValue = null )
+    public function getParameter( $parameterName, $defaultValue = null )
     {
-        return isset( $this->options[$optionName] ) ? $this->options[$optionName] : $defaultValue;
+        if ( $this->getConfigResolver()->hasParameter( $parameterName ) )
+            return $this->getConfigResolver()->getParameter( $parameterName );
+
+        return $defaultValue;
     }
 
     /**
-     * Checks if $optionName is defined
+     * Checks if $parameterName is defined
      *
-     * @param string $optionName
+     * @param string $parameterName
      * @return bool
      */
-    public function hasOption( $optionName )
+    public function hasParameter( $parameterName )
     {
-        return isset( $this->options[$optionName] );
+        return $this->getConfigResolver()->hasParameter( $parameterName );
     }
 
     /**
-     * Sets $optionName with $value
-     *
-     * @param string $optionName
-     * @param mixed $value
+     * @return \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
-    public function setOption( $optionName, $value )
+    public function getConfigResolver()
     {
-        $this->options[$optionName] = $value;
+        return $this->container->get( 'ezpublish.config.resolver' );
     }
 
     /**
@@ -84,7 +77,7 @@ abstract class Controller extends ContainerAware
     }
 
     /**
-     * @return \Symfony\Component\HttpKernel\Log\LoggerInterface\null
+     * @return \Symfony\Component\HttpKernel\Log\LoggerInterface|null
      */
     public function getLogger()
     {

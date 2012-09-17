@@ -13,9 +13,7 @@ use eZ\Publish\Core\MVC\Symfony\Controller\Controller,
     eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager,
     eZ\Publish\Core\MVC\Symfony\MVCEvents,
     eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent,
-    Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\OptionsResolver\OptionsResolver,
-    Symfony\Component\OptionsResolver\OptionsResolverInterface;
+    Symfony\Component\HttpFoundation\Response;
 
 class ViewController extends Controller
 {
@@ -24,24 +22,9 @@ class ViewController extends Controller
      */
     private $viewManager;
 
-    public function __construct( ViewManager $viewManager, array $options = array() )
+    public function __construct( ViewManager $viewManager )
     {
         $this->viewManager = $viewManager;
-
-        $resolver = new OptionsResolver();
-        $this->setDefaultOptions( $resolver );
-        parent::__construct( $resolver->resolve( $options ) );
-    }
-
-    protected function setDefaultOptions( OptionsResolverInterface $resolver )
-    {
-        $resolver->setDefaults(
-            array(
-                 'viewCache'    => true,
-                 'defaultTTL'   => 60,
-                 'TTLCache'     => false
-            )
-        );
     }
 
     /**
@@ -66,7 +49,7 @@ class ViewController extends Controller
             // Assume that location is cached by the repository
             $location = $repository->getLocationService()->loadLocation( $locationId );
 
-            if ( $this->getOption( 'viewCache' ) === true )
+            if ( $this->getParameter( 'content.view_cache' ) === true )
             {
                 $response->setPublic();
                 $response->setEtag( $etag );
@@ -74,10 +57,10 @@ class ViewController extends Controller
                 // If-None-Match is the request counterpart of Etag response header
                 // Making the response to vary against it ensures that an HTTP reverse proxy caches the different possible variations of the response
                 // as it can depend on user role for instance.
-                if ( $request->headers->has( 'If-None-Match' ) && $this->getOption( 'TTLCache' ) === true )
+                if ( $request->headers->has( 'If-None-Match' ) && $this->getParameter( 'content.ttl_cache' ) === true )
                 {
                     $response->setVary( 'If-None-Match' );
-                    $response->setMaxAge( $this->getOption( 'defaultTTL' ) );
+                    $response->setMaxAge( $this->getParameter( 'content.default_ttl' ) );
                 }
 
                 $response->setLastModified( $location->getContentInfo()->modificationDate );

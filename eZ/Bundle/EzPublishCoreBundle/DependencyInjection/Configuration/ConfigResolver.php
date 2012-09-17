@@ -45,6 +45,11 @@ class ConfigResolver implements ConfigResolverInterface
     protected $siteAccess;
 
     /**
+     * @var array Siteaccess groups, indexed by siteaccess name
+     */
+    protected $groupsBySiteAccess;
+
+    /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
     protected $container;
@@ -61,6 +66,7 @@ class ConfigResolver implements ConfigResolverInterface
 
     /**
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
+     * @param array $groupsBySiteAccess SiteAccess groups, indexed by siteaccess.
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      * @param string $defaultNamespace The default namespace
      * @param int $undefinedStrategy Strategy to use when encountering undefined parameters.
@@ -68,9 +74,16 @@ class ConfigResolver implements ConfigResolverInterface
      *                                  - ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION (throw an exception)
      *                                  - ConfigResolver::UNDEFINED_STRATEGY_NULL (return null)
      */
-    public function __construct( SiteAccess $siteAccess, ContainerInterface $container, $defaultNamespace, $undefinedStrategy = self::UNDEFINED_STRATEGY_EXCEPTION )
+    public function __construct(
+        SiteAccess $siteAccess,
+        array $groupsBySiteAccess,
+        ContainerInterface $container,
+        $defaultNamespace,
+        $undefinedStrategy = self::UNDEFINED_STRATEGY_EXCEPTION
+    )
     {
         $this->siteAccess = $siteAccess;
+        $this->groupsBySiteAccess = $groupsBySiteAccess;
         $this->container = $container;
         $this->defaultNamespace = $defaultNamespace;
         $this->undefinedStrategy = $undefinedStrategy;
@@ -150,7 +163,7 @@ class ConfigResolver implements ConfigResolverInterface
         $triedScopes[] = self::SCOPE_GLOBAL;
         unset( $globalScopeParamName );
 
-        // Relative scope (i.e. siteaccess relative)
+        // Relative scope, siteaccess wise
         $relativeScopeParamName = "$namespace.$scope.$paramName";
         if ( $this->container->hasParameter( $relativeScopeParamName ) )
         {
@@ -158,6 +171,19 @@ class ConfigResolver implements ConfigResolverInterface
         }
         $triedScopes[] = $this->siteAccess->name;
         unset( $relativeScopeParamName );
+
+        // Relative scope, siteacces group wise
+        if ( isset( $this->groupsBySiteAccess[$scope] ) )
+        {
+            foreach ( $this->groupsBySiteAccess[$scope] as $groupName )
+            {
+                $relativeScopeParamName = "$namespace.$groupName.$paramName";
+                if ( $this->container->hasParameter( $relativeScopeParamName ) )
+                {
+                    return $this->container->getParameter( $relativeScopeParamName );
+                }
+            }
+        }
 
         // Default scope
         $defaultScopeParamName = "$namespace." . self::SCOPE_DEFAULT . ".$paramName";

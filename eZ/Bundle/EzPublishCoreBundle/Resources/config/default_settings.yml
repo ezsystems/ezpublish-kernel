@@ -4,6 +4,27 @@ parameters:
     binaryfile_storage_dir: var/files
     binaryfile_identifier_prefix:
 
+    ###
     # ezsettings namespace, default scope
+    ###
+
+    # Content/Location view
     ezsettings.default.location_view: {}
     ezsettings.default.content_view: {}
+
+    # Common settings
+    ezsettings.default.database.dsn: ~
+    ezsettings.default.session_name: "eZSESSID{siteaccess_hash}"    # Using "{siteaccess_hash}" in session name makes it unique per siteaccess
+    ezsettings.default.url_alias_router: true      # Use UrlAliasRouter by default
+    ezsettings.default.languages: ["eng-GB"]
+
+    # Content settings
+    ezsettings.default.content.view_cache: true
+    ezsettings.default.content.ttl_cache: false
+    ezsettings.default.content.view_cache: 60
+
+    ###
+    # Internal settings
+    ###
+    ezpublish.siteaccess.groups: {}
+    ezpublish.siteaccess.groups_by_siteaccess: {}

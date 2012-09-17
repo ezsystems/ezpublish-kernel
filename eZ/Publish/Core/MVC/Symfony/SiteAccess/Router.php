@@ -55,16 +55,19 @@ class Router
      */
     protected $siteAccess;
 
+    protected $siteAccessClass;
+
     /**
      * Constructor.
      *
      * @param string $defaultSiteAccess
      * @param array $siteAccessesConfiguration
      */
-    public function __construct( $defaultSiteAccess, array $siteAccessesConfiguration )
+    public function __construct( $defaultSiteAccess, array $siteAccessesConfiguration, $siteAccessClass = null )
     {
         $this->defaultSiteAccess = $defaultSiteAccess;
         $this->siteAccessesConfiguration = $siteAccessesConfiguration;
+        $this->siteAccessClass = $siteAccessClass;
     }
 
     /**
@@ -85,7 +88,10 @@ class Router
     public function match( SimplifiedRequest $request )
     {
         if ( !isset( $this->siteAccess ) )
-            $this->siteAccess = new SiteAccess;
+        {
+            $siteAccessClass = $this->siteAccessClass ?: 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess';
+            $this->siteAccess = new $siteAccessClass();
+        }
 
         // First check environment variable
         $siteaccessEnvName = getenv( 'EZPUBLISH_SITEACCESS' );
