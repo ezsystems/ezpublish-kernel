@@ -4,7 +4,8 @@
 
 {% block ezstring_field %}
 {% spaceless %}
-    <span {{ block( 'field_attributes' ) }}>{{ field.value }}</span>
+    {% set field_value = field.value.text %}
+    {{ block( 'simple_inline_field' ) }}
 {% endspaceless %}
 {% endblock %}
 
@@ -36,7 +37,8 @@
 {# TODO: add translate filter #}
 {% block ezboolean_field %}
 {% spaceless %}
-    <span {{ block( 'field_attributes' )}}>{% if field.value.bool %}Yes{% else %}No{% endif %}</span>
+    {% set field_value = field.value.bool ? 'Yes' : 'No' %}
+    {{ block( 'simple_inline_field' ) }}
 {% endspaceless %}
 {% endblock %}
 
@@ -60,7 +62,8 @@
 {% block ezinteger_field %}
 {% spaceless %}
     {% if field.value %}
-        <span {{ block( 'field_attributes' )}}>{{ field.value.value }}</span>
+        {% set field_value = field.value.value %}
+        {{ block( 'simple_inline_field' ) }}
     {% endif %}
 {% endspaceless %}
 {% endblock %}
@@ -69,7 +72,8 @@
 {% block ezfloat_field %}
 {% spaceless %}
     {% if field.value %}
-        <span {{ block( 'field_attributes' )}}>{{ field.value.value }}</span>
+        {% set field_value = field.value.value %}
+        {{ block( 'simple_inline_field' ) }}
     {% endif %}
 {% endspaceless %}
 {% endblock %}
@@ -82,6 +86,13 @@
     <div {{ block( 'field_attributes' ) }}>
         {{ field_value|raw }}
     </div>
+{% endspaceless %}
+{% endblock %}
+
+{% block simple_inline_field %}
+{% spaceless %}
+    {% set field_value = field_value|default( field.value ) %}
+    <span {{ block( 'field_attributes' ) }}>{{ field_value }}</span>
 {% endspaceless %}
 {% endblock %}
 
