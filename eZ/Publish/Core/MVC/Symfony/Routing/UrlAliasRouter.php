@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Repository,
     eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager,
     eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator,
+    eZ\Publish\Core\MVC\ConfigResolverInterface,
     Symfony\Component\Routing\RouterInterface,
     Symfony\Component\Routing\Matcher\RequestMatcherInterface,
     Symfony\Component\HttpFoundation\Request,
@@ -54,14 +55,26 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
     protected $generator;
 
     /**
+     * @var array
+     */
+    protected $prioritizedLanguages;
+
+    /**
      * @var \Symfony\Component\HttpKernel\Log\LoggerInterface
      */
     protected $logger;
 
-    public function __construct( \Closure $lazyRepository, UrlAliasGenerator $generator, RequestContext $requestContext, LoggerInterface $logger = null )
+    public function __construct(
+        \Closure $lazyRepository,
+        UrlAliasGenerator $generator,
+        array $prioritizedLanguages,
+        RequestContext $requestContext,
+        LoggerInterface $logger = null
+    )
     {
         $this->lazyRepository = $lazyRepository;
         $this->generator = $generator;
+        $this->prioritizedLanguages = $prioritizedLanguages;
         $this->requestContext = isset( $requestContext ) ? $requestContext : new RequestContext();
         $this->logger = $logger;
     }
@@ -73,6 +86,16 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
     {
         $lazyRepository = $this->lazyRepository;
         return $lazyRepository();
+    }
+
+    /**
+     * Returns the locale code having the top priority.
+     *
+     * @return string
+     */
+    protected function getTopLanguage()
+    {
+        return !empty( $this->prioritizedLanguages ) ? $this->prioritizedLanguages[0] : 'eng-GB';
     }
 
     /**
@@ -97,8 +120,7 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
                     'semanticPathinfo',
                     $request->getPathInfo()
                 ),
-                // TODO : Don't hardcode language. Build the Repository with configured prioritized languages instead.
-                'eng-GB'
+                $this->getTopLanguage()
             );
 
             $params = array(
