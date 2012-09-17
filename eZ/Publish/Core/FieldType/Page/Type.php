@@ -121,7 +121,7 @@ class Type extends FieldType
         {
             return null;
         }
-        return new Value( $hash );
+        return new Value( unserialize( $hash ) );
     }
 
     /**
@@ -137,7 +137,7 @@ class Type extends FieldType
         {
             return null;
         }
-        return $value->page;
+        return serialize( $value->page );
     }
 
     /**

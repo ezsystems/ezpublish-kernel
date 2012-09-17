@@ -218,7 +218,7 @@ class PageTest extends StandardizedFieldTypeTest
             ),
             array(
                 new PageValue( new Page( $this->getPageServiceMock() ) ),
-                new Page( $this->getPageServiceMock() ),
+                serialize( new Page( $this->getPageServiceMock() ) ),
             )
         );
     }
@@ -266,7 +266,7 @@ class PageTest extends StandardizedFieldTypeTest
                 null
             ),
             array(
-                new Page( $this->getPageServiceMock() ),
+                serialize( new Page( $this->getPageServiceMock() ) ),
                 new PageValue( new Page( $this->getPageServiceMock() ) )
             )
         );
