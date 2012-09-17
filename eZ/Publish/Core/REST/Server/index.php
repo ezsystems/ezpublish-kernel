@@ -100,6 +100,13 @@ $urlHandler = new Common\UrlHandler\eZPublish();
 // Object with convenience methods for parsers
 $parserTools = new Common\Input\ParserTools();
 
+// Parser for field values (using FieldTypes for toHash()/fromHash() operations)
+$fieldTypeParser = new Common\Input\FieldTypeParser(
+    $repository->getContentService(),
+    $repository->getContentTypeService(),
+    $repository->getFieldTypeService()
+);
+
 /*
  * The Input Dispatcher receives the array structure as decoded by a handler
  * fitting the input format. It selects a parser based on the media type of the
@@ -110,11 +117,20 @@ $inputDispatcher = new Common\Input\Dispatcher(
         array(
             'application/vnd.ez.api.RoleInput'              => new Input\Parser\RoleInput( $urlHandler, $repository->getRoleService() ),
             'application/vnd.ez.api.SectionInput'           => new Input\Parser\SectionInput( $urlHandler, $repository->getSectionService() ),
+            'application/vnd.ez.api.ContentCreate'          => new Input\Parser\ContentCreate(
+                $urlHandler,
+                $repository->getContentService(),
+                $repository->getContentTypeService(),
+                $fieldTypeParser,
+                // Needed here since there's no ContentType in request for embedded LocationCreate
+                ( $locationCreateParser = new Input\Parser\LocationCreate( $urlHandler, $repository->getLocationService(), $parserTools ) ),
+                $parserTools
+            ),
             'application/vnd.ez.api.ContentUpdate'          => new Input\Parser\ContentUpdate( $urlHandler ),
             'application/vnd.ez.api.PolicyCreate'           => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService(), $parserTools ),
             'application/vnd.ez.api.PolicyUpdate'           => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService(), $parserTools ),
             'application/vnd.ez.api.RoleAssignInput'        => new Input\Parser\RoleAssignInput( $urlHandler, $parserTools ),
-            'application/vnd.ez.api.LocationCreate'         => new Input\Parser\LocationCreate( $urlHandler, $repository->getLocationService(), $parserTools ),
+            'application/vnd.ez.api.LocationCreate'         => $locationCreateParser,
             'application/vnd.ez.api.LocationUpdate'         => new Input\Parser\LocationUpdate( $urlHandler, $repository->getLocationService(), $parserTools ),
             'application/vnd.ez.api.ObjectStateGroupCreate' => new Input\Parser\ObjectStateGroupCreate( $urlHandler, $repository->getObjectStateService(), $parserTools ),
             'application/vnd.ez.api.ObjectStateGroupUpdate' => new Input\Parser\ObjectStateGroupUpdate( $urlHandler, $repository->getObjectStateService(), $parserTools ),
@@ -213,6 +229,7 @@ $valueObjectVisitors = array(
 
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentList'                => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestContent'                => new Output\ValueObjectVisitor\RestContent( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedContent'             => new Output\ValueObjectVisitor\CreatedContent( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo'          => new Output\ValueObjectVisitor\VersionInfo( $urlHandler ),
     // Includes vitising of VersionInfo, which can be extracted for re-use, if
     // necessary
@@ -315,6 +332,9 @@ $dispatcher = new AuthenticatingDispatcher(
 
             // /content/objects
 
+            '(^/content/objects$)' => array(
+                'POST' => array( $contentController, 'createContent' ),
+            ),
             '(^/content/objects\?remoteId=[0-9a-z]+$)' => array(
                 'GET'   => array( $contentController, 'loadContentInfoByRemoteId' ),
             ),

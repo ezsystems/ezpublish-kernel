@@ -97,13 +97,17 @@ class RestContent extends ValueObjectVisitor
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Section' );
 
-        $generator->startObjectElement( 'MainLocation', 'Location' );
-        $generator->startAttribute(
-            'href',
-            $this->urlHandler->generate( 'location', array( 'location' => $mainLocation->pathString ) )
-        );
-        $generator->endAttribute( 'href' );
-        $generator->endObjectElement( 'MainLocation' );
+        // Main location will not exist if we're visiting the content draft
+        if ( $data->mainLocation !== null )
+        {
+            $generator->startObjectElement( 'MainLocation', 'Location' );
+            $generator->startAttribute(
+                'href',
+                $this->urlHandler->generate( 'location', array( 'location' => $mainLocation->pathString ) )
+            );
+            $generator->endAttribute( 'href' );
+            $generator->endObjectElement( 'MainLocation' );
+        }
 
         $generator->startObjectElement( 'Locations', 'LocationList' );
         $generator->startAttribute(
@@ -121,19 +125,27 @@ class RestContent extends ValueObjectVisitor
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Owner' );
 
-        $generator->startValueElement(
-            'lastModificationDate',
-            $contentInfo->modificationDate->format( 'c' )
-        );
-        $generator->endValueElement( 'lastModificationDate' );
+        // Modification date will not exist if we're visiting the content draft
+        if ( $contentInfo->modificationDate !== null )
+        {
+            $generator->startValueElement(
+                'lastModificationDate',
+                $contentInfo->modificationDate->format( 'c' )
+            );
+            $generator->endValueElement( 'lastModificationDate' );
+        }
 
-        $generator->startValueElement(
-            'publishedDate',
-            ( $contentInfo->publishedDate !== null
-                ? $contentInfo->publishedDate->format( 'c' )
-                : null )
-        );
-        $generator->endValueElement( 'publishedDate' );
+        // Published date will not exist if we're visiting the content draft
+        if ( $contentInfo->publishedDate !== null )
+        {
+            $generator->startValueElement(
+                'publishedDate',
+                ( $contentInfo->publishedDate !== null
+                    ? $contentInfo->publishedDate->format( 'c' )
+                    : null )
+            );
+            $generator->endValueElement( 'publishedDate' );
+        }
 
         $generator->startValueElement(
             'mainLanguageCode',

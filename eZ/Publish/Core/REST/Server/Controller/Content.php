@@ -215,4 +215,41 @@ class Content
             $urlValues['version']
         );
     }
+
+    /**
+     * Creates a new content draft assigned to the authenticated user.
+     * If a different userId is given in the input it is assigned to the
+     * given user but this required special rights for the authenticated
+     * user (this is useful for content staging where the transfer process
+     * does not have to authenticate with the user which created the content
+     * object in the source server). The user has to publish the content if
+     * it should be visible.
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\RestContent
+     */
+    public function createContent( RMF\Request $request )
+    {
+        $contentCreate = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            )
+        );
+
+        $content = $this->contentService->createContent(
+            $contentCreate->contentCreateStruct,
+            array( $contentCreate->locationCreateStruct )
+        );
+
+        return new Values\CreatedContent(
+            array(
+                'content' => new Values\RestContent(
+                    $content->contentInfo,
+                    null,
+                    $this->getMediaType( $request ) === 'application/vnd.ez.api.content' ? $content : null
+                )
+            )
+        );
+    }
 }
