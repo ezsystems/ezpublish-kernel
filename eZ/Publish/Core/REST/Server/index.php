@@ -340,7 +340,9 @@ $dispatcher = new AuthenticatingDispatcher(
             ),
             '(^/content/objects/[0-9]+$)' => array(
                 'PATCH' => array( $contentController, 'updateContentMetadata' ),
-                'GET' => array( $contentController, 'loadContent' )
+                'GET' => array( $contentController, 'loadContent' ),
+                'DELETE' => array( $contentController, 'deleteContent' ),
+                'COPY' => array( $contentController, 'copyContent' ),
             ),
             '(^/content/objects/[0-9]+/versions/[0-9]+$)' => array(
                 'GET' => array( $contentController, 'loadContentInVersion' ),

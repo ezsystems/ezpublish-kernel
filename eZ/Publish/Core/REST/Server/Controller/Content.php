@@ -252,4 +252,47 @@ class Content
             )
         );
     }
+
+    /**
+     * The content is deleted. If the content has locations (which is required in 4.x)
+     * on delete all locations assigned the content object are deleted via delete subtree.
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     */
+    public function deleteContent( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'object', $request->path );
+
+        $this->contentService->deleteContent(
+            $this->contentService->loadContentInfo( $urlValues['object'] )
+        );
+
+        return new Values\ResourceDeleted();
+    }
+
+    /**
+     * Creates a new content object as copy under the given parent location given in the destination header.
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
+     */
+    public function copyContent( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'object', $request->path );
+        $destinationValues = $this->urlHandler->parse( 'location', $request->destination );
+
+        $parentLocationParts = explode( '/', $destinationValues['location'] );
+        $copiedContent = $this->contentService->copyContent(
+            $this->contentService->loadContentInfo( $urlValues['object'] ),
+            $this->locationService->newLocationCreateStruct( array_pop( $parentLocationParts ) )
+        );
+
+        return new Values\ResourceCreated(
+            $this->urlHandler->generate(
+                'object',
+                array( 'object' => $copiedContent->id )
+            )
+        );
+    }
 }
