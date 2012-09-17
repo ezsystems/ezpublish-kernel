@@ -21,6 +21,11 @@ services:
             - @ezpublish.api.persistence_handler
             - @ezpublish.api.io_handler
 
+    ezpublish.api.repository.lazy:
+        class: Closure
+        factory_service: ezpublish.api.repository.factory
+        factory_method: buildLazyRepository
+
     ezpublish.api.io_handler:
         class: %ezpublish.api.io_handler.class%
         public: false

@@ -34,6 +34,11 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
     protected $requestContext;
 
     /**
+     * @var \Closure
+     */
+    protected $lazyRepository;
+
+    /**
      * @var \eZ\Publish\API\Repository\URLAliasService
      */
     protected $urlAliasService;
@@ -53,13 +58,21 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
      */
     protected $logger;
 
-    public function __construct( Repository $repository, UrlAliasGenerator $generator, RequestContext $requestContext, LoggerInterface $logger = null )
+    public function __construct( \Closure $lazyRepository, UrlAliasGenerator $generator, RequestContext $requestContext, LoggerInterface $logger = null )
     {
-        $this->urlAliasService = $repository->getURLAliasService();
-        $this->repository = $repository;
+        $this->lazyRepository = $lazyRepository;
         $this->generator = $generator;
         $this->requestContext = isset( $requestContext ) ? $requestContext : new RequestContext();
         $this->logger = $logger;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Repository
+     */
+    protected function getRepository()
+    {
+        $lazyRepository = $this->lazyRepository;
+        return $lazyRepository();
     }
 
     /**
@@ -79,7 +92,7 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
     {
         try
         {
-            $urlAlias = $this->urlAliasService->lookup(
+            $urlAlias = $this->getRepository()->getURLAliasService()->lookup(
                 $request->attributes->get(
                     'semanticPathinfo',
                     $request->getPathInfo()
@@ -175,7 +188,7 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
                 );
             }
 
-            $location = isset( $parameters['location'] ) ? $parameters['location'] : $this->repository->getLocationService()->loadLocation( $parameters['locationId'] );
+            $location = isset( $parameters['location'] ) ? $parameters['location'] : $this->getRepository()->getLocationService()->loadLocation( $parameters['locationId'] );
             unset( $parameters['location'], $parameters['locationId'] );
             return $this->generator->generate( $location, $parameters, $absolute );
         }
