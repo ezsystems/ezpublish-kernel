@@ -93,18 +93,18 @@ class CLIHandler implements ezpKernelHandler
      *
      * @return bool
      */
-    public function hasSymfonyDIContainer()
+    public function hasServiceContainer()
     {
         return false;
     }
 
     /**
-     * Returns the Symfony Dependency Injection if it has been injected,
+     * Returns the Symfony Dependency Injection container if it has been injected,
      * otherwise returns null.
      *
      * @return \Symfony\Component\DependencyInjection\ContainerInterface|null
      */
-    public function getSymfonyDIContainer()
+    public function getServiceContainer()
     {
         return null;
     }

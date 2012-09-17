@@ -105,7 +105,7 @@ class Loader
 
         $eventDispatcher = $container->get( 'event_dispatcher' );
         $legacyParameters = new ParameterBag( $defaultLegacyOptions );
-        $legacyParameters->set( 'symfony-dic', $container );
+        $legacyParameters->set( 'service-container', $container );
 
         return function () use ( $legacyRootDir, $webrootDir, $request, $eventDispatcher, $legacyParameters, $webHandlerClass )
         {
