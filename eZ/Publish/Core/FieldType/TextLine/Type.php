@@ -104,9 +104,9 @@ class Type extends FieldType
     public function validate( FieldDefinition $fieldDefinition, $fieldValue )
     {
         $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
-        $constraints = isset($validatorConfiguration['StringLengthValidator']) ?
-            $validatorConfiguration['StringLengthValidator'] :
-            array();
+        $constraints = isset( $validatorConfiguration['StringLengthValidator'] )
+            ? $validatorConfiguration['StringLengthValidator']
+            : array();
 
         $validationErrors = array();
 
