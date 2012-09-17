@@ -32,7 +32,7 @@ class Service
      * @param $zoneDefinition
      * @param $blockDefinition
      */
-    public function __construct( $zoneDefinition, $blockDefinition )
+    public function __construct( array $zoneDefinition = array(), array $blockDefinition = array() )
     {
         $this->zoneDefinition = $zoneDefinition;
         $this->blockDefinition = $blockDefinition;
