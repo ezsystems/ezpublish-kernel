@@ -28,7 +28,6 @@ class Value extends BaseValue
     public function __construct( Page $page = null )
     {
         $this->page = $page;
-
     }
 
     /**

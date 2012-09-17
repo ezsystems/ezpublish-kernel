@@ -55,8 +55,6 @@ class PageTest extends StandardizedFieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         return new PageType(
-            $this->getValidatorServiceMock(),
-            $this->getFieldTypeToolsMock(),
             $this->getPageServiceMock()
         );
     }

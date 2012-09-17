@@ -9,9 +9,8 @@
 
 namespace eZ\Publish\Core\FieldType\Page;
 use eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\API\Repository\FieldTypeTools,
     eZ\Publish\Core\FieldType\Page\Service as PageService,
-    eZ\Publish\Core\Repository\ValidatorService,
+    eZ\Publish\Core\FieldType\ValidationError,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 
@@ -33,13 +32,10 @@ class Type extends FieldType
     protected $pageService;
 
     /**
-     * @param \eZ\Publish\Core\Repository\ValidatorService $validatorService
-     * @param \eZ\Publish\API\Repository\FieldTypeTools $fieldTypeTools
      * @param \eZ\Publish\Core\FieldType\Page\Service $pageService
      */
-    public function __construct( ValidatorService $validatorService, FieldTypeTools $fieldTypeTools, PageService $pageService )
+    public function __construct( PageService $pageService )
     {
-        parent::__construct( $validatorService, $fieldTypeTools );
         $this->pageService = $pageService;
     }
 
