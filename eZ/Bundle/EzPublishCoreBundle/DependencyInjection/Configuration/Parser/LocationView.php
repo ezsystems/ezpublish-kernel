@@ -55,7 +55,7 @@ class LocationView implements Parser
     {
         foreach ( $config['system'] as $sa => $settings )
         {
-            if ( isset( $settings['location_view'] ) )
+            if ( !empty( $settings['location_view'] ) )
             {
                 $container->setParameter( "ezsettings.$sa.location_view", $settings['location_view'] );
             }

@@ -61,12 +61,12 @@ class Common implements Parser
     {
         foreach ( $config['system'] as $sa => $settings )
         {
-            if ( isset( $settings['languages'] ) )
+            if ( !empty( $settings['languages'] ) )
             {
                 $container->setParameter( "ezsettings.$sa.languages", $settings['languages'] );
             }
 
-            if ( isset( $settings['database'] ) )
+            if ( !empty( $settings['database'] ) )
             {
                 if ( isset( $settings['database']['dsn'] ) )
                 {
@@ -79,9 +79,13 @@ class Common implements Parser
                         $port = ":{$settings['database']['port']}";
 
                     $dsn = "{$settings['database']['type']}://{$settings['database']['user']}:{$settings['database']['password']}@{$settings['database']['server']}$port/{$settings['database']['database_name']}";
-                    $container->setParameter( "ezsettings.$sa.database.dsn", $dsn );
                 }
+
+                $container->setParameter( "ezsettings.$sa.database.dsn", $dsn );
             }
+
+            // urlAliasRouter
+            $container->setParameter( "ezsettings.$sa.url_alias_router", $settings['url_alias_router'] );
         }
     }
 }
