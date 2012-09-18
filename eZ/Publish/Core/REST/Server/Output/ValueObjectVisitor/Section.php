@@ -29,6 +29,7 @@ class Section extends ValueObjectVisitor
     {
         $generator->startObjectElement( 'Section' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Section' ) );
+        $visitor->setHeader( 'Accept-Patch', $generator->getMediaType( 'SectionInput' ) );
 
         $generator->startAttribute(
             'href',

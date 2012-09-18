@@ -29,6 +29,7 @@ class ObjectStateGroup extends ValueObjectVisitor
     {
         $generator->startObjectElement( 'ObjectStateGroup' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'ObjectStateGroup' ) );
+        $visitor->setHeader( 'Accept-Patch', $generator->getMediaType( 'ObjectStateGroupUpdate' ) );
 
         $generator->startAttribute(
             'href',

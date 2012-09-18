@@ -29,6 +29,7 @@ class RestObjectState extends ValueObjectVisitor
     {
         $generator->startObjectElement( 'ObjectState' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'ObjectState' ) );
+        $visitor->setHeader( 'Accept-Patch', $generator->getMediaType( 'ObjectStateUpdate' ) );
 
         $generator->startAttribute(
             'href',

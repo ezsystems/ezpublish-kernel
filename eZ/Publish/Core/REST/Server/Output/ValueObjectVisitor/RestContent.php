@@ -37,6 +37,7 @@ class RestContent extends ValueObjectVisitor
         $generator->startObjectElement( 'Content', $mediaType );
 
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( $mediaType ) );
+        $visitor->setHeader( 'Accept-Patch', $generator->getMediaType( 'ContentUpdate' ) );
 
         $generator->startAttribute(
             'href',

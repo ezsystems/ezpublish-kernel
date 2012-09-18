@@ -31,6 +31,7 @@ class Location extends ValueObjectVisitor
     {
         $generator->startObjectElement( 'Location' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Location' ) );
+        $visitor->setHeader( 'Accept-Patch', $generator->getMediaType( 'LocationUpdate' ) );
 
         $generator->startAttribute(
             'href',

@@ -29,6 +29,7 @@ class Role extends ValueObjectVisitor
     {
         $generator->startObjectElement( 'Role' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Role' ) );
+        $visitor->setHeader( 'Accept-Patch', $generator->getMediaType( 'RoleInput' ) );
 
         $generator->startAttribute(
             'href',

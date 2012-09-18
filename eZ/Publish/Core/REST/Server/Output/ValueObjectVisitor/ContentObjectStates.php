@@ -29,6 +29,7 @@ class ContentObjectStates extends ValueObjectVisitor
     {
         $generator->startObjectElement( 'ContentObjectStates' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'ContentObjectStates' ) );
+        $visitor->setHeader( 'Accept-Patch', $generator->getMediaType( 'ContentObjectStates' ) );
 
         $generator->startList( 'ObjectState' );
 

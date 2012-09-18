@@ -29,6 +29,7 @@ class Policy extends ValueObjectVisitor
     {
         $generator->startObjectElement( 'Policy' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Policy' ) );
+        $visitor->setHeader( 'Accept-Patch', $generator->getMediaType( 'PolicyUpdate' ) );
 
         $generator->startAttribute(
             'href',
