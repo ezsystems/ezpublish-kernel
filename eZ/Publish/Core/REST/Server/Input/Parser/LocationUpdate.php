@@ -57,31 +57,32 @@ class LocationUpdate extends Base
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
-        if ( !array_key_exists( 'priority', $data ) )
+        $locationUpdateStruct = $this->locationService->newLocationUpdateStruct();
+
+        if ( array_key_exists( 'priority', $data ) )
         {
-            throw new Exceptions\Parser( "Missing 'priority' element for LocationUpdate." );
+            $locationUpdateStruct->priority = (int) $data['priority'];
         }
 
-        if ( !array_key_exists( 'remoteId', $data ) )
+        if ( array_key_exists( 'remoteId', $data ) )
         {
-            throw new Exceptions\Parser( "Missing 'remoteId' element for LocationUpdate." );
+            $locationUpdateStruct->remoteId = $data['remoteId'];
         }
+
+        // @todo how to handle hidden?
 
         if ( !array_key_exists( 'sortField', $data ) )
         {
             throw new Exceptions\Parser( "Missing 'sortField' element for LocationUpdate." );
         }
 
+        $locationUpdateStruct->sortField = $this->parserTools->parseDefaultSortField( $data['sortField'] );
+
         if ( !array_key_exists( 'sortOrder', $data ) )
         {
             throw new Exceptions\Parser( "Missing 'sortOrder' element for LocationUpdate." );
         }
 
-        $locationUpdateStruct = $this->locationService->newLocationUpdateStruct();
-
-        $locationUpdateStruct->priority = (int) $data['priority'];
-        $locationUpdateStruct->remoteId = $data['remoteId'];
-        $locationUpdateStruct->sortField = $this->parserTools->parseDefaultSortField( $data['sortField'] );
         $locationUpdateStruct->sortOrder = $this->parserTools->parseDefaultSortOrder( $data['sortOrder'] );
 
         return $locationUpdateStruct;

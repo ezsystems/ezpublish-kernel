@@ -61,43 +61,7 @@ class LocationUpdateTest extends BaseTest
     }
 
     /**
-     * Test LocationUpdate parser throwing exception on missing priority
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing 'priority' element for LocationUpdate.
-     */
-    public function testParseExceptionOnMissingPriority()
-    {
-        $inputArray = array(
-            'remoteId' => 'remote-id',
-            'sortField' => 'PATH',
-            'sortOrder' => 'ASC'
-        );
-
-        $locationUpdate = $this->getLocationUpdate();
-        $locationUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
-    }
-
-    /**
-     * Test LocationUpdate parser throwing exception on missing remoteId
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing 'remoteId' element for LocationUpdate.
-     */
-    public function testParseExceptionOnMissingRemoteId()
-    {
-        $inputArray = array(
-            'priority' => 0,
-            'sortField' => 'PATH',
-            'sortOrder' => 'ASC'
-        );
-
-        $locationUpdate = $this->getLocationUpdate();
-        $locationUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
-    }
-
-    /**
-     * Test LocationUpdate parser throwing exception on missing priority
+     * Test LocationUpdate parser throwing exception on missing sort field
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'sortField' element for LocationUpdate.
@@ -115,7 +79,7 @@ class LocationUpdateTest extends BaseTest
     }
 
     /**
-     * Test LocationUpdate parser throwing exception on missing priority
+     * Test LocationUpdate parser throwing exception on missing sort order
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'sortOrder' element for LocationUpdate.
