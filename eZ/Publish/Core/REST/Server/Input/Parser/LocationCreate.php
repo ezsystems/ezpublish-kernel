@@ -66,26 +66,6 @@ class LocationCreate extends Base
             throw new Exceptions\Parser( "Missing '_href' attribute for ParentLocation element in LocationCreate." );
         }
 
-        if ( !array_key_exists( 'priority', $data ) )
-        {
-            throw new Exceptions\Parser( "Missing 'priority' element for LocationCreate." );
-        }
-
-        if ( !array_key_exists( 'hidden', $data ) )
-        {
-            throw new Exceptions\Parser( "Missing 'hidden' element for LocationCreate." );
-        }
-
-        if ( !array_key_exists( 'sortField', $data ) )
-        {
-            throw new Exceptions\Parser( "Missing 'sortField' element for LocationCreate." );
-        }
-
-        if ( !array_key_exists( 'sortOrder', $data ) )
-        {
-            throw new Exceptions\Parser( "Missing 'sortOrder' element for LocationCreate." );
-        }
-
         $locationHref = $this->urlHandler->parse( 'location', $data['ParentLocation']['_href'] );
         $locationHrefParts = explode( '/', $locationHref['location'] );
 
@@ -93,9 +73,33 @@ class LocationCreate extends Base
             array_pop( $locationHrefParts )
         );
 
-        $locationCreateStruct->priority = (int) $data['priority'];
-        $locationCreateStruct->hidden = $data['hidden'] === 'true' ? true : false;
+        if ( array_key_exists( 'priority', $data ) )
+        {
+            $locationCreateStruct->priority = (int) $data['priority'];
+        }
+
+        if ( array_key_exists( 'hidden', $data ) )
+        {
+            $locationCreateStruct->hidden = $this->parserTools->parseBooleanValue( $data['hidden'] );
+        }
+
+        if ( array_key_exists( 'remoteId', $data ) )
+        {
+            $locationCreateStruct->remoteId = $data['remoteId'];
+        }
+
+        if ( !array_key_exists( 'sortField', $data ) )
+        {
+            throw new Exceptions\Parser( "Missing 'sortField' element for LocationCreate." );
+        }
+
         $locationCreateStruct->sortField = $this->parserTools->parseDefaultSortField( $data['sortField'] );
+
+        if ( !array_key_exists( 'sortOrder', $data ) )
+        {
+            throw new Exceptions\Parser( "Missing 'sortOrder' element for LocationCreate." );
+        }
+
         $locationCreateStruct->sortOrder = $this->parserTools->parseDefaultSortOrder( $data['sortOrder'] );
 
         return $locationCreateStruct;

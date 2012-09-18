@@ -23,8 +23,9 @@ class LocationCreateTest extends BaseTest
             'ParentLocation' => array(
                 '_href' => '/content/locations/1/2/42'
             ),
-            'priority' => 0,
-            'hidden' => 'false',
+            'priority' => '2',
+            'hidden' => 'true',
+            'remoteId' => 'remoteId12345678',
             'sortField' => 'PATH',
             'sortOrder' => 'ASC'
         );
@@ -45,15 +46,21 @@ class LocationCreateTest extends BaseTest
         );
 
         $this->assertEquals(
-            0,
+            2,
             $result->priority,
             'LocationCreateStruct priority property not created correctly.'
         );
 
         $this->assertEquals(
-            false,
+            true,
             $result->hidden,
             'LocationCreateStruct hidden property not created correctly.'
+        );
+
+        $this->assertEquals(
+            'remoteId12345678',
+            $result->remoteId,
+            'LocationCreateStruct remoteId property not created correctly.'
         );
 
         $this->assertEquals(
@@ -78,8 +85,9 @@ class LocationCreateTest extends BaseTest
     public function testParseExceptionOnMissingParentLocation()
     {
         $inputArray = array(
-            'priority' => 0,
-            'hidden' => false,
+            'priority' => '0',
+            'hidden' => 'false',
+            'remoteId' => 'remoteId12345678',
             'sortField' => 'PATH',
             'sortOrder' => 'ASC'
         );
@@ -98,8 +106,9 @@ class LocationCreateTest extends BaseTest
     {
         $inputArray = array(
             'ParentLocation' => array(),
-            'priority' => 0,
-            'hidden' => false,
+            'priority' => '0',
+            'hidden' => 'false',
+            'remoteId' => 'remoteId12345678',
             'sortField' => 'PATH',
             'sortOrder' => 'ASC'
         );
@@ -109,49 +118,7 @@ class LocationCreateTest extends BaseTest
     }
 
     /**
-     * Test LocationCreate parser throwing exception on missing priority
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing 'priority' element for LocationCreate.
-     */
-    public function testParseExceptionOnMissingPriority()
-    {
-        $inputArray = array(
-            'ParentLocation' => array(
-                '_href' => '/content/locations/1/2/42'
-            ),
-            'hidden' => false,
-            'sortField' => 'PATH',
-            'sortOrder' => 'ASC'
-        );
-
-        $locationCreate = $this->getLocationCreate();
-        $locationCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
-    }
-
-    /**
-     * Test LocationCreate parser throwing exception on missing hidden
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing 'hidden' element for LocationCreate.
-     */
-    public function testParseExceptionOnMissingHidden()
-    {
-        $inputArray = array(
-            'ParentLocation' => array(
-                '_href' => '/content/locations/1/2/42'
-            ),
-            'priority' => 0,
-            'sortField' => 'PATH',
-            'sortOrder' => 'ASC'
-        );
-
-        $locationCreate = $this->getLocationCreate();
-        $locationCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
-    }
-
-    /**
-     * Test LocationCreate parser throwing exception on missing priority
+     * Test LocationCreate parser throwing exception on missing sort field
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'sortField' element for LocationCreate.
@@ -162,8 +129,9 @@ class LocationCreateTest extends BaseTest
             'ParentLocation' => array(
                 '_href' => '/content/locations/1/2/42'
             ),
-            'priority' => 0,
-            'hidden' => false,
+            'priority' => '0',
+            'hidden' => 'false',
+            'remoteId' => 'remoteId12345678',
             'sortOrder' => 'ASC'
         );
 
@@ -172,7 +140,7 @@ class LocationCreateTest extends BaseTest
     }
 
     /**
-     * Test LocationCreate parser throwing exception on missing priority
+     * Test LocationCreate parser throwing exception on missing sort order
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'sortOrder' element for LocationCreate.
@@ -183,8 +151,9 @@ class LocationCreateTest extends BaseTest
             'ParentLocation' => array(
                 '_href' => '/content/locations/1/2/42'
             ),
-            'priority' => 0,
-            'hidden' => false,
+            'priority' => '0',
+            'hidden' => 'false',
+            'remoteId' => 'remoteId12345678',
             'sortField' => 'PATH'
         );
 
