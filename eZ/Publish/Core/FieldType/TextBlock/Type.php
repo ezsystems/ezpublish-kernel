@@ -50,8 +50,10 @@ class Type extends FieldType
      */
     public function getName( $value )
     {
-        $value = $this->acceptValue( $value );
-
+        if ( $value === null )
+        {
+            return "";
+        }
         return (string)$value->text;
     }
 
@@ -63,7 +65,7 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value( "" );
+        return null;
     }
 
     /**
@@ -89,6 +91,11 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( $inputValue === null || $inputValue === "" )
+        {
+            return null;
+        }
+
         if ( is_string( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
@@ -101,6 +108,11 @@ class Type extends FieldType
                 'eZ\\Publish\\Core\\FieldType\\TextBlock\\Value',
                 $inputValue
             );
+        }
+
+        if ( $inputValue->text === null || $inputValue->text === "" )
+        {
+            return null;
         }
 
         if ( !is_string( $inputValue->text ) )

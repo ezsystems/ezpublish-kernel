@@ -39,7 +39,7 @@ class TextLine implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataText      = $value->data;
+        $storageFieldValue->dataText = $value->data;
         $storageFieldValue->sortKeyString = $value->sortKey;
     }
 
@@ -51,7 +51,7 @@ class TextLine implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data    = $value->dataText;
+        $fieldValue->data = $value->dataText;
         $fieldValue->sortKey = $value->sortKeyString;
     }
 
@@ -104,7 +104,7 @@ class TextLine implements Converter
         }
 
         $fieldDef->fieldTypeConstraints->validators = $validatorConstraints;
-        $fieldDef->defaultValue->data = isset( $storageDef->dataText1 ) ? $storageDef->dataText1 : '';
+        $fieldDef->defaultValue->data = $storageDef->dataText1 ?: null;
     }
 
     /**
@@ -120,5 +120,4 @@ class TextLine implements Converter
     {
         return 'sort_key_string';
     }
-
 }

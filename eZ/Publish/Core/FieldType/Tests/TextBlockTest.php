@@ -27,7 +27,7 @@ class TextBlockTest extends StandardizedFieldTypeTest
      * NOT take care for test case wide caching of the field type, just return
      * a new instance from this method!
      *
-     * @return FieldType
+     * @return \eZ\Publish\SPI\FieldType\FieldType
      */
     protected function createFieldTypeUnderTest()
     {
@@ -62,11 +62,11 @@ class TextBlockTest extends StandardizedFieldTypeTest
     /**
      * Returns the empty value expected from the field type.
      *
-     * @return void
+     * @return \eZ\Publish\Core\FieldType\TextLine\Value
      */
     protected function getEmptyValueExpectation()
     {
-        return new TextBlockValue( '' );
+        return null;
     }
 
     /**
@@ -139,8 +139,12 @@ class TextBlockTest extends StandardizedFieldTypeTest
     {
         return array(
             array(
+                null,
+                null,
+            ),
+            array(
                 '',
-                new TextBlockValue( '' ),
+                null,
             ),
             array(
                 'sindelfingen',
@@ -149,6 +153,14 @@ class TextBlockTest extends StandardizedFieldTypeTest
             array(
                 new TextBlockValue( 'sindelfingen' ),
                 new TextBlockValue( 'sindelfingen' ),
+            ),
+            array(
+                new TextBlockValue( '' ),
+                null,
+            ),
+            array(
+                new TextBlockValue( null ),
+                null,
             ),
         );
     }
