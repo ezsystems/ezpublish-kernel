@@ -144,10 +144,7 @@ class ContentCreate extends Base
 
         if ( array_key_exists( 'modificationDate', $data ) )
         {
-            $modificationDate = new DateTime();
-            $modificationDate->setTimestamp( strtotime( $data['modificationDate'] ) );
-
-            $contentCreateStruct->modificationDate = $modificationDate;
+            $contentCreateStruct->modificationDate = new DateTime( $data['modificationDate'] );
         }
 
         if ( array_key_exists( 'User', $data ) && is_array( $data['User'] ) )
