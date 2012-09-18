@@ -58,6 +58,8 @@ class PolicyUpdate extends Base
     {
         $policyUpdate = $this->roleService->newPolicyUpdateStruct();
 
+        // @todo XSD says that limitations field is mandatory, but
+        // it needs to be possible to remove limitations from policy
         if ( array_key_exists( 'limitations', $data ) )
         {
             if ( !is_array( $data['limitations'] ) )

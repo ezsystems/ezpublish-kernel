@@ -68,6 +68,8 @@ class PolicyCreate extends Base
 
         $policyCreate = $this->roleService->newPolicyCreateStruct( $data['module'], $data['function'] );
 
+        // @todo XSD says that limitations is mandatory,
+        // but polices can be created without limitations
         if ( array_key_exists( 'limitations', $data ) )
         {
             if ( !is_array( $data['limitations'] ) )
