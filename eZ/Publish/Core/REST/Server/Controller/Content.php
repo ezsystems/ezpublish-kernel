@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Controller;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
+use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Values;
 
 use \eZ\Publish\API\Repository\ContentService;
@@ -429,6 +430,34 @@ class Content
         );
 
         return new Values\RelationList( $relationList, $urlValues['object'], $urlValues['version'] );
+    }
+
+    /**
+     * Loads a relation for the given content object and version
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\RestRelation
+     */
+    public function loadVersionRelation( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'objectVersionRelation', $request->path );
+
+        $relationList = $this->contentService->loadRelations(
+            $this->contentService->loadVersionInfo(
+                $this->contentService->loadContentInfo( $urlValues['object'] ),
+                $urlValues['version']
+            )
+        );
+
+        foreach ( $relationList as $relation )
+        {
+            if ( $relation->id == $urlValues['relation'] )
+            {
+                return new Values\RestRelation( $relation, $urlValues['object'], $urlValues['version'] );
+            }
+        }
+
+        throw new Exceptions\NotFoundException( "Relation not found: '{$request->path}'." );
     }
 
     /**

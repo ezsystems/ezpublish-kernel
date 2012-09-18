@@ -360,6 +360,9 @@ $dispatcher = new AuthenticatingDispatcher(
             '(^/content/objects/[0-9]+/versions/[0-9]+/relations$)' => array(
                 'GET' => array( $contentController, 'loadVersionRelations' ),
             ),
+            '(^/content/objects/[0-9]+/versions/[0-9]+/relations/[0-9]+$)' => array(
+                'GET' => array( $contentController, 'loadVersionRelation' ),
+            ),
             '(^/content/objects/[0-9]+/versions/[0-9]+$)' => array(
                 'GET' => array( $contentController, 'loadContentInVersion' ),
                 'DELETE' => array( $contentController, 'deleteContentVersion' ),
