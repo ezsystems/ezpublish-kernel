@@ -173,6 +173,9 @@ class Role
      */
     public function deleteRole( RMF\Request $request )
     {
+        //@todo error handling if the role is assigned to user or user group
+        //problem being that PAPI does not specify throwing an exception in that case
+
         $values = $this->urlHandler->parse( 'role', $request->path );
         $this->roleService->deleteRole(
             $this->roleService->loadRole( $values['role'] )
@@ -343,6 +346,9 @@ class Role
      */
     public function assignRoleToUser( RMF\Request $request )
     {
+        //@todo error handling if the role is already assigned to user
+        //problem being that PAPI does not specify throwing an exception in this case
+
         $values = $this->urlHandler->parse( 'userRoleAssignments', $request->path );
 
         $roleAssignment = $this->inputDispatcher->parse(
@@ -369,6 +375,9 @@ class Role
      */
     public function assignRoleToUserGroup( RMF\Request $request )
     {
+        //@todo error handling if the role is already assigned to user group
+        //problem being that PAPI does not specify throwing an exception in this case
+
         $values = $this->urlHandler->parse( 'groupRoleAssignments', $request->path );
 
         $roleAssignment = $this->inputDispatcher->parse(

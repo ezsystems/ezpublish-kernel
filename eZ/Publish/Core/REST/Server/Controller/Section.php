@@ -13,10 +13,13 @@ use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
 
-use \eZ\Publish\API\Repository\SectionService;
-use \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
-use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
-use \eZ\Publish\Core\REST\Server\Values\ResourceDeleted;
+use eZ\Publish\API\Repository\SectionService;
+use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
+use eZ\Publish\Core\REST\Server\Values\ResourceDeleted;
+
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 
 use Qafoo\RMF;
 
@@ -99,16 +102,25 @@ class Section
      */
     public function createSection( RMF\Request $request )
     {
-        return new Values\CreatedSection(
-            array(
-                'section' => $this->sectionService->createSection(
-                    $this->inputDispatcher->parse(
-                        new Message(
-                            array( 'Content-Type' => $request->contentType ),
-                            $request->body
-                        )
+        try
+        {
+            $createdSection = $this->sectionService->createSection(
+                $this->inputDispatcher->parse(
+                    new Message(
+                        array( 'Content-Type' => $request->contentType ),
+                        $request->body
                     )
                 )
+            );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
+
+        return new Values\CreatedSection(
+            array(
+                'section' => $createdSection
             )
         );
     }
@@ -140,10 +152,18 @@ class Section
                 $request->body
             )
         );
-        return $this->sectionService->updateSection(
-            $this->sectionService->loadSection( $values['section'] ),
-            $this->mapToUpdateStruct( $createStruct )
-        );
+
+        try
+        {
+            return $this->sectionService->updateSection(
+                $this->sectionService->loadSection( $values['section'] ),
+                $this->mapToUpdateStruct( $createStruct )
+            );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
     }
 
     /**

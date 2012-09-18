@@ -186,14 +186,16 @@ class Content
     {
         $urlValues = $this->urlHandler->parse( 'objectCurrentVersion', $request->path );
 
-        $contentInfo = $this->contentService->loadContentInfo( $urlValues['object'] );
+        $versionInfo = $this->contentService->loadVersionInfo(
+            $this->contentService->loadContentInfo( $urlValues['object'] )
+        );
 
         return new Values\ResourceRedirect(
             $this->urlHandler->generate(
                 'objectVersion',
                 array(
                     'object' => $urlValues['object'],
-                    'version' => $contentInfo->currentVersionNo
+                    'version' => $versionInfo->versionNo
                 )
             ),
             'Version'

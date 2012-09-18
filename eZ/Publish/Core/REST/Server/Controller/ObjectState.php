@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\ContentService;
 
 use eZ\Publish\Core\REST\Common\Values\ContentObjectStates;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 
 use Qafoo\RMF;
 
@@ -79,6 +80,9 @@ class ObjectState
      */
     public function createObjectStateGroup( RMF\Request $request )
     {
+        //@todo Error handling if identifier already exists
+        //Problem being, PAPI does not specify exception in that case
+
         return new Values\CreatedObjectStateGroup(
             array(
                 'objectStateGroup' => $this->objectStateService->createObjectStateGroup(
@@ -101,6 +105,9 @@ class ObjectState
      */
     public function createObjectState( RMF\Request $request )
     {
+        //@todo Error handling if identifier already exists
+        //Problem being, PAPI does not specify exception in that case
+
         $values = $this->urlHandler->parse( 'objectstates', $request->path );
 
         $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] );
@@ -220,6 +227,9 @@ class ObjectState
      */
     public function updateObjectStateGroup( RMF\Request $request )
     {
+        //@todo Error handling if identifier already exists
+        //Problem being, PAPI does not specify exception in that case
+
         $values = $this->urlHandler->parse( 'objectstategroup', $request->path );
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
@@ -241,6 +251,9 @@ class ObjectState
      */
     public function updateObjectState( RMF\Request $request )
     {
+        //@todo Error handling if identifier already exists
+        //Problem being, PAPI does not specify exception in that case
+
         $values = $this->urlHandler->parse( 'objectstate', $request->path );
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
@@ -303,6 +316,28 @@ class ObjectState
                 $request->body
             )
         );
+
+        $countByGroups = array();
+        foreach ( $newObjectStates as $newObjectState )
+        {
+            $groupId = (int) $newObjectState->groupId;
+            if ( array_key_exists( $groupId, $countByGroups ) )
+            {
+                $countByGroups[$groupId]++;
+            }
+            else
+            {
+                $countByGroups[$groupId] = 1;
+            }
+        }
+
+        foreach ( $countByGroups as $groupId => $count )
+        {
+            if ( $count > 1 )
+            {
+                throw new ForbiddenException( "Multiple object states provided for group with ID $groupId" );
+            }
+        }
 
         $contentInfo = $this->contentService->loadContentInfo( $values['object'] );
 

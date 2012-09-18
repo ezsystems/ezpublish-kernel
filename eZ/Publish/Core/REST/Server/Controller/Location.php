@@ -97,6 +97,9 @@ class Location
             )
         );
 
+        //@todo Error handling if a location under the given parent id already exists
+        //Problem being that PAPI throws same exception for several conditions
+
         $contentInfo = $this->contentService->loadContentInfo( $values['object'] );
         return new Values\CreatedLocation(
             array(
