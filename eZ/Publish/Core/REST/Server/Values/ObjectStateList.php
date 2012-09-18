@@ -17,22 +17,22 @@ class ObjectStateList
     /**
      * Object states
      *
-     * @var array
+     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState[]
      */
     public $states;
 
     /**
      * ID of the group that the states belong to
      *
-     * @var int
+     * @var mixed
      */
     public $groupId;
 
     /**
      * Construct
      *
-     * @param array $states
-     * @param int $groupId
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState[] $states
+     * @param mixed $groupId
      */
     public function __construct( array $states, $groupId )
     {

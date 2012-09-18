@@ -85,6 +85,11 @@ class FieldTypeProcessorRegistryTest extends BaseTest
         );
     }
 
+    /**
+     * Get FieldTypeProcessor mock object
+     *
+     * @return \eZ\Publish\Core\REST\Server\FieldTypeProcessor
+     */
     protected function getAProcessorMock()
     {
         return $this->getMock(

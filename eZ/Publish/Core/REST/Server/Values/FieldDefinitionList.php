@@ -19,22 +19,22 @@ class FieldDefinitionList
     /**
      * ContentType the field definitions belong to
      *
-     * @var ContentType
+     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     public $contentType;
 
     /**
-     * FieldDefinitions
+     * Field definitions
      *
-     * @var array
+     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
     public $fieldDefinitions;
 
     /**
      * Construct
      *
-     * @param ContentType $contentType
-     * @param array $fieldDefinitions
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[] $fieldDefinitions
      */
     public function __construct( ContentType $contentType, array $fieldDefinitions )
     {

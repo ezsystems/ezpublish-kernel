@@ -21,7 +21,6 @@ class InvalidApiUse extends RMF\View
      *
      * @param RMF\Request $request
      * @param mixed $result
-     * @return void
      */
     public function display( RMF\Request $request, $result )
     {
@@ -29,4 +28,3 @@ class InvalidApiUse extends RMF\View
         echo "<h1>Unsupported Media Type</h1>";
     }
 }
-

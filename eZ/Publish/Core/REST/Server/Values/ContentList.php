@@ -17,14 +17,14 @@ class ContentList
     /**
      * Contents
      *
-     * @var array
+     * @var \eZ\Publish\Core\REST\Server\Values\RestContent[]
      */
     public $contents;
 
     /**
      * Construct
      *
-     * @param array $contents
+     * @param \eZ\Publish\Core\REST\Server\Values\RestContent[] $contents
      */
     public function __construct( array $contents )
     {

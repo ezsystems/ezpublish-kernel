@@ -26,7 +26,7 @@ class SectionInput extends Base
     protected $sectionService;
 
     /**
-     * Construct from section service
+     * Construct
      *
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\SectionService $sectionService

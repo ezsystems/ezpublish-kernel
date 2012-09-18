@@ -59,7 +59,7 @@ abstract class BaseTest extends \eZ\Publish\Core\REST\Server\Tests\BaseTest
     /**
      * Get the URL handler
      *
-     * @return \eZ\Publish\Core\REST\Common\UrlHandler\eZPublish;
+     * @return \eZ\Publish\Core\REST\Common\UrlHandler\eZPublish
      */
     protected function getUrlHandler()
     {
@@ -73,7 +73,7 @@ abstract class BaseTest extends \eZ\Publish\Core\REST\Server\Tests\BaseTest
     /**
      * Get the parser tools
      *
-     * @return \eZ\Publish\Core\REST\Common\Input\ParserTools;
+     * @return \eZ\Publish\Core\REST\Common\Input\ParserTools
      */
     protected function getParserTools()
     {

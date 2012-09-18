@@ -19,16 +19,6 @@ use eZ\Publish\Core\REST\Common\Exceptions;
 class RelationCreate extends Base
 {
     /**
-     * Construct from location service
-     *
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
-     */
-    public function __construct( UrlHandler $urlHandler )
-    {
-        parent::__construct( $urlHandler );
-    }
-
-    /**
      * Parse input structure
      *
      * @param array $data

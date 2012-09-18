@@ -17,7 +17,7 @@ class RelationList
     /**
      * Relations
      *
-     * @var array
+     * @var \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
     public $relations;
 
@@ -38,7 +38,7 @@ class RelationList
     /**
      * Construct
      *
-     * @param array $relations
+     * @param \eZ\Publish\API\Repository\Values\Content\Relation[] $relations
      * @param mixed $contentId
      * @param mixed $versionNo
      */

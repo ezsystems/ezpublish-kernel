@@ -19,7 +19,7 @@ class RestUserGroupRoleAssignment
     /**
      * Role assignment
      *
-     * @var \eZ\Publish\API\Repository\Values\User\RoleAssignment
+     * @var \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment
      */
     public $roleAssignment;
 

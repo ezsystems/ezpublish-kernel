@@ -34,7 +34,7 @@ class ObjectStateUpdate extends Base
     protected $parserTools;
 
     /**
-     * Construct from object state service
+     * Construct
      *
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\ObjectStateService $objectStateService

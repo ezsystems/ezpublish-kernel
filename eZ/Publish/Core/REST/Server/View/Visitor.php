@@ -39,7 +39,6 @@ class Visitor extends RMF\View
      *
      * @param RMF\Request $request
      * @param mixed $result
-     * @return void
      */
     public function display( RMF\Request $request, $result )
     {
@@ -67,4 +66,3 @@ class Visitor extends RMF\View
         echo $message->body;
     }
 }
-

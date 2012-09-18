@@ -27,6 +27,12 @@ class RestContentCreate
      */
     public $locationCreateStruct;
 
+    /**
+     * Construct
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct $contentCreateStruct
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $locationCreateStruct
+     */
     public function __construct( ContentCreateStruct $contentCreateStruct, LocationCreateStruct $locationCreateStruct )
     {
         $this->contentCreateStruct = $contentCreateStruct;

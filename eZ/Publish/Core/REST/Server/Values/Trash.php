@@ -17,14 +17,14 @@ class Trash
     /**
      * Trash items
      *
-     * @var array
+     * @var \eZ\Publish\API\Repository\Values\Content\TrashItem[]
      */
     public $trashItems;
 
     /**
      * Construct
      *
-     * @param array $trashItems
+     * @param \eZ\Publish\API\Repository\Values\Content\TrashItem[] $trashItems
      */
     public function __construct( array $trashItems )
     {

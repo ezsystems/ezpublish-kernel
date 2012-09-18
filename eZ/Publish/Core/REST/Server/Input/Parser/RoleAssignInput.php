@@ -28,7 +28,7 @@ class RoleAssignInput extends Base
     protected $parserTools;
 
     /**
-     * Constructor
+     * Construct
      *
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools

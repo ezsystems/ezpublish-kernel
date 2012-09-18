@@ -17,7 +17,7 @@ class PolicyList
     /**
      * Policies
      *
-     * @var array
+     * @var \eZ\Publish\API\Repository\Values\User\Policy[]
      */
     public $policies;
 
@@ -31,7 +31,7 @@ class PolicyList
     /**
      * Construct
      *
-     * @param array $policies
+     * @param \eZ\Publish\API\Repository\Values\User\Policy[] $policies
      * @param string $path
      */
     public function __construct( array $policies, $path )

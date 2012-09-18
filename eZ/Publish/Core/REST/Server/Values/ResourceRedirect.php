@@ -11,10 +11,26 @@ namespace eZ\Publish\Core\REST\Server\Values;
 
 class ResourceRedirect
 {
+    /**
+     * Redirect URI
+     *
+     * @var string
+     */
     public $redirectUri;
 
+    /**
+     * Resource type
+     *
+     * @var string
+     */
     public $resourceType;
 
+    /**
+     * Construct
+     *
+     * @param string $redirectUri
+     * @param string $resourceType
+     */
     public function __construct( $redirectUri, $resourceType )
     {
         $this->redirectUri = $redirectUri;

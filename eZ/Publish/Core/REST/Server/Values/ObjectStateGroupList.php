@@ -17,14 +17,14 @@ class ObjectStateGroupList
     /**
      * Object state groups
      *
-     * @var array
+     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup[]
      */
     public $groups;
 
     /**
      * Construct
      *
-     * @param array $groups
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup[] $groups
      */
     public function __construct( array $groups )
     {

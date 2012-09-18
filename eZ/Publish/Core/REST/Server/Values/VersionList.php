@@ -17,7 +17,7 @@ class VersionList
     /**
      * Versions
      *
-     * @var array
+     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo[]
      */
     public $versions;
 
@@ -31,7 +31,7 @@ class VersionList
     /**
      * Construct
      *
-     * @param array $versions
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo[] $versions
      * @param mixed $contentId
      */
     public function __construct( array $versions, $contentId )

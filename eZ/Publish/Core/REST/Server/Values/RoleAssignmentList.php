@@ -17,7 +17,7 @@ class RoleAssignmentList
     /**
      * Role assignments
      *
-     * @var array
+     * @var \eZ\Publish\API\Repository\Values\User\RoleAssignment[]
      */
     public $roleAssignments;
 
@@ -38,7 +38,7 @@ class RoleAssignmentList
     /**
      * Construct
      *
-     * @param array $roleAssignments
+     * @param \eZ\Publish\API\Repository\Values\User\RoleAssignment[] $roleAssignments
      * @param mixed $id
      * @param bool $isGroupAssignment
      */

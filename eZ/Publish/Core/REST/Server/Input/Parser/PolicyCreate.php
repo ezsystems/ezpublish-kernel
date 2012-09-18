@@ -34,7 +34,7 @@ class PolicyCreate extends Base
     protected $parserTools;
 
     /**
-     * Construct from role service
+     * Construct
      *
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\RoleService $roleService

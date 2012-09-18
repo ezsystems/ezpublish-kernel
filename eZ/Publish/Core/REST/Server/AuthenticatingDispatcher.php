@@ -14,7 +14,6 @@ namespace eZ\Publish\Core\REST\Server;
 
 use Qafoo\RMF;
 
-
 /**
  * MVC dispatcher with integrated authentication
  */

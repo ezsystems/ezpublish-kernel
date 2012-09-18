@@ -20,22 +20,22 @@ class RestFieldDefinition
     /**
      * ContentType the field definitions belong to
      *
-     * @var ContentType
+     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     public $contentType;
 
     /**
-     * FieldDefinitions
+     * Field definition
      *
-     * @var FieldDefinition
+     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
     public $fieldDefinition;
 
     /**
      * Construct
      *
-     * @param ContentType $contentType
-     * @param FieldDefinition $fieldDefinition
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      */
     public function __construct( ContentType $contentType, FieldDefinition $fieldDefinition )
     {

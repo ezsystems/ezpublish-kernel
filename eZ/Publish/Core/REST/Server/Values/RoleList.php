@@ -17,14 +17,14 @@ class RoleList
     /**
      * Roles
      *
-     * @var array
+     * @var \eZ\Publish\API\Repository\Values\User\Role[]
      */
     public $roles;
 
     /**
      * Construct
      *
-     * @param array $roles
+     * @param \eZ\Publish\API\Repository\Values\User\Role[] $roles
      */
     public function __construct( array $roles )
     {

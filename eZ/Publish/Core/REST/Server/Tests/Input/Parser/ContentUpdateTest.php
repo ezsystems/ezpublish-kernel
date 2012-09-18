@@ -16,7 +16,7 @@ use eZ\Publish\Core\REST\Server\Input\Parser\ContentUpdate as ContentUpdateParse
 class ContentUpdateTest extends BaseTest
 {
     /**
-     * Test the parser for ContentUpdate
+     * Tests the ContentUpdate parser
      *
      * @return \eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct
      */

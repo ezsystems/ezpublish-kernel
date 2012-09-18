@@ -17,7 +17,7 @@ class LocationList
     /**
      * Locations
      *
-     * @var array
+     * @var \eZ\Publish\API\Repository\Values\Content\Location[]
      */
     public $locations;
 
@@ -31,7 +31,7 @@ class LocationList
     /**
      * Construct
      *
-     * @param array $locations
+     * @param \eZ\Publish\API\Repository\Values\Content\Location[] $locations
      * @param string $path
      */
     public function __construct( array $locations, $path )

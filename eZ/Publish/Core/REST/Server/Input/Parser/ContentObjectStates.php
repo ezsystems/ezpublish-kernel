@@ -23,16 +23,6 @@ use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
 class ContentObjectStates extends Base
 {
     /**
-     * Construct
-     *
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
-     */
-    public function __construct( UrlHandler $urlHandler )
-    {
-        parent::__construct( $urlHandler );
-    }
-
-    /**
      * Parse input structure
      *
      * @param array $data

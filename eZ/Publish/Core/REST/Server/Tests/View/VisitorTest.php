@@ -25,8 +25,6 @@ class VisitorTest extends BaseTest
 
     /**
      * testVisit
-     *
-     * @return void
      */
     public function testVisit()
     {

@@ -35,7 +35,7 @@ class LocationUpdate extends Base
 
 
     /**
-     * Construct from location service
+     * Construct
      *
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\LocationService $locationService

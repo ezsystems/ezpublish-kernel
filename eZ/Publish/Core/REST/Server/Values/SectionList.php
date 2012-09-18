@@ -17,14 +17,14 @@ class SectionList
     /**
      * Sections
      *
-     * @var array
+     * @var \eZ\Publish\API\Repository\Values\Content\Section[]
      */
     public $sections;
 
     /**
      * Construct
      *
-     * @param array $sections
+     * @param \eZ\Publish\API\Repository\Values\Content\Section[] $sections
      */
     public function __construct( array $sections )
     {

@@ -37,7 +37,6 @@ class FieldTypeProcessorRegistry
      *
      * @param string $fieldTypeIdentifier
      * @param \eZ\Publish\Core\REST\Server\FieldTypeProcessor $processor
-     * @return void
      */
     public function registerProcessor( $fieldTypeIdentifier, FieldTypeProcessor $processor )
     {
@@ -58,10 +57,9 @@ class FieldTypeProcessorRegistry
     /**
      * Returns the processor for $fieldTypeIdentifier
      *
-     * @param mixed $fieldTypeIdentifier
+     * @param string $fieldTypeIdentifier
      * @return \eZ\Publish\Core\REST\Server\FieldTypeProcessor
-     * @throws \RuntimeException if not processor is registered for
-     *                           $fieldTypeIdentifier
+     * @throws \RuntimeException if not processor is registered for $fieldTypeIdentifier
      */
     public function getProcessor( $fieldTypeIdentifier )
     {

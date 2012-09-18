@@ -35,6 +35,13 @@ class RestContent
      */
     public $currentVersion;
 
+    /**
+     * Construct
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $mainLocation
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $currentVersion
+     */
     public function __construct( ContentInfo $contentInfo, Location $mainLocation = null, Content $currentVersion = null )
     {
         $this->contentInfo = $contentInfo;

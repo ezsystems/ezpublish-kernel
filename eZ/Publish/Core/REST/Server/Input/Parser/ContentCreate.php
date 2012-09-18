@@ -59,7 +59,7 @@ class ContentCreate extends Base
     protected $parserTools;
 
     /**
-     * Construct from content service
+     * Construct
      *
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\ContentService $contentService

@@ -34,7 +34,7 @@ class PolicyUpdate extends Base
     protected $parserTools;
 
     /**
-     * Construct from role service
+     * Construct
      *
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\RoleService $roleService
@@ -52,7 +52,7 @@ class PolicyUpdate extends Base
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
+     * @return \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
