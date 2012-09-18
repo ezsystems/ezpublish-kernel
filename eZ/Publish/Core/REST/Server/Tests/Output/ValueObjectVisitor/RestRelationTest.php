@@ -13,11 +13,12 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\Content;
 use eZ\Publish\Core\REST\Common;
+use eZ\Publish\Core\REST\Server\Values\RestRelation;
 
-class RelationTest extends ValueObjectVisitorBaseTest
+class RestRelationTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the Relation visitor
+     * Test the RestRelation visitor
      *
      * @return string
      */
@@ -28,21 +29,32 @@ class RelationTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $section = new Content\Relation( array(
-            'id'         => 23,
-            'sourceContentInfo' => new Content\ContentInfo( array(
-                'id' => 1,
-            ) ),
-            'destinationContentInfo' => new Content\ContentInfo( array(
-                'id' => 2,
-            ) ),
-            'type' => Content\Relation::COMMON
-        ) );
+        $relation = new RestRelation(
+            new Content\Relation(
+                array(
+                    'id' => 42,
+                    'sourceContentInfo' => new Content\ContentInfo(
+                        array(
+                            'id' => 1,
+                        )
+                    ),
+                    'destinationContentInfo' => new Content\ContentInfo(
+                        array(
+                            'id' => 2,
+                        )
+                    ),
+                    'type' => Content\Relation::FIELD,
+                    'sourceFieldDefinitionIdentifier' => 'relation_field'
+                )
+            ),
+            1,
+            1
+        );
 
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
-            $section
+            $relation
         );
 
         $result = $generator->endDocument( null );
@@ -64,8 +76,8 @@ class RelationTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'Relation',
                 'children' => array(
-                    'less_than'    => 4,
-                    'greater_than' => 2,
+                    'less_than'    => 5,
+                    'greater_than' => 3,
                 )
             ),
             $result,
@@ -87,7 +99,7 @@ class RelationTest extends ValueObjectVisitorBaseTest
                 'tag'      => 'Relation',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Relation+xml',
-                    'href'       => '/content/objects/1/relations/23',
+                    'href'       => '/content/objects/1/versions/1/relations/42',
                 )
             ),
             $result,
@@ -140,12 +152,29 @@ class RelationTest extends ValueObjectVisitorBaseTest
      * @param string $result
      * @depends testVisit
      */
+    public function testResultContainsSourceFieldDefinitionIdentifierElement( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag'      => 'sourceFieldDefinitionIdentifier',
+                'content'  => 'relation_field',
+            ),
+            $result,
+            'Invalid or non-existing <Relation> sourceFieldDefinitionIdentifier value element.',
+            false
+        );
+    }
+
+    /**
+     * @param string $result
+     * @depends testVisit
+     */
     public function testResultContainsRelationTypeElement( $result )
     {
         $this->assertTag(
             array(
                 'tag'      => 'RelationType',
-                'content'  => 'COMMON',
+                'content'  => 'FIELD',
             ),
             $result,
             'Invalid or non-existing <Relation> RelationType value element.',
@@ -156,11 +185,11 @@ class RelationTest extends ValueObjectVisitorBaseTest
     /**
      * Get the Relation visitor
      *
-     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Relation
+     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestRelation
      */
     protected function getRelationVisitor()
     {
-        return new ValueObjectVisitor\Relation(
+        return new ValueObjectVisitor\RestRelation(
             new Common\UrlHandler\eZPublish()
         );
     }

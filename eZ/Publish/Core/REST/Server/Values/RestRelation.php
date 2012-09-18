@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the RelationList class
+ * File containing the RestRelation class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,17 +9,19 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
+use eZ\Publish\API\Repository\Values\Content\Relation;
+
 /**
- * Relation list view model
+ * RestRelation view model
  */
-class RelationList
+class RestRelation
 {
     /**
-     * Relations
+     * A relation
      *
-     * @var array
+     * @var \eZ\Publish\API\Repository\Values\Content\Relation
      */
-    public $relations;
+    public $relation;
 
     /**
      * Content ID to which this relation belongs to
@@ -36,15 +38,13 @@ class RelationList
     public $versionNo;
 
     /**
-     * Construct
-     *
-     * @param array $relations
+     * @param \eZ\Publish\API\Repository\Values\Content\Relation $relation
      * @param mixed $contentId
      * @param mixed $versionNo
      */
-    public function __construct( array $relations, $contentId, $versionNo )
+    public function __construct( Relation $relation, $contentId, $versionNo )
     {
-        $this->relations = $relations;
+        $this->relation = $relation;
         $this->contentId = $contentId;
         $this->versionNo = $versionNo;
     }

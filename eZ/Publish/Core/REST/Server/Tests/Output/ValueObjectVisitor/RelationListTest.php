@@ -29,12 +29,12 @@ class RelationListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $sectionList = new RelationList( 23, array() );
+        $relationList = new RelationList( array(), 42, 21 );
 
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
-            $sectionList
+            $relationList
         );
 
         $result = $generator->endDocument( null );
@@ -75,7 +75,7 @@ class RelationListTest extends ValueObjectVisitorBaseTest
                 'tag'      => 'Relations',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.RelationList+xml',
-                    'href'       => '/content/objects/23/relations',
+                    'href'       => '/content/objects/42/versions/21/relations',
                 )
             ),
             $result,
@@ -94,22 +94,23 @@ class RelationListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $sectionList = new RelationList(
-            23,
+        $relationList = new RelationList(
             array(
                 new Content\Relation(),
                 new Content\Relation(),
-            )
+            ),
+            23,
+            1
         );
 
         $this->getVisitorMock()->expects( $this->exactly( 2 ) )
             ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Relation' ) );
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Server\\Values\\RestRelation' ) );
 
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
-            $sectionList
+            $relationList
         );
     }
 

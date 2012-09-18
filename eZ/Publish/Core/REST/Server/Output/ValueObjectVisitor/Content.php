@@ -83,7 +83,13 @@ class Content extends ValueObjectVisitor
         $generator->endList( 'Field' );
         $generator->endHashElement( 'Fields' );
 
-        $visitor->visitValueObject( new RelationList( $content->id, $content->getRelations() ) );
+        $visitor->visitValueObject(
+            new RelationList(
+                $content->getRelations(),
+                $content->id,
+                $versionInfo->versionNo
+            )
+        );
 
         $generator->endObjectElement( 'Version' );
     }

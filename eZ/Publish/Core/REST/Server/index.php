@@ -77,7 +77,7 @@ if ( isset( $_SERVER['HTTP_X_TEST_SESSION'] ) )
  * for the integration tests, is re-used here.
  */
 $setupFactory = new \eZ\Publish\API\Repository\Tests\SetupFactory\Legacy();
-$repository   = $setupFactory->getRepository( $reInitializeRepository );
+$repository   = $setupFactory->getRepository( false );
 
 /*
  * The following reflects a standard REST server setup
@@ -259,7 +259,7 @@ $valueObjectVisitors = array(
     // Relation
 
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RelationList'               => new Output\ValueObjectVisitor\RelationList( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Relation'             => new Output\ValueObjectVisitor\Relation( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestRelation'               => new Output\ValueObjectVisitor\RestRelation( $urlHandler ),
 
     // Role
 
@@ -356,6 +356,9 @@ $dispatcher = new AuthenticatingDispatcher(
             '(^/content/objects/[0-9]+/versions$)' => array(
                 'GET' => array( $contentController, 'loadContentVersions' ),
                 'COPY' => array( $contentController, 'createDraftFromCurrentVersion' ),
+            ),
+            '(^/content/objects/[0-9]+/versions/[0-9]+/relations$)' => array(
+                'GET' => array( $contentController, 'loadVersionRelations' ),
             ),
             '(^/content/objects/[0-9]+/versions/[0-9]+$)' => array(
                 'GET' => array( $contentController, 'loadContentInVersion' ),

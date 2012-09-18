@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Relation ValueObjectVisitor class
+ * File containing the RestRelation ValueObjectVisitor class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -16,9 +16,9 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\API\Repository\Values\Content\Relation as RelationValue;
 
 /**
- * Relation value object visitor
+ * RestRelation value object visitor
  */
-class Relation extends ValueObjectVisitor
+class RestRelation extends ValueObjectVisitor
 {
     /**
      * Visit struct returned by controllers
@@ -26,7 +26,6 @@ class Relation extends ValueObjectVisitor
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param mixed $data
-     * @todo Handle SourceFieldDefinitionIdentifier
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
@@ -36,10 +35,11 @@ class Relation extends ValueObjectVisitor
         $generator->startAttribute(
             'href',
             $this->urlHandler->generate(
-                'objectrelation',
+                'objectVersionRelation',
                  array(
-                    'object' => $data->getSourceContentInfo()->id,
-                    'relation' => $data->id
+                    'object' => $data->contentId,
+                    'version' => $data->versionNo,
+                    'relation' => $data->relation->id
                  )
             )
         );
@@ -51,7 +51,7 @@ class Relation extends ValueObjectVisitor
             $this->urlHandler->generate(
                 'object',
                  array(
-                    'object' => $data->getSourceContentInfo()->id,
+                    'object' => $data->contentId,
                  )
             )
         );
@@ -64,14 +64,20 @@ class Relation extends ValueObjectVisitor
             $this->urlHandler->generate(
                 'object',
                  array(
-                    'object' => $data->getDestinationContentInfo()->id,
+                    'object' => $data->relation->getDestinationContentInfo()->id,
                  )
             )
         );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'DestinationContent' );
 
-        $generator->startValueElement( 'RelationType', $this->getRelationTypeString( $data->type ) );
+        if ( $data->relation->sourceFieldDefinitionIdentifier !== null )
+        {
+            $generator->startValueElement( 'sourceFieldDefinitionIdentifier', $data->relation->sourceFieldDefinitionIdentifier );
+            $generator->endValueElement( 'sourceFieldDefinitionIdentifier' );
+        }
+
+        $generator->startValueElement( 'RelationType', $this->getRelationTypeString( $data->relation->type ) );
         $generator->endValueElement( 'RelationType' );
 
         $generator->endObjectElement( 'Relation' );

@@ -412,6 +412,26 @@ class Content
     }
 
     /**
+     * Loads the relations of the given version
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\RelationList
+     */
+    public function loadVersionRelations( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'objectVersionRelations', $request->path );
+
+        $relationList = $this->contentService->loadRelations(
+            $this->contentService->loadVersionInfo(
+                $this->contentService->loadContentInfo( $urlValues['object'] ),
+                $urlValues['version']
+            )
+        );
+
+        return new Values\RelationList( $relationList, $urlValues['object'], $urlValues['version'] );
+    }
+
+    /**
      * Extracts the requested media type from $request
      *
      * @param RMF\Request $request
