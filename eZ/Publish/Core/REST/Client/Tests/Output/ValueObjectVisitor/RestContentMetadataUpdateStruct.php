@@ -14,7 +14,7 @@ use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
 use eZ\Publish\Core\REST\Common;
 
-class SectionIncludingContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
+class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
 {
     /**
      * Test the SectionIncludingContentMetadataUpdateStructTest visitor
