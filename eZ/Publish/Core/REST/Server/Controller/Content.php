@@ -14,6 +14,11 @@ use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Values;
 
+use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Exceptions\BadStateException;
+use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
+
 use \eZ\Publish\API\Repository\ContentService;
 use \eZ\Publish\API\Repository\LocationService;
 use \eZ\Publish\API\Repository\SectionService;
@@ -454,6 +459,44 @@ class Content
             if ( $relation->id == $urlValues['relation'] )
             {
                 return new Values\RestRelation( $relation, $urlValues['object'], $urlValues['version'] );
+            }
+        }
+
+        throw new Exceptions\NotFoundException( "Relation not found: '{$request->path}'." );
+    }
+
+    /**
+     * Deletes a relation of the given draft.
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     */
+    public function removeRelation( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'objectVersionRelation', $request->path );
+
+        $versionInfo = $this->contentService->loadVersionInfo(
+            $this->contentService->loadContentInfo( $urlValues['object'] ),
+            $urlValues['version']
+        );
+
+        $versionRelations = $this->contentService->loadRelations( $versionInfo );
+        foreach ( $versionRelations as $relation )
+        {
+            if ( $relation->id == $urlValues['relation'] )
+            {
+                if ( $relation->type !== Relation::COMMON )
+                {
+                    throw new ForbiddenException( "Relation is not of type COMMON" );
+                }
+
+                if ( $versionInfo->status !== VersionInfo::STATUS_DRAFT )
+                {
+                    throw new ForbiddenException( "Relation of type COMMON can only be removed from drafts" );
+                }
+
+                $this->contentService->deleteRelation( $versionInfo, $relation->getDestinationContentInfo() );
+                return new Values\ResourceDeleted();
             }
         }
 

@@ -219,6 +219,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException'         => new Output\ValueObjectVisitor\NotFoundException( $urlHandler,  true ),
     '\\eZ\\Publish\\API\\Repository\\Exceptions\\BadStateException'         => new Output\ValueObjectVisitor\BadStateException( $urlHandler,  true ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Exceptions\\BadRequestException'    => new Output\ValueObjectVisitor\BadRequestException( $urlHandler,  true ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Exceptions\\ForbiddenException'     => new Output\ValueObjectVisitor\ForbiddenException( $urlHandler,  true ),
     '\\Exception'                                                           => new Output\ValueObjectVisitor\Exception( $urlHandler,  true ),
 
     // Section
@@ -361,6 +362,7 @@ $dispatcher = new AuthenticatingDispatcher(
             ),
             '(^/content/objects/[0-9]+/versions/[0-9]+/relations/[0-9]+$)' => array(
                 'GET' => array( $contentController, 'loadVersionRelation' ),
+                'DELETE' => array( $contentController, 'removeRelation' ),
             ),
             '(^/content/objects/[0-9]+/versions/[0-9]+$)' => array(
                 'GET' => array( $contentController, 'loadContentInVersion' ),
