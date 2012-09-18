@@ -138,6 +138,7 @@ $inputDispatcher = new Common\Input\Dispatcher(
             'application/vnd.ez.api.ObjectStateUpdate'      => new Input\Parser\ObjectStateUpdate( $urlHandler, $repository->getObjectStateService(), $parserTools ),
             'application/vnd.ez.api.ContentObjectStates'    => new Input\Parser\ContentObjectStates( $urlHandler ),
             'application/vnd.ez.api.ObjectState'            => new Input\Parser\ObjectState( $urlHandler ),
+            'application/vnd.ez.api.RelationCreate'         => new Input\Parser\RelationCreate( $urlHandler ),
         )
     ),
     $handler
@@ -261,6 +262,7 @@ $valueObjectVisitors = array(
 
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RelationList'               => new Output\ValueObjectVisitor\RelationList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestRelation'               => new Output\ValueObjectVisitor\RestRelation( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedRelation'            => new Output\ValueObjectVisitor\CreatedRelation( $urlHandler ),
 
     // Role
 
@@ -359,6 +361,7 @@ $dispatcher = new AuthenticatingDispatcher(
             ),
             '(^/content/objects/[0-9]+/versions/[0-9]+/relations$)' => array(
                 'GET' => array( $contentController, 'loadVersionRelations' ),
+                'POST' => array( $contentController, 'createRelation' ),
             ),
             '(^/content/objects/[0-9]+/versions/[0-9]+/relations/[0-9]+$)' => array(
                 'GET' => array( $contentController, 'loadVersionRelation' ),

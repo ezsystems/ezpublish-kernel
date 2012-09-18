@@ -17,6 +17,7 @@ use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Exceptions\BadStateException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 
 use \eZ\Publish\API\Repository\ContentService;
@@ -501,6 +502,55 @@ class Content
         }
 
         throw new Exceptions\NotFoundException( "Relation not found: '{$request->path}'." );
+    }
+
+    /**
+     * Creates a new relation of type COMMON for the given draft.
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedRelation
+     */
+    public function createRelation( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'objectVersionRelations', $request->path );
+        $destinationContentId = $updateStruct = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            )
+        );
+
+        $contentInfo = $this->contentService->loadContentInfo( $urlValues['object'] );
+        $versionInfo = $this->contentService->loadVersionInfo( $contentInfo, $urlValues['version'] );
+        if ( $versionInfo->status !== VersionInfo::STATUS_DRAFT )
+        {
+            throw new ForbiddenException( "Relation of type COMMON can only be added to drafts" );
+        }
+
+        try
+        {
+            $destinationContentInfo = $this->contentService->loadContentInfo( $destinationContentId );
+        }
+        catch ( NotFoundException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
+
+        $existingRelations = $this->contentService->loadRelations( $versionInfo );
+        foreach ( $existingRelations as $existingRelation )
+        {
+            if ( $existingRelation->getDestinationContentInfo()->id == $destinationContentId )
+            {
+                throw new ForbiddenException( "Relation of type COMMON to selected destination content ID already exists" );
+            }
+        }
+
+        $relation = $this->contentService->addRelation( $versionInfo, $destinationContentInfo );
+        return new Values\CreatedRelation(
+            array(
+                'relation' => new Values\RestRelation( $relation, $urlValues['object'], $urlValues['version'] )
+            )
+        );
     }
 
     /**
