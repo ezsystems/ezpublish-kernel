@@ -542,7 +542,10 @@ class Role
     {
         return new RoleUpdateStruct(
             array(
-                'identifier' => $createStruct->identifier
+                'identifier' => $createStruct->identifier,
+                'mainLanguageCode' => $createStruct->mainLanguageCode,
+                'names' => $createStruct->names,
+                'descriptions' => $createStruct->descriptions
             )
         );
     }
