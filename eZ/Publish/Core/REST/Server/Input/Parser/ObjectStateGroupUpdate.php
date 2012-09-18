@@ -16,6 +16,8 @@ use eZ\Publish\API\Repository\ObjectStateService;
 
 /**
  * Parser for ObjectStateGroupUpdate
+ * @todo There's a clear mismatch between XSD and PAPI specs for updating object state groups
+ * @todo XSD says some fields are not mandatory, while PAPI says they are
  */
 class ObjectStateGroupUpdate extends Base
 {
@@ -54,15 +56,21 @@ class ObjectStateGroupUpdate extends Base
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
+        $objectStateGroupUpdateStruct = $this->objectStateService->newObjectStateGroupUpdateStruct();
+
         if ( !array_key_exists( 'identifier', $data ) )
         {
             throw new Exceptions\Parser( "Missing 'identifier' attribute for ObjectStateGroupUpdate." );
         }
 
+        $objectStateGroupUpdateStruct->identifier = $data['identifier'];
+
         if ( !array_key_exists( 'defaultLanguageCode', $data ) )
         {
             throw new Exceptions\Parser( "Missing 'defaultLanguageCode' attribute for ObjectStateGroupUpdate." );
         }
+
+        $objectStateGroupUpdateStruct->defaultLanguageCode = $data['defaultLanguageCode'];
 
         if ( !array_key_exists( 'names', $data ) || !is_array( $data['names'] ) )
         {
@@ -74,11 +82,8 @@ class ObjectStateGroupUpdate extends Base
             throw new Exceptions\Parser( "Missing or invalid 'names' element for ObjectStateGroupUpdate." );
         }
 
-        $objectStateGroupUpdateStruct = $this->objectStateService->newObjectStateGroupUpdateStruct();
-        $objectStateGroupUpdateStruct->identifier = $data['identifier'];
-        $objectStateGroupUpdateStruct->defaultLanguageCode = $data['defaultLanguageCode'];
-
         $objectStateGroupUpdateStruct->names = $this->parserTools->parseTranslatableList( $data['names'] );
+
         if ( array_key_exists( 'descriptions', $data ) && is_array( $data['descriptions'] ) )
         {
             $objectStateGroupUpdateStruct->descriptions = $this->parserTools->parseTranslatableList( $data['descriptions'] );

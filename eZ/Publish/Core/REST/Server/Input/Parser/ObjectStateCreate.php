@@ -59,15 +59,21 @@ class ObjectStateCreate extends Base
             throw new Exceptions\Parser( "Missing 'identifier' attribute for ObjectStateCreate." );
         }
 
+        $objectStateCreateStruct = $this->objectStateService->newObjectStateCreateStruct( $data['identifier'] );
+
         if ( !array_key_exists( 'priority', $data ) )
         {
             throw new Exceptions\Parser( "Missing 'priority' attribute for ObjectStateCreate." );
         }
 
+        $objectStateCreateStruct->priority = (int) $data['priority'];
+
         if ( !array_key_exists( 'defaultLanguageCode', $data ) )
         {
             throw new Exceptions\Parser( "Missing 'defaultLanguageCode' attribute for ObjectStateCreate." );
         }
+
+        $objectStateCreateStruct->defaultLanguageCode = $data['defaultLanguageCode'];
 
         if ( !array_key_exists( 'names', $data ) || !is_array( $data['names'] ) )
         {
@@ -79,11 +85,9 @@ class ObjectStateCreate extends Base
             throw new Exceptions\Parser( "Missing or invalid 'names' element for ObjectStateCreate." );
         }
 
-        $objectStateCreateStruct = $this->objectStateService->newObjectStateCreateStruct( $data['identifier'] );
-        $objectStateCreateStruct->priority = (int) $data['priority'];
-        $objectStateCreateStruct->defaultLanguageCode = $data['defaultLanguageCode'];
-
         $objectStateCreateStruct->names = $this->parserTools->parseTranslatableList( $data['names'] );
+
+        // @todo XSD says that descriptions field is mandatory. Does that make sense?
         if ( array_key_exists( 'descriptions', $data ) && is_array( $data['descriptions'] ) )
         {
             $objectStateCreateStruct->descriptions = $this->parserTools->parseTranslatableList( $data['descriptions'] );

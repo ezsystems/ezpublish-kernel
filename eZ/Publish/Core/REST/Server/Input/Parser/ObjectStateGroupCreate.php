@@ -59,10 +59,14 @@ class ObjectStateGroupCreate extends Base
             throw new Exceptions\Parser( "Missing 'identifier' attribute for ObjectStateGroupCreate." );
         }
 
+        $objectStateGroupCreateStruct = $this->objectStateService->newObjectStateGroupCreateStruct( $data['identifier'] );
+
         if ( !array_key_exists( 'defaultLanguageCode', $data ) )
         {
             throw new Exceptions\Parser( "Missing 'defaultLanguageCode' attribute for ObjectStateGroupCreate." );
         }
+
+        $objectStateGroupCreateStruct->defaultLanguageCode = $data['defaultLanguageCode'];
 
         if ( !array_key_exists( 'names', $data ) || !is_array( $data['names'] ) )
         {
@@ -74,10 +78,8 @@ class ObjectStateGroupCreate extends Base
             throw new Exceptions\Parser( "Missing or invalid 'names' element for ObjectStateGroupCreate." );
         }
 
-        $objectStateGroupCreateStruct = $this->objectStateService->newObjectStateGroupCreateStruct( $data['identifier'] );
-        $objectStateGroupCreateStruct->defaultLanguageCode = $data['defaultLanguageCode'];
-
         $objectStateGroupCreateStruct->names = $this->parserTools->parseTranslatableList( $data['names'] );
+
         if ( array_key_exists( 'descriptions', $data ) && is_array( $data['descriptions'] ) )
         {
             $objectStateGroupCreateStruct->descriptions = $this->parserTools->parseTranslatableList( $data['descriptions'] );
