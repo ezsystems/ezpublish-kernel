@@ -237,8 +237,6 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedVersion'             => new Output\ValueObjectVisitor\CreatedVersion( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\Version'                    => new Output\ValueObjectVisitor\Version( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo'          => new Output\ValueObjectVisitor\VersionInfo( $urlHandler ),
-    // Includes vitising of VersionInfo, which can be extracted for re-use, if
-    // necessary
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content'              => new Output\ValueObjectVisitor\Content(
         $urlHandler,
         new Common\Output\FieldTypeSerializer( $repository->getFieldTypeService() )
