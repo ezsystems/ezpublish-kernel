@@ -9,15 +9,16 @@
 
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
-use eZ\Publish\Core\REST\Server\Input\Parser\ContentUpdate;
-use eZ\Publish\Core\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct;
+use eZ\Publish\Core\REST\Server\Input\Parser\ContentUpdate as ContentUpdateParser,
+    eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct,
+    DateTime;
 
 class ContentUpdateTest extends BaseTest
 {
     /**
      * Test the parser for ContentUpdate
      *
-     * @return \eZ\Publish\Core\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct
+     * @return \eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct
      */
     public function testParseValid()
     {
@@ -29,8 +30,8 @@ class ContentUpdateTest extends BaseTest
             $this->getParsingDispatcherMock()
         );
 
-        $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\REST\\Common\\Values\\SectionIncludingContentMetadataUpdateStruct',
+        self::assertEquals(
+            $this->getContentUpdateStruct(),
             $result
         );
 
@@ -38,26 +39,12 @@ class ContentUpdateTest extends BaseTest
     }
 
     /**
-     * Test for valid section ID value in result
-     *
-     * @param \eZ\Publish\Core\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct $result
-     * @depends testParseValid
-     */
-    public function testParserResultSection( SectionIncludingContentMetadataUpdateStruct $result )
-    {
-        $this->assertEquals(
-            '23',
-            $result->sectionId
-        );
-    }
-
-    /**
      * Test for valid owner ID value in result
      *
-     * @param \eZ\Publish\Core\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct $result
+     * @param \eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct $result
      * @depends testParseValid
      */
-    public function testParserResultOwner( SectionIncludingContentMetadataUpdateStruct $result )
+    public function testParserResultOwner( RestContentMetadataUpdateStruct $result )
     {
         $this->assertEquals(
             '42',
@@ -66,118 +53,84 @@ class ContentUpdateTest extends BaseTest
     }
 
     /**
-     * Test for null section ID value in result
-     * @depends testParseValid
-     */
-    public function testParseValidSectionNull()
-    {
-        $inputArray = $this->getValidInputData();
-        $inputArray['Section'] = null;
-
-        $contentUpdateParser = $this->getContentUpdate();
-        $result = $contentUpdateParser->parse(
-            $inputArray,
-            $this->getParsingDispatcherMock()
-        );
-
-        $this->assertNull(
-            $result->sectionId
-        );
-    }
-
-    /**
-     * Test for null owner ID value in result
-     * @depends testParseValid
-     */
-    public function testParseValidOwnerNull()
-    {
-        $inputArray = $this->getValidInputData();
-        $inputArray['Owner'] = null;
-
-        $contentUpdateParser = $this->getContentUpdate();
-        $result = $contentUpdateParser->parse(
-            $inputArray,
-            $this->getParsingDispatcherMock()
-        );
-
-        $this->assertNull(
-            $result->ownerId
-        );
-    }
-
-    /**
-     * Test for missing Section element throws exception
+     * Tests that invalid _href attribute throw the appropriate exception
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing <Section> element in <ContentUpdate>.
+     * @dataProvider providerForTestParseFailureInvalidHref
      */
-    public function testParseFailureMissingSection()
+    public function testParseFailureInvalidHref( $element, $exceptionMessage )
     {
         $inputArray = $this->getValidInputData();
-        unset( $inputArray['Section'] );
+        $inputArray[$element]['_href'] = '/invalid/section/uri';
 
         $contentUpdateParser = $this->getContentUpdate();
 
-        $contentUpdateParser->parse(
-            $inputArray,
-            $this->getParsingDispatcherMock()
+        try {
+            $contentUpdateParser->parse(
+                $inputArray,
+                $this->getParsingDispatcherMock()
+            );
+        }
+        catch( \eZ\Publish\Core\REST\Common\Exceptions\Parser $e )
+        {
+            if ( $e->getMessage() != $exceptionMessage )
+            {
+                self::fail( "Failed asserting that exception message '" . $e->getMessage() . "' contains '$exceptionMessage'." );
+            }
+            $exceptionThrown = true;
+        }
+
+        if ( !isset( $exceptionThrown ) )
+        {
+            self::fail( "Failed asserting that exception of type \"\\eZ\\Publish\\Core\\REST\\Common\\Exceptions\\Parser\" is thrown." );
+        }
+    }
+
+    public function providerForTestParseFailureInvalidHref()
+    {
+        return array(
+            array( 'Section', 'Invalid format for <Section> reference in <ContentUpdate>.' ),
+            array( 'MainLocation', "Invalid format for <MainLocation> reference in <ContentUpdate>." ),
+            array( 'Owner', "Invalid format for <Owner> reference in <ContentUpdate>." )
         );
     }
 
     /**
-     * Test for invalid Section _href attribute throws exception
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Invalid format for <Section> reference in <ContentUpdate>.
+     * Tests that invalid dates will fail at parsing
+     * @dataProvider providerForTestParseFailureInvalidDate
      */
-    public function testParseFailureInvalidSectionHref()
+    public function testParseFailureInvalidDate( $element, $exceptionMessage )
     {
         $inputArray = $this->getValidInputData();
-        $inputArray['Section']['_href'] = '/invalid/section/uri';
+        $inputArray[$element] = 42;
 
         $contentUpdateParser = $this->getContentUpdate();
 
-        $contentUpdateParser->parse(
-            $inputArray,
-            $this->getParsingDispatcherMock()
-        );
+        try {
+            $contentUpdateParser->parse(
+                $inputArray,
+                $this->getParsingDispatcherMock()
+            );
+        }
+        catch( \eZ\Publish\Core\REST\Common\Exceptions\Parser $e )
+        {
+            if ( $e->getMessage() != $exceptionMessage )
+            {
+                self::fail( "Failed asserting that exception message '" . $e->getMessage() . "' contains '$exceptionMessage'." );
+            }
+            $exceptionThrown = true;
+        }
+
+        if ( !isset( $exceptionThrown ) )
+        {
+            self::fail( "Failed asserting that exception of type \"\\eZ\\Publish\\Core\\REST\\Common\\Exceptions\\Parser\" is thrown." );
+        }
     }
 
-    /**
-     * Test for missing Owner element throws exception
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing <Owner> element in <ContentUpdate>.
-     */
-    public function testParseFailureMissingOwner()
+    public function providerForTestParseFailureInvalidDate()
     {
-        $inputArray = $this->getValidInputData();
-        unset( $inputArray['Owner'] );
-
-        $contentUpdateParser = $this->getContentUpdate();
-
-        $contentUpdateParser->parse(
-            $inputArray,
-            $this->getParsingDispatcherMock()
-        );
-    }
-
-    /**
-     * Test for invalid Owner _href attribute throws exception
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Invalid format for <Owner> reference in <ContentUpdate>.
-     */
-    public function testParseFailureInvalidOwnerHref()
-    {
-        $inputArray = $this->getValidInputData();
-        $inputArray['Owner']['_href'] = '/invalid/owner/uri';
-
-        $contentUpdateParser = $this->getContentUpdate();
-
-        $contentUpdateParser->parse(
-            $inputArray,
-            $this->getParsingDispatcherMock()
+        return array(
+            array( 'publishedDate', "Invalid format for <publishedDate> in <ContentUpdate>" ),
+            array( 'modificationDate', "Invalid format for <modificationDate> in <ContentUpdate>" )
         );
     }
 
@@ -188,7 +141,26 @@ class ContentUpdateTest extends BaseTest
      */
     protected function getContentUpdate()
     {
-        return new ContentUpdate( $this->getUrlHandler() );
+        return new ContentUpdateParser( $this->getUrlHandler() );
+    }
+
+    /**
+     * Returns a valid RestContentMetadataUpdateStruct that matches the structure from getValidInputData()
+     *
+     * @return \eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct
+     */
+    protected function getContentUpdateStruct()
+    {
+        return new RestContentMetadataUpdateStruct( array(
+            'mainLanguageCode' => 'eng-GB',
+            'sectionId'        => '23',
+            'mainLocationId'   => '/1/2/55',
+            'ownerId'          => '42',
+            'alwaysAvailable'  => false,
+            'remoteId'         => '7e7afb135e50490a281dafc0aafb6dac',
+            'modificationDate' => new DateTime( '19/Sept/2012:14:05:00 +0200' ),
+            'publishedDate'    => new DateTime( '19/Sept/2012:14:05:00 +0200' )
+        ) );
     }
 
     /**
@@ -199,13 +171,14 @@ class ContentUpdateTest extends BaseTest
     protected function getValidInputData()
     {
         return array(
-            'Section' => array(
-                '_href' => '/content/sections/23',
-            ),
-            'Owner' => array(
-                '_href' => '/user/users/42',
-            ),
-            // TODO: Missing properties + tests according to examples
+            'mainLanguageCode' => 'eng-GB',
+            'Section'          => array( '_href' => '/content/sections/23' ),
+            'MainLocation'     => array( '_href' => '/content/locations/1/2/55' ),
+            'Owner'            => array( '_href' => '/user/users/42' ),
+            'alwaysAvailable'  => 'false',
+            'remoteId'         => '7e7afb135e50490a281dafc0aafb6dac',
+            'modificationDate' => '19/Sept/2012:14:05:00 +0200',
+            'publishedDate'    => '19/Sept/2012:14:05:00 +0200'
         );
     }
 }

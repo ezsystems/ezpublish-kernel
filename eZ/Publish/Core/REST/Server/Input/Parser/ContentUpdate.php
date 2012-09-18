@@ -6,12 +6,13 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
-use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\Exceptions;
 
-use eZ\Publish\Core\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct;
+use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher,
+    eZ\Publish\Core\REST\Common\Exceptions,
+    eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct,
+    DateTime,
+    Exception;
 
 /**
  * Parser for ContentUpdate
@@ -23,17 +24,15 @@ class ContentUpdate extends Base
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\Core\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct
+     * @return \eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct
+     *
+     * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser if $data is invalid
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
         $parsedData = array();
 
-        if ( !array_key_exists( 'Section', $data ) )
-        {
-            throw new Exceptions\Parser( 'Missing <Section> element in <ContentUpdate>.' );
-        }
-        if ( is_array( $data['Section'] ) && isset( $data['Section']['_href'] ) )
+        if ( array_key_exists( 'Section', $data ) && is_array( $data['Section'] ) && isset( $data['Section']['_href'] ) )
         {
             try
             {
@@ -46,11 +45,7 @@ class ContentUpdate extends Base
             $parsedData['sectionId'] = $matches['section'];
         }
 
-        if ( !array_key_exists( 'Owner', $data ) )
-        {
-            throw new Exceptions\Parser( 'Missing <Owner> element in <ContentUpdate>.' );
-        }
-        if ( is_array( $data['Owner'] ) && isset( $data['Owner']['_href'] ) )
+        if ( array_key_exists( 'Owner', $data ) && is_array( $data['Owner'] ) && isset( $data['Owner']['_href'] ) )
         {
             if ( !preg_match( '(/user/users/(?P<value>[^/]+)$)', $data['Owner']['_href'], $matches ) )
             {
@@ -59,8 +54,68 @@ class ContentUpdate extends Base
             $parsedData['ownerId'] = $matches['value'];
         }
 
-        // TODO: Implement missing properties
+        if ( array_key_exists( 'mainLanguageCode', $data ) )
+        {
+            $parsedData['mainLanguageCode'] = $data['mainLanguageCode'];
+        }
 
-        return new SectionIncludingContentMetadataUpdateStruct( $parsedData );
+        if ( array_key_exists( 'MainLocation', $data ) )
+        {
+            if ( !preg_match( '(/content/locations(?P<value>/[0-9/]+)$)', $data['MainLocation']['_href'], $matches ) )
+            {
+                throw new Exceptions\Parser( 'Invalid format for <MainLocation> reference in <ContentUpdate>.' );
+            }
+            $parsedData['mainLocationId'] = $matches['value'];
+        }
+
+        if ( array_key_exists( 'alwaysAvailable', $data ) )
+        {
+            if ( $data['alwaysAvailable'] === 'true' )
+            {
+                $parsedData['alwaysAvailable'] = true;
+            }
+            elseif ( $data['alwaysAvailable'] === 'false' )
+            {
+                $parsedData['alwaysAvailable'] = false;
+            }
+            else
+            {
+                throw new Exceptions\Parser( 'Invalid format for <alwaysAvailable> in <ContentUpdate>.' );
+            }
+        }
+
+        // remoteId
+        if ( array_key_exists( 'remoteId', $data ) )
+        {
+            $parsedData['remoteId'] = $data['remoteId'];
+        }
+
+        // modificationDate
+        if ( array_key_exists( 'modificationDate', $data ) )
+        {
+            try
+            {
+                $parsedData['modificationDate'] = new DateTime( $data['modificationDate'] );
+            }
+            catch( Exception $e )
+            {
+                throw new Exceptions\Parser( 'Invalid format for <modificationDate> in <ContentUpdate>', 0, $e );
+            }
+        }
+
+        // publishDate
+        if ( array_key_exists( 'publishedDate', $data ) )
+        {
+            try
+            {
+                $parsedData['publishedDate'] = new DateTime( $data['publishedDate'] );
+            }
+            catch( Exception $e )
+            {
+                throw new Exceptions\Parser( 'Invalid format for <publishedDate> in <ContentUpdate>', 0, $e );
+            }
+        }
+
+        return new RestContentMetadataUpdateStruct( $parsedData );
     }
 }

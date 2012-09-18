@@ -130,14 +130,13 @@ class Content
     }
 
     /**
-     * Performs an update on the content meta data.
+     * Updates a content's metadata
      *
      * @param RMF\Request $request
-     * @return void
+     * @return \eZ\Publish\Core\REST\Server\Values\RestContent
      */
     public function updateContentMetadata( RMF\Request $request )
     {
-        $values = $this->urlHandler->parse( 'object', $request->path );
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
                 array( 'Content-Type' => $request->contentType ),
@@ -145,23 +144,36 @@ class Content
             )
         );
 
-        $contentInfo = $this->contentService->loadContentInfo( $values['object'] );
+        $values = $this->urlHandler->parse( 'object', $request->path );
+        $contentId = (int)$values['object'];
+        $contentInfo = $this->contentService->loadContentInfo( $contentId );
 
+        // update section
         if ( $updateStruct->sectionId !== null )
         {
+            // @todo Exception handling. Section not found ? Not authorized ?
             $section = $this->sectionService->loadSection( $updateStruct->sectionId );
             $this->sectionService->assignSection( $contentInfo, $section );
+            $updateStruct->sectionId = null;
         }
 
-        /*
-         * TODO: Implement visitor.
-        return $this->contentService->updateContentMetadata(
+        // update content
+        // @todo An exception may be thrown if sectionId was the only property left in the struct. Maybe test the properties list manually here ?
+        $this->contentService->updateContentMetadata( $contentInfo, $updateStruct );
+
+        $contentInfo = $this->contentService->loadContentInfo( $contentId );
+        try
+        {
+            $locationInfo = $this->locationService->loadLocation( $contentInfo->mainLocationId );
+        }
+        catch ( NotFoundException $e )
+        {
+            $locationInfo = null;
+        }
+        return new Values\RestContent(
             $contentInfo,
-            $updateStruct
+            $locationInfo
         );
-        */
-        // Since by now only used for section assign, we return null
-        return null;
     }
 
     /**

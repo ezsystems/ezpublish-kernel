@@ -18,7 +18,7 @@ use \eZ\Publish\Core\REST\Common\UrlHandler;
 use \eZ\Publish\Core\REST\Common\Input;
 use \eZ\Publish\Core\REST\Common\Output;
 use \eZ\Publish\Core\REST\Common\Message;
-use \eZ\Publish\Core\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct;
+use \eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\SectionService}
@@ -223,7 +223,7 @@ class SectionService implements \eZ\Publish\API\Repository\SectionService, Sessi
     public function assignSection( ContentInfo $contentInfo, Section $section )
     {
         $inputMessage = $this->outputVisitor->visit(
-            new SectionIncludingContentMetadataUpdateStruct(
+            new RestContentMetadataUpdateStruct(
                 array( 'sectionId' => $section->id )
             )
         );

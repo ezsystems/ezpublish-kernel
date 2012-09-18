@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
-use eZ\Publish\Core\REST\Common\Values\SectionIncludingContentMetadataUpdateStruct;
+use eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
 use eZ\Publish\Core\REST\Common;
 
 class SectionIncludingContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
@@ -28,7 +28,7 @@ class SectionIncludingContentMetadataUpdateStructTest extends ValueObjectVisitor
 
         $generator->startDocument( null );
 
-        $sectionCreatestruct = new SectionIncludingContentMetadataUpdateStruct(
+        $sectionCreatestruct = new RestContentMetadataUpdateStruct(
             $this->getValidValues()
         );
 
@@ -124,7 +124,7 @@ class SectionIncludingContentMetadataUpdateStructTest extends ValueObjectVisitor
         $values = $this->getValidValues();
         unset( $values['sectionId'] );
 
-        $sectionCreatestruct = new SectionIncludingContentMetadataUpdateStruct(
+        $sectionCreatestruct = new RestContentMetadataUpdateStruct(
             $values
         );
 
@@ -162,7 +162,7 @@ class SectionIncludingContentMetadataUpdateStructTest extends ValueObjectVisitor
         $values = $this->getValidValues();
         unset( $values['ownerId'] );
 
-        $sectionCreatestruct = new SectionIncludingContentMetadataUpdateStruct(
+        $sectionCreatestruct = new RestContentMetadataUpdateStruct(
             $values
         );
 
