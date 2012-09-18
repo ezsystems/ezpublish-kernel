@@ -461,6 +461,56 @@ class Role
     }
 
     /**
+     * Returns a role assignment to the given user
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment
+     */
+    public function loadRoleAssignmentForUser( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'userRoleAssignment', $request->path );
+
+        $user = $this->userService->loadUser( $values['user'] );
+        $roleAssignments = $this->roleService->getRoleAssignmentsForUser( $user );
+
+        foreach ( $roleAssignments as $roleAssignment )
+        {
+            if ( $roleAssignment->getRole()->id == $values['role'] )
+            {
+                return new Values\RestUserRoleAssignment( $roleAssignment, $values['user'] );
+            }
+        }
+
+        throw new Exceptions\NotFoundException( "Role assignment not found: '{$request->path}'." );
+    }
+
+    /**
+     * Returns a role assignment to the given user group
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment
+     */
+    public function loadRoleAssignmentForUserGroup( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'groupRoleAssignment', $request->path );
+
+        $groupLocationParts = explode( '/', $values['group'] );
+        $groupLocation = $this->locationService->loadLocation( array_pop( $groupLocationParts ) );
+        $userGroup = $this->userService->loadUserGroup( $groupLocation->contentId );
+
+        $roleAssignments = $this->roleService->getRoleAssignmentsForUserGroup( $userGroup );
+        foreach ( $roleAssignments as $roleAssignment )
+        {
+            if ( $roleAssignment->getRole()->id == $values['role'] )
+            {
+                return new Values\RestUserGroupRoleAssignment( $roleAssignment, $values['group'] );
+            }
+        }
+
+        throw new Exceptions\NotFoundException( "Role assignment not found: '{$request->path}'." );
+    }
+
+    /**
      * Search all policies which are applied to a given user
      *
      * @param RMF\Request $request

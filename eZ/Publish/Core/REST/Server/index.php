@@ -480,6 +480,7 @@ $dispatcher = new AuthenticatingDispatcher(
                 'POST'  => array( $roleController, 'assignRoleToUser' ),
             ),
             '(^/user/users/[0-9]+/roles/[0-9]+$)' => array(
+                'GET'  => array( $roleController, 'loadRoleAssignmentForUser' ),
                 'DELETE'  => array( $roleController, 'unassignRoleFromUser' ),
             ),
             '(^/user/groups/[0-9/]+/roles$)' => array(
@@ -487,6 +488,7 @@ $dispatcher = new AuthenticatingDispatcher(
                 'POST'  => array( $roleController, 'assignRoleToUserGroup' ),
             ),
             '(^/user/groups/[0-9/]+/roles/[0-9]+$)' => array(
+                'GET'  => array( $roleController, 'loadRoleAssignmentForUserGroup' ),
                 'DELETE'  => array( $roleController, 'unassignRoleFromUserGroup' ),
             ),
         )
