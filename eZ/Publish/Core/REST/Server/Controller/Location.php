@@ -11,10 +11,14 @@ namespace eZ\Publish\Core\REST\Server\Controller;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
+use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\TrashService;
+
+use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 
 use Qafoo\RMF;
 
@@ -52,19 +56,28 @@ class Location
     protected $contentService;
 
     /**
+     * Trash service
+     *
+     * @var \eZ\Publish\API\Repository\TrashService
+     */
+    protected $trashService;
+
+    /**
      * Construct controller
      *
      * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
+     * @param \eZ\Publish\API\Repository\TrashService $trashService
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, LocationService $locationService, ContentService $contentService )
+    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, LocationService $locationService, ContentService $contentService, TrashService $trashService )
     {
         $this->inputDispatcher = $inputDispatcher;
         $this->urlHandler      = $urlHandler;
         $this->locationService = $locationService;
         $this->contentService  = $contentService;
+        $this->trashService    = $trashService;
     }
 
     /**
@@ -152,29 +165,62 @@ class Location
      *
      * @param \QaFoo\RMF\Request $request
      *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException if the Destination header cannot be parsed as location or trash
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
     public function moveSubtree( RMF\Request $request )
     {
         $values = $this->urlHandler->parse( 'location', $request->path );
 
-        $locationId = $this->extractLocationIdFromPath($values['location']);
-        $location = $this->locationService->loadLocation( $locationId );
+        $locationToMove = $this->locationService->loadLocation(
+            $this->extractLocationIdFromPath( $values['location'] )
+        );
 
-        $destinationValues = $this->urlHandler->parse( 'location', $request->destination );
-        $destinationLocation = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $destinationValues['location'] ) );
+        $destinationLocationId = null;
+        try
+        {
+            // First check to see if the destination is for moving within another subtree
+            $destinationValues = $this->urlHandler->parse( 'location', $request->destination );
+            $destinationLocationId = $this->extractLocationIdFromPath( $destinationValues['location'] );
+        }
+        catch ( Exceptions\InvalidArgumentException $e )
+        {
+            try
+            {
+                // If parsing of destination fails, let's try to see if destination is trash
+                $this->urlHandler->parse( 'trashItems', $request->destination );
+            }
+            catch ( Exceptions\InvalidArgumentException $e )
+            {
+                // If that fails, the Destination header is not formatted right
+                // so just throw the BadStateException
+                throw new BadRequestException( "{$request->destination} is not formatted correctly" );
+            }
+        }
 
-        $this->locationService->moveSubtree( $location, $destinationLocation );
+        if ( $destinationLocationId !== null )
+        {
+            // We're moving the subtree
+            $destinationLocation = $this->locationService->loadLocation( $destinationLocationId );
+            $this->locationService->moveSubtree( $locationToMove, $destinationLocation );
 
-        $location = $this->locationService->loadLocation( $locationId );
-
-        return new Values\ResourceCreated(
-            $this->urlHandler->generate(
-                'location',
-                array(
-                    'location' => rtrim( $location->pathString, '/' ),
+            // Reload the location to get the new position is subtree
+            $locationToMove = $this->locationService->loadLocation( $locationToMove->id );
+            return new Values\ResourceCreated(
+                $this->urlHandler->generate(
+                    'location',
+                    array(
+                        'location' => rtrim( $locationToMove->pathString, '/' ),
+                    )
                 )
-            )
+            );
+        }
+
+        // We're trashing the subtree
+        $trashItem = $this->trashService->trash( $locationToMove );
+        return new Values\ResourceCreated(
+            $this->urlHandler->generate( 'trash', array( 'trash' => $trashItem->id ) )
         );
     }
 

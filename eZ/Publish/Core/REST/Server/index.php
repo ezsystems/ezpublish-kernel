@@ -182,7 +182,8 @@ $locationController = new Controller\Location(
     $inputDispatcher,
     $urlHandler,
     $repository->getLocationService(),
-    $repository->getContentService()
+    $repository->getContentService(),
+    $repository->getTrashService()
 );
 
 $objectStateController = new Controller\ObjectState(
@@ -216,7 +217,8 @@ $valueObjectVisitors = array(
 
     '\\eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'  => new Output\ValueObjectVisitor\InvalidArgumentException( $urlHandler,  true ),
     '\\eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException'         => new Output\ValueObjectVisitor\NotFoundException( $urlHandler,  true ),
-    '\\eZ\\Publish\\API\Repository\\Exceptions\\BadStateException'          => new Output\ValueObjectVisitor\BadStateException( $urlHandler,  true ),
+    '\\eZ\\Publish\\API\\Repository\\Exceptions\\BadStateException'         => new Output\ValueObjectVisitor\BadStateException( $urlHandler,  true ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Exceptions\\BadRequestException'    => new Output\ValueObjectVisitor\BadRequestException( $urlHandler,  true ),
     '\\Exception'                                                           => new Output\ValueObjectVisitor\Exception( $urlHandler,  true ),
 
     // Section

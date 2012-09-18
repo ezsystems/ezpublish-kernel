@@ -208,7 +208,7 @@ class Content
      * it should be visible.
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\Core\REST\Server\Values\RestContent
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedContent
      */
     public function createContent( RMF\Request $request )
     {
