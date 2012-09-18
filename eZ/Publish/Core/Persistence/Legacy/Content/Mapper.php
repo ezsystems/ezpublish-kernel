@@ -458,6 +458,12 @@ class Mapper
         $relation->destinationContentId = (int)$row['ezcontentobject_link_to_contentobject_id'];
         $relation->type = (int)$row['ezcontentobject_link_relation_type'];
 
+        $contentClassAttributeId = (int)$row['ezcontentobject_link_contentclassattribute_id'];
+        if ( $contentClassAttributeId > 0 )
+        {
+            $relation->sourceFieldDefinitionId = $contentClassAttributeId;
+        }
+
         return $relation;
     }
 
