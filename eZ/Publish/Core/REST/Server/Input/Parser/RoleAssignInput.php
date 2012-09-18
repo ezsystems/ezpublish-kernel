@@ -67,6 +67,7 @@ class RoleAssignInput extends Base
             throw new Exceptions\Parser( 'Invalid format for <Role> reference in <RoleAssignInput>.' );
         }
 
+        // @todo XSD says that limitation is mandatory, but roles can be assigned without limitations
         $limitation = null;
         if ( array_key_exists( 'limitation', $data ) && is_array( $data['limitation'] ) )
         {
