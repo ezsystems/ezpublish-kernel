@@ -43,7 +43,7 @@ class RestUserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
                     )
                 )
             ),
-            '1/5/14'
+            '/1/5/14'
         );
 
         $visitor->visit(

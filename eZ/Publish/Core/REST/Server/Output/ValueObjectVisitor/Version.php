@@ -13,7 +13,7 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 
 /**
  * Version value object visitor
@@ -32,7 +32,7 @@ class Version extends ValueObjectVisitor
         $generator->startObjectElement( 'Version' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Version' ) );
 
-        if ( $data->versionInfo->status === VersionInfo::STATUS_DRAFT )
+        if ( $data->versionInfo->status === APIVersionInfo::STATUS_DRAFT )
         {
             $visitor->setHeader( 'Accept-Patch', $generator->getMediaType( 'VersionUpdate' ) );
         }

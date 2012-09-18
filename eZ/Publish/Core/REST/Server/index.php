@@ -150,6 +150,11 @@ $inputDispatcher = new Common\Input\Dispatcher(
  * call to methods of the Public API.
  */
 
+$rootController = new Controller\Root(
+    $inputDispatcher,
+    $urlHandler
+);
+
 $sectionController = new Controller\Section(
     $inputDispatcher,
     $urlHandler,
@@ -304,6 +309,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceCreated'            => new Output\ValueObjectVisitor\ResourceCreated( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceSwapped'            => new Output\ValueObjectVisitor\ResourceSwapped( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\NoContent'                  => new Output\ValueObjectVisitor\NoContent( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Common\\Values\\Root'                       => new Output\ValueObjectVisitor\Root( $urlHandler ),
 );
 
 /*
@@ -325,6 +331,12 @@ $valueObjectVisitors = array(
 $dispatcher = new AuthenticatingDispatcher(
     new RMF\Router\Regexp(
         array(
+            // /
+
+            '(^/$)' => array(
+                'GET' => array( $rootController, 'loadRootResource' ),
+            ),
+
             // /content/sections
 
             '(^/content/sections$)' => array(

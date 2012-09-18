@@ -67,7 +67,7 @@ class Section
      * List sections
      *
      * @param RMF\Request $request
-     * @return mixed
+     * @return \eZ\Publish\Core\REST\Server\Values\SectionList
      */
     public function listSections( RMF\Request $request )
     {
@@ -80,7 +80,7 @@ class Section
      * Load section by identifier
      *
      * @param RMF\Request $request
-     * @return mixed
+     * @return \eZ\Publish\Core\REST\Server\Values\SectionList
      */
     public function loadSectionByIdentifier( RMF\Request $request )
     {
@@ -98,7 +98,7 @@ class Section
      * Create new section
      *
      * @param RMF\Request $request
-     * @return mixed
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedSection
      */
     public function createSection( RMF\Request $request )
     {
@@ -129,7 +129,7 @@ class Section
      * Loads a section
      *
      * @param RMF\Request $request
-     * @return Section
+     * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
     public function loadSection( RMF\Request $request )
     {
@@ -141,7 +141,7 @@ class Section
      * Updates a section
      *
      * @param RMF\Request $request
-     * @return Section
+     * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
     public function updateSection( RMF\Request $request )
     {
@@ -187,8 +187,8 @@ class Section
      *
      * Needed since both structs are encoded into the same media type on input.
      *
-     * @param SectionCreateStruct $createStruct
-     * @return SectionUpdateStruct
+     * @param \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct $createStruct
+     * @return \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
      */
     protected function mapToUpdateStruct( SectionCreateStruct $createStruct )
     {
