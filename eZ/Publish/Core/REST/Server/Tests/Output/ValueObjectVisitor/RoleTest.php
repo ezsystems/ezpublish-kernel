@@ -31,7 +31,16 @@ class RoleTest extends ValueObjectVisitorBaseTest
         $role = new User\Role(
             array(
                 'id'         => 42,
-                'identifier' => 'some-role'
+                'identifier' => 'some-role',
+                'mainLanguageCode' => 'eng-GB',
+                'names' => array(
+                    'eng-GB' => 'Role name EN',
+                    'eng-US' => 'Role name EN US',
+                ),
+                'descriptions' => array(
+                    'eng-GB' => 'Role description EN',
+                    'eng-US' => 'Role description EN US',
+                )
             )
         );
 
@@ -60,7 +69,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'Role',
                 'children' => array(
-                    'count' => 2
+                    'count' => 5
                 )
             ),
             $result,
@@ -106,6 +115,67 @@ class RoleTest extends ValueObjectVisitorBaseTest
             ),
             $result,
             'Invalid or non-existing <Role> identifier value element.',
+            false
+        );
+    }
+
+    /**
+     * Test if result contains mainLanguageCode value element
+     *
+     * @param string $result
+     * @depends testVisit
+     */
+    public function testResultContainsMainLanguageCodeValueElement( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag'      => 'mainLanguageCode',
+                'content'  => 'eng-GB'
+            ),
+            $result,
+            'Invalid or non-existing <Role> mainLanguageCode value element.',
+            false
+        );
+    }
+
+    /**
+     * Test if result contains names element
+     *
+     * @param string $result
+     * @depends testVisit
+     */
+    public function testResultContainsNamesElement( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag'      => 'names',
+                'children' => array(
+                    'count' => 2
+                )
+            ),
+            $result,
+            'Invalid <names> element.',
+            false
+        );
+    }
+
+    /**
+     * Test if result contains descriptions element
+     *
+     * @param string $result
+     * @depends testVisit
+     */
+    public function testResultContainsDescriptionsElement( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag'      => 'descriptions',
+                'children' => array(
+                    'count' => 2
+                )
+            ),
+            $result,
+            'Invalid <descriptions> element.',
             false
         );
     }

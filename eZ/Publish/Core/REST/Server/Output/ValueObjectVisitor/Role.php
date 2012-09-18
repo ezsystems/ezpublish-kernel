@@ -39,6 +39,24 @@ class Role extends ValueObjectVisitor
         $generator->startValueElement( 'identifier', $data->identifier );
         $generator->endValueElement( 'identifier' );
 
+        if ( !empty( $data->mainLanguageCode ) )
+        {
+            $generator->startValueElement( 'mainLanguageCode', $data->mainLanguageCode );
+            $generator->endValueElement( 'mainLanguageCode' );
+        }
+
+        $names = $data->getNames();
+        if ( !empty( $names ) )
+        {
+            $this->visitNamesList( $generator, $names );
+        }
+
+        $descriptions = $data->getDescriptions();
+        if ( !empty( $descriptions ) )
+        {
+            $this->visitDescriptionsList( $generator, $descriptions );
+        }
+
         $generator->startObjectElement( 'PolicyList' );
         $generator->startAttribute(
             'href',
