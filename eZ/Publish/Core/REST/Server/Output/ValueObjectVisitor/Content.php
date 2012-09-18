@@ -75,12 +75,12 @@ class Content extends ValueObjectVisitor
         $visitor->visitValueObject( $versionInfo );
 
         $generator->startHashElement( 'Fields' );
-        $generator->startList( 'Field' );
+        $generator->startList( 'field' );
         foreach ( $content->getFields() as $field )
         {
             $this->visitField( $generator, $contentType, $field );
         }
-        $generator->endList( 'Field' );
+        $generator->endList( 'field' );
         $generator->endHashElement( 'Fields' );
 
         $visitor->visitValueObject(
