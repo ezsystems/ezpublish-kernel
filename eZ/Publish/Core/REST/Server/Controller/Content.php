@@ -123,24 +123,6 @@ class Content
     }
 
     /**
-     * Extracts the requested media type from $request
-     *
-     * @param RMF\Request $request
-     * @return string
-     */
-    protected function getMediaType( RMF\Request $request )
-    {
-        foreach ( $request->mimetype as $mimeType )
-        {
-            if ( preg_match( '(^([a-z0-9-/.]+)\+.*$)', $mimeType['value'], $matches ) )
-            {
-                return $matches[1];
-            }
-        }
-        return 'unknown/unknown';
-    }
-
-    /**
      * Performs an update on the content meta data.
      *
      * @param RMF\Request $request
@@ -214,5 +196,213 @@ class Content
             null,               // TODO: Implement using language filter on request URI
             $urlValues['version']
         );
+    }
+
+    /**
+     * Creates a new content draft assigned to the authenticated user.
+     * If a different userId is given in the input it is assigned to the
+     * given user but this required special rights for the authenticated
+     * user (this is useful for content staging where the transfer process
+     * does not have to authenticate with the user which created the content
+     * object in the source server). The user has to publish the content if
+     * it should be visible.
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedContent
+     */
+    public function createContent( RMF\Request $request )
+    {
+        $contentCreate = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            )
+        );
+
+        $content = $this->contentService->createContent(
+            $contentCreate->contentCreateStruct,
+            array( $contentCreate->locationCreateStruct )
+        );
+
+        return new Values\CreatedContent(
+            array(
+                'content' => new Values\RestContent(
+                    $content->contentInfo,
+                    null,
+                    $this->getMediaType( $request ) === 'application/vnd.ez.api.content' ? $content : null
+                )
+            )
+        );
+    }
+
+    /**
+     * The content is deleted. If the content has locations (which is required in 4.x)
+     * on delete all locations assigned the content object are deleted via delete subtree.
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     */
+    public function deleteContent( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'object', $request->path );
+
+        $this->contentService->deleteContent(
+            $this->contentService->loadContentInfo( $urlValues['object'] )
+        );
+
+        return new Values\ResourceDeleted();
+    }
+
+    /**
+     * Creates a new content object as copy under the given parent location given in the destination header.
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
+     */
+    public function copyContent( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'object', $request->path );
+        $destinationValues = $this->urlHandler->parse( 'location', $request->destination );
+
+        $parentLocationParts = explode( '/', $destinationValues['location'] );
+        $copiedContent = $this->contentService->copyContent(
+            $this->contentService->loadContentInfo( $urlValues['object'] ),
+            $this->locationService->newLocationCreateStruct( array_pop( $parentLocationParts ) )
+        );
+
+        return new Values\ResourceCreated(
+            $this->urlHandler->generate(
+                'object',
+                array( 'object' => $copiedContent->id )
+            )
+        );
+    }
+
+    /**
+     * Returns a list of all versions of the content. This method does not
+     * include fields and relations in the Version elements of the response.
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\VersionList
+     */
+    public function loadContentVersions( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'objectVersions', $request->path );
+
+        return new Values\VersionList(
+            $this->contentService->loadVersions(
+                $this->contentService->loadContentInfo( $urlValues['object'] )
+            ),
+            $urlValues['object']
+        );
+    }
+
+    /**
+     * The version is deleted
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     */
+    public function deleteContentVersion( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'objectVersion', $request->path );
+
+        $this->contentService->deleteVersion(
+            $this->contentService->loadVersionInfo(
+                $this->contentService->loadContentInfo( $urlValues['object'] ),
+                $urlValues['version']
+            )
+        );
+
+        return new Values\ResourceDeleted();
+    }
+
+    /**
+     * The system creates a new draft version as a copy from the given version
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
+     */
+    public function createDraftFromVersion( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'objectVersion', $request->path );
+
+        $contentInfo = $this->contentService->loadContentInfo( $urlValues['object'] );
+        $contentDraft = $this->contentService->createContentDraft(
+            $contentInfo,
+            $this->contentService->loadVersionInfo(
+                $contentInfo, $urlValues['version']
+            )
+        );
+
+        return new Values\CreatedVersion(
+            array(
+                'version' => new Values\Version(
+                    $contentDraft->versionInfo,
+                    $urlValues['object']
+                )
+            )
+        );
+    }
+
+    /**
+     * The system creates a new draft version as a copy from the current version
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
+     */
+    public function createDraftFromCurrentVersion( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'objectVersions', $request->path );
+
+        $contentInfo = $this->contentService->loadContentInfo( $urlValues['object'] );
+        $contentDraft = $this->contentService->createContentDraft( $contentInfo );
+
+        return new Values\CreatedVersion(
+            array(
+                'version' => new Values\Version(
+                    $contentDraft->versionInfo,
+                    $urlValues['object']
+                )
+            )
+        );
+    }
+
+    /**
+     * The content version is published
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
+     */
+    public function publishVersion( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'objectVersion', $request->path );
+
+        $this->contentService->publishVersion(
+            $this->contentService->loadVersionInfo(
+                $this->contentService->loadContentInfo( $urlValues['object'] ),
+                $urlValues['version']
+            )
+        );
+
+        return new Values\NoContent();
+    }
+
+    /**
+     * Extracts the requested media type from $request
+     *
+     * @param RMF\Request $request
+     * @return string
+     */
+    protected function getMediaType( RMF\Request $request )
+    {
+        foreach ( $request->mimetype as $mimeType )
+        {
+            if ( preg_match( '(^([a-z0-9-/.]+)\+.*$)', $mimeType['value'], $matches ) )
+            {
+                return $matches[1];
+            }
+        }
+        return 'unknown/unknown';
     }
 }

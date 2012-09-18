@@ -104,9 +104,9 @@ class Type extends FieldType
     public function validate( FieldDefinition $fieldDefinition, $fieldValue )
     {
         $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
-        $constraints = isset($validatorConfiguration['StringLengthValidator']) ?
-            $validatorConfiguration['StringLengthValidator'] :
-            array();
+        $constraints = isset( $validatorConfiguration['StringLengthValidator'] )
+            ? $validatorConfiguration['StringLengthValidator']
+            : array();
 
         $validationErrors = array();
 
@@ -163,8 +163,10 @@ class Type extends FieldType
      */
     public function getName( $value )
     {
-        $value = $this->acceptValue( $value );
-
+        if ( $value === null )
+        {
+            return "";
+        }
         return (string)$value->text;
     }
 
@@ -202,7 +204,7 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
-        if ( $inputValue === null )
+        if ( $inputValue === null || $inputValue === "" )
         {
             return null;
         }
@@ -219,6 +221,11 @@ class Type extends FieldType
                 'eZ\\Publish\\Core\\FieldType\\TextLine\\Value',
                 $inputValue
             );
+        }
+
+        if ( $inputValue->text === null || $inputValue->text === "" )
+        {
+            return null;
         }
 
         if ( !is_string( $inputValue->text ) )

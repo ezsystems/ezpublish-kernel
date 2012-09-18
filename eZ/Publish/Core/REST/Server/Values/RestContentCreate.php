@@ -1,0 +1,35 @@
+<?php
+/**
+ * File containing the RestContentCreate class
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
+namespace eZ\Publish\Core\REST\Server\Values;
+
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+
+/**
+ * RestContentCreate view model
+ */
+class RestContentCreate
+{
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
+     */
+    public $contentCreateStruct;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
+     */
+    public $locationCreateStruct;
+
+    public function __construct( ContentCreateStruct $contentCreateStruct, LocationCreateStruct $locationCreateStruct )
+    {
+        $this->contentCreateStruct = $contentCreateStruct;
+        $this->locationCreateStruct = $locationCreateStruct;
+    }
+}

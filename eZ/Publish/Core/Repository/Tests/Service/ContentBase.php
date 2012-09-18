@@ -1468,9 +1468,9 @@ abstract class ContentBase extends BaseServiceTest
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
         $contentUpdateStruct->initialLanguageCode = "eng-US";
 
-        $contentUpdateStruct->setField( "test_required_empty", "new value for test_required_empty", "eng-GB" );
+        $contentUpdateStruct->setField( "test_required_empty", "new value for test_required_empty" );
         $contentUpdateStruct->setField( "test_translatable", "new eng-US value for test_translatable" );
-        $contentUpdateStruct->setField( "test_untranslatable", "new value for test_untranslatable", "eng-GB" );
+        $contentUpdateStruct->setField( "test_untranslatable", "new value for test_untranslatable" );
         $contentUpdateStruct->setField( "test_translatable", "new eng-GB value for test_translatable", "eng-GB" );
 
         $updatedContent = $contentService->updateContent( $versionInfo, $contentUpdateStruct );
@@ -1529,7 +1529,7 @@ abstract class ContentBase extends BaseServiceTest
                 );
 
                 // If field is not set in update struct, it should retain its previous value
-                $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $contentDraft->contentInfo->mainLanguageCode;
+                $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $contentUpdate->initialLanguageCode;
                 if ( isset( $structFields[$fieldDefinition->identifier][$valueLanguageCode] ) )
                 {
                     $this->assertEquals(
@@ -1577,7 +1577,7 @@ abstract class ContentBase extends BaseServiceTest
         );
 
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->initialLanguageCode = "ger-DE";
+        $contentUpdateStruct->initialLanguageCode = "eng-GB";
         $contentUpdateStruct->setField( "test_required_empty", "new value for untranslatable field", "eng-GB" );
         $contentUpdateStruct->setField( "test_translatable", "Französisch frites", "ger-DE" );
 
@@ -1653,8 +1653,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentUpdateStruct->initialLanguageCode = "eng-US";
         $contentUpdateStruct->setField(
             "test_required_empty",
-            "a string that is too long and will not validate 12345678901234567890123456789012345678901234567890",
-            "eng-GB"
+            "a string that is too long and will not validate 12345678901234567890123456789012345678901234567890"
         );
 
         // Throws an exception because "test_required_empty" field value is too long and fails

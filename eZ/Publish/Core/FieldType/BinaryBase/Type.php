@@ -59,13 +59,6 @@ abstract class Type extends FieldType
     }
 
     /**
-     * Return the field type identifier for this field type
-     *
-     * @return string
-     */
-    abstract public function getFieldTypeIdentifier();
-
-    /**
      * Creates a specific value of the derived class from $inputValue
      *
      * @param array $inputValue

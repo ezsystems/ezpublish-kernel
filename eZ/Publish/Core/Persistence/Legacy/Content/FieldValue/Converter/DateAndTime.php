@@ -45,7 +45,7 @@ class DateAndTime implements Converter
     {
         // @TODO: One should additionally store the timezone here. This could
         // be done in a backwards compatible way, I think…
-        $storageFieldValue->dataInt    = ( $value->data !== null ? $value->data['timestamp'] : null);
+        $storageFieldValue->dataInt = ( $value->data !== null ? $value->data['timestamp'] : null );
         $storageFieldValue->sortKeyInt = $value->sortKey;
     }
 
@@ -62,8 +62,8 @@ class DateAndTime implements Converter
             return;
         }
 
-        $fieldValue->data    = array(
-            'rfc850'    => null,
+        $fieldValue->data = array(
+            'rfc850' => null,
             'timestamp' => $value->dataInt,
         );
         $fieldValue->sortKey = $value->sortKeyInt;
@@ -111,25 +111,30 @@ class DateAndTime implements Converter
         switch ( $fieldDef->fieldTypeConstraints->fieldSettings['defaultType'] )
         {
             case DateAndTimeType::DEFAULT_CURRENT_DATE:
-                $timestamp = time();
+                $data = array(
+                    'rfc850' => null,
+                    'timestamp' => time(),
+                );
                 break;
 
             case DateAndTimeType::DEFAULT_CURRENT_DATE_ADJUSTED:
                 if ( !$useSeconds )
+                {
                     $dateInterval->s = 0;
+                }
                 $date = new DateTime;
                 $date->add( $dateInterval );
-                $timestamp = $date->getTimestamp();
+                $data = array(
+                    'rfc850' => null,
+                    'timestamp' => $date->getTimestamp(),
+                );
                 break;
 
             default:
-                $timestamp = null;
+                $data = null;
         }
 
-        $fieldDef->defaultValue->data = array(
-            'rfc850'    => null,
-            'timestamp' => $timestamp,
-        );
+        $fieldDef->defaultValue->data = $data;
     }
 
     /**

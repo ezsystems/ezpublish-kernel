@@ -86,4 +86,26 @@ class CLIHandler implements ezpKernelHandler
     {
         $this->script->setIsInitialized( false );
     }
+
+    /**
+     * Checks whether the kernel handler has the Symfony Dependency Injection
+     * container or not.
+     *
+     * @return bool
+     */
+    public function hasServiceContainer()
+    {
+        return false;
+    }
+
+    /**
+     * Returns the Symfony Dependency Injection container if it has been injected,
+     * otherwise returns null.
+     *
+     * @return \Symfony\Component\DependencyInjection\ContainerInterface|null
+     */
+    public function getServiceContainer()
+    {
+        return null;
+    }
 }

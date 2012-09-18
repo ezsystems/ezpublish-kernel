@@ -140,8 +140,7 @@ class NameSchemaService
                     continue;
                 }
 
-                $mergedFieldMap[$fieldIdentifier][$languageCode] =
-                    isset( $fieldMap[$fieldIdentifier][$languageCode] )
+                $mergedFieldMap[$fieldIdentifier][$languageCode] = isset( $fieldMap[$fieldIdentifier][$languageCode] )
                     ? $fieldMap[$fieldIdentifier][$languageCode]
                     : $fieldValue;
             }

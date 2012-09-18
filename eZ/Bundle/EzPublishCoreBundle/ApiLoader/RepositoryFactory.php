@@ -12,6 +12,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
     eZ\Publish\SPI\IO\Handler as IoHandler,
     eZ\Publish\SPI\Limitation\Type as SPILimitationType,
+    eZ\Publish\API\Repository\Repository,
     Symfony\Component\DependencyInjection\ContainerInterface;
 
 class RepositoryFactory
@@ -67,6 +68,27 @@ class RepositoryFactory
                 )
             )
         );
+    }
+
+    /**
+     * Returns a closure which returns the repository.
+     * To be used when lazy loading is needed.
+     *
+     * @return \Closure
+     */
+    public function buildLazyRepository()
+    {
+        $container = $this->container;
+        return function () use ( $container )
+        {
+            static $repository;
+            if ( !$repository instanceof Repository )
+            {
+                $repository = $container->get( 'ezpublish.api.repository' );
+            }
+
+            return $repository;
+        };
     }
 
     /**

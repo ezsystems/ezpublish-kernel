@@ -35,7 +35,7 @@ class RestContent
      */
     public $currentVersion;
 
-    public function __construct( ContentInfo $contentInfo, Location $mainLocation, Content $currentVersion = null )
+    public function __construct( ContentInfo $contentInfo, Location $mainLocation = null, Content $currentVersion = null )
     {
         $this->contentInfo = $contentInfo;
         $this->currentVersion = $currentVersion;
