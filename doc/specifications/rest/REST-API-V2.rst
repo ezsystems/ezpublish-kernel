@@ -178,10 +178,11 @@ In the content module there are the root collections objects, locations, trash a
 /content/objects/<ID>                                 .                   load content            update content meta data     delete content   copy content
 /content/objects/<ID>/<lang_code>                     .                   .                       .                            delete language
                                                                                                                                from content   
-/content/objects/<ID>/versions                        create a new draft  load all versions       .                            .            
-                                                      from an existing    (version infos)
-                                                      version 
-/content/objects/<ID>/currentversion                  .                   redirect to current v.  .                            .             
+/content/objects/<ID>/versions                        .                   load all versions       .                            .            
+                                                                          (version infos)
+/content/objects/<ID>/currentversion                  .                   redirect to current v.  .                            .                 create draft
+                                                                                                                                                 from current
+                                                                                                                                                 version
 /content/objects/<ID>/versions/<no>                   .                   get a specific version  update a version/draft       delete version    create draft
                                                                                                                                                  from version
 /content/objects/<ID>/versions/<no>/relations         create new relation load relations of vers. .                            .              
@@ -1042,8 +1043,11 @@ Load Version
 .. code:: http
 
         HTTP/1.1 200 OK
-        Content-Type: <depending on accept header>
+        Content-Type: <depending_on_accept_header>
         Content-Length: <length>
+        ETag: <etag>
+        Accept-Patch: application/vnd.ez.api.VersionUpdate+xml (ONLY if version is a draft)
+
 .. parsed-literal::
         Version_
 
@@ -1259,17 +1263,53 @@ Create a Draft from a Version
 :Resource: /content/objects/<ID>/versions/<no>
 :Method: COPY or POST with header X-HTTP-Method-Override: COPY
 :Description: The system creates a new draft version as a copy from the given version
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Version+xml:  if set the updated version is returned in xml format (see Version_)
+         :application/vnd.ez.api.Version+json:  if set the updated version returned in json format (see Version_)
 :Response:
 
 .. code:: http
  
         HTTP/1.1 201 Created
         Location: /content/objects/<ID>/versions/<new-versionNo> 
+        ETag: <etag>
+        Accept-Patch: application/vnd.ez.api.VersionUpdate+xml 
+        Content-Type: <depending on accept header>
+        Content-Length: <length>
 .. parsed-literal::
         Version_
 
 :Error Codes:
     :401: If the user is not authorized to update this object  
+    :404: If the content object was not found
+
+Create a Draft from current Version
+```````````````````````````````````
+
+:Resource: /content/objects/<ID>/currentversion
+:Method: COPY or POST with header X-HTTP-Method-Override: COPY
+:Description: The system creates a new draft version as a copy from the current version
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Version+xml:  if set the updated version is returned in xml format (see Version_)
+         :application/vnd.ez.api.Version+json:  if set the updated version returned in json format (see Version_)
+:Response:
+
+.. code:: http
+ 
+        HTTP/1.1 201 Created
+        Location: /content/objects/<ID>/versions/<new-versionNo> 
+        ETag: <etag>
+        Accept-Patch: application/vnd.ez.api.VersionUpdate+xml 
+        Content-Type: <depending on accept header>
+        Content-Length: <length>
+.. parsed-literal::
+        Version_
+
+:Error Codes:
+    :401: If the user is not authorized to update this object  
+    :403: If the current version is already a draft
     :404: If the content object was not found
 
 Delete Content Version
@@ -4014,7 +4054,7 @@ Resource                                      POST                  GET         
 /user/users/<ID>/drafts                       .                     list all drafts owned .                     .                
                                                                     by the user                                                     
 /user/users/<ID>/roles                        assign role to user   load roles of group   .                     .            
-/user/users/<ID>/roles/<ID>                   .                     .                     .                     unassign role from user 
+/user/users/<ID>/roles/<ID>                   .                     load roleassignment   .                     unassign role from user 
 /user/roles                                   create new role       load all roles        .                     .            
 /user/roles/<ID>                              .                     load role             update role           delete role
 /user/roles/<ID>/policies                     create policy         load policies         .                     delete all policies from role
@@ -5182,6 +5222,30 @@ XML Example
         <Role href="/user/roles/7" media-type="application/vnd.ez.api.Role+xml"/>
       </RoleAssignment>
     </RoleAssignmentList>
+
+Load Assignment
+```````````````
+:Resource: - /user/groups/<path>/roles/<ID> for user group
+           - /user/users/<ID>/roles/<ID> for user
+:Method: GET
+:Description: Returns a roleassignment to the given user or user group
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.RoleAssignment+xml:  if set the role assignment list  is returned in xml format (see Role_)
+         :application/vnd.ez.api.RoleAssignment+json:  if set the role assignment list  is returned in json format (see Role_)
+:Response: 
+
+.. code:: http
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+          Role_      
+
+:Error Codes:
+    :401: If the user has no permission to read roles
+
 
 
 Assign Role to User or User Group
