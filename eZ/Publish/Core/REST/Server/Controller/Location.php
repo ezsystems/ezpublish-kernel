@@ -194,7 +194,7 @@ class Location
             catch ( Exceptions\InvalidArgumentException $e )
             {
                 // If that fails, the Destination header is not formatted right
-                // so just throw the BadStateException
+                // so just throw the BadRequestException
                 throw new BadRequestException( "{$request->destination} is not formatted correctly" );
             }
         }
