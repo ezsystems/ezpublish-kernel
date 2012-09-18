@@ -326,11 +326,18 @@ class Content
     {
         $urlValues = $this->urlHandler->parse( 'objectVersion', $request->path );
 
+        $versionInfo = $this->contentService->loadVersionInfo(
+            $this->contentService->loadContentInfo( $urlValues['object'] ),
+            $urlValues['version']
+        );
+
+        if ( $versionInfo->status === VersionInfo::STATUS_PUBLISHED )
+        {
+            throw new ForbiddenException( 'Version in status PUBLISHED cannot be deleted' );
+        }
+
         $this->contentService->deleteVersion(
-            $this->contentService->loadVersionInfo(
-                $this->contentService->loadContentInfo( $urlValues['object'] ),
-                $urlValues['version']
-            )
+            $versionInfo
         );
 
         return new Values\ResourceDeleted();
@@ -375,6 +382,15 @@ class Content
         $urlValues = $this->urlHandler->parse( 'objectCurrentVersion', $request->path );
 
         $contentInfo = $this->contentService->loadContentInfo( $urlValues['object'] );
+        $versionInfo = $this->contentService->loadVersionInfo(
+            $contentInfo
+        );
+
+        if ( $versionInfo->status === VersionInfo::STATUS_DRAFT )
+        {
+            throw new ForbiddenException( 'Current version is already in status DRAFT' );
+        }
+
         $contentDraft = $this->contentService->createContentDraft( $contentInfo );
 
         return new Values\CreatedVersion(
@@ -397,11 +413,18 @@ class Content
     {
         $urlValues = $this->urlHandler->parse( 'objectVersion', $request->path );
 
+        $versionInfo = $this->contentService->loadVersionInfo(
+            $this->contentService->loadContentInfo( $urlValues['object'] ),
+            $urlValues['version']
+        );
+
+        if ( $versionInfo->status !== VersionInfo::STATUS_DRAFT )
+        {
+            throw new ForbiddenException( 'Only version in status DRAFT can be published' );
+        }
+
         $this->contentService->publishVersion(
-            $this->contentService->loadVersionInfo(
-                $this->contentService->loadContentInfo( $urlValues['object'] ),
-                $urlValues['version']
-            )
+            $versionInfo
         );
 
         return new Values\NoContent();
