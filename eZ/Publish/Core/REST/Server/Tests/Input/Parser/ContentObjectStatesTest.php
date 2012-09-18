@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
-use eZ\Publish\Core\REST\Server\Input\Parser\ObjectState;
+use eZ\Publish\Core\REST\Server\Input\Parser;
 
-class ObjectStateTest extends BaseTest
+class ContentObjectStatesTest extends BaseTest
 {
     /**
      * Tests the ObjectStat parser
@@ -19,58 +19,80 @@ class ObjectStateTest extends BaseTest
     public function testParse()
     {
         $inputArray = array(
-            '_href' => '/content/objectstategroups/42/objectstates/21',
+            'ObjectState' => array(
+                array(
+                    '_href' => '/content/objectstategroups/42/objectstates/21'
+                )
+            )
         );
 
-        $objectState = $this->getObjectState();
+        $objectState = $this->getParser();
         $result = $objectState->parse( $inputArray, $this->getParsingDispatcherMock() );
+
+        $this->assertInternalType(
+            'array',
+            $result,
+            'ContentObjectStates not parsed correctly'
+        );
+
+        $this->assertNotEmpty(
+            $result,
+            'ContentObjectStates has no ObjectState elements'
+        );
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\Core\\REST\\Common\\Values\\RestObjectState',
-            $result,
+            $result[0],
             'ObjectState not created correctly.'
         );
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectState',
-            $result->objectState,
+            $result[0]->objectState,
             'Inner ObjectState not created correctly.'
         );
 
         $this->assertEquals(
             21,
-            $result->objectState->id,
+            $result[0]->objectState->id,
             'Inner ObjectState id property not created correctly.'
         );
 
         $this->assertEquals(
             42,
-            $result->groupId,
+            $result[0]->groupId,
             'groupId property not created correctly.'
         );
     }
 
     /**
-     * Test ObjectState parser throwing exception on missing href
+     * Test ContentObjectStates parser throwing exception on missing href
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for ObjectState.
      */
-    public function testParseExceptionOnMissingIdentifier()
+    public function testParseExceptionOnMissingHref()
     {
-        $inputArray = array();
+        $inputArray = array(
+            'ObjectState' => array(
+                array(
+                    '_href' => '/content/objectstategroups/42/objectstates/21'
+                ),
+                array()
+            )
+        );
 
-        $objectState = $this->getObjectState();
+        $objectState = $this->getParser();
         $objectState->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
     /**
-     * Returns the ObjectState parser
+     * Gets the ContentObjectStates parser
      *
-     * @return \eZ\Publish\Core\REST\Server\Input\Parser\ObjectState
+     * @return \eZ\Publish\Core\REST\Server\Input\Parser\ContentObjectStates;
      */
-    protected function getObjectState()
+    protected function getParser()
     {
-        return new ObjectState( $this->getUrlHandler() );
+        return new Parser\ContentObjectStates( $this->getUrlHandler() );
     }
 }

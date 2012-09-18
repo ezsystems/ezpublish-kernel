@@ -11,30 +11,63 @@ namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Common\Exceptions;
+
+use eZ\Publish\Core\REST\Common\Values\RestObjectState;
+use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
 
 /**
  * Parser for ContentObjectStates
  */
-class ContentObjectStates extends Parser
+class ContentObjectStates extends Base
 {
+    /**
+     * Construct
+     *
+     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
+     */
+    public function __construct( UrlHandler $urlHandler )
+    {
+        parent::__construct( $urlHandler );
+    }
+
     /**
      * Parse input structure
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState[]
-     * @todo Error handling
+     * @return \eZ\Publish\Core\REST\Common\Values\RestObjectState[]
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
+        // @todo XSD says that no ObjectState elements is valid,
+        // but we should at least have one if setting new states to content?
+        if ( !array_key_exists( 'ObjectState', $data ) || !is_array( $data['ObjectState'] ) || empty( $data['ObjectState'] ) )
+        {
+            throw new Exceptions\Parser( "Missing or invalid 'ObjectState' elements for ContentObjectStates." );
+        }
+
         $states = array();
         foreach ( $data['ObjectState'] as $rawStateData )
         {
-            $states[] = $parsingDispatcher->parse(
-                $rawStateData,
-                $rawStateData['_media-type']
+            if ( !array_key_exists( '_href', $rawStateData ) )
+            {
+                throw new Exceptions\Parser( "Missing '_href' attribute for ObjectState." );
+            }
+
+            $values = $this->urlHandler->parse( 'objectstate', $rawStateData['_href'] );
+
+            $states[] = new RestObjectState(
+                new ObjectState(
+                    array(
+                        'id' => $values['objectstate']
+                    )
+                ),
+                $values['objectstategroup']
             );
         }
+
         return $states;
     }
 }

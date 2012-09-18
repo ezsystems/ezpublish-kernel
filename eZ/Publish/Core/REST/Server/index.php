@@ -127,6 +127,12 @@ $inputDispatcher = new Common\Input\Dispatcher(
                 $parserTools
             ),
             'application/vnd.ez.api.ContentUpdate'          => new Input\Parser\ContentUpdate( $urlHandler ),
+            'application/vnd.ez.api.VersionUpdate'          => new Input\Parser\VersionUpdate(
+                $urlHandler,
+                $repository->getContentService(),
+                $repository->getContentTypeService(),
+                $fieldTypeParser
+            ),
             'application/vnd.ez.api.PolicyCreate'           => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService(), $parserTools ),
             'application/vnd.ez.api.PolicyUpdate'           => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService(), $parserTools ),
             'application/vnd.ez.api.RoleAssignInput'        => new Input\Parser\RoleAssignInput( $urlHandler, $parserTools ),
@@ -137,7 +143,6 @@ $inputDispatcher = new Common\Input\Dispatcher(
             'application/vnd.ez.api.ObjectStateCreate'      => new Input\Parser\ObjectStateCreate( $urlHandler, $repository->getObjectStateService(), $parserTools ),
             'application/vnd.ez.api.ObjectStateUpdate'      => new Input\Parser\ObjectStateUpdate( $urlHandler, $repository->getObjectStateService(), $parserTools ),
             'application/vnd.ez.api.ContentObjectStates'    => new Input\Parser\ContentObjectStates( $urlHandler ),
-            'application/vnd.ez.api.ObjectState'            => new Input\Parser\ObjectState( $urlHandler ),
             'application/vnd.ez.api.RelationCreate'         => new Input\Parser\RelationCreate( $urlHandler ),
         )
     ),
