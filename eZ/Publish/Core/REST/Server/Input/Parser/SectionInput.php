@@ -46,17 +46,22 @@ class SectionInput extends Base
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
+        $sectionCreate = $this->sectionService->newSectionCreateStruct();
+
+        //@todo XSD says that name is not mandatory? Does that make sense?
         if ( !array_key_exists( 'name', $data ) )
         {
             throw new Exceptions\Parser( "Missing 'name' attribute for SectionInput." );
         }
+
+        $sectionCreate->name = $data['name'];
+
+        //@todo XSD says that identifier is not mandatory? Does that make sense?
         if ( !array_key_exists( 'identifier', $data ) )
         {
             throw new Exceptions\Parser( "Missing 'identifier' attribute for SectionInput." );
         }
 
-        $sectionCreate = $this->sectionService->newSectionCreateStruct();
-        $sectionCreate->name = $data['name'];
         $sectionCreate->identifier = $data['identifier'];
 
         return $sectionCreate;
