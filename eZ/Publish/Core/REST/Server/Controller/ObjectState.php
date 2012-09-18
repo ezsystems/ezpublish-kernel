@@ -76,7 +76,7 @@ class ObjectState
      * Creates a new object state group
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedObjectStateGroup
      */
     public function createObjectStateGroup( RMF\Request $request )
     {
@@ -101,7 +101,7 @@ class ObjectState
      * Creates a new object state
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedObjectState
      */
     public function createObjectState( RMF\Request $request )
     {

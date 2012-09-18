@@ -349,7 +349,7 @@ class Content
      * The system creates a new draft version as a copy from the given version
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedVersion
      */
     public function createDraftFromVersion( RMF\Request $request )
     {
@@ -377,7 +377,7 @@ class Content
      * The system creates a new draft version as a copy from the current version
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedVersion
      */
     public function createDraftFromCurrentVersion( RMF\Request $request )
     {
@@ -409,7 +409,7 @@ class Content
      * The content version is published
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function publishVersion( RMF\Request $request )
     {

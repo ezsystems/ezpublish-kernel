@@ -76,7 +76,7 @@ class Trash
      * Returns a list of all trash items
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\Core\REST\Server\Values\LocationList
+     * @return \eZ\Publish\Core\REST\Server\Values\Trash
      */
     public function loadTrashItems( RMF\Request $request )
     {
@@ -92,7 +92,7 @@ class Trash
      * Returns the trash item given by id
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
     public function loadTrashItem( RMF\Request $request )
     {

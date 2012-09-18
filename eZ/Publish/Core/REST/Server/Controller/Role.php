@@ -243,7 +243,7 @@ class Role
      * Adds a policy to role
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\API\Repository\Values\User\Policy
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedPolicy
      */
     public function addPolicy( RMF\Request $request )
     {
@@ -477,7 +477,7 @@ class Role
      * Returns a role assignment to the given user
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment
+     * @return \eZ\Publish\Core\REST\Server\Values\RestUserRoleAssignment
      */
     public function loadRoleAssignmentForUser( RMF\Request $request )
     {
@@ -501,7 +501,7 @@ class Role
      * Returns a role assignment to the given user group
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment
+     * @return \eZ\Publish\Core\REST\Server\Values\RestUserGroupRoleAssignment
      */
     public function loadRoleAssignmentForUserGroup( RMF\Request $request )
     {

@@ -84,7 +84,7 @@ class Location
      * Creates a new location for the given content object
      *
      * @param \Qafoo\RMF\Request $request
-     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedLocation
      */
     public function createLocation( RMF\Request $request )
     {
