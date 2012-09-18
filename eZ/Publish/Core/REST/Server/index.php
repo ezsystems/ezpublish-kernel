@@ -127,12 +127,6 @@ $inputDispatcher = new Common\Input\Dispatcher(
                 $parserTools
             ),
             'application/vnd.ez.api.ContentUpdate'          => new Input\Parser\ContentUpdate( $urlHandler ),
-            'application/vnd.ez.api.VersionUpdate'          => new Input\Parser\VersionUpdate(
-                $urlHandler,
-                $repository->getContentService(),
-                $repository->getContentTypeService(),
-                $fieldTypeParser
-            ),
             'application/vnd.ez.api.PolicyCreate'           => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService(), $parserTools ),
             'application/vnd.ez.api.PolicyUpdate'           => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService(), $parserTools ),
             'application/vnd.ez.api.RoleAssignInput'        => new Input\Parser\RoleAssignInput( $urlHandler, $parserTools ),
