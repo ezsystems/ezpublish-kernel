@@ -1759,10 +1759,10 @@ class ContentService implements ContentServiceInterface
         if ( $destinationContentInfo === null )
             $destinationContentInfo = $this->loadContentInfo( $spiRelation->destinationContentId );
 
-        $sourceFieldDefinitionIdentifier = null;
-        if ( $spiRelation->type !== APIRelation::COMMON )
+        $sourceFieldDefinition = null;
+        if ( $spiRelation->sourceFieldDefinitionId !== null )
         {
-            $sourceFieldDefinitionIdentifier = $sourceContentInfo->getContentType()->getFieldDefinitionById(
+            $sourceFieldDefinition = $sourceContentInfo->getContentType()->getFieldDefinitionById(
                 $spiRelation->sourceFieldDefinitionId
             );
         }
@@ -1770,7 +1770,7 @@ class ContentService implements ContentServiceInterface
         return new Relation(
             array(
                 "id" => $spiRelation->id,
-                "sourceFieldDefinitionIdentifier" => $sourceFieldDefinitionIdentifier,
+                "sourceFieldDefinitionIdentifier" => $sourceFieldDefinition !== null ? $sourceFieldDefinition->identifier : null,
                 "type" => $spiRelation->type,
                 "sourceContentInfo" => $sourceContentInfo,
                 "destinationContentInfo" => $destinationContentInfo
