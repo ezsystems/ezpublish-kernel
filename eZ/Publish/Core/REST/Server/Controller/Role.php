@@ -90,13 +90,17 @@ class Role
      */
     public function createRole( RMF\Request $request )
     {
-        return new Values\CreatedRole( array(
-            'role' => $this->roleService->createRole(
-                $this->inputDispatcher->parse( new Message(
-                    array( 'Content-Type' => $request->contentType ),
-                    $request->body
-                ) )
-            ) )
+        return new Values\CreatedRole(
+            array(
+                'role' => $this->roleService->createRole(
+                    $this->inputDispatcher->parse(
+                        new Message(
+                            array( 'Content-Type' => $request->contentType ),
+                            $request->body
+                        )
+                    )
+                )
+            )
         );
     }
 

@@ -20,6 +20,23 @@ class RoleInputTest extends BaseTest
     {
         $inputArray = array(
             'identifier' => 'Identifier Bar',
+            'mainLanguageCode' => 'eng-GB',
+            'names' => array(
+                'value' => array(
+                    array(
+                        '_languageCode' => 'eng-GB',
+                        '#text' => 'Test role'
+                    )
+                )
+            ),
+            'descriptions' => array(
+                'value' => array(
+                    array(
+                        '_languageCode' => 'eng-GB',
+                        '#text' => 'Test role description'
+                    )
+                )
+            )
         );
 
         $roleInput = $this->getRoleInput();
@@ -36,20 +53,18 @@ class RoleInputTest extends BaseTest
             $result->identifier,
             'RoleCreateStruct identifier property not created correctly.'
         );
-    }
 
-    /**
-     * Test RoleInput parser throwing exception on missing identifier
-     *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing 'identifier' attribute for RoleInput.
-     */
-    public function testParseExceptionOnMissingIdentifier()
-    {
-        $inputArray = array();
+        $this->assertEquals(
+            array( 'eng-GB' => 'Test role' ),
+            $result->names,
+            'RoleCreateStruct names property not created correctly.'
+        );
 
-        $roleInput = $this->getRoleInput();
-        $roleInput->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $this->assertEquals(
+            array( 'eng-GB' => 'Test role description' ),
+            $result->descriptions,
+            'RoleCreateStruct descriptions property not created correctly.'
+        );
     }
 
     /**
@@ -59,6 +74,10 @@ class RoleInputTest extends BaseTest
      */
     protected function getRoleInput()
     {
-        return new RoleInput( $this->getUrlHandler(), $this->getRepository()->getRoleService() );
+        return new RoleInput(
+            $this->getUrlHandler(),
+            $this->getRepository()->getRoleService(),
+            $this->getParserTools()
+        );
     }
 }

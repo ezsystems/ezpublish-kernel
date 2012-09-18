@@ -115,7 +115,7 @@ $fieldTypeParser = new Common\Input\FieldTypeParser(
 $inputDispatcher = new Common\Input\Dispatcher(
     new Common\Input\ParsingDispatcher(
         array(
-            'application/vnd.ez.api.RoleInput'              => new Input\Parser\RoleInput( $urlHandler, $repository->getRoleService() ),
+            'application/vnd.ez.api.RoleInput'              => new Input\Parser\RoleInput( $urlHandler, $repository->getRoleService(), $parserTools ),
             'application/vnd.ez.api.SectionInput'           => new Input\Parser\SectionInput( $urlHandler, $repository->getSectionService() ),
             'application/vnd.ez.api.ContentCreate'          => new Input\Parser\ContentCreate(
                 $urlHandler,
