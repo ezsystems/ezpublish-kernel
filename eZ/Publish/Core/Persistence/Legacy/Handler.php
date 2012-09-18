@@ -757,7 +757,8 @@ class Handler implements HandlerInterface
                 $this->getUrlAliasGateway(),
                 $this->getUrlAliasMapper(),
                 $this->contentLanguageHandler(),
-                $this->getLanguageMaskGenerator()
+                $this->getLanguageMaskGenerator(),
+                $this->transformationProcessor
             );
         }
 

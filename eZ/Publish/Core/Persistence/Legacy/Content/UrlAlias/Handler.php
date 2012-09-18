@@ -9,9 +9,10 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
-use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as BaseUrlAliasHandler,
+use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor,
     eZ\Publish\SPI\Persistence\Content\UrlAlias,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\ForbiddenException,
@@ -23,8 +24,130 @@ use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as BaseUrlAliasHandler,
  * Its methods operate on a representation of the url alias data structure held
  * inside a storage engine.
  */
-class Handler implements BaseUrlAliasHandler
+class Handler implements UrlAliasHandlerInterface
 {
+    protected $configuration = array(
+        "wordSeparatorName" => "dash",
+        "urlAliasNameLimit" => 255,
+        "transformation" => "urlalias",
+        "transformationGroups" => array(
+            "urlalias" => array(
+                "commands" => array(
+                    //normalize
+                    "space_normalize",
+                    "hyphen_normalize",
+                    "apostrophe_normalize",
+                    "doublequote_normalize",
+                    "greek_normalize",
+                    "endline_search_normalize",
+                    "tab_search_normalize",
+                    "specialwords_search_normalize",
+                    "punctuation_normalize",
+
+                    //transform
+                    "apostrophe_to_doublequote",
+                    "math_to_ascii",
+                    "inverted_to_normal",
+
+                    //decompose
+                    "special_decompose",
+                    "latin_search_decompose",
+
+                    //transliterate
+                    "cyrillic_transliterate_ascii",
+                    "greek_transliterate_ascii",
+                    "hebrew_transliterate_ascii",
+                    "latin1_transliterate_ascii",
+                    "latin-exta_transliterate_ascii",
+
+                    //diacritical
+                    "cyrillic_diacritical",
+                    "greek_diacritical",
+                    "latin1_diacritical",
+                    "latin-exta_diacritical",
+                ),
+                "cleanupMethod" => "url_cleanup",
+            ),
+            "urlalias_iri" => array(
+                "commands" => array(),
+                "cleanupMethod" => "url_cleanup_iri",
+            ),
+            "urlalias_compat" => array(
+                "commands" => array(
+                    //normalize
+                    "space_normalize",
+                    "hyphen_normalize",
+                    "apostrophe_normalize",
+                    "doublequote_normalize",
+                    "greek_normalize",
+                    "endline_search_normalize",
+                    "tab_search_normalize",
+                    "specialwords_search_normalize",
+                    "punctuation_normalize",
+
+                    //transform
+                    "apostrophe_to_doublequote",
+                    "math_to_ascii",
+                    "inverted_to_normal",
+
+                    //decompose
+                    "special_decompose",
+                    "latin_search_decompose",
+
+                    //transliterate
+                    "cyrillic_transliterate_ascii",
+                    "greek_transliterate_ascii",
+                    "hebrew_transliterate_ascii",
+                    "latin1_transliterate_ascii",
+                    "latin-exta_transliterate_ascii",
+
+                    //diacritical
+                    "cyrillic_diacritical",
+                    "greek_diacritical",
+                    "latin1_diacritical",
+                    "latin-exta_diacritical",
+
+                    //lowercase
+                    "ascii_lowercase",
+                    "cyrillic_lowercase",
+                    "greek_lowercase",
+                    "latin1_lowercase",
+                    "latin-exta_lowercase",
+                    "latin_lowercase",
+                ),
+                "cleanupMethod" => "url_cleanup_compat",
+            ),
+        ),
+        "reservedNames" => array(
+            "class",
+            "collaboration",
+            "content",
+            "error",
+            "ezinfo",
+            "infocollector",
+            "layout",
+            "notification",
+            "oauth",
+            "oauthadmin",
+            "package",
+            "pdf",
+            "role",
+            "rss",
+            "search",
+            "section",
+            "settings",
+            "setup",
+            "shop",
+            "state",
+            "trigger",
+            "url",
+            "user",
+            "visual",
+            "workflow",
+            "switchlanguage",
+        ),
+    );
+
     /**
      * UrlAlias Gateway
      *
@@ -54,11 +177,11 @@ class Handler implements BaseUrlAliasHandler
     protected $languageMaskGenerator;
 
     /**
-     * List of system reserved URL alias names
+     * Transformation processor to normalize URL strings
      *
-     * @var array
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor
      */
-    protected $reservedNames = array();
+    protected $transformationProcessor;
 
     /**
      * Creates a new UrlWildcard Handler
@@ -67,17 +190,24 @@ class Handler implements BaseUrlAliasHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper $mapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler $languageHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor $transformationProcessor
+     * @param array $configuration
      */
     public function __construct(
         Gateway $gateway,
         Mapper $mapper,
         LanguageHandler $languageHandler,
-        LanguageMaskGenerator $languageMaskGenerator )
+        LanguageMaskGenerator $languageMaskGenerator,
+        TransformationProcessor $transformationProcessor,
+        array $configuration = array()
+    )
     {
         $this->gateway = $gateway;
         $this->mapper = $mapper;
         $this->languageHandler = $languageHandler;
         $this->languageMaskGenerator = $languageMaskGenerator;
+        $this->transformationProcessor = $transformationProcessor;
+        $this->configuration = $configuration + $this->configuration;
     }
 
     /**
@@ -679,37 +809,24 @@ class Handler implements BaseUrlAliasHandler
      * 'myfile.tpl' => 'Myfile-tpl',
      * 'øæå' => 'oeaeaa'
      *
-     * @param string $urlElement
+     * @param string $text
      * @param $defaultValue
      *
      * @return string
-     *
-     * @todo: implement eZCharTransform
      */
-    protected function convertToAlias( $urlElement, $defaultValue = "_1" )
+    protected function convertToAlias( $text, $defaultValue = "_1" )
     {
-        if ( strlen( $urlElement ) === 0 )
+        if ( strlen( $text ) === 0 )
         {
-            $urlElement = $defaultValue;
+            $text = $defaultValue;
         }
 
-        /*
-        $trans = eZCharTransform::instance();
-
-        $ini = eZINI::instance();
-        $group = $ini->variable( 'URLTranslator', 'TransformationGroup' );
-
-        $urlElement = $trans->transformByGroup( $urlElement, $group );
-
-        return $trans->transformByGroup(
-            strlen( $urlElement ) === 0
-                ? $defaultValue
-                : $urlElement,
-            $group
+        return $this->cleanupText(
+            $this->transformationProcessor->transform(
+                $text,
+                $this->configuration["transformationGroups"][$this->configuration["transformation"]]["commands"]
+            )
         );
-        */
-
-        return $urlElement;
     }
 
     /**
@@ -725,18 +842,18 @@ class Handler implements BaseUrlAliasHandler
      * of the alias name will be further checked against existing elements under the same parent, using
      * unique counter value determined here as starting unique counter value.
      *
-     * @param string $name
+     * @param string $text
      * @param int $parentId
      *
      * @return int
      */
-    protected function getUniqueCounterValue( $name, $parentId )
+    protected function getUniqueCounterValue( $text, $parentId )
     {
         if ( $parentId === 0 )
         {
-            foreach ( $this->reservedNames as $reservedName )
+            foreach ( $this->configuration["reservedNames"] as $reservedName )
             {
-                if ( strcasecmp( $name, $reservedName ) )
+                if ( strcasecmp( $text, $reservedName ) === 0 )
                 {
                     return 2;
                 }
@@ -750,11 +867,109 @@ class Handler implements BaseUrlAliasHandler
      * @param string $text
      *
      * @return string
-     *
-     * @todo use utility method to downcase
      */
     protected function getHash( $text )
     {
         return md5( strtolower( $text ) );
+    }
+
+    /**
+     * @param string $text
+     *
+     * @return string
+     */
+    protected function cleanupText( $text )
+    {
+        switch ( $this->configuration["transformationGroups"][$this->configuration["transformation"]]["cleanupMethod"] )
+        {
+            case "url_cleanup":
+                $sep = $this->getWordSeparator();
+                $sepQ = preg_quote( $sep );
+                $text = preg_replace(
+                    array(
+                        "#[^a-zA-Z0-9_!.-]+#",
+                        "#^[.]+|[!.]+$#", # Remove dots at beginning/end
+                        "#\.\.+#", # Remove double dots
+                        "#[{$sepQ}]+#", # Turn multiple separators into one
+                        "#^[{$sepQ}]+|[{$sepQ}]+$#" # Strip separator from beginning/end
+                    ),
+                    array(
+                        $sep,
+                        $sep,
+                        $sep,
+                        $sep,
+                        ""
+                    ),
+                    $text
+                );
+                break;
+            case "url_cleanup_iri":
+                // With IRI support we keep all characters except some reserved ones,
+                // they are space, ampersand, semi-colon, forward slash, colon, equal sign, question mark,
+                //          square brackets, parenthesis, plus.
+                //
+                // Note: Space is turned into a dash to make it easier for people to
+                //       paste urls from the system and have the whole url recognized
+                //       instead of being broken off
+                $sep = $this->getWordSeparator();
+                $sepQ = preg_quote( $sep );
+                $prepost = " ." . $sepQ;
+                if ( $sep != "-" )
+                    $prepost .= "-";
+                $text = preg_replace(
+                    array(
+                        "#[ \\\\%\#&;/:=?\[\]()+]+#",
+                        "#^[.]+|[!.]+$#", # Remove dots at beginning/end
+                        "#\.\.+#", # Remove double dots
+                        "#[{$sepQ}]+#", # Turn multiple separators into one
+                        "#^[{$prepost}]+|[{$prepost}]+$#"
+                    ),
+                    array(
+                        $sep,
+                        $sep,
+                        $sep,
+                        $sep,
+                        ""
+                    ),
+                    $text
+                );
+                break;
+            case "url_cleanup_compat":
+                // Old style of url alias with lowercase only and underscores for separators
+                $text = strtolower( $text );
+                $text = preg_replace(
+                    array(
+                        "#[^a-z0-9]+#",
+                        "#^_+|_+$#"
+                    ),
+                    array(
+                        "_",
+                        ""
+                    ),
+                    $text
+                );
+                break;
+            default:
+                // Nothing
+        }
+
+        return $text;
+    }
+
+    /**
+     * Returns word separator value
+     *
+     * @return string
+     */
+    protected function getWordSeparator()
+    {
+        switch ( $this->configuration["wordSeparatorName"] )
+        {
+            case "dash": return "-";
+            case "underscore": return "_";
+            case "space": return " ";
+        }
+
+        return "-";
     }
 }

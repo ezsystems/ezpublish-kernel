@@ -17,6 +17,10 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase as LanguageGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationParser,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationPcreCompiler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter,
     eZ\Publish\SPI\Persistence\Content\UrlAlias,
     eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
@@ -2204,8 +2208,23 @@ class UrlAliasHandlerTest extends TestCase
             $gateway,
             $mapper,
             $languageHandler,
-            $languageMaskGenerator
+            $languageMaskGenerator,
+            $this->getProcessor()
         );
+    }
+
+    public function getProcessor()
+    {
+        $processor = new TransformationProcessor(
+            new TransformationParser( self::getInstallationDir() ),
+            new TransformationPcreCompiler( new Utf8Converter() )
+        );
+
+        foreach ( glob( __DIR__ . '/_fixtures/transformations/*.tr' ) as $file )
+        {
+            $processor->loadRules( str_replace( self::getInstallationDir(), '', $file ) );
+        }
+        return $processor;
     }
 
     /**
