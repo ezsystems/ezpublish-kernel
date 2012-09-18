@@ -16,6 +16,8 @@ use eZ\Publish\API\Repository\TrashService;
 use eZ\Publish\API\Repository\LocationService;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 
 use Qafoo\RMF;
 
@@ -153,7 +155,14 @@ class Trash
             $locationPath = $destinationValues['location'];
             $locationPathParts = explode( '/', $locationPath );
 
-            $parentLocation = $this->locationService->loadLocation( array_pop( $locationPathParts ) );
+            try
+            {
+                $parentLocation = $this->locationService->loadLocation( array_pop( $locationPathParts ) );
+            }
+            catch ( NotFoundException $e )
+            {
+                throw new ForbiddenException( $e->getMessage() );
+            }
         }
 
         $values = $this->urlHandler->parse( 'trash', $request->path );
