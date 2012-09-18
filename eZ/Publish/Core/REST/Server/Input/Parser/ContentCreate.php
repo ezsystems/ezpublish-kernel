@@ -16,6 +16,7 @@ use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\Core\REST\Server\Values\RestContentCreate;
+use DateTime;
 
 /**
  * Parser for ContentCreate
@@ -141,15 +142,23 @@ class ContentCreate extends Base
             $contentCreateStruct->remoteId = $data['remoteId'];
         }
 
-        if ( array_key_exists( 'Owner', $data ) && is_array( $data['Owner'] ) )
+        if ( array_key_exists( 'modificationDate', $data ) )
         {
-            if ( !array_key_exists( '_href', $data['Owner'] ) )
+            $modificationDate = new DateTime();
+            $modificationDate->setTimestamp( strtotime( $data['modificationDate'] ) );
+
+            $contentCreateStruct->modificationDate = $modificationDate;
+        }
+
+        if ( array_key_exists( 'User', $data ) && is_array( $data['User'] ) )
+        {
+            if ( !array_key_exists( '_href', $data['User'] ) )
             {
-                throw new Exceptions\Parser( "Missing '_href' attribute for Owner element in ContentCreate." );
+                throw new Exceptions\Parser( "Missing '_href' attribute for User element in ContentCreate." );
             }
 
-            $ownerValues = $this->urlHandler->parse( 'user', $data['Owner']['_href'] );
-            $contentCreateStruct->ownerId = $ownerValues['user'];
+            $userValues = $this->urlHandler->parse( 'user', $data['User']['_href'] );
+            $contentCreateStruct->ownerId = $userValues['user'];
         }
 
         if ( !array_key_exists( 'fields', $data ) || !is_array( $data['fields'] ) || !is_array( $data['fields']['field'] ) )

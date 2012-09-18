@@ -31,7 +31,7 @@ class ContentCreateTest extends BaseTest
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'Owner' => array(
+            'User' => array(
                 '_href' => '/user/users/14'
             ),
             'fields' => array(
@@ -143,7 +143,7 @@ class ContentCreateTest extends BaseTest
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'Owner' => array(
+            'User' => array(
                 '_href' => '/user/users/14'
             ),
             'fields' => array(
@@ -197,7 +197,7 @@ class ContentCreateTest extends BaseTest
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'Owner' => array(
+            'User' => array(
                 '_href' => '/user/users/14'
             ),
             'fields' => array(
@@ -239,7 +239,7 @@ class ContentCreateTest extends BaseTest
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'Owner' => array(
+            'User' => array(
                 '_href' => '/user/users/14'
             ),
             'fields' => array(
@@ -282,7 +282,7 @@ class ContentCreateTest extends BaseTest
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'Owner' => array(
+            'User' => array(
                 '_href' => '/user/users/14'
             ),
             'fields' => array(
@@ -324,7 +324,7 @@ class ContentCreateTest extends BaseTest
             'Section' => array(),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'Owner' => array(
+            'User' => array(
                 '_href' => '/user/users/14'
             ),
             'fields' => array(
@@ -350,12 +350,12 @@ class ContentCreateTest extends BaseTest
     }
 
     /**
-     * Test ContentCreate parser throwing exception on invalid Owner
+     * Test ContentCreate parser throwing exception on invalid User
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing '_href' attribute for Owner element in ContentCreate.
+     * @expectedExceptionMessage Missing '_href' attribute for User element in ContentCreate.
      */
-    public function testParseExceptionOnInvalidOwner()
+    public function testParseExceptionOnInvalidUser()
     {
         $inputArray = array(
             'ContentType' => array(
@@ -368,7 +368,7 @@ class ContentCreateTest extends BaseTest
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'Owner' => array(),
+            'User' => array(),
             'fields' => array(
                 'field' => array(
                     array(
@@ -410,7 +410,7 @@ class ContentCreateTest extends BaseTest
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'Owner' => array(
+            'User' => array(
                 '_href' => '/user/users/14'
             )
         );
@@ -438,7 +438,7 @@ class ContentCreateTest extends BaseTest
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'Owner' => array(
+            'User' => array(
                 '_href' => '/user/users/14'
             ),
             'fields' => array(
@@ -482,7 +482,7 @@ class ContentCreateTest extends BaseTest
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'Owner' => array(
+            'User' => array(
                 '_href' => '/user/users/14'
             ),
             'fields' => array(
@@ -526,7 +526,7 @@ class ContentCreateTest extends BaseTest
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'Owner' => array(
+            'User' => array(
                 '_href' => '/user/users/14'
             ),
             'fields' => array(
