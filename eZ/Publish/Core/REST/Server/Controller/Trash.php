@@ -166,10 +166,23 @@ class Trash
         }
 
         $values = $this->urlHandler->parse( 'trash', $request->path );
-
         $trashItem = $this->trashService->loadTrashItem( $values['trash'] );
-        $location = $this->trashService->recover( $trashItem, $parentLocation );
 
+        if ( $requestDestination === null )
+        {
+            // If we're recovering under the original location
+            // check if it exists, to return "403 Forbidden" in case it does not
+            try
+            {
+                $this->locationService->loadLocation( $trashItem->parentLocationId );
+            }
+            catch ( NotFoundException $e )
+            {
+                throw new ForbiddenException( $e->getMessage() );
+            }
+        }
+
+        $location = $this->trashService->recover( $trashItem, $parentLocation );
         return new Values\ResourceCreated(
             $this->urlHandler->generate(
                 'location',
