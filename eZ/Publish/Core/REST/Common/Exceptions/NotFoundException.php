@@ -17,8 +17,4 @@ namespace eZ\Publish\Core\REST\Common\Exceptions;
  */
 class NotFoundException extends \eZ\Publish\API\Repository\Exceptions\NotFoundException
 {
-    function __construct( $message )
-    {
-        parent::__construct( $message );
-    }
 }
