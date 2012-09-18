@@ -355,7 +355,6 @@ $dispatcher = new AuthenticatingDispatcher(
             ),
             '(^/content/objects/[0-9]+/versions$)' => array(
                 'GET' => array( $contentController, 'loadContentVersions' ),
-                'COPY' => array( $contentController, 'createDraftFromCurrentVersion' ),
             ),
             '(^/content/objects/[0-9]+/versions/[0-9]+/relations$)' => array(
                 'GET' => array( $contentController, 'loadVersionRelations' ),
@@ -370,7 +369,8 @@ $dispatcher = new AuthenticatingDispatcher(
                 'PUBLISH' => array( $contentController, 'publishVersion' ),
             ),
             '(^/content/objects/[0-9]+/currentversion$)' => array(
-                'GET' => array( $contentController, 'redirectCurrentVersion' )
+                'GET' => array( $contentController, 'redirectCurrentVersion' ),
+                'COPY' => array( $contentController, 'createDraftFromCurrentVersion' ),
             ),
             '(^/content/objects/[0-9]+/locations$)' => array(
                 'GET' => array( $locationController, 'loadLocationsForContent' ),

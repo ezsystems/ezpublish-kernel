@@ -354,7 +354,7 @@ class Content
      */
     public function createDraftFromCurrentVersion( RMF\Request $request )
     {
-        $urlValues = $this->urlHandler->parse( 'objectVersions', $request->path );
+        $urlValues = $this->urlHandler->parse( 'objectCurrentVersion', $request->path );
 
         $contentInfo = $this->contentService->loadContentInfo( $urlValues['object'] );
         $contentDraft = $this->contentService->createContentDraft( $contentInfo );
