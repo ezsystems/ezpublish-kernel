@@ -35,6 +35,8 @@ class eZPublish extends Pattern
         'objectObjectStates'   => '/content/objects/{object}/objectstates',
         'objectVersions'       => '/content/objects/{object}/versions',
         'objectVersion'        => '/content/objects/{object}/versions/{version}',
+        'objectVersionRelations' => '/content/objects/{object}/versions/{version}/relations',
+        'objectVersionRelation' => '/content/objects/{object}/versions/{version}/relations/{relation}',
         'objectCurrentVersion' => '/content/objects/{object}/currentversion',
         'objectrelations'      => '/content/objects/{object}/relations',
         'objectrelation'       => '/content/objects/{object}/relations/{relation}',

@@ -389,6 +389,29 @@ class Content
     }
 
     /**
+     * Redirects to the relations of the current version
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceRedirect
+     */
+    public function redirectCurrentVersionRelations( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'objectrelations', $request->path );
+
+        $contentInfo = $this->contentService->loadContentInfo( $urlValues['object'] );
+        return new Values\ResourceRedirect(
+            $this->urlHandler->generate(
+                'objectVersionRelations',
+                array(
+                    'object' => $urlValues['object'],
+                    'version' => $contentInfo->currentVersionNo
+                )
+            ),
+            'RelationList'
+        );
+    }
+
+    /**
      * Extracts the requested media type from $request
      *
      * @param RMF\Request $request

@@ -350,6 +350,9 @@ $dispatcher = new AuthenticatingDispatcher(
                 'DELETE' => array( $contentController, 'deleteContent' ),
                 'COPY' => array( $contentController, 'copyContent' ),
             ),
+            '(^/content/objects/[0-9]+/relations$)' => array(
+                'GET' => array( $contentController, 'redirectCurrentVersionRelations' ),
+            ),
             '(^/content/objects/[0-9]+/versions$)' => array(
                 'GET' => array( $contentController, 'loadContentVersions' ),
                 'COPY' => array( $contentController, 'createDraftFromCurrentVersion' ),
