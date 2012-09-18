@@ -87,32 +87,18 @@ class Loader
     {
         $legacyRootDir = $this->legacyRootDir;
         $webrootDir = $this->webrootDir;
-        try
-        {
-            // Getting the request through the container since this service is in the "request" scope and we are not in this scope yet.
-            // Moreover, while clearing/warming up caches with app/console we might get an InactiveScopeException
-            // since the "request" scope is only active via web.
-            $request = $container->get( 'request' );
-        }
-        catch ( InactiveScopeException $e )
-        {
-            // Not in web mode. We have nothing to do here.
-            if ( isset( $this->logger ) )
-                $this->logger->info( 'Trying to get the request in non-web context (warming up caches?), aborting', array( __METHOD__ ) );
 
-            return;
-        }
-
-        $eventDispatcher = $container->get( 'event_dispatcher' );
-        $legacyParameters = new ParameterBag( $defaultLegacyOptions );
-        $legacyParameters->set( 'service-container', $container );
-
-        return function () use ( $legacyRootDir, $webrootDir, $request, $eventDispatcher, $legacyParameters, $webHandlerClass )
+        return function () use ( $legacyRootDir, $webrootDir, $container, $defaultLegacyOptions, $webHandlerClass )
         {
             static $webHandler;
             if ( !$webHandler instanceof ezpKernelHandler )
             {
                 chdir( $legacyRootDir );
+
+                $legacyParameters = new ParameterBag( $defaultLegacyOptions );
+                $legacyParameters->set( 'service-container', $container );
+                $request = $container->get( 'request' );
+                $eventDispatcher = $container->get( 'event_dispatcher' );
 
                 $buildEvent = new PreBuildKernelWebHandlerEvent(
                     $legacyParameters, $request
