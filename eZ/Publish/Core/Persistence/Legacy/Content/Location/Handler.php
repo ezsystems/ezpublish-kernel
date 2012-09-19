@@ -53,20 +53,12 @@ class Handler implements BaseLocationHandler
     protected $contentMapper;
 
     /**
-     * UrlAlias handler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler
-     */
-    protected $urlAliasHandler;
-
-    /**
      * Construct from userGateway
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $locationGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Handler $contentHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler $urlAliasHandler
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
      */
@@ -74,15 +66,13 @@ class Handler implements BaseLocationHandler
         LocationGateway $locationGateway,
         LocationMapper $locationMapper,
         ContentHandler $contentHandler,
-        ContentMapper $contentMapper,
-        UrlAliasHandler $urlAliasHandler
+        ContentMapper $contentMapper
     )
     {
         $this->locationGateway = $locationGateway;
         $this->locationMapper = $locationMapper;
         $this->contentHandler = $contentHandler;
         $this->contentMapper = $contentMapper;
-        $this->urlAliasHandler = $urlAliasHandler;
     }
 
     /**
@@ -392,8 +382,6 @@ class Handler implements BaseLocationHandler
         }
 
         $this->locationGateway->removeLocation( $locationId );
-        $this->urlAliasHandler->locationDeleted( $locationId );
-
         $this->locationGateway->deleteNodeAssignment( $contentId );
     }
 

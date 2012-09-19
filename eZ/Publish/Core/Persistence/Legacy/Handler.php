@@ -609,8 +609,7 @@ class Handler implements HandlerInterface
                 $this->getLocationGateway(),
                 $this->getLocationMapper(),
                 $this->contentHandler(),
-                $this->getContentMapper(),
-                $this->urlAliasHandler()
+                $this->getContentMapper()
             );
         }
         return $this->locationHandler;
