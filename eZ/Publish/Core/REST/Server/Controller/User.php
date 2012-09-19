@@ -21,6 +21,8 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 
+use eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException AS RestInvalidArgumentException;
+
 use Qafoo\RMF;
 
 /**
@@ -154,10 +156,27 @@ class User
      */
     public function createUserGroup( RMF\Request $request )
     {
-        $urlValues = $this->urlHandler->parse( 'groupSubgroups', $request->path );
+        try
+        {
+            $urlValues = $this->urlHandler->parse( 'groupSubgroups', $request->path );
+            $userGroupPath = $urlValues['group'];
+        }
+        catch ( RestInvalidArgumentException $e )
+        {
+            try
+            {
+                $this->urlHandler->parse( 'rootUserGroupSubGroups', $request->path );
+                //@todo Load from settings instead of hardcoding
+                $userGroupPath = '/1/5';
+            }
+            catch ( RestInvalidArgumentException $e )
+            {
+                throw new Exceptions\BadRequestException( 'Unrecognized user group resource' );
+            }
+        }
 
         $userGroupLocation = $this->locationService->loadLocation(
-            $this->extractLocationIdFromPath( $urlValues['group'] )
+            $this->extractLocationIdFromPath( $userGroupPath )
         );
 
         $createdUserGroup = $this->userService->createUserGroup(

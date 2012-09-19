@@ -559,6 +559,9 @@ $dispatcher = new AuthenticatingDispatcher(
             '(^/user/groups/root$)' => array(
                 'GET'  => array( $userController, 'loadRootUserGroup' ),
             ),
+            '(^/user/groups/subgroups$)' => array(
+                'POST' => array( $userController, 'createUserGroup' ),
+            ),
             '(^/user/groups/[0-9/]+$)' => array(
                 'GET' => array( $userController, 'loadUserGroup' ),
                 'DELETE' => array( $userController, 'deleteUserGroup' ),

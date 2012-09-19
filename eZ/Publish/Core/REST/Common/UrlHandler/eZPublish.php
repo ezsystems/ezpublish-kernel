@@ -70,6 +70,7 @@ class eZPublish extends Pattern
         'groupSubgroups'            => '/user/groups{&group}/subgroups',
         'groupUsers'                => '/user/groups{&group}/users',
         'rootUserGroup'             => '/user/groups/root',
+        'rootUserGroupSubGroups'    => '/user/groups/subgroups',
         'roles'                     => '/user/roles',
         'role'                      => '/user/roles/{role}',
         'roleByIdentifier'          => '/user/roles?identifier={role}',
