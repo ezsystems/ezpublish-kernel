@@ -99,6 +99,22 @@
 {% endspaceless %}
 {% endblock %}
 
+{% block ezselection_field %}
+{% spaceless %}
+    {% if fieldSettings.isMultiple  %}
+        <ul {{ block( 'field_attributes' ) }}>
+        {% for selectedIndex in field.value.selection %}
+            <li>{{ fieldSettings.options[selectedIndex] }}</li>
+        {% endfor %}
+        </ul>
+    {% elseif not fieldSettings.isMultiple %}
+        {% set field_value = fieldSettings.options[field.value.selection.0] %}
+        {{ block( 'simple_block_field' ) }}
+    {% endif %}
+{% endspaceless %}
+{% endblock %}
+
+
 {# The simple_block_field block is a shorthand html block-based fields (like eztext or ezxmltext) #}
 {# You can define a field_value variable before rendering this one if you need special operation for rendering content (i.e. nl2br) #}
 {% block simple_block_field %}
