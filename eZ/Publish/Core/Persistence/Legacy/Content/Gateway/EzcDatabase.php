@@ -415,7 +415,7 @@ class EzcDatabase extends Gateway
                         $qName->bindValue( $contentId, null, \PDO::PARAM_INT )
                     ),
                     $qName->expr->eq(
-                        $this->dbHandler->quoteColumn( 'version' ),
+                        $this->dbHandler->quoteColumn( 'content_version' ),
                         $qName->bindValue( $versionNo, null, \PDO::PARAM_INT )
                     )
                 )
