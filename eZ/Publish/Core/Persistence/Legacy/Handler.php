@@ -274,7 +274,7 @@ class Handler implements HandlerInterface
      * @param Content\Search\TransformationProcessor $transformationProcessor Search Text Transformation processor
      * @param array $config List of optional configuration flags:
      *                      The flag 'defer_type_update' defines if content types should be
-     *                      published immediatly (false), when the
+     *                      published immediately (false), when the
      *                      {@link \eZ\Publish\SPI\Persistence\Content\Type\Handler::publish()} method
      *                      is called, or if a background process should be triggered (true), which
      *                      is then executed by the old eZ Publish core.
@@ -609,7 +609,8 @@ class Handler implements HandlerInterface
                 $this->getLocationGateway(),
                 $this->getLocationMapper(),
                 $this->contentHandler(),
-                $this->getContentMapper()
+                $this->getContentMapper(),
+                $this->urlAliasHandler()
             );
         }
         return $this->locationHandler;
