@@ -18,6 +18,8 @@ use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Repository;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+
 use Qafoo\RMF;
 
 /**
@@ -199,6 +201,13 @@ class User
             $userGroupLocation->contentId
         );
 
+        // Load one user to see if user group is empty or not
+        $users = $this->userService->loadUsersOfUserGroup( $userGroup, 0, 1 );
+        if ( !empty( $users ) )
+        {
+            throw new Exceptions\ForbiddenException( "Non-empty user groups cannot be deleted" );
+        }
+
         $this->userService->deleteUserGroup( $userGroup );
 
         return new Values\ResourceDeleted();
@@ -226,6 +235,58 @@ class User
         $this->userService->deleteUser( $user );
 
         return new Values\ResourceDeleted();
+    }
+
+    /**
+     * Moves the user group to another parent
+     *
+     * @param \Qafoo\RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
+     */
+    public function moveUserGroup( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'group', $request->path );
+
+        $userGroupLocation = $this->locationService->loadLocation(
+            $this->extractLocationIdFromPath( $urlValues['group'] )
+        );
+
+        $userGroup = $this->userService->loadUserGroup(
+            $userGroupLocation->contentId
+        );
+
+        $destinationParts = $this->urlHandler->parse( 'group', $request->destination );
+
+        try
+        {
+            $destinationGroupLocation = $this->locationService->loadLocation(
+                $this->extractLocationIdFromPath( $destinationParts['group'] )
+            );
+        }
+        catch ( NotFoundException $e )
+        {
+            throw new Exceptions\ForbiddenException( $e->getMessage() );
+        }
+
+        try
+        {
+            $destinationGroup = $this->userService->loadUserGroup( $destinationGroupLocation->contentId );
+        }
+        catch ( NotFoundException $e )
+        {
+            throw new Exceptions\ForbiddenException( $e->getMessage() );
+        }
+
+        $this->userService->moveUserGroup( $userGroup, $destinationGroup );
+
+        return new Values\ResourceCreated(
+            $this->urlHandler->generate(
+                'group',
+                array(
+                    'group' => $destinationGroupLocation->pathString . $userGroupLocation->id
+                )
+            )
+        );
     }
 
     /**
