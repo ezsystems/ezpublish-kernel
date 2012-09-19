@@ -290,7 +290,43 @@ class User
     }
 
     /**
-     * loads the users of the group with the given path
+     * Returns a list of the sub groups
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\UserList
+     */
+    public function loadSubUserGroups( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'groupSubgroups', $request->path );
+
+        $userGroupLocation = $this->locationService->loadLocation(
+            $this->extractLocationIdFromPath( $urlValues['group'] )
+        );
+
+        $userGroup = $this->userService->loadUserGroup(
+            $userGroupLocation->contentId
+        );
+
+        $subGroups = $this->userService->loadSubUserGroups( $userGroup );
+
+        $restUserGroups = array();
+        foreach ( $subGroups as $subGroup )
+        {
+            $subGroupContentInfo = $subGroup->getVersionInfo()->getContentInfo();
+            $subGroupLocation = $this->locationService->loadLocation( $subGroupContentInfo->mainLocationId );
+            $restUserGroups[] = new Values\RestUserGroup( $subGroup, $subGroupContentInfo, $subGroupLocation );
+        }
+
+        if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.usergrouplist' )
+        {
+            return new Values\UserGroupList( $restUserGroups, $request->path );
+        }
+
+        return new Values\UserGroupRefList( $restUserGroups, $request->path );
+    }
+
+    /**
+     * Loads the users of the group with the given path
      *
      * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\UserList

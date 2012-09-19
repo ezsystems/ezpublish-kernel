@@ -271,6 +271,8 @@ $valueObjectVisitors = array(
 
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserGroup'              => new Output\ValueObjectVisitor\RestUserGroup( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedUserGroup'           => new Output\ValueObjectVisitor\CreatedUserGroup( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserGroupList'              => new Output\ValueObjectVisitor\UserGroupList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserGroupRefList'           => new Output\ValueObjectVisitor\UserGroupRefList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserList'                   => new Output\ValueObjectVisitor\UserList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserRefList'                => new Output\ValueObjectVisitor\UserRefList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUser'                   => new Output\ValueObjectVisitor\RestUser( $urlHandler ),
@@ -546,6 +548,7 @@ $dispatcher = new AuthenticatingDispatcher(
                 'MOVE' => array( $userController, 'moveUserGroup' ),
             ),
             '(^/user/groups/[0-9/]+/subgroups$)' => array(
+                'GET' => array( $userController, 'loadSubUserGroups' ),
                 'POST' => array( $userController, 'createUserGroup' ),
             ),
             '(^/user/groups/[0-9/]+/users$)' => array(
