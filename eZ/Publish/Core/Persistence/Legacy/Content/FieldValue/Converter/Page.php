@@ -45,7 +45,9 @@ class Page implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataText = $this->generateXmlString( $value->data );
+        $storageFieldValue->dataText = $value->data === null
+            ? null
+            : $this->generateXmlString( $value->data );
     }
 
     /**
@@ -56,7 +58,9 @@ class Page implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = $this->restoreValueFromXmlString( $value->dataText );
+        $fieldValue->data = $value->dataText === null
+            ? null
+            : $this->restoreValueFromXmlString( $value->dataText );
     }
 
     /**

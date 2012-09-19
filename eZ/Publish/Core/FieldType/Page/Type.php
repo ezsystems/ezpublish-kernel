@@ -11,8 +11,8 @@ namespace eZ\Publish\Core\FieldType\Page;
 use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\FieldType\Page\Service as PageService,
     eZ\Publish\Core\FieldType\ValidationError,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
-
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
+    eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 class Type extends FieldType
 {
@@ -141,6 +141,52 @@ class Type extends FieldType
     }
 
     /**
+     * Converts a persistence $fieldValue to a Value
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
+     *
+     * @return mixed
+     */
+    public function fromPersistenceValue( FieldValue $fieldValue )
+    {
+        if ( $fieldValue->data === null )
+        {
+            return null;
+        }
+
+        return new Value( $fieldValue->data );
+    }
+
+    /**
+     * Converts a $value to a persistence value
+     *
+     * @param mixed $value
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
+     */
+    public function toPersistenceValue( $value )
+    {
+        if ( $value === null )
+        {
+            return new FieldValue(
+                array(
+                    "data" => null,
+                    "externalData" => null,
+                    "sortKey" => null
+                )
+            );
+        }
+
+        return new FieldValue(
+            array(
+                "data" => $value->page,
+                "externalData" => null,
+                "sortKey" => $this->getSortInfo( $value )
+            )
+        );
+    }
+
+    /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
      * Return value is mixed. It should be something which is sensible for
@@ -197,6 +243,11 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( $inputValue === null )
+        {
+            return null;
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
