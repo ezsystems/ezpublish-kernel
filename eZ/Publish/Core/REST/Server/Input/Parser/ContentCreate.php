@@ -15,7 +15,7 @@ use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
-use eZ\Publish\Core\REST\Server\Values\RestContentCreate;
+use eZ\Publish\Core\REST\Server\Values\RestContentCreateStruct;
 use DateTime;
 
 /**
@@ -88,7 +88,7 @@ class ContentCreate extends Base
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\Core\REST\Server\Values\RestContentCreate
+     * @return \eZ\Publish\Core\REST\Server\Values\RestContentCreateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
@@ -194,6 +194,6 @@ class ContentCreate extends Base
             $contentCreateStruct->setField( $fieldData['fieldDefinitionIdentifier'], $fieldValue, $languageCode );
         }
 
-        return new RestContentCreate( $contentCreateStruct, $locationCreateStruct );
+        return new RestContentCreateStruct( $contentCreateStruct, $locationCreateStruct );
     }
 }

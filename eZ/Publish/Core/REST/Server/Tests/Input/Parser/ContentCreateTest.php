@@ -56,7 +56,7 @@ class ContentCreateTest extends BaseTest
         $result = $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestContentCreate',
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestContentCreateStruct',
             $result,
             'ContentCreate not created correctly.'
         );

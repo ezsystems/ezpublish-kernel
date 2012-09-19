@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the RestContentCreate class
+ * File containing the RestContentCreateStruct class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -13,9 +13,9 @@ use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 
 /**
- * RestContentCreate view model
+ * RestContentCreateStruct view model
  */
-class RestContentCreate
+class RestContentCreateStruct
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
