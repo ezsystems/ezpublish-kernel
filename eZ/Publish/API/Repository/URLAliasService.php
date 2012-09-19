@@ -56,12 +56,12 @@ interface URLAliasService
      * @param string $resource
      * @param string $path
      * @param string $languageCode
-     * @param boolean $forward
+     * @param boolean $forwarding
      * @param boolean $alwaysAvailable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function createGlobalUrlAlias( $resource, $path, $languageCode, $forward = false, $alwaysAvailable = false );
+    public function createGlobalUrlAlias( $resource, $path, $languageCode, $forwarding = false, $alwaysAvailable = false );
 
      /**
      * List of url aliases pointing to $location.

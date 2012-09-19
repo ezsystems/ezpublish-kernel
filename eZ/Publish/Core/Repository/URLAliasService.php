@@ -75,7 +75,7 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $path
-     * @param boolean $forward if true a redirect is performed
+     * @param boolean $forwarding if true a redirect is performed
      * @param string $languageCode the languageCode for which this alias is valid
      * @param boolean $alwaysAvailable
      *
@@ -83,7 +83,7 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function createUrlAlias( Location $location, $path, $languageCode, $forward = false, $alwaysAvailable = false )
+    public function createUrlAlias( Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false )
     {
         $path = $this->cleanUrl( $path );
         $path = $this->addPathPrefix( $path );
@@ -94,7 +94,7 @@ class URLAliasService implements URLAliasServiceInterface
             $spiUrlAlias = $this->persistenceHandler->urlAliasHandler()->createCustomUrlAlias(
                 $location->id,
                 $path,
-                $forward,
+                $forwarding,
                 $languageCode,
                 $alwaysAvailable
             );
@@ -134,12 +134,12 @@ class URLAliasService implements URLAliasServiceInterface
      * @param string $resource
      * @param string $path
      * @param string $languageCode
-     * @param boolean $forward
+     * @param boolean $forwarding
      * @param boolean $alwaysAvailable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function createGlobalUrlAlias( $resource, $path, $languageCode, $forward = false, $alwaysAvailable = false )
+    public function createGlobalUrlAlias( $resource, $path, $languageCode, $forwarding = false, $alwaysAvailable = false )
     {
         if ( !preg_match( "#^([a-zA-Z0-9_]+):(.+)$#", $resource, $matches ) )
         {
@@ -165,7 +165,7 @@ class URLAliasService implements URLAliasServiceInterface
                 $locationId,
                 $path,
                 $languageCode,
-                $forward,
+                $forwarding,
                 $alwaysAvailable
             );
         }
@@ -176,7 +176,7 @@ class URLAliasService implements URLAliasServiceInterface
             $spiUrlAlias = $this->persistenceHandler->urlAliasHandler()->createGlobalUrlAlias(
                 $resource,
                 $path,
-                $forward,
+                $forwarding,
                 $languageCode,
                 $alwaysAvailable
             );
