@@ -133,6 +133,17 @@
 {% endspaceless %}
 {% endblock %}
 
+{% block ezbinaryfile_field %}
+{% spaceless %}
+    {% if field.value %}
+        {% set uri = 'content/download/' ~ contentInfo.id ~ '/' ~ field.id
+                        ~ '/version/' ~ contentInfo.currentVersionNo ~  "/file/"
+                        ~ field.value.fileName|escape( 'url' ) %}
+        <a href="{{ path( 'ez_legacy', {'module_uri': uri} ) }}
+            {{ block( 'field_attributes' ) }}">{{ field.value.fileName }}</a>&nbsp;({{ field.value.fileSize }})
+    {% endif %}
+{% endspaceless %}
+{% endblock %}
 
 {# The simple_block_field block is a shorthand html block-based fields (like eztext or ezxmltext) #}
 {# You can define a field_value variable before rendering this one if you need special operation for rendering content (i.e. nl2br) #}
