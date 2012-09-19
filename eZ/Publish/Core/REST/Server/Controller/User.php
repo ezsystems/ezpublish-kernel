@@ -75,6 +75,7 @@ class User
      */
     public function loadRootUserGroup( RMF\Request $request )
     {
+        //@todo Replace hardcoded value with one loaded from settings
         return new Values\PermanentRedirect(
             $this->urlHandler->generate( 'group', array( 'group' => '/1/5' ) ),
             'UserGroup'
@@ -103,6 +104,45 @@ class User
             $userGroup,
             $userGroup->getVersionInfo()->getContentInfo(),
             $userGroupLocation
+        );
+    }
+
+    /**
+     * Create a new user group under the given parent
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedUserGroup
+     */
+    public function createUserGroup( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'groupSubgroups', $request->path );
+
+        $userGroupLocation = $this->locationService->loadLocation(
+            $this->extractLocationIdFromPath( $urlValues['group'] )
+        );
+
+        $createdUserGroup = $this->userService->createUserGroup(
+            $this->inputDispatcher->parse(
+                new Message(
+                    array( 'Content-Type' => $request->contentType ),
+                    $request->body
+                )
+            ),
+            $this->userService->loadUserGroup(
+                $userGroupLocation->contentId
+            )
+        );
+
+        $createdContentInfo = $createdUserGroup->getVersionInfo()->getContentInfo();
+        $createdLocation = $this->locationService->loadLocation( $createdContentInfo->mainLocationId );
+        return new Values\CreatedUserGroup(
+            array(
+                'userGroup' => new Values\RestUserGroup(
+                    $createdUserGroup,
+                    $createdContentInfo,
+                    $createdLocation
+                )
+            )
         );
     }
 

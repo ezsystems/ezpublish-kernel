@@ -126,6 +126,12 @@ $inputDispatcher = new Common\Input\Dispatcher(
                 ( $locationCreateParser = new Input\Parser\LocationCreate( $urlHandler, $repository->getLocationService(), $parserTools ) ),
                 $parserTools
             ),
+            'application/vnd.ez.api.UserGroupCreate'        => new Input\Parser\UserGroupCreate(
+                $urlHandler,
+                $repository->getUserService(),
+                $repository->getContentTypeService(),
+                $fieldTypeParser
+            ),
             'application/vnd.ez.api.ContentUpdate'          => new Input\Parser\ContentUpdate( $urlHandler ),
             'application/vnd.ez.api.PolicyCreate'           => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService(), $parserTools ),
             'application/vnd.ez.api.PolicyUpdate'           => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService(), $parserTools ),
@@ -260,7 +266,8 @@ $valueObjectVisitors = array(
 
     // User
 
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserGroup'            => new Output\ValueObjectVisitor\RestUserGroup( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserGroup'              => new Output\ValueObjectVisitor\RestUserGroup( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedUserGroup'           => new Output\ValueObjectVisitor\CreatedUserGroup( $urlHandler ),
 
     // ContentType
 
@@ -514,6 +521,9 @@ $dispatcher = new AuthenticatingDispatcher(
             '(^/user/groups/[0-9/]+$)' => array(
                 'GET' => array( $userController, 'loadUserGroup' ),
                 'DELETE' => array( $userController, 'deleteUserGroup' ),
+            ),
+            '(^/user/groups/[0-9/]+/subgroups$)' => array(
+                'POST' => array( $userController, 'createUserGroup' ),
             ),
             '(^/user/groups/[0-9/]+/roles$)' => array(
                 'GET'  => array( $roleController, 'loadRoleAssignmentsForUserGroup' ),
