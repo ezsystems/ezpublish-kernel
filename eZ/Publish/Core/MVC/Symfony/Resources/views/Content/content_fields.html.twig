@@ -114,6 +114,25 @@
 {% endspaceless %}
 {% endblock %}
 
+{# TODO:
+ # - add translate filter
+ # - legacy used to dump is_locked attribute
+ #}
+{% block ezuser_field %}
+{% spaceless %}
+<dl {{ block( 'field_attributes' ) }}>
+    <dt>User ID</dt>
+    <dd>{{ field.value.contentId }}</dd>
+    <dt>Username</dt>
+    <dd>{{ field.value.login }}</dd>
+    <dt>Email</dt>
+    <dd><a href="mailto:{{ field.value.email }}">{{ field.value.email }}</a></dd>
+    <dt>Account status</dt>
+    <dd>{{ field.value.enabled ? 'enabled' : 'disabled' }}</dd>
+</dl>
+{% endspaceless %}
+{% endblock %}
+
 
 {# The simple_block_field block is a shorthand html block-based fields (like eztext or ezxmltext) #}
 {# You can define a field_value variable before rendering this one if you need special operation for rendering content (i.e. nl2br) #}
