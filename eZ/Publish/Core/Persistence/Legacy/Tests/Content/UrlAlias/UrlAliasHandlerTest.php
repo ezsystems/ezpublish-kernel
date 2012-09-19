@@ -437,7 +437,7 @@ class UrlAliasHandlerTest extends TestCase
     public function testLookupLocationUrlAlias(
         $url,
         array $pathData,
-        array $pathLanguageCodes,
+        array $pathLanguageData,
         array $languageCodes,
         $alwaysAvailable,
         $locationId,
@@ -458,7 +458,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertFalse( $urlAlias->isCustom );
         self::assertFalse( $urlAlias->isHistory );
         self::assertEquals( $languageCodes, $urlAlias->languageCodes );
-        self::assertEquals( $pathLanguageCodes, $urlAlias->pathLanguageCodes );
+        self::assertEquals( $pathLanguageData, $urlAlias->pathLanguageData );
         self::assertEquals( $pathData, $urlAlias->pathData );
     }
 
@@ -483,7 +483,7 @@ class UrlAliasHandlerTest extends TestCase
     public function testLookupLocationCaseCorrection(
         $url,
         array $pathData,
-        array $pathLanguageCodes,
+        array $pathLanguageData,
         array $languageCodes,
         $alwaysAvailable,
         $locationId,
@@ -503,7 +503,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertFalse( $urlAlias->isCustom );
         self::assertFalse( $urlAlias->isHistory );
         self::assertEquals( $languageCodes, $urlAlias->languageCodes );
-        self::assertEquals( $pathLanguageCodes, $urlAlias->pathLanguageCodes );
+        self::assertEquals( $pathLanguageData, $urlAlias->pathLanguageData );
         self::assertEquals( $pathData, $urlAlias->pathData );
     }
 
@@ -643,7 +643,7 @@ class UrlAliasHandlerTest extends TestCase
     public function testLookupLocationMultipleLanguages(
         $url,
         array $pathData,
-        array $pathLanguageCodes,
+        array $pathLanguageData,
         array $languageCodes,
         $alwaysAvailable,
         $locationId,
@@ -663,7 +663,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertFalse( $urlAlias->isCustom );
         self::assertFalse( $urlAlias->isHistory );
         self::assertEquals( $languageCodes, $urlAlias->languageCodes );
-        self::assertEquals( $pathLanguageCodes, $urlAlias->pathLanguageCodes );
+        self::assertEquals( $pathLanguageData, $urlAlias->pathLanguageData );
         self::assertEquals( $pathData, $urlAlias->pathData );
     }
 
@@ -709,7 +709,7 @@ class UrlAliasHandlerTest extends TestCase
                             )
                         ),
                     ),
-                    "pathLanguageCodes" => array(
+                    "pathLanguageData" => array(
                         array( "always-available" => true, "language-codes" => array( "cro-HR" ) ),
                         array( "always-available" => false, "language-codes" => array( "cro-HR" ) ),
                         array( "always-available" => false, "language-codes" => array( "cro-HR" ) ),
@@ -905,7 +905,7 @@ class UrlAliasHandlerTest extends TestCase
     public function testLookupCustomLocationUrlAlias(
         $url,
         array $pathData,
-        array $pathLanguageCodes,
+        array $pathLanguageData,
         array $languageCodes,
         $forward,
         $alwaysAvailable,
@@ -925,7 +925,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertTrue( $urlAlias->isCustom );
         self::assertFalse( $urlAlias->isHistory );
         self::assertEquals( $languageCodes, $urlAlias->languageCodes );
-        self::assertEquals( $pathLanguageCodes, $urlAlias->pathLanguageCodes );
+        self::assertEquals( $pathLanguageData, $urlAlias->pathLanguageData );
         self::assertEquals( $pathData, $urlAlias->pathData );
     }
 
@@ -943,7 +943,7 @@ class UrlAliasHandlerTest extends TestCase
     public function testLookupCustomLocationUrlAliasCaseCorrection(
         $url,
         array $pathData,
-        array $pathLanguageCodes,
+        array $pathLanguageData,
         array $languageCodes,
         $forward,
         $alwaysAvailable,
@@ -964,7 +964,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertTrue( $urlAlias->isCustom );
         self::assertFalse( $urlAlias->isHistory );
         self::assertEquals( $languageCodes, $urlAlias->languageCodes );
-        self::assertEquals( $pathLanguageCodes, $urlAlias->pathLanguageCodes );
+        self::assertEquals( $pathLanguageData, $urlAlias->pathLanguageData );
         self::assertEquals( $pathData, $urlAlias->pathData );
     }
 
@@ -1085,7 +1085,7 @@ class UrlAliasHandlerTest extends TestCase
     public function testLookupResourceUrlAlias(
         $url,
         $pathData,
-        array $pathLanguageCodes,
+        array $pathLanguageData,
         array $languageCodes,
         $forward,
         $alwaysAvailable,
@@ -1107,7 +1107,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertTrue( $urlAlias->isCustom );
         self::assertFalse( $urlAlias->isHistory );
         self::assertEquals( $languageCodes, $urlAlias->languageCodes );
-        self::assertEquals( $pathLanguageCodes, $urlAlias->pathLanguageCodes );
+        self::assertEquals( $pathLanguageData, $urlAlias->pathLanguageData );
         self::assertEquals( $pathData, $urlAlias->pathData );
     }
 
@@ -1124,7 +1124,7 @@ class UrlAliasHandlerTest extends TestCase
     public function testLookupResourceUrlAliasCaseCorrection(
         $url,
         $pathData,
-        array $pathLanguageCodes,
+        array $pathLanguageData,
         array $languageCodes,
         $forward,
         $alwaysAvailable,
@@ -1146,7 +1146,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertTrue( $urlAlias->isCustom );
         self::assertFalse( $urlAlias->isHistory );
         self::assertEquals( $languageCodes, $urlAlias->languageCodes );
-        self::assertEquals( $pathLanguageCodes, $urlAlias->pathLanguageCodes );
+        self::assertEquals( $pathLanguageData, $urlAlias->pathLanguageData );
         self::assertEquals( $pathData, $urlAlias->pathData );
     }
 
@@ -1156,7 +1156,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertEquals( UrlAlias::VIRTUAL, $urlAlias->type );
         self::assertEquals( $id, $urlAlias->id );
         self::assertEmpty( $urlAlias->languageCodes );
-        self::assertEmpty( $urlAlias->pathLanguageCodes );
+        self::assertEmpty( $urlAlias->pathLanguageData );
         self::assertEmpty( $urlAlias->destination );
         self::assertTrue( $urlAlias->alwaysAvailable );
         self::assertTrue( $urlAlias->forward );
@@ -1166,38 +1166,75 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
-     *
-     */
-    public function providerForTestListURLAliasesForLocation()
-    {
-        return array(
-            array(
-                314
-            ),
-            array(
-                315
-            ),
-            array(
-                316
-            ),
-        );
-    }
-
-    /**
      * Test for the listURLAliasesForLocation() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::listURLAliasesForLocation
-     * @dataProvider providerForTestListURLAliasesForLocation
      * @group x
      */
-    public function testListURLAliasesForLocation( $locationId )
+    public function testListURLAliasesForLocation()
     {
         $handler = $this->getHandler();
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_location.php" );
 
-        $urlAliases = $handler->listURLAliasesForLocation( $locationId );
+        $urlAliases = $handler->listURLAliasesForLocation( 315 );
 
-        self::markTestIncomplete( "Test for the listURLAliasesForLocation() method is not complete" );
+        self::assertEquals(
+            array(
+                new UrlAlias(
+                    array(
+                        "id" => "2-b8a9f715dbb64fd5c56e7783c6820a61",
+                        "type" => UrlAlias::LOCATION,
+                        "destination" => 315,
+                        "languageCodes" => array( "eng-GB" ),
+                        "pathData" => array(
+                            array(
+                                "always-available" => true,
+                                "translations" => array( "cro-HR" => "jedan" )
+                            ),
+                            array(
+                                "always-available" => false,
+                                "translations" => array(
+                                    "cro-HR" => "dva",
+                                    "eng-GB" => "two",
+                                )
+                            )
+                        ),
+                        "pathLanguageData" => null,
+                        "alwaysAvailable" => false,
+                        "isHistory" => false,
+                        "isCustom" => false,
+                        "forward" => false
+                    )
+                ),
+                new UrlAlias(
+                    array(
+                        "id" => "2-c67ed9a09ab136fae610b6a087d82e21",
+                        "type" => UrlAlias::LOCATION,
+                        "destination" => 315,
+                        "languageCodes" => array( "cro-HR" ),
+                        "pathData" => array(
+                            array(
+                                "always-available" => true,
+                                "translations" => array( "cro-HR" => "jedan" )
+                            ),
+                            array(
+                                "always-available" => false,
+                                "translations" => array(
+                                    "cro-HR" => "dva",
+                                    "eng-GB" => "two",
+                                )
+                            )
+                        ),
+                        "pathLanguageData" => null,
+                        "alwaysAvailable" => false,
+                        "isHistory" => false,
+                        "isCustom" => false,
+                        "forward" => false
+                    )
+                ),
+            ),
+            $urlAliases
+        );
     }
 
     /**
@@ -1245,7 +1282,7 @@ class UrlAliasHandlerTest extends TestCase
     public function testPublishUrlAliasForLocationComplex(
         $url,
         $pathData,
-        array $pathLanguageCodes,
+        array $pathLanguageData,
         array $languageCodes,
         $alwaysAvailable,
         $locationId,
@@ -1273,7 +1310,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertFalse( $urlAlias->isCustom );
         self::assertFalse( $urlAlias->isHistory );
         self::assertEquals( $languageCodes, $urlAlias->languageCodes );
-        self::assertEquals( $pathLanguageCodes, $urlAlias->pathLanguageCodes );
+        self::assertEquals( $pathLanguageData, $urlAlias->pathLanguageData );
         self::assertEquals( $pathData, $urlAlias->pathData );
     }
 
@@ -1307,7 +1344,7 @@ class UrlAliasHandlerTest extends TestCase
                     $urlAlias2->languageCodes
                 );
             }
-            elseif ( $propertyName === "pathLanguageCodes" )
+            elseif ( $propertyName === "pathLanguageData" )
             {
                 self::assertEquals(
                     array(
@@ -1316,7 +1353,7 @@ class UrlAliasHandlerTest extends TestCase
                             "language-codes" => array( "cro-HR", "eng-GB" )
                         )
                     ),
-                    $urlAlias2->pathLanguageCodes
+                    $urlAlias2->pathLanguageData
                 );
             }
             elseif ( $propertyName === "pathData" )
@@ -1380,7 +1417,7 @@ class UrlAliasHandlerTest extends TestCase
                             )
                         )
                     ),
-                    "pathLanguageCodes" => array(
+                    "pathLanguageData" => array(
                         array(
                             "always-available" => true,
                             "language-codes" => array( "cro-HR" )
@@ -1412,7 +1449,7 @@ class UrlAliasHandlerTest extends TestCase
                             )
                         )
                     ),
-                    "pathLanguageCodes" => array(
+                    "pathLanguageData" => array(
                         array(
                             "always-available" => false,
                             "language-codes" => array( "cro-HR" )
@@ -1467,7 +1504,7 @@ class UrlAliasHandlerTest extends TestCase
                             )
                         )
                     ),
-                    "pathLanguageCodes" => array(
+                    "pathLanguageData" => array(
                         array(
                             "always-available" => false,
                             "language-codes" => array( "eng-GB" )
@@ -1499,7 +1536,7 @@ class UrlAliasHandlerTest extends TestCase
                             )
                         )
                     ),
-                    "pathLanguageCodes" => array(
+                    "pathLanguageData" => array(
                         array(
                             "always-available" => false,
                             "language-codes" => array( "cro-HR" )
@@ -1602,7 +1639,7 @@ class UrlAliasHandlerTest extends TestCase
                             "translations" => array( "eng-GB" => "nop-element" )
                         )
                     ),
-                    "pathLanguageCodes" => array(
+                    "pathLanguageData" => array(
                         array(
                             "always-available" => false,
                             "language-codes" => array( "eng-GB" )
@@ -1620,7 +1657,7 @@ class UrlAliasHandlerTest extends TestCase
         $virtualUrlAliasReloaded = $handler->lookup( "nop-element/search" );
         foreach ( $virtualUrlAliasReloaded as $propertyName => $propertyValue )
         {
-            if ( $propertyName === "pathLanguageCodes" )
+            if ( $propertyName === "pathLanguageData" )
             {
                 self::assertEquals(
                     array(
@@ -1633,7 +1670,7 @@ class UrlAliasHandlerTest extends TestCase
                             "language-codes" => array( "eng-GB" )
                         )
                     ),
-                    $virtualUrlAliasReloaded->pathLanguageCodes
+                    $virtualUrlAliasReloaded->pathLanguageData
                 );
             }
             elseif ( $propertyName === "pathData" )
@@ -1688,7 +1725,7 @@ class UrlAliasHandlerTest extends TestCase
 
         foreach ( $virtualUrlAliasChanged as $propertyName => $propertyValue )
         {
-            if ( $propertyName === "pathLanguageCodes" )
+            if ( $propertyName === "pathLanguageData" )
             {
                 self::assertEquals(
                     array(
@@ -1701,7 +1738,7 @@ class UrlAliasHandlerTest extends TestCase
                             "language-codes" => array( "eng-GB" )
                         )
                     ),
-                    $virtualUrlAliasChanged->pathLanguageCodes
+                    $virtualUrlAliasChanged->pathLanguageData
                 );
             }
             elseif ( $propertyName === "pathData" )
@@ -1850,7 +1887,7 @@ class UrlAliasHandlerTest extends TestCase
                     "destination" => 314,
                     "languageCodes" => array( "cro-HR" ),
                     "alwaysAvailable" => false,
-                    //"pathLanguageCodes" => array( array( "cro-HR" ) ),
+                    //"pathLanguageData" => array( array( "cro-HR" ) ),
                     "isHistory" => false,
                     "isCustom" => true,
                     "forward" => false
@@ -1887,7 +1924,7 @@ class UrlAliasHandlerTest extends TestCase
 
         foreach ( $loadedCustomUrlAlias as $propertyName => $propertyValue )
         {
-            if ( $propertyName === "pathLanguageCodes" )
+            if ( $propertyName === "pathLanguageData" )
             {
                 self::assertEquals(
                     array(
@@ -1951,7 +1988,7 @@ class UrlAliasHandlerTest extends TestCase
                     "destination" => 314,
                     "languageCodes" => array( "cro-HR" ),
                     "alwaysAvailable" => true,
-                    //"pathLanguageCodes" => array(),
+                    //"pathLanguageData" => array(),
                     "isHistory" => false,
                     "isCustom" => true,
                     "forward" => false
@@ -2058,7 +2095,7 @@ class UrlAliasHandlerTest extends TestCase
                             "translations" => array( "eng-GB" => "search" )
                         )
                     ),
-                    "pathLanguageCodes" => array(
+                    "pathLanguageData" => array(
                         array(
                             "always-available" => true,
                             "language-codes" => array( "cro-HR" )
@@ -2111,6 +2148,99 @@ class UrlAliasHandlerTest extends TestCase
             $handler->lookup( "autogenerated-hello" )
         );
     }
+
+    /**
+     * Test for the locationDeleted() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::locationDeleted
+     * @group cc
+     */
+    public function testLocationDeleted()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_location.php" );
+
+        $countBeforeDeleting = $this->countRows();
+
+        $handler->locationDeleted( 316 );
+
+        self::assertEquals(
+            $countBeforeDeleting,
+            $this->countRows()
+        );
+
+        self::assertEmpty(
+            $handler->listURLAliasesForLocation( 316 )
+        );
+
+        $this->assertVirtualUrlAliasValid(
+            $handler->lookup( "jedan/dva/tri" ),
+            "3-d2cfe69af2d64330670e08efb2c86df7"
+        );
+
+        $this->assertVirtualUrlAliasValid(
+            $handler->lookup( "jedan/dva/three" ),
+            "3-35d6d33467aae9a2e3dccb4b6b027878"
+        );
+
+        $this->assertVirtualUrlAliasValid(
+            $handler->lookup( "jedan/dva/drei" ),
+            "3-1d8d2fd0a99802b89eb356a86e029d25"
+        );
+
+        $this->assertVirtualUrlAliasValid(
+            $handler->lookup( "jedan/dva/tri-history" ),
+            "3-5f46413bb0ba5998caef84ab1ea590e1"
+        );
+    }
+
+    /**
+     * Test for the locationDeleted() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::locationDeleted
+     */
+    public function testLocationDeletedRemovesCustomAliases()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_location_custom.php" );
+
+        $countBeforeDeleting = $this->countRows();
+
+        $handler->locationDeleted( 314 );
+
+        self::assertEquals(
+            $countBeforeDeleting,
+            $this->countRows()
+        );
+
+        self::assertEmpty( $handler->listURLAliasesForLocation( 314 ) );
+
+        self::assertEmpty( $handler->listURLAliasesForLocation( 314, true ) );
+
+        $this->assertVirtualUrlAliasValid(
+            $handler->lookup( "autogenerated-hello" ),
+            "0-2eb35041e168cb62fe790b7555a0e90d"
+        );
+
+        $this->assertVirtualUrlAliasValid(
+            $handler->lookup( "hello" ),
+            "0-5d41402abc4b2a76b9719d911017c592"
+        );
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * @return int
@@ -2177,6 +2307,13 @@ class UrlAliasHandlerTest extends TestCase
                 ),
                 self::getMock(
                     "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\MaskGenerator",
+                    array(),
+                    array(),
+                    '',
+                    false
+                ),
+                self::getMock(
+                    "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Search\\TransformationProcessor",
                     array(),
                     array(),
                     '',
