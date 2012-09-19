@@ -475,7 +475,7 @@ class Handler implements UrlAliasHandlerInterface
         preg_match( "#^([a-zA-Z0-9_]+):(.+)?$#", $action, $matches );
         $data["type"] = $matches[1] === "eznode" ? UrlAlias::LOCATION : UrlALias::RESOURCE;
         $data["destination"] = $matches[2];
-        //$data["path_language_codes"] = $alwaysAvailable ? array() : array( array( $languageCode ) );
+        //$data["path_language_data"] = $alwaysAvailable ? array() : array( array( $languageCode ) );
         $data["forward"] = $forward;
         $data["always_available"] = $alwaysAvailable;
         $data["is_original"] = true;
@@ -559,6 +559,85 @@ class Handler implements UrlAliasHandlerInterface
     }
 
     /**
+     * Returns normalized path data loaded by Gateway::loadPathDataByActionList() method.
+     *
+     * @throws \RuntimeException
+     *
+     * @param array $actionList
+     * @param array $pathData
+     *
+     * @return array
+     */
+    protected function normalizeActionListPathData( array $actionList, array $pathData )
+    {
+        $normalizedPathData = array();
+        $pathDataMap = array();
+        foreach ( $pathData as $row )
+        {
+            $action = $row['action'];
+            if ( !isset( $pathDataMap[$action] ) )
+            {
+                $pathDataMap[$action] = array();
+            }
+            $pathDataMap[$action][] = $row;
+        }
+
+        $lastId = false;
+        foreach ( $actionList as $level => $action )
+        {
+            if ( !isset( $pathDataMap[$action] ) )
+            {
+                throw new \RuntimeException(
+                    "The action '{$action}' was not found in the database, can not calculate path."
+                );
+            }
+
+            $pathElementData = array();
+            $auxId = false;
+            $parentId = false;
+            foreach ( $pathDataMap[$action] as $row )
+            {
+                if ( $auxId !== false && $auxId !== $row["id"] )
+                {
+                    // @todo log error
+                    throw new \RuntimeException( "Different IDs found for action '$action', the path is corrupted." );
+                }
+
+                if ( $parentId !== false && $parentId !== $row["parent"] )
+                {
+                    // @todo log error
+                    throw new \RuntimeException( "Different parent IDs found for action '$action', the path is corrupted." );
+                }
+
+                $auxId = $row["id"];
+                $parentId = $row["parent"];
+
+
+                $this->normalizePathDataRow( $pathElementData, $row );
+            }
+
+            if ( $level === 0 && $parentId != 0 )
+            {
+                // @todo log error
+                throw new \RuntimeException( "The first path entry with action '$action' is not root entry, the path is corrupted." );
+            }
+
+            if ( $lastId !== false && $parentId != $lastId )
+            {
+                // @todo log error
+                throw new \RuntimeException(
+                    "The parent ID '$parentId' of element with ID '$auxId' does not point to the last entry which had ID '$lastId', the path is corrupted."
+                );
+            }
+
+            $lastId = $auxId;
+            $normalizedPathData[$level] = $pathElementData;
+        }
+
+        return $normalizedPathData;
+    }
+
+    /**
      *
      *
      * @param array $pathData
@@ -568,34 +647,43 @@ class Handler implements UrlAliasHandlerInterface
     protected function normalizePathData( $pathData )
     {
         $normalizedPathData = array();
-        foreach ( $pathData as $level => $rawPathElementData )
+        foreach ( $pathData as $level => $rows )
         {
             $pathElementData = array();
-            foreach ( $rawPathElementData as $rawPathElementEntry )
+            foreach ( $rows as $row )
             {
-                $languageIds = $this->languageMaskGenerator->extractLanguageIdsFromMask(
-                    $rawPathElementEntry["lang_mask"]
-                );
-                $pathElementData["always-available"] = (boolean)( $rawPathElementEntry["lang_mask"] & 1 );
-                if ( !empty( $languageIds ) )
-                {
-                    foreach ( $languageIds as $languageId )
-                    {
-                        $pathElementData["translations"][$this->languageHandler->load( $languageId )->languageCode] =
-                            $rawPathElementEntry["text"];
-                    }
-                }
-                elseif ( $pathElementData["always-available"] )
-                {
-                    // NOP entry, lang_mask == 1
-                    $pathElementData["translations"]["always-available"] = $rawPathElementEntry["text"];
-                }
+                $this->normalizePathDataRow( $pathElementData, $row );
             }
 
             $normalizedPathData[$level] = $pathElementData;
         }
 
         return $normalizedPathData;
+    }
+
+    /**
+     * @param array $pathElementData
+     * @param array $row
+     *
+     * @return void
+     */
+    protected function normalizePathDataRow( array &$pathElementData, array $row )
+    {
+        $languageIds = $this->languageMaskGenerator->extractLanguageIdsFromMask( $row["lang_mask"] );
+        $pathElementData["always-available"] = (boolean)( $row["lang_mask"] & 1 );
+        if ( !empty( $languageIds ) )
+        {
+            foreach ( $languageIds as $languageId )
+            {
+                $pathElementData["translations"][$this->languageHandler->load( $languageId )->languageCode] =
+                    $row["text"];
+            }
+        }
+        elseif ( $pathElementData["always-available"] )
+        {
+            // NOP entry, lang_mask == 1
+            $pathElementData["translations"]["always-available"] = $row["text"];
+        }
     }
 
     /**
@@ -685,9 +773,11 @@ class Handler implements UrlAliasHandlerInterface
         }
 
         $pathLanguageData = array();
+        $actionList = array();
         for ( $level = 0; $level < $pathLevels; ++$level )
         {
             $prefix =  "ezurlalias_ml" . $level;
+            $actionList[$level] = $data[$prefix . "_action"];
             $pathLevelLanguageData = array(
                 "always-available" => (boolean)( $data[$prefix . "_lang_mask"] & 1 ),
                 "language-codes" => $this->getLanguageCodesFromMask( $data[$prefix . "_lang_mask"] )
@@ -703,14 +793,27 @@ class Handler implements UrlAliasHandlerInterface
         $data["forward"] = $data[$prefix . "_is_alias"] && $data[$prefix . "_alias_redirects"];
         $data["destination"] = $destination;
         $data["language_codes"] = $this->getLanguageCodesFromMask( $data[$prefix . "_lang_mask"] );
-        $data["path_data"] = $this->normalizePathData( $this->gateway->loadPathData( $data[$prefix . "_id"] ) );
-        $data["path_language_codes"] = $pathLanguageData;
+        $data["path_language_data"] = $pathLanguageData;
         $data["always_available"] = (bool)( $data[$prefix . "_lang_mask"] & 1 );
         $data["is_original"] = $data[$prefix . "_is_original"];
         $data["is_alias"] = $data[$prefix . "_is_alias"];
         $data["action"] = $data[$prefix . "_action"];
         $data["parent"] = $data[$prefix . "_parent"];
         $data["text_md5"] = $data[$prefix . "_text_md5"];
+
+        if ( $data["type"] === UrlAlias::LOCATION && !$data["is_alias"] && $data["is_original"] )
+        {
+            $data["path_data"] = $this->normalizeActionListPathData(
+                $actionList,
+                $this->gateway->loadPathDataByActionList( $actionList )
+            );
+        }
+        else
+        {
+            $data["path_data"] = $this->normalizePathData(
+                $this->gateway->loadPathData( $data[$prefix . "_id"] )
+            );
+        }
 
         return $this->mapper->extractUrlAliasFromData( $data );
     }
@@ -728,6 +831,10 @@ class Handler implements UrlAliasHandlerInterface
     }
 
     /**
+     * Returns URL alias of type UrlAlias::VIRTUAL.
+     *
+     * Except for id this alias is the same in all cases.
+     *
      * @param $id
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
@@ -757,7 +864,6 @@ class Handler implements UrlAliasHandlerInterface
     public function locationMoved( $locationId, $newParentId )
     {
         //@todo implement
-        //$this->updateAliasSubtree();
         //$this->gateway->reparent();
     }
 
@@ -790,7 +896,7 @@ class Handler implements UrlAliasHandlerInterface
      */
     public function locationDeleted( $locationId )
     {
-        //@todo implement
+        $this->gateway->removeByLocationId( $locationId );
     }
 
     /**
