@@ -79,7 +79,7 @@ class eZPublish extends Pattern
         'users'                => '/user/users',
         'user'                 => '/user/users/{user}',
         ''                     => '/user/users/{user}/drafts',
-        ''                     => '/user/users/{user}/groups',
+        'userGroups'           => '/user/users/{user}/groups',
         'userRoleAssignments'  => '/user/users/{user}/roles',
         'userRoleAssignment'   => '/user/users/{user}/roles/{role}',
         'userPolicies'         => '/user/policies?userId={user}',

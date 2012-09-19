@@ -108,6 +108,30 @@ class User
     }
 
     /**
+     * Loads a user for the given ID
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\RestUser
+     */
+    public function loadUser( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'user', $request->path );
+
+        $user = $this->userService->loadUser(
+            $urlValues['user']
+        );
+
+        $userContentInfo = $user->getVersionInfo()->getContentInfo();
+        $userMainLocation = $this->locationService->loadLocation( $userContentInfo->mainLocationId );
+
+        return new Values\RestUser(
+            $user,
+            $userContentInfo,
+            $userMainLocation
+        );
+    }
+
+    /**
      * Create a new user group under the given parent
      *
      * @param RMF\Request $request
@@ -191,7 +215,14 @@ class User
 
         if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.userlist' )
         {
-            return new Values\UserList( $users, $request->path );
+            $restUsers = array();
+            foreach ( $users as $user )
+            {
+                $userContentInfo = $user->getVersionInfo()->getContentInfo();
+                $userLocation = $this->locationService->loadLocation( $userContentInfo->mainLocationId );
+                $restUsers[] = new Values\RestUser( $user, $userContentInfo, $userLocation );
+            }
+            return new Values\UserList( $restUsers, $request->path );
         }
 
         return new Values\UserRefList( $users, $request->path );

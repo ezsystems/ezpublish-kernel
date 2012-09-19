@@ -270,6 +270,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedUserGroup'           => new Output\ValueObjectVisitor\CreatedUserGroup( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserList'                   => new Output\ValueObjectVisitor\UserList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserRefList'                => new Output\ValueObjectVisitor\UserRefList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUser'                   => new Output\ValueObjectVisitor\RestUser( $urlHandler ),
 
     // ContentType
 
@@ -482,11 +483,14 @@ $dispatcher = new AuthenticatingDispatcher(
                 'MOVE'   => array( $trashController, 'restoreTrashItem' ),
             ),
 
-            // /user
+            // /user/policies
 
             '(^/user/policies\?userId=[0-9]+$)' => array(
                 'GET' => array( $roleController, 'listPoliciesForUser' ),
             ),
+
+            // /user/roles
+
             '(^/user/roles$)' => array(
                 'GET' => array( $roleController, 'listRoles' ),
                 'POST' => array( $roleController, 'createRole' ),
@@ -509,6 +513,15 @@ $dispatcher = new AuthenticatingDispatcher(
                 'PATCH'  => array( $roleController, 'updatePolicy' ),
                 'DELETE' => array( $roleController, 'deletePolicy' ),
             ),
+
+            // /user/users
+
+            '(^/user/users/[0-9/]+$)' => array(
+                'GET' => array( $userController, 'loadUser' ),
+            ),
+
+            // /user/users/<ID>/roles
+
             '(^/user/users/[0-9]+/roles$)' => array(
                 'GET'  => array( $roleController, 'loadRoleAssignmentsForUser' ),
                 'POST'  => array( $roleController, 'assignRoleToUser' ),
@@ -517,6 +530,9 @@ $dispatcher = new AuthenticatingDispatcher(
                 'GET'  => array( $roleController, 'loadRoleAssignmentForUser' ),
                 'DELETE'  => array( $roleController, 'unassignRoleFromUser' ),
             ),
+
+            // /user/groups
+
             '(^/user/groups/root$)' => array(
                 'GET'  => array( $userController, 'loadRootUserGroup' ),
             ),
@@ -530,6 +546,9 @@ $dispatcher = new AuthenticatingDispatcher(
             '(^/user/groups/[0-9/]+/users$)' => array(
                 'GET' => array( $userController, 'loadUsersFromGroup' ),
             ),
+
+            // /user/groups/<path>/roles
+
             '(^/user/groups/[0-9/]+/roles$)' => array(
                 'GET'  => array( $roleController, 'loadRoleAssignmentsForUserGroup' ),
                 'POST'  => array( $roleController, 'assignRoleToUserGroup' ),
