@@ -2153,7 +2153,6 @@ class UrlAliasHandlerTest extends TestCase
      * Test for the locationDeleted() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::locationDeleted
-     * @group cc
      */
     public function testLocationDeleted()
     {
@@ -2162,7 +2161,7 @@ class UrlAliasHandlerTest extends TestCase
 
         $countBeforeDeleting = $this->countRows();
 
-        $handler->locationDeleted( 316 );
+        $handler->locationDeleted( 315 );
 
         self::assertEquals(
             $countBeforeDeleting,
@@ -2170,7 +2169,17 @@ class UrlAliasHandlerTest extends TestCase
         );
 
         self::assertEmpty(
-            $handler->listURLAliasesForLocation( 316 )
+            $handler->listURLAliasesForLocation( 315 )
+        );
+
+        $this->assertVirtualUrlAliasValid(
+            $handler->lookup( "jedan/dva" ),
+            "2-c67ed9a09ab136fae610b6a087d82e21"
+        );
+
+        $this->assertVirtualUrlAliasValid(
+            $handler->lookup( "jedan/two" ),
+            "2-b8a9f715dbb64fd5c56e7783c6820a61"
         );
 
         $this->assertVirtualUrlAliasValid(
