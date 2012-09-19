@@ -205,6 +205,12 @@ $trashController = new Controller\Trash(
     $repository->getLocationService()
 );
 
+$userController = new Controller\User(
+    $inputDispatcher,
+    $urlHandler,
+    $repository->getUserService()
+);
+
 /*
  * Visitors are used to transform the Value Objects returned by the Public API
  * into the output format requested by the client. In some cases, it is
