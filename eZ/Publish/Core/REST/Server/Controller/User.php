@@ -56,4 +56,18 @@ class User
         $this->urlHandler      = $urlHandler;
         $this->userService  = $userService;
     }
+
+    /**
+     * Redirects to the root user group
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\PermanentRedirect
+     */
+    public function loadRootUserGroup( RMF\Request $request )
+    {
+        return new Values\PermanentRedirect(
+            $this->urlHandler->generate( 'group', array( 'group' => '/1/5' ) ),
+            'UserGroup'
+        );
+    }
 }

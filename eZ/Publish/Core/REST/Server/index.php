@@ -311,6 +311,7 @@ $valueObjectVisitors = array(
 
     // REST specific
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceRedirect'           => new Output\ValueObjectVisitor\ResourceRedirect( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PermanentRedirect'          => new Output\ValueObjectVisitor\PermanentRedirect( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceDeleted'            => new Output\ValueObjectVisitor\ResourceDeleted( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceCreated'            => new Output\ValueObjectVisitor\ResourceCreated( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceSwapped'            => new Output\ValueObjectVisitor\ResourceSwapped( $urlHandler ),
@@ -501,6 +502,9 @@ $dispatcher = new AuthenticatingDispatcher(
             '(^/user/users/[0-9]+/roles/[0-9]+$)' => array(
                 'GET'  => array( $roleController, 'loadRoleAssignmentForUser' ),
                 'DELETE'  => array( $roleController, 'unassignRoleFromUser' ),
+            ),
+            '(^/user/groups/root$)' => array(
+                'GET'  => array( $userController, 'loadRootUserGroup' ),
             ),
             '(^/user/groups/[0-9/]+/roles$)' => array(
                 'GET'  => array( $roleController, 'loadRoleAssignmentsForUserGroup' ),
