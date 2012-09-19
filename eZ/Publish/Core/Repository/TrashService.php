@@ -111,6 +111,7 @@ class TrashService implements TrashServiceInterface
         try
         {
             $spiTrashItem = $this->persistenceHandler->trashHandler()->trash( $location->id );
+            $this->persistenceHandler->urlAliasHandler()->locationDeleted( $location->id );
             $this->repository->commit();
         }
         catch ( \Exception $e )
@@ -151,24 +152,41 @@ class TrashService implements TrashServiceInterface
         $this->repository->beginTransaction();
         try
         {
+            $newParentLocationId = $newParentLocation ? $newParentLocation->id : $trashItem->parentLocationId;
             $newLocationId = $this->persistenceHandler->trashHandler()->recover(
                 $trashItem->id,
-                $newParentLocation ? $newParentLocation->id : $trashItem->parentLocationId
+                $newParentLocationId
             );
 
             // There is a possibility for content to loose main location when one of its locations is recovered
             // from trash, so we need to check for it and set the newly recovered location to be the main one
             $contentService = $this->repository->getContentService();
 
-            $contentInfo = $contentService->loadContentInfo( $trashItem->contentId );
-            if ( !is_numeric( $contentInfo->mainLocationId ) )
+            $content = $contentService->loadContent( $trashItem->contentId );
+            if ( !is_numeric( $content->contentInfo->mainLocationId ) )
             {
                 $contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
                 $contentMetadataUpdateStruct->mainLocationId = $newLocationId;
 
                 $contentService->updateContentMetadata(
-                    $contentInfo,
+                    $content->contentInfo,
                     $contentMetadataUpdateStruct
+                );
+            }
+
+            // Publish URL aliases for recovered location
+            $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
+            $alwaysAvailableLanguageCode = ( isset( $urlAliasNames["always-available"] ) && isset( $urlAliasNames[$urlAliasNames["always-available"]] ) )
+                ? $urlAliasNames[$urlAliasNames["always-available"]]
+                : null;
+            foreach ( $urlAliasNames as $languageCode => $name )
+            {
+                $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
+                    $newLocationId,
+                    $newParentLocationId,
+                    $name,
+                    $languageCode,
+                    $languageCode === $alwaysAvailableLanguageCode
                 );
             }
 
