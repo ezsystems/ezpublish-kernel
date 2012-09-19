@@ -28,7 +28,7 @@ class ResourceCreatedTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $redirect = new Values\ResourceCreated(
+        $resourceCreated = new Values\ResourceCreated(
             '/some/redirect/uri'
         );
 
@@ -42,14 +42,14 @@ class ResourceCreatedTest extends ValueObjectVisitorBaseTest
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
-            $redirect
+            $resourceCreated
         );
 
         $this->assertTrue( $generator->isEmpty() );
     }
 
     /**
-     * Get the ResourceRedirect visitor
+     * Get the ResourceCreated visitor
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ResourceCreated
      */

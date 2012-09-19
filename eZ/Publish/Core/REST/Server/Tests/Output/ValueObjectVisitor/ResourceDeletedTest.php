@@ -28,7 +28,7 @@ class ResourceDeletedTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $redirect = new Values\ResourceDeleted();
+        $resourceDeleted = new Values\ResourceDeleted();
 
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'setStatus' )
@@ -37,14 +37,14 @@ class ResourceDeletedTest extends ValueObjectVisitorBaseTest
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
-            $redirect
+            $resourceDeleted
         );
 
         $this->assertTrue( $generator->isEmpty() );
     }
 
     /**
-     * Get the ResourceRedirect visitor
+     * Get the ResourceDeleted visitor
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ResourceDeleted
      */

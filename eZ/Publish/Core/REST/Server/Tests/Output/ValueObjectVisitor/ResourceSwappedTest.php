@@ -28,7 +28,7 @@ class ResourceSwappedTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $redirect = new Values\ResourceSwapped();
+        $resourceSwapped = new Values\ResourceSwapped();
 
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'setStatus' )
@@ -37,14 +37,14 @@ class ResourceSwappedTest extends ValueObjectVisitorBaseTest
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
-            $redirect
+            $resourceSwapped
         );
 
         $this->assertTrue( $generator->isEmpty() );
     }
 
     /**
-     * Get the ResourceRedirect visitor
+     * Get the ResourceSwapped visitor
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ResourceSwapped
      */

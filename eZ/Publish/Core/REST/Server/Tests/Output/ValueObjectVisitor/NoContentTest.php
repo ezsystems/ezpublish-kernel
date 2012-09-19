@@ -28,7 +28,7 @@ class NoContentTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $redirect = new Values\NoContent();
+        $noContent = new Values\NoContent();
 
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'setStatus' )
@@ -37,14 +37,14 @@ class NoContentTest extends ValueObjectVisitorBaseTest
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
-            $redirect
+            $noContent
         );
 
         $this->assertTrue( $generator->isEmpty() );
     }
 
     /**
-     * Get the ResourceRedirect visitor
+     * Get the NoContent visitor
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\NoContent
      */
