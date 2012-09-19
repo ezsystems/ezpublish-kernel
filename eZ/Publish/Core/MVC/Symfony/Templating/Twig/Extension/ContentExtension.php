@@ -124,10 +124,14 @@ class ContentExtension extends Twig_Extension
         if ( !$field instanceof Field )
             throw new InvalidArgumentException( "Invalid field identifier '$fieldIdentifier' for content #{$content->contentInfo->id}" );
 
-        // Adding Field and ContentInfo objects to parameters to be passed to the template
+        $contentInfo = $content->getVersionInfo()->getContentInfo();
+        $contentType = $contentInfo->getContentType();
+        // Adding Field, FieldSettings and ContentInfo objects to
+        // parameters to be passed to the template
         $params += array(
-            'field'         => $field,
-            'contentInfo'   => $content->getVersionInfo()->getContentInfo()
+            'field' => $field,
+            'contentInfo' => $contentInfo,
+            'fieldSettings' => $contentType->getFieldDefinition( $fieldIdentifier )->getFieldSettings()
         );
 
         // Ensure that not edit metadata has been injected from the template
