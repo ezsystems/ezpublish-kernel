@@ -87,6 +87,7 @@ class EzcDatabase extends Gateway
      */
     public function loadUrlAliasListDataByLocationId( $locationId, $custom = false )
     {
+        /** @var $query \ezcQuerySelect */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $this->dbHandler->quoteColumn( "id" ),
@@ -137,6 +138,7 @@ class EzcDatabase extends Gateway
     {
         $limit = $limit === -1 ? self::MAX_LIMIT : $limit;
 
+        /** @var $query \ezcQuerySelect */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $this->dbHandler->quoteColumn( "action" ),
@@ -186,6 +188,7 @@ class EzcDatabase extends Gateway
      */
     public function isRootEntry( $id )
     {
+        /** @var $query \ezcQuerySelect */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $this->dbHandler->quoteColumn( "text" ),
@@ -221,6 +224,7 @@ class EzcDatabase extends Gateway
      */
     public function downgrade( $action, $languageId, $parentId, $textMD5 )
     {
+        /** @var $query \ezcQuerySelect */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $this->dbHandler->quoteColumn( "parent" ),
@@ -295,6 +299,7 @@ class EzcDatabase extends Gateway
      */
     protected function markAsHistory( $parentId, $textMD5 )
     {
+        /** @var $query \ezcQueryUpdate */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
             $this->dbHandler->quoteColumn( "ezurlalias_ml" )
@@ -329,6 +334,7 @@ class EzcDatabase extends Gateway
      */
     protected function removeTranslation( $parentId, $textMD5, $languageId )
     {
+        /** @var $query \ezcQueryUpdate */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
             $this->dbHandler->quoteColumn( "ezurlalias_ml" )
@@ -370,6 +376,7 @@ class EzcDatabase extends Gateway
     public function relink( $action, $languageId, $newId, $parentId, $textMD5 )
     {
         // Select all history entries (location and custom alias) that match action and language mask
+        /** @var $query \ezcQuerySelect */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $this->dbHandler->quoteColumn( "id" ),
@@ -457,6 +464,7 @@ class EzcDatabase extends Gateway
      */
     public function reparent( $action, $languageId, $newParentId, $parentId, $textMD5 )
     {
+        /** @var $query \ezcQuerySelect */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $this->dbHandler->quoteColumn( "id" )
@@ -493,6 +501,7 @@ class EzcDatabase extends Gateway
 
         if ( !empty( $ids ) )
         {
+            /** @var $query \ezcQueryUpdate */
             $query = $this->dbHandler->createUpdateQuery();
             $query->update(
                 $this->dbHandler->quoteColumn( "ezurlalias_ml" )
@@ -533,6 +542,7 @@ class EzcDatabase extends Gateway
      */
     public function updateRow( $parentId, $textMD5, array $values, $languageMaskMatch = null )
     {
+        /** @var $query \ezcQueryUpdate */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update( $this->dbHandler->quoteColumn( "ezurlalias_ml" ) );
         $this->setQueryValues( $query, $values );
@@ -584,6 +594,7 @@ class EzcDatabase extends Gateway
         if ( $values["is_alias"] ) $values["is_original"] = 1;
         if ( $values["action"] === "nop:" ) $values["is_original"] = 0;
 
+        /** @var $query \ezcQueryInsert */
         $query = $this->dbHandler->createInsertQuery();
         $query->insertInto( $this->dbHandler->quoteTable( "ezurlalias_ml" ) );
         $this->setQueryValues( $query, $values );
@@ -655,6 +666,7 @@ class EzcDatabase extends Gateway
      */
     protected function getNextId()
     {
+        /** @var $query \ezcQueryInsert */
         $query = $this->dbHandler->createInsertQuery();
         $query->insertInto(
             $this->dbHandler->quoteTable( "ezurlalias_ml_incr" )
@@ -678,6 +690,7 @@ class EzcDatabase extends Gateway
      */
     public function loadRow( $parentId, $textMD5 )
     {
+        /** @var $query \ezcQuerySelect */
         $query = $this->dbHandler->createSelectQuery();
         $query->select( "*" )->from(
             $this->dbHandler->quoteTable( "ezurlalias_ml" )
@@ -709,6 +722,7 @@ class EzcDatabase extends Gateway
      */
     public function loadUrlAliasData( array $urlHashes )
     {
+        /** @var $query \ezcQuerySelect */
         $query = $this->dbHandler->createSelectQuery();
 
         foreach ( $urlHashes as $level => $urlPartHash )
@@ -763,6 +777,7 @@ class EzcDatabase extends Gateway
      */
     public function loadLocationEntryIdByAction( $action )
     {
+        /** @var $query \ezcQuerySelect */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $this->dbHandler->quoteColumn( "id" )
@@ -801,6 +816,7 @@ class EzcDatabase extends Gateway
      */
     public function loadLocationEntryByParentIdAndAction( $parentId, $action )
     {
+        /** @var $query \ezcQuerySelect */
         $query = $this->dbHandler->createSelectQuery();
         $query->selectDistinct(
             $this->dbHandler->quoteColumn( "id" ),
@@ -842,7 +858,7 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     *
+     * Loads all data for the path identified by given $id
      *
      * @throws \RuntimeException
      *
@@ -856,6 +872,7 @@ class EzcDatabase extends Gateway
 
         while ( $id != 0 )
         {
+            /** @var $query \ezcQuerySelect */
             $query = $this->dbHandler->createSelectQuery();
             $query->select(
                 $this->dbHandler->quoteColumn( "id" ),
@@ -892,6 +909,54 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Loads all data for the path identified by ordered array of actions.
+     *
+     * The first entry in $actionList would be the top-most path element in the path, the second entry the child of
+     * the first path element and so on.
+     * This method is faster than self::getPath() since it can fetch all elements using only one query, but can be used
+     * only for active (non-history) autogenerated paths and when action list is available. Effectively this means
+     * when looking up the URL, which will usually be the most used and performance critical case.
+     *
+     * @param array $actionList
+     *
+     * @return array
+     */
+    public function loadPathDataByActionList( array $actionList )
+    {
+        /** @var $query \ezcQuerySelect */
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $this->dbHandler->quoteColumn( "action" ),
+            $this->dbHandler->quoteColumn( "id" ),
+            $this->dbHandler->quoteColumn( "parent" ),
+            $this->dbHandler->quoteColumn( "lang_mask" ),
+            $this->dbHandler->quoteColumn( "text" )
+        )->from(
+            $this->dbHandler->quoteTable( "ezurlalias_ml" )
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->in(
+                    $this->dbHandler->quoteColumn( "action" ),
+                    $actionList
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "is_original" ),
+                    $query->bindValue( 1, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "is_alias" ),
+                    $query->bindValue( 0, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      *
      *
      * @param mixed $parentId
@@ -901,6 +966,7 @@ class EzcDatabase extends Gateway
      */
     public function removeCustomAlias( $parentId, $textMD5 )
     {
+        /** @var $query \ezcQueryUpdate */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update( $this->dbHandler->quoteColumn( "ezurlalias_ml" ) );
         $this->setQueryValues(
@@ -909,7 +975,9 @@ class EzcDatabase extends Gateway
                 "lang_mask" => 1,
                 "action" => "nop:",
                 "action_type" => "nop",
-                "is_alias" => 0
+                "is_alias" => 0,
+                "is_original" => 0,
+                "alias_redirects" => 1
             )
         );
         $query->where(
@@ -937,13 +1005,37 @@ class EzcDatabase extends Gateway
     /**
      *
      *
-     * @param string $actionName
-     * @param string $actionValue
+     * @param mixed $locationId
      *
-     * @return void
+     * @return boolean
      */
-    public function removeByAction( $actionName, $actionValue )
+    public function removeByLocationId( $locationId )
     {
+        /** @var $query \ezcQueryUpdate */
+        $query = $this->dbHandler->createUpdateQuery();
+        $query->update( $this->dbHandler->quoteColumn( "ezurlalias_ml" ) );
+        $this->setQueryValues(
+            $query,
+            array(
+                "lang_mask" => 1,
+                "action" => "nop:",
+                "action_type" => "nop",
+                "is_alias" => 0,
+                "is_original" => 0,
+                "alias_redirects" => 1
+            )
+        );
+        $query->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "action" ),
+                    $query->bindValue( "eznode:" . $locationId, null, \PDO::PARAM_STR )
+                )
+            )
+        );
+        $statement = $query->prepare();
+        $statement->execute();
 
+        return $statement->rowCount() === 1 ?: false;
     }
 }
