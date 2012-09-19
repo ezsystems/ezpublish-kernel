@@ -146,6 +146,7 @@ class User
 
     /**
      * Create a new user group under the given parent
+     * To create a top level group use /user/groups/subgroups
      *
      * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedUserGroup
@@ -176,6 +177,50 @@ class User
             array(
                 'userGroup' => new Values\RestUserGroup(
                     $createdUserGroup,
+                    $createdContentInfo,
+                    $createdLocation
+                )
+            )
+        );
+    }
+
+    /**
+     * Create a new user group in the given group
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedUser
+     */
+    public function createUser( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'groupUsers', $request->path );
+
+        $userGroupLocation = $this->locationService->loadLocation(
+            $this->extractLocationIdFromPath( $urlValues['group'] )
+        );
+
+        $userGroupCreateStruct = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            )
+        );
+
+        //@todo Check for existence of user with same login
+        //Problem being, PAPI doesn't specify any distinct error in such case
+
+        $createdUser = $this->userService->createUser(
+            $userGroupCreateStruct,
+            array(
+                $this->userService->loadUserGroup( $userGroupLocation->contentId )
+            )
+        );
+
+        $createdContentInfo = $createdUser->getVersionInfo()->getContentInfo();
+        $createdLocation = $this->locationService->loadLocation( $createdContentInfo->mainLocationId );
+        return new Values\CreatedUser(
+            array(
+                'user' => new Values\RestUser(
+                    $createdUser,
                     $createdContentInfo,
                     $createdLocation
                 )

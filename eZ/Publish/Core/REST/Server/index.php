@@ -132,6 +132,13 @@ $inputDispatcher = new Common\Input\Dispatcher(
                 $repository->getContentTypeService(),
                 $fieldTypeParser
             ),
+            'application/vnd.ez.api.UserCreate'        => new Input\Parser\UserCreate(
+                $urlHandler,
+                $repository->getUserService(),
+                $repository->getContentTypeService(),
+                $fieldTypeParser,
+                $parserTools
+            ),
             'application/vnd.ez.api.ContentUpdate'          => new Input\Parser\ContentUpdate( $urlHandler ),
             'application/vnd.ez.api.PolicyCreate'           => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService(), $parserTools ),
             'application/vnd.ez.api.PolicyUpdate'           => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService(), $parserTools ),
@@ -275,6 +282,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserGroupRefList'           => new Output\ValueObjectVisitor\UserGroupRefList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserList'                   => new Output\ValueObjectVisitor\UserList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserRefList'                => new Output\ValueObjectVisitor\UserRefList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedUser'                => new Output\ValueObjectVisitor\CreatedUser( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUser'                   => new Output\ValueObjectVisitor\RestUser( $urlHandler ),
 
     // ContentType
@@ -553,6 +561,7 @@ $dispatcher = new AuthenticatingDispatcher(
             ),
             '(^/user/groups/[0-9/]+/users$)' => array(
                 'GET' => array( $userController, 'loadUsersFromGroup' ),
+                'POST' => array( $userController, 'createUser' ),
             ),
 
             // /user/groups/<path>/roles
