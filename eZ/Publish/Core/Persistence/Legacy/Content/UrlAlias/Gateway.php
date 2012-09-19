@@ -189,9 +189,11 @@ abstract class Gateway
     /**
      *
      *
-     * @param mixed $locationId
+     * @param string $action
      *
      * @return void
      */
-    abstract public function removeByLocationId( $locationId );
+    abstract public function removeByAction( $action );
+
+    abstract public function loadLocationAliasDataByParentId( $parentId );
 }

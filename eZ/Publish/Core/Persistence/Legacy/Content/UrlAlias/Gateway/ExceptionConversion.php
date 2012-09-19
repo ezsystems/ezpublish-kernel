@@ -308,15 +308,15 @@ class ExceptionConversion extends Gateway
     /**
      *
      *
-     * @param mixed $locationId
+     * @param string $action
      *
      * @return void
      */
-    public function removeByLocationId( $locationId )
+    public function removeByAction( $action )
     {
         try
         {
-            $this->innerGateway->removeByLocationId( $locationId );
+            $this->innerGateway->removeByAction( $action );
         }
         catch ( ezcDbException $e )
         {
@@ -432,6 +432,29 @@ class ExceptionConversion extends Gateway
         try
         {
             return $this->innerGateway->loadPathDataByActionList( $actionList );
+        }
+        catch ( ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
+     *
+     *
+     * @param mixed $parentId
+     *
+     * @return array
+     */
+    public function loadLocationAliasDataByParentId( $parentId )
+    {
+        try
+        {
+            return $this->innerGateway->loadLocationAliasDataByParentId( $parentId );
         }
         catch ( ezcDbException $e )
         {

@@ -1005,15 +1005,16 @@ class EzcDatabase extends Gateway
     /**
      *
      *
-     * @param mixed $locationId
+     * @param mixed $action
      *
      * @return boolean
      */
-    public function removeByLocationId( $locationId )
+    public function removeByAction( $action )
     {
         /** @var $query \ezcQueryUpdate */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update( $this->dbHandler->quoteColumn( "ezurlalias_ml" ) );
+        // @todo set link to id
         $this->setQueryValues(
             $query,
             array(
@@ -1029,13 +1030,49 @@ class EzcDatabase extends Gateway
             $query->expr->lAnd(
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( "action" ),
-                    $query->bindValue( "eznode:" . $locationId, null, \PDO::PARAM_STR )
+                    $query->bindValue( $action, null, \PDO::PARAM_STR )
                 )
             )
         );
+        $query->prepare()->execute();
+    }
+
+    /**
+     *
+     *
+     * @param mixed $parentId
+     *
+     * @return array
+     */
+    public function loadLocationAliasDataByParentId( $parentId )
+    {
+        /** @var $query \ezcQuerySelect */
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $this->dbHandler->quoteColumn( "action" ),
+            $this->dbHandler->quoteColumn( "id" )
+        )->from(
+            $this->dbHandler->quoteTable( "ezurlalias_ml" )
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "parent" ),
+                    $query->bindValue( $parentId, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "action_type" ),
+                    $query->bindValue( "eznode", null, \PDO::PARAM_STR )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "is_alias" ),
+                    $query->bindValue( 0, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->rowCount() === 1 ?: false;
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
     }
 }
