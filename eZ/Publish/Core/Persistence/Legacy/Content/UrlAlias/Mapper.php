@@ -30,7 +30,7 @@ class Mapper
         $urlAlias->id = $data["parent"] . "-" . $data["text_md5"];
         $urlAlias->pathData = isset( $data["path_data"] ) ? $data["path_data"] : null;
         $urlAlias->languageCodes = $data["language_codes"];
-        $urlAlias->pathLanguageCodes = isset( $data["path_language_codes"] ) ? $data["path_language_codes"] : null;
+        $urlAlias->pathLanguageData = isset( $data["path_language_data"] ) ? $data["path_language_data"] : null;
         $urlAlias->alwaysAvailable = $data["always_available"];
         $urlAlias->isHistory = !$data["is_original"];
         $urlAlias->isCustom = (boolean)$data["is_alias"];

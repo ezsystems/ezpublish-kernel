@@ -45,7 +45,26 @@ class UrlAlias extends ValueObject
     public $destination;
 
     /**
+     * Holds normalized path data
      *
+     * Example:
+     * <code>
+     *  array(
+     *      array(
+     *          "always-available" => true,
+     *          "translations" => array(
+     *              "cro-HR" => "jedan"
+     *          )
+     *      ),
+     *      array(
+     *          "always-available" => false,
+     *          "translations" => array(
+     *              "cro-HR" => "dva",
+     *              "eng-GB" => "two",
+     *          )
+     *      )
+     *  )
+     * </code>
      *
      * @var array
      */
@@ -59,18 +78,30 @@ class UrlAlias extends ValueObject
     public $languageCodes;
 
     /**
-     * Language code of url alias path
+     * Language data of url alias path
+     *
+     * Example:
+     * <code>
+     *  array(
+     *      array(
+     *          "always-available" => true,
+     *          "language-codes" => array( "cro-HR" )
+     *      ),
+     *      array(
+     *          "always-available" => false,
+     *          "language-codes" => array( "eng-GB" )
+     *      )
+     *  )
+     * </code>
      *
      * @var string[][]|null
      */
-    public $pathLanguageCodes;
+    public $pathLanguageData;
 
     /**
-     * Pointer to other url alias element.
+     * Fallback indicator for other languages
      *
-     * Used to dereference history chain of url alias elements.
-     *
-     * @var int
+     * @var boolean
      */
     public $alwaysAvailable;
 
