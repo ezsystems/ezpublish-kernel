@@ -85,7 +85,7 @@ class User
      * Loads a user group for the given path
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroup
+     * @return \eZ\Publish\Core\REST\Server\Values\RestUserGroup
      */
     public function loadUserGroup( RMF\Request $request )
     {
@@ -104,6 +104,29 @@ class User
             $userGroup->getVersionInfo()->getContentInfo(),
             $userGroupLocation
         );
+    }
+
+    /**
+     * Given user group is deleted
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     */
+    public function deleteUserGroup( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'group', $request->path );
+
+        $userGroupLocation = $this->locationService->loadLocation(
+            $this->extractLocationIdFromPath( $urlValues['group'] )
+        );
+
+        $userGroup = $this->userService->loadUserGroup(
+            $userGroupLocation->contentId
+        );
+
+        $this->userService->deleteUserGroup( $userGroup );
+
+        return new Values\ResourceDeleted();
     }
 
     /**
