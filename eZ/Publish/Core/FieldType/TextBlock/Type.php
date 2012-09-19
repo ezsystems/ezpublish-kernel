@@ -146,6 +146,10 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
+        if ( $hash === null )
+        {
+            return null;
+        }
         return new Value( $hash );
     }
 
@@ -158,6 +162,10 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
+        if ( $value === null )
+        {
+            return null;
+        }
         return $value->text;
     }
 
