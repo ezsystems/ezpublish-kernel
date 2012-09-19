@@ -97,10 +97,9 @@ class Content extends ValueObjectVisitor
     /**
      * Visits a single content field and generates its content
      *
-     * @param Generator $generator
-     * @param ContentType $contentType
-     * @param Field $field
-     * @return void
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      */
     public function visitField( Generator $generator, ContentType $contentType, Field $field )
     {

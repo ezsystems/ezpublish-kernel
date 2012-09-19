@@ -36,6 +36,7 @@ class RestFieldDefinition extends ContentTypeBase
         parent::__construct( $urlHandler );
         $this->fieldTypeSerializer = $fieldTypeSerializer;
     }
+
     /**
      * Visit struct returned by controllers
      *

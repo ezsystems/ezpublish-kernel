@@ -21,7 +21,6 @@ use eZ\Publish\Core\REST\Common\UrlHandler,
  */
 class VersionInfo extends ValueObjectVisitor
 {
-
     /**
      * Visit struct returned by controllers
      *
