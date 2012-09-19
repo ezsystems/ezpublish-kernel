@@ -104,15 +104,15 @@ class ContentUpdate extends Base
         }
 
         // publishDate
-        if ( array_key_exists( 'publishedDate', $data ) )
+        if ( array_key_exists( 'publishDate', $data ) )
         {
             try
             {
-                $parsedData['publishedDate'] = new DateTime( $data['publishedDate'] );
+                $parsedData['publishedDate'] = new DateTime( $data['publishDate'] );
             }
             catch( Exception $e )
             {
-                throw new Exceptions\Parser( 'Invalid format for <publishedDate> in <ContentUpdate>', 0, $e );
+                throw new Exceptions\Parser( 'Invalid format for <publishDate> in <ContentUpdate>', 0, $e );
             }
         }
 

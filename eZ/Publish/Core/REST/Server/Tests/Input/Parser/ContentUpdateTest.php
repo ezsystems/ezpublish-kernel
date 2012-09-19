@@ -129,7 +129,7 @@ class ContentUpdateTest extends BaseTest
     public function providerForTestParseFailureInvalidDate()
     {
         return array(
-            array( 'publishedDate', "Invalid format for <publishedDate> in <ContentUpdate>" ),
+            array( 'publishDate', "Invalid format for <publishDate> in <ContentUpdate>" ),
             array( 'modificationDate', "Invalid format for <modificationDate> in <ContentUpdate>" )
         );
     }
@@ -178,7 +178,7 @@ class ContentUpdateTest extends BaseTest
             'alwaysAvailable'  => 'false',
             'remoteId'         => '7e7afb135e50490a281dafc0aafb6dac',
             'modificationDate' => '19/Sept/2012:14:05:00 +0200',
-            'publishedDate'    => '19/Sept/2012:14:05:00 +0200'
+            'publishDate'    => '19/Sept/2012:14:05:00 +0200'
         );
     }
 }
