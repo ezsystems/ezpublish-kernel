@@ -1181,6 +1181,7 @@ XML Example
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://ez.no/API/Values ../VersionUpdate.xsd ">
       <modificationDate>2001-12-31T12:00:00</modificationDate>
+      <initialLanguageCode>ger-DE</initialLanguageCode>
       <fields>
         <field>
           <id>1234</id>
@@ -6234,6 +6235,7 @@ VersionUpdate XML Schema
         <xsd:all>
           <xsd:element name="User" type="ref" minOccurs="0" />
           <xsd:element name="modificationDate" type="xsd:dateTime"
+          <xsd:element name="initialLanguageCode" type="xsd:string"
             minOccurs="0" />
           <xsd:element name="fields">
             <xsd:complexType>
