@@ -208,7 +208,8 @@ $trashController = new Controller\Trash(
 $userController = new Controller\User(
     $inputDispatcher,
     $urlHandler,
-    $repository->getUserService()
+    $repository->getUserService(),
+    $repository->getLocationService()
 );
 
 /*
@@ -256,6 +257,10 @@ $valueObjectVisitors = array(
         $urlHandler,
         new Common\Output\FieldTypeSerializer( $repository->getFieldTypeService() )
     ),
+
+    // User
+
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserGroup'            => new Output\ValueObjectVisitor\RestUserGroup( $urlHandler ),
 
     // ContentType
 
@@ -505,6 +510,9 @@ $dispatcher = new AuthenticatingDispatcher(
             ),
             '(^/user/groups/root$)' => array(
                 'GET'  => array( $userController, 'loadRootUserGroup' ),
+            ),
+            '(^/user/groups/[0-9/]+$)' => array(
+                'GET'  => array( $userController, 'loadUserGroup' ),
             ),
             '(^/user/groups/[0-9/]+/roles$)' => array(
                 'GET'  => array( $roleController, 'loadRoleAssignmentsForUserGroup' ),
