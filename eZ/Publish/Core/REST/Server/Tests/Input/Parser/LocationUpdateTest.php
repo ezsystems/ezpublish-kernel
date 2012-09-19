@@ -22,6 +22,7 @@ class LocationUpdateTest extends BaseTest
         $inputArray = array(
             'priority' => 0,
             'remoteId' => 'remote-id',
+            'hidden' => 'true',
             'sortField' => 'PATH',
             'sortOrder' => 'ASC'
         );
@@ -30,32 +31,44 @@ class LocationUpdateTest extends BaseTest
         $result = $locationUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationUpdateStruct',
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestLocationUpdateStruct',
             $result,
+            'LocationUpdateStruct not created correctly.'
+        );
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationUpdateStruct',
+            $result->locationUpdateStruct,
             'LocationUpdateStruct not created correctly.'
         );
 
         $this->assertEquals(
             0,
-            $result->priority,
+            $result->locationUpdateStruct->priority,
             'LocationUpdateStruct priority property not created correctly.'
         );
 
         $this->assertEquals(
             'remote-id',
-            $result->remoteId,
+            $result->locationUpdateStruct->remoteId,
             'LocationUpdateStruct remoteId property not created correctly.'
         );
 
         $this->assertEquals(
+            true,
+            $result->hidden,
+            'hidden property not created correctly.'
+        );
+
+        $this->assertEquals(
             Location::SORT_FIELD_PATH,
-            $result->sortField,
+            $result->locationUpdateStruct->sortField,
             'LocationUpdateStruct sortField property not created correctly.'
         );
 
         $this->assertEquals(
             Location::SORT_ORDER_ASC,
-            $result->sortOrder,
+            $result->locationUpdateStruct->sortOrder,
             'LocationUpdateStruct sortOrder property not created correctly.'
         );
     }

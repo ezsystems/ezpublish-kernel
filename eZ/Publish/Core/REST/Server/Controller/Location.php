@@ -315,17 +315,29 @@ class Location
     {
         $values = $this->urlHandler->parse( 'location', $request->path );
 
-        return $this->locationService->updateLocation(
-            $this->locationService->loadLocation(
-                $this->extractLocationIdFromPath( $values['location'] )
-            ),
-            $this->inputDispatcher->parse(
-                new Message(
-                    array( 'Content-Type' => $request->contentType ),
-                    $request->body
-                )
+        $locationUpdate = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
             )
         );
+
+        $location = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $values['location'] ) );
+
+        // First handle hiding/unhiding so that updating location afterwards
+        // will return updated location with hidden/visible status correctly updated
+        // Exact check for true/false is needed as null signals that no hiding/unhiding
+        // is to be performed
+        if ( $locationUpdate->hidden === true )
+        {
+            $this->locationService->hideLocation( $location );
+        }
+        else if ( $locationUpdate->hidden === false )
+        {
+            $this->locationService->unhideLocation( $location );
+        }
+
+        return $this->locationService->updateLocation( $location, $locationUpdate->locationUpdateStruct );
     }
 
     /**

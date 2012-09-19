@@ -14,6 +14,8 @@ use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\LocationService;
 
+use eZ\Publish\Core\REST\Server\Values\RestLocationUpdateStruct;
+
 /**
  * Parser for LocationUpdate
  */
@@ -53,7 +55,7 @@ class LocationUpdate extends Base
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
-     * @return \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct
+     * @return \eZ\Publish\Core\REST\Server\Values\RestLocationUpdateStruct
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
@@ -69,7 +71,11 @@ class LocationUpdate extends Base
             $locationUpdateStruct->remoteId = $data['remoteId'];
         }
 
-        // @todo how to handle hidden?
+        $hidden = null;
+        if ( array_key_exists( 'hidden', $data ) )
+        {
+            $hidden = $this->parserTools->parseBooleanValue( $data['hidden'] );
+        }
 
         if ( !array_key_exists( 'sortField', $data ) )
         {
@@ -85,6 +91,6 @@ class LocationUpdate extends Base
 
         $locationUpdateStruct->sortOrder = $this->parserTools->parseDefaultSortOrder( $data['sortOrder'] );
 
-        return $locationUpdateStruct;
+        return new RestLocationUpdateStruct( $locationUpdateStruct, $hidden );
     }
 }
