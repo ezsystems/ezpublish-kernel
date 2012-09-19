@@ -13,7 +13,7 @@ use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Exceptions;
 use eZ\Publish\Core\REST\Common;
 
-class BadRequestExceptionExceptionTest extends ExceptionTest
+class BadRequestExceptionTest extends ExceptionTest
 {
     /**
      * Get expected status code

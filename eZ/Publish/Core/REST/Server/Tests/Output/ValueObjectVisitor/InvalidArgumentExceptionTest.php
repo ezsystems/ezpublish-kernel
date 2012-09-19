@@ -10,10 +10,10 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
-use eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
+use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Common;
 
-class BadStateExceptionTest extends ExceptionTest
+class InvalidArgumentExceptionTest extends ExceptionTest
 {
     /**
      * Get expected status code
@@ -22,7 +22,7 @@ class BadStateExceptionTest extends ExceptionTest
      */
     protected function getExpectedStatusCode()
     {
-        return 409;
+        return 406;
     }
 
     /**
@@ -32,7 +32,7 @@ class BadStateExceptionTest extends ExceptionTest
      */
     protected function getExpectedMessage()
     {
-        return "Conflict";
+        return "Not Acceptable";
     }
 
     /**
@@ -42,17 +42,17 @@ class BadStateExceptionTest extends ExceptionTest
      */
     protected function getException()
     {
-        return new Exceptions\BadStateExceptionStub( "Test" );
+        return new Exceptions\InvalidArgumentException( "Test" );
     }
 
     /**
      * Gets the exception visitor
      *
-     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Exception
+     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\InvalidArgumentException
      */
     protected function getExceptionVisitor()
     {
-        return new ValueObjectVisitor\BadStateException(
+        return new ValueObjectVisitor\InvalidArgumentException(
             new Common\UrlHandler\eZPublish()
         );
     }

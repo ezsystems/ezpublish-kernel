@@ -13,7 +13,7 @@ use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
 use eZ\Publish\Core\REST\Common;
 
-class NotFoundExceptionExceptionTest extends ExceptionTest
+class NotFoundExceptionTest extends ExceptionTest
 {
     /**
      * Get expected status code
