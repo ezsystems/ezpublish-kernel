@@ -713,6 +713,7 @@ class LocationService implements LocationServiceInterface
         try
         {
             $this->persistenceHandler->locationHandler()->removeSubtree( $location->id );
+            $this->persistenceHandler->urlAliasHandler()->locationDeleted( $location->id );
             $this->repository->commit();
         }
         catch ( \Exception $e )
