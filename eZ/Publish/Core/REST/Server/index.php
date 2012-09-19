@@ -338,7 +338,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Common\\Values\\ContentObjectStates'        => new Output\ValueObjectVisitor\ContentObjectStates( $urlHandler ),
 
     // REST specific
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceRedirect'           => new Output\ValueObjectVisitor\ResourceRedirect( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\TemporaryRedirect'           => new Output\ValueObjectVisitor\TemporaryRedirect( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PermanentRedirect'          => new Output\ValueObjectVisitor\PermanentRedirect( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceDeleted'            => new Output\ValueObjectVisitor\ResourceDeleted( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceCreated'            => new Output\ValueObjectVisitor\ResourceCreated( $urlHandler ),
