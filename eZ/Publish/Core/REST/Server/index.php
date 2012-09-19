@@ -132,7 +132,7 @@ $inputDispatcher = new Common\Input\Dispatcher(
                 $repository->getContentTypeService(),
                 $fieldTypeParser
             ),
-            'application/vnd.ez.api.UserCreate'        => new Input\Parser\UserCreate(
+            'application/vnd.ez.api.UserCreate'             => new Input\Parser\UserCreate(
                 $urlHandler,
                 $repository->getUserService(),
                 $repository->getContentTypeService(),
@@ -243,108 +243,107 @@ $userController = new Controller\User(
 $valueObjectVisitors = array(
     // Errors
 
-    '\\eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'  => new Output\ValueObjectVisitor\InvalidArgumentException( $urlHandler,  true ),
-    '\\eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException'         => new Output\ValueObjectVisitor\NotFoundException( $urlHandler,  true ),
-    '\\eZ\\Publish\\API\\Repository\\Exceptions\\BadStateException'         => new Output\ValueObjectVisitor\BadStateException( $urlHandler,  true ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Exceptions\\BadRequestException'    => new Output\ValueObjectVisitor\BadRequestException( $urlHandler,  true ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Exceptions\\ForbiddenException'     => new Output\ValueObjectVisitor\ForbiddenException( $urlHandler,  true ),
-    '\\Exception'                                                           => new Output\ValueObjectVisitor\Exception( $urlHandler,  true ),
+    '\\eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'   => new Output\ValueObjectVisitor\InvalidArgumentException( $urlHandler,  true ),
+    '\\eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException'          => new Output\ValueObjectVisitor\NotFoundException( $urlHandler,  true ),
+    '\\eZ\\Publish\\API\\Repository\\Exceptions\\BadStateException'          => new Output\ValueObjectVisitor\BadStateException( $urlHandler,  true ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Exceptions\\BadRequestException'     => new Output\ValueObjectVisitor\BadRequestException( $urlHandler,  true ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Exceptions\\ForbiddenException'      => new Output\ValueObjectVisitor\ForbiddenException( $urlHandler,  true ),
+    '\\Exception'                                                            => new Output\ValueObjectVisitor\Exception( $urlHandler,  true ),
 
     // Section
 
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\SectionList'                => new Output\ValueObjectVisitor\SectionList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedSection'             => new Output\ValueObjectVisitor\CreatedSection( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section'              => new Output\ValueObjectVisitor\Section( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\SectionList'                 => new Output\ValueObjectVisitor\SectionList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedSection'              => new Output\ValueObjectVisitor\CreatedSection( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section'               => new Output\ValueObjectVisitor\Section( $urlHandler ),
 
     // Content
 
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentList'                => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestContent'                => new Output\ValueObjectVisitor\RestContent( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedContent'             => new Output\ValueObjectVisitor\CreatedContent( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\VersionList'                => new Output\ValueObjectVisitor\VersionList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedVersion'             => new Output\ValueObjectVisitor\CreatedVersion( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo'          => new Output\ValueObjectVisitor\VersionInfo( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentList'                 => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestContent'                 => new Output\ValueObjectVisitor\RestContent( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedContent'              => new Output\ValueObjectVisitor\CreatedContent( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\VersionList'                 => new Output\ValueObjectVisitor\VersionList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedVersion'              => new Output\ValueObjectVisitor\CreatedVersion( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo'           => new Output\ValueObjectVisitor\VersionInfo( $urlHandler ),
 
     // The following two visitors are quite similar, as they both generate
     // <Version> resource. However, "Version" visitor DOES NOT generate embedded
     // <Fields> and <Relations> elements, while "Content" visitor DOES
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\Version'                    => new Output\ValueObjectVisitor\Version( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content'              => new Output\ValueObjectVisitor\Content(
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\Version'                     => new Output\ValueObjectVisitor\Version( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content'               => new Output\ValueObjectVisitor\Content(
         $urlHandler,
         new Common\Output\FieldTypeSerializer( $repository->getFieldTypeService() )
     ),
 
+    // UserGroup
+
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserGroup'               => new Output\ValueObjectVisitor\RestUserGroup( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedUserGroup'            => new Output\ValueObjectVisitor\CreatedUserGroup( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserGroupList'               => new Output\ValueObjectVisitor\UserGroupList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserGroupRefList'            => new Output\ValueObjectVisitor\UserGroupRefList( $urlHandler ),
+
     // User
 
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserGroup'              => new Output\ValueObjectVisitor\RestUserGroup( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedUserGroup'           => new Output\ValueObjectVisitor\CreatedUserGroup( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserGroupList'              => new Output\ValueObjectVisitor\UserGroupList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserGroupRefList'           => new Output\ValueObjectVisitor\UserGroupRefList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserList'                   => new Output\ValueObjectVisitor\UserList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserRefList'                => new Output\ValueObjectVisitor\UserRefList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedUser'                => new Output\ValueObjectVisitor\CreatedUser( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUser'                   => new Output\ValueObjectVisitor\RestUser( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserList'                    => new Output\ValueObjectVisitor\UserList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserRefList'                 => new Output\ValueObjectVisitor\UserRefList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedUser'                 => new Output\ValueObjectVisitor\CreatedUser( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUser'                    => new Output\ValueObjectVisitor\RestUser( $urlHandler ),
 
     // ContentType
 
-    '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'      => new Output\ValueObjectVisitor\ContentType(
-        $urlHandler
-    ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\FieldDefinitionList'        => new Output\ValueObjectVisitor\FieldDefinitionList(
-        $urlHandler
-    ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestFieldDefinition'        => new Output\ValueObjectVisitor\RestFieldDefinition(
+    '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'       => new Output\ValueObjectVisitor\ContentType( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\FieldDefinitionList'         => new Output\ValueObjectVisitor\FieldDefinitionList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestFieldDefinition'         => new Output\ValueObjectVisitor\RestFieldDefinition(
         $urlHandler,
         new Common\Output\FieldTypeSerializer( $repository->getFieldTypeService() )
     ),
 
     // Relation
 
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RelationList'               => new Output\ValueObjectVisitor\RelationList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestRelation'               => new Output\ValueObjectVisitor\RestRelation( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedRelation'            => new Output\ValueObjectVisitor\CreatedRelation( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RelationList'                => new Output\ValueObjectVisitor\RelationList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestRelation'                => new Output\ValueObjectVisitor\RestRelation( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedRelation'             => new Output\ValueObjectVisitor\CreatedRelation( $urlHandler ),
 
     // Role
 
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleList'                   => new Output\ValueObjectVisitor\RoleList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedRole'                => new Output\ValueObjectVisitor\CreatedRole( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role'                    => new Output\ValueObjectVisitor\Role( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy'                  => new Output\ValueObjectVisitor\Policy( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedPolicy'              => new Output\ValueObjectVisitor\CreatedPolicy( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PolicyList'                 => new Output\ValueObjectVisitor\PolicyList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleAssignmentList'         => new Output\ValueObjectVisitor\RoleAssignmentList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserRoleAssignment'     => new Output\ValueObjectVisitor\RestUserRoleAssignment( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleList'                    => new Output\ValueObjectVisitor\RoleList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedRole'                 => new Output\ValueObjectVisitor\CreatedRole( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role'                     => new Output\ValueObjectVisitor\Role( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy'                   => new Output\ValueObjectVisitor\Policy( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedPolicy'               => new Output\ValueObjectVisitor\CreatedPolicy( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PolicyList'                  => new Output\ValueObjectVisitor\PolicyList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleAssignmentList'          => new Output\ValueObjectVisitor\RoleAssignmentList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserRoleAssignment'      => new Output\ValueObjectVisitor\RestUserRoleAssignment( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserGroupRoleAssignment' => new Output\ValueObjectVisitor\RestUserGroupRoleAssignment( $urlHandler ),
 
     // Location
 
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedLocation'            => new Output\ValueObjectVisitor\CreatedLocation( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location'             => new Output\ValueObjectVisitor\Location( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\LocationList'               => new Output\ValueObjectVisitor\LocationList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedLocation'             => new Output\ValueObjectVisitor\CreatedLocation( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location'              => new Output\ValueObjectVisitor\Location( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\LocationList'                => new Output\ValueObjectVisitor\LocationList( $urlHandler ),
 
     // Trash
 
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\Trash'                      => new Output\ValueObjectVisitor\Trash( $urlHandler ),
-    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem'            => new Output\ValueObjectVisitor\TrashItem( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\Trash'                       => new Output\ValueObjectVisitor\Trash( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem'             => new Output\ValueObjectVisitor\TrashItem( $urlHandler ),
 
     // Object state
 
-    '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup' => new Output\ValueObjectVisitor\ObjectStateGroup( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedObjectStateGroup'    => new Output\ValueObjectVisitor\CreatedObjectStateGroup( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectStateGroupList'       => new Output\ValueObjectVisitor\ObjectStateGroupList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Common\\Values\\RestObjectState'            => new Output\ValueObjectVisitor\RestObjectState( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedObjectState'         => new Output\ValueObjectVisitor\CreatedObjectState( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectStateList'            => new Output\ValueObjectVisitor\ObjectStateList( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Common\\Values\\ContentObjectStates'        => new Output\ValueObjectVisitor\ContentObjectStates( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup'  => new Output\ValueObjectVisitor\ObjectStateGroup( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedObjectStateGroup'     => new Output\ValueObjectVisitor\CreatedObjectStateGroup( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectStateGroupList'        => new Output\ValueObjectVisitor\ObjectStateGroupList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Common\\Values\\RestObjectState'             => new Output\ValueObjectVisitor\RestObjectState( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedObjectState'          => new Output\ValueObjectVisitor\CreatedObjectState( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectStateList'             => new Output\ValueObjectVisitor\ObjectStateList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Common\\Values\\ContentObjectStates'         => new Output\ValueObjectVisitor\ContentObjectStates( $urlHandler ),
 
     // REST specific
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\TemporaryRedirect'           => new Output\ValueObjectVisitor\TemporaryRedirect( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PermanentRedirect'          => new Output\ValueObjectVisitor\PermanentRedirect( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceDeleted'            => new Output\ValueObjectVisitor\ResourceDeleted( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceCreated'            => new Output\ValueObjectVisitor\ResourceCreated( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceSwapped'            => new Output\ValueObjectVisitor\ResourceSwapped( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\NoContent'                  => new Output\ValueObjectVisitor\NoContent( $urlHandler ),
-    '\\eZ\\Publish\\Core\\REST\\Common\\Values\\Root'                       => new Output\ValueObjectVisitor\Root( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PermanentRedirect'           => new Output\ValueObjectVisitor\PermanentRedirect( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceDeleted'             => new Output\ValueObjectVisitor\ResourceDeleted( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceCreated'             => new Output\ValueObjectVisitor\ResourceCreated( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceSwapped'             => new Output\ValueObjectVisitor\ResourceSwapped( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\NoContent'                   => new Output\ValueObjectVisitor\NoContent( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Common\\Values\\Root'                        => new Output\ValueObjectVisitor\Root( $urlHandler ),
 );
 
 /*
@@ -369,221 +368,221 @@ $dispatcher = new AuthenticatingDispatcher(
             // /
 
             '(^/$)' => array(
-                'GET' => array( $rootController, 'loadRootResource' ),
+                'GET'     => array( $rootController, 'loadRootResource' ),
             ),
 
             // /content/sections
 
             '(^/content/sections$)' => array(
-                'GET'  => array( $sectionController, 'listSections' ),
-                'POST' => array( $sectionController, 'createSection' ),
+                'GET'     => array( $sectionController, 'listSections' ),
+                'POST'    => array( $sectionController, 'createSection' ),
             ),
             '(^/content/sections\?identifier=.*$)' => array(
-                'GET'  => array( $sectionController, 'loadSectionByIdentifier' ),
+                'GET'     => array( $sectionController, 'loadSectionByIdentifier' ),
             ),
             '(^/content/sections/[0-9]+$)' => array(
-                'GET'    => array( $sectionController, 'loadSection' ),
-                'PATCH'  => array( $sectionController, 'updateSection' ),
-                'DELETE' => array( $sectionController, 'deleteSection' ),
+                'GET'     => array( $sectionController, 'loadSection' ),
+                'PATCH'   => array( $sectionController, 'updateSection' ),
+                'DELETE'  => array( $sectionController, 'deleteSection' ),
             ),
 
             // /content/objects
 
             '(^/content/objects$)' => array(
-                'POST' => array( $contentController, 'createContent' ),
+                'POST'    => array( $contentController, 'createContent' ),
             ),
             '(^/content/objects\?remoteId=[0-9a-z]+$)' => array(
-                'GET'   => array( $contentController, 'loadContentInfoByRemoteId' ),
+                'GET'     => array( $contentController, 'loadContentInfoByRemoteId' ),
             ),
             '(^/content/objects/[0-9]+$)' => array(
-                'PATCH' => array( $contentController, 'updateContentMetadata' ),
-                'GET' => array( $contentController, 'loadContent' ),
-                'DELETE' => array( $contentController, 'deleteContent' ),
-                'COPY' => array( $contentController, 'copyContent' ),
+                'PATCH'   => array( $contentController, 'updateContentMetadata' ),
+                'GET'     => array( $contentController, 'loadContent' ),
+                'DELETE'  => array( $contentController, 'deleteContent' ),
+                'COPY'    => array( $contentController, 'copyContent' ),
             ),
             '(^/content/objects/[0-9]+/relations$)' => array(
-                'GET' => array( $contentController, 'redirectCurrentVersionRelations' ),
+                'GET'     => array( $contentController, 'redirectCurrentVersionRelations' ),
             ),
             '(^/content/objects/[0-9]+/versions$)' => array(
-                'GET' => array( $contentController, 'loadContentVersions' ),
+                'GET'     => array( $contentController, 'loadContentVersions' ),
             ),
             '(^/content/objects/[0-9]+/versions/[0-9]+/relations$)' => array(
-                'GET' => array( $contentController, 'loadVersionRelations' ),
-                'POST' => array( $contentController, 'createRelation' ),
+                'GET'     => array( $contentController, 'loadVersionRelations' ),
+                'POST'    => array( $contentController, 'createRelation' ),
             ),
             '(^/content/objects/[0-9]+/versions/[0-9]+/relations/[0-9]+$)' => array(
-                'GET' => array( $contentController, 'loadVersionRelation' ),
-                'DELETE' => array( $contentController, 'removeRelation' ),
+                'GET'     => array( $contentController, 'loadVersionRelation' ),
+                'DELETE'  => array( $contentController, 'removeRelation' ),
             ),
             '(^/content/objects/[0-9]+/versions/[0-9]+$)' => array(
-                'GET' => array( $contentController, 'loadContentInVersion' ),
-                'DELETE' => array( $contentController, 'deleteContentVersion' ),
-                'COPY' => array( $contentController, 'createDraftFromVersion' ),
+                'GET'     => array( $contentController, 'loadContentInVersion' ),
+                'DELETE'  => array( $contentController, 'deleteContentVersion' ),
+                'COPY'    => array( $contentController, 'createDraftFromVersion' ),
                 'PUBLISH' => array( $contentController, 'publishVersion' ),
             ),
             '(^/content/objects/[0-9]+/currentversion$)' => array(
-                'GET' => array( $contentController, 'redirectCurrentVersion' ),
-                'COPY' => array( $contentController, 'createDraftFromCurrentVersion' ),
+                'GET'     => array( $contentController, 'redirectCurrentVersion' ),
+                'COPY'    => array( $contentController, 'createDraftFromCurrentVersion' ),
             ),
             '(^/content/objects/[0-9]+/locations$)' => array(
-                'GET' => array( $locationController, 'loadLocationsForContent' ),
-                'POST' => array( $locationController, 'createLocation' ),
+                'GET'     => array( $locationController, 'loadLocationsForContent' ),
+                'POST'    => array( $locationController, 'createLocation' ),
             ),
             '(^/content/objects/[0-9]+/objectstates$)' => array(
-                'GET' => array( $objectStateController, 'getObjectStatesForContent' ),
-                'PATCH' => array( $objectStateController, 'setObjectStatesForContent' ),
+                'GET'     => array( $objectStateController, 'getObjectStatesForContent' ),
+                'PATCH'   => array( $objectStateController, 'setObjectStatesForContent' ),
             ),
 
             // /content/objectstategroups
 
             '(^/content/objectstategroups$)' => array(
-                'GET' => array( $objectStateController, 'loadObjectStateGroups' ),
-                'POST' => array( $objectStateController, 'createObjectStateGroup' ),
+                'GET'     => array( $objectStateController, 'loadObjectStateGroups' ),
+                'POST'    => array( $objectStateController, 'createObjectStateGroup' ),
             ),
             '(^/content/objectstategroups/[0-9]+$)' => array(
-                'GET' => array( $objectStateController, 'loadObjectStateGroup' ),
-                'PATCH' => array( $objectStateController, 'updateObjectStateGroup' ),
-                'DELETE' => array( $objectStateController, 'deleteObjectStateGroup' ),
+                'GET'     => array( $objectStateController, 'loadObjectStateGroup' ),
+                'PATCH'   => array( $objectStateController, 'updateObjectStateGroup' ),
+                'DELETE'  => array( $objectStateController, 'deleteObjectStateGroup' ),
             ),
             '(^/content/objectstategroups/[0-9]+/objectstates$)' => array(
-                'GET' => array( $objectStateController, 'loadObjectStates' ),
-                'POST' => array( $objectStateController, 'createObjectState' ),
+                'GET'     => array( $objectStateController, 'loadObjectStates' ),
+                'POST'    => array( $objectStateController, 'createObjectState' ),
             ),
             '(^/content/objectstategroups/[0-9]+/objectstates/[0-9]+$)' => array(
-                'GET' => array( $objectStateController, 'loadObjectState' ),
-                'PATCH' => array( $objectStateController, 'updateObjectState' ),
-                'DELETE' => array( $objectStateController, 'deleteObjectState' ),
+                'GET'     => array( $objectStateController, 'loadObjectState' ),
+                'PATCH'   => array( $objectStateController, 'updateObjectState' ),
+                'DELETE'  => array( $objectStateController, 'deleteObjectState' ),
             ),
 
             // content/locations
 
             '(^/content/locations\?remoteId=[0-9a-z]+$)' => array(
-                'GET' => array( $locationController, 'loadLocationByRemoteId' ),
+                'GET'     => array( $locationController, 'loadLocationByRemoteId' ),
             ),
             '(^/content/locations/[0-9/]+$)' => array(
-                'GET'    => array( $locationController, 'loadLocation' ),
-                'PATCH'  => array( $locationController, 'updateLocation' ),
-                'DELETE' => array( $locationController, 'deleteSubtree' ),
-                'COPY'   => array( $locationController, 'copySubtree' ),
-                'MOVE'   => array( $locationController, 'moveSubtree' ),
-                'SWAP'   => array( $locationController, 'swapLocation' ),
+                'GET'     => array( $locationController, 'loadLocation' ),
+                'PATCH'   => array( $locationController, 'updateLocation' ),
+                'DELETE'  => array( $locationController, 'deleteSubtree' ),
+                'COPY'    => array( $locationController, 'copySubtree' ),
+                'MOVE'    => array( $locationController, 'moveSubtree' ),
+                'SWAP'    => array( $locationController, 'swapLocation' ),
             ),
             '(^/content/locations/[0-9/]+/children$)' => array(
-                'GET'    => array( $locationController, 'loadLocationChildren' ),
+                'GET'     => array( $locationController, 'loadLocationChildren' ),
             ),
 
             // /content/types
 
             '(^/content/types/[0-9]+$)' => array(
-                'GET'   => array( $contentTypeController, 'loadContentType' ),
+                'GET'     => array( $contentTypeController, 'loadContentType' ),
             ),
             '(^/content/types/[0-9]+/fieldDefinitions$)' => array(
-                'GET'   => array( $contentTypeController, 'loadFieldDefinitionList' ),
+                'GET'     => array( $contentTypeController, 'loadFieldDefinitionList' ),
             ),
             '(^/content/types/[0-9]+/fieldDefinitions/[0-9]+$)' => array(
-                'GET'   => array( $contentTypeController, 'loadFieldDefinition' ),
+                'GET'     => array( $contentTypeController, 'loadFieldDefinition' ),
             ),
 
             // /content/trash
 
             '(^/content/trash$)' => array(
-                'GET'    => array( $trashController, 'loadTrashItems' ),
-                'DELETE' => array( $trashController, 'emptyTrash' ),
+                'GET'     => array( $trashController, 'loadTrashItems' ),
+                'DELETE'  => array( $trashController, 'emptyTrash' ),
             ),
             '(^/content/trash/[0-9]+$)' => array(
-                'GET'    => array( $trashController, 'loadTrashItem' ),
-                'DELETE' => array( $trashController, 'deleteTrashItem' ),
-                'MOVE'   => array( $trashController, 'restoreTrashItem' ),
+                'GET'     => array( $trashController, 'loadTrashItem' ),
+                'DELETE'  => array( $trashController, 'deleteTrashItem' ),
+                'MOVE'    => array( $trashController, 'restoreTrashItem' ),
             ),
 
             // /user/policies
 
             '(^/user/policies\?userId=[0-9]+$)' => array(
-                'GET' => array( $roleController, 'listPoliciesForUser' ),
+                'GET'     => array( $roleController, 'listPoliciesForUser' ),
             ),
 
             // /user/roles
 
             '(^/user/roles$)' => array(
-                'GET' => array( $roleController, 'listRoles' ),
-                'POST' => array( $roleController, 'createRole' ),
+                'GET'     => array( $roleController, 'listRoles' ),
+                'POST'    => array( $roleController, 'createRole' ),
             ),
             '(^/user/roles\?identifier=.*$)' => array(
-                'GET'  => array( $roleController, 'loadRoleByIdentifier' ),
+                'GET'     => array( $roleController, 'loadRoleByIdentifier' ),
             ),
             '(^/user/roles/[0-9]+$)' => array(
-                'GET'    => array( $roleController, 'loadRole' ),
-                'PATCH'  => array( $roleController, 'updateRole' ),
-                'DELETE' => array( $roleController, 'deleteRole' ),
+                'GET'     => array( $roleController, 'loadRole' ),
+                'PATCH'   => array( $roleController, 'updateRole' ),
+                'DELETE'  => array( $roleController, 'deleteRole' ),
             ),
             '(^/user/roles/[0-9]+/policies$)' => array(
-                'GET'    => array( $roleController, 'loadPolicies' ),
-                'POST'   => array( $roleController, 'addPolicy' ),
-                'DELETE' => array( $roleController, 'deletePolicies' ),
+                'GET'     => array( $roleController, 'loadPolicies' ),
+                'POST'    => array( $roleController, 'addPolicy' ),
+                'DELETE'  => array( $roleController, 'deletePolicies' ),
             ),
             '(^/user/roles/[0-9]+/policies/[0-9]+$)' => array(
-                'GET'    => array( $roleController, 'loadPolicy' ),
-                'PATCH'  => array( $roleController, 'updatePolicy' ),
-                'DELETE' => array( $roleController, 'deletePolicy' ),
+                'GET'     => array( $roleController, 'loadPolicy' ),
+                'PATCH'   => array( $roleController, 'updatePolicy' ),
+                'DELETE'  => array( $roleController, 'deletePolicy' ),
             ),
 
             // /user/users
 
             '(^/user/users/[0-9]+$)' => array(
-                'GET' => array( $userController, 'loadUser' ),
-                'DELETE' => array( $userController, 'deleteUser' ),
+                'GET'     => array( $userController, 'loadUser' ),
+                'DELETE'  => array( $userController, 'deleteUser' ),
             ),
             '(^/user/users/[0-9]+/groups$)' => array(
-                'GET' => array( $userController, 'loadUserGroupsOfUser' ),
+                'GET'     => array( $userController, 'loadUserGroupsOfUser' ),
             ),
             '(^/user/users/[0-9]+/groups\?group=[0-9/]+$)' => array(
-                'POST' => array( $userController, 'assignUserToUserGroup' ),
+                'POST'    => array( $userController, 'assignUserToUserGroup' ),
             ),
             '(^/user/users/[0-9]+/groups/[0-9]+$)' => array(
-                'DELETE' => array( $userController, 'unassignUserFromUserGroup' ),
+                'DELETE'  => array( $userController, 'unassignUserFromUserGroup' ),
             ),
 
             // /user/users/<ID>/roles
 
             '(^/user/users/[0-9]+/roles$)' => array(
-                'GET'  => array( $roleController, 'loadRoleAssignmentsForUser' ),
-                'POST'  => array( $roleController, 'assignRoleToUser' ),
+                'GET'     => array( $roleController, 'loadRoleAssignmentsForUser' ),
+                'POST'    => array( $roleController, 'assignRoleToUser' ),
             ),
             '(^/user/users/[0-9]+/roles/[0-9]+$)' => array(
-                'GET'  => array( $roleController, 'loadRoleAssignmentForUser' ),
+                'GET'     => array( $roleController, 'loadRoleAssignmentForUser' ),
                 'DELETE'  => array( $roleController, 'unassignRoleFromUser' ),
             ),
 
             // /user/groups
 
             '(^/user/groups/root$)' => array(
-                'GET'  => array( $userController, 'loadRootUserGroup' ),
+                'GET'     => array( $userController, 'loadRootUserGroup' ),
             ),
             '(^/user/groups/subgroups$)' => array(
-                'POST' => array( $userController, 'createUserGroup' ),
+                'POST'    => array( $userController, 'createUserGroup' ),
             ),
             '(^/user/groups/[0-9/]+$)' => array(
-                'GET' => array( $userController, 'loadUserGroup' ),
-                'DELETE' => array( $userController, 'deleteUserGroup' ),
-                'MOVE' => array( $userController, 'moveUserGroup' ),
+                'GET'     => array( $userController, 'loadUserGroup' ),
+                'DELETE'  => array( $userController, 'deleteUserGroup' ),
+                'MOVE'    => array( $userController, 'moveUserGroup' ),
             ),
             '(^/user/groups/[0-9/]+/subgroups$)' => array(
-                'GET' => array( $userController, 'loadSubUserGroups' ),
-                'POST' => array( $userController, 'createUserGroup' ),
+                'GET'     => array( $userController, 'loadSubUserGroups' ),
+                'POST'    => array( $userController, 'createUserGroup' ),
             ),
             '(^/user/groups/[0-9/]+/users$)' => array(
-                'GET' => array( $userController, 'loadUsersFromGroup' ),
-                'POST' => array( $userController, 'createUser' ),
+                'GET'     => array( $userController, 'loadUsersFromGroup' ),
+                'POST'    => array( $userController, 'createUser' ),
             ),
 
             // /user/groups/<path>/roles
 
             '(^/user/groups/[0-9/]+/roles$)' => array(
-                'GET'  => array( $roleController, 'loadRoleAssignmentsForUserGroup' ),
-                'POST'  => array( $roleController, 'assignRoleToUserGroup' ),
+                'GET'     => array( $roleController, 'loadRoleAssignmentsForUserGroup' ),
+                'POST'    => array( $roleController, 'assignRoleToUserGroup' ),
             ),
             '(^/user/groups/[0-9/]+/roles/[0-9]+$)' => array(
-                'GET'  => array( $roleController, 'loadRoleAssignmentForUserGroup' ),
+                'GET'     => array( $roleController, 'loadRoleAssignmentForUserGroup' ),
                 'DELETE'  => array( $roleController, 'unassignRoleFromUserGroup' ),
             ),
         )
