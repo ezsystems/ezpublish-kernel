@@ -268,6 +268,8 @@ $valueObjectVisitors = array(
 
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserGroup'              => new Output\ValueObjectVisitor\RestUserGroup( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedUserGroup'           => new Output\ValueObjectVisitor\CreatedUserGroup( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserList'                   => new Output\ValueObjectVisitor\UserList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserRefList'                => new Output\ValueObjectVisitor\UserRefList( $urlHandler ),
 
     // ContentType
 
@@ -524,6 +526,9 @@ $dispatcher = new AuthenticatingDispatcher(
             ),
             '(^/user/groups/[0-9/]+/subgroups$)' => array(
                 'POST' => array( $userController, 'createUserGroup' ),
+            ),
+            '(^/user/groups/[0-9/]+/users$)' => array(
+                'GET' => array( $userController, 'loadUsersFromGroup' ),
             ),
             '(^/user/groups/[0-9/]+/roles$)' => array(
                 'GET'  => array( $roleController, 'loadRoleAssignmentsForUserGroup' ),

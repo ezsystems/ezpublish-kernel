@@ -170,6 +170,34 @@ class User
     }
 
     /**
+     * loads the users of the group with the given path
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\UserList
+     */
+    public function loadUsersFromGroup( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'groupUsers', $request->path );
+
+        $userGroupLocation = $this->locationService->loadLocation(
+            $this->extractLocationIdFromPath( $urlValues['group'] )
+        );
+
+        $userGroup = $this->userService->loadUserGroup(
+            $userGroupLocation->contentId
+        );
+
+        $users = $this->userService->loadUsersOfUserGroup( $userGroup );
+
+        if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.userlist' )
+        {
+            return new Values\UserList( $users, $request->path );
+        }
+
+        return new Values\UserRefList( $users, $request->path );
+    }
+
+    /**
      * Extracts and returns an item id from a path, e.g. /1/2/58 => 58
      *
      * @param string $path
@@ -179,5 +207,23 @@ class User
     {
         $pathParts = explode( '/', $path );
         return array_pop( $pathParts );
+    }
+
+    /**
+     * Extracts the requested media type from $request
+     *
+     * @param RMF\Request $request
+     * @return string
+     */
+    protected function getMediaType( RMF\Request $request )
+    {
+        foreach ( $request->mimetype as $mimeType )
+        {
+            if ( preg_match( '(^([a-z0-9-/.]+)\+.*$)', $mimeType['value'], $matches ) )
+            {
+                return $matches[1];
+            }
+        }
+        return 'unknown/unknown';
     }
 }
