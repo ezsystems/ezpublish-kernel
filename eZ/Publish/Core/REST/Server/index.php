@@ -215,7 +215,10 @@ $userController = new Controller\User(
     $inputDispatcher,
     $urlHandler,
     $repository->getUserService(),
-    $repository->getLocationService()
+    $repository->getLocationService(),
+    // User controller needs the repository because of
+    // dealing with the current user
+    $repository
 );
 
 /*
@@ -518,6 +521,7 @@ $dispatcher = new AuthenticatingDispatcher(
 
             '(^/user/users/[0-9/]+$)' => array(
                 'GET' => array( $userController, 'loadUser' ),
+                'DELETE' => array( $userController, 'deleteUser' ),
             ),
 
             // /user/users/<ID>/roles

@@ -12,9 +12,11 @@ use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
+use eZ\Publish\Core\REST\Server\Exceptions;
 
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\Repository;
 
 use Qafoo\RMF;
 
@@ -52,19 +54,28 @@ class User
     protected $locationService;
 
     /**
+     * Repository
+     *
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    protected $repository;
+
+    /**
      * Construct controller
      *
      * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\UserService $userService
      * @param \eZ\Publish\API\Repository\LocationService $locationService
+     * @param \eZ\Publish\API\Repository\Repository $repository
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, UserService $userService, LocationService $locationService )
+    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, UserService $userService, LocationService $locationService, Repository $repository )
     {
         $this->inputDispatcher = $inputDispatcher;
         $this->urlHandler = $urlHandler;
         $this->userService = $userService;
         $this->locationService = $locationService;
+        $this->repository = $repository;
     }
 
     /**
@@ -189,6 +200,30 @@ class User
         );
 
         $this->userService->deleteUserGroup( $userGroup );
+
+        return new Values\ResourceDeleted();
+    }
+
+    /**
+     * Given user is deleted
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     */
+    public function deleteUser( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'user', $request->path );
+
+        $user = $this->userService->loadUser(
+            $urlValues['user']
+        );
+
+        if ( $user->id == $this->repository->getCurrentUser()->id )
+        {
+            throw new Exceptions\ForbiddenException( "Currently authenticated user cannot be deleted" );
+        }
+
+        $this->userService->deleteUser( $user );
 
         return new Values\ResourceDeleted();
     }
