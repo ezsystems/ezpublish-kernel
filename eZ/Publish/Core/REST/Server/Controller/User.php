@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Repository;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 
 use Qafoo\RMF;
 
@@ -429,6 +430,104 @@ class User
         }
 
         return new Values\UserRefList( $users, $request->path );
+    }
+
+    /**
+     * Unassigns the user from a user group
+     *
+     * @param \Qafoo\RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\UserGroupRefList
+     */
+    public function unassignUserFromUserGroup( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'userGroup', $request->path );
+
+        $user = $this->userService->loadUser( $urlValues['user'] );
+        $userGroupLocation = $this->locationService->loadLocation( trim( $urlValues['group'], '/' ) );
+
+        $userGroup = $this->userService->loadUserGroup(
+            $userGroupLocation->contentId
+        );
+
+        try
+        {
+            $this->userService->unAssignUserFromUserGroup( $user, $userGroup );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            // User is not in the group
+            throw new Exceptions\ForbiddenException( $e->getMessage() );
+        }
+
+        $userGroups = $this->userService->loadUserGroupsOfUser( $user );
+        $restUserGroups = array();
+        foreach ( $userGroups as $userGroup )
+        {
+            $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
+            $userGroupLocation = $this->locationService->loadLocation( $userGroupContentInfo->mainLocationId );
+            $restUserGroups[] = new Values\RestUserGroup( $userGroup, $userGroupContentInfo, $userGroupLocation );
+        }
+
+        return new Values\UserGroupRefList(
+            $restUserGroups,
+            $this->urlHandler->generate( 'userGroups', array( 'user' => $urlValues['user'] ) ),
+            $urlValues['user']
+        );
+    }
+
+    /**
+     * Assigns the user to a user group
+     *
+     * @param \Qafoo\RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\UserGroupRefList
+     */
+    public function assignUserToUserGroup( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'userGroupAssign', $request->path );
+
+        $user = $this->userService->loadUser( $urlValues['user'] );
+
+        try
+        {
+            $userGroupLocation = $this->locationService->loadLocation(
+                $this->extractLocationIdFromPath( $request->variables['group'] )
+            );
+        }
+        catch ( NotFoundException $e )
+        {
+            throw new Exceptions\ForbiddenException( $e->getMessage() );
+        }
+
+        try
+        {
+            $userGroup = $this->userService->loadUserGroup(
+                $userGroupLocation->contentId
+            );
+        }
+        catch ( NotFoundException $e )
+        {
+            throw new Exceptions\ForbiddenException( $e->getMessage() );
+        }
+
+        //@todo Error handing if user is already in the group
+        //Reason being that UserService::assignUserToUserGroup by specs
+        // does nothing if the user is already a member of the group
+        $this->userService->assignUserToUserGroup( $user, $userGroup );
+
+        $userGroups = $this->userService->loadUserGroupsOfUser( $user );
+        $restUserGroups = array();
+        foreach ( $userGroups as $userGroup )
+        {
+            $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
+            $userGroupLocation = $this->locationService->loadLocation( $userGroupContentInfo->mainLocationId );
+            $restUserGroups[] = new Values\RestUserGroup( $userGroup, $userGroupContentInfo, $userGroupLocation );
+        }
+
+        return new Values\UserGroupRefList(
+            $restUserGroups,
+            $this->urlHandler->generate( 'userGroups', array( 'user' => $urlValues['user'] ) ),
+            $urlValues['user']
+        );
     }
 
     /**
