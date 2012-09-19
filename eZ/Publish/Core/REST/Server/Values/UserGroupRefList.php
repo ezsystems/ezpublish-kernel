@@ -29,14 +29,23 @@ class UserGroupRefList
     public $path;
 
     /**
+     * User ID whose groups are the ones in the list
+     *
+     * @var mixed
+     */
+    public $userId;
+
+    /**
      * Construct
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup[] $userGroups
      * @param string $path
+     * @param mixed $userId
      */
-    public function __construct( array $userGroups, $path )
+    public function __construct( array $userGroups, $path, $userId = null )
     {
         $this->userGroups = $userGroups;
         $this->path = $path;
+        $this->userId = $userId;
     }
 }

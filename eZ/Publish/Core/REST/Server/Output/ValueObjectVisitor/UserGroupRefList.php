@@ -33,6 +33,8 @@ class UserGroupRefList extends ValueObjectVisitor
         $generator->startAttribute( 'href', $data->path );
         $generator->endAttribute( 'href' );
 
+        $groupCount = count( $data->userGroups );
+
         $generator->startList( 'UserGroup' );
         foreach ( $data->userGroups as $userGroup )
         {
@@ -48,6 +50,28 @@ class UserGroupRefList extends ValueObjectVisitor
                 )
             );
             $generator->endAttribute( 'href' );
+
+            if ( $data->userId !== null && $groupCount > 1 )
+            {
+                $generator->startHashElement( 'unassign' );
+
+                $generator->startAttribute(
+                    'href',
+                    $this->urlHandler->generate(
+                        'userGroup',
+                        array(
+                            'user' => $data->userId,
+                            'group' => '/' . $userGroup->mainLocation->path[count( $userGroup->mainLocation->path ) - 1]
+                        )
+                    )
+                );
+                $generator->endAttribute( 'href' );
+
+                $generator->startAttribute( 'method', 'DELETE' );
+                $generator->endAttribute( 'method' );
+
+                $generator->endHashElement( 'unassign' );
+            }
 
             $generator->endObjectElement( 'UserGroup' );
         }

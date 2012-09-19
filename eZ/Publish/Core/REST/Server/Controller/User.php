@@ -338,7 +338,7 @@ class User
      * Returns a list of the sub groups
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\Core\REST\Server\Values\UserList
+     * @return \eZ\Publish\Core\REST\Server\Values\UserGroupList|\eZ\Publish\Core\REST\Server\Values\UserGroupRefList
      */
     public function loadSubUserGroups( RMF\Request $request )
     {
@@ -371,10 +371,36 @@ class User
     }
 
     /**
+     * Returns a list of user groups the user belongs to.
+     * The returned list includes the resources for unassigning
+     * a user group if the user is in multiple groups.
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\UserGroupRefList
+     */
+    public function loadUserGroupsOfUser( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'userGroups', $request->path );
+
+        $user = $this->userService->loadUser( $urlValues['user'] );
+        $userGroups = $this->userService->loadUserGroupsOfUser( $user );
+
+        $restUserGroups = array();
+        foreach ( $userGroups as $userGroup )
+        {
+            $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
+            $userGroupLocation = $this->locationService->loadLocation( $userGroupContentInfo->mainLocationId );
+            $restUserGroups[] = new Values\RestUserGroup( $userGroup, $userGroupContentInfo, $userGroupLocation );
+        }
+
+        return new Values\UserGroupRefList( $restUserGroups, $request->path, $urlValues['user'] );
+    }
+
+    /**
      * Loads the users of the group with the given path
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\Core\REST\Server\Values\UserList
+     * @return \eZ\Publish\Core\REST\Server\Values\UserList|\eZ\Publish\Core\REST\Server\Values\UserRefList
      */
     public function loadUsersFromGroup( RMF\Request $request )
     {

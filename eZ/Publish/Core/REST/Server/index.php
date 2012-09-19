@@ -529,9 +529,13 @@ $dispatcher = new AuthenticatingDispatcher(
 
             // /user/users
 
-            '(^/user/users/[0-9/]+$)' => array(
+            '(^/user/users/[0-9]+$)' => array(
                 'GET' => array( $userController, 'loadUser' ),
                 'DELETE' => array( $userController, 'deleteUser' ),
+            ),
+
+            '(^/user/users/[0-9]+/groups$)' => array(
+                'GET' => array( $userController, 'loadUserGroupsOfUser' ),
             ),
 
             // /user/users/<ID>/roles
