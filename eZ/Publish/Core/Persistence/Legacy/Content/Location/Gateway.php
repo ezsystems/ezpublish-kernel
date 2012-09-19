@@ -205,10 +205,10 @@ abstract class Gateway
      * Moves all locations in the subtree to the Trash. The associated content
      * objects are left untouched.
      *
-     * @param mixed $locationId
+     * @param string $pathString
      * @return boolean
      */
-    abstract public function trashSubtree( $locationId );
+    abstract public function trashSubtree( $pathString );
 
     /**
      * Returns a trashed location to normal state.
