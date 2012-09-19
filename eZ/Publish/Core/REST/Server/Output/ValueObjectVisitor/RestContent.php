@@ -104,7 +104,7 @@ class RestContent extends ValueObjectVisitor
             $generator->startObjectElement( 'MainLocation', 'Location' );
             $generator->startAttribute(
                 'href',
-                $this->urlHandler->generate( 'location', array( 'location' => $mainLocation->pathString ) )
+                $this->urlHandler->generate( 'location', array( 'location' => rtrim( $mainLocation->pathString, '/' ) ) )
             );
             $generator->endAttribute( 'href' );
             $generator->endObjectElement( 'MainLocation' );
