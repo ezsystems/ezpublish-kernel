@@ -16,6 +16,7 @@ use eZ\Publish\SPI\Persistence\Content\Location,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler as UrlAliasHandler,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
 
 /**
@@ -52,12 +53,20 @@ class Handler implements BaseLocationHandler
     protected $contentMapper;
 
     /**
+     * UrlAlias handler
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler
+     */
+    protected $urlAliasHandler;
+
+    /**
      * Construct from userGateway
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $locationGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Handler $contentHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler $urlAliasHandler
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
      */
@@ -65,13 +74,15 @@ class Handler implements BaseLocationHandler
         LocationGateway $locationGateway,
         LocationMapper $locationMapper,
         ContentHandler $contentHandler,
-        ContentMapper $contentMapper
+        ContentMapper $contentMapper,
+        UrlAliasHandler $urlAliasHandler
     )
     {
         $this->locationGateway = $locationGateway;
         $this->locationMapper = $locationMapper;
         $this->contentHandler = $contentHandler;
         $this->contentMapper = $contentMapper;
+        $this->urlAliasHandler = $urlAliasHandler;
     }
 
     /**
@@ -381,6 +392,8 @@ class Handler implements BaseLocationHandler
         }
 
         $this->locationGateway->removeLocation( $locationId );
+        $this->urlAliasHandler->locationDeleted( $locationId );
+
         $this->locationGateway->deleteNodeAssignment( $contentId );
     }
 

@@ -44,6 +44,13 @@ class LocationHandlerTest extends TestCase
     protected $contentHandler;
 
     /**
+     * Mocked URL alias handler instance
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Handler
+     */
+    protected $urlAliasHandler;
+
+    /**
      * Returns the test suite with all tests declared in this class.
      *
      * @return \PHPUnit_Framework_TestSuite
@@ -60,7 +67,8 @@ class LocationHandlerTest extends TestCase
             $this->locationGateway = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway' ),
             $this->locationMapper = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper' ),
             $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler', array(), array(), '', false ),
-            $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper', array(), array(), '', false )
+            $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper', array(), array(), '', false ),
+            $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\Handler', array(), array(), '', false )
         );
     }
 
@@ -318,7 +326,8 @@ class LocationHandlerTest extends TestCase
                 $locationGatewayMock,
                 $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper" ),
                 $contentHandlerMock,
-                $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper", array(), array(), "", false )
+                $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper", array(), array(), "", false ),
+                $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\Handler', array(), array(), "", false )
             )
         );
 
@@ -426,6 +435,10 @@ class LocationHandlerTest extends TestCase
             ->expects( $this->at( 5 ) )
             ->method( "removeLocation" )
             ->with( 201 );
+        $this->urlAliasHandler
+            ->expects( $this->at( 0 ) )
+            ->method( "locationDeleted" )
+            ->with( 201 );
         $this->locationGateway
             ->expects( $this->at( 6 ) )
             ->method( "deleteNodeAssignment" )
@@ -477,6 +490,10 @@ class LocationHandlerTest extends TestCase
             ->expects( $this->at( 11 ) )
             ->method( "removeLocation" )
             ->with( 202 );
+        $this->urlAliasHandler
+            ->expects( $this->at( 1 ) )
+            ->method( "locationDeleted" )
+            ->with( 202 );
         $this->locationGateway
             ->expects( $this->at( 12 ) )
             ->method( "deleteNodeAssignment" )
@@ -486,6 +503,10 @@ class LocationHandlerTest extends TestCase
         $this->locationGateway
             ->expects( $this->at( 13 ) )
             ->method( "removeLocation" )
+            ->with( 42 );
+        $this->urlAliasHandler
+            ->expects( $this->at( 2 ) )
+            ->method( "locationDeleted" )
             ->with( 42 );
         $this->locationGateway
             ->expects( $this->at( 14 ) )
@@ -661,7 +682,8 @@ class LocationHandlerTest extends TestCase
                 $this->locationGateway = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway', array(), array(), '', false ),
                 $this->locationMapper = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper', array(), array(), '', false ),
                 $this->contentHandler = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler', array(), array(), '', false ),
-                $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper', array(), array(), '', false )
+                $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper', array(), array(), '', false ),
+                $this->urlAliasHandler = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\Handler', array(), array(), '', false )
             )
         );
     }
