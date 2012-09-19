@@ -896,7 +896,27 @@ class Handler implements UrlAliasHandlerInterface
      */
     public function locationDeleted( $locationId )
     {
-        $this->gateway->removeByLocationId( $locationId );
+        $action = "eznode:" . $locationId;
+        $this->removeSubtree(
+            $this->gateway->loadLocationEntryIdByAction( $action ),
+            $action
+        );
+    }
+
+    /**
+     * @param mixed $parentId
+     * @param string $action
+     */
+    protected function removeSubtree( $parentId, $action )
+    {
+        $list = $this->gateway->loadLocationAliasDataByParentId( $parentId );
+
+        foreach ( $list as $alias )
+        {
+            $this->removeSubtree( $alias["id"], $alias["action"] );
+        }
+
+        $this->gateway->removeByAction( $action );
     }
 
     /**
