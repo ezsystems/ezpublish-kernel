@@ -487,19 +487,25 @@ class ContentService implements ContentServiceInterface
                     $fieldValue = $fieldType->acceptValue( $fieldDefinition->defaultValue );
                 }
 
-                if ( $fieldDefinition->isRequired && $fieldType->isEmptyValue( $fieldValue ) )
+                if ( $fieldType->isEmptyValue( $fieldValue ) )
                 {
-                    throw new ContentValidationException( "Required field '{$fieldDefinition->identifier}' value is empty" );
+                    if ( $fieldDefinition->isRequired )
+                    {
+                        throw new ContentValidationException( "Required field '{$fieldDefinition->identifier}' value is empty" );
+                    }
+                }
+                else
+                {
+                    $fieldErrors = $fieldType->validate(
+                        $fieldDefinition,
+                        $fieldValue
+                    );
+                    if ( !empty( $fieldErrors ) )
+                    {
+                        $allFieldErrors[$fieldDefinition->id][$languageCode] = $fieldErrors;
+                    }
                 }
 
-                $fieldErrors = $fieldType->validate(
-                    $fieldDefinition,
-                    $fieldValue
-                );
-                if ( !empty( $fieldErrors ) )
-                {
-                    $allFieldErrors[$fieldDefinition->id][$languageCode] = $fieldErrors;
-                }
                 if ( !empty( $allFieldErrors ) )
                 {
                     continue;
@@ -1018,19 +1024,25 @@ class ContentService implements ContentServiceInterface
                     $fieldValue = $fieldType->acceptValue( $fieldDefinition->defaultValue );
                 }
 
-                if ( $fieldDefinition->isRequired && $fieldType->isEmptyValue( $fieldValue ) )
+                if ( $fieldType->isEmptyValue( $fieldValue ) )
                 {
-                    throw new ContentValidationException( "Required field '{$fieldDefinition->identifier}' value is empty" );
+                    if ( $fieldDefinition->isRequired )
+                    {
+                        throw new ContentValidationException( "Required field '{$fieldDefinition->identifier}' value is empty" );
+                    }
+                }
+                else
+                {
+                    $fieldErrors = $fieldType->validate(
+                        $fieldDefinition,
+                        $fieldValue
+                    );
+                    if ( !empty( $fieldErrors ) )
+                    {
+                        $allFieldErrors[$fieldDefinition->id][$languageCode] = $fieldErrors;
+                    }
                 }
 
-                $fieldErrors = $fieldType->validate(
-                    $fieldDefinition,
-                    $fieldValue
-                );
-                if ( !empty( $fieldErrors ) )
-                {
-                    $allFieldErrors[$fieldDefinition->id][$languageCode] = $fieldErrors;
-                }
                 if ( !empty( $allFieldErrors ) )
                 {
                     continue;
