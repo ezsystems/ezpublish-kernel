@@ -120,7 +120,6 @@ interface UserService
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing or set  to an empty value
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a field value is not accepted by the field type
      */
-
     public function createUser( UserCreateStruct $userCreateStruct, array $parentGroups );
 
     /**
