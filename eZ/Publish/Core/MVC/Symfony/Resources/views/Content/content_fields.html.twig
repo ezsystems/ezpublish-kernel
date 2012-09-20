@@ -1,6 +1,12 @@
 {# Template blocks to be used by content fields #}
 {# Block naming convention is <fieldDefinitionIdentifier>_field #}
-{# Following variables are passed: field, contentInfo, fieldSettings, editMode, editMeta, attr #}
+{# Following variables are passed:
+ # - \eZ\Publish\API\Repository\Values\Content\Field field the field to display
+ # - \eZ\Publish\API\Repository\Values\Content\ContentInfo contentInfo the contentInfo to which the field belongs to
+ # - mixed fieldSettings settings of the field (depends on the fieldtype)
+ # - bool editMode not used for now
+ # - array editMeta not used for now
+ #}
 
 {% block ezstring_field %}
 {% spaceless %}
@@ -42,7 +48,11 @@
 {% endspaceless %}
 {% endblock %}
 
-{# TODO: handle default format #}
+{# TODO:
+ # - handle default format
+ # - handle eztime
+ # - handle ezdate
+ #}
 {% block ezdatetime_field %}
 {% spaceless %}
     {% set field_value = field.value.value|date() %}
@@ -133,6 +143,7 @@
 {% endspaceless %}
 {% endblock %}
 
+{# TODO: handle the unit of the fileSize (si operator in legacy template engine) #}
 {% block ezbinaryfile_field %}
 {% spaceless %}
     {% if field.value %}
