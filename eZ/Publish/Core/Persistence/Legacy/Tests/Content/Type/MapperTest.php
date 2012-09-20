@@ -48,7 +48,6 @@ class MapperTest extends TestCase
             array(
                 'id' => null,
                 'name' => array(
-                    'always-available' => 'eng-GB',
                     'eng-GB' => 'Media',
                 ),
                 'description' => array(),
@@ -72,13 +71,9 @@ class MapperTest extends TestCase
         $struct = new GroupCreateStruct();
 
         $struct->name = array(
-            'always-available' => 'eng-GB',
             'eng-GB' => 'Media',
         );
-        $struct->description = array(
-            'always-available' => 'eng-GB',
-            'eng-GB' => '',
-        );
+        $struct->description = array();
         $struct->identifier = 'Media';
         $struct->created = 1032009743;
         $struct->modified = 1033922120;
@@ -94,7 +89,7 @@ class MapperTest extends TestCase
      */
     public function testTypeFromCreateStruct()
     {
-        $struct = $this->getContenTypeCreateStructFixture();
+        $struct = $this->getContentTypeCreateStructFixture();
 
         $mapper = new Mapper( $this->getConverterRegistryMock() );
         $type = $mapper->createTypeFromCreateStruct( $struct );
@@ -114,19 +109,15 @@ class MapperTest extends TestCase
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct
      */
-    protected function getContenTypeCreateStructFixture()
+    protected function getContentTypeCreateStructFixture()
     {
         // Taken from example DB
         $struct = new CreateStruct();
         $struct->name = array(
-            'always-available' => 'eng-US',
             'eng-US' => 'Folder',
         );
         $struct->status = 0;
-        $struct->description = array(
-            0 => '',
-            'always-available' => false,
-        );
+        $struct->description = array();
         $struct->identifier = 'folder';
         $struct->created = 1024392098;
         $struct->modified = 1082454875;
@@ -163,7 +154,7 @@ class MapperTest extends TestCase
      */
     public function testCreateStructFromType()
     {
-        $type = $this->getContenTypeFixture();
+        $type = $this->getContentTypeFixture();
 
         $mapper = new Mapper( $this->getConverterRegistryMock() );
         $struct = $mapper->createCreateStructFromType( $type );
@@ -184,20 +175,16 @@ class MapperTest extends TestCase
      *
      * @return Type
      */
-    protected function getContenTypeFixture()
+    protected function getContentTypeFixture()
     {
         // Taken from example DB
         $type = new Type();
         $type->id = 23;
         $type->name = array(
-            'always-available' => 'eng-US',
             'eng-US' => 'Folder',
         );
         $type->status = 0;
-        $type->description = array(
-            0 => '',
-            'always-available' => false,
-        );
+        $type->description = array();
         $type->identifier = 'folder';
         $type->created = 1024392098;
         $type->modified = 1082454875;
@@ -279,13 +266,9 @@ class MapperTest extends TestCase
                 'id' => 1,
                 'status' => 0,
                 'name' => array(
-                    'always-available' => 'eng-US',
                     'eng-US' => 'Folder'
                 ),
-                'description' => array(
-                    0 => '',
-                    'always-available' => false,
-                ),
+                'description' => array(),
                 'created' => 1024392098,
                 'creatorId' => 14,
                 'modified' => 1082454875,
@@ -313,13 +296,9 @@ class MapperTest extends TestCase
             array(
                 'id' => 155,
                 'name' => array(
-                    'always-available' => 'eng-US',
                     'eng-US' => 'Short name',
                 ),
-                'description' => array(
-                    0 => '',
-                    'always-available' => false,
-                ),
+                'description' => array(),
                 'identifier' => 'short_name',
                 'fieldGroup' => '',
                 'fieldType' => 'ezstring',
@@ -432,7 +411,7 @@ class MapperTest extends TestCase
     /**
      * Returns a converter registry mock
      *
-     * @return eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected function getConverterRegistryMock()
     {

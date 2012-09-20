@@ -141,6 +141,13 @@ class Mapper
         $type->status = (int)$row['ezcontentclass_version'];
         $type->name = unserialize( $row['ezcontentclass_serialized_name_list'] );
         $type->description = unserialize( $row['ezcontentclass_serialized_description_list'] );
+        // Unset redundant data
+        unset(
+            $type->name["always-available"],
+            $type->name[0],
+            $type->description["always-available"],
+            $type->description[0]
+        );
         $type->identifier = $row['ezcontentclass_identifier'];
         $type->created = (int)$row['ezcontentclass_created'];
         $type->modified = (int)$row['ezcontentclass_modified'];
@@ -177,6 +184,13 @@ class Mapper
         $field->id = (int)$row['ezcontentclass_attribute_id'];
         $field->name = unserialize( $row['ezcontentclass_attribute_serialized_name_list'] );
         $field->description = unserialize( $row['ezcontentclass_attribute_serialized_description_list'] );
+        // Unset redundant data
+        unset(
+            $field->name["always-available"],
+            $field->name[0],
+            $field->description["always-available"],
+            $field->description[0]
+        );
         $field->identifier = $row['ezcontentclass_attribute_identifier'];
         $field->fieldGroup = $row['ezcontentclass_attribute_category'];
         $field->fieldType = $row['ezcontentclass_attribute_data_type_string'];
