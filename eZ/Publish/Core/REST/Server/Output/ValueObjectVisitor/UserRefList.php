@@ -29,6 +29,8 @@ class UserRefList extends ValueObjectVisitor
     {
         $generator->startObjectElement( 'UserRefList' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'UserRefList' ) );
+        //@TODO Needs refactoring, disabling certain headers should not be done this way
+        $visitor->setHeader( 'Accept-Patch', false );
 
         $generator->startAttribute( 'href', $data->path );
         $generator->endAttribute( 'href' );

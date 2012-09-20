@@ -29,6 +29,8 @@ class UserGroupList extends ValueObjectVisitor
     {
         $generator->startObjectElement( 'UserGroupList' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'UserGroupList' ) );
+        //@TODO Needs refactoring, disabling certain headers should not be done this way
+        $visitor->setHeader( 'Accept-Patch', false );
 
         $generator->startAttribute( 'href', $data->path );
         $generator->endAttribute( 'href' );

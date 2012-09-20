@@ -31,6 +31,8 @@ class ObjectStateList extends ValueObjectVisitor
     {
         $generator->startObjectElement( 'ObjectStateList' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'ObjectStateList' ) );
+        //@TODO Needs refactoring, disabling certain headers should not be done this way
+        $visitor->setHeader( 'Accept-Patch', false );
 
         $generator->startAttribute( 'href', $this->urlHandler->generate( 'objectstates', array( 'objectstategroup' => $data->groupId ) ) );
         $generator->endAttribute( 'href' );
