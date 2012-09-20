@@ -104,7 +104,8 @@ $parserTools = new Common\Input\ParserTools();
 $fieldTypeParser = new Common\Input\FieldTypeParser(
     $repository->getContentService(),
     $repository->getContentTypeService(),
-    $repository->getFieldTypeService()
+    $repository->getFieldTypeService(),
+    new Common\FieldTypeProcessorRegistry()
 );
 
 /*
