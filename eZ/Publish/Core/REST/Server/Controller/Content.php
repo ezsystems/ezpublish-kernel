@@ -406,6 +406,40 @@ class Content
     }
 
     /**
+     * A specific draft is updated.
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    public function updateVersion( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'objectVersion', $request->path );
+
+        $contentUpdateStruct = $this->inputDispatcher->parse(
+            new Message(
+                array(
+                    'Content-Type' => $request->contentType,
+                    // @todo Needs refactoring! Temporary solution so parser has access to URL
+                    'Url' => $request->path
+                ),
+                $request->body
+            )
+        );
+
+        $versionInfo = $this->contentService->loadVersionInfo(
+            $this->contentService->loadContentInfo( $urlValues['object'] ),
+            $urlValues['version']
+        );
+
+        if ( $versionInfo->status !== VersionInfo::STATUS_DRAFT )
+        {
+            throw new ForbiddenException( 'Only version in status DRAFT can be updated' );
+        }
+
+        return $this->contentService->updateContent( $versionInfo, $contentUpdateStruct );
+    }
+
+    /**
      * The content version is published
      *
      * @param RMF\Request $request

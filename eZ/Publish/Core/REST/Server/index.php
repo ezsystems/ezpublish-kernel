@@ -126,6 +126,11 @@ $inputDispatcher = new Common\Input\Dispatcher(
                 ( $locationCreateParser = new Input\Parser\LocationCreate( $urlHandler, $repository->getLocationService(), $parserTools ) ),
                 $parserTools
             ),
+            'application/vnd.ez.api.VersionUpdate'          => new Input\Parser\VersionUpdate(
+                $urlHandler,
+                $repository->getContentService(),
+                $fieldTypeParser
+            ),
             'application/vnd.ez.api.UserGroupCreate'        => new Input\Parser\UserGroupCreate(
                 $urlHandler,
                 $repository->getUserService(),
@@ -416,6 +421,7 @@ $dispatcher = new AuthenticatingDispatcher(
             ),
             '(^/content/objects/[0-9]+/versions/[0-9]+$)' => array(
                 'GET'     => array( $contentController, 'loadContentInVersion' ),
+                'PATCH'   => array( $contentController, 'updateVersion' ),
                 'DELETE'  => array( $contentController, 'deleteContentVersion' ),
                 'COPY'    => array( $contentController, 'createDraftFromVersion' ),
                 'PUBLISH' => array( $contentController, 'publishVersion' ),
