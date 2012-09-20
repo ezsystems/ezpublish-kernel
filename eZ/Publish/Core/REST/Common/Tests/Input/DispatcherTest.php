@@ -93,4 +93,47 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             $dispatcher->parse( $message )
         );
     }
+
+    /**
+     * @todo This is a test for a feature that needs refactoring. There must be
+     * a sensible way to submit the called URL to the parser.
+     */
+    public function testParseSpecialUrlHeader()
+    {
+        $message = new Common\Message(
+            array(
+                'Content-Type' => 'text/html+format',
+                'Url' => '/foo/bar',
+            ),
+            'Hello world!'
+        );
+
+        $parsingDispatcher = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher' );
+        $parsingDispatcher
+            ->expects( $this->at( 0 ) )
+            ->method( 'parse' )
+            ->with( array( 'someKey' => 'someValue', '__url' => '/foo/bar' ), 'text/html' )
+            ->will( $this->returnValue( 23 ) );
+
+        $handler = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Input\\Handler' );
+        $handler
+            ->expects( $this->at( 0 ) )
+            ->method( 'convert' )
+            ->with( 'Hello world!' )
+            ->will( $this->returnValue(
+                array(
+                    array(
+                        'someKey' => 'someValue',
+                    )
+                )
+            ) );
+
+        $dispatcher = new Common\Input\Dispatcher( $parsingDispatcher, array( 'format' => $handler ) );
+
+        $this->assertSame(
+            23,
+            $dispatcher->parse( $message )
+        );
+
+    }
 }

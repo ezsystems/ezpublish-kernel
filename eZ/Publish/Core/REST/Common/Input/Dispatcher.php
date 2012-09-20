@@ -91,9 +91,19 @@ class Dispatcher
         }
 
         $rawArray = $this->handlers[$format]->convert( $message->body );
+
+        // Only 1 XML root node
+        $rootNodeArray = reset( $rawArray );
+
+        // @TODO: This needs to be refactored in order to make the called URL
+        // available to parsers in the server in a sane way
+        if ( isset( $message->headers['Url'] ) )
+        {
+            $rootNodeArray['__url'] = $message->headers['Url'];
+        }
+
         return $this->parsingDispatcher->parse(
-            // Only 1 XML root node
-            reset( $rawArray ), $media
+            $rootNodeArray, $media
         );
     }
 }
