@@ -29,6 +29,10 @@ class FieldTypeParserTest extends \PHPUnit_Framework_TestCase
 
     protected $fieldTypeMock;
 
+    protected $fieldTypeProcessorRegistryMock;
+
+    protected $fieldTypeProcessorMock;
+
     public function setUp()
     {
         $this->contentServiceMock = $this->getMock(
@@ -61,6 +65,20 @@ class FieldTypeParserTest extends \PHPUnit_Framework_TestCase
         );
         $this->fieldTypeMock = $this->getMock(
             'eZ\\Publish\\SPI\\FieldType\\FieldType',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->fieldTypeProcessorRegistryMock = $this->getMock(
+            'eZ\\Publish\\Core\\REST\\Common\\FieldTypeProcessorRegistry',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->fieldTypeProcessorMock = $this->getMock(
+            'eZ\\Publish\\Core\\REST\\Common\\FieldTypeProcessor',
             array(),
             array(),
             '',
@@ -109,6 +127,11 @@ class FieldTypeParserTest extends \PHPUnit_Framework_TestCase
                 ) )
             ) );
 
+        $this->fieldTypeProcessorRegistryMock->expects( $this->once() )
+            ->method( 'hasProcessor' )
+            ->with( $this->equalTo( 'some-fancy-field-type' ) )
+            ->will( $this->returnValue( false ) );
+
         $fieldTypeMock = $this->fieldTypeMock;
         $this->fieldTypeServiceMock->expects( $this->once() )
             ->method( 'getFieldType' )
@@ -140,6 +163,11 @@ class FieldTypeParserTest extends \PHPUnit_Framework_TestCase
     {
         $fieldTypeParser = $this->getFieldTypeParser();
 
+        $this->fieldTypeProcessorRegistryMock->expects( $this->once() )
+            ->method( 'hasProcessor' )
+            ->with( $this->equalTo( 'some-fancy-field-type' ) )
+            ->will( $this->returnValue( false ) );
+
         $fieldTypeMock = $this->fieldTypeMock;
         $this->fieldTypeServiceMock->expects( $this->once() )
             ->method( 'getFieldType' )
@@ -155,6 +183,57 @@ class FieldTypeParserTest extends \PHPUnit_Framework_TestCase
         $fieldTypeMock->expects( $this->once() )
             ->method( 'fromHash' )
             ->with( $this->equalTo( array( 1, 2, 3 ) ) )
+            ->will( $this->returnValue( array( 'foo', 'bar' ) ) );
+
+        $this->assertEquals(
+            array( 'foo', 'bar' ),
+            $fieldTypeParser->parseValue(
+                'some-fancy-field-type',
+                array( 1, 2, 3 )
+            )
+        );
+    }
+
+    public function testParseValueWithPreProcessing()
+    {
+        $fieldTypeParser = $this->getFieldTypeParser();
+
+        $this->fieldTypeProcessorRegistryMock->expects( $this->once() )
+            ->method( 'hasProcessor' )
+            ->with( $this->equalTo( 'some-fancy-field-type' ) )
+            ->will( $this->returnValue( true ) );
+
+        $processor = $this->fieldTypeProcessorMock;
+        $this->fieldTypeProcessorRegistryMock->expects( $this->once() )
+            ->method( 'getProcessor' )
+            ->with( $this->equalTo( 'some-fancy-field-type' ) )
+            ->will( $this->returnCallback(
+                function () use ( $processor )
+                {
+                    return $processor;
+                }
+            ) );
+
+        $processor->expects( $this->once() )
+            ->method( 'preProcessHash' )
+            ->with( array( 1, 2, 3 ) )
+            ->will( $this->returnValue( array( 4, 5, 6 ) ) );
+
+        $fieldTypeMock = $this->fieldTypeMock;
+        $this->fieldTypeServiceMock->expects( $this->once() )
+            ->method( 'getFieldType' )
+            ->with( $this->equalTo( 'some-fancy-field-type' ) )
+            ->will( $this->returnCallback(
+                // Avoid PHPUnit cloning
+                function () use ( $fieldTypeMock )
+                {
+                    return $fieldTypeMock;
+                }
+            ) );
+
+        $fieldTypeMock->expects( $this->once() )
+            ->method( 'fromHash' )
+            ->with( $this->equalTo( array( 4, 5, 6 ) ) )
             ->will( $this->returnValue( array( 'foo', 'bar' ) ) );
 
         $this->assertEquals(
@@ -231,7 +310,8 @@ class FieldTypeParserTest extends \PHPUnit_Framework_TestCase
         return new FieldTypeParser(
             $this->contentServiceMock,
             $this->contentTypeServiceMock,
-            $this->fieldTypeServiceMock
+            $this->fieldTypeServiceMock,
+            $this->fieldTypeProcessorRegistryMock
         );
     }
 }

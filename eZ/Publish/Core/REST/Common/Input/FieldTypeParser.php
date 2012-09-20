@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\REST\Common\Input;
 
+use eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry;
+
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\FieldTypeService;
@@ -31,15 +33,26 @@ class FieldTypeParser
     protected $fieldTypeService;
 
     /**
+     * @var \eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry
+     */
+    protected $fieldTypeProcessorRegistry;
+
+    /**
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
+     * @param \eZ\Publish\Core\REST\Commmon\FieldTypeProcessorRegistry $fieldTypeProcessorRegistry
      */
-    public function __construct( ContentService $contentService, ContentTypeService $contentTypeService, FieldTypeService $fieldTypeService )
+    public function __construct(
+        ContentService $contentService,
+        ContentTypeService $contentTypeService,
+        FieldTypeService $fieldTypeService,
+        FieldTypeProcessorRegistry $fieldTypeProcessorRegistry )
     {
         $this->contentService = $contentService;
         $this->contentTypeService = $contentTypeService;
         $this->fieldTypeService = $fieldTypeService;
+        $this->fieldTypeProcessorRegistry = $fieldTypeProcessorRegistry;
     }
 
     /**
@@ -54,7 +67,7 @@ class FieldTypeParser
     public function parseFieldValue( $contentInfoId, $fieldDefIdentifier, $value )
     {
         $contentInfo = $this->contentService->loadContentInfo( $contentInfoId );
-        $contentType = $this->contentTypeService->loadContentType( $contentInfo->getContentType()->id );
+        $contentType = $this->contentTypeService->loadContentType( $contentInfo->contentTypeId );
 
         $fieldDefinition = $contentType->getFieldDefinition( $fieldDefIdentifier );
 
@@ -72,6 +85,13 @@ class FieldTypeParser
     public function parseValue( $fieldTypeIdentifier, $value )
     {
         $fieldType = $this->fieldTypeService->getFieldType( $fieldTypeIdentifier );
+
+        if ( $this->fieldTypeProcessorRegistry->hasProcessor( $fieldTypeIdentifier ) )
+        {
+            $fieldTypeProcessor = $this->fieldTypeProcessorRegistry->getProcessor( $fieldTypeIdentifier );
+            $value = $fieldTypeProcessor->preProcessHash( $value );
+        }
+
         return $fieldType->fromHash( $value );
     }
 
