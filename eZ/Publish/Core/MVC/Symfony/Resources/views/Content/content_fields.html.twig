@@ -33,7 +33,7 @@
     {% if field.value.authors|length() > 0 %}
         <ul {{ block( 'field_attributes' ) }}>
         {% for author in field.value.authors %}
-            <li><a href="mailto:{{ author.email }}">{{ author.name }}</a></li>
+            <li><a href="mailto:{{ author.email|escape( 'url' ) }}">{{ author.name }}</a></li>
         {% endfor %}
         </ul>
     {% endif %}
@@ -64,7 +64,7 @@
 {% spaceless %}
     {% if field.value.email %}
         {% set field_value = field.value.email %}
-        <a href="mailto:{{ field.value.email|escape }}" {{ block( 'field_attributes' ) }}>{{ field.value.email|escape }}</a>
+        <a href="mailto:{{ field.value.email|escape( 'url' ) }}" {{ block( 'field_attributes' ) }}>{{ field.value.email }}</a>
     {% endif %}
 {% endspaceless %}
 {% endblock %}
@@ -136,7 +136,7 @@
     <dt>Username</dt>
     <dd>{{ field.value.login }}</dd>
     <dt>Email</dt>
-    <dd><a href="mailto:{{ field.value.email }}">{{ field.value.email }}</a></dd>
+    <dd><a href="mailto:{{ field.value.email|escape( 'url' ) }}">{{ field.value.email }}</a></dd>
     <dt>Account status</dt>
     <dd>{{ field.value.enabled ? 'enabled' : 'disabled' }}</dd>
 </dl>
