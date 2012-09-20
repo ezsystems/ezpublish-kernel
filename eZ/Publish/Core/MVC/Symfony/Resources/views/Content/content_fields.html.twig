@@ -62,7 +62,7 @@
 
 {% block ezemail_field %}
 {% spaceless %}
-    {% if field.value.email|length() > 0 %}
+    {% if field.value.email %}
         {% set field_value = field.value.email %}
         <a href="mailto:{{ field.value.email|escape }}" {{ block( 'field_attributes' ) }}>{{ field.value.email|escape }}</a>
     {% endif %}
