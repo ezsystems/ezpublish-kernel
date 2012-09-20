@@ -111,7 +111,7 @@
 
 {% block ezselection_field %}
 {% spaceless %}
-    {% if fieldSettings.isMultiple  %}
+    {% if fieldSettings.isMultiple and field.value.selection|length() > 0  %}
         <ul {{ block( 'field_attributes' ) }}>
         {% for selectedIndex in field.value.selection %}
             <li>{{ fieldSettings.options[selectedIndex] }}</li>
