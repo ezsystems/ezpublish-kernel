@@ -42,7 +42,7 @@ class Version extends ValueObjectVisitor
             $this->urlHandler->generate(
                 'objectVersion',
                 array(
-                    'object' => $data->contentId,
+                    'object' => $data->versionInfo->getContentInfo()->id,
                     'version' => $data->versionInfo->versionNo
                 )
             )

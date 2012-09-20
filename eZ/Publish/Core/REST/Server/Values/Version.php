@@ -24,19 +24,10 @@ class Version
     public $versionInfo;
 
     /**
-     * Content ID to which this version belongs to
-     *
-     * @var mixed
-     */
-    public $contentId;
-
-    /**
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     * @param mixed $contentId
      */
-    public function __construct( VersionInfo $versionInfo, $contentId )
+    public function __construct( VersionInfo $versionInfo )
     {
         $this->versionInfo = $versionInfo;
-        $this->contentId = $contentId;
     }
 }

@@ -34,10 +34,14 @@ class VersionTest extends ValueObjectVisitorBaseTest
         $version = new Version(
             new VersionInfo(
                 array(
-                    'versionNo' => 21
+                    'versionNo' => 21,
+                    'contentInfo' => new ContentInfo(
+                        array(
+                           'id' => 42
+                        )
+                    )
                 )
-            ),
-            42
+            )
         );
 
         $visitor->visit(
@@ -106,10 +110,14 @@ class VersionTest extends ValueObjectVisitorBaseTest
         $version = new Version(
             new VersionInfo(
                 array(
-                    'versionNo' => 21
+                    'versionNo' => 21,
+                    'contentInfo' => new ContentInfo(
+                        array(
+                           'id' => 42
+                        )
+                    )
                 )
-            ),
-            42
+            )
         );
 
         $this->getVisitorMock()->expects( $this->exactly( 1 ) )

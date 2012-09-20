@@ -13,6 +13,7 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\VersionList;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\REST\Common;
 
 class VersionListTest extends ValueObjectVisitorBaseTest
@@ -29,7 +30,7 @@ class VersionListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $versionList = new VersionList( array(), 42 );
+        $versionList = new VersionList( array(), '/some/path' );
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -75,7 +76,7 @@ class VersionListTest extends ValueObjectVisitorBaseTest
                 'tag'      => 'VersionList',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.VersionList+xml',
-                    'href'       => '/content/objects/42/versions',
+                    'href'       => '/some/path',
                 )
             ),
             $result,
@@ -96,10 +97,26 @@ class VersionListTest extends ValueObjectVisitorBaseTest
 
         $versionList = new VersionList(
             array(
-                new VersionInfo(),
-                new VersionInfo()
+                new VersionInfo(
+                    array(
+                        'contentInfo' => new ContentInfo(
+                            array(
+                                'id' => 42
+                            )
+                        )
+                    )
+                ),
+                new VersionInfo(
+                    array(
+                        'contentInfo' => new ContentInfo(
+                            array(
+                                'id' => 42
+                            )
+                        )
+                    )
+                )
             ),
-            42
+            '/some/path'
         );
 
         $this->getVisitorMock()->expects( $this->exactly( 2 ) )

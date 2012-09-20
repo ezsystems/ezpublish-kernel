@@ -504,6 +504,23 @@ class User
     }
 
     /**
+     * Loads drafts assigned to user
+     *
+     * @param \Qafoo\RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\VersionList
+     */
+    public function loadUserDrafts( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'userDrafts', $request->path );
+
+        $contentDrafts = $this->contentService->loadContentDrafts(
+            $this->userService->loadUser( $urlValues['user'] )
+        );
+
+        return new Values\VersionList( $contentDrafts, $request->path );
+    }
+
+    /**
      * Moves the user group to another parent
      *
      * @param \Qafoo\RMF\Request $request

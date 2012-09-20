@@ -314,7 +314,7 @@ class Content
             $this->contentService->loadVersions(
                 $this->contentService->loadContentInfo( $urlValues['object'] )
             ),
-            $urlValues['object']
+            $request->path
         );
     }
 

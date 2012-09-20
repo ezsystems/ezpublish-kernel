@@ -22,21 +22,21 @@ class VersionList
     public $versions;
 
     /**
-     * Content ID to which these versions belong to
+     * Path used to retrieve this version list
      *
-     * @var mixed
+     * @var string
      */
-    public $contentId;
+    public $path;
 
     /**
      * Construct
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo[] $versions
-     * @param mixed $contentId
+     * @param string $path
      */
-    public function __construct( array $versions, $contentId )
+    public function __construct( array $versions, $path )
     {
         $this->versions = $versions;
-        $this->contentId = $contentId;
+        $this->path = $path;
     }
 }

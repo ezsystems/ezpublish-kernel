@@ -31,19 +31,13 @@ class VersionList extends ValueObjectVisitor
         $generator->startObjectElement( 'VersionList' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'VersionList' ) );
 
-        $generator->startAttribute(
-            'href',
-            $this->urlHandler->generate(
-                'objectVersions',
-                array( 'object' => $data->contentId )
-            )
-        );
+        $generator->startAttribute( 'href', $data->path );
         $generator->endAttribute( 'href' );
 
         $generator->startList( 'Version' );
         foreach ( $data->versions as $version )
         {
-            $visitor->visitValueObject( new Version( $version, $data->contentId ) );
+            $visitor->visitValueObject( new Version( $version ) );
         }
         $generator->endList( 'Version' );
 
