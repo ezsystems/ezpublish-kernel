@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Server;
+namespace eZ\Publish\Core\REST\Common;
 
 /**
  * FieldTypeProcessor

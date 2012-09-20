@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Server;
+namespace eZ\Publish\Core\REST\Common;
 
 /**
  * FieldTypeProcessorRegistry
@@ -17,12 +17,12 @@ class FieldTypeProcessorRegistry
     /**
      * Registered processors
      *
-     * @var \eZ\Publish\Core\REST\Server\FieldTypeProcessor[]
+     * @var \eZ\Publish\Core\REST\Common\FieldTypeProcessor[]
      */
     private $processors = array();
 
     /**
-     * @param \eZ\Publish\Core\REST\Server\FieldTypeProcessor[] $processors
+     * @param \eZ\Publish\Core\REST\Common\FieldTypeProcessor[] $processors
      */
     public function __construct( array $processors = array() )
     {
@@ -36,7 +36,7 @@ class FieldTypeProcessorRegistry
      * Registers $processor for $fieldTypeIdentifier
      *
      * @param string $fieldTypeIdentifier
-     * @param \eZ\Publish\Core\REST\Server\FieldTypeProcessor $processor
+     * @param \eZ\Publish\Core\REST\Common\FieldTypeProcessor $processor
      */
     public function registerProcessor( $fieldTypeIdentifier, FieldTypeProcessor $processor )
     {
@@ -58,7 +58,7 @@ class FieldTypeProcessorRegistry
      * Returns the processor for $fieldTypeIdentifier
      *
      * @param string $fieldTypeIdentifier
-     * @return \eZ\Publish\Core\REST\Server\FieldTypeProcessor
+     * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor
      * @throws \RuntimeException if not processor is registered for $fieldTypeIdentifier
      */
     public function getProcessor( $fieldTypeIdentifier )

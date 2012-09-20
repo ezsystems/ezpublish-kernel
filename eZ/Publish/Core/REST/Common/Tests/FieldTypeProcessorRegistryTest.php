@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Tests;
 
-use eZ\Publish\Core\REST\Server\FieldTypeProcessorRegistry;
+use eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry;
 
 class FieldTypeProcessorRegistryTest extends BaseTest
 {
@@ -88,12 +88,12 @@ class FieldTypeProcessorRegistryTest extends BaseTest
     /**
      * Get FieldTypeProcessor mock object
      *
-     * @return \eZ\Publish\Core\REST\Server\FieldTypeProcessor
+     * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor
      */
     protected function getAProcessorMock()
     {
         return $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Server\\FieldTypeProcessor',
+            'eZ\\Publish\\Core\\REST\\Common\\FieldTypeProcessor',
             array(),
             array(),
             '',
