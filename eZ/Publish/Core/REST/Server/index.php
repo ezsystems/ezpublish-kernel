@@ -241,6 +241,8 @@ $userController = new Controller\User(
     $inputDispatcher,
     $urlHandler,
     $repository->getUserService(),
+    $repository->getRoleService(),
+    $repository->getContentService(),
     $repository->getLocationService(),
     $repository->getSectionService(),
     // User controller needs the repository because of
@@ -549,6 +551,9 @@ $dispatcher = new AuthenticatingDispatcher(
 
             // /user/users
 
+            '(^/user/users\?roleId=.*$)' => array(
+                'GET'     => array( $userController, 'loadUsersAssignedToRole' ),
+            ),
             '(^/user/users/[0-9]+$)' => array(
                 'GET'     => array( $userController, 'loadUser' ),
                 'PATCH'   => array( $userController, 'updateUser' ),
@@ -577,6 +582,9 @@ $dispatcher = new AuthenticatingDispatcher(
 
             // /user/groups
 
+            '(^/user/groups\?roleId=.*$)' => array(
+                'GET'     => array( $userController, 'loadUserGroupsAssignedToRole' ),
+            ),
             '(^/user/groups/root$)' => array(
                 'GET'     => array( $userController, 'loadRootUserGroup' ),
             ),

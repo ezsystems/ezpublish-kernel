@@ -15,9 +15,14 @@ use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Exceptions;
 
 use eZ\Publish\API\Repository\UserService;
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\RoleService;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\SectionService;
 use eZ\Publish\API\Repository\Repository;
+
+use eZ\Publish\API\Repository\Values\User\UserRoleAssignment;
+use eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
@@ -53,6 +58,20 @@ class User
     protected $userService;
 
     /**
+     * Role service
+     *
+     * @var \eZ\Publish\API\Repository\RoleService
+     */
+    protected $roleService;
+
+    /**
+     * Content service
+     *
+     * @var \eZ\Publish\API\Repository\ContentService
+     */
+    protected $contentService;
+
+    /**
      * Location service
      *
      * @var \eZ\Publish\API\Repository\LocationService
@@ -79,6 +98,8 @@ class User
      * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\UserService $userService
+     * @param \eZ\Publish\API\Repository\RoleService $roleService
+     * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\SectionService $sectionService
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -87,6 +108,8 @@ class User
         Input\Dispatcher $inputDispatcher,
         UrlHandler $urlHandler,
         UserService $userService,
+        RoleService $roleService,
+        ContentService $contentService,
         LocationService $locationService,
         SectionService $sectionService,
         Repository $repository )
@@ -94,6 +117,8 @@ class User
         $this->inputDispatcher = $inputDispatcher;
         $this->urlHandler = $urlHandler;
         $this->userService = $userService;
+        $this->roleService = $roleService;
+        $this->contentService = $contentService;
         $this->locationService = $locationService;
         $this->sectionService = $sectionService;
         $this->repository = $repository;
@@ -406,6 +431,76 @@ class User
         $this->userService->deleteUser( $user );
 
         return new Values\ResourceDeleted();
+    }
+
+    /**
+     * Loads a list of users assigned to role
+     *
+     * @param \Qafoo\RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\UserList|\eZ\Publish\Core\REST\Server\Values\UserRefList
+     */
+    public function loadUsersAssignedToRole( RMF\Request $request )
+    {
+        $roleValues = $this->urlHandler->parse( 'role', $request->variables['roleId'] );
+
+        $role = $this->roleService->loadRole( $roleValues['role'] );
+        $roleAssignments = $this->roleService->getRoleAssignments( $role );
+
+        $restUsers = array();
+
+        foreach ( $roleAssignments as $roleAssignment )
+        {
+            if ( $roleAssignment instanceof UserRoleAssignment )
+            {
+                $user = $roleAssignment->getUser();
+                $userContentInfo = $user->getVersionInfo()->getContentInfo();
+                $userLocation = $this->locationService->loadLocation( $userContentInfo->mainLocationId );
+
+                $restUsers[] = new Values\RestUser( $user, $userContentInfo, $userLocation );
+            }
+        }
+
+        if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.userlist' )
+        {
+            return new Values\UserList( $restUsers, $request->path );
+        }
+
+        return new Values\UserRefList( $restUsers, $request->path );
+    }
+
+    /**
+     * Loads a list of user groups assigned to role
+     *
+     * @param \Qafoo\RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\UserGroupList|\eZ\Publish\Core\REST\Server\Values\UserGroupRefList
+     */
+    public function loadUserGroupsAssignedToRole( RMF\Request $request )
+    {
+        $roleValues = $this->urlHandler->parse( 'role', $request->variables['roleId'] );
+
+        $role = $this->roleService->loadRole( $roleValues['role'] );
+        $roleAssignments = $this->roleService->getRoleAssignments( $role );
+
+        $restUserGroups = array();
+
+        foreach ( $roleAssignments as $roleAssignment )
+        {
+            if ( $roleAssignment instanceof UserGroupRoleAssignment )
+            {
+                $userGroup = $roleAssignment->getUserGroup();
+                $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
+                $userGroupLocation = $this->locationService->loadLocation( $userGroupContentInfo->mainLocationId );
+
+                $restUserGroups[] = new Values\RestUserGroup( $userGroup, $userGroupContentInfo, $userGroupLocation );
+            }
+        }
+
+        if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.usergrouplist' )
+        {
+            return new Values\UserGroupList( $restUserGroups, $request->path );
+        }
+
+        return new Values\UserGroupRefList( $restUserGroups, $request->path );
     }
 
     /**
