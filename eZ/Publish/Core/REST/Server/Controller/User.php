@@ -16,6 +16,7 @@ use eZ\Publish\Core\REST\Server\Exceptions;
 
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\SectionService;
 use eZ\Publish\API\Repository\Repository;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
@@ -59,6 +60,13 @@ class User
     protected $locationService;
 
     /**
+     * Section service
+     *
+     * @var \eZ\Publish\API\Repository\SectionService
+     */
+    protected $sectionService;
+
+    /**
      * Repository
      *
      * @var \eZ\Publish\API\Repository\Repository
@@ -72,14 +80,22 @@ class User
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\UserService $userService
      * @param \eZ\Publish\API\Repository\LocationService $locationService
+     * @param \eZ\Publish\API\Repository\SectionService $sectionService
      * @param \eZ\Publish\API\Repository\Repository $repository
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, UserService $userService, LocationService $locationService, Repository $repository )
+    public function __construct(
+        Input\Dispatcher $inputDispatcher,
+        UrlHandler $urlHandler,
+        UserService $userService,
+        LocationService $locationService,
+        SectionService $sectionService,
+        Repository $repository )
     {
         $this->inputDispatcher = $inputDispatcher;
         $this->urlHandler = $urlHandler;
         $this->userService = $userService;
         $this->locationService = $locationService;
+        $this->sectionService = $sectionService;
         $this->repository = $repository;
     }
 
@@ -245,6 +261,53 @@ class User
                     $createdLocation
                 )
             )
+        );
+    }
+
+    /**
+     * Updates a user group
+     *
+     * @param \Qafoo\RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\RestUserGroup
+     */
+    public function updateUserGroup( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'group', $request->path );
+
+        $userGroupLocation = $this->locationService->loadLocation(
+            $this->extractLocationIdFromPath( $urlValues['group'] )
+        );
+
+        $userGroup = $this->userService->loadUserGroup(
+            $userGroupLocation->contentId
+        );
+
+        $updateStruct = $this->inputDispatcher->parse(
+            new Message(
+                array(
+                    'Content-Type' => $request->contentType,
+                    // @todo Needs refactoring! Temporary solution so parser has access to URL
+                    'Url' => $request->path
+                ),
+                $request->body
+            )
+        );
+
+        if ( $updateStruct->sectionId !== null )
+        {
+            $section = $this->sectionService->loadSection( $updateStruct->sectionId );
+            $this->sectionService->assignSection(
+                $userGroup->getVersionInfo()->getContentInfo(),
+                $section
+            );
+        }
+
+        $updatedGroup = $this->userService->updateUserGroup( $userGroup, $updateStruct->userGroupUpdateStruct );
+
+        return new Values\RestUserGroup(
+            $updatedGroup,
+            $updatedGroup->getVersionInfo()->getContentInfo(),
+            $userGroupLocation
         );
     }
 

@@ -145,6 +145,13 @@ $inputDispatcher = new Common\Input\Dispatcher(
                 $parserTools
             ),
             'application/vnd.ez.api.ContentUpdate'          => new Input\Parser\ContentUpdate( $urlHandler ),
+            'application/vnd.ez.api.UserGroupUpdate'        => new Input\Parser\UserGroupUpdate(
+                $urlHandler,
+                $repository->getUserService(),
+                $repository->getContentService(),
+                $repository->getLocationService(),
+                $fieldTypeParser
+            ),
             'application/vnd.ez.api.PolicyCreate'           => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService(), $parserTools ),
             'application/vnd.ez.api.PolicyUpdate'           => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService(), $parserTools ),
             'application/vnd.ez.api.RoleAssignInput'        => new Input\Parser\RoleAssignInput( $urlHandler, $parserTools ),
@@ -228,6 +235,7 @@ $userController = new Controller\User(
     $urlHandler,
     $repository->getUserService(),
     $repository->getLocationService(),
+    $repository->getSectionService(),
     // User controller needs the repository because of
     // dealing with the current user
     $repository
@@ -569,6 +577,7 @@ $dispatcher = new AuthenticatingDispatcher(
             ),
             '(^/user/groups/[0-9/]+$)' => array(
                 'GET'     => array( $userController, 'loadUserGroup' ),
+                'PATCH'   => array( $userController, 'updateUserGroup' ),
                 'DELETE'  => array( $userController, 'deleteUserGroup' ),
                 'MOVE'    => array( $userController, 'moveUserGroup' ),
             ),
