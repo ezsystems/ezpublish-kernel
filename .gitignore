@@ -11,4 +11,3 @@ docblox.xml
 composer.phar
 /vendor/
 var/
-eZ/Publish/Core/REST/Server/database.cnf
