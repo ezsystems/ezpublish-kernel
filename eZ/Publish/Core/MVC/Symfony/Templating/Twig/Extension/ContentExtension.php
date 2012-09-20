@@ -12,8 +12,10 @@ namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 use \Twig_Extension;
 use \Twig_Environment;
 use \Twig_Function_Method;
+use \Twig_Filter_Method;
 use \Twig_Template;
 use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\Core\FieldType\XmlText\Converter\Output\Html5 as XmlTextToHtml5Converter;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use \SplObjectStorage;
@@ -57,13 +59,20 @@ class ContentExtension extends Twig_Extension
     protected $blocks;
 
     /**
+     * Converter used to transform XmlText content in HTML5
+     *
+     * @var eZ\Publish\Core\FieldType\XmlText\Converter\Output\Html5
+     */
+    protected $xmlTextConverter;
+
+    /**
      * Hash of field type identifiers (i.e. "ezstring"), indexed by field definition identifier
      *
      * @var array
      */
     protected $fieldTypeIdentifiers = array();
 
-    public function __construct( ConfigResolverInterface $resolver )
+    public function __construct( XmlTextToHtml5Converter $converter, ConfigResolverInterface $resolver )
     {
         $this->resources = $resolver->getParameter( 'field_templates' );
         usort(
@@ -75,6 +84,7 @@ class ContentExtension extends Twig_Extension
         );
 
         $this->blocks = new SplObjectStorage();
+        $this->xmlTextConverter = $converter;
     }
 
     /**
@@ -187,6 +197,18 @@ class ContentExtension extends Twig_Extension
             $params,
             $this->getBlocksByField( $content, $field, $localTemplate )
         );
+    }
+
+    public function getFilters()
+    {
+        return array(
+            'xmltext_to_html5' => new Twig_Filter_Method( $this, 'xmltextToHtml5' ),
+        );
+    }
+
+    public function xmltextToHtml5( $xmlData )
+    {
+        return $this->xmlTextConverter->convert( $xmlData );
     }
 
     /**
