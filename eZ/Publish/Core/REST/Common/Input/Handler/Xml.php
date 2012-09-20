@@ -54,6 +54,9 @@ class Xml extends Handler
         ),
         'descriptions' => array(
             'value'
+        ),
+        'fields' => array(
+            'field'
         )
     );
 
