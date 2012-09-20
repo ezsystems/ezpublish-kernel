@@ -131,6 +131,33 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @TODO This is a test for a feature that needs refactoring.
+     * @see \eZ\Publish\Core\REST\Common\Output\Visitor::visit
+     */
+    public function testSetFilteredHeaders()
+    {
+        $data = new \stdClass();
+
+        $generator = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' );
+        $visitor = $this->getMock(
+            '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
+            array( 'visitValueObject' ),
+            array( $generator, array() )
+        );
+
+        $visitor->setHeader( 'Content-Type', 'text/xml' );
+        $visitor->setHeader( 'Accept-Patch', false );
+        $this->assertEquals(
+            new Common\Message( array(
+                    'Content-Type' => 'text/xml',
+                ),
+                null
+            ),
+            $visitor->visit( $data )
+        );
+    }
+
     public function testSetHeadersNoOverwrite()
     {
         $data = new \stdClass();

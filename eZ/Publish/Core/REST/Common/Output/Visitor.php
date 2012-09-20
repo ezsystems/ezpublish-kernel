@@ -187,8 +187,22 @@ class Visitor
         $this->generator->startDocument( $data );
         $this->visitValueObject( $data );
 
+        //@TODO Needs refactoring!
+        // A hackish solution to enable outer visitors to disable setting
+        // of certain headers in inner visitors, for example Accept-Patch header
+        // which is valid in GET/POST/PATCH for a resource, but must not appear
+        // in the list of resources
+        $filteredHeaders = array();
+        foreach ( $this->headers as $headerName => $headerValue )
+        {
+            if ( $headerValue !== false )
+            {
+                $filteredHeaders[$headerName] = $headerValue;
+            }
+        }
+
         $result = new Message(
-            $this->headers,
+            $filteredHeaders,
             ( $this->generator->isEmpty()
                 ? null
                 : $this->generator->endDocument( $data ) )
