@@ -111,6 +111,11 @@ class SortClauseConverter
             );
         }
 
+        // @TODO Review needed
+        // The following line was added because without it, loading sub user groups through the Public API
+        // fails with the database error "Unknown column sort_column_0". The change does not break any
+        // integration tests or legacy persistence tests, but it can break something else, so review is needed
+        // Discussion: https://github.com/ezsystems/ezp-next/commit/8749d0977307858c3e2a7d82f3be90fa21973357#L1R102
         $this->sortColumns = array();
     }
 }
