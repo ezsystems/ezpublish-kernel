@@ -9,16 +9,15 @@
 
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
-use eZ\Publish\Core\REST\Server\Input\Parser\UserGroupUpdate;
+use eZ\Publish\Core\REST\Server\Input\Parser\UserUpdate;
 
-class UserGroupUpdateTest extends BaseTest
+class UserUpdateTest extends BaseTest
 {
     /**
-     * Tests the UserGroupUpdate parser
+     * Tests the UserUpdate parser
      */
     public function testParse()
     {
-        $this->markTestSkipped( '@todo Skipped due to InMemory implementation of Location value object does not implement getting of contentId virtual property' );
         $inputArray = array(
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
@@ -28,37 +27,40 @@ class UserGroupUpdateTest extends BaseTest
             'fields' => array(
                 'field' => array(
                     array(
-                        'fieldDefinitionIdentifier' => 'name',
+                        'fieldDefinitionIdentifier' => 'first_name',
                         'fieldValue' => array()
                     ),
                     array(
-                        'fieldDefinitionIdentifier' => 'description',
+                        'fieldDefinitionIdentifier' => 'last_name',
                         'fieldValue' => array()
                     )
                 )
             ),
-            '__url' => '/user/groups/1/5'
+            'email' => 'nospam@ez.no',
+            'password' => 'somePassword',
+            'enabled' => 'true',
+            '__url' => '/user/users/14'
         );
 
-        $userGroupUpdate = $this->getUserGroupUpdate();
-        $result = $userGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $userUpdate = $this->getUserUpdate();
+        $result = $userUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserGroupUpdateStruct',
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserUpdateStruct',
             $result,
-            'UserGroupUpdate not created correctly.'
+            'UserUpdate not created correctly.'
         );
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentUpdateStruct',
-            $result->userGroupUpdateStruct->contentUpdateStruct,
-            'UserGroupUpdate not created correctly.'
+            $result->userUpdateStruct->contentUpdateStruct,
+            'UserUpdate not created correctly.'
         );
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentMetadataUpdateStruct',
-            $result->userGroupUpdateStruct->contentMetadataUpdateStruct,
-            'UserGroupUpdate not created correctly.'
+            $result->userUpdateStruct->contentMetadataUpdateStruct,
+            'UserUpdate not created correctly.'
         );
 
         $this->assertEquals(
@@ -69,17 +71,35 @@ class UserGroupUpdateTest extends BaseTest
 
         $this->assertEquals(
             'eng-US',
-            $result->userGroupUpdateStruct->contentMetadataUpdateStruct->mainLanguageCode,
+            $result->userUpdateStruct->contentMetadataUpdateStruct->mainLanguageCode,
             'mainLanguageCode not created correctly'
         );
 
         $this->assertEquals(
             'remoteId123456',
-            $result->userGroupUpdateStruct->contentMetadataUpdateStruct->remoteId,
+            $result->userUpdateStruct->contentMetadataUpdateStruct->remoteId,
             'remoteId not created correctly'
         );
 
-        foreach ( $result->userGroupUpdateStruct->contentUpdateStruct->fields as $field )
+        $this->assertEquals(
+            'nospam@ez.no',
+            $result->userUpdateStruct->email,
+            'email not created correctly'
+        );
+
+        $this->assertEquals(
+            'somePassword',
+            $result->userUpdateStruct->password,
+            'password not created correctly'
+        );
+
+        $this->assertEquals(
+            true,
+            $result->userUpdateStruct->enabled,
+            'enabled not created correctly'
+        );
+
+        foreach ( $result->userUpdateStruct->contentUpdateStruct->fields as $field )
         {
             $this->assertEquals(
                 'foo',
@@ -90,10 +110,10 @@ class UserGroupUpdateTest extends BaseTest
     }
 
     /**
-     * Test UserGroupUpdate parser throwing exception on missing Section href
+     * Test UserUpdate parser throwing exception on missing Section href
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing '_href' attribute for Section element in UserGroupUpdate.
+     * @expectedExceptionMessage Missing '_href' attribute for Section element in UserUpdate.
      */
     public function testParseExceptionOnMissingSectionHref()
     {
@@ -104,27 +124,30 @@ class UserGroupUpdateTest extends BaseTest
             'fields' => array(
                 'field' => array(
                     array(
-                        'fieldDefinitionIdentifier' => 'name',
+                        'fieldDefinitionIdentifier' => 'first_name',
                         'fieldValue' => array()
                     ),
                     array(
-                        'fieldDefinitionIdentifier' => 'description',
+                        'fieldDefinitionIdentifier' => 'last_name',
                         'fieldValue' => array()
                     )
                 )
             ),
-            '__url' => '/user/groups/1/5'
+            'email' => 'nospam@ez.no',
+            'password' => 'somePassword',
+            'enabled' => 'true',
+            '__url' => '/user/users/14'
         );
 
-        $userGroupUpdate = $this->getUserGroupUpdateWithSimpleFieldTypeMock();
-        $userGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $userUpdate = $this->getUserUpdateWithSimpleFieldTypeMock();
+        $userUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
     /**
-     * Test UserGroupUpdate parser throwing exception on invalid fields data
+     * Test UserUpdate parser throwing exception on invalid fields data
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Invalid 'fields' element for UserGroupUpdate.
+     * @expectedExceptionMessage Invalid 'fields' element for UserUpdate.
      */
     public function testParseExceptionOnInvalidFields()
     {
@@ -135,18 +158,21 @@ class UserGroupUpdateTest extends BaseTest
             ),
             'remoteId' => 'remoteId123456',
             'fields' => array(),
-            '__url' => '/user/groups/1/5'
+            'email' => 'nospam@ez.no',
+            'password' => 'somePassword',
+            'enabled' => 'true',
+            '__url' => '/user/users/14'
         );
 
-        $userGroupUpdate = $this->getUserGroupUpdateWithSimpleFieldTypeMock();
-        $userGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $userUpdate = $this->getUserUpdateWithSimpleFieldTypeMock();
+        $userUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
     /**
-     * Test UserGroupUpdate parser throwing exception on missing field definition identifier
+     * Test UserUpdate parser throwing exception on missing field definition identifier
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing 'fieldDefinitionIdentifier' element in field data for UserGroupUpdate.
+     * @expectedExceptionMessage Missing 'fieldDefinitionIdentifier' element in field data for UserUpdate.
      */
     public function testParseExceptionOnMissingFieldDefinitionIdentifier()
     {
@@ -162,23 +188,26 @@ class UserGroupUpdateTest extends BaseTest
                         'fieldValue' => array()
                     ),
                     array(
-                        'fieldDefinitionIdentifier' => 'description',
+                        'fieldDefinitionIdentifier' => 'last_name',
                         'fieldValue' => array()
                     )
                 )
             ),
-            '__url' => '/user/groups/1/5'
+            'email' => 'nospam@ez.no',
+            'password' => 'somePassword',
+            'enabled' => 'true',
+            '__url' => '/user/users/14'
         );
 
-        $userGroupUpdate = $this->getUserGroupUpdateWithSimpleFieldTypeMock();
-        $userGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $userUpdate = $this->getUserUpdateWithSimpleFieldTypeMock();
+        $userUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
     /**
-     * Test UserGroupUpdate parser throwing exception on missing field value
+     * Test UserUpdate parser throwing exception on missing field value
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing 'fieldValue' element for 'name' identifier in UserGroupUpdate.
+     * @expectedExceptionMessage Missing 'fieldValue' element for 'first_name' identifier in UserUpdate.
      */
     public function testParseExceptionOnMissingFieldValue()
     {
@@ -191,50 +220,53 @@ class UserGroupUpdateTest extends BaseTest
             'fields' => array(
                 'field' => array(
                     array(
-                        'fieldDefinitionIdentifier' => 'name',
+                        'fieldDefinitionIdentifier' => 'first_name',
                     ),
                     array(
-                        'fieldDefinitionIdentifier' => 'description',
+                        'fieldDefinitionIdentifier' => 'last_name',
                         'fieldValue' => array()
                     )
                 )
             ),
-            '__url' => '/user/groups/1/5'
+            'email' => 'nospam@ez.no',
+            'password' => 'somePassword',
+            'enabled' => 'true',
+            '__url' => '/user/users/14'
         );
 
-        $userGroupUpdate = $this->getUserGroupUpdateWithSimpleFieldTypeMock();
-        $userGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $userUpdate = $this->getUserUpdateWithSimpleFieldTypeMock();
+        $userUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
     /**
-     * Returns the UserGroupUpdate parser
+     * Returns the UserUpdate parser
      *
-     * @return \eZ\Publish\Core\REST\Server\Input\Parser\UserGroupUpdate
+     * @return \eZ\Publish\Core\REST\Server\Input\Parser\UserUpdate
      */
-    protected function getUserGroupUpdate()
+    protected function getUserUpdate()
     {
-        return new UserGroupUpdate(
+        return new UserUpdate(
             $this->getUrlHandler(),
             $this->getRepository()->getUserService(),
             $this->getRepository()->getContentService(),
-            $this->getRepository()->getLocationService(),
-            $this->getFieldTypeParserMock()
+            $this->getFieldTypeParserMock(),
+            $this->getParserTools()
         );
     }
 
     /**
-     * Returns the UserGroupUpdate parser
+     * Returns the UserUpdate parser
      *
-     * @return \eZ\Publish\Core\REST\Server\Input\Parser\UserGroupUpdate
+     * @return \eZ\Publish\Core\REST\Server\Input\Parser\UserUpdate
      */
-    protected function getUserGroupUpdateWithSimpleFieldTypeMock()
+    protected function getUserUpdateWithSimpleFieldTypeMock()
     {
-        return new UserGroupUpdate(
+        return new UserUpdate(
             $this->getUrlHandler(),
             $this->getRepository()->getUserService(),
             $this->getRepository()->getContentService(),
-            $this->getRepository()->getLocationService(),
-            $this->getSimpleFieldTypeParserMock()
+            $this->getSimpleFieldTypeParserMock(),
+            $this->getParserTools()
         );
     }
 
@@ -249,12 +281,12 @@ class UserGroupUpdateTest extends BaseTest
 
         $fieldTypeParserMock->expects( $this->at( 0 ) )
             ->method( 'parseFieldValue' )
-            ->with( 4, 'name', array() )
+            ->with( 14, 'first_name', array() )
             ->will( $this->returnValue( 'foo' ) );
 
         $fieldTypeParserMock->expects( $this->at( 1 ) )
             ->method( 'parseFieldValue' )
-            ->with( 4, 'description', array() )
+            ->with( 14, 'last_name', array() )
             ->will( $this->returnValue( 'foo' ) );
 
         return $fieldTypeParserMock;

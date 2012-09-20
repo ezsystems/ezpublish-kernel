@@ -312,6 +312,49 @@ class User
     }
 
     /**
+     * Updates a user
+     *
+     * @param \Qafoo\RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\RestUser
+     */
+    public function updateUser( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'user', $request->path );
+
+        $user = $this->userService->loadUser( $urlValues['user'] );
+
+        $updateStruct = $this->inputDispatcher->parse(
+            new Message(
+                array(
+                    'Content-Type' => $request->contentType,
+                    // @todo Needs refactoring! Temporary solution so parser has access to URL
+                    'Url' => $request->path
+                ),
+                $request->body
+            )
+        );
+
+        if ( $updateStruct->sectionId !== null )
+        {
+            $section = $this->sectionService->loadSection( $updateStruct->sectionId );
+            $this->sectionService->assignSection(
+                $user->getVersionInfo()->getContentInfo(),
+                $section
+            );
+        }
+
+        $updatedUser = $this->userService->updateUser( $user, $updateStruct->userUpdateStruct );
+        $updatedContentInfo = $updatedUser->getVersionInfo()->getContentInfo();
+        $mainLocation = $this->locationService->loadLocation( $updatedContentInfo->mainLocationId );
+
+        return new Values\RestUser(
+            $updatedUser,
+            $updatedContentInfo,
+            $mainLocation
+        );
+    }
+
+    /**
      * Given user group is deleted
      *
      * @param RMF\Request $request
