@@ -7,22 +7,24 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Input\Converter;
+namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Converter\Input;
 
-use eZ\Publish\Core\FieldType\XmlText\Input\Converter\EzXml as Converter,
+use eZ\Publish\Core\FieldType\XmlText\Converter\Input\EzXml as Converter,
     PHPUnit_Framework_TestCase,
     Exception;
 
 class EzXmlTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\FieldType\XmlText\Input\Converter
+     * @var \eZ\Publish\Core\FieldType\XmlText\Converter\Input
      */
     private $converter;
 
     public function setUp()
     {
-        $this->converter = new Converter();
+        $this->converter = new Converter(
+            __DIR__ . "/../../../../../../../Bundle/EzPublishCoreBundle/Resources/schemas/ezxml.xsd"
+        );
     }
 
     /**

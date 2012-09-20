@@ -26,6 +26,8 @@ parameters:
     ezpublish.fieldType.ezxmltext.simplifiedInputParser.class: eZ\Publish\Core\FieldType\XmlText\Input\Parser\Simplified
     ezpublish.fieldType.ezxmltext.xmlSchema.class: eZ\Publish\Core\FieldType\XmlText\Schema
     ezpublish.fieldType.ezxmltext.xmlSchema.options: []
+    ezpublish.fieldType.ezxmltext.converter.html5.class: eZ\Publish\Core\FieldType\XmlText\Converter\Output\Html5
+    ezpublish.fieldType.ezxmltext.converter.html5.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish/eZ/Bundle/EzPublishCoreBundle/Resources/stylesheets/eZXml2Html5.xsl
     # ezpublish.fieldType.ezxmltext.xmlSchema.options:
     #    customAttributes:
     #         table:
@@ -195,6 +197,11 @@ services:
         class: %ezpublish.fieldType.ezxmltext.xmlSchema.class%
         arguments:
             - %ezpublish.fieldType.ezxmltext.xmlSchema.options%
+        public: false
+
+    ezpublish.fieldType.ezxmltext.converter.html5:
+        class: %ezpublish.fieldType.ezxmltext.converter.html5.class%
+        arguments: [%ezpublish.fieldType.ezxmltext.converter.html5.resources%]
         public: false
 
     ezpublish.fieldType.ezpage:
