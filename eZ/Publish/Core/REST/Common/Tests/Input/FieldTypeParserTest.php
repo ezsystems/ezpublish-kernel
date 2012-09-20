@@ -10,8 +10,9 @@
 namespace eZ\Publish\Core\REST\Common\Tests\Input;
 
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
-use eZ\Publish\Core\REST\Client\Values\Content\ContentInfo;
-use eZ\Publish\Core\REST\Client\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 
 /**
  * FieldTypeParser test class
@@ -31,28 +32,28 @@ class FieldTypeParserTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->contentServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Client\\ContentService',
+            'eZ\\Publish\\Core\\Repository\\ContentService',
             array(),
             array(),
             '',
             false
         );
         $this->contentTypeServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Client\\ContentTypeService',
+            'eZ\\Publish\\Core\\Repository\\ContentTypeService',
             array(),
             array(),
             '',
             false
         );
         $this->fieldTypeServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Client\\FieldTypeService',
+            'eZ\\Publish\\Core\\Repository\\FieldTypeService',
             array(),
             array(),
             '',
             false
         );
         $this->contentTypeMock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Client\\Values\\ContentType\\ContentType',
+            'eZ\\Publish\\Core\\Repository\\Values\\ContentType\\ContentType',
             array(),
             array(),
             '',
@@ -73,12 +74,16 @@ class FieldTypeParserTest extends \PHPUnit_Framework_TestCase
 
         $this->contentServiceMock->expects( $this->once() )
             ->method( 'loadContentInfo' )
-            ->with( '/content/23' )
+            ->with( '23' )
             ->will( $this->returnValue(
                 new ContentInfo(
-                    $this->contentTypeServiceMock,
                     array(
-                    'contentTypeId' => '/content/types/42'
+                        'contentType' => new ContentType(
+                            array(
+                                'id' => '42',
+                                'fieldDefinitions' => array()
+                            )
+                        )
                     )
                 )
             ) );
@@ -86,7 +91,7 @@ class FieldTypeParserTest extends \PHPUnit_Framework_TestCase
         $contentTypeMock = $this->contentTypeMock;
         $this->contentTypeServiceMock->expects( $this->once() )
             ->method( 'loadContentType' )
-            ->with( '/content/types/42' )
+            ->with( '42' )
             ->will( $this->returnCallback(
                 // Avoid PHPUnit cloning
                 function () use ( $contentTypeMock )
@@ -124,7 +129,7 @@ class FieldTypeParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             array( 'foo', 'bar' ),
             $fieldTypeParser->parseFieldValue(
-                '/content/23',
+                '23',
                 'my-field-definition',
                 array( 1, 2, 3 )
             )
