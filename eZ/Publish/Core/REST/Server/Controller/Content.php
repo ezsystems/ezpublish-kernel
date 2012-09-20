@@ -180,7 +180,7 @@ class Content
      * Loads a specific version of a given content object
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceRedirect
+     * @return \eZ\Publish\Core\REST\Server\Values\TemporaryRedirect
      */
     public function redirectCurrentVersion( RMF\Request $request )
     {
@@ -190,7 +190,7 @@ class Content
             $this->contentService->loadContentInfo( $urlValues['object'] )
         );
 
-        return new Values\ResourceRedirect(
+        return new Values\TemporaryRedirect(
             $this->urlHandler->generate(
                 'objectVersion',
                 array(
@@ -436,14 +436,14 @@ class Content
      * Redirects to the relations of the current version
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceRedirect
+     * @return \eZ\Publish\Core\REST\Server\Values\TemporaryRedirect
      */
     public function redirectCurrentVersionRelations( RMF\Request $request )
     {
         $urlValues = $this->urlHandler->parse( 'objectrelations', $request->path );
 
         $contentInfo = $this->contentService->loadContentInfo( $urlValues['object'] );
-        return new Values\ResourceRedirect(
+        return new Values\TemporaryRedirect(
             $this->urlHandler->generate(
                 'objectVersionRelations',
                 array(

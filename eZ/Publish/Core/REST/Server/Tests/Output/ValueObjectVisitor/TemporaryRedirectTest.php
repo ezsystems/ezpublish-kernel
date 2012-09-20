@@ -14,21 +14,21 @@ use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Common;
 
-class ResourceRedirectTest extends ValueObjectVisitorBaseTest
+class TemporaryRedirectTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the ResourceRedirect visitor
+     * Test the TemporaryRedirect visitor
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getResourceRedirectVisitor();
+        $visitor   = $this->getTemporaryRedirectVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
 
-        $redirect = new Values\ResourceRedirect(
+        $redirect = new Values\TemporaryRedirect(
             '/some/redirect/uri',
             'Version'
         );
@@ -50,13 +50,13 @@ class ResourceRedirectTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the ResourceRedirect visitor
+     * Get the TemporaryRedirect visitor
      *
-     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ResourceRedirect
+     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\TemporaryRedirect
      */
-    protected function getResourceRedirectVisitor()
+    protected function getTemporaryRedirectVisitor()
     {
-        return new ValueObjectVisitor\ResourceRedirect(
+        return new ValueObjectVisitor\TemporaryRedirect(
             new Common\UrlHandler\eZPublish()
         );
     }
