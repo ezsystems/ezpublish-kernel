@@ -30,7 +30,7 @@
 
 {% block ezauthor_field %}
 {% spaceless %}
-    {% if field.value|length() > 0 %}
+    {% if field.value.authors|length() > 0 %}
         <ul {{ block( 'field_attributes' ) }}>
         {% for author in field.value.authors %}
             <li><a href="mailto:{{ author.email }}">{{ author.name }}</a></li>
