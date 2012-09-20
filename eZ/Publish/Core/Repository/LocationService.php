@@ -485,9 +485,6 @@ class LocationService implements LocationServiceInterface
             $content = $this->repository->getContentService()->loadContent( $newLocation->contentId );
 
             $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
-            $alwaysAvailableLanguageCode = ( isset( $urlAliasNames["always-available"] ) && isset( $urlAliasNames[$urlAliasNames["always-available"]] ) )
-                ? $urlAliasNames[$urlAliasNames["always-available"]]
-                : null;
             foreach ( $urlAliasNames as $languageCode => $name )
             {
                 $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
@@ -495,7 +492,7 @@ class LocationService implements LocationServiceInterface
                     $newLocation->parentId,
                     $name,
                     $languageCode,
-                    $languageCode === $alwaysAvailableLanguageCode
+                    $content->contentInfo->alwaysAvailable
                 );
             }
 

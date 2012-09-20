@@ -1162,9 +1162,6 @@ class ContentService implements ContentServiceInterface
         $content = $this->buildContentDomainObject( $spiContent );
 
         $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
-        $alwaysAvailableLanguageCode = ( isset( $urlAliasNames["always-available"] ) && isset( $urlAliasNames[$urlAliasNames["always-available"]] ) )
-            ? $urlAliasNames[$urlAliasNames["always-available"]]
-            : null;
         foreach ( $spiContent->locations as $spiLocation )
         {
             foreach ( $urlAliasNames as $languageCode => $name )
@@ -1174,7 +1171,7 @@ class ContentService implements ContentServiceInterface
                     $spiLocation->parentId,
                     $name,
                     $languageCode,
-                    $languageCode === $alwaysAvailableLanguageCode
+                    $content->contentInfo->alwaysAvailable
                 );
             }
         }

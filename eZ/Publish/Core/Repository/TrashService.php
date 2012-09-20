@@ -176,9 +176,6 @@ class TrashService implements TrashServiceInterface
 
             // Publish URL aliases for recovered location
             $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
-            $alwaysAvailableLanguageCode = ( isset( $urlAliasNames["always-available"] ) && isset( $urlAliasNames[$urlAliasNames["always-available"]] ) )
-                ? $urlAliasNames[$urlAliasNames["always-available"]]
-                : null;
             foreach ( $urlAliasNames as $languageCode => $name )
             {
                 $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
@@ -186,7 +183,7 @@ class TrashService implements TrashServiceInterface
                     $newParentLocationId,
                     $name,
                     $languageCode,
-                    $languageCode === $alwaysAvailableLanguageCode
+                    $content->contentInfo->alwaysAvailable
                 );
             }
 
