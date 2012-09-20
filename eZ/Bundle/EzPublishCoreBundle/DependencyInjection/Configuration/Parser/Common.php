@@ -43,6 +43,20 @@ class Common implements Parser
                     ->scalarNode( 'dsn' )->info( 'Full database DSN. Will replace settings above.' )->example( 'mysql://root:root@localhost:3306/ezdemo' )->end()
                 ->end()
             ->end()
+            ->scalarNode( 'var_dir' )
+                ->cannotBeEmpty()
+                ->defaultValue( 'var' )
+                ->example( 'var/ezdemo_site' )
+                ->info( 'The directory relative to web/ where files are stored' )
+            ->end()
+            ->scalarNode( 'storage_dir' )
+                ->cannotBeEmpty()
+                ->defaultValue( 'storage' )
+            ->end()
+            ->scalarNode( 'binary_dir' )
+                ->cannotBeEmpty()
+                ->defaultValue( 'original' )
+            ->end()
             ->booleanNode( 'url_alias_router' )
                 ->info( 'Whether to use UrlAliasRouter or not. If false, will let the legacy kernel handle url aliases.' )
                 ->defaultValue( true )
@@ -86,6 +100,13 @@ class Common implements Parser
 
             // urlAliasRouter
             $container->setParameter( "ezsettings.$sa.url_alias_router", $settings['url_alias_router'] );
+            $container->setParameter( "ezsettings.$sa.var_dir", $settings['var_dir'] );
+            $storageDir = rtrim( $settings['var_dir'], '/' ) . '/' . $settings['storage_dir'];
+            $container->setParameter( "ezsettings.$sa.storage_dir", $storageDir );
+            $container->setParameter(
+                "ezsettings.$sa.binary_dir",
+                ltrim( $storageDir, '/' ) . '/' . $settings['binary_dir']
+            );
         }
     }
 }
