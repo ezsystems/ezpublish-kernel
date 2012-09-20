@@ -110,6 +110,8 @@ class SortClauseConverter
                 $direction === Query::SORT_ASC ? ezcQuerySelect::ASC : ezcQuerySelect::DESC
             );
         }
+
+        $this->sortColumns = array();
     }
 }
 
