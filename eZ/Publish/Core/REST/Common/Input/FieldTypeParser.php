@@ -41,7 +41,7 @@ class FieldTypeParser
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
-     * @param \eZ\Publish\Core\REST\Commmon\FieldTypeProcessorRegistry $fieldTypeProcessorRegistry
+     * @param \eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry $fieldTypeProcessorRegistry
      */
     public function __construct(
         ContentService $contentService,
@@ -67,7 +67,7 @@ class FieldTypeParser
     public function parseFieldValue( $contentInfoId, $fieldDefIdentifier, $value )
     {
         $contentInfo = $this->contentService->loadContentInfo( $contentInfoId );
-        $contentType = $this->contentTypeService->loadContentType( $contentInfo->contentTypeId );
+        $contentType = $this->contentTypeService->loadContentType( $contentInfo->getContentType()->id );
 
         $fieldDefinition = $contentType->getFieldDefinition( $fieldDefIdentifier );
 
