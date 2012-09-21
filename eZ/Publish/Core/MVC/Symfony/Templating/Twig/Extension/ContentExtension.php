@@ -118,6 +118,7 @@ class ContentExtension extends Twig_Extension
         $params += array(
             'lang' => null,
             'editMode' => false,
+            'parameters' => array(), // parameters dedicated to template processing
             'attr' => array() // attributes to add on the enclosing HTML tags
         );
 
