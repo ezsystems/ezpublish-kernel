@@ -601,7 +601,7 @@ abstract class LocationBase extends BaseServiceTest
     {
         $locationService = $this->repository->getLocationService();
 
-        $location1 = $locationService->loadLocation( 13 );
+        $location1 = $locationService->loadLocation( 2 );
         $location2 = $locationService->loadLocation( 44 );
 
         $contentId1 = $location1->getContentInfo()->id;
@@ -609,7 +609,7 @@ abstract class LocationBase extends BaseServiceTest
 
         $locationService->swapLocation( $location1, $location2 );
 
-        $location1 = $locationService->loadLocation( 13 );
+        $location1 = $locationService->loadLocation( 2 );
         $location2 = $locationService->loadLocation( 44 );
 
         self::assertEquals( $contentId1, $location2->getContentInfo()->id );

@@ -1340,15 +1340,15 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $administratorsLocationId = $this->generateId( 'location', 13 );
+        $mediaLocationId = $this->generateId( 'location', 43 );
         /* BEGIN: Use Case */
-        // $administratorsLocationId is the ID of the location of the
-        // "Administrator users" group in an eZ Publish demo installation
+        // $mediaLocationId is the ID of the location of the
+        // "Media" location in an eZ Publish demo installation
 
         $locationService = $repository->getLocationService();
 
         // Load the current the user group location
-        $location = $locationService->loadLocation( $administratorsLocationId );
+        $location = $locationService->loadLocation( $mediaLocationId );
 
         // Load the parent location
         $parentLocation = $locationService->loadLocation(
