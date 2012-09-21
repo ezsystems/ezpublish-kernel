@@ -1,29 +1,48 @@
 {
-    "hash": "bcda13f715d994db0c147bb496239f69",
+    "hash": "a7888e7e4d2c617c21e5fdf715b16d3d",
     "packages": [
+
+    ],
+    "packages-dev": [
         {
-            "package": "symfony-cmf/routing",
-            "version": "dev-master",
-            "alias-pretty-version": "1.0.x-dev",
-            "alias-version": "1.0.9999999.9999999-dev"
+            "package": "doctrine/common",
+            "version": "2.3.x-dev",
+            "source-reference": "605b1b8b5a7bc8daf9111fb35483e5708e30de35",
+            "commit-date": "1346249247"
         },
         {
-            "package": "symfony-cmf/routing",
+            "package": "ezsystems/ezpublish-legacy",
             "version": "dev-master",
-            "source-reference": "a5810c9be0c1b29f9f32e23e117a3530d0a32300",
-            "commit-date": "1348216257"
+            "source-reference": "57a5355b6c6b6b6b320b3e317d4b6e8e6b02a2b9",
+            "commit-date": "1346920574"
         },
         {
-            "package": "zetacomponents/archive",
+            "package": "qafoo/rmf",
             "version": "dev-master",
-            "source-reference": "4b2c4a1c24b1e1f831b015c8ff72181aece7b421",
-            "commit-date": "1337594043"
+            "source-reference": "1.0.0",
+            "commit-date": "1346696651"
         },
         {
-            "package": "zetacomponents/authentication",
+            "package": "symfony/symfony",
+            "version": "v2.1.0"
+        },
+        {
+            "package": "twig/twig",
             "version": "dev-master",
-            "source-reference": "c422670d09967491c1c8c98f9334f1a738617bd0",
-            "commit-date": "1337594121"
+            "alias-pretty-version": "1.9.x-dev",
+            "alias-version": "1.9.9999999.9999999-dev"
+        },
+        {
+            "package": "twig/twig",
+            "version": "dev-master",
+            "source-reference": "459720ff3b74ee0c0d159277c6f2f5df89d8a4f6",
+            "commit-date": "1346397138"
+        },
+        {
+            "package": "zetacomponents/base",
+            "version": "dev-master",
+            "source-reference": "642f63a8a72c32996f1aaf8a317fdf746bc32ce7",
+            "commit-date": "1337599296"
         },
         {
             "package": "zetacomponents/cache",
@@ -38,28 +57,10 @@
             "commit-date": "1337594132"
         },
         {
-            "package": "zetacomponents/console-tools",
-            "version": "dev-master",
-            "source-reference": "90156abef01e4215fda8b9740f77c322f126fb02",
-            "commit-date": "1337594134"
-        },
-        {
             "package": "zetacomponents/database",
             "version": "dev-master",
             "source-reference": "0e8ddef8ce616bc18365efa2eef2161de3d7f74f",
             "commit-date": "1337594140"
-        },
-        {
-            "package": "zetacomponents/debug",
-            "version": "dev-master",
-            "source-reference": "0d8cc8fae2765c22f3f1930e4cf738304fbadbaf",
-            "commit-date": "1337594145"
-        },
-        {
-            "package": "zetacomponents/feed",
-            "version": "dev-master",
-            "source-reference": "e0190e90caf6f49771410b485fc43ff09a62b725",
-            "commit-date": "1337594158"
         },
         {
             "package": "zetacomponents/mail",
@@ -68,90 +69,10 @@
             "commit-date": "1337594175"
         },
         {
-            "package": "zetacomponents/mvc-authentication-tiein",
-            "version": "dev-master",
-            "source-reference": "9bae3a7313e2ef7f53ef1f394276acc3fde0f80e",
-            "commit-date": "1337593613"
-        },
-        {
-            "package": "zetacomponents/mvc-tools",
-            "version": "dev-master",
-            "source-reference": "6f2c1eb079faee98f37643d212cec0aa925313b2",
-            "commit-date": "1337594182"
-        },
-        {
-            "package": "zetacomponents/persistent-object",
-            "version": "dev-master",
-            "source-reference": "a4c8b95157919d71db0b380ea7c6375be117eca2",
-            "commit-date": "1337594185"
-        },
-        {
             "package": "zetacomponents/php-generator",
             "version": "dev-master",
             "source-reference": "b51935ec5b763e5bad2182d810e1b752fcc83903",
             "commit-date": "1337594190"
-        },
-        {
-            "package": "zetacomponents/signal-slot",
-            "version": "dev-master",
-            "source-reference": "74deb412339a9e9af5937a5d8726f8246b6a9ccc",
-            "commit-date": "1337609183"
-        },
-        {
-            "package": "zetacomponents/system-information",
-            "version": "dev-master",
-            "source-reference": "674336286f189d222a275bec32be9123d9faf477",
-            "commit-date": "1337594201"
-        },
-        {
-            "package": "zetacomponents/webdav",
-            "version": "1.1rc1"
-        }
-    ],
-    "packages-dev": [
-        {
-            "package": "doctrine/common",
-            "version": "2.3.x-dev",
-            "source-reference": "bb0aebbf234db52df476a2b473d434745b34221c",
-            "commit-date": "1348120518"
-        },
-        {
-            "package": "ezsystems/ezpublish-legacy",
-            "version": "dev-master",
-            "source-reference": "b124d5780175ed20238c77230d523fd3c942ebc2",
-            "commit-date": "1348232020"
-        },
-        {
-            "package": "mikey179/vfsStream",
-            "version": "v1.1.0"
-        },
-        {
-            "package": "qafoo/rmf",
-            "version": "dev-master",
-            "source-reference": "1.0.0",
-            "commit-date": "1346696651"
-        },
-        {
-            "package": "symfony/symfony",
-            "version": "v2.1.1"
-        },
-        {
-            "package": "twig/twig",
-            "version": "dev-master",
-            "alias-pretty-version": "1.10.x-dev",
-            "alias-version": "1.10.9999999.9999999-dev"
-        },
-        {
-            "package": "twig/twig",
-            "version": "dev-master",
-            "source-reference": "b4d1d62b82e83c6fd3d5a6cd46a186de64275bb4",
-            "commit-date": "1347961095"
-        },
-        {
-            "package": "zetacomponents/base",
-            "version": "dev-master",
-            "source-reference": "642f63a8a72c32996f1aaf8a317fdf746bc32ce7",
-            "commit-date": "1337599296"
         }
     ],
     "aliases": [
@@ -159,22 +80,11 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "zetacomponents/archive": 20,
-        "zetacomponents/authentication": 20,
         "zetacomponents/cache": 20,
-        "zetacomponents/configuration": 20,
-        "zetacomponents/console-tools": 20,
-        "zetacomponents/database": 20,
-        "zetacomponents/debug": 20,
-        "zetacomponents/feed": 20,
-        "zetacomponents/mail": 20,
-        "zetacomponents/mvc-tools": 20,
-        "zetacomponents/mvc-authentication-tiein": 20,
-        "zetacomponents/persistent-object": 20,
         "zetacomponents/php-generator": 20,
-        "zetacomponents/signal-slot": 20,
-        "zetacomponents/system-information": 20,
-        "zetacomponents/webdav": 5,
+        "zetacomponents/configuration": 20,
+        "zetacomponents/database": 20,
+        "zetacomponents/mail": 20,
         "qafoo/rmf": 20,
         "ezsystems/ezpublish-legacy": 20
     }
