@@ -150,7 +150,7 @@
         {% set uri = 'content/download/' ~ contentInfo.id ~ '/' ~ field.id
                         ~ '/version/' ~ contentInfo.currentVersionNo ~  "/file/"
                         ~ field.value.fileName|escape( 'url' ) %}
-        <a href="{{ path( 'ez_legacy', {'module_uri': uri} ) }}
+        <a href="{{ path( 'ez_legacy', {'module_uri': uri} ) }}"
             {{ block( 'field_attributes' ) }}">{{ field.value.fileName }}</a>&nbsp;({{ field.value.fileSize }})
     {% endif %}
 {% endspaceless %}
