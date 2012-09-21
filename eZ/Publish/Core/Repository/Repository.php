@@ -347,7 +347,11 @@ class Repository implements RepositoryInterface
         if ( $this->languageService !== null )
             return $this->languageService;
 
-        $this->languageService = new LanguageService( $this, $this->persistenceHandler, $this->serviceSettings['language'] );
+        $this->languageService = new LanguageService(
+            $this,
+            $this->persistenceHandler->contentLanguageHandler(),
+            $this->serviceSettings['language']
+        );
         return $this->languageService;
     }
 

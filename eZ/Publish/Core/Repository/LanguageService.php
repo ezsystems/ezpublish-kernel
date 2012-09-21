@@ -10,7 +10,7 @@
 
 namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface,
-    eZ\Publish\SPI\Persistence\Handler,
+    eZ\Publish\SPI\Persistence\Content\Language\Handler,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
 
     eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct,
@@ -39,9 +39,9 @@ class LanguageService implements LanguageServiceInterface
     protected $repository;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
      */
-    protected $persistenceHandler;
+    protected $languageHandler;
 
     /**
      * @var array
@@ -52,13 +52,13 @@ class LanguageService implements LanguageServiceInterface
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct( RepositoryInterface $repository, Handler $languageHandler, array $settings = array() )
     {
         $this->repository = $repository;
-        $this->persistenceHandler = $handler;
+        $this->languageHandler = $languageHandler;
         $this->settings = $settings + array(
             'languages' => array( 'eng-GB' ),// Union will skip this if $settings contains 'languages'
         );
@@ -109,7 +109,7 @@ class LanguageService implements LanguageServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $createdLanguage = $this->persistenceHandler->contentLanguageHandler()->create( $createStruct );
+            $createdLanguage = $this->languageHandler->create( $createStruct );
             $this->repository->commit();
         }
         catch ( \Exception $e )
@@ -158,7 +158,7 @@ class LanguageService implements LanguageServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->contentLanguageHandler()->update( $updateLanguageStruct );
+            $this->languageHandler->update( $updateLanguageStruct );
             $this->repository->commit();
         }
         catch ( \Exception $e )
@@ -201,7 +201,7 @@ class LanguageService implements LanguageServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->contentLanguageHandler()->update( $updateLanguageStruct );
+            $this->languageHandler->update( $updateLanguageStruct );
             $this->repository->commit();
         }
         catch ( \Exception $e )
@@ -244,7 +244,7 @@ class LanguageService implements LanguageServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->contentLanguageHandler()->update( $updateLanguageStruct );
+            $this->languageHandler->update( $updateLanguageStruct );
             $this->repository->commit();
         }
         catch ( \Exception $e )
@@ -272,7 +272,7 @@ class LanguageService implements LanguageServiceInterface
         if ( !is_string( $languageCode ) || empty( $languageCode ) )
             throw new InvalidArgumentException( "languageCode", "language code has an invalid value" );
 
-        $language = $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode( $languageCode );
+        $language = $this->languageHandler->loadByLanguageCode( $languageCode );
         return $this->buildDomainObject( $language );
     }
 
@@ -283,7 +283,7 @@ class LanguageService implements LanguageServiceInterface
      */
     public function loadLanguages()
     {
-        $languages = $this->persistenceHandler->contentLanguageHandler()->loadAll();
+        $languages = $this->languageHandler->loadAll();
 
         $returnArray = array();
         foreach ( $languages as $language )
@@ -310,7 +310,7 @@ class LanguageService implements LanguageServiceInterface
         if ( !is_numeric( $languageId ) )
             throw new InvalidArgumentValue( "languageId", $languageId );
 
-        $language = $this->persistenceHandler->contentLanguageHandler()->load( (int) $languageId );
+        $language = $this->languageHandler->load( (int) $languageId );
 
         return $this->buildDomainObject( $language );
     }
@@ -338,7 +338,7 @@ class LanguageService implements LanguageServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->contentLanguageHandler()->delete( $loadedLanguage->id );
+            $this->languageHandler->delete( $loadedLanguage->id );
             $this->repository->commit();
         }
         catch ( LogicException $e )
