@@ -915,6 +915,9 @@ class ContentService implements ContentServiceInterface
             $user = $this->repository->getCurrentUser();
         }
 
+        if ( !$this->repository->canUser( 'content', 'read', $user ) )
+            throw new UnauthorizedException( 'content', 'read' );
+
         $spiVersionInfoList = $this->persistenceHandler->contentHandler()->loadDraftsForUser( $user->id );
 
         $versionInfoList = array();
@@ -1288,6 +1291,9 @@ class ContentService implements ContentServiceInterface
      */
     public function loadVersions( APIContentInfo $contentInfo )
     {
+        if ( !$this->repository->canUser( 'content', 'read', $contentInfo ) )
+            throw new UnauthorizedException( 'content', 'read' );
+
         $spiVersionInfoList = $this->persistenceHandler->contentHandler()->listVersions( $contentInfo->id );
 
         $versions = array();
@@ -1393,6 +1399,28 @@ class ContentService implements ContentServiceInterface
      */
     public function loadRelations( APIVersionInfo $versionInfo )
     {
+        if ( !$this->repository->canUser( 'content', 'read', $versionInfo ) )
+            throw new UnauthorizedException( 'content', 'read' );
+
+        $relations = $this->internalLoadRelations( $versionInfo );
+        foreach ( $relations as $relation )
+        {
+            if ( !$this->repository->canUser( 'content', 'read', $relation->getDestinationContentInfo() ) )
+                throw new UnauthorizedException( 'content', 'read' );
+        }
+
+        return $relations;
+    }
+
+    /**
+     * Load all outgoing relations for the given version
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[] an array of {@link Relation}
+     */
+    public function internalLoadRelations( APIVersionInfo $versionInfo )
+    {
         $contentInfo = $versionInfo->getContentInfo();
 
         $spiRelations = $this->persistenceHandler->contentHandler()->loadRelations(
@@ -1425,6 +1453,9 @@ class ContentService implements ContentServiceInterface
      */
     public function loadReverseRelations( APIContentInfo $contentInfo )
     {
+        if ( !$this->repository->canUser( 'content', 'read', $contentInfo ) )
+            throw new UnauthorizedException( 'content', 'read' );
+
         $spiRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations(
             $contentInfo->id
         );
@@ -1432,11 +1463,15 @@ class ContentService implements ContentServiceInterface
         $returnArray = array();
         foreach ( $spiRelations as $spiRelation )
         {
-            $returnArray[] = $this->buildRelationDomainObject(
+            $relation = $this->buildRelationDomainObject(
                 $spiRelation,
                 null,
                 $contentInfo
             );
+            if ( !$this->repository->canUser( 'content', 'read', $relation->getSourceContentInfo() ) )
+                throw new UnauthorizedException( 'content', 'read' );
+
+            $returnArray[] = $relation;
         }
 
         return $returnArray;
@@ -1663,7 +1698,7 @@ class ContentService implements ContentServiceInterface
             array(
                 "internalFields" => $this->buildDomainFields( $spiContent->fields ),
                 "versionInfo" => $versionInfo,
-                "relations" => $this->loadRelations( $versionInfo ),
+                "relations" => $this->internalLoadRelations( $versionInfo ),
             )
         );
     }
