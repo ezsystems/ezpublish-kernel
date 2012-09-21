@@ -123,7 +123,7 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        return $this->buildContentInfoDomainObject( $spiContentInfo );
+        return $this->buildContentInfoDomainObject( $spiContentInfo );// This throws UnauthorizedException
     }
 
     /**
@@ -204,7 +204,7 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        return $this->buildVersionInfoDomainObject( $spiVersionInfo );
+        return $this->buildVersionInfoDomainObject( $spiVersionInfo );// This throws UnauthorizedException
     }
 
     /**
@@ -264,6 +264,31 @@ class ContentService implements ContentServiceInterface
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
     public function loadContent( $contentId, array $languages = null, $versionNo = null )
+    {
+        $content = $this->internalLoadContent( $contentId, $languages, $versionNo );
+
+        if ( !$this->repository->canUser( 'content', 'read', $content ) )
+            throw new UnauthorizedException( 'content', 'read' );
+
+        return $content;
+    }
+
+
+    /**
+     * loads content in a version of the given content object.
+     *
+     * If no version number is given, the method returns the current version
+     *
+     * @access private This is only available to services that needs access to Content w/o permissions checks
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the content or version with the given id and languages does not exist
+     *
+     * @param int $contentId
+     * @param array|null $languages A language filter for fields. If not given all languages are returned
+     * @param int|null $versionNo the version number. If not given the current version is returned.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    public function internalLoadContent( $contentId, array $languages = null, $versionNo = null )
     {
         try
         {
@@ -336,7 +361,7 @@ class ContentService implements ContentServiceInterface
         $content = $this->repository->getSearchService()->findSingle( new CriterionRemoteId( $remoteId ), array(), false );
         if ( !empty( $languages ) || $versionNo !== null )
         {
-            $content = $this->loadContent( $content->id, $languages, $versionNo );
+            $content = $this->internalLoadContent( $content->id, $languages, $versionNo );
         }
 
         if ( !$this->repository->canUser( 'content', 'read', $content ) )
@@ -690,6 +715,9 @@ class ContentService implements ContentServiceInterface
             );
         }
 
+        if ( !$this->repository->canUser( 'content', 'edit', $contentInfo ) )
+            throw new UnauthorizedException( 'content', 'edt' );
+
         $this->repository->beginTransaction();
         try
         {
@@ -766,6 +794,9 @@ class ContentService implements ContentServiceInterface
      */
     public function deleteContent( APIContentInfo $contentInfo )
     {
+        if ( !$this->repository->canUser( 'content', 'remove', $contentInfo ) )
+            throw new UnauthorizedException( 'content', 'remove' );
+
         $this->repository->beginTransaction();
         try
         {
@@ -826,6 +857,9 @@ class ContentService implements ContentServiceInterface
                 "Content is not published, draft can be created only from published or archived version"
             );
         }
+
+        if ( !$this->repository->canUser( 'content', 'edit', $contentInfo ) )
+            throw new UnauthorizedException( 'content', 'edt' );
 
         $this->repository->beginTransaction();
         try
@@ -928,6 +962,9 @@ class ContentService implements ContentServiceInterface
                 "Version is not a draft and can not be updated"
             );
         }
+
+        if ( !$this->repository->canUser( 'content', 'edit', $content ) )
+            throw new UnauthorizedException( 'content', 'edt' );
 
         /** @var \eZ\Publish\API\Repository\Values\Content\Field[] $fields */
         $fields = array();
@@ -1112,15 +1149,19 @@ class ContentService implements ContentServiceInterface
      */
     public function publishVersion( APIVersionInfo $versionInfo )
     {
-        $loadedVersionInfo = $this->loadVersionInfoById(
+        $content = $this->loadContent(
             $versionInfo->contentInfo->id,
+            null,
             $versionInfo->versionNo
         );
+
+        if ( !$this->repository->canUser( 'content', 'edit', $content ) )
+            throw new UnauthorizedException( 'content', 'edt' );
 
         $this->repository->beginTransaction();
         try
         {
-            $content = $this->internalPublishVersion( $loadedVersionInfo );
+            $content = $this->internalPublishVersion( $content->getVersionInfo() );
             $this->repository->commit();
         }
         catch ( Exception $e )
@@ -1135,7 +1176,6 @@ class ContentService implements ContentServiceInterface
     /**
      * Publishes a content version
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish this version
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
@@ -1197,6 +1237,9 @@ class ContentService implements ContentServiceInterface
             );
         }
 
+        if ( !$this->repository->canUser( 'content', 'remove', $versionInfo ) )
+            throw new UnauthorizedException( 'content', 'remove' );
+
         $this->repository->beginTransaction();
         try
         {
@@ -1229,7 +1272,11 @@ class ContentService implements ContentServiceInterface
         $versions = array();
         foreach ( $spiVersionInfoList as $spiVersionInfo )
         {
-            $versions[] = $this->buildVersionInfoDomainObject( $spiVersionInfo );
+            $versionInfo = $this->buildVersionInfoDomainObject( $spiVersionInfo );
+            if ( !$this->repository->canUser( 'content', 'read', $versionInfo ) )
+                throw new UnauthorizedException( 'content', 'read' );
+
+            $versions[] = $versionInfo;
         }
 
         usort(
@@ -1282,6 +1329,9 @@ class ContentService implements ContentServiceInterface
         {
             $destinationLocationCreateStruct->remoteId = md5( uniqid( get_class( $this ), true ) );
         }
+
+        if ( !$this->repository->canUser( 'content', 'create', $contentInfo, $destinationLocationCreateStruct ) )
+            throw new UnauthorizedException( 'content', 'create' );
 
         $this->repository->beginTransaction();
         try
@@ -1395,6 +1445,9 @@ class ContentService implements ContentServiceInterface
             );
         }
 
+        if ( !$this->repository->canUser( 'content', 'edit', $sourceVersion ) )
+            throw new UnauthorizedException( 'content', 'edit' );
+
         $sourceContentInfo = $sourceVersion->getContentInfo();
 
         $this->repository->beginTransaction();
@@ -1441,6 +1494,9 @@ class ContentService implements ContentServiceInterface
                 "Relations of type common can only be removed from versions of status draft"
             );
         }
+
+        if ( !$this->repository->canUser( 'content', 'edit', $sourceVersion ) )
+            throw new UnauthorizedException( 'content', 'edit' );
 
         $spiRelations = $this->persistenceHandler->contentHandler()->loadRelations(
             $sourceVersion->getContentInfo()->id,

@@ -1058,7 +1058,7 @@ class UserService implements UserServiceInterface
     protected function buildDomainUserObject( SPIUser $spiUser, APIContent $content = null )
     {
         if ( $content === null )
-            $content = $this->repository->getContentService()->loadContent( $spiUser->id );
+            $content = $this->repository->getContentService()->internalLoadContent( $spiUser->id );
 
         return new User(
             array(
