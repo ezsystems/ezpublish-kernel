@@ -123,7 +123,11 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        return $this->buildContentInfoDomainObject( $spiContentInfo );// This throws UnauthorizedException
+        $contentInfo = $this->buildContentInfoDomainObject( $spiContentInfo );
+        if ( !$this->repository->canUser( 'content', 'read', $contentInfo ) )
+            throw new UnauthorizedException( 'content', 'read' );
+
+        return $contentInfo;
     }
 
     /**
@@ -204,7 +208,11 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        return $this->buildVersionInfoDomainObject( $spiVersionInfo );// This throws UnauthorizedException
+        $versionInfo = $this->buildVersionInfoDomainObject( $spiVersionInfo );
+        if ( !$this->repository->canUser( 'content', 'read', $versionInfo ) )
+            throw new UnauthorizedException( 'content', 'read' );
+
+        return $versionInfo;
     }
 
     /**
@@ -406,7 +414,16 @@ class ContentService implements ContentServiceInterface
             $contentCreateStruct->alwaysAvailable = false;
         }
 
-        // @todo: check for user permissions
+        // @todo: Add support for structs in Limitations
+        foreach ( $locationCreateStructs as $locationCreateStruct )
+        {
+            if ( !$this->repository->canUser( 'content', 'create', $contentCreateStruct, $locationCreateStruct ) )
+                throw new UnauthorizedException( 'content', 'read' );
+        }
+
+        if ( empty( $locationCreateStructs ) &&
+            !$this->repository->canUser( 'content', 'create', $contentCreateStruct ) )
+            throw new UnauthorizedException( 'content', 'read' );
 
         if ( !empty( $contentCreateStruct->remoteId ) )
         {
@@ -903,7 +920,11 @@ class ContentService implements ContentServiceInterface
         $versionInfoList = array();
         foreach ( $spiVersionInfoList as $spiVersionInfo )
         {
-            $versionInfoList[] = $this->buildVersionInfoDomainObject( $spiVersionInfo );
+            $versionInfo = $this->buildVersionInfoDomainObject( $spiVersionInfo );
+            if ( !$this->repository->canUser( 'content', 'read', $versionInfo ) )
+                throw new UnauthorizedException( 'content', 'read' );
+
+            $versionInfoList[] = $versionInfo;
         }
 
         return $versionInfoList;
