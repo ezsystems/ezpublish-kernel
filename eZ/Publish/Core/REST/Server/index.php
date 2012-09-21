@@ -15,27 +15,15 @@ use eZ\Publish\Core\REST\Common;
 
 use Qafoo\RMF;
 
+use eZ\Publish\Core\Base\ConfigurationManager;
+use eZ\Publish\Core\Base\ServiceContainer;
+
 ini_set( 'html_errors', 0 );
 
 /*
  * Configuration magic, this should actually be taken from services.ini in the
  * future.
  */
-
-$configFile = __DIR__ . '/database.cnf';
-
-if ( is_file( $configFile ) )
-{
-    $_ENV['DATABASE'] = trim( file_get_contents( $configFile ) );
-}
-
-if ( !isset( $_ENV['DATABASE'] ) )
-{
-    echo "The REST test server does only work with a persistent database.\n";
-    echo "Please specify a database DSN in the environment variable DATABASE.\n";
-    echo "Or create a database.cnf file with it in the same directory as index.php\n";
-    exit( 1 );
-}
 
 // Exposing $legacyKernelHandler to be a web handler (to be used in bootstrap.php)
 $legacyKernelHandler = function()
@@ -44,40 +32,45 @@ $legacyKernelHandler = function()
 };
 require_once __DIR__ . '/../../../../../bootstrap.php';
 
-/*
- * This is a very simple session handling for the repository, which allows the
- * integration tests to run multiple requests against a continuous repository
- * state. This is needed in many test methods, e.g. in
- * SectionServiceTest::testUpdateSection() where there is 1. the section loaded
- * and 2. updated.
- *
- * The test framework therefore issues an X-Test-Session header, with the same
- * session ID for a dedicated test method. If a session was already started,
- * the database is not reset for this request. NOTE: This does NOT work with
- * SQLite in-memory databases, since these are automatically cleared on request
- * shutdown!
- */
+$settingsPath = __DIR__ . '/../../../../../config.php';
+$globalSettings = include $settingsPath;
 
-$reInitializeRepository = true;
-if ( isset( $_SERVER['HTTP_X_TEST_SESSION'] ) )
+$configurationManager = new ConfigurationManager(
+    array_merge_recursive(
+        $globalSettings,
+        array(
+            'base' => array(
+                'Configuration' => array(
+                    'UseCache' => false
+                )
+            )
+        )
+    ),
+    $settings['base']['Configuration']['Paths']
+);
+
+$dependencies = array();
+if ( isset( $_ENV['legacyKernel'] ) )
 {
-    $sessionId = $_SERVER['HTTP_X_TEST_SESSION'];
-
-    $sessionFile = __DIR__ . '/.session';
-
-    // Only re-initialize the repository, if for the current session no session
-    // file exists
-    $reInitializeRepository = ( !is_file( $sessionFile )  || file_get_contents( $sessionFile ) !== $sessionId );
-
-    file_put_contents( $sessionFile, $sessionId );
+    $dependencies['@legacyKernel'] = $_ENV['legacyKernel'];
 }
 
-/*
- * The setup factory, which is also used for setting up the normal repository
- * for the integration tests, is re-used here.
- */
-$setupFactory = new \eZ\Publish\API\Repository\Tests\SetupFactory\Legacy();
-$repository   = $setupFactory->getRepository( $reInitializeRepository );
+$serviceSettings = $configManager->getConfiguration('service')->getAll();
+
+$serviceSettings['repository']['arguments']['persistence_handler'] = '@persistence_handler_legacy';
+$serviceSettings['repository']['arguments']['io_handler'] = '@io_handler_legacy';
+
+$serviceContainer = new ServiceContainer(
+    $serviceSettings,
+    $dependencies
+);
+
+$repository = $serviceContainer->getRepository();
+
+// @FIXME: THIS MUST COME FROM AUTHENTICATION IN A REAL SETUP!
+$repository->setCurrentUser(
+    $repository->getUserService()->loadUser( 14 )
+);
 
 /*
  * The following reflects a standard REST server setup
