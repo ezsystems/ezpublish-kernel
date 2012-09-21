@@ -100,12 +100,26 @@ $urlHandler = new Common\UrlHandler\eZPublish();
 // Object with convenience methods for parsers
 $parserTools = new Common\Input\ParserTools();
 
+// Processors for field type values, depend on FieldType
+$fieldTypeProcessorRegistry = new Common\FieldTypeProcessorRegistry(
+    array(
+        'ezimage' => new FieldTypeProcessor\ImageProcessor(
+            // Config for local temp dir
+            sys_get_temp_dir(),
+            // URL schema for image links (from config!)
+            'http://example.com/fancy_site/{variant}/images/{path}',
+            // Image variants (names only, from config!)
+            array( 'original', 'gallery', 'thumbnail' )
+        )
+    )
+);
+
 // Parser for field values (using FieldTypes for toHash()/fromHash() operations)
 $fieldTypeParser = new Common\Input\FieldTypeParser(
     $repository->getContentService(),
     $repository->getContentTypeService(),
     $repository->getFieldTypeService(),
-    new Common\FieldTypeProcessorRegistry()
+    $fieldTypeProcessorRegistry
 );
 
 /*
@@ -251,6 +265,11 @@ $userController = new Controller\User(
     $repository
 );
 
+$fieldTypeSerializer = new Common\Output\FieldTypeSerializer(
+    $repository->getFieldTypeService(),
+    $fieldTypeProcessorRegistry
+);
+
 /*
  * Visitors are used to transform the Value Objects returned by the Public API
  * into the output format requested by the client. In some cases, it is
@@ -294,7 +313,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\Version'                     => new Output\ValueObjectVisitor\Version( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content'               => new Output\ValueObjectVisitor\Content(
         $urlHandler,
-        new Common\Output\FieldTypeSerializer( $repository->getFieldTypeService() )
+        $fieldTypeSerializer
     ),
 
     // UserGroup
@@ -317,7 +336,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\FieldDefinitionList'         => new Output\ValueObjectVisitor\FieldDefinitionList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestFieldDefinition'         => new Output\ValueObjectVisitor\RestFieldDefinition(
         $urlHandler,
-        new Common\Output\FieldTypeSerializer( $repository->getFieldTypeService() )
+        $fieldTypeSerializer
     ),
 
     // Relation
