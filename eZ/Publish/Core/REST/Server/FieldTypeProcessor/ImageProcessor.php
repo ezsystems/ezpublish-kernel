@@ -1,0 +1,89 @@
+<?php
+/**
+ * File containing the ImageProcessor class.
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
+namespace eZ\Publish\Core\REST\Server\FieldTypeProcessor;
+
+use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
+
+class ImageProcessor extends BinaryInputProcessor
+{
+    /**
+     * Template for image URLs
+     *
+     * @var string
+     */
+    protected $urlTemplate;
+
+    /**
+     * Array of variant names
+     *
+     * @var string[]
+     */
+    protected $variants;
+
+    /**
+     * @param string $temporaryDirectory
+     * @param string $urlTemplate
+     * @param array $variants
+     */
+    public function __construct( $temporaryDirectory, $urlTemplate, array $variants )
+    {
+        parent::__construct( $temporaryDirectory );
+        $this->urlTemplate = $urlTemplate;
+        $this->variants = $variants;
+    }
+
+    /**
+     * Perform manipulations on an a generated $outgoingValueHash
+     *
+     * This method is called by the REST server to allow a field type to post
+     * process the given $outgoingValueHash, which was previously generated
+     * using {@link eZ\Publish\SPI\FieldType\FieldType::toHash()}, before it is
+     * sent to the client. The return value of this method replaces
+     * $outgoingValueHash and must obey to the same rules as the original
+     * $outgoingValueHash.
+     *
+     * @param mixed $outgoingValueHash
+     * @return mixed Post processed hash
+     */
+    public function postProcessHash( $outgoingValueHash )
+    {
+        $outgoingValueHash['variants'] = array();
+        foreach ( $this->variants as $variant )
+        {
+            $outgoingValueHash['variants'][] = $this->generateUrl(
+                $outgoingValueHash['path'],
+                $variant
+            );
+        }
+        return $outgoingValueHash;
+    }
+
+    /**
+     * Generates a URL for $path in $variant
+     *
+     * @param string $path
+     * @param string $variant
+     * @return string
+     */
+    protected function generateUrl( $path, $variant )
+    {
+        return str_replace(
+            array(
+                '{variant}',
+                '{path}'
+            ),
+            array(
+                $variant,
+                $path
+            ),
+            $this->urlTemplate
+        );
+    }
+}
