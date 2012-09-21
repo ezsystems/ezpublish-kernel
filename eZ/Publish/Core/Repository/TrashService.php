@@ -84,8 +84,15 @@ class TrashService implements TrashServiceInterface
         if ( !is_numeric( $trashItemId ) )
             throw new InvalidArgumentValue( "trashItemId", $trashItemId );
 
+        if ( $this->repository->hasAccess( 'content', 'restore' ) !== true )
+            throw new UnauthorizedException( 'content', 'restore' );
+
         $spiTrashItem = $this->persistenceHandler->trashHandler()->loadTrashItem( $trashItemId );
-        return $this->buildDomainTrashItemObject( $spiTrashItem );
+        $trash = $this->buildDomainTrashItemObject( $spiTrashItem );
+        if ( !$this->repository->canUser( 'content', 'read', $trash->getContentInfo() ) )
+            throw new UnauthorizedException( 'content', 'read' );
+
+        return $trash;
     }
 
     /**

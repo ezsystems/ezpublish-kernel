@@ -38,6 +38,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
+    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
 
     DateTime;
 
@@ -109,6 +110,9 @@ class LocationService implements LocationServiceInterface
         if ( stripos( $loadedTargetLocation->pathString, $loadedSubtree->pathString ) !== false )
             throw new InvalidArgumentException("targetParentLocation", "target parent location is a sub location of the given subtree");
 
+        if ( !$this->repository->canUser( 'content', 'create', $loadedSubtree->getContentInfo(), $loadedTargetLocation ) )
+            throw new UnauthorizedException( 'content', 'create' );
+
         $this->repository->beginTransaction();
         try
         {
@@ -143,7 +147,11 @@ class LocationService implements LocationServiceInterface
             throw new InvalidArgumentValue( "locationId", $locationId );
 
         $spiLocation = $this->persistenceHandler->locationHandler()->load( $locationId );
-        return $this->buildDomainLocationObject( $spiLocation );
+        $location = $this->buildDomainLocationObject( $spiLocation );
+        if ( !$this->repository->canUser( 'content', 'read', $location->getContentInfo(), $location ) )
+            throw new UnauthorizedException( 'content', 'read' );
+
+        return $location;
     }
 
     /**
@@ -185,7 +193,13 @@ class LocationService implements LocationServiceInterface
             foreach ( $searchResult->searchHits[0]->valueObject->locations as $spiLocation )
             {
                 if ( $spiLocation->remoteId === $remoteId )
-                    return $this->buildDomainLocationObject( $spiLocation );
+                {
+                    $location = $this->buildDomainLocationObject( $spiLocation );
+                    if ( !$this->repository->canUser( 'content', 'read', $location->getContentInfo(), $location ) )
+                        throw new UnauthorizedException( 'content', 'read' );
+
+                    return $location;
+                }
             }
         }
 
@@ -231,7 +245,13 @@ class LocationService implements LocationServiceInterface
         foreach ( $spiLocations as $spiLocation )
         {
             if ( $spiLocation->id == $spiLocation->mainLocationId )
-                return $this->buildDomainLocationObject( $spiLocation );
+            {
+                $location = $this->buildDomainLocationObject( $spiLocation );
+                if ( !$this->repository->canUser( 'content', 'read', $location->getContentInfo(), $location ) )
+                    throw new UnauthorizedException( 'content', 'read' );
+
+                return $location;
+            }
         }
 
         return null;
@@ -448,6 +468,9 @@ class LocationService implements LocationServiceInterface
             }
         }
 
+        if ( !$this->repository->canUser( 'content', 'create', $contentInfo, $loadedParentLocation ) )
+            throw new UnauthorizedException( 'content', 'create' );
+
         $createStruct = new CreateStruct();
         $createStruct->priority = $locationCreateStruct->priority !== null ? (int) $locationCreateStruct->priority : null;
 
@@ -548,6 +571,9 @@ class LocationService implements LocationServiceInterface
             catch ( APINotFoundException $e ) {}
         }
 
+        if ( !$this->repository->canUser( 'content', 'edit', $loadedLocation->getContentInfo(), $loadedLocation ) )
+            throw new UnauthorizedException( 'content', 'edit' );
+
         $updateStruct = new UpdateStruct();
         $updateStruct->priority = $locationUpdateStruct->priority !== null ? (int) $locationUpdateStruct->priority : $loadedLocation->priority;
         $updateStruct->remoteId = $locationUpdateStruct->remoteId !== null ? trim( $locationUpdateStruct->remoteId ) : $loadedLocation->remoteId;
@@ -588,6 +614,11 @@ class LocationService implements LocationServiceInterface
         $loadedLocation1 = $this->loadLocation( $location1->id );
         $loadedLocation2 = $this->loadLocation( $location2->id );
 
+        if ( !$this->repository->canUser( 'content', 'edit', $loadedLocation1->getContentInfo(), $loadedLocation1 ) )
+            throw new UnauthorizedException( 'content', 'edit' );
+        if ( !$this->repository->canUser( 'content', 'edit', $loadedLocation2->getContentInfo(), $loadedLocation2 ) )
+            throw new UnauthorizedException( 'content', 'edit' );
+
         $this->repository->beginTransaction();
         try
         {
@@ -614,6 +645,9 @@ class LocationService implements LocationServiceInterface
     {
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
+
+        if ( !$this->repository->canUser( 'content', 'hide', $location->getContentInfo(), $location ) )
+            throw new UnauthorizedException( 'content', 'hide' );
 
         $this->repository->beginTransaction();
         try
@@ -646,6 +680,9 @@ class LocationService implements LocationServiceInterface
     {
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
+
+        if ( !$this->repository->canUser( 'content', 'hide', $location->getContentInfo(), $location ) )
+            throw new UnauthorizedException( 'content', 'hide' );
 
         $this->repository->beginTransaction();
         try
@@ -681,6 +718,9 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $newParentLocation->id ) )
             throw new InvalidArgumentValue( "id", $newParentLocation->id, "Location" );
 
+        if ( !$this->repository->canUser( 'content', 'create', $location->getContentInfo(), $newParentLocation ) )
+            throw new UnauthorizedException( 'content', 'create' );
+
         $this->repository->beginTransaction();
         try
         {
@@ -705,6 +745,11 @@ class LocationService implements LocationServiceInterface
     {
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
+
+        if ( !$this->repository->canUser( 'content', 'manage_locations', $location->getContentInfo() ) )
+            throw new UnauthorizedException( 'content', 'manage_locations' );
+        if ( !$this->repository->canUser( 'content', 'remove', $location->getContentInfo(), $location ) )
+            throw new UnauthorizedException( 'content', 'remove' );
 
         $this->repository->beginTransaction();
         try

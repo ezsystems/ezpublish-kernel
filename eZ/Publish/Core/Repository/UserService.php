@@ -41,6 +41,7 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\Core\Base\Exceptions\BadStateException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
 
     ezcMailTools;
 
@@ -182,6 +183,9 @@ class UserService implements UserServiceInterface
         $locationService = $this->repository->getLocationService();
 
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
+        if ( !$this->repository->canUser( 'content', 'read', $loadedUserGroup ) )
+            throw new UnauthorizedException( 'content', 'read' );
+
         $mainGroupLocation = $locationService->loadMainLocation( $loadedUserGroup->getVersionInfo()->getContentInfo() );
 
         if ( $mainGroupLocation === null )
@@ -236,7 +240,7 @@ class UserService implements UserServiceInterface
 
         $searchQuery->sortClauses = $sortClause;
 
-        return $this->repository->getSearchService()->findContent( $searchQuery, array() );
+        return $this->repository->getSearchService()->findContent( $searchQuery, array(), false );
     }
 
     /**
