@@ -391,7 +391,7 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testFindSingleFailMultiple()
     {
