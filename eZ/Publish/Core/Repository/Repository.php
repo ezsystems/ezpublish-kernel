@@ -368,7 +368,11 @@ class Repository implements RepositoryInterface
         if ( $this->contentTypeService !== null )
             return $this->contentTypeService;
 
-        $this->contentTypeService = new ContentTypeService( $this, $this->persistenceHandler, $this->serviceSettings['contentType'] );
+        $this->contentTypeService = new ContentTypeService(
+            $this,
+            $this->persistenceHandler->contentTypeHandler(),
+            $this->serviceSettings['contentType']
+        );
         return $this->contentTypeService;
     }
 

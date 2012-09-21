@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\SPI\Persistence\Handler,
+    eZ\Publish\SPI\Persistence\Content\Type\Handler,
     eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
     eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException,
     eZ\Publish\API\Repository\Values\User\User,
@@ -61,9 +61,9 @@ class ContentTypeService implements ContentTypeServiceInterface
     protected $repository;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
      */
-    protected $persistenceHandler;
+    protected $contentTypeHandler;
 
     /**
      * @var array
@@ -74,13 +74,13 @@ class ContentTypeService implements ContentTypeServiceInterface
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct( RepositoryInterface $repository, Handler $contentTypeHandler, array $settings = array() )
     {
         $this->repository = $repository;
-        $this->persistenceHandler = $handler;
+        $this->contentTypeHandler = $contentTypeHandler;
         $this->settings = $settings;
     }
 
@@ -138,7 +138,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $spiContentTypeGroup = $this->persistenceHandler->contentTypeHandler()->createGroup(
+            $spiContentTypeGroup = $this->contentTypeHandler->createGroup(
                 $spiGroupCreateStruct
             );
             $this->repository->commit();
@@ -168,7 +168,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new InvalidArgumentValue( '$contentTypeGroupId', $contentTypeGroupId );
         }
 
-        $spiGroup = $this->persistenceHandler->contentTypeHandler()->loadGroup(
+        $spiGroup = $this->contentTypeHandler->loadGroup(
             $contentTypeGroupId
         );
 
@@ -206,7 +206,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function loadContentTypeGroups()
     {
-        $spiGroups = $this->persistenceHandler->contentTypeHandler()->loadAllGroups();
+        $spiGroups = $this->contentTypeHandler->loadAllGroups();
 
         $groups = array();
         foreach ( $spiGroups as $spiGroup )
@@ -273,7 +273,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->contentTypeHandler()->updateGroup(
+            $this->contentTypeHandler->updateGroup(
                 $spiGroupUpdateStruct
             );
             $this->repository->commit();
@@ -303,7 +303,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->contentTypeHandler()->deleteGroup(
+            $this->contentTypeHandler->deleteGroup(
                 $contentTypeGroup->id
             );
             $this->repository->commit();
@@ -389,7 +389,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         try
         {
-            $this->persistenceHandler->contentTypeHandler()->loadByIdentifier(
+            $this->contentTypeHandler->loadByIdentifier(
                 $contentTypeCreateStruct->identifier
             );
 
@@ -405,7 +405,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         try
         {
-            $this->persistenceHandler->contentTypeHandler()->loadByRemoteId(
+            $this->contentTypeHandler->loadByRemoteId(
                 $contentTypeCreateStruct->remoteId
             );
 
@@ -466,7 +466,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             $contentTypeCreateStruct->remoteId = md5( uniqid( get_class( $contentTypeCreateStruct ), true ) );
         }
 
-        $initialLanguageId = $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
+        $initialLanguageId = $this->repository->getContentLanguageService()->loadLanguage(
             $contentTypeCreateStruct->mainLanguageCode
         )->id;
         $groupIds = array_map(
@@ -508,7 +508,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $spiContentType = $this->persistenceHandler->contentTypeHandler()->create(
+            $spiContentType = $this->contentTypeHandler->create(
                 $spiContentTypeCreateStruct
             );
             $this->repository->commit();
@@ -657,7 +657,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     protected function buildContentTypeDomainObject( SPIContentType $spiContentType )
     {
-        $mainLanguageCode = $this->persistenceHandler->contentLanguageHandler()->load(
+        $mainLanguageCode = $this->repository->getContentLanguageService()->loadLanguageById(
             $spiContentType->initialLanguageId
         )->languageCode;
 
@@ -763,7 +763,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new InvalidArgumentValue( '$contentTypeId', $contentTypeId );
         }
 
-        $spiContentType = $this->persistenceHandler->contentTypeHandler()->load(
+        $spiContentType = $this->contentTypeHandler->load(
             $contentTypeId,
             SPIContentType::STATUS_DEFINED
         );
@@ -789,7 +789,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new InvalidArgumentValue( '$identifier', $identifier );
         }
 
-        $spiContentType = $this->persistenceHandler->contentTypeHandler()->loadByIdentifier(
+        $spiContentType = $this->contentTypeHandler->loadByIdentifier(
             $identifier
         );
 
@@ -809,7 +809,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function loadContentTypeByRemoteId( $remoteId )
     {
-        $spiContentType = $this->persistenceHandler->contentTypeHandler()->loadByRemoteId( $remoteId );
+        $spiContentType = $this->contentTypeHandler->loadByRemoteId( $remoteId );
 
         return $this->buildContentTypeDomainObject(
             $spiContentType
@@ -833,7 +833,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new InvalidArgumentValue( '$contentTypeId', $contentTypeId );
         }
 
-        $spiContentType = $this->persistenceHandler->contentTypeHandler()->load(
+        $spiContentType = $this->contentTypeHandler->load(
             $contentTypeId,
             SPIContentType::STATUS_DRAFT
         );
@@ -857,7 +857,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function loadContentTypes( APIContentTypeGroup $contentTypeGroup )
     {
-        $spiContentTypes = $this->persistenceHandler->contentTypeHandler()->loadContentTypes(
+        $spiContentTypes = $this->contentTypeHandler->loadContentTypes(
             $contentTypeGroup->id,
             SPIContentType::STATUS_DEFINED
         );
@@ -891,7 +891,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         try
         {
-            $this->persistenceHandler->contentTypeHandler()->load(
+            $this->contentTypeHandler->load(
                 $contentType->id,
                 SPIContentType::STATUS_DRAFT
             );
@@ -906,7 +906,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             $this->repository->beginTransaction();
             try
             {
-                $spiContentType = $this->persistenceHandler->contentTypeHandler()->createDraft(
+                $spiContentType = $this->contentTypeHandler->createDraft(
                     $this->repository->getCurrentUser()->id,
                     $contentType->id
                 );
@@ -995,7 +995,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->contentTypeHandler()->update(
+            $this->contentTypeHandler->update(
                 $contentTypeDraft->id,
                 $contentTypeDraft->status,
                 $this->buildSPIContentTypeUpdateStruct(
@@ -1065,7 +1065,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $updateStruct->defaultAlwaysAvailable = $contentTypeUpdateStruct->defaultAlwaysAvailable !== null
             ? $contentTypeUpdateStruct->defaultAlwaysAvailable
             : $contentTypeDraft->defaultAlwaysAvailable;
-        $updateStruct->initialLanguageId = $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
+        $updateStruct->initialLanguageId = $this->repository->getContentLanguageService()->loadLanguage(
             $contentTypeUpdateStruct->mainLanguageCode !== null
                 ? $contentTypeUpdateStruct->mainLanguageCode
                 : $contentTypeDraft->mainLanguageCode
@@ -1092,7 +1092,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->contentTypeHandler()->delete(
+            $this->contentTypeHandler->delete(
                 $contentType->id,
                 $contentType->status
             );
@@ -1140,7 +1140,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $spiContentType = $this->persistenceHandler->contentTypeHandler()->copy(
+            $spiContentType = $this->contentTypeHandler->copy(
                 $user->id,
                 $contentType->id,
                 SPIContentType::STATUS_DEFINED
@@ -1170,7 +1170,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         if ( $this->repository->hasAccess( 'class', 'update' ) !== true )
             throw new UnauthorizedException( 'ContentType', 'update' );
 
-        $spiContentType = $this->persistenceHandler->contentTypeHandler()->load(
+        $spiContentType = $this->contentTypeHandler->load(
             $contentType->id,
             $contentType->status
         );
@@ -1186,7 +1186,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->contentTypeHandler()->link(
+            $this->contentTypeHandler->link(
                 $contentTypeGroup->id,
                 $contentType->id,
                 $contentType->status
@@ -1215,7 +1215,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         if ( $this->repository->hasAccess( 'class', 'update' ) !== true )
             throw new UnauthorizedException( 'ContentType', 'update' );
 
-        $spiContentType = $this->persistenceHandler->contentTypeHandler()->load(
+        $spiContentType = $this->contentTypeHandler->load(
             $contentType->id,
             $contentType->status
         );
@@ -1231,7 +1231,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->contentTypeHandler()->unlink(
+            $this->contentTypeHandler->unlink(
                 $contentTypeGroup->id,
                 $contentType->id,
                 $contentType->status
@@ -1287,7 +1287,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->contentTypeHandler()->addFieldDefinition(
+            $this->contentTypeHandler->addFieldDefinition(
                 $contentTypeDraft->id,
                 $contentTypeDraft->status,
                 $spiFieldDefinitionCreateStruct
@@ -1332,7 +1332,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->contentTypeHandler()->removeFieldDefinition(
+            $this->contentTypeHandler->removeFieldDefinition(
                 $contentTypeDraft->id,
                 SPIContentType::STATUS_DRAFT,
                 $fieldDefinition->id
@@ -1394,7 +1394,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->contentTypeHandler()->updateFieldDefinition(
+            $this->contentTypeHandler->updateFieldDefinition(
                 $contentTypeDraft->id,
                 SPIContentType::STATUS_DRAFT,
                 $spiFieldDefinitionUpdateStruct
@@ -1453,7 +1453,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             if ( empty( $loadedContentTypeDraft->nameSchema ) )
             {
                 $fieldDefinitions = $loadedContentTypeDraft->getFieldDefinitions();
-                $this->persistenceHandler->contentTypeHandler()->update(
+                $this->contentTypeHandler->update(
                     $contentTypeDraft->id,
                     $contentTypeDraft->status,
                     $this->buildSPIContentTypeUpdateStruct(
@@ -1467,7 +1467,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 );
             }
 
-            $this->persistenceHandler->contentTypeHandler()->publish(
+            $this->contentTypeHandler->publish(
                 $loadedContentTypeDraft->id
             );
             $this->repository->commit();
