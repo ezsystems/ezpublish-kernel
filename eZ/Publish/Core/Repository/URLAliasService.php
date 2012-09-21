@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\SPI\Persistence\Handler,
+    eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler,
     eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\API\Repository\Values\Content\URLAlias,
     eZ\Publish\SPI\Persistence\Content\URLAlias as SPIURLAlias,
@@ -37,9 +37,9 @@ class URLAliasService implements URLAliasServiceInterface
     protected $repository;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
      */
-    protected $persistenceHandler;
+    protected $urlAliasHandler;
 
     /**
      * @var array
@@ -50,13 +50,13 @@ class URLAliasService implements URLAliasServiceInterface
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler $urlAliasHandler
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct( RepositoryInterface $repository, Handler $urlAliasHandler, array $settings = array() )
     {
         $this->repository = $repository;
-        $this->persistenceHandler = $handler;
+        $this->urlAliasHandler = $urlAliasHandler;
         $this->settings = $settings + array(
             "prioritizedLanguageList" => array(
                 "eng-US",
@@ -91,7 +91,7 @@ class URLAliasService implements URLAliasServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $spiUrlAlias = $this->persistenceHandler->urlAliasHandler()->createCustomUrlAlias(
+            $spiUrlAlias = $this->urlAliasHandler->createCustomUrlAlias(
                 $location->id,
                 $path,
                 $forwarding,
@@ -173,7 +173,7 @@ class URLAliasService implements URLAliasServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $spiUrlAlias = $this->persistenceHandler->urlAliasHandler()->createGlobalUrlAlias(
+            $spiUrlAlias = $this->urlAliasHandler->createGlobalUrlAlias(
                 $resource,
                 $path,
                 $forwarding,
@@ -212,7 +212,7 @@ class URLAliasService implements URLAliasServiceInterface
     public function listLocationAliases( Location $location, $custom = false, $languageCode = null )
     {
         $urlAliasList = array();
-        $spiUrlAliasList = $this->persistenceHandler->urlAliasHandler()->listURLAliasesForLocation(
+        $spiUrlAliasList = $this->urlAliasHandler->listURLAliasesForLocation(
             $location->id,
             $custom
         );
@@ -398,7 +398,7 @@ class URLAliasService implements URLAliasServiceInterface
     public function listGlobalAliases( $languageCode = null, $offset = 0, $limit = -1 )
     {
         $urlAliasList = array();
-        $spiUrlAliasList = $this->persistenceHandler->urlAliasHandler()->listGlobalURLAliases(
+        $spiUrlAliasList = $this->urlAliasHandler->listGlobalURLAliases(
             $languageCode,
             $offset,
             $limit
@@ -448,7 +448,7 @@ class URLAliasService implements URLAliasServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $success = $this->persistenceHandler->urlAliasHandler()->removeURLAliases( $spiUrlAliasList );
+            $success = $this->urlAliasHandler->removeURLAliases( $spiUrlAliasList );
             $this->repository->commit();
         }
         catch ( Exception $e )
@@ -483,7 +483,7 @@ class URLAliasService implements URLAliasServiceInterface
         $url = $this->cleanUrl( $url );
         $url = $this->addPathPrefix( $url );
 
-        $spiUrlAlias = $this->persistenceHandler->urlAliasHandler()->lookup( $url );
+        $spiUrlAlias = $this->urlAliasHandler->lookup( $url );
 
         if ( !$this->isAliasLoadable( $spiUrlAlias, $languageCode ) )
         {

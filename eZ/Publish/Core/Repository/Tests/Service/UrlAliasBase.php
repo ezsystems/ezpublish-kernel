@@ -2537,11 +2537,11 @@ abstract class UrlAliasBase extends BaseServiceTest
         $urlAliasService = $this->repository->getURLAliasService();
 
         $refObject = new \ReflectionObject( $urlAliasService );
-        $refProperty = $refObject->getProperty( 'persistenceHandler' );
+        $refProperty = $refObject->getProperty( 'urlAliasHandler' );
         $refProperty->setAccessible( true );
         $refProperty->setValue(
             $urlAliasService,
-            $this->getPersistenceHandlerMock()
+            $this->getUrlAliasHandlerMock()
         );
 
         return $urlAliasService;
@@ -2586,43 +2586,6 @@ abstract class UrlAliasBase extends BaseServiceTest
     }
 
     /**
-     * Persistence Handler mock
-     *
-     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $persistenceHandlerMock;
-
-    /**
-     * Returns a persistence Handler mock
-     *
-     * @return \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getPersistenceHandlerMock()
-    {
-        if ( !isset( $this->persistenceHandlerMock ) )
-        {
-            $this->persistenceHandlerMock = $this->getMock(
-                "eZ\\Publish\\SPI\\Persistence\\Handler",
-                array(),
-                array(),
-                '',
-                false
-            );
-            $this->persistenceHandlerMock->expects(
-                $this->any()
-            )->method(
-                "urlAliasHandler"
-            )->will(
-                $this->returnValue(
-                    $this->getUrlAliasHandlerMock()
-                )
-            );
-        }
-
-        return $this->persistenceHandlerMock;
-    }
-
-    /**
      * Returns the content service to test with $methods mocked
      *
      * @param string[] $methods
@@ -2635,7 +2598,7 @@ abstract class UrlAliasBase extends BaseServiceTest
             $methods,
             array(
                 $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' ),
-                $this->getPersistenceHandlerMock()
+                $this->getUrlAliasHandlerMock()
             )
         );
     }

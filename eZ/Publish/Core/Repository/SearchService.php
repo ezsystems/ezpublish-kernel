@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\SearchService as SearchServiceInterface,
 
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
 
-    eZ\Publish\SPI\Persistence\Handler;
+    eZ\Publish\SPI\Persistence\Content\Search\Handler;
 
 /**
  * Search service
@@ -32,9 +32,9 @@ class SearchService implements SearchServiceInterface
     protected $repository;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\Search\Handler
      */
-    protected $persistenceHandler;
+    protected $searchHandler;
 
     /**
      * @var array
@@ -45,13 +45,13 @@ class SearchService implements SearchServiceInterface
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository  $repository
-     * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandler
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct( RepositoryInterface $repository, Handler $searchHandler, array $settings = array() )
     {
         $this->repository = $repository;
-        $this->persistenceHandler = $handler;
+        $this->searchHandler = $searchHandler;
         $this->settings = $settings;
     }
 
@@ -74,7 +74,7 @@ class SearchService implements SearchServiceInterface
             return new SearchResult( array( 'time' => 0, 'totalCount' => 0 ) );
         }
 
-        $result = $this->persistenceHandler->searchHandler()->findContent( $query, $fieldFilters );
+        $result = $this->searchHandler->findContent( $query, $fieldFilters );
         foreach ( $result->searchHits as $hit )
         {
             $hit->valueObject = $this->repository->getContentService()->buildContentDomainObject(
@@ -107,7 +107,7 @@ class SearchService implements SearchServiceInterface
         }
 
         return $this->repository->getContentService()->buildContentDomainObject(
-            $this->persistenceHandler->searchHandler()->findSingle( $criterion, $fieldFilters )
+            $this->searchHandler->findSingle( $criterion, $fieldFilters )
         );
     }
 

@@ -2538,11 +2538,11 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         $refObject = new \ReflectionObject( $contentService );
-        $refProperty = $refObject->getProperty( 'persistenceHandler' );
+        $refProperty = $refObject->getProperty( 'searchHandler' );
         $refProperty->setAccessible( true );
         $refProperty->setValue(
             $contentService,
-            $this->getPersistenceHandlerMock()
+            $this->getSearchHandlerMock()
         );
 
         $searchHandlerMock = $this->getSearchHandlerMock();

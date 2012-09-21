@@ -417,7 +417,11 @@ class Repository implements RepositoryInterface
         if ( $this->sectionService !== null )
             return $this->sectionService;
 
-        $this->sectionService = new SectionService( $this, $this->persistenceHandler, $this->serviceSettings['section'] );
+        $this->sectionService = new SectionService(
+            $this,
+            $this->persistenceHandler->sectionHandler(),
+            $this->serviceSettings['section']
+        );
         return $this->sectionService;
     }
 
@@ -433,7 +437,11 @@ class Repository implements RepositoryInterface
         if ( $this->userService !== null )
             return $this->userService;
 
-        $this->userService = new UserService( $this, $this->persistenceHandler, $this->serviceSettings['user'] );
+        $this->userService = new UserService(
+            $this,
+            $this->persistenceHandler->userHandler(),
+            $this->serviceSettings['user']
+        );
         return $this->userService;
     }
 
@@ -447,7 +455,11 @@ class Repository implements RepositoryInterface
         if ( $this->urlAliasService !== null )
             return $this->urlAliasService;
 
-        $this->urlAliasService = new URLAliasService( $this, $this->persistenceHandler, $this->serviceSettings['urlAlias'] );
+        $this->urlAliasService = new URLAliasService(
+            $this,
+            $this->persistenceHandler->urlAliasHandler(),
+            $this->serviceSettings['urlAlias']
+        );
         return $this->urlAliasService;
     }
 
@@ -461,7 +473,11 @@ class Repository implements RepositoryInterface
         if ( $this->urlWildcardService !== null )
             return $this->urlWildcardService;
 
-        $this->urlWildcardService = new URLWildcardService( $this, $this->persistenceHandler, $this->serviceSettings['urlWildcard'] );
+        $this->urlWildcardService = new URLWildcardService(
+            $this,
+            $this->persistenceHandler->urlWildcardHandler(),
+            $this->serviceSettings['urlWildcard']
+        );
         return $this->urlWildcardService;
     }
 
@@ -475,7 +491,10 @@ class Repository implements RepositoryInterface
         if ( $this->objectStateService !== null )
             return $this->objectStateService;
 
-        $this->objectStateService = new ObjectStateService( $this, $this->persistenceHandler, $this->serviceSettings['objectState'] );
+        $this->objectStateService = new ObjectStateService(
+            $this, $this->persistenceHandler->objectStateHandler(),
+            $this->serviceSettings['objectState']
+        );
         return $this->objectStateService;
     }
 
@@ -505,7 +524,11 @@ class Repository implements RepositoryInterface
         if ( $this->roleService !== null )
             return $this->roleService;
 
-        $this->roleService = new RoleService( $this, $this->persistenceHandler, $this->serviceSettings['role'] );
+        $this->roleService = new RoleService(
+            $this,
+            $this->persistenceHandler->userHandler(),
+            $this->serviceSettings['role']
+        );
         return $this->roleService;
     }
 
@@ -519,7 +542,11 @@ class Repository implements RepositoryInterface
         if ( $this->searchService !== null )
             return $this->searchService;
 
-        $this->searchService = new SearchService( $this, $this->persistenceHandler, $this->serviceSettings['search'] );
+        $this->searchService = new SearchService(
+            $this,
+            $this->persistenceHandler->searchHandler(),
+            $this->serviceSettings['search']
+        );
         return $this->searchService;
     }
 

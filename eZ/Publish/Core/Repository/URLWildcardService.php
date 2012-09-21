@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\SPI\Persistence\Handler,
+    eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler,
     eZ\Publish\API\Repository\Values\Content\URLWildcard,
     eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult,
     eZ\Publish\SPI\Persistence\Content\UrlWildcard as SPIUrlWildcard,
@@ -35,9 +35,9 @@ class URLWildcardService implements URLWildcardServiceInterface
     protected $repository;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
      */
-    protected $persistenceHandler;
+    protected $urlWildcardHandler;
 
     /**
      * @var array
@@ -48,13 +48,13 @@ class URLWildcardService implements URLWildcardServiceInterface
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler $urlWildcardHandler
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct( RepositoryInterface $repository, Handler $urlWildcardHandler, array $settings = array() )
     {
         $this->repository = $repository;
-        $this->persistenceHandler = $handler;
+        $this->urlWildcardHandler = $urlWildcardHandler;
         $this->settings = $settings;
     }
 
@@ -79,7 +79,7 @@ class URLWildcardService implements URLWildcardServiceInterface
             throw new UnauthorizedException( 'content', 'urltranslator' );
 
         // @todo This needs to be optimized
-        $spiUrlWildcards = $this->persistenceHandler->urlWildcardHandler()->loadAll();
+        $spiUrlWildcards = $this->urlWildcardHandler->loadAll();
         foreach ( $spiUrlWildcards as $wildcard )
         {
             if ( $wildcard->sourceUrl === $sourceUrl )
@@ -110,7 +110,7 @@ class URLWildcardService implements URLWildcardServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $spiUrlWildcard = $this->persistenceHandler->urlWildcardHandler()->create(
+            $spiUrlWildcard = $this->urlWildcardHandler->create(
                 $sourceUrl,
                 $destinationUrl,
                 $forward
@@ -141,7 +141,7 @@ class URLWildcardService implements URLWildcardServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->urlWildcardHandler()->remove(
+            $this->urlWildcardHandler->remove(
                 $urlWildcard->id
             );
             $this->repository->commit();
@@ -166,7 +166,7 @@ class URLWildcardService implements URLWildcardServiceInterface
     public function load( $id )
     {
         return $this->buildUrlWildcardDomainObject(
-            $this->persistenceHandler->urlWildcardHandler()->load( $id )
+            $this->urlWildcardHandler->load( $id )
         );
     }
 
@@ -180,7 +180,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     public function loadAll( $offset = 0, $limit = -1 )
     {
-        $spiUrlWildcards = $this->persistenceHandler->urlWildcardHandler()->loadAll(
+        $spiUrlWildcards = $this->urlWildcardHandler->loadAll(
             $offset,
             $limit
         );
@@ -209,7 +209,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     public function translate( $url )
     {
-        $spiUrlWildcards = $this->persistenceHandler->urlWildcardHandler()->loadAll();
+        $spiUrlWildcards = $this->urlWildcardHandler->loadAll();
 
         foreach ( $spiUrlWildcards as $wildcard )
         {

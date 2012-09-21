@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
 
     eZ\Publish\API\Repository\SectionService as SectionServiceInterface,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\SPI\Persistence\Handler,
+    eZ\Publish\SPI\Persistence\Content\Section\Handler,
 
     eZ\Publish\SPI\Persistence\Content\Section as SPISection,
 
@@ -41,9 +41,9 @@ class SectionService implements SectionServiceInterface
     protected $repository;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\Section\Handler
      */
-    protected $persistenceHandler;
+    protected $sectionHandler;
 
     /**
      * @var array
@@ -54,13 +54,13 @@ class SectionService implements SectionServiceInterface
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository  $repository
-     * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param \eZ\Publish\SPI\Persistence\Content\Section\Handler $sectionHandler
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct( RepositoryInterface $repository, Handler $sectionHandler, array $settings = array() )
     {
         $this->repository = $repository;
-        $this->persistenceHandler = $handler;
+        $this->sectionHandler = $sectionHandler;
         $this->settings = $settings;
     }
 
@@ -99,7 +99,7 @@ class SectionService implements SectionServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $spiSection = $this->persistenceHandler->sectionHandler()->create(
+            $spiSection = $this->sectionHandler->create(
                 $sectionCreateStruct->name,
                 $sectionCreateStruct->identifier
             );
@@ -158,7 +158,7 @@ class SectionService implements SectionServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $spiSection = $this->persistenceHandler->sectionHandler()->update(
+            $spiSection = $this->sectionHandler->update(
                 $loadedSection->id,
                 $sectionUpdateStruct->name ?: $loadedSection->name,
                 $sectionUpdateStruct->identifier ?: $loadedSection->identifier
@@ -192,7 +192,7 @@ class SectionService implements SectionServiceInterface
         if ( $this->repository->hasAccess( 'section', 'view' ) !== true )
             throw new UnauthorizedException( 'section', 'view' );
 
-        $spiSection = $this->persistenceHandler->sectionHandler()->load( $sectionId );
+        $spiSection = $this->sectionHandler->load( $sectionId );
         return $this->buildDomainSectionObject( $spiSection );
     }
 
@@ -208,7 +208,7 @@ class SectionService implements SectionServiceInterface
         if ( $this->repository->hasAccess( 'section', 'view' ) !== true )
             throw new UnauthorizedException( 'section', 'view' );
 
-        $spiSections = $this->persistenceHandler->sectionHandler()->loadAll();
+        $spiSections = $this->sectionHandler->loadAll();
 
         $sections = array();
         foreach ( $spiSections as $spiSection )
@@ -237,7 +237,7 @@ class SectionService implements SectionServiceInterface
         if ( $this->repository->hasAccess( 'section', 'view' ) !== true )
             throw new UnauthorizedException( 'section', 'view' );
 
-        $spiSection = $this->persistenceHandler->sectionHandler()->loadByIdentifier( $sectionIdentifier );
+        $spiSection = $this->sectionHandler->loadByIdentifier( $sectionIdentifier );
         return $this->buildDomainSectionObject( $spiSection );
     }
 
@@ -253,7 +253,7 @@ class SectionService implements SectionServiceInterface
         if ( !is_numeric( $section->id ) )
             throw new InvalidArgumentValue( "id", $section->id, "Section" );
 
-        return $this->persistenceHandler->sectionHandler()->assignmentsCount( $section->id );
+        return $this->sectionHandler->assignmentsCount( $section->id );
     }
 
     /**
@@ -282,7 +282,7 @@ class SectionService implements SectionServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->sectionHandler()->assign(
+            $this->sectionHandler->assign(
                 $loadedSection->id,
                 $loadedContentInfo->id
             );
@@ -321,7 +321,7 @@ class SectionService implements SectionServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->sectionHandler()->delete( $loadedSection->id );
+            $this->sectionHandler->delete( $loadedSection->id );
             $this->repository->commit();
         }
         catch ( \Exception $e )

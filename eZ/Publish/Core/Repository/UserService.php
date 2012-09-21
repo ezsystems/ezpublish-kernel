@@ -23,7 +23,7 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\API\Repository\Values\Content\Content as APIContent,
 
-    eZ\Publish\SPI\Persistence\Handler,
+    eZ\Publish\SPI\Persistence\User\Handler,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
     eZ\Publish\API\Repository\UserService as UserServiceInterface,
 
@@ -59,9 +59,9 @@ class UserService implements UserServiceInterface
     protected $repository;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
+     * @var \eZ\Publish\SPI\Persistence\User\Handler
      */
-    protected $persistenceHandler;
+    protected $userHandler;
 
     /**
      * @var array
@@ -72,13 +72,13 @@ class UserService implements UserServiceInterface
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository  $repository
-     * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct( RepositoryInterface $repository, Handler $userHandler, array $settings = array() )
     {
         $this->repository = $repository;
-        $this->persistenceHandler = $handler;
+        $this->userHandler = $userHandler;
         $this->settings = $settings + array(
             'anonymousUserID' => 10,
             'defaultUserPlacement' => 12,
@@ -485,7 +485,7 @@ class UserService implements UserServiceInterface
             $contentDraft = $contentService->createContent( $userCreateStruct, $locationCreateStructs );
             $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
 
-            $spiUser = $this->persistenceHandler->userHandler()->create(
+            $spiUser = $this->userHandler->create(
                 new SPIUser(
                     array(
                         'id' => $publishedContent->id,
@@ -532,7 +532,7 @@ class UserService implements UserServiceInterface
         if ( !is_numeric( $userId ) )
             throw new InvalidArgumentValue( "userId", $userId );
 
-        $spiUser = $this->persistenceHandler->userHandler()->load( $userId );
+        $spiUser = $this->userHandler->load( $userId );
         return $this->buildDomainUserObject( $spiUser );
     }
 
@@ -566,7 +566,7 @@ class UserService implements UserServiceInterface
         if ( !is_string( $password ) || empty( $password ) )
             throw new InvalidArgumentValue( "password", $password );
 
-        $spiUsers = $this->persistenceHandler->userHandler()->loadByLogin( $login );
+        $spiUsers = $this->userHandler->loadByLogin( $login );
 
         if ( empty( $spiUsers ) )
             throw new NotFoundException( "user", $login );
@@ -701,7 +701,7 @@ class UserService implements UserServiceInterface
                 );
             }
 
-            $this->persistenceHandler->userHandler()->update(
+            $this->userHandler->update(
                 new SPIUser(
                     array(
                         'id' => $loadedUser->id,
@@ -929,7 +929,7 @@ class UserService implements UserServiceInterface
         $users = array();
         foreach ( $searchResult->searchHits as $resultItem )
         {
-            $spiUser = $this->persistenceHandler->userHandler()->load( $resultItem->valueObject->id );
+            $spiUser = $this->userHandler->load( $resultItem->valueObject->id );
 
             $users[] = $this->buildDomainUserObject( $spiUser, $resultItem->valueObject );
         }

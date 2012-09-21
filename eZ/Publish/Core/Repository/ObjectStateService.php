@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ObjectStateService as ObjectStateServiceInterface,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\SPI\Persistence\Handler,
+    eZ\Publish\SPI\Persistence\Content\ObjectState\Handler,
 
     eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct,
     eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct,
@@ -46,9 +46,9 @@ class ObjectStateService implements ObjectStateServiceInterface
     protected $repository;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
      */
-    protected $persistenceHandler;
+    protected $objectStateHandler;
 
     /**
      * @var array
@@ -59,13 +59,13 @@ class ObjectStateService implements ObjectStateServiceInterface
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct( RepositoryInterface $repository, Handler $objectStateHandler, array $settings = array() )
     {
         $this->repository = $repository;
-        $this->persistenceHandler = $handler;
+        $this->objectStateHandler = $objectStateHandler;
         $this->settings = $settings;
     }
 
@@ -93,7 +93,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $spiObjectStateGroup = $this->persistenceHandler->objectStateHandler()->createGroup( $inputStruct );
+            $spiObjectStateGroup = $this->objectStateHandler->createGroup( $inputStruct );
             $this->repository->commit();
         }
         catch ( \Exception $e )
@@ -119,7 +119,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         if ( !is_numeric( $objectStateGroupId ) )
             throw new InvalidArgumentValue( "objectStateGroupId", $objectStateGroupId );
 
-        $spiObjectStateGroup = $this->persistenceHandler->objectStateHandler()->loadGroup( $objectStateGroupId );
+        $spiObjectStateGroup = $this->objectStateHandler->loadGroup( $objectStateGroupId );
 
         return $this->buildDomainObjectStateGroupObject( $spiObjectStateGroup );
     }
@@ -134,7 +134,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function loadObjectStateGroups( $offset = 0, $limit = -1 )
     {
-        $spiObjectStateGroups = $this->persistenceHandler->objectStateHandler()->loadAllGroups( $offset, $limit );
+        $spiObjectStateGroups = $this->objectStateHandler->loadAllGroups( $offset, $limit );
 
         $objectStateGroups = array();
         foreach ( $spiObjectStateGroups as $spiObjectStateGroup )
@@ -157,7 +157,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         if ( !is_numeric( $objectStateGroup->id ) )
             throw new InvalidArgumentValue( "id", $objectStateGroup->id, "ObjectStateGroup" );
 
-        $spiObjectStates = $this->persistenceHandler->objectStateHandler()->loadObjectStates( $objectStateGroup->id );
+        $spiObjectStates = $this->objectStateHandler->loadObjectStates( $objectStateGroup->id );
 
         $objectStates = array();
         foreach ( $spiObjectStates as $spiObjectState )
@@ -198,7 +198,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $spiObjectStateGroup = $this->persistenceHandler->objectStateHandler()->updateGroup(
+            $spiObjectStateGroup = $this->objectStateHandler->updateGroup(
                 $loadedObjectStateGroup->id,
                 $inputStruct
             );
@@ -233,7 +233,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->objectStateHandler()->deleteGroup( $loadedObjectStateGroup->id );
+            $this->objectStateHandler->deleteGroup( $loadedObjectStateGroup->id );
             $this->repository->commit();
         }
         catch ( \Exception $e )
@@ -271,18 +271,18 @@ class ObjectStateService implements ObjectStateServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $spiObjectState = $this->persistenceHandler->objectStateHandler()->create( $objectStateGroup->id, $inputStruct );
+            $spiObjectState = $this->objectStateHandler->create( $objectStateGroup->id, $inputStruct );
 
             if ( is_numeric( $objectStateCreateStruct->priority ) )
             {
-                $this->persistenceHandler->objectStateHandler()->setPriority(
+                $this->objectStateHandler->setPriority(
                     $spiObjectState->id,
                     (int) $objectStateCreateStruct->priority
                 );
 
                 // Reload the object state to have the updated priority,
                 // considering that priorities are always incremental within a group
-                $spiObjectState = $this->persistenceHandler->objectStateHandler()->load( $spiObjectState->id );
+                $spiObjectState = $this->objectStateHandler->load( $spiObjectState->id );
             }
 
             $this->repository->commit();
@@ -310,7 +310,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         if ( !is_numeric( $stateId ) )
             throw new InvalidArgumentValue( "stateId", $stateId );
 
-        $spiObjectState = $this->persistenceHandler->objectStateHandler()->load( $stateId );
+        $spiObjectState = $this->objectStateHandler->load( $stateId );
 
         return $this->buildDomainObjectStateObject( $spiObjectState );
     }
@@ -345,7 +345,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $spiObjectState = $this->persistenceHandler->objectStateHandler()->update(
+            $spiObjectState = $this->objectStateHandler->update(
                 $loadedObjectState->id,
                 $inputStruct
             );
@@ -384,7 +384,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->objectStateHandler()->setPriority(
+            $this->objectStateHandler->setPriority(
                 $loadedObjectState->id,
                 (int) $priority
             );
@@ -418,7 +418,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->objectStateHandler()->delete( $loadedObjectState->id );
+            $this->objectStateHandler->delete( $loadedObjectState->id );
             $this->repository->commit();
         }
         catch ( \Exception $e )
@@ -460,7 +460,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->objectStateHandler()->setObjectState(
+            $this->objectStateHandler->setObjectState(
                 $contentInfo->id,
                 $objectStateGroup->id,
                 $loadedObjectState->id
@@ -492,7 +492,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         if ( !is_numeric( $objectStateGroup->id ) )
             throw new InvalidArgumentValue( "id", $objectStateGroup->id, "ObjectStateGroup" );
 
-        $spiObjectState = $this->persistenceHandler->objectStateHandler()->getObjectState(
+        $spiObjectState = $this->objectStateHandler->getObjectState(
             $contentInfo->id,
             $objectStateGroup->id
         );
@@ -512,7 +512,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         if ( !is_numeric( $objectState->id ) )
             throw new InvalidArgumentValue( "id", $objectState->id, "ObjectState" );
 
-        return $this->persistenceHandler->objectStateHandler()->getContentCount(
+        return $this->objectStateHandler->getContentCount(
             $objectState->id
         );
     }
