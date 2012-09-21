@@ -21,9 +21,16 @@ class ImageProcessor extends BinaryInputProcessor
     protected $urlTemplate;
 
     /**
-     * Array of variant names
+     * Array of variant names and content types
      *
-     * @var string[]
+     * <code>
+     * array(
+     *      'small' => 'image/jpeg',
+     *      'thumbnail' => 'image/png',
+     * )
+     * </code>
+     *
+     * @var string[][]
      */
     protected $variants;
 
@@ -55,11 +62,15 @@ class ImageProcessor extends BinaryInputProcessor
     public function postProcessHash( $outgoingValueHash )
     {
         $outgoingValueHash['variants'] = array();
-        foreach ( $this->variants as $variant )
+        foreach ( $this->variants as $variant => $mimeType )
         {
-            $outgoingValueHash['variants'][] = $this->generateUrl(
-                $outgoingValueHash['path'],
-                $variant
+            $outgoingValueHash['variants'][] = array(
+                'variant' => $variant,
+                'contentType' => $mimeType,
+                'url' => $this->generateUrl(
+                    $outgoingValueHash['path'],
+                    $variant
+                ),
             );
         }
         return $outgoingValueHash;

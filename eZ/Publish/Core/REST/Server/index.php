@@ -102,7 +102,11 @@ $fieldTypeProcessorRegistry = new Common\FieldTypeProcessorRegistry(
             // URL schema for image links (from config!)
             'http://example.com/fancy_site/{variant}/images/{path}',
             // Image variants (names only, from config!)
-            array( 'original', 'gallery', 'thumbnail' )
+            array(
+                'original' => 'image/jpeg',
+                'gallery' => 'image/jpeg',
+                'thumbnail' => 'image/png',
+            )
         )
     )
 );

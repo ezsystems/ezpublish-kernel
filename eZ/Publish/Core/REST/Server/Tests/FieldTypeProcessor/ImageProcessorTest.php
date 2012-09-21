@@ -28,8 +28,16 @@ class ImageProcessorTest extends BinaryInputProcessorTest
             array(
                 'path' => 'var/some_site/23-foo.jpg',
                 'variants' => array(
-                    'http://example.com/my_site/images/original/var/some_site/23-foo.jpg',
-                    'http://example.com/my_site/images/thumbnail/var/some_site/23-foo.jpg',
+                    array(
+                        'variant' => 'original',
+                        'contentType' => 'image/jpeg',
+                        'url' => 'http://example.com/my_site/images/original/var/some_site/23-foo.jpg',
+                    ),
+                    array(
+                        'variant' => 'thumbnail',
+                        'contentType' => 'image/png',
+                        'url' => 'http://example.com/my_site/images/thumbnail/var/some_site/23-foo.jpg',
+                    ),
                 ),
             ),
             $outputHash
@@ -47,8 +55,8 @@ class ImageProcessorTest extends BinaryInputProcessorTest
             $this->getVfsUrl(),
             'http://example.com/my_site/images/{variant}/{path}',
             array(
-                'original',
-                'thumbnail',
+                'original' => 'image/jpeg',
+                'thumbnail' => 'image/png',
             )
         );
     }
