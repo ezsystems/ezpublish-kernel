@@ -23,6 +23,7 @@ use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use \eZ\Publish\API\Repository\ContentService;
 use \eZ\Publish\API\Repository\LocationService;
 use \eZ\Publish\API\Repository\SectionService;
+use \eZ\Publish\API\Repository\SearchService;
 
 use Qafoo\RMF;
 
@@ -67,6 +68,13 @@ class Content
     protected $sectionService;
 
     /**
+     * Search service
+     *
+     * @var \eZ\Publish\API\Repository\SearchService
+     */
+    protected $searchService;
+
+    /**
      * Construct controller
      *
      * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
@@ -74,14 +82,16 @@ class Content
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\SectionService $sectionService
+     * @param \eZ\Publish\API\Repository\SearchService $searchService
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, ContentService $contentService, LocationService $locationService, SectionService $sectionService )
+    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, ContentService $contentService, LocationService $locationService, SectionService $sectionService, SearchService $searchService )
     {
         $this->inputDispatcher = $inputDispatcher;
         $this->urlHandler      = $urlHandler;
         $this->contentService  = $contentService;
         $this->locationService = $locationService;
         $this->sectionService  = $sectionService;
+        $this->searchService   = $searchService;
     }
 
     /**
@@ -620,6 +630,28 @@ class Content
         return new Values\CreatedRelation(
             array(
                 'relation' => new Values\RestRelation( $relation, $urlValues['object'], $urlValues['version'] )
+            )
+        );
+    }
+
+    /**
+     * Creates and executes a content view
+     *
+     * @param \Qafoo\RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\RestExecutedView
+     */
+    public function createView( RMF\Request $request )
+    {
+        $viewInput = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            )
+        );
+        return new Values\RestExecutedView(
+            array(
+                 'identifier'    => $viewInput->identifier,
+                 'searchResults' => $this->searchService->findContent( $viewInput->query ),
             )
         );
     }

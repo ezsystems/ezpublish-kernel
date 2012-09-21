@@ -182,6 +182,33 @@ $inputDispatcher = new Common\Input\Dispatcher(
             'application/vnd.ez.api.ObjectStateUpdate'      => new Input\Parser\ObjectStateUpdate( $urlHandler, $repository->getObjectStateService(), $parserTools ),
             'application/vnd.ez.api.ContentObjectStates'    => new Input\Parser\ContentObjectStates( $urlHandler ),
             'application/vnd.ez.api.RelationCreate'         => new Input\Parser\RelationCreate( $urlHandler ),
+            'application/vnd.ez.api.ViewInput'              => new Input\Parser\ViewInput( $urlHandler ),
+
+            // internal Media-Types
+            'application/vnd.ez.api.internal.criterion.ContentId'              => new Input\Parser\Criterion\ContentId( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.ContentRemoteId'        => new Input\Parser\Criterion\ContentRemoteId( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.ContentTypeGroupId'     => new Input\Parser\Criterion\ContentTypeGroupId( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.ContentTypeId'          => new Input\Parser\Criterion\ContentTypeId( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.ContentTypeIdentifier'  => new Input\Parser\Criterion\ContentTypeIdentifier( $urlHandler, $repository->getContentTypeService() ),
+            'application/vnd.ez.api.internal.criterion.DateMetadata'           => new Input\Parser\Criterion\DateMetadata( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.Field'                  => new Input\Parser\Criterion\Field( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.FullText'               => new Input\Parser\Criterion\FullText( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.LocationId'             => new Input\Parser\Criterion\LocationId( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.LocationRemoteId'       => new Input\Parser\Criterion\LocationRemoteId( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.LogicalAnd'             => new Input\Parser\Criterion\LogicalAnd( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.LogicalNot'             => new Input\Parser\Criterion\LogicalNot( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.LogicalOperator'        => new Input\Parser\Criterion\LogicalOperator( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.LogicalOr'              => new Input\Parser\Criterion\LogicalOr( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.MoreLikeThis'           => new Input\Parser\Criterion\MoreLikeThis( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.Operator'               => new Input\Parser\Criterion\Operator( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.ParentLocationId'       => new Input\Parser\Criterion\ParentLocationId( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.ParentLocationRemoteId' => new Input\Parser\Criterion\ParentLocationRemoteId( $urlHandler, $repository->getLocationService() ),
+            'application/vnd.ez.api.internal.criterion.SectionIdentifier'      => new Input\Parser\Criterion\SectionIdentifier( $urlHandler, $repository->getSectionService() ),
+            'application/vnd.ez.api.internal.criterion.SectionId'              => new Input\Parser\Criterion\SectionId( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.Status'                 => new Input\Parser\Criterion\Status( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.Subtree'                => new Input\Parser\Criterion\Subtree( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.UrlAlias'               => new Input\Parser\Criterion\UrlAlias( $urlHandler ),
+            'application/vnd.ez.api.internal.criterion.UserMetadata'           => new Input\Parser\Criterion\UserMetadata( $urlHandler ),
         )
     ),
     $handler
@@ -210,7 +237,8 @@ $contentController = new Controller\Content(
     $urlHandler,
     $repository->getContentService(),
     $repository->getLocationService(),
-    $repository->getSectionService()
+    $repository->getSectionService(),
+    $repository->getSearchService()
 );
 
 $contentTypeController = new Controller\ContentType(
@@ -366,6 +394,10 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\Trash'                       => new Output\ValueObjectVisitor\Trash( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem'             => new Output\ValueObjectVisitor\TrashItem( $urlHandler ),
 
+    // Views
+
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestExecutedView'            => new Output\ValueObjectVisitor\RestExecutedView( $urlHandler, $repository->getLocationService(), $repository->getContentService() ),
+
     // Object state
 
     '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup'  => new Output\ValueObjectVisitor\ObjectStateGroup( $urlHandler ),
@@ -472,6 +504,11 @@ $dispatcher = new AuthenticatingDispatcher(
             '(^/content/objects/[0-9]+/objectstates$)' => array(
                 'GET'     => array( $objectStateController, 'getObjectStatesForContent' ),
                 'PATCH'   => array( $objectStateController, 'setObjectStatesForContent' ),
+            ),
+
+            // /content/views
+            '(^/content/views$)' => array(
+                'POST' => array( $contentController, 'createView' ),
             ),
 
             // /content/objectstategroups
