@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\Limitation;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\UserGroupLimitation as APIUserGroupLimitation;
@@ -84,19 +86,22 @@ class UserGroupLimitationType implements SPILimitationTypeInterface
             );
         }
 
-        if ( !$object instanceof Content )
-            throw new InvalidArgumentException( '$object', 'Must be of type: Content' );
+        if ( $object instanceof Content )
+            $object = $object->getVersionInfo()->getContentInfo();
+        else if ( $object instanceof VersionInfo )
+            $object = $object->getContentInfo();
+        else if ( !$object instanceof ContentInfo )
+            throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
 
          /**
-          * @var \eZ\Publish\API\Repository\Values\Content\Content $object
+          * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $object
           */
-        $contentInfo = $object->contentInfo;
         $currentUser = $repository->getCurrentUser();
-        if ( $contentInfo->ownerId === $currentUser->id )
+        if ( $object->ownerId === $currentUser->id )
             return true;
 
         $userService = $repository->getUserService();
-        $contentOwner = $userService->loadUser( $contentInfo->ownerId );
+        $contentOwner = $userService->loadUser( $object->ownerId );
         $contentOwnerGroups = $userService->loadUserGroupsOfUser( $contentOwner );
         $currentUserGroups = $userService->loadUserGroupsOfUser( $currentUser );
 

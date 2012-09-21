@@ -87,9 +87,6 @@ class ParentOwnerLimitationType implements SPILimitationTypeInterface
             );
         }
 
-        if ( !$object instanceof Content )
-            throw new InvalidArgumentException( '$object', 'Must be of type: Content' );
-
         if ( $target !== null  && !$target instanceof Location )
             throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
 

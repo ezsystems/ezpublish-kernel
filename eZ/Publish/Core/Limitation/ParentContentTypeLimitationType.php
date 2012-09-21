@@ -76,9 +76,6 @@ class ParentContentTypeLimitationType implements SPILimitationTypeInterface
         if ( !$value instanceof APIParentContentTypeLimitation )
             throw new InvalidArgumentException( '$value', 'Must be of type: APIParentContentTypeLimitation' );
 
-        if ( !$object instanceof Content )
-            throw new InvalidArgumentException( '$object', 'Must be of type: Content' );
-
         if ( $target !== null  && !$target instanceof Location )
             throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
 

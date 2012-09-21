@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation as APIContentTypeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
@@ -77,9 +78,11 @@ class ContentTypeLimitationType implements SPILimitationTypeInterface
             throw new InvalidArgumentException( '$value', 'Must be of type: APIContentTypeLimitation' );
 
         if ( $object instanceof Content )
-            $object = $object->contentInfo;
+            $object = $object->getVersionInfo()->getContentInfo();
+        else if ( $object instanceof VersionInfo )
+            $object = $object->getContentInfo();
         else if ( !$object instanceof ContentInfo )
-            throw new InvalidArgumentException( '$object', 'Must be of type: Content or ContentInfo' );
+            throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
 
         if ( empty( $value->limitationValues ) )
             return false;

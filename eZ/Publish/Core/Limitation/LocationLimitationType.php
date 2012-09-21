@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\Limitation;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation as APILocationLimitation;
@@ -76,8 +78,12 @@ class LocationLimitationType implements SPILimitationTypeInterface
         if ( !$value instanceof APILocationLimitation )
             throw new InvalidArgumentException( '$value', 'Must be of type: APILocationLimitation' );
 
-        if ( !$object instanceof Content )
-            throw new InvalidArgumentException( '$object', 'Must be of type: Content' );
+        if ( $object instanceof Content )
+            $object = $object->getVersionInfo()->getContentInfo();
+        else if ( $object instanceof VersionInfo )
+            $object = $object->getContentInfo();
+        else if ( !$object instanceof ContentInfo )
+            throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
 
         if ( $target !== null  && !$target instanceof Location )
             throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
@@ -101,9 +107,9 @@ class LocationLimitationType implements SPILimitationTypeInterface
         /**
          * Check all locations if no placement was provided
          *
-         * @var \eZ\Publish\API\Repository\Values\Content\Content $object
+         * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $object
          */
-        $locations = $repository->getLocationService()->loadLocations( $object->contentInfo );
+        $locations = $repository->getLocationService()->loadLocations( $object );
         foreach ( $locations as $location )
         {
             if ( in_array( $location->id, $value->limitationValues ) )

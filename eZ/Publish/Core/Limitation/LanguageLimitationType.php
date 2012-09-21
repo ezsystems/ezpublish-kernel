@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\Limitation;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation as APILanguageLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
@@ -75,21 +77,25 @@ class LanguageLimitationType implements SPILimitationTypeInterface
         if ( !$value instanceof APILanguageLimitation )
             throw new InvalidArgumentException( '$value', 'Must be of type: APILanguageLimitation' );
 
-        if ( !$object instanceof Content )
-            throw new InvalidArgumentException( '$object', 'Must be of type: Content' );
+        if ( $object instanceof Content )
+            $object = $object->getVersionInfo();
+        else if ( !$object instanceof VersionInfo && !$object instanceof ContentInfo )
+            throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
 
         if ( empty( $value->limitationValues ) )
             return false;
 
+        if ( $object instanceof ContentInfo )
+            return in_array( $object->mainLanguageCode, $value->limitationValues, true );
+
         /**
-         * @var \eZ\Publish\API\Repository\Values\Content\Content $object
+         * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo $object
          */
-        $versionInfo = $object->getVersionInfo();
         foreach ( $value->limitationValues as $limitationLanguageCode )
         {
-            if ( $versionInfo->initialLanguageCode === $limitationLanguageCode )
+            if ( $object->initialLanguageCode === $limitationLanguageCode )
                 return true;
-            if ( in_array( $limitationLanguageCode, $versionInfo->languageCodes, true ) )
+            if ( in_array( $limitationLanguageCode, $object->languageCodes, true ) )
                 return true;
         }
         return false;
