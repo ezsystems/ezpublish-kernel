@@ -32,7 +32,7 @@ class CreatedVersion extends Version
             $this->urlHandler->generate(
                 'objectVersion',
                 array(
-                    'object' => $data->version->contentId,
+                    'object' => $data->version->versionInfo->getContentInfo()->id,
                     'version' => $data->version->versionInfo->versionNo
                 )
             )
