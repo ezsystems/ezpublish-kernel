@@ -37,7 +37,8 @@
     "require-dev": {
         "symfony/symfony": "2.1.1",
         "Qafoo/RMF": "dev-master",
-        "ezsystems/ezpublish-legacy": "dev-master"
+        "ezsystems/ezpublish-legacy": "dev-master",
+        "mikey179/vfsStream": "1.1.0"
     },
     "autoload": {
         "psr-0": {
