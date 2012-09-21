@@ -109,7 +109,7 @@ abstract class ValueObjectVisitor
         $generator->endAttribute( 'identifier' );
 
         $generator->startHashElement( 'values' );
-        $generator->startList( 'values' );
+        $generator->startList( 'ref' );
 
         foreach ( $limitation->limitationValues as $limitationValue )
         {
@@ -119,7 +119,7 @@ abstract class ValueObjectVisitor
             $generator->endObjectElement( 'ref' );
         }
 
-        $generator->endList( 'values' );
+        $generator->endList( 'ref' );
         $generator->endHashElement( 'values' );
 
         $generator->endHashElement( 'limitation' );

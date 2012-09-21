@@ -50,14 +50,14 @@ class Policy extends ValueObjectVisitor
         if ( !empty( $limitations ) )
         {
             $generator->startHashElement( 'limitations' );
-            $generator->startList( 'limitations' );
+            $generator->startList( 'limitation' );
 
             foreach ( $limitations as $limitation )
             {
                 $this->visitLimitation( $generator, $limitation );
             }
 
-            $generator->endList( 'limitations' );
+            $generator->endList( 'limitation' );
             $generator->endHashElement( 'limitations' );
         }
 
