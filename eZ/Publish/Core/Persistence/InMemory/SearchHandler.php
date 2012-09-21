@@ -28,7 +28,9 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     Exception;
 
 /**
@@ -181,6 +183,8 @@ class SearchHandler extends SearchHandlerInterface
 
         if ( !$list->totalCount )
             throw new NotFound( 'Content', var_export( $criterion, true ) );
+        else if ( $list->totalCount > 1 )
+            throw new InvalidArgumentException( "totalCount", "findSingle() found more then one item for query" );
 
         return $list->searchHits[0]->valueObject;
     }
@@ -223,27 +227,27 @@ class SearchHandler extends SearchHandlerInterface
             }
             else if ( $criterion instanceof ContentId && !isset( $match['id'] ) )
             {
-                $match['id'] = $criterion->value[0];
+                $match['id'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
             }
             else if ( $criterion instanceof ContentTypeId && !isset( $match['contentInfo']['typeId'] ) )
             {
-                $match['contentInfo']['contentTypeId'] = $criterion->value[0];
+                $match['contentInfo']['contentTypeId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
             }
             else if ( $criterion instanceof LocationId && !isset( $match['locations']['id'] ) )
             {
-                $match['locations']['id'] = $criterion->value[0];
+                $match['locations']['id'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
             }
             else if ( $criterion instanceof RemoteId && !isset( $match['contentInfo']['remoteId'] ) )
             {
-                $match['contentInfo']['remoteId'] = $criterion->value[0];
+                $match['contentInfo']['remoteId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
             }
             else if ( $criterion instanceof LocationRemoteId && !isset( $match['locations']['remoteId'] ) )
             {
-                $match['locations']['remoteId'] = $criterion->value[0];
+                $match['locations']['remoteId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
             }
             else if ( $criterion instanceof SectionId && !isset( $match['contentInfo']['sectionId'] ) )
             {
-                $match['contentInfo']['sectionId'] = $criterion->value[0];
+                $match['contentInfo']['sectionId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
             }
             else if ( $criterion instanceof Status && !isset( $match['versionInfo']['status'] ) )
             {
@@ -265,7 +269,7 @@ class SearchHandler extends SearchHandlerInterface
             }
             else if ( $criterion instanceof ParentLocationId && !isset( $match['locations']['parentId'] ) )
             {
-                $match['locations']['parentId'] = $criterion->value[0];
+                $match['locations']['parentId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
             }
             else if ( $criterion instanceof Subtree && !isset( $match['locations']['pathString'] ) )
             {
@@ -276,9 +280,9 @@ class SearchHandler extends SearchHandlerInterface
                 if ( $criterion instanceof UserMetadata && $criterion->target !== $criterion::MODIFIER )
                 {
                     if ( $criterion->target === $criterion::OWNER && !isset( $match['contentInfo']['ownerId'] ) )
-                        $match['ownerId'] = $criterion->value[0];
+                        $match['ownerId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
                     else if ( $criterion->target === $criterion::CREATOR && !isset( $match['versionInfo']['creatorId'] ) )
-                        $match['versionInfo']['creatorId'] = $criterion->value[0];
+                        $match['versionInfo']['creatorId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
                     //else if ( $criterion->target === $criterion::MODIFIER && !isset( $match['version']['creatorId'] ) )
                         //$match['version']['creatorId'] = $criterion->value[0];
                     continue;

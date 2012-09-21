@@ -14,10 +14,6 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\LocationCreateStruct,
     eZ\Publish\API\Repository\Values\Content\Content as APIContent,
     eZ\Publish\Core\Repository\Values\Content\Content,
-    eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\SearchResult,
-    eZ\Publish\SPI\Persistence\Content\Search\Result as SPISearchResult,
     eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
@@ -33,13 +29,6 @@ abstract class ContentBase extends BaseServiceTest
      * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $persistenceHandlerMock;
-
-    /**
-     * Search handler mock
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\Search\Handler|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $searchHandlerMock;
 
     protected function getContentInfoExpectedValues()
     {
@@ -2528,280 +2517,6 @@ abstract class ContentBase extends BaseServiceTest
     }
 
     /**
-     * Test for the findContent() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\ContentService::findContent
-     */
-    public function testFindContentBehaviour()
-    {
-        self::markTestIncomplete( "Move to Search Service tests" );
-        $contentService = $this->repository->getContentService();
-
-        $refObject = new \ReflectionObject( $contentService );
-        $refProperty = $refObject->getProperty( 'searchHandler' );
-        $refProperty->setAccessible( true );
-        $refProperty->setValue(
-            $contentService,
-            $this->getSearchHandlerMock()
-        );
-
-        $searchHandlerMock = $this->getSearchHandlerMock();
-        $searchHandlerMock->expects(
-            $this->once()
-        )->method(
-            "find"
-        )->with(
-            $this->isInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion" ),
-            $this->equalTo( 0 ),
-            $this->equalTo( 10 ),
-            $this->isType( "array" )
-        )->will(
-            $this->returnValue( new SPISearchResult() )
-        );
-
-        $contentService->findContent(
-            new Query(
-                array(
-                    "criterion" => new Criterion\ContentId( 4 ),
-                    "offset" => 0,
-                    "limit" => 10,
-                    "sortClauses" => array()
-                )
-            ),
-            array( "languages" => array( "eng-GB" ) )
-        );
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\ContentService::findContent
-     */
-    public function testFindContent()
-    {
-        self::markTestIncomplete( "Move to Search Service tests" );
-        /* BEGIN: Use Case */
-        $contentService = $this->repository->getContentService();
-        $query = new Query(
-            array(
-                "criterion" => new Criterion\ContentId( array( 4 ) ),
-                "offset" => 0
-            )
-        );
-
-        $searchResult = $contentService->findContent(
-            $query,
-            array()
-        );
-        /* END: Use Case */
-
-        $this->assertInstanceOf(
-            "eZ\\Publish\\API\\Repository\\Values\\Content\\SearchResult",
-            $searchResult
-        );
-
-        $this->assertEquals( $query, $searchResult->query );
-        $this->assertEquals( 1, $searchResult->count );
-        $this->assertCount( $searchResult->count, $searchResult->items );
-        $this->assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\Values\\Content\\Content",
-            reset( $searchResult->items )
-        );
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @todo finish
-     * @covers \eZ\Publish\Core\Repository\ContentService::findContent
-     */
-    public function testFindContentWithLanguageFilter()
-    {
-        self::markTestIncomplete( "Move to Search Service tests" );
-        /* BEGIN: Use Case */
-        $contentService = $this->repository->getContentService();
-        $query = new Query(
-            array(
-                "criterion" => new Criterion\ContentId( array( 4 ) ),
-                "offset" => 0
-            )
-        );
-
-        $searchResult = $contentService->findContent(
-            $query,
-            array( "languages" => array( "eng-US" ) )
-        );
-        /* END: Use Case */
-
-        $this->assertInstanceOf(
-            "eZ\\Publish\\API\\Repository\\Values\\Content\\SearchResult",
-            $searchResult
-        );
-
-        $this->assertEquals( $query, $searchResult->query );
-        $this->assertEquals( 1, $searchResult->count );
-        $this->assertCount( $searchResult->count, $searchResult->items );
-        $this->assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\Values\\Content\\Content",
-            reset( $searchResult->items )
-        );
-    }
-
-    /**
-     * Test for the findSingle() method.
-     *
-     * @depends testFindContent
-     * @depends testFindContentWithLanguageFilter
-     * @covers \eZ\Publish\Core\Repository\ContentService::findSingle
-     */
-    public function testFindSingle()
-    {
-        self::markTestIncomplete( "Move to Search Service tests" );
-        $contentServiceMock = $this->getPartlyMockedService(
-            array( "findContent" )
-        );
-        $contentServiceMock->expects(
-            $this->once()
-        )->method(
-            "findContent"
-        )->with(
-            $this->isInstanceOf(
-                "eZ\\Publish\\API\\Repository\\Values\\Content\\Query"
-            ),
-            $this->equalTo( array( "languages" => array( "eng-GB" ) ) ),
-            $this->equalTo( true )
-        )->will(
-            $this->returnValue(
-                new SearchResult(
-                    array(
-                        "count" => 1,
-                        "items" => array(
-                            new Content( array( "internalFields" => array() ) )
-                        )
-                    )
-                )
-            )
-        );
-
-        /* BEGIN: Use Case */
-        $content = $contentServiceMock->findSingle(
-            new Query(
-                array(
-                    "criterion" => new Criterion\ContentId( array( 42 ) ),
-                    "offset" => 0
-                )
-            ),
-            array( "languages" => array( "eng-GB" ) ),
-            true
-        );
-        /* END: Use Case */
-
-        $this->assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\Values\\Content\\Content",
-            $content
-        );
-    }
-
-    /**
-     * Test for the findSingle() method.
-     *
-     * @depends testFindSingle
-     * @covers \eZ\Publish\Core\Repository\ContentService::findSingle
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    public function testFindSingleThrowsNotFoundException()
-    {
-        self::markTestIncomplete( "Move to Search Service tests" );
-        /* BEGIN: Use Case */
-        $contentService = $this->repository->getContentService();
-        $query = new Query(
-            array(
-                "criterion" => new Criterion\ContentId( array( PHP_INT_MAX ) ),
-                "offset" => 0
-            )
-        );
-
-        // Throws an exception because content with given id does not exist
-        $searchResult = $contentService->findSingle(
-            $query,
-            array( "languages" => array( "eng-GB" ) )
-        );
-        /* END: Use Case */
-    }
-
-    /**
-     * Test for the findSingle() method.
-     *
-     * @depends testFindSingle
-     * @covers \eZ\Publish\Core\Repository\ContentService::findSingle
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    public function testFindSingleThrowsNotFoundExceptionDueToPermissions()
-    {
-        $this->markTestIncomplete( "Test for ContentService::findSingle() is not implemented." );
-    }
-
-    /**
-     * Test for the findSingle() method.
-     *
-     * @depends testFindSingle
-     * @covers \eZ\Publish\Core\Repository\ContentService::findSingle
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function testFindSingleThrowsInvalidArgumentException()
-    {
-        self::markTestIncomplete( "Move to Search Service tests" );
-        /* BEGIN: Use Case */
-        /*$contentService = $this->repository->getContentService();
-        $query = new Query(
-            array(
-                "criterion" => new Criterion\ContentId( array( 1, 4 ) )
-            )
-        );
-
-        // Throws an exception because more than one result was returned for the given query
-        $searchResult = $contentService->findSingle(
-            $query,
-            array( "languages" => array( "eng-GB" ) )
-        );*/
-        /* END: Use Case */
-
-        $contentServiceMock = $this->getPartlyMockedService(
-            array( "findContent" )
-        );
-        $contentServiceMock->expects(
-            $this->once()
-        )->method(
-            "findContent"
-        )->with(
-            $this->isInstanceOf(
-                "eZ\\Publish\\API\\Repository\\Values\\Content\\Query"
-            ),
-            $this->equalTo( array( "languages" => array( "eng-GB" ) ) ),
-            $this->equalTo( true )
-        )->will(
-            $this->returnValue(
-                new SearchResult(
-                    array(
-                        "count" => 2,
-                        "items" => array(
-                            new Content( array( "internalFields" => array() ) ),
-                            new Content( array( "internalFields" => array() ) )
-                        )
-                    )
-                )
-            )
-        );
-
-        // Throws an exception because more than one result was returned for the given query
-        $content = $contentServiceMock->findSingle(
-            new Query,
-            array( "languages" => array( "eng-GB" ) ),
-            true
-        );
-    }
-
-    /**
      * Test for the newTranslationInfo() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::newTranslationInfo
@@ -2846,26 +2561,6 @@ abstract class ContentBase extends BaseServiceTest
     }
 
     /**
-     * Returns a SearchHandler mock
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Search\Handler|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getSearchHandlerMock()
-    {
-        if ( !isset( $this->searchHandlerMock ) )
-        {
-            $this->searchHandlerMock = $this->getMock(
-                "eZ\\Publish\\SPI\\Persistence\\Content\\Search\\Handler",
-                array(),
-                array(),
-                '',
-                false
-            );
-        }
-        return $this->searchHandlerMock;
-    }
-
-    /**
      * Returns a persistence Handler mock
      *
      * @return \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
@@ -2880,15 +2575,6 @@ abstract class ContentBase extends BaseServiceTest
                 array(),
                 '',
                 false
-            );
-            $this->persistenceHandlerMock->expects(
-                $this->any()
-            )->method(
-                "searchHandler"
-            )->will(
-                $this->returnValue(
-                    $this->getSearchHandlerMock()
-                )
             );
         }
 

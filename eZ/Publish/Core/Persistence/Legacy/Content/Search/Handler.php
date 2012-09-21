@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
 
 use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler,
-    eZ\Publish\Core\Persistence\Legacy\Exception,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler,
     eZ\Publish\API\Repository\Exceptions\NotImplementedException,
@@ -19,7 +18,10 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query,
-    eZ\Publish\API\Repository\Values\Content\VersionInfo;
+    eZ\Publish\API\Repository\Values\Content\VersionInfo,
+
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -137,12 +139,10 @@ class Handler extends BaseSearchHandler
         $query->limit     = 1;
         $result = $this->findContent( $query, $fieldFilters );
 
-        if ( $result->totalCount !== 1 )
-        {
-            throw new Exception\InvalidObjectCount(
-                'Expected exactly one object to be found -- found ' . $result->totalCount . '.'
-            );
-        }
+        if ( !$result->totalCount )
+            throw new NotFoundException( 'Content', "findSingle() found no content for given \$criterion" );
+        else if ( $result->totalCount > 1 )
+            throw new InvalidArgumentException( "totalCount", "findSingle() found more then one item for given \$criterion" );
 
         $first = reset( $result->searchHits );
         return $first->valueObject;

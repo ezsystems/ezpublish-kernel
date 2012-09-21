@@ -362,7 +362,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @expectedException eZ\Publish\Core\Persistence\Legacy\Exception\InvalidObjectCount
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findSingle
      */
     public function testFindSingleTooMany()
@@ -372,7 +372,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * @expectedException eZ\Publish\Core\Persistence\Legacy\Exception\InvalidObjectCount
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findSingle
      */
     public function testFindSingleZero()
