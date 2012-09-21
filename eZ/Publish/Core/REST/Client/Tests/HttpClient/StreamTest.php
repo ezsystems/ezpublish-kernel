@@ -46,7 +46,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
     {
         $response = $this->client->request( 'GET', '/' );
 
-        $this->assertSame( 500, $response->headers['status'] );
+        $this->assertSame( 200, $response->headers['status'] );
     }
 
     /**
