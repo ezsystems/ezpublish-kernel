@@ -518,7 +518,7 @@ class UserService implements UserServiceInterface
 
         return $this->buildDomainUserObject(
             $spiUser,
-            $publishedContent
+            $contentService->loadContent( $publishedContent->id )// Reload to get with updated user field value
         );
     }
 
@@ -1070,9 +1070,9 @@ class UserService implements UserServiceInterface
                 'login' => $spiUser->login,
                 'email' => $spiUser->email,
                 'passwordHash' => $spiUser->passwordHash,
-                'hashAlgorithm' => $spiUser->hashAlgorithm,
+                'hashAlgorithm' => (int)$spiUser->hashAlgorithm,
                 'enabled' => $spiUser->isEnabled,
-                'maxLogin' => $spiUser->maxLogin,
+                'maxLogin' => (int)$spiUser->maxLogin,
             )
         );
     }
