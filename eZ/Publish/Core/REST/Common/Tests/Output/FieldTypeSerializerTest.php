@@ -20,6 +20,10 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
 {
     protected $fieldTypeServiceMock;
 
+    protected $fieldTypeProcessorRegistryMock;
+
+    protected $fieldTypeProcessorMock;
+
     protected $contentTypeMock;
 
     protected $fieldTypeMock;
@@ -28,9 +32,7 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
 
     public function testSerializeFieldValue()
     {
-        $serializer = new Common\Output\FieldTypeSerializer(
-            $this->getFieldTypeServiceMock()
-        );
+        $serializer = $this->getFieldTypeSerializer();
 
         $this->getGeneratorMock()->expects( $this->once() )
             ->method( 'generateFieldTypeHash' )
@@ -79,11 +81,84 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testSerializeFieldValueWithProcessor()
+    {
+        $serializer = $this->getFieldTypeSerializer();
+
+        $this->getGeneratorMock()->expects( $this->once() )
+            ->method( 'generateFieldTypeHash' )
+            ->with(
+                $this->equalTo( 'fieldValue' ),
+                $this->equalTo( array( 'post-processed' ) )
+            );
+
+        $this->getContentTypeMock()->expects( $this->once() )
+            ->method( 'getFieldDefinition' )
+            ->with(
+                $this->equalTo( 'some-field' )
+            )->will(
+                $this->returnValue(
+                    new FieldDefinition( array(
+                        'fieldTypeIdentifier' => 'myFancyFieldType',
+                    ) )
+                )
+            );
+
+        $processorMock = $this->getFieldTypeProcessorMock();
+        $this->getFieldTypeProcessorRegistryMock()
+            ->expects( $this->once() )
+            ->method( 'hasProcessor' )
+            ->with( 'myFancyFieldType' )
+            ->will( $this->returnValue( true ) );
+        $this->getFieldTypeProcessorRegistryMock()
+            ->expects( $this->once() )
+            ->method( 'getProcessor' )
+            ->with( 'myFancyFieldType' )
+            ->will( $this->returnCallback(
+                function () use ( $processorMock )
+                {
+                    return $processorMock;
+                }
+            ) );
+        $processorMock->expects( $this->once() )
+            ->method( 'postProcessHash' )
+            ->with( $this->equalTo( array( 23, 42 ) ) )
+            ->will( $this->returnValue( array( 'post-processed' ) ) );
+
+        $fieldTypeMock = $this->getFieldTypeMock();
+        $this->getFieldTypeServiceMock()->expects( $this->once() )
+            ->method( 'getFieldType' )
+            ->with( $this->equalTo( 'myFancyFieldType' ) )
+            ->will( $this->returnCallback(
+                function () use ( $fieldTypeMock )
+                {
+                    return $fieldTypeMock;
+                }
+            ) );
+
+        $fieldTypeMock->expects( $this->once() )
+            ->method( 'getFieldTypeIdentifier' )
+            ->will( $this->returnValue( 'myFancyFieldType' ) );
+        $fieldTypeMock->expects( $this->once() )
+            ->method( 'toHash' )
+            ->with( $this->equalTo( 'my-field-value' ) )
+            ->will( $this->returnValue( array( 23, 42 ) ) );
+
+        $serializer->serializeFieldValue(
+            $this->getGeneratorMock(),
+            $this->getContentTypeMock(),
+            new Field(
+                array(
+                    'fieldDefIdentifier' => 'some-field',
+                    'value' => 'my-field-value'
+                )
+            )
+        );
+    }
+
     public function testSerializeFieldDefaultValue()
     {
-        $serializer = new Common\Output\FieldTypeSerializer(
-            $this->getFieldTypeServiceMock()
-        );
+        $serializer = $this->getFieldTypeSerializer();
 
         $this->getGeneratorMock()->expects( $this->once() )
             ->method( 'generateFieldTypeHash' )
@@ -121,9 +196,7 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
 
     public function testSerializeFieldSettings()
     {
-        $serializer = new Common\Output\FieldTypeSerializer(
-            $this->getFieldTypeServiceMock()
-        );
+        $serializer = $this->getFieldTypeSerializer();
 
         $this->getGeneratorMock()->expects( $this->once() )
             ->method( 'generateFieldTypeHash' )
@@ -161,9 +234,7 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
 
     public function testSerializeValidatorConfiguration()
     {
-        $serializer = new Common\Output\FieldTypeSerializer(
-            $this->getFieldTypeServiceMock()
-        );
+        $serializer = $this->getFieldTypeSerializer();
 
         $this->getGeneratorMock()->expects( $this->once() )
             ->method( 'generateFieldTypeHash' )
@@ -199,6 +270,14 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    protected function getFieldTypeSerializer()
+    {
+        return new Common\Output\FieldTypeSerializer(
+            $this->getFieldTypeServiceMock(),
+            $this->getFieldTypeProcessorRegistryMock()
+        );
+    }
+
     protected function getFieldTypeServiceMock()
     {
         if ( !isset( $this->fieldTypeServiceMock ) )
@@ -212,6 +291,36 @@ class FieldTypeSerializerTest extends \PHPUnit_Framework_TestCase
             );
         }
         return $this->fieldTypeServiceMock;
+    }
+
+    protected function getFieldTypeProcessorRegistryMock()
+    {
+        if ( !isset( $this->fieldTypeProcessorRegistryMock ) )
+        {
+            $this->fieldTypeProcessorRegistryMock = $this->getMock(
+                'eZ\\Publish\\Core\\REST\\Common\\FieldTypeProcessorRegistry',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->fieldTypeProcessorRegistryMock;
+    }
+
+    protected function getFieldTypeProcessorMock()
+    {
+        if ( !isset( $this->fieldTypeProcessorMock ) )
+        {
+            $this->fieldTypeProcessorMock = $this->getMock(
+                'eZ\\Publish\\Core\\REST\\Common\\FieldTypeProcessor',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->fieldTypeProcessorMock;
     }
 
     protected function getContentTypeMock()

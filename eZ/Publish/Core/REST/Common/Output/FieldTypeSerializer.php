@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\REST\Common\Output;
 
+use eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry;
+
 use eZ\Publish\API\Repository\FieldTypeService,
     eZ\Publish\API\Repository\FieldType,
     eZ\Publish\API\Repository\Values\ContentType\ContentType,
@@ -28,11 +30,17 @@ class FieldTypeSerializer
     protected $fieldTypeService;
 
     /**
+     * @var eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry
+     */
+    protected $fieldTypeProcessorRegistry;
+
+    /**
      * @param ieZ\Publish\API\Repository\FieldTypeService $fieldTypeService
      */
-    public function __construct( FieldTypeService $fieldTypeService )
+    public function __construct( FieldTypeService $fieldTypeService, FieldTypeProcessorRegistry $fieldTypeProcessorRegistry )
     {
         $this->fieldTypeService = $fieldTypeService;
+        $this->fieldTypeProcessorRegistry = $fieldTypeProcessorRegistry;
     }
 
     /**
@@ -137,7 +145,16 @@ class FieldTypeSerializer
      */
     protected function serializeValue( $elementName, Generator $generator, FieldType $fieldType, $value )
     {
-        $this->serializeHash( $elementName, $generator, $fieldType->toHash( $value ) );
+        $hash = $fieldType->toHash( $value );
+
+        $fieldTypeIdentifier = $fieldType->getFieldTypeIdentifier();
+        if ( $this->fieldTypeProcessorRegistry->hasProcessor( $fieldTypeIdentifier ) )
+        {
+            $processor = $this->fieldTypeProcessorRegistry->getProcessor( $fieldTypeIdentifier );
+            $hash = $processor->postProcessHash( $hash );
+        }
+
+        $this->serializeHash( $elementName, $generator, $hash );
     }
 
     /**
