@@ -1300,8 +1300,8 @@ class ContentService implements ContentServiceInterface
         foreach ( $spiVersionInfoList as $spiVersionInfo )
         {
             $versionInfo = $this->buildVersionInfoDomainObject( $spiVersionInfo );
-            if ( !$this->repository->canUser( 'content', 'read', $versionInfo ) )
-                throw new UnauthorizedException( 'content', 'read' );
+            if ( !$this->repository->canUser( 'content', 'versionread', $versionInfo ) )
+                throw new UnauthorizedException( 'content', 'versionread' );
 
             $versions[] = $versionInfo;
         }
@@ -1453,8 +1453,8 @@ class ContentService implements ContentServiceInterface
      */
     public function loadReverseRelations( APIContentInfo $contentInfo )
     {
-        if ( !$this->repository->canUser( 'content', 'read', $contentInfo ) )
-            throw new UnauthorizedException( 'content', 'read' );
+        if ( $this->repository->hasAccess( 'content', 'reverserelatedlist' ) !== true )
+            throw new UnauthorizedException( 'content', 'reverserelatedlist' );
 
         $spiRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations(
             $contentInfo->id
