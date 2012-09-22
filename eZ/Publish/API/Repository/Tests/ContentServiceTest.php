@@ -2804,7 +2804,8 @@ class ContentServiceTest extends BaseContentServiceTest
         $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
         $demoDesignRemoteId = '8b8b22fe3c6061ed500fbd2b377b885f';
 
-        $content = $this->createContentVersion1();
+        $versionInfo = $this->createContentVersion1()->getVersionInfo();
+        $contentInfo = $versionInfo->getContentInfo();
 
         // Create some drafts
         $mediaDraft = $contentService->createContentDraft(
@@ -2815,24 +2816,32 @@ class ContentServiceTest extends BaseContentServiceTest
         );
 
         // Create relation between new content object and "Media" page
-        $contentService->addRelation(
+        $relation1 = $contentService->addRelation(
             $mediaDraft->getVersionInfo(),
-            $content->contentInfo
+            $contentInfo
         );
 
         // Create another relation with the "Demo Design" page
-        $contentService->addRelation(
+        $relation2 = $contentService->addRelation(
             $demoDesignDraft->getVersionInfo(),
-            $content->contentInfo
+            $contentInfo
         );
 
         // Load all relations
-        $relations = $contentService->loadReverseRelations( $content->contentInfo );
+        $relations = $contentService->loadRelations( $versionInfo );
+        $reverseRelations = $contentService->loadReverseRelations( $contentInfo );
         /* END: Use Case */
 
-        $this->assertEquals( 2, count( $relations ) );
+        $this->assertEquals( $contentInfo->id, $relation1->getDestinationContentInfo()->id );
+        $this->assertEquals( $mediaDraft->id, $relation1->getSourceContentInfo()->id );
 
-        usort( $relations, function( $rel1, $rel2 ) {
+        $this->assertEquals( $contentInfo->id, $relation2->getDestinationContentInfo()->id );
+        $this->assertEquals( $demoDesignDraft->id, $relation2->getSourceContentInfo()->id );
+
+        $this->assertEquals( 0, count( $relations ) );
+        $this->assertEquals( 2, count( $reverseRelations ) );
+
+        usort( $reverseRelations, function( $rel1, $rel2 ) {
             return strcasecmp(
                 $rel2->getSourceContentInfo()->remoteId,
                 $rel1->getSourceContentInfo()->remoteId
@@ -2852,12 +2861,12 @@ class ContentServiceTest extends BaseContentServiceTest
             ),
             array(
                 array(
-                    'sourceContentInfo' => $relations[0]->sourceContentInfo->remoteId,
-                    'destinationContentInfo' => $relations[0]->destinationContentInfo->remoteId,
+                    'sourceContentInfo' => $reverseRelations[0]->sourceContentInfo->remoteId,
+                    'destinationContentInfo' => $reverseRelations[0]->destinationContentInfo->remoteId,
                 ),
                 array(
-                    'sourceContentInfo' => $relations[1]->sourceContentInfo->remoteId,
-                    'destinationContentInfo' => $relations[1]->destinationContentInfo->remoteId,
+                    'sourceContentInfo' => $reverseRelations[1]->sourceContentInfo->remoteId,
+                    'destinationContentInfo' => $reverseRelations[1]->destinationContentInfo->remoteId,
                 )
             )
         );
