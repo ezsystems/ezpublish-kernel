@@ -17,7 +17,7 @@ class UserGroupRefList
     /**
      * User groups
      *
-     * @var \eZ\Publish\API\Repository\Values\User\UserGroup[]
+     * @var \eZ\Publish\Core\REST\Server\Values\RestUserGroup[]
      */
     public $userGroups;
 
@@ -38,7 +38,7 @@ class UserGroupRefList
     /**
      * Construct
      *
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroup[] $userGroups
+     * @param \eZ\Publish\Core\REST\Server\Values\RestUserGroup[] $userGroups
      * @param string $path
      * @param mixed $userId
      */
