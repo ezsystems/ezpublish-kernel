@@ -24,6 +24,7 @@
         "zetacomponents/database": "dev-master",
         "zetacomponents/debug": "dev-master",
         "zetacomponents/feed": "dev-master",
+        "zetacomponents/image-conversion": "dev-master",
         "zetacomponents/mail": "dev-master",
         "zetacomponents/mvc-tools": "dev-master",
         "zetacomponents/mvc-authentication-tiein": "dev-master",
