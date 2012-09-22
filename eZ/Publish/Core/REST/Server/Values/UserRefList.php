@@ -17,7 +17,7 @@ class UserRefList
     /**
      * Users
      *
-     * @var \eZ\Publish\API\Repository\Values\User\User[]
+     * @var \eZ\Publish\Core\REST\Server\Values\RestUser[]
      */
     public $users;
 
@@ -31,7 +31,7 @@ class UserRefList
     /**
      * Construct
      *
-     * @param \eZ\Publish\API\Repository\Values\User\User[] $users
+     * @param \eZ\Publish\Core\REST\Server\Values\RestUser[] $users
      * @param string $path
      */
     public function __construct( array $users, $path )

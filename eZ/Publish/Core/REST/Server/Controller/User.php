@@ -654,19 +654,20 @@ class User
 
         $users = $this->userService->loadUsersOfUserGroup( $userGroup );
 
+        $restUsers = array();
+        foreach ( $users as $user )
+        {
+            $userContentInfo = $user->getVersionInfo()->getContentInfo();
+            $userLocation = $this->locationService->loadLocation( $userContentInfo->mainLocationId );
+            $restUsers[] = new Values\RestUser( $user, $userContentInfo, $userLocation );
+        }
+
         if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.userlist' )
         {
-            $restUsers = array();
-            foreach ( $users as $user )
-            {
-                $userContentInfo = $user->getVersionInfo()->getContentInfo();
-                $userLocation = $this->locationService->loadLocation( $userContentInfo->mainLocationId );
-                $restUsers[] = new Values\RestUser( $user, $userContentInfo, $userLocation );
-            }
             return new Values\UserList( $restUsers, $request->path );
         }
 
-        return new Values\UserRefList( $users, $request->path );
+        return new Values\UserRefList( $restUsers, $request->path );
     }
 
     /**
