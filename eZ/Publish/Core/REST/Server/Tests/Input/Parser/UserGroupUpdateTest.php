@@ -10,6 +10,11 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\UserGroupUpdate;
+use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
+use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 
 class UserGroupUpdateTest extends BaseTest
 {
@@ -18,7 +23,6 @@ class UserGroupUpdateTest extends BaseTest
      */
     public function testParse()
     {
-        $this->markTestSkipped( '@todo Skipped due to InMemory implementation of Location value object does not implement getting of contentId virtual property' );
         $inputArray = array(
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
@@ -29,10 +33,6 @@ class UserGroupUpdateTest extends BaseTest
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'name',
-                        'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
                         'fieldValue' => array()
                     )
                 )
@@ -106,17 +106,13 @@ class UserGroupUpdateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'name',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
-                        'fieldValue' => array()
                     )
                 )
             ),
             '__url' => '/user/groups/1/5'
         );
 
-        $userGroupUpdate = $this->getUserGroupUpdateWithSimpleFieldTypeMock();
+        $userGroupUpdate = $this->getUserGroupUpdate();
         $userGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -138,7 +134,7 @@ class UserGroupUpdateTest extends BaseTest
             '__url' => '/user/groups/1/5'
         );
 
-        $userGroupUpdate = $this->getUserGroupUpdateWithSimpleFieldTypeMock();
+        $userGroupUpdate = $this->getUserGroupUpdate();
         $userGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -160,17 +156,13 @@ class UserGroupUpdateTest extends BaseTest
                 'field' => array(
                     array(
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
-                        'fieldValue' => array()
                     )
                 )
             ),
             '__url' => '/user/groups/1/5'
         );
 
-        $userGroupUpdate = $this->getUserGroupUpdateWithSimpleFieldTypeMock();
+        $userGroupUpdate = $this->getUserGroupUpdate();
         $userGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -192,17 +184,13 @@ class UserGroupUpdateTest extends BaseTest
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'name',
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
-                        'fieldValue' => array()
                     )
                 )
             ),
             '__url' => '/user/groups/1/5'
         );
 
-        $userGroupUpdate = $this->getUserGroupUpdateWithSimpleFieldTypeMock();
+        $userGroupUpdate = $this->getUserGroupUpdate();
         $userGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -215,26 +203,10 @@ class UserGroupUpdateTest extends BaseTest
     {
         return new UserGroupUpdate(
             $this->getUrlHandler(),
-            $this->getRepository()->getUserService(),
-            $this->getRepository()->getContentService(),
-            $this->getRepository()->getLocationService(),
+            $this->getUserServiceMock(),
+            $this->getContentServiceMock(),
+            $this->getLocationServiceMock(),
             $this->getFieldTypeParserMock()
-        );
-    }
-
-    /**
-     * Returns the UserGroupUpdate parser
-     *
-     * @return \eZ\Publish\Core\REST\Server\Input\Parser\UserGroupUpdate
-     */
-    protected function getUserGroupUpdateWithSimpleFieldTypeMock()
-    {
-        return new UserGroupUpdate(
-            $this->getUrlHandler(),
-            $this->getRepository()->getUserService(),
-            $this->getRepository()->getContentService(),
-            $this->getRepository()->getLocationService(),
-            $this->getSimpleFieldTypeParserMock()
         );
     }
 
@@ -245,48 +217,20 @@ class UserGroupUpdateTest extends BaseTest
      */
     private function getFieldTypeParserMock()
     {
-        $fieldTypeParserMock = $this->getSimpleFieldTypeParserMock();
-
-        $fieldTypeParserMock->expects( $this->at( 0 ) )
-            ->method( 'parseFieldValue' )
-            ->with( 4, 'name', array() )
-            ->will( $this->returnValue( 'foo' ) );
-
-        $fieldTypeParserMock->expects( $this->at( 1 ) )
-            ->method( 'parseFieldValue' )
-            ->with( 4, 'description', array() )
-            ->will( $this->returnValue( 'foo' ) );
-
-        return $fieldTypeParserMock;
-    }
-
-    /**
-     * Get the field type parser mock object
-     *
-     * @return \eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
-     */
-    private function getSimpleFieldTypeParserMock()
-    {
         $fieldTypeParserMock = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Input\\FieldTypeParser',
             array(),
             array(
+                $this->getContentServiceMock(),
                 $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\ContentService',
+                    'eZ\\Publish\\Core\\Repository\\ContentTypeService',
                     array(),
                     array(),
                     '',
                     false
                 ),
                 $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\ContentTypeService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\FieldTypeService',
+                    'eZ\\Publish\\Core\\Repository\\FieldTypeService',
                     array(),
                     array(),
                     '',
@@ -297,6 +241,100 @@ class UserGroupUpdateTest extends BaseTest
             false
         );
 
+        $fieldTypeParserMock->expects( $this->any() )
+            ->method( 'parseFieldValue' )
+            ->with( 4, 'name', array() )
+            ->will( $this->returnValue( 'foo' ) );
+
         return $fieldTypeParserMock;
+    }
+
+    /**
+     * Get the user service mock object
+     *
+     * @return \eZ\Publish\API\Repository\UserService
+     */
+    protected function getUserServiceMock()
+    {
+        $userServiceMock =  $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\UserService',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $userServiceMock->expects( $this->any() )
+            ->method( 'newUserGroupUpdateStruct' )
+            ->will(
+                $this->returnValue( new UserGroupUpdateStruct() )
+            );
+
+        return $userServiceMock;
+    }
+
+    /**
+     * Get the location service mock object
+     *
+     * @return \eZ\Publish\API\Repository\LocationService
+     */
+    protected function getLocationServiceMock()
+    {
+        $userServiceMock =  $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\LocationService',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $userServiceMock->expects( $this->any() )
+            ->method( 'loadLocation' )
+            ->with( $this->equalTo( 5 ) )
+            ->will(
+                $this->returnValue(
+                    new Location(
+                        array(
+                             'contentInfo' => new ContentInfo(
+                                 array(
+                                      'id' => 4
+                                 )
+                             )
+                        )
+                    )
+                )
+            );
+
+        return $userServiceMock;
+    }
+
+    /**
+     * Get the content service mock object
+     *
+     * @return \eZ\Publish\API\Repository\ContentService
+     */
+    protected function getContentServiceMock()
+    {
+        $contentServiceMock =  $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\ContentService',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $contentServiceMock->expects( $this->any() )
+            ->method( 'newContentUpdateStruct' )
+            ->will(
+                $this->returnValue( new ContentUpdateStruct() )
+            );
+
+        $contentServiceMock->expects( $this->any() )
+            ->method( 'newContentMetadataUpdateStruct' )
+            ->will(
+                $this->returnValue( new ContentMetadataUpdateStruct() )
+            );
+
+        return $contentServiceMock;
     }
 }

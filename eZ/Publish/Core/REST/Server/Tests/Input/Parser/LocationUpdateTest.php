@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\LocationUpdate;
+use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
 class LocationUpdateTest extends BaseTest
@@ -118,8 +119,32 @@ class LocationUpdateTest extends BaseTest
     {
         return new LocationUpdate(
             $this->getUrlHandler(),
-            $this->getRepository()->getLocationService(),
+            $this->getLocationServiceMock(),
             $this->getParserTools()
         );
+    }
+
+    /**
+     * Get the location service mock object
+     *
+     * @return \eZ\Publish\API\Repository\LocationService
+     */
+    protected function getLocationServiceMock()
+    {
+        $locationServiceMock =  $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\LocationService',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $locationServiceMock->expects( $this->any() )
+            ->method( 'newLocationUpdateStruct' )
+            ->will(
+                $this->returnValue( new LocationUpdateStruct() )
+            );
+
+        return $locationServiceMock;
     }
 }

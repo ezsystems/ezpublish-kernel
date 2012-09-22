@@ -10,6 +10,9 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\UserCreate;
+use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
 
 class UserCreateTest extends BaseTest
 {
@@ -28,19 +31,15 @@ class UserCreateTest extends BaseTest
             ),
             'remoteId' => 'remoteId12345678',
             'login' => 'login',
-            'email' => 'email@local.com',
+            'email' => 'nospam@ez.no',
             'password' => 'password',
             'enabled' => 'true',
             'fields' => array(
                 'field' => array(
                     array(
-                        'fieldDefinitionIdentifier' => 'first_name',
+                        'fieldDefinitionIdentifier' => 'name',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'last_name',
-                        'fieldValue' => array()
-                    ),
+                    )
                 )
             )
         );
@@ -110,7 +109,7 @@ class UserCreateTest extends BaseTest
             ),
             'remoteId' => 'remoteId12345678',
             'login' => 'login',
-            'email' => 'email@local.com',
+            'email' => 'nospam@ez.no',
             'password' => 'password',
             'enabled' => 'true',
             'fields' => array(
@@ -118,16 +117,12 @@ class UserCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'name',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
-                        'fieldValue' => array()
-                    ),
+                    )
                 )
             )
         );
 
-        $userCreate = $this->getUserCreateWithSimpleFieldTypeMock();
+        $userCreate = $this->getUserCreate();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -141,14 +136,14 @@ class UserCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/3'
+                '_href' => '/content/types/4'
             ),
             'Section' => array(
                 '_href' => '/content/sections/4'
             ),
             'remoteId' => 'remoteId12345678',
             'login' => 'login',
-            'email' => 'email@local.com',
+            'email' => 'nospam@ez.no',
             'password' => 'password',
             'enabled' => 'true',
             'fields' => array(
@@ -156,16 +151,12 @@ class UserCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'name',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
-                        'fieldValue' => array()
-                    ),
+                    )
                 )
             )
         );
 
-        $userCreate = $this->getUserCreateWithSimpleFieldTypeMock();
+        $userCreate = $this->getUserCreate();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -179,14 +170,14 @@ class UserCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/3'
+                '_href' => '/content/types/4'
             ),
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
                 '_href' => '/content/sections/4'
             ),
             'remoteId' => 'remoteId12345678',
-            'email' => 'email@local.com',
+            'email' => 'nospam@ez.no',
             'password' => 'password',
             'enabled' => 'true',
             'fields' => array(
@@ -194,16 +185,12 @@ class UserCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'name',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
-                        'fieldValue' => array()
-                    ),
+                    )
                 )
             )
         );
 
-        $userCreate = $this->getUserCreateWithSimpleFieldTypeMock();
+        $userCreate = $this->getUserCreate();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -217,7 +204,7 @@ class UserCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/3'
+                '_href' => '/content/types/4'
             ),
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
@@ -232,16 +219,12 @@ class UserCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'name',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
-                        'fieldValue' => array()
-                    ),
+                    )
                 )
             )
         );
 
-        $userCreate = $this->getUserCreateWithSimpleFieldTypeMock();
+        $userCreate = $this->getUserCreate();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -255,7 +238,7 @@ class UserCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/3'
+                '_href' => '/content/types/4'
             ),
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
@@ -263,23 +246,19 @@ class UserCreateTest extends BaseTest
             ),
             'remoteId' => 'remoteId12345678',
             'login' => 'login',
-            'email' => 'email@local.com',
+            'email' => 'nospam@ez.no',
             'enabled' => 'true',
             'fields' => array(
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'name',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
-                        'fieldValue' => array()
-                    ),
+                    )
                 )
             )
         );
 
-        $userCreate = $this->getUserCreateWithSimpleFieldTypeMock();
+        $userCreate = $this->getUserCreate();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -293,13 +272,13 @@ class UserCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/3'
+                '_href' => '/content/types/4'
             ),
             'mainLanguageCode' => 'eng-US',
             'Section' => array(),
             'remoteId' => 'remoteId12345678',
             'login' => 'login',
-            'email' => 'email@local.com',
+            'email' => 'nospam@ez.no',
             'password' => 'password',
             'enabled' => 'true',
             'fields' => array(
@@ -307,16 +286,12 @@ class UserCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'name',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
-                        'fieldValue' => array()
-                    ),
+                    )
                 )
             )
         );
 
-        $userCreate = $this->getUserCreateWithSimpleFieldTypeMock();
+        $userCreate = $this->getUserCreate();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -330,7 +305,7 @@ class UserCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/3'
+                '_href' => '/content/types/4'
             ),
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
@@ -338,12 +313,12 @@ class UserCreateTest extends BaseTest
             ),
             'remoteId' => 'remoteId12345678',
             'login' => 'login',
-            'email' => 'email@local.com',
+            'email' => 'nospam@ez.no',
             'password' => 'password',
             'enabled' => 'true',
         );
 
-        $userCreate = $this->getUserCreateWithSimpleFieldTypeMock();
+        $userCreate = $this->getUserCreate();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -357,7 +332,7 @@ class UserCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/3'
+                '_href' => '/content/types/4'
             ),
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
@@ -365,7 +340,7 @@ class UserCreateTest extends BaseTest
             ),
             'remoteId' => 'remoteId12345678',
             'login' => 'login',
-            'email' => 'email@local.com',
+            'email' => 'nospam@ez.no',
             'password' => 'password',
             'enabled' => 'true',
             'fields' => array(
@@ -376,16 +351,12 @@ class UserCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'name',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
-                        'fieldValue' => array()
                     )
                 )
             )
         );
 
-        $userCreate = $this->getUserCreateWithSimpleFieldTypeMock();
+        $userCreate = $this->getUserCreate();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -393,14 +364,13 @@ class UserCreateTest extends BaseTest
      * Test UserCreate parser throwing exception on invalid field definition identifier
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage 'unknown' is invalid field definition identifier for 'comment' content type in UserCreate.
+     * @expectedExceptionMessage 'unknown' is invalid field definition identifier for 'some_class' content type in UserCreate.
      */
     public function testParseExceptionOnInvalidFieldDefinitionIdentifier()
     {
-        $this->markTestSkipped( '@todo Disabled due to invalid implementation of ContentType::getFieldDefinition in InMemory stub' );
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/3'
+                '_href' => '/content/types/4'
             ),
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
@@ -408,7 +378,7 @@ class UserCreateTest extends BaseTest
             ),
             'remoteId' => 'remoteId12345678',
             'login' => 'login',
-            'email' => 'email@local.com',
+            'email' => 'nospam@ez.no',
             'password' => 'password',
             'enabled' => 'true',
             'fields' => array(
@@ -416,16 +386,12 @@ class UserCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'unknown',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
-                        'fieldValue' => array()
-                    ),
+                    )
                 )
             )
         );
 
-        $userCreate = $this->getUserCreateWithSimpleFieldTypeMock();
+        $userCreate = $this->getUserCreate();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -433,14 +399,13 @@ class UserCreateTest extends BaseTest
      * Test UserCreate parser throwing exception on missing field value
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing 'fieldValue' element for 'subject' identifier in UserCreate.
+     * @expectedExceptionMessage Missing 'fieldValue' element for 'name' identifier in UserCreate.
      */
     public function testParseExceptionOnMissingFieldValue()
     {
-        $this->markTestSkipped( '@todo Disabled due to invalid implementation of ContentType::getFieldDefinition in InMemory stub' );
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/13'
+                '_href' => '/content/types/4'
             ),
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
@@ -448,23 +413,19 @@ class UserCreateTest extends BaseTest
             ),
             'remoteId' => 'remoteId12345678',
             'login' => 'login',
-            'email' => 'email@local.com',
+            'email' => 'nospam@ez.no',
             'password' => 'password',
             'enabled' => 'true',
             'fields' => array(
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'name'
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
-                        'fieldValue' => array()
-                    ),
+                    )
                 )
             )
         );
 
-        $userCreate = $this->getUserCreateWithSimpleFieldTypeMock();
+        $userCreate = $this->getUserCreate();
         $userCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -477,25 +438,9 @@ class UserCreateTest extends BaseTest
     {
         return new UserCreate(
             $this->getUrlHandler(),
-            $this->getRepository()->getUserService(),
-            $this->getRepository()->getContentTypeService(),
+            $this->getUserServiceMock(),
+            $this->getContentTypeServiceMock(),
             $this->getFieldTypeParserMock(),
-            $this->getParserTools()
-        );
-    }
-
-    /**
-     * Returns the UserCreate parser
-     *
-     * @return \eZ\Publish\Core\REST\Server\Input\Parser\UserCreate
-     */
-    protected function getUserCreateWithSimpleFieldTypeMock()
-    {
-        return new UserCreate(
-            $this->getUrlHandler(),
-            $this->getRepository()->getUserService(),
-            $this->getRepository()->getContentTypeService(),
-            $this->getSimpleFieldTypeParserMock(),
             $this->getParserTools()
         );
     }
@@ -518,13 +463,7 @@ class UserCreateTest extends BaseTest
                     '',
                     false
                 ),
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\ContentTypeService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
+                $this->getContentTypeServiceMock(),
                 $this->getMock(
                     'eZ\\Publish\\Core\\REST\\Client\\FieldTypeService',
                     array(),
@@ -537,12 +476,7 @@ class UserCreateTest extends BaseTest
             false
         );
 
-        $fieldTypeParserMock->expects( $this->at( 0 ) )
-            ->method( 'parseValue' )
-            ->with( 'ezstring', array() )
-            ->will( $this->returnValue( 'foo' ) );
-
-        $fieldTypeParserMock->expects( $this->at( 1 ) )
+        $fieldTypeParserMock->expects( $this->any() )
             ->method( 'parseValue' )
             ->with( 'ezstring', array() )
             ->will( $this->returnValue( 'foo' ) );
@@ -551,42 +485,88 @@ class UserCreateTest extends BaseTest
     }
 
     /**
-     * Get the field type parser mock object
+     * Get the user service mock object
      *
-     * @return \eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
+     * @return \eZ\Publish\API\Repository\UserService
      */
-    private function getSimpleFieldTypeParserMock()
+    protected function getUserServiceMock()
     {
-        $fieldTypeParserMock = $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Common\\Input\\FieldTypeParser',
+        $userServiceMock =  $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\UserService',
             array(),
-            array(
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\ContentService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\ContentTypeService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\FieldTypeService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                )
-            ),
+            array(),
             '',
             false
         );
 
-        return $fieldTypeParserMock;
+        $contentType = $this->getContentType();
+        $userServiceMock->expects( $this->any() )
+            ->method( 'newUserCreateStruct' )
+            ->with(
+                $this->equalTo( 'login' ),
+                $this->equalTo( 'nospam@ez.no' ),
+                $this->equalTo( 'password' ),
+                $this->equalTo( 'eng-US' ),
+                $this->equalTo( $contentType )
+            )
+            ->will(
+                $this->returnValue(
+                    new UserCreateStruct(
+                        array(
+                            'contentType' =>  $contentType,
+                            'mainLanguageCode' => 'eng-US'
+                        )
+                    )
+                )
+            );
+
+        return $userServiceMock;
+    }
+
+    /**
+     * Get the content type service mock object
+     *
+     * @return \eZ\Publish\API\Repository\ContentTypeService
+     */
+    protected function getContentTypeServiceMock()
+    {
+        $contentTypeServiceMock = $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\ContentTypeService',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $contentTypeServiceMock->expects( $this->any() )
+            ->method( 'loadContentType' )
+            ->with( $this->equalTo( 4 ) )
+            ->will( $this->returnValue( $this->getContentType() ) );
+
+        return $contentTypeServiceMock;
+    }
+
+    /**
+     * Get the content type used in UserCreate parser
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     */
+    protected function getContentType()
+    {
+        return new ContentType(
+            array(
+                'id' => 4,
+                'identifier' => 'some_class',
+                'fieldDefinitions' => array(
+                    new FieldDefinition(
+                        array(
+                             'id' => 42,
+                             'identifier' => 'name',
+                             'fieldTypeIdentifier' => 'ezstring'
+                        )
+                    )
+                )
+            )
+        );
     }
 }

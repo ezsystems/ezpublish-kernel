@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateUpdate;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
 
 class ObjectStateUpdateTest extends BaseTest
 {
@@ -197,8 +198,32 @@ class ObjectStateUpdateTest extends BaseTest
     {
         return new ObjectStateUpdate(
             $this->getUrlHandler(),
-            $this->getRepository()->getObjectStateService(),
+            $this->getObjectStateServiceMock(),
             $this->getParserTools()
         );
+    }
+
+    /**
+     * Get the object state service mock object
+     *
+     * @return \eZ\Publish\API\Repository\ObjectStateService
+     */
+    protected function getObjectStateServiceMock()
+    {
+        $objectStateServiceMock =  $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\ObjectStateService',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $objectStateServiceMock->expects( $this->any() )
+            ->method( 'newObjectStateUpdateStruct' )
+            ->will(
+                $this->returnValue( new ObjectStateUpdateStruct() )
+            );
+
+        return $objectStateServiceMock;
     }
 }

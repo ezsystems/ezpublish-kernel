@@ -10,6 +10,9 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\REST\Server\Input\Parser\ContentCreate;
 use eZ\Publish\Core\REST\Server\Input\Parser\LocationCreate;
 
@@ -42,10 +45,6 @@ class ContentCreateTest extends BaseTest
                     ),
                     array(
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'message',
                         'fieldValue' => array()
                     )
                 )
@@ -155,29 +154,12 @@ class ContentCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'author',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'message',
-                        'fieldValue' => array()
                     )
                 )
             )
         );
 
-        $contentCreate = new ContentCreate(
-            $this->getUrlHandler(),
-            $this->getRepository()->getContentService(),
-            $this->getRepository()->getContentTypeService(),
-            $this->getSimpleFieldTypeParserMock(),
-            $this->getMock(
-                '\\eZ\\Publish\\Core\\REST\\Server\\Input\\Parser\\LocationCreate',
-                array(),
-                array(),
-                '',
-                false
-            ),
-            $this->getParserTools()
-        );
+        $contentCreate = $this->getContentCreate();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -209,16 +191,12 @@ class ContentCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'author',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'message',
-                        'fieldValue' => array()
                     )
                 )
             )
         );
 
-        $contentCreate = $this->getContentCreateWithSimpleFieldTypeMock();
+        $contentCreate = $this->getContentCreate();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -251,16 +229,12 @@ class ContentCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'author',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'message',
-                        'fieldValue' => array()
                     )
                 )
             )
         );
 
-        $contentCreate = $this->getContentCreateWithSimpleFieldTypeMock();
+        $contentCreate = $this->getContentCreate();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -294,16 +268,12 @@ class ContentCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'author',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'message',
-                        'fieldValue' => array()
                     )
                 )
             )
         );
 
-        $contentCreate = $this->getContentCreateWithSimpleFieldTypeMock();
+        $contentCreate = $this->getContentCreate();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -336,16 +306,12 @@ class ContentCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'author',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'message',
-                        'fieldValue' => array()
                     )
                 )
             )
         );
 
-        $contentCreate = $this->getContentCreateWithSimpleFieldTypeMock();
+        $contentCreate = $this->getContentCreate();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -378,16 +344,12 @@ class ContentCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'author',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'message',
-                        'fieldValue' => array()
                     )
                 )
             )
         );
 
-        $contentCreate = $this->getContentCreateWithSimpleFieldTypeMock();
+        $contentCreate = $this->getContentCreate();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -415,7 +377,7 @@ class ContentCreateTest extends BaseTest
             )
         );
 
-        $contentCreate = $this->getContentCreateWithSimpleFieldTypeMock();
+        $contentCreate = $this->getContentCreate();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -449,16 +411,12 @@ class ContentCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'author',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'message',
-                        'fieldValue' => array()
                     )
                 )
             )
         );
 
-        $contentCreate = $this->getContentCreateWithSimpleFieldTypeMock();
+        $contentCreate = $this->getContentCreate();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -466,11 +424,10 @@ class ContentCreateTest extends BaseTest
      * Test ContentCreate parser throwing exception on invalid field definition identifier
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage 'unknown' is invalid field definition identifier for 'comment' content type in ContentCreate.
+     * @expectedExceptionMessage 'unknown' is invalid field definition identifier for 'some_class' content type in ContentCreate.
      */
     public function testParseExceptionOnInvalidFieldDefinitionIdentifier()
     {
-        $this->markTestSkipped( '@todo Disabled due to invalid implementation of ContentType::getFieldDefinition in InMemory stub' );
         $inputArray = array(
             'ContentType' => array(
                 '_href' => '/content/types/13'
@@ -494,16 +451,12 @@ class ContentCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'author',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'message',
-                        'fieldValue' => array()
                     )
                 )
             )
         );
 
-        $contentCreate = $this->getContentCreateWithSimpleFieldTypeMock();
+        $contentCreate = $this->getContentCreate();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -537,16 +490,12 @@ class ContentCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'author',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'message',
-                        'fieldValue' => array()
                     )
                 )
             )
         );
 
-        $contentCreate = $this->getContentCreateWithSimpleFieldTypeMock();
+        $contentCreate = $this->getContentCreate();
         $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -559,26 +508,9 @@ class ContentCreateTest extends BaseTest
     {
         return new ContentCreate(
             $this->getUrlHandler(),
-            $this->getRepository()->getContentService(),
-            $this->getRepository()->getContentTypeService(),
+            $this->getContentServiceMock(),
+            $this->getContentTypeServiceMock(),
             $this->getFieldTypeParserMock(),
-            $this->getLocationCreateParserMock(),
-            $this->getParserTools()
-        );
-    }
-
-    /**
-     * Returns the ContentCreate parser
-     *
-     * @return \eZ\Publish\Core\REST\Server\Input\Parser\ContentCreate
-     */
-    protected function getContentCreateWithSimpleFieldTypeMock()
-    {
-        return new ContentCreate(
-            $this->getUrlHandler(),
-            $this->getRepository()->getContentService(),
-            $this->getRepository()->getContentTypeService(),
-            $this->getSimpleFieldTypeParserMock(),
             $this->getLocationCreateParserMock(),
             $this->getParserTools()
         );
@@ -595,20 +527,8 @@ class ContentCreateTest extends BaseTest
             '\\eZ\\Publish\\Core\\REST\\Common\\Input\\FieldTypeParser',
             array(),
             array(
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\ContentService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\ContentTypeService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
+                $this->getContentServiceMock(),
+                $this->getContentTypeServiceMock(),
                 $this->getMock(
                     'eZ\\Publish\\Core\\REST\\Client\\FieldTypeService',
                     array(),
@@ -621,60 +541,10 @@ class ContentCreateTest extends BaseTest
             false
         );
 
-        $fieldTypeParserMock->expects( $this->at( 0 ) )
+        $fieldTypeParserMock->expects( $this->any() )
             ->method( 'parseValue' )
             ->with( 'ezstring', array() )
             ->will( $this->returnValue( 'foo' ) );
-
-        $fieldTypeParserMock->expects( $this->at( 1 ) )
-            ->method( 'parseValue' )
-            ->with( 'ezstring', array() )
-            ->will( $this->returnValue( 'foo' ) );
-
-        $fieldTypeParserMock->expects( $this->at( 2 ) )
-            ->method( 'parseValue' )
-            ->with( 'eztext', array() )
-            ->will( $this->returnValue( 'foo' ) );
-
-        return $fieldTypeParserMock;
-    }
-
-    /**
-     * Get the field type parser mock object
-     *
-     * @return \eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
-     */
-    private function getSimpleFieldTypeParserMock()
-    {
-        $fieldTypeParserMock = $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Common\\Input\\FieldTypeParser',
-            array(),
-            array(
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\ContentService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\ContentTypeService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\FieldTypeService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                )
-            ),
-            '',
-            false
-        );
 
         return $fieldTypeParserMock;
     }
@@ -694,11 +564,101 @@ class ContentCreateTest extends BaseTest
             false
         );
 
-        $locationCreateParserMock->expects( $this->exactly( 1 ) )
+        $locationCreateParserMock->expects( $this->any() )
             ->method( 'parse' )
             ->with( array(), $this->getParsingDispatcherMock() )
             ->will( $this->returnValue( new LocationCreateStruct() ) );
 
         return $locationCreateParserMock;
+    }
+
+    /**
+     * Get the content service mock object
+     *
+     * @return \eZ\Publish\API\Repository\ContentService
+     */
+    protected function getContentServiceMock()
+    {
+        $contentServiceMock =  $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\ContentService',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $contentType = $this->getContentType();
+        $contentServiceMock->expects( $this->any() )
+            ->method( 'newContentCreateStruct' )
+            ->with(
+                $this->equalTo( $contentType ),
+                $this->equalTo( 'eng-US' )
+            )
+            ->will(
+                $this->returnValue(
+                    new ContentCreateStruct(
+                        array(
+                            'contentType' =>  $contentType,
+                            'mainLanguageCode' => 'eng-US'
+                        )
+                    )
+                )
+            );
+
+        return $contentServiceMock;
+    }
+
+    /**
+     * Get the content type service mock object
+     *
+     * @return \eZ\Publish\API\Repository\ContentTypeService
+     */
+    protected function getContentTypeServiceMock()
+    {
+        $contentTypeServiceMock = $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\ContentTypeService',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $contentTypeServiceMock->expects( $this->any() )
+            ->method( 'loadContentType' )
+            ->with( $this->equalTo( 13 ) )
+            ->will( $this->returnValue( $this->getContentType() ) );
+
+        return $contentTypeServiceMock;
+    }
+
+    /**
+     * Get the content type used in ContentCreate parser
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     */
+    protected function getContentType()
+    {
+        return new ContentType(
+            array(
+                'id' => 13,
+                'identifier' => 'some_class',
+                'fieldDefinitions' => array(
+                    new FieldDefinition(
+                        array(
+                             'id' => 42,
+                             'identifier' => 'subject',
+                             'fieldTypeIdentifier' => 'ezstring'
+                        )
+                    ),
+                    new FieldDefinition(
+                        array(
+                             'id' => 43,
+                             'identifier' => 'author',
+                             'fieldTypeIdentifier' => 'ezstring'
+                        )
+                    )
+                )
+            )
+        );
     }
 }

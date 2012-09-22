@@ -73,6 +73,30 @@ class SectionInputTest extends BaseTest
      */
     protected function getSectionInput()
     {
-        return new SectionInput( $this->getUrlHandler(), $this->getRepository()->getSectionService() );
+        return new SectionInput( $this->getUrlHandler(), $this->getSectionServiceMock() );
+    }
+
+    /**
+     * Get the section service mock object
+     *
+     * @return \eZ\Publish\API\Repository\SectionService
+     */
+    protected function getSectionServiceMock()
+    {
+        $sectionServiceMock =  $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\SectionService',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $sectionServiceMock->expects( $this->any() )
+            ->method( 'newSectionCreateStruct' )
+            ->will(
+                $this->returnValue( new SectionCreateStruct() )
+            );
+
+        return $sectionServiceMock;
     }
 }

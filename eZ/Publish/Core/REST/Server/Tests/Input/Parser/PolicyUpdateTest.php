@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\PolicyUpdate;
+use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct;
 
 class PolicyUpdateTest extends BaseTest
 {
@@ -66,19 +67,19 @@ class PolicyUpdateTest extends BaseTest
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation',
-            $parsedLimitations[0],
+            $parsedLimitations['Class'],
             'Limitation not created correctly.'
         );
 
         $this->assertEquals(
             'Class',
-            $parsedLimitations[0]->getIdentifier(),
+            $parsedLimitations['Class']->getIdentifier(),
             'Limitation identifier not created correctly.'
         );
 
         $this->assertEquals(
             array( 1, 2, 3 ),
-            $parsedLimitations[0]->limitationValues,
+            $parsedLimitations['Class']->limitationValues,
             'Limitation values not created correctly.'
         );
     }
@@ -148,8 +149,32 @@ class PolicyUpdateTest extends BaseTest
     {
         return new PolicyUpdate(
             $this->getUrlHandler(),
-            $this->getRepository()->getRoleService(),
+            $this->getRoleServiceMock(),
             $this->getParserTools()
         );
+    }
+
+    /**
+     * Get the role service mock object
+     *
+     * @return \eZ\Publish\API\Repository\RoleService
+     */
+    protected function getRoleServiceMock()
+    {
+        $roleServiceMock =  $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\RoleService',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $roleServiceMock->expects( $this->any() )
+            ->method( 'newPolicyUpdateStruct' )
+            ->will(
+                $this->returnValue( new PolicyUpdateStruct() )
+            );
+
+        return $roleServiceMock;
     }
 }

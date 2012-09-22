@@ -10,12 +10,13 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\PolicyCreate;
+use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
+use eZ\Publish\Core\Repository\Values\User\PolicyCreateStruct;
 
 class PolicyCreateTest extends BaseTest
 {
     /**
      * Tests the PolicyCreate parser
-     * @todo test with limitations
      */
     public function testParse()
     {
@@ -65,7 +66,6 @@ class PolicyCreateTest extends BaseTest
             'PolicyCreateStruct function property not created correctly.'
         );
 
-        /*
         $parsedLimitations = $result->getLimitations();
 
         $this->assertInternalType(
@@ -82,22 +82,21 @@ class PolicyCreateTest extends BaseTest
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation',
-            $parsedLimitations[0],
+            $parsedLimitations['Class'],
             'Limitation not created correctly.'
         );
 
         $this->assertEquals(
             'Class',
-            $parsedLimitations[0]->getIdentifier(),
+            $parsedLimitations['Class']->getIdentifier(),
             'Limitation identifier not created correctly.'
         );
 
         $this->assertEquals(
             array( 1, 2, 3 ),
-            $parsedLimitations[0]->limitationValues,
+            $parsedLimitations['Class']->limitationValues,
             'Limitation values not created correctly.'
         );
-        */
     }
 
     /**
@@ -180,7 +179,6 @@ class PolicyCreateTest extends BaseTest
      */
     public function testParseExceptionOnMissingLimitationIdentifier()
     {
-        $this->markTestSkipped( '@todo PolicyCreateStruct stub does not support limitations' );
         $inputArray = array(
             'module' => 'content',
             'function' => 'delete',
@@ -217,7 +215,6 @@ class PolicyCreateTest extends BaseTest
      */
     public function testParseExceptionOnMissingLimitationValues()
     {
-        $this->markTestSkipped( '@todo PolicyCreateStruct stub does not support limitations' );
         $inputArray = array(
             'module' => 'content',
             'function' => 'delete',
@@ -243,8 +240,43 @@ class PolicyCreateTest extends BaseTest
     {
         return new PolicyCreate(
             $this->getUrlHandler(),
-            $this->getRepository()->getRoleService(),
+            $this->getRoleServiceMock(),
             $this->getParserTools()
         );
+    }
+
+    /**
+     * Get the role service mock object
+     *
+     * @return \eZ\Publish\API\Repository\RoleService
+     */
+    protected function getRoleServiceMock()
+    {
+        $roleServiceMock =  $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\RoleService',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $roleServiceMock->expects( $this->any() )
+            ->method( 'newPolicyCreateStruct' )
+            ->with(
+                $this->equalTo( 'content' ),
+                $this->equalTo( 'delete' )
+            )
+            ->will(
+                $this->returnValue(
+                    new PolicyCreateStruct(
+                        array(
+                            'module' =>  'content',
+                            'function' => 'delete'
+                        )
+                    )
+                )
+            );
+
+        return $roleServiceMock;
     }
 }

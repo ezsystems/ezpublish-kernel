@@ -10,6 +10,9 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\UserUpdate;
+use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
+use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 
 class UserUpdateTest extends BaseTest
 {
@@ -28,10 +31,6 @@ class UserUpdateTest extends BaseTest
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'first_name',
-                        'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'last_name',
                         'fieldValue' => array()
                     )
                 )
@@ -126,10 +125,6 @@ class UserUpdateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'first_name',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'last_name',
-                        'fieldValue' => array()
                     )
                 )
             ),
@@ -139,7 +134,7 @@ class UserUpdateTest extends BaseTest
             '__url' => '/user/users/14'
         );
 
-        $userUpdate = $this->getUserUpdateWithSimpleFieldTypeMock();
+        $userUpdate = $this->getUserUpdate();
         $userUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -164,7 +159,7 @@ class UserUpdateTest extends BaseTest
             '__url' => '/user/users/14'
         );
 
-        $userUpdate = $this->getUserUpdateWithSimpleFieldTypeMock();
+        $userUpdate = $this->getUserUpdate();
         $userUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -186,10 +181,6 @@ class UserUpdateTest extends BaseTest
                 'field' => array(
                     array(
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'last_name',
-                        'fieldValue' => array()
                     )
                 )
             ),
@@ -199,7 +190,7 @@ class UserUpdateTest extends BaseTest
             '__url' => '/user/users/14'
         );
 
-        $userUpdate = $this->getUserUpdateWithSimpleFieldTypeMock();
+        $userUpdate = $this->getUserUpdate();
         $userUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -221,10 +212,6 @@ class UserUpdateTest extends BaseTest
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'first_name',
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'last_name',
-                        'fieldValue' => array()
                     )
                 )
             ),
@@ -234,7 +221,7 @@ class UserUpdateTest extends BaseTest
             '__url' => '/user/users/14'
         );
 
-        $userUpdate = $this->getUserUpdateWithSimpleFieldTypeMock();
+        $userUpdate = $this->getUserUpdate();
         $userUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -247,25 +234,9 @@ class UserUpdateTest extends BaseTest
     {
         return new UserUpdate(
             $this->getUrlHandler(),
-            $this->getRepository()->getUserService(),
-            $this->getRepository()->getContentService(),
+            $this->getUserServiceMock(),
+            $this->getContentServiceMock(),
             $this->getFieldTypeParserMock(),
-            $this->getParserTools()
-        );
-    }
-
-    /**
-     * Returns the UserUpdate parser
-     *
-     * @return \eZ\Publish\Core\REST\Server\Input\Parser\UserUpdate
-     */
-    protected function getUserUpdateWithSimpleFieldTypeMock()
-    {
-        return new UserUpdate(
-            $this->getUrlHandler(),
-            $this->getRepository()->getUserService(),
-            $this->getRepository()->getContentService(),
-            $this->getSimpleFieldTypeParserMock(),
             $this->getParserTools()
         );
     }
@@ -277,39 +248,11 @@ class UserUpdateTest extends BaseTest
      */
     private function getFieldTypeParserMock()
     {
-        $fieldTypeParserMock = $this->getSimpleFieldTypeParserMock();
-
-        $fieldTypeParserMock->expects( $this->at( 0 ) )
-            ->method( 'parseFieldValue' )
-            ->with( 14, 'first_name', array() )
-            ->will( $this->returnValue( 'foo' ) );
-
-        $fieldTypeParserMock->expects( $this->at( 1 ) )
-            ->method( 'parseFieldValue' )
-            ->with( 14, 'last_name', array() )
-            ->will( $this->returnValue( 'foo' ) );
-
-        return $fieldTypeParserMock;
-    }
-
-    /**
-     * Get the field type parser mock object
-     *
-     * @return \eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
-     */
-    private function getSimpleFieldTypeParserMock()
-    {
         $fieldTypeParserMock = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Input\\FieldTypeParser',
             array(),
             array(
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\ContentService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
+                $this->getContentServiceMock(),
                 $this->getMock(
                     'eZ\\Publish\\Core\\REST\\Client\\ContentTypeService',
                     array(),
@@ -329,6 +272,65 @@ class UserUpdateTest extends BaseTest
             false
         );
 
+        $fieldTypeParserMock->expects( $this->any() )
+            ->method( 'parseFieldValue' )
+            ->with( 14, 'first_name', array() )
+            ->will( $this->returnValue( 'foo' ) );
+
         return $fieldTypeParserMock;
+    }
+
+    /**
+     * Get the user service mock object
+     *
+     * @return \eZ\Publish\API\Repository\UserService
+     */
+    protected function getUserServiceMock()
+    {
+        $userServiceMock =  $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\UserService',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $userServiceMock->expects( $this->any() )
+            ->method( 'newUserUpdateStruct' )
+            ->will(
+                $this->returnValue( new UserUpdateStruct() )
+            );
+
+        return $userServiceMock;
+    }
+
+    /**
+     * Get the Content service mock object
+     *
+     * @return \eZ\Publish\API\Repository\ContentService
+     */
+    protected function getContentServiceMock()
+    {
+        $contentServiceMock =  $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\ContentService',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $contentServiceMock->expects( $this->any() )
+            ->method( 'newContentUpdateStruct' )
+            ->will(
+                $this->returnValue( new ContentUpdateStruct() )
+            );
+
+        $contentServiceMock->expects( $this->any() )
+            ->method( 'newContentMetadataUpdateStruct' )
+            ->will(
+                $this->returnValue( new ContentMetadataUpdateStruct() )
+            );
+
+        return $contentServiceMock;
     }
 }

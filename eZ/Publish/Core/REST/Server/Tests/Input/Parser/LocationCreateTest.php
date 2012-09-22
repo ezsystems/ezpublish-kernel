@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\LocationCreate;
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
 class LocationCreateTest extends BaseTest
@@ -170,8 +171,33 @@ class LocationCreateTest extends BaseTest
     {
         return new LocationCreate(
             $this->getUrlHandler(),
-            $this->getRepository()->getLocationService(),
+            $this->getLocationServiceMock(),
             $this->getParserTools()
         );
+    }
+
+    /**
+     * Get the location service mock object
+     *
+     * @return \eZ\Publish\API\Repository\LocationService
+     */
+    protected function getLocationServiceMock()
+    {
+        $locationServiceMock =  $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\LocationService',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $locationServiceMock->expects( $this->any() )
+            ->method( 'newLocationCreateStruct' )
+            ->with( $this->equalTo( 42 ) )
+            ->will(
+                $this->returnValue( new LocationCreateStruct( array( 'parentLocationId' => 42 ) ) )
+            );
+
+        return $locationServiceMock;
     }
 }

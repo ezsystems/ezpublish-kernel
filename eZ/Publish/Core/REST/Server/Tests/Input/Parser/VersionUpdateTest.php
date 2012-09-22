@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\VersionUpdate;
+use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 
 class VersionUpdateTest extends BaseTest
 {
@@ -24,14 +25,6 @@ class VersionUpdateTest extends BaseTest
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'subject',
-                        'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'message',
                         'fieldValue' => array()
                     )
                 )
@@ -78,7 +71,7 @@ class VersionUpdateTest extends BaseTest
             '__url' => '/content/objects/42/versions/1'
         );
 
-        $VersionUpdate = $this->getVersionUpdateWithSimpleFieldTypeMock();
+        $VersionUpdate = $this->getVersionUpdate();
         $VersionUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -96,21 +89,13 @@ class VersionUpdateTest extends BaseTest
                 'field' => array(
                     array(
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'message',
-                        'fieldValue' => array()
                     )
                 )
             ),
             '__url' => '/content/objects/42/versions/1'
         );
 
-        $VersionUpdate = $this->getVersionUpdateWithSimpleFieldTypeMock();
+        $VersionUpdate = $this->getVersionUpdate();
         $VersionUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -128,21 +113,13 @@ class VersionUpdateTest extends BaseTest
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'subject'
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'message',
-                        'fieldValue' => array()
                     )
                 )
             ),
             '__url' => '/content/objects/42/versions/1'
         );
 
-        $VersionUpdate = $this->getVersionUpdateWithSimpleFieldTypeMock();
+        $VersionUpdate = $this->getVersionUpdate();
         $VersionUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -155,22 +132,8 @@ class VersionUpdateTest extends BaseTest
     {
         return new VersionUpdate(
             $this->getUrlHandler(),
-            $this->getRepository()->getContentService(),
+            $this->getContentServiceMock(),
             $this->getFieldTypeParserMock()
-        );
-    }
-
-    /**
-     * Returns the VersionUpdate parser
-     *
-     * @return \eZ\Publish\Core\REST\Server\Input\Parser\VersionUpdate
-     */
-    protected function getVersionUpdateWithSimpleFieldTypeMock()
-    {
-        return new VersionUpdate(
-            $this->getUrlHandler(),
-            $this->getRepository()->getContentService(),
-            $this->getSimpleFieldTypeParserMock()
         );
     }
 
@@ -181,44 +144,11 @@ class VersionUpdateTest extends BaseTest
      */
     private function getFieldTypeParserMock()
     {
-        $fieldTypeParserMock = $this->getSimpleFieldTypeParserMock();
-
-        $fieldTypeParserMock->expects( $this->at( 0 ) )
-            ->method( 'parseFieldValue' )
-            ->with( 42, 'subject', array() )
-            ->will( $this->returnValue( 'foo' ) );
-
-        $fieldTypeParserMock->expects( $this->at( 1 ) )
-            ->method( 'parseFieldValue' )
-            ->with( 42, 'author', array() )
-            ->will( $this->returnValue( 'foo' ) );
-
-        $fieldTypeParserMock->expects( $this->at( 2 ) )
-            ->method( 'parseFieldValue' )
-            ->with( 42, 'message', array() )
-            ->will( $this->returnValue( 'foo' ) );
-
-        return $fieldTypeParserMock;
-    }
-
-    /**
-     * Get the field type parser mock object
-     *
-     * @return \eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
-     */
-    private function getSimpleFieldTypeParserMock()
-    {
         $fieldTypeParserMock = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Input\\FieldTypeParser',
             array(),
             array(
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\ContentService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
+                $this->getContentServiceMock(),
                 $this->getMock(
                     'eZ\\Publish\\Core\\REST\\Client\\ContentTypeService',
                     array(),
@@ -238,6 +168,35 @@ class VersionUpdateTest extends BaseTest
             false
         );
 
+        $fieldTypeParserMock->expects( $this->any() )
+            ->method( 'parseFieldValue' )
+            ->with( 42, 'subject', array() )
+            ->will( $this->returnValue( 'foo' ) );
+
         return $fieldTypeParserMock;
+    }
+
+    /**
+     * Get the Content service mock object
+     *
+     * @return \eZ\Publish\API\Repository\ContentService
+     */
+    protected function getContentServiceMock()
+    {
+        $contentServiceMock =  $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\ContentService',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $contentServiceMock->expects( $this->any() )
+            ->method( 'newContentUpdateStruct' )
+            ->will(
+                $this->returnValue( new ContentUpdateStruct() )
+            );
+
+        return $contentServiceMock;
     }
 }

@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateGroupUpdate;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
 
 class ObjectStateGroupUpdateTest extends BaseTest
 {
@@ -197,8 +198,32 @@ class ObjectStateGroupUpdateTest extends BaseTest
     {
         return new ObjectStateGroupUpdate(
             $this->getUrlHandler(),
-            $this->getRepository()->getObjectStateService(),
+            $this->getObjectStateServiceMock(),
             $this->getParserTools()
         );
+    }
+
+    /**
+     * Get the object state service mock object
+     *
+     * @return \eZ\Publish\API\Repository\ObjectStateService
+     */
+    protected function getObjectStateServiceMock()
+    {
+        $objectStateServiceMock =  $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\ObjectStateService',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $objectStateServiceMock->expects( $this->any() )
+            ->method( 'newObjectStateGroupUpdateStruct' )
+            ->will(
+                $this->returnValue( new ObjectStateGroupUpdateStruct() )
+            );
+
+        return $objectStateServiceMock;
     }
 }

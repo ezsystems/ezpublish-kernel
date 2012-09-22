@@ -10,6 +10,9 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\UserGroupCreate;
+use eZ\Publish\Core\Repository\Values\User\UserGroupCreateStruct;
+use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 
 class UserGroupCreateTest extends BaseTest
 {
@@ -32,11 +35,7 @@ class UserGroupCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'name',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
-                        'fieldValue' => array()
-                    ),
+                    )
                 )
             )
         );
@@ -110,16 +109,12 @@ class UserGroupCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'name',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
-                        'fieldValue' => array()
-                    ),
+                    )
                 )
             )
         );
 
-        $userGroupCreate = $this->getUserGroupCreateWithSimpleFieldTypeMock();
+        $userGroupCreate = $this->getUserGroupCreate();
         $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -144,16 +139,12 @@ class UserGroupCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'name',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
-                        'fieldValue' => array()
-                    ),
+                    )
                 )
             )
         );
 
-        $userGroupCreate = $this->getUserGroupCreateWithSimpleFieldTypeMock();
+        $userGroupCreate = $this->getUserGroupCreate();
         $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -177,16 +168,12 @@ class UserGroupCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'name',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
-                        'fieldValue' => array()
-                    ),
+                    )
                 )
             )
         );
 
-        $userGroupCreate = $this->getUserGroupCreateWithSimpleFieldTypeMock();
+        $userGroupCreate = $this->getUserGroupCreate();
         $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -209,7 +196,7 @@ class UserGroupCreateTest extends BaseTest
             'remoteId' => 'remoteId12345678',
         );
 
-        $userGroupCreate = $this->getUserGroupCreateWithSimpleFieldTypeMock();
+        $userGroupCreate = $this->getUserGroupCreate();
         $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -238,16 +225,12 @@ class UserGroupCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'name',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
-                        'fieldValue' => array()
                     )
                 )
             )
         );
 
-        $userGroupCreate = $this->getUserGroupCreateWithSimpleFieldTypeMock();
+        $userGroupCreate = $this->getUserGroupCreate();
         $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -255,11 +238,10 @@ class UserGroupCreateTest extends BaseTest
      * Test UserGroupCreate parser throwing exception on invalid field definition identifier
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage 'unknown' is invalid field definition identifier for 'comment' content type in UserGroupCreate.
+     * @expectedExceptionMessage 'unknown' is invalid field definition identifier for 'some_class' content type in UserGroupCreate.
      */
     public function testParseExceptionOnInvalidFieldDefinitionIdentifier()
     {
-        $this->markTestSkipped( '@todo Disabled due to invalid implementation of ContentType::getFieldDefinition in InMemory stub' );
         $inputArray = array(
             'ContentType' => array(
                 '_href' => '/content/types/3'
@@ -274,16 +256,12 @@ class UserGroupCreateTest extends BaseTest
                     array(
                         'fieldDefinitionIdentifier' => 'unknown',
                         'fieldValue' => array()
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
-                        'fieldValue' => array()
-                    ),
+                    )
                 )
             )
         );
 
-        $userGroupCreate = $this->getUserGroupCreateWithSimpleFieldTypeMock();
+        $userGroupCreate = $this->getUserGroupCreate();
         $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -291,14 +269,13 @@ class UserGroupCreateTest extends BaseTest
      * Test UserGroupCreate parser throwing exception on missing field value
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @expectedExceptionMessage Missing 'fieldValue' element for 'subject' identifier in UserGroupCreate.
+     * @expectedExceptionMessage Missing 'fieldValue' element for 'name' identifier in UserGroupCreate.
      */
     public function testParseExceptionOnMissingFieldValue()
     {
-        $this->markTestSkipped( '@todo Disabled due to invalid implementation of ContentType::getFieldDefinition in InMemory stub' );
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/13'
+                '_href' => '/content/types/3'
             ),
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
@@ -309,16 +286,12 @@ class UserGroupCreateTest extends BaseTest
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'name'
-                    ),
-                    array(
-                        'fieldDefinitionIdentifier' => 'description',
-                        'fieldValue' => array()
-                    ),
+                    )
                 )
             )
         );
 
-        $userGroupCreate = $this->getUserGroupCreateWithSimpleFieldTypeMock();
+        $userGroupCreate = $this->getUserGroupCreate();
         $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
     }
 
@@ -331,24 +304,9 @@ class UserGroupCreateTest extends BaseTest
     {
         return new UserGroupCreate(
             $this->getUrlHandler(),
-            $this->getRepository()->getUserService(),
-            $this->getRepository()->getContentTypeService(),
+            $this->getUserServiceMock(),
+            $this->getContentTypeServiceMock(),
             $this->getFieldTypeParserMock()
-        );
-    }
-
-    /**
-     * Returns the UserGroupCreate parser
-     *
-     * @return \eZ\Publish\Core\REST\Server\Input\Parser\UserGroupCreate
-     */
-    protected function getUserGroupCreateWithSimpleFieldTypeMock()
-    {
-        return new UserGroupCreate(
-            $this->getUrlHandler(),
-            $this->getRepository()->getUserService(),
-            $this->getRepository()->getContentTypeService(),
-            $this->getSimpleFieldTypeParserMock()
         );
     }
 
@@ -370,13 +328,7 @@ class UserGroupCreateTest extends BaseTest
                     '',
                     false
                 ),
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\ContentTypeService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
+                $this->getContentTypeServiceMock(),
                 $this->getMock(
                     'eZ\\Publish\\Core\\REST\\Client\\FieldTypeService',
                     array(),
@@ -389,12 +341,7 @@ class UserGroupCreateTest extends BaseTest
             false
         );
 
-        $fieldTypeParserMock->expects( $this->at( 0 ) )
-            ->method( 'parseValue' )
-            ->with( 'ezstring', array() )
-            ->will( $this->returnValue( 'foo' ) );
-
-        $fieldTypeParserMock->expects( $this->at( 1 ) )
+        $fieldTypeParserMock->expects( $this->any() )
             ->method( 'parseValue' )
             ->with( 'ezstring', array() )
             ->will( $this->returnValue( 'foo' ) );
@@ -403,42 +350,85 @@ class UserGroupCreateTest extends BaseTest
     }
 
     /**
-     * Get the field type parser mock object
+     * Get the user service mock object
      *
-     * @return \eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
+     * @return \eZ\Publish\API\Repository\UserService
      */
-    private function getSimpleFieldTypeParserMock()
+    protected function getUserServiceMock()
     {
-        $fieldTypeParserMock = $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Common\\Input\\FieldTypeParser',
+        $userServiceMock =  $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\UserService',
             array(),
-            array(
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\ContentService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\ContentTypeService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\FieldTypeService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                )
-            ),
+            array(),
             '',
             false
         );
 
-        return $fieldTypeParserMock;
+        $contentType = $this->getContentType();
+        $userServiceMock->expects( $this->any() )
+            ->method( 'newUserGroupCreateStruct' )
+            ->with(
+                $this->equalTo( 'eng-US' ),
+                $this->equalTo( $contentType )
+            )
+            ->will(
+                $this->returnValue(
+                    new UserGroupCreateStruct(
+                        array(
+                            'contentType' =>  $contentType,
+                            'mainLanguageCode' => 'eng-US'
+                        )
+                    )
+                )
+            );
+
+        return $userServiceMock;
+    }
+
+    /**
+     * Get the content type service mock object
+     *
+     * @return \eZ\Publish\API\Repository\ContentTypeService
+     */
+    protected function getContentTypeServiceMock()
+    {
+        $contentTypeServiceMock = $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\ContentTypeService',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $contentTypeServiceMock->expects( $this->any() )
+            ->method( 'loadContentType' )
+            ->with( $this->equalTo( 3 ) )
+            ->will( $this->returnValue( $this->getContentType() ) );
+
+        return $contentTypeServiceMock;
+    }
+
+    /**
+     * Get the content type used in UserGroupCreate parser
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     */
+    protected function getContentType()
+    {
+        return new ContentType(
+            array(
+                'id' => 3,
+                'identifier' => 'some_class',
+                'fieldDefinitions' => array(
+                    new FieldDefinition(
+                        array(
+                             'id' => 42,
+                             'identifier' => 'name',
+                             'fieldTypeIdentifier' => 'ezstring'
+                        )
+                    )
+                )
+            )
+        );
     }
 }

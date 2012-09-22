@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\RoleInput;
+use eZ\Publish\Core\Repository\Values\User\RoleCreateStruct;
 
 class RoleInputTest extends BaseTest
 {
@@ -76,8 +77,33 @@ class RoleInputTest extends BaseTest
     {
         return new RoleInput(
             $this->getUrlHandler(),
-            $this->getRepository()->getRoleService(),
+            $this->getRoleServiceMock(),
             $this->getParserTools()
         );
+    }
+
+    /**
+     * Get the role service mock object
+     *
+     * @return \eZ\Publish\API\Repository\RoleService
+     */
+    protected function getRoleServiceMock()
+    {
+        $roleServiceMock =  $this->getMock(
+            'eZ\\Publish\\Core\\Repository\\RoleService',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $roleServiceMock->expects( $this->any() )
+            ->method( 'newRoleCreateStruct' )
+            ->with( $this->equalTo( 'Identifier Bar' ) )
+            ->will(
+                $this->returnValue( new RoleCreateStruct( array( 'identifier' => 'Identifier Bar' ) ) )
+            );
+
+        return $roleServiceMock;
     }
 }

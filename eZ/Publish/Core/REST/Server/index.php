@@ -396,7 +396,11 @@ $valueObjectVisitors = array(
 
     // Views
 
-    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestExecutedView'            => new Output\ValueObjectVisitor\RestExecutedView( $urlHandler, $repository->getLocationService(), $repository->getContentService() ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestExecutedView'            => new Output\ValueObjectVisitor\RestExecutedView(
+        $urlHandler,
+        $repository->getLocationService(),
+        $repository->getContentService()
+    ),
 
     // Object state
 
@@ -507,8 +511,9 @@ $dispatcher = new AuthenticatingDispatcher(
             ),
 
             // /content/views
+
             '(^/content/views$)' => array(
-                'POST' => array( $contentController, 'createView' ),
+                'POST'    => array( $contentController, 'createView' ),
             ),
 
             // /content/objectstategroups
