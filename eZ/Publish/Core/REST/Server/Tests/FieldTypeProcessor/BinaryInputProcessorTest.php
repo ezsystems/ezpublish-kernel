@@ -9,31 +9,48 @@
 
 namespace eZ\Publish\Core\REST\Server\Tests\FieldTypeProcessor;
 
-use org\bovigo\vfs\vfsStream;
-
 use eZ\Publish\Core\REST\Server\Tests\BaseTest;
 
 abstract class BinaryInputProcessorTest extends BaseTest
 {
-    const VFS_DIR_NAME = 'tempDir';
+    private $tempDir;
 
-    private $vfsRoot;
-
-    public function setUp()
+    public function tearDown()
     {
-        parent::setUp();
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator(
+                $this->getTempDir(),
+                \FileSystemIterator::KEY_AS_PATHNAME | \FileSystemIterator::SKIP_DOTS | \ FilesystemIterator::CURRENT_AS_FILEINFO
 
-        $this->vfsRoot = vfsStream::setup( self::VFS_DIR_NAME );
+            ),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        parent::tearDown();
     }
 
-    protected function getVfsRoot()
+    /**
+     * Returns a temp directory path and creates it, if necessary
+     *
+     * @return string The directory path
+     */
+    protected function getTempDir()
     {
-        return $this->vfsRoot;
-    }
+        if ( !isset( $this->tempDir ) )
+        {
+            $tempFile = tempnam(
+                sys_get_temp_dir(),
+                'eZ_REST_BinaryInput'
+            );
 
-    protected function getVfsUrl()
-    {
-        return vfsStream::url( self::VFS_DIR_NAME );
+            unlink( $tempFile );
+
+            $this->tempDir = $tempFile;
+
+            mkdir( $this->tempDir );
+        }
+
+        return $this->tempDir;
     }
 
     public function testPreProcessHashMissingKey()

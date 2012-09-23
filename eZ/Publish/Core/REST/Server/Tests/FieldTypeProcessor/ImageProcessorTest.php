@@ -52,7 +52,7 @@ class ImageProcessorTest extends BinaryInputProcessorTest
     protected function getProcessor()
     {
         return new ImageProcessor(
-            $this->getVfsUrl(),
+            $this->getTempDir(),
             'http://example.com/my_site/images/{variant}/{path}',
             array(
                 'original' => 'image/jpeg',
