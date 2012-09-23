@@ -105,7 +105,7 @@ $fieldTypeProcessorRegistry = new Common\FieldTypeProcessorRegistry(
             // Config for local temp dir
             sys_get_temp_dir(),
             // URL schema for image links (from config!)
-            'http://example.com/fancy_site/{variant}/images/{path}',
+            'http://example.com/images/{fieldId}-{versionNo}/{variant}',
             // Image variants (names only, from config!)
             array(
                 'original' => 'image/jpeg',

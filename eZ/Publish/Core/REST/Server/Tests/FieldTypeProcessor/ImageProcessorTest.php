@@ -19,24 +19,24 @@ class ImageProcessorTest extends BinaryInputProcessorTest
         $processor = $this->getProcessor();
 
         $inputHash = array(
-            'path' => 'var/some_site/23-foo.jpg',
+            'path' => 'var/some_site/223-1-eng-US/Cool-File.jpg',
         );
 
         $outputHash = $processor->postProcessHash( $inputHash );
 
         $this->assertEquals(
             array(
-                'path' => 'var/some_site/23-foo.jpg',
+                'path' => 'var/some_site/223-1-eng-US/Cool-File.jpg',
                 'variants' => array(
                     array(
                         'variant' => 'original',
                         'contentType' => 'image/jpeg',
-                        'url' => 'http://example.com/my_site/images/original/var/some_site/23-foo.jpg',
+                        'url' => 'http://example.com/images/223-1/original',
                     ),
                     array(
                         'variant' => 'thumbnail',
                         'contentType' => 'image/png',
-                        'url' => 'http://example.com/my_site/images/thumbnail/var/some_site/23-foo.jpg',
+                        'url' => 'http://example.com/images/223-1/thumbnail',
                     ),
                 ),
             ),
@@ -53,7 +53,7 @@ class ImageProcessorTest extends BinaryInputProcessorTest
     {
         return new ImageProcessor(
             $this->getTempDir(),
-            'http://example.com/my_site/images/{variant}/{path}',
+            'http://example.com/images/{fieldId}-{versionNo}/{variant}',
             array(
                 'original' => 'image/jpeg',
                 'thumbnail' => 'image/png',

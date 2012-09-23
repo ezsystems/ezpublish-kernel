@@ -85,14 +85,26 @@ class ImageProcessor extends BinaryInputProcessor
      */
     protected function generateUrl( $path, $variant )
     {
+        $fieldId = '';
+        $versionNo = '';
+
+        // 223-1-eng-US/Cool-File.jpg
+        if ( preg_match( '((?<id>[0-9]+)-(?<version>[0-9]+)-[^/]+/[^/]+$)', $path, $matches ) )
+        {
+            $fieldId = $matches['id'];
+            $versionNo = $matches['version'];
+        }
+
         return str_replace(
             array(
                 '{variant}',
-                '{path}'
+                '{fieldId}',
+                '{versionNo}',
             ),
             array(
                 $variant,
-                $path
+                $fieldId,
+                $versionNo
             ),
             $this->urlTemplate
         );
