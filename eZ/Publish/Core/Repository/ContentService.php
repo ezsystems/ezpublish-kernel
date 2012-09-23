@@ -209,8 +209,8 @@ class ContentService implements ContentServiceInterface
         }
 
         $versionInfo = $this->buildVersionInfoDomainObject( $spiVersionInfo );
-        if ( !$this->repository->canUser( 'content', 'read', $versionInfo ) )
-            throw new UnauthorizedException( 'content', 'read' );
+        if ( !$this->repository->canUser( 'content', 'versionread', $versionInfo ) )
+            throw new UnauthorizedException( 'content', 'versionread' );
 
         return $versionInfo;
     }
@@ -418,12 +418,12 @@ class ContentService implements ContentServiceInterface
         foreach ( $locationCreateStructs as $locationCreateStruct )
         {
             if ( !$this->repository->canUser( 'content', 'create', $contentCreateStruct, $locationCreateStruct ) )
-                throw new UnauthorizedException( 'content', 'read' );
+                throw new UnauthorizedException( 'content', 'create' );
         }
 
         if ( empty( $locationCreateStructs ) &&
             !$this->repository->canUser( 'content', 'create', $contentCreateStruct ) )
-            throw new UnauthorizedException( 'content', 'read' );
+            throw new UnauthorizedException( 'content', 'create' );
 
         if ( !empty( $contentCreateStruct->remoteId ) )
         {
@@ -915,8 +915,9 @@ class ContentService implements ContentServiceInterface
             $user = $this->repository->getCurrentUser();
         }
 
-        if ( !$this->repository->canUser( 'content', 'read', $user ) )
-            throw new UnauthorizedException( 'content', 'read' );
+        // throw early if user has absolutely no access to versionread
+        if ( $this->repository->hasAccess( 'content', 'versionread' ) === false )
+            throw new UnauthorizedException( 'content', 'versionread' );
 
         $spiVersionInfoList = $this->persistenceHandler->contentHandler()->loadDraftsForUser( $user->id );
 
@@ -924,8 +925,8 @@ class ContentService implements ContentServiceInterface
         foreach ( $spiVersionInfoList as $spiVersionInfo )
         {
             $versionInfo = $this->buildVersionInfoDomainObject( $spiVersionInfo );
-            if ( !$this->repository->canUser( 'content', 'read', $versionInfo ) )
-                throw new UnauthorizedException( 'content', 'read' );
+            if ( !$this->repository->canUser( 'content', 'versionread', $versionInfo ) )
+                throw new UnauthorizedException( 'content', 'versionread' );
 
             $versionInfoList[] = $versionInfo;
         }
@@ -1291,8 +1292,8 @@ class ContentService implements ContentServiceInterface
      */
     public function loadVersions( APIContentInfo $contentInfo )
     {
-        if ( !$this->repository->canUser( 'content', 'read', $contentInfo ) )
-            throw new UnauthorizedException( 'content', 'read' );
+        if ( !$this->repository->canUser( 'content', 'versionread', $contentInfo ) )
+            throw new UnauthorizedException( 'content', 'versionread' );
 
         $spiVersionInfoList = $this->persistenceHandler->contentHandler()->listVersions( $contentInfo->id );
 
@@ -1399,9 +1400,6 @@ class ContentService implements ContentServiceInterface
      */
     public function loadRelations( APIVersionInfo $versionInfo )
     {
-        if ( !$this->repository->canUser( 'content', 'read', $versionInfo ) )
-            throw new UnauthorizedException( 'content', 'read' );
-
         $relations = $this->internalLoadRelations( $versionInfo );
         foreach ( $relations as $relation )
         {
