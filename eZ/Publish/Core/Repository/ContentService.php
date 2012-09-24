@@ -1417,6 +1417,9 @@ class ContentService implements ContentServiceInterface
      */
     public function loadRelations( APIVersionInfo $versionInfo )
     {
+        if ( !$this->repository->canUser( 'content', 'versionread', $versionInfo ) )
+            throw new UnauthorizedException( 'content', 'versionread' );
+
         $relations = $this->internalLoadRelations( $versionInfo );
         foreach ( $relations as $relation )
         {
