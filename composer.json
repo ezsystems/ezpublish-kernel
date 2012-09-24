@@ -33,10 +33,10 @@
         "zetacomponents/signal-slot": "dev-master",
         "zetacomponents/system-information": "dev-master",
         "zetacomponents/webdav": "1.1.0-rc1",
+        "symfony/symfony": "2.1.*",
         "symfony-cmf/routing": "1.0.*"
     },
     "require-dev": {
-        "symfony/symfony": "2.1.*",
         "Qafoo/RMF": "dev-master",
         "ezsystems/ezpublish-legacy": "dev-master",
         "mikey179/vfsStream": "1.1.0"

@@ -1,6 +1,74 @@
 {
-    "hash": "458262a32a6800b69c14e22588c7ca6a",
+    "hash": "fb8cdb8ae62d695386af4e9489e15007",
     "packages": [
+        {
+            "name": "doctrine/common",
+            "version": "2.3.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/common",
+                "reference": "bb0aebbf234db52df476a2b473d434745b34221c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/doctrine/common/zipball/bb0aebbf234db52df476a2b473d434745b34221c",
+                "reference": "bb0aebbf234db52df476a2b473d434745b34221c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "time": "1348120518",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.3.x-dev"
+                }
+            },
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Common": "lib/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com",
+                    "homepage": "http://www.jwage.com/"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com"
+                },
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Johannes Schmitt",
+                    "email": "schmittjoh@gmail.com",
+                    "homepage": "http://jmsyst.com",
+                    "role": "Developer of wrapped JMSSerializerBundle"
+                }
+            ],
+            "description": "Common Library for Doctrine projects",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "collections",
+                "spl",
+                "eventmanager",
+                "annotations",
+                "persistence"
+            ]
+        },
         {
             "name": "symfony-cmf/routing",
             "version": "dev-master",
@@ -48,6 +116,148 @@
             "keywords": [
                 "database",
                 "routing"
+            ]
+        },
+        {
+            "name": "symfony/symfony",
+            "version": "2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/symfony/symfony.git",
+                "reference": "21d16e60fa2d4dc12a489817070896daf806b55d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/symfony/symfony/zipball/21d16e60fa2d4dc12a489817070896daf806b55d",
+                "reference": "21d16e60fa2d4dc12a489817070896daf806b55d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "doctrine/common": ">2.2,<2.4-dev",
+                "twig/twig": ">=1.9.1,<2.0-dev"
+            },
+            "replace": {
+                "symfony/doctrine-bridge": "self.version",
+                "symfony/monolog-bridge": "self.version",
+                "symfony/propel1-bridge": "self.version",
+                "symfony/swiftmailer-bridge": "self.version",
+                "symfony/twig-bridge": "self.version",
+                "symfony/framework-bundle": "self.version",
+                "symfony/security-bundle": "self.version",
+                "symfony/twig-bundle": "self.version",
+                "symfony/web-profiler-bundle": "self.version",
+                "symfony/browser-kit": "self.version",
+                "symfony/class-loader": "self.version",
+                "symfony/config": "self.version",
+                "symfony/console": "self.version",
+                "symfony/css-selector": "self.version",
+                "symfony/dependency-injection": "self.version",
+                "symfony/dom-crawler": "self.version",
+                "symfony/event-dispatcher": "self.version",
+                "symfony/filesystem": "self.version",
+                "symfony/finder": "self.version",
+                "symfony/form": "self.version",
+                "symfony/http-foundation": "self.version",
+                "symfony/http-kernel": "self.version",
+                "symfony/locale": "self.version",
+                "symfony/options-resolver": "self.version",
+                "symfony/process": "self.version",
+                "symfony/routing": "self.version",
+                "symfony/security": "self.version",
+                "symfony/serializer": "self.version",
+                "symfony/templating": "self.version",
+                "symfony/translation": "self.version",
+                "symfony/validator": "self.version",
+                "symfony/yaml": "self.version"
+            },
+            "require-dev": {
+                "doctrine/dbal": ">=2.2,<2.4-dev",
+                "doctrine/orm": ">=2.2.3,<2.4-dev",
+                "doctrine/data-fixtures": "1.0.*",
+                "propel/propel1": "dev-master",
+                "monolog/monolog": "dev-master"
+            },
+            "time": "2012-09-24 12:11:50",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1-dev"
+                }
+            },
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "Symfony": "src/",
+                    "SessionHandlerInterface": "src/Symfony/Component/HttpFoundation/Resources/stubs"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "The Symfony PHP framework",
+            "homepage": "http://symfony.com",
+            "keywords": [
+                "framework"
+            ]
+        },
+        {
+            "name": "twig/twig",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/fabpot/Twig.git",
+                "reference": "b4d1d62b82e83c6fd3d5a6cd46a186de64275bb4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/fabpot/Twig/zipball/b4d1d62b82e83c6fd3d5a6cd46a186de64275bb4",
+                "reference": "b4d1d62b82e83c6fd3d5a6cd46a186de64275bb4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.4"
+            },
+            "time": "1347961095",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.10-dev"
+                }
+            },
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "Twig_": "lib/"
+                }
+            },
+            "license": [
+                "BSD-3"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Armin Ronacher",
+                    "email": "armin.ronacher@active-4.com"
+                }
+            ],
+            "description": "Twig, the flexible, fast, and secure template language for PHP",
+            "homepage": "http://twig.sensiolabs.org",
+            "keywords": [
+                "templating"
             ]
         },
         {
@@ -180,6 +390,69 @@
                 }
             ],
             "description": "The purpose of the Authentication component is to provide support for different means of identification and authentication of users using different providers and protocols.",
+            "homepage": "https://github.com/zetacomponents"
+        },
+        {
+            "name": "zetacomponents/base",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zetacomponents/Base.git",
+                "reference": "642f63a8a72c32996f1aaf8a317fdf746bc32ce7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/zetacomponents/Base/zipball/642f63a8a72c32996f1aaf8a317fdf746bc32ce7",
+                "reference": "642f63a8a72c32996f1aaf8a317fdf746bc32ce7",
+                "shasum": ""
+            },
+            "require-dev": {
+                "zetacomponents/unit-test": "*"
+            },
+            "time": "1337599296",
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "classmap": [
+                    "src"
+                ]
+            },
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Sergey Alexeev"
+                },
+                {
+                    "name": "Sebastian Bergmann"
+                },
+                {
+                    "name": "Jan Borsodi"
+                },
+                {
+                    "name": "Raymond Bosman"
+                },
+                {
+                    "name": "Frederik Holljen"
+                },
+                {
+                    "name": "Kore Nordmann"
+                },
+                {
+                    "name": "Derick Rethans"
+                },
+                {
+                    "name": "Vadym Savchuk"
+                },
+                {
+                    "name": "Tobias Schlitt"
+                },
+                {
+                    "name": "Alexandru Stanoi"
+                }
+            ],
+            "description": "The Base package provides the basic infrastructure that all packages rely on. Therefore every component relies on this package.",
             "homepage": "https://github.com/zetacomponents"
         },
         {
@@ -1227,74 +1500,6 @@
     ],
     "packages-dev": [
         {
-            "name": "doctrine/common",
-            "version": "2.3.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/doctrine/common",
-                "reference": "bb0aebbf234db52df476a2b473d434745b34221c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/doctrine/common/zipball/bb0aebbf234db52df476a2b473d434745b34221c",
-                "reference": "bb0aebbf234db52df476a2b473d434745b34221c",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.2"
-            },
-            "time": "1348120518",
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.3.x-dev"
-                }
-            },
-            "installation-source": "source",
-            "autoload": {
-                "psr-0": {
-                    "Doctrine\\Common": "lib/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jonathan Wage",
-                    "email": "jonwage@gmail.com",
-                    "homepage": "http://www.jwage.com/"
-                },
-                {
-                    "name": "Guilherme Blanco",
-                    "email": "guilhermeblanco@gmail.com"
-                },
-                {
-                    "name": "Roman Borschel",
-                    "email": "roman@code-factory.org"
-                },
-                {
-                    "name": "Benjamin Eberlei",
-                    "email": "kontakt@beberlei.de"
-                },
-                {
-                    "name": "Johannes M. Schmitt",
-                    "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
-                    "role": "Developer of wrapped JMSSerializerBundle"
-                }
-            ],
-            "description": "Common Library for Doctrine projects",
-            "homepage": "http://www.doctrine-project.org",
-            "keywords": [
-                "collections",
-                "spl",
-                "eventmanager",
-                "annotations",
-                "persistence"
-            ]
-        },
-        {
             "name": "ezsystems/ezpublish-legacy",
             "version": "dev-master",
             "source": {
@@ -1376,174 +1581,6 @@
             "support": {
                 "source": "https://github.com/Qafoo/REST-Micro-Framework/tree/1.0.0",
                 "issues": "https://github.com/Qafoo/REST-Micro-Framework/issues"
-            }
-        },
-        {
-            "name": "symfony/symfony",
-            "version": "2.1.x-dev",
-            "source": {
-                "type": "git",
-                "url": "git://github.com/symfony/symfony.git",
-                "reference": "21d16e60fa2d4dc12a489817070896daf806b55d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/symfony/symfony/zipball/21d16e60fa2d4dc12a489817070896daf806b55d",
-                "reference": "21d16e60fa2d4dc12a489817070896daf806b55d",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3",
-                "doctrine/common": ">2.2,<2.4-dev",
-                "twig/twig": ">=1.9.1,<2.0-dev"
-            },
-            "replace": {
-                "symfony/doctrine-bridge": "self.version",
-                "symfony/monolog-bridge": "self.version",
-                "symfony/propel1-bridge": "self.version",
-                "symfony/swiftmailer-bridge": "self.version",
-                "symfony/twig-bridge": "self.version",
-                "symfony/framework-bundle": "self.version",
-                "symfony/security-bundle": "self.version",
-                "symfony/twig-bundle": "self.version",
-                "symfony/web-profiler-bundle": "self.version",
-                "symfony/browser-kit": "self.version",
-                "symfony/class-loader": "self.version",
-                "symfony/config": "self.version",
-                "symfony/console": "self.version",
-                "symfony/css-selector": "self.version",
-                "symfony/dependency-injection": "self.version",
-                "symfony/dom-crawler": "self.version",
-                "symfony/event-dispatcher": "self.version",
-                "symfony/filesystem": "self.version",
-                "symfony/finder": "self.version",
-                "symfony/form": "self.version",
-                "symfony/http-foundation": "self.version",
-                "symfony/http-kernel": "self.version",
-                "symfony/locale": "self.version",
-                "symfony/options-resolver": "self.version",
-                "symfony/process": "self.version",
-                "symfony/routing": "self.version",
-                "symfony/security": "self.version",
-                "symfony/serializer": "self.version",
-                "symfony/templating": "self.version",
-                "symfony/translation": "self.version",
-                "symfony/validator": "self.version",
-                "symfony/yaml": "self.version"
-            },
-            "require-dev": {
-                "doctrine/dbal": ">=2.2,<2.4-dev",
-                "doctrine/orm": ">=2.2.3,<2.4-dev",
-                "doctrine/data-fixtures": "1.0.*",
-                "propel/propel1": "dev-master",
-                "monolog/monolog": "dev-master"
-            },
-            "time": "1348488710",
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.1-dev"
-                }
-            },
-            "installation-source": "source",
-            "autoload": {
-                "psr-0": {
-                    "Symfony": "src/",
-                    "SessionHandlerInterface": "src/Symfony/Component/HttpFoundation/Resources/stubs"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
-                }
-            ],
-            "description": "The Symfony PHP framework",
-            "homepage": "http://symfony.com",
-            "keywords": [
-                "framework"
-            ]
-        },
-        {
-            "name": "twig/twig",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "git://github.com/fabpot/Twig.git",
-                "reference": "b4d1d62b82e83c6fd3d5a6cd46a186de64275bb4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/fabpot/Twig/zipball/b4d1d62b82e83c6fd3d5a6cd46a186de64275bb4",
-                "reference": "b4d1d62b82e83c6fd3d5a6cd46a186de64275bb4",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2.4"
-            },
-            "time": "1347961095",
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.10-dev"
-                }
-            },
-            "installation-source": "source",
-            "autoload": {
-                "psr-0": {
-                    "Twig_": "lib/"
-                }
-            },
-            "license": [
-                "BSD-3"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Armin Ronacher",
-                    "email": "armin.ronacher@active-4.com"
-                }
-            ],
-            "description": "Twig, the flexible, fast, and secure template language for PHP",
-            "homepage": "http://twig.sensiolabs.org",
-            "keywords": [
-                "templating"
-            ]
-        },
-        {
-            "name": "zetacomponents/base",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zetacomponents/Base.git",
-                "reference": "642f63a8a72c32996f1aaf8a317fdf746bc32ce7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/zetacomponents/Base/zipball/642f63a8a72c32996f1aaf8a317fdf746bc32ce7",
-                "reference": "642f63a8a72c32996f1aaf8a317fdf746bc32ce7",
-                "shasum": ""
-            },
-            "require-dev": {
-                "zetacomponents/unit-test": "*"
-            },
-            "time": "1337599296",
-            "type": "library",
-            "installation-source": "source",
-            "autoload": {
-                "classmap": [
-                    "src"
-                ]
             }
         }
     ],
