@@ -26,14 +26,6 @@ class LegacyTreeMenuController extends Controller
     {
         $kernelClosure = $legacyKernelFactory->buildLegacyKernel( $treeMenuKernelHandler );
         $this->treeMenuKernel = $kernelClosure();
-        $resolver = new OptionsResolver();
-        $resolver->setDefaults(
-            array(
-                 'useHttpCache'     => true,
-                 'TTLCache'         => 86400
-            )
-        );
-        parent::__construct( $resolver->resolve( $options ) );
     }
 
     /**
@@ -49,10 +41,10 @@ class LegacyTreeMenuController extends Controller
     public function viewMenu( $nodeId, $modified, $expiry, $perm )
     {
         $response = new Response();
-        if ( $this->getOption( 'useHttpCache' ) )
+        if ( $this->getParameter( 'treemenu.http_cache' ) )
         {
             $request = $this->getRequest();
-            $response->setMaxAge( $this->getOption( 'TTLCache' ) );
+            $response->setMaxAge( $this->getParameter( 'treemenu.ttl_cache' ) );
             // Aggressive cache : Always return a 304 response if "If-Modified-Since" request header is present.
             if ( $request->headers->has( 'If-Modified-Since' ) )
             {
