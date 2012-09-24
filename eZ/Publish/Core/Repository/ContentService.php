@@ -110,6 +110,27 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentInfo( $contentId )
     {
+        $contentInfo = $this->internalLoadContentInfo( $contentId );
+        if ( !$this->repository->canUser( 'content', 'read', $contentInfo ) )
+            throw new UnauthorizedException( 'content', 'read' );
+
+        return $contentInfo;
+    }
+
+    /**
+     * Loads a content info object.
+     *
+     * To load fields use loadContent
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the content
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content with the given id does not exist
+     *
+     * @param int $contentId
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
+     */
+    public function internalLoadContentInfo( $contentId )
+    {
         try
         {
             $spiContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo( $contentId );
@@ -123,11 +144,7 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        $contentInfo = $this->buildContentInfoDomainObject( $spiContentInfo );
-        if ( !$this->repository->canUser( 'content', 'read', $contentInfo ) )
-            throw new UnauthorizedException( 'content', 'read' );
-
-        return $contentInfo;
+        return $this->buildContentInfoDomainObject( $spiContentInfo );
     }
 
     /**
@@ -1872,11 +1889,12 @@ class ContentService implements ContentServiceInterface
      */
     protected function buildRelationDomainObject( SPIRelation $spiRelation, APIContentInfo $sourceContentInfo = null, APIContentInfo $destinationContentInfo = null )
     {
+        // @todo Shoudl relations really be loaded w/o checking permissions just because User needs to be accisible??
         if ( $sourceContentInfo === null )
-            $sourceContentInfo = $this->loadContentInfo( $spiRelation->sourceContentId );
+            $sourceContentInfo = $this->internalLoadContentInfo( $spiRelation->sourceContentId );
 
         if ( $destinationContentInfo === null )
-            $destinationContentInfo = $this->loadContentInfo( $spiRelation->destinationContentId );
+            $destinationContentInfo = $this->internalLoadContentInfo( $spiRelation->destinationContentId );
 
         $sourceFieldDefinition = null;
         if ( $spiRelation->sourceFieldDefinitionId !== null )
