@@ -460,7 +460,12 @@ class URLAliasServiceTest extends BaseTest
 
         $location = $locationService->loadLocation( $locationId );
 
-        // $loadedAliases will contain an array of URLAlias objects
+        // Create a custom URL alias for $location
+        $urlAliasService->createUrlAlias(
+            $location, '/My/Great-new-Site', 'eng-US'
+        );
+
+        // $loadedAliases will contain an array of custom URLAlias objects
         $loadedAliases = $urlAliasService->listLocationAliases( $location );
         /* END: Use Case */
 
