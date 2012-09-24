@@ -209,7 +209,7 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias[]
      */
-    public function listLocationAliases( Location $location, $custom = false, $languageCode = null )
+    public function listLocationAliases( Location $location, $custom = true, $languageCode = null )
     {
         $urlAliasList = array();
         $spiUrlAliasList = $this->urlAliasHandler->listURLAliasesForLocation(
