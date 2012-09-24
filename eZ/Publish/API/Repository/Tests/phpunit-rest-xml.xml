@@ -21,8 +21,6 @@
             <file>UserServiceTest.php</file>
             <file>RoleServiceTest.php</file>
             <file>TrashServiceTest.php</file>
-            <file>IOServiceTest.php</file>
-            <file>IOServiceTest/testNewBinaryCreateStructFromUploadedFile.phpt</file>
             <file>URLAliasServiceTest.php</file>
             <file>URLWildcardServiceTest.php</file>
             <file>SectionServiceAuthorizationTest.php</file>
