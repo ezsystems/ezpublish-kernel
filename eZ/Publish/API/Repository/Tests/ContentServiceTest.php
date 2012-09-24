@@ -4050,20 +4050,11 @@ class ContentServiceTest extends BaseContentServiceTest
             $liveContent->getVersionInfo()->getContentInfo()
         );
 
-        $aliases = $urlAliasService->listLocationAliases( $location );
+        $aliases = $urlAliasService->listLocationAliases( $location, false );
 
         $this->assertAliasesCorrect(
             array(
-                '/Design/eZ-publish/An-awesome-forum' => array(
-                    'type' => URLAlias::LOCATION,
-                    'destination' => $location,
-                    'path' => '/Design/eZ-publish/An-awesome-forum',
-                    'languageCodes' => array( 'eng-US' ),
-                    'isHistory' => true,
-                    'isCustom' => false,
-                    'forward' => false,
-                ),
-                '/Design/eZ-publish/An-awesome-forum²' => array(
+                '/Design/eZ-publish/An-awesome-forum2' => array(
                     'type' => URLAlias::LOCATION,
                     'destination' => $location,
                     'path' => '/Design/eZ-publish/An-awesome-forum²',
@@ -4072,7 +4063,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'isCustom' => false,
                     'forward' => false,
                 ),
-                '/Design/eZ-publish/An-awesome-forum²³' => array(
+                '/Design/eZ-publish/An-awesome-forum23' => array(
                     'type' => URLAlias::LOCATION,
                     'destination' => $location,
                     'path' => '/Design/eZ-publish/An-awesome-forum²³',
@@ -4132,26 +4123,6 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertAliasesCorrect(
             array(
-                '/Design/eZ-publish/An-awesome-forum' => array(
-                    'type' => URLAlias::LOCATION,
-                    'destination' => $location,
-                    'path' => '/Design/eZ-publish/An-awesome-forum',
-                    'languageCodes' => array( 'eng-US' ),
-                    'isHistory' => true,
-                    'isCustom' => false,
-                    'forward' => false,
-                    'alwaysAvailable' => true,
-                ),
-                '/Design/eZ-publish/Amazing-Bielefeld-forum' => array(
-                    'type' => URLAlias::LOCATION,
-                    'destination' => $location,
-                    'path' => '/Design/eZ-publish/Amazing-Bielefeld-forum',
-                    'languageCodes' => array( 'eng-US' ),
-                    'isHistory' => false,
-                    'isCustom' => false,
-                    'forward' => false,
-                    'alwaysAvailable' => true,
-                ),
                 '/my/fancy/story-about-ez-publish' => array(
                     'type' => URLAlias::LOCATION,
                     'destination' => $location,

@@ -1759,11 +1759,6 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                     'eng-US' => 'Name',
                 ),
                 'descriptions' => array(
-                    0 => '',
-                ),
-                'fieldSettings' => array(
-                ),
-                'validatorConfiguration' => array(
                 ),
             ),
             'description' => array(
@@ -1780,11 +1775,6 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                     'eng-US' => 'Description',
                 ),
                 'descriptions' => array(
-                    0 => '',
-                ),
-                'fieldSettings' => array(
-                ),
-                'validatorConfiguration' => array(
                 ),
             )
         );
