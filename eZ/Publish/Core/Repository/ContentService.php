@@ -122,7 +122,7 @@ class ContentService implements ContentServiceInterface
      *
      * To load fields use loadContent
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the content
+     * @access private This is only available to services that needs access to Content w/o permissions checks
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content with the given id does not exist
      *
      * @param int $contentId
@@ -1437,7 +1437,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[] an array of {@link Relation}
      */
-    public function internalLoadRelations( APIVersionInfo $versionInfo )
+    protected function internalLoadRelations( APIVersionInfo $versionInfo )
     {
         $contentInfo = $versionInfo->getContentInfo();
 
