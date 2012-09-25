@@ -268,6 +268,26 @@ class ContentType
     }
 
     /**
+     * Copies a content type. The identifier of the copy
+     * is changed to copy_of_<identifier> and a new remoteId is generated.
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
+     */
+    public function copyContentType( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'type', $request->path );
+
+        $copiedContentType = $this->contentTypeService->copyContentType(
+            $this->contentTypeService->loadContentType( $urlValues['type'] )
+        );
+
+        return new Values\ResourceCreated(
+            $this->urlHandler->generate( 'type', array( 'type' => $copiedContentType->id ) )
+        );
+    }
+
+    /**
      * Loads FieldDefinitions for a given type
      *
      * @param RMF\Request $request
