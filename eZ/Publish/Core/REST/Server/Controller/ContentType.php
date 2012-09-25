@@ -18,6 +18,8 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\ContentTypeService;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 
 use Qafoo\RMF;
 
@@ -83,6 +85,38 @@ class ContentType
                     'contentTypeGroup' => $this->contentTypeService->createContentTypeGroup( $createStruct )
                 )
             );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
+    }
+
+    /**
+     * Updates a content type group
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
+     */
+    public function updateContentTypeGroup( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'typegroup', $request->path );
+
+        $createStruct = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            )
+        );
+
+        try
+        {
+            $this->contentTypeService->updateContentTypeGroup(
+                $this->contentTypeService->loadContentTypeGroup( $urlValues['typegroup'] ),
+                $this->mapToGroupUpdateStruct( $createStruct )
+            );
+
+            return $this->contentTypeService->loadContentTypeGroup( $urlValues['typegroup'] );
         }
         catch ( InvalidArgumentException $e )
         {
@@ -171,5 +205,25 @@ class ContentType
         }
 
         throw new Exceptions\NotFoundException( "Field definition not found: '{$request->path}'." );
+    }
+
+    /**
+     * Converts the provided ContentTypeGroupCreateStruct to ContentTypeGroupUpdateStruct
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct $createStruct
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct
+     */
+    private function mapToGroupUpdateStruct( ContentTypeGroupCreateStruct $createStruct )
+    {
+        return new ContentTypeGroupUpdateStruct(
+            array(
+                'identifier' => $createStruct->identifier,
+                'modifierId' => $createStruct->creatorId,
+                'modificationDate' => $createStruct->creationDate,
+                'mainLanguageCode' => $createStruct->mainLanguageCode,
+                'names' => $createStruct->names,
+                'descriptions' => $createStruct->descriptions
+            )
+        );
     }
 }

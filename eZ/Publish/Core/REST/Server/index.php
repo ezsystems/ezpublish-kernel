@@ -583,6 +583,7 @@ $dispatcher = new AuthenticatingDispatcher(
             ),
             '(^/content/typegroups/[0-9]+$)' => array(
                 'GET'     => array( $contentTypeController, 'loadContentTypeGroup' ),
+                'PATCH'   => array( $contentTypeController, 'updateContentTypeGroup' ),
             ),
 
             // /content/types
