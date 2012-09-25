@@ -584,6 +584,7 @@ $dispatcher = new AuthenticatingDispatcher(
             '(^/content/typegroups/[0-9]+$)' => array(
                 'GET'     => array( $contentTypeController, 'loadContentTypeGroup' ),
                 'PATCH'   => array( $contentTypeController, 'updateContentTypeGroup' ),
+                'DELETE'  => array( $contentTypeController, 'deleteContentTypeGroup' ),
             ),
 
             // /content/types

@@ -125,6 +125,29 @@ class ContentType
     }
 
     /**
+     * The given content type group is deleted
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     */
+    public function deleteContentTypeGroup( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'typegroup', $request->path );
+
+        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $urlValues['typegroup'] );
+
+        $contentTypes = $this->contentTypeService->loadContentTypes( $contentTypeGroup );
+        if ( !empty( $contentTypes ) )
+        {
+            throw new ForbiddenException( 'Only empty content type groups can be deleted' );
+        }
+
+        $this->contentTypeService->deleteContentTypeGroup( $contentTypeGroup );
+
+        return new Values\ResourceDeleted();
+    }
+
+    /**
      * Returns a list of all content type groups
      *
      * @param RMF\Request $request
