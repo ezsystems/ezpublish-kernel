@@ -224,7 +224,7 @@ class ContentType
         $questionMarkPosition = strpos( $request->path, '?' );
         $urlValues = $this->urlHandler->parse(
             'grouptypes',
-            substr( $request->path, 0, $questionMarkPosition !== false ? $questionMarkPosition : strlen( $request->path ) )
+            $questionMarkPosition !== false ? substr( $request->path, 0, $questionMarkPosition ) : $request->path
         );
 
         //@todo Throw forbidden exception if content type identifier already exists
