@@ -214,6 +214,60 @@ class ContentType
     }
 
     /**
+     * Creates a new content type draft in the given content type group
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedContentType
+     */
+    public function createContentType( RMF\Request $request )
+    {
+        $questionMarkPosition = strpos( $request->path, '?' );
+        $urlValues = $this->urlHandler->parse(
+            'grouptypes',
+            substr( $request->path, 0, $questionMarkPosition !== false ? $questionMarkPosition : strlen( $request->path ) )
+        );
+
+        //@todo Throw forbidden exception if content type identifier already exists
+        //Cannot be caught as PAPI throws same InvalidArgumentException for couple of situations
+
+        $contentTypeDraft = $this->contentTypeService->createContentType(
+            $this->inputDispatcher->parse(
+                new Message(
+                    array(
+                        'Content-Type' => $request->contentType,
+                    ),
+                    $request->body
+                )
+            ),
+            array( $this->contentTypeService->loadContentTypeGroup( $urlValues['typegroup'] ) )
+        );
+
+        if ( isset( $request->variables['publish'] ) && $request->variables['publish'] === 'true' )
+        {
+            $this->contentTypeService->publishContentTypeDraft( $contentTypeDraft, 'bla' );
+
+            $contentType = $this->contentTypeService->loadContentType( $contentTypeDraft->id );
+            return new Values\CreatedContentType(
+                array(
+                    'contentType' => new Values\RestContentType(
+                        $contentType,
+                        $contentType->getFieldDefinitions()
+                    )
+                )
+            );
+        }
+
+        return new Values\CreatedContentType(
+            array(
+                'contentType' => new Values\RestContentType(
+                    $contentTypeDraft,
+                    $contentTypeDraft->getFieldDefinitions()
+                )
+            )
+        );
+    }
+
+    /**
      * Loads FieldDefinitions for a given type
      *
      * @param RMF\Request $request

@@ -39,7 +39,11 @@ class RestContentType extends RestContentTypeBase
         $generator->startObjectElement( $mediaType );
 
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( $mediaType ) );
-        $visitor->setHeader( 'Accept-Patch', $generator->getMediaType( 'ContentTypeUpdate' ) );
+
+        if ( $contentType->status === APIContentType::STATUS_DRAFT )
+        {
+            $visitor->setHeader( 'Accept-Patch', $generator->getMediaType( 'ContentTypeUpdate' ) );
+        }
 
         $generator->startAttribute(
             'href',

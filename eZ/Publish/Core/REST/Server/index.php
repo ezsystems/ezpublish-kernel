@@ -188,6 +188,14 @@ $inputDispatcher = new Common\Input\Dispatcher(
                 $fieldTypeParser,
                 $parserTools
             ),
+            'application/vnd.ez.api.ContentTypeCreate'      => new Input\Parser\ContentTypeCreate(
+                $urlHandler,
+                $repository->getContentTypeService(),
+                // Needed here since there's no ContentType in request for embedded FieldDefinitionCreate
+                ( $fieldDefinitionCreateParser = new Input\Parser\FieldDefinitionCreate( $urlHandler, $repository->getContentTypeService(), $parserTools ) ),
+                $parserTools
+            ),
+            'application/vnd.ez.api.FieldDefinitionCreate'  => $fieldDefinitionCreateParser,
             'application/vnd.ez.api.PolicyCreate'           => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService(), $parserTools ),
             'application/vnd.ez.api.PolicyUpdate'           => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService(), $parserTools ),
             'application/vnd.ez.api.RoleAssignInput'        => new Input\Parser\RoleAssignInput( $urlHandler, $parserTools ),
@@ -377,6 +385,7 @@ $valueObjectVisitors = array(
     // ContentType
 
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestContentType'             => new Output\ValueObjectVisitor\RestContentType( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedContentType'          => new Output\ValueObjectVisitor\CreatedContentType( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentTypeList'             => new Output\ValueObjectVisitor\ContentTypeList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentTypeInfoList'         => new Output\ValueObjectVisitor\ContentTypeInfoList( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeGroup'  => new Output\ValueObjectVisitor\ContentTypeGroup( $urlHandler ),
@@ -588,8 +597,9 @@ $dispatcher = new AuthenticatingDispatcher(
                 'PATCH'   => array( $contentTypeController, 'updateContentTypeGroup' ),
                 'DELETE'  => array( $contentTypeController, 'deleteContentTypeGroup' ),
             ),
-            '(^/content/typegroups/[0-9]+/types$)' => array(
+            '(^/content/typegroups/[0-9]+/types(\?publish=(true|false))?$)' => array(
                 'GET'     => array( $contentTypeController, 'listContentTypesForGroup' ),
+                'POST'    => array( $contentTypeController, 'createContentType' ),
             ),
 
             // /content/types

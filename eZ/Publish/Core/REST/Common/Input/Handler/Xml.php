@@ -37,17 +37,14 @@ class Xml extends Handler
         'PolicyList' => array(
             'Policy',
         ),
-        'limitations' => array(
-            'limitation'
-        ),
-        'values' => array(
-            'ref'
-        ),
         'LocationList' => array(
             'Location'
         ),
         'ContentObjectStates' => array(
             'ObjectState'
+        ),
+        'FieldDefinitions' => array(
+            'FieldDefinition'
         ),
         'names' => array(
             'value'
@@ -57,6 +54,12 @@ class Xml extends Handler
         ),
         'fields' => array(
             'field'
+        ),
+        'limitations' => array(
+            'limitation'
+        ),
+        'values' => array(
+            'ref'
         )
     );
 
@@ -227,7 +230,7 @@ class Xml extends Handler
                         throw new \RuntimeException(
                             sprintf(
                                 'Invalid value tag: <%s>.',
-                                $value->tagName
+                                $valueNode->tagName
                             )
                         );
                     }
