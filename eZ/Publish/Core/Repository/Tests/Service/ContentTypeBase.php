@@ -803,19 +803,6 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the newContentTypeCreateStruct() method.
      *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentValue
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeCreateStruct
-     *
-     * @return void
-     */
-    public function testNewContentTypeCreateStructThrowsInvalidArgumentValue()
-    {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
-    }
-
-    /**
-     * Test for the newContentTypeCreateStruct() method.
-     *
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::newFieldDefinitionCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct
@@ -868,19 +855,6 @@ abstract class ContentTypeBase extends BaseServiceTest
             ),
             $fieldDefinitionCreateStruct
         );
-    }
-
-    /**
-     * Test for the deleteContentTypeGroup() method.
-     *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newFieldDefinitionCreateStruct
-     *
-     * @return void
-     */
-    public function testNewFieldDefinitionCreateStructThrowsInvalidArgumentValue()
-    {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -976,7 +950,12 @@ abstract class ContentTypeBase extends BaseServiceTest
         $titleFieldCreate->isInfoCollector = false;
         $titleFieldCreate->isSearchable = true;
         $titleFieldCreate->defaultValue = "New text line";
-        //$titleFieldCreate->validators
+        $titleFieldCreate->validatorConfiguration = array(
+            "StringLengthValidator" => array(
+                "maxStringLength" => 255,
+                "minStringLength" => 128
+            )
+        );
         //$titleFieldCreate->fieldSettings
         $typeCreateStruct->addFieldDefinition( $titleFieldCreate );
 
@@ -999,7 +978,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyFieldCreate->isInfoCollector = false;
         $bodyFieldCreate->isSearchable = true;
         $bodyFieldCreate->defaultValue = "";
-        //$bodyFieldCreate->validators
+        //$bodyFieldCreate->validatorConfiguration
         $bodyFieldCreate->fieldSettings = array(
             "textRows" => 80
         );
@@ -1711,19 +1690,6 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the loadContentType() method.
      *
-     * @depends testLoadContentType
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentType
-     *
-     * @return void
-     */
-    public function testLoadContentTypeThrowsInvalidArgumentValue()
-    {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
-    }
-
-    /**
-     * Test for the loadContentType() method.
-     *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentType
      *
@@ -1782,19 +1748,6 @@ abstract class ContentTypeBase extends BaseServiceTest
     public function testLoadContentTypeByIdentifierValues( array $data )
     {
         $this->compareContentTypes( $data );
-    }
-
-    /**
-     * Test for the loadContentTypeByIdentifier() method.
-     *
-     * @depends testLoadContentTypeByIdentifier
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByIdentifier
-     *
-     * @return void
-     */
-    public function testLoadContentTypeByIdentifierThrowsInvalidArgumentValue()
-    {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -1921,18 +1874,6 @@ abstract class ContentTypeBase extends BaseServiceTest
     public function testLoadContentTypeDraftValues( array $data )
     {
         $this->compareContentTypes( $data );
-    }
-
-    /**
-     * Test for the loadContentTypeDraft() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeDraft
-     *
-     * @return array
-     */
-    public function testLoadContentTypeDraftThrowsInvalidArgumentValue()
-    {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
     }
 
     /**
@@ -3273,11 +3214,10 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the updateFieldDefinition() method.
      *
-     * @_depends testUpdateFieldDefinition
+     * @depends testUpdateFieldDefinition
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition
      *
      * @return array
-     * @group xx
      */
     public function testUpdateFieldDefinitionWithValidatorConfiguration()
     {
