@@ -324,11 +324,49 @@ class ContentType
         return new Values\CreatedContentType(
             array(
                 'contentType' => new Values\RestContentType(
-                    // Reload the content type to get the updated values
+                    // Reload the content type draft to get the updated values
                     $this->contentTypeService->loadContentTypeDraft(
                         $contentTypeDraft->id
                     )
                 )
+            )
+        );
+    }
+
+    /**
+     * Updates meta data of a draft. This method does not handle field definitions
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\RestContentType
+     */
+    public function updateContentTypeDraft( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'typeDraft', $request->path );
+
+        // @TODO Throw NotFoundException if the content type does not have a draft
+
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
+        $contentTypeUpdateStruct = $this->inputDispatcher->parse(
+            new Message(
+                array(
+                    'Content-Type' => $request->contentType,
+                ),
+                $request->body
+            )
+        );
+
+        // @TODO Throw ForbiddenException if the content type with the identifier already exists
+        // PAPI throws same exception for various situations
+
+        $this->contentTypeService->updateContentTypeDraft(
+            $contentTypeDraft,
+            $contentTypeUpdateStruct
+        );
+
+        return new Values\RestContentType(
+            // Reload the content type draft to get the updated values
+            $this->contentTypeService->loadContentTypeDraft(
+                $contentTypeDraft->id
             )
         );
     }

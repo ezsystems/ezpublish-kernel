@@ -614,6 +614,9 @@ $dispatcher = new AuthenticatingDispatcher(
                 'GET'     => array( $contentTypeController, 'loadContentType' ),
                 'POST'    => array( $contentTypeController, 'createContentTypeDraft' ),
             ),
+            '(^/content/types/[0-9]+/draft$)' => array(
+                'PATCH'   => array( $contentTypeController, 'updateContentTypeDraft' ),
+            ),
             '(^/content/types/[0-9]+/fieldDefinitions$)' => array(
                 'GET'     => array( $contentTypeController, 'loadFieldDefinitionList' ),
             ),
