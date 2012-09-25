@@ -379,6 +379,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'       => new Output\ValueObjectVisitor\ContentType( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeGroup'  => new Output\ValueObjectVisitor\ContentTypeGroup( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedContentTypeGroup'     => new Output\ValueObjectVisitor\CreatedContentTypeGroup( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentTypeGroupList'        => new Output\ValueObjectVisitor\ContentTypeGroupList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\FieldDefinitionList'         => new Output\ValueObjectVisitor\FieldDefinitionList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestFieldDefinition'         => new Output\ValueObjectVisitor\RestFieldDefinition(
         $urlHandler,
@@ -577,6 +578,7 @@ $dispatcher = new AuthenticatingDispatcher(
             // /content/typegroups
 
             '(^/content/typegroups$)' => array(
+                'GET'     => array( $contentTypeController, 'loadContentTypeGroupList' ),
                 'POST'    => array( $contentTypeController, 'createContentTypeGroup' ),
             ),
 

@@ -65,7 +65,7 @@ class ContentType
      * Creates a new content type group
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedContentTypeGroup
      */
     public function createContentTypeGroup( RMF\Request $request )
     {
@@ -88,6 +88,19 @@ class ContentType
         {
             throw new ForbiddenException( $e->getMessage() );
         }
+    }
+
+    /**
+     * Returns a list of all content type groups
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeGroupList
+     */
+    public function loadContentTypeGroupList( RMF\Request $request )
+    {
+        return new Values\ContentTypeGroupList(
+            $this->contentTypeService->loadContentTypeGroups()
+        );
     }
 
     /**
