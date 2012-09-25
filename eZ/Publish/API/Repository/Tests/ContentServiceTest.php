@@ -2827,6 +2827,10 @@ class ContentServiceTest extends BaseContentServiceTest
             $contentInfo
         );
 
+        // Publish drafts, so relations become active
+        $contentService->publishVersion( $mediaDraft->getVersionInfo() );
+        $contentService->publishVersion( $demoDesignDraft->getVersionInfo() );
+
         // Load all relations
         $relations = $contentService->loadRelations( $versionInfo );
         $reverseRelations = $contentService->loadReverseRelations( $contentInfo );
