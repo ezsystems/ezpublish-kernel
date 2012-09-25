@@ -125,12 +125,15 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
+     * Add Permission criteria if needed and return false if no access at all
+     *
+     * @access private Temporarly made accessible until Location service stops using searchHandler()
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
      * @todo Known issue: Whole permissions system need to be change accommodate role limitations.
      */
-    private function addPermissionsCriterion( Criterion &$criterion )
+    public function addPermissionsCriterion( Criterion &$criterion )
     {
         $limitations = $this->repository->hasAccess( 'content', 'read' );
         if ( $limitations === false || $limitations === true )

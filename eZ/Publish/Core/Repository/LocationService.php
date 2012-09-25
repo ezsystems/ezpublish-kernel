@@ -392,6 +392,11 @@ class LocationService implements LocationServiceInterface
         if ( $sortField !== null )
             $query->sortClauses = array( $this->getSortClauseBySortField( $sortField, $sortOrder ) );
 
+        if ( !$this->repository->getSearchService()->addPermissionsCriterion( $query->criterion ) )
+        {
+            return array();
+        }
+
         return $this->persistenceHandler->searchHandler()->findContent( $query );
     }
 
