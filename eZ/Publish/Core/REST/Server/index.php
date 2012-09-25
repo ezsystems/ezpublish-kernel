@@ -200,6 +200,7 @@ $inputDispatcher = new Common\Input\Dispatcher(
             'application/vnd.ez.api.ContentObjectStates'    => new Input\Parser\ContentObjectStates( $urlHandler ),
             'application/vnd.ez.api.RelationCreate'         => new Input\Parser\RelationCreate( $urlHandler ),
             'application/vnd.ez.api.ViewInput'              => new Input\Parser\ViewInput( $urlHandler ),
+            'application/vnd.ez.api.ContentTypeGroupInput'  => new Input\Parser\ContentTypeGroupInput( $urlHandler, $repository->getContentTypeService(), $parserTools ),
 
             // internal Media-Types
             'application/vnd.ez.api.internal.criterion.ContentId'              => new Input\Parser\Criterion\ContentId( $urlHandler ),
@@ -376,6 +377,8 @@ $valueObjectVisitors = array(
     // ContentType
 
     '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'       => new Output\ValueObjectVisitor\ContentType( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeGroup'  => new Output\ValueObjectVisitor\ContentTypeGroup( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedContentTypeGroup'     => new Output\ValueObjectVisitor\CreatedContentTypeGroup( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\FieldDefinitionList'         => new Output\ValueObjectVisitor\FieldDefinitionList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestFieldDefinition'         => new Output\ValueObjectVisitor\RestFieldDefinition(
         $urlHandler,
@@ -569,6 +572,12 @@ $dispatcher = new AuthenticatingDispatcher(
             ),
             '(^/content/locations/[0-9/]+/children$)' => array(
                 'GET'     => array( $locationController, 'loadLocationChildren' ),
+            ),
+
+            // /content/typegroups
+
+            '(^/content/typegroups$)' => array(
+                'POST'    => array( $contentTypeController, 'createContentTypeGroup' ),
             ),
 
             // /content/types

@@ -12,6 +12,8 @@ use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Common\Exceptions;
+use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 
 use eZ\Publish\Core\REST\Server\Values;
 
@@ -57,6 +59,35 @@ class ContentType
         $this->inputDispatcher = $inputDispatcher;
         $this->urlHandler = $urlHandler;
         $this->contentTypeService = $contentTypeService;
+    }
+
+    /**
+     * Creates a new content type group
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
+     */
+    public function createContentTypeGroup( RMF\Request $request )
+    {
+        $createStruct = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            )
+        );
+
+        try
+        {
+            return new Values\CreatedContentTypeGroup(
+                array(
+                    'contentTypeGroup' => $this->contentTypeService->createContentTypeGroup( $createStruct )
+                )
+            );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
     }
 
     /**
