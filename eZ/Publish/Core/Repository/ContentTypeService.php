@@ -598,47 +598,69 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     protected function buildSPIFieldDefinitionUpdate( FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct, APIFieldDefinition $fieldDefinition )
     {
-        $spiFieldDefinition = new SPIFieldDefinition(
-            array(
-                "id" => $fieldDefinition->id,
-                "name" => $fieldDefinitionUpdateStruct->names,
-                "description" => $fieldDefinitionUpdateStruct->descriptions,
-                "identifier" => $fieldDefinitionUpdateStruct->identifier,
-                "fieldGroup" => $fieldDefinitionUpdateStruct->fieldGroup,
-                "position" => $fieldDefinitionUpdateStruct->position,
-                "fieldType" => $fieldDefinition->fieldTypeIdentifier,
-                "isTranslatable" => $fieldDefinitionUpdateStruct->isTranslatable,
-                "isRequired" => $fieldDefinitionUpdateStruct->isRequired,
-                "isInfoCollector" => $fieldDefinitionUpdateStruct->isInfoCollector,
-                "isSearchable" => $fieldDefinitionUpdateStruct->isSearchable,
-                // These properties are precreated in constructor
-                //"fieldTypeConstraints"
-                //"defaultValue"
-            )
-        );
         /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
         $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
             $fieldDefinition->fieldTypeIdentifier
         );
 
-        $validationErrors = $fieldType->validateValidatorConfiguration(
-            $fieldDefinitionUpdateStruct->validatorConfiguration
-        );
+        $validatorConfiguration = $fieldDefinitionUpdateStruct->validatorConfiguration === null
+            ? $fieldDefinition->validatorConfiguration
+            : $fieldDefinitionUpdateStruct->validatorConfiguration;
+        $fieldSettings = $fieldDefinitionUpdateStruct->fieldSettings === null
+            ? $fieldDefinition->fieldSettings
+            : $fieldDefinitionUpdateStruct->fieldSettings;
+
+        $validationErrors = $fieldType->validateValidatorConfiguration( $validatorConfiguration );
         if ( !empty( $validationErrors ) )
         {
             throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
         }
 
-        $validationErrors = $fieldType->validateFieldSettings(
-            $fieldDefinitionUpdateStruct->fieldSettings
-        );
+        $validationErrors = $fieldType->validateFieldSettings( $fieldSettings );
         if ( !empty( $validationErrors ) )
         {
             throw new ContentTypeFieldDefinitionValidationException( $validationErrors );
         }
 
-        $spiFieldDefinition->fieldTypeConstraints->validators = $fieldDefinitionUpdateStruct->validatorConfiguration;
-        $spiFieldDefinition->fieldTypeConstraints->fieldSettings = $fieldDefinitionUpdateStruct->fieldSettings;
+        $spiFieldDefinition = new SPIFieldDefinition(
+            array(
+                "id" => $fieldDefinition->id,
+                "fieldType" => $fieldDefinition->fieldTypeIdentifier,
+                "name" => $fieldDefinitionUpdateStruct->names === null
+                    ? $fieldDefinition->getNames()
+                    : $fieldDefinitionUpdateStruct->names,
+                "description" => $fieldDefinitionUpdateStruct->descriptions === null
+                    ? $fieldDefinition->getDescriptions()
+                    : $fieldDefinitionUpdateStruct->descriptions,
+                "identifier" => $fieldDefinitionUpdateStruct->identifier === null
+                    ? $fieldDefinition->identifier
+                    : $fieldDefinitionUpdateStruct->identifier,
+                "fieldGroup" => $fieldDefinitionUpdateStruct->fieldGroup === null
+                    ? $fieldDefinition->fieldGroup
+                    : $fieldDefinitionUpdateStruct->fieldGroup,
+                "position" => $fieldDefinitionUpdateStruct->position === null
+                    ? $fieldDefinition->position
+                    : $fieldDefinitionUpdateStruct->position,
+                "isTranslatable" => $fieldDefinitionUpdateStruct->isTranslatable === null
+                    ? $fieldDefinition->isTranslatable
+                    : $fieldDefinitionUpdateStruct->isTranslatable,
+                "isRequired" => $fieldDefinitionUpdateStruct->isRequired === null
+                    ? $fieldDefinition->isRequired
+                    : $fieldDefinitionUpdateStruct->isRequired,
+                "isInfoCollector" => $fieldDefinitionUpdateStruct->isInfoCollector === null
+                    ? $fieldDefinition->isInfoCollector
+                    : $fieldDefinitionUpdateStruct->isInfoCollector,
+                "isSearchable" => $fieldDefinitionUpdateStruct->isSearchable === null
+                    ? $fieldDefinition->isSearchable
+                    : $fieldDefinitionUpdateStruct->isSearchable,
+                // These properties are precreated in constructor
+                //"fieldTypeConstraints"
+                //"defaultValue"
+            )
+        );
+
+        $spiFieldDefinition->fieldTypeConstraints->validators = $validatorConfiguration;
+        $spiFieldDefinition->fieldTypeConstraints->fieldSettings = $fieldSettings;
         $spiFieldDefinition->defaultValue = $fieldType->toPersistenceValue(
             isset( $fieldDefinitionUpdateStruct->defaultValue )
                 ? $fieldType->acceptValue( $fieldDefinitionUpdateStruct->defaultValue )
