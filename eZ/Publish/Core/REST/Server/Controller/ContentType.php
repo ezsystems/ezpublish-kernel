@@ -104,6 +104,19 @@ class ContentType
     }
 
     /**
+     * Returns the content type group given by id
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
+     */
+    public function loadContentTypeGroup( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'typegroup', $request->path );
+
+        return $this->contentTypeService->loadContentTypeGroup( $urlValues['typegroup'] );
+    }
+
+    /**
      * Load a content info by remote ID
      *
      * @param RMF\Request $request

@@ -581,6 +581,9 @@ $dispatcher = new AuthenticatingDispatcher(
                 'GET'     => array( $contentTypeController, 'loadContentTypeGroupList' ),
                 'POST'    => array( $contentTypeController, 'createContentTypeGroup' ),
             ),
+            '(^/content/typegroups/[0-9]+$)' => array(
+                'GET'     => array( $contentTypeController, 'loadContentTypeGroup' ),
+            ),
 
             // /content/types
 
