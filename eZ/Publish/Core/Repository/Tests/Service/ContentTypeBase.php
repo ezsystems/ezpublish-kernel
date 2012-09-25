@@ -873,7 +873,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the deleteContentTypeGroup() method.
      *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentValue
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::newFieldDefinitionCreateStruct
      *
      * @return void
@@ -2927,10 +2927,6 @@ abstract class ContentTypeBase extends BaseServiceTest
     public function testAddFieldDefinitionWithValidators()
     {
         $contentTypeDraft = $this->createDraftContentType();
-
-        /* BEGIN: Use Case */
-        // $contentTypeDraft contains a ContentTypeDraft
-
         $contentTypeService = $this->repository->getContentTypeService();
 
         $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct(
@@ -2938,11 +2934,11 @@ abstract class ContentTypeBase extends BaseServiceTest
         );
         $fieldDefCreate->names = array(
             'eng-US' => 'Tags',
-            'de-DE' => 'Schlagworte',
+            'ger-DE' => 'Schlagworte',
         );
         $fieldDefCreate->descriptions = array(
             'eng-US' => 'Tags of the blog post',
-            'de-DE' => 'Schlagworte des Blog-Eintrages',
+            'ger-DE' => 'Schlagworte des Blog-Eintrages',
         );
         $fieldDefCreate->fieldGroup = 'blog-meta';
         $fieldDefCreate->position = 1;
@@ -2952,14 +2948,14 @@ abstract class ContentTypeBase extends BaseServiceTest
         $fieldDefCreate->defaultValue = "New tags text line";
         $fieldDefCreate->validatorConfiguration = array(
             "StringLengthValidator" => array(
-                "maxStringLength" => 255
+                "maxStringLength" => 255,
+                "minStringLength" => 128
             )
         );
         $fieldDefCreate->fieldSettings = null;
         $fieldDefCreate->isSearchable = true;
 
         $contentTypeService->addFieldDefinition( $contentTypeDraft, $fieldDefCreate );
-        /* END: Use Case */
 
         $loadedType = $contentTypeService->loadContentTypeDraft( $contentTypeDraft->id );
 
@@ -2967,41 +2963,8 @@ abstract class ContentTypeBase extends BaseServiceTest
             'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeDraft',
             $loadedType
         );
-        return array(
-            'loadedType' => $loadedType,
-            'fieldDefCreate' => $fieldDefCreate,
-        );
-    }
 
-    /**
-     * Test for the addFieldDefinition() method.
-     *
-     * @depends testAddFieldDefinitionWithValidators
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::addFieldDefinition
-     *
-     * @param array $data
-     * @return void
-     */
-    public function testAddFieldDefinitionWithValidatorsStructValues( array $data )
-    {
-        $loadedType = $data['loadedType'];
-        $fieldDefCreate = $data['fieldDefCreate'];
-
-        foreach ( $loadedType->fieldDefinitions as $fieldDefinition )
-        {
-            if ( $fieldDefinition->identifier == $fieldDefCreate->identifier )
-            {
-                $this->assertCreatedFieldDefinitionCorrect( $fieldDefCreate, $fieldDefinition );
-                return;
-            }
-        }
-
-        $this->fail(
-            sprintf(
-                'Field definition with identifier "%s" not created.',
-                $fieldDefCreate->identifier
-            )
-        );
+        $this->assertAddFieldDefinitionStructValues( $loadedType, $fieldDefCreate );
     }
 
     /**
@@ -3016,10 +2979,6 @@ abstract class ContentTypeBase extends BaseServiceTest
     public function testAddFieldDefinitionWithSettings()
     {
         $contentTypeDraft = $this->createDraftContentType();
-
-        /* BEGIN: Use Case */
-        // $contentTypeDraft contains a ContentTypeDraft
-
         $contentTypeService = $this->repository->getContentTypeService();
 
         $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct(
@@ -3027,11 +2986,11 @@ abstract class ContentTypeBase extends BaseServiceTest
         );
         $fieldDefCreate->names = array(
             'eng-US' => 'Body',
-            'de-DE' => 'Körper',
+            'ger-DE' => 'Körper',
         );
         $fieldDefCreate->descriptions = array(
             'eng-US' => 'Body of the blog post',
-            'de-DE' => 'Körper der den Blog-Post',
+            'ger-DE' => 'Körper der den Blog-Post',
         );
         $fieldDefCreate->fieldGroup = 'blog-content';
         $fieldDefCreate->position = 1;
@@ -3042,12 +3001,11 @@ abstract class ContentTypeBase extends BaseServiceTest
         $fieldDefCreate->validatorConfiguration = array();
         $fieldDefCreate->fieldSettings = array(
             'numRows' => 10,
-            'tagPreset' => null,
+            'tagPreset' => \eZ\Publish\Core\FieldType\XmlText\Type::TAG_PRESET_SIMPLE_FORMATTING,
         );
         $fieldDefCreate->isSearchable = true;
 
         $contentTypeService->addFieldDefinition( $contentTypeDraft, $fieldDefCreate );
-        /* END: Use Case */
 
         $loadedType = $contentTypeService->loadContentTypeDraft( $contentTypeDraft->id );
 
@@ -3055,26 +3013,12 @@ abstract class ContentTypeBase extends BaseServiceTest
             'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeDraft',
             $loadedType
         );
-        return array(
-            'loadedType' => $loadedType,
-            'fieldDefCreate' => $fieldDefCreate,
-        );
+
+        $this->assertAddFieldDefinitionStructValues( $loadedType, $fieldDefCreate );
     }
 
-    /**
-     * Test for the addFieldDefinition() method.
-     *
-     * @depends testAddFieldDefinitionWithSettings
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::addFieldDefinition
-     *
-     * @param array $data
-     * @return void
-     */
-    public function testAddFieldDefinitionWithSettingsStructValues( array $data )
+    public function assertAddFieldDefinitionStructValues( $loadedType, $fieldDefCreate )
     {
-        $loadedType = $data['loadedType'];
-        $fieldDefCreate = $data['fieldDefCreate'];
-
         foreach ( $loadedType->fieldDefinitions as $fieldDefinition )
         {
             if ( $fieldDefinition->identifier == $fieldDefCreate->identifier )
@@ -3280,90 +3224,161 @@ abstract class ContentTypeBase extends BaseServiceTest
     public function testUpdateFieldDefinition()
     {
         $draftId = $this->createDraftContentType()->id;
-
-        /* BEGIN: Use Case */
-        // $draftId contains the ID of a content type draft
         $contentTypeService = $this->repository->getContentTypeService();
-
         $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+        $fieldDefinition = $contentTypeDraft->getFieldDefinition( "body" );
 
-        $bodyField = $contentTypeDraft->getFieldDefinition( 'body' );
-
-        $bodyUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
-        $bodyUpdateStruct->identifier = 'blog-body';
-        $bodyUpdateStruct->names = array(
-            'eng-US' => 'Blog post body',
-            'de-DE' => 'Blog-Eintrags-Textkörper',
+        $fieldDefinitionUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
+        $fieldDefinitionUpdateStruct->identifier = $fieldDefinition->identifier . "changed";
+        $fieldDefinitionUpdateStruct->names = array(
+            "eng-US" => $fieldDefinition->getName( "eng-US" ) . "changed",
+            "ger-DE" => $fieldDefinition->getName( "ger-DE" ) . "changed"
         );
-        $bodyUpdateStruct->descriptions = array(
-            'eng-US' => 'Blog post body of the blog post',
-            'de-DE' => 'Blog-Eintrags-Textkörper des Blog-Eintrages',
+        $fieldDefinitionUpdateStruct->descriptions = array(
+            "eng-US" => $fieldDefinition->getDescription( "eng-US" ) . "changed",
+            "ger-DE" => $fieldDefinition->getDescription( "ger-DE" ) . "changed"
         );
-        $bodyUpdateStruct->fieldGroup = 'updated-blog-content';
-        $bodyUpdateStruct->position = 3;
-        $bodyUpdateStruct->isTranslatable = false;
-        $bodyUpdateStruct->isRequired = false;
-        $bodyUpdateStruct->isInfoCollector = true;
-        $bodyUpdateStruct->defaultValue = "";
-        //$bodyUpdateStruct->validators
-        $bodyUpdateStruct->fieldSettings = array(
-            "textRows" => 40
+        $fieldDefinitionUpdateStruct->fieldGroup = $fieldDefinition->fieldGroup . "changed";
+        $fieldDefinitionUpdateStruct->position = $fieldDefinition->position + 1;
+        $fieldDefinitionUpdateStruct->isTranslatable = !$fieldDefinition->isTranslatable;
+        $fieldDefinitionUpdateStruct->isRequired = !$fieldDefinition->isRequired;
+        $fieldDefinitionUpdateStruct->isInfoCollector = !$fieldDefinition->isInfoCollector;
+        $fieldDefinitionUpdateStruct->defaultValue = (string)$fieldDefinition->defaultValue . "changed";
+        //$fieldDefinitionUpdateStruct->validators
+        $fieldDefinitionUpdateStruct->fieldSettings = array(
+            "textRows" => $fieldDefinition->fieldSettings["textRows"] + 1
         );
-        $bodyUpdateStruct->isSearchable = false;
+        $fieldDefinitionUpdateStruct->isSearchable = !$fieldDefinition->isSearchable;
 
         $contentTypeService->updateFieldDefinition(
             $contentTypeDraft,
-            $bodyField,
-            $bodyUpdateStruct
+            $fieldDefinition,
+            $fieldDefinitionUpdateStruct
         );
-        /* END: Use Case */
 
-        $loadedDraft = $contentTypeService->loadContentTypeDraft( $draftId );
-        $loadedField = $loadedDraft->getFieldDefinition( 'blog-body' );
+        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+        $updatedFieldDefinition = $contentTypeDraft->getFieldDefinition( $fieldDefinitionUpdateStruct->identifier );
         $this->assertInstanceOf(
-            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition',
-            $loadedField
+            "eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition",
+            $updatedFieldDefinition
         );
 
-        return array(
-            'originalField' => $bodyField,
-            'updatedField' => $loadedField,
-            'updateStruct' => $bodyUpdateStruct,
+        $this->assertUpdateFieldDefinitionStructValues(
+            $fieldDefinition,
+            $updatedFieldDefinition,
+            $fieldDefinitionUpdateStruct
         );
     }
 
     /**
      * Test for the updateFieldDefinition() method.
      *
-     * @depends testUpdateFieldDefinition
+     * @_depends testUpdateFieldDefinition
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition
      *
-     * @param array $data
-     * @return void
+     * @return array
+     * @group xx
      */
-    public function testUpdateFieldDefinitionStructValues( array $data )
+    public function testUpdateFieldDefinitionWithValidatorConfiguration()
     {
-        $originalField = $data['originalField'];
-        $updatedField = $data['updatedField'];
-        $updateStruct = $data['updateStruct'];
+        $draftId = $this->createDraftContentType()->id;
+        $contentTypeService = $this->repository->getContentTypeService();
+        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+        $fieldDefinition = $contentTypeDraft->getFieldDefinition( "title" );
 
+        $fieldDefinitionUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
+        $fieldDefinitionUpdateStruct->validatorConfiguration = array(
+            "StringLengthValidator" => array(
+                "minStringLength" =>
+                    (int)$fieldDefinition->validatorConfiguration["StringLengthValidator"]["minStringLength"] + 1,
+                "maxStringLength" =>
+                    (int)$fieldDefinition->validatorConfiguration["StringLengthValidator"]["maxStringLength"] + 1
+            )
+        );
+
+        $contentTypeService->updateFieldDefinition(
+            $contentTypeDraft,
+            $fieldDefinition,
+            $fieldDefinitionUpdateStruct
+        );
+
+        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+        $updatedFieldDefinition = $contentTypeDraft->getFieldDefinition( "title" );
+        $this->assertInstanceOf(
+            "eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition",
+            $updatedFieldDefinition
+        );
+
+        $this->assertUpdateFieldDefinitionStructValues(
+            $fieldDefinition,
+            $updatedFieldDefinition,
+            $fieldDefinitionUpdateStruct
+        );
+    }
+
+    /**
+     * Test for the updateFieldDefinition() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition
+     */
+    public function testUpdateFieldDefinitionWithEmptyStruct()
+    {
+        $draftId = $this->createDraftContentType()->id;
+        $contentTypeService = $this->repository->getContentTypeService();
+        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+        $fieldDefinition = $contentTypeDraft->getFieldDefinition( 'body' );
+        $fieldDefinitionUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
+
+        $contentTypeService->updateFieldDefinition(
+            $contentTypeDraft,
+            $fieldDefinition,
+            $fieldDefinitionUpdateStruct
+        );
+        $contentTypeDraft = $contentTypeService->loadContentTypeDraft( $draftId );
+        $updatedFieldDefinition = $contentTypeDraft->getFieldDefinition( 'body' );
+
+        self::assertEquals(
+            $fieldDefinition,
+            $updatedFieldDefinition
+        );
+    }
+
+    protected function assertUpdateFieldDefinitionStructValues( $originalField, $updatedField, $updateStruct )
+    {
         $this->assertPropertiesCorrect(
             array(
                 'id' => $originalField->id,
-                'identifier' => $updateStruct->identifier,
-                'names' => $updateStruct->names,
-                'descriptions' => $updateStruct->descriptions,
-                'fieldGroup' => $updateStruct->fieldGroup,
-                'position' => $updateStruct->position,
                 'fieldTypeIdentifier' => $originalField->fieldTypeIdentifier,
-                'isTranslatable' => $updateStruct->isTranslatable,
-                'isRequired' => $updateStruct->isRequired,
-                'isInfoCollector' => $updateStruct->isInfoCollector,
-                // validators and fieldSettings properties are tested separately below
-                //'validators' => $updateStruct->validators,
-                //'fieldSettings' => $updateStruct->fieldSettings,
-                'defaultValue' => $originalField->defaultValue,
-                'isSearchable' => $updateStruct->isSearchable,
+                'identifier' => $updateStruct->identifier === null
+                    ? $originalField->identifier
+                    : $updateStruct->identifier,
+                'names' => $updateStruct->names === null
+                    ? $originalField->names
+                    : $updateStruct->names,
+                'descriptions' => $updateStruct->descriptions === null
+                    ? $originalField->descriptions
+                    : $updateStruct->descriptions,
+                'fieldGroup' => $updateStruct->fieldGroup === null
+                    ? $originalField->fieldGroup
+                    : $updateStruct->fieldGroup,
+                'position' => $updateStruct->position === null
+                    ? $originalField->position
+                    : $updateStruct->position,
+                'isTranslatable' => $updateStruct->isTranslatable === null
+                    ? $originalField->isTranslatable
+                    : $updateStruct->isTranslatable,
+                'isRequired' => $updateStruct->isRequired === null
+                    ? $originalField->isRequired
+                    : $updateStruct->isRequired,
+                'isInfoCollector' => $updateStruct->isInfoCollector === null
+                    ? $originalField->isInfoCollector
+                    : $updateStruct->isInfoCollector,
+                'defaultValue' => $originalField->defaultValue === null
+                    ? $originalField->defaultValue
+                    : $updateStruct->defaultValue,
+                'isSearchable' => $updateStruct->isSearchable === null
+                    ? $originalField->isSearchable
+                    : $updateStruct->isSearchable,
             ),
             $updatedField
         );
@@ -3390,7 +3405,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $this->assertEquals(
             $expectedValidators,
             $actualValidators,
-            "Field definition property 'validators' is not correctly updated"
+            "Field definition property 'validatorConfiguration' is not correctly updated"
         );
     }
 
