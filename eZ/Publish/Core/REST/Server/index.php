@@ -151,7 +151,7 @@ $inputDispatcher = new Common\Input\Dispatcher(
                 $repository->getContentService(),
                 $repository->getContentTypeService(),
                 $fieldTypeParser,
-                // Needed here since there's no ContentType in request for embedded LocationCreate
+                // Needed here since there's no media type in request for embedded LocationCreate
                 ( $locationCreateParser = new Input\Parser\LocationCreate( $urlHandler, $repository->getLocationService(), $parserTools ) ),
                 $parserTools
             ),
@@ -191,8 +191,13 @@ $inputDispatcher = new Common\Input\Dispatcher(
             'application/vnd.ez.api.ContentTypeCreate'      => new Input\Parser\ContentTypeCreate(
                 $urlHandler,
                 $repository->getContentTypeService(),
-                // Needed here since there's no ContentType in request for embedded FieldDefinitionCreate
+                // Needed here since there's no media type in request for embedded FieldDefinitionCreate
                 ( $fieldDefinitionCreateParser = new Input\Parser\FieldDefinitionCreate( $urlHandler, $repository->getContentTypeService(), $parserTools ) ),
+                $parserTools
+            ),
+            'application/vnd.ez.api.ContentTypeUpdate'      => new Input\Parser\ContentTypeUpdate(
+                $urlHandler,
+                $repository->getContentTypeService(),
                 $parserTools
             ),
             'application/vnd.ez.api.FieldDefinitionCreate'  => $fieldDefinitionCreateParser,
@@ -607,6 +612,7 @@ $dispatcher = new AuthenticatingDispatcher(
             '(^/content/types/[0-9]+$)' => array(
                 'COPY'    => array( $contentTypeController, 'copyContentType' ),
                 'GET'     => array( $contentTypeController, 'loadContentType' ),
+                'POST'    => array( $contentTypeController, 'createContentTypeDraft' ),
             ),
             '(^/content/types/[0-9]+/fieldDefinitions$)' => array(
                 'GET'     => array( $contentTypeController, 'loadFieldDefinitionList' ),

@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Controller;
 use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Common\Exceptions;
@@ -284,6 +285,51 @@ class ContentType
 
         return new Values\ResourceCreated(
             $this->urlHandler->generate( 'type', array( 'type' => $copiedContentType->id ) )
+        );
+    }
+
+    /**
+     * Creates a draft and updates it with the given data
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedContentType
+     */
+    public function createContentTypeDraft( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'type', $request->path );
+
+        // @TODO Throw ForbiddenException if the content type already has a draft
+
+        $contentTypeDraft = $this->contentTypeService->createContentTypeDraft(
+            $this->contentTypeService->loadContentType( $urlValues['type'] )
+        );
+
+        $contentTypeUpdateStruct = $this->inputDispatcher->parse(
+            new Message(
+                array(
+                    'Content-Type' => $request->contentType,
+                ),
+                $request->body
+            )
+        );
+
+        // @TODO Throw ForbiddenException if the content type with the identifier already exists
+        // PAPI throws same exception for various situations
+
+        $this->contentTypeService->updateContentTypeDraft(
+            $contentTypeDraft,
+            $contentTypeUpdateStruct
+        );
+
+        return new Values\CreatedContentType(
+            array(
+                'contentType' => new Values\RestContentType(
+                    // Reload the content type to get the updated values
+                    $this->contentTypeService->loadContentTypeDraft(
+                        $contentTypeDraft->id
+                    )
+                )
+            )
         );
     }
 
