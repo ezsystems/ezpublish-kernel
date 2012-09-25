@@ -9,9 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 
-use eZ\Publish\Core\MVC\Symfony\Routing\Generator,
-    eZ\Publish\API\Repository\Values\Content\Location,
-    eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 
 /**
  * URL generator for UrlAlias based links

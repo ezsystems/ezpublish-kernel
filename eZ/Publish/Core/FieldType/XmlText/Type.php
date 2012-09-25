@@ -8,13 +8,8 @@
  */
 
 namespace eZ\Publish\Core\FieldType\XmlText;
-use eZ\Publish\API\Repository\Values\Content\Field,
-    eZ\Publish\Core\FieldType\FieldType,
-    eZ\Publish\Core\FieldType\XmlText\Input\Handler as XmlTextInputHandler,
-    eZ\Publish\Core\FieldType\XmlText\Input\Parser as XmlTextInputParserInterface,
+use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\SPI\FieldType\Event,
     eZ\Publish\Core\FieldType\ValidationError;
 
 /**
@@ -51,21 +46,6 @@ class Type extends FieldType
     );
 
     /**
-     * @var \eZ\Publish\Core\FieldType\XmlText\Input\Handler
-     */
-    protected $inputHandler;
-
-    /**
-     * Constructs field type object, initializing internal data structures.
-     *
-     * @param \eZ\Publish\Core\FieldType\XmlText\Input\Parser $inputParser
-     */
-    public function __construct( XmlTextInputParserInterface $inputParser )
-    {
-        $this->inputHandler = new XmlTextInputHandler( $inputParser );
-    }
-
-    /**
      * Return the field type identifier for this field type
      *
      * @return string
@@ -98,13 +78,13 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        $value = <<<EOF
+        return new Value( <<<EOF
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />
-EOF;
-        return new Value( $this->inputHandler, $value );
+EOF
+        );
     }
 
     /**
@@ -124,7 +104,7 @@ EOF;
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
      *
-     * @param mixed $inputValue
+     * @param \eZ\Publish\Core\FieldType\XmlText\Value|string $inputValue
      *
      * @return mixed The potentially converted and structurally plausible value.
      */
@@ -132,7 +112,7 @@ EOF;
     {
         if ( is_string( $inputValue ) )
         {
-            $inputValue = new Value( $this->inputHandler, $inputValue );
+            $inputValue = new Value( $inputValue );
         }
 
         if ( !$inputValue instanceof Value )
@@ -142,22 +122,6 @@ EOF;
                 'eZ\\Publish\\Core\\FieldType\\XmlText\\Value',
                 $inputValue
             );
-        }
-
-        if ( !is_string( $inputValue->text ) )
-        {
-            throw new InvalidArgumentType(
-                '$inputValue->text',
-                'string',
-                $inputValue->text
-            );
-        }
-
-        $handler = $inputValue->getInputHandler();
-        if ( !$handler->isXmlValid( $inputValue->text, false ) )
-        {
-            // @todo Pass on the parser error messages (if any: $handler->getParsingMessages())
-            throw new InvalidArgumentValue( '$inputValue->text', $inputValue->text, __CLASS__ );
         }
 
         return $inputValue;
@@ -178,41 +142,6 @@ EOF;
     }
 
     /**
-     * Converts complex values to a Value\Raw object
-     *
-     * @param \eZ\Publish\Core\FieldType\XmlText\Value $value
-     * @param \eZ\Publish\API\Repository\Values\Content\Field $field
-     *
-     * @return \eZ\Publish\Core\FieldType\XmlText\Value
-     */
-    protected function convertValueToRawValue( Value $value, Field $field )
-    {
-        // we don't convert Raw to Raw, right ?
-        // if ( get_class( $value ) === 'eZ\\Publish\\Core\\FieldType\\XmlText\\Value' )
-        //    return $value;
-
-        $handler = $value->getInputHandler( $value );
-        throw new \RuntimeException( '@todo XmlText has a dependency on version id and version number, after refactoring that is not available' );
-        $handler->process( $value->text, $this->fieldTypeTools, $field->version );
-
-        $value->setText( $handler->getDocumentAsXml() );
-    }
-
-    /**
-     * This method is called on occurring events. Implementations can perform corresponding actions
-     *
-     * @param string $event prePublish, postPublish, preCreate, postCreate
-     * @param \eZ\Publish\SPI\FieldType\Event $event
-     */
-    public function handleEvent( Event $event )
-    {
-        if ( $event instanceof PreCreateEvent )
-        {
-            $this->convertValueToRawValue( $event->field->value, $field );
-        }
-    }
-
-    /**
      * Converts an $hash to the Value defined by the field type
      *
      * @param mixed $hash
@@ -221,7 +150,7 @@ EOF;
      */
     public function fromHash( $hash )
     {
-        return new Value( $this->inputHandler, $hash );
+        return new Value( $hash );
     }
 
     /**

@@ -113,18 +113,12 @@ class XmlTextIntergrationTest extends BaseIntegrationTest
      */
     public function getValidCreationFieldData()
     {
-        $xmlData = '<?xml version="1.0" encoding="utf-8"?>
+        return new XmlTextValue(
+            '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
 <paragraph>Example</paragraph>
-</section>';
-        $mock = $this->getMockForXmlTextInputHandler();
-        $mock
-            ->expects( $this->once() )
-            ->method( 'isXmlValid' )
-            ->with( $xmlData )
-            ->will( $this->returnValue( true ) );
-
-        return new XmlTextValue( $mock, $xmlData );
+</section>'
+        );
     }
 
     /**
@@ -143,14 +137,13 @@ class XmlTextIntergrationTest extends BaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
-            'text' => '<?xml version="1.0" encoding="utf-8"?>
+        $this->assertPropertiesCorrect(
+            array(
+                'text' => '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
 <paragraph>Example</paragraph>
 </section>',
-        );
-        $this->assertPropertiesCorrect(
-            $expectedData,
+            ),
             $field->value
         );
     }
@@ -193,18 +186,12 @@ class XmlTextIntergrationTest extends BaseIntegrationTest
      */
     public function getValidUpdateFieldData()
     {
-        $xmlData = '<?xml version="1.0" encoding="utf-8"?>
+        return new XmlTextValue(
+            '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
 <paragraph>Example 2</paragraph>
-</section>';
-        $mock = $this->getMockForXmlTextInputHandler();
-        $mock
-            ->expects( $this->once() )
-            ->method( 'isXmlValid' )
-            ->with( $xmlData )
-            ->will( $this->returnValue( true ) );
-
-        return new XmlTextValue( $mock, $xmlData );
+</section>'
+        );
     }
 
     /**
@@ -221,14 +208,13 @@ class XmlTextIntergrationTest extends BaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
-            'text' => '<?xml version="1.0" encoding="utf-8"?>
+        $this->assertPropertiesCorrect(
+            array(
+                'text' => '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
 <paragraph>Example 2</paragraph>
 </section>',
-        );
-        $this->assertPropertiesCorrect(
-            $expectedData,
+            ),
             $field->value
         );
     }
@@ -274,14 +260,13 @@ class XmlTextIntergrationTest extends BaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
-            'text' => '<?xml version="1.0" encoding="utf-8"?>
+        $this->assertPropertiesCorrect(
+            array(
+                'text' => '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
 <paragraph>Example</paragraph>
 </section>',
-        );
-        $this->assertPropertiesCorrect(
-            $expectedData,
+            ),
             $field->value
         );
     }
@@ -312,16 +297,10 @@ class XmlTextIntergrationTest extends BaseIntegrationTest
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
 <paragraph>Simple value</paragraph>
 </section>';
-        $mock = $this->getMockForXmlTextInputHandler();
-        $mock
-            ->expects( $this->once() )
-            ->method( 'isXmlValid' )
-            ->with( $xmlData )
-            ->will( $this->returnValue( true ) );
 
         return array(
             array(
-                new XmlTextValue( $mock, $xmlData ),
+                new XmlTextValue( $xmlData ),
                 $xmlData,
             ),
         );
@@ -363,18 +342,5 @@ class XmlTextIntergrationTest extends BaseIntegrationTest
             $xmlTextValue
         );
         $this->assertEquals( $hash, $xmlTextValue->text );
-    }
-
-    /**
-     * Returns an XmlText Input Handler mock.
-     *
-     * @return \eZ\Publish\Core\FieldType\XmlText\Input\Handler
-     */
-    protected function getMockForXmlTextInputHandler()
-    {
-        return $this
-            ->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Handler' )
-            ->disableOriginalConstructor()
-            ->getMock();
     }
 }
