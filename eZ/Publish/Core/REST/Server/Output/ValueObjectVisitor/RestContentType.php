@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ContentType ValueObjectVisitor class
+ * File containing the RestContentType ValueObjectVisitor class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -13,13 +13,14 @@ use eZ\Publish\Core\REST\Common\UrlHandler,
     eZ\Publish\Core\REST\Common\Output\Generator,
     eZ\Publish\Core\REST\Common\Output\Visitor,
 
-    eZ\Publish\API\Repository\Values,
-    eZ\Publish\Core\REST\Server\Values\FieldDefinitionList;
+    eZ\Publish\API\Repository\Values\Content\Location as APILocation,
+    eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType,
+    eZ\Publish\Core\REST\Server\Values;
 
 /**
- * ContentType value object visitor
+ * RestContentType value object visitor
  */
-class ContentType extends ContentTypeBase
+class RestContentType extends RestContentTypeBase
 {
     /**
      * Visit struct returned by controllers
@@ -30,13 +31,14 @@ class ContentType extends ContentTypeBase
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $contentType = $data;
+        $contentType = $data->contentType;
 
         $urlTypeSuffix = $this->getUrlTypeSuffix( $contentType->status );
+        $mediaType = $data->fieldDefinitions !== null ? 'ContentType' : 'ContentTypeInfo';
 
-        $generator->startObjectElement( 'ContentType' );
+        $generator->startObjectElement( $mediaType );
 
-        $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'ContentType' ) );
+        $visitor->setHeader( 'Content-Type', $generator->getMediaType( $mediaType ) );
         $visitor->setHeader( 'Accept-Patch', $generator->getMediaType( 'ContentTypeUpdate' ) );
 
         $generator->startAttribute(
@@ -60,7 +62,12 @@ class ContentType extends ContentTypeBase
         $generator->endValueElement( 'identifier' );
 
         $this->visitNamesList( $generator, $contentType->getNames() );
-        $this->visitDescriptionsList( $generator, $contentType->getDescriptions() );
+
+        $descriptions = $contentType->getDescriptions();
+        if ( is_array( $descriptions ) )
+        {
+            $this->visitDescriptionsList( $generator, $descriptions );
+        }
 
         $generator->startValueElement( 'creationDate', $contentType->creationDate->format( 'c' ) );
         $generator->endValueElement( 'creationDate' );
@@ -114,14 +121,17 @@ class ContentType extends ContentTypeBase
         $generator->startValueElement( 'defaultSortOrder', $this->serializeDefaultSortOrder( $contentType->defaultSortOrder ) );
         $generator->endValueElement( 'defaultSortOrder' );
 
-        $visitor->visitValueObject(
-            new FieldDefinitionList(
-                $contentType,
-                $contentType->getFieldDefinitions()
-            )
-        );
+        if ( $data->fieldDefinitions !== null )
+        {
+            $visitor->visitValueObject(
+                new Values\FieldDefinitionList(
+                    $contentType,
+                    $data->fieldDefinitions
+                )
+            );
+        }
 
-        $generator->endObjectElement( 'ContentType' );
+        $generator->endObjectElement( $mediaType );
     }
 
     /**
@@ -134,13 +144,13 @@ class ContentType extends ContentTypeBase
     {
         switch ( $contentTypeStatus )
         {
-            case Values\ContentType\ContentType::STATUS_DEFINED:
+            case APIContentType::STATUS_DEFINED:
                 return 'DEFINED';
 
-            case Values\ContentType\ContentType::STATUS_DRAFT:
+            case APIContentType::STATUS_DRAFT:
                 return 'DRAFT';
 
-            case Values\ContentType\ContentType::STATUS_MODIFIED:
+            case APIContentType::STATUS_MODIFIED:
                 return 'MODIFIED';
         }
 
@@ -157,29 +167,29 @@ class ContentType extends ContentTypeBase
     {
         switch ( $defaultSortField )
         {
-            case Values\Content\Location::SORT_FIELD_PATH:
+            case APILocation::SORT_FIELD_PATH:
                 return 'PATH';
-            case Values\Content\Location::SORT_FIELD_PUBLISHED:
+            case APILocation::SORT_FIELD_PUBLISHED:
                 return 'PUBLISHED';
-            case Values\Content\Location::SORT_FIELD_MODIFIED:
+            case APILocation::SORT_FIELD_MODIFIED:
                 return 'MODIFIED';
-            case Values\Content\Location::SORT_FIELD_SECTION:
+            case APILocation::SORT_FIELD_SECTION:
                 return 'SECTION';
-            case Values\Content\Location::SORT_FIELD_DEPTH:
+            case APILocation::SORT_FIELD_DEPTH:
                 return 'DEPTH';
-            case Values\Content\Location::SORT_FIELD_CLASS_IDENTIFIER:
+            case APILocation::SORT_FIELD_CLASS_IDENTIFIER:
                 return 'CLASS_IDENTIFIER';
-            case Values\Content\Location::SORT_FIELD_CLASS_NAME:
+            case APILocation::SORT_FIELD_CLASS_NAME:
                 return 'CLASS_NAME';
-            case Values\Content\Location::SORT_FIELD_PRIORITY:
+            case APILocation::SORT_FIELD_PRIORITY:
                 return 'PRIORITY';
-            case Values\Content\Location::SORT_FIELD_NAME:
+            case APILocation::SORT_FIELD_NAME:
                 return 'NAME';
-            case Values\Content\Location::SORT_FIELD_MODIFIED_SUBNODE:
+            case APILocation::SORT_FIELD_MODIFIED_SUBNODE:
                 return 'MODIFIED_SUBNODE';
-            case Values\Content\Location::SORT_FIELD_NODE_ID:
+            case APILocation::SORT_FIELD_NODE_ID:
                 return 'NODE_ID';
-            case Values\Content\Location::SORT_FIELD_CONTENTOBJECT_ID:
+            case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
                 return 'CONTENTOBJECT_ID';
         }
 
@@ -196,9 +206,9 @@ class ContentType extends ContentTypeBase
     {
         switch ( $defaultSortOrder )
         {
-            case Values\Content\Location::SORT_ORDER_ASC:
+            case APILocation::SORT_ORDER_ASC:
                 return 'ASC';
-            case Values\Content\Location::SORT_ORDER_DESC:
+            case APILocation::SORT_ORDER_DESC:
                 return 'DESC';
         }
 

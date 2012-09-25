@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
-use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
@@ -20,7 +19,7 @@ use eZ\Publish\API\Repository\Values;
 /**
  * FieldDefinitionList value object visitor
  */
-class FieldDefinitionList extends ContentTypeBase
+class FieldDefinitionList extends RestContentTypeBase
 {
     /**
      * Visit struct returned by controllers

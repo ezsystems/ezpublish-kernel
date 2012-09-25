@@ -376,7 +376,9 @@ $valueObjectVisitors = array(
 
     // ContentType
 
-    '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'       => new Output\ValueObjectVisitor\ContentType( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestContentType'             => new Output\ValueObjectVisitor\RestContentType( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentTypeList'             => new Output\ValueObjectVisitor\ContentTypeList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentTypeInfoList'         => new Output\ValueObjectVisitor\ContentTypeInfoList( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeGroup'  => new Output\ValueObjectVisitor\ContentTypeGroup( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedContentTypeGroup'     => new Output\ValueObjectVisitor\CreatedContentTypeGroup( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentTypeGroupList'        => new Output\ValueObjectVisitor\ContentTypeGroupList( $urlHandler ),
@@ -585,6 +587,9 @@ $dispatcher = new AuthenticatingDispatcher(
                 'GET'     => array( $contentTypeController, 'loadContentTypeGroup' ),
                 'PATCH'   => array( $contentTypeController, 'updateContentTypeGroup' ),
                 'DELETE'  => array( $contentTypeController, 'deleteContentTypeGroup' ),
+            ),
+            '(^/content/typegroups/[0-9]+/types$)' => array(
+                'GET'     => array( $contentTypeController, 'listContentTypesForGroup' ),
             ),
 
             // /content/types

@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\UrlHandler;
-use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer;
@@ -20,7 +19,7 @@ use eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer;
  *
  * @todo $fieldSettings & $validatorConfiguration (missing from spec)
  */
-class RestFieldDefinition extends ContentTypeBase
+class RestFieldDefinition extends RestContentTypeBase
 {
     /**
      * @var \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer
@@ -101,7 +100,12 @@ class RestFieldDefinition extends ContentTypeBase
         $generator->endValueElement( 'isSearchable' );
 
         $this->visitNamesList( $generator, $fieldDefinition->getNames() );
-        $this->visitDescriptionsList( $generator, $fieldDefinition->getDescriptions() );
+
+        $descriptions = $fieldDefinition->getDescriptions();
+        if ( is_array( $descriptions ) )
+        {
+            $this->visitDescriptionsList( $generator, $descriptions );
+        }
 
         $this->fieldTypeSerializer->serializeFieldSettings(
             $generator,

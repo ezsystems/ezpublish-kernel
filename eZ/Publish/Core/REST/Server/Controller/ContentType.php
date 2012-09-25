@@ -148,6 +148,28 @@ class ContentType
     }
 
     /**
+     * Returns a list of content types of the group
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeList|\eZ\Publish\Core\REST\Server\Values\ContentTypeInfoList
+     */
+    public function listContentTypesForGroup( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'grouptypes', $request->path );
+
+        $contentTypes = $this->contentTypeService->loadContentTypes(
+            $this->contentTypeService->loadContentTypeGroup( $urlValues['typegroup'] )
+        );
+
+        if ( $this->getMediaType( $request ) == 'application/vnd.ez.api.contenttypelist' )
+        {
+            return new Values\ContentTypeList( $contentTypes, $request->path );
+        }
+
+        return new Values\ContentTypeInfoList( $contentTypes, $request->path );
+    }
+
+    /**
      * Returns a list of all content type groups
      *
      * @param RMF\Request $request
@@ -183,7 +205,12 @@ class ContentType
     {
         $urlValues = $this->urlHandler->parse( 'type', $request->path );
 
-        return $this->contentTypeService->loadContentType( $urlValues['type'] );
+        $contentType = $this->contentTypeService->loadContentType( $urlValues['type'] );
+
+        return new Values\RestContentType(
+            $contentType,
+            $contentType->getFieldDefinitions()
+        );
     }
 
     /**
@@ -248,5 +275,23 @@ class ContentType
                 'descriptions' => $createStruct->descriptions
             )
         );
+    }
+
+    /**
+     * Extracts the requested media type from $request
+     *
+     * @param RMF\Request $request
+     * @return string
+     */
+    private function getMediaType( RMF\Request $request )
+    {
+        foreach ( $request->mimetype as $mimeType )
+        {
+            if ( preg_match( '(^([a-z0-9-/.]+)\+.*$)', $mimeType['value'], $matches ) )
+            {
+                return $matches[1];
+            }
+        }
+        return 'unknown/unknown';
     }
 }

@@ -27,8 +27,6 @@ class ContentTypeGroup extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        /** @var $data \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup */
-
         $generator->startObjectElement( 'ContentTypeGroup' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'ContentTypeGroup' ) );
         $visitor->setHeader( 'Accept-Patch', $generator->getMediaType( 'ContentTypeGroupInput' ) );

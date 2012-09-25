@@ -13,20 +13,21 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values;
 use eZ\Publish\Core\REST\Common;
+use eZ\Publish\Core\REST\Server\Values\RestContentType;
 
-class ContentTypeTest extends ValueObjectVisitorBaseTest
+class RestContentTypeTest extends ValueObjectVisitorBaseTest
 {
     /**
      * @return \DOMDocument
      */
     public function testVisitDefinedType()
     {
-        $visitor   = $this->getContentVisitor();
+        $visitor   = $this->getRestContentTypeVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
 
-        $restContent = $this->getBasicContentType();
+        $restContentType = $this->getBasicContentType();
 
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'visitValueObject' )
@@ -35,7 +36,7 @@ class ContentTypeTest extends ValueObjectVisitorBaseTest
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
-            $restContent
+            $restContentType
         );
 
         $result = $generator->endDocument( null );
@@ -50,29 +51,34 @@ class ContentTypeTest extends ValueObjectVisitorBaseTest
 
     protected function getBasicContentType()
     {
-        return new Values\ContentType\ContentType( array(
-            'id' => 'contentTypeId',
-            'status' => Values\ContentType\ContentType::STATUS_DEFINED,
-            'identifier' => 'contentTypeIdentifier',
-            'creationDate' => new \DateTime( '2012-09-06 19:30 Europe/Berlin' ),
-            'modificationDate' => new \DateTime( '2012-09-06 19:32 Europe/Berlin' ),
-            'creatorId' => 'creatorId',
-            'modifierId' => 'modifierId',
-            'remoteId' => 'remoteId',
-            'urlAliasSchema' => 'urlAliasSchema',
-            'nameSchema' => 'nameSchema',
-            'isContainer' => true,
-            'mainLanguageCode' => 'eng-US',
-            'defaultAlwaysAvailable' => false,
-            'defaultSortField' => Values\Content\Location::SORT_FIELD_SECTION,
-            'defaultSortOrder' => Values\Content\Location::SORT_ORDER_DESC,
+        return new RestContentType(
+            new Values\ContentType\ContentType(
+                array(
+                    'id' => 'contentTypeId',
+                    'status' => Values\ContentType\ContentType::STATUS_DEFINED,
+                    'identifier' => 'contentTypeIdentifier',
+                    'creationDate' => new \DateTime( '2012-09-06 19:30 Europe/Berlin' ),
+                    'modificationDate' => new \DateTime( '2012-09-06 19:32 Europe/Berlin' ),
+                    'creatorId' => 'creatorId',
+                    'modifierId' => 'modifierId',
+                    'remoteId' => 'remoteId',
+                    'urlAliasSchema' => 'urlAliasSchema',
+                    'nameSchema' => 'nameSchema',
+                    'isContainer' => true,
+                    'mainLanguageCode' => 'eng-US',
+                    'defaultAlwaysAvailable' => false,
+                    'defaultSortField' => Values\Content\Location::SORT_FIELD_SECTION,
+                    'defaultSortOrder' => Values\Content\Location::SORT_ORDER_DESC,
 
-            'names' => array( 'eng-US' => 'Sindelfingen', 'eng-GB' => 'Bielefeld' ),
-            'descriptions' => array( 'eng-GB' => 'Sindelfingen', 'eng-US' => 'Bielefeld' ),
+                    'names' => array( 'eng-US' => 'Sindelfingen', 'eng-GB' => 'Bielefeld' ),
+                    'descriptions' => array( 'eng-GB' => 'Sindelfingen', 'eng-US' => 'Bielefeld' ),
 
-            // "Mock"
-            'fieldDefinitions' => array(),
-        ) );
+                    // "Mock"
+                    'fieldDefinitions' => array(),
+                )
+            ),
+            array()
+        );
     }
 
     /**
@@ -306,13 +312,13 @@ class ContentTypeTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the Content visitor
+     * Get the RestContentType visitor
      *
-     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ContentType
+     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestContentType
      */
-    protected function getContentVisitor()
+    protected function getRestContentTypeVisitor()
     {
-        return new ValueObjectVisitor\ContentType(
+        return new ValueObjectVisitor\RestContentType(
             new Common\UrlHandler\eZPublish()
         );
     }
