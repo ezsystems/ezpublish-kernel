@@ -239,6 +239,29 @@ class ContentType
     }
 
     /**
+     * Loads a content type by its remote ID
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeList|\eZ\Publish\Core\REST\Server\Values\ContentTypeInfoList
+     */
+    public function loadContentTypeByRemoteId( RMF\Request $request )
+    {
+        // Serves only to verify that the URI is correct
+        $this->urlHandler->parse( 'typeByRemoteId', $request->path );
+
+        $contentType = $this->contentTypeService->loadContentTypeByRemoteId(
+            $request->variables['remoteId']
+        );
+
+        if ( $this->getMediaType( $request ) == 'application/vnd.ez.api.contenttypelist' )
+        {
+            return new Values\ContentTypeList( array( $contentType ), $request->path );
+        }
+
+        return new Values\ContentTypeInfoList( array( $contentType ), $request->path );
+    }
+
+    /**
      * Creates a new content type draft in the given content type group
      *
      * @param RMF\Request $request

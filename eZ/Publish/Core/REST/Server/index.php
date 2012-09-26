@@ -622,6 +622,9 @@ $dispatcher = new AuthenticatingDispatcher(
             '(^/content/types\?identifier=.*$)' => array(
                 'GET'     => array( $contentTypeController, 'loadContentTypeByIdentifier' ),
             ),
+            '(^/content/types\?remoteId=[0-9a-z]+$)' => array(
+                'GET'     => array( $contentTypeController, 'loadContentTypeByRemoteId' ),
+            ),
             '(^/content/types/[0-9]+$)' => array(
                 'COPY'    => array( $contentTypeController, 'copyContentType' ),
                 'GET'     => array( $contentTypeController, 'loadContentType' ),
