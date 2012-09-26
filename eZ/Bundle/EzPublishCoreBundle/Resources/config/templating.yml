@@ -3,7 +3,6 @@ parameters:
     twig.loader.string.class: Twig_Loader_String
 
     ezpublish.twig.extension.content.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ContentExtension
-    ezpublish.twig.content_helper.resources: [EzPublishCoreBundle::content_fields.html.twig]
 
     ezpublish.view_manager.class: eZ\Publish\Core\MVC\Symfony\View\Manager
     ezpublish.content_view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\ContentViewProvider\Configured
