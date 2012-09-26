@@ -45,7 +45,6 @@ parameters:
     ezpublish.fieldType.ezimage.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\Type
     ezpublish.fieldType.ezgmaplocation.externalStorage.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage
-    ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezcomcomments.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezobjectrelationlist.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezuser.class: eZ\Publish\Core\FieldType\User\Type
@@ -236,11 +235,6 @@ services:
         arguments: [[]]
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezgmaplocation}
-
-    ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway:
-        class: %ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway.class%
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezgmaplocation, identifier: LegacyStorage}
 
     ezpublish.fieldType.ezcomcomments:
         class: %ezpublish.fieldType.ezcomcomments.class%
