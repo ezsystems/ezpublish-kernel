@@ -603,6 +603,35 @@ class ContentType
     }
 
     /**
+     * Publishes a content type draft
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\RestContentType
+     */
+    public function publishContentTypeDraft( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'typeDraft', $request->path );
+
+        // @TODO Throw NotFoundException if the content type does not have a draft for the current user
+
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
+
+        $fieldDefinitions = $contentTypeDraft->getFieldDefinitions();
+        if ( empty( $fieldDefinitions ) )
+        {
+            throw new ForbiddenException( 'Empty content type draft cannot be published' );
+        }
+
+        $this->contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+
+        $publishedContentType = $this->contentTypeService->loadContentType( $contentTypeDraft->id );
+        return new Values\RestContentType(
+            $publishedContentType,
+            $publishedContentType->getFieldDefinitions()
+        );
+    }
+
+    /**
      * Converts the provided ContentTypeGroupCreateStruct to ContentTypeGroupUpdateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct $createStruct
