@@ -567,6 +567,42 @@ class ContentType
     }
 
     /**
+     * The given field definition is deleted
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     */
+    public function removeFieldDefinition( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'typeFieldDefinitionDraft', $request->path );
+
+        // @TODO Throw NotFoundException if the content type does not have a draft for the current user
+
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
+
+        $fieldDefinition = null;
+        foreach ( $contentTypeDraft->getFieldDefinitions() as $fieldDef )
+        {
+            if ( $fieldDef->id == $urlValues['fieldDefinition'] )
+            {
+                $fieldDefinition = $fieldDef;
+            }
+        }
+
+        if ( $fieldDefinition === null )
+        {
+            throw new Exceptions\NotFoundException( "Field definition not found: '{$request->path}'." );
+        }
+
+        $this->contentTypeService->removeFieldDefinition(
+            $contentTypeDraft,
+            $fieldDefinition
+        );
+
+        return new Values\ResourceDeleted();
+    }
+
+    /**
      * Converts the provided ContentTypeGroupCreateStruct to ContentTypeGroupUpdateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct $createStruct

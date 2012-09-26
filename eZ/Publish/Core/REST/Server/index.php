@@ -639,6 +639,7 @@ $dispatcher = new AuthenticatingDispatcher(
             '(^/content/types/[0-9]+/draft/fieldDefinitions/[0-9]+$)' => array(
                 'GET'     => array( $contentTypeController, 'loadDraftFieldDefinition' ),
                 'PATCH'   => array( $contentTypeController, 'updateFieldDefinition' ),
+                'DELETE'  => array( $contentTypeController, 'removeFieldDefinition' ),
             ),
 
             // /content/trash
