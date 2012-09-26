@@ -52,6 +52,7 @@ class eZPublish extends Pattern
         'typegroup'                 => '/content/typegroups/{typegroup}',
         'grouptypes'                => '/content/typegroups/{typegroup}/types',
         'types'                     => '/content/types',
+        'typeByIdentifier'          => '/content/types?identifier={identifier}',
         'type'                      => '/content/types/{type}',
         'typeFieldDefinitions'      => '/content/types/{type}/fieldDefinitions',
         'typeFieldDefinition'       => '/content/types/{type}/fieldDefinitions/{fieldDefinition}',

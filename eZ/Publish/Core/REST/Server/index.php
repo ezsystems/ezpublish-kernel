@@ -619,6 +619,9 @@ $dispatcher = new AuthenticatingDispatcher(
 
             // /content/types
 
+            '(^/content/types\?identifier=.*$)' => array(
+                'GET'     => array( $contentTypeController, 'loadContentTypeByIdentifier' ),
+            ),
             '(^/content/types/[0-9]+$)' => array(
                 'COPY'    => array( $contentTypeController, 'copyContentType' ),
                 'GET'     => array( $contentTypeController, 'loadContentType' ),
