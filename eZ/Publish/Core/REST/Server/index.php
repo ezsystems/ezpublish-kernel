@@ -618,17 +618,21 @@ $dispatcher = new AuthenticatingDispatcher(
                 'GET'     => array( $contentTypeController, 'loadContentType' ),
                 'POST'    => array( $contentTypeController, 'createContentTypeDraft' ),
             ),
-            '(^/content/types/[0-9]+/draft$)' => array(
-                'PATCH'   => array( $contentTypeController, 'updateContentTypeDraft' ),
-            ),
-            '(^/content/types/[0-9]+/draft/fieldDefinitions$)' => array(
-                'POST'    => array( $contentTypeController, 'addFieldDefinition' ),
-            ),
             '(^/content/types/[0-9]+/fieldDefinitions$)' => array(
                 'GET'     => array( $contentTypeController, 'loadFieldDefinitionList' ),
             ),
             '(^/content/types/[0-9]+/fieldDefinitions/[0-9]+$)' => array(
                 'GET'     => array( $contentTypeController, 'loadFieldDefinition' ),
+            ),
+            '(^/content/types/[0-9]+/draft$)' => array(
+                'PATCH'   => array( $contentTypeController, 'updateContentTypeDraft' ),
+            ),
+            '(^/content/types/[0-9]+/draft/fieldDefinitions$)' => array(
+                'GET'     => array( $contentTypeController, 'loadDraftFieldDefinitionList' ),
+                'POST'    => array( $contentTypeController, 'addFieldDefinition' ),
+            ),
+            '(^/content/types/[0-9]+/draft/fieldDefinitions/[0-9]+$)' => array(
+                'GET'     => array( $contentTypeController, 'loadDraftFieldDefinition' ),
             ),
 
             // /content/trash

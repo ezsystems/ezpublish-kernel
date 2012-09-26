@@ -422,7 +422,7 @@ class ContentType
     }
 
     /**
-     * Loads FieldDefinitions for a given type
+     * Loads field definitions for a given content type
      *
      * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\FieldDefinitionList
@@ -440,7 +440,7 @@ class ContentType
     }
 
     /**
-     * Loads a single FieldDefinition
+     * Returns the field definition given by id
      *
      * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RestFieldDefinition
@@ -457,6 +457,50 @@ class ContentType
             {
                 return new Values\RestFieldDefinition(
                     $contentType,
+                    $fieldDefinition
+                );
+            }
+        }
+
+        throw new Exceptions\NotFoundException( "Field definition not found: '{$request->path}'." );
+    }
+
+    /**
+     * Loads field definitions for a given content type draft
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\FieldDefinitionList
+     */
+    public function loadDraftFieldDefinitionList( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'typeFieldDefinitionsDraft', $request->path );
+
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
+
+        return new Values\FieldDefinitionList(
+            $contentTypeDraft,
+            $contentTypeDraft->getFieldDefinitions()
+        );
+    }
+
+    /**
+     * Returns the draft field definition given by id
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\RestFieldDefinition
+     */
+    public function loadDraftFieldDefinition( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'typeFieldDefinitionDraft', $request->path );
+
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
+
+        foreach ( $contentTypeDraft->getFieldDefinitions() as $fieldDefinition )
+        {
+            if ( $fieldDefinition->id == $urlValues['fieldDefinition'] )
+            {
+                return new Values\RestFieldDefinition(
+                    $contentTypeDraft,
                     $fieldDefinition
                 );
             }
