@@ -78,13 +78,13 @@ services:
         factory_method: buildService
         arguments: [@ezpublish.api.repository, ObjectState]
 
-    ezpublish.api.service.urlwildcard:
+    ezpublish.api.service.url_wildcard:
         class: eZ\Publish\API\Repository\URLWildcardsService
         factory_service: ezpublish.api.repository.factory
         factory_method: buildService
         arguments: [@ezpublish.api.repository, URLWildcard]
 
-    ezpublish.api.service.urlalias:
+    ezpublish.api.service.url_alias:
         class: eZ\Publish\API\Repository\URLAliasService
         factory_service: ezpublish.api.repository.factory
         factory_method: buildService
