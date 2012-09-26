@@ -33,20 +33,6 @@ use Qafoo\RMF;
 class Content extends RestController
 {
     /**
-     * Input dispatcher
-     *
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
-     */
-    protected $inputDispatcher;
-
-    /**
-     * URL handler
-     *
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
-     */
-    protected $urlHandler;
-
-    /**
      * Content service
      *
      * @var \eZ\Publish\API\Repository\ContentService
@@ -77,17 +63,13 @@ class Content extends RestController
     /**
      * Construct controller
      *
-     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\SectionService $sectionService
      * @param \eZ\Publish\API\Repository\SearchService $searchService
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, ContentService $contentService, LocationService $locationService, SectionService $sectionService, SearchService $searchService )
+    public function __construct( ContentService $contentService, LocationService $locationService, SectionService $sectionService, SearchService $searchService )
     {
-        $this->inputDispatcher = $inputDispatcher;
-        $this->urlHandler      = $urlHandler;
         $this->contentService  = $contentService;
         $this->locationService = $locationService;
         $this->sectionService  = $sectionService;

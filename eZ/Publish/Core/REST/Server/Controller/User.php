@@ -13,6 +13,7 @@ use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Exceptions;
+use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\ContentService;
@@ -34,22 +35,8 @@ use Qafoo\RMF;
 /**
  * User controller
  */
-class User
+class User extends RestController
 {
-    /**
-     * Input dispatcher
-     *
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
-     */
-    protected $inputDispatcher;
-
-    /**
-     * URL handler
-     *
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
-     */
-    protected $urlHandler;
-
     /**
      * User service
      *
@@ -95,8 +82,6 @@ class User
     /**
      * Construct controller
      *
-     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\UserService $userService
      * @param \eZ\Publish\API\Repository\RoleService $roleService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
@@ -105,8 +90,6 @@ class User
      * @param \eZ\Publish\API\Repository\Repository $repository
      */
     public function __construct(
-        Input\Dispatcher $inputDispatcher,
-        UrlHandler $urlHandler,
         UserService $userService,
         RoleService $roleService,
         ContentService $contentService,
@@ -114,8 +97,6 @@ class User
         SectionService $sectionService,
         Repository $repository )
     {
-        $this->inputDispatcher = $inputDispatcher;
-        $this->urlHandler = $urlHandler;
         $this->userService = $userService;
         $this->roleService = $roleService;
         $this->contentService = $contentService;

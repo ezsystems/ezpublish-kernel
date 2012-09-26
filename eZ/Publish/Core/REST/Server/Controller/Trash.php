@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Controller;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
+use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use eZ\Publish\API\Repository\TrashService;
 use eZ\Publish\API\Repository\LocationService;
@@ -26,22 +27,8 @@ use InvalidArgumentException;
 /**
  * Trash controller
  */
-class Trash
+class Trash extends RestController
 {
-    /**
-     * Input dispatcher
-     *
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
-     */
-    protected $inputDispatcher;
-
-    /**
-     * URL handler
-     *
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
-     */
-    protected $urlHandler;
-
     /**
      * Trash service
      *
@@ -59,15 +46,11 @@ class Trash
     /**
      * Construct controller
      *
-     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\TrashService $trashService
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, TrashService $trashService, LocationService $locationService )
+    public function __construct( TrashService $trashService, LocationService $locationService )
     {
-        $this->inputDispatcher = $inputDispatcher;
-        $this->urlHandler = $urlHandler;
         $this->trashService = $trashService;
         $this->locationService = $locationService;
     }

@@ -13,6 +13,7 @@ use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Values;
+use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use eZ\Publish\API\Repository\RoleService;
 use eZ\Publish\API\Repository\UserService;
@@ -25,22 +26,8 @@ use Qafoo\RMF;
 /**
  * Role controller
  */
-class Role
+class Role extends RestController
 {
-    /**
-     * Input dispatcher
-     *
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
-     */
-    protected $inputDispatcher;
-
-    /**
-     * URL handler
-     *
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
-     */
-    protected $urlHandler;
-
     /**
      * Role service
      *
@@ -65,18 +52,13 @@ class Role
     /**
      * Construct controller
      *
-     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\RoleService $roleService
      * @param \eZ\Publish\API\Repository\UserService $userService
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler,
-                                 RoleService $roleService, UserService $userService,
+    public function __construct( RoleService $roleService, UserService $userService,
                                  LocationService $locationService )
     {
-        $this->inputDispatcher = $inputDispatcher;
-        $this->urlHandler      = $urlHandler;
         $this->roleService     = $roleService;
         $this->userService     = $userService;
         $this->locationService = $locationService;

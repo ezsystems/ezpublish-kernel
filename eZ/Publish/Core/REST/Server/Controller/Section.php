@@ -12,6 +12,7 @@ use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
+use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use eZ\Publish\API\Repository\SectionService;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
@@ -26,22 +27,8 @@ use Qafoo\RMF;
 /**
  * Section controller
  */
-class Section
+class Section extends RestController
 {
-    /**
-     * Input dispatcher
-     *
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
-     */
-    protected $inputDispatcher;
-
-    /**
-     * URL handler
-     *
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
-     */
-    protected $urlHandler;
-
     /**
      * Section service
      *
@@ -52,14 +39,10 @@ class Section
     /**
      * Construct controller
      *
-     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\SectionService $sectionService
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, SectionService $sectionService )
+    public function __construct( SectionService $sectionService )
     {
-        $this->inputDispatcher = $inputDispatcher;
-        $this->urlHandler      = $urlHandler;
         $this->sectionService  = $sectionService;
     }
 
