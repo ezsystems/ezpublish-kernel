@@ -31,7 +31,7 @@ services:
 
     ezpublish.twig.extension.content:
         class: %ezpublish.twig.extension.content.class%
-        arguments: [%ezpublish.twig.content_helper.resources%]
+        arguments: [@ezpublish.config.resolver]
         public: false
         tags:
             - {name: twig.extension}

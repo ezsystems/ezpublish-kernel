@@ -15,6 +15,7 @@ use \Twig_Function_Method;
 use \Twig_Template;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use \SplObjectStorage;
 use \InvalidArgumentException;
 use \LogicException;
@@ -27,9 +28,10 @@ class ContentExtension extends Twig_Extension
 {
     /**
      * Array of Twig template resources.
-     * Either path to each template is referenced or its \Twig_Template (compiled) counterpart
+     * Either the path to each template and its priority in a hash or its
+     * \Twig_Template (compiled) counterpart
      *
-     * @var string[]|\Twig_Template[]
+     * @var array|\Twig_Template[]
      */
     protected $resources;
 
@@ -61,9 +63,17 @@ class ContentExtension extends Twig_Extension
      */
     protected $fieldTypeIdentifiers = array();
 
-    public function __construct( array $resources = array() )
+    public function __construct( ConfigResolverInterface $resolver )
     {
-        $this->resources = $resources;
+        $this->resources = $resolver->getParameter( 'field_templates' );
+        usort(
+            $this->resources,
+            function ( $a, $b )
+            {
+                return $b['priority'] - $a['priority'];
+            }
+        );
+
         $this->blocks = new SplObjectStorage();
     }
 
@@ -146,7 +156,8 @@ class ContentExtension extends Twig_Extension
         // Getting instance of Twig_Template that will be used to render blocks
         if ( !$this->template instanceof Twig_Template )
         {
-            $this->template = $this->environment->loadTemplate( reset( $this->resources ) );
+            $tpl = reset( $this->resources );
+            $this->template = $this->environment->loadTemplate( $tpl['template'] );
         }
 
         return $this->template->renderBlock(
@@ -172,12 +183,11 @@ class ContentExtension extends Twig_Extension
             return $this->blocks[$field];
 
         // Looping against available resources to find template blocks for $field
-        //TODO: maybe we should consider "themes" like in forms - http://symfony.com/doc/master/book/forms.html#form-theming
         $blocks = array();
         foreach ( $this->resources as &$template )
         {
             if ( !$template instanceof Twig_Template )
-                $template = $this->environment->loadTemplate( $template );
+                $template = $this->environment->loadTemplate( $template['template'] );
 
             $tpl = $template;
             $fieldBlockName = $this->getFieldBlockName( $content, $field );
@@ -187,13 +197,13 @@ class ContentExtension extends Twig_Extension
             {
                 foreach ( $tpl->getBlocks() as $blockName => $block )
                 {
-                    if ( strpos( $blockName, $fieldBlockName ) === 0 )
+                    if ( $blockName === $fieldBlockName && !isset( $blocks[$blockName] ) )
                     {
                         $blocks[$blockName] = $block;
                     }
                 }
             }
-            while ( $tpl = $tpl->getParent( array() ) !== false );
+            while ( ( $tpl = $tpl->getParent( array() ) ) instanceof Twig_Template );
         }
 
         if ( empty( $blocks ) )
