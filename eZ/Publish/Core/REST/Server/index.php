@@ -401,6 +401,7 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeGroup'  => new Output\ValueObjectVisitor\ContentTypeGroup( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedContentTypeGroup'     => new Output\ValueObjectVisitor\CreatedContentTypeGroup( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentTypeGroupList'        => new Output\ValueObjectVisitor\ContentTypeGroupList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentTypeGroupRefList'     => new Output\ValueObjectVisitor\ContentTypeGroupRefList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\FieldDefinitionList'         => new Output\ValueObjectVisitor\FieldDefinitionList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedFieldDefinition'      => new Output\ValueObjectVisitor\CreatedFieldDefinition(
         $urlHandler,
@@ -643,6 +644,9 @@ $dispatcher = new AuthenticatingDispatcher(
                 'GET'     => array( $contentTypeController, 'loadDraftFieldDefinition' ),
                 'PATCH'   => array( $contentTypeController, 'updateFieldDefinition' ),
                 'DELETE'  => array( $contentTypeController, 'removeFieldDefinition' ),
+            ),
+            '(^/content/types/[0-9]+/groups$)' => array(
+                'GET'     => array( $contentTypeController, 'loadGroupsOfContentType' ),
             ),
 
             // /content/trash

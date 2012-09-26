@@ -676,6 +676,23 @@ class ContentType
     }
 
     /**
+     * Returns the content type groups the content type belongs to
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeGroupRefList
+     */
+    public function loadGroupsOfContentType( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'groupsOfType', $request->path );
+
+        $contentType = $this->contentTypeService->loadContentType( $urlValues['type'] );
+        return new Values\ContentTypeGroupRefList(
+            $contentType,
+            $contentType->getContentTypeGroups()
+        );
+    }
+
+    /**
      * Converts the provided ContentTypeGroupCreateStruct to ContentTypeGroupUpdateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct $createStruct
