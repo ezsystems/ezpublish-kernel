@@ -46,6 +46,7 @@ class EzPublishCoreBundle extends Bundle
                      new ConfigParser\LocationView,
                      new ConfigParser\Common,
                      new ConfigParser\Content,
+                     new ConfigParser\FieldTemplates,
                 )
             );
         }
