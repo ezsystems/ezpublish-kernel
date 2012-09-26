@@ -14,6 +14,8 @@ use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer;
 
+use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
+
 /**
  * RestFieldDefinition value object visitor
  *
@@ -53,6 +55,11 @@ class RestFieldDefinition extends RestContentTypeBase
 
         $generator->startObjectElement( 'FieldDefinition' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'FieldDefinition' ) );
+
+        if ( $contentType->status === APIContentType::STATUS_DRAFT )
+        {
+            $visitor->setHeader( 'Accept-Patch', $generator->getMediaType( 'FieldDefinitionUpdate' ) );
+        }
 
         $generator->startAttribute(
             'href',

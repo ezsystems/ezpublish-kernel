@@ -372,6 +372,56 @@ class ContentType
     }
 
     /**
+     * Creates a new field definition for the given content type
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\FieldDefinitionList
+     */
+    public function addFieldDefinition( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'typeFieldDefinitionsDraft', $request->path );
+
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
+        $fieldDefinitionCreate = $this->inputDispatcher->parse(
+            new Message(
+                array(
+                    'Content-Type' => $request->contentType,
+                ),
+                $request->body
+            )
+        );
+
+        try
+        {
+            $this->contentTypeService->addFieldDefinition(
+                $contentTypeDraft,
+                $fieldDefinitionCreate
+            );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
+
+        $updatedDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
+        foreach ( $updatedDraft->getFieldDefinitions() as $fieldDefinition )
+        {
+            if ( $fieldDefinition->identifier == $fieldDefinitionCreate->identifier )
+            {
+                return new Values\CreatedFieldDefinition(
+                    array(
+                        'fieldDefinition' => new Values\RestFieldDefinition(
+                            $updatedDraft, $fieldDefinition
+                        )
+                    )
+                );
+            }
+        }
+
+        throw new Exceptions\NotFoundException( "Field definition not found: '{$request->path}'." );
+    }
+
+    /**
      * Loads FieldDefinitions for a given type
      *
      * @param RMF\Request $request

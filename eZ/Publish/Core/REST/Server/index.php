@@ -397,6 +397,10 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedContentTypeGroup'     => new Output\ValueObjectVisitor\CreatedContentTypeGroup( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentTypeGroupList'        => new Output\ValueObjectVisitor\ContentTypeGroupList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\FieldDefinitionList'         => new Output\ValueObjectVisitor\FieldDefinitionList( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedFieldDefinition'      => new Output\ValueObjectVisitor\CreatedFieldDefinition(
+        $urlHandler,
+        $fieldTypeSerializer
+    ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestFieldDefinition'         => new Output\ValueObjectVisitor\RestFieldDefinition(
         $urlHandler,
         $fieldTypeSerializer
@@ -616,6 +620,9 @@ $dispatcher = new AuthenticatingDispatcher(
             ),
             '(^/content/types/[0-9]+/draft$)' => array(
                 'PATCH'   => array( $contentTypeController, 'updateContentTypeDraft' ),
+            ),
+            '(^/content/types/[0-9]+/draft/fieldDefinitions$)' => array(
+                'POST'    => array( $contentTypeController, 'addFieldDefinition' ),
             ),
             '(^/content/types/[0-9]+/fieldDefinitions$)' => array(
                 'GET'     => array( $contentTypeController, 'loadFieldDefinitionList' ),

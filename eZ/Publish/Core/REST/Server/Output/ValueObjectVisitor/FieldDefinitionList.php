@@ -37,6 +37,8 @@ class FieldDefinitionList extends RestContentTypeBase
 
         $generator->startObjectElement( 'FieldDefinitions', 'FieldDefinitionList' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'FieldDefinitionList' ) );
+        //@TODO Needs refactoring, disabling certain headers should not be done this way
+        $visitor->setHeader( 'Accept-Patch', false );
 
         $generator->startAttribute(
             'href',
