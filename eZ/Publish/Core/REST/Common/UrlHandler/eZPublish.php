@@ -62,6 +62,8 @@ class eZPublish extends Pattern
         'typeFieldDefinitionDraft'  => '/content/types/{type}/draft/fieldDefinitions/{fieldDefinition}',
         'groupsOfType'              => '/content/types/{type}/groups',
         'groupOfType'               => '/content/types/{type}/groups/{group}',
+        'urlWildcards'              => '/content/urlwildcards',
+        'urlWildcard'               => '/content/urlwildcards/{urlwildcard}',
         'views'                     => '/content/views',
         'view'                      => '/content/views/{view}',
         'viewResults'               => '/content/views/{view}/results',

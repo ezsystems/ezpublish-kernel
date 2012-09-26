@@ -326,6 +326,12 @@ $userController = new Controller\User(
     $repository
 );
 
+$urlWildcardController = new Controller\URLWildcard(
+    $inputDispatcher,
+    $urlHandler,
+    $repository->getURLWildcardService()
+);
+
 $fieldTypeSerializer = new Common\Output\FieldTypeSerializer(
     $repository->getFieldTypeService(),
     $fieldTypeProcessorRegistry
@@ -359,6 +365,11 @@ $valueObjectVisitors = array(
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\SectionList'                 => new Output\ValueObjectVisitor\SectionList( $urlHandler ),
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedSection'              => new Output\ValueObjectVisitor\CreatedSection( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section'               => new Output\ValueObjectVisitor\Section( $urlHandler ),
+
+    // URLWildcard
+
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\URLWildcardList'             => new Output\ValueObjectVisitor\URLWildcardList( $urlHandler ),
+    '\\eZ\\Publish\\API\\Repository\\Values\\Content\\URLWildcard'           => new Output\ValueObjectVisitor\URLWildcard( $urlHandler ),
 
     // Content
 
@@ -671,6 +682,17 @@ $dispatcher = new AuthenticatingDispatcher(
                 'GET'     => array( $trashController, 'loadTrashItem' ),
                 'DELETE'  => array( $trashController, 'deleteTrashItem' ),
                 'MOVE'    => array( $trashController, 'restoreTrashItem' ),
+            ),
+
+            // /content/urlwildcards
+
+            '(^/content/urlwildcards$)' => array(
+                'GET'     => array( $urlWildcardController, 'listURLWildcards' ),
+                'POST'    => array( $urlWildcardController, 'createURLWildcard' ),
+            ),
+            '(^/content/urlwildcards/[0-9]+$)' => array(
+                'GET'     => array( $urlWildcardController, 'loadURLWildcard' ),
+                'DELETE'  => array( $urlWildcardController, 'deleteURLWildcard' ),
             ),
 
             // /user/policies
