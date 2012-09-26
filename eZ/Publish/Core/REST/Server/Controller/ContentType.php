@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Controller;
 use eZ\Publish\Core\REST\Common\UrlHandler;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\BadStateException;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Common\Exceptions;
@@ -629,6 +629,30 @@ class ContentType
             $publishedContentType,
             $publishedContentType->getFieldDefinitions()
         );
+    }
+
+    /**
+     * The given content type is deleted
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     */
+    public function deleteContentType( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'type', $request->path );
+
+        $contentType = $this->contentTypeService->loadContentType( $urlValues['type'] );
+
+        try
+        {
+            $this->contentTypeService->deleteContentType( $contentType );
+        }
+        catch ( BadStateException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
+
+        return new Values\ResourceDeleted();
     }
 
     /**

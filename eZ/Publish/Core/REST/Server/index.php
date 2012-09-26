@@ -622,6 +622,7 @@ $dispatcher = new AuthenticatingDispatcher(
                 'COPY'    => array( $contentTypeController, 'copyContentType' ),
                 'GET'     => array( $contentTypeController, 'loadContentType' ),
                 'POST'    => array( $contentTypeController, 'createContentTypeDraft' ),
+                'DELETE'  => array( $contentTypeController, 'deleteContentType' ),
             ),
             '(^/content/types/[0-9]+/fieldDefinitions$)' => array(
                 'GET'     => array( $contentTypeController, 'loadFieldDefinitionList' ),
