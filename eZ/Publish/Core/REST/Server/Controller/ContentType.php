@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Controller;
 use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 use eZ\Publish\API\Repository\Exceptions\BadStateException;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
@@ -689,6 +690,62 @@ class ContentType
         return new Values\ContentTypeGroupRefList(
             $contentType,
             $contentType->getContentTypeGroups()
+        );
+    }
+
+    /**
+     * Links a content type group to the content type and returns the updated group list
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeGroupRefList
+     */
+    public function linkContentTypeToGroup( RMF\Request $request )
+    {
+        $questionMarkPosition = strpos( $request->path, '?' );
+        $urlValues = $this->urlHandler->parse(
+            'groupsOfType',
+            $questionMarkPosition !== false ? substr( $request->path, 0, $questionMarkPosition ) : $request->path
+        );
+
+        $contentType = $this->contentTypeService->loadContentType( $urlValues['type'] );
+
+        try
+        {
+            $groupValues = $this->urlHandler->parse( 'typegroup', $request->variables['group'] );
+        }
+        catch ( Exceptions\InvalidArgumentException $e )
+        {
+            // Group URI does not match the required value
+            throw new BadRequestException( $e->getMessage() );
+        }
+
+        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $groupValues['typegroup'] );
+
+        $existingContentTypeGroups = $contentType->getContentTypeGroups();
+        $contentTypeInGroup = false;
+        foreach ( $existingContentTypeGroups as $existingGroup )
+        {
+            if ( $existingGroup->id == $contentTypeGroup->id )
+            {
+                $contentTypeInGroup = true;
+                break;
+            }
+        }
+
+        if ( $contentTypeInGroup )
+        {
+            throw new ForbiddenException( 'Content type is already linked to provided group' );
+        }
+
+        $this->contentTypeService->assignContentTypeGroup(
+            $contentType,
+            $contentTypeGroup
+        );
+
+        $existingContentTypeGroups[] = $contentTypeGroup;
+        return new Values\ContentTypeGroupRefList(
+            $contentType,
+            $existingContentTypeGroups
         );
     }
 

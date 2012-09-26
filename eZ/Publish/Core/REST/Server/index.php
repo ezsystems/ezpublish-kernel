@@ -648,6 +648,9 @@ $dispatcher = new AuthenticatingDispatcher(
             '(^/content/types/[0-9]+/groups$)' => array(
                 'GET'     => array( $contentTypeController, 'loadGroupsOfContentType' ),
             ),
+            '(^/content/types/[0-9]+/groups\?group=.*$)' => array(
+                'POST'    => array( $contentTypeController, 'linkContentTypeToGroup' ),
+            ),
             '(^/content/types/[0-9]+/groups/[0-9]+$)' => array(
                 'DELETE'  => array( $contentTypeController, 'unlinkContentTypeFromGroup' ),
             ),
