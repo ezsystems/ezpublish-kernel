@@ -4,6 +4,9 @@
  # - \eZ\Publish\API\Repository\Values\Content\Field field the field to display
  # - \eZ\Publish\API\Repository\Values\Content\ContentInfo contentInfo the contentInfo to which the field belongs to
  # - mixed fieldSettings settings of the field (depends on the fieldtype)
+ # - array parameters options passed to ez_render_field under the parameters key
+ # - array attr the attributes to add the generate HTML, contains at least a "class" entry
+ #              containing <fieldtypeidentifier>-field
  # - bool editMode not used for now
  # - array editMeta not used for now
  #}
@@ -155,6 +158,109 @@
     {% endif %}
 {% endspaceless %}
 {% endblock %}
+
+{# TODO:
+ # - include Gmaps JS only once if the field is used several times in the page
+ # - add translate filter
+ #}
+{% block ezgmaplocation_field %}
+{##
+ # This field type block accepts the following parameters:
+ # - string mapType the Google map type (ROADMAP, SATELLITE, HYBRID or TERRAIN), default is ROADMAP
+ # - boolean showMap whether to show the Google map or not, default is true
+ # - integer zoom the default zoom level, default is 13
+ # - string|false width the width of the rendered map with its unit (ie "500px" or "50em"),
+ #                      set to false to not set any width style inline, default is 500px
+ # - string|boolean height the height of the rendered map with its unit (ie "200px" or "20em"),
+ #                         set to false to not set any height style inline, default is 200px
+ #}
+{% spaceless %}
+<div {{ block( 'field_attributes' ) }}>
+    {% set defaultWidth = '500px' %}
+    {% set defaultHeight = '200px' %}
+    {% set defautShowMap = true %}
+    {% set defaultZoom = 13 %}
+    {% set defaultMapType = 'ROADMAP' %}
+
+    {% set hasContent = field.value is not null %}
+    {% set latitude = field.value.latitude ? field.value.latitude : 0 %}
+    {% set longitude = field.value.longitude ? field.value.longitude : 0 %}
+    {% set address = field.value.address ? field.value.address : "" %}
+    {% set mapId = "maplocation-map-" ~ field.id %}
+
+    {% set zoom = parameters.zoom|default( defaultZoom ) %}
+    {% set mapType = parameters.mapType|default( defaultMapType ) %}
+    {% if parameters.width is sameas(false) %}
+        {% set mapWidth = false %}
+    {% else %}
+        {% set mapWidth = parameters.width|default( defaultWidth ) %}
+    {% endif %}
+    {% if parameters.height is sameas(false) %}
+        {% set mapHeight = false %}
+    {% else %}
+        {% set mapHeight = parameters.width|default( defaultHeight ) %}
+    {% endif %}
+
+    {% set showMap = defautShowMap %}
+    {% if parameters and parameters.showMap is sameas(false) %}
+        {% set showMap = false %}
+    {% endif %}
+
+    <dl>
+        <dt>Latitude</dt>
+        <dd>{{ hasContent ? latitude : "Not set" }}</dd>
+        <dt>Longitude</dt>
+        <dd>{{ longitude ? longitude : "Not set" }}</dd>
+        {% if address %}
+        <dt>Address</dt>
+        <dd>{{ address }}</dd>
+        {% endif %}
+    </dl>
+
+    {% if hasContent and showMap %}
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+        <script type="text/javascript">
+        (function(win, doc) {
+            var mapView = function (mapId, latitude, longitude) {
+                var mapElt = doc.getElementById("{{ mapId }}"),
+                    startPoint = new google.maps.LatLng(latitude, longitude),
+                    zoom = {{ zoom }};
+
+                new google.maps.Marker({
+                    map: new google.maps.Map(mapElt, {
+                        center: startPoint,
+                        zoom: zoom,
+                        mapTypeId: google.maps.MapTypeId.{{ mapType }}
+                    }),
+                    position: startPoint
+                });
+            }
+            if ( win.addEventListener ) {
+                win.addEventListener(
+                    'load',
+                    function () {
+                        mapView("{{ mapId }}", {{ latitude }}, {{ longitude }});
+                    },
+                    false
+                );
+            } else if ( win.attachEvent ) {
+                win.attachEvent(
+                    'onload',
+                    function () {
+                        mapView("{{ mapId }}", {{ latitude }}, {{ longitude }});
+                    }
+                );
+            }
+        })(window, document);
+        </script>
+        {% set mapStyle = mapWidth ? "width:" ~ mapWidth  ~ ";": "" %}
+        {% set mapStyle =  mapHeight ? mapStyle ~ " height:" ~ mapHeight : mapStyle %}
+        <div class="maplocation-map" id="{{ mapId }}" style="{{ mapStyle }}"></div>
+    {% endif %}
+</div>
+{% endspaceless %}
+{% endblock %}
+
 
 {# The simple_block_field block is a shorthand html block-based fields (like eztext or ezxmltext) #}
 {# You can define a field_value variable before rendering this one if you need special operation for rendering content (i.e. nl2br) #}

@@ -116,8 +116,10 @@ class ContentExtension extends Twig_Extension
     {
         // Merging passed parameters to default ones
         $params += array(
-            'lang'      => null,
-            'editMode'  => false
+            'lang' => null,
+            'editMode' => false,
+            'parameters' => array(), // parameters dedicated to template processing
+            'attr' => array() // attributes to add on the enclosing HTML tags
         );
 
         $field = $content->getField( $fieldIdentifier, $params['lang'] );
@@ -141,6 +143,17 @@ class ContentExtension extends Twig_Extension
             $params += array(
                 'editMeta' => $this->getEditMetadata( $content, $field )
             );
+        }
+
+        // make we can easily add class="<fieldtypeidentifier>-field" to the
+        // generated HTML
+        if ( isset( $params['attr']['class'] ) )
+        {
+            $params['attr']['class'] .= $this->getFieldTypeIdentifier( $content, $field ) . '-field';
+        }
+        else
+        {
+            $params['attr']['class'] = $this->getFieldTypeIdentifier( $content, $field ) . '-field';
         }
 
         // Getting instance of Twig_Template that will be used to render blocks
