@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Selection;
 use eZ\Publish\Core\FieldType\FieldType,
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\Core\FieldType\ValidationError;
 
@@ -190,6 +191,50 @@ class Type extends FieldType
         }
 
         return $inputValue;
+    }
+
+    /**
+     * Validates field value against 'isMultiple' and 'options' settings.
+     *
+     * Does not use validators.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
+     * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field for which an action is performed
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validate( FieldDefinition $fieldDefinition, $fieldValue )
+    {
+        $validationErrors = array();
+        $fieldSettings = $fieldDefinition->fieldSettings;
+
+        if ( ( !isset( $fieldSettings["isMultiple"] ) || $fieldSettings["isMultiple"] === false )
+            && count( $fieldValue->selection ) > 1 )
+        {
+            $validationErrors[] = new ValidationError(
+                "Field definition does not allow multiple options to be selected.",
+                null,
+                array()
+            );
+        }
+
+        foreach ( $fieldValue->selection as $index => $option )
+        {
+            if ( !isset( $fieldSettings["options"][$index] ) )
+            {
+                $validationErrors[] = new ValidationError(
+                    "Option with index %index% does not exist in the field definition.",
+                    null,
+                    array(
+                        "index" => $index
+                    )
+                );
+            }
+        }
+
+        return $validationErrors;
     }
 
     /**
