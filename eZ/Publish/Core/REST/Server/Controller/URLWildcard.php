@@ -57,7 +57,7 @@ class URLWildcard
     }
 
     /**
-     * Returns the URLWildcard with the given id
+     * Returns the URL wildcard with the given id
      *
      * @param RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\Content\URLWildcard
@@ -69,7 +69,7 @@ class URLWildcard
     }
 
     /**
-     * Returns the URLWildcard with the given id
+     * Returns the URL wildcard with the given id
      *
      * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\URLWildcardList
@@ -79,5 +79,21 @@ class URLWildcard
         return new Values\URLWildcardList(
             $this->urlWildcardService->loadAll()
         );
+    }
+
+    /**
+     * The given URL wildcard is deleted
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     */
+    public function deleteURLWildcard( RMF\Request $request )
+    {
+        $values = $this->urlHandler->parse( 'urlWildcard', $request->path );
+        $this->urlWildcardService->remove(
+            $this->urlWildcardService->load( $values['urlwildcard'] )
+        );
+
+        return new Values\ResourceDeleted();
     }
 }
