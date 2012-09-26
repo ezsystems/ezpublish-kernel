@@ -179,7 +179,7 @@ abstract class BaseIntegrationTest extends TestCase
         if ( !self::$setUp )
         {
             parent::setUp();
-            $this->insertDatabaseFixture( __DIR__ . '/../../../Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/full_dump.php' );
+            $this->insertDatabaseFixture( __DIR__ . '/../../../Core/Repository/Tests/Service/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
             self::$setUp = $this->handler;
         }
         else

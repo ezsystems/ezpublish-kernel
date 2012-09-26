@@ -837,7 +837,7 @@ class UserHandlerTest extends TestCase
 
     public function testLoadPoliciesForUser()
     {
-        $this->insertDatabaseFixture( __DIR__ . '/../Content/SearchHandler/_fixtures/full_dump.php' );
+        $this->insertDatabaseFixture( __DIR__ . '/../../../../Repository/Tests/Service/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
         $handler = $this->getUserHandler();
 
         $policies = $handler->loadPoliciesByUserId( 10 ); // Anonymous user
@@ -863,7 +863,7 @@ class UserHandlerTest extends TestCase
 
     public function testLoadRoleAssignments()
     {
-        $this->insertDatabaseFixture( __DIR__ . '/../Content/SearchHandler/_fixtures/full_dump.php' );
+        $this->insertDatabaseFixture( __DIR__ . '/../../../../Repository/Tests/Service/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
         $handler = $this->getUserHandler();
 
         $this->assertEquals(
@@ -887,7 +887,7 @@ class UserHandlerTest extends TestCase
 
     public function testLoadComplexRoleAssignments()
     {
-        $this->insertDatabaseFixture( __DIR__ . '/../Content/SearchHandler/_fixtures/full_dump.php' );
+        $this->insertDatabaseFixture( __DIR__ . '/../../../../Repository/Tests/Service/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
         $handler = $this->getUserHandler();
 
         $this->assertEquals(
