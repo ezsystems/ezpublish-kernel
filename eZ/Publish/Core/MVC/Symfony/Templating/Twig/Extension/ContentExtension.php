@@ -15,6 +15,7 @@ use \Twig_Function_Method;
 use \Twig_Template;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use \SplObjectStorage;
 use \InvalidArgumentException;
 use \LogicException;
@@ -27,9 +28,10 @@ class ContentExtension extends Twig_Extension
 {
     /**
      * Array of Twig template resources.
-     * Either path to each template is referenced or its \Twig_Template (compiled) counterpart
+     * Either the path to each template and its priority in a hash or its
+     * \Twig_Template (compiled) counterpart
      *
-     * @var string[]|\Twig_Template[]
+     * @var array|\Twig_Template[]
      */
     protected $resources;
 
@@ -61,9 +63,17 @@ class ContentExtension extends Twig_Extension
      */
     protected $fieldTypeIdentifiers = array();
 
-    public function __construct( array $resources = array() )
+    public function __construct( ConfigResolverInterface $resolver )
     {
-        $this->resources = $resources;
+        $this->resources = $resolver->getParameter( 'field_templates' );
+        usort(
+            $this->resources,
+            function ( $a, $b )
+            {
+                return $b['priority'] - $a['priority'];
+            }
+        );
+
         $this->blocks = new SplObjectStorage();
     }
 
@@ -143,57 +153,99 @@ class ContentExtension extends Twig_Extension
             );
         }
 
+        $localTemplate = null;
+        if ( isset( $params['template'] ) )
+        {
+            // local override of the template
+            // this template is put on the top the templates stack
+            $localTemplate = $params['template'];
+            unset( $params['template'] );
+        }
+
         // Getting instance of Twig_Template that will be used to render blocks
         if ( !$this->template instanceof Twig_Template )
         {
-            $this->template = $this->environment->loadTemplate( reset( $this->resources ) );
+            $tpl = reset( $this->resources );
+            $this->template = $this->environment->loadTemplate( $tpl['template'] );
         }
 
         return $this->template->renderBlock(
             $this->getFieldBlockName( $content, $field ),
             $params,
-            $this->getBlocksByField( $content, $field )
+            $this->getBlocksByField( $content, $field, $localTemplate )
         );
     }
 
     /**
-     * Returns template blocks for $field.
+     * Returns the block named $blockName in the given template. If it's not
+     * found, returns null.
+     *
+     * @param string $blockName
+     * @param Twig_Template $tpl
+     * @return array
+     */
+    protected function searchBlock( $blockName, Twig_Template $tpl )
+    {
+        // Current template might have parents, so we need to loop against
+        // them to find a matching block
+        do
+        {
+            foreach ( $tpl->getBlocks() as $name => $block )
+            {
+                if ( $name === $blockName )
+                {
+                    return $block;
+                }
+            }
+        }
+        while ( ( $tpl = $tpl->getParent( array() ) ) instanceof Twig_Template );
+
+        return null;
+    }
+
+    /**
+     * Returns template blocks for $field. First check in the $localTemplate if
+     * it's provided.
      * Template block convention name is <fieldTypeIdentifier>_field
      * Example: 'ezstring_field' will be relevant for a full view of ezstring field type
      *
      * @param Content $content
      * @param Field $field
+     * @param null|string $localTemplate a file where to look for the block first
      * @return array
      * @throws \LogicException If no template block can be found for $field
      */
-    protected function getBlocksByField( Content $content, Field $field )
+    protected function getBlocksByField( Content $content, Field $field, $localTemplate = null )
     {
+        $fieldBlockName = $this->getFieldBlockName( $content, $field );
+        if ( $localTemplate !== null )
+        {
+            $tpl = $this->environment->loadTemplate( $localTemplate );
+            $block = $this->searchBlock( $fieldBlockName, $tpl );
+            if ( $block !== null )
+            {
+                return array( $fieldBlockName => $block );
+            }
+        }
+
         if ( $this->blocks->contains( $field ) )
             return $this->blocks[$field];
 
         // Looping against available resources to find template blocks for $field
-        //TODO: maybe we should consider "themes" like in forms - http://symfony.com/doc/master/book/forms.html#form-theming
         $blocks = array();
         foreach ( $this->resources as &$template )
         {
             if ( !$template instanceof Twig_Template )
-                $template = $this->environment->loadTemplate( $template );
+                $template = $this->environment->loadTemplate( $template['template'] );
 
             $tpl = $template;
-            $fieldBlockName = $this->getFieldBlockName( $content, $field );
 
-            // Current template might have parents, so we need to loop against them to find a matching block
-            do
+            $block = $this->searchBlock( $fieldBlockName, $tpl );
+            if ( $block !== null )
             {
-                foreach ( $tpl->getBlocks() as $blockName => $block )
-                {
-                    if ( strpos( $blockName, $fieldBlockName ) === 0 )
-                    {
-                        $blocks[$blockName] = $block;
-                    }
-                }
+                $blocks[$fieldBlockName] = $block;
+                break;
             }
-            while ( $tpl = $tpl->getParent( array() ) !== false );
         }
 
         if ( empty( $blocks ) )
