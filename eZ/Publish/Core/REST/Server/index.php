@@ -201,6 +201,11 @@ $inputDispatcher = new Common\Input\Dispatcher(
                 $parserTools
             ),
             'application/vnd.ez.api.FieldDefinitionCreate'  => $fieldDefinitionCreateParser,
+            'application/vnd.ez.api.FieldDefinitionUpdate'  => new Input\Parser\FieldDefinitionUpdate(
+                $urlHandler,
+                $repository->getContentTypeService(),
+                $parserTools
+            ),
             'application/vnd.ez.api.PolicyCreate'           => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService(), $parserTools ),
             'application/vnd.ez.api.PolicyUpdate'           => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService(), $parserTools ),
             'application/vnd.ez.api.RoleAssignInput'        => new Input\Parser\RoleAssignInput( $urlHandler, $parserTools ),
@@ -633,6 +638,7 @@ $dispatcher = new AuthenticatingDispatcher(
             ),
             '(^/content/types/[0-9]+/draft/fieldDefinitions/[0-9]+$)' => array(
                 'GET'     => array( $contentTypeController, 'loadDraftFieldDefinition' ),
+                'PATCH'   => array( $contentTypeController, 'updateFieldDefinition' ),
             ),
 
             // /content/trash

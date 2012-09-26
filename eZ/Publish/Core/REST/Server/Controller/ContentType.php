@@ -200,7 +200,7 @@ class ContentType
      * Load a content info by remote ID
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     * @return \eZ\Publish\Core\REST\Server\Values\RestContentType
      */
     public function loadContentType( RMF\Request $request )
     {
@@ -375,7 +375,7 @@ class ContentType
      * Creates a new field definition for the given content type
      *
      * @param RMF\Request $request
-     * @return \eZ\Publish\Core\REST\Server\Values\FieldDefinitionList
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedFieldDefinition
      */
     public function addFieldDefinition( RMF\Request $request )
     {
@@ -502,6 +502,63 @@ class ContentType
                 return new Values\RestFieldDefinition(
                     $contentTypeDraft,
                     $fieldDefinition
+                );
+            }
+        }
+
+        throw new Exceptions\NotFoundException( "Field definition not found: '{$request->path}'." );
+    }
+
+    /**
+     * Updates the attributes of a field definition
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\FieldDefinitionList
+     */
+    public function updateFieldDefinition( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'typeFieldDefinitionDraft', $request->path );
+
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
+        $fieldDefinitionUpdate = $this->inputDispatcher->parse(
+            new Message(
+                array(
+                    'Content-Type' => $request->contentType,
+                ),
+                $request->body
+            )
+        );
+
+        $fieldDefinition = null;
+        foreach ( $contentTypeDraft->getFieldDefinitions() as $fieldDef )
+        {
+            if ( $fieldDef->id == $urlValues['fieldDefinition'] )
+            {
+                $fieldDefinition = $fieldDef;
+            }
+        }
+
+        if ( $fieldDefinition === null )
+        {
+            throw new Exceptions\NotFoundException( "Field definition not found: '{$request->path}'." );
+        }
+
+        //@TODO Throw ForbiddenException if identifier already exists
+        // PAPI throws same type of exception for various cases
+
+        $this->contentTypeService->updateFieldDefinition(
+            $contentTypeDraft,
+            $fieldDefinition,
+            $fieldDefinitionUpdate
+        );
+
+        $updatedDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
+        foreach ( $updatedDraft->getFieldDefinitions() as $fieldDef )
+        {
+            if ( $fieldDef->id == $urlValues['fieldDefinition'] )
+            {
+                return new Values\RestFieldDefinition(
+                    $updatedDraft, $fieldDef
                 );
             }
         }
