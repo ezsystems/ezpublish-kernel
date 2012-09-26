@@ -9,6 +9,9 @@
 
 namespace eZ\Publish\Core\REST\Server\Controller;
 use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
 
@@ -78,6 +81,41 @@ class URLWildcard
     {
         return new Values\URLWildcardList(
             $this->urlWildcardService->loadAll()
+        );
+    }
+
+    /**
+     * Creates a new URL wildcard
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedURLWildcard
+     */
+    public function createURLWildcard( RMF\Request $request )
+    {
+        $urlWildcardCreate = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $request->contentType ),
+                $request->body
+            )
+        );
+
+        try
+        {
+            $createdURLWildcard = $this->urlWildcardService->create(
+                $urlWildcardCreate['sourceUrl'],
+                $urlWildcardCreate['destinationUrl'],
+                $urlWildcardCreate['forward']
+            );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
+
+        return new Values\CreatedURLWildcard(
+            array(
+                'urlWildcard' => $createdURLWildcard
+            )
         );
     }
 

@@ -206,6 +206,7 @@ $inputDispatcher = new Common\Input\Dispatcher(
                 $repository->getContentTypeService(),
                 $parserTools
             ),
+            'application/vnd.ez.api.UrlWildcardCreate'      => new Input\Parser\URLWildcardCreate( $urlHandler, $parserTools ),
             'application/vnd.ez.api.PolicyCreate'           => new Input\Parser\PolicyCreate( $urlHandler, $repository->getRoleService(), $parserTools ),
             'application/vnd.ez.api.PolicyUpdate'           => new Input\Parser\PolicyUpdate( $urlHandler, $repository->getRoleService(), $parserTools ),
             'application/vnd.ez.api.RoleAssignInput'        => new Input\Parser\RoleAssignInput( $urlHandler, $parserTools ),
@@ -370,6 +371,7 @@ $valueObjectVisitors = array(
 
     '\\eZ\\Publish\\Core\\REST\\Server\\Values\\URLWildcardList'             => new Output\ValueObjectVisitor\URLWildcardList( $urlHandler ),
     '\\eZ\\Publish\\API\\Repository\\Values\\Content\\URLWildcard'           => new Output\ValueObjectVisitor\URLWildcard( $urlHandler ),
+    '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedURLWildcard'          => new Output\ValueObjectVisitor\CreatedURLWildcard( $urlHandler ),
 
     // Content
 
