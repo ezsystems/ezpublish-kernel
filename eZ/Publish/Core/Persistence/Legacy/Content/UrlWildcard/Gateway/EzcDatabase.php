@@ -132,7 +132,7 @@ class EzcDatabase extends Gateway
             "*"
         )->from(
             $this->dbHandler->quoteTable( "ezurlwildcard" )
-        )->limit( $limit, $offset );
+        )->limit( $limit > 0 ? $limit : PHP_INT_MAX, $offset );
 
         $stmt = $q->prepare();
         $stmt->execute();
