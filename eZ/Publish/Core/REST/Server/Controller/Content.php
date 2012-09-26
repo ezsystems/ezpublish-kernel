@@ -13,6 +13,7 @@ use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Values;
+use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -29,7 +30,7 @@ use Qafoo\RMF;
 /**
  * Content controller
  */
-class Content
+class Content extends RestController
 {
     /**
      * Input dispatcher
