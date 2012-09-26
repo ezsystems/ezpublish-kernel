@@ -183,9 +183,9 @@
     {% set defaultMapType = 'ROADMAP' %}
 
     {% set hasContent = field.value is not null %}
-    {% set latitude = field.value.latitude ? field.value.latitude : 0 %}
-    {% set longitude = field.value.longitude ? field.value.longitude : 0 %}
-    {% set address = field.value.address ? field.value.address : "" %}
+    {% set latitude = field.value.latitude|default( 0 ) %}
+    {% set longitude = field.value.longitude|default( 0 ) %}
+    {% set address = field.value.address|default( "" ) %}
     {% set mapId = "maplocation-map-" ~ field.id %}
 
     {% set zoom = parameters.zoom|default( defaultZoom ) %}
