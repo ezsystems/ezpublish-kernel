@@ -197,7 +197,7 @@ class ContentType
     }
 
     /**
-     * Load a content info by remote ID
+     * Loads a content type
      *
      * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RestContentType
@@ -330,6 +330,26 @@ class ContentType
                     )
                 )
             )
+        );
+    }
+
+    /**
+     * Loads a content type draft
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\RestContentType
+     */
+    public function loadContentTypeDraft( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'typeDraft', $request->path );
+
+        // @TODO Throw NotFoundException if the content type does not have a draft for the current user
+
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
+
+        return new Values\RestContentType(
+            $contentTypeDraft,
+            $contentTypeDraft->getFieldDefinitions()
         );
     }
 
