@@ -693,6 +693,52 @@ class ContentType
     }
 
     /**
+     * Removes the given group from the content type and returns the updated group list
+     *
+     * @param RMF\Request $request
+     * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeGroupRefList
+     */
+    public function unlinkContentTypeFromGroup( RMF\Request $request )
+    {
+        $urlValues = $this->urlHandler->parse( 'groupOfType', $request->path );
+
+        $contentType = $this->contentTypeService->loadContentType( $urlValues['type'] );
+        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $urlValues['group'] );
+
+        $existingContentTypeGroups = $contentType->getContentTypeGroups();
+        $contentTypeInGroup = false;
+        foreach ( $existingContentTypeGroups as $existingGroup )
+        {
+            if ( $existingGroup->id == $contentTypeGroup->id )
+            {
+                $contentTypeInGroup = true;
+                break;
+            }
+        }
+
+        if ( !$contentTypeInGroup )
+        {
+            throw new Exceptions\NotFoundException( 'Content type is not in the given group' );
+        }
+
+        if ( count( $existingContentTypeGroups ) == 1 )
+        {
+            throw new ForbiddenException( 'Content type cannot be unlinked from the only remaining group' );
+        }
+
+        $this->contentTypeService->unassignContentTypeGroup(
+            $contentType,
+            $contentTypeGroup
+        );
+
+        $contentType = $this->contentTypeService->loadContentType( $urlValues['type'] );
+        return new Values\ContentTypeGroupRefList(
+            $contentType,
+            $contentType->getContentTypeGroups()
+        );
+    }
+
+    /**
      * Converts the provided ContentTypeGroupCreateStruct to ContentTypeGroupUpdateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct $createStruct
