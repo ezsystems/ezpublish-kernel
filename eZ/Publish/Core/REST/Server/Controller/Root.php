@@ -11,40 +11,15 @@ namespace eZ\Publish\Core\REST\Server\Controller;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Common\Values;
+use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use Qafoo\RMF;
 
 /**
  * Root controller
  */
-class Root
+class Root extends RestController
 {
-    /**
-     * Input dispatcher
-     *
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
-     */
-    protected $inputDispatcher;
-
-    /**
-     * URL handler
-     *
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
-     */
-    protected $urlHandler;
-
-    /**
-     * Construct controller
-     *
-     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
-     */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler )
-    {
-        $this->inputDispatcher = $inputDispatcher;
-        $this->urlHandler      = $urlHandler;
-    }
-
     /**
      * List the root resources of the eZ Publish installation
      *

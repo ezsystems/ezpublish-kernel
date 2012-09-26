@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
+use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use \eZ\Publish\API\Repository\URLWildcardService;
 
@@ -22,22 +23,8 @@ use Qafoo\RMF;
 /**
  * URLWildcard controller
  */
-class URLWildcard
+class URLWildcard extends RestController
 {
-    /**
-     * Input dispatcher
-     *
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
-     */
-    protected $inputDispatcher;
-
-    /**
-     * URL handler
-     *
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
-     */
-    protected $urlHandler;
-
     /**
      * URLWildcard service
      *
@@ -52,10 +39,8 @@ class URLWildcard
      * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\URLWildcardService $urlWildcardService
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, URLWildcardService $urlWildcardService )
+    public function __construct( URLWildcardService $urlWildcardService )
     {
-        $this->inputDispatcher = $inputDispatcher;
-        $this->urlHandler = $urlHandler;
         $this->urlWildcardService = $urlWildcardService;
     }
 

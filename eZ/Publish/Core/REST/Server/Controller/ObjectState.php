@@ -13,6 +13,7 @@ use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Common\Values\RestObjectState;
+use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use eZ\Publish\API\Repository\ObjectStateService;
 use eZ\Publish\API\Repository\ContentService;
@@ -26,22 +27,8 @@ use Qafoo\RMF;
 /**
  * ObjectState controller
  */
-class ObjectState
+class ObjectState extends RestController
 {
-    /**
-     * Input dispatcher
-     *
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
-     */
-    protected $inputDispatcher;
-
-    /**
-     * URL handler
-     *
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
-     */
-    protected $urlHandler;
-
     /**
      * ObjectState service
      *
@@ -59,15 +46,11 @@ class ObjectState
     /**
      * Construct controller
      *
-     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\ObjectStateService $objectStateService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, ObjectStateService $objectStateService, ContentService $contentService )
+    public function __construct( ObjectStateService $objectStateService, ContentService $contentService )
     {
-        $this->inputDispatcher = $inputDispatcher;
-        $this->urlHandler = $urlHandler;
         $this->objectStateService = $objectStateService;
         $this->contentService = $contentService;
     }
