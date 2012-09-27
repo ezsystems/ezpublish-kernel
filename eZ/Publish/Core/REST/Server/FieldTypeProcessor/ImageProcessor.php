@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Server\FieldTypeProcessor;
 
-use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
-
 class ImageProcessor extends BinaryInputProcessor
 {
     /**

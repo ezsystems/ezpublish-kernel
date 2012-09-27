@@ -207,7 +207,7 @@ class User
             try
             {
                 $this->urlHandler->parse( 'rootUserGroupSubGroups', $request->path );
-                //@todo Load from settings instead of hardcoding
+                //@todo Load from settings instead of using hardcoded value
                 $userGroupPath = '/1/5';
             }
             catch ( RestInvalidArgumentException $e )
