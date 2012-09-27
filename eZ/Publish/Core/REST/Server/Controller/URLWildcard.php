@@ -72,7 +72,7 @@ class URLWildcard
     }
 
     /**
-     * Returns the URL wildcard with the given id
+     * Returns the list of URL wildcards
      *
      * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\URLWildcardList
