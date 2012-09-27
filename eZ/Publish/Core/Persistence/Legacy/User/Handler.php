@@ -352,6 +352,14 @@ class Handler implements BaseUserHandler
     {
         $data = $this->roleGateway->loadRoleAssignmentsByGroupId( $groupId, $inherit );
 
-        return $this->mapper->mapRoleAssignments( $data );
+        if ( empty( $data ) )
+            return array();
+
+        $contentIds = array();
+        foreach ( $data as $item )
+            $contentIds[] = $item['contentobject_id'];
+
+        $roleData = $this->roleGateway->loadRolesForContentObjects( $contentIds );
+        return $this->mapper->mapRoleAssignments( $data, $roleData );
     }
 }

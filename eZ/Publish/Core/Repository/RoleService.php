@@ -660,7 +660,7 @@ class RoleService implements RoleServiceInterface
                 $spiRoleAssignments = $userHandler->loadRoleAssignmentsByGroupId( $userGroup->id );
                 foreach ( $spiRoleAssignments as $spiRoleAssignment )
                 {
-                    if ( $spiRoleAssignment->roleId == $role->id )
+                    if ( $spiRoleAssignment->role->id == $role->id )
                     {
                         $roleAssignments[] = $this->buildDomainUserGroupRoleAssignmentObject(
                             $spiRoleAssignment,
@@ -679,7 +679,7 @@ class RoleService implements RoleServiceInterface
                     $spiRoleAssignments = $userHandler->loadRoleAssignmentsByGroupId( $user->id );
                     foreach ( $spiRoleAssignments as $spiRoleAssignment )
                     {
-                        if ( $spiRoleAssignment->roleId == $role->id )
+                        if ( $spiRoleAssignment->role->id == $role->id )
                         {
                             $roleAssignments[] = $this->buildDomainUserRoleAssignmentObject(
                                 $spiRoleAssignment,
@@ -700,15 +700,18 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * returns the roles assigned to the given user
+     * Returns the roles assigned to the given user
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a role
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param bool $inherited
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException If the current user is not allowed to read a role
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue On invalid User object
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment[]
      */
-    public function getRoleAssignmentsForUser( User $user )
+    public function getRoleAssignmentsForUser( User $user, $inherited = false )
     {
         if ( !is_numeric( $user->id ) )
             throw new InvalidArgumentValue( "id", $user->id, "User" );
@@ -717,17 +720,20 @@ class RoleService implements RoleServiceInterface
             throw new UnauthorizedException( 'role', 'read' );
 
         $roleAssignments = array();
-        $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByGroupId( $user->id );
+        $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByGroupId( $user->id, $inherited );
         foreach ( $spiRoleAssignments as $spiRoleAssignment )
         {
-            $roleAssignments[] = $this->buildDomainUserRoleAssignmentObject( $spiRoleAssignment, $user );
+            if ( !$inherited || $spiRoleAssignment->contentId == $user->id )
+                $roleAssignments[] = $this->buildDomainUserRoleAssignmentObject( $spiRoleAssignment, $user );
+            else
+                $roleAssignments[] = $this->buildDomainUserGroupRoleAssignmentObject( $spiRoleAssignment );
         }
 
         return $roleAssignments;
     }
 
     /**
-     * returns the roles assigned to the given user group
+     * Returns the roles assigned to the given user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a role
      *
@@ -892,7 +898,7 @@ class RoleService implements RoleServiceInterface
         }
 
         $user = $user ?: $this->repository->getUserService()->loadUser( $spiRoleAssignment->contentId );
-        $role = $role ?: $this->loadRole( $spiRoleAssignment->roleId );
+        $role = $role ?: $this->buildDomainRoleObject( $spiRoleAssignment->role );
 
         return new UserRoleAssignment(
             array(
@@ -922,7 +928,7 @@ class RoleService implements RoleServiceInterface
         }
 
         $userGroup = $userGroup ?: $this->repository->getUserService()->loadUserGroup( $spiRoleAssignment->contentId );
-        $role = $role ?: $this->loadRole( $spiRoleAssignment->roleId );
+        $role = $role ?: $this->buildDomainRoleObject( $spiRoleAssignment->role );
 
         return new UserGroupRoleAssignment(
             array(

@@ -870,13 +870,13 @@ class UserHandlerTest extends TestCase
             array(
                 new Persistence\User\RoleAssignment(
                     array(
-                        'roleId' => 1,
+                        'role' => $handler->loadRole( 1 ),
                         'contentId' => 11
                     )
                 ),
                 new Persistence\User\RoleAssignment(
                     array(
-                        'roleId' => 5,
+                        'role' => $handler->loadRole( 5 ),
                         'contentId' => 11
                     )
                 )
@@ -888,7 +888,7 @@ class UserHandlerTest extends TestCase
             array(
                 new Persistence\User\RoleAssignment(
                     array(
-                        'roleId' => 1,
+                        'role' => $handler->loadRole( 1 ),
                         'contentId' => 42
                     )
                 )
@@ -911,7 +911,7 @@ class UserHandlerTest extends TestCase
             array(
                 new Persistence\User\RoleAssignment(
                     array(
-                        'roleId' => 1,
+                        'role' => $handler->loadRole( 1 ),
                         'contentId' => 42
                     )
                 )
@@ -929,7 +929,7 @@ class UserHandlerTest extends TestCase
             array(
                 new Persistence\User\RoleAssignment(
                     array(
-                        'roleId' => 3,
+                        'role' => $handler->loadRole( 3 ),
                         'contentId' => 13,
                         'limitationIdentifier' => 'Subtree',
                         'values' => array( '/1/2/', '/1/43/' )
@@ -937,7 +937,7 @@ class UserHandlerTest extends TestCase
                 ),
                 new Persistence\User\RoleAssignment(
                     array(
-                        'roleId' => 5,
+                        'role' => $handler->loadRole( 5 ),
                         'contentId' => 13
                     )
                 )

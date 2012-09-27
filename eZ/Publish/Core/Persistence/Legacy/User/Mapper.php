@@ -112,7 +112,7 @@ class Mapper
         {
             if ( empty( $role->id ) )
             {
-                $role->id = $row['ezrole_id'];
+                $role->id = (int)$row['ezrole_id'];
                 $role->identifier = $row['ezrole_name'];
                 // skip name and description as they don't exist in legacy
             }
@@ -131,9 +131,11 @@ class Mapper
      * Map data for a set of roles
      *
      * @param array $data
+     * @param bool $indexById
+     *
      * @return \eZ\Publish\SPI\Persistence\User\Role[]
      */
-    public function mapRoles( array $data )
+    public function mapRoles( array $data, $indexById = false )
     {
         $roleData = array();
         foreach ( $data as $row )
@@ -142,9 +144,12 @@ class Mapper
         }
 
         $roles = array();
-        foreach ( $roleData as $data )
+        foreach ( $roleData as $id => $data )
         {
-            $roles[] = $this->mapRole( $data );
+            if ( $indexById )
+                $roles[$id] = $this->mapRole( $data );
+            else
+                $roles[] = $this->mapRole( $data );
         }
 
         return $roles;
@@ -156,8 +161,10 @@ class Mapper
      * @param array $data
      * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
      */
-    public function mapRoleAssignments( array $data )
+    public function mapRoleAssignments( array $data, array $roleData )
     {
+        $roles = $this->mapRoles( $roleData, true );
+
         $roleAssignmentData = array();
         foreach ( $data as $row )
         {
@@ -173,7 +180,7 @@ class Mapper
                 {
                     $roleAssignmentData[$roleId][$limitIdentifier] = new RoleAssignment(
                         array(
-                            'roleId' => $roleId,
+                            'role' => $roles[$roleId],
                             'contentId' => (int)$row['contentobject_id'],
                             'limitationIdentifier' => $limitIdentifier,
                             'values' => array( $row['limit_value'] )
@@ -189,7 +196,7 @@ class Mapper
             {
                 $roleAssignmentData[$roleId] = new RoleAssignment(
                     array(
-                        'roleId' => $roleId,
+                        'role' => $roles[$roleId],
                         'contentId' => (int)$row['contentobject_id']
                     )
                 );

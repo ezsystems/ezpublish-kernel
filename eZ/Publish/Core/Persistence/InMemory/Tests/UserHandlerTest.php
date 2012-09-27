@@ -377,7 +377,7 @@ class UserHandlerTest extends HandlerTest
             array(
                 new RoleAssignment(
                     array(
-                        'roleId' => 1,
+                        'role' => $handler->loadRole( 1 ),
                         'contentId' => 11,
                         'limitationIdentifier' => null,
                         'values' => null
@@ -428,7 +428,7 @@ class UserHandlerTest extends HandlerTest
         $list = $handler->loadRoleAssignmentsByGroupId( 10, true );
         $this->assertEquals( 1, count( $list ) );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\RoleAssignment', $list[0] );
-        $this->assertEquals( $obj->id, $list[0]->roleId );
+        $this->assertEquals( $obj->id, $list[0]->role->id );
         $this->assertEquals( 42, $list[0]->contentId );
         $this->assertEquals( null, $list[0]->limitationIdentifier );
         $this->assertEquals( null, $list[0]->values );
@@ -460,7 +460,7 @@ class UserHandlerTest extends HandlerTest
         $list = $handler->loadRoleAssignmentsByGroupId( 10, true );// 10: Anonymous User
         $this->assertEquals( 2, count( $list ) );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\RoleAssignment', $list[1] );
-        $this->assertEquals( $obj->id, $list[1]->roleId );
+        $this->assertEquals( $obj->id, $list[1]->role->id );
         $this->assertEquals( 4, $list[1]->contentId );
     }
 
@@ -659,7 +659,7 @@ class UserHandlerTest extends HandlerTest
         // See if our role was properly assigned to the user group
         foreach ( $roleAssignments as $roleAssignment )
         {
-            if ( $roleAssignment->roleId == $obj->id )
+            if ( $roleAssignment->role->id == $obj->id )
                 return;
         }
 
@@ -720,7 +720,7 @@ class UserHandlerTest extends HandlerTest
         $roleAssigned = false;
         foreach ( $roleAssignments as $roleAssignment )
         {
-            if ( $roleAssignment->roleId == $obj->id )
+            if ( $roleAssignment->role->id == $obj->id )
                 $roleAssigned = true;
         }
 
@@ -734,7 +734,7 @@ class UserHandlerTest extends HandlerTest
         $roleAssignments = $handler->loadRoleAssignmentsByGroupId( 42 );
         foreach ( $roleAssignments as $roleAssignment )
         {
-            if ( $roleAssignment->roleId == $obj->id )
+            if ( $roleAssignment->role->id == $obj->id )
                 $this->fail( 'Role was not unassigned from User Group with id: 42' );
         }
     }

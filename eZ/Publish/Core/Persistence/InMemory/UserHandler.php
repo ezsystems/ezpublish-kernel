@@ -288,9 +288,10 @@ class UserHandler implements UserHandlerInterface
     public function loadRoleAssignmentsByGroupId( $groupId, $inherit = false )
     {
         if ( $inherit === false )
-            return $this->backend->find( 'User\\RoleAssignment', array( 'contentId' => $groupId ) );
+            return $this->getRoleAssignmentForContent( array( $groupId ) );
 
 
+        $contentIds = array( $groupId );
         $list = $this->backend->find(
             'Content',
             array( 'id' => $groupId ),
@@ -299,19 +300,16 @@ class UserHandler implements UserHandlerInterface
                     'type' => 'Content\\Location',
                     'match' => array( 'contentId' => 'id' )
                 ),
-                'contentInfo' => array(
+                /*'contentInfo' => array(
                     'type' => 'Content\\ContentInfo',
                     'match' => array( 'id' => 'id' ),
                     'single' => true
-                )
+                )*/
             )
         );
 
-        if ( !$list )
+        if ( empty( $list ) )
             return array();
-
-        $roleAssignmentData = array();
-        $this->getRoleAssignmentForContent( $groupId, $roleAssignmentData );
 
         // crawl up path on all locations
         foreach ( $list[0]->locations as $location )
@@ -341,12 +339,71 @@ class UserHandler implements UserHandlerInterface
                 if ( isset( $list[1] ) )
                     throw new LogicException( "'content tree' logic error, there is more than one item with parentId: $parentId" );
                 if ( $list )
-                    $this->getRoleAssignmentForContent( $list[0]->contentInfo->id, $roleAssignmentData );
+                    $contentIds[] = $list[0]->contentInfo->id;
             }
         }
+
+        return $this->getRoleAssignmentForContent( $contentIds );
+    }
+
+    /**
+     * @param array $contentIds
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
+     */
+    protected function getRoleAssignmentForContent( array $contentIds )
+    {
+        /** fetch possible roles assigned to this object
+         * @var \eZ\Publish\SPI\Persistence\User\RoleAssignment[] $list
+         */
+        $list = $this->backend->find(
+            'User\\RoleAssignment',
+            array( 'contentId' => $contentIds ),
+            array(
+                'role' => array(
+                    'type' => 'User\\Role',
+                    'match' => array( 'id' => '_roleId' ),
+                    'single' => true,
+                    'sub' => array(
+                        'policies' => array(
+                            'type' => 'User\\Policy',
+                            'match' => array( 'roleId' => 'id' )
+                        )
+                    )
+                )
+            )
+        );
+
+        // merge policies
+        $data = array();
+        foreach ( $list as $new )
+        {
+            // if user already have full access to a role, continue (@todo merge groupIds)
+            if ( isset( $data[$new->role->id] ) && $data[$new->role->id] instanceof RoleAssignment )
+                continue;
+
+            if ( !empty( $new->limitationIdentifier ) )
+            {
+                if ( !isset( $data[$new->role->id][$new->limitationIdentifier] ) )
+                {
+                    $new->values = array( $new->values );
+                    $data[$new->role->id][$new->limitationIdentifier] = $new;
+                }
+                else // merge limitation values
+                {
+                    $data[$new->role->id][$new->limitationIdentifier]->values[] = $new->values;
+                }
+            }
+            else
+            {
+                $data[$new->role->id] = $new;
+            }
+        }
+
+        // flatten structure
         $roleAssignments = array();
         array_walk_recursive(
-            $roleAssignmentData,
+            $data,
             function( $roleAssignment ) use ( &$roleAssignments )
             {
                 $roleAssignments[] = $roleAssignment;
@@ -354,48 +411,6 @@ class UserHandler implements UserHandlerInterface
         );
 
         return $roleAssignments;
-    }
-
-    /**
-     * @param mixed $contentId
-     * @param \eZ\Publish\SPI\Persistence\User\RoleAssignment[] $data
-     *
-     * @return void
-     */
-    protected function getRoleAssignmentForContent( $contentId, array &$data )
-    {
-        /** fetch possible roles assigned to this object
-         * @var \eZ\Publish\SPI\Persistence\User\RoleAssignment[] $list
-         */
-        $list = $this->backend->find(
-            'User\\RoleAssignment',
-            array( 'contentId' => $contentId )
-        );
-
-        // merge policies
-        foreach ( $list as $new )
-        {
-            // if user already have full access to a role, continue (@todo merge groupIds)
-            if ( isset( $data[$new->roleId] ) && $data[$new->roleId] instanceof RoleAssignment )
-                continue;
-
-            if ( !empty( $new->limitationIdentifier ) )
-            {
-                if ( !isset( $data[$new->roleId][$new->limitationIdentifier] ) )
-                {
-                    $new->values = array( $new->values );
-                    $data[$new->roleId][$new->limitationIdentifier] = $new;
-                }
-                else // merge limitation values
-                {
-                    $data[$new->roleId][$new->limitationIdentifier]->values[] = $new->values;
-                }
-            }
-            else
-            {
-                $data[$new->roleId] = $new;
-            }
-        }
     }
 
     /**
@@ -430,7 +445,7 @@ class UserHandler implements UserHandlerInterface
     {
         $this->backend->delete( 'User\\Role', $roleId );
         $this->backend->deleteByMatch( 'User\\Policy', array( 'roleId' => $roleId ) );
-        $this->backend->deleteByMatch( 'User\\RoleAssignment', array( 'roleId' => $roleId ) );
+        $this->backend->deleteByMatch( 'User\\RoleAssignment', array( '_roleId' => $roleId ) );
     }
 
     /**
@@ -628,7 +643,7 @@ class UserHandler implements UserHandlerInterface
                 $this->backend->create(
                     'User\\RoleAssignment',
                     array(
-                        'roleId' => $roleId,
+                        '_roleId' => $roleId,
                         'contentId' => $contentId,
                         'limitationIdentifier' => $limitIdentifier,
                         'values' => $limitValues
@@ -641,7 +656,7 @@ class UserHandler implements UserHandlerInterface
             $this->backend->create(
                 'User\\RoleAssignment',
                 array(
-                    'roleId' => $roleId,
+                    '_roleId' => $roleId,
                     'contentId' => $contentId,
                     'limitationIdentifier' => null,
                     'values' => null
@@ -678,13 +693,13 @@ class UserHandler implements UserHandlerInterface
 
         $roleAssignments = $this->backend->find(
             'User\\RoleAssignment',
-            array( 'roleId' => $roleId, 'contentId' => $contentId )
+            array( '_roleId' => $roleId, 'contentId' => $contentId )
         );
 
         if ( empty( $roleAssignments ) )
             throw new InvalidArgumentValue( '$roleId', $roleId );
 
-        $this->backend->deleteByMatch( 'User\\RoleAssignment', array( 'roleId' => $roleId, 'contentId' => $contentId ) );
+        $this->backend->deleteByMatch( 'User\\RoleAssignment', array( '_roleId' => $roleId, 'contentId' => $contentId ) );
 
         $role->groupIds = array_values( array_diff( $role->groupIds, array( $contentId ) ) );
         $this->backend->update( 'User\\Role', $roleId, (array)$role );

@@ -15,11 +15,11 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class RoleAssignment extends ValueObject
 {
     /**
-     * ID of the role
+     * The Role connected to this assignment
      *
-     * @var mixed
+     * @var \eZ\Publish\SPI\Persistence\User\Role
      */
-    public $roleId;
+    public $role;
 
     /**
      * The user or user group id
