@@ -37,14 +37,14 @@ class ContentTypeInfoList extends ValueObjectVisitor
         $generator->startAttribute( 'href', $data->path );
         $generator->endAttribute( 'href' );
 
-        $generator->startList( 'ContentTypeInfo' );
+        $generator->startList( 'ContentType' );
         foreach ( $data->contentTypes as $contentType )
         {
             $visitor->visitValueObject(
                 new Values\RestContentType( $contentType )
             );
         }
-        $generator->endList( 'ContentTypeInfo' );
+        $generator->endList( 'ContentType' );
 
         $generator->endObjectElement( 'ContentTypeInfoList' );
     }

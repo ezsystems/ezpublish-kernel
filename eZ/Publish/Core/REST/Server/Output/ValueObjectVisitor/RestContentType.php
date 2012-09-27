@@ -36,7 +36,7 @@ class RestContentType extends RestContentTypeBase
         $urlTypeSuffix = $this->getUrlTypeSuffix( $contentType->status );
         $mediaType = $data->fieldDefinitions !== null ? 'ContentType' : 'ContentTypeInfo';
 
-        $generator->startObjectElement( $mediaType );
+        $generator->startObjectElement( 'ContentType' );
 
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( $mediaType ) );
 
@@ -135,7 +135,7 @@ class RestContentType extends RestContentTypeBase
             );
         }
 
-        $generator->endObjectElement( $mediaType );
+        $generator->endObjectElement( 'ContentType' );
     }
 
     /**
