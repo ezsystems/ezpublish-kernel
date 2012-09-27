@@ -58,9 +58,9 @@ class SelectionIntegrationTest extends BaseIntegrationTest
         return array(
             'isMultiple' => true,
             'options' => array(
-                1 => 'First',
-                2 => 'Sindelfingen',
-                3 => 'Bielefeld',
+                0 => 'First',
+                1 => 'Sindelfingen',
+                2 => 'Bielefeld',
             )
         );
     }
@@ -118,7 +118,7 @@ class SelectionIntegrationTest extends BaseIntegrationTest
      */
     public function getValidCreationFieldData()
     {
-        return new SelectionValue( array( 1, 3 ) );
+        return new SelectionValue( array( 0, 2 ) );
     }
 
     /**
@@ -138,7 +138,7 @@ class SelectionIntegrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'selection' => array( 1, 3 ),
+            'selection' => array( 0, 2 ),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -173,6 +173,10 @@ class SelectionIntegrationTest extends BaseIntegrationTest
             array(
                 new \stdClass(),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
+            ),
+            array(
+                new SelectionValue( array( 3 ) ),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
             ),
         );
     }
@@ -252,7 +256,7 @@ class SelectionIntegrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'selection' => array( 1, 3 ),
+            'selection' => array( 0, 2 ),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -284,8 +288,8 @@ class SelectionIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new SelectionValue( array( 1, 3 ) ),
-                array( 1, 3 ),
+                new SelectionValue( array( 0, 2 ) ),
+                array( 0, 2 ),
             ),
         );
     }
@@ -301,8 +305,8 @@ class SelectionIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                array( 1, 3 ),
-                new SelectionValue( array( 1, 3 ) )
+                array( 0, 2 ),
+                new SelectionValue( array( 0, 2 ) )
             ),
         );
     }

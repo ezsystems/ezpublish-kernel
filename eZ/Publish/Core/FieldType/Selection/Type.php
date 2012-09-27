@@ -220,15 +220,15 @@ class Type extends FieldType
             );
         }
 
-        foreach ( $fieldValue->selection as $index => $option )
+        foreach ( $fieldValue->selection as $optionIndex )
         {
-            if ( !isset( $fieldSettings["options"][$index] ) )
+            if ( !isset( $fieldSettings["options"][$optionIndex] ) )
             {
                 $validationErrors[] = new ValidationError(
                     "Option with index %index% does not exist in the field definition.",
                     null,
                     array(
-                        "index" => $index
+                        "index" => $optionIndex
                     )
                 );
             }
