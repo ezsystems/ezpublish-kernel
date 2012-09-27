@@ -169,19 +169,21 @@ class Mapper
         foreach ( $data as $row )
         {
             $roleId = (int)$row['role_id'];
-             // if user already have full access to a role, continue (@todo merge groupIds)
-            if ( isset( $roleAssignmentData[$roleId] ) && $roleAssignmentData[$roleId] instanceof RoleAssignment )
+            $contentId = (int)$row['contentobject_id'];
+             // if user already have full access to a role, continue
+            if ( isset( $roleAssignmentData[$roleId][$contentId] )
+              && $roleAssignmentData[$roleId][$contentId] instanceof RoleAssignment )
                 continue;
 
             $limitIdentifier = $row['limit_identifier'];
             if ( !empty( $limitIdentifier ) )
             {
-                if ( !isset( $roleAssignmentData[$roleId][$limitIdentifier] ) )
+                if ( !isset( $roleAssignmentData[$roleId][$contentId][$limitIdentifier] ) )
                 {
-                    $roleAssignmentData[$roleId][$limitIdentifier] = new RoleAssignment(
+                    $roleAssignmentData[$roleId][$contentId][$limitIdentifier] = new RoleAssignment(
                         array(
                             'role' => $roles[$roleId],
-                            'contentId' => (int)$row['contentobject_id'],
+                            'contentId' => $contentId,
                             'limitationIdentifier' => $limitIdentifier,
                             'values' => array( $row['limit_value'] )
                         )
@@ -189,15 +191,15 @@ class Mapper
                 }
                 else
                 {
-                    $roleAssignmentData[$roleId][$limitIdentifier]->values[] = $row['limit_value'];
+                    $roleAssignmentData[$roleId][$contentId][$limitIdentifier]->values[] = $row['limit_value'];
                 }
             }
             else
             {
-                $roleAssignmentData[$roleId] = new RoleAssignment(
+                $roleAssignmentData[$roleId][$contentId] = new RoleAssignment(
                     array(
                         'role' => $roles[$roleId],
-                        'contentId' => (int)$row['contentobject_id']
+                        'contentId' => $contentId
                     )
                 );
             }

@@ -477,10 +477,18 @@ class UserHandlerTest extends HandlerTest
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
 
+        $handler->assignRole( 4, $obj->id, array( 'Section' => array( 1 ) ) );// 4: Users
         $handler->assignRole( 4, $obj->id );// 4: Users
+        $handler->assignRole( 4, $obj->id, array( 'Section' => array( 2 ) ) );// 4: Users
 
         $list = $handler->loadRoleAssignmentsByGroupId( 10, true );// 10: Anonymous User
-        $this->assertEquals( 1, count( $list ), "Duplicate RoleAssignments should be merged" );
+        $this->assertEquals( 2, count( $list ), "Duplicate RoleAssignments should be merged" );
+        $this->assertEquals( $obj->id, $list[0]->role->id );
+        $this->assertEquals( null, $list[0]->limitationIdentifier );
+        $this->assertEquals( null, $list[0]->values );
+        $this->assertEquals( $obj->id, $list[1]->role->id );
+        $this->assertEquals( null, $list[1]->limitationIdentifier );
+        $this->assertEquals( null, $list[1]->values );
     }
 
     /**

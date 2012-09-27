@@ -378,25 +378,26 @@ class UserHandler implements UserHandlerInterface
         $data = array();
         foreach ( $list as $new )
         {
-            // if user already have full access to a role, continue (@todo merge groupIds)
-            if ( isset( $data[$new->role->id] ) && $data[$new->role->id] instanceof RoleAssignment )
+            // if user already have full access to a role, continue
+            if ( isset( $data[$new->role->id][$new->contentId] )
+              && $data[$new->role->id][$new->contentId] instanceof RoleAssignment )
                 continue;
 
             if ( !empty( $new->limitationIdentifier ) )
             {
-                if ( !isset( $data[$new->role->id][$new->limitationIdentifier] ) )
+                if ( !isset( $data[$new->role->id][$new->contentId][$new->limitationIdentifier] ) )
                 {
                     $new->values = array( $new->values );
-                    $data[$new->role->id][$new->limitationIdentifier] = $new;
+                    $data[$new->role->id][$new->contentId][$new->limitationIdentifier] = $new;
                 }
                 else // merge limitation values
                 {
-                    $data[$new->role->id][$new->limitationIdentifier]->values[] = $new->values;
+                    $data[$new->role->id][$new->contentId][$new->limitationIdentifier]->values[] = $new->values;
                 }
             }
             else
             {
-                $data[$new->role->id] = $new;
+                $data[$new->role->id][$new->contentId] = $new;
             }
         }
 
