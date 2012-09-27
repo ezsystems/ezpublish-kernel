@@ -20,9 +20,9 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 abstract class RoleAssignment extends ValueObject
 {
     /**
-     * returns the limitation of the role assignment
+     * Returns the limitation of the role assignment
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation
+     * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation|null
      */
     abstract public function getRoleLimitation();
 

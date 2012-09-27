@@ -19,7 +19,7 @@ class UserRoleAssignment extends APIUserRoleAssignment
     /**
      * the limitation of this role assignment
      *
-     * @var \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation
+     * @var \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation|null
      */
     protected $limitation;
 
@@ -40,7 +40,7 @@ class UserRoleAssignment extends APIUserRoleAssignment
     /**
      * returns the limitation of the user role assignment
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation
+     * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation|null
      */
     public function getRoleLimitation()
     {
