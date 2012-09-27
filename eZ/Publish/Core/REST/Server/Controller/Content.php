@@ -16,7 +16,6 @@ use eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use eZ\Publish\API\Repository\Exceptions\BadStateException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 
@@ -375,10 +374,7 @@ class Content
 
         return new Values\CreatedVersion(
             array(
-                'version' => new Values\Version(
-                    $contentDraft->versionInfo,
-                    $urlValues['object']
-                )
+                'version' => $contentDraft
             )
         );
     }
@@ -407,10 +403,7 @@ class Content
 
         return new Values\CreatedVersion(
             array(
-                'version' => new Values\Version(
-                    $contentDraft->versionInfo,
-                    $urlValues['object']
-                )
+                'version' => $contentDraft
             )
         );
     }
