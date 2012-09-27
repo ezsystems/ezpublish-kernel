@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository;
-use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
-    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\SPI\IO\Handler as IoHandler,
     eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
