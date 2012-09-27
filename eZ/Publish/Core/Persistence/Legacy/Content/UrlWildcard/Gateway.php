@@ -21,14 +21,14 @@ abstract class Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\UrlWildcard $urlWildcard
      *
-     * @return int UrlWildcard id
+     * @return mixed UrlWildcard id
      */
     abstract public function insertUrlWildcard( UrlWildcard $urlWildcard );
 
     /**
      * Deletes the UrlWildcard with given $id
      *
-     * @param int $id
+     * @param mixed $id
      *
      * @return void
      */
@@ -37,7 +37,7 @@ abstract class Gateway
     /**
      * Loads an array with data about UrlWildcard with $id
      *
-     * @param int $id
+     * @param mixed $id
      *
      * @return array
      */
@@ -51,5 +51,5 @@ abstract class Gateway
      *
      * @return array
      */
-    abstract public function loadUrlWildcardsData( $offset, $limit );
+    abstract public function loadUrlWildcardsData( $offset = 0, $limit = -1 );
 }

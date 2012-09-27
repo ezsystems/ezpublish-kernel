@@ -19,9 +19,15 @@ use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway,
 class EzcDatabase extends Gateway
 {
     /**
+     * 2^30, since PHP_INT_MAX can cause overflows in DB systems, if PHP is run
+     * on 64 bit systems
+     */
+    const MAX_LIMIT = 1073741824;
+
+    /**
      * Database handler
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @var \ezcDbHandler $dbHandler
      */
     protected $dbHandler;
 
@@ -40,26 +46,29 @@ class EzcDatabase extends Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\UrlWildcard $urlWildcard
      *
-     * @return int
+     * @return mixed
      */
     public function insertUrlWildcard( UrlWildcard $urlWildcard )
     {
+        /** @var $query \ezcQueryInsert */
         $query = $this->dbHandler->createInsertQuery();
         $query->insertInto(
             $this->dbHandler->quoteTable( "ezurlwildcard" )
         )->set(
             $this->dbHandler->quoteColumn( "destination_url" ),
-            $query->bindValue( $urlWildcard->destinationUrl )
+            $query->bindValue( $urlWildcard->destinationUrl, null, \PDO::PARAM_STR )
         )->set(
             $this->dbHandler->quoteColumn( "id" ),
             $this->dbHandler->getAutoIncrementValue( "ezurlwildcard", "id" )
         )->set(
             $this->dbHandler->quoteColumn( "source_url" ),
-            $query->bindValue( $urlWildcard->sourceUrl )
+            $query->bindValue( $urlWildcard->sourceUrl, null, \PDO::PARAM_STR )
         )->set(
             $this->dbHandler->quoteColumn( "type" ),
             $query->bindValue(
-                $urlWildcard->forward ? 1 : 2
+                $urlWildcard->forward ? 1 : 2,
+                null,
+                \PDO::PARAM_INT
             )
         );
 
@@ -79,16 +88,17 @@ class EzcDatabase extends Gateway
      */
     public function deleteUrlWildcard( $id )
     {
-        $q = $this->dbHandler->createDeleteQuery();
-        $q->deleteFrom(
+        /** @var $query \ezcQueryDelete */
+        $query = $this->dbHandler->createDeleteQuery();
+        $query->deleteFrom(
             $this->dbHandler->quoteTable( "ezurlwildcard" )
         )->where(
-            $q->expr->eq(
+            $query->expr->eq(
                 $this->dbHandler->quoteColumn( "id" ),
-                $q->bindValue( $id, null, \PDO::PARAM_INT )
+                $query->bindValue( $id, null, \PDO::PARAM_INT )
             )
         );
-        $q->prepare()->execute();
+        $query->prepare()->execute();
     }
 
     /**
@@ -100,21 +110,22 @@ class EzcDatabase extends Gateway
      */
     public function loadUrlWildcardData( $id )
     {
-        $q = $this->dbHandler->createSelectQuery();
-        $q->select(
+        /** @var $query \ezcQuerySelect */
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
             "*"
         )->from(
             $this->dbHandler->quoteTable( "ezurlwildcard" )
         )->where(
-            $q->expr->eq(
+            $query->expr->eq(
                 $this->dbHandler->quoteColumn( "id" ),
-                $q->bindValue( $id, null, \PDO::PARAM_INT )
+                $query->bindValue( $id, null, \PDO::PARAM_INT )
             )
         );
-        $stmt = $q->prepare();
+        $stmt = $query->prepare();
         $stmt->execute();
 
-        return $stmt->fetchAll( \PDO::FETCH_ASSOC );
+        return $stmt->fetch( \PDO::FETCH_ASSOC );
     }
 
     /**
@@ -125,16 +136,24 @@ class EzcDatabase extends Gateway
      *
      * @return array
      */
-    public function loadUrlWildcardsData( $offset, $limit )
+    public function loadUrlWildcardsData( $offset = 0, $limit = -1 )
     {
-        $q = $this->dbHandler->createSelectQuery();
-        $q->select(
+        $limit = $limit === -1 ? self::MAX_LIMIT : $limit;
+
+        /** @var $query \ezcQuerySelect */
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
             "*"
         )->from(
             $this->dbHandler->quoteTable( "ezurlwildcard" )
-        )->limit( $limit > 0 ? $limit : PHP_INT_MAX, $offset );
+        )->limit(
+            $limit > 0
+                ? $limit
+                : self::MAX_LIMIT,
+            $offset
+        );
 
-        $stmt = $q->prepare();
+        $stmt = $query->prepare();
         $stmt->execute();
 
         return $stmt->fetchAll( \PDO::FETCH_ASSOC );
