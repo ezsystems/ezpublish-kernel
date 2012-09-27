@@ -100,9 +100,8 @@ abstract class UrlWildcardBase extends BaseServiceTest
     public function testCreate( $sourceUrl, $destinationUrl, $forward )
     {
         $service = $this->repository->getURLWildcardService();
-        $service->create( $sourceUrl, $destinationUrl, $forward );
+        $urlWildcard = $service->create( $sourceUrl, $destinationUrl, $forward );
 
-        $urlWildcard = $service->load( 1 );
         self::assertEquals(
             new URLWildcard(
                 array(
@@ -132,18 +131,7 @@ abstract class UrlWildcardBase extends BaseServiceTest
         $service->create( "fruit/*", "food/{1}", true );
         $this->repository->rollback();
 
-        $urlWildcard = $service->load( 1 );
-        self::assertEquals(
-            new URLWildcard(
-                array(
-                    "id" => 1,
-                    "sourceUrl" => "fruit/*",
-                    "destinationUrl" => "food/{1}",
-                    "forward" => true
-                )
-            ),
-            $urlWildcard
-        );
+        $service->load( 1 );
     }
 
     /**
