@@ -9,11 +9,11 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser,
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser,
     Symfony\Component\Config\Definition\Builder\NodeBuilder,
     Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class LocationView implements Parser
+class LocationView extends AbstractParser
 {
     /**
      * Adds semantic configuration definition.
@@ -53,12 +53,6 @@ class LocationView implements Parser
      */
     public function registerInternalConfig( array $config, ContainerBuilder $container )
     {
-        foreach ( $config['system'] as $sa => $settings )
-        {
-            if ( !empty( $settings['location_view'] ) )
-            {
-                $container->setParameter( "ezsettings.$sa.location_view", $settings['location_view'] );
-            }
-        }
+        $this->registerInternalConfigArray( 'location_view', $config, $container, self::MERGE_FROM_SECOND_LEVEL );
     }
 }
