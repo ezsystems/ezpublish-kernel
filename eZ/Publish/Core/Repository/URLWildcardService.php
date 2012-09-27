@@ -64,8 +64,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the $sourceUrl pattern already exists
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create url wildcards
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if the number of "*" patterns in $sourceUrl and
-     *          the number of {\d} placeholders in $destinationUrl doesn't match or
-     *          if the placeholders aren't a valid number sequence({1}/{2}/{3}), starting with 1.
+     *         the numbers in {\d} placeholders in $destinationUrl doesn't match.
      *
      * @param string $sourceUrl
      * @param string $destinationUrl
@@ -78,7 +77,6 @@ class URLWildcardService implements URLWildcardServiceInterface
         if ( $this->repository->hasAccess( 'content', 'urltranslator' ) !== true )
             throw new UnauthorizedException( 'content', 'urltranslator' );
 
-        // @todo This needs to be optimized
         $spiUrlWildcards = $this->urlWildcardHandler->loadAll();
         foreach ( $spiUrlWildcards as $wildcard )
         {
@@ -94,17 +92,12 @@ class URLWildcardService implements URLWildcardServiceInterface
         preg_match_all( '(\\*)', $sourceUrl, $patterns );
         preg_match_all( '(\{(\d+)\})', $destinationUrl, $placeholders );
 
-        if ( count( $patterns[0] ) !== count( $placeholders[1] ) )
-        {
-            throw new ContentValidationException( 'What error code should be used?' );
-        }
-
+        $patterns = array_map( 'intval', $patterns[0] );
         $placeholders = array_map( 'intval', $placeholders[1] );
-        sort( $placeholders );
 
-        if ( range( 1, count( $placeholders ) ) !== $placeholders  )
+        if ( count( $placeholders ) > 0 && max( $placeholders ) > count( $patterns ) )
         {
-            throw new ContentValidationException( 'What error code should be used?' );
+            throw new ContentValidationException(  );
         }
 
         $this->repository->beginTransaction();
@@ -293,7 +286,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLWildcard
      */
-    protected function buildUrlWildcardDomainObject( SPIUrlWildcard $wildcard )
+    private function buildUrlWildcardDomainObject( SPIUrlWildcard $wildcard )
     {
         return new URLWildcard(
             array(
