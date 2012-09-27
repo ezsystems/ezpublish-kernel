@@ -153,15 +153,23 @@ class TextLineTest extends StandardizedFieldTypeTest
                 null,
             ),
             array(
-                'sindelfingen',
-                new TextLineValue( 'sindelfingen' ),
+                " ",
+                null,
             ),
             array(
-                new TextLineValue( 'sindelfingen' ),
-                new TextLineValue( 'sindelfingen' ),
+                ' sindelfingen ',
+                new TextLineValue( ' sindelfingen ' ),
+            ),
+            array(
+                new TextLineValue( ' sindelfingen ' ),
+                new TextLineValue( ' sindelfingen ' ),
             ),
             array(
                 new TextLineValue( '' ),
+                null,
+            ),
+            array(
+                new TextLineValue( ' ' ),
                 null,
             ),
             array(

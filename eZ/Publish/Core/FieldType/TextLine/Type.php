@@ -204,7 +204,8 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
-        if ( $inputValue === null || $inputValue === "" )
+        if ( $inputValue === null
+            || ( is_string( $inputValue ) && trim( $inputValue, " " ) === "" ) )
         {
             return null;
         }
@@ -223,7 +224,8 @@ class Type extends FieldType
             );
         }
 
-        if ( $inputValue->text === null || $inputValue->text === "" )
+        if ( $inputValue->text === null
+            || ( is_string( $inputValue->text ) && trim( $inputValue->text, " " ) === "" ) )
         {
             return null;
         }
