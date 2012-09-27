@@ -26,7 +26,7 @@ class EzcDatabaseTest extends TestCase
     protected $gateway;
 
     protected $fixtureData = array(
-        0 => array (
+        0 => array(
             'id' => '1',
             'source_url' => 'developer/*',
             'destination_url' => 'dev/{1}',
@@ -38,7 +38,7 @@ class EzcDatabaseTest extends TestCase
             'destination_url' => 'repo/{1}',
             'type' => '2',
         ),
-        2 => array (
+        2 => array(
             'id' => '3',
             'source_url' => 'information/*',
             'destination_url' => 'info/{1}',
