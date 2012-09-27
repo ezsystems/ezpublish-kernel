@@ -836,7 +836,7 @@ class RoleService implements RoleServiceInterface
 
         return new Role(
             array(
-                'id' => (int) $role->id,
+                'id' => (int)$role->id,
                 'identifier' => $role->identifier,
                 //@todo: add main language code
                 'mainLanguageCode' => null,
