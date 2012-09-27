@@ -124,7 +124,10 @@ class Content
      */
     public function loadContent( RMF\Request $request )
     {
-        $urlValues = $this->urlHandler->parse( 'object', $request->path );
+        $questionMark = strpos( $request->path, '?' );
+        $requestPath = $questionMark !== false ? substr( $request->path, 0, $questionMark ) : $request->path;
+
+        $urlValues = $this->urlHandler->parse( 'object', $requestPath );
 
         $contentInfo = $this->contentService->loadContentInfo( $urlValues['object'] );
         $mainLocation = $this->locationService->loadLocation( $contentInfo->mainLocationId );
@@ -132,10 +135,16 @@ class Content
         $contentVersion = null;
         if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.content' )
         {
-            $contentVersion = $this->contentService->loadContent( $urlValues['object'] );
+            $languages = null;
+            if ( isset( $request->variables['languages'] ) )
+            {
+                $languages = explode( ',', $request->variables['languages'] );
+            }
+
+            $contentVersion = $this->contentService->loadContent( $urlValues['object'], $languages );
         }
 
-        return new Values\RestContent( $contentInfo, $mainLocation, $contentVersion );
+        return new Values\RestContent( $contentInfo, $mainLocation, $contentVersion, $request->path );
     }
 
     /**

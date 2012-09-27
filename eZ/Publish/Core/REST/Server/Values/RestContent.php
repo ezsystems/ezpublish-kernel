@@ -36,16 +36,25 @@ class RestContent
     public $currentVersion;
 
     /**
+     * Path that was used to load this content
+     *
+     * @var string
+     */
+    public $path;
+
+    /**
      * Construct
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\Location $mainLocation
      * @param \eZ\Publish\API\Repository\Values\Content\Content $currentVersion
+     * @param string $path
      */
-    public function __construct( ContentInfo $contentInfo, Location $mainLocation = null, Content $currentVersion = null )
+    public function __construct( ContentInfo $contentInfo, Location $mainLocation = null, Content $currentVersion = null, $path = null )
     {
         $this->contentInfo = $contentInfo;
         $this->currentVersion = $currentVersion;
         $this->mainLocation = $mainLocation;
+        $this->path = $path;
     }
 }

@@ -536,6 +536,9 @@ $dispatcher = new AuthenticatingDispatcher(
                 'DELETE'  => array( $contentController, 'deleteContent' ),
                 'COPY'    => array( $contentController, 'copyContent' ),
             ),
+            '(^/content/objects/[0-9]+\?languages=.+$)' => array(
+                'GET'     => array( $contentController, 'loadContent' ),
+            ),
             '(^/content/objects/[0-9]+/relations$)' => array(
                 'GET'     => array( $contentController, 'redirectCurrentVersionRelations' ),
             ),

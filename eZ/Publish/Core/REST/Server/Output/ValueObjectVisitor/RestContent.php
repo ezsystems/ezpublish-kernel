@@ -41,7 +41,9 @@ class RestContent extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'object', array( 'object' => $contentInfo->id ) )
+            $data->path === null
+                ? $this->urlHandler->generate( 'object', array( 'object' => $contentInfo->id ) )
+                : $data->path
         );
         $generator->endAttribute( 'href' );
 
