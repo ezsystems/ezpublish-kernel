@@ -9,14 +9,14 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser,
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser,
     Symfony\Component\Config\Definition\Builder\NodeBuilder,
     Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Configuration parser handling all basic configuration (aka "common")
  */
-class Common implements Parser
+class Common extends AbstractParser
 {
     /**
      * Adds semantic configuration definition.
@@ -73,32 +73,22 @@ class Common implements Parser
      */
     public function registerInternalConfig( array $config, ContainerBuilder $container )
     {
+        $this->registerInternalConfigArray(
+            'languages', $config, $container, self::UNIQUE
+        );
+        $this->registerInternalConfigArray( 'database', $config, $container );
+        foreach ( $config['siteaccess']['list'] as $sa )
+        {
+            $database = $container->getParameter( "ezsettings.$sa.database" );
+            $port = '';
+            if ( isset( $database['port'] ) && !empty( $database['port'] ) )
+                $port = ":{$database['port']}";
+
+            $dsn = "{$database['type']}://{$database['user']}:{$database['password']}@{$database['server']}$port/{$database['database_name']}";
+            $container->setParameter( "ezsettings.$sa.database.dsn", $dsn );
+        }
         foreach ( $config['system'] as $sa => $settings )
         {
-            if ( !empty( $settings['languages'] ) )
-            {
-                $container->setParameter( "ezsettings.$sa.languages", $settings['languages'] );
-            }
-
-            if ( !empty( $settings['database'] ) )
-            {
-                if ( isset( $settings['database']['dsn'] ) )
-                {
-                    $dsn = $settings['database']['dsn'];
-                }
-                else
-                {
-                    $port = '';
-                    if ( isset( $settings['database']['port'] ) && !empty( $settings['database']['port'] ) )
-                        $port = ":{$settings['database']['port']}";
-
-                    $dsn = "{$settings['database']['type']}://{$settings['database']['user']}:{$settings['database']['password']}@{$settings['database']['server']}$port/{$settings['database']['database_name']}";
-                }
-
-                $container->setParameter( "ezsettings.$sa.database.dsn", $dsn );
-            }
-
-            // urlAliasRouter
             $container->setParameter( "ezsettings.$sa.url_alias_router", $settings['url_alias_router'] );
             $container->setParameter( "ezsettings.$sa.var_dir", $settings['var_dir'] );
             $storageDir = rtrim( $settings['var_dir'], '/' ) . '/' . $settings['storage_dir'];

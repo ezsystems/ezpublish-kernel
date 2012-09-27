@@ -9,11 +9,11 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser,
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser,
     Symfony\Component\Config\Definition\Builder\NodeBuilder,
     Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class FieldTemplates implements Parser
+class FieldTemplates extends AbstractParser
 {
     /**
      * Adds semantic configuration definition.
@@ -50,13 +50,20 @@ class FieldTemplates implements Parser
      */
     public function registerInternalConfig( array $config, ContainerBuilder $container )
     {
-        foreach ( $config['system'] as $sa => $settings )
+
+        foreach ( $config['siteaccess']['groups'] as $group => $saArray )
         {
-            if ( !empty( $settings['field_templates'] ) )
+            if ( isset( $config['system'][$group]['field_templates'] ) )
             {
-                $container->setParameter( "ezsettings.$sa.field_templates", $settings['field_templates'] );
+                $container->setParameter(
+                    "ezsettings.$group.field_templates",
+                    $config['system'][$group]['field_templates']
+                );
             }
-        }
+        };
+        $this->registerInternalConfigArray(
+            'field_templates', $config, $container
+        );
     }
 
 
