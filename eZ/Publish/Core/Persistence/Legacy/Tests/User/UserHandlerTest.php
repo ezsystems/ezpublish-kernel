@@ -858,7 +858,7 @@ class UserHandlerTest extends TestCase
             },
             true
         ) );
-        $this->assertEquals( 6, count( $policies ) );
+        $this->assertEquals( 8, count( $policies ) );
     }
 
     public function testLoadRoleAssignments()
