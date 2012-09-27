@@ -145,6 +145,30 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * Loads role assignments for specified content ID
+     *
+     * @param mixed $groupId
+     * @param bool $inherited
+     *
+     * @return array
+     */
+    public function loadRoleAssignmentsByGroupId( $groupId, $inherited = false )
+    {
+        try
+        {
+            return $this->innerGateway->loadRoleAssignmentsByGroupId( $groupId, $inherited );
+        }
+        catch ( \ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( \PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
      * Returns the user policies associated with the user
      *
      * @param mixed $userId

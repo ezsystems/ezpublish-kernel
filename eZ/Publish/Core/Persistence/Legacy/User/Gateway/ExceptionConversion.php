@@ -186,25 +186,4 @@ class ExceptionConversion extends Gateway
             throw new \RuntimeException( 'Database error', 0, $e );
         }
     }
-
-    /**
-     * Loads role assignments for specified content ID
-     *
-     * @param mixed $contentId
-     */
-    public function loadRoleAssignmentsByGroupId( $contentId )
-    {
-        try
-        {
-            return $this->innerGateway->loadRoleAssignmentsByGroupId( $contentId );
-        }
-        catch ( \ezcDbException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( \PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-    }
 }
