@@ -324,15 +324,33 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Returns a list of role assignments for the given user or user group id
+     * Load roles assignments Role
      *
-     * @param mixed $contentId
+     * Role Assignments with same roleId and limitationIdentifier will be merged together into one.
+     *
+     * @param mixed $roleId
      *
      * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
      */
-    public function getRoleAssignments( $contentId )
+    public function loadRoleAssignmentsByRoleId( $roleId )
     {
-        $data = $this->userGateway->loadRoleAssignments( $contentId );
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+    }
+
+    /**
+     * Load roles assignments to a user/group
+     *
+     * Role Assignments with same roleId and limitationIdentifier will be merged together into one.
+     *
+     * @param mixed $groupId In legacy storage engine this is the content object id roles are assigned to in ezuser_role.
+     *                      By the nature of legacy this can currently also be used to get by $userId.
+     * @param bool $inherit If true also return inherited role assigments from user groups.
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
+     */
+    public function loadRoleAssignmentsByGroupId( $groupId, $inherit = false )
+    {
+        $data = $this->roleGateway->loadRoleAssignmentsByGroupId( $groupId, $inherit );
 
         return $this->mapper->mapRoleAssignments( $data );
     }

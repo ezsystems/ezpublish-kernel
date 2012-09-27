@@ -31,14 +31,14 @@ class RoleAssignment extends ValueObject
     /**
      * One of 'Subtree' or 'Section'
      *
-     * @var string
+     * @var string|null
      */
     public $limitationIdentifier;
 
     /**
      * The subtree paths or section ids.
      *
-     * @var mixed
+     * @var mixed[]|null
      */
     public $values;
 }

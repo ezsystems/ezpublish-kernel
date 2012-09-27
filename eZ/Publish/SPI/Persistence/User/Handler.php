@@ -109,6 +109,30 @@ interface Handler
     public function loadRolesByGroupId( $groupId );
 
     /**
+     * Load roles assignments Role
+     *
+     * Role Assignments with same roleId and limitationIdentifier will be merged together into one.
+     *
+     * @param mixed $roleId
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
+     */
+    public function loadRoleAssignmentsByRoleId( $roleId );
+
+    /**
+     * Load roles assignments to a user/group
+     *
+     * Role Assignments with same roleId and limitationIdentifier will be merged together into one.
+     *
+     * @param mixed $groupId In legacy storage engine this is the content object id roles are assigned to in ezuser_role.
+     *                      By the nature of legacy this can currently also be used to get by $userId.
+     * @param bool $inherit If true also return inherited role assigments from user groups.
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
+     */
+    public function loadRoleAssignmentsByGroupId( $groupId, $inherit = false );
+
+    /**
      * Update role
      *
      * @param \eZ\Publish\SPI\Persistence\User\RoleUpdateStruct $role
@@ -193,13 +217,4 @@ interface Handler
      * @param mixed $roleId
      */
     public function unAssignRole( $contentId, $roleId );
-
-    /**
-     * Returns a list of role assignments for the given user or user group id
-     *
-     * @param mixed $contentId
-     *
-     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
-     */
-    public function getRoleAssignments( $contentId );
 }

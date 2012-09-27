@@ -365,6 +365,168 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
+     * Test loadRoleAssignments function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     */
+    public function testLoadRoleAssignmentsByGroupId()
+    {
+        $handler = $this->persistenceHandler->userHandler();
+
+        $this->assertEquals(
+            array(
+                new RoleAssignment(
+                    array(
+                        'roleId' => 1,
+                        'contentId' => 11,
+                        'limitationIdentifier' => null,
+                        'values' => null
+                    )
+                )
+            ),
+            $handler->loadRoleAssignmentsByGroupId( 11 )
+        );
+    }
+
+
+    /**
+     * Test loadRoleAssignments function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     */
+    public function testLoadRoleAssignmentsNotFound()
+    {
+        $handler = $this->persistenceHandler->userHandler();
+        $list =  $handler->loadRoleAssignmentsByGroupId( 999 );
+        $this->assertEquals( array(), $list );
+    }
+
+    /**
+     * Test loadRoleAssignments function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     */
+    public function testLoadRoleAssignmentsInherited()
+    {
+        $this->clearRolesByGroupId( 42 );
+
+        $handler = $this->persistenceHandler->userHandler();
+
+        $list = $handler->loadRoleAssignmentsByGroupId( 10, true );// 10: Anonymous User
+        $this->assertEquals( 0, count( $list ) );
+
+        $obj = $handler->createRole( self::getRole() );
+        $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
+
+        $list = $handler->loadRoleAssignmentsByGroupId( 10, true );// 10: Anonymous User
+        $this->assertEquals( 1, count( $list ) );
+
+        // add a policy and check that it is part of returned permission after re fetch
+        $handler->addPolicy( $obj->id, new Policy( array( 'module' => 'Foo',
+                                                     'function' => 'Bar',
+                                                     'limitations' => array( 'Limit' => array( 'Test' ) ) ) ) );
+        $list = $handler->loadRoleAssignmentsByGroupId( 10, true );
+        $this->assertEquals( 1, count( $list ) );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\RoleAssignment', $list[0] );
+        $this->assertEquals( $obj->id, $list[0]->roleId );
+        $this->assertEquals( 42, $list[0]->contentId );
+        $this->assertEquals( null, $list[0]->limitationIdentifier );
+        $this->assertEquals( null, $list[0]->values );
+    }
+
+    /**
+     * Test loadRoleAssignments function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     */
+    public function testLoadRoleAssignmentsInheritedDeep()
+    {
+        $this->clearRolesByGroupId( 42 );
+
+        $handler = $this->persistenceHandler->userHandler();
+        $obj = $handler->createRole( self::getRole() );
+        $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
+
+        $role = new Role();
+        $role->identifier = 'test2';
+        $role->name = array( 'eng-GB' => 'Test2' );
+        $role->description = array( 'eng-GB' => 'Test2 role' );
+        $role->policies = array(
+            new Policy( array( 'module' => 'tag', 'function' => '*', 'limitations' => '*' ) ),
+        );
+        $obj = $handler->createRole( $role );
+        $handler->assignRole( 4, $obj->id );// 4: Users
+
+        $list = $handler->loadRoleAssignmentsByGroupId( 10, true );// 10: Anonymous User
+        $this->assertEquals( 2, count( $list ) );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\RoleAssignment', $list[1] );
+        $this->assertEquals( $obj->id, $list[1]->roleId );
+        $this->assertEquals( 4, $list[1]->contentId );
+    }
+
+    /**
+     * Test loadRoleAssignments function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     */
+    public function testLoadRoleAssignmentsInheritedDuplicates()
+    {
+        $this->clearRolesByGroupId( 42 );
+
+        $handler = $this->persistenceHandler->userHandler();
+        $obj = $handler->createRole( self::getRole() );
+        $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
+
+        $handler->assignRole( 4, $obj->id );// 4: Users
+
+        $list = $handler->loadRoleAssignmentsByGroupId( 10, true );// 10: Anonymous User
+        $this->assertEquals( 1, count( $list ), "Duplicate RoleAssignments should be merged" );
+    }
+
+    /**
+     * Test loadRoleAssignments function
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     */
+    public function testLoadRoleAssignmentsInheritedNotFound()
+    {
+        $handler = $this->persistenceHandler->userHandler();
+        $list =  $handler->loadRoleAssignmentsByGroupId( 999, true );
+        $this->assertEquals( array(), $list );
+    }
+
+    /**
+     * Test loadRoleAssignments function
+     *
+     * Make sure several policies that have same values are not merged (when not same entity)
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     */
+    public function testLoadRoleAssignmentsInheritedWithSameValueRoleAssignments()
+    {
+        $this->clearRolesByGroupId( 42 );
+
+        $handler = $this->persistenceHandler->userHandler();
+        $obj = $handler->createRole( self::getRole() );
+        $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
+
+        $role = new Role();
+        $role->identifier = 'test2';
+        $role->name = array( 'eng-GB' => 'Test2' );
+        $role->description = array( 'eng-GB' => 'Test2 role' );
+        $role->policies = array(
+            new Policy( array( 'module' => $obj->policies[2]->module,
+                               'function' => $obj->policies[2]->function,
+                               'limitations' => $obj->policies[2]->limitations, ) ),
+        );
+        $obj = $handler->createRole( $role );
+        $handler->assignRole( 4, $obj->id );// 4: Users
+
+        $list = $handler->loadRoleAssignmentsByGroupId( 10, true );// 10: Anonymous User
+        $this->assertEquals( 2, count( $list ) );
+    }
+
+    /**
      * Test update function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::updateRole
@@ -493,7 +655,7 @@ class UserHandlerTest extends HandlerTest
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
 
-        $roleAssignments = $handler->getRoleAssignments( 42 );
+        $roleAssignments = $handler->loadRoleAssignmentsByGroupId( 42 );
         // See if our role was properly assigned to the user group
         foreach ( $roleAssignments as $roleAssignment )
         {
@@ -553,7 +715,7 @@ class UserHandlerTest extends HandlerTest
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
 
-        $roleAssignments = $handler->getRoleAssignments( 42 );
+        $roleAssignments = $handler->loadRoleAssignmentsByGroupId( 42 );
         // See if our role was properly assigned to the user group
         $roleAssigned = false;
         foreach ( $roleAssignments as $roleAssignment )
@@ -569,7 +731,7 @@ class UserHandlerTest extends HandlerTest
 
         $handler->unAssignRole( 42, $obj->id );// 42: Anonymous Users
 
-        $roleAssignments = $handler->getRoleAssignments( 42 );
+        $roleAssignments = $handler->loadRoleAssignmentsByGroupId( 42 );
         foreach ( $roleAssignments as $roleAssignment )
         {
             if ( $roleAssignment->roleId == $obj->id )
@@ -757,30 +919,6 @@ class UserHandlerTest extends HandlerTest
 
         $list = $handler->loadPoliciesByUserId( 10 );// 10: Anonymous User
         $this->assertEquals( 4, count( $list ) );
-    }
-
-    /**
-     * Test getRoleAssignments function
-     *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::getRoleAssignments
-     */
-    public function testGetRoleAssignments()
-    {
-        $handler = $this->persistenceHandler->userHandler();
-
-        $this->assertEquals(
-            array(
-                new RoleAssignment(
-                    array(
-                        'roleId' => 1,
-                        'contentId' => 11,
-                        'limitationIdentifier' => null,
-                        'values' => null
-                    )
-                )
-            ),
-            $handler->getRoleAssignments( 11 )
-        );
     }
 
     /**

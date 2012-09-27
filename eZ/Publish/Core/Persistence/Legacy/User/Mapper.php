@@ -162,16 +162,19 @@ class Mapper
         foreach ( $data as $row )
         {
             $roleId = (int)$row['role_id'];
-            $contentId = (int)$row['contentobject_id'];
+             // if user already have full access to a role, continue (@todo merge groupIds)
+            if ( isset( $roleAssignmentData[$roleId] ) && $roleAssignmentData[$roleId] instanceof RoleAssignment )
+                continue;
+
             $limitIdentifier = $row['limit_identifier'];
             if ( !empty( $limitIdentifier ) )
             {
-                if ( !isset( $roleAssignmentData[$roleId][$contentId][$limitIdentifier] ) )
+                if ( !isset( $roleAssignmentData[$roleId][$limitIdentifier] ) )
                 {
-                    $roleAssignmentData[$roleId][$contentId][$limitIdentifier] = new RoleAssignment(
+                    $roleAssignmentData[$roleId][$limitIdentifier] = new RoleAssignment(
                         array(
                             'roleId' => $roleId,
-                            'contentId' => $contentId,
+                            'contentId' => (int)$row['contentobject_id'],
                             'limitationIdentifier' => $limitIdentifier,
                             'values' => array( $row['limit_value'] )
                         )
@@ -179,15 +182,15 @@ class Mapper
                 }
                 else
                 {
-                    $roleAssignmentData[$roleId][$contentId][$limitIdentifier]->values[] = $row['limit_value'];
+                    $roleAssignmentData[$roleId][$limitIdentifier]->values[] = $row['limit_value'];
                 }
             }
             else
             {
-                $roleAssignmentData[$roleId][$contentId] = new RoleAssignment(
+                $roleAssignmentData[$roleId] = new RoleAssignment(
                     array(
                         'roleId' => $roleId,
-                        'contentId' => $contentId
+                        'contentId' => (int)$row['contentobject_id']
                     )
                 );
             }

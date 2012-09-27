@@ -308,6 +308,54 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Loads role assignments for specified content ID
+     *
+     * @param mixed $groupId
+     * @param bool $inherited
+     *
+     * @return array
+     */
+    public function loadRoleAssignmentsByGroupId( $groupId, $inherited = false )
+    {
+
+        $query = $this->handler->createSelectQuery();
+        $query->select(
+            $this->handler->quoteColumn( 'contentobject_id' ),
+            $this->handler->quoteColumn( 'limit_identifier' ),
+            $this->handler->quoteColumn( 'limit_value' ),
+            $this->handler->quoteColumn( 'role_id' )
+        )->from(
+            $this->handler->quoteTable( 'ezuser_role' )
+        );
+
+        if ( $inherited )
+        {
+            $groupIds = $this->fetchUserGroups( $groupId );
+            $groupIds[] = $groupId;
+            $query->where(
+                $query->expr->in(
+                    $this->handler->quoteColumn( 'contentobject_id' ),
+                    $groupIds
+                )
+            );
+        }
+        else
+        {
+            $query->where(
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'contentobject_id' ),
+                    $query->bindValue( $groupId, null, \PDO::PARAM_INT )
+                )
+            );
+        }
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Returns the user policies associated with the user
      *
      * @param mixed $userId

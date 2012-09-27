@@ -57,6 +57,16 @@ abstract class Gateway
     abstract public function loadRolesForContentObjects( $contentIds );
 
     /**
+     * Loads role assignments for specified content ID
+     *
+     * @param mixed $groupId
+     * @param bool $inherited
+     *
+     * @return array
+     */
+    abstract public function loadRoleAssignmentsByGroupId( $groupId, $inherited = false );
+
+    /**
      * Returns the user policies associated with the user
      *
      * @param mixed $userId

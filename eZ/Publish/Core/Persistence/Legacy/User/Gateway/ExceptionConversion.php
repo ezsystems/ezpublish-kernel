@@ -192,11 +192,11 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $contentId
      */
-    public function loadRoleAssignments( $contentId )
+    public function loadRoleAssignmentsByGroupId( $contentId )
     {
         try
         {
-            return $this->innerGateway->loadRoleAssignments( $contentId );
+            return $this->innerGateway->loadRoleAssignmentsByGroupId( $contentId );
         }
         catch ( \ezcDbException $e )
         {

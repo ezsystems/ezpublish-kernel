@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\InMemory;
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
     eZ\Publish\SPI\Persistence\User,
     eZ\Publish\SPI\Persistence\User\Role,
+    eZ\Publish\SPI\Persistence\User\RoleAssignment,
     eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
     eZ\Publish\SPI\Persistence\User\Policy,
     eZ\Publish\SPI\Persistence\Content,
@@ -258,6 +259,146 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
+     * Load roles assignments Role
+     *
+     * Role Assignments with same roleId and limitationIdentifier will be merged together into one.
+     *
+     * @param mixed $roleId
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
+     */
+    public function loadRoleAssignmentsByRoleId( $roleId )
+    {
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+    }
+
+    /**
+     * Load roles assignments to a user/group
+     *
+     * Role Assignments with same roleId and limitationIdentifier will be merged together into one.
+     *
+     * @param mixed $groupId In legacy storage engine this is the content object id roles are assigned to in ezuser_role.
+     *                      By the nature of legacy this can currently also be used to get by $userId.
+     * @param bool $inherit If true also return inherited role assigments from user groups.
+     *
+     * @throws \LogicException Internal data corruption error
+     * @uses getRoleAssignmentForContent()
+     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
+     */
+    public function loadRoleAssignmentsByGroupId( $groupId, $inherit = false )
+    {
+        if ( $inherit === false )
+            return $this->backend->find( 'User\\RoleAssignment', array( 'contentId' => $groupId ) );
+
+
+        $list = $this->backend->find(
+            'Content',
+            array( 'id' => $groupId ),
+            array(
+                'locations' => array(
+                    'type' => 'Content\\Location',
+                    'match' => array( 'contentId' => 'id' )
+                ),
+                'contentInfo' => array(
+                    'type' => 'Content\\ContentInfo',
+                    'match' => array( 'id' => 'id' ),
+                    'single' => true
+                )
+            )
+        );
+
+        if ( !$list )
+            return array();
+
+        $roleAssignmentData = array();
+        $this->getRoleAssignmentForContent( $groupId, $roleAssignmentData );
+
+        // crawl up path on all locations
+        foreach ( $list[0]->locations as $location )
+        {
+            $parentIds = array_reverse( explode( '/', trim( $location->pathString, '/' ) ) );
+            foreach ( $parentIds as $parentId )
+            {
+                if ( $parentId == $location->id )
+                    continue;
+
+                $list = $this->backend->find(
+                    'Content',
+                    array( 'locations' => array( 'id' => $parentId ) ),
+                    array(
+                        'locations' => array(
+                            'type' => 'Content\\Location',
+                            'match' => array( 'contentId' => 'id' )
+                        ),
+                        'contentInfo' => array(
+                            'type' => 'Content\\ContentInfo',
+                            'match' => array( 'id' => 'id' ),
+                            'single' => true
+                        )
+                    )
+                );
+
+                if ( isset( $list[1] ) )
+                    throw new LogicException( "'content tree' logic error, there is more than one item with parentId: $parentId" );
+                if ( $list )
+                    $this->getRoleAssignmentForContent( $list[0]->contentInfo->id, $roleAssignmentData );
+            }
+        }
+        $roleAssignments = array();
+        array_walk_recursive(
+            $roleAssignmentData,
+            function( $roleAssignment ) use ( &$roleAssignments )
+            {
+                $roleAssignments[] = $roleAssignment;
+            }
+        );
+
+        return $roleAssignments;
+    }
+
+    /**
+     * @param mixed $contentId
+     * @param \eZ\Publish\SPI\Persistence\User\RoleAssignment[] $data
+     *
+     * @return void
+     */
+    protected function getRoleAssignmentForContent( $contentId, array &$data )
+    {
+        /** fetch possible roles assigned to this object
+         * @var \eZ\Publish\SPI\Persistence\User\RoleAssignment[] $list
+         */
+        $list = $this->backend->find(
+            'User\\RoleAssignment',
+            array( 'contentId' => $contentId )
+        );
+
+        // merge policies
+        foreach ( $list as $new )
+        {
+            // if user already have full access to a role, continue (@todo merge groupIds)
+            if ( isset( $data[$new->roleId] ) && $data[$new->roleId] instanceof RoleAssignment )
+                continue;
+
+            if ( !empty( $new->limitationIdentifier ) )
+            {
+                if ( !isset( $data[$new->roleId][$new->limitationIdentifier] ) )
+                {
+                    $new->values = array( $new->values );
+                    $data[$new->roleId][$new->limitationIdentifier] = $new;
+                }
+                else // merge limitation values
+                {
+                    $data[$new->roleId][$new->limitationIdentifier]->values[] = $new->values;
+                }
+            }
+            else
+            {
+                $data[$new->roleId] = $new;
+            }
+        }
+    }
+
+    /**
      * Update role
      *
      * @param \eZ\Publish\SPI\Persistence\User\RoleUpdateStruct $role
@@ -370,7 +511,7 @@ class UserHandler implements UserHandlerInterface
             throw new NotFound( 'User', $userId );
 
         $policies = array();
-        $this->getPermissionsForObject( $list[0], 4, $policies );// @deprecated Roles assigned to user
+        $this->getPermissionsForObject( $list[0], 4, $policies );
 
         // crawl up path on all locations
         foreach ( $list[0]->locations as $location )
@@ -410,7 +551,9 @@ class UserHandler implements UserHandlerInterface
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param mixed $typeId
      * @param array $policies
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $content is not of user_group Content Type
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $content is not type $typeId
+     * @return void
      */
     protected function getPermissionsForObject( Content $content, $typeId, array &$policies )
     {
@@ -545,17 +688,5 @@ class UserHandler implements UserHandlerInterface
 
         $role->groupIds = array_values( array_diff( $role->groupIds, array( $contentId ) ) );
         $this->backend->update( 'User\\Role', $roleId, (array)$role );
-    }
-
-    /**
-     * Returns a list of role assignments for the given user or user group id
-     *
-     * @param mixed $contentId
-     *
-     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
-     */
-    public function getRoleAssignments( $contentId )
-    {
-        return $this->backend->find( 'User\\RoleAssignment', array( 'contentId' => $contentId ) );
     }
 }

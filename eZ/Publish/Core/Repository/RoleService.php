@@ -657,7 +657,7 @@ class RoleService implements RoleServiceInterface
             {
                 $userGroup = $userService->loadUserGroup( $groupId );
 
-                $spiRoleAssignments = $userHandler->getRoleAssignments( $userGroup->id );
+                $spiRoleAssignments = $userHandler->loadRoleAssignmentsByGroupId( $userGroup->id );
                 foreach ( $spiRoleAssignments as $spiRoleAssignment )
                 {
                     if ( $spiRoleAssignment->roleId == $role->id )
@@ -676,7 +676,7 @@ class RoleService implements RoleServiceInterface
                 {
                     $user = $userService->loadUser( $groupId );
 
-                    $spiRoleAssignments = $userHandler->getRoleAssignments( $user->id );
+                    $spiRoleAssignments = $userHandler->loadRoleAssignmentsByGroupId( $user->id );
                     foreach ( $spiRoleAssignments as $spiRoleAssignment )
                     {
                         if ( $spiRoleAssignment->roleId == $role->id )
@@ -717,7 +717,7 @@ class RoleService implements RoleServiceInterface
             throw new UnauthorizedException( 'role', 'read' );
 
         $roleAssignments = array();
-        $spiRoleAssignments = $this->userHandler->getRoleAssignments( $user->id );
+        $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByGroupId( $user->id );
         foreach ( $spiRoleAssignments as $spiRoleAssignment )
         {
             $roleAssignments[] = $this->buildDomainUserRoleAssignmentObject( $spiRoleAssignment, $user );
@@ -744,7 +744,7 @@ class RoleService implements RoleServiceInterface
             throw new UnauthorizedException( 'role', 'read' );
 
         $roleAssignments = array();
-        $spiRoleAssignments = $this->userHandler->getRoleAssignments( $userGroup->id );
+        $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByGroupId( $userGroup->id );
         foreach ( $spiRoleAssignments as $spiRoleAssignment )
         {
             $roleAssignments[] = $this->buildDomainUserGroupRoleAssignmentObject( $spiRoleAssignment, $userGroup );

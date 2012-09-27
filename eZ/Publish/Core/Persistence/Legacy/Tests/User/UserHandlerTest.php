@@ -861,7 +861,7 @@ class UserHandlerTest extends TestCase
         $this->assertEquals( 8, count( $policies ) );
     }
 
-    public function testLoadRoleAssignments()
+    public function testLoadRoleAssignmentsByGroupId()
     {
         $this->insertDatabaseFixture( __DIR__ . '/../../../../Repository/Tests/Service/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
         $handler = $this->getUserHandler();
@@ -881,7 +881,42 @@ class UserHandlerTest extends TestCase
                     )
                 )
             ),
-            $handler->getRoleAssignments( 11 )
+            $handler->loadRoleAssignmentsByGroupId( 11 )// 11: Members
+        );
+
+        $this->assertEquals(
+            array(
+                new Persistence\User\RoleAssignment(
+                    array(
+                        'roleId' => 1,
+                        'contentId' => 42
+                    )
+                )
+            ),
+            $handler->loadRoleAssignmentsByGroupId( 42 )// 42: Anonymous Users
+        );
+
+        $this->assertEquals(
+            array(),
+            $handler->loadRoleAssignmentsByGroupId( 10 )// 10: Anonymous User
+        );
+    }
+
+    public function testLoadRoleAssignmentsByGroupIdInherited()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/../../../../Repository/Tests/Service/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
+        $handler = $this->getUserHandler();
+
+        $this->assertEquals(
+            array(
+                new Persistence\User\RoleAssignment(
+                    array(
+                        'roleId' => 1,
+                        'contentId' => 42
+                    )
+                )
+            ),
+            $handler->loadRoleAssignmentsByGroupId( 10, true )// 10: Anonymous User
         );
     }
 
@@ -907,7 +942,7 @@ class UserHandlerTest extends TestCase
                     )
                 )
             ),
-            $handler->getRoleAssignments( 13 )
+            $handler->loadRoleAssignmentsByGroupId( 13 )
         );
     }
 }

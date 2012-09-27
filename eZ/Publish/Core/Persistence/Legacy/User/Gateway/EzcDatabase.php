@@ -293,32 +293,4 @@ class EzcDatabase extends Gateway
             );
         $query->prepare()->execute();
     }
-
-    /**
-     * Loads role assignments for specified content ID
-     *
-     * @param mixed $contentId
-     */
-    public function loadRoleAssignments( $contentId )
-    {
-        $query = $this->handler->createSelectQuery();
-        $query->select(
-            $this->handler->quoteColumn( 'contentobject_id' ),
-            $this->handler->quoteColumn( 'limit_identifier' ),
-            $this->handler->quoteColumn( 'limit_value' ),
-            $this->handler->quoteColumn( 'role_id' )
-        )->from(
-            $this->handler->quoteTable( 'ezuser_role' )
-        )->where(
-            $query->expr->eq(
-                $this->handler->quoteColumn( 'contentobject_id' ),
-                $query->bindValue( $contentId, null, \PDO::PARAM_INT )
-            )
-        );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        return $statement->fetchAll( \PDO::FETCH_ASSOC );
-    }
 }
