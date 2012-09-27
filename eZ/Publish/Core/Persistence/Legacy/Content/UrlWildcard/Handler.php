@@ -91,15 +91,14 @@ class Handler implements BaseUrlWildcardHandler
      */
     public function load( $id )
     {
-        $urlWildcards = $this->mapper->extractUrlWildcardsFromRows(
-            $this->gateway->loadUrlWildcardData( $id )
-        );
+        $row = $this->gateway->loadUrlWildcardData( $id );
 
-        if ( count( $urlWildcards ) < 1 )
+        if ( empty( $row ) )
         {
             throw new NotFoundException( "UrlWildcard", $id );
         }
-        return reset( $urlWildcards );
+
+        return $this->mapper->extractUrlWildcardFromRow( $row );
     }
 
     /**

@@ -37,6 +37,25 @@ class Mapper
     }
 
     /**
+     * Extracts UrlWildcard object from given database $row
+     *
+     * @param array $row
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard
+     */
+    public function extractUrlWildcardFromRow( array $row )
+    {
+        $urlWildcard = new UrlWildcard();
+
+        $urlWildcard->destinationUrl = $row["destination_url"];
+        $urlWildcard->id = (int)$row["id"];
+        $urlWildcard->sourceUrl = $row["source_url"];
+        $urlWildcard->forward = (int)$row["type"] === 1 ? true : false;
+
+        return $urlWildcard;
+    }
+
+    /**
      * Extracts UrlWildcard objects from database $rows
      *
      * @param array $rows
@@ -49,14 +68,7 @@ class Mapper
 
         foreach ( $rows as $row )
         {
-            $urlWildcard = new UrlWildcard();
-
-            $urlWildcard->destinationUrl = $row["destination_url"];
-            $urlWildcard->id = (int)$row["id"];
-            $urlWildcard->sourceUrl = $row["source_url"];
-            $urlWildcard->forward = (int)$row["type"] === 1 ? true : false;
-
-            $urlWildcards[] = $urlWildcard;
+            $urlWildcards[] = $this->extractUrlWildcardFromRow( $row );
         }
 
         return $urlWildcards;
