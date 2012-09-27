@@ -560,6 +560,9 @@ $dispatcher = new AuthenticatingDispatcher(
                 'COPY'    => array( $contentController, 'createDraftFromVersion' ),
                 'PUBLISH' => array( $contentController, 'publishVersion' ),
             ),
+            '(^/content/objects/[0-9]+/versions/[0-9]+\?languages=.+$)' => array(
+                'PATCH'   => array( $contentController, 'updateVersion' ),
+            ),
             '(^/content/objects/[0-9]+/currentversion$)' => array(
                 'GET'     => array( $contentController, 'redirectCurrentVersion' ),
                 'COPY'    => array( $contentController, 'createDraftFromCurrentVersion' ),

@@ -425,14 +425,17 @@ class Content
      */
     public function updateVersion( RMF\Request $request )
     {
-        $urlValues = $this->urlHandler->parse( 'objectVersion', $request->path );
+        $questionMark = strpos( $request->path, '?' );
+        $requestPath = $questionMark !== false ? substr( $request->path, 0, $questionMark ) : $request->path;
+
+        $urlValues = $this->urlHandler->parse( 'objectVersion', $requestPath );
 
         $contentUpdateStruct = $this->inputDispatcher->parse(
             new Message(
                 array(
                     'Content-Type' => $request->contentType,
                     // @todo Needs refactoring! Temporary solution so parser has access to URL
-                    'Url' => $request->path
+                    'Url' => $requestPath
                 ),
                 $request->body
             )
@@ -448,7 +451,16 @@ class Content
             throw new ForbiddenException( 'Only version in status DRAFT can be updated' );
         }
 
-        return $this->contentService->updateContent( $versionInfo, $contentUpdateStruct );
+        $this->contentService->updateContent( $versionInfo, $contentUpdateStruct );
+
+        $languages = null;
+        if ( isset( $request->variables['languages'] ) )
+        {
+            $languages = explode( ',', $request->variables['languages'] );
+        }
+
+        // Reload the content to handle languages GET parameter
+        return $this->contentService->loadContent( $urlValues['object'], $languages, $versionInfo->versionNo );
     }
 
     /**
