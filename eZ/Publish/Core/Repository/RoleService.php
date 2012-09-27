@@ -862,8 +862,7 @@ class RoleService implements RoleServiceInterface
         {
             foreach ( $policy->limitations as $limitationIdentifier => $limitationValues )
             {
-                $limitation = $this->getLimitationType( $limitationIdentifier )->buildValue( array() );
-                $limitation->limitationValues = $limitationValues;
+                $limitation = $this->getLimitationType( $limitationIdentifier )->buildValue( $limitationValues );
                 $policyLimitations[] = $limitation;
             }
         }
@@ -893,8 +892,9 @@ class RoleService implements RoleServiceInterface
         $limitation = null;
         if ( !empty( $spiRoleAssignment->limitationIdentifier ) )
         {
-            $limitation = $this->getLimitationType( $spiRoleAssignment->limitationIdentifier )->buildValue( array() );
-            $limitation->limitationValues = $spiRoleAssignment->values;
+            $limitation = $this
+                ->getLimitationType( $spiRoleAssignment->limitationIdentifier )
+                ->buildValue( $spiRoleAssignment->values );
         }
 
         $user = $user ?: $this->repository->getUserService()->loadUser( $spiRoleAssignment->contentId );
@@ -923,8 +923,9 @@ class RoleService implements RoleServiceInterface
         $limitation = null;
         if ( !empty( $spiRoleAssignment->limitationIdentifier ) )
         {
-            $limitation = $this->getLimitationType( $spiRoleAssignment->limitationIdentifier )->buildValue( array() );
-            $limitation->limitationValues = $spiRoleAssignment->values;
+            $limitation = $this
+                ->getLimitationType( $spiRoleAssignment->limitationIdentifier )
+                ->buildValue( $spiRoleAssignment->values );
         }
 
         $userGroup = $userGroup ?: $this->repository->getUserService()->loadUserGroup( $spiRoleAssignment->contentId );
