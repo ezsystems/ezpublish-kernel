@@ -946,5 +946,25 @@ class UserHandlerTest extends TestCase
             ),
             $handler->loadRoleAssignmentsByGroupId( 13 )
         );
+
+        $this->assertEquals(
+            array(
+                new Persistence\User\RoleAssignment(
+                    array(
+                        'role' => $handler->loadRole( 3 ),
+                        'contentId' => 13,
+                        'limitationIdentifier' => 'Subtree',
+                        'values' => array( '/1/2/', '/1/43/' )
+                    )
+                ),
+                new Persistence\User\RoleAssignment(
+                    array(
+                        'role' => $handler->loadRole( 5 ),
+                        'contentId' => 13
+                    )
+                )
+            ),
+            $handler->loadRoleAssignmentsByGroupId( 13, true )
+        );
     }
 }
