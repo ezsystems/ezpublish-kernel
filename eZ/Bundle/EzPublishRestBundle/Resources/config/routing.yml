@@ -342,7 +342,7 @@ ezpublish_rest_loadLocation:
         _controller: ezpublish_rest.controller.location:loadLocation
     requirements:
         _method: GET
-        locationPath: [0-9/]+
+        locationPath: "[0-9/]+"
 
 ezpublish_rest_loadLocation:
     # @todo Handle GET parameter remoteId. See loadLocationByRemoteId
@@ -351,7 +351,7 @@ ezpublish_rest_loadLocation:
         _controller: ezpublish_rest.controller.location:loadLocation
     requirements:
         _method: PATCH
-        locationPath: [0-9/]+
+        locationPath: "[0-9/]+"
 
 ezpublish_rest_deleteSubtree:
     pattern: /content/locations/{locationPath}
@@ -359,7 +359,7 @@ ezpublish_rest_deleteSubtree:
         _controller: ezpublish_rest.controller.location:deleteSubtree
     requirements:
         _method: DELETE
-        locationPath: [0-9/]+
+        locationPath: "[0-9/]+"
 
 ezpublish_rest_copySubtree:
     pattern: /content/locations/{locationPath}
@@ -367,7 +367,7 @@ ezpublish_rest_copySubtree:
         _controller: ezpublish_rest.controller.location:copySubtree
     requirements:
         _method: COPY
-        locationPath: [0-9/]+
+        locationPath: "[0-9/]+"
 
 ezpublish_rest_moveSubtree:
     pattern: /content/locations/{locationPath}
@@ -375,7 +375,7 @@ ezpublish_rest_moveSubtree:
         _controller: ezpublish_rest.controller.location:moveSubtree
     requirements:
         _method: MOVE
-        locationPath: [0-9/]+
+        locationPath: "[0-9/]+"
 
 ezpublish_rest_swapLocation:
     pattern: /content/locations/{locationPath}
@@ -383,7 +383,7 @@ ezpublish_rest_swapLocation:
         _controller: ezpublish_rest.controller.location:swapLocation
     requirements:
         _method: SWAP
-        locationPath: [0-9/]+
+        locationPath: "[0-9/]+"
 
 ezpublish_rest_loadLocationChildren:
     pattern: /content/locations/{locationPath}/children
@@ -391,7 +391,7 @@ ezpublish_rest_loadLocationChildren:
         _controller: ezpublish_rest.controller.location:loadLocationChildren
     requirements:
         _method: GET
-        locationPath: [0-9/]+
+        locationPath: "[0-9/]+"
 
 ezpublish_rest_loadContentTypeGroupList:
     pattern: /content/typegroups
@@ -622,7 +622,7 @@ ezpublish_rest_loadTrashItem:
         _controller: ezpublish_rest.controller.trash:loadTrashItem
     requirements:
         _method: GET
-         trashId: \d+
+        trashId: \d+
 
 ezpublish_rest_deleteTrashItem:
     pattern: /content/trash/{trashId}
@@ -630,7 +630,7 @@ ezpublish_rest_deleteTrashItem:
         _controller: ezpublish_rest.controller.trash:deleteTrashItem
     requirements:
         _method: DELETE
-         trashId: \d+
+        trashId: \d+
 
 ezpublish_rest_restoreTrashItem:
     pattern: /content/trash/{trashId}
@@ -638,7 +638,7 @@ ezpublish_rest_restoreTrashItem:
         _controller: ezpublish_rest.controller.trash:restoreTrashItem
     requirements:
         _method: MOVE
-         trashId: \d+
+        trashId: \d+
 
 ezpublish_rest_listURLWildcards:
     pattern: /content/urlwildcards
@@ -693,12 +693,12 @@ ezpublish_rest_createRole:
     requirements:
         _method: POST
 
-ezpublish_rest_:
+ezpublish_rest_loadRole:
     pattern: /user/roles/{roleId}
     defaults:
-        _controller: ezpublish_rest.controller.role:
+        _controller: ezpublish_rest.controller.role:loadRole
     requirements:
-        _method:
+        _method: GET
         roleId: \d+
 
 ezpublish_rest_updateRole:
@@ -883,10 +883,10 @@ ezpublish_rest_loadRootUserGroup:
     requirements:
         _method: GET
 
-ezpublish_rest_/user/groups/subgroups:
+ezpublish_rest_createUserGroup:
     pattern: /user/groups/subgroups
     defaults:
-        _controller: ezpublish_rest.controller.user:/user/groups/subgroups
+        _controller: ezpublish_rest.controller.user:createUserGroup
     requirements:
         _method: POST
 
@@ -896,7 +896,7 @@ ezpublish_rest_loadUserGroup:
         _controller: ezpublish_rest.controller.user:loadUserGroup
     requirements:
         _method: GET
-        groupId: [0-9/]+
+        groupId: "[0-9/]+"
 
 ezpublish_rest_updateUserGroup:
     pattern: /user/groups/{groupId}
@@ -904,7 +904,7 @@ ezpublish_rest_updateUserGroup:
         _controller: ezpublish_rest.controller.user:updateUserGroup
     requirements:
         _method: PATCH
-        groupId: [0-9/]+
+        groupId: "[0-9/]+"
 
 ezpublish_rest_deleteUserGroup:
     pattern: /user/groups/{groupId}
@@ -912,7 +912,7 @@ ezpublish_rest_deleteUserGroup:
         _controller: ezpublish_rest.controller.user:deleteUserGroup
     requirements:
         _method: DELETE
-        groupId: [0-9/]+
+        groupId: "[0-9/]+"
 
 ezpublish_rest_moveUserGroup:
     pattern: /user/groups/{groupId}
@@ -920,7 +920,7 @@ ezpublish_rest_moveUserGroup:
         _controller: ezpublish_rest.controller.user:moveUserGroup
     requirements:
         _method: MOVE
-        groupId: [0-9/]+
+        groupId: "[0-9/]+"
 
 ezpublish_rest_loadSubUserGroups:
     pattern: /user/groups/{groupId}/subgroups
@@ -928,7 +928,7 @@ ezpublish_rest_loadSubUserGroups:
         _controller: ezpublish_rest.controller.user:loadSubUserGroups
     requirements:
         _method: GET
-        groupId: [0-9/]+
+        groupId: "[0-9/]+"
 
 ezpublish_rest_createUserGroup:
     pattern: /user/groups/{groupId}/subgroups
@@ -936,7 +936,7 @@ ezpublish_rest_createUserGroup:
         _controller: ezpublish_rest.controller.user:createUserGroup
     requirements:
         _method: POST
-        groupId: [0-9/]+
+        groupId: "[0-9/]+"
 
 ezpublish_rest_loadUsersFromGroup:
     pattern: /user/groups/{groupId}/users
@@ -944,7 +944,7 @@ ezpublish_rest_loadUsersFromGroup:
         _controller: ezpublish_rest.controller.user:loadUsersFromGroup
     requirements:
         _method: GET
-        groupId: [0-9/]+
+        groupId: "[0-9/]+"
 
 ezpublish_rest_createUser:
     pattern: /user/groups/{groupId}/users
@@ -952,7 +952,7 @@ ezpublish_rest_createUser:
         _controller: ezpublish_rest.controller.user:createUser
     requirements:
         _method: POST
-        groupId: [0-9/]+
+        groupId: "[0-9/]+"
 
 ezpublish_rest_loadRoleAssignmentsForUserGroup:
     pattern: /user/groups/{groupId}/roles
@@ -960,7 +960,7 @@ ezpublish_rest_loadRoleAssignmentsForUserGroup:
         _controller: ezpublish_rest.controller.role:loadRoleAssignmentsForUserGroup
     requirements:
         _method: GET
-        groupId: [0-9/]+
+        groupId: "[0-9/]+"
 
 ezpublish_rest_assignRoleToUserGroup:
     pattern: /user/groups/{groupId}/roles
@@ -968,7 +968,7 @@ ezpublish_rest_assignRoleToUserGroup:
         _controller: ezpublish_rest.controller.role:assignRoleToUserGroup
     requirements:
         _method: POST
-        groupId: [0-9/]+
+        groupId: "[0-9/]+"
 
 ezpublish_rest_loadRoleAssignmentForUserGroup:
     pattern: /user/groups/{groupId}/roles/{roleId}
@@ -976,7 +976,7 @@ ezpublish_rest_loadRoleAssignmentForUserGroup:
         _controller: ezpublish_rest.controller.role:loadRoleAssignmentForUserGroup
     requirements:
         _method: GET
-        groupId: [0-9/]+
+        groupId: "[0-9/]+"
         roleId: \d+
 
 ezpublish_rest_unassignRoleFromUserGroup:
@@ -985,5 +985,5 @@ ezpublish_rest_unassignRoleFromUserGroup:
         _controller: ezpublish_rest.controller.role:unassignRoleFromUserGroup
     requirements:
         _method: DELETE
-        groupId: [0-9/]+
+        groupId: "[0-9/]+"
         roleId: \d+
