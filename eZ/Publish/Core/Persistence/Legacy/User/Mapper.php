@@ -63,6 +63,9 @@ class Mapper
      */
     public function mapPolicies( array $data )
     {
+        /**
+         * @var \eZ\Publish\SPI\Persistence\User\Policy[] $policies
+         */
         $policies = array();
         foreach ( $data as $row )
         {
@@ -76,6 +79,7 @@ class Mapper
                         'roleId' => $row['ezrole_id'],
                         'module' => $row['ezpolicy_module_name'],
                         'function' => $row['ezpolicy_function_name'],
+                        'limitations' => '*' // limitations must be '*' if not a non empty array of limitations
                     )
                 );
             }
@@ -83,6 +87,10 @@ class Mapper
             if ( !$row['ezpolicy_limitation_identifier'] )
             {
                 continue;
+            }
+            else if ( $policies[$policyId]->limitations === '*' )
+            {
+                $policies[$policyId]->limitations = array();
             }
 
             if ( !isset( $policies[$policyId]->limitations[$row['ezpolicy_limitation_identifier']] ) )

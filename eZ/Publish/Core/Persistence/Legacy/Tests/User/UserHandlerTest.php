@@ -307,6 +307,7 @@ class UserHandlerTest extends TestCase
                 'roleId' => 1,
                 'module' => 'foo',
                 'function' => 'bar',
+                'limitations' => '*',
             ) ) ),
             $loaded->policies
         );
@@ -337,6 +338,7 @@ class UserHandlerTest extends TestCase
                 'roleId' => 1,
                 'module' => 'foo',
                 'function' => 'bar',
+                'limitations' => '*',
             ) ) ),
             $loaded->policies
         );
