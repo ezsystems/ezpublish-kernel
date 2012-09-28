@@ -69,12 +69,11 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
      * with $domNode as its context.
      *
      * This method asserts that $xpathExpression results in a non-empty node
-     * set in cotext of $domNode, by wrapping the "boolean()" function around
+     * set in context of $domNode, by wrapping the "boolean()" function around
      * it and evaluating it on the document owning $domNode.
      *
      * @param \DOMNode $domNode
      * @param string $xpathExpression
-     * @return void
      */
     protected function assertXPath( \DOMNode $domNode, $xpathExpression )
     {

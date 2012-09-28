@@ -310,7 +310,6 @@ abstract class Generator
      *
      * @param string $hashElementName
      * @param mixed $hashValue
-     * @return void
      */
     abstract public function generateFieldTypeHash( $hashElementName, $hashValue );
 

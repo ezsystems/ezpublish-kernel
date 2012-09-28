@@ -196,6 +196,10 @@ class Xml extends Handler
         return $current;
     }
 
+    /**
+     * @param \DOMElement $domElement
+     * @return array|string|null
+     */
     protected function parseFieldTypeHash( \DOMElement $domElement )
     {
         $result = $this->parseFieldTypeValues( $domElement->childNodes );

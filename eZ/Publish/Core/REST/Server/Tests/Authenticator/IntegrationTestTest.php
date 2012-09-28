@@ -29,9 +29,6 @@ class IntegrationTestTest extends BaseTest
      */
     protected $userServiceMock;
 
-    /**
-     * @return void
-     */
     public function testAuthenticate()
     {
         $auth = new IntegrationTest( $this->getRepositoryMock() );

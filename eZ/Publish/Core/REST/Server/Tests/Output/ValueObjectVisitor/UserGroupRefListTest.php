@@ -77,7 +77,6 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
-     * @return void
      * @depends testVisit
      */
     public function testUserGroupRefListHrefCorrect( \DOMDocument $dom )
@@ -87,7 +86,6 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
-     * @return void
      * @depends testVisit
      */
     public function testUserGroupRefListMediaTypeCorrect( \DOMDocument $dom )
@@ -97,7 +95,6 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
-     * @return void
      * @depends testVisit
      */
     public function testFirstUserGroupHrefCorrect( \DOMDocument $dom )
@@ -107,7 +104,6 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
-     * @return void
      * @depends testVisit
      */
     public function testFirstUserGroupMediaTypeCorrect( \DOMDocument $dom )
@@ -117,7 +113,6 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
-     * @return void
      * @depends testVisit
      */
     public function testFirstUserGroupUnassignHrefCorrect( \DOMDocument $dom )
@@ -127,7 +122,6 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
-     * @return void
      * @depends testVisit
      */
     public function testFirstUserGroupUnassignMethodCorrect( \DOMDocument $dom )
@@ -137,7 +131,6 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
-     * @return void
      * @depends testVisit
      */
     public function testSecondUserGroupHrefCorrect( \DOMDocument $dom )
@@ -147,7 +140,6 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
-     * @return void
      * @depends testVisit
      */
     public function testSecondUserGroupMediaTypeCorrect( \DOMDocument $dom )
@@ -157,7 +149,6 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
-     * @return void
      * @depends testVisit
      */
     public function testSecondUserGroupUnassignHrefCorrect( \DOMDocument $dom )
@@ -167,7 +158,6 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
 
     /**
      * @param \DOMDocument $dom
-     * @return void
      * @depends testVisit
      */
     public function testSecondUserGroupUnassignMethodCorrect( \DOMDocument $dom )

@@ -25,17 +25,18 @@ class FieldTypeSerializer
     /**
      * FieldTypeService
      *
-     * @var eZ\Publish\API\Repository\FieldTypeService
+     * @var \eZ\Publish\API\Repository\FieldTypeService
      */
     protected $fieldTypeService;
 
     /**
-     * @var eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry
+     * @var \eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry
      */
     protected $fieldTypeProcessorRegistry;
 
     /**
-     * @param ieZ\Publish\API\Repository\FieldTypeService $fieldTypeService
+     * @param \eZ\Publish\API\Repository\FieldTypeService $fieldTypeService
+     * @param \eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry $fieldTypeProcessorRegistry
      */
     public function __construct( FieldTypeService $fieldTypeService, FieldTypeProcessorRegistry $fieldTypeProcessorRegistry )
     {
@@ -46,10 +47,9 @@ class FieldTypeSerializer
     /**
      * Serializes the field value of $field through $generator
      *
-     * @param Generator $generator
-     * @param ContentType $contentType
-     * @param Field $field
-     * @return void
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      */
     public function serializeFieldValue( Generator $generator, ContentType $contentType, Field $field )
     {
@@ -66,10 +66,9 @@ class FieldTypeSerializer
     /**
      * Serializes the $defaultValue for $fieldDefIdentifier through $generator
      *
-     * @param Generator $generator
-     * @param FieldDefinition $fieldDefinition
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      * @param mixed $defaultValue
-     * @return void
      */
     public function serializeFieldDefaultValue( Generator $generator, FieldDefinition $fieldDefinition, $defaultValue )
     {
@@ -82,13 +81,12 @@ class FieldTypeSerializer
     }
 
     /**
-     * Serializeds $settings as fieldSettings for $fieldDefinition using
+     * Serializes $settings as fieldSettings for $fieldDefinition using
      * $generator
      *
-     * @param Generator $generator
-     * @param FieldDefinition $fieldDefinition
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      * @param mixed $settings
-     * @return void
      */
     public function serializeFieldSettings( Generator $generator, FieldDefinition $fieldDefinition, $settings )
     {
@@ -102,12 +100,11 @@ class FieldTypeSerializer
     }
 
     /**
-     * Serializeds $validatorConfiguration for $fieldDefinition using $generator
+     * Serializes $validatorConfiguration for $fieldDefinition using $generator
      *
-     * @param Generator $generator
-     * @param FieldDefinition $fieldDefinition
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      * @param mixed $validatorConfiguration
-     * @return void
      */
     public function serializeValidatorConfiguration( Generator $generator, FieldDefinition $fieldDefinition, $validatorConfiguration )
     {
@@ -124,7 +121,7 @@ class FieldTypeSerializer
      * Returns the field type with $fieldTypeIdentifier
      *
      * @param string $fieldTypeIdentifier
-     * @return FieldType
+     * @return \eZ\Publish\API\Repository\FieldType
      */
     protected function getFieldType( $fieldTypeIdentifier )
     {
@@ -138,10 +135,9 @@ class FieldTypeSerializer
      * $elementName
      *
      * @param string $elementName
-     * @param Generator $generator
-     * @param FieldType $fieldType
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
+     * @param \eZ\Publish\API\Repository\FieldType $fieldType
      * @param mixed $value
-     * @return void
      */
     protected function serializeValue( $elementName, Generator $generator, FieldType $fieldType, $value )
     {
@@ -161,9 +157,8 @@ class FieldTypeSerializer
      * Serializes the given $hash with $generator into $elementName
      *
      * @param string $elementName
-     * @param Generator $generator
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param mixed $hash
-     * @return void
      */
     protected function serializeHash( $elementName, Generator $generator, $hash )
     {

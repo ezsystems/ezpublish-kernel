@@ -15,10 +15,9 @@ class FieldTypeHashGenerator
      * Generates the field type value $hashValue as a child of the given Object
      * using $hashElementName as the property name
      *
-     * @param eZ\Publish\Core\REST\Common\Output\Generator\Json\$parent
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator\Json\ArrayObject|\eZ\Publish\Core\REST\Common\Output\Generator\Json\Object $parent
      * @param string $hashElementName
      * @param mixed $hashValue
-     * @return void
      */
     public function generateHashValue( $parent, $hashElementName, $hashValue )
     {
@@ -29,8 +28,8 @@ class FieldTypeHashGenerator
      * Generates and returns a value based on $hashValue type, with $parent (
      * if the type of $hashValue supports it)
      *
-     * @param Object|ArrayObject $parent
-     * @param mixed $hashValue
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator\Json\ArrayObject|\eZ\Publish\Core\REST\Common\Output\Generator\Json\Object $parent
+     * @param mixed $value
      * @return mixed
      */
     protected function generateValue( $parent, $value )
@@ -63,9 +62,9 @@ class FieldTypeHashGenerator
      * If $type only contains numeric keys, the resulting structure will be an
      * JSON array, otherwise a JSON object
      *
-     * @param Object|ArrayObject $parent
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator\Json\ArrayObject|\eZ\Publish\Core\REST\Common\Output\Generator\Json\Object $parent
      * @param array $value
-     * @return Object|ArrayObject
+     * @return \eZ\Publish\Core\REST\Common\Output\Generator\Json\ArrayObject|\eZ\Publish\Core\REST\Common\Output\Generator\Json\Object
      */
     protected function generateArrayValue( $parent, array $value )
     {
@@ -82,9 +81,9 @@ class FieldTypeHashGenerator
     /**
      * Generates a JSON array from the given $hashArray with $parent
      *
-     * @param Object|ArrayObject $parent
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator\Json\ArrayObject|\eZ\Publish\Core\REST\Common\Output\Generator\Json\Object $parent
      * @param array $listArray
-     * @return void
+     * @return \eZ\Publish\Core\REST\Common\Output\Generator\Json\ArrayObject
      */
     protected function generateListArray( $parent, array $listArray )
     {
@@ -99,9 +98,9 @@ class FieldTypeHashGenerator
     /**
      * Generates a JSON object from the given $hashArray with $parent
      *
-     * @param Object|ArrayObject $parent
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator\Json\ArrayObject|\eZ\Publish\Core\REST\Common\Output\Generator\Json\Object $parent
      * @param array $hashArray
-     * @return Object
+     * @return \eZ\Publish\Core\REST\Common\Output\Generator\Json\Object
      */
     protected function generateHashArray( $parent, array $hashArray )
     {

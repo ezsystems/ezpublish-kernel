@@ -25,7 +25,7 @@ class Xml extends Generator
     /**
      * Generator for field type hash values
      *
-     * @var eZ\Publish\Core\REST\Common\Output\Generator\Xml\FieldTypeHashGenerator
+     * @var \eZ\Publish\Core\REST\Common\Output\Generator\Xml\FieldTypeHashGenerator
      */
     protected $hashGenerator;
 
@@ -37,7 +37,7 @@ class Xml extends Generator
     protected $isEmpty = true;
 
     /**
-     * @param eZ\Publish\Core\REST\Common\Output\Generator\Xml\FieldTypeHashGenerator $hashGenerator
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator\Xml\FieldTypeHashGenerator $hashGenerator
      */
     public function __construct( Xml\FieldTypeHashGenerator $hashGenerator )
     {
@@ -244,7 +244,6 @@ class Xml extends Generator
      *
      * @param string $hashElementName
      * @param mixed $hashValue
-     * @return void
      */
     public function generateFieldTypeHash( $hashElementName, $hashValue )
     {

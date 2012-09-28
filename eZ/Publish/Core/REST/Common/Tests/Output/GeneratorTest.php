@@ -16,8 +16,14 @@ use eZ\Publish\Core\REST\Common;
  */
 abstract class GeneratorTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \eZ\Publish\Core\REST\Common\Output\Generator
+     */
     protected $generator;
 
+    /**
+     * @return \eZ\Publish\Core\REST\Common\Output\Generator
+     */
     abstract protected function getGenerator();
 
     /**

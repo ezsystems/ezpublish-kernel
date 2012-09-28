@@ -19,7 +19,6 @@ class FieldTypeHashGenerator
      * @param \XmlWriter $writer
      * @param string $hashElementName
      * @param mixed $hashValue
-     * @return void
      */
     public function generateHashValue( \XMLWriter $writer, $hashElementName, $hashValue )
     {
@@ -32,7 +31,7 @@ class FieldTypeHashGenerator
      * @param \XmlWriter $writer
      * @param mixed $value
      * @param string|null $key
-     * @return void
+     * @param string $elementName
      */
     protected function generateValue( \XmlWriter $writer, $value, $key = null, $elementName = 'value' )
     {
@@ -74,7 +73,6 @@ class FieldTypeHashGenerator
      * @param array $value
      * @param string|null $key
      * @param string $elementName
-     * @return void
      */
     protected function generateArrayValue( \XmlWriter $writer, $value, $key, $elementName = 'value' )
     {
@@ -95,7 +93,6 @@ class FieldTypeHashGenerator
      * @param array $value
      * @param string|null $key
      * @param string $elementName
-     * @return void
      */
     protected function generateHashArray( \XmlWriter $writer, $value, $key = null, $elementName = 'value' )
     {
@@ -117,7 +114,6 @@ class FieldTypeHashGenerator
      * @param array $value
      * @param string|null $key
      * @param string $elementName
-     * @return void
      */
     protected function generateListArray( \XmlWriter $writer, $value, $key = null, $elementName = 'value' )
     {
@@ -156,7 +152,6 @@ class FieldTypeHashGenerator
      * @param \XmlWriter $writer
      * @param string|null $key
      * @param string $elementName
-     * @return void
      */
     protected function generateNullValue( \XmlWriter $writer, $key = null, $elementName = 'value' )
     {
@@ -173,7 +168,6 @@ class FieldTypeHashGenerator
      * @param bool $value
      * @param string|null $key
      * @param string $elementName
-     * @return void
      */
     protected function generateBooleanValue( \XmlWriter $writer, $value, $key = null, $elementName = 'value' )
     {
@@ -190,10 +184,9 @@ class FieldTypeHashGenerator
      * @param integer $value
      * @param string|null $key
      * @param string $elementName
-     * @return void
      */
     protected function generateIntegerValue( \XmlWriter $writer, $value, $key = null, $elementName = 'value' )
-    {;
+    {
         $writer->startElement( $elementName );
         $this->generateKeyAttribute( $writer, $key );
         $writer->text( $value );
@@ -207,7 +200,6 @@ class FieldTypeHashGenerator
      * @param float $value
      * @param string|null $key
      * @param string $elementName
-     * @return void
      */
     protected function generateFloatValue( \XmlWriter $writer, $value, $key = null, $elementName = 'value' )
     {
@@ -224,7 +216,6 @@ class FieldTypeHashGenerator
      * @param string $value
      * @param string|null $key
      * @param string $elementName
-     * @return void
      */
     protected function generateStringValue( \XmlWriter $writer, $value, $key = null, $elementName = 'value' )
     {
@@ -239,8 +230,6 @@ class FieldTypeHashGenerator
      *
      * @param \XmlWriter $writer
      * @param string|null $key
-     * @param string $elementName
-     * @return void
      */
     protected function generateKeyAttribute( \XmlWriter $writer, $key = null )
     {

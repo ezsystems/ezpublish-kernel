@@ -15,7 +15,7 @@ use eZ\Publish\Core\REST\Common\Exceptions;
 /**
  * Pattern based URL Handler
  *
- * Alles 2 types of patterns to be used in an URL:
+ * Handles 2 types of patterns to be used in an URL:
  *
  * - {foo} matches anything but a slash and is used to match the typical URL
  *   variable (e.g. an ID)

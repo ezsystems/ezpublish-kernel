@@ -26,7 +26,7 @@ class RestObjectState
     /**
      * Group ID to which wrapped state belongs
      *
-     * @var int
+     * @var mixed
      */
     public $groupId;
 
@@ -34,7 +34,7 @@ class RestObjectState
      * Constructor
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
-     * @param int $groupId
+     * @param mixed $groupId
      */
     public function __construct( ObjectState $objectState, $groupId )
     {

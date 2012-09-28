@@ -52,7 +52,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
                     )
                 )
             ),
-            $this->getHandler()->convert(
+            $handler->convert(
                 '{"Field":{"fieldValue":[{"id":1,"name":"Joe Sindelfingen","email":"sindelfingen@example.com"},{"id":2,"name":"Joe Bielefeld","email":"bielefeld@example.com"}]}}'
             )
         );

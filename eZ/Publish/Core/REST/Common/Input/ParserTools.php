@@ -22,7 +22,7 @@ class ParserTools
      * Parses the given $objectElement, if it contains embedded data
      *
      * @param array $objectElement
-     * @param ParsingDispatcher $parsingDispatcher
+     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      * @return mixed
      */
     public function parseObjectElement( array $objectElement, ParsingDispatcher $parsingDispatcher )

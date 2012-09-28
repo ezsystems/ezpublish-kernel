@@ -17,7 +17,7 @@ class FieldTypeHashGeneratorTest extends FieldTypeHashGeneratorBaseTest
     /**
      * Initializes the field type hash generator
      *
-     * @return FieldTypeHashGenerator
+     * @return \eZ\Publish\Core\REST\Common\Output\Generator\Json\FieldTypeHashGenerator
      */
     protected function initializeFieldTypeHashGenerator()
     {
@@ -27,7 +27,7 @@ class FieldTypeHashGeneratorTest extends FieldTypeHashGeneratorBaseTest
     /**
      * Initializes the generator
      *
-     * @return eZ\Publish\Core\REST\Common\Output\Generator
+     * @return \eZ\Publish\Core\REST\Common\Output\Generator
      */
     protected function initializeGenerator()
     {

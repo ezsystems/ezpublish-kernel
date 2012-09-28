@@ -19,15 +19,13 @@ abstract class FieldTypeHashGeneratorBaseTest extends \PHPUnit_Framework_TestCas
 
     /**
      * Initializes the field type hash generator
-     *
-     * @return FieldTypeHashGenerator
      */
     abstract protected function initializeFieldTypeHashGenerator();
 
     /**
      * Initializes the generator
      *
-     * @return eZ\Publish\Core\REST\Common\Output\Generator
+     * @return \eZ\Publish\Core\REST\Common\Output\Generator
      */
     abstract protected function initializeGenerator();
 
