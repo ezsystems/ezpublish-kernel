@@ -45,7 +45,7 @@ class SetupFactory extends Repository\Tests\SetupFactory
      *
      * @param string $configKey
      * @return mixed
-     * @throws Exception if $configKey could not be found.
+     * @throws \Exception if $configKey could not be found.
      */
     public function getConfigValue( $configKey )
     {

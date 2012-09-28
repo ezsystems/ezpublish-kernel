@@ -68,7 +68,7 @@ class FieldTypeServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testGetFieldTypeThrowsNotFoundException()
     {

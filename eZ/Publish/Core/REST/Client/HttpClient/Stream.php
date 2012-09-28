@@ -85,7 +85,7 @@ class Stream implements HttpClient
                 'ignore_errors' => true,
                 'header'        => $requestHeaders,
                 // Do not follow redirects, since we want to handle them
-                // explicitely.
+                // explicitly.
                 'follow_location' => 0,
             ),
         );
