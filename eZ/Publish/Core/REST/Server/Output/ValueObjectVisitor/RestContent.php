@@ -23,7 +23,7 @@ class RestContent extends ValueObjectVisitor
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
-     * @param mixed $data
+     * @param \eZ\Publish\Core\REST\Server\Values\RestContent $data
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
@@ -57,7 +57,7 @@ class RestContent extends ValueObjectVisitor
             'href',
             $this->urlHandler->generate(
                 'type',
-                array( 'type' => $contentInfo->contentType->id )
+                array( 'type' => $contentInfo->getContentType()->id )
             )
         );
         $generator->endAttribute( 'href' );

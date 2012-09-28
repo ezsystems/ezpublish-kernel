@@ -18,7 +18,7 @@ use Qafoo\RMF;
 class Visitor extends RMF\View
 {
     /**
-     * JSON visitor
+     * Output visitor
      *
      * @var \eZ\Publish\Core\REST\Common\Output\Visitor
      */

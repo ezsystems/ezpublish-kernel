@@ -43,7 +43,6 @@ class AuthenticatingDispatcher extends RMF\Dispatcher\Simple
      * Performs authentication and dispatches the request
      *
      * @param RMF\Request $request
-     * @return void
      */
     public function dispatch( RMF\Request $request )
     {
@@ -55,6 +54,6 @@ class AuthenticatingDispatcher extends RMF\Dispatcher\Simple
         {
             $this->view->display( $request, $e );
         }
-        return parent::dispatch( $request );
+        parent::dispatch( $request );
     }
 }

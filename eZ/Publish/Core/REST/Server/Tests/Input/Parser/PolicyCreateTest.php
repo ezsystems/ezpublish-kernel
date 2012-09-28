@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\PolicyCreate;
-use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\Core\Repository\Values\User\PolicyCreateStruct;
 
 class PolicyCreateTest extends BaseTest

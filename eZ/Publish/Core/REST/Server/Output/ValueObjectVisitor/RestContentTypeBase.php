@@ -41,5 +41,7 @@ abstract class RestContentTypeBase extends ValueObjectVisitor
             case Values\ContentType\ContentType::STATUS_MODIFIED:
                 return 'Modified';
         }
+
+        return '';
     }
 }

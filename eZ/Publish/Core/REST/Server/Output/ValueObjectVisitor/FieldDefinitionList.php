@@ -26,7 +26,7 @@ class FieldDefinitionList extends RestContentTypeBase
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
-     * @param mixed $data
+     * @param \eZ\Publish\Core\REST\Server\Values\FieldDefinitionList $data
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {

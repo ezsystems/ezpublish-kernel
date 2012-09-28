@@ -18,7 +18,7 @@ class CreatedFieldDefinition extends ValueObject
     /**
      * The created field definition
      *
-     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
+     * @var \eZ\Publish\Core\REST\Server\Values\RestFieldDefinition
      */
     public $fieldDefinition;
 }

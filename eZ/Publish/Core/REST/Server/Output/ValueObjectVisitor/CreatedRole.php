@@ -22,7 +22,7 @@ class CreatedRole extends Role
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
-     * @param mixed $data
+     * @param \eZ\Publish\Core\REST\Server\Values\CreatedRole $data
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {

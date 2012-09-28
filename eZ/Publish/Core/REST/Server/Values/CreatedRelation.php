@@ -18,7 +18,7 @@ class CreatedRelation extends ValueObject
     /**
      * The created relation
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\Relation
+     * @var \eZ\Publish\Core\REST\Server\Values\RestRelation
      */
     public $relation;
 }

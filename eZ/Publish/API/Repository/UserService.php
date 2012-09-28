@@ -62,7 +62,7 @@ interface UserService
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
-     * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\UserGroup}
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
      */
@@ -204,7 +204,7 @@ interface UserService
     public function unAssignUserFromUserGroup( User $user, UserGroup $userGroup );
 
     /**
-     * Loads the user groups ther user belongs to
+     * Loads the user groups the user belongs to
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed read the user or user group
      *
@@ -212,7 +212,7 @@ interface UserService
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
-    public function loadUserGroupsOfUser( User $user);
+    public function loadUserGroupsOfUser( User $user );
 
     /**
      * loads the users of a user group
@@ -225,7 +225,7 @@ interface UserService
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersOfUserGroup( UserGroup $userGroup, $offset = 0, $limit = -1);
+    public function loadUsersOfUserGroup( UserGroup $userGroup, $offset = 0, $limit = -1 );
 
     /**
      * Instantiate a user create class

@@ -12,7 +12,7 @@ use eZ\Publish\Core\REST\Server\Input\Parser\Base;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Exceptions;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\UrlAlias as UrlAliasCriterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\UserMetadata as UserMetadataCriterion;
 
 /**
  * Parser for ViewInput
@@ -26,7 +26,7 @@ class UserMetadata extends Base
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\UserMetadata
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {

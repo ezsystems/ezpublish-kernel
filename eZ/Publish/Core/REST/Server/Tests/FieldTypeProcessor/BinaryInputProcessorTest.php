@@ -90,7 +90,7 @@ abstract class BinaryInputProcessorTest extends BaseTest
     /**
      * Returns the processor under test
      *
-     * @return eZ\Publish\Core\REST\Server\FieldTypeProcessor\BinaryInputProcessor
+     * @return \eZ\Publish\Core\REST\Server\FieldTypeProcessor\BinaryInputProcessor
      */
     abstract protected function getProcessor();
 }

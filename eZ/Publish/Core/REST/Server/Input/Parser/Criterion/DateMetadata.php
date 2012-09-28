@@ -12,7 +12,7 @@ use eZ\Publish\Core\REST\Server\Input\Parser\Base;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Exceptions;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ViewInput;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\DateMetadata as DateMetadataCriterion;
 
 /**
  * Parser for ViewInput Criterion
@@ -26,7 +26,7 @@ class DateMetadata extends Base
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\DateMetadata
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {

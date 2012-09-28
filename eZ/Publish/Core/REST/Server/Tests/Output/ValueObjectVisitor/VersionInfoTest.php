@@ -16,8 +16,14 @@ use eZ\Publish\Core\REST\Common;
 
 class VersionInfoTest extends ValueObjectVisitorBaseTest
 {
+    /**
+     * @var \DateTime
+     */
     protected $creationDate;
 
+    /**
+     * @var \DateTime
+     */
     protected $modificationDate;
 
     public function setUp()

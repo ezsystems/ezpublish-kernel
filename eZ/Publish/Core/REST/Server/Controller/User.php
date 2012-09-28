@@ -747,7 +747,7 @@ class User
             throw new Exceptions\ForbiddenException( $e->getMessage() );
         }
 
-        //@todo Error handing if user is already in the group
+        //@todo Error handling if user is already in the group
         //Reason being that UserService::assignUserToUserGroup by specs
         // does nothing if the user is already a member of the group
         $this->userService->assignUserToUserGroup( $user, $userGroup );
