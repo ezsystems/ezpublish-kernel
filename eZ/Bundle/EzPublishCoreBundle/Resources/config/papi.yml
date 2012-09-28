@@ -79,7 +79,7 @@ services:
         arguments: [@ezpublish.api.repository, ObjectState]
 
     ezpublish.api.service.url_wildcard:
-        class: eZ\Publish\API\Repository\URLWildcardsService
+        class: eZ\Publish\API\Repository\URLWildcardService
         factory_service: ezpublish.api.repository.factory
         factory_method: buildService
         arguments: [@ezpublish.api.repository, URLWildcard]
