@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
     eZ\Publish\API\Repository\Values\Content\Query,
+    eZ\Publish\API\Repository\Values\User\Limitation,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
     eZ\Publish\API\Repository\Values\Content\Search\SearchResult,
 
@@ -125,53 +126,92 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * Add Permission criteria if needed and return false if no access at all
+     * Add content, read Permission criteria if needed and return false if no access at all
      *
      * @access private Temporarly made accessible until Location service stops using searchHandler()
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
-     * @todo Known issue: Whole permissions system need to be change accommodate role limitations.
+     * @return boolean|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
     public function addPermissionsCriterion( Criterion &$criterion )
     {
-        $limitations = $this->repository->hasAccess( 'content', 'read' );
-        if ( $limitations === false || $limitations === true )
+        $permissionSets = $this->repository->hasAccess( 'content', 'read', null, true );
+        if ( $permissionSets === false || $permissionSets === true )
         {
-            return $limitations;
+            return $permissionSets;
         }
 
-        if ( empty( $limitations ) )
+        if ( empty( $permissionSets ) )
             throw new \RuntimeException( "Got an empty array of limitations from hasAccess()" );
 
-        // Create OR conditions for every "policy" that contains AND conditions for limitations
-        $orCriteria = array();
+        /**
+         * RoleAssignment is a OR condition, so is policy, while limitations is a AND condition
+         *
+         * If RoleAssignment has limitation then policy OR conditions are wrapped in a AND condition with the
+         * role limitation, otherwise it will be merged into RoleAssignment's OR condition.
+         */
+        $roleAssignmentOrCriteria = array();
         $roleService = $this->repository->getRoleService();
-        foreach ( $limitations as $limitationSet )
+        foreach ( $permissionSets as $permissionSet )
         {
-            $andCriteria = array();
+            $policyOrCriteria = array();
             /**
-             * @var \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
+             * @var \eZ\Publish\API\Repository\Values\User\Policy $policy
              */
-            foreach ( $limitationSet as $limitationValue )
+            foreach ( $permissionSet['policies'] as $policy )
             {
-                $type = $roleService->getLimitationType( $limitationValue->getIdentifier() );
-                $andCriteria[] = $type->getCriterion( $limitationValue, $this->repository );
+                $limitationsAndCriteria = array();
+                foreach ( $policy->getLimitations() as $limitation )
+                {
+                    $type = $roleService->getLimitationType( $limitation->getIdentifier() );
+                    $limitationsAndCriteria[] = $type->getCriterion( $limitation, $this->repository );
+                }
+                $policyOrCriteria[] = isset( $limitationsAndCriteria[1] ) ?
+                    new Criterion\LogicalAnd( $limitationsAndCriteria ) :
+                    $limitationsAndCriteria[0];
             }
-            $orCriteria[] = isset( $andCriteria[1] ) ? new Criterion\LogicalAnd( $andCriteria ) : $andCriteria[0];
+
+            if ( empty( $policyOrCriteria ) )
+                continue;
+
+            /**
+             * Apply role limitations if there is one
+             * @var \eZ\Publish\API\Repository\Values\User\Limitation[] $permissionSet
+             */
+            if ( $permissionSet['limitation'] instanceof Limitation )
+            {
+                $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
+                $roleAssignmentOrCriteria[] = new Criterion\LogicalAnd( array(
+                        $type->getCriterion( $permissionSet['limitation'], $this->repository ),
+                        isset( $policyOrCriteria[1] ) ? new Criterion\LogicalOr( $policyOrCriteria ) : $policyOrCriteria[0]
+                    )
+                );
+            }
+            else // Otherwise merge $policyOrCriteria into $roleAssignmentOrCriteria
+            {
+                $roleAssignmentOrCriteria = empty( $roleAssignmentOrCriteria ) ?
+                    $policyOrCriteria :
+                    array_merge( $roleAssignmentOrCriteria, $policyOrCriteria );
+            }
+
         }
 
-        // Merge with $criterion
+        // Merge with original $criterion
         if ( $criterion instanceof Criterion\LogicalAnd )
         {
-            $criterion->criteria[] = isset( $orCriteria[1] ) ? new Criterion\LogicalOr( $orCriteria ) : $orCriteria[0];
+            $criterion->criteria[] = isset( $roleAssignmentOrCriteria[1] ) ?
+                new Criterion\LogicalOr( $roleAssignmentOrCriteria ) :
+                $roleAssignmentOrCriteria[0];
         }
         else
         {
             $criterion = new Criterion\LogicalAnd(
                 array(
                     $criterion,
-                    (isset( $orCriteria[1] ) ? new Criterion\LogicalOr( $orCriteria ) : $orCriteria[0])
+                    ( isset( $roleAssignmentOrCriteria[1] ) ?
+                        new Criterion\LogicalOr( $roleAssignmentOrCriteria ) :
+                        $roleAssignmentOrCriteria[0]
+                    )
                 )
             );
         }

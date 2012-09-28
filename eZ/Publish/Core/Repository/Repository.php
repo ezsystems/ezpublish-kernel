@@ -14,6 +14,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
     eZ\Publish\API\Repository\Values\ValueObject,
     eZ\Publish\API\Repository\Values\User\User,
+    eZ\Publish\API\Repository\Values\User\Limitation,
     Exception,
     LogicException,
     RuntimeException;
@@ -235,38 +236,59 @@ class Repository implements RepositoryInterface
      * @param string $module
      * @param string $function
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param bool $returnLimitations Return
      *
-     * @return boolean|array if limitations are on this function an array of limitations is returned
+     * @return boolean|array Bool if user has full or no access, array if limitations & $returnLimitations = true
      */
-    public function hasAccess( $module, $function, User $user = null )
+    public function hasAccess( $module, $function, User $user = null, $returnLimitations = false )
     {
         if ( $user === null )
             $user = $this->getCurrentUser();
 
-        foreach ( $this->getRoleService()->loadPoliciesByUserId( $user->id ) as $policy )
+        // Uses SPI to avoid triggering permission checks in Role/User service
+        $permissionSets = array();
+        $roleService = $this->getRoleService();
+        $spiRoleAssignments = $this->persistenceHandler->userHandler()->loadRoleAssignmentsByGroupId( $user->id, true );
+        foreach ( $spiRoleAssignments as $spiRoleAssignment )
         {
-            if ( $policy->module === '*' )
-                return true;
+            $permissionSet = array( 'limitation' => null, 'policies' => array() );
+            foreach ( $spiRoleAssignment->role->policies as $spiPolicy )
+            {
+                if ( $spiPolicy->module === '*' && $spiRoleAssignment->limitationIdentifier === null )
+                    return true;
 
-            if ( $policy->module !== $module )
-                continue;
+                if ( $spiPolicy->module !== $module )
+                    continue;
 
-            if ( $policy->function === '*' )
-                return true;
+                if ( $spiPolicy->function === '*' && $spiRoleAssignment->limitationIdentifier === null )
+                    return true;
 
-            if ( $policy->function !== $function )
-                continue;
+                if ( $spiPolicy->function !== $function )
+                    continue;
 
-            if ( $policy->limitations === '*' )
-                return true;
+                if ( $spiPolicy->limitations === '*' && $spiRoleAssignment->limitationIdentifier === null )
+                    return true;
 
-            $limitationArray[] = $policy->limitations;
+                if ( $returnLimitations && $spiPolicy->limitations !== '*' )
+                    $permissionSet['policies'][] = $roleService->buildDomainPolicyObject( $spiPolicy );
+            }
+
+
+            if ( !empty( $permissionSet['policies'] ) )
+            {
+                if ( $spiRoleAssignment->limitationIdentifier !== null )
+                    $permissionSet['limitation'] = $roleService
+                        ->getLimitationType( $spiRoleAssignment->limitationIdentifier )
+                        ->buildValue( $spiRoleAssignment->values );
+
+                $permissionSets[] = $permissionSet;
+            }
         }
 
-        if ( !empty( $limitationArray ) )
-            return $limitationArray;
+        if ( !empty( $permissionSets ) )
+            return $permissionSets;
 
-        return false;// No policies matching $module and $function
+        return false;// No policies matching $module and $function, or they contained limitations & !$returnLimitations
     }
 
     /**
@@ -287,33 +309,45 @@ class Repository implements RepositoryInterface
      */
     public function canUser( $module, $function, ValueObject $object, ValueObject $target = null )
     {
-        $limitationArray = $this->hasAccess( $module, $function );
-        if ( $limitationArray === false || $limitationArray === true )
+        $permissionSets = $this->hasAccess( $module, $function, null, true );
+        if ( $permissionSets === false || $permissionSets === true )
         {
-            return $limitationArray;
+            return $permissionSets;
         }
 
         $roleService = $this->getRoleService();
-        foreach ( $limitationArray as $limitationSet )
+        foreach ( $permissionSets as $permissionSet )
         {
-            $limitationSetSaysYes = true;
             /**
-             * @var \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
+             * @var \eZ\Publish\API\Repository\Values\User\Limitation[] $permissionSet
              */
-            foreach ( $limitationSet as $limitationValue )
+            if ( $permissionSet['limitation'] instanceof Limitation )
             {
-                $type = $roleService->getLimitationType( $limitationValue->getIdentifier() );
-                if ( !$type->evaluate( $limitationValue, $this, $object, $target ) )
-                {
-                    $limitationSetSaysYes = false;
-                    // Break to next limitationSet
-                    // If needed, there could be a if condition here building up an array of all limitations
-                    // that are denying user access, for debug use.
-                    break;
-                }
+                $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
+                if ( !$type->evaluate( $permissionSet['limitation'], $this, $object, $target ) )
+                    continue;
             }
-            if ( $limitationSetSaysYes )
-                return true;
+
+            /**
+             * @var \eZ\Publish\API\Repository\Values\User\Policy $policy
+             */
+            foreach ( $permissionSet['policies'] as $policy )
+            {
+                $limitationSetSaysYes = true;
+                foreach ( $policy->getLimitations() as $limitation )
+                {
+                    $type = $roleService->getLimitationType( $limitation->getIdentifier() );
+                    if ( !$type->evaluate( $limitation, $this, $object, $target ) )
+                    {
+                        $limitationSetSaysYes = false;
+                        // Break to next limitationSet, this one just said no
+                        break;
+                    }
+                }
+                if ( $limitationSetSaysYes )
+                    return true;
+            }
+
         }
         return false;// None of the limitation sets wanted to let you in, sorry!
     }

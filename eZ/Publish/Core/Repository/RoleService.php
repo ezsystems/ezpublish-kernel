@@ -850,27 +850,27 @@ class RoleService implements RoleServiceInterface
     /**
      * Maps provided SPI Policy value object to API Policy value object
      *
+     * @access private Only accessible for other services and the internals of the repository
      * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
      * @param \eZ\Publish\SPI\Persistence\User\Role|null $role
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy
      */
-    protected function buildDomainPolicyObject( SPIPolicy $policy, SPIRole $role = null )
+    public function buildDomainPolicyObject( SPIPolicy $policy, SPIRole $role = null )
     {
         $policyLimitations = array();
-        if ( $policy->module !== '*' && $policy->function !== '*' && is_array( $policy->limitations ) )
+        if ( $policy->module !== '*' && $policy->function !== '*' && $policy->limitations !== '*' )
         {
-            foreach ( $policy->limitations as $limitationIdentifier => $limitationValues )
+            foreach ( $policy->limitations as $identifier => $values )
             {
-                $limitation = $this->getLimitationType( $limitationIdentifier )->buildValue( $limitationValues );
-                $policyLimitations[] = $limitation;
+                $policyLimitations[] = $this->getLimitationType( $identifier )->buildValue( $values );
             }
         }
 
         return new Policy(
             array(
-                'id' => (int) $policy->id,
-                'roleId' => $role ? (int) $role->id : (int) $policy->roleId,
+                'id' => (int)$policy->id,
+                'roleId' => $role !== null ? (int)$role->id : (int)$policy->roleId,
                 'module' => $policy->module,
                 'function' => $policy->function,
                 'limitations' => $policyLimitations
