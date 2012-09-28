@@ -750,7 +750,7 @@ class ContentService implements ContentServiceInterface
         }
 
         if ( !$this->repository->canUser( 'content', 'edit', $contentInfo ) )
-            throw new UnauthorizedException( 'content', 'edt' );
+            throw new UnauthorizedException( 'content', 'edit' );
 
         $this->repository->beginTransaction();
         try
@@ -893,7 +893,7 @@ class ContentService implements ContentServiceInterface
         }
 
         if ( !$this->repository->canUser( 'content', 'edit', $contentInfo ) )
-            throw new UnauthorizedException( 'content', 'edt' );
+            throw new UnauthorizedException( 'content', 'edit' );
 
         $this->repository->beginTransaction();
         try
@@ -1006,7 +1006,7 @@ class ContentService implements ContentServiceInterface
         }
 
         if ( !$this->repository->canUser( 'content', 'edit', $content ) )
-            throw new UnauthorizedException( 'content', 'edt' );
+            throw new UnauthorizedException( 'content', 'edit' );
 
         /** @var \eZ\Publish\API\Repository\Values\Content\Field[] $fields */
         $fields = array();
@@ -1198,7 +1198,7 @@ class ContentService implements ContentServiceInterface
         );
 
         if ( !$this->repository->canUser( 'content', 'edit', $content ) )
-            throw new UnauthorizedException( 'content', 'edt' );
+            throw new UnauthorizedException( 'content', 'edit' );
 
         $this->repository->beginTransaction();
         try
