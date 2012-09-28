@@ -661,7 +661,6 @@ ezpublish_rest_loadURLWildcard:
     requirements:
         _method: GET
         urlWildcardId: \d+
-    'GET'     => array( $urlWildcardController, 'loadURLWildcard' ),
 
 ezpublish_rest_deleteURLWildcard:
     pattern: /content/urlwildcards/{urlWildcardId}
@@ -701,7 +700,6 @@ ezpublish_rest_:
     requirements:
         _method:
         roleId: \d+
-    'GET'     => array( $roleController, 'loadRole' ),
 
 ezpublish_rest_updateRole:
     pattern: /user/roles/{roleId}
