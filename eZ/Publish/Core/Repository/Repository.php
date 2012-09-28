@@ -333,21 +333,19 @@ class Repository implements RepositoryInterface
              */
             foreach ( $permissionSet['policies'] as $policy )
             {
-                $limitationSetSaysYes = true;
+                $limitationsPass = true;
                 foreach ( $policy->getLimitations() as $limitation )
                 {
                     $type = $roleService->getLimitationType( $limitation->getIdentifier() );
                     if ( !$type->evaluate( $limitation, $this, $object, $target ) )
                     {
-                        $limitationSetSaysYes = false;
-                        // Break to next limitationSet, this one just said no
-                        break;
+                        $limitationsPass = false;
+                        break;// Break to next policy, all limitations must pass
                     }
                 }
-                if ( $limitationSetSaysYes )
+                if ( $limitationsPass )
                     return true;
             }
-
         }
         return false;// None of the limitation sets wanted to let you in, sorry!
     }
