@@ -277,7 +277,12 @@ class SectionService implements SectionServiceInterface
         $loadedSection = $this->loadSection( $section->id );
 
         if ( $this->repository->canUser( 'section', 'assign', $loadedContentInfo, $loadedSection ) !== true )
-            throw new UnauthorizedException( 'section', 'assign', $loadedSection->id );
+        {
+            throw new UnauthorizedException( 'section', 'assign', array(
+                'name' => $loadedSection->name,
+                'content-name' => $loadedContentInfo->name
+            ) );
+        }
 
         $this->repository->beginTransaction();
         try
@@ -313,7 +318,7 @@ class SectionService implements SectionServiceInterface
         $loadedSection = $this->loadSection( $section->id );
 
         if ( $this->repository->canUser( 'section', 'edit', $loadedSection ) !== true )
-            throw new UnauthorizedException( 'section', 'edit', $loadedSection->id );
+            throw new UnauthorizedException( 'section', 'edit', array( 'name' => $loadedSection->name ) );
 
         if ( $this->countAssignedContents( $loadedSection ) > 0 )
             throw new BadStateException( "section", 'section is still assigned to content' );

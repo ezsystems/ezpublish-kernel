@@ -893,7 +893,7 @@ class ContentService implements ContentServiceInterface
         }
 
         if ( !$this->repository->canUser( 'content', 'edit', $contentInfo ) )
-            throw new UnauthorizedException( 'content', 'edit' );
+            throw new UnauthorizedException( 'content', 'edit', array( 'name' => $contentInfo->name ) );
 
         $this->repository->beginTransaction();
         try

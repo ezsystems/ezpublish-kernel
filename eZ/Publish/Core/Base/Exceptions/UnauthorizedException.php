@@ -29,11 +29,20 @@ class UnauthorizedException extends APIUnauthorizedException implements Httpable
      * @param string|null $identifier
      * @param \Exception|null $previous
      */
-    public function __construct( $module, $function, $identifier = null, Exception $previous = null )
+    public function __construct( $module, $function, array $properties = null, Exception $previous = null )
     {
+        $identificationString = '';
+        if ( $properties !== null )
+        {
+            foreach ( $properties as $name => $value )
+            {
+                $identificationString .= $identificationString === '' ? ' with' : ' and';
+                $identificationString .= " {$name} '{$value}'";
+            }
+        }
+
         parent::__construct(
-            "User does not have access to '{$function}' '{$module}'" .
-            ( $identifier !== null ? " with identifier '{$identifier}'" : '' ),
+            "User does not have access to '{$function}' '{$module}'" . $identificationString,
             self::UNAUTHORIZED,
             $previous
         );
