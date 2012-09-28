@@ -8,11 +8,12 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Values;
+use eZ\Publish\Core\REST\Server\Value AS RestValue;
 
 /**
  * Content list view model
  */
-class ContentList
+class ContentList extends RestValue
 {
     /**
      * Contents

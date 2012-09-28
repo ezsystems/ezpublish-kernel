@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
+use eZ\Publish\Core\REST\Server\Value as RestValue;
+
 /**
  * Version list view model
  */
-class VersionList
+class VersionList extends RestValue
 {
     /**
      * Versions

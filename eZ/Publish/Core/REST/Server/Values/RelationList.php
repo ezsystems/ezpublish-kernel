@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
+use eZ\Publish\Core\REST\Server\Value as RestValue;
+
 /**
  * Relation list view model
  */
-class RelationList
+class RelationList extends RestValue
 {
     /**
      * Relations

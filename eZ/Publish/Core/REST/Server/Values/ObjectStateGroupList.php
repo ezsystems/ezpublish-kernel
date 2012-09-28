@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
+use eZ\Publish\Core\REST\Server\Value as RestValue;
+
 /**
  * ObjectStateGroup list view model
  */
-class ObjectStateGroupList
+class ObjectStateGroupList extends RestValue
 {
     /**
      * Object state groups

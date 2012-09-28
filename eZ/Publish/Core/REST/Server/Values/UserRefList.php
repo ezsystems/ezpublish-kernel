@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
+use eZ\Publish\Core\REST\Server\Value as RestValue;
+
 /**
  * User list view model
  */
-class UserRefList
+class UserRefList extends RestValue
 {
     /**
      * Users
