@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
+use eZ\Publish\Core\REST\Server\Value as RestValue;
+
 /**
  * ContentType list view model
  */
-class ContentTypeList
+class ContentTypeList extends RestValue
 {
     /**
      * Content types

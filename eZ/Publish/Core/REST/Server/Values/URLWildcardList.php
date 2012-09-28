@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
+use eZ\Publish\Core\REST\Server\Value as RestValue;
+
 /**
  * URLWildcard list view model
  */
-class URLWildcardList
+class URLWildcardList extends RestValue
 {
     /**
      * URL wildcards

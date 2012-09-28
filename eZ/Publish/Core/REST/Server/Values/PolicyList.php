@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
+use eZ\Publish\Core\REST\Server\Value as RestValue;
+
 /**
  * Policy list view model
  */
-class PolicyList
+class PolicyList extends RestValue
 {
     /**
      * Policies

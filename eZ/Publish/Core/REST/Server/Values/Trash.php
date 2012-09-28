@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
+use eZ\Publish\Core\REST\Server\Value as RestValue;
+
 /**
  * Trash view model
  */
-class Trash
+class Trash extends RestValue
 {
     /**
      * Trash items
