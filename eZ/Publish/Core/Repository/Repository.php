@@ -269,7 +269,7 @@ class Repository implements RepositoryInterface
                 if ( $spiPolicy->limitations === '*' && $spiRoleAssignment->limitationIdentifier === null )
                     return true;
 
-                if ( $returnLimitations && $spiPolicy->limitations !== '*' )
+                if ( $returnLimitations )
                     $permissionSet['policies'][] = $roleService->buildDomainPolicyObject( $spiPolicy );
             }
 
@@ -333,8 +333,12 @@ class Repository implements RepositoryInterface
              */
             foreach ( $permissionSet['policies'] as $policy )
             {
+                $limitations = $policy->getLimitations();
+                if ( $limitations === '*' )
+                    return true;
+
                 $limitationsPass = true;
-                foreach ( $policy->getLimitations() as $limitation )
+                foreach ( $limitations as $limitation )
                 {
                     $type = $roleService->getLimitationType( $limitation->getIdentifier() );
                     if ( !$type->evaluate( $limitation, $this, $object, $target ) )

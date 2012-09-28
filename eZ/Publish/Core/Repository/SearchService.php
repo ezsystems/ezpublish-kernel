@@ -160,8 +160,12 @@ class SearchService implements SearchServiceInterface
              */
             foreach ( $permissionSet['policies'] as $policy )
             {
+                $limitations = $policy->getLimitations();
+                if ( $limitations === '*' )
+                    continue;
+
                 $limitationsAndCriteria = array();
-                foreach ( $policy->getLimitations() as $limitation )
+                foreach ( $limitations as $limitation )
                 {
                     $type = $roleService->getLimitationType( $limitation->getIdentifier() );
                     $limitationsAndCriteria[] = $type->getCriterion( $limitation, $this->repository );
