@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Service;
 
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
+    eZ\Publish\Core\Repository\URLWildcardService,
     eZ\Publish\API\Repository\Values\Content\URLWildcard,
     eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
 
@@ -25,17 +26,11 @@ abstract class UrlWildcardBase extends BaseServiceTest
      */
     public function testConstructor()
     {
-        /** @var $repository \eZ\Publish\API\Repository\Repository */
-        /** @var $handler \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler */
-        $repository = self::getMock( "eZ\\Publish\\API\\Repository\\Repository" );
-        $handler = self::getMock( "eZ\\Publish\\SPI\\Persistence\\Content\\UrlWildcard\\Handler" );
-        $settings = array( "settings" );
+        $service = $this->getMockedService();
 
-        $service = new \eZ\Publish\Core\Repository\URLWildcardService( $repository, $handler, $settings );
-
-        self::assertAttributeSame( $repository, "repository", $service );
-        self::assertAttributeSame( $handler, "urlWildcardHandler", $service );
-        self::assertAttributeSame( $settings, "settings", $service );
+        self::assertAttributeSame( $this->getRepositoryMock(), "repository", $service );
+        self::assertAttributeSame( $this->getHandlerMock(), "urlWildcardHandler", $service );
+        self::assertAttributeSame( array( "settings" ), "settings", $service );
     }
 
     /**
@@ -82,6 +77,7 @@ abstract class UrlWildcardBase extends BaseServiceTest
     {
         return array(
             array( "fruit", "food", true ),
+            array( " /fruit/ ", " /food/ ", true ),
             array( "fruit/*", "food", false ),
             array( "fruit/*", "food/{1}", true ),
             array( "fruit/*/*", "food/{1}", true ),
@@ -94,7 +90,6 @@ abstract class UrlWildcardBase extends BaseServiceTest
      * Test for the create() method.
      *
      * @covers \eZ\Publish\Core\Repository\UrlWildcardService::create
-     * @depends testLoad
      * @dataProvider providerForTestCreate
      */
     public function testCreate( $sourceUrl, $destinationUrl, $forward )
@@ -106,12 +101,31 @@ abstract class UrlWildcardBase extends BaseServiceTest
             new URLWildcard(
                 array(
                     "id" => 1,
-                    "sourceUrl" => $sourceUrl,
-                    "destinationUrl" => $destinationUrl,
+                    "sourceUrl" => trim( $sourceUrl, "/ " ),
+                    "destinationUrl" => trim( $destinationUrl, "/ " ),
                     "forward" => $forward
                 )
             ),
             $urlWildcard
+        );
+
+        return $urlWildcard;
+    }
+
+    /**
+     * Test for the create() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\UrlWildcardService::create
+     * @dataProvider providerForTestCreate
+     */
+    public function testCreatedUrlWildcardIsLoadable( $sourceUrl, $destinationUrl, $forward )
+    {
+        $service = $this->repository->getURLWildcardService();
+        $urlWildcard = $service->create( $sourceUrl, $destinationUrl, $forward );
+
+        self::assertEquals(
+            $urlWildcard,
+            $service->load( $urlWildcard->id )
         );
     }
 
@@ -182,7 +196,20 @@ abstract class UrlWildcardBase extends BaseServiceTest
      */
     public function testCreateThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
+        $mockedService = $this->getMockedService();
+        $repositoryMock = $this->getRepositoryMock();
+        $repositoryMock->expects(
+            $this->once()
+        )->method(
+            "hasAccess"
+        )->with(
+            $this->equalTo( "content" ),
+            $this->equalTo( "urltranslator" )
+        )->will(
+            $this->returnValue( false )
+        );
+
+        $mockedService->create( "lorem/ipsum", "opossum", true );
     }
 
     /**
@@ -235,7 +262,20 @@ abstract class UrlWildcardBase extends BaseServiceTest
      */
     public function testRemoveThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
+        $mockedService = $this->getMockedService();
+        $repositoryMock = $this->getRepositoryMock();
+        $repositoryMock->expects(
+            $this->once()
+        )->method(
+            "hasAccess"
+        )->with(
+            $this->equalTo( "content" ),
+            $this->equalTo( "urltranslator" )
+        )->will(
+            $this->returnValue( false )
+        );
+
+        $mockedService->remove( new URLWildcard() );
     }
 
     /**
@@ -346,7 +386,31 @@ abstract class UrlWildcardBase extends BaseServiceTest
     public function providerForTestTranslate()
     {
         return array(
-            array( "" ),
+            array(
+                array( "fruit/apricot", "food/apricot", true ),
+                "fruit/apricot",
+                "food/apricot"
+            ),
+            array(
+                array( "fruit/*", "food/{1}", true ),
+                "fruit/citrus",
+                "food/citrus"
+            ),
+            array(
+                array( "fruit/*", "food/{1}", true ),
+                "fruit/citrus/orange",
+                "food/citrus/orange"
+            ),
+            array(
+                array( "fruit/*/*", "food/{2}", true ),
+                "fruit/citrus/orange",
+                "food/orange"
+            ),
+            array(
+                array( "fruit/*/*", "food/{1}/{2}", true ),
+                "fruit/citrus/orange",
+                "food/citrus/orange"
+            ),
         );
     }
 
@@ -355,12 +419,49 @@ abstract class UrlWildcardBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\UrlWildcardService::translate
      * @dataProvider providerForTestTranslate
+     * @depends testCreate
      */
-    public function testTranslate( $url )
+    public function testTranslate( $createArray, $url, $uri )
     {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
         $service = $this->repository->getURLWildcardService();
+        list( $createSourceUrl, $createDestinationUrl, $createForward ) = $createArray;
+        $service->create( $createSourceUrl, $createDestinationUrl, $createForward );
 
+        $translationResult = $service->translate( $url );
+
+        self::assertEquals(
+            new URLWildcardTranslationResult(
+                array(
+                    "uri" => $uri,
+                    "forward" => $createForward
+                )
+            ),
+            $translationResult
+        );
+    }
+
+    /**
+     * Test for the translate() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\UrlWildcardService::translate
+     */
+    public function testTranslateUsesLongestMatchingWildcard()
+    {
+        $service = $this->repository->getURLWildcardService();
+        $service->create( "something/*", "short", true );
+        $service->create( "something/something/*", "long", false );
+
+        $translationResult = $service->translate( "something/something/thing" );
+
+        self::assertEquals(
+            new URLWildcardTranslationResult(
+                array(
+                    "uri" => "long",
+                    "forward" => false
+                )
+            ),
+            $translationResult
+        );
     }
 
     /**
@@ -371,8 +472,67 @@ abstract class UrlWildcardBase extends BaseServiceTest
      */
     public function testTranslateThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
+        $this->markTestSkipped( "Specification needs to be checked: " . __METHOD__ );
         $service = $this->repository->getURLWildcardService();
 
+        $service->translate( "cant/get/there/from/here" );
+    }
+
+    /**
+     * @var \eZ\Publish\Core\Repository\URLWildcardService
+     */
+    private $mockedService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    private $repositoryMock;
+
+    /**
+     * @var \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
+     */
+    private $handlerMock;
+
+    /**
+     * @return \eZ\Publish\Core\Repository\URLWildcardService
+     */
+    private function getMockedService()
+    {
+        if ( !isset( $this->mockedService ) )
+        {
+            $this->mockedService = new URLWildcardService(
+                $this->getRepositoryMock(),
+                $this->getHandlerMock(),
+                array( "settings" )
+            );
+        }
+
+        return $this->mockedService;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Repository|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getRepositoryMock()
+    {
+        if ( !isset( $this->repositoryMock ) )
+        {
+            $this->repositoryMock = self::getMock( "eZ\\Publish\\API\\Repository\\Repository" );
+        }
+
+        return $this->repositoryMock;
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getHandlerMock()
+    {
+        if ( !isset( $this->handlerMock ) )
+        {
+            $this->handlerMock = self::getMock( "eZ\\Publish\\SPI\\Persistence\\Content\\UrlWildcard\\Handler" );
+        }
+
+        return $this->handlerMock;
     }
 }
