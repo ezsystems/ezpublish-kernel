@@ -77,6 +77,9 @@ class URLWildcardService implements URLWildcardServiceInterface
         if ( $this->repository->hasAccess( 'content', 'urltranslator' ) !== true )
             throw new UnauthorizedException( 'content', 'urltranslator' );
 
+        $sourceUrl = $this->cleanUrl( $sourceUrl );
+        $destinationUrl = $this->cleanUrl( $destinationUrl );
+
         $spiUrlWildcards = $this->urlWildcardHandler->loadAll();
         foreach ( $spiUrlWildcards as $wildcard )
         {
@@ -97,7 +100,7 @@ class URLWildcardService implements URLWildcardServiceInterface
 
         if ( count( $placeholders ) > 0 && max( $placeholders ) > count( $patterns ) )
         {
-            throw new ContentValidationException(  );
+            throw new ContentValidationException( "Placeholders are not matching with wildcards." );
         }
 
         $this->repository->beginTransaction();
@@ -117,6 +120,18 @@ class URLWildcardService implements URLWildcardServiceInterface
         }
 
         return $this->buildUrlWildcardDomainObject( $spiUrlWildcard );
+    }
+
+    /**
+     * Removes leading and trailing slashes and spaces.
+     *
+     * @param string $url
+     *
+     * @return string
+     */
+    protected function cleanUrl( $url )
+    {
+        return trim( $url, "/ " );
     }
 
     /**
@@ -193,6 +208,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      * url is an alias it will be translated to the system uri.
      *
      * This method runs also configured url translations and filter
+     * @todo lookup should not happen here?
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url could not be translated
      *
@@ -203,6 +219,16 @@ class URLWildcardService implements URLWildcardServiceInterface
     public function translate( $url )
     {
         $spiUrlWildcards = $this->urlWildcardHandler->loadAll();
+
+        // sorts wildcards by length of source URL string
+        // @todo sort by specificity of the pattern?
+        uasort(
+            $spiUrlWildcards,
+            function( SPIUrlWildcard $w1, SPIUrlWildcard $w2 )
+            {
+                return strlen( $w2->sourceUrl ) - strlen( $w1->sourceUrl );
+            }
+        );
 
         foreach ( $spiUrlWildcards as $wildcard )
         {
@@ -217,7 +243,7 @@ class URLWildcardService implements URLWildcardServiceInterface
             }
         }
 
-        $alias = $this->repository->getURLAliasService()->lookUp( $url );
+        $alias = $this->repository->getURLAliasService()->lookup( $url );
 
         return new URLWildcardTranslationResult(
             array(
@@ -225,6 +251,26 @@ class URLWildcardService implements URLWildcardServiceInterface
                 'forward' => $alias->forward
             )
         );
+    }
+
+    /**
+     * Map by specificity
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\UrlWildcard[] $spiUrlWildcards
+     *
+     * @return array
+     * @todo use or remove
+     */
+    private function buildSpecificityScoreMap( array $spiUrlWildcards )
+    {
+        $map = array();
+
+        foreach ( $spiUrlWildcards as $spiUrlWildcard )
+        {
+            $map[$spiUrlWildcard->id] = preg_replace("/[\\D]/", "", strtr( $spiUrlWildcard->sourceUrl, "/*", "10" ) );
+        }
+
+        return $map;
     }
 
     /**
