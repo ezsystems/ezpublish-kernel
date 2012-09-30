@@ -58,13 +58,13 @@ class Role extends ValueObjectVisitor
             $this->visitDescriptionsList( $generator, $descriptions );
         }
 
-        $generator->startObjectElement( 'PolicyList' );
+        $generator->startObjectElement( 'Policies', 'PolicyList' );
         $generator->startAttribute(
             'href',
             $this->urlHandler->generate( 'policies', array( 'role' => $data->id ) )
         );
         $generator->endAttribute( 'href' );
-        $generator->endObjectElement( 'PolicyList' );
+        $generator->endObjectElement( 'Policies' );
 
         $generator->endObjectElement( 'Role' );
     }

@@ -181,41 +181,41 @@ class RoleTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains PolicyList element
+     * Test if result contains Policies element
      *
      * @param string $result
      * @depends testVisit
      */
-    public function testResultContainsPolicyListElement( $result )
+    public function testResultContainsPoliciesElement( $result )
     {
         $this->assertTag(
             array(
-                'tag'      => 'PolicyList'
+                'tag'      => 'Policies'
             ),
             $result,
-            'Invalid <PolicyList> element.',
+            'Invalid <Policies> element.',
             false
         );
     }
 
     /**
-     * Test if result contains PolicyList element attributes
+     * Test if result contains Policies element attributes
      *
      * @param string $result
      * @depends testVisit
      */
-    public function testResultContainsPolicyListAttributes( $result )
+    public function testResultContainsPoliciesAttributes( $result )
     {
         $this->assertTag(
             array(
-                'tag'      => 'PolicyList',
+                'tag'      => 'Policies',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.PolicyList+xml',
                     'href'       => '/user/roles/42/policies',
                 )
             ),
             $result,
-            'Invalid <PolicyList> attributes.',
+            'Invalid <Policies> attributes.',
             false
         );
     }
