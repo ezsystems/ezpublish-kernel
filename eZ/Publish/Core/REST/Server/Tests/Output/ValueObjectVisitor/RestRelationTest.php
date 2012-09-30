@@ -156,11 +156,11 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
     {
         $this->assertTag(
             array(
-                'tag'      => 'sourceFieldDefinitionIdentifier',
+                'tag'      => 'SourceFieldDefinitionIdentifier',
                 'content'  => 'relation_field',
             ),
             $result,
-            'Invalid or non-existing <Relation> sourceFieldDefinitionIdentifier value element.',
+            'Invalid or non-existing <Relation> SourceFieldDefinitionIdentifier value element.',
             false
         );
     }
@@ -174,7 +174,7 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
         $this->assertTag(
             array(
                 'tag'      => 'RelationType',
-                'content'  => 'FIELD',
+                'content'  => 'ATTRIBUTE',
             ),
             $result,
             'Invalid or non-existing <Relation> RelationType value element.',

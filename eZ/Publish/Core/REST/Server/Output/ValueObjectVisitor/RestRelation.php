@@ -73,8 +73,8 @@ class RestRelation extends ValueObjectVisitor
 
         if ( $data->relation->sourceFieldDefinitionIdentifier !== null )
         {
-            $generator->startValueElement( 'sourceFieldDefinitionIdentifier', $data->relation->sourceFieldDefinitionIdentifier );
-            $generator->endValueElement( 'sourceFieldDefinitionIdentifier' );
+            $generator->startValueElement( 'SourceFieldDefinitionIdentifier', $data->relation->sourceFieldDefinitionIdentifier );
+            $generator->endValueElement( 'SourceFieldDefinitionIdentifier' );
         }
 
         $generator->startValueElement( 'RelationType', $this->getRelationTypeString( $data->relation->type ) );
@@ -100,7 +100,7 @@ class RestRelation extends ValueObjectVisitor
             case RelationValue::LINK:
                 return 'LINK';
             case RelationValue::FIELD:
-                return 'FIELD';
+                return 'ATTRIBUTE';
         }
 
         throw new \Exception( 'Unknown relation type ' . $relationType . '.' );
