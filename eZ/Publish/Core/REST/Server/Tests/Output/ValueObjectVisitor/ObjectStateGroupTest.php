@@ -70,7 +70,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'ObjectStateGroup',
                 'children' => array(
-                    'count' => 5
+                    'count' => 6
                 )
             ),
             $result,
@@ -97,6 +97,25 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
             ),
             $result,
             'Invalid <ObjectStateGroup> attributes.',
+            false
+        );
+    }
+
+    /**
+     * Test if result contains id value element
+     *
+     * @param string $result
+     * @depends testVisit
+     */
+    public function testResultContainsIdValueElement( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag'      => 'id',
+                'content'  => '42'
+            ),
+            $result,
+            'Invalid or non-existing <ObjectStateGroup> id value element.',
             false
         );
     }

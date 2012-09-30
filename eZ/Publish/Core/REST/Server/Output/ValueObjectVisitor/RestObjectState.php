@@ -37,6 +37,9 @@ class RestObjectState extends ValueObjectVisitor
         );
         $generator->endAttribute( 'href' );
 
+        $generator->startValueElement( 'id', $data->objectState->id );
+        $generator->endValueElement( 'id' );
+
         $generator->startValueElement( 'identifier', $data->objectState->identifier );
         $generator->endValueElement( 'identifier' );
 
