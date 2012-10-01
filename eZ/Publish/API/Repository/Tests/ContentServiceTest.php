@@ -4017,10 +4017,10 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertAliasesCorrect(
             array(
-                '/Design/eZ-publish/An-awesome-forum' => array(
+                '/Design/Plain-site/An-awesome-forum' => array(
                     'type' => URLAlias::LOCATION,
                     'destination' => $location,
-                    'path' => '/Design/eZ-publish/An-awesome-forum',
+                    'path' => '/Design/Plain-site/An-awesome-forum',
                     'languageCodes' => array( 'eng-US' ),
                     'isHistory' => false,
                     'isCustom' => false,
