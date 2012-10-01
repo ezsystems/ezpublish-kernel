@@ -13,7 +13,15 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser,
     Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Provides helpers to deal with settings which are array
+ * Provides helpers to deal with array settings. This abstract class mainly
+ * provides the registerInternalConfigArray() method to properly merge and
+ * register array settings defined at in several scopes:
+ * <code>
+ *     $this->registerInternalConfigArray( 'key', $config, $container );
+ * </code>
+ * This method will look for the 'key' array in the configuration provided in
+ * $config and will merge the arrays from default, group, siteaccess and global
+ * scopes in the correct order to compute the value for each siteaccess.
  */
 abstract class AbstractParser implements Parser
 {
@@ -71,8 +79,7 @@ abstract class AbstractParser implements Parser
             {
                 if ( $mergeFromSecondLevel )
                 {
-                    $keys = array_keys( $config['system'][$group][$id] );
-                    foreach ( $keys as $key )
+                    foreach ( array_keys( $config['system'][$group][$id] ) as $key )
                     {
                         if ( !isset( $groupsSettings[$key] ) )
                         {
@@ -80,6 +87,8 @@ abstract class AbstractParser implements Parser
                         }
                         else
                         {
+                            // array_merge() has to be used because we don't
+                            // know wether we have a hash or a plain array
                             $groupsSettings[$key] = array_merge(
                                 $groupsSettings[$key],
                                 $config['system'][$group][$id][$key]
@@ -89,6 +98,8 @@ abstract class AbstractParser implements Parser
                 }
                 else
                 {
+                    // array_merge() has to be used because we don't
+                    // know wether we have a hash or a plain array
                     $groupsSettings = array_merge(
                         $groupsSettings,
                         $config['system'][$group][$id]
@@ -100,10 +111,10 @@ abstract class AbstractParser implements Parser
     }
 
     /**
-     * Registers the internal configuration. For settings arrays, we merge the
+     * Registers the internal configuration. For array settings, we merge the
      * arrays defined in scopes default, in the siteaccess groups, in the
-     * siteaccess itself and in the global scope. Too calculate the precedence
-     * of siteaccess group, they are sorted by name.
+     * siteaccess itself and in the global scope. To calculate the precedence
+     * of siteaccess group, they are alphabetically sorted.
      *
      * @param string $id id of the setting array to register
      * @param array $config the full configuration as an array
@@ -149,6 +160,8 @@ abstract class AbstractParser implements Parser
             }
             if ( $options & self::MERGE_FROM_SECOND_LEVEL )
             {
+                // array_merge() has to be used because we don't
+                // know wether we have a hash or a plain array
                 $keys1 = array_unique(
                     array_merge(
                         array_keys( $defaultSettings ),
@@ -186,9 +199,5 @@ abstract class AbstractParser implements Parser
 
             $container->setParameter( "ezsettings.$sa.$id", $mergedSettings );
         }
-
     }
-
 }
-
-?>

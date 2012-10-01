@@ -50,7 +50,6 @@ class FieldTemplates extends AbstractParser
      */
     public function registerInternalConfig( array $config, ContainerBuilder $container )
     {
-
         foreach ( $config['siteaccess']['groups'] as $group => $saArray )
         {
             if ( isset( $config['system'][$group]['field_templates'] ) )
