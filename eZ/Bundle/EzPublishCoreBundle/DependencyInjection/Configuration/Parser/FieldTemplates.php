@@ -52,11 +52,11 @@ class FieldTemplates extends AbstractParser
     {
         foreach ( $config['siteaccess']['groups'] as $group => $saArray )
         {
-            if ( isset( $config['system'][$group]['field_templates'] ) )
+            if ( isset( $config[$this->baseKey][$group]['field_templates'] ) )
             {
                 $container->setParameter(
                     "ezsettings.$group.field_templates",
-                    $config['system'][$group]['field_templates']
+                    $config[$this->baseKey][$group]['field_templates']
                 );
             }
         };

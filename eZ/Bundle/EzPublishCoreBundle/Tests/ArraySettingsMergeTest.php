@@ -22,7 +22,15 @@ class ArraySettingsMergeTest extends \PHPUnit_Framework_TestCase
             'Symfony\\Component\\DependencyInjection\\ContainerBuilder'
         );
         $this->parserMock = $this->getMock(
-            'eZ\\Bundle\\EzPublishCoreBundle\\DependencyInjection\\Configuration\\AbstractParser'
+            'eZ\\Bundle\\EzPublishCoreBundle\\DependencyInjection\\Configuration\\AbstractParser',
+            array(
+                // leave setBaseKey alone!
+                'registerInternalConfigArray',
+                'getContainerParameter',
+                'groupsArraySetting',
+                'addSemanticConfig',
+                'registerInternalConfig'
+            )
         );
     }
 
@@ -34,7 +42,8 @@ class ArraySettingsMergeTest extends \PHPUnit_Framework_TestCase
      */
     public function testArrayMerge(
         $testId, $siteaccess, array $groups, array $defaultValue,
-        array $globalValue, array $config, $options, array $expected
+        array $globalValue, array $config, $options, array $expected,
+        $customBaseKey = null
     )
     {
         $hasParameterMap = array(
@@ -85,6 +94,10 @@ class ArraySettingsMergeTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo( $expected )
             );
 
+        if ( $customBaseKey !== null )
+        {
+            $this->parserMock->setBaseKey( $customBaseKey );
+        }
         $method = new \ReflectionMethod(
             $this->parserMock,
             'registerInternalConfigArray'
@@ -221,7 +234,7 @@ class ArraySettingsMergeTest extends \PHPUnit_Framework_TestCase
         );
 
 
-        return array(
+        $cases = array(
             //
             // MERGING TESTS ON NORMAL ARRAY
             //
@@ -953,6 +966,19 @@ class ArraySettingsMergeTest extends \PHPUnit_Framework_TestCase
                 $locationView3,
             )
         );
+
+        foreach ( $cases as $k => $newcase )
+        {
+            // run the same tests with another baseKey than the default one
+            if ( isset( $newcase[5]['system'] ) )
+            {
+                $newcase[5]['customBaseKey'] = $newcase[5]['system'];
+                unset( $newcase[5]['system'] );
+                $newcase[] = 'customBaseKey';
+                $cases[] = $newcase;
+            }
+        }
+        return $cases;
     }
 
 
