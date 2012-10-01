@@ -1,0 +1,10 @@
+parameters:
+    ezpublish_legacy.security.firewall_listener.class: eZ\Publish\Core\MVC\Symfony\Security\Firewall\Listener
+
+services:
+    ezpublish_legacy.security.firewall_listener:
+        class: %ezpublish_legacy.security.firewall_listener.class%
+        abstract: true
+        parent: security.authentication.listener.abstract
+        calls:
+            - [setRepository, [@ezpublish.api.repository]]

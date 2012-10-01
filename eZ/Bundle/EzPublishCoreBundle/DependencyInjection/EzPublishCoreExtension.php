@@ -51,8 +51,10 @@ class EzPublishCoreExtension extends Extension
         $configuration = $this->getConfiguration( $configs, $container );
         $config = $this->processConfiguration( $configuration, $configs );
 
-        // Base services override
+        // Base services and services overrides
         $loader->load( 'services.yml' );
+        // Security services
+        $loader->load( 'security.yml' );
         // Default settings
         $loader->load( 'default_settings.yml' );
         $this->registerSiteAcccessConfiguration( $config, $container );

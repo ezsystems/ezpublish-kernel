@@ -1,0 +1,8 @@
+parameters:
+    ezpublish_legacy.security.firewall_listener.class: eZ\Publish\Core\MVC\Legacy\Security\Firewall
+
+services:
+    ezpublish_legacy.security.firewall_listener:
+        class: %ezpublish_legacy.security.firewall_listener.class%
+        abstract: true
+        parent: ezpublish.security.firewall_listener
