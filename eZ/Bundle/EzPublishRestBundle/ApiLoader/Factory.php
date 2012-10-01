@@ -2,10 +2,14 @@
 namespace eZ\Bundle\EzPublishRestBundle\ApiLoader;
 
 use eZ\Publish\Core\REST\Server\Input;
+use eZ\Publish\Core\REST\Server\Output;
+use eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher;
 use eZ\Publish\Core\REST\Server\FieldTypeProcessor;
 use eZ\Publish\Core\REST\Common;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use eZ\Publish\API\Repository\Repository;
+// use eZ\Publish\Core\REST\Server\View\Visitor;
+use QaFoo\RMF\View\AcceptHeaderViewDispatcher;
 
 class Factory
 {
@@ -150,5 +154,170 @@ class Factory
                 )
             )
         );
+    }
+
+    public function buildResponseVisitorDispatcher(
+        Common\URLHandler $urlHandler,
+        Common\Output\FieldTypeSerializer $fieldTypeSerializer,
+        Repository $repository )
+    {
+        $valueObjectVisitors = array(
+            // Errors
+
+            '\\eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'   => new Output\ValueObjectVisitor\InvalidArgumentException( $urlHandler,  true ),
+            '\\eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException'          => new Output\ValueObjectVisitor\NotFoundException( $urlHandler,  true ),
+            '\\eZ\\Publish\\API\\Repository\\Exceptions\\UnauthorizedException'      => new Output\ValueObjectVisitor\UnauthorizedException( $urlHandler,  true ),
+            '\\eZ\\Publish\\API\\Repository\\Exceptions\\BadStateException'          => new Output\ValueObjectVisitor\BadStateException( $urlHandler,  true ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Exceptions\\BadRequestException'     => new Output\ValueObjectVisitor\BadRequestException( $urlHandler,  true ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Exceptions\\ForbiddenException'      => new Output\ValueObjectVisitor\ForbiddenException( $urlHandler,  true ),
+            '\\Exception'                                                            => new Output\ValueObjectVisitor\Exception( $urlHandler,  true ),
+
+            // Section
+
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\SectionList'                 => new Output\ValueObjectVisitor\SectionList( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedSection'              => new Output\ValueObjectVisitor\CreatedSection( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section'               => new Output\ValueObjectVisitor\Section( $urlHandler ),
+
+            // URLWildcard
+
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\URLWildcardList'             => new Output\ValueObjectVisitor\URLWildcardList( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\URLWildcard'           => new Output\ValueObjectVisitor\URLWildcard( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedURLWildcard'          => new Output\ValueObjectVisitor\CreatedURLWildcard( $urlHandler ),
+
+            // Content
+
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentList'                 => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestContent'                 => new Output\ValueObjectVisitor\RestContent( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedContent'              => new Output\ValueObjectVisitor\CreatedContent( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\VersionList'                 => new Output\ValueObjectVisitor\VersionList( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedVersion'              => new Output\ValueObjectVisitor\CreatedVersion( $urlHandler, $fieldTypeSerializer ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo'           => new Output\ValueObjectVisitor\VersionInfo( $urlHandler ),
+
+            // The following two visitors are quite similar, as they both generate
+            // <Version> resource. However, "Version" visitor DOES NOT generate embedded
+            // <Fields> and <Relations> elements, while "Content" visitor DOES
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\Version'                     => new Output\ValueObjectVisitor\Version( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content'               => new Output\ValueObjectVisitor\Content(
+                $urlHandler,
+                $fieldTypeSerializer
+            ),
+
+            // UserGroup
+
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserGroup'               => new Output\ValueObjectVisitor\RestUserGroup( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedUserGroup'            => new Output\ValueObjectVisitor\CreatedUserGroup( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserGroupList'               => new Output\ValueObjectVisitor\UserGroupList( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserGroupRefList'            => new Output\ValueObjectVisitor\UserGroupRefList( $urlHandler ),
+
+            // User
+
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserList'                    => new Output\ValueObjectVisitor\UserList( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\UserRefList'                 => new Output\ValueObjectVisitor\UserRefList( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedUser'                 => new Output\ValueObjectVisitor\CreatedUser( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUser'                    => new Output\ValueObjectVisitor\RestUser( $urlHandler ),
+
+            // ContentType
+
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestContentType'             => new Output\ValueObjectVisitor\RestContentType( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedContentType'          => new Output\ValueObjectVisitor\CreatedContentType( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentTypeList'             => new Output\ValueObjectVisitor\ContentTypeList( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentTypeInfoList'         => new Output\ValueObjectVisitor\ContentTypeInfoList( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeGroup'  => new Output\ValueObjectVisitor\ContentTypeGroup( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedContentTypeGroup'     => new Output\ValueObjectVisitor\CreatedContentTypeGroup( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentTypeGroupList'        => new Output\ValueObjectVisitor\ContentTypeGroupList( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentTypeGroupRefList'     => new Output\ValueObjectVisitor\ContentTypeGroupRefList( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\FieldDefinitionList'         => new Output\ValueObjectVisitor\FieldDefinitionList( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedFieldDefinition'      => new Output\ValueObjectVisitor\CreatedFieldDefinition(
+                $urlHandler,
+                $fieldTypeSerializer
+            ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestFieldDefinition'         => new Output\ValueObjectVisitor\RestFieldDefinition(
+                $urlHandler,
+                $fieldTypeSerializer
+            ),
+
+            // Relation
+
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RelationList'                => new Output\ValueObjectVisitor\RelationList( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestRelation'                => new Output\ValueObjectVisitor\RestRelation( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedRelation'             => new Output\ValueObjectVisitor\CreatedRelation( $urlHandler ),
+
+            // Role
+
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleList'                    => new Output\ValueObjectVisitor\RoleList( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedRole'                 => new Output\ValueObjectVisitor\CreatedRole( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role'                     => new Output\ValueObjectVisitor\Role( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy'                   => new Output\ValueObjectVisitor\Policy( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedPolicy'               => new Output\ValueObjectVisitor\CreatedPolicy( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PolicyList'                  => new Output\ValueObjectVisitor\PolicyList( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RoleAssignmentList'          => new Output\ValueObjectVisitor\RoleAssignmentList( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserRoleAssignment'      => new Output\ValueObjectVisitor\RestUserRoleAssignment( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserGroupRoleAssignment' => new Output\ValueObjectVisitor\RestUserGroupRoleAssignment( $urlHandler ),
+
+            // Location
+
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedLocation'             => new Output\ValueObjectVisitor\CreatedLocation( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location'              => new Output\ValueObjectVisitor\Location( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\LocationList'                => new Output\ValueObjectVisitor\LocationList( $urlHandler ),
+
+            // Trash
+
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\Trash'                       => new Output\ValueObjectVisitor\Trash( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem'             => new Output\ValueObjectVisitor\TrashItem( $urlHandler ),
+
+            // Views
+
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestExecutedView'            => new Output\ValueObjectVisitor\RestExecutedView(
+                $urlHandler,
+                $repository->getLocationService(),
+                $repository->getContentService()
+            ),
+
+            // Object state
+
+            '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup'  => new Output\ValueObjectVisitor\ObjectStateGroup( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedObjectStateGroup'     => new Output\ValueObjectVisitor\CreatedObjectStateGroup( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectStateGroupList'        => new Output\ValueObjectVisitor\ObjectStateGroupList( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Common\\Values\\RestObjectState'             => new Output\ValueObjectVisitor\RestObjectState( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedObjectState'          => new Output\ValueObjectVisitor\CreatedObjectState( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ObjectStateList'             => new Output\ValueObjectVisitor\ObjectStateList( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Common\\Values\\ContentObjectStates'         => new Output\ValueObjectVisitor\ContentObjectStates( $urlHandler ),
+
+            // REST specific
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\TemporaryRedirect'           => new Output\ValueObjectVisitor\TemporaryRedirect( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PermanentRedirect'           => new Output\ValueObjectVisitor\PermanentRedirect( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceDeleted'             => new Output\ValueObjectVisitor\ResourceDeleted( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceCreated'             => new Output\ValueObjectVisitor\ResourceCreated( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceSwapped'             => new Output\ValueObjectVisitor\ResourceSwapped( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\NoContent'                   => new Output\ValueObjectVisitor\NoContent( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Common\\Values\\Root'                        => new Output\ValueObjectVisitor\Root( $urlHandler ),
+        );
+
+        $jsonVisitor = new Common\Output\Visitor(
+            new Common\Output\Generator\Json(
+                new Common\Output\Generator\Json\FieldTypeHashGenerator()
+            ),
+            $valueObjectVisitors
+        );
+
+        $xmlVisitor = new Common\Output\Visitor(
+            new Common\Output\Generator\Xml(
+                new Common\Output\Generator\Xml\FieldTypeHashGenerator()
+            ),
+            $valueObjectVisitors
+        );
+
+        $acceptHeaderVisitorMapping = array(
+            '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+json$)' =>  $jsonVisitor,
+            '(^application/vnd\\.ez\\.api\\.[A-Za-z]+\\+xml$)'  => $xmlVisitor,
+            '(^application/json$)'  => $jsonVisitor,
+            '(^application/xml$)'  => $xmlVisitor,
+            // '(^.*/.*$)'  => new View\InvalidApiUse(),
+            // Fall back gracefully to XML visiting. Also helps support responses
+            // without Accept header (e.g. DELETE requests).
+            '(^.*/.*$)'  => $xmlVisitor,
+        );
+
+        return new AcceptHeaderVisitorDispatcher( $acceptHeaderVisitorMapping );
     }
 }

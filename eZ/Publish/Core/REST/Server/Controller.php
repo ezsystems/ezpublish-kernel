@@ -3,7 +3,7 @@ namespace eZ\Publish\Core\REST\Server;
 
 use eZ\Publish\Core\REST\Common\UrlHandler\eZPublish as UrlHandler;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher as InputDispatcher;
-use \Symfony\Component\HttpFoundation\Request as HttpRequest;
+use eZ\Publish\Core\REST\Server\Request as HttpRequest;
 
 abstract class Controller
 {
@@ -34,7 +34,6 @@ abstract class Controller
 
     public function setRequest( HttpRequest $request )
     {
-        // @todo Decorate $request as an RMF\Request like object
         $this->request = $request;
     }
 }
