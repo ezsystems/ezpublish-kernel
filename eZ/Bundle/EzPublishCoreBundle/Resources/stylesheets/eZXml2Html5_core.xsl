@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:php="http://php.net/xsl" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" exclude-result-prefixes="xhtml custom image php">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" exclude-result-prefixes="xhtml custom image">
 <xsl:output method="html" indent="yes" encoding="UTF-8" />
 
 <xsl:template match="/ | section">
@@ -104,7 +104,7 @@
 </xsl:template>
 
 <xsl:template match="link">
-<a><xsl:attribute name="href"><xsl:value-of select="php:function('eZ\Publish\Core\FieldType\XmlText\Converter\Output\Html5::resolveUrl', string(@url_id))"/></xsl:attribute> <xsl:attribute name="target"><xsl:choose><xsl:when test="@target"><xsl:value-of select="@target"/></xsl:when><xsl:otherwise>_self</xsl:otherwise></xsl:choose></xsl:attribute><xsl:if test="@title"><xsl:attribute name="title"><xsl:value-of select="@title"/></xsl:attribute></xsl:if><xsl:apply-templates/></a>
+<a><xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute><xsl:attribute name="target"><xsl:choose><xsl:when test="@target"><xsl:value-of select="@target"/></xsl:when><xsl:otherwise>_self</xsl:otherwise></xsl:choose></xsl:attribute><xsl:if test="@title"><xsl:attribute name="title"><xsl:value-of select="@title"/></xsl:attribute></xsl:if><xsl:apply-templates/></a>
 </xsl:template>
 
 <!-- copy unknown elements as-is -->

@@ -46,15 +46,14 @@ class Html5 implements Converter
         $doc = new DOMDocument;
         $doc->load( $this->stylesheet );
         $xsl = new XSLTProcessor();
-        $xsl->registerPHPFunctions();
         $xsl->importStyleSheet( $doc );
         $doc->loadXML( $xmlString );
 
-        return $xsl->transformToXML( $doc );
-    }
+        foreach ( $doc->getElementsByTagName( "link" ) as $link )
+        {
+            $link->setAttribute( "url", "http://ez.no/url/id/" . $link->getAttribute( "url_id" ) );
+        }
 
-    public static function resolveUrl( $data )
-    {
-        return "http://ez.no/$data";
+        return $xsl->transformToXML( $doc );
     }
 }
