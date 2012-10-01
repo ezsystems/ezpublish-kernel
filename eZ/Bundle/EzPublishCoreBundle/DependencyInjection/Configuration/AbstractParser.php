@@ -64,12 +64,10 @@ abstract class AbstractParser implements Parser
      * @param array $groups array of group name
      * @param string $id id of the setting array under ezpublish.system.<group_name>
      * @param array $config the full configuration array
-     * @param bool $mergeFromSecondLevel if false, array_merge is used to merge
-     *             the arrays from different group, otherwise the merge is done
-     *             from the second level.
+     * @param bool $options only self::MERGE_FROM_SECOND_LEVEL is recognized
      * @return array
      */
-    protected function groupsArraySetting( array $groups, $id, array $config, $mergeFromSecondLevel = false )
+    protected function groupsArraySetting( array $groups, $id, array $config, $options = 0 )
     {
         $groupsSettings = array();
         sort( $groups );
@@ -77,7 +75,7 @@ abstract class AbstractParser implements Parser
         {
             if ( isset( $config['system'][$group][$id] ) )
             {
-                if ( $mergeFromSecondLevel )
+                if ( $options & self::MERGE_FROM_SECOND_LEVEL )
                 {
                     foreach ( array_keys( $config['system'][$group][$id] ) as $key )
                     {
