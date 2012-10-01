@@ -116,7 +116,11 @@ class URLAliasServiceStub implements URLAliasService
         $data = array(
             'id' => ++$this->nextAliasId,
             'type' => URLAlias::RESOURCE,
-            'destination' => $resource,
+            'destination' => preg_replace(
+                '(^module:)',
+                '',
+                $resource
+            ),
             'path' => $path,
             'languageCodes' => array( $languageCode ),
             'alwaysAvailable' => $alwaysAvailable,
