@@ -13,8 +13,6 @@ use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Common\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 
-use Qafoo\RMF;
-
 /**
  * Root controller
  */
@@ -23,10 +21,9 @@ class Root extends RestController
     /**
      * List the root resources of the eZ Publish installation
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Common\Values\Root
      */
-    public function loadRootResource( RMF\Request $request )
+    public function loadRootResource()
     {
         return new Values\Root();
     }

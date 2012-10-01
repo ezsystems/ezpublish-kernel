@@ -22,8 +22,6 @@ use eZ\Publish\Core\REST\Server\Values\ResourceDeleted;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 
-use Qafoo\RMF;
-
 /**
  * Section controller
  */
@@ -49,10 +47,9 @@ class Section extends RestController
     /**
      * List sections
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\SectionList
      */
-    public function listSections( RMF\Request $request )
+    public function listSections()
     {
         return new Values\SectionList(
             $this->sectionService->loadSections()
@@ -62,16 +59,15 @@ class Section extends RestController
     /**
      * Load section by identifier
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\SectionList
      */
-    public function loadSectionByIdentifier( RMF\Request $request )
+    public function loadSectionByIdentifier()
     {
         return new Values\SectionList(
             array(
                 $this->sectionService->loadSectionByIdentifier(
                     // GET variable
-                    $request->variables['identifier']
+                    $this->request->variables['identifier']
                 )
             )
         );
@@ -80,18 +76,17 @@ class Section extends RestController
     /**
      * Create new section
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedSection
      */
-    public function createSection( RMF\Request $request )
+    public function createSection()
     {
         try
         {
             $createdSection = $this->sectionService->createSection(
                 $this->inputDispatcher->parse(
                     new Message(
-                        array( 'Content-Type' => $request->contentType ),
-                        $request->body
+                        array( 'Content-Type' => $this->request->contentType ),
+                        $this->request->body
                     )
                 )
             );
@@ -111,28 +106,26 @@ class Section extends RestController
     /**
      * Loads a section
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function loadSection( RMF\Request $request )
+    public function loadSection()
     {
-        $values = $this->urlHandler->parse( 'section', $request->path );
+        $values = $this->urlHandler->parse( 'section', $this->request->path );
         return $this->sectionService->loadSection( $values['section'] );
     }
 
     /**
      * Updates a section
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function updateSection( RMF\Request $request )
+    public function updateSection()
     {
-        $values = $this->urlHandler->parse( 'section', $request->path );
+        $values = $this->urlHandler->parse( 'section', $this->request->path );
         $createStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $request->contentType ),
-                $request->body
+                array( 'Content-Type' => $this->request->contentType ),
+                $this->request->body
             )
         );
 
@@ -152,12 +145,11 @@ class Section extends RestController
     /**
      * Delete a section by ID
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
-    public function deleteSection( RMF\Request $request )
+    public function deleteSection()
     {
-        $values = $this->urlHandler->parse( 'section', $request->path );
+        $values = $this->urlHandler->parse( 'section', $this->request->path );
         $this->sectionService->deleteSection(
             $this->sectionService->loadSection( $values['section'] )
         );
