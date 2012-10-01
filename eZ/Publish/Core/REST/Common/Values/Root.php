@@ -9,9 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Common\Values;
 
+// @todo Move RestValue to Common
+use eZ\Publish\Core\REST\Server\Value as RestValue;
+
 /**
  * This class represents the root resource
  */
-class Root
+class Root extends RestValue
 {
 }
