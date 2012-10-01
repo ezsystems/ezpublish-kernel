@@ -143,16 +143,24 @@ class URLAliasServiceStub implements URLAliasService
         $locationAliases = array();
         foreach ( $this->aliases as $existingAlias )
         {
-            // Filter chain
+            // Filter non-location aliases and location aliases for other
+            // locations
             if ( !( $existingAlias->destination instanceof Location ) || $existingAlias->destination->id != $location->id )
             {
                 continue;
             }
+            // Filter for custom / non-custom
             if ( !$custom && $existingAlias->isCustom )
             {
                 continue;
             }
+            // Filter for language code
             if ( $languageCode !== null && !in_array( $languageCode, $existingAlias->languageCodes ) )
+            {
+                continue;
+            }
+            // Filter out history aliases
+            if ( $existingAlias->isHistory )
             {
                 continue;
             }
@@ -425,7 +433,14 @@ class URLAliasServiceStub implements URLAliasService
      */
     private function generateAliasName( $name )
     {
-        return strtr( $name, ' ', '-' );
+        return strtr(
+            $name,
+            array(
+                ' ' => '-',
+                '²' => '2',
+                '³' => '3',
+            )
+        );
     }
 
     /**
