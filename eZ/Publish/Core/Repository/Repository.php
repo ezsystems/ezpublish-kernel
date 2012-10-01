@@ -16,7 +16,6 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\API\Repository\Values\User\User,
     eZ\Publish\API\Repository\Values\User\Limitation,
     Exception,
-    LogicException,
     RuntimeException;
 
 /**

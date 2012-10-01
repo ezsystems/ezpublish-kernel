@@ -45,7 +45,6 @@ use eZ\Publish\API\Repository\ContentService as ContentServiceInterface,
 
     eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo,
     eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo,
-    eZ\Publish\SPI\Persistence\Content\Version as SPIVersion,
     eZ\Publish\SPI\Persistence\Content as SPIContent,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct as SPIMetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\CreateStruct as SPIContentCreateStruct,

@@ -18,7 +18,6 @@ use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface,
     eZ\Publish\SPI\Persistence\Content\URLAlias as SPIURLAlias,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
     eZ\Publish\API\Repository\Exceptions\ForbiddenException,
     Exception;
 
