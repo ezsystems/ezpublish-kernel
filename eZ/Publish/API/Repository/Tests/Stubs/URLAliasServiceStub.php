@@ -455,13 +455,10 @@ class URLAliasServiceStub implements URLAliasService
      */
     public function _obsoleteOldAliases( Location $location )
     {
-        $aliases = $this->listLocationAliases( $location );
+        $aliases = $this->listLocationAliases( $location, false );
         foreach ( $aliases as $alias )
         {
-            if ( !$alias->isCustom )
-            {
-                $this->obsoleteAlias( $alias );
-            }
+            $this->obsoleteAlias( $alias );
         }
     }
 
