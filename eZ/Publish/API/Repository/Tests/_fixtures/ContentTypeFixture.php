@@ -39,7 +39,6 @@ return array(
                     "eng-US" => "Name",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -63,7 +62,6 @@ return array(
                     "eng-US" => "Summary",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -87,7 +85,6 @@ return array(
                     "eng-US" => "Short name",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -111,7 +108,6 @@ return array(
                     "eng-US" => "Description",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -135,7 +131,6 @@ return array(
                     "eng-US" => "Display sub items",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -235,7 +230,6 @@ return array(
                     "eng-US" => "Name",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -259,7 +253,6 @@ return array(
                     "eng-US" => "Description",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -311,7 +304,6 @@ return array(
                     "eng-US" => "First name",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -335,7 +327,6 @@ return array(
                     "eng-US" => "Last name",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -359,7 +350,6 @@ return array(
                     "eng-US" => "User account",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -383,7 +373,6 @@ return array(
                     "eng-US" => "Signature",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -407,7 +396,6 @@ return array(
                     "eng-US" => "Image",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -459,7 +447,6 @@ return array(
                     "eng-US" => "Subject",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -483,7 +470,6 @@ return array(
                     "eng-US" => "Author",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -507,7 +493,6 @@ return array(
                     "eng-US" => "Message",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -559,7 +544,6 @@ return array(
                     "eng-US" => "Name",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -583,7 +567,6 @@ return array(
                     "eng-US" => "Index Page",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -607,7 +590,6 @@ return array(
                     "eng-US" => "Default Page",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -631,7 +613,6 @@ return array(
                     "eng-US" => "Debug Output",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -655,7 +636,6 @@ return array(
                     "eng-US" => "Debug By IP",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -679,7 +659,6 @@ return array(
                     "eng-US" => "Debug IP List",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -703,7 +682,6 @@ return array(
                     "eng-US" => "Debug Redirection",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -727,7 +705,6 @@ return array(
                     "eng-US" => "View Caching",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -751,7 +728,6 @@ return array(
                     "eng-US" => "Template Cache",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -775,7 +751,6 @@ return array(
                     "eng-US" => "Template Compile",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -799,7 +774,6 @@ return array(
                     "eng-US" => "Image Small Size",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -823,7 +797,6 @@ return array(
                     "eng-US" => "Image Medium Size",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -847,7 +820,6 @@ return array(
                     "eng-US" => "Image Large Size",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -899,7 +871,6 @@ return array(
                     "eng-US" => "Title",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -923,7 +894,6 @@ return array(
                     "eng-US" => "Meta data",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -947,7 +917,6 @@ return array(
                     "eng-US" => "Image",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -971,7 +940,6 @@ return array(
                     "eng-US" => "Sitestyle",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -995,7 +963,6 @@ return array(
                     "eng-US" => "Email",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
@@ -1019,7 +986,6 @@ return array(
                     "eng-US" => "Site URL",
                 ),
                 "descriptions" => array(
-                    0 => "",
                 ),
                 "fieldSettings" => array(
                 ),
