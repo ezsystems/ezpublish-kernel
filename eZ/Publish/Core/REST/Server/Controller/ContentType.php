@@ -24,8 +24,6 @@ use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 
-use Qafoo\RMF;
-
 /**
  * ContentType controller
  */
@@ -51,15 +49,14 @@ class ContentType extends RestController
     /**
      * Creates a new content type group
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedContentTypeGroup
      */
-    public function createContentTypeGroup( RMF\Request $request )
+    public function createContentTypeGroup()
     {
         $createStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $request->contentType ),
-                $request->body
+                array( 'Content-Type' => $this->request->contentType ),
+                $this->request->body
             )
         );
 
@@ -80,17 +77,16 @@ class ContentType extends RestController
     /**
      * Updates a content type group
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function updateContentTypeGroup( RMF\Request $request )
+    public function updateContentTypeGroup()
     {
-        $urlValues = $this->urlHandler->parse( 'typegroup', $request->path );
+        $urlValues = $this->urlHandler->parse( 'typegroup', $this->request->path );
 
         $createStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $request->contentType ),
-                $request->body
+                array( 'Content-Type' => $this->request->contentType ),
+                $this->request->body
             )
         );
 
@@ -112,12 +108,11 @@ class ContentType extends RestController
     /**
      * The given content type group is deleted
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
-    public function deleteContentTypeGroup( RMF\Request $request )
+    public function deleteContentTypeGroup()
     {
-        $urlValues = $this->urlHandler->parse( 'typegroup', $request->path );
+        $urlValues = $this->urlHandler->parse( 'typegroup', $this->request->path );
 
         $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $urlValues['typegroup'] );
 
@@ -135,12 +130,11 @@ class ContentType extends RestController
     /**
      * Returns a list of content types of the group
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeList|\eZ\Publish\Core\REST\Server\Values\ContentTypeInfoList
      */
-    public function listContentTypesForGroup( RMF\Request $request )
+    public function listContentTypesForGroup()
     {
-        $urlValues = $this->urlHandler->parse( 'grouptypes', $request->path );
+        $urlValues = $this->urlHandler->parse( 'grouptypes', $this->request->path );
 
         $contentTypes = $this->contentTypeService->loadContentTypes(
             $this->contentTypeService->loadContentTypeGroup( $urlValues['typegroup'] )
@@ -148,19 +142,18 @@ class ContentType extends RestController
 
         if ( $this->getMediaType( $request ) == 'application/vnd.ez.api.contenttypelist' )
         {
-            return new Values\ContentTypeList( $contentTypes, $request->path );
+            return new Values\ContentTypeList( $contentTypes, $this->request->path );
         }
 
-        return new Values\ContentTypeInfoList( $contentTypes, $request->path );
+        return new Values\ContentTypeInfoList( $contentTypes, $this->request->path );
     }
 
     /**
      * Returns a list of all content type groups
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeGroupList
      */
-    public function loadContentTypeGroupList( RMF\Request $request )
+    public function loadContentTypeGroupList()
     {
         return new Values\ContentTypeGroupList(
             $this->contentTypeService->loadContentTypeGroups()
@@ -170,12 +163,11 @@ class ContentType extends RestController
     /**
      * Returns the content type group given by id
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function loadContentTypeGroup( RMF\Request $request )
+    public function loadContentTypeGroup()
     {
-        $urlValues = $this->urlHandler->parse( 'typegroup', $request->path );
+        $urlValues = $this->urlHandler->parse( 'typegroup', $this->request->path );
 
         return $this->contentTypeService->loadContentTypeGroup( $urlValues['typegroup'] );
     }
@@ -183,12 +175,11 @@ class ContentType extends RestController
     /**
      * Loads a content type
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RestContentType
      */
-    public function loadContentType( RMF\Request $request )
+    public function loadContentType()
     {
-        $urlValues = $this->urlHandler->parse( 'type', $request->path );
+        $urlValues = $this->urlHandler->parse( 'type', $this->request->path );
 
         $contentType = $this->contentTypeService->loadContentType( $urlValues['type'] );
 
@@ -201,61 +192,58 @@ class ContentType extends RestController
     /**
      * Loads a content type by its identifier
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeList|\eZ\Publish\Core\REST\Server\Values\ContentTypeInfoList
      */
-    public function loadContentTypeByIdentifier( RMF\Request $request )
+    public function loadContentTypeByIdentifier()
     {
         // Serves only to verify that the URI is correct
-        $this->urlHandler->parse( 'typeByIdentifier', $request->path );
+        $this->urlHandler->parse( 'typeByIdentifier', $this->request->path );
 
         $contentType = $this->contentTypeService->loadContentTypeByIdentifier(
-            $request->variables['identifier']
+            $this->request->variables['identifier']
         );
 
         if ( $this->getMediaType( $request ) == 'application/vnd.ez.api.contenttypelist' )
         {
-            return new Values\ContentTypeList( array( $contentType ), $request->path );
+            return new Values\ContentTypeList( array( $contentType ), $this->request->path );
         }
 
-        return new Values\ContentTypeInfoList( array( $contentType ), $request->path );
+        return new Values\ContentTypeInfoList( array( $contentType ), $this->request->path );
     }
 
     /**
      * Loads a content type by its remote ID
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeList|\eZ\Publish\Core\REST\Server\Values\ContentTypeInfoList
      */
-    public function loadContentTypeByRemoteId( RMF\Request $request )
+    public function loadContentTypeByRemoteId()
     {
         // Serves only to verify that the URI is correct
-        $this->urlHandler->parse( 'typeByRemoteId', $request->path );
+        $this->urlHandler->parse( 'typeByRemoteId', $this->request->path );
 
         $contentType = $this->contentTypeService->loadContentTypeByRemoteId(
-            $request->variables['remoteId']
+            $this->request->variables['remoteId']
         );
 
         if ( $this->getMediaType( $request ) == 'application/vnd.ez.api.contenttypelist' )
         {
-            return new Values\ContentTypeList( array( $contentType ), $request->path );
+            return new Values\ContentTypeList( array( $contentType ), $this->request->path );
         }
 
-        return new Values\ContentTypeInfoList( array( $contentType ), $request->path );
+        return new Values\ContentTypeInfoList( array( $contentType ), $this->request->path );
     }
 
     /**
      * Creates a new content type draft in the given content type group
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedContentType
      */
-    public function createContentType( RMF\Request $request )
+    public function createContentType()
     {
-        $questionMarkPosition = strpos( $request->path, '?' );
+        $questionMarkPosition = strpos( $this->request->path, '?' );
         $urlValues = $this->urlHandler->parse(
             'grouptypes',
-            $questionMarkPosition !== false ? substr( $request->path, 0, $questionMarkPosition ) : $request->path
+            $questionMarkPosition !== false ? substr( $this->request->path, 0, $questionMarkPosition ) : $this->request->path
         );
 
         //@todo Throw forbidden exception if content type identifier already exists
@@ -265,15 +253,15 @@ class ContentType extends RestController
             $this->inputDispatcher->parse(
                 new Message(
                     array(
-                        'Content-Type' => $request->contentType,
+                        'Content-Type' => $this->request->contentType,
                     ),
-                    $request->body
+                    $this->request->body
                 )
             ),
             array( $this->contentTypeService->loadContentTypeGroup( $urlValues['typegroup'] ) )
         );
 
-        if ( isset( $request->variables['publish'] ) && $request->variables['publish'] === 'true' )
+        if ( isset( $this->request->variables['publish'] ) && $this->request->variables['publish'] === 'true' )
         {
             $this->contentTypeService->publishContentTypeDraft( $contentTypeDraft, 'bla' );
 
@@ -302,12 +290,11 @@ class ContentType extends RestController
      * Copies a content type. The identifier of the copy
      * is changed to copy_of_<identifier> and a new remoteId is generated.
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
-    public function copyContentType( RMF\Request $request )
+    public function copyContentType()
     {
-        $urlValues = $this->urlHandler->parse( 'type', $request->path );
+        $urlValues = $this->urlHandler->parse( 'type', $this->request->path );
 
         $copiedContentType = $this->contentTypeService->copyContentType(
             $this->contentTypeService->loadContentType( $urlValues['type'] )
@@ -321,12 +308,11 @@ class ContentType extends RestController
     /**
      * Creates a draft and updates it with the given data
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedContentType
      */
-    public function createContentTypeDraft( RMF\Request $request )
+    public function createContentTypeDraft()
     {
-        $urlValues = $this->urlHandler->parse( 'type', $request->path );
+        $urlValues = $this->urlHandler->parse( 'type', $this->request->path );
 
         // @TODO Throw ForbiddenException if the content type already has a draft
 
@@ -337,9 +323,9 @@ class ContentType extends RestController
         $contentTypeUpdateStruct = $this->inputDispatcher->parse(
             new Message(
                 array(
-                    'Content-Type' => $request->contentType,
+                    'Content-Type' => $this->request->contentType,
                 ),
-                $request->body
+                $this->request->body
             )
         );
 
@@ -366,12 +352,11 @@ class ContentType extends RestController
     /**
      * Loads a content type draft
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RestContentType
      */
-    public function loadContentTypeDraft( RMF\Request $request )
+    public function loadContentTypeDraft()
     {
-        $urlValues = $this->urlHandler->parse( 'typeDraft', $request->path );
+        $urlValues = $this->urlHandler->parse( 'typeDraft', $this->request->path );
 
         // @TODO Throw NotFoundException if the content type does not have a draft for the current user
 
@@ -386,12 +371,11 @@ class ContentType extends RestController
     /**
      * Updates meta data of a draft. This method does not handle field definitions
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RestContentType
      */
-    public function updateContentTypeDraft( RMF\Request $request )
+    public function updateContentTypeDraft()
     {
-        $urlValues = $this->urlHandler->parse( 'typeDraft', $request->path );
+        $urlValues = $this->urlHandler->parse( 'typeDraft', $this->request->path );
 
         // @TODO Throw NotFoundException if the content type does not have a draft
 
@@ -399,9 +383,9 @@ class ContentType extends RestController
         $contentTypeUpdateStruct = $this->inputDispatcher->parse(
             new Message(
                 array(
-                    'Content-Type' => $request->contentType,
+                    'Content-Type' => $this->request->contentType,
                 ),
-                $request->body
+                $this->request->body
             )
         );
 
@@ -424,20 +408,19 @@ class ContentType extends RestController
     /**
      * Creates a new field definition for the given content type
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedFieldDefinition
      */
-    public function addFieldDefinition( RMF\Request $request )
+    public function addFieldDefinition()
     {
-        $urlValues = $this->urlHandler->parse( 'typeFieldDefinitionsDraft', $request->path );
+        $urlValues = $this->urlHandler->parse( 'typeFieldDefinitionsDraft', $this->request->path );
 
         $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
         $fieldDefinitionCreate = $this->inputDispatcher->parse(
             new Message(
                 array(
-                    'Content-Type' => $request->contentType,
+                    'Content-Type' => $this->request->contentType,
                 ),
-                $request->body
+                $this->request->body
             )
         );
 
@@ -468,18 +451,17 @@ class ContentType extends RestController
             }
         }
 
-        throw new Exceptions\NotFoundException( "Field definition not found: '{$request->path}'." );
+        throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->path}'." );
     }
 
     /**
      * Loads field definitions for a given content type
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\FieldDefinitionList
      */
-    public function loadFieldDefinitionList( RMF\Request $request )
+    public function loadFieldDefinitionList()
     {
-        $urlValues = $this->urlHandler->parse( 'typeFieldDefinitions', $request->path );
+        $urlValues = $this->urlHandler->parse( 'typeFieldDefinitions', $this->request->path );
 
         $contentType = $this->contentTypeService->loadContentType( $urlValues['type'] );
 
@@ -492,12 +474,11 @@ class ContentType extends RestController
     /**
      * Returns the field definition given by id
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RestFieldDefinition
      */
-    public function loadFieldDefinition( RMF\Request $request )
+    public function loadFieldDefinition()
     {
-        $urlValues = $this->urlHandler->parse( 'typeFieldDefinition', $request->path );
+        $urlValues = $this->urlHandler->parse( 'typeFieldDefinition', $this->request->path );
 
         $contentType = $this->contentTypeService->loadContentType( $urlValues['type'] );
 
@@ -512,18 +493,17 @@ class ContentType extends RestController
             }
         }
 
-        throw new Exceptions\NotFoundException( "Field definition not found: '{$request->path}'." );
+        throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->path}'." );
     }
 
     /**
      * Loads field definitions for a given content type draft
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\FieldDefinitionList
      */
-    public function loadDraftFieldDefinitionList( RMF\Request $request )
+    public function loadDraftFieldDefinitionList()
     {
-        $urlValues = $this->urlHandler->parse( 'typeFieldDefinitionsDraft', $request->path );
+        $urlValues = $this->urlHandler->parse( 'typeFieldDefinitionsDraft', $this->request->path );
 
         $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
 
@@ -536,12 +516,11 @@ class ContentType extends RestController
     /**
      * Returns the draft field definition given by id
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RestFieldDefinition
      */
-    public function loadDraftFieldDefinition( RMF\Request $request )
+    public function loadDraftFieldDefinition()
     {
-        $urlValues = $this->urlHandler->parse( 'typeFieldDefinitionDraft', $request->path );
+        $urlValues = $this->urlHandler->parse( 'typeFieldDefinitionDraft', $this->request->path );
 
         $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
 
@@ -556,26 +535,25 @@ class ContentType extends RestController
             }
         }
 
-        throw new Exceptions\NotFoundException( "Field definition not found: '{$request->path}'." );
+        throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->path}'." );
     }
 
     /**
      * Updates the attributes of a field definition
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\FieldDefinitionList
      */
-    public function updateFieldDefinition( RMF\Request $request )
+    public function updateFieldDefinition()
     {
-        $urlValues = $this->urlHandler->parse( 'typeFieldDefinitionDraft', $request->path );
+        $urlValues = $this->urlHandler->parse( 'typeFieldDefinitionDraft', $this->request->path );
 
         $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
         $fieldDefinitionUpdate = $this->inputDispatcher->parse(
             new Message(
                 array(
-                    'Content-Type' => $request->contentType,
+                    'Content-Type' => $this->request->contentType,
                 ),
-                $request->body
+                $this->request->body
             )
         );
 
@@ -590,7 +568,7 @@ class ContentType extends RestController
 
         if ( $fieldDefinition === null )
         {
-            throw new Exceptions\NotFoundException( "Field definition not found: '{$request->path}'." );
+            throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->path}'." );
         }
 
         //@TODO Throw ForbiddenException if identifier already exists
@@ -613,18 +591,17 @@ class ContentType extends RestController
             }
         }
 
-        throw new Exceptions\NotFoundException( "Field definition not found: '{$request->path}'." );
+        throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->path}'." );
     }
 
     /**
      * The given field definition is deleted
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
-    public function removeFieldDefinition( RMF\Request $request )
+    public function removeFieldDefinition()
     {
-        $urlValues = $this->urlHandler->parse( 'typeFieldDefinitionDraft', $request->path );
+        $urlValues = $this->urlHandler->parse( 'typeFieldDefinitionDraft', $this->request->path );
 
         // @TODO Throw NotFoundException if the content type does not have a draft for the current user
 
@@ -641,7 +618,7 @@ class ContentType extends RestController
 
         if ( $fieldDefinition === null )
         {
-            throw new Exceptions\NotFoundException( "Field definition not found: '{$request->path}'." );
+            throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->path}'." );
         }
 
         $this->contentTypeService->removeFieldDefinition(
@@ -655,12 +632,11 @@ class ContentType extends RestController
     /**
      * Publishes a content type draft
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RestContentType
      */
-    public function publishContentTypeDraft( RMF\Request $request )
+    public function publishContentTypeDraft()
     {
-        $urlValues = $this->urlHandler->parse( 'typeDraft', $request->path );
+        $urlValues = $this->urlHandler->parse( 'typeDraft', $this->request->path );
 
         // @TODO Throw NotFoundException if the content type does not have a draft for the current user
 
@@ -684,12 +660,11 @@ class ContentType extends RestController
     /**
      * The given content type is deleted
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
-    public function deleteContentType( RMF\Request $request )
+    public function deleteContentType()
     {
-        $urlValues = $this->urlHandler->parse( 'type', $request->path );
+        $urlValues = $this->urlHandler->parse( 'type', $this->request->path );
 
         $contentType = $this->contentTypeService->loadContentType( $urlValues['type'] );
 
@@ -708,12 +683,11 @@ class ContentType extends RestController
     /**
      * Returns the content type groups the content type belongs to
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeGroupRefList
      */
-    public function loadGroupsOfContentType( RMF\Request $request )
+    public function loadGroupsOfContentType()
     {
-        $urlValues = $this->urlHandler->parse( 'groupsOfType', $request->path );
+        $urlValues = $this->urlHandler->parse( 'groupsOfType', $this->request->path );
 
         $contentType = $this->contentTypeService->loadContentType( $urlValues['type'] );
         return new Values\ContentTypeGroupRefList(
@@ -725,22 +699,21 @@ class ContentType extends RestController
     /**
      * Links a content type group to the content type and returns the updated group list
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeGroupRefList
      */
-    public function linkContentTypeToGroup( RMF\Request $request )
+    public function linkContentTypeToGroup()
     {
-        $questionMarkPosition = strpos( $request->path, '?' );
+        $questionMarkPosition = strpos( $this->request->path, '?' );
         $urlValues = $this->urlHandler->parse(
             'groupsOfType',
-            $questionMarkPosition !== false ? substr( $request->path, 0, $questionMarkPosition ) : $request->path
+            $questionMarkPosition !== false ? substr( $this->request->path, 0, $questionMarkPosition ) : $this->request->path
         );
 
         $contentType = $this->contentTypeService->loadContentType( $urlValues['type'] );
 
         try
         {
-            $groupValues = $this->urlHandler->parse( 'typegroup', $request->variables['group'] );
+            $groupValues = $this->urlHandler->parse( 'typegroup', $this->request->variables['group'] );
         }
         catch ( Exceptions\InvalidArgumentException $e )
         {
@@ -781,12 +754,11 @@ class ContentType extends RestController
     /**
      * Removes the given group from the content type and returns the updated group list
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeGroupRefList
      */
-    public function unlinkContentTypeFromGroup( RMF\Request $request )
+    public function unlinkContentTypeFromGroup()
     {
-        $urlValues = $this->urlHandler->parse( 'groupOfType', $request->path );
+        $urlValues = $this->urlHandler->parse( 'groupOfType', $this->request->path );
 
         $contentType = $this->contentTypeService->loadContentType( $urlValues['type'] );
         $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $urlValues['group'] );
@@ -847,12 +819,11 @@ class ContentType extends RestController
     /**
      * Extracts the requested media type from $request
      *
-     * @param RMF\Request $request
      * @return string
      */
-    private function getMediaType( RMF\Request $request )
+    private function getMediaType()
     {
-        foreach ( $request->mimetype as $mimeType )
+        foreach ( $this->request->mimetype as $mimeType )
         {
             if ( preg_match( '(^([a-z0-9-/.]+)\+.*$)', $mimeType['value'], $matches ) )
             {

@@ -21,8 +21,6 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 
-use Qafoo\RMF;
-
 /**
  * Role controller
  */
@@ -67,18 +65,17 @@ class Role extends RestController
     /**
      * Create new role
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedRole
      */
-    public function createRole( RMF\Request $request )
+    public function createRole()
     {
         return new Values\CreatedRole(
             array(
                 'role' => $this->roleService->createRole(
                     $this->inputDispatcher->parse(
                         new Message(
-                            array( 'Content-Type' => $request->contentType ),
-                            $request->body
+                            array( 'Content-Type' => $this->request->contentType ),
+                            $this->request->body
                         )
                     )
                 )
@@ -89,10 +86,9 @@ class Role extends RestController
     /**
      * Load list of roles
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RoleList
      */
-    public function listRoles( RMF\Request $request )
+    public function listRoles()
     {
         return new Values\RoleList(
             $this->roleService->loadRoles()
@@ -102,26 +98,24 @@ class Role extends RestController
     /**
      * Load role
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function loadRole( RMF\Request $request )
+    public function loadRole()
     {
-        $values = $this->urlHandler->parse( 'role', $request->path );
+        $values = $this->urlHandler->parse( 'role', $this->request->path );
         return $this->roleService->loadRole( $values['role'] );
     }
 
     /**
      * Load role by identifier
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RoleList
      */
-    public function loadRoleByIdentifier( RMF\Request $request )
+    public function loadRoleByIdentifier()
     {
         return new Values\RoleList(
             array(
-                $this->roleService->loadRoleByIdentifier( $request->variables['identifier'] )
+                $this->roleService->loadRoleByIdentifier( $this->request->variables['identifier'] )
             )
         );
     }
@@ -129,16 +123,15 @@ class Role extends RestController
     /**
      * Updates a role
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function updateRole( RMF\Request $request )
+    public function updateRole()
     {
-        $values = $this->urlHandler->parse( 'role', $request->path );
+        $values = $this->urlHandler->parse( 'role', $this->request->path );
         $createStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $request->contentType ),
-                $request->body
+                array( 'Content-Type' => $this->request->contentType ),
+                $this->request->body
             )
         );
         return $this->roleService->updateRole(
@@ -150,15 +143,14 @@ class Role extends RestController
     /**
      * Delete a role by ID
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
-    public function deleteRole( RMF\Request $request )
+    public function deleteRole()
     {
         //@todo error handling if the role is assigned to user or user group
         //problem being that PAPI does not specify throwing an exception in that case
 
-        $values = $this->urlHandler->parse( 'role', $request->path );
+        $values = $this->urlHandler->parse( 'role', $this->request->path );
         $this->roleService->deleteRole(
             $this->roleService->loadRole( $values['role'] )
         );
@@ -169,27 +161,25 @@ class Role extends RestController
     /**
      * Loads the policies for the role
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\PolicyList
      */
-    public function loadPolicies( RMF\Request $request )
+    public function loadPolicies()
     {
-        $values = $this->urlHandler->parse( 'policies', $request->path );
+        $values = $this->urlHandler->parse( 'policies', $this->request->path );
 
         $loadedRole = $this->roleService->loadRole( $values['role'] );
 
-        return new Values\PolicyList( $loadedRole->getPolicies(), $request->path );
+        return new Values\PolicyList( $loadedRole->getPolicies(), $this->request->path );
     }
 
     /**
      * Deletes all policies from a role
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
-    public function deletePolicies( RMF\Request $request )
+    public function deletePolicies()
     {
-        $values = $this->urlHandler->parse( 'policies', $request->path );
+        $values = $this->urlHandler->parse( 'policies', $this->request->path );
 
         $loadedRole = $this->roleService->loadRole( $values['role'] );
 
@@ -204,12 +194,11 @@ class Role extends RestController
     /**
      * Loads a policy
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\User\Policy
      */
-    public function loadPolicy( RMF\Request $request )
+    public function loadPolicy()
     {
-        $values = $this->urlHandler->parse( 'policy', $request->path );
+        $values = $this->urlHandler->parse( 'policy', $this->request->path );
 
         $loadedRole = $this->roleService->loadRole( $values['role'] );
         foreach ( $loadedRole->getPolicies() as $policy )
@@ -218,22 +207,21 @@ class Role extends RestController
                 return $policy;
         }
 
-        throw new Exceptions\NotFoundException( "Policy not found: '{$request->path}'." );
+        throw new Exceptions\NotFoundException( "Policy not found: '{$this->request->path}'." );
     }
 
     /**
      * Adds a policy to role
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedPolicy
      */
-    public function addPolicy( RMF\Request $request )
+    public function addPolicy()
     {
-        $values = $this->urlHandler->parse( 'policies', $request->path );
+        $values = $this->urlHandler->parse( 'policies', $this->request->path );
         $createStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $request->contentType ),
-                $request->body
+                array( 'Content-Type' => $this->request->contentType ),
+                $this->request->body
             )
         );
 
@@ -261,16 +249,15 @@ class Role extends RestController
     /**
      * Updates a policy
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\User\Policy
      */
-    public function updatePolicy( RMF\Request $request )
+    public function updatePolicy()
     {
-        $values = $this->urlHandler->parse( 'policy', $request->path );
+        $values = $this->urlHandler->parse( 'policy', $this->request->path );
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $request->contentType ),
-                $request->body
+                array( 'Content-Type' => $this->request->contentType ),
+                $this->request->body
             )
         );
 
@@ -286,18 +273,17 @@ class Role extends RestController
             }
         }
 
-        throw new Exceptions\NotFoundException( "Policy not found: '{$request->path}'." );
+        throw new Exceptions\NotFoundException( "Policy not found: '{$this->request->path}'." );
     }
 
     /**
      * Delete a policy from role
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
-    public function deletePolicy( RMF\Request $request )
+    public function deletePolicy()
     {
-        $values = $this->urlHandler->parse( 'policy', $request->path );
+        $values = $this->urlHandler->parse( 'policy', $this->request->path );
 
         $role = $this->roleService->loadRole( $values['role'] );
 
@@ -317,26 +303,25 @@ class Role extends RestController
             return new Values\ResourceDeleted();
         }
 
-        throw new Exceptions\NotFoundException( "Policy not found: '{$request->path}'." );
+        throw new Exceptions\NotFoundException( "Policy not found: '{$this->request->path}'." );
     }
 
     /**
      * Assigns role to user
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RoleAssignmentList
      */
-    public function assignRoleToUser( RMF\Request $request )
+    public function assignRoleToUser()
     {
         //@todo error handling if the role is already assigned to user
         //problem being that PAPI does not specify throwing an exception in this case
 
-        $values = $this->urlHandler->parse( 'userRoleAssignments', $request->path );
+        $values = $this->urlHandler->parse( 'userRoleAssignments', $this->request->path );
 
         $roleAssignment = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $request->contentType ),
-                $request->body
+                array( 'Content-Type' => $this->request->contentType ),
+                $this->request->body
             )
         );
 
@@ -352,20 +337,19 @@ class Role extends RestController
     /**
      * Assigns role to user group
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RoleAssignmentList
      */
-    public function assignRoleToUserGroup( RMF\Request $request )
+    public function assignRoleToUserGroup()
     {
         //@todo error handling if the role is already assigned to user group
         //problem being that PAPI does not specify throwing an exception in this case
 
-        $values = $this->urlHandler->parse( 'groupRoleAssignments', $request->path );
+        $values = $this->urlHandler->parse( 'groupRoleAssignments', $this->request->path );
 
         $roleAssignment = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $request->contentType ),
-                $request->body
+                array( 'Content-Type' => $this->request->contentType ),
+                $this->request->body
             )
         );
 
@@ -383,12 +367,11 @@ class Role extends RestController
     /**
      * Un-assigns role from user
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RoleAssignmentList
      */
-    public function unassignRoleFromUser( RMF\Request $request )
+    public function unassignRoleFromUser()
     {
-        $values = $this->urlHandler->parse( 'userRoleAssignment', $request->path );
+        $values = $this->urlHandler->parse( 'userRoleAssignment', $this->request->path );
 
         $user = $this->userService->loadUser( $values['user'] );
         $role = $this->roleService->loadRole( $values['role'] );
@@ -402,12 +385,11 @@ class Role extends RestController
     /**
      * Un-assigns role from user group
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RoleAssignmentList
      */
-    public function unassignRoleFromUserGroup( RMF\Request $request )
+    public function unassignRoleFromUserGroup()
     {
-        $values = $this->urlHandler->parse( 'groupRoleAssignment', $request->path );
+        $values = $this->urlHandler->parse( 'groupRoleAssignment', $this->request->path );
 
         $groupLocationParts = explode( '/', $values['group'] );
         $groupLocation = $this->locationService->loadLocation( array_pop( $groupLocationParts ) );
@@ -423,12 +405,11 @@ class Role extends RestController
     /**
      * Load role assignments for user
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RoleAssignmentList
      */
-    public function loadRoleAssignmentsForUser( RMF\Request $request )
+    public function loadRoleAssignmentsForUser()
     {
-        $values = $this->urlHandler->parse( 'userRoleAssignments', $request->path );
+        $values = $this->urlHandler->parse( 'userRoleAssignments', $this->request->path );
 
         $user = $this->userService->loadUser( $values['user'] );
 
@@ -439,12 +420,11 @@ class Role extends RestController
     /**
      * Load role assignments for user group
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RoleAssignmentList
      */
-    public function loadRoleAssignmentsForUserGroup( RMF\Request $request )
+    public function loadRoleAssignmentsForUserGroup()
     {
-        $values = $this->urlHandler->parse( 'groupRoleAssignments', $request->path );
+        $values = $this->urlHandler->parse( 'groupRoleAssignments', $this->request->path );
 
         $groupLocationParts = explode( '/', $values['group'] );
         $groupLocation = $this->locationService->loadLocation( array_pop( $groupLocationParts ) );
@@ -458,12 +438,11 @@ class Role extends RestController
     /**
      * Returns a role assignment to the given user
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RestUserRoleAssignment
      */
-    public function loadRoleAssignmentForUser( RMF\Request $request )
+    public function loadRoleAssignmentForUser()
     {
-        $values = $this->urlHandler->parse( 'userRoleAssignment', $request->path );
+        $values = $this->urlHandler->parse( 'userRoleAssignment', $this->request->path );
 
         $user = $this->userService->loadUser( $values['user'] );
         $roleAssignments = $this->roleService->getRoleAssignmentsForUser( $user );
@@ -476,18 +455,17 @@ class Role extends RestController
             }
         }
 
-        throw new Exceptions\NotFoundException( "Role assignment not found: '{$request->path}'." );
+        throw new Exceptions\NotFoundException( "Role assignment not found: '{$this->request->path}'." );
     }
 
     /**
      * Returns a role assignment to the given user group
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RestUserGroupRoleAssignment
      */
-    public function loadRoleAssignmentForUserGroup( RMF\Request $request )
+    public function loadRoleAssignmentForUserGroup()
     {
-        $values = $this->urlHandler->parse( 'groupRoleAssignment', $request->path );
+        $values = $this->urlHandler->parse( 'groupRoleAssignment', $this->request->path );
 
         $groupLocationParts = explode( '/', $values['group'] );
         $groupLocation = $this->locationService->loadLocation( array_pop( $groupLocationParts ) );
@@ -502,22 +480,21 @@ class Role extends RestController
             }
         }
 
-        throw new Exceptions\NotFoundException( "Role assignment not found: '{$request->path}'." );
+        throw new Exceptions\NotFoundException( "Role assignment not found: '{$this->request->path}'." );
     }
 
     /**
      * Search all policies which are applied to a given user
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\PolicyList
      */
-    public function listPoliciesForUser( RMF\Request $request )
+    public function listPoliciesForUser()
     {
         return new Values\PolicyList(
             $this->roleService->loadPoliciesByUserId(
-                $request->variables['userId']
+                $this->request->variables['userId']
             ),
-            $request->path
+            $this->request->path
         );
     }
 

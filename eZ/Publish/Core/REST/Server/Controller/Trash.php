@@ -20,8 +20,6 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 
-use Qafoo\RMF;
-
 use InvalidArgumentException;
 
 /**
@@ -58,38 +56,35 @@ class Trash extends RestController
     /**
      * Returns a list of all trash items
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\Trash
      */
-    public function loadTrashItems( RMF\Request $request )
+    public function loadTrashItems()
     {
         return new Values\Trash(
             $this->trashService->findTrashItems(
                 new Query()
             )->items,
-            $request->path
+            $this->request->path
         );
     }
 
     /**
      * Returns the trash item given by id
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
-    public function loadTrashItem( RMF\Request $request )
+    public function loadTrashItem()
     {
-        $values = $this->urlHandler->parse( 'trash', $request->path );
+        $values = $this->urlHandler->parse( 'trash', $this->request->path );
         return $this->trashService->loadTrashItem( $values['trash'] );
     }
 
     /**
      * Empties the trash
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
-    public function emptyTrash( RMF\Request $request )
+    public function emptyTrash()
     {
         $this->trashService->emptyTrash();
 
@@ -99,12 +94,11 @@ class Trash extends RestController
     /**
      * Deletes the given trash item
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
-    public function deleteTrashItem( RMF\Request $request )
+    public function deleteTrashItem()
     {
-        $values = $this->urlHandler->parse( 'trash', $request->path );
+        $values = $this->urlHandler->parse( 'trash', $this->request->path );
         $this->trashService->deleteTrashItem(
             $this->trashService->loadTrashItem( $values['trash'] )
         );
@@ -115,15 +109,14 @@ class Trash extends RestController
     /**
      * Restores a trashItem
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
-    public function restoreTrashItem( RMF\Request $request )
+    public function restoreTrashItem()
     {
         $requestDestination = null;
         try
         {
-            $requestDestination = $request->destination;
+            $requestDestination = $this->request->destination;
         }
         catch ( InvalidArgumentException $e )
         {
@@ -148,7 +141,7 @@ class Trash extends RestController
             }
         }
 
-        $values = $this->urlHandler->parse( 'trash', $request->path );
+        $values = $this->urlHandler->parse( 'trash', $this->request->path );
         $trashItem = $this->trashService->loadTrashItem( $values['trash'] );
 
         if ( $requestDestination === null )
