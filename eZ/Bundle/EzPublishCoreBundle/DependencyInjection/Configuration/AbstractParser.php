@@ -49,7 +49,7 @@ abstract class AbstractParser implements Parser
      * @param mixed $default
      * @return mixed
      */
-    private function getContainerParameter( ContainerBuilder $container, $id, $default = null )
+    protected function getContainerParameter( ContainerBuilder $container, $id, $default = null )
     {
         if ( $container->hasParameter( $id ) )
         {
@@ -69,7 +69,7 @@ abstract class AbstractParser implements Parser
      *             from the second level.
      * @return array
      */
-    private function groupsArraySetting( array $groups, $id, array $config, $mergeFromSecondLevel = false )
+    protected function groupsArraySetting( array $groups, $id, array $config, $mergeFromSecondLevel = false )
     {
         $groupsSettings = array();
         sort( $groups );
