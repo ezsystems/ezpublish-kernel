@@ -87,7 +87,7 @@ class Common extends AbstractParser
             $dsn = "{$database['type']}://{$database['user']}:{$database['password']}@{$database['server']}$port/{$database['database_name']}";
             $container->setParameter( "ezsettings.$sa.database.dsn", $dsn );
         }
-        foreach ( $config['system'] as $sa => $settings )
+        foreach ( $config[$this->baseKey] as $sa => $settings )
         {
             $container->setParameter( "ezsettings.$sa.url_alias_router", $settings['url_alias_router'] );
             $container->setParameter( "ezsettings.$sa.var_dir", $settings['var_dir'] );

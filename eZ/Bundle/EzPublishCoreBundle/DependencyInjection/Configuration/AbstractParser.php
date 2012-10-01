@@ -41,6 +41,23 @@ abstract class AbstractParser implements Parser
     const MERGE_FROM_SECOND_LEVEL = 2;
 
     /**
+     * The base key where to look for the configuration. 'system' by default.
+     *
+     * @var string
+     */
+    protected $baseKey = 'system';
+
+    /**
+     * Sets the base key of this parser.
+     *
+     * @param string $key 
+     */
+    public function setBaseKey( $key )
+    {
+        $this->baseKey = $key;
+    }
+
+    /**
      * Returns the value under the $id in the $container. if the container does
      * not known this $id, returns $default
      *
@@ -62,7 +79,7 @@ abstract class AbstractParser implements Parser
      * Merges setting array for a set of groups.
      *
      * @param array $groups array of group name
-     * @param string $id id of the setting array under ezpublish.system.<group_name>
+     * @param string $id id of the setting array under ezpublish.<base_key>.<group_name>
      * @param array $config the full configuration array
      * @param bool $options only self::MERGE_FROM_SECOND_LEVEL is recognized
      * @return array
@@ -73,15 +90,15 @@ abstract class AbstractParser implements Parser
         sort( $groups );
         foreach ( $groups as $group )
         {
-            if ( isset( $config['system'][$group][$id] ) )
+            if ( isset( $config[$this->baseKey][$group][$id] ) )
             {
                 if ( $options & self::MERGE_FROM_SECOND_LEVEL )
                 {
-                    foreach ( array_keys( $config['system'][$group][$id] ) as $key )
+                    foreach ( array_keys( $config[$this->baseKey][$group][$id] ) as $key )
                     {
                         if ( !isset( $groupsSettings[$key] ) )
                         {
-                            $groupsSettings[$key] = $config['system'][$group][$id][$key];
+                            $groupsSettings[$key] = $config[$this->baseKey][$group][$id][$key];
                         }
                         else
                         {
@@ -89,7 +106,7 @@ abstract class AbstractParser implements Parser
                             // know wether we have a hash or a plain array
                             $groupsSettings[$key] = array_merge(
                                 $groupsSettings[$key],
-                                $config['system'][$group][$id][$key]
+                                $config[$this->baseKey][$group][$id][$key]
                             );
                         }
                     }
@@ -100,7 +117,7 @@ abstract class AbstractParser implements Parser
                     // know wether we have a hash or a plain array
                     $groupsSettings = array_merge(
                         $groupsSettings,
-                        $config['system'][$group][$id]
+                        $config[$this->baseKey][$group][$id]
                     );
                 }
             }
@@ -152,9 +169,9 @@ abstract class AbstractParser implements Parser
                 );
             }
             $siteaccessSettings = array();
-            if ( isset( $config['system'][$sa][$id] ) )
+            if ( isset( $config[$this->baseKey][$sa][$id] ) )
             {
-                $siteaccessSettings = $config['system'][$sa][$id];
+                $siteaccessSettings = $config[$this->baseKey][$sa][$id];
             }
             if ( $options & self::MERGE_FROM_SECOND_LEVEL )
             {
