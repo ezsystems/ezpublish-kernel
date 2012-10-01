@@ -16,7 +16,8 @@ use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider as ContentViewProviderI
     eZ\Publish\Core\MVC\Legacy\View\TwigContentViewLayoutDecorator,
     eZModule,
     eZTemplate,
-    Symfony\Component\HttpKernel\Log\LoggerInterface;
+    Symfony\Component\HttpKernel\Log\LoggerInterface,
+    Closure;
 
 class ContentViewProvider implements ContentViewProviderInterface
 {
@@ -35,7 +36,7 @@ class ContentViewProvider implements ContentViewProviderInterface
      */
     private $decorator;
 
-    public function __construct( \Closure $legacyKernelClosure, TwigContentViewLayoutDecorator $decorator, LoggerInterface $logger = null )
+    public function __construct( Closure $legacyKernelClosure, TwigContentViewLayoutDecorator $decorator, LoggerInterface $logger = null )
     {
         $this->legacyKernelClosure = $legacyKernelClosure;
         $this->decorator = $decorator;
