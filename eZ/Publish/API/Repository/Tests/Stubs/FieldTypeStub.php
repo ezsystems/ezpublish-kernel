@@ -169,4 +169,58 @@ class FieldTypeStub implements FieldType
     {
         throw new \RuntimeException( "Not implemented, just a wrapper." );
     }
+
+    /**
+     * Converts the given $fieldSettings to a simple hash format
+     *
+     * See the class description for more details on a hash format.
+     *
+     * @param mixed $fieldSettings
+     * @return array|hash|scalar|null
+     */
+    public function fieldSettingsToHash( $fieldSettings )
+    {
+        throw new \RuntimeException( "Not implemented, just a wrapper." );
+    }
+
+    /**
+     * Converts the given $fieldSettingsHash to field settings of the type
+     *
+     * This is the reverse operation of {@link fieldSettingsToHash()}.
+     * See the class description for more details on a hash format.
+     *
+     * @param array|hash|scalar|null $fieldSettingsHash
+     * @return mixed
+     */
+    public function fieldSettingsFromHash( $fieldSettingsHash )
+    {
+        throw new \RuntimeException( "Not implemented, just a wrapper." );
+    }
+
+    /**
+     * Converts the given $validatorConfiguration to a simple hash format
+     *
+     * See the class description for more details on a hash format.
+     *
+     * @param mixed $validatorConfiguration
+     * @return array|hash|scalar|null
+     */
+    public function validatorConfigurationToHash( $validatorConfiguration )
+    {
+        throw new \RuntimeException( "Not implemented, just a wrapper." );
+    }
+
+    /**
+     * Converts the given $validatorConfigurationHash to a validator
+     * configuration of the type
+     *
+     * See the class description for more details on a hash format.
+     *
+     * @param array|hash|scalar|null $validatorConfigurationHash
+     * @return mixed
+     */
+    public function validatorConfigurationFromHash( $validatorConfigurationHash )
+    {
+        throw new \RuntimeException( "Not implemented, just a wrapper." );
+    }
 }
