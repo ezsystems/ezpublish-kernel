@@ -76,7 +76,7 @@ class URLAliasServiceStub implements URLAliasService
      */
     public function createUrlAlias( Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false )
     {
-        $this->checkAliasNotExists( $path, $languageCode );
+        $this->checkAliasNotExists( $path, $languageCode, true );
 
         $data = array(
             'destination' => $location,
@@ -111,7 +111,7 @@ class URLAliasServiceStub implements URLAliasService
      */
     public function createGlobalUrlAlias( $resource, $path, $languageCode, $forward = false, $alwaysAvailable = false )
     {
-        $this->checkAliasNotExists( $path, $languageCode );
+        $this->checkAliasNotExists( $path, $languageCode, true );
 
         $data = array(
             'id' => ++$this->nextAliasId,
@@ -154,7 +154,7 @@ class URLAliasServiceStub implements URLAliasService
                 continue;
             }
             // Filter for custom / non-custom
-            if ( !$custom && $existingAlias->isCustom )
+            if ( $custom !== $existingAlias->isCustom )
             {
                 continue;
             }
@@ -476,7 +476,7 @@ class URLAliasServiceStub implements URLAliasService
      */
     private function createInternalUrlAlias( Location $location, $path, $languageCode, $alwaysAvailable )
     {
-        $this->checkAliasNotExists( $path, $languageCode );
+        $this->checkAliasNotExists( $path, $languageCode, false );
 
         return $this->createLocationUrlAlias(
             array(
@@ -560,16 +560,19 @@ class URLAliasServiceStub implements URLAliasService
      * Checks if an alias for the given $path already exists.
      *
      * @param string $path
+     * @param string $languageCodes
+     * @param bool $custom
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
      *
      * @return void
      */
-    private function checkAliasNotExists( $path, $languageCode )
+    private function checkAliasNotExists( $path, $languageCode, $custom )
     {
         foreach ( $this->aliases as $existingAlias )
         {
-            if ( !$existingAlias->isHistory
+            if ( $custom
+                && !$existingAlias->isHistory
                 && $existingAlias->path == $path
                 && in_array( $languageCode, $existingAlias->languageCodes ) )
             {
