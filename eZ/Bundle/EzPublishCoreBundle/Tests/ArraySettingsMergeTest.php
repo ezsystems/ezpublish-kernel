@@ -142,6 +142,16 @@ class ArraySettingsMergeTest extends \PHPUnit_Framework_TestCase
                 ),
             )
         );
+        $locationView4 = array(
+            'full' => array(
+                'Moredhel' => array(
+                    'template' => 'moredhel2.html.twig'
+                ),
+                'Warrior' => array(
+                    'template' => 'warrior.html.twig'
+                ),
+            )
+        );
 
         $locationView12 = array(
             'full' => array(
@@ -173,6 +183,27 @@ class ArraySettingsMergeTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
+
+        $locationView1234 = array(
+            'full' => array(
+                'Wizard' => array(
+                    'template' => 'wizard.html.twig'
+                ),
+                'Sorcerer' => array(
+                    'template' => 'sorcerer3.html.twig'
+                ),
+                'Dwarve' => array(
+                    'template' => 'dwarve.html.twig'
+                ),
+                'Moredhel' => array(
+                    'template' => 'moredhel2.html.twig'
+                ),
+                'Warrior' => array(
+                    'template' => 'warrior.html.twig'
+                ),
+            )
+        );
+
 
 
         $locationView21 = array(
@@ -522,6 +553,39 @@ class ArraySettingsMergeTest extends \PHPUnit_Framework_TestCase
                 AbstractParser::MERGE_FROM_SECOND_LEVEL,
                 $locationView123,
             ),
+            array( // default scope + two groups + siteaccess
+                $testIdHash,
+                $siteaccess,
+                array( $group1, $group2 ),
+                $locationView1,
+                array(),
+                array(
+                    'siteaccess' => $siteaccessConfig,
+                    'system' => array(
+                        $group1 => array( $testIdHash => $locationView2 ),
+                        $group2 => array( $testIdHash => $locationView3 ),
+                        $siteaccess => array( $testIdHash => $locationView4 )
+                    )
+                ),
+                AbstractParser::MERGE_FROM_SECOND_LEVEL,
+                $locationView1234,
+            ),
+            array( // two groups
+                $testIdHash,
+                $siteaccess,
+                array( $group1, $group2 ),
+                array(),
+                array(),
+                array(
+                    'siteaccess' => $siteaccessConfig,
+                    'system' => array(
+                        $group1 => array( $testIdHash => $locationView1 ),
+                        $group2 => array( $testIdHash => $locationView2 ),
+                    )
+                ),
+                AbstractParser::MERGE_FROM_SECOND_LEVEL,
+                $locationView12,
+            ),
             array( // two groups + global scope
                 $testIdHash,
                 $siteaccess,
@@ -531,6 +595,41 @@ class ArraySettingsMergeTest extends \PHPUnit_Framework_TestCase
                 array(
                     'siteaccess' => $siteaccessConfig,
                     'system' => array(
+                        $group1 => array( $testIdHash => $locationView1 ),
+                        $group2 => array( $testIdHash => $locationView2 ),
+                    )
+                ),
+                AbstractParser::MERGE_FROM_SECOND_LEVEL,
+                $locationView123
+            ),
+            array( // two groups + siteaccess + global scope
+                $testIdHash,
+                $siteaccess,
+                array( $group1, $group2 ),
+                array(),
+                $locationView4,
+                array(
+                    'siteaccess' => $siteaccessConfig,
+                    'system' => array(
+                        $group1 => array( $testIdHash => $locationView1 ),
+                        $group2 => array( $testIdHash => $locationView2 ),
+                        $siteaccess => array( $testIdHash => $locationView3 ),
+                    )
+                ),
+                AbstractParser::MERGE_FROM_SECOND_LEVEL,
+                $locationView1234
+            ),
+
+            array( // two groups + siteaccess
+                $testIdHash,
+                $siteaccess,
+                array( $group1, $group2 ),
+                array(),
+                array(),
+                array(
+                    'siteaccess' => $siteaccessConfig,
+                    'system' => array(
+                        $siteaccess => array( $testIdHash => $locationView3 ),
                         $group1 => array( $testIdHash => $locationView1 ),
                         $group2 => array( $testIdHash => $locationView2 ),
                     )
@@ -553,6 +652,22 @@ class ArraySettingsMergeTest extends \PHPUnit_Framework_TestCase
                 ),
                 AbstractParser::MERGE_FROM_SECOND_LEVEL,
                 $locationView123,
+            ),
+            array( // default scope + group + siteaccess + global scope
+                $testIdHash,
+                $siteaccess,
+                array( $group1, $group2 ),
+                $locationView1,
+                $locationView4,
+                array(
+                    'siteaccess' => $siteaccessConfig,
+                    'system' => array(
+                        $group1 => array( $testIdHash => $locationView2 ),
+                        $siteaccess => array( $testIdHash => $locationView3 ),
+                    )
+                ),
+                AbstractParser::MERGE_FROM_SECOND_LEVEL,
+                $locationView1234,
             ),
             array( // global scope + group + siteaccess
                 $testIdHash,
@@ -691,6 +806,55 @@ class ArraySettingsMergeTest extends \PHPUnit_Framework_TestCase
                 0,
                 $locationView3,
             ),
+            array( // default scope + two groups + siteaccess
+                $testIdHash,
+                $siteaccess,
+                array( $group1, $group2 ),
+                $locationView1,
+                array(),
+                array(
+                    'siteaccess' => $siteaccessConfig,
+                    'system' => array(
+                        $group1 => array( $testIdHash => $locationView2 ),
+                        $group2 => array( $testIdHash => $locationView3 ),
+                        $siteaccess => array( $testIdHash => $locationView4 ),
+                    )
+                ),
+                0,
+                $locationView4,
+            ),
+            array( // default scope + two groups + global scope
+                $testIdHash,
+                $siteaccess,
+                array( $group1, $group2 ),
+                $locationView1,
+                $locationView4,
+                array(
+                    'siteaccess' => $siteaccessConfig,
+                    'system' => array(
+                        $group1 => array( $testIdHash => $locationView2 ),
+                        $group2 => array( $testIdHash => $locationView3 ),
+                    )
+                ),
+                0,
+                $locationView4,
+            ),
+            array( // two groups
+                $testIdHash,
+                $siteaccess,
+                array( $group1, $group2 ),
+                array(),
+                array(),
+                array(
+                    'siteaccess' => $siteaccessConfig,
+                    'system' => array(
+                        $group1 => array( $testIdHash => $locationView1 ),
+                        $group2 => array( $testIdHash => $locationView2 ),
+                    )
+                ),
+                0,
+                $locationView2,
+            ),
             array( // two groups + global scope
                 $testIdHash,
                 $siteaccess,
@@ -706,6 +870,40 @@ class ArraySettingsMergeTest extends \PHPUnit_Framework_TestCase
                 ),
                 0,
                 $locationView3
+            ),
+            array( // two groups + siteaccess
+                $testIdHash,
+                $siteaccess,
+                array( $group1, $group2 ),
+                array(),
+                array(),
+                array(
+                    'siteaccess' => $siteaccessConfig,
+                    'system' => array(
+                        $siteaccess => array( $testIdHash => $locationView3 ),
+                        $group1 => array( $testIdHash => $locationView1 ),
+                        $group2 => array( $testIdHash => $locationView2 ),
+                    )
+                ),
+                0,
+                $locationView3
+            ),
+            array( // two groups + siteaccess + global scope
+                $testIdHash,
+                $siteaccess,
+                array( $group1, $group2 ),
+                array(),
+                $locationView4,
+                array(
+                    'siteaccess' => $siteaccessConfig,
+                    'system' => array(
+                        $siteaccess => array( $testIdHash => $locationView3 ),
+                        $group1 => array( $testIdHash => $locationView1 ),
+                        $group2 => array( $testIdHash => $locationView2 ),
+                    )
+                ),
+                0,
+                $locationView4
             ),
             array( // default scope + group + siteaccess
                 $testIdHash,
