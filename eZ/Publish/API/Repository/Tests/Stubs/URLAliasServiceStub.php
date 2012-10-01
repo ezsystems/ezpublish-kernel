@@ -223,6 +223,12 @@ class URLAliasServiceStub implements URLAliasService
             {
                 unset( $this->aliases[$aliasToRemove->id] );
             }
+            else
+            {
+                throw new Exceptions\InvalidArgumentExceptionStub(
+                    'What error code should be used?'
+                );
+            }
         }
         return true;
     }
