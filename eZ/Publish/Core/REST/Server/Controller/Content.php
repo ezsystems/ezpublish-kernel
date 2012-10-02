@@ -112,7 +112,7 @@ class Content extends RestController
         $mainLocation = $this->locationService->loadLocation( $contentInfo->mainLocationId );
 
         $contentVersion = null;
-        if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.content' )
+        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.content' )
         {
             $languages = null;
             if ( isset( $this->request->variables['languages'] ) )
@@ -243,7 +243,7 @@ class Content extends RestController
                 'content' => new Values\RestContent(
                     $content->contentInfo,
                     null,
-                    $this->getMediaType( $request ) === 'application/vnd.ez.api.content' ? $content : null
+                    $this->getMediaType( $this->request ) === 'application/vnd.ez.api.content' ? $content : null
                 )
             )
         );
