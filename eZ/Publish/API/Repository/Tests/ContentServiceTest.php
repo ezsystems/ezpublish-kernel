@@ -4017,10 +4017,10 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertAliasesCorrect(
             array(
-                '/Design/eZ-publish/An-awesome-forum' => array(
+                '/Design/Plain-site/An-awesome-forum' => array(
                     'type' => URLAlias::LOCATION,
                     'destination' => $location,
-                    'path' => '/Design/eZ-publish/An-awesome-forum',
+                    'path' => '/Design/Plain-site/An-awesome-forum',
                     'languageCodes' => array( 'eng-US' ),
                     'isHistory' => false,
                     'isCustom' => false,
@@ -4058,19 +4058,19 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $this->assertAliasesCorrect(
             array(
-                '/Design/eZ-publish/An-awesome-forum2' => array(
+                '/Design/Plain-site/An-awesome-forum2' => array(
                     'type' => URLAlias::LOCATION,
                     'destination' => $location,
-                    'path' => '/Design/eZ-publish/An-awesome-forum²',
+                    'path' => '/Design/Plain-site/An-awesome-forum2',
                     'languageCodes' => array( 'eng-US' ),
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
                 ),
-                '/Design/eZ-publish/An-awesome-forum23' => array(
+                '/Design/Plain-site/An-awesome-forum23' => array(
                     'type' => URLAlias::LOCATION,
                     'destination' => $location,
-                    'path' => '/Design/eZ-publish/An-awesome-forum²³',
+                    'path' => '/Design/Plain-site/An-awesome-forum23',
                     'languageCodes' => array( 'eng-GB' ),
                     'isHistory' => false,
                     'isCustom' => false,

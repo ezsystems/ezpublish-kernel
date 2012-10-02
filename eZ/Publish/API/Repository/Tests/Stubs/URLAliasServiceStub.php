@@ -76,7 +76,7 @@ class URLAliasServiceStub implements URLAliasService
      */
     public function createUrlAlias( Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false )
     {
-        $this->checkAliasNotExists( $path, $languageCode );
+        $this->checkAliasNotExists( $path, $languageCode, true );
 
         $data = array(
             'destination' => $location,
@@ -111,12 +111,16 @@ class URLAliasServiceStub implements URLAliasService
      */
     public function createGlobalUrlAlias( $resource, $path, $languageCode, $forward = false, $alwaysAvailable = false )
     {
-        $this->checkAliasNotExists( $path, $languageCode );
+        $this->checkAliasNotExists( $path, $languageCode, true );
 
         $data = array(
             'id' => ++$this->nextAliasId,
             'type' => URLAlias::RESOURCE,
-            'destination' => $resource,
+            'destination' => preg_replace(
+                '(^module:)',
+                '',
+                $resource
+            ),
             'path' => $path,
             'languageCodes' => array( $languageCode ),
             'alwaysAvailable' => $alwaysAvailable,
@@ -143,16 +147,24 @@ class URLAliasServiceStub implements URLAliasService
         $locationAliases = array();
         foreach ( $this->aliases as $existingAlias )
         {
-            // Filter chain
+            // Filter non-location aliases and location aliases for other
+            // locations
             if ( !( $existingAlias->destination instanceof Location ) || $existingAlias->destination->id != $location->id )
             {
                 continue;
             }
-            if ( !$custom && $existingAlias->isCustom )
+            // Filter for custom / non-custom
+            if ( $custom !== $existingAlias->isCustom )
             {
                 continue;
             }
+            // Filter for language code
             if ( $languageCode !== null && !in_array( $languageCode, $existingAlias->languageCodes ) )
+            {
+                continue;
+            }
+            // Filter out history aliases
+            if ( $existingAlias->isHistory )
             {
                 continue;
             }
@@ -211,6 +223,12 @@ class URLAliasServiceStub implements URLAliasService
             {
                 unset( $this->aliases[$aliasToRemove->id] );
             }
+            else
+            {
+                throw new Exceptions\InvalidArgumentExceptionStub(
+                    'What error code should be used?'
+                );
+            }
         }
         return true;
     }
@@ -243,6 +261,23 @@ class URLAliasServiceStub implements URLAliasService
                 $languageCode
             )
         );
+    }
+
+    /**
+     * Returns the URL alias for the given location in the given language.
+     *
+     * If $languageCode is null the method returns the url alias in the most prioritized language.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if no url alias exist for the given language
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     */
+    public function reverseLookup( Location $location, $languageCode = null )
+    {
+        throw new \RuntimeException( 'TODO: Implement.' );
     }
 
     /**
@@ -408,7 +443,14 @@ class URLAliasServiceStub implements URLAliasService
      */
     private function generateAliasName( $name )
     {
-        return strtr( $name, ' ', '-' );
+        return strtr(
+            $name,
+            array(
+                ' ' => '-',
+                '²' => '2',
+                '³' => '3',
+            )
+        );
     }
 
     /**
@@ -419,13 +461,10 @@ class URLAliasServiceStub implements URLAliasService
      */
     public function _obsoleteOldAliases( Location $location )
     {
-        $aliases = $this->listLocationAliases( $location );
+        $aliases = $this->listLocationAliases( $location, false );
         foreach ( $aliases as $alias )
         {
-            if ( !$alias->isCustom )
-            {
-                $this->obsoleteAlias( $alias );
-            }
+            $this->obsoleteAlias( $alias );
         }
     }
 
@@ -440,7 +479,7 @@ class URLAliasServiceStub implements URLAliasService
      */
     private function createInternalUrlAlias( Location $location, $path, $languageCode, $alwaysAvailable )
     {
-        $this->checkAliasNotExists( $path, $languageCode );
+        $this->checkAliasNotExists( $path, $languageCode, false );
 
         return $this->createLocationUrlAlias(
             array(
@@ -524,16 +563,19 @@ class URLAliasServiceStub implements URLAliasService
      * Checks if an alias for the given $path already exists.
      *
      * @param string $path
+     * @param string $languageCodes
+     * @param bool $custom
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
      *
      * @return void
      */
-    private function checkAliasNotExists( $path, $languageCode )
+    private function checkAliasNotExists( $path, $languageCode, $custom )
     {
         foreach ( $this->aliases as $existingAlias )
         {
-            if ( !$existingAlias->isHistory
+            if ( $custom
+                && !$existingAlias->isHistory
                 && $existingAlias->path == $path
                 && in_array( $languageCode, $existingAlias->languageCodes ) )
             {

@@ -135,11 +135,9 @@ function getContentTypeFieldDefinition( array $fixture )
             $fieldDef[$data['contentclass_id']] = array();
         }
 
-        $names = unserialize( $data['serialized_name_list'] );
-        unset( $names['always-available'] );
+        $names = filterTranslatedArray( unserialize( $data['serialized_name_list'] ) );
 
-        $description = unserialize( $data['serialized_description_list'] );
-        unset( $description['always-available'] );
+        $description = filterTranslatedArray( unserialize( $data['serialized_description_list'] ) );
 
         $fieldDef[$data['contentclass_id']][$data['id']] = array(
             'id' => (int) $data['id'],
@@ -163,6 +161,20 @@ function getContentTypeFieldDefinition( array $fixture )
     }
 
     return array( $fieldDef, $nextFieldId );
+}
+
+function filterTranslatedArray( array $translated )
+{
+    $filtered = array();
+    foreach ( $translated as $languageCode => $translation )
+    {
+        if ( is_string( $languageCode ) )
+        {
+            $filtered[$languageCode] = $translation;
+        }
+    }
+    unset( $filtered['always-available'] );
+    return $filtered;
 }
 
 function generateSectionFixture( array $fixture )
