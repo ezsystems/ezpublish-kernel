@@ -17,7 +17,7 @@ parameters:
     ezpublish_rest.url_handler.class: eZ\Publish\Core\REST\Common\UrlHandler\eZPublish
     ezpublish_rest.parser_tools.class: eZ\Publish\Core\REST\Common\Input\ParserTools
     ezpublish_rest.field_type_parser.class: eZ\Publish\Core\REST\Common\Input\FieldTypeParser
-    ezpublish_rest.value_response_listener.class: eZ\Bundle\EzPublishRestBundle\EventListener\RestValueResponseListener
+    ezpublish_rest.listener.class: eZ\Bundle\EzPublishRestBundle\EventListener\RestListener
     ezpublish_rest.field_type_serializer.class: eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer
     ezpublish_rest.field_type_processor_registry.class: eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry
     ezpublish_rest.request.class: eZ\Publish\Core\REST\Server\Request
@@ -137,10 +137,11 @@ services:
         arguments:
             - @ezpublish.api.service.url_wildcard
 
-    ezpublish_rest.value_response_listener:
-        class: %ezpublish_rest.value_response_listener.class%
+    ezpublish_rest.listener:
+        class: %ezpublish_rest.listener.class%
         arguments:
             - @service_container
+            - @ezpublish_rest.request
         tags:
             - { name: kernel.event_subscriber }
 

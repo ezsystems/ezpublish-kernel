@@ -12,10 +12,13 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+
+use eZ\Publish\Core\REST\Server\Request as RESTRequest;
 
 /**
  * This class listens, as a service, for the kernel.view event, triggered when a controller method
@@ -23,7 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * It converts the RestValue / Value Object to a Response using Visitors
  */
-class RestValueResponseListener implements EventSubscriberInterface
+class RestListener implements EventSubscriberInterface
 {
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
@@ -31,11 +34,17 @@ class RestValueResponseListener implements EventSubscriberInterface
     private $container;
 
     /**
+     * @var \eZ\Publish\Core\REST\Server\Request
+     */
+    private $request;
+
+    /**
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
-    public function __construct( ContainerInterface $container )
+    public function __construct( ContainerInterface $container, RESTRequest $request )
     {
         $this->container = $container;
+        $this->request = $request;
     }
 
     /**
@@ -45,7 +54,8 @@ class RestValueResponseListener implements EventSubscriberInterface
     {
         return array(
             KernelEvents::VIEW => 'onKernelResultView',
-            KernelEvents::EXCEPTION => 'onKernelExceptionView'
+            KernelEvents::EXCEPTION => 'onKernelExceptionView',
+            KernelEvents::REQUEST => 'onKernelRequest'
         );
     }
 
@@ -53,7 +63,8 @@ class RestValueResponseListener implements EventSubscriberInterface
      * @param \Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent $event
      *
      * @throws \Exception
-     */public function onKernelResultView( GetResponseForControllerResultEvent $event )
+     */
+    public function onKernelResultView( GetResponseForControllerResultEvent $event )
     {
         if ( $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
             return;
@@ -68,7 +79,7 @@ class RestValueResponseListener implements EventSubscriberInterface
 //            return;
 //        }
 
-        $event->setResponse( $this->visitResponse( $result ) );
+        $event->setResponse( $this->visitResult( $result ) );
         $event->stopPropagation();
     }
 
@@ -77,11 +88,11 @@ class RestValueResponseListener implements EventSubscriberInterface
      *
      * @throws \Exception
      * @return void
-     */public function onKernelExceptionView( GetResponseForExceptionEvent $event )
+     */
+    public function onKernelExceptionView( GetResponseForExceptionEvent $event )
     {
         if ( $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
             return;
-
 
         if ( !$this->isRestRequest( $event->getRequest() ) )
             return;
@@ -90,6 +101,25 @@ class RestValueResponseListener implements EventSubscriberInterface
 
         $event->setResponse( $this->visitResult( $result ) );
         $event->stopPropagation();
+    }
+
+    public function onKernelRequest( GetResponseEvent $event )
+    {
+        if ( $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
+            return;
+
+        if ( !$this->isRestRequest( $event->getRequest() ) )
+            return;
+
+        /**  @var \eZ\Publish\Core\REST\Server\Request $request */
+        $request = $this->container->get( 'ezpublish_rest.request' );
+
+        /**  @var \eZ\Publish\API\Repository $repository */
+        $repository = $this->container->get( 'ezpublish.api.repository' );
+
+        $repository->setCurrentUser(
+            $repository->getUserService()->loadUser( $request->testUser )
+        );
     }
 
     /**
