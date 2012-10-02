@@ -455,6 +455,7 @@ class SearchServiceTest extends BaseTest
                     'limit'       => 10,
                     'sortClauses' => array(
                         new SortClause\LocationPriority( Query::SORT_DESC ),
+                        new SortClause\ContentId(),
                     )
                 ) ),
                 $fixtureDir . '/SortDesc.php',
@@ -466,6 +467,7 @@ class SearchServiceTest extends BaseTest
                     'limit'       => 10,
                     'sortClauses' => array(
                         new SortClause\DatePublished(),
+                        new SortClause\ContentId(),
                     )
                 ) ),
                 $fixtureDir . '/SortDatePublished.php',
@@ -477,6 +479,7 @@ class SearchServiceTest extends BaseTest
                     'limit'       => null,
                     'sortClauses' => array(
                         new SortClause\SectionIdentifier(),
+                        new SortClause\ContentId(),
                     )
                 ) ),
                 $fixtureDir . '/SortSectionIdentifier.php',
@@ -488,6 +491,7 @@ class SearchServiceTest extends BaseTest
                     'limit'       => null,
                     'sortClauses' => array(
                         new SortClause\SectionName(),
+                        new SortClause\ContentId(),
                     )
                 ) ),
                 $fixtureDir . '/SortSectionName.php',
@@ -499,6 +503,7 @@ class SearchServiceTest extends BaseTest
                     'limit'       => null,
                     'sortClauses' => array(
                         new SortClause\ContentName(),
+                        new SortClause\ContentId(),
                     )
                 ) ),
                 $fixtureDir . '/SortContentName.php',
@@ -510,6 +515,7 @@ class SearchServiceTest extends BaseTest
                     'limit'       => null,
                     'sortClauses' => array(
                         new SortClause\Field( "folder", "name" ),
+                        new SortClause\ContentId(),
                     )
                 ) ),
                 $fixtureDir . '/SortFolderName.php',
@@ -521,6 +527,7 @@ class SearchServiceTest extends BaseTest
                     'limit'       => null,
                     'sortClauses' => array(
                         new SortClause\Field( "template_look", "title" ),
+                        new SortClause\ContentId(),
                     )
                 ) ),
                 $fixtureDir . '/SortTemplateTitle.php',
