@@ -152,7 +152,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             'eng-US' => 'Content name',
         );
         $content->versionInfo->status = VersionInfo::STATUS_PENDING;
-        $content->locations = array();
 
         return $content;
     }

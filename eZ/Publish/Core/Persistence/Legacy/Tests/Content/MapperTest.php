@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
-    eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\API\Repository\Values\Content\Relation as RelationValue,
@@ -29,13 +28,6 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
  */
 class MapperTest extends LanguageAwareTestCase
 {
-    /**
-     * Location mapper mock
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
-     */
-    protected $locationMapperMock;
-
     /**
      * Value converter registry mock
      *
@@ -168,7 +160,6 @@ class MapperTest extends LanguageAwareTestCase
         $content->fields = array(
             new Field( array( "languageCode" => "eng-GB" ) ),
         );
-        $content->locations = array();
 
         return $content;
     }
@@ -214,7 +205,7 @@ class MapperTest extends LanguageAwareTestCase
         $field->type = 'some-type';
         $field->value = new FieldValue();
 
-        $mapper = new Mapper( $this->getLocationMapperMock(), $reg, $this->getLanguageHandler() );
+        $mapper = new Mapper( $reg, $this->getLanguageHandler() );
         $res = $mapper->convertToStorageValue( $field );
 
         $this->assertInstanceOf(
@@ -260,7 +251,7 @@ class MapperTest extends LanguageAwareTestCase
 
         $rowsFixture = $this->getContentExtractFixture();
 
-        $mapper = new Mapper( new LocationMapper(), $reg, $this->getLanguageHandler() );
+        $mapper = new Mapper( $reg, $this->getLanguageHandler() );
         $result = $mapper->extractContentFromRows( $rowsFixture );
 
         $this->assertEquals(
@@ -277,11 +268,6 @@ class MapperTest extends LanguageAwareTestCase
      */
     public function testExtractContentFromRowsMultipleVersions()
     {
-        $locationMapperMock = $this->getLocationMapperMock();
-        $locationMapperMock->expects( $this->any() )
-            ->method( 'createLocationFromRow' )
-            ->will( $this->returnValue( new Content\Location() ) );
-
         $convMock = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
         );
@@ -297,7 +283,7 @@ class MapperTest extends LanguageAwareTestCase
 
         $rowsFixture = $this->getMultipleVersionsExtractFixture();
 
-        $mapper = new Mapper( $locationMapperMock, $reg, $this->getLanguageHandler() );
+        $mapper = new Mapper( $reg, $this->getLanguageHandler() );
         $result = $mapper->extractContentFromRows( $rowsFixture );
 
         $this->assertEquals(
@@ -436,7 +422,6 @@ class MapperTest extends LanguageAwareTestCase
     {
         $contentInfoReference = $this->getContentExtractReference()->contentInfo;
         $mapper = new Mapper(
-            $this->getLocationMapperMock(),
             $this->getValueConverterRegistryMock(),
             $this->getLanguageHandler()
         );
@@ -474,7 +459,6 @@ class MapperTest extends LanguageAwareTestCase
     {
         $versionInfoReference = $this->getContentExtractReference()->versionInfo;
         $mapper = new Mapper(
-            $this->getLocationMapperMock(),
             $this->getValueConverterRegistryMock(),
             $this->getLanguageHandler()
         );
@@ -641,33 +625,12 @@ class MapperTest extends LanguageAwareTestCase
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
-    protected function getMapper( $locationMapper = null, $valueConverter = null )
+    protected function getMapper( $valueConverter = null )
     {
         return new Mapper(
-            $this->getLocationMapperMock(),
             $this->getValueConverterRegistryMock(),
             $this->getLanguageHandler()
         );
-    }
-
-    /**
-     * Returns a location mapper mock
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
-     */
-    protected function getLocationMapperMock()
-    {
-        if ( !isset( $this->locationMapperMock ) )
-        {
-            $this->locationMapperMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper',
-                array(),
-                array(),
-                '',
-                false
-            );
-        }
-        return $this->locationMapperMock;
     }
 
     /**

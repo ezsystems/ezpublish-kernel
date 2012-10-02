@@ -128,13 +128,6 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
             array( 'extractContentFromRows' ),
             array(
-                $this->locationMapperMock = $this->getMock(
-                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
                 $this->getFieldRegistry(),
                 $this->getLanguageHandler()
             )
