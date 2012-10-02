@@ -99,6 +99,19 @@ class Handler implements BaseLocationHandler
     }
 
     /**
+     * Loads all locations for $contentId, optionally limited to a sub tree
+     * identified by $rootLocationId
+     *
+     * @param int $contentId
+     * @param int $rootLocationId
+     * @return \eZ\Publish\SPI\Persistence\Content\Location[]
+     */
+    public function loadLocationsByContent( $contentId, $rootLocationId = null )
+    {
+        throw new \RuntimeException( "Not implemented, yet." );
+    }
+
+    /**
      * Copy location object identified by $sourceId, into destination identified by $destinationParentId.
      *
      * Performs a deep copy of the location identified by $sourceId and all of
