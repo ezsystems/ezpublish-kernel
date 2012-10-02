@@ -834,25 +834,43 @@ class EzcDatabase extends Gateway
      */
     public function loadContentInfo( $contentId )
     {
-        $q = $this->dbHandler->createSelectQuery();
-        $q
-            ->select( '*' )
-            ->from( $this->dbHandler->quoteTable( 'ezcontentobject' ) )
-            ->where(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn( 'id' ),
-                    $q->bindValue( $contentId )
+        /** @var $query \ezcQuerySelect */
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            "ezcontentobject.*",
+            $this->dbHandler->aliasedColumn( $query, 'main_node_id', 'ezcontentobject_tree' )
+        )->from(
+            $this->dbHandler->quoteTable( "ezcontentobject" )
+        )->leftJoin(
+            $this->dbHandler->quoteTable( "ezcontentobject_tree" ),
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "contentobject_id", "ezcontentobject_tree" ),
+                    $this->dbHandler->quoteColumn( "id", "ezcontentobject" )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "main_node_id", "ezcontentobject_tree" ),
+                    $this->dbHandler->quoteColumn( "node_id", "ezcontentobject_tree" )
                 )
-            );
-        $stmt = $q->prepare();
-        $stmt->execute();
-        $rows = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+            )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( "id" ),
+                $query->bindValue( $contentId )
+            )
+        );
+        $statement = $query->prepare();
+        $statement->execute();
+        $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
+
         if ( empty( $rows ) )
-            throw new NotFound( 'content', $contentId );
+        {
+            throw new NotFound( "content", $contentId );
+        }
 
         $contentInfo = $rows[0];
-        $contentInfo['always_available'] = $this->languageMaskGenerator->isAlwaysAvailable( $contentInfo['language_mask'] );
-        $contentInfo['main_language_code'] = $this->languageHandler->load( $contentInfo['initial_language_id'] )->languageCode;
+        $contentInfo["always_available"] = $this->languageMaskGenerator->isAlwaysAvailable( $contentInfo["language_mask"] );
+        $contentInfo["main_language_code"] = $this->languageHandler->load( $contentInfo["initial_language_id"] )->languageCode;
         return $contentInfo;
     }
 

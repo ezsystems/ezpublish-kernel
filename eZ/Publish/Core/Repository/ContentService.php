@@ -1760,31 +1760,11 @@ class ContentService implements ContentServiceInterface
      * build* methods.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $spiContentInfo
-     * @param \eZ\Publish\SPI\Persistence\Content|null $spiContent
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\ContentInfo
      */
-    public function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo, SPIContent $spiContent = null )
+    public function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo )
     {
-
-        if ( $spiContent === null )
-        {
-            $spiContent = $this->persistenceHandler->contentHandler()->load(
-                $spiContentInfo->id,
-                $spiContentInfo->currentVersionNo
-            );
-        }
-        // @todo: $mainLocationId should have been removed through SPI refactoring?
-        $mainLocationId = null;
-        foreach ( $spiContent->locations as $spiLocation )
-        {
-            if ( $spiLocation->mainLocationId === $spiLocation->id )
-            {
-                $mainLocationId = $spiLocation->mainLocationId;
-                break;
-            }
-        }
-
         return new ContentInfo(
             array(
                 "id" => $spiContentInfo->id,
@@ -1802,7 +1782,7 @@ class ContentService implements ContentServiceInterface
                 "alwaysAvailable" => $spiContentInfo->alwaysAvailable,
                 "remoteId" => $spiContentInfo->remoteId,
                 "mainLanguageCode" => $spiContentInfo->mainLanguageCode,
-                "mainLocationId" => $mainLocationId,
+                "mainLocationId" => $spiContentInfo->mainLocationId,
                 "contentType" => $this->repository->getContentTypeService()->loadContentType(
                     $spiContentInfo->contentTypeId
                 )
@@ -1840,7 +1820,7 @@ class ContentService implements ContentServiceInterface
                 "languageCodes" => $languageCodes,
                 "names" => $persistenceVersionInfo->names,
                 "contentInfo" => ( $spiContent !== null ?
-                    $this->buildContentInfoDomainObject( $spiContent->contentInfo, $spiContent ) :
+                    $this->buildContentInfoDomainObject( $spiContent->contentInfo ) :
                     $this->loadContentInfo( $persistenceVersionInfo->contentId ) )
             )
         );

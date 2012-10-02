@@ -454,7 +454,9 @@ class MapperTest extends LanguageAwareTestCase
         $fixturesNoPrefix = array();
         foreach ( $fixtures[0] as $key => $value )
         {
-            $keyNoPrefix = str_replace( 'ezcontentobject_', '', $key );
+            $keyNoPrefix = $key === "ezcontentobject_tree_main_node_id"
+                ? $key
+                : str_replace( 'ezcontentobject_', '', $key );
             $fixturesNoPrefix[$keyNoPrefix] = $value;
         }
 
@@ -486,7 +488,7 @@ class MapperTest extends LanguageAwareTestCase
             {
                 default:
                     self::assertSame(
-                        $value, 
+                        $value,
                         $versionInfo->$property,
                         "Property '$property' incorrect."
                     );
