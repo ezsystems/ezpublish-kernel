@@ -193,7 +193,7 @@ class EzcDatabase extends Gateway
     /**
      * Inserts a new version.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Version $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
      * @param boolean $alwaysAvailable
      * @return int ID
