@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authentication;
 
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface,
+    Symfony\Component\Security\Core\User\UserProviderInterface,
     Symfony\Component\Security\Core\Authentication\Token\TokenInterface,
     Symfony\Component\Security\Core\Exception\AuthenticationException;
 

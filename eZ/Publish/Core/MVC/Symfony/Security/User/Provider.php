@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Security\User;
 
-use eZ\Publish\API\Repository\Repository,
-    eZ\Publish\API\Repository\Exceptions\NotFoundException,
+use eZ\Publish\API\Repository\Exceptions\NotFoundException,
     eZ\Publish\Core\MVC\Symfony\Security\User,
     Symfony\Component\Security\Core\User\UserProviderInterface,
     Symfony\Component\Security\Core\User\UserInterface,
@@ -23,9 +22,31 @@ class Provider implements UserProviderInterface
      */
     protected $userService;
 
-    public function __construct( Repository $repository )
+    /**
+     * @var \Closure
+     */
+    private $lazyRepository;
+
+    public function __construct( \Closure $lazyRepository )
     {
-        $this->userService = $repository->getUserService();
+        $this->lazyRepository = $lazyRepository;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Repository
+     */
+    public function getRepository()
+    {
+        $lazyRepository = $this->lazyRepository;
+        return $lazyRepository();
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\UserService
+     */
+    public function getUserService()
+    {
+        return $this->getRepository()->getUserService();
     }
 
     /**
@@ -48,7 +69,7 @@ class Provider implements UserProviderInterface
     {
         try
         {
-            $user = $this->userService->loadUser( $userId );
+            $user = $this->getUserService()->loadUser( $userId );
             return new User( $user );
         }
         catch ( NotFoundException $e )
@@ -74,7 +95,7 @@ class Provider implements UserProviderInterface
         try
         {
             return new User(
-                $this->userService->loadUser( $user->getUserObject()->id )
+                $this->getUserService()->loadUser( $user->getUserObject()->id )
             );
         }
         catch ( NotFoundException $e )

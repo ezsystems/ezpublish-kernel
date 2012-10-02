@@ -42,7 +42,7 @@ class Listener extends AbstractAuthenticationListener
             return false;
 
         list( $module, $function ) = $this->supportedRoutes[$routeName];
-        return $this->repository->hasAccess( $module, $function ) !== false;
+        return $this->repository->hasAccess( $module, $function ) === false;
     }
 
     private function isRouteSupported( $routeName )
