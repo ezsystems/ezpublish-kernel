@@ -243,6 +243,7 @@ class Mapper
         $contentInfo->alwaysAvailable = $row["{$prefix}always_available"];
         $contentInfo->mainLanguageCode = $row["{$prefix}main_language_code"];
         $contentInfo->remoteId = $row["{$prefix}remote_id"];
+        $contentInfo->mainLocationId = $row["ezcontentobject_tree_main_node_id"];
 
         return $contentInfo;
     }

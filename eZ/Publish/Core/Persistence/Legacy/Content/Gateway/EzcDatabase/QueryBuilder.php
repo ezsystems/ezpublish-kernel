@@ -15,7 +15,7 @@ class QueryBuilder
     /**
      * Database handler
      *
-     * @var EzcDbHandler
+     * @var \EzcDbHandler
      */
     protected $dbHandler;
 
@@ -36,10 +36,11 @@ class QueryBuilder
      * content object. Does not apply any WHERE conditions.
      *
      * @param string[] $translations
-     * @return ezcQuerySelect
+     * @return \ezcQuerySelect
      */
     public function createFindQuery( array $translations = null )
     {
+        /** @var $query \ezcQuerySelect */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             // Content object
@@ -128,6 +129,10 @@ class QueryBuilder
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( 'contentobject_version', 'ezcontentobject_tree' ),
                     $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'main_node_id', 'ezcontentobject_tree' ),
+                    $this->dbHandler->quoteColumn( 'node_id', 'ezcontentobject_tree' )
                 )
             )
         // @todo: Joining with ezcontentobject_name is probably a VERY bad way to gather that information

@@ -21,6 +21,7 @@ $content->contentInfo->currentVersionNo = 2;
 $content->contentInfo->isPublished = true;
 $content->contentInfo->mainLanguageCode = 'eng-US';
 $content->contentInfo->name = 'Something';
+$content->contentInfo->mainLocationId = 228;
 $content->locations = array(
     new Location(
         array(
