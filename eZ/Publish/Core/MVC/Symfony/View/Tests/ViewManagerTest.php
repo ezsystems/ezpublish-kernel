@@ -32,14 +32,23 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
      */
     private $eventDispatcherMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $repositoryMock;
+
     protected  function setUp()
     {
         parent::setUp();
         $this->templateEngineMock = $this->getMock( 'Symfony\\Component\\Templating\\EngineInterface' );
         $this->eventDispatcherMock = $this->getMock( 'Symfony\\Component\\EventDispatcher\\EventDispatcherInterface' );
+        $this->repositoryMock = $this->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\Repository' )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->viewManager = new Manager(
             $this->templateEngineMock,
-            $this->eventDispatcherMock
+            $this->eventDispatcherMock,
+            $this->repositoryMock
         );
     }
 
@@ -185,6 +194,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
 
         $location = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
         $content = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Content' );
+        $contentInfo = $this->getMock( 'eZ\\Publish\\Core\\Repository\\Values\\Content\\ContentInfo' );
 
         // Configuring view provider behaviour
         $templateIdentifier = 'foo:bar:baz';
@@ -200,6 +210,30 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
         )
         ;
 
+        $contentService = $this->getMockBuilder( "eZ\\Publish\\Core\\Repository\\ContentService" )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $contentService->expects( $this->any() )
+            ->method( "loadContentByContentInfo" )
+            ->with( $contentInfo )
+            ->will(
+                $this->returnValue( $content )
+            );
+
+        $this->repositoryMock
+            ->expects( $this->any() )
+            ->method( "getContentService" )
+            ->will(
+                $this->returnValue(
+                    $contentService
+                )
+            );
+
+        $location->expects( $this->any() )
+            ->method( "getContentInfo" )
+            ->will( $this->returnValue( $contentInfo ) );
+
         // Configuring template engine behaviour
         $expectedTemplateResult = 'This is location rendering';
         $this->templateEngineMock
@@ -209,7 +243,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $expectedTemplateResult ) )
         ;
 
-        self::assertSame( $expectedTemplateResult, $this->viewManager->renderLocation( $location, $content, 'customViewType' ) );
+        self::assertSame( $expectedTemplateResult, $this->viewManager->renderLocation( $location, 'customViewType' ) );
     }
 
     /**
@@ -223,6 +257,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
 
         $location = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
         $content = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Content' );
+        $contentInfo = $this->getMock( 'eZ\\Publish\\Core\\Repository\\Values\\Content\\ContentInfo' );
 
         // Configuring view provider behaviour
         $closure = function ( $params )
@@ -241,6 +276,30 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
         )
         ;
 
+        $contentService = $this->getMockBuilder( "eZ\\Publish\\Core\\Repository\\ContentService" )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $contentService->expects( $this->any() )
+            ->method( "loadContentByContentInfo" )
+            ->with( $contentInfo )
+            ->will(
+                $this->returnValue( $content )
+            );
+
+        $this->repositoryMock
+            ->expects( $this->any() )
+            ->method( "getContentService" )
+            ->will(
+                $this->returnValue(
+                    $contentService
+                )
+            );
+
+        $location->expects( $this->any() )
+            ->method( "getContentInfo" )
+            ->will( $this->returnValue( $contentInfo ) );
+
         // Configuring template engine behaviour
         $params += array( 'location' => $location, 'content' => $content );
         $expectedTemplateResult = serialize( array_keys( $params ) );
@@ -249,7 +308,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
             ->method( 'render' )
         ;
 
-        self::assertSame( $expectedTemplateResult, $this->viewManager->renderLocation( $location, $content ) );
+        self::assertSame( $expectedTemplateResult, $this->viewManager->renderLocation( $location ) );
     }
 
     private function createViewProviderMocks()

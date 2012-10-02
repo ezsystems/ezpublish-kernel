@@ -37,7 +37,7 @@ services:
 
     ezpublish.view_manager:
         class: %ezpublish.view_manager.class%
-        arguments: [@templating, @event_dispatcher, @?logger]
+        arguments: [@templating, @event_dispatcher, @ezpublish.api.repository, @?logger]
 
     ezpublish.content_view_provider.configured:
         class: %ezpublish.content_view_provider.configured.class%
