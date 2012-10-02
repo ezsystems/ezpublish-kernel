@@ -683,6 +683,9 @@ class UserService implements UserServiceInterface
         $contentService = $this->repository->getContentService();
         $loadedUser = $this->loadUser( $user->id );
 
+        if ( !$this->repository->canUser( 'content', 'edit', $loadedUser ) )
+            throw new UnauthorizedException( 'content', 'edit' );
+
         $this->repository->beginTransaction();
         try
         {
@@ -855,6 +858,9 @@ class UserService implements UserServiceInterface
     public function loadUserGroupsOfUser( APIUser $user )
     {
         $locationService = $this->repository->getLocationService();
+
+        if ( !$this->repository->canUser( 'content', 'edit', $user ) )
+            throw new UnauthorizedException( 'content', 'edit' );
 
         $userLocations = $locationService->loadLocations(
             $user->getVersionInfo()->getContentInfo()
