@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
-use eZ\Publish\Core\REST\Server\Value as RestValue;
+use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
  * RestUserGroupUpdateStruct view model
