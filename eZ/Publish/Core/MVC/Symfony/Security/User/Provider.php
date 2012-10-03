@@ -11,11 +11,12 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\User;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException,
     eZ\Publish\Core\MVC\Symfony\Security\User,
-    Symfony\Component\Security\Core\User\UserProviderInterface,
+    eZ\Publish\Core\MVC\Symfony\Security\User\APIUserProviderInterface,
+    eZ\Publish\API\Repository\Values\User\User as APIUser,
     Symfony\Component\Security\Core\User\UserInterface,
     Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
-class Provider implements UserProviderInterface
+class Provider implements APIUserProviderInterface
 {
     /**
      * @var \eZ\Publish\API\Repository\UserService
@@ -115,5 +116,16 @@ class Provider implements UserProviderInterface
     {
         $supportedClass = 'eZ\\Publish\\Core\\MVC\\Symfony\\Security\\User';
         return $class === $supportedClass || is_subclass_of( $class, $supportedClass );
+    }
+
+    /**
+     * Loads a regular user object, usable by Symfony Security component, from a user object returned by Public API
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $apiUser
+     * @return \eZ\Publish\Core\MVC\Symfony\Security\User
+     */
+    public function loadUserByAPIUser( APIUser $apiUser )
+    {
+        return new User( $apiUser );
     }
 }

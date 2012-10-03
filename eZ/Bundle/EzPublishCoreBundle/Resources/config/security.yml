@@ -17,6 +17,7 @@ services:
         abstract: true
         arguments:
             - ~     # Will be replaced at compile time by the security factory to be the right user provider
+            - @ezpublish.api.repository.lazy
 
 #    TODO: To be implemented, use legacy for now (see legacy bundle)
 #    ezpublish.security.auth.entry_point:
