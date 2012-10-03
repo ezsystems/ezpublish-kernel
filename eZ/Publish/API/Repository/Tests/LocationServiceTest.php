@@ -1315,7 +1315,7 @@ class LocationServiceTest extends BaseTest
         {
             try
             {
-                $locationService->loadLocation( $childLocationId );
+                $locationService->loadLocation( $this->generateId( 'location', $childLocationId ) );
                 $this->fail( "Location $childLocationId not deleted." );
             }
             catch ( Exceptions\NotFoundException $e ) {}
@@ -1328,7 +1328,7 @@ class LocationServiceTest extends BaseTest
         {
             try
             {
-                $contentService->loadContentInfo( $childContentId );
+                $contentService->loadContentInfo( $this->generateId( 'object', $childContentId ) );
                 $this->fail( "Content $childContentId not deleted." );
             }
             catch ( Exceptions\NotFoundException $e ) {}
