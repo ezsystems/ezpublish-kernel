@@ -135,7 +135,7 @@ class SearchService implements SearchServiceInterface
      */
     public function addPermissionsCriterion( Criterion &$criterion )
     {
-        $permissionSets = $this->repository->hasAccess( 'content', 'read', null, true );
+        $permissionSets = $this->repository->hasAccess( 'content', 'read' );
         if ( $permissionSets === false || $permissionSets === true )
         {
             return $permissionSets;

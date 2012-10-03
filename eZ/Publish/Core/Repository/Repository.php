@@ -307,7 +307,7 @@ class Repository implements RepositoryInterface
      */
     public function canUser( $module, $function, ValueObject $object, ValueObject $target = null )
     {
-        $permissionSets = $this->hasAccess( $module, $function, null, true );
+        $permissionSets = $this->hasAccess( $module, $function );
         if ( $permissionSets === false || $permissionSets === true )
         {
             return $permissionSets;
