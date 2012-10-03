@@ -36,7 +36,7 @@ class Provider implements APIUserProviderInterface
     /**
      * @return \eZ\Publish\API\Repository\Repository
      */
-    public function getRepository()
+    protected function getRepository()
     {
         $lazyRepository = $this->lazyRepository;
         return $lazyRepository();
@@ -45,7 +45,7 @@ class Provider implements APIUserProviderInterface
     /**
      * @return \eZ\Publish\API\Repository\UserService
      */
-    public function getUserService()
+    protected function getUserService()
     {
         return $this->getRepository()->getUserService();
     }
