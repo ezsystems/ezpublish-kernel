@@ -164,43 +164,55 @@ class RepositoryStub implements Repository
             return true;
         }
 
-        $limitations = null;
-
         $user = $user ?: $this->getCurrentUser();
-
         $roleService = $this->getRoleService();
-        foreach ( $roleService->loadPoliciesByUserId( $user->id ) as $policy )
+
+        ++$this->permissionChecks;
+
+        foreach ( $roleService->getRoleAssignmentsForUser( $user, true ) as $roleAssignment )
         {
-            if ( $policy->module === '*' )
+            $roleLimitation = $roleAssignment->getRoleLimitation();
+            $permissionSet = array( 'limitation' => null, 'policies' => array() );
+            foreach ( $roleService->__getRolePolicies( $roleAssignment->getRole() ) as $policy )
             {
+                if ( $policy->module === '*' && $roleLimitation === null )
+                {
+                    --$this->permissionChecks;
+                    return true;
+                }
 
-                return true;
-            }
-            if ( $policy->module !== $module )
-            {
-                continue;
-            }
-            if ( $policy->function === '*' && $policy->module === $module )
-            {
-                return true;
-            }
-            if ( $policy->function !== $function )
-            {
-                continue;
+                if ( $policy->module !== $module )
+                    continue;
+
+                if ( $policy->function === '*' && $roleLimitation === null )
+                {
+                    --$this->permissionChecks;
+                    return true;
+                }
+
+                if ( $policy->function !== $function )
+                    continue;
+
+                $permissionSet['policies'][] = $policy;
             }
 
-            if ( null === $limitations )
+            if ( !empty( $permissionSet['policies'] ) )
             {
-                $limitations = array();
-            }
+                if ( $roleLimitation !== null )
+                {
+                    $permissionSet['limitation'] = $roleLimitation;
+                }
 
-            foreach ( $policy->getLimitations() as $limitation )
-            {
-                $limitations[] = $limitation;
+                $permissionSets[] = $permissionSet;
             }
         }
 
-        return is_array( $limitations ) ? $limitations : false;
+        --$this->permissionChecks;
+
+        if ( !empty( $permissionSets ) )
+            return $permissionSets;
+
+        return false;// No policies matching $module and $function
     }
 
     /**
@@ -224,10 +236,10 @@ class RepositoryStub implements Repository
             return true;
         }
 
-        $hasAccess = $this->hasAccess( $module, $function );
-        if ( is_bool( $hasAccess ) )
+        $permissionSets = $this->hasAccess( $module, $function );
+        if ( $permissionSets === false || $permissionSets === true )
         {
-            return $hasAccess;
+            return $permissionSets;
         }
 
         ++$this->permissionChecks;
@@ -261,19 +273,32 @@ class RepositoryStub implements Repository
         {
             --$this->permissionChecks;
             return true;
-        }
+         }
 
-        foreach ( $hasAccess as $limitation )
+        foreach ( $permissionSets as $permissionSet )
         {
-            if ( $limitation->getIdentifier() !== Limitation::SUBTREE )
+            /**
+             * @var \eZ\Publish\API\Repository\Values\User\Limitation[] $permissionSet
+             */
+            if ( $permissionSet['limitation'] instanceof Limitation )
             {
-                continue;
-            }
-            foreach ( $locations as $location )
-            {
-                foreach ( $limitation->limitationValues as $pathString )
+                if ( $permissionSet['limitation']->getIdentifier() == Limitation::SUBTREE )
                 {
-                    if ( 0 === strpos( $location->pathString, $pathString ) )
+                    foreach ( $locations as $location )
+                    {
+                        foreach ( $permissionSet['limitation']->limitationValues as $limitationPathString )
+                        {
+                            if ( strpos( $location->pathString, $limitationPathString ) === 0 )
+                            {
+                                --$this->permissionChecks;
+                                return true;
+                            }
+                        }
+                    }
+                }
+                else if ( $permissionSet['limitation']->getIdentifier() == Limitation::SECTION )
+                {
+                    if ( in_array( $contentInfoValue->sectionId, $permissionSet['limitation']->limitationValues ) )
                     {
                         --$this->permissionChecks;
                         return true;
@@ -283,7 +308,7 @@ class RepositoryStub implements Repository
         }
 
         --$this->permissionChecks;
-        return false;
+        return false; // None of the limitation sets wanted to let you in, sorry!
     }
 
     /**
