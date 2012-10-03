@@ -176,8 +176,11 @@ abstract class SearchBase extends BaseServiceTest
             $this->isType( "array" )
         )->will(
             $this->returnValue( new SPIContent( array(
-                'versionInfo' => new SPIVersionInfo(),
-                'contentInfo' => new SPIContentInfo( array( 'contentTypeId' => 1 ) ),
+                'versionInfo' => new SPIVersionInfo(
+                    array(
+                        'contentInfo' => new SPIContentInfo( array( 'contentTypeId' => 1 ) )
+                    )
+                ),
                 'fields' => array(),
                 'relations' => array()
             ) ) )

@@ -63,8 +63,9 @@ class MapperTest extends LanguageAwareTestCase
     /**
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createContentFromCreateStruct
+     * @todo remove
      */
-    public function testCreateContentFromCreateStruct()
+    public function xtestCreateContentFromCreateStruct()
     {
         $struct = $this->getCreateStructFixture();
 
@@ -131,8 +132,6 @@ class MapperTest extends LanguageAwareTestCase
         $versionInfo = $mapper->createVersionInfoForContent(
             $content,
             1,
-            $content->fields,
-            $content->versionInfo->initialLanguageCode,
             14
         );
 
@@ -157,32 +156,27 @@ class MapperTest extends LanguageAwareTestCase
      *
      * @return Content
      */
-    protected function getContentFixture()
+    protected function getFullContentFixture()
     {
         $content = new Content;
-        $content->contentInfo = new ContentInfo;
-        $content->contentInfo->id = 2342;
-        $content->contentInfo->contentTypeId = 23;
-        $content->contentInfo->sectionId = 42;
-        $content->contentInfo->ownerId = 13;
+
         $content->fields = array(
             new Field( array( "languageCode" => "eng-GB" ) ),
         );
         $content->locations = array();
-
-        return $content;
-    }
-
-    protected function getFullContentFixture()
-    {
-        $content = $this->getContentFixture();
-
         $content->versionInfo = new VersionInfo(
             array(
                 'versionNo' => 1,
-                'initialLanguageCode' => 'eng-GB'
+                'initialLanguageCode' => 'eng-GB',
+                'languageIds' => array( 4 ),
             )
         );
+
+        $content->versionInfo->contentInfo = new ContentInfo;
+        $content->versionInfo->contentInfo->id = 2342;
+        $content->versionInfo->contentInfo->contentTypeId = 23;
+        $content->versionInfo->contentInfo->sectionId = 42;
+        $content->versionInfo->contentInfo->ownerId = 13;
 
         return $content;
     }
@@ -307,11 +301,11 @@ class MapperTest extends LanguageAwareTestCase
 
         $this->assertEquals(
             11,
-            $result[0]->contentInfo->id
+            $result[0]->versionInfo->contentInfo->id
         );
         $this->assertEquals(
             11,
-            $result[1]->contentInfo->id
+            $result[1]->versionInfo->contentInfo->id
         );
 
         $this->assertEquals(
@@ -362,14 +356,14 @@ class MapperTest extends LanguageAwareTestCase
         $struct = $data['result'];
         $time = $data['time'];
         $this->assertStructsEqual(
-            $content->contentInfo,
+            $content->versionInfo->contentInfo,
             $struct,
             array( 'sectionId', 'ownerId' )
         );
-        self::assertNotEquals( $content->contentInfo->remoteId, $struct->remoteId );
-        self::assertSame( $content->contentInfo->contentTypeId, $struct->typeId );
+        self::assertNotEquals( $content->versionInfo->contentInfo->remoteId, $struct->remoteId );
+        self::assertSame( $content->versionInfo->contentInfo->contentTypeId, $struct->typeId );
         self::assertSame( 2, $struct->initialLanguageId );
-        self::assertSame( $content->contentInfo->alwaysAvailable, $struct->alwaysAvailable );
+        self::assertSame( $content->versionInfo->contentInfo->alwaysAvailable, $struct->alwaysAvailable );
         self::assertGreaterThanOrEqual( $time, $struct->modified );
     }
 
@@ -434,7 +428,7 @@ class MapperTest extends LanguageAwareTestCase
      */
     public function testExtractContentInfoFromRow( array $fixtures, $prefix )
     {
-        $contentInfoReference = $this->getContentExtractReference()->contentInfo;
+        $contentInfoReference = $this->getContentExtractReference()->versionInfo->contentInfo;
         $mapper = new Mapper(
             $this->getLocationMapperMock(),
             $this->getValueConverterRegistryMock(),
@@ -465,37 +459,6 @@ class MapperTest extends LanguageAwareTestCase
             array( $fixturesNoPrefix, '' )
         );
     }
-
-    /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractVersionInfoFromRow
-     * @dataProvider extractVersionInfoFromRowProvider
-     * @param array $fixtures
-     * @param string $prefix
-     */
-    public function testExtractVersionInfoFromRow( array $fixtures, $prefix )
-    {
-        $versionInfoReference = $this->getContentExtractReference()->versionInfo;
-        $mapper = new Mapper(
-            $this->getLocationMapperMock(),
-            $this->getValueConverterRegistryMock(),
-            $this->getLanguageHandler()
-        );
-
-        $versionInfo = $mapper->extractVersionInfoFromRow( $fixtures, $prefix );
-        foreach ( $versionInfoReference as $property => $value )
-        {
-            switch ( $property )
-            {
-                default:
-                    self::assertSame(
-                        $value,
-                        $versionInfo->$property,
-                        "Property '$property' incorrect."
-                    );
-            }
-        }
-    }
-
 
     /**
      * @return void

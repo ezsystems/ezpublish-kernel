@@ -53,6 +53,13 @@ class VersionInfo extends ValueObject
     public $contentId;
 
     /**
+     * ContentInfo of the content this VersionInfo belongs to.
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\ContentInfo
+     */
+    public $contentInfo;
+
+    /**
      * Returns the names computed from the name schema in the available languages.
      * Eg. array( 'eng-GB' => "New Article" )
      *

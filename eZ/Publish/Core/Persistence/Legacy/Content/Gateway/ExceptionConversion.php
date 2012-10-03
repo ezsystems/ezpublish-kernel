@@ -90,14 +90,13 @@ class ExceptionConversion extends Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
-     * @param boolean $alwaysAvailable
      * @return int ID
      */
-    public function insertVersion( VersionInfo $versionInfo, array $fields, $alwaysAvailable )
+    public function insertVersion( VersionInfo $versionInfo, array $fields )
     {
         try
         {
-            return $this->innerGateway->insertVersion( $versionInfo, $fields, $alwaysAvailable );
+            return $this->innerGateway->insertVersion( $versionInfo, $fields );
         }
         catch ( \ezcDbException $e )
         {

@@ -145,8 +145,8 @@ class Handler implements BaseLocationHandler
                 );
 
                 $content = $this->contentHandler->publish(
-                    $content->contentInfo->id,
-                    $content->contentInfo->currentVersionNo,
+                    $content->versionInfo->contentInfo->id,
+                    $content->versionInfo->contentInfo->currentVersionNo,
                     new MetadataUpdateStruct(
                         array(
                             "publicationDate" => $time,
@@ -155,7 +155,7 @@ class Handler implements BaseLocationHandler
                     )
                 );
 
-                $contentMap[$child["contentobject_id"]] = $content->contentInfo->id;
+                $contentMap[$child["contentobject_id"]] = $content->versionInfo->contentInfo->id;
             }
 
             $createStruct = $this->locationMapper->getLocationCreateStruct( $child );

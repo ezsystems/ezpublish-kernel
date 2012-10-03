@@ -28,13 +28,6 @@ class Content extends ValueObject
     public $versionInfo;
 
     /**
-     * ContentInfo object for this content.
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\ContentInfo
-     */
-    public $contentInfo;
-
-    /**
      * Relation objects for this content.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Relation

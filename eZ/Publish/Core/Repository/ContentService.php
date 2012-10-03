@@ -1387,7 +1387,7 @@ class ContentService implements ContentServiceInterface
             );
 
             $content = $this->internalPublishVersion(
-                $this->buildVersionInfoDomainObject( $spiContent->versionInfo, $spiContent ),
+                $this->buildVersionInfoDomainObject( $spiContent->versionInfo ),
                 $spiContent->versionInfo->creationDate
             );
 
@@ -1711,7 +1711,7 @@ class ContentService implements ContentServiceInterface
      */
     public function buildContentDomainObject( SPIContent $spiContent )
     {
-        $versionInfo = $this->buildVersionInfoDomainObject( $spiContent->versionInfo, $spiContent );
+        $versionInfo = $this->buildVersionInfoDomainObject( $spiContent->versionInfo );
         return new Content(
             array(
                 "internalFields" => $this->buildDomainFields( $spiContent->fields ),
@@ -1793,15 +1793,14 @@ class ContentService implements ContentServiceInterface
     /**
      * Builds a VersionInfo domain object from value object returned from persistence
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $persistenceVersionInfo
-     * @param \eZ\Publish\SPI\Persistence\Content|null $spiContent
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $spiVersionInfo
      *
      * @return VersionInfo
      */
-    protected function buildVersionInfoDomainObject( SPIVersionInfo $persistenceVersionInfo, SPIContent $spiContent = null )
+    protected function buildVersionInfoDomainObject( SPIVersionInfo $spiVersionInfo )
     {
         $languageCodes = array();
-        foreach ( $persistenceVersionInfo->languageIds as $languageId )
+        foreach ( $spiVersionInfo->languageIds as $languageId )
         {
             $languageCodes[] = $this->persistenceHandler->contentLanguageHandler()->load(
                 $languageId
@@ -1810,18 +1809,16 @@ class ContentService implements ContentServiceInterface
 
         return new VersionInfo(
             array(
-                "id" => $persistenceVersionInfo->id,
-                "versionNo" => $persistenceVersionInfo->versionNo,
-                "modificationDate" => $this->getDateTime( $persistenceVersionInfo->modificationDate ),
-                "creatorId" => $persistenceVersionInfo->creatorId,
-                "creationDate" => $this->getDateTime( $persistenceVersionInfo->creationDate ),
-                "status" => $this->getDomainVersionStatus( $persistenceVersionInfo->status ),
-                "initialLanguageCode" => $persistenceVersionInfo->initialLanguageCode,
+                "id" => $spiVersionInfo->id,
+                "versionNo" => $spiVersionInfo->versionNo,
+                "modificationDate" => $this->getDateTime( $spiVersionInfo->modificationDate ),
+                "creatorId" => $spiVersionInfo->creatorId,
+                "creationDate" => $this->getDateTime( $spiVersionInfo->creationDate ),
+                "status" => $this->getDomainVersionStatus( $spiVersionInfo->status ),
+                "initialLanguageCode" => $spiVersionInfo->initialLanguageCode,
                 "languageCodes" => $languageCodes,
-                "names" => $persistenceVersionInfo->names,
-                "contentInfo" => ( $spiContent !== null ?
-                    $this->buildContentInfoDomainObject( $spiContent->contentInfo ) :
-                    $this->loadContentInfo( $persistenceVersionInfo->contentId ) )
+                "names" => $spiVersionInfo->names,
+                "contentInfo" => $this->buildContentInfoDomainObject( $spiVersionInfo->contentInfo )
             )
         );
     }
