@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Values;
-use eZ\Publish\Core\REST\Server\Value AS RestValue;
+use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
  * Content list view model
