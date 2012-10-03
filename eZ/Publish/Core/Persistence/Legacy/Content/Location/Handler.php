@@ -108,7 +108,8 @@ class Handler implements BaseLocationHandler
      */
     public function loadLocationsByContent( $contentId, $rootLocationId = null )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $rows = $this->locationGateway->loadLocationDataByContent( $contentId, $rootLocationId );
+        return $this->locationMapper->createLocationsFromRows( $rows );
     }
 
     /**

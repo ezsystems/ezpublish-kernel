@@ -91,6 +91,31 @@ class LocationHandlerTest extends TestCase
         $this->assertTrue( $location instanceof \eZ\Publish\SPI\Persistence\Content\Location );
     }
 
+    public function testLoadLocationsByContent()
+    {
+        $handler = $this->getLocationHandler();
+
+        $this->locationGateway
+            ->expects( $this->once() )
+            ->method( 'loadLocationDataByContent' )
+            ->with( 23, 42 )
+            ->will(
+                $this->returnValue(
+                    array()
+                )
+            );
+
+        $this->locationMapper
+            ->expects( $this->once() )
+            ->method( 'createLocationsFromRows' )
+            ->with( array() )
+            ->will( $this->returnValue( array( 'a', 'b' ) ) );
+
+        $locations = $handler->loadLocationsByContent( 23, 42 );
+
+        $this->assertInternalType( 'array', $locations );
+    }
+
     public function testMoveSubtree()
     {
         $handler = $this->getLocationHandler();
