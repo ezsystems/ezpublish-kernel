@@ -11,15 +11,17 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\Firewall;
 
 use eZ\Publish\API\Repository\Repository,
     eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter,
+    eZ\Publish\API\Repository\Values\User\User as APIUser,
+    eZ\Publish\Core\MVC\Symfony\Security\Authentication\Token,
     Symfony\Component\Security\Http\Firewall\AbstractAuthenticationListener,
     Symfony\Component\HttpFoundation\Request;
 
-class Listener extends AbstractAuthenticationListener
+abstract class Listener extends AbstractAuthenticationListener
 {
     /**
      * @var \eZ\Publish\API\Repository\Repository
      */
-    private $repository;
+    protected $repository;
 
     /**
      * @var array Route names that are supported by current firewall listener
@@ -37,13 +39,21 @@ class Listener extends AbstractAuthenticationListener
     protected function requiresAuthentication( Request $request )
     {
         // TODO : Following implementation is really ugly and temporary.
-        $routeName = $request->attributes->get( '_route' );
         if ( !$this->isRouteSupported( $request->attributes->get( '_route' ) ) )
             return false;
 
-        list( $module, $function ) = $this->supportedRoutes[$routeName];
-        return $this->repository->hasAccess( $module, $function ) === false;
+        // Always return true since any user must be authenticated, including anonymous user.
+
+        return $this->getCurrentUserId( $request ) === null;
     }
+
+    /**
+     * Returns the current eZ Publish user ID when applicable (user already connected) or null (user not connected)
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return int|null
+     */
+    abstract protected function getCurrentUserId( Request $request );
 
     private function isRouteSupported( $routeName )
     {
@@ -53,17 +63,18 @@ class Listener extends AbstractAuthenticationListener
     /**
      * Performs authentication.
      *
-     * @todo Not implemented yet in 5.0, still relies on legacy user/login.
-     * @see eZ\Publish\Core\MVC\Legacy\Security\Firewall\LegacyListener
-     *
      * @param Request $request A Request instance
      *
      * @return TokenInterface|Response|null The authenticated token, null if full authentication is not possible, or a Response
      *
      * @throws AuthenticationException if the authentication fails
      */
-    protected function attemptAuthentication(Request $request)
+    protected function attemptAuthentication( Request $request )
     {
-        return null;
+        $routeName = $request->attributes->get( '_route' );
+        list( $module, $function ) = $this->supportedRoutes[$routeName];
+
+        $token = new Token( $module, $function, $this->getCurrentUserId( $request ) );
+        return $this->authenticationManager->authenticate( $token );
     }
 }

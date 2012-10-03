@@ -10,30 +10,22 @@
 namespace eZ\Publish\Core\MVC\Legacy\Security\Firewall;
 
 use eZ\Publish\Core\MVC\Symfony\Security\Firewall\Listener as BaseListener,
-    eZ\Publish\Core\MVC\Symfony\Security\Authentication\Token,
     Symfony\Component\Security\Core\Exception\AuthenticationException,
     Symfony\Component\HttpFoundation\Request;
 
 class LegacyListener extends BaseListener
 {
     /**
-     * Performs authentication.
-     *
-     * @param Request $request A Request instance
-     *
-     * @return TokenInterface|Response|null The authenticated token, null if full authentication is not possible, or a Response
-     *
-     * @throws AuthenticationException if the authentication fails
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \eZ\Publish\API\Repository\Values\User\User|null
      */
-    protected function attemptAuthentication( Request $request )
+    protected function getCurrentUserId( Request $request )
     {
         if ( $request->cookies->has( 'is_logged_in' ) && $request->cookies->get( 'is_logged_in' ) === 'true' )
         {
-            return $this->authenticationManager->authenticate(
-                new Token( $request->getSession()->get( 'eZUserLoggedInID' ) )
-            );
+            return $request->getSession()->get( 'eZUserLoggedInID' );
         }
 
-        throw new AuthenticationException( 'Cannot authenticate current user.' );
+        return null;
     }
 }
