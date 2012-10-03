@@ -539,44 +539,6 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a reference result for mapping RestrictedVersion objects
-     *
-     * @return RestrictedVersion[]
-     */
-    protected function getRestrictedVersionExtractReference()
-    {
-        $versions = array();
-
-        $version = new RestrictedVersion();
-        $version->id = 675;
-        $version->name = array( "eng-GB" => "Something" );
-        $version->versionNo = 1;
-        $version->modified = 1313047907;
-        $version->creatorId = 14;
-        $version->created = 1313047865;
-        $version->status = 3;
-        $version->contentId = 226;
-        $version->languageIds = array( 'eng-GB' );
-
-        $versions[] = $version;
-
-        $version = new RestrictedVersion();
-        $version->id = 676;
-        $version->name = array( "eng-GB" => "Something" );
-        $version->versionNo = 2;
-        $version->modified = 1313061404;
-        $version->creatorId = 14;
-        $version->created = 1313061317;
-        $version->status = 1;
-        $version->contentId = 226;
-        $version->languageIds = array( 'eng-GB' );
-
-        $versions[] = $version;
-
-        return $versions;
-    }
-
-    /**
      * Returns a fixture of database rows for relations extraction
      *
      * Fixture is stored in _fixtures/relations.php
