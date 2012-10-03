@@ -302,8 +302,8 @@ abstract class BaseIntegrationTest extends TestCase
 
         $content = $this->createContent( $contentType, $this->getInitialValue() );
 
-        self::$contentId      = $content->contentInfo->id;
-        self::$contentVersion = $content->contentInfo->currentVersionNo;
+        self::$contentId      = $content->versionInfo->contentInfo->id;
+        self::$contentVersion = $content->versionInfo->contentInfo->currentVersionNo;
 
         $this->postCreationHook( $handler, $content );
 
@@ -490,7 +490,7 @@ abstract class BaseIntegrationTest extends TestCase
         $contentHandler = $handler->contentHandler();
 
         $contentHandler->removeRawContent(
-            $content->versionInfo->contentId
+            $content->versionInfo->contentInfo->id
         );
     }
 
