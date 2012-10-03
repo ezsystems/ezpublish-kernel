@@ -81,6 +81,35 @@ class EzpDatabaseTest extends TestCase
         $data = $handler->getBasicNodeData( 1337 );
     }
 
+    /**
+     * @dataProvider getLoadLocationValues
+     */
+    public function testLoadLocationDataByContent( $field, $value )
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+
+        $gateway = $this->getLocationGateway();
+
+        $locationsData = $gateway->loadLocationDataByContent( 75 );
+
+        $this->assertCount( 1, $locationsData );
+
+        $locationRow = reset( $locationsData );
+
+        $this->assertEquals( $value, $locationRow[$field] );
+    }
+
+    public function testLoadLocationDataByContentLimitSubtree()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+
+        $gateway = $this->getLocationGateway();
+
+        $locationsData = $gateway->loadLocationDataByContent( 75, 3 );
+
+        $this->assertCount( 0, $locationsData );
+    }
+
     public function testMoveSubtreePathUpdate()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
