@@ -70,7 +70,7 @@ class Provider implements APIUserProviderInterface
     {
         try
         {
-            $user = $this->getUserService()->loadUser( $userId );
+            $user = $userId ? $this->getUserService()->loadUser( $userId ) : $this->getUserService()->loadAnonymousUser();
             return new User( $user );
         }
         catch ( NotFoundException $e )
