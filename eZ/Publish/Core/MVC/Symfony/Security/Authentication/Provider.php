@@ -10,20 +10,35 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authentication;
 
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface,
-    Symfony\Component\Security\Core\User\UserProviderInterface,
+    eZ\Publish\Core\MVC\Symfony\Security\User\APIUserProviderInterface,
     Symfony\Component\Security\Core\Authentication\Token\TokenInterface,
     Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class Provider implements AuthenticationProviderInterface
 {
     /**
-     * @var \Symfony\Component\Security\Core\User\UserProviderInterface
+     * @var \eZ\Publish\Core\MVC\Symfony\Security\User\APIUserProviderInterface
      */
     protected $userProvider;
 
-    public function __construct( UserProviderInterface $userProvider )
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    protected $lazyRepository;
+
+    public function __construct( APIUserProviderInterface $userProvider, \Closure $lazyRepository )
     {
         $this->userProvider = $userProvider;
+        $this->lazyRepository = $lazyRepository;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Repository
+     */
+    protected function getRepository()
+    {
+        $lazyRepository = $this->lazyRepository;
+        return $lazyRepository();
     }
 
     /**
@@ -37,12 +52,25 @@ class Provider implements AuthenticationProviderInterface
      */
     public function authenticate( TokenInterface $token )
     {
-        // Note: loadUserByUsername() is a generic method name. We keep using it to be consistent with the interface.
-        $user = $this->userProvider->loadUserByUsername( $token->getUserId() );
+        if ( !$this->supports( $token ) )
+            return null;
+
+        $module = $token->getAttribute( 'module' );
+        $function = $token->getAttribute( 'function' );
+        $userId = $token->getAttribute( 'userId' );
+
+        $user = $this->userProvider->loadUserByUsername( $userId );
         if ( $user )
         {
-            $authenticatedToken = new Token( $token->getUserId() );
+            $apiUser = $user->getUserObject();
+            $this->getRepository()->setCurrentUser( $apiUser );
+
+            if ( !$this->getRepository()->hasAccess( $module, $function ) )
+                throw new AuthenticationException( "Access to $module/$function denied for user #{$apiUser->id} ({$apiUser->login})" );
+
+            $authenticatedToken = new Token( $module, $function, $apiUser->id/*, array( 'ROLE_EZ_USER' )*/ );
             $authenticatedToken->setUser( $user );
+            $authenticatedToken->setAuthenticated( true );
             return $authenticatedToken;
         }
 
