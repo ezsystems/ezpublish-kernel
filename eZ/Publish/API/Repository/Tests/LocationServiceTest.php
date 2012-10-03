@@ -1291,40 +1291,21 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $locationId = $this->generateId( 'location', 13 );
+        $mediaLocationId = $this->generateId( 'location', 43 );
         /* BEGIN: Use Case */
-        // $locationId is the ID of an existing location
+        // $mediaLocationId is the ID of the location of the
+        // "Media" location in an eZ Publish demo installation
         $locationService = $repository->getLocationService();
 
-        $location = $locationService->loadLocation( $locationId );
+        $location = $locationService->loadLocation( $mediaLocationId );
 
         $locationService->deleteLocation( $location );
         /* END: Use Case */
 
         try
         {
-            $locationService->loadLocation( $locationId );
-            $this->fail( "Location $locationId not deleted." );
-        }
-        catch ( Exceptions\NotFoundException $e ) {}
-        try
-        {
-            $locationService->loadLocation( $this->generateId( 'locationId', 15 ) );
-            $this->fail( "Location 15 not deleted." );
-        }
-        catch ( Exceptions\NotFoundException $e ) {}
-
-        $contentService = $repository->getContentService();
-        try
-        {
-            $contentService->loadContentInfo( $this->generateId( 'object', 12 ) );
-            $this->fail( "Content 12 at location 13 not delete." );
-        }
-        catch ( Exceptions\NotFoundException $e ) {}
-        try
-        {
-            $contentService->loadContentInfo( $this->generateId( 'location', 14 ) );
-            $this->fail( "Content 14 at location 15 not delete." );
+            $locationService->loadLocation( $mediaLocationId );
+            $this->fail( "Location $mediaLocationId not deleted." );
         }
         catch ( Exceptions\NotFoundException $e ) {}
     }
