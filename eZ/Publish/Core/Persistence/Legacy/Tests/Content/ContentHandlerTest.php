@@ -118,28 +118,19 @@ class ContentHandlerTest extends TestCase
         $locationMock = $this->getLocationGatewayMock();
 
         $mapperMock->expects( $this->once() )
-            ->method( 'createContentFromCreateStruct' )
+            ->method( 'createVersionInfoFromCreateStruct' )
             ->with(
                 $this->isInstanceOf(
                     'eZ\\Publish\\SPI\\Persistence\\Content\\CreateStruct'
                 )
             )->will(
                 $this->returnValue(
-                    new Content(
+                    new VersionInfo(
                         array(
-                            'contentInfo' => new ContentInfo
+                            "names" => array()
                         )
                     )
                 )
-            );
-        $mapperMock->expects( $this->once() )
-            ->method( 'createVersionInfoForContent' )
-            ->with(
-                $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content'
-                )
-            )->will(
-                $this->returnValue( new VersionInfo )
             );
 
         $gatewayMock->expects( $this->once() )
@@ -180,7 +171,7 @@ class ContentHandlerTest extends TestCase
         );
         $this->assertEquals(
             23,
-            $res->contentInfo->id,
+            $res->versionInfo->contentInfo->id,
             'Content ID not set correctly'
         );
         $this->assertInstanceOf(
@@ -349,8 +340,6 @@ class ContentHandlerTest extends TestCase
             ->with(
                 $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ),
                 $this->equalTo( 3 ),
-                $this->getContentFixtureForDraft()->fields,
-                $this->getContentFixtureForDraft()->versionInfo->initialLanguageCode,
                 $this->equalTo( 14 )
             )->will( $this->returnValue( new VersionInfo( array( "names" => array() ) ) ) );
 
@@ -358,8 +347,7 @@ class ContentHandlerTest extends TestCase
             ->method( 'insertVersion' )
             ->with(
                 $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
-                $this->getContentFixtureForDraft()->fields,
-                $this->getContentFixtureForDraft()->contentInfo->alwaysAvailable
+                $this->getContentFixtureForDraft()->fields
             )->will( $this->returnValue( 42 ) );
 
         $gatewayMock->expects( $this->once() )
@@ -453,7 +441,7 @@ class ContentHandlerTest extends TestCase
         $content->versionInfo = new VersionInfo;
         $content->versionInfo->versionNo = 2;
 
-        $content->contentInfo = new ContentInfo;
+        $content->versionInfo->contentInfo = new ContentInfo;
 
         $field = new Field;
         $field->versionNo = 2;
@@ -913,11 +901,11 @@ class ContentHandlerTest extends TestCase
 
         // Load VersionInfo to delete fields
         $mapperMock->expects( $this->once() )
-            ->method( 'extractVersionInfoFromRow' )
-            ->will( $this->returnValue( new VersionInfo() ) );
+            ->method( 'extractVersionInfoListFromRows' )
+            ->will( $this->returnValue( array( new VersionInfo() ) ) );
         $gatewayMock->expects( $this->once() )
             ->method( 'loadVersionInfo' )
-            ->will( $this->returnValue( array() ) );
+            ->will( $this->returnValue( array( 42 ) ) );
 
         $locationHandlerMock->expects( $this->once() )
             ->method( 'deleteNodeAssignment' )
@@ -1050,7 +1038,11 @@ class ContentHandlerTest extends TestCase
                 $this->returnValue(
                     new Content(
                         array(
-                            "contentInfo" => new ContentInfo( array( "id" => 24 ) )
+                            "versionInfo" => new VersionInfo(
+                                array(
+                                    "contentInfo" => new ContentInfo( array( "id" => 24 ) )
+                                )
+                            )
                         )
                     )
                 )
@@ -1075,8 +1067,12 @@ class ContentHandlerTest extends TestCase
                 $this->returnValue(
                     new Content(
                         array(
-                            "versionInfo" => new VersionInfo( array( "names" => array( "eng-US" => "Test" ) ) ),
-                            "contentInfo" => new ContentInfo( array( "alwaysAvailable" => true ) ),
+                            "versionInfo" => new VersionInfo(
+                                array(
+                                    "names" => array( "eng-US" => "Test" ),
+                                    "contentInfo" => new ContentInfo( array( "alwaysAvailable" => true ) ),
+                                )
+                            ),
                             "fields" => array()
                         )
                     )
@@ -1092,12 +1088,17 @@ class ContentHandlerTest extends TestCase
                             "contentId" => 24,
                             "creationDate" => $time,
                             "modificationDate" => $time,
-                            "names" => array( "eng-US" => "Test" )
+                            "names" => array( "eng-US" => "Test" ),
+                            "contentInfo" => new ContentInfo(
+                                array(
+                                    "id" => 24,
+                                    "alwaysAvailable" => true
+                                )
+                            ),
                         )
                     )
                 ),
-                $this->isType( "array" ),
-                $this->equalTo( true )
+                $this->isType( "array" )
             )->will( $this->returnValue( 42 ) );
 
         $fieldHandlerMock->expects( $this->once() )
@@ -1112,13 +1113,13 @@ class ContentHandlerTest extends TestCase
                                     "contentId" => 24,
                                     "creationDate" => $time,
                                     "modificationDate" => $time,
-                                    "names" => array( "eng-US" => "Test" )
-                                )
-                            ),
-                            "contentInfo" => new ContentInfo(
-                                array(
-                                    "id" => 24,
-                                    "alwaysAvailable" => true
+                                    "names" => array( "eng-US" => "Test" ),
+                                    "contentInfo" => new ContentInfo(
+                                        array(
+                                            "id" => 24,
+                                            "alwaysAvailable" => true
+                                        )
+                                    ),
                                 )
                             ),
                             "fields" => array()

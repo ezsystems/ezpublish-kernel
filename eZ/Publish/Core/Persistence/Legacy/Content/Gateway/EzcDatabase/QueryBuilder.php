@@ -169,10 +169,11 @@ class QueryBuilder
     /**
      * Creates a select query for content relations
      *
-     * @return ezcQuerySelect
+     * @return \ezcQuerySelect
      */
     public function createRelationFindQuery()
     {
+        /** @var $query \ezcQuerySelect */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject_link' ),
@@ -195,12 +196,14 @@ class QueryBuilder
      * Creates a select query with all necessary joins to fetch a complete
      * content object. Does not apply any WHERE conditions.
      *
-     * @return ezcQuerySelect
+     * @return \ezcQuerySelect
      */
-    public function createVersionFindQuery()
+    public function createVersionInfoFindQuery()
     {
+        /** @var $query \ezcQuerySelect */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
+            // Content object version
             $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject_version' ),
             $this->dbHandler->aliasedColumn( $query, 'version', 'ezcontentobject_version' ),
             $this->dbHandler->aliasedColumn( $query, 'modified', 'ezcontentobject_version' ),
@@ -210,24 +213,46 @@ class QueryBuilder
             $this->dbHandler->aliasedColumn( $query, 'contentobject_id', 'ezcontentobject_version' ),
             $this->dbHandler->aliasedColumn( $query, 'initial_language_id', 'ezcontentobject_version' ),
             $this->dbHandler->aliasedColumn( $query, 'language_mask', 'ezcontentobject_version' ),
-            // Language IDs
-            $this->dbHandler->aliasedColumn( $query, 'language_code', 'ezcontentobject_attribute' ),
-            $this->dbHandler->aliasedColumn( $query, 'language_id', 'ezcontentobject_attribute' ),
+            // Content main location
+            $this->dbHandler->aliasedColumn( $query, 'main_node_id', 'ezcontentobject_tree' ),
+            // Content object
+            $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject' ),
+            $this->dbHandler->aliasedColumn( $query, 'contentclass_id', 'ezcontentobject' ),
+            $this->dbHandler->aliasedColumn( $query, 'section_id', 'ezcontentobject' ),
+            $this->dbHandler->aliasedColumn( $query, 'owner_id', 'ezcontentobject' ),
+            $this->dbHandler->aliasedColumn( $query, 'remote_id', 'ezcontentobject' ),
+            $this->dbHandler->aliasedColumn( $query, 'current_version', 'ezcontentobject' ),
+            $this->dbHandler->aliasedColumn( $query, 'initial_language_id', 'ezcontentobject' ),
+            $this->dbHandler->aliasedColumn( $query, 'modified', 'ezcontentobject' ),
+            $this->dbHandler->aliasedColumn( $query, 'published', 'ezcontentobject' ),
+            $this->dbHandler->aliasedColumn( $query, 'status', 'ezcontentobject' ),
+            $this->dbHandler->aliasedColumn( $query, 'name', 'ezcontentobject' ),
+            $this->dbHandler->aliasedColumn( $query, 'language_mask', 'ezcontentobject' ),
             // Content object names
             $this->dbHandler->aliasedColumn( $query, 'name', 'ezcontentobject_name' ),
             $this->dbHandler->aliasedColumn( $query, 'content_translation', 'ezcontentobject_name' )
         )->from(
             $this->dbHandler->quoteTable( 'ezcontentobject_version' )
         )->leftJoin(
-            $this->dbHandler->quoteTable( 'ezcontentobject_attribute' ),
+            $this->dbHandler->quoteTable( 'ezcontentobject' ),
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
+                $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' )
+            )
+        )->leftJoin(
+            $this->dbHandler->quoteTable( 'ezcontentobject_tree' ),
             $query->expr->lAnd(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' ),
-                    $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_attribute' )
+                    $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' ),
+                    $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' )
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' ),
-                    $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_attribute' )
+                    $this->dbHandler->quoteColumn( 'contentobject_version', 'ezcontentobject_tree' ),
+                    $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'main_node_id', 'ezcontentobject_tree' ),
+                    $this->dbHandler->quoteColumn( 'node_id', 'ezcontentobject_tree' )
                 )
             )
         // @todo: Joining with ezcontentobject_name is probably a VERY bad way to gather that information
@@ -235,8 +260,8 @@ class QueryBuilder
         )->leftJoin(
             $this->dbHandler->quoteTable( 'ezcontentobject_name' ),
             $query->expr->lAnd(
-            // ezcontentobject_name.content_translation is also part of the PK but can't be
-            // easily joined with something at this level
+                // ezcontentobject_name.content_translation is also part of the PK but can't be
+                // easily joined with something at this level
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_name' ),
                     $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' )
