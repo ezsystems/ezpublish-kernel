@@ -1308,6 +1308,31 @@ class LocationServiceTest extends BaseTest
             $this->fail( "Location $mediaLocationId not deleted." );
         }
         catch ( Exceptions\NotFoundException $e ) {}
+
+        // The following IDs are IDs of child locations of $mediaLocationId location
+        // ( Media/Images, Media/Files, Media/Multimedia respectively )
+        foreach ( array( 51, 52, 53 ) as $childLocationId )
+        {
+            try
+            {
+                $locationService->loadLocation( $childLocationId );
+                $this->fail( "Location $childLocationId not deleted." );
+            }
+            catch ( Exceptions\NotFoundException $e ) {}
+        }
+
+        // The following IDs are IDs of content below $mediaLocationId location
+        // ( Media/Images, Media/Files, Media/Multimedia respectively )
+        $contentService = $this->getRepository()->getContentService();
+        foreach ( array( 49, 50, 51 ) as $childContentId )
+        {
+            try
+            {
+                $contentService->loadContentInfo( $childContentId );
+                $this->fail( "Content $childContentId not deleted." );
+            }
+            catch ( Exceptions\NotFoundException $e ) {}
+        }
     }
 
     /**
