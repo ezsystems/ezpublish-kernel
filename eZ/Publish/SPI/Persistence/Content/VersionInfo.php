@@ -46,13 +46,6 @@ class VersionInfo extends ValueObject
     public $versionNo;
 
     /**
-     * Content of the content this version belongs to.
-     *
-     * @var int $contentId
-     */
-    public $contentId;
-
-    /**
      * ContentInfo of the content this VersionInfo belongs to.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\ContentInfo

@@ -141,7 +141,6 @@ class MapperTest extends LanguageAwareTestCase
                 'versionNo' => 1,
                 'creatorId' => 14,
                 'status' => 0,
-                'contentId' => 2342,
                 'initialLanguageCode' => 'eng-GB',
                 'languageIds' => array( 4 ),
             ),

@@ -120,7 +120,6 @@ class Handler implements BaseContentHandler
         $content->versionInfo = $this->mapper->createVersionInfoFromCreateStruct( $struct, $versionNo );
 
         $content->versionInfo->contentInfo->id =  $this->contentGateway->insertContentObject( $struct, $versionNo );
-        $content->versionInfo->contentId = $content->versionInfo->contentInfo->id;
         $content->versionInfo->id = $this->contentGateway->insertVersion(
             $content->versionInfo,
             $struct->fields
@@ -511,7 +510,6 @@ class Handler implements BaseContentHandler
                 $versionContent = $this->load( $contentId, $versionInfo->versionNo );
 
                 $versionContent->versionInfo->contentInfo->id = $content->versionInfo->contentInfo->id;
-                $versionContent->versionInfo->contentId = $content->versionInfo->contentInfo->id;
                 $versionContent->versionInfo->modificationDate = $createStruct->modified;
                 $versionContent->versionInfo->creationDate = $createStruct->modified;
                 $versionContent->versionInfo->id = $this->contentGateway->insertVersion(

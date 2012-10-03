@@ -473,7 +473,7 @@ abstract class BaseIntegrationTest extends TestCase
         $this->assertDeletedFieldDataCorrect( $content );
 
         $contentHandler->load(
-            $content->versionInfo->contentId,
+            $content->versionInfo->contentInfo->id,
             $content->versionInfo->versionNo
         );
     }
