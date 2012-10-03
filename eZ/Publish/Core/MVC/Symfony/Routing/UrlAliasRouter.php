@@ -135,8 +135,10 @@ class UrlAliasRouter implements RouterInterface, RequestMatcherInterface
                         'viewType'      => ViewManager::VIEW_TYPE_FULL
                     );
 
+                    $request->attributes->set( 'locationId', $urlAlias->destination->id );
+
                     if ( isset( $this->logger ) )
-                        $this->logger->info( "UrlAlias matched location #$urlAlias->destination. Forwarding to ViewController" );
+                        $this->logger->info( "UrlAlias matched location #{$urlAlias->destination->id}. Forwarding to ViewController" );
 
                     break;
 
