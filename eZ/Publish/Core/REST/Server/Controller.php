@@ -4,6 +4,7 @@ namespace eZ\Publish\Core\REST\Server;
 use eZ\Publish\Core\REST\Common\UrlHandler\eZPublish as UrlHandler;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher as InputDispatcher;
 use eZ\Publish\Core\REST\Server\Request as HttpRequest;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 
 abstract class Controller
 {
@@ -21,6 +22,12 @@ abstract class Controller
      * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
      */
     protected $urlHandler;
+    
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    protected $container;
+
 
     public function setInputDispatcher( InputDispatcher $inputDispatcher )
     {
@@ -34,6 +41,12 @@ abstract class Controller
 
     public function setRequest( HttpRequest $request )
     {
+        $request->path = str_replace( '/api/ezp/v2', '', $request->path );
         $this->request = $request;
+    }
+    
+    public function setContainer( Container $container )
+    {
+        $this->container = $container;
     }
 }
