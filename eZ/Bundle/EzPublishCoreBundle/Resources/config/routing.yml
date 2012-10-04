@@ -39,7 +39,7 @@ services:
 
     ezpublish.urlalias_generator:
         class: %ezpublish.urlalias_generator.class%
-        arguments: [@ezpublish.api.repository.lazy]
+        arguments: [@ezpublish.api.repository.lazy, @router]
         parent: ezpublish.url_generator.base
 
     ezpublish.siteaccess_router:
