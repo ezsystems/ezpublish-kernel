@@ -9,26 +9,21 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authentication;
 
-use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface,
-    eZ\Publish\Core\MVC\Symfony\Security\User\APIUserProviderInterface,
+use Symfony\Component\Security\Core\Authentication\Provider\PreAuthenticatedAuthenticationProvider,
     Symfony\Component\Security\Core\Authentication\Token\TokenInterface,
-    Symfony\Component\Security\Core\Exception\AuthenticationException;
+    Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken,
+    Symfony\Component\Security\Core\Exception\AuthenticationException,
+    eZ\Publish\Core\MVC\Symfony\Security\User;
 
-class Provider implements AuthenticationProviderInterface
+class Provider extends PreAuthenticatedAuthenticationProvider
 {
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Security\User\APIUserProviderInterface
-     */
-    protected $userProvider;
-
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
+     * @var \Closure
      */
     protected $lazyRepository;
 
-    public function __construct( APIUserProviderInterface $userProvider, \Closure $lazyRepository )
+    public function setLazyRepository( \Closure $lazyRepository )
     {
-        $this->userProvider = $userProvider;
         $this->lazyRepository = $lazyRepository;
     }
 
@@ -55,37 +50,19 @@ class Provider implements AuthenticationProviderInterface
         if ( !$this->supports( $token ) )
             return null;
 
-        $module = $token->getAttribute( 'module' );
-        $function = $token->getAttribute( 'function' );
-        $userId = $token->getAttribute( 'userId' );
-
-        $user = $this->userProvider->loadUserByUsername( $userId );
-        if ( $user )
+        $authenticatedToken = parent::authenticate( $token );
+        if ( $authenticatedToken instanceof PreAuthenticatedToken )
         {
-            $apiUser = $user->getUserObject();
-            $this->getRepository()->setCurrentUser( $apiUser );
+            $user = $authenticatedToken->getUser();
+            if ( !$user instanceof User )
+                throw new AuthenticationException( 'Invalid eZ Publish user. Expected type is eZ\\Publish\\Core\\MVC\\Symfony\\Security\\User. Got ' . get_class( $user ) );
 
-            if ( !$this->getRepository()->hasAccess( $module, $function ) )
-                throw new AuthenticationException( "Access to $module/$function denied for user #{$apiUser->id} ({$apiUser->login})" );
+            // Inject current user in the repository
+            $this->getRepository()->setCurrentUser( $user->getAPIUser() );
 
-            $authenticatedToken = new Token( $module, $function, $apiUser->id/*, array( 'ROLE_EZ_USER' )*/ );
-            $authenticatedToken->setUser( $user );
-            $authenticatedToken->setAuthenticated( true );
             return $authenticatedToken;
         }
 
         throw new AuthenticationException( 'The eZ Publish user could not be retrieved from the session' );
-    }
-
-    /**
-     * Checks whether this provider supports the given token.
-     *
-     * @param TokenInterface $token A TokenInterface instance
-     *
-     * @return Boolean true if the implementation supports the Token, false otherwise
-     */
-    public function supports( TokenInterface $token )
-    {
-        return $token instanceof Token;
     }
 }

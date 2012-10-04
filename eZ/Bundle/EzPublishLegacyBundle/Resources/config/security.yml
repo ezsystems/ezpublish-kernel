@@ -6,7 +6,11 @@ services:
     ezpublish_legacy.security.firewall_listener:
         class: %ezpublish_legacy.security.firewall_listener.class%
         abstract: true
-        parent: ezpublish.security.firewall_listener.default
+        arguments:
+            - @security.context
+            - @security.authentication.manager
+            - ~     # Will be replaced at compile time by the security factory to be the right user provider
+            - @?logger
 
     ezpublish_legacy.security.auth.entry_point:
         class: %ezpublish.security.auth.entry_point.legacy.class%

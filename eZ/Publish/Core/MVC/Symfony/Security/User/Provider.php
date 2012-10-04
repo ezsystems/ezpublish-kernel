@@ -54,15 +54,8 @@ class Provider implements APIUserProviderInterface
      * Loads the user for the given username.
      * $username actually represents the user ID, not the user login.
      *
-     * This method must throw UsernameNotFoundException if the user is not
-     * found.
-     *
-     * @param string $userId The user ID
-     *
+     * @param string $userId The user ID. A value of -1 represents an anonymous user.
      * @return \Symfony\Component\Security\Core\User\UserInterface
-     *
-     * @see UsernameNotFoundException
-     *
      * @throws UsernameNotFoundException if the user is not found
      *
      */
@@ -70,8 +63,8 @@ class Provider implements APIUserProviderInterface
     {
         try
         {
-            $user = $userId ? $this->getUserService()->loadUser( $userId ) : $this->getUserService()->loadAnonymousUser();
-            return new User( $user );
+            $apiUser = $userId != -1 ? $this->getUserService()->loadUser( $userId ) : $this->getUserService()->loadAnonymousUser();
+            return new User( $apiUser );
         }
         catch ( NotFoundException $e )
         {
@@ -93,16 +86,7 @@ class Provider implements APIUserProviderInterface
      */
     public function refreshUser( UserInterface $user )
     {
-        try
-        {
-            return new User(
-                $this->getUserService()->loadUser( $user->getUserObject()->id )
-            );
-        }
-        catch ( NotFoundException $e )
-        {
-            throw new UsernameNotFoundException( $e->getMessage(), null, 0, $e );
-        }
+        return $user;
     }
 
     /**

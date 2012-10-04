@@ -17,7 +17,7 @@ use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractF
 
 class Factory extends AbstractFactory
 {
-    const AUTHENTICATION_PROVIDER_ID = 'ezpublish.security.auth';
+    const AUTHENTICATION_PROVIDER_ID = 'ezpublish.security.authentication_provider';
     const AUTHENTICATION_LISTENER_ID = 'ezpublish_legacy.security.firewall_listener';
     const AUTHENTICATION_ENTRY_POINT_ID = 'ezpublish_legacy.security.auth.entry_point';
 
@@ -38,6 +38,7 @@ class Factory extends AbstractFactory
         $container
             ->setDefinition( $providerId, new DefinitionDecorator( self::AUTHENTICATION_PROVIDER_ID ) )
             ->replaceArgument( 0, new Reference( $userProviderId ) )
+            ->addArgument( $id )
         ;
 
         return $providerId;
@@ -51,18 +52,20 @@ class Factory extends AbstractFactory
         return $entryPointId;
     }
 
+    protected function createListener( $container, $id, $config, $userProvider )
+    {
+        $parentListenerId = $this->getListenerId();
+        $listenerId = "$parentListenerId.$id";
+        $container
+            ->setDefinition( $listenerId, new DefinitionDecorator( $parentListenerId ) )
+            ->replaceArgument( 2, $id )
+        ;
+
+        return $listenerId;
+    }
+
     /**
      * Subclasses must return the id of the listener template.
-     *
-     * Listener definitions should inherit from the AbstractAuthenticationListener
-     * like this:
-     *
-     *    <service id="my.listener.id"
-     *             class="My\Concrete\Classname"
-     *             parent="security.authentication.listener.abstract"
-     *             abstract="true" />
-     *
-     * In the above case, this method would return "my.listener.id".
      *
      * @return string
      */

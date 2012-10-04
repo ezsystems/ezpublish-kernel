@@ -9,23 +9,30 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\Security\Firewall;
 
-use eZ\Publish\Core\MVC\Symfony\Security\Firewall\Listener as BaseListener,
-    Symfony\Component\Security\Core\Exception\AuthenticationException,
-    Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\Firewall\AbstractPreAuthenticatedListener,
+    Symfony\Component\HttpFoundation\Request,
+    eZ\Publish\Core\MVC\Symfony\Security\User,
+    eZ\Publish\API\Repository\Repository;
 
-class LegacyListener extends BaseListener
+class LegacyListener extends AbstractPreAuthenticatedListener
 {
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return \eZ\Publish\API\Repository\Values\User\User|null
+     * Gets the user and credentials from the Request.
+     *
+     * @param Request $request A Request instance
+     *
+     * @return array An array composed of the user and the credentials
      */
-    protected function getCurrentUserId( Request $request )
+    protected function getPreAuthenticatedData( Request $request )
     {
+        // -1 stands for not logged in user (aka anonymous), since PreAuthenticatedAuthenticationProvider needs a non empty value
+        $userId = -1;
+
         if ( $request->cookies->has( 'is_logged_in' ) && $request->cookies->get( 'is_logged_in' ) === 'true' )
         {
-            return $request->getSession()->get( 'eZUserLoggedInID' );
+            $userId = $request->getSession()->get( 'eZUserLoggedInID' );
         }
 
-        return null;
+        return array( (string)$userId, '' );
     }
 }

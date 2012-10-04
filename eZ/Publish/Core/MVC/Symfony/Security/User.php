@@ -18,9 +18,9 @@ class User implements UserInterface, EquatableInterface
     /**
      * @var \eZ\Publish\API\Repository\Values\User\User
      */
-    protected $user;
+    private $user;
 
-    public function __construct( APIUser $user )
+    public function __construct( APIUser $user = null )
     {
         $this->user = $user;
     }
@@ -43,8 +43,7 @@ class User implements UserInterface, EquatableInterface
      */
     public function getRoles()
     {
-        // TODO: Implement getRoles() method.
-        return array();
+        return array( 'ROLE_USER' );
     }
 
     /**
@@ -97,9 +96,17 @@ class User implements UserInterface, EquatableInterface
     /**
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    public function getUserObject()
+    public function getAPIUser()
     {
         return $this->user;
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     */
+    public function setAPIUser( APIUser $user )
+    {
+        $this->user = $user;
     }
 
     /**
@@ -118,9 +125,11 @@ class User implements UserInterface, EquatableInterface
      */
     public function isEqualTo( UserInterface $user )
     {
-        if ( !$user instanceof User )
-            return false;
+        if ( $user instanceof User && $this->user instanceof User )
+        {
+            return $user->getUserObject()->id === $this->user->id;
+        }
 
-        return $user->getUserObject()->id === $this->user->id;
+        return false;
     }
 }
