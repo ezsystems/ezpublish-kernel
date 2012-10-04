@@ -64,7 +64,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the $sourceUrl pattern already exists
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create url wildcards
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if the number of "*" patterns in $sourceUrl and
-     *         the numbers in {\d} placeholders in $destinationUrl doesn't match.
+     *         the numbers in {\d} placeholders in $destinationUrl does not match.
      *
      * @param string $sourceUrl
      * @param string $destinationUrl

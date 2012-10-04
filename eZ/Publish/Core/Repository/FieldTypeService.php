@@ -116,7 +116,7 @@ class FieldTypeService implements FieldTypeServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $type not priorly setup
      *         with settings injected to service
      *
-     * @param string $type
+     * @param string $identifier
      * @return \eZ\Publish\SPI\FieldType\FieldType
      */
     public function buildFieldType( $identifier )

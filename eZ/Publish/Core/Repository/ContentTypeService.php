@@ -845,7 +845,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param int $contentTypeId
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
-     * @todo Use another excpetion when user of draft is someone else
+     * @todo Use another exception when user of draft is someone else
      */
     public function loadContentTypeDraft( $contentTypeId )
     {

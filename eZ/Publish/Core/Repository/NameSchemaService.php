@@ -254,7 +254,7 @@ class NameSchemaService
      */
     private function extractTokens( $nameSchema )
     {
-        $foundTokens = preg_match_all(
+        preg_match_all(
             "|<([^>]+)>|U",
             $nameSchema,
             $tokenArray

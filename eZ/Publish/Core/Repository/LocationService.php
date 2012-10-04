@@ -822,7 +822,7 @@ class LocationService implements LocationServiceInterface
                     )
                 )
             );
-        else // @todo This should not be loaded seperatly, SPI need to change to fix this.
+        else // @todo This should not be loaded separately, SPI need to change to fix this.
             $contentInfo = $this->repository->getContentService()->internalLoadContentInfo( $spiLocation->contentId );
 
         $childrenLocations = $this->searchChildrenLocations( $spiLocation->id, null, APILocation::SORT_ORDER_ASC, 0, 0 );

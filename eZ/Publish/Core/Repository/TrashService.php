@@ -356,11 +356,9 @@ class TrashService implements TrashServiceInterface
     }
 
     /**
+     * @param int $timestamp
      *
-     *
-     * @param int|null $timestamp
-     *
-     * @return \DateTime|null
+     * @return \DateTime
      */
     protected function getDateTime( $timestamp )
     {

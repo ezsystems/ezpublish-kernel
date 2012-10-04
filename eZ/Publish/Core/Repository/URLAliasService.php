@@ -447,7 +447,7 @@ class URLAliasService implements URLAliasServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $success = $this->urlAliasHandler->removeURLAliases( $spiUrlAliasList );
+            $this->urlAliasHandler->removeURLAliases( $spiUrlAliasList );
             $this->repository->commit();
         }
         catch ( Exception $e )

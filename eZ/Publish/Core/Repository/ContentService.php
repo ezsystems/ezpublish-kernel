@@ -1284,7 +1284,7 @@ class ContentService implements ContentServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $success = $this->persistenceHandler->contentHandler()->deleteVersion(
+            $this->persistenceHandler->contentHandler()->deleteVersion(
                 $versionInfo->getContentInfo()->id,
                 $versionInfo->versionNo
             );
@@ -1868,7 +1868,7 @@ class ContentService implements ContentServiceInterface
      */
     protected function buildRelationDomainObject( SPIRelation $spiRelation, APIContentInfo $sourceContentInfo = null, APIContentInfo $destinationContentInfo = null )
     {
-        // @todo Shoudl relations really be loaded w/o checking permissions just because User needs to be accisible??
+        // @todo Should relations really be loaded w/o checking permissions just because User needs to be accessible??
         if ( $sourceContentInfo === null )
             $sourceContentInfo = $this->internalLoadContentInfo( $spiRelation->sourceContentId );
 
