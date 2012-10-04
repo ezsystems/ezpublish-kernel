@@ -64,7 +64,6 @@ class Location extends RestController
     /**
      * Creates a new location for the given content object
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedLocation
      */
     public function createLocation()
@@ -92,7 +91,6 @@ class Location extends RestController
     /**
      * Loads a location
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
     public function loadLocation()
@@ -106,7 +104,6 @@ class Location extends RestController
     /**
      * Deletes a location
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
     public function deleteSubtree()
@@ -121,7 +118,6 @@ class Location extends RestController
     /**
      * Copies a subtree to a new destination
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
     public function copySubtree()
@@ -147,7 +143,6 @@ class Location extends RestController
     /**
      * Moves a subtree to a new location
      *
-     * @param \QaFoo\RMF\Request $request
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException if the Destination header cannot be parsed as location or trash
      *
@@ -211,7 +206,6 @@ class Location extends RestController
     /**
      * Swaps a location with another one
      *
-     * @param \QaFoo\RMF\Request $request
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceSwapped
      */
@@ -250,7 +244,6 @@ class Location extends RestController
     /**
      * Loads all locations for content object
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\LocationList
      */
     public function loadLocationsForContent()
@@ -268,7 +261,6 @@ class Location extends RestController
     /**
      * Loads child locations of a location
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\LocationList
      */
     public function loadLocationChildren()
@@ -288,7 +280,6 @@ class Location extends RestController
     /**
      * Updates a location
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
     public function updateLocation()

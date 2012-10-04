@@ -32,6 +32,7 @@ services:
     ezpublish_rest.url_handler:
         class: %ezpublish_rest.url_handler.class%
         arguments:
+            # Note: everything related to prefix will be removed when UrlGeneration is handled by Symfony instead
             - /api/ezp/v2
 
     ezpublish_rest.parser_tools:

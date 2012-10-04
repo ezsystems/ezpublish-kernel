@@ -64,6 +64,7 @@ class RestListener implements EventSubscriberInterface
      *
      * @throws \Exception
      */
+
     public function onKernelResultView( GetResponseForControllerResultEvent $event )
     {
         if ( $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
@@ -73,11 +74,6 @@ class RestListener implements EventSubscriberInterface
             return;
 
         $result = $event->getControllerResult();
-//        if ( !$result instanceof \eZ\Publish\Core\REST\Server\Value && !$result instanceof \eZ\Publish\API\Repository\Values\ValueObject )
-//        {
-//            throw new \Exception( print_r( $result, true ) );
-//            return;
-//        }
 
         $event->setResponse( $this->visitResult( $result ) );
         $event->stopPropagation();

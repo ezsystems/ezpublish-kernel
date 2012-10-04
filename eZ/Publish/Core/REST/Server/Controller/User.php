@@ -266,7 +266,6 @@ class User extends RestController
     /**
      * Updates a user group
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RestUserGroup
      */
     public function updateUserGroup()
@@ -313,7 +312,6 @@ class User extends RestController
     /**
      * Updates a user
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RestUser
      */
     public function updateUser()
@@ -408,7 +406,6 @@ class User extends RestController
     /**
      * Loads a list of users assigned to role
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\UserList|\eZ\Publish\Core\REST\Server\Values\UserRefList
      */
     public function loadUsersAssignedToRole()
@@ -443,7 +440,6 @@ class User extends RestController
     /**
      * Loads a list of user groups assigned to role
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\UserGroupList|\eZ\Publish\Core\REST\Server\Values\UserGroupRefList
      */
     public function loadUserGroupsAssignedToRole()
@@ -478,7 +474,6 @@ class User extends RestController
     /**
      * Loads drafts assigned to user
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\VersionList
      */
     public function loadUserDrafts()
@@ -495,7 +490,6 @@ class User extends RestController
     /**
      * Moves the user group to another parent
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
     public function moveUserGroup()
@@ -642,7 +636,6 @@ class User extends RestController
     /**
      * Unassigns the user from a user group
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\UserGroupRefList
      */
     public function unassignUserFromUserGroup()
@@ -685,7 +678,6 @@ class User extends RestController
     /**
      * Assigns the user to a user group
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\UserGroupRefList
      */
     public function assignUserToUserGroup()
