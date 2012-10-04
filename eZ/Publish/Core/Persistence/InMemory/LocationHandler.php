@@ -119,9 +119,10 @@ class LocationHandler implements LocationHandlerInterface
                     $child->contentId,
                     $originalContentInfo->currentVersionNo
                 );
+                $newContentId = $content->versionInfo->contentInfo->id;
 
                 $content = $this->handler->contentHandler()->publish(
-                    $content->contentInfo->id,
+                    $newContentId,
                     $content->versionInfo->versionNo,
                     new MetadataUpdateStruct(
                         array(
@@ -131,7 +132,7 @@ class LocationHandler implements LocationHandlerInterface
                     )
                 );
 
-                $contentMap[$child->contentId] = $content->contentInfo->id;
+                $contentMap[$child->contentId] = $newContentId;
             }
 
             $createStruct = new CreateStruct();

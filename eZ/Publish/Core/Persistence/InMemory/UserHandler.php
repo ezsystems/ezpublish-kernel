@@ -328,18 +328,25 @@ class UserHandler implements UserHandlerInterface
                             'type' => 'Content\\Location',
                             'match' => array( 'contentId' => 'id' )
                         ),
-                        'contentInfo' => array(
-                            'type' => 'Content\\ContentInfo',
-                            'match' => array( 'id' => 'id' ),
-                            'single' => true
-                        )
+                        'versionInfo' => array(
+                            'type' => 'Content\\VersionInfo',
+                            'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
+                            'single' => true,
+                            'sub' => array(
+                                'contentInfo' => array(
+                                    'type' => 'Content\\ContentInfo',
+                                    'match' => array( 'id' => '_contentId' ),
+                                    'single' => true
+                                ),
+                            )
+                        ),
                     )
                 );
 
                 if ( isset( $list[1] ) )
                     throw new LogicException( "'content tree' logic error, there is more than one item with parentId: $parentId" );
                 if ( $list )
-                    $contentIds[] = $list[0]->contentInfo->id;
+                    $contentIds[] = $list[0]->versionInfo->contentInfo->id;
             }
         }
 
@@ -515,10 +522,17 @@ class UserHandler implements UserHandlerInterface
                     'type' => 'Content\\Location',
                     'match' => array( 'contentId' => 'id' )
                 ),
-                'contentInfo' => array(
-                    'type' => 'Content\\ContentInfo',
-                    'match' => array( 'id' => 'id' ),
-                    'single' => true
+                'versionInfo' => array(
+                    'type' => 'Content\\VersionInfo',
+                    'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
+                    'single' => true,
+                    'sub' => array(
+                        'contentInfo' => array(
+                            'type' => 'Content\\ContentInfo',
+                            'match' => array( 'id' => '_contentId' ),
+                            'single' => true
+                        ),
+                    )
                 )
             )
         );
@@ -538,7 +552,7 @@ class UserHandler implements UserHandlerInterface
                 if ( $parentId == $location->id )
                     continue;
 
-                $list = $this->backend->find(
+                $list2 = $this->backend->find(
                     'Content',
                     array( 'locations' => array( 'id' => $parentId ) ),
                     array(
@@ -546,18 +560,25 @@ class UserHandler implements UserHandlerInterface
                             'type' => 'Content\\Location',
                             'match' => array( 'contentId' => 'id' )
                         ),
-                        'contentInfo' => array(
-                            'type' => 'Content\\ContentInfo',
-                            'match' => array( 'id' => 'id' ),
-                            'single' => true
+                        'versionInfo' => array(
+                            'type' => 'Content\\VersionInfo',
+                            'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
+                            'single' => true,
+                            'sub' => array(
+                                'contentInfo' => array(
+                                    'type' => 'Content\\ContentInfo',
+                                    'match' => array( 'id' => '_contentId' ),
+                                    'single' => true
+                                ),
+                            )
                         )
                     )
                 );
 
-                if ( isset( $list[1] ) )
+                if ( isset( $list2[1] ) )
                     throw new LogicException( "'content tree' logic error, there is more than one item with parentId: $parentId" );
-                if ( $list )
-                    $this->getPermissionsForObject( $list[0], 3, $policies );
+                if ( $list2 )
+                    $this->getPermissionsForObject( $list2[0], 3, $policies );
             }
         }
         return array_values( $policies );
@@ -573,13 +594,13 @@ class UserHandler implements UserHandlerInterface
      */
     protected function getPermissionsForObject( Content $content, $typeId, array &$policies )
     {
-        if ( $content->contentInfo->contentTypeId != $typeId )
-            throw new NotFound( "Content with TypeId:$typeId", $content->contentInfo->id );
+        if ( $content->versionInfo->contentInfo->contentTypeId != $typeId )
+            throw new NotFound( "Content with TypeId:$typeId", $content->versionInfo->contentInfo->id );
 
         // fetch possible roles assigned to this object
         $list = $this->backend->find(
             'User\\Role',
-            array( 'groupIds' => $content->contentInfo->id ),
+            array( 'groupIds' => $content->versionInfo->contentInfo->id ),
             array(
                 'policies' => array(
                     'type' => 'User\\Policy',

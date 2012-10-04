@@ -66,7 +66,7 @@ class SearchHandlerTest extends HandlerTest
 
         $this->content = $this->persistenceHandler->contentHandler()->create( $struct );
         $this->contentToDelete[] = $this->content;
-        $this->contentId = $this->content->contentInfo->id;
+        $this->contentId = $this->content->versionInfo->contentInfo->id;
     }
 
     protected function tearDown()
@@ -78,7 +78,7 @@ class SearchHandlerTest extends HandlerTest
             // Removing default objects as well as those created by tests
             foreach ( $this->contentToDelete as $content )
             {
-                $contentHandler->deleteContent( $content->contentInfo->id );
+                $contentHandler->deleteContent( $content->versionInfo->contentInfo->id );
             }
         }
         catch ( NotFound $e )
@@ -96,7 +96,7 @@ class SearchHandlerTest extends HandlerTest
     public function testFindContent()
     {
         $result = $this->persistenceHandler->searchHandler()->findContent( new Query( array(
-            'criterion' => new ContentId( $this->content->contentInfo->id ),
+            'criterion' => new ContentId( $this->content->versionInfo->contentInfo->id ),
         ) ) );
 
         $this->assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchResult', $result );
@@ -104,7 +104,7 @@ class SearchHandlerTest extends HandlerTest
         $this->assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchHit', $result->searchHits[0] );
 
         $content = $result->searchHits[0]->valueObject;
-        $this->assertEquals( 14, $content->contentInfo->ownerId );
+        $this->assertEquals( 14, $content->versionInfo->contentInfo->ownerId );
         $this->assertEquals( array( 'eng-GB' => 'test' ), $content->versionInfo->names );
         $this->assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo", $content->versionInfo );
     }
@@ -116,10 +116,10 @@ class SearchHandlerTest extends HandlerTest
      */
     public function testFindSingle()
     {
-        $content = $this->persistenceHandler->searchHandler()->findSingle( new ContentId( $this->content->contentInfo->id ) );
+        $content = $this->persistenceHandler->searchHandler()->findSingle( new ContentId( $this->content->versionInfo->contentInfo->id ) );
         $this->assertInstanceOf( 'eZ\Publish\SPI\Persistence\Content', $content );
-        $this->assertEquals( $this->contentId, $content->contentInfo->id );
-        $this->assertEquals( 14, $content->contentInfo->ownerId );
+        $this->assertEquals( $this->contentId, $content->versionInfo->contentInfo->id );
+        $this->assertEquals( 14, $content->versionInfo->contentInfo->ownerId );
         $this->assertEquals( array( 'eng-GB' => 'test' ), $content->versionInfo->names );
         $this->assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo", $content->versionInfo );
     }
@@ -133,6 +133,6 @@ class SearchHandlerTest extends HandlerTest
     {
         $content = $this->persistenceHandler->searchHandler()->findSingle( new LocationRemoteId( 'f3e90596361e31d496d4026eb624c983' ) );
         $this->assertTrue( $content instanceof Content );
-        $this->assertEquals( 1, $content->contentInfo->id );
+        $this->assertEquals( 1, $content->versionInfo->contentInfo->id );
     }
 }
