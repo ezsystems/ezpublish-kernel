@@ -22,7 +22,7 @@ class Factory
      * @var \eZ\Publish\API\Repository\Repository
      */
     protected $repository;
-    
+
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -49,7 +49,7 @@ class Factory
                         $this->repository->getContentService(),
                         $this->repository->getContentTypeService(),
                         $fieldTypeParser,
-                        // Needed here since there's no ContentType in request for embedded LocationCreate
+                        // Needed here since there's no media type in request for embedded LocationCreate
                         ( $locationCreateParser = new Input\Parser\LocationCreate( $urlHandler, $this->repository->getLocationService(), $parserTools ) ),
                         $parserTools
                     ),
@@ -84,6 +84,24 @@ class Factory
                         $this->repository->getUserService(),
                         $this->repository->getContentService(),
                         $fieldTypeParser,
+                        $parserTools
+                    ),
+                    'application/vnd.ez.api.ContentTypeCreate'      => new Input\Parser\ContentTypeCreate(
+                        $urlHandler,
+                        $this->repository->getContentTypeService(),
+                        // Needed here since there's no media type in request for embedded FieldDefinitionCreate
+                        ( $fieldDefinitionCreateParser = new Input\Parser\FieldDefinitionCreate( $urlHandler, $this->repository->getContentTypeService(), $parserTools ) ),
+                        $parserTools
+                    ),
+                    'application/vnd.ez.api.ContentTypeUpdate'      => new Input\Parser\ContentTypeUpdate(
+                        $urlHandler,
+                        $this->repository->getContentTypeService(),
+                        $parserTools
+                    ),
+                    'application/vnd.ez.api.FieldDefinitionCreate'  => $fieldDefinitionCreateParser,
+                    'application/vnd.ez.api.FieldDefinitionUpdate'  => new Input\Parser\FieldDefinitionUpdate(
+                        $urlHandler,
+                        $this->repository->getContentTypeService(),
                         $parserTools
                     ),
                     'application/vnd.ez.api.PolicyCreate'           => new Input\Parser\PolicyCreate( $urlHandler, $this->repository->getRoleService(), $parserTools ),
