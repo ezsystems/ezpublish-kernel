@@ -108,10 +108,13 @@ class Manager
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param string $viewType Variation of display for your content. Default is 'full'.
+     * @param array $parameters Parameters to pass to the template called to
+     *        render the view. By default, it's empty. 'content' entry is
+     *        reserved for the Content that is rendered.
      * @throws \RuntimeException
      * @return string
      */
-    public function renderContent( Content $content, $viewType = self::VIEW_TYPE_FULL )
+    public function renderContent( Content $content, $viewType = self::VIEW_TYPE_FULL, $parameters = array() )
     {
         $contentInfo = $content->getVersionInfo()->getContentInfo();
         foreach ( $this->getAllViewProviders() as $viewProvider )
@@ -119,7 +122,8 @@ class Manager
             $view = $viewProvider->getViewForContent( $contentInfo, $viewType );
             if ( $view instanceof ContentViewInterface )
             {
-                return $this->renderContentView( $view, array( 'content' => $content ) );
+                $parameters['content'] = $content;
+                return $this->renderContentView( $view, $parameters );
             }
         }
 
@@ -133,23 +137,23 @@ class Manager
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param string $viewType Variation of display for your content. Default is 'full'.
+     * @param array $parameters Parameters to pass to the template called to
+     *        render the view. By default, it's empty. 'location' and 'content'
+     *        entries are reserved for the Location (and its Content) that is
+     *        viewed.
      * @throws \RuntimeException
      * @return string
      */
-    public function renderLocation( Location $location, Content $content, $viewType = self::VIEW_TYPE_FULL )
+    public function renderLocation( Location $location, Content $content, $viewType = self::VIEW_TYPE_FULL, $parameters = array() )
     {
         foreach ( $this->getAllViewProviders() as $viewProvider )
         {
             $view = $viewProvider->getViewForLocation( $location, $viewType );
             if ( $view instanceof ContentViewInterface )
             {
-                return $this->renderContentView(
-                    $view,
-                    array(
-                         'location' => $location,
-                         'content' => $content
-                    )
-                );
+                $parameters['location'] = $location;
+                $parameters['content'] = $content;
+                return $this->renderContentView( $view, $parameters );
             }
         }
 
