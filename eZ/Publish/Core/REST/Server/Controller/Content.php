@@ -613,7 +613,6 @@ class Content extends RestController
     /**
      * Creates and executes a content view
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RestExecutedView
      */
     public function createView()

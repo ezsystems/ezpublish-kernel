@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Common\Values;
 
-// @todo Move RestValue to Common
 use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
