@@ -20,7 +20,7 @@
             <xsd:annotation>
               <xsd:documentation>
                 Created date
-			  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="modified" type="xsd:dateTime">

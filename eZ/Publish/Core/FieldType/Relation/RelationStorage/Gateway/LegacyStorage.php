@@ -119,6 +119,6 @@ class LegacyStorage extends Gateway
      */
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldId, array $context )
     {
-	// @todo implement when content deleting is fixed in the service
+        // @todo implement when content deleting is fixed in the service
     }
 }

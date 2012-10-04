@@ -29,7 +29,7 @@ The API is still very much work in progress, and so is documentation, hence why 
 * [eZ/Publish/Core/MVC/Legacy](/ezsystems/ezp-next/tree/master/eZ/Publish/Core/MVC/Legacy/)  *eZ Publish Legacy components integration*
 * [eZ/Bundle](/ezsystems/ezp-next/tree/master/eZ/Bundle/)  *Bundles that wrap eZ Publish components into Symfony*
 
-* [design/](/ezsystems/ezp-next/tree/master/design/)	 *Early uml class diagrams*
+* [design/](/ezsystems/ezp-next/tree/master/design/)  *Early uml class diagrams*
 * [doc/](/ezsystems/ezp-next/tree/master/doc/)  *Placeholder for bc doc and other doc that can not be on wiki or inline*
 * config.php-DEVELOPMENT  *Default config file for development use*
 * phpunit.xml  *PHPUnit 3.6+ xml configuration*
