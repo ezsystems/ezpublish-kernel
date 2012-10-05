@@ -17,11 +17,18 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class CreateContentSignal extends Signal
 {
     /**
-     * LocationCreateStructs
+     * Content ID
      *
      * @var mixed
      */
-    public $locationCreateStructs;
+    public $contentId;
+
+    /**
+     * Verion Number
+     *
+     * @var mixed
+     */
+    public $versionNo;
 
 }
 

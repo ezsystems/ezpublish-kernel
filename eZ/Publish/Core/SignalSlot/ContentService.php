@@ -271,7 +271,8 @@ class ContentService implements ContentServiceInterface
         $returnValue = $this->service->createContent( $contentCreateStruct, $locationCreateStructs );
         $this->signalDispatcher()->emit(
             new Signal\ContentService\CreateContentSignal( array(
-                'locationCreateStructs' => $locationCreateStructs,
+                'contentId' => $returnValue->getVersionInfo()->getContentInfo()->id,
+                'versionNo' => $returnValue->getVersionInfo()->versionNo,
             ) )
         );
         return $returnValue;
