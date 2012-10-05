@@ -54,7 +54,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function createObjectStateGroup( eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct $objectStateGroupCreateStruct )
+    public function createObjectStateGroup( \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct $objectStateGroupCreateStruct )
     {
         $returnValue = $this->service->createObjectStateGroup( $objectStateGroupCreateStruct );
         $this->signalDispatcher()->emit(
@@ -101,7 +101,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState[]
      */
-    public function loadObjectStates( eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup )
+    public function loadObjectStates( \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup )
     {
         $returnValue = $this->service->loadObjectStates( $objectStateGroup );
         return $returnValue;
@@ -117,7 +117,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function updateObjectStateGroup( eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup, eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct )
+    public function updateObjectStateGroup( \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup, \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct )
     {
         $returnValue = $this->service->updateObjectStateGroup( $objectStateGroup, $objectStateGroupUpdateStruct );
         $this->signalDispatcher()->emit(
@@ -135,7 +135,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      */
-    public function deleteObjectStateGroup( eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup )
+    public function deleteObjectStateGroup( \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup )
     {
         $returnValue = $this->service->deleteObjectStateGroup( $objectStateGroup );
         $this->signalDispatcher()->emit(
@@ -159,7 +159,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function createObjectState( eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup, eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct $objectStateCreateStruct )
+    public function createObjectState( \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup, \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct $objectStateCreateStruct )
     {
         $returnValue = $this->service->createObjectState( $objectStateGroup, $objectStateCreateStruct );
         $this->signalDispatcher()->emit(
@@ -196,7 +196,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function updateObjectState( eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState, eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct $objectStateUpdateStruct )
+    public function updateObjectState( \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState, \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct $objectStateUpdateStruct )
     {
         $returnValue = $this->service->updateObjectState( $objectState, $objectStateUpdateStruct );
         $this->signalDispatcher()->emit(
@@ -215,7 +215,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      * @param int $priority
      */
-    public function setPriorityOfObjectState( eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState, $priority )
+    public function setPriorityOfObjectState( \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState, $priority )
     {
         $returnValue = $this->service->setPriorityOfObjectState( $objectState, $priority );
         $this->signalDispatcher()->emit(
@@ -235,7 +235,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      */
-    public function deleteObjectState( eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState )
+    public function deleteObjectState( \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState )
     {
         $returnValue = $this->service->deleteObjectState( $objectState );
         $this->signalDispatcher()->emit(
@@ -256,7 +256,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      */
-    public function setObjectState( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup, eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState )
+    public function setObjectState( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup, \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState )
     {
         $returnValue = $this->service->setObjectState( $contentInfo, $objectStateGroup, $objectState );
         $this->signalDispatcher()->emit(
@@ -279,7 +279,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function getObjectState( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup )
+    public function getObjectState( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup )
     {
         $returnValue = $this->service->getObjectState( $contentInfo, $objectStateGroup );
         return $returnValue;
@@ -292,7 +292,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @return int
      */
-    public function getContentCount( eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState )
+    public function getContentCount( \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState )
     {
         $returnValue = $this->service->getContentCount( $objectState );
         return $returnValue;

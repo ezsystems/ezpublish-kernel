@@ -78,7 +78,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\UrlWildcard $urlWildcard the url wildcard to remove
      */
-    public function remove( eZ\Publish\API\Repository\Values\Content\URLWildcard $urlWildcard )
+    public function remove( \eZ\Publish\API\Repository\Values\Content\URLWildcard $urlWildcard )
     {
         $returnValue = $this->service->remove( $urlWildcard );
         $this->signalDispatcher()->emit(

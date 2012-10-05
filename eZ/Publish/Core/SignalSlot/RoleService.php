@@ -55,7 +55,7 @@ class RoleService implements RoleServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function createRole( eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct )
+    public function createRole( \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct )
     {
         $returnValue = $this->service->createRole( $roleCreateStruct );
         $this->signalDispatcher()->emit(
@@ -77,7 +77,7 @@ class RoleService implements RoleServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function updateRole( eZ\Publish\API\Repository\Values\User\Role $role, eZ\Publish\API\Repository\Values\User\RoleUpdateStruct $roleUpdateStruct )
+    public function updateRole( \eZ\Publish\API\Repository\Values\User\Role $role, \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct $roleUpdateStruct )
     {
         $returnValue = $this->service->updateRole( $role, $roleUpdateStruct );
         $this->signalDispatcher()->emit(
@@ -98,7 +98,7 @@ class RoleService implements RoleServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function addPolicy( eZ\Publish\API\Repository\Values\User\Role $role, eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStruct )
+    public function addPolicy( \eZ\Publish\API\Repository\Values\User\Role $role, \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStruct )
     {
         $returnValue = $this->service->addPolicy( $role, $policyCreateStruct );
         $this->signalDispatcher()->emit(
@@ -120,7 +120,7 @@ class RoleService implements RoleServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role the updated role
      */
-    public function removePolicy( eZ\Publish\API\Repository\Values\User\Role $role, eZ\Publish\API\Repository\Values\User\Policy $policy )
+    public function removePolicy( \eZ\Publish\API\Repository\Values\User\Role $role, \eZ\Publish\API\Repository\Values\User\Policy $policy )
     {
         $returnValue = $this->service->removePolicy( $role, $policy );
         $this->signalDispatcher()->emit(
@@ -143,7 +143,7 @@ class RoleService implements RoleServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy
      */
-    public function updatePolicy( eZ\Publish\API\Repository\Values\User\Policy $policy, eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct $policyUpdateStruct )
+    public function updatePolicy( \eZ\Publish\API\Repository\Values\User\Policy $policy, \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct $policyUpdateStruct )
     {
         $returnValue = $this->service->updatePolicy( $policy, $policyUpdateStruct );
         $this->signalDispatcher()->emit(
@@ -206,7 +206,7 @@ class RoleService implements RoleServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      */
-    public function deleteRole( eZ\Publish\API\Repository\Values\User\Role $role )
+    public function deleteRole( \eZ\Publish\API\Repository\Values\User\Role $role )
     {
         $returnValue = $this->service->deleteRole( $role );
         $this->signalDispatcher()->emit(
@@ -241,7 +241,7 @@ class RoleService implements RoleServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
      */
-    public function assignRoleToUserGroup( eZ\Publish\API\Repository\Values\User\Role $role, eZ\Publish\API\Repository\Values\User\UserGroup $userGroup, eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation = null )
+    public function assignRoleToUserGroup( \eZ\Publish\API\Repository\Values\User\Role $role, \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup, \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation = null )
     {
         $returnValue = $this->service->assignRoleToUserGroup( $role, $userGroup, $roleLimitation );
         $this->signalDispatcher()->emit(
@@ -263,7 +263,7 @@ class RoleService implements RoleServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      */
-    public function unassignRoleFromUserGroup( eZ\Publish\API\Repository\Values\User\Role $role, eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
+    public function unassignRoleFromUserGroup( \eZ\Publish\API\Repository\Values\User\Role $role, \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
     {
         $returnValue = $this->service->unassignRoleFromUserGroup( $role, $userGroup );
         $this->signalDispatcher()->emit(
@@ -284,7 +284,7 @@ class RoleService implements RoleServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
      */
-    public function assignRoleToUser( eZ\Publish\API\Repository\Values\User\Role $role, eZ\Publish\API\Repository\Values\User\User $user, eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation = null )
+    public function assignRoleToUser( \eZ\Publish\API\Repository\Values\User\Role $role, \eZ\Publish\API\Repository\Values\User\User $user, \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation = null )
     {
         $returnValue = $this->service->assignRoleToUser( $role, $user, $roleLimitation );
         $this->signalDispatcher()->emit(
@@ -306,7 +306,7 @@ class RoleService implements RoleServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      */
-    public function unassignRoleFromUser( eZ\Publish\API\Repository\Values\User\Role $role, eZ\Publish\API\Repository\Values\User\User $user )
+    public function unassignRoleFromUser( \eZ\Publish\API\Repository\Values\User\Role $role, \eZ\Publish\API\Repository\Values\User\User $user )
     {
         $returnValue = $this->service->unassignRoleFromUser( $role, $user );
         $this->signalDispatcher()->emit(
@@ -327,7 +327,7 @@ class RoleService implements RoleServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[] an array of {@link RoleAssignment}
      */
-    public function getRoleAssignments( eZ\Publish\API\Repository\Values\User\Role $role )
+    public function getRoleAssignments( \eZ\Publish\API\Repository\Values\User\Role $role )
     {
         $returnValue = $this->service->getRoleAssignments( $role );
         return $returnValue;
@@ -342,7 +342,7 @@ class RoleService implements RoleServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment[] an array of {@link UserRoleAssignment}
      */
-    public function getRoleAssignmentsForUser( eZ\Publish\API\Repository\Values\User\User $user )
+    public function getRoleAssignmentsForUser( \eZ\Publish\API\Repository\Values\User\User $user )
     {
         $returnValue = $this->service->getRoleAssignmentsForUser( $user );
         return $returnValue;
@@ -357,7 +357,7 @@ class RoleService implements RoleServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment[] an array of {@link UserGroupRoleAssignment}
      */
-    public function getRoleAssignmentsForUserGroup( eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
+    public function getRoleAssignmentsForUserGroup( \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
     {
         $returnValue = $this->service->getRoleAssignmentsForUserGroup( $userGroup );
         return $returnValue;

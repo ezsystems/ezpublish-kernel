@@ -57,7 +57,7 @@ class SearchService implements SearchServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContent( eZ\Publish\API\Repository\Values\Content\Query $query, $fieldFilters = array(), $filterOnUserPermissions = true )
+    public function findContent( \eZ\Publish\API\Repository\Values\Content\Query $query, $fieldFilters = array(), $filterOnUserPermissions = true )
     {
         $returnValue = $this->service->findContent( $query, $fieldFilters, $filterOnUserPermissions );
         return $returnValue;
@@ -77,7 +77,7 @@ class SearchService implements SearchServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function findSingle( eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion, $fieldFilters = array(), $filterOnUserPermissions = true )
+    public function findSingle( \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion, $fieldFilters = array(), $filterOnUserPermissions = true )
     {
         $returnValue = $this->service->findSingle( $criterion, $fieldFilters, $filterOnUserPermissions );
         return $returnValue;
@@ -91,7 +91,7 @@ class SearchService implements SearchServiceInterface
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
-    public function suggest( $prefix, $fieldPaths = array(), $limit = 10, eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter = null )
+    public function suggest( $prefix, $fieldPaths = array(), $limit = 10, \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter = null )
     {
         $returnValue = $this->service->suggest( $prefix, $fieldPaths, $limit, $filter );
         return $returnValue;

@@ -55,7 +55,7 @@ class LanguageService implements LanguageServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
      */
-    public function createLanguage( eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct $languageCreateStruct )
+    public function createLanguage( \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct $languageCreateStruct )
     {
         $returnValue = $this->service->createLanguage( $languageCreateStruct );
         $this->signalDispatcher()->emit(
@@ -76,7 +76,7 @@ class LanguageService implements LanguageServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
      */
-    public function updateLanguageName( eZ\Publish\API\Repository\Values\Content\Language $language, $newName )
+    public function updateLanguageName( \eZ\Publish\API\Repository\Values\Content\Language $language, $newName )
     {
         $returnValue = $this->service->updateLanguageName( $language, $newName );
         $this->signalDispatcher()->emit(
@@ -97,7 +97,7 @@ class LanguageService implements LanguageServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
      */
-    public function enableLanguage( eZ\Publish\API\Repository\Values\Content\Language $language )
+    public function enableLanguage( \eZ\Publish\API\Repository\Values\Content\Language $language )
     {
         $returnValue = $this->service->enableLanguage( $language );
         $this->signalDispatcher()->emit(
@@ -117,7 +117,7 @@ class LanguageService implements LanguageServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
      */
-    public function disableLanguage( eZ\Publish\API\Repository\Values\Content\Language $language )
+    public function disableLanguage( \eZ\Publish\API\Repository\Values\Content\Language $language )
     {
         $returnValue = $this->service->disableLanguage( $language );
         $this->signalDispatcher()->emit(
@@ -179,7 +179,7 @@ class LanguageService implements LanguageServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
      */
-    public function deleteLanguage( eZ\Publish\API\Repository\Values\Content\Language $language )
+    public function deleteLanguage( \eZ\Publish\API\Repository\Values\Content\Language $language )
     {
         $returnValue = $this->service->deleteLanguage( $language );
         $this->signalDispatcher()->emit(

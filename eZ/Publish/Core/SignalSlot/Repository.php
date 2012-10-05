@@ -9,6 +9,9 @@
 
 namespace eZ\Publish\Core\SignalSlot;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\ValueObject,
+    eZ\Publish\API\Repository\Values\User\User,
+    eZ\Publish\API\Repository\Values\User\Limitation;
 
 /**
  * Repository class

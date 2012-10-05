@@ -62,7 +62,7 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function createUrlAlias( eZ\Publish\API\Repository\Values\Content\Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false )
+    public function createUrlAlias( \eZ\Publish\API\Repository\Values\Content\Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false )
     {
         $returnValue = $this->service->createUrlAlias( $location, $path, $languageCode, $forwarding, $alwaysAvailable );
         $this->signalDispatcher()->emit(
@@ -116,7 +116,7 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias[]
      */
-    public function listLocationAliases( eZ\Publish\API\Repository\Values\Content\Location $location, $custom = true, $languageCode = null )
+    public function listLocationAliases( \eZ\Publish\API\Repository\Values\Content\Location $location, $custom = true, $languageCode = null )
     {
         $returnValue = $this->service->listLocationAliases( $location, $custom, $languageCode );
         return $returnValue;
@@ -188,7 +188,7 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function reverseLookup( eZ\Publish\API\Repository\Values\Content\Location $location, $languageCode = null )
+    public function reverseLookup( \eZ\Publish\API\Repository\Values\Content\Location $location, $languageCode = null )
     {
         $returnValue = $this->service->reverseLookup( $location, $languageCode );
         return $returnValue;

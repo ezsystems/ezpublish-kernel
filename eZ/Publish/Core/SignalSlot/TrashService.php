@@ -74,7 +74,7 @@ class TrashService implements TrashServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
-    public function trash( eZ\Publish\API\Repository\Values\Content\Location $location )
+    public function trash( \eZ\Publish\API\Repository\Values\Content\Location $location )
     {
         $returnValue = $this->service->trash( $location );
         $this->signalDispatcher()->emit(
@@ -97,7 +97,7 @@ class TrashService implements TrashServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created or recovered location
      */
-    public function recover( eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem, eZ\Publish\API\Repository\Values\Content\Location $newParentLocation = null )
+    public function recover( \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem, \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation = null )
     {
         $returnValue = $this->service->recover( $trashItem, $newParentLocation );
         $this->signalDispatcher()->emit(
@@ -136,7 +136,7 @@ class TrashService implements TrashServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
      */
-    public function deleteTrashItem( eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem )
+    public function deleteTrashItem( \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem )
     {
         $returnValue = $this->service->deleteTrashItem( $trashItem );
         $this->signalDispatcher()->emit(
@@ -156,7 +156,7 @@ class TrashService implements TrashServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
      */
-    public function findTrashItems( eZ\Publish\API\Repository\Values\Content\Query $query )
+    public function findTrashItems( \eZ\Publish\API\Repository\Values\Content\Query $query )
     {
         $returnValue = $this->service->findTrashItems( $query );
         return $returnValue;

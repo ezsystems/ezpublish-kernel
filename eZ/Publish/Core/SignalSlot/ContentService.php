@@ -94,7 +94,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
-    public function loadVersionInfo( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, $versionNo = null )
+    public function loadVersionInfo( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, $versionNo = null )
     {
         $returnValue = $this->service->loadVersionInfo( $contentInfo, $versionNo );
         return $returnValue;
@@ -133,7 +133,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByContentInfo( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, $languages = null, $versionNo = null )
+    public function loadContentByContentInfo( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, $languages = null, $versionNo = null )
     {
         $returnValue = $this->service->loadContentByContentInfo( $contentInfo, $languages, $versionNo );
         return $returnValue;
@@ -149,7 +149,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByVersionInfo( eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo, $languages = null )
+    public function loadContentByVersionInfo( \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo, $languages = null )
     {
         $returnValue = $this->service->loadContentByVersionInfo( $versionInfo, $languages );
         return $returnValue;
@@ -217,7 +217,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContent( eZ\Publish\API\Repository\Values\Content\ContentCreateStruct $contentCreateStruct, $locationCreateStructs = array() )
+    public function createContent( \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct $contentCreateStruct, $locationCreateStructs = array() )
     {
         $returnValue = $this->service->createContent( $contentCreateStruct, $locationCreateStructs );
         $this->signalDispatcher()->emit(
@@ -242,7 +242,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content with the updated attributes
      */
-    public function updateContentMetadata( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct $contentMetadataUpdateStruct )
+    public function updateContentMetadata( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct $contentMetadataUpdateStruct )
     {
         $returnValue = $this->service->updateContentMetadata( $contentInfo, $contentMetadataUpdateStruct );
         $this->signalDispatcher()->emit(
@@ -260,7 +260,7 @@ class ContentService implements ContentServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      */
-    public function deleteContent( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo )
+    public function deleteContent( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo )
     {
         $returnValue = $this->service->deleteContent( $contentInfo );
         $this->signalDispatcher()->emit(
@@ -286,7 +286,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContentDraft( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo = null, eZ\Publish\API\Repository\Values\User\User $user = null )
+    public function createContentDraft( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo = null, \eZ\Publish\API\Repository\Values\User\User $user = null )
     {
         $returnValue = $this->service->createContentDraft( $contentInfo, $versionInfo, $user );
         $this->signalDispatcher()->emit(
@@ -310,7 +310,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] the drafts ({@link VersionInfo}) owned by the given user
      */
-    public function loadContentDrafts( eZ\Publish\API\Repository\Values\User\User $user = null )
+    public function loadContentDrafts( \eZ\Publish\API\Repository\Values\User\User $user = null )
     {
         $returnValue = $this->service->loadContentDrafts( $user );
         return $returnValue;
@@ -336,7 +336,7 @@ class ContentService implements ContentServiceInterface
      *
      * @since 5.0
      */
-    public function translateVersion( eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo, eZ\Publish\API\Repository\Values\Content\TranslationValues $translationValues, eZ\Publish\API\Repository\Values\User\User $user = null )
+    public function translateVersion( \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo, \eZ\Publish\API\Repository\Values\Content\TranslationValues $translationValues, \eZ\Publish\API\Repository\Values\User\User $user = null )
     {
         $returnValue = $this->service->translateVersion( $translationInfo, $translationValues, $user );
         $this->signalDispatcher()->emit(
@@ -361,7 +361,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the updated fields
      */
-    public function updateContent( eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo, eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct $contentUpdateStruct )
+    public function updateContent( \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo, \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct $contentUpdateStruct )
     {
         $returnValue = $this->service->updateContent( $versionInfo, $contentUpdateStruct );
         $this->signalDispatcher()->emit(
@@ -383,7 +383,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function publishVersion( eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo )
+    public function publishVersion( \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo )
     {
         $returnValue = $this->service->publishVersion( $versionInfo );
         $this->signalDispatcher()->emit(
@@ -402,7 +402,7 @@ class ContentService implements ContentServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      */
-    public function deleteVersion( eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo )
+    public function deleteVersion( \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo )
     {
         $returnValue = $this->service->deleteVersion( $versionInfo );
         $this->signalDispatcher()->emit(
@@ -422,7 +422,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] an array of {@link \eZ\Publish\API\Repository\Values\Content\VersionInfo} sorted by creation date
      */
-    public function loadVersions( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo )
+    public function loadVersions( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo )
     {
         $returnValue = $this->service->loadVersions( $contentInfo );
         return $returnValue;
@@ -440,7 +440,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function copyContent( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $destinationLocationCreateStruct, eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo = null )
+    public function copyContent( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $destinationLocationCreateStruct, \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo = null )
     {
         $returnValue = $this->service->copyContent( $contentInfo, $destinationLocationCreateStruct, $versionInfo );
         $this->signalDispatcher()->emit(
@@ -463,7 +463,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[] an array of {@link Relation}
      */
-    public function loadRelations( eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo )
+    public function loadRelations( \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo )
     {
         $returnValue = $this->service->loadRelations( $versionInfo );
         return $returnValue;
@@ -480,7 +480,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[] an array of {@link Relation}
      */
-    public function loadReverseRelations( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo )
+    public function loadReverseRelations( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo )
     {
         $returnValue = $this->service->loadReverseRelations( $contentInfo );
         return $returnValue;
@@ -500,7 +500,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation the newly created relation
      */
-    public function addRelation( eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion, eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent )
+    public function addRelation( \eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion, \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent )
     {
         $returnValue = $this->service->addRelation( $sourceVersion, $destinationContent );
         $this->signalDispatcher()->emit(
@@ -522,7 +522,7 @@ class ContentService implements ContentServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent
      */
-    public function deleteRelation( eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion, eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent )
+    public function deleteRelation( \eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion, \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent )
     {
         $returnValue = $this->service->deleteRelation( $sourceVersion, $destinationContent );
         $this->signalDispatcher()->emit(
@@ -545,7 +545,7 @@ class ContentService implements ContentServiceInterface
      *
      * @since 5.0
      */
-    public function addTranslationInfo( eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo )
+    public function addTranslationInfo( \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo )
     {
         $returnValue = $this->service->addTranslationInfo( $translationInfo );
         $this->signalDispatcher()->emit(
@@ -568,7 +568,7 @@ class ContentService implements ContentServiceInterface
      *
      * @since 5.0
      */
-    public function loadTranslationInfos( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, $filter = array() )
+    public function loadTranslationInfos( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, $filter = array() )
     {
         $returnValue = $this->service->loadTranslationInfos( $contentInfo, $filter );
         return $returnValue;
@@ -582,7 +582,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
      */
-    public function newContentCreateStruct( eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType, $mainLanguageCode )
+    public function newContentCreateStruct( \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType, $mainLanguageCode )
     {
         $returnValue = $this->service->newContentCreateStruct( $contentType, $mainLanguageCode );
         return $returnValue;

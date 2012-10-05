@@ -55,7 +55,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function createContentTypeGroup( eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct )
+    public function createContentTypeGroup( \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct )
     {
         $returnValue = $this->service->createContentTypeGroup( $contentTypeGroupCreateStruct );
         $this->signalDispatcher()->emit(
@@ -116,7 +116,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup the content type group to be updated
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct
      */
-    public function updateContentTypeGroup( eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup, eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct )
+    public function updateContentTypeGroup( \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup, \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct )
     {
         $returnValue = $this->service->updateContentTypeGroup( $contentTypeGroup, $contentTypeGroupUpdateStruct );
         $this->signalDispatcher()->emit(
@@ -137,7 +137,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $ContentTypeGroup
      */
-    public function deleteContentTypeGroup( eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup )
+    public function deleteContentTypeGroup( \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup )
     {
         $returnValue = $this->service->deleteContentTypeGroup( $contentTypeGroup );
         $this->signalDispatcher()->emit(
@@ -165,10 +165,10 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function createContentType( eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct, $contentTypeGroups )
+    public function createContentType( \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups )
     {
         $returnValue = $this->service->createContentType( $contentTypeCreateStruct, $contentTypeGroups );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ContentTypeService\CreateContentTypeSignal( array(
                 'contentTypeId' => $returnValue->id,
             ) )
@@ -243,7 +243,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[] an array of {@link ContentType} which have status DEFINED
      */
-    public function loadContentTypes( eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup )
+    public function loadContentTypes( \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup )
     {
         $returnValue = $this->service->loadContentTypes( $contentTypeGroup );
         return $returnValue;
@@ -262,7 +262,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function createContentTypeDraft( eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType )
+    public function createContentTypeDraft( \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType )
     {
         $returnValue = $this->service->createContentTypeDraft( $contentType );
         $this->signalDispatcher()->emit(
@@ -284,7 +284,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct $contentTypeUpdateStruct
      */
-    public function updateContentTypeDraft( eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft, eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct $contentTypeUpdateStruct )
+    public function updateContentTypeDraft( \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft, \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct $contentTypeUpdateStruct )
     {
         $returnValue = $this->service->updateContentTypeDraft( $contentTypeDraft, $contentTypeUpdateStruct );
         $this->signalDispatcher()->emit(
@@ -305,7 +305,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      */
-    public function deleteContentType( eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType )
+    public function deleteContentType( \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType )
     {
         $returnValue = $this->service->deleteContentType( $contentType );
         $this->signalDispatcher()->emit(
@@ -329,7 +329,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function copyContentType( eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType, eZ\Publish\API\Repository\Values\User\User $user = null )
+    public function copyContentType( \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType, \eZ\Publish\API\Repository\Values\User\User $user = null )
     {
         $returnValue = $this->service->copyContentType( $contentType, $user );
         $this->signalDispatcher()->emit(
@@ -350,7 +350,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      */
-    public function assignContentTypeGroup( eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType, eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup )
+    public function assignContentTypeGroup( \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType, \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup )
     {
         $returnValue = $this->service->assignContentTypeGroup( $contentType, $contentTypeGroup );
         $this->signalDispatcher()->emit(
@@ -372,7 +372,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      */
-    public function unassignContentTypeGroup( eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType, eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup )
+    public function unassignContentTypeGroup( \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType, \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup )
     {
         $returnValue = $this->service->unassignContentTypeGroup( $contentType, $contentTypeGroup );
         $this->signalDispatcher()->emit(
@@ -395,7 +395,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
      */
-    public function addFieldDefinition( eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft, eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
+    public function addFieldDefinition( \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft, \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
     {
         $returnValue = $this->service->addFieldDefinition( $contentTypeDraft, $fieldDefinitionCreateStruct );
         $this->signalDispatcher()->emit(
@@ -415,7 +415,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      */
-    public function removeFieldDefinition( eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft, eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition )
+    public function removeFieldDefinition( \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft, \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition )
     {
         $returnValue = $this->service->removeFieldDefinition( $contentTypeDraft, $fieldDefinition );
         $this->signalDispatcher()->emit(
@@ -438,7 +438,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition the field definition which should be updated
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
      */
-    public function updateFieldDefinition( eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft, eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition, eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct )
+    public function updateFieldDefinition( \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft, \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition, \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct )
     {
         $returnValue = $this->service->updateFieldDefinition( $contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct );
         $this->signalDispatcher()->emit(
@@ -461,7 +461,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      */
-    public function publishContentTypeDraft( eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft )
+    public function publishContentTypeDraft( \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft )
     {
         $returnValue = $this->service->publishContentTypeDraft( $contentTypeDraft );
         $this->signalDispatcher()->emit(

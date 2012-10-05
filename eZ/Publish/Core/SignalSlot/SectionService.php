@@ -55,7 +55,7 @@ class SectionService implements SectionServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section The newly create section
      */
-    public function createSection( eZ\Publish\API\Repository\Values\Content\SectionCreateStruct $sectionCreateStruct )
+    public function createSection( \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct $sectionCreateStruct )
     {
         $returnValue = $this->service->createSection( $sectionCreateStruct );
         $this->signalDispatcher()->emit(
@@ -77,7 +77,7 @@ class SectionService implements SectionServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function updateSection( eZ\Publish\API\Repository\Values\Content\Section $section, eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct $sectionUpdateStruct )
+    public function updateSection( \eZ\Publish\API\Repository\Values\Content\Section $section, \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct $sectionUpdateStruct )
     {
         $returnValue = $this->service->updateSection( $section, $sectionUpdateStruct );
         $this->signalDispatcher()->emit(
@@ -140,7 +140,7 @@ class SectionService implements SectionServiceInterface
      *
      * @return int
      */
-    public function countAssignedContents( eZ\Publish\API\Repository\Values\Content\Section $section )
+    public function countAssignedContents( \eZ\Publish\API\Repository\Values\Content\Section $section )
     {
         $returnValue = $this->service->countAssignedContents( $section );
         return $returnValue;
@@ -155,7 +155,7 @@ class SectionService implements SectionServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      */
-    public function assignSection( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, eZ\Publish\API\Repository\Values\Content\Section $section )
+    public function assignSection( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, \eZ\Publish\API\Repository\Values\Content\Section $section )
     {
         $returnValue = $this->service->assignSection( $contentInfo, $section );
         $this->signalDispatcher()->emit(
@@ -177,7 +177,7 @@ class SectionService implements SectionServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      */
-    public function deleteSection( eZ\Publish\API\Repository\Values\Content\Section $section )
+    public function deleteSection( \eZ\Publish\API\Repository\Values\Content\Section $section )
     {
         $returnValue = $this->service->deleteSection( $section );
         $this->signalDispatcher()->emit(

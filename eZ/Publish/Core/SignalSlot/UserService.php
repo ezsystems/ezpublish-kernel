@@ -62,7 +62,7 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userGroupCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing or set to an empty value
      */
-    public function createUserGroup( eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct $userGroupCreateStruct, eZ\Publish\API\Repository\Values\User\UserGroup $parentGroup )
+    public function createUserGroup( \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct $userGroupCreateStruct, \eZ\Publish\API\Repository\Values\User\UserGroup $parentGroup )
     {
         $returnValue = $this->service->createUserGroup( $userGroupCreateStruct, $parentGroup );
         $this->signalDispatcher()->emit(
@@ -98,7 +98,7 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
      */
-    public function loadSubUserGroups( eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
+    public function loadSubUserGroups( \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
     {
         $returnValue = $this->service->loadSubUserGroups( $userGroup );
         return $returnValue;
@@ -113,7 +113,7 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
      */
-    public function deleteUserGroup( eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
+    public function deleteUserGroup( \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
     {
         $returnValue = $this->service->deleteUserGroup( $userGroup );
         $this->signalDispatcher()->emit(
@@ -132,7 +132,7 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to move the user group
      */
-    public function moveUserGroup( eZ\Publish\API\Repository\Values\User\UserGroup $userGroup, eZ\Publish\API\Repository\Values\User\UserGroup $newParent )
+    public function moveUserGroup( \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup, \eZ\Publish\API\Repository\Values\User\UserGroup $newParent )
     {
         $returnValue = $this->service->moveUserGroup( $userGroup, $newParent );
         $this->signalDispatcher()->emit(
@@ -160,7 +160,7 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set empty
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a field value is not accepted by the field type
      */
-    public function updateUserGroup( eZ\Publish\API\Repository\Values\User\UserGroup $userGroup, eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct $userGroupUpdateStruct )
+    public function updateUserGroup( \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup, \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct $userGroupUpdateStruct )
     {
         $returnValue = $this->service->updateUserGroup( $userGroup, $userGroupUpdateStruct );
         $this->signalDispatcher()->emit(
@@ -184,7 +184,7 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing or set  to an empty value
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a field value is not accepted by the field type
      */
-    public function createUser( eZ\Publish\API\Repository\Values\User\UserCreateStruct $userCreateStruct, $parentGroups )
+    public function createUser( \eZ\Publish\API\Repository\Values\User\UserCreateStruct $userCreateStruct, array $parentGroups )
     {
         $returnValue = $this->service->createUser( $userCreateStruct, $parentGroups );
         $this->signalDispatcher()->emit(
@@ -245,7 +245,7 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete the user
      */
-    public function deleteUser( eZ\Publish\API\Repository\Values\User\User $user )
+    public function deleteUser( \eZ\Publish\API\Repository\Values\User\User $user )
     {
         $returnValue = $this->service->deleteUser( $user );
         $this->signalDispatcher()->emit(
@@ -272,7 +272,7 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    public function updateUser( eZ\Publish\API\Repository\Values\User\User $user, eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct )
+    public function updateUser( \eZ\Publish\API\Repository\Values\User\User $user, \eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct )
     {
         $returnValue = $this->service->updateUser( $user, $userUpdateStruct );
         $this->signalDispatcher()->emit(
@@ -293,7 +293,7 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign the user group to the user
      */
-    public function assignUserToUserGroup( eZ\Publish\API\Repository\Values\User\User $user, eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
+    public function assignUserToUserGroup( \eZ\Publish\API\Repository\Values\User\User $user, \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
     {
         $returnValue = $this->service->assignUserToUserGroup( $user, $userGroup );
         $this->signalDispatcher()->emit(
@@ -314,7 +314,7 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove the user group from the user
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the user is not in the given user group
      */
-    public function unAssignUserFromUserGroup( eZ\Publish\API\Repository\Values\User\User $user, eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
+    public function unAssignUserFromUserGroup( \eZ\Publish\API\Repository\Values\User\User $user, \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
     {
         $returnValue = $this->service->unAssignUserFromUserGroup( $user, $userGroup );
         $this->signalDispatcher()->emit(
@@ -335,7 +335,7 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
-    public function loadUserGroupsOfUser( eZ\Publish\API\Repository\Values\User\User $user )
+    public function loadUserGroupsOfUser( \eZ\Publish\API\Repository\Values\User\User $user )
     {
         $returnValue = $this->service->loadUserGroupsOfUser( $user );
         return $returnValue;
@@ -352,7 +352,7 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersOfUserGroup( eZ\Publish\API\Repository\Values\User\UserGroup $userGroup, $offset = 0, $limit = -1 )
+    public function loadUsersOfUserGroup( \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup, $offset = 0, $limit = -1 )
     {
         $returnValue = $this->service->loadUsersOfUserGroup( $userGroup, $offset, $limit );
         return $returnValue;
