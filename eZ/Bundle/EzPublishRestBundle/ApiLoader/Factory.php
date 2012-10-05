@@ -8,8 +8,6 @@ use eZ\Publish\Core\REST\Server\FieldTypeProcessor;
 use eZ\Publish\Core\REST\Common;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use eZ\Publish\API\Repository\Repository;
-// use eZ\Publish\Core\REST\Server\View\Visitor;
-use QaFoo\RMF\View\AcceptHeaderViewDispatcher;
 
 class Factory
 {
@@ -35,8 +33,13 @@ class Factory
 
     public function buildInputDispatcher()
     {
+        /** @var \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler */
         $urlHandler = $this->container->get( 'ezpublish_rest.url_handler' );
+
+        /** @var \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools */
         $parserTools = $this->container->get( 'ezpublish_rest.parser_tools' );
+
+        /** @var \eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser */
         $fieldTypeParser = $this->container->get( 'ezpublish_rest.field_type_parser' );
 
         return new Common\Input\Dispatcher(

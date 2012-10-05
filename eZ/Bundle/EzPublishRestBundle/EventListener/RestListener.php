@@ -40,6 +40,7 @@ class RestListener implements EventSubscriberInterface
 
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param \eZ\Publish\Core\REST\Server\Request $request
      */
     public function __construct( ContainerInterface $container, RESTRequest $request )
     {
@@ -110,7 +111,7 @@ class RestListener implements EventSubscriberInterface
         /**  @var \eZ\Publish\Core\REST\Server\Request $request */
         $request = $this->container->get( 'ezpublish_rest.request' );
 
-        /**  @var \eZ\Publish\API\Repository $repository */
+        /**  @var \eZ\Publish\API\Repository\Repository $repository */
         $repository = $this->container->get( 'ezpublish.api.repository' );
 
         $repository->setCurrentUser(
