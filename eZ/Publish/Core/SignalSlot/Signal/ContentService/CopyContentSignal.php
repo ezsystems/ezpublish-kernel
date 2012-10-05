@@ -21,14 +21,28 @@ class CopyContentSignal extends Signal
      *
      * @var mixed
      */
-    public $contentId;
+    public $srcContentId;
 
     /**
      * VersionNo
      *
      * @var int
      */
-    public $versionNo;
+    public $srcVersionNo;
+
+    /**
+     * ContentId
+     *
+     * @var mixed
+     */
+    public $dstContentId;
+
+    /**
+     * VersionNo
+     *
+     * @var int
+     */
+    public $dstVersionNo;
 
 }
 

@@ -420,6 +420,7 @@ class ContentService implements ContentServiceInterface
         $returnValue = $this->service->updateContent( $versionInfo, $contentUpdateStruct );
         $this->signalDispatcher()->emit(
             new Signal\ContentService\UpdateContentSignal( array(
+                'contentId' => $versionInfo->getContentInfo()->id,
                 'versionNo' => $versionInfo->versionNo,
             ) )
         );
@@ -503,8 +504,10 @@ class ContentService implements ContentServiceInterface
         $returnValue = $this->service->copyContent( $contentInfo, $destinationLocationCreateStruct, $versionInfo );
         $this->signalDispatcher()->emit(
             new Signal\ContentService\CopyContentSignal( array(
-                'contentId' => $contentInfo->id,
-                'versionNo' => $versionInfo->versionNo,
+                'srcContentId' => $contentInfo->id,
+                'srcVersionNo' => $versionInfo->versionNo,
+                'dstContentId' => $returnValue->getVersionInfo()->getContentInfo()->id,
+                'dstVersionNo' => $returnValue->getVersionInfo()->versionNo,
             ) )
         );
         return $returnValue;
@@ -657,12 +660,6 @@ class ContentService implements ContentServiceInterface
     public function newContentCreateStruct( eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType, $mainLanguageCode )
     {
         $returnValue = $this->service->newContentCreateStruct( $contentType, $mainLanguageCode );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentService\NewContentCreateStructSignal( array(
-                'contentTypeId' => $contentType->id,
-                'mainLanguageCode' => $mainLanguageCode,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -674,10 +671,6 @@ class ContentService implements ContentServiceInterface
     public function newContentMetadataUpdateStruct()
     {
         $returnValue = $this->service->newContentMetadataUpdateStruct();
-        $this->signalDispatcher()->emit(
-            new Signal\ContentService\NewContentMetadataUpdateStructSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 
@@ -688,10 +681,6 @@ class ContentService implements ContentServiceInterface
     public function newContentUpdateStruct()
     {
         $returnValue = $this->service->newContentUpdateStruct();
-        $this->signalDispatcher()->emit(
-            new Signal\ContentService\NewContentUpdateStructSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 
@@ -702,10 +691,6 @@ class ContentService implements ContentServiceInterface
     public function newTranslationInfo()
     {
         $returnValue = $this->service->newTranslationInfo();
-        $this->signalDispatcher()->emit(
-            new Signal\ContentService\NewTranslationInfoSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 
@@ -716,12 +701,7 @@ class ContentService implements ContentServiceInterface
     public function newTranslationValues()
     {
         $returnValue = $this->service->newTranslationValues();
-        $this->signalDispatcher()->emit(
-            new Signal\ContentService\NewTranslationValuesSignal( array(
-            ) )
-        );
         return $returnValue;
     }
-
 }
 
