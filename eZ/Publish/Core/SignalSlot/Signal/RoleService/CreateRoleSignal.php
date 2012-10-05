@@ -23,16 +23,5 @@ class CreateRoleSignal extends Signal
      */
     public $roleCreateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
-     */
-    public function __construct( $roleCreateStruct )
-    {
-        $this->roleCreateStruct = $roleCreateStruct;
-    }
 }
 

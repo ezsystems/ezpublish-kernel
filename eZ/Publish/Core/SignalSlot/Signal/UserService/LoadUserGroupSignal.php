@@ -23,16 +23,5 @@ class LoadUserGroupSignal extends Signal
      */
     public $id;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $id
-     */
-    public function __construct( $id )
-    {
-        $this->id = $id;
-    }
 }
 

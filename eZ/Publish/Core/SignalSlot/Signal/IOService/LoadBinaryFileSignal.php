@@ -23,16 +23,5 @@ class LoadBinaryFileSignal extends Signal
      */
     public $binaryFileid;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $binaryFileid
-     */
-    public function __construct( $binaryFileid )
-    {
-        $this->binaryFileid = $binaryFileid;
-    }
 }
 

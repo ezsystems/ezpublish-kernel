@@ -23,16 +23,5 @@ class LoadRoleByIdentifierSignal extends Signal
      */
     public $identifier;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $identifier
-     */
-    public function __construct( $identifier )
-    {
-        $this->identifier = $identifier;
-    }
 }
 

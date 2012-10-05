@@ -30,18 +30,5 @@ class LoadAllSignal extends Signal
      */
     public $limit;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $offset
-     * @param mixed $limit
-     */
-    public function __construct( $offset, $limit )
-    {
-        $this->offset = $offset;
-        $this->limit = $limit;
-    }
 }
 

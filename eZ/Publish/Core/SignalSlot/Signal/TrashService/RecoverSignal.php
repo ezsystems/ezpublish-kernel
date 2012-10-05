@@ -30,18 +30,5 @@ class RecoverSignal extends Signal
      */
     public $newParentLocation;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
-     * @param eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
-     */
-    public function __construct( $trashItem, $newParentLocation )
-    {
-        $this->trashItem = $trashItem;
-        $this->newParentLocation = $newParentLocation;
-    }
 }
 

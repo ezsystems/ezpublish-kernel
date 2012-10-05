@@ -61,7 +61,9 @@ class TrashService implements TrashServiceInterface
     {
         $returnValue = $this->service->loadTrashItem( $trashItemId );
         $this->signalDispatcher()->emit(
-            new Signal\TrashService\LoadTrashItemSignal( $trashItemId )
+            new Signal\TrashService\LoadTrashItemSignal( array(
+                'trashItemId' => $trashItemId,
+            ) )
         );
         return $returnValue;
     }
@@ -81,7 +83,9 @@ class TrashService implements TrashServiceInterface
     {
         $returnValue = $this->service->trash( $location );
         $this->signalDispatcher()->emit(
-            new Signal\TrashService\TrashSignal( $location )
+            new Signal\TrashService\TrashSignal( array(
+                'location' => $location,
+            ) )
         );
         return $returnValue;
     }
@@ -102,7 +106,10 @@ class TrashService implements TrashServiceInterface
     {
         $returnValue = $this->service->recover( $trashItem, $newParentLocation );
         $this->signalDispatcher()->emit(
-            new Signal\TrashService\RecoverSignal( $trashItem, $newParentLocation )
+            new Signal\TrashService\RecoverSignal( array(
+                'trashItem' => $trashItem,
+                'newParentLocation' => $newParentLocation,
+            ) )
         );
         return $returnValue;
     }
@@ -119,7 +126,8 @@ class TrashService implements TrashServiceInterface
     {
         $returnValue = $this->service->emptyTrash();
         $this->signalDispatcher()->emit(
-            new Signal\TrashService\EmptyTrashSignal()
+            new Signal\TrashService\EmptyTrashSignal( array(
+            ) )
         );
         return $returnValue;
     }
@@ -137,7 +145,9 @@ class TrashService implements TrashServiceInterface
     {
         $returnValue = $this->service->deleteTrashItem( $trashItem );
         $this->signalDispatcher()->emit(
-            new Signal\TrashService\DeleteTrashItemSignal( $trashItem )
+            new Signal\TrashService\DeleteTrashItemSignal( array(
+                'trashItem' => $trashItem,
+            ) )
         );
         return $returnValue;
     }
@@ -155,7 +165,9 @@ class TrashService implements TrashServiceInterface
     {
         $returnValue = $this->service->findTrashItems( $query );
         $this->signalDispatcher()->emit(
-            new Signal\TrashService\FindTrashItemsSignal( $query )
+            new Signal\TrashService\FindTrashItemsSignal( array(
+                'query' => $query,
+            ) )
         );
         return $returnValue;
     }

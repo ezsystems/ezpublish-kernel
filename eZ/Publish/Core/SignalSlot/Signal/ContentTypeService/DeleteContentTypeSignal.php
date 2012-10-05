@@ -23,16 +23,5 @@ class DeleteContentTypeSignal extends Signal
      */
     public $contentType;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
-     */
-    public function __construct( $contentType )
-    {
-        $this->contentType = $contentType;
-    }
 }
 

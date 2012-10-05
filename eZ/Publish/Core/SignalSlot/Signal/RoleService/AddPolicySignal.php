@@ -30,18 +30,5 @@ class AddPolicySignal extends Signal
      */
     public $policyCreateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\User\Role $role
-     * @param eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStruct
-     */
-    public function __construct( $role, $policyCreateStruct )
-    {
-        $this->role = $role;
-        $this->policyCreateStruct = $policyCreateStruct;
-    }
 }
 

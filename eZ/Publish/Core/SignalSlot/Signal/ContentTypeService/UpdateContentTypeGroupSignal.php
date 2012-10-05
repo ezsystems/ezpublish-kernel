@@ -30,18 +30,5 @@ class UpdateContentTypeGroupSignal extends Signal
      */
     public $contentTypeGroupUpdateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
-     * @param eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct
-     */
-    public function __construct( $contentTypeGroup, $contentTypeGroupUpdateStruct )
-    {
-        $this->contentTypeGroup = $contentTypeGroup;
-        $this->contentTypeGroupUpdateStruct = $contentTypeGroupUpdateStruct;
-    }
 }
 

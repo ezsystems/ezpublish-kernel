@@ -23,16 +23,5 @@ class EnableLanguageSignal extends Signal
      */
     public $language;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\Language $language
-     */
-    public function __construct( $language )
-    {
-        $this->language = $language;
-    }
 }
 

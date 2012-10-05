@@ -23,16 +23,5 @@ class CreateSectionSignal extends Signal
      */
     public $sectionCreateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\SectionCreateStruct $sectionCreateStruct
-     */
-    public function __construct( $sectionCreateStruct )
-    {
-        $this->sectionCreateStruct = $sectionCreateStruct;
-    }
 }
 

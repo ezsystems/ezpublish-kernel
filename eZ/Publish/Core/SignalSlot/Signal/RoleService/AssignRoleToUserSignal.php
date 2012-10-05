@@ -37,20 +37,5 @@ class AssignRoleToUserSignal extends Signal
      */
     public $roleLimitation;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\User\Role $role
-     * @param eZ\Publish\API\Repository\Values\User\User $user
-     * @param eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation
-     */
-    public function __construct( $role, $user, $roleLimitation )
-    {
-        $this->role = $role;
-        $this->user = $user;
-        $this->roleLimitation = $roleLimitation;
-    }
 }
 

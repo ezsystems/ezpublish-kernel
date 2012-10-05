@@ -30,18 +30,5 @@ class UpdateUserGroupSignal extends Signal
      */
     public $userGroupUpdateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     * @param eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct $userGroupUpdateStruct
-     */
-    public function __construct( $userGroup, $userGroupUpdateStruct )
-    {
-        $this->userGroup = $userGroup;
-        $this->userGroupUpdateStruct = $userGroupUpdateStruct;
-    }
 }
 

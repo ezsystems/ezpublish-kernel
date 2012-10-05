@@ -30,18 +30,5 @@ class LoadTranslationInfosSignal extends Signal
      */
     public $filter;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param mixed $filter
-     */
-    public function __construct( $contentInfo, $filter )
-    {
-        $this->contentInfo = $contentInfo;
-        $this->filter = $filter;
-    }
 }
 

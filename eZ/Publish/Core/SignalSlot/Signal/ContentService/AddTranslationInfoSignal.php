@@ -23,16 +23,5 @@ class AddTranslationInfoSignal extends Signal
      */
     public $translationInfo;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
-     */
-    public function __construct( $translationInfo )
-    {
-        $this->translationInfo = $translationInfo;
-    }
 }
 

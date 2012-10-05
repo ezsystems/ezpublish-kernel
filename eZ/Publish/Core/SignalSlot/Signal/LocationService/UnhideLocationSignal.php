@@ -23,16 +23,5 @@ class UnhideLocationSignal extends Signal
      */
     public $location;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\Location $location
-     */
-    public function __construct( $location )
-    {
-        $this->location = $location;
-    }
 }
 

@@ -23,16 +23,5 @@ class LoadSectionSignal extends Signal
      */
     public $sectionId;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $sectionId
-     */
-    public function __construct( $sectionId )
-    {
-        $this->sectionId = $sectionId;
-    }
 }
 

@@ -23,16 +23,5 @@ class LoadContentInfoSignal extends Signal
      */
     public $contentId;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $contentId
-     */
-    public function __construct( $contentId )
-    {
-        $this->contentId = $contentId;
-    }
 }
 

@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\SignalSlot;
 
+use eZ\Publish\API\Repository\Values\ValueObject;
+
 /**
  * Base class for Signals. All Signals must derive this class.
  *
@@ -17,8 +19,7 @@ namespace eZ\Publish\Core\SignalSlot;
  *
  * @internal
  */
-abstract class Signal
+abstract class Signal extends ValueObject;
 {
-    // abstract static public function __set_state( array $state );
 }
 

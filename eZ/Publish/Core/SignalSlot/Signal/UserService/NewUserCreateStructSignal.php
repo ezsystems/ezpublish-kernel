@@ -51,24 +51,5 @@ class NewUserCreateStructSignal extends Signal
      */
     public $contentType;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $login
-     * @param mixed $email
-     * @param mixed $password
-     * @param mixed $mainLanguageCode
-     * @param mixed $contentType
-     */
-    public function __construct( $login, $email, $password, $mainLanguageCode, $contentType )
-    {
-        $this->login = $login;
-        $this->email = $email;
-        $this->password = $password;
-        $this->mainLanguageCode = $mainLanguageCode;
-        $this->contentType = $contentType;
-    }
 }
 

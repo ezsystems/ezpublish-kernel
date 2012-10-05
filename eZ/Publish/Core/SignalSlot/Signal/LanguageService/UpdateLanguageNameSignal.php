@@ -30,18 +30,5 @@ class UpdateLanguageNameSignal extends Signal
      */
     public $newName;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\Language $language
-     * @param mixed $newName
-     */
-    public function __construct( $language, $newName )
-    {
-        $this->language = $language;
-        $this->newName = $newName;
-    }
 }
 

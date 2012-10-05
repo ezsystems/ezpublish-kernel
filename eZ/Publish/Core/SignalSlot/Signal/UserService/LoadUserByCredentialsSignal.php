@@ -30,18 +30,5 @@ class LoadUserByCredentialsSignal extends Signal
      */
     public $password;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $login
-     * @param mixed $password
-     */
-    public function __construct( $login, $password )
-    {
-        $this->login = $login;
-        $this->password = $password;
-    }
 }
 

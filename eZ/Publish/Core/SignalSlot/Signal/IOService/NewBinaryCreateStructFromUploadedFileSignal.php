@@ -23,16 +23,5 @@ class NewBinaryCreateStructFromUploadedFileSignal extends Signal
      */
     public $uploadedFile;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $uploadedFile
-     */
-    public function __construct( $uploadedFile )
-    {
-        $this->uploadedFile = $uploadedFile;
-    }
 }
 

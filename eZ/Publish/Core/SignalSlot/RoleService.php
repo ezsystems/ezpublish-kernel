@@ -59,7 +59,9 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->createRole( $roleCreateStruct );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\CreateRoleSignal( $roleCreateStruct )
+            new Signal\RoleService\CreateRoleSignal( array(
+                'roleCreateStruct' => $roleCreateStruct,
+            ) )
         );
         return $returnValue;
     }
@@ -79,7 +81,10 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->updateRole( $role, $roleUpdateStruct );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\UpdateRoleSignal( $role, $roleUpdateStruct )
+            new Signal\RoleService\UpdateRoleSignal( array(
+                'role' => $role,
+                'roleUpdateStruct' => $roleUpdateStruct,
+            ) )
         );
         return $returnValue;
     }
@@ -98,7 +103,10 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->addPolicy( $role, $policyCreateStruct );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\AddPolicySignal( $role, $policyCreateStruct )
+            new Signal\RoleService\AddPolicySignal( array(
+                'role' => $role,
+                'policyCreateStruct' => $policyCreateStruct,
+            ) )
         );
         return $returnValue;
     }
@@ -117,7 +125,10 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->removePolicy( $role, $policy );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\RemovePolicySignal( $role, $policy )
+            new Signal\RoleService\RemovePolicySignal( array(
+                'role' => $role,
+                'policy' => $policy,
+            ) )
         );
         return $returnValue;
     }
@@ -137,7 +148,10 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->updatePolicy( $policy, $policyUpdateStruct );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\UpdatePolicySignal( $policy, $policyUpdateStruct )
+            new Signal\RoleService\UpdatePolicySignal( array(
+                'policy' => $policy,
+                'policyUpdateStruct' => $policyUpdateStruct,
+            ) )
         );
         return $returnValue;
     }
@@ -156,7 +170,9 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->loadRole( $id );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\LoadRoleSignal( $id )
+            new Signal\RoleService\LoadRoleSignal( array(
+                'id' => $id,
+            ) )
         );
         return $returnValue;
     }
@@ -175,7 +191,9 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->loadRoleByIdentifier( $identifier );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\LoadRoleByIdentifierSignal( $identifier )
+            new Signal\RoleService\LoadRoleByIdentifierSignal( array(
+                'identifier' => $identifier,
+            ) )
         );
         return $returnValue;
     }
@@ -191,7 +209,8 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->loadRoles();
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\LoadRolesSignal()
+            new Signal\RoleService\LoadRolesSignal( array(
+            ) )
         );
         return $returnValue;
     }
@@ -207,7 +226,9 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->deleteRole( $role );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\DeleteRoleSignal( $role )
+            new Signal\RoleService\DeleteRoleSignal( array(
+                'role' => $role,
+            ) )
         );
         return $returnValue;
     }
@@ -225,7 +246,9 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->loadPoliciesByUserId( $userId );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\LoadPoliciesByUserIdSignal( $userId )
+            new Signal\RoleService\LoadPoliciesByUserIdSignal( array(
+                'userId' => $userId,
+            ) )
         );
         return $returnValue;
     }
@@ -243,7 +266,11 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->assignRoleToUserGroup( $role, $userGroup, $roleLimitation );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\AssignRoleToUserGroupSignal( $role, $userGroup, $roleLimitation )
+            new Signal\RoleService\AssignRoleToUserGroupSignal( array(
+                'role' => $role,
+                'userGroup' => $userGroup,
+                'roleLimitation' => $roleLimitation,
+            ) )
         );
         return $returnValue;
     }
@@ -261,7 +288,10 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->unassignRoleFromUserGroup( $role, $userGroup );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\UnassignRoleFromUserGroupSignal( $role, $userGroup )
+            new Signal\RoleService\UnassignRoleFromUserGroupSignal( array(
+                'role' => $role,
+                'userGroup' => $userGroup,
+            ) )
         );
         return $returnValue;
     }
@@ -279,7 +309,11 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->assignRoleToUser( $role, $user, $roleLimitation );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\AssignRoleToUserSignal( $role, $user, $roleLimitation )
+            new Signal\RoleService\AssignRoleToUserSignal( array(
+                'role' => $role,
+                'user' => $user,
+                'roleLimitation' => $roleLimitation,
+            ) )
         );
         return $returnValue;
     }
@@ -297,7 +331,10 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->unassignRoleFromUser( $role, $user );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\UnassignRoleFromUserSignal( $role, $user )
+            new Signal\RoleService\UnassignRoleFromUserSignal( array(
+                'role' => $role,
+                'user' => $user,
+            ) )
         );
         return $returnValue;
     }
@@ -315,7 +352,9 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->getRoleAssignments( $role );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\GetRoleAssignmentsSignal( $role )
+            new Signal\RoleService\GetRoleAssignmentsSignal( array(
+                'role' => $role,
+            ) )
         );
         return $returnValue;
     }
@@ -333,7 +372,9 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->getRoleAssignmentsForUser( $user );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\GetRoleAssignmentsForUserSignal( $user )
+            new Signal\RoleService\GetRoleAssignmentsForUserSignal( array(
+                'user' => $user,
+            ) )
         );
         return $returnValue;
     }
@@ -351,7 +392,9 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->getRoleAssignmentsForUserGroup( $userGroup );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\GetRoleAssignmentsForUserGroupSignal( $userGroup )
+            new Signal\RoleService\GetRoleAssignmentsForUserGroupSignal( array(
+                'userGroup' => $userGroup,
+            ) )
         );
         return $returnValue;
     }
@@ -367,7 +410,9 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->newRoleCreateStruct( $name );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\NewRoleCreateStructSignal( $name )
+            new Signal\RoleService\NewRoleCreateStructSignal( array(
+                'name' => $name,
+            ) )
         );
         return $returnValue;
     }
@@ -384,7 +429,10 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->newPolicyCreateStruct( $module, $function );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\NewPolicyCreateStructSignal( $module, $function )
+            new Signal\RoleService\NewPolicyCreateStructSignal( array(
+                'module' => $module,
+                'function' => $function,
+            ) )
         );
         return $returnValue;
     }
@@ -398,7 +446,8 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->newPolicyUpdateStruct();
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\NewPolicyUpdateStructSignal()
+            new Signal\RoleService\NewPolicyUpdateStructSignal( array(
+            ) )
         );
         return $returnValue;
     }
@@ -412,7 +461,8 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->newRoleUpdateStruct();
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\NewRoleUpdateStructSignal()
+            new Signal\RoleService\NewRoleUpdateStructSignal( array(
+            ) )
         );
         return $returnValue;
     }
@@ -430,7 +480,9 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->getLimitationType( $identifier );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\GetLimitationTypeSignal( $identifier )
+            new Signal\RoleService\GetLimitationTypeSignal( array(
+                'identifier' => $identifier,
+            ) )
         );
         return $returnValue;
     }
@@ -454,7 +506,10 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->getLimitationTypesByModuleFunction( $module, $function );
         $this->signalDispatcher()->emit(
-            new Signal\RoleService\GetLimitationTypesByModuleFunctionSignal( $module, $function )
+            new Signal\RoleService\GetLimitationTypesByModuleFunctionSignal( array(
+                'module' => $module,
+                'function' => $function,
+            ) )
         );
         return $returnValue;
     }

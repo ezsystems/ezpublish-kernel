@@ -30,18 +30,5 @@ class GetObjectStateSignal extends Signal
      */
     public $objectStateGroup;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
-     */
-    public function __construct( $contentInfo, $objectStateGroup )
-    {
-        $this->contentInfo = $contentInfo;
-        $this->objectStateGroup = $objectStateGroup;
-    }
 }
 

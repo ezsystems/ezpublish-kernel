@@ -30,18 +30,5 @@ class NewContentCreateStructSignal extends Signal
      */
     public $mainLanguageCode;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
-     * @param mixed $mainLanguageCode
-     */
-    public function __construct( $contentType, $mainLanguageCode )
-    {
-        $this->contentType = $contentType;
-        $this->mainLanguageCode = $mainLanguageCode;
-    }
 }
 

@@ -30,18 +30,5 @@ class UpdateObjectStateGroupSignal extends Signal
      */
     public $objectStateGroupUpdateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
-     * @param eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct
-     */
-    public function __construct( $objectStateGroup, $objectStateGroupUpdateStruct )
-    {
-        $this->objectStateGroup = $objectStateGroup;
-        $this->objectStateGroupUpdateStruct = $objectStateGroupUpdateStruct;
-    }
 }
 

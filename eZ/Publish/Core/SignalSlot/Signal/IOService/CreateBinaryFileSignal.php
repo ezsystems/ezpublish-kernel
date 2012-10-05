@@ -23,16 +23,5 @@ class CreateBinaryFileSignal extends Signal
      */
     public $binaryFileCreateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct $binaryFileCreateStruct
-     */
-    public function __construct( $binaryFileCreateStruct )
-    {
-        $this->binaryFileCreateStruct = $binaryFileCreateStruct;
-    }
 }
 

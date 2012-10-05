@@ -30,18 +30,5 @@ class CreateLocationSignal extends Signal
      */
     public $locationCreateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $locationCreateStruct
-     */
-    public function __construct( $contentInfo, $locationCreateStruct )
-    {
-        $this->contentInfo = $contentInfo;
-        $this->locationCreateStruct = $locationCreateStruct;
-    }
 }
 

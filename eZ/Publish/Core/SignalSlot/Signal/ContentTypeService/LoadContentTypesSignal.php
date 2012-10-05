@@ -23,16 +23,5 @@ class LoadContentTypesSignal extends Signal
      */
     public $contentTypeGroup;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
-     */
-    public function __construct( $contentTypeGroup )
-    {
-        $this->contentTypeGroup = $contentTypeGroup;
-    }
 }
 

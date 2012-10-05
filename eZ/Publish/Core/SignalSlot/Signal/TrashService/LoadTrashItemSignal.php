@@ -23,16 +23,5 @@ class LoadTrashItemSignal extends Signal
      */
     public $trashItemId;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $trashItemId
-     */
-    public function __construct( $trashItemId )
-    {
-        $this->trashItemId = $trashItemId;
-    }
 }
 

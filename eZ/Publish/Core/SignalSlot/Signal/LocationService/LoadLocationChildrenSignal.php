@@ -37,20 +37,5 @@ class LoadLocationChildrenSignal extends Signal
      */
     public $limit;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param mixed $offset
-     * @param mixed $limit
-     */
-    public function __construct( $location, $offset, $limit )
-    {
-        $this->location = $location;
-        $this->offset = $offset;
-        $this->limit = $limit;
-    }
 }
 

@@ -30,18 +30,5 @@ class UpdateSectionSignal extends Signal
      */
     public $sectionUpdateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\Section $section
-     * @param eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct $sectionUpdateStruct
-     */
-    public function __construct( $section, $sectionUpdateStruct )
-    {
-        $this->section = $section;
-        $this->sectionUpdateStruct = $sectionUpdateStruct;
-    }
 }
 

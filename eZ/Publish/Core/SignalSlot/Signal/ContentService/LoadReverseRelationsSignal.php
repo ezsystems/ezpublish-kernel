@@ -23,16 +23,5 @@ class LoadReverseRelationsSignal extends Signal
      */
     public $contentInfo;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     */
-    public function __construct( $contentInfo )
-    {
-        $this->contentInfo = $contentInfo;
-    }
 }
 

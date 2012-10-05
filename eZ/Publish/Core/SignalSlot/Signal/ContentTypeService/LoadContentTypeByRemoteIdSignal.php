@@ -23,16 +23,5 @@ class LoadContentTypeByRemoteIdSignal extends Signal
      */
     public $remoteId;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $remoteId
-     */
-    public function __construct( $remoteId )
-    {
-        $this->remoteId = $remoteId;
-    }
 }
 

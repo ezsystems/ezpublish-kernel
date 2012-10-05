@@ -23,16 +23,5 @@ class NewLocationCreateStructSignal extends Signal
      */
     public $parentLocationId;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $parentLocationId
-     */
-    public function __construct( $parentLocationId )
-    {
-        $this->parentLocationId = $parentLocationId;
-    }
 }
 

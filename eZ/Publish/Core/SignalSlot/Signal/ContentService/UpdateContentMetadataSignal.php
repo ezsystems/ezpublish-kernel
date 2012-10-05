@@ -30,18 +30,5 @@ class UpdateContentMetadataSignal extends Signal
      */
     public $contentMetadataUpdateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct $contentMetadataUpdateStruct
-     */
-    public function __construct( $contentInfo, $contentMetadataUpdateStruct )
-    {
-        $this->contentInfo = $contentInfo;
-        $this->contentMetadataUpdateStruct = $contentMetadataUpdateStruct;
-    }
 }
 

@@ -30,18 +30,5 @@ class AddRelationSignal extends Signal
      */
     public $destinationContent;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion
-     * @param eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent
-     */
-    public function __construct( $sourceVersion, $destinationContent )
-    {
-        $this->sourceVersion = $sourceVersion;
-        $this->destinationContent = $destinationContent;
-    }
 }
 

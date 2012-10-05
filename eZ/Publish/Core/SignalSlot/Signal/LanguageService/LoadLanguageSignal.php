@@ -23,16 +23,5 @@ class LoadLanguageSignal extends Signal
      */
     public $languageCode;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $languageCode
-     */
-    public function __construct( $languageCode )
-    {
-        $this->languageCode = $languageCode;
-    }
 }
 

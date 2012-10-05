@@ -37,20 +37,5 @@ class AssignRoleToUserGroupSignal extends Signal
      */
     public $roleLimitation;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\User\Role $role
-     * @param eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     * @param eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation
-     */
-    public function __construct( $role, $userGroup, $roleLimitation )
-    {
-        $this->role = $role;
-        $this->userGroup = $userGroup;
-        $this->roleLimitation = $roleLimitation;
-    }
 }
 

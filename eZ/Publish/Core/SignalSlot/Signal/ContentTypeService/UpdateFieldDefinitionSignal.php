@@ -37,20 +37,5 @@ class UpdateFieldDefinitionSignal extends Signal
      */
     public $fieldDefinitionUpdateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
-     * @param eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
-     * @param eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
-     */
-    public function __construct( $contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct )
-    {
-        $this->contentTypeDraft = $contentTypeDraft;
-        $this->fieldDefinition = $fieldDefinition;
-        $this->fieldDefinitionUpdateStruct = $fieldDefinitionUpdateStruct;
-    }
 }
 

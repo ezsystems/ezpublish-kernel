@@ -64,7 +64,11 @@ class URLWildcardService implements URLWildcardServiceInterface
     {
         $returnValue = $this->service->create( $sourceUrl, $destinationUrl, $foreward );
         $this->signalDispatcher()->emit(
-            new Signal\URLWildcardService\CreateSignal( $sourceUrl, $destinationUrl, $foreward )
+            new Signal\URLWildcardService\CreateSignal( array(
+                'sourceUrl' => $sourceUrl,
+                'destinationUrl' => $destinationUrl,
+                'foreward' => $foreward,
+            ) )
         );
         return $returnValue;
     }
@@ -80,7 +84,9 @@ class URLWildcardService implements URLWildcardServiceInterface
     {
         $returnValue = $this->service->remove( $urlWildcard );
         $this->signalDispatcher()->emit(
-            new Signal\URLWildcardService\RemoveSignal( $urlWildcard )
+            new Signal\URLWildcardService\RemoveSignal( array(
+                'urlWildcard' => $urlWildcard,
+            ) )
         );
         return $returnValue;
     }
@@ -99,7 +105,9 @@ class URLWildcardService implements URLWildcardServiceInterface
     {
         $returnValue = $this->service->load( $id );
         $this->signalDispatcher()->emit(
-            new Signal\URLWildcardService\LoadSignal( $id )
+            new Signal\URLWildcardService\LoadSignal( array(
+                'id' => $id,
+            ) )
         );
         return $returnValue;
     }
@@ -116,7 +124,10 @@ class URLWildcardService implements URLWildcardServiceInterface
     {
         $returnValue = $this->service->loadAll( $offset, $limit );
         $this->signalDispatcher()->emit(
-            new Signal\URLWildcardService\LoadAllSignal( $offset, $limit )
+            new Signal\URLWildcardService\LoadAllSignal( array(
+                'offset' => $offset,
+                'limit' => $limit,
+            ) )
         );
         return $returnValue;
     }
@@ -138,7 +149,9 @@ class URLWildcardService implements URLWildcardServiceInterface
     {
         $returnValue = $this->service->translate( $url );
         $this->signalDispatcher()->emit(
-            new Signal\URLWildcardService\TranslateSignal( $url )
+            new Signal\URLWildcardService\TranslateSignal( array(
+                'url' => $url,
+            ) )
         );
         return $returnValue;
     }

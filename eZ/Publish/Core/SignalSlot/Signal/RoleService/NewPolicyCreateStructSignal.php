@@ -30,18 +30,5 @@ class NewPolicyCreateStructSignal extends Signal
      */
     public $function;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $module
-     * @param mixed $function
-     */
-    public function __construct( $module, $function )
-    {
-        $this->module = $module;
-        $this->function = $function;
-    }
 }
 

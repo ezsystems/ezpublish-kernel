@@ -54,7 +54,8 @@ class FieldTypeService implements FieldTypeServiceInterface
     {
         $returnValue = $this->service->getFieldTypes();
         $this->signalDispatcher()->emit(
-            new Signal\FieldTypeService\GetFieldTypesSignal()
+            new Signal\FieldTypeService\GetFieldTypesSignal( array(
+            ) )
         );
         return $returnValue;
     }
@@ -71,7 +72,9 @@ class FieldTypeService implements FieldTypeServiceInterface
     {
         $returnValue = $this->service->getFieldType( $identifier );
         $this->signalDispatcher()->emit(
-            new Signal\FieldTypeService\GetFieldTypeSignal( $identifier )
+            new Signal\FieldTypeService\GetFieldTypeSignal( array(
+                'identifier' => $identifier,
+            ) )
         );
         return $returnValue;
     }
@@ -86,7 +89,9 @@ class FieldTypeService implements FieldTypeServiceInterface
     {
         $returnValue = $this->service->hasFieldType( $identifier );
         $this->signalDispatcher()->emit(
-            new Signal\FieldTypeService\HasFieldTypeSignal( $identifier )
+            new Signal\FieldTypeService\HasFieldTypeSignal( array(
+                'identifier' => $identifier,
+            ) )
         );
         return $returnValue;
     }

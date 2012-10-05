@@ -59,7 +59,9 @@ class LanguageService implements LanguageServiceInterface
     {
         $returnValue = $this->service->createLanguage( $languageCreateStruct );
         $this->signalDispatcher()->emit(
-            new Signal\LanguageService\CreateLanguageSignal( $languageCreateStruct )
+            new Signal\LanguageService\CreateLanguageSignal( array(
+                'languageCreateStruct' => $languageCreateStruct,
+            ) )
         );
         return $returnValue;
     }
@@ -78,7 +80,10 @@ class LanguageService implements LanguageServiceInterface
     {
         $returnValue = $this->service->updateLanguageName( $language, $newName );
         $this->signalDispatcher()->emit(
-            new Signal\LanguageService\UpdateLanguageNameSignal( $language, $newName )
+            new Signal\LanguageService\UpdateLanguageNameSignal( array(
+                'language' => $language,
+                'newName' => $newName,
+            ) )
         );
         return $returnValue;
     }
@@ -96,7 +101,9 @@ class LanguageService implements LanguageServiceInterface
     {
         $returnValue = $this->service->enableLanguage( $language );
         $this->signalDispatcher()->emit(
-            new Signal\LanguageService\EnableLanguageSignal( $language )
+            new Signal\LanguageService\EnableLanguageSignal( array(
+                'language' => $language,
+            ) )
         );
         return $returnValue;
     }
@@ -114,7 +121,9 @@ class LanguageService implements LanguageServiceInterface
     {
         $returnValue = $this->service->disableLanguage( $language );
         $this->signalDispatcher()->emit(
-            new Signal\LanguageService\DisableLanguageSignal( $language )
+            new Signal\LanguageService\DisableLanguageSignal( array(
+                'language' => $language,
+            ) )
         );
         return $returnValue;
     }
@@ -132,7 +141,9 @@ class LanguageService implements LanguageServiceInterface
     {
         $returnValue = $this->service->loadLanguage( $languageCode );
         $this->signalDispatcher()->emit(
-            new Signal\LanguageService\LoadLanguageSignal( $languageCode )
+            new Signal\LanguageService\LoadLanguageSignal( array(
+                'languageCode' => $languageCode,
+            ) )
         );
         return $returnValue;
     }
@@ -146,7 +157,8 @@ class LanguageService implements LanguageServiceInterface
     {
         $returnValue = $this->service->loadLanguages();
         $this->signalDispatcher()->emit(
-            new Signal\LanguageService\LoadLanguagesSignal()
+            new Signal\LanguageService\LoadLanguagesSignal( array(
+            ) )
         );
         return $returnValue;
     }
@@ -164,7 +176,9 @@ class LanguageService implements LanguageServiceInterface
     {
         $returnValue = $this->service->loadLanguageById( $languageId );
         $this->signalDispatcher()->emit(
-            new Signal\LanguageService\LoadLanguageByIdSignal( $languageId )
+            new Signal\LanguageService\LoadLanguageByIdSignal( array(
+                'languageId' => $languageId,
+            ) )
         );
         return $returnValue;
     }
@@ -183,7 +197,9 @@ class LanguageService implements LanguageServiceInterface
     {
         $returnValue = $this->service->deleteLanguage( $language );
         $this->signalDispatcher()->emit(
-            new Signal\LanguageService\DeleteLanguageSignal( $language )
+            new Signal\LanguageService\DeleteLanguageSignal( array(
+                'language' => $language,
+            ) )
         );
         return $returnValue;
     }
@@ -197,7 +213,8 @@ class LanguageService implements LanguageServiceInterface
     {
         $returnValue = $this->service->getDefaultLanguageCode();
         $this->signalDispatcher()->emit(
-            new Signal\LanguageService\GetDefaultLanguageCodeSignal()
+            new Signal\LanguageService\GetDefaultLanguageCodeSignal( array(
+            ) )
         );
         return $returnValue;
     }
@@ -211,7 +228,8 @@ class LanguageService implements LanguageServiceInterface
     {
         $returnValue = $this->service->newLanguageCreateStruct();
         $this->signalDispatcher()->emit(
-            new Signal\LanguageService\NewLanguageCreateStructSignal()
+            new Signal\LanguageService\NewLanguageCreateStructSignal( array(
+            ) )
         );
         return $returnValue;
     }

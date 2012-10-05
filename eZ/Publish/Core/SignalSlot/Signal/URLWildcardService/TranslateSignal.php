@@ -23,16 +23,5 @@ class TranslateSignal extends Signal
      */
     public $url;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $url
-     */
-    public function __construct( $url )
-    {
-        $this->url = $url;
-    }
 }
 

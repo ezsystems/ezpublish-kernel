@@ -30,18 +30,5 @@ class UnassignRoleFromUserSignal extends Signal
      */
     public $user;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\User\Role $role
-     * @param eZ\Publish\API\Repository\Values\User\User $user
-     */
-    public function __construct( $role, $user )
-    {
-        $this->role = $role;
-        $this->user = $user;
-    }
 }
 

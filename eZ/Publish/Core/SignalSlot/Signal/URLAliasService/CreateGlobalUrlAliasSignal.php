@@ -51,24 +51,5 @@ class CreateGlobalUrlAliasSignal extends Signal
      */
     public $alwaysAvailable;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $resource
-     * @param mixed $path
-     * @param mixed $languageCode
-     * @param mixed $forwarding
-     * @param mixed $alwaysAvailable
-     */
-    public function __construct( $resource, $path, $languageCode, $forwarding, $alwaysAvailable )
-    {
-        $this->resource = $resource;
-        $this->path = $path;
-        $this->languageCode = $languageCode;
-        $this->forwarding = $forwarding;
-        $this->alwaysAvailable = $alwaysAvailable;
-    }
 }
 

@@ -23,16 +23,5 @@ class LoadObjectStateSignal extends Signal
      */
     public $stateId;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $stateId
-     */
-    public function __construct( $stateId )
-    {
-        $this->stateId = $stateId;
-    }
 }
 

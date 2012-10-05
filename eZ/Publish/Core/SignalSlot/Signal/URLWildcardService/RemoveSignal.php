@@ -23,16 +23,5 @@ class RemoveSignal extends Signal
      */
     public $urlWildcard;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\URLWildcard $urlWildcard
-     */
-    public function __construct( $urlWildcard )
-    {
-        $this->urlWildcard = $urlWildcard;
-    }
 }
 

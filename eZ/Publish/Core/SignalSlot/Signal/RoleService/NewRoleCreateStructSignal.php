@@ -23,16 +23,5 @@ class NewRoleCreateStructSignal extends Signal
      */
     public $name;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $name
-     */
-    public function __construct( $name )
-    {
-        $this->name = $name;
-    }
 }
 

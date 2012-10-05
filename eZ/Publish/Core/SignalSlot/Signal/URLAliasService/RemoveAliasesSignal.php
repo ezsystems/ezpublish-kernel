@@ -23,16 +23,5 @@ class RemoveAliasesSignal extends Signal
      */
     public $aliasList;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $aliasList
-     */
-    public function __construct( $aliasList )
-    {
-        $this->aliasList = $aliasList;
-    }
 }
 

@@ -30,18 +30,5 @@ class AddFieldDefinitionSignal extends Signal
      */
     public $fieldDefinitionCreateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
-     * @param eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
-     */
-    public function __construct( $contentTypeDraft, $fieldDefinitionCreateStruct )
-    {
-        $this->contentTypeDraft = $contentTypeDraft;
-        $this->fieldDefinitionCreateStruct = $fieldDefinitionCreateStruct;
-    }
 }
 

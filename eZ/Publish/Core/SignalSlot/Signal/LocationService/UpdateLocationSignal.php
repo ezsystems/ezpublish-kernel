@@ -30,18 +30,5 @@ class UpdateLocationSignal extends Signal
      */
     public $locationUpdateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct $locationUpdateStruct
-     */
-    public function __construct( $location, $locationUpdateStruct )
-    {
-        $this->location = $location;
-        $this->locationUpdateStruct = $locationUpdateStruct;
-    }
 }
 

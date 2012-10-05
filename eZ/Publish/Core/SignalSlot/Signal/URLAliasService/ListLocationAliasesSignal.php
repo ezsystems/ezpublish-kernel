@@ -37,20 +37,5 @@ class ListLocationAliasesSignal extends Signal
      */
     public $languageCode;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param mixed $custom
-     * @param mixed $languageCode
-     */
-    public function __construct( $location, $custom, $languageCode )
-    {
-        $this->location = $location;
-        $this->custom = $custom;
-        $this->languageCode = $languageCode;
-    }
 }
 

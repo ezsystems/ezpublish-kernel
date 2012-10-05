@@ -23,16 +23,5 @@ class LoadPoliciesByUserIdSignal extends Signal
      */
     public $userId;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $userId
-     */
-    public function __construct( $userId )
-    {
-        $this->userId = $userId;
-    }
 }
 

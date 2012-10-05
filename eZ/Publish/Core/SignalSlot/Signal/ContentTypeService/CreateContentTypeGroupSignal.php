@@ -23,16 +23,5 @@ class CreateContentTypeGroupSignal extends Signal
      */
     public $contentTypeGroupCreateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct
-     */
-    public function __construct( $contentTypeGroupCreateStruct )
-    {
-        $this->contentTypeGroupCreateStruct = $contentTypeGroupCreateStruct;
-    }
 }
 

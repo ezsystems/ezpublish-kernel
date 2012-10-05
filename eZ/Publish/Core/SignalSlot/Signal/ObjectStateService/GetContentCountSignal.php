@@ -23,16 +23,5 @@ class GetContentCountSignal extends Signal
      */
     public $objectState;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
-     */
-    public function __construct( $objectState )
-    {
-        $this->objectState = $objectState;
-    }
 }
 

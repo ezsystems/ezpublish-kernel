@@ -37,20 +37,5 @@ class LoadUsersOfUserGroupSignal extends Signal
      */
     public $limit;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     * @param mixed $offset
-     * @param mixed $limit
-     */
-    public function __construct( $userGroup, $offset, $limit )
-    {
-        $this->userGroup = $userGroup;
-        $this->offset = $offset;
-        $this->limit = $limit;
-    }
 }
 

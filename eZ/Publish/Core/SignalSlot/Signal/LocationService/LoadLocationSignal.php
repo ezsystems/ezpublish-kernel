@@ -23,16 +23,5 @@ class LoadLocationSignal extends Signal
      */
     public $locationId;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $locationId
-     */
-    public function __construct( $locationId )
-    {
-        $this->locationId = $locationId;
-    }
 }
 

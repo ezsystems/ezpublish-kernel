@@ -44,22 +44,5 @@ class SuggestSignal extends Signal
      */
     public $filter;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $prefix
-     * @param mixed $fieldPaths
-     * @param mixed $limit
-     * @param eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
-     */
-    public function __construct( $prefix, $fieldPaths, $limit, $filter )
-    {
-        $this->prefix = $prefix;
-        $this->fieldPaths = $fieldPaths;
-        $this->limit = $limit;
-        $this->filter = $filter;
-    }
 }
 

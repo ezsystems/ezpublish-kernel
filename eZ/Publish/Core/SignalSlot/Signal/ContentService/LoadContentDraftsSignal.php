@@ -23,16 +23,5 @@ class LoadContentDraftsSignal extends Signal
      */
     public $user;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\User\User $user
-     */
-    public function __construct( $user )
-    {
-        $this->user = $user;
-    }
 }
 

@@ -58,7 +58,9 @@ class IOService implements IOServiceInterface
     {
         $returnValue = $this->service->newBinaryCreateStructFromUploadedFile( $uploadedFile );
         $this->signalDispatcher()->emit(
-            new Signal\IOService\NewBinaryCreateStructFromUploadedFileSignal( $uploadedFile )
+            new Signal\IOService\NewBinaryCreateStructFromUploadedFileSignal( array(
+                'uploadedFile' => $uploadedFile,
+            ) )
         );
         return $returnValue;
     }
@@ -76,7 +78,9 @@ class IOService implements IOServiceInterface
     {
         $returnValue = $this->service->newBinaryCreateStructFromLocalFile( $localFile );
         $this->signalDispatcher()->emit(
-            new Signal\IOService\NewBinaryCreateStructFromLocalFileSignal( $localFile )
+            new Signal\IOService\NewBinaryCreateStructFromLocalFileSignal( array(
+                'localFile' => $localFile,
+            ) )
         );
         return $returnValue;
     }
@@ -92,7 +96,9 @@ class IOService implements IOServiceInterface
     {
         $returnValue = $this->service->createBinaryFile( $binaryFileCreateStruct );
         $this->signalDispatcher()->emit(
-            new Signal\IOService\CreateBinaryFileSignal( $binaryFileCreateStruct )
+            new Signal\IOService\CreateBinaryFileSignal( array(
+                'binaryFileCreateStruct' => $binaryFileCreateStruct,
+            ) )
         );
         return $returnValue;
     }
@@ -106,7 +112,9 @@ class IOService implements IOServiceInterface
     {
         $returnValue = $this->service->deleteBinaryFile( $binaryFile );
         $this->signalDispatcher()->emit(
-            new Signal\IOService\DeleteBinaryFileSignal( $binaryFile )
+            new Signal\IOService\DeleteBinaryFileSignal( array(
+                'binaryFile' => $binaryFile,
+            ) )
         );
         return $returnValue;
     }
@@ -124,7 +132,9 @@ class IOService implements IOServiceInterface
     {
         $returnValue = $this->service->loadBinaryFile( $binaryFileid );
         $this->signalDispatcher()->emit(
-            new Signal\IOService\LoadBinaryFileSignal( $binaryFileid )
+            new Signal\IOService\LoadBinaryFileSignal( array(
+                'binaryFileid' => $binaryFileid,
+            ) )
         );
         return $returnValue;
     }
@@ -140,7 +150,9 @@ class IOService implements IOServiceInterface
     {
         $returnValue = $this->service->getFileInputStream( $binaryFile );
         $this->signalDispatcher()->emit(
-            new Signal\IOService\GetFileInputStreamSignal( $binaryFile )
+            new Signal\IOService\GetFileInputStreamSignal( array(
+                'binaryFile' => $binaryFile,
+            ) )
         );
         return $returnValue;
     }
@@ -156,7 +168,9 @@ class IOService implements IOServiceInterface
     {
         $returnValue = $this->service->getFileContents( $binaryFile );
         $this->signalDispatcher()->emit(
-            new Signal\IOService\GetFileContentsSignal( $binaryFile )
+            new Signal\IOService\GetFileContentsSignal( array(
+                'binaryFile' => $binaryFile,
+            ) )
         );
         return $returnValue;
     }

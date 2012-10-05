@@ -23,16 +23,5 @@ class DeleteVersionSignal extends Signal
      */
     public $versionInfo;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     */
-    public function __construct( $versionInfo )
-    {
-        $this->versionInfo = $versionInfo;
-    }
 }
 

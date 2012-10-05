@@ -30,18 +30,5 @@ class MoveUserGroupSignal extends Signal
      */
     public $newParent;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     * @param eZ\Publish\API\Repository\Values\User\UserGroup $newParent
-     */
-    public function __construct( $userGroup, $newParent )
-    {
-        $this->userGroup = $userGroup;
-        $this->newParent = $newParent;
-    }
 }
 

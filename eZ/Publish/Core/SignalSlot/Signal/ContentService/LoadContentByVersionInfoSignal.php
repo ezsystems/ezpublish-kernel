@@ -30,18 +30,5 @@ class LoadContentByVersionInfoSignal extends Signal
      */
     public $languages;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     * @param mixed $languages
-     */
-    public function __construct( $versionInfo, $languages )
-    {
-        $this->versionInfo = $versionInfo;
-        $this->languages = $languages;
-    }
 }
 

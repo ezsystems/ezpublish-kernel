@@ -23,16 +23,5 @@ class LoadContentTypeGroupByIdentifierSignal extends Signal
      */
     public $contentTypeGroupIdentifier;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $contentTypeGroupIdentifier
-     */
-    public function __construct( $contentTypeGroupIdentifier )
-    {
-        $this->contentTypeGroupIdentifier = $contentTypeGroupIdentifier;
-    }
 }
 

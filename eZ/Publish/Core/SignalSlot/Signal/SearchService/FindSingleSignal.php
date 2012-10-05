@@ -37,20 +37,5 @@ class FindSingleSignal extends Signal
      */
     public $filterOnUserPermissions;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param mixed $fieldFilters
-     * @param mixed $filterOnUserPermissions
-     */
-    public function __construct( $criterion, $fieldFilters, $filterOnUserPermissions )
-    {
-        $this->criterion = $criterion;
-        $this->fieldFilters = $fieldFilters;
-        $this->filterOnUserPermissions = $filterOnUserPermissions;
-    }
 }
 

@@ -51,24 +51,5 @@ class CreateUrlAliasSignal extends Signal
      */
     public $alwaysAvailable;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param mixed $path
-     * @param mixed $languageCode
-     * @param mixed $forwarding
-     * @param mixed $alwaysAvailable
-     */
-    public function __construct( $location, $path, $languageCode, $forwarding, $alwaysAvailable )
-    {
-        $this->location = $location;
-        $this->path = $path;
-        $this->languageCode = $languageCode;
-        $this->forwarding = $forwarding;
-        $this->alwaysAvailable = $alwaysAvailable;
-    }
 }
 

@@ -23,16 +23,5 @@ class DeleteSectionSignal extends Signal
      */
     public $section;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\Section $section
-     */
-    public function __construct( $section )
-    {
-        $this->section = $section;
-    }
 }
 

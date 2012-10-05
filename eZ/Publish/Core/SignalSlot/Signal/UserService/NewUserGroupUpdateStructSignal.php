@@ -16,14 +16,5 @@ use eZ\Publish\Core\SignalSlot\Signal;
  */
 class NewUserGroupUpdateStructSignal extends Signal
 {
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     */
-    public function __construct()
-    {
-    }
 }
 

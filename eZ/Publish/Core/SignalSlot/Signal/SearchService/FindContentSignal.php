@@ -37,20 +37,5 @@ class FindContentSignal extends Signal
      */
     public $filterOnUserPermissions;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param mixed $fieldFilters
-     * @param mixed $filterOnUserPermissions
-     */
-    public function __construct( $query, $fieldFilters, $filterOnUserPermissions )
-    {
-        $this->query = $query;
-        $this->fieldFilters = $fieldFilters;
-        $this->filterOnUserPermissions = $filterOnUserPermissions;
-    }
 }
 

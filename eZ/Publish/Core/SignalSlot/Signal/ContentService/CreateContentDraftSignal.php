@@ -37,20 +37,5 @@ class CreateContentDraftSignal extends Signal
      */
     public $user;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     * @param eZ\Publish\API\Repository\Values\User\User $user
-     */
-    public function __construct( $contentInfo, $versionInfo, $user )
-    {
-        $this->contentInfo = $contentInfo;
-        $this->versionInfo = $versionInfo;
-        $this->user = $user;
-    }
 }
 

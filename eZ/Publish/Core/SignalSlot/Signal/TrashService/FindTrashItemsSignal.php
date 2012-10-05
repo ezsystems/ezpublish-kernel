@@ -23,16 +23,5 @@ class FindTrashItemsSignal extends Signal
      */
     public $query;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\Query $query
-     */
-    public function __construct( $query )
-    {
-        $this->query = $query;
-    }
 }
 

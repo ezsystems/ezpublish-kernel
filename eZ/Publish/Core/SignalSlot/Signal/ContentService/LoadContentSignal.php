@@ -37,20 +37,5 @@ class LoadContentSignal extends Signal
      */
     public $versionNo;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $contentId
-     * @param mixed $languages
-     * @param mixed $versionNo
-     */
-    public function __construct( $contentId, $languages, $versionNo )
-    {
-        $this->contentId = $contentId;
-        $this->languages = $languages;
-        $this->versionNo = $versionNo;
-    }
 }
 

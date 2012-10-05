@@ -16,14 +16,5 @@ use eZ\Publish\Core\SignalSlot\Signal;
  */
 class NewContentMetadataUpdateStructSignal extends Signal
 {
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     */
-    public function __construct()
-    {
-    }
 }
 

@@ -23,16 +23,5 @@ class LoadSubUserGroupsSignal extends Signal
      */
     public $userGroup;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     */
-    public function __construct( $userGroup )
-    {
-        $this->userGroup = $userGroup;
-    }
 }
 

@@ -30,18 +30,5 @@ class NewFieldDefinitionCreateStructSignal extends Signal
      */
     public $fieldTypeIdentifier;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $identifier
-     * @param mixed $fieldTypeIdentifier
-     */
-    public function __construct( $identifier, $fieldTypeIdentifier )
-    {
-        $this->identifier = $identifier;
-        $this->fieldTypeIdentifier = $fieldTypeIdentifier;
-    }
 }
 

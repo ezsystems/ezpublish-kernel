@@ -30,18 +30,5 @@ class UpdateUserSignal extends Signal
      */
     public $userUpdateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\User\User $user
-     * @param eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct
-     */
-    public function __construct( $user, $userUpdateStruct )
-    {
-        $this->user = $user;
-        $this->userUpdateStruct = $userUpdateStruct;
-    }
 }
 

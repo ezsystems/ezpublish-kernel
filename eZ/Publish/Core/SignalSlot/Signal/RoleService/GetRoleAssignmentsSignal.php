@@ -23,16 +23,5 @@ class GetRoleAssignmentsSignal extends Signal
      */
     public $role;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\User\Role $role
-     */
-    public function __construct( $role )
-    {
-        $this->role = $role;
-    }
 }
 

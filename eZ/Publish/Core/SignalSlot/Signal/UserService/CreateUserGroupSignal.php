@@ -30,18 +30,5 @@ class CreateUserGroupSignal extends Signal
      */
     public $parentGroup;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct $userGroupCreateStruct
-     * @param eZ\Publish\API\Repository\Values\User\UserGroup $parentGroup
-     */
-    public function __construct( $userGroupCreateStruct, $parentGroup )
-    {
-        $this->userGroupCreateStruct = $userGroupCreateStruct;
-        $this->parentGroup = $parentGroup;
-    }
 }
 

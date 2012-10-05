@@ -23,16 +23,5 @@ class LoadObjectStatesSignal extends Signal
      */
     public $objectStateGroup;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
-     */
-    public function __construct( $objectStateGroup )
-    {
-        $this->objectStateGroup = $objectStateGroup;
-    }
 }
 

@@ -30,18 +30,5 @@ class AssignSectionSignal extends Signal
      */
     public $section;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param eZ\Publish\API\Repository\Values\Content\Section $section
-     */
-    public function __construct( $contentInfo, $section )
-    {
-        $this->contentInfo = $contentInfo;
-        $this->section = $section;
-    }
 }
 

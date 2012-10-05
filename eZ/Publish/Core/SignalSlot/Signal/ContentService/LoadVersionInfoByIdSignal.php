@@ -30,18 +30,5 @@ class LoadVersionInfoByIdSignal extends Signal
      */
     public $versionNo;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $contentId
-     * @param mixed $versionNo
-     */
-    public function __construct( $contentId, $versionNo )
-    {
-        $this->contentId = $contentId;
-        $this->versionNo = $versionNo;
-    }
 }
 

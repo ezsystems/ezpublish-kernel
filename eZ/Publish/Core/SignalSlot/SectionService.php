@@ -59,7 +59,9 @@ class SectionService implements SectionServiceInterface
     {
         $returnValue = $this->service->createSection( $sectionCreateStruct );
         $this->signalDispatcher()->emit(
-            new Signal\SectionService\CreateSectionSignal( $sectionCreateStruct )
+            new Signal\SectionService\CreateSectionSignal( array(
+                'sectionCreateStruct' => $sectionCreateStruct,
+            ) )
         );
         return $returnValue;
     }
@@ -79,7 +81,10 @@ class SectionService implements SectionServiceInterface
     {
         $returnValue = $this->service->updateSection( $section, $sectionUpdateStruct );
         $this->signalDispatcher()->emit(
-            new Signal\SectionService\UpdateSectionSignal( $section, $sectionUpdateStruct )
+            new Signal\SectionService\UpdateSectionSignal( array(
+                'section' => $section,
+                'sectionUpdateStruct' => $sectionUpdateStruct,
+            ) )
         );
         return $returnValue;
     }
@@ -98,7 +103,9 @@ class SectionService implements SectionServiceInterface
     {
         $returnValue = $this->service->loadSection( $sectionId );
         $this->signalDispatcher()->emit(
-            new Signal\SectionService\LoadSectionSignal( $sectionId )
+            new Signal\SectionService\LoadSectionSignal( array(
+                'sectionId' => $sectionId,
+            ) )
         );
         return $returnValue;
     }
@@ -114,7 +121,8 @@ class SectionService implements SectionServiceInterface
     {
         $returnValue = $this->service->loadSections();
         $this->signalDispatcher()->emit(
-            new Signal\SectionService\LoadSectionsSignal()
+            new Signal\SectionService\LoadSectionsSignal( array(
+            ) )
         );
         return $returnValue;
     }
@@ -133,7 +141,9 @@ class SectionService implements SectionServiceInterface
     {
         $returnValue = $this->service->loadSectionByIdentifier( $sectionIdentifier );
         $this->signalDispatcher()->emit(
-            new Signal\SectionService\LoadSectionByIdentifierSignal( $sectionIdentifier )
+            new Signal\SectionService\LoadSectionByIdentifierSignal( array(
+                'sectionIdentifier' => $sectionIdentifier,
+            ) )
         );
         return $returnValue;
     }
@@ -149,7 +159,9 @@ class SectionService implements SectionServiceInterface
     {
         $returnValue = $this->service->countAssignedContents( $section );
         $this->signalDispatcher()->emit(
-            new Signal\SectionService\CountAssignedContentsSignal( $section )
+            new Signal\SectionService\CountAssignedContentsSignal( array(
+                'section' => $section,
+            ) )
         );
         return $returnValue;
     }
@@ -167,7 +179,10 @@ class SectionService implements SectionServiceInterface
     {
         $returnValue = $this->service->assignSection( $contentInfo, $section );
         $this->signalDispatcher()->emit(
-            new Signal\SectionService\AssignSectionSignal( $contentInfo, $section )
+            new Signal\SectionService\AssignSectionSignal( array(
+                'contentInfo' => $contentInfo,
+                'section' => $section,
+            ) )
         );
         return $returnValue;
     }
@@ -186,7 +201,9 @@ class SectionService implements SectionServiceInterface
     {
         $returnValue = $this->service->deleteSection( $section );
         $this->signalDispatcher()->emit(
-            new Signal\SectionService\DeleteSectionSignal( $section )
+            new Signal\SectionService\DeleteSectionSignal( array(
+                'section' => $section,
+            ) )
         );
         return $returnValue;
     }
@@ -200,7 +217,8 @@ class SectionService implements SectionServiceInterface
     {
         $returnValue = $this->service->newSectionCreateStruct();
         $this->signalDispatcher()->emit(
-            new Signal\SectionService\NewSectionCreateStructSignal()
+            new Signal\SectionService\NewSectionCreateStructSignal( array(
+            ) )
         );
         return $returnValue;
     }
@@ -214,7 +232,8 @@ class SectionService implements SectionServiceInterface
     {
         $returnValue = $this->service->newSectionUpdateStruct();
         $this->signalDispatcher()->emit(
-            new Signal\SectionService\NewSectionUpdateStructSignal()
+            new Signal\SectionService\NewSectionUpdateStructSignal( array(
+            ) )
         );
         return $returnValue;
     }

@@ -30,18 +30,5 @@ class LookupSignal extends Signal
      */
     public $languageCode;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $url
-     * @param mixed $languageCode
-     */
-    public function __construct( $url, $languageCode )
-    {
-        $this->url = $url;
-        $this->languageCode = $languageCode;
-    }
 }
 

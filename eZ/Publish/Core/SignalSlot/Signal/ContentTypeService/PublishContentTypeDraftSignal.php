@@ -23,16 +23,5 @@ class PublishContentTypeDraftSignal extends Signal
      */
     public $contentTypeDraft;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
-     */
-    public function __construct( $contentTypeDraft )
-    {
-        $this->contentTypeDraft = $contentTypeDraft;
-    }
 }
 

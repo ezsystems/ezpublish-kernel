@@ -30,18 +30,5 @@ class AssignContentTypeGroupSignal extends Signal
      */
     public $contentTypeGroup;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
-     * @param eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
-     */
-    public function __construct( $contentType, $contentTypeGroup )
-    {
-        $this->contentType = $contentType;
-        $this->contentTypeGroup = $contentTypeGroup;
-    }
 }
 

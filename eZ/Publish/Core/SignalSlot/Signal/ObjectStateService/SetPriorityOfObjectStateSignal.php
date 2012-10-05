@@ -30,18 +30,5 @@ class SetPriorityOfObjectStateSignal extends Signal
      */
     public $priority;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
-     * @param mixed $priority
-     */
-    public function __construct( $objectState, $priority )
-    {
-        $this->objectState = $objectState;
-        $this->priority = $priority;
-    }
 }
 

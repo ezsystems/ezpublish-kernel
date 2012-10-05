@@ -37,20 +37,5 @@ class CopyContentSignal extends Signal
      */
     public $versionInfo;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $destinationLocationCreateStruct
-     * @param eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     */
-    public function __construct( $contentInfo, $destinationLocationCreateStruct, $versionInfo )
-    {
-        $this->contentInfo = $contentInfo;
-        $this->destinationLocationCreateStruct = $destinationLocationCreateStruct;
-        $this->versionInfo = $versionInfo;
-    }
 }
 

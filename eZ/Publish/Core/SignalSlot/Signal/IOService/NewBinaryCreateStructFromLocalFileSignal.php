@@ -23,16 +23,5 @@ class NewBinaryCreateStructFromLocalFileSignal extends Signal
      */
     public $localFile;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $localFile
-     */
-    public function __construct( $localFile )
-    {
-        $this->localFile = $localFile;
-    }
 }
 

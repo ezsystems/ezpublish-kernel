@@ -30,18 +30,5 @@ class AssignUserToUserGroupSignal extends Signal
      */
     public $userGroup;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\User\User $user
-     * @param eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     */
-    public function __construct( $user, $userGroup )
-    {
-        $this->user = $user;
-        $this->userGroup = $userGroup;
-    }
 }
 

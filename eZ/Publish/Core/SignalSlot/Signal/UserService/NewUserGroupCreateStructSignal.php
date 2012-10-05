@@ -30,18 +30,5 @@ class NewUserGroupCreateStructSignal extends Signal
      */
     public $contentType;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $mainLanguageCode
-     * @param mixed $contentType
-     */
-    public function __construct( $mainLanguageCode, $contentType )
-    {
-        $this->mainLanguageCode = $mainLanguageCode;
-        $this->contentType = $contentType;
-    }
 }
 

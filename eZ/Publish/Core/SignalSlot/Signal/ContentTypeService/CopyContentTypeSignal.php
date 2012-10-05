@@ -30,18 +30,5 @@ class CopyContentTypeSignal extends Signal
      */
     public $user;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
-     * @param eZ\Publish\API\Repository\Values\User\User $user
-     */
-    public function __construct( $contentType, $user )
-    {
-        $this->contentType = $contentType;
-        $this->user = $user;
-    }
 }
 

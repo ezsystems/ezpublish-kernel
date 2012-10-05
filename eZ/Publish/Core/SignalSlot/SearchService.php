@@ -61,7 +61,11 @@ class SearchService implements SearchServiceInterface
     {
         $returnValue = $this->service->findContent( $query, $fieldFilters, $filterOnUserPermissions );
         $this->signalDispatcher()->emit(
-            new Signal\SearchService\FindContentSignal( $query, $fieldFilters, $filterOnUserPermissions )
+            new Signal\SearchService\FindContentSignal( array(
+                'query' => $query,
+                'fieldFilters' => $fieldFilters,
+                'filterOnUserPermissions' => $filterOnUserPermissions,
+            ) )
         );
         return $returnValue;
     }
@@ -84,7 +88,11 @@ class SearchService implements SearchServiceInterface
     {
         $returnValue = $this->service->findSingle( $criterion, $fieldFilters, $filterOnUserPermissions );
         $this->signalDispatcher()->emit(
-            new Signal\SearchService\FindSingleSignal( $criterion, $fieldFilters, $filterOnUserPermissions )
+            new Signal\SearchService\FindSingleSignal( array(
+                'criterion' => $criterion,
+                'fieldFilters' => $fieldFilters,
+                'filterOnUserPermissions' => $filterOnUserPermissions,
+            ) )
         );
         return $returnValue;
     }
@@ -101,7 +109,12 @@ class SearchService implements SearchServiceInterface
     {
         $returnValue = $this->service->suggest( $prefix, $fieldPaths, $limit, $filter );
         $this->signalDispatcher()->emit(
-            new Signal\SearchService\SuggestSignal( $prefix, $fieldPaths, $limit, $filter )
+            new Signal\SearchService\SuggestSignal( array(
+                'prefix' => $prefix,
+                'fieldPaths' => $fieldPaths,
+                'limit' => $limit,
+                'filter' => $filter,
+            ) )
         );
         return $returnValue;
     }

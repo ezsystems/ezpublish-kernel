@@ -37,20 +37,5 @@ class CreateSignal extends Signal
      */
     public $foreward;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $sourceUrl
-     * @param mixed $destinationUrl
-     * @param mixed $foreward
-     */
-    public function __construct( $sourceUrl, $destinationUrl, $foreward )
-    {
-        $this->sourceUrl = $sourceUrl;
-        $this->destinationUrl = $destinationUrl;
-        $this->foreward = $foreward;
-    }
 }
 

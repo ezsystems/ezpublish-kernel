@@ -30,18 +30,5 @@ class RemovePolicySignal extends Signal
      */
     public $policy;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\User\Role $role
-     * @param eZ\Publish\API\Repository\Values\User\Policy $policy
-     */
-    public function __construct( $role, $policy )
-    {
-        $this->role = $role;
-        $this->policy = $policy;
-    }
 }
 

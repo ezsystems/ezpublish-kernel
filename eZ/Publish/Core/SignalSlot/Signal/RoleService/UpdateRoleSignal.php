@@ -30,18 +30,5 @@ class UpdateRoleSignal extends Signal
      */
     public $roleUpdateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\User\Role $role
-     * @param eZ\Publish\API\Repository\Values\User\RoleUpdateStruct $roleUpdateStruct
-     */
-    public function __construct( $role, $roleUpdateStruct )
-    {
-        $this->role = $role;
-        $this->roleUpdateStruct = $roleUpdateStruct;
-    }
 }
 

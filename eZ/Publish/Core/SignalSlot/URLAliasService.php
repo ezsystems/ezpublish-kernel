@@ -66,7 +66,13 @@ class URLAliasService implements URLAliasServiceInterface
     {
         $returnValue = $this->service->createUrlAlias( $location, $path, $languageCode, $forwarding, $alwaysAvailable );
         $this->signalDispatcher()->emit(
-            new Signal\URLAliasService\CreateUrlAliasSignal( $location, $path, $languageCode, $forwarding, $alwaysAvailable )
+            new Signal\URLAliasService\CreateUrlAliasSignal( array(
+                'location' => $location,
+                'path' => $path,
+                'languageCode' => $languageCode,
+                'forwarding' => $forwarding,
+                'alwaysAvailable' => $alwaysAvailable,
+            ) )
         );
         return $returnValue;
     }
@@ -96,7 +102,13 @@ class URLAliasService implements URLAliasServiceInterface
     {
         $returnValue = $this->service->createGlobalUrlAlias( $resource, $path, $languageCode, $forwarding, $alwaysAvailable );
         $this->signalDispatcher()->emit(
-            new Signal\URLAliasService\CreateGlobalUrlAliasSignal( $resource, $path, $languageCode, $forwarding, $alwaysAvailable )
+            new Signal\URLAliasService\CreateGlobalUrlAliasSignal( array(
+                'resource' => $resource,
+                'path' => $path,
+                'languageCode' => $languageCode,
+                'forwarding' => $forwarding,
+                'alwaysAvailable' => $alwaysAvailable,
+            ) )
         );
         return $returnValue;
     }
@@ -116,7 +128,11 @@ class URLAliasService implements URLAliasServiceInterface
     {
         $returnValue = $this->service->listLocationAliases( $location, $custom, $languageCode );
         $this->signalDispatcher()->emit(
-            new Signal\URLAliasService\ListLocationAliasesSignal( $location, $custom, $languageCode )
+            new Signal\URLAliasService\ListLocationAliasesSignal( array(
+                'location' => $location,
+                'custom' => $custom,
+                'languageCode' => $languageCode,
+            ) )
         );
         return $returnValue;
     }
@@ -134,7 +150,11 @@ class URLAliasService implements URLAliasServiceInterface
     {
         $returnValue = $this->service->listGlobalAliases( $languageCode, $offset, $limit );
         $this->signalDispatcher()->emit(
-            new Signal\URLAliasService\ListGlobalAliasesSignal( $languageCode, $offset, $limit )
+            new Signal\URLAliasService\ListGlobalAliasesSignal( array(
+                'languageCode' => $languageCode,
+                'offset' => $offset,
+                'limit' => $limit,
+            ) )
         );
         return $returnValue;
     }
@@ -155,7 +175,9 @@ class URLAliasService implements URLAliasServiceInterface
     {
         $returnValue = $this->service->removeAliases( $aliasList );
         $this->signalDispatcher()->emit(
-            new Signal\URLAliasService\RemoveAliasesSignal( $aliasList )
+            new Signal\URLAliasService\RemoveAliasesSignal( array(
+                'aliasList' => $aliasList,
+            ) )
         );
         return $returnValue;
     }
@@ -174,7 +196,10 @@ class URLAliasService implements URLAliasServiceInterface
     {
         $returnValue = $this->service->lookup( $url, $languageCode );
         $this->signalDispatcher()->emit(
-            new Signal\URLAliasService\LookupSignal( $url, $languageCode )
+            new Signal\URLAliasService\LookupSignal( array(
+                'url' => $url,
+                'languageCode' => $languageCode,
+            ) )
         );
         return $returnValue;
     }
@@ -195,7 +220,10 @@ class URLAliasService implements URLAliasServiceInterface
     {
         $returnValue = $this->service->reverseLookup( $location, $languageCode );
         $this->signalDispatcher()->emit(
-            new Signal\URLAliasService\ReverseLookupSignal( $location, $languageCode )
+            new Signal\URLAliasService\ReverseLookupSignal( array(
+                'location' => $location,
+                'languageCode' => $languageCode,
+            ) )
         );
         return $returnValue;
     }

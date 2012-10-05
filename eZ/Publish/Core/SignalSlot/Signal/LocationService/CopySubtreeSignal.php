@@ -30,18 +30,5 @@ class CopySubtreeSignal extends Signal
      */
     public $targetParentLocation;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\Location $subtree
-     * @param eZ\Publish\API\Repository\Values\Content\Location $targetParentLocation
-     */
-    public function __construct( $subtree, $targetParentLocation )
-    {
-        $this->subtree = $subtree;
-        $this->targetParentLocation = $targetParentLocation;
-    }
 }
 

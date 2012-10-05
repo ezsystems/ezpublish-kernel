@@ -37,20 +37,5 @@ class ListGlobalAliasesSignal extends Signal
      */
     public $limit;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $languageCode
-     * @param mixed $offset
-     * @param mixed $limit
-     */
-    public function __construct( $languageCode, $offset, $limit )
-    {
-        $this->languageCode = $languageCode;
-        $this->offset = $offset;
-        $this->limit = $limit;
-    }
 }
 

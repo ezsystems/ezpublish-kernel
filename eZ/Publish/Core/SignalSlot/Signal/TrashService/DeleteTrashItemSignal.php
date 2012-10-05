@@ -23,16 +23,5 @@ class DeleteTrashItemSignal extends Signal
      */
     public $trashItem;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
-     */
-    public function __construct( $trashItem )
-    {
-        $this->trashItem = $trashItem;
-    }
 }
 

@@ -30,18 +30,5 @@ class ReverseLookupSignal extends Signal
      */
     public $languageCode;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param mixed $languageCode
-     */
-    public function __construct( $location, $languageCode )
-    {
-        $this->location = $location;
-        $this->languageCode = $languageCode;
-    }
 }
 

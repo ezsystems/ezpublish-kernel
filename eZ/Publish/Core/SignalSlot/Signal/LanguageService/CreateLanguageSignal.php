@@ -23,16 +23,5 @@ class CreateLanguageSignal extends Signal
      */
     public $languageCreateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct $languageCreateStruct
-     */
-    public function __construct( $languageCreateStruct )
-    {
-        $this->languageCreateStruct = $languageCreateStruct;
-    }
 }
 

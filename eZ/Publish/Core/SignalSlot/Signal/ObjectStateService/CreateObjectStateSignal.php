@@ -30,18 +30,5 @@ class CreateObjectStateSignal extends Signal
      */
     public $objectStateCreateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
-     * @param eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct $objectStateCreateStruct
-     */
-    public function __construct( $objectStateGroup, $objectStateCreateStruct )
-    {
-        $this->objectStateGroup = $objectStateGroup;
-        $this->objectStateCreateStruct = $objectStateCreateStruct;
-    }
 }
 

@@ -30,18 +30,5 @@ class UpdateContentTypeDraftSignal extends Signal
      */
     public $contentTypeUpdateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
-     * @param eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct $contentTypeUpdateStruct
-     */
-    public function __construct( $contentTypeDraft, $contentTypeUpdateStruct )
-    {
-        $this->contentTypeDraft = $contentTypeDraft;
-        $this->contentTypeUpdateStruct = $contentTypeUpdateStruct;
-    }
 }
 

@@ -30,18 +30,5 @@ class UpdatePolicySignal extends Signal
      */
     public $policyUpdateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\User\Policy $policy
-     * @param eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct $policyUpdateStruct
-     */
-    public function __construct( $policy, $policyUpdateStruct )
-    {
-        $this->policy = $policy;
-        $this->policyUpdateStruct = $policyUpdateStruct;
-    }
 }
 

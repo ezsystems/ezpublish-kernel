@@ -30,18 +30,5 @@ class SwapLocationSignal extends Signal
      */
     public $location2;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\Location $location1
-     * @param eZ\Publish\API\Repository\Values\Content\Location $location2
-     */
-    public function __construct( $location1, $location2 )
-    {
-        $this->location1 = $location1;
-        $this->location2 = $location2;
-    }
 }
 

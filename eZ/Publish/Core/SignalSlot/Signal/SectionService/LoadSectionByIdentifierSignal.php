@@ -23,16 +23,5 @@ class LoadSectionByIdentifierSignal extends Signal
      */
     public $sectionIdentifier;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param mixed $sectionIdentifier
-     */
-    public function __construct( $sectionIdentifier )
-    {
-        $this->sectionIdentifier = $sectionIdentifier;
-    }
 }
 

@@ -30,18 +30,5 @@ class LoadLocationsSignal extends Signal
      */
     public $rootLocation;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param eZ\Publish\API\Repository\Values\Content\Location $rootLocation
-     */
-    public function __construct( $contentInfo, $rootLocation )
-    {
-        $this->contentInfo = $contentInfo;
-        $this->rootLocation = $rootLocation;
-    }
 }
 

@@ -23,16 +23,5 @@ class DeleteBinaryFileSignal extends Signal
      */
     public $binaryFile;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\IO\BinaryFile $binaryFile
-     */
-    public function __construct( $binaryFile )
-    {
-        $this->binaryFile = $binaryFile;
-    }
 }
 

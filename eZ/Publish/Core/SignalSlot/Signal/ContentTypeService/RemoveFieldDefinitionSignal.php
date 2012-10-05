@@ -30,18 +30,5 @@ class RemoveFieldDefinitionSignal extends Signal
      */
     public $fieldDefinition;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
-     * @param eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
-     */
-    public function __construct( $contentTypeDraft, $fieldDefinition )
-    {
-        $this->contentTypeDraft = $contentTypeDraft;
-        $this->fieldDefinition = $fieldDefinition;
-    }
 }
 

@@ -30,18 +30,5 @@ class UpdateContentSignal extends Signal
      */
     public $contentUpdateStruct;
 
-    /**
-     * Constructor
-     *
-     * Construct from signal values
-     *
-     * @param eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     * @param eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct $contentUpdateStruct
-     */
-    public function __construct( $versionInfo, $contentUpdateStruct )
-    {
-        $this->versionInfo = $versionInfo;
-        $this->contentUpdateStruct = $contentUpdateStruct;
-    }
 }
 
