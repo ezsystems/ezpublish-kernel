@@ -60,13 +60,6 @@ class SearchService implements SearchServiceInterface
     public function findContent( eZ\Publish\API\Repository\Values\Content\Query $query, $fieldFilters = array(), $filterOnUserPermissions = true )
     {
         $returnValue = $this->service->findContent( $query, $fieldFilters, $filterOnUserPermissions );
-        $this->signalDispatcher()->emit(
-            new Signal\SearchService\FindContentSignal( array(
-                'query' => $query,
-                'fieldFilters' => $fieldFilters,
-                'filterOnUserPermissions' => $filterOnUserPermissions,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -87,13 +80,6 @@ class SearchService implements SearchServiceInterface
     public function findSingle( eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion, $fieldFilters = array(), $filterOnUserPermissions = true )
     {
         $returnValue = $this->service->findSingle( $criterion, $fieldFilters, $filterOnUserPermissions );
-        $this->signalDispatcher()->emit(
-            new Signal\SearchService\FindSingleSignal( array(
-                'criterion' => $criterion,
-                'fieldFilters' => $fieldFilters,
-                'filterOnUserPermissions' => $filterOnUserPermissions,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -108,14 +94,6 @@ class SearchService implements SearchServiceInterface
     public function suggest( $prefix, $fieldPaths = array(), $limit = 10, eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter = null )
     {
         $returnValue = $this->service->suggest( $prefix, $fieldPaths, $limit, $filter );
-        $this->signalDispatcher()->emit(
-            new Signal\SearchService\SuggestSignal( array(
-                'prefix' => $prefix,
-                'fieldPaths' => $fieldPaths,
-                'limit' => $limit,
-                'filter' => $filter,
-            ) )
-        );
         return $returnValue;
     }
 
