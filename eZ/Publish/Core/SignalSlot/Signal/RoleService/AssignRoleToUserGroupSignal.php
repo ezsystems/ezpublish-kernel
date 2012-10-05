@@ -17,18 +17,18 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class AssignRoleToUserGroupSignal extends Signal
 {
     /**
-     * Role
+     * RoleId
      *
-     * @var eZ\Publish\API\Repository\Values\User\Role
+     * @var mixed
      */
-    public $role;
+    public $roleId;
 
     /**
-     * UserGroup
+     * UserGroupId
      *
-     * @var eZ\Publish\API\Repository\Values\User\UserGroup
+     * @var mixed
      */
-    public $userGroup;
+    public $userGroupId;
 
     /**
      * RoleLimitation

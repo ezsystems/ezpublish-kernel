@@ -17,18 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class UpdateRoleSignal extends Signal
 {
     /**
-     * Role
+     * RoleId
      *
-     * @var eZ\Publish\API\Repository\Values\User\Role
+     * @var mixed
      */
-    public $role;
-
-    /**
-     * RoleUpdateStruct
-     *
-     * @var eZ\Publish\API\Repository\Values\User\RoleUpdateStruct
-     */
-    public $roleUpdateStruct;
+    public $roleId;
 
 }
 

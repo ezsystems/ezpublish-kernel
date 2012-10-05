@@ -17,18 +17,18 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class UnassignRoleFromUserSignal extends Signal
 {
     /**
-     * Role
+     * RoleId
      *
-     * @var eZ\Publish\API\Repository\Values\User\Role
+     * @var mixed
      */
-    public $role;
+    public $roleId;
 
     /**
-     * User
+     * UserId
      *
-     * @var eZ\Publish\API\Repository\Values\User\User
+     * @var mixed
      */
-    public $user;
+    public $userId;
 
 }
 

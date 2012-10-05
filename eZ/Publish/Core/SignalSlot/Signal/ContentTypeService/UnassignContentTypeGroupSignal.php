@@ -17,18 +17,18 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class UnassignContentTypeGroupSignal extends Signal
 {
     /**
-     * ContentType
+     * ContentTypeId
      *
-     * @var eZ\Publish\API\Repository\Values\ContentType\ContentType
+     * @var mixed
      */
-    public $contentType;
+    public $contentTypeId;
 
     /**
-     * ContentTypeGroup
+     * ContentTypeGroupId
      *
-     * @var eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
+     * @var mixed
      */
-    public $contentTypeGroup;
+    public $contentTypeGroupId;
 
 }
 

@@ -17,11 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class DisableLanguageSignal extends Signal
 {
     /**
-     * Language
+     * LanguageId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\Language
+     * @var mixed
      */
-    public $language;
+    public $languageId;
 
 }
 

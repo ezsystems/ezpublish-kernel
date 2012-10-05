@@ -17,18 +17,18 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class RemoveFieldDefinitionSignal extends Signal
 {
     /**
-     * ContentTypeDraft
+     * ContentTypeDraftId
      *
-     * @var eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     * @var mixed
      */
-    public $contentTypeDraft;
+    public $contentTypeDraftId;
 
     /**
-     * FieldDefinition
+     * FieldDefinitionId
      *
-     * @var eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
+     * @var mixed
      */
-    public $fieldDefinition;
+    public $fieldDefinitionId;
 
 }
 

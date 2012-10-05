@@ -60,7 +60,6 @@ class SectionService implements SectionServiceInterface
         $returnValue = $this->service->createSection( $sectionCreateStruct );
         $this->signalDispatcher()->emit(
             new Signal\SectionService\CreateSectionSignal( array(
-                'sectionCreateStruct' => $sectionCreateStruct,
             ) )
         );
         return $returnValue;
@@ -82,8 +81,7 @@ class SectionService implements SectionServiceInterface
         $returnValue = $this->service->updateSection( $section, $sectionUpdateStruct );
         $this->signalDispatcher()->emit(
             new Signal\SectionService\UpdateSectionSignal( array(
-                'section' => $section,
-                'sectionUpdateStruct' => $sectionUpdateStruct,
+                'sectionId' => $section->id,
             ) )
         );
         return $returnValue;
@@ -160,7 +158,7 @@ class SectionService implements SectionServiceInterface
         $returnValue = $this->service->countAssignedContents( $section );
         $this->signalDispatcher()->emit(
             new Signal\SectionService\CountAssignedContentsSignal( array(
-                'section' => $section,
+                'sectionId' => $section->id,
             ) )
         );
         return $returnValue;
@@ -180,8 +178,8 @@ class SectionService implements SectionServiceInterface
         $returnValue = $this->service->assignSection( $contentInfo, $section );
         $this->signalDispatcher()->emit(
             new Signal\SectionService\AssignSectionSignal( array(
-                'contentInfo' => $contentInfo,
-                'section' => $section,
+                'contentId' => $contentInfo->id,
+                'sectionId' => $section->id,
             ) )
         );
         return $returnValue;
@@ -202,7 +200,7 @@ class SectionService implements SectionServiceInterface
         $returnValue = $this->service->deleteSection( $section );
         $this->signalDispatcher()->emit(
             new Signal\SectionService\DeleteSectionSignal( array(
-                'section' => $section,
+                'sectionId' => $section->id,
             ) )
         );
         return $returnValue;

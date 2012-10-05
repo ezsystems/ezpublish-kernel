@@ -17,11 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class LoadContentByVersionInfoSignal extends Signal
 {
     /**
-     * VersionInfo
+     * VersionNo
      *
-     * @var eZ\Publish\API\Repository\Values\Content\VersionInfo
+     * @var int
      */
-    public $versionInfo;
+    public $versionNo;
 
     /**
      * Languages

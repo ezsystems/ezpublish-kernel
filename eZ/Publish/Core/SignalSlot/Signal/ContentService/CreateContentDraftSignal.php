@@ -17,25 +17,25 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class CreateContentDraftSignal extends Signal
 {
     /**
-     * ContentInfo
+     * ContentId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\ContentInfo
+     * @var mixed
      */
-    public $contentInfo;
+    public $contentId;
 
     /**
-     * VersionInfo
+     * VersionNo
      *
-     * @var eZ\Publish\API\Repository\Values\Content\VersionInfo
+     * @var int
      */
-    public $versionInfo;
+    public $versionNo;
 
     /**
-     * User
+     * UserId
      *
-     * @var eZ\Publish\API\Repository\Values\User\User
+     * @var mixed
      */
-    public $user;
+    public $userId;
 
 }
 

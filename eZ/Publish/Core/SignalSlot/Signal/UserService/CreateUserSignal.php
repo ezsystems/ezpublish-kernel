@@ -17,13 +17,6 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class CreateUserSignal extends Signal
 {
     /**
-     * UserCreateStruct
-     *
-     * @var eZ\Publish\API\Repository\Values\User\UserCreateStruct
-     */
-    public $userCreateStruct;
-
-    /**
      * ParentGroups
      *
      * @var mixed

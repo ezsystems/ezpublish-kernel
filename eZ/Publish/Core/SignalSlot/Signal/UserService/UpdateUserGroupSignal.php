@@ -17,18 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class UpdateUserGroupSignal extends Signal
 {
     /**
-     * UserGroup
+     * UserGroupId
      *
-     * @var eZ\Publish\API\Repository\Values\User\UserGroup
+     * @var mixed
      */
-    public $userGroup;
-
-    /**
-     * UserGroupUpdateStruct
-     *
-     * @var eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct
-     */
-    public $userGroupUpdateStruct;
+    public $userGroupId;
 
 }
 

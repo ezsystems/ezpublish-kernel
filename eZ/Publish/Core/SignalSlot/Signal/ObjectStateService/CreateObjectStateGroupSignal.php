@@ -16,12 +16,5 @@ use eZ\Publish\Core\SignalSlot\Signal;
  */
 class CreateObjectStateGroupSignal extends Signal
 {
-    /**
-     * ObjectStateGroupCreateStruct
-     *
-     * @var eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct
-     */
-    public $objectStateGroupCreateStruct;
-
 }
 

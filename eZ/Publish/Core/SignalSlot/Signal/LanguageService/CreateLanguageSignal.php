@@ -16,12 +16,5 @@ use eZ\Publish\Core\SignalSlot\Signal;
  */
 class CreateLanguageSignal extends Signal
 {
-    /**
-     * LanguageCreateStruct
-     *
-     * @var eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
-     */
-    public $languageCreateStruct;
-
 }
 

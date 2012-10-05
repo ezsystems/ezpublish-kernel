@@ -17,11 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class CreateUrlAliasSignal extends Signal
 {
     /**
-     * Location
+     * LocationId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\Location
+     * @var mixed
      */
-    public $location;
+    public $locationId;
 
     /**
      * Path

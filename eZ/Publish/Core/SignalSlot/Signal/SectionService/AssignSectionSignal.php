@@ -17,18 +17,18 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class AssignSectionSignal extends Signal
 {
     /**
-     * ContentInfo
+     * ContentId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\ContentInfo
+     * @var mixed
      */
-    public $contentInfo;
+    public $contentId;
 
     /**
-     * Section
+     * SectionId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\Section
+     * @var mixed
      */
-    public $section;
+    public $sectionId;
 
 }
 

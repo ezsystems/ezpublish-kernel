@@ -17,13 +17,6 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class CreateContentSignal extends Signal
 {
     /**
-     * ContentCreateStruct
-     *
-     * @var eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
-     */
-    public $contentCreateStruct;
-
-    /**
      * LocationCreateStructs
      *
      * @var mixed

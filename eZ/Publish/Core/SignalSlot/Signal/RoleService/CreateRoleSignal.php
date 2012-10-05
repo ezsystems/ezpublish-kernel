@@ -16,12 +16,5 @@ use eZ\Publish\Core\SignalSlot\Signal;
  */
 class CreateRoleSignal extends Signal
 {
-    /**
-     * RoleCreateStruct
-     *
-     * @var eZ\Publish\API\Repository\Values\User\RoleCreateStruct
-     */
-    public $roleCreateStruct;
-
 }
 

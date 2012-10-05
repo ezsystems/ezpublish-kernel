@@ -17,18 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class UpdatePolicySignal extends Signal
 {
     /**
-     * Policy
+     * PolicyId
      *
-     * @var eZ\Publish\API\Repository\Values\User\Policy
+     * @var mixed
      */
-    public $policy;
-
-    /**
-     * PolicyUpdateStruct
-     *
-     * @var eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
-     */
-    public $policyUpdateStruct;
+    public $policyId;
 
 }
 

@@ -17,11 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class LoadUsersOfUserGroupSignal extends Signal
 {
     /**
-     * UserGroup
+     * UserGroupId
      *
-     * @var eZ\Publish\API\Repository\Values\User\UserGroup
+     * @var mixed
      */
-    public $userGroup;
+    public $userGroupId;
 
     /**
      * Offset

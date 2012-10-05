@@ -17,18 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class UpdateLocationSignal extends Signal
 {
     /**
-     * Location
+     * LocationId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\Location
+     * @var mixed
      */
-    public $location;
-
-    /**
-     * LocationUpdateStruct
-     *
-     * @var eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct
-     */
-    public $locationUpdateStruct;
+    public $locationId;
 
 }
 

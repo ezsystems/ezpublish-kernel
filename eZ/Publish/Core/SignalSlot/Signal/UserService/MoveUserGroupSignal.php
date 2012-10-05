@@ -17,18 +17,18 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class MoveUserGroupSignal extends Signal
 {
     /**
-     * UserGroup
+     * UserGroupId
      *
-     * @var eZ\Publish\API\Repository\Values\User\UserGroup
+     * @var mixed
      */
-    public $userGroup;
+    public $userGroupId;
 
     /**
-     * NewParent
+     * NewParentId
      *
-     * @var eZ\Publish\API\Repository\Values\User\UserGroup
+     * @var mixed
      */
-    public $newParent;
+    public $newParentId;
 
 }
 

@@ -17,11 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class CountAssignedContentsSignal extends Signal
 {
     /**
-     * Section
+     * SectionId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\Section
+     * @var mixed
      */
-    public $section;
+    public $sectionId;
 
 }
 

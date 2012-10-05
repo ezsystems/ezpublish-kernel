@@ -17,18 +17,18 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class MoveSubtreeSignal extends Signal
 {
     /**
-     * Location
+     * LocationId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\Location
+     * @var mixed
      */
-    public $location;
+    public $locationId;
 
     /**
-     * NewParentLocation
+     * NewParentLocationId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\Location
+     * @var mixed
      */
-    public $newParentLocation;
+    public $newParentLocationId;
 
 }
 

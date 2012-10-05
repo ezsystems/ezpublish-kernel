@@ -17,11 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class GetRoleAssignmentsSignal extends Signal
 {
     /**
-     * Role
+     * RoleId
      *
-     * @var eZ\Publish\API\Repository\Values\User\Role
+     * @var mixed
      */
-    public $role;
+    public $roleId;
 
 }
 

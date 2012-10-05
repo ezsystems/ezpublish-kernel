@@ -17,18 +17,18 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class AddRelationSignal extends Signal
 {
     /**
-     * SourceVersion
+     * VersionNo
      *
-     * @var eZ\Publish\API\Repository\Values\Content\VersionInfo
+     * @var int
      */
-    public $sourceVersion;
+    public $versionNo;
 
     /**
-     * DestinationContent
+     * ContentId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\ContentInfo
+     * @var mixed
      */
-    public $destinationContent;
+    public $contentId;
 
 }
 

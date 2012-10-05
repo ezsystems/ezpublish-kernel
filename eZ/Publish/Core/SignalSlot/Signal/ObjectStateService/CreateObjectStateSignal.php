@@ -17,18 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class CreateObjectStateSignal extends Signal
 {
     /**
-     * ObjectStateGroup
+     * ObjectStateGroupId
      *
-     * @var eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
+     * @var mixed
      */
-    public $objectStateGroup;
-
-    /**
-     * ObjectStateCreateStruct
-     *
-     * @var eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct
-     */
-    public $objectStateCreateStruct;
+    public $objectStateGroupId;
 
 }
 

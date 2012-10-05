@@ -17,18 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class CreateUserGroupSignal extends Signal
 {
     /**
-     * UserGroupCreateStruct
+     * ParentGroupId
      *
-     * @var eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct
+     * @var mixed
      */
-    public $userGroupCreateStruct;
-
-    /**
-     * ParentGroup
-     *
-     * @var eZ\Publish\API\Repository\Values\User\UserGroup
-     */
-    public $parentGroup;
+    public $parentGroupId;
 
 }
 

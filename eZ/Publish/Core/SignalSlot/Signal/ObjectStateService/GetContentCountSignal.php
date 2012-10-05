@@ -17,11 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class GetContentCountSignal extends Signal
 {
     /**
-     * ObjectState
+     * ObjectStateId
      *
-     * @var eZ\Publish\API\Repository\Values\ObjectState\ObjectState
+     * @var mixed
      */
-    public $objectState;
+    public $objectStateId;
 
 }
 

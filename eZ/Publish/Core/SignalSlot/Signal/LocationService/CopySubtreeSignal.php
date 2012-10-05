@@ -17,18 +17,18 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class CopySubtreeSignal extends Signal
 {
     /**
-     * Subtree
+     * SubtreeId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\Location
+     * @var mixed
      */
-    public $subtree;
+    public $subtreeId;
 
     /**
-     * TargetParentLocation
+     * TargetParentLocationId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\Location
+     * @var mixed
      */
-    public $targetParentLocation;
+    public $targetParentLocationId;
 
 }
 

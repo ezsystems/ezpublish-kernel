@@ -17,18 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class UpdateContentTypeGroupSignal extends Signal
 {
     /**
-     * ContentTypeGroup
+     * ContentTypeGroupId
      *
-     * @var eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
+     * @var mixed
      */
-    public $contentTypeGroup;
-
-    /**
-     * ContentTypeGroupUpdateStruct
-     *
-     * @var eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct
-     */
-    public $contentTypeGroupUpdateStruct;
+    public $contentTypeGroupId;
 
 }
 

@@ -17,18 +17,18 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class LoadLocationsSignal extends Signal
 {
     /**
-     * ContentInfo
+     * ContentId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\ContentInfo
+     * @var mixed
      */
-    public $contentInfo;
+    public $contentId;
 
     /**
-     * RootLocation
+     * RootLocationId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\Location
+     * @var mixed
      */
-    public $rootLocation;
+    public $rootLocationId;
 
 }
 

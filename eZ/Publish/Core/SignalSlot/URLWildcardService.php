@@ -85,7 +85,7 @@ class URLWildcardService implements URLWildcardServiceInterface
         $returnValue = $this->service->remove( $urlWildcard );
         $this->signalDispatcher()->emit(
             new Signal\URLWildcardService\RemoveSignal( array(
-                'urlWildcard' => $urlWildcard,
+                'urlWildcardId' => $urlWildcard->id,
             ) )
         );
         return $returnValue;

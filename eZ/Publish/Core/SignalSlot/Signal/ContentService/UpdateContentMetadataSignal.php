@@ -17,18 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class UpdateContentMetadataSignal extends Signal
 {
     /**
-     * ContentInfo
+     * ContentId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\ContentInfo
+     * @var mixed
      */
-    public $contentInfo;
-
-    /**
-     * ContentMetadataUpdateStruct
-     *
-     * @var eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct
-     */
-    public $contentMetadataUpdateStruct;
+    public $contentId;
 
 }
 

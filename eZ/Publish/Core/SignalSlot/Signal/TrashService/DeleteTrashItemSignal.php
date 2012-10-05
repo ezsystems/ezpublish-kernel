@@ -17,11 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class DeleteTrashItemSignal extends Signal
 {
     /**
-     * TrashItem
+     * TrashItemId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\TrashItem
+     * @var mixed
      */
-    public $trashItem;
+    public $trashItemId;
 
 }
 

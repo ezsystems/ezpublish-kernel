@@ -17,25 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class TranslateVersionSignal extends Signal
 {
     /**
-     * TranslationInfo
+     * UserId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\TranslationInfo
+     * @var mixed
      */
-    public $translationInfo;
-
-    /**
-     * TranslationValues
-     *
-     * @var eZ\Publish\API\Repository\Values\Content\TranslationValues
-     */
-    public $translationValues;
-
-    /**
-     * User
-     *
-     * @var eZ\Publish\API\Repository\Values\User\User
-     */
-    public $user;
+    public $userId;
 
 }
 

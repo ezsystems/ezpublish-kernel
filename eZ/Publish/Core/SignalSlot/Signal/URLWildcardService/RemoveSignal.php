@@ -17,11 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class RemoveSignal extends Signal
 {
     /**
-     * UrlWildcard
+     * UrlWildcardId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\URLWildcard
+     * @var mixed
      */
-    public $urlWildcard;
+    public $urlWildcardId;
 
 }
 

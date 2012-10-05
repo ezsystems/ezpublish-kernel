@@ -17,25 +17,18 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class UpdateFieldDefinitionSignal extends Signal
 {
     /**
-     * ContentTypeDraft
+     * ContentTypeDraftId
      *
-     * @var eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     * @var mixed
      */
-    public $contentTypeDraft;
+    public $contentTypeDraftId;
 
     /**
-     * FieldDefinition
+     * FieldDefinitionId
      *
-     * @var eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
+     * @var mixed
      */
-    public $fieldDefinition;
-
-    /**
-     * FieldDefinitionUpdateStruct
-     *
-     * @var eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct
-     */
-    public $fieldDefinitionUpdateStruct;
+    public $fieldDefinitionId;
 
 }
 

@@ -17,18 +17,18 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class CopyContentTypeSignal extends Signal
 {
     /**
-     * ContentType
+     * ContentTypeId
      *
-     * @var eZ\Publish\API\Repository\Values\ContentType\ContentType
+     * @var mixed
      */
-    public $contentType;
+    public $contentTypeId;
 
     /**
-     * User
+     * UserId
      *
-     * @var eZ\Publish\API\Repository\Values\User\User
+     * @var mixed
      */
-    public $user;
+    public $userId;
 
 }
 

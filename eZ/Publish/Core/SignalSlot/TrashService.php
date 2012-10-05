@@ -84,7 +84,7 @@ class TrashService implements TrashServiceInterface
         $returnValue = $this->service->trash( $location );
         $this->signalDispatcher()->emit(
             new Signal\TrashService\TrashSignal( array(
-                'location' => $location,
+                'locationId' => $location->id,
             ) )
         );
         return $returnValue;
@@ -107,8 +107,8 @@ class TrashService implements TrashServiceInterface
         $returnValue = $this->service->recover( $trashItem, $newParentLocation );
         $this->signalDispatcher()->emit(
             new Signal\TrashService\RecoverSignal( array(
-                'trashItem' => $trashItem,
-                'newParentLocation' => $newParentLocation,
+                'trashItemId' => $trashItem->id,
+                'newParentLocationId' => $newParentLocation->id,
             ) )
         );
         return $returnValue;
@@ -146,7 +146,7 @@ class TrashService implements TrashServiceInterface
         $returnValue = $this->service->deleteTrashItem( $trashItem );
         $this->signalDispatcher()->emit(
             new Signal\TrashService\DeleteTrashItemSignal( array(
-                'trashItem' => $trashItem,
+                'trashItemId' => $trashItem->id,
             ) )
         );
         return $returnValue;

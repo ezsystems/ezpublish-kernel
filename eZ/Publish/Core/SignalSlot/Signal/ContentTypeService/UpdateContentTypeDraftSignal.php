@@ -17,18 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class UpdateContentTypeDraftSignal extends Signal
 {
     /**
-     * ContentTypeDraft
+     * ContentTypeDraftId
      *
-     * @var eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     * @var mixed
      */
-    public $contentTypeDraft;
-
-    /**
-     * ContentTypeUpdateStruct
-     *
-     * @var eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct
-     */
-    public $contentTypeUpdateStruct;
+    public $contentTypeDraftId;
 
 }
 

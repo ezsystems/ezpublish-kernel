@@ -17,25 +17,25 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class SetObjectStateSignal extends Signal
 {
     /**
-     * ContentInfo
+     * ContentId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\ContentInfo
+     * @var mixed
      */
-    public $contentInfo;
+    public $contentId;
 
     /**
-     * ObjectStateGroup
+     * ObjectStateGroupId
      *
-     * @var eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
+     * @var mixed
      */
-    public $objectStateGroup;
+    public $objectStateGroupId;
 
     /**
-     * ObjectState
+     * ObjectStateId
      *
-     * @var eZ\Publish\API\Repository\Values\ObjectState\ObjectState
+     * @var mixed
      */
-    public $objectState;
+    public $objectStateId;
 
 }
 

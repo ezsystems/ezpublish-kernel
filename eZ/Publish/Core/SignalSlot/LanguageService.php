@@ -60,7 +60,6 @@ class LanguageService implements LanguageServiceInterface
         $returnValue = $this->service->createLanguage( $languageCreateStruct );
         $this->signalDispatcher()->emit(
             new Signal\LanguageService\CreateLanguageSignal( array(
-                'languageCreateStruct' => $languageCreateStruct,
             ) )
         );
         return $returnValue;
@@ -81,7 +80,7 @@ class LanguageService implements LanguageServiceInterface
         $returnValue = $this->service->updateLanguageName( $language, $newName );
         $this->signalDispatcher()->emit(
             new Signal\LanguageService\UpdateLanguageNameSignal( array(
-                'language' => $language,
+                'languageId' => $language->id,
                 'newName' => $newName,
             ) )
         );
@@ -102,7 +101,7 @@ class LanguageService implements LanguageServiceInterface
         $returnValue = $this->service->enableLanguage( $language );
         $this->signalDispatcher()->emit(
             new Signal\LanguageService\EnableLanguageSignal( array(
-                'language' => $language,
+                'languageId' => $language->id,
             ) )
         );
         return $returnValue;
@@ -122,7 +121,7 @@ class LanguageService implements LanguageServiceInterface
         $returnValue = $this->service->disableLanguage( $language );
         $this->signalDispatcher()->emit(
             new Signal\LanguageService\DisableLanguageSignal( array(
-                'language' => $language,
+                'languageId' => $language->id,
             ) )
         );
         return $returnValue;
@@ -198,7 +197,7 @@ class LanguageService implements LanguageServiceInterface
         $returnValue = $this->service->deleteLanguage( $language );
         $this->signalDispatcher()->emit(
             new Signal\LanguageService\DeleteLanguageSignal( array(
-                'language' => $language,
+                'languageId' => $language->id,
             ) )
         );
         return $returnValue;

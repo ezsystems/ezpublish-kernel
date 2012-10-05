@@ -17,11 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class LoadObjectStatesSignal extends Signal
 {
     /**
-     * ObjectStateGroup
+     * ObjectStateGroupId
      *
-     * @var eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
+     * @var mixed
      */
-    public $objectStateGroup;
+    public $objectStateGroupId;
 
 }
 

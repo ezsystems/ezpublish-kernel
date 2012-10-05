@@ -16,12 +16,5 @@ use eZ\Publish\Core\SignalSlot\Signal;
  */
 class CreateContentTypeGroupSignal extends Signal
 {
-    /**
-     * ContentTypeGroupCreateStruct
-     *
-     * @var eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct
-     */
-    public $contentTypeGroupCreateStruct;
-
 }
 

@@ -17,18 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class UpdateContentSignal extends Signal
 {
     /**
-     * VersionInfo
+     * VersionNo
      *
-     * @var eZ\Publish\API\Repository\Values\Content\VersionInfo
+     * @var int
      */
-    public $versionInfo;
-
-    /**
-     * ContentUpdateStruct
-     *
-     * @var eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct
-     */
-    public $contentUpdateStruct;
+    public $versionNo;
 
 }
 

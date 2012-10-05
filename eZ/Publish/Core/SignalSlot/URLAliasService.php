@@ -67,7 +67,7 @@ class URLAliasService implements URLAliasServiceInterface
         $returnValue = $this->service->createUrlAlias( $location, $path, $languageCode, $forwarding, $alwaysAvailable );
         $this->signalDispatcher()->emit(
             new Signal\URLAliasService\CreateUrlAliasSignal( array(
-                'location' => $location,
+                'locationId' => $location->id,
                 'path' => $path,
                 'languageCode' => $languageCode,
                 'forwarding' => $forwarding,
@@ -129,7 +129,7 @@ class URLAliasService implements URLAliasServiceInterface
         $returnValue = $this->service->listLocationAliases( $location, $custom, $languageCode );
         $this->signalDispatcher()->emit(
             new Signal\URLAliasService\ListLocationAliasesSignal( array(
-                'location' => $location,
+                'locationId' => $location->id,
                 'custom' => $custom,
                 'languageCode' => $languageCode,
             ) )
@@ -221,7 +221,7 @@ class URLAliasService implements URLAliasServiceInterface
         $returnValue = $this->service->reverseLookup( $location, $languageCode );
         $this->signalDispatcher()->emit(
             new Signal\URLAliasService\ReverseLookupSignal( array(
-                'location' => $location,
+                'locationId' => $location->id,
                 'languageCode' => $languageCode,
             ) )
         );

@@ -17,18 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class UpdateObjectStateGroupSignal extends Signal
 {
     /**
-     * ObjectStateGroup
+     * ObjectStateGroupId
      *
-     * @var eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
+     * @var mixed
      */
-    public $objectStateGroup;
-
-    /**
-     * ObjectStateGroupUpdateStruct
-     *
-     * @var eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct
-     */
-    public $objectStateGroupUpdateStruct;
+    public $objectStateGroupId;
 
 }
 

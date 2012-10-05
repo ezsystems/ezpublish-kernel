@@ -17,11 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class DeleteContentTypeGroupSignal extends Signal
 {
     /**
-     * ContentTypeGroup
+     * ContentTypeGroupId
      *
-     * @var eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
+     * @var mixed
      */
-    public $contentTypeGroup;
+    public $contentTypeGroupId;
 
 }
 

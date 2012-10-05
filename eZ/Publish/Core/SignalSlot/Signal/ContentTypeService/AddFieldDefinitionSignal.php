@@ -17,18 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class AddFieldDefinitionSignal extends Signal
 {
     /**
-     * ContentTypeDraft
+     * ContentTypeDraftId
      *
-     * @var eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     * @var mixed
      */
-    public $contentTypeDraft;
-
-    /**
-     * FieldDefinitionCreateStruct
-     *
-     * @var eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct
-     */
-    public $fieldDefinitionCreateStruct;
+    public $contentTypeDraftId;
 
 }
 

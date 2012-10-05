@@ -17,18 +17,18 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class RemovePolicySignal extends Signal
 {
     /**
-     * Role
+     * RoleId
      *
-     * @var eZ\Publish\API\Repository\Values\User\Role
+     * @var mixed
      */
-    public $role;
+    public $roleId;
 
     /**
-     * Policy
+     * PolicyId
      *
-     * @var eZ\Publish\API\Repository\Values\User\Policy
+     * @var mixed
      */
-    public $policy;
+    public $policyId;
 
 }
 

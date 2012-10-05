@@ -17,25 +17,18 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class CopyContentSignal extends Signal
 {
     /**
-     * ContentInfo
+     * ContentId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\ContentInfo
+     * @var mixed
      */
-    public $contentInfo;
+    public $contentId;
 
     /**
-     * DestinationLocationCreateStruct
+     * VersionNo
      *
-     * @var eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
+     * @var int
      */
-    public $destinationLocationCreateStruct;
-
-    /**
-     * VersionInfo
-     *
-     * @var eZ\Publish\API\Repository\Values\Content\VersionInfo
-     */
-    public $versionInfo;
+    public $versionNo;
 
 }
 

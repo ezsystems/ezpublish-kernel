@@ -17,18 +17,18 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class RecoverSignal extends Signal
 {
     /**
-     * TrashItem
+     * TrashItemId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\TrashItem
+     * @var mixed
      */
-    public $trashItem;
+    public $trashItemId;
 
     /**
-     * NewParentLocation
+     * NewParentLocationId
      *
-     * @var eZ\Publish\API\Repository\Values\Content\Location
+     * @var mixed
      */
-    public $newParentLocation;
+    public $newParentLocationId;
 
 }
 

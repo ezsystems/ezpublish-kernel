@@ -17,18 +17,18 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class UnAssignUserFromUserGroupSignal extends Signal
 {
     /**
-     * User
+     * UserId
      *
-     * @var eZ\Publish\API\Repository\Values\User\User
+     * @var mixed
      */
-    public $user;
+    public $userId;
 
     /**
-     * UserGroup
+     * UserGroupId
      *
-     * @var eZ\Publish\API\Repository\Values\User\UserGroup
+     * @var mixed
      */
-    public $userGroup;
+    public $userGroupId;
 
 }
 

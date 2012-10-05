@@ -16,12 +16,5 @@ use eZ\Publish\Core\SignalSlot\Signal;
  */
 class CreateSectionSignal extends Signal
 {
-    /**
-     * SectionCreateStruct
-     *
-     * @var eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
-     */
-    public $sectionCreateStruct;
-
 }
 

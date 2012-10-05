@@ -16,12 +16,5 @@ use eZ\Publish\Core\SignalSlot\Signal;
  */
 class AddTranslationInfoSignal extends Signal
 {
-    /**
-     * TranslationInfo
-     *
-     * @var eZ\Publish\API\Repository\Values\Content\TranslationInfo
-     */
-    public $translationInfo;
-
 }
 
