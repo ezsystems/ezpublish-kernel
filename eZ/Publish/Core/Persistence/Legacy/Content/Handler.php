@@ -418,8 +418,12 @@ class Handler implements BaseContentHandler
      */
     public function removeRawContent( $contentId )
     {
-        $versionInfos = $this->listVersions( $contentId );
+        $contentInfo = $this->loadContentInfo( $contentId );
+        $this->locationGateway->removeElementFromTrash(
+            $contentInfo->mainLocationId
+        );
 
+        $versionInfos = $this->listVersions( $contentId );
         foreach ( $versionInfos as $versionInfo )
         {
             $this->fieldHandler->deleteFields( $contentId, $versionInfo );
