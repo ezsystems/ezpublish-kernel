@@ -11,7 +11,7 @@
             <xsd:annotation>
               <xsd:documentation>
                 Location ID.
-			  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="priority" type="xsd:int">

@@ -10,11 +10,12 @@
 namespace eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
  * FieldDefinition list view model
  */
-class FieldDefinitionList
+class FieldDefinitionList extends RestValue
 {
     /**
      * ContentType the field definitions belong to

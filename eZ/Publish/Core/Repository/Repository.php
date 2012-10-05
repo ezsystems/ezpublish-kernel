@@ -16,7 +16,6 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\API\Repository\Values\User\User,
     eZ\Publish\API\Repository\Values\User\Limitation,
     Exception,
-    LogicException,
     RuntimeException;
 
 /**
@@ -307,7 +306,7 @@ class Repository implements RepositoryInterface
      */
     public function canUser( $module, $function, ValueObject $object, ValueObject $target = null )
     {
-        $permissionSets = $this->hasAccess( $module, $function, null, true );
+        $permissionSets = $this->hasAccess( $module, $function );
         if ( $permissionSets === false || $permissionSets === true )
         {
             return $permissionSets;

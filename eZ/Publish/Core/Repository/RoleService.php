@@ -25,7 +25,6 @@ use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct,
     eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation,
     eZ\Publish\API\Repository\Values\User\User,
     eZ\Publish\API\Repository\Values\User\UserGroup,
-    eZ\Publish\API\Repository\Values\User\Limitation,
 
     eZ\Publish\SPI\Persistence\User\Policy as SPIPolicy,
     eZ\Publish\SPI\Persistence\User\RoleAssignment as SPIRoleAssignment,
@@ -76,7 +75,10 @@ class RoleService implements RoleServiceInterface
     {
         $this->repository = $repository;
         $this->userHandler = $userHandler;
-        $this->settings = $settings;
+        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+            'limitationTypes' => array(),
+            'limitationMap' => array(),
+        );
     }
 
     /**

@@ -29,14 +29,22 @@ class Message
     public $body;
 
     /**
+     * HTTP status code
+     * @var int
+     */
+    public $statusCode;
+
+    /**
      * Construct from headers and body
      *
      * @param array $headers
      * @param string $body
+     * @param int $statusCode
      */
-    public function __construct( array $headers = array(), $body = '' )
+    public function __construct( array $headers = array(), $body = '', $statusCode = 200 )
     {
-        $this->headers = $headers;
-        $this->body    = $body;
+        $this->headers    = $headers;
+        $this->body       = $body;
+        $this->statusCode = $statusCode;
     }
 }

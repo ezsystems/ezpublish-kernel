@@ -12,13 +12,14 @@ namespace eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
  * REST Content, as received by /content/objects/<ID>
  *
  * Might have a "Version" (aka Content in the Public API) embedded
  */
-class RestContent
+class RestContent extends RestValue
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo

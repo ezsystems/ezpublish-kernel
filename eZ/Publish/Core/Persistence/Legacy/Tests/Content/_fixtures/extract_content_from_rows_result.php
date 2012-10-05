@@ -39,7 +39,6 @@ $versionInfo->modificationDate = 1313061404;
 $versionInfo->creatorId = 14;
 $versionInfo->creationDate = 1313061317;
 $versionInfo->status = 1;
-$versionInfo->contentId = 226;
 $versionInfo->initialLanguageCode = 'eng-US';
 $versionInfo->languageIds = array( 2 );
 

@@ -10,11 +10,12 @@
 namespace eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\Values\User\UserRoleAssignment;
+use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
  * RestUserRoleAssignment view model
  */
-class RestUserRoleAssignment
+class RestUserRoleAssignment extends RestValue
 {
     /**
      * Role assignment

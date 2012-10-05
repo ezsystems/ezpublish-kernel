@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Common\Values;
 
+use eZ\Publish\Core\REST\Common\Value as RestValue;
+
 /**
  * ContentObjectStates view model
  */
-class ContentObjectStates
+class ContentObjectStates extends RestValue
 {
     /**
      * Object states

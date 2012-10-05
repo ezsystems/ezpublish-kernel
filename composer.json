@@ -7,10 +7,6 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "http://github.com/Qafoo/REST-Micro-Framework"
-        },
-        {
-            "type": "vcs",
             "url": "https://github.com/ezsystems/ezpublish.git"
         }
     ],
@@ -34,10 +30,10 @@
         "zetacomponents/system-information": "dev-master",
         "zetacomponents/webdav": "1.1.0-rc1",
         "symfony/symfony": "2.1.*",
-        "symfony-cmf/routing": "1.0.*"
+        "symfony-cmf/routing": "1.0.*",
+        "qafoo/rmf": "1.0.0"
     },
     "require-dev": {
-        "Qafoo/RMF": "dev-master",
         "ezsystems/ezpublish-legacy": "dev-master",
         "mikey179/vfsStream": "1.1.0"
     },

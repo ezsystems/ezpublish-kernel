@@ -108,15 +108,17 @@ class SearchHandler extends SearchHandlerInterface
                     'type' => 'Content\\Location',
                     'match' => array( 'contentId' => 'id' )
                 ),
-                'contentInfo' => array(
-                    'type' => 'Content\\ContentInfo',
-                    'match' => array( 'id' => 'id' ),
-                    'single' => true
-                ),
                 'versionInfo' => array(
                     'type' => 'Content\\VersionInfo',
-                    'match' => array( 'contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
-                    'single' => true
+                    'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
+                    'single' => true,
+                    'sub' => array(
+                        'contentInfo' => array(
+                            'type' => 'Content\\ContentInfo',
+                            'match' => array( 'id' => '_contentId' ),
+                            'single' => true
+                        ),
+                    )
                 ),
             )
         );
@@ -124,13 +126,19 @@ class SearchHandler extends SearchHandlerInterface
         $resultList = array();
         foreach ( $list as $item )
         {
-            if ( $item->contentInfo instanceof ContentInfo )
+            if ( !$item instanceof Content )
+                throw new \RuntimeException( "item is not instance of Content, it is ". var_export( $item, true ) );
+            else if ( !$item->versionInfo instanceof VersionInfo )
+                throw new \RuntimeException( "item->versionInfo is not instance of VersionInfo, it is ". var_export( $item, true ) );
+            else if ( !$item->versionInfo->contentInfo instanceof ContentInfo )
+                throw new \RuntimeException( "item->versionInfo->contentInfo is not instance of ContentInfo, it is ". var_export( $item, true ) );
+            else
             {
                 $item->fields = $this->backend->find(
                     'Content\\Field',
                     array(
-                        '_contentId' => $item->contentInfo->id,
-                        'versionNo' => $item->contentInfo->currentVersionNo
+                        '_contentId' => $item->versionInfo->contentInfo->id,
+                        'versionNo' => $item->versionInfo->contentInfo->currentVersionNo
                     )
                 );
 
@@ -229,25 +237,25 @@ class SearchHandler extends SearchHandlerInterface
             {
                 $match['id'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
             }
-            else if ( $criterion instanceof ContentTypeId && !isset( $match['contentInfo']['typeId'] ) )
+            else if ( $criterion instanceof ContentTypeId && !isset( $match['versionInfo']['contentInfo']['typeId'] ) )
             {
-                $match['contentInfo']['contentTypeId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
+                $match['versionInfo']['contentInfo']['contentTypeId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
             }
             else if ( $criterion instanceof LocationId && !isset( $match['locations']['id'] ) )
             {
                 $match['locations']['id'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
             }
-            else if ( $criterion instanceof RemoteId && !isset( $match['contentInfo']['remoteId'] ) )
+            else if ( $criterion instanceof RemoteId && !isset( $match['versionInfo']['contentInfo']['remoteId'] ) )
             {
-                $match['contentInfo']['remoteId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
+                $match['versionInfo']['contentInfo']['remoteId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
             }
             else if ( $criterion instanceof LocationRemoteId && !isset( $match['locations']['remoteId'] ) )
             {
                 $match['locations']['remoteId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
             }
-            else if ( $criterion instanceof SectionId && !isset( $match['contentInfo']['sectionId'] ) )
+            else if ( $criterion instanceof SectionId && !isset( $match['versionInfo']['contentInfo']['sectionId'] ) )
             {
-                $match['contentInfo']['sectionId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
+                $match['versionInfo']['contentInfo']['sectionId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
             }
             else if ( $criterion instanceof Status && !isset( $match['versionInfo']['status'] ) )
             {
@@ -279,8 +287,8 @@ class SearchHandler extends SearchHandlerInterface
             {
                 if ( $criterion instanceof UserMetadata && $criterion->target !== $criterion::MODIFIER )
                 {
-                    if ( $criterion->target === $criterion::OWNER && !isset( $match['contentInfo']['ownerId'] ) )
-                        $match['ownerId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
+                    if ( $criterion->target === $criterion::OWNER && !isset( $match['versionInfo']['contentInfo']['ownerId'] ) )
+                        $match['versionInfo']['contentInfo']['ownerId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
                     else if ( $criterion->target === $criterion::CREATOR && !isset( $match['versionInfo']['creatorId'] ) )
                         $match['versionInfo']['creatorId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
                     //else if ( $criterion->target === $criterion::MODIFIER && !isset( $match['version']['creatorId'] ) )

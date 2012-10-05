@@ -169,7 +169,7 @@ class ContentExtension extends Twig_Extension
         // generated HTML
         if ( isset( $params['attr']['class'] ) )
         {
-            $params['attr']['class'] .= $this->getFieldTypeIdentifier( $content, $field ) . '-field';
+            $params['attr']['class'] .= ' ' . $this->getFieldTypeIdentifier( $content, $field ) . '-field';
         }
         else
         {

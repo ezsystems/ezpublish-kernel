@@ -226,7 +226,7 @@ class EzcDatabase extends Gateway
             $q->bindValue( $this->languageHandler->loadByLanguageCode( $versionInfo->initialLanguageCode )->id, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'contentobject_id' ),
-            $q->bindValue( $versionInfo->contentId, null, \PDO::PARAM_INT )
+            $q->bindValue( $versionInfo->contentInfo->id, null, \PDO::PARAM_INT )
         )->set(
             // As described in field mapping document
             $this->dbHandler->quoteColumn( 'workflow_event_pos' ),

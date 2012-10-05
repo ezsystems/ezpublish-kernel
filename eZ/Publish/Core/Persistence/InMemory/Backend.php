@@ -515,7 +515,14 @@ class Backend
             }
         }
 
-        return $this->joinToValue( $obj, $joinInfo );
+        try
+        {
+            return $this->joinToValue( $obj, $joinInfo );
+        }
+        catch ( \Exception $e )
+        {
+            throw new \RuntimeException( "Could not join value using: " . var_export( $data, true ), 0, $e );
+        }
     }
 
     /**
@@ -542,6 +549,7 @@ class Backend
                 }
                 else
                 {
+                    throw new \RuntimeException( "$property is supposed to be single(1), found none!" );
                     $value = null;
                 }
                 continue;

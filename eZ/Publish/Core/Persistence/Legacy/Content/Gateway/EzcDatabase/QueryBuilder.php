@@ -129,10 +129,6 @@ class QueryBuilder
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( 'contentobject_version', 'ezcontentobject_tree' ),
                     $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' )
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'main_node_id', 'ezcontentobject_tree' ),
-                    $this->dbHandler->quoteColumn( 'node_id', 'ezcontentobject_tree' )
                 )
             )
         // @todo: Joining with ezcontentobject_name is probably a VERY bad way to gather that information

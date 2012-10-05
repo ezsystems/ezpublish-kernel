@@ -10,11 +10,12 @@
 namespace eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
  * RestRelation view model
  */
-class RestRelation
+class RestRelation extends RestValue
 {
     /**
      * A relation

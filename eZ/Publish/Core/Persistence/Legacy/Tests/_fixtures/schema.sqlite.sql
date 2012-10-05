@@ -1,10 +1,10 @@
 CREATE TABLE 'ezbinaryfile' (
-	'contentobject_attribute_id' integer NOT NULL DEFAULT 0,
-	'download_count' integer NOT NULL DEFAULT 0,
-	'filename' text(255) NOT NULL,
-	'mime_type' text(255) NOT NULL,
-	'original_filename' text(255) NOT NULL,
-	'version' integer NOT NULL DEFAULT 0
+  'contentobject_attribute_id' integer NOT NULL DEFAULT 0,
+  'download_count' integer NOT NULL DEFAULT 0,
+  'filename' text(255) NOT NULL,
+  'mime_type' text(255) NOT NULL,
+  'original_filename' text(255) NOT NULL,
+  'version' integer NOT NULL DEFAULT 0
 );
 CREATE TABLE 'ezmedia' (
   'contentobject_attribute_id' integer NOT NULL DEFAULT 0,
@@ -23,9 +23,9 @@ CREATE TABLE 'ezmedia' (
   PRIMARY KEY ('contentobject_attribute_id','version')
 );
 CREATE TABLE 'ezimagefile' (
-	'contentobject_attribute_id' integer NOT NULL DEFAULT 0,
-	'filepath' text NOT NULL,
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT
+  'contentobject_attribute_id' integer NOT NULL DEFAULT 0,
+  'filepath' text NOT NULL,
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT
 );
 CREATE TABLE 'ezgmaplocation' (
   'contentobject_attribute_id' integer NOT NULL DEFAULT 0,
@@ -36,33 +36,33 @@ CREATE TABLE 'ezgmaplocation' (
   PRIMARY KEY ('contentobject_attribute_id','contentobject_version')
 );
 CREATE TABLE 'ezcobj_state' (
-	'default_language_id' integer NOT NULL DEFAULT 0,
-	'group_id' integer NOT NULL DEFAULT 0,
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'identifier' text(45) NOT NULL DEFAULT '',
-	'language_mask' integer NOT NULL DEFAULT 0,
-	'priority' integer NOT NULL DEFAULT 0
+  'default_language_id' integer NOT NULL DEFAULT 0,
+  'group_id' integer NOT NULL DEFAULT 0,
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'identifier' text(45) NOT NULL DEFAULT '',
+  'language_mask' integer NOT NULL DEFAULT 0,
+  'priority' integer NOT NULL DEFAULT 0
 );
 CREATE TABLE 'ezcobj_state_group' (
-	'default_language_id' integer NOT NULL DEFAULT 0,
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'identifier' text(45) NOT NULL DEFAULT '',
-	'language_mask' integer NOT NULL DEFAULT 0
+  'default_language_id' integer NOT NULL DEFAULT 0,
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'identifier' text(45) NOT NULL DEFAULT '',
+  'language_mask' integer NOT NULL DEFAULT 0
 );
 CREATE TABLE 'ezcobj_state_group_language' (
-	'contentobject_state_group_id' integer NOT NULL DEFAULT 0,
-	'description' text NOT NULL,
-	'language_id' integer NOT NULL DEFAULT 0,
-	'real_language_id' integer NOT NULL DEFAULT 0,
-	'name' text(45) NOT NULL DEFAULT '',
-	PRIMARY KEY ( contentobject_state_group_id, real_language_id )
+  'contentobject_state_group_id' integer NOT NULL DEFAULT 0,
+  'description' text NOT NULL,
+  'language_id' integer NOT NULL DEFAULT 0,
+  'real_language_id' integer NOT NULL DEFAULT 0,
+  'name' text(45) NOT NULL DEFAULT '',
+  PRIMARY KEY ( contentobject_state_group_id, real_language_id )
 );
 CREATE TABLE 'ezcobj_state_language' (
-	'contentobject_state_id' integer NOT NULL DEFAULT 0,
-	'description' text NOT NULL,
-	'language_id' integer NOT NULL DEFAULT 0,
-	'name' text(45) NOT NULL DEFAULT '',
-	PRIMARY KEY ( contentobject_state_id, language_id )
+  'contentobject_state_id' integer NOT NULL DEFAULT 0,
+  'description' text NOT NULL,
+  'language_id' integer NOT NULL DEFAULT 0,
+  'name' text(45) NOT NULL DEFAULT '',
+  PRIMARY KEY ( contentobject_state_id, language_id )
 );
 CREATE TABLE 'ezcobj_state_link' (
   'contentobject_id' integer NOT NULL DEFAULT '0',
@@ -70,298 +70,298 @@ CREATE TABLE 'ezcobj_state_link' (
   PRIMARY KEY ( contentobject_id, contentobject_state_id )
 );
 CREATE TABLE 'ezcontent_language' (
-	'disabled' integer NOT NULL DEFAULT 0,
-	'id' integer NOT NULL DEFAULT 0,
-	'locale' text(20) NOT NULL,
-	'name' text(255) NOT NULL
+  'disabled' integer NOT NULL DEFAULT 0,
+  'id' integer NOT NULL DEFAULT 0,
+  'locale' text(20) NOT NULL,
+  'name' text(255) NOT NULL
 );
 CREATE TABLE 'ezcontentclass' (
-	'always_available' integer NOT NULL DEFAULT 0,
-	'contentobject_name' text(255),
-	'created' integer NOT NULL DEFAULT 0,
-	'creator_id' integer NOT NULL DEFAULT 0,
-	'id' integer NOT NULL DEFAULT 0,
-	'identifier' text(50) NOT NULL,
-	'initial_language_id' integer NOT NULL DEFAULT 0,
-	'is_container' integer NOT NULL DEFAULT 0,
-	'language_mask' integer NOT NULL DEFAULT 0,
-	'modified' integer NOT NULL DEFAULT 0,
-	'modifier_id' integer NOT NULL DEFAULT 0,
-	'remote_id' text(100) NOT NULL,
-	'serialized_description_list' clob,
-	'serialized_name_list' clob,
-	'sort_field' integer NOT NULL DEFAULT 1,
-	'sort_order' integer NOT NULL DEFAULT 1,
-	'url_alias_name' text(255),
-	'version' integer NOT NULL DEFAULT 0,
-	PRIMARY KEY ( id, version )
+  'always_available' integer NOT NULL DEFAULT 0,
+  'contentobject_name' text(255),
+  'created' integer NOT NULL DEFAULT 0,
+  'creator_id' integer NOT NULL DEFAULT 0,
+  'id' integer NOT NULL DEFAULT 0,
+  'identifier' text(50) NOT NULL,
+  'initial_language_id' integer NOT NULL DEFAULT 0,
+  'is_container' integer NOT NULL DEFAULT 0,
+  'language_mask' integer NOT NULL DEFAULT 0,
+  'modified' integer NOT NULL DEFAULT 0,
+  'modifier_id' integer NOT NULL DEFAULT 0,
+  'remote_id' text(100) NOT NULL,
+  'serialized_description_list' clob,
+  'serialized_name_list' clob,
+  'sort_field' integer NOT NULL DEFAULT 1,
+  'sort_order' integer NOT NULL DEFAULT 1,
+  'url_alias_name' text(255),
+  'version' integer NOT NULL DEFAULT 0,
+  PRIMARY KEY ( id, version )
 );
 CREATE TABLE 'ezcontentclass_attribute' (
-	'can_translate' integer DEFAULT 1,
-	'category' text(25) NOT NULL,
-	'contentclass_id' integer NOT NULL DEFAULT 0,
-	'data_float1' real,
-	'data_float2' real,
-	'data_float3' real,
-	'data_float4' real,
-	'data_int1' integer,
-	'data_int2' integer,
-	'data_int3' integer,
-	'data_int4' integer,
-	'data_text1' text(50),
-	'data_text2' text(50),
-	'data_text3' text(50),
-	'data_text4' text(255),
-	'data_text5' clob,
-	'data_type_string' text(50) NOT NULL,
-	'id' integer NOT NULL DEFAULT 0,
-	'identifier' text(50) NOT NULL,
-	'is_information_collector' integer NOT NULL DEFAULT 0,
-	'is_required' integer NOT NULL DEFAULT 0,
-	'is_searchable' integer NOT NULL DEFAULT 0,
-	'placement' integer NOT NULL DEFAULT 0,
-	'serialized_data_text' clob,
-	'serialized_description_list' clob,
-	'serialized_name_list' clob NOT NULL,
-	'version' integer NOT NULL DEFAULT 0
+  'can_translate' integer DEFAULT 1,
+  'category' text(25) NOT NULL,
+  'contentclass_id' integer NOT NULL DEFAULT 0,
+  'data_float1' real,
+  'data_float2' real,
+  'data_float3' real,
+  'data_float4' real,
+  'data_int1' integer,
+  'data_int2' integer,
+  'data_int3' integer,
+  'data_int4' integer,
+  'data_text1' text(50),
+  'data_text2' text(50),
+  'data_text3' text(50),
+  'data_text4' text(255),
+  'data_text5' clob,
+  'data_type_string' text(50) NOT NULL,
+  'id' integer NOT NULL DEFAULT 0,
+  'identifier' text(50) NOT NULL,
+  'is_information_collector' integer NOT NULL DEFAULT 0,
+  'is_required' integer NOT NULL DEFAULT 0,
+  'is_searchable' integer NOT NULL DEFAULT 0,
+  'placement' integer NOT NULL DEFAULT 0,
+  'serialized_data_text' clob,
+  'serialized_description_list' clob,
+  'serialized_name_list' clob NOT NULL,
+  'version' integer NOT NULL DEFAULT 0
 );
 CREATE TABLE 'ezcontentclass_classgroup' (
-	'contentclass_id' integer NOT NULL DEFAULT 0,
-	'contentclass_version' integer NOT NULL DEFAULT 0,
-	'group_id' integer NOT NULL DEFAULT 0,
-	'group_name' text(255)
+  'contentclass_id' integer NOT NULL DEFAULT 0,
+  'contentclass_version' integer NOT NULL DEFAULT 0,
+  'group_id' integer NOT NULL DEFAULT 0,
+  'group_name' text(255)
 );
 CREATE TABLE 'ezcontentclass_name' (
-	'contentclass_id' integer NOT NULL DEFAULT 0,
-	'contentclass_version' integer NOT NULL DEFAULT 0,
-	'language_id' integer NOT NULL DEFAULT 0,
-	'language_locale' text(20) NOT NULL,
-	'name' text(255) NOT NULL
+  'contentclass_id' integer NOT NULL DEFAULT 0,
+  'contentclass_version' integer NOT NULL DEFAULT 0,
+  'language_id' integer NOT NULL DEFAULT 0,
+  'language_locale' text(20) NOT NULL,
+  'name' text(255) NOT NULL
 );
 CREATE TABLE 'ezcontentclassgroup' (
-	'created' integer NOT NULL DEFAULT 0,
-	'creator_id' integer NOT NULL DEFAULT 0,
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'modified' integer NOT NULL DEFAULT 0,
-	'modifier_id' integer NOT NULL DEFAULT 0,
-	'name' text(255)
+  'created' integer NOT NULL DEFAULT 0,
+  'creator_id' integer NOT NULL DEFAULT 0,
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'modified' integer NOT NULL DEFAULT 0,
+  'modifier_id' integer NOT NULL DEFAULT 0,
+  'name' text(255)
 );
 CREATE TABLE 'ezcontentobject' (
-	'contentclass_id' integer NOT NULL DEFAULT 0,
-	'current_version' integer,
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'initial_language_id' integer NOT NULL DEFAULT 0,
-	'language_mask' integer NOT NULL DEFAULT 0,
-	'modified' integer NOT NULL DEFAULT 0,
-	'name' text(255),
-	'owner_id' integer NOT NULL DEFAULT 0,
-	'published' integer NOT NULL DEFAULT 0,
-	'remote_id' text(100),
-	'section_id' integer NOT NULL DEFAULT 0,
-	'status' integer DEFAULT 0
+  'contentclass_id' integer NOT NULL DEFAULT 0,
+  'current_version' integer,
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'initial_language_id' integer NOT NULL DEFAULT 0,
+  'language_mask' integer NOT NULL DEFAULT 0,
+  'modified' integer NOT NULL DEFAULT 0,
+  'name' text(255),
+  'owner_id' integer NOT NULL DEFAULT 0,
+  'published' integer NOT NULL DEFAULT 0,
+  'remote_id' text(100),
+  'section_id' integer NOT NULL DEFAULT 0,
+  'status' integer DEFAULT 0
 );
 CREATE TABLE 'ezcontentobject_attribute' (
-	'attribute_original_id' integer DEFAULT 0,
-	'contentclassattribute_id' integer NOT NULL DEFAULT 0,
-	'contentobject_id' integer NOT NULL DEFAULT 0,
-	'data_float' real,
-	'data_int' integer,
-	'data_text' clob,
-	'data_type_string' text(50),
-	'id' integer NOT NULL DEFAULT 0,
-	'language_code' text(20) NOT NULL,
-	'language_id' integer NOT NULL DEFAULT 0,
-	'sort_key_int' integer NOT NULL DEFAULT 0,
-	'sort_key_string' text(255) NOT NULL COLLATE NOCASE,
-	'version' integer NOT NULL DEFAULT 0,
+  'attribute_original_id' integer DEFAULT 0,
+  'contentclassattribute_id' integer NOT NULL DEFAULT 0,
+  'contentobject_id' integer NOT NULL DEFAULT 0,
+  'data_float' real,
+  'data_int' integer,
+  'data_text' clob,
+  'data_type_string' text(50),
+  'id' integer NOT NULL DEFAULT 0,
+  'language_code' text(20) NOT NULL,
+  'language_id' integer NOT NULL DEFAULT 0,
+  'sort_key_int' integer NOT NULL DEFAULT 0,
+  'sort_key_string' text(255) NOT NULL COLLATE NOCASE,
+  'version' integer NOT NULL DEFAULT 0,
     PRIMARY KEY ( id, version )
 );
 CREATE TABLE 'ezcontentobject_link' (
-	'contentclassattribute_id' integer NOT NULL DEFAULT 0,
-	'from_contentobject_id' integer NOT NULL DEFAULT 0,
-	'from_contentobject_version' integer NOT NULL DEFAULT 0,
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'op_code' integer NOT NULL DEFAULT 0,
-	'relation_type' integer NOT NULL DEFAULT 1,
-	'to_contentobject_id' integer NOT NULL DEFAULT 0
+  'contentclassattribute_id' integer NOT NULL DEFAULT 0,
+  'from_contentobject_id' integer NOT NULL DEFAULT 0,
+  'from_contentobject_version' integer NOT NULL DEFAULT 0,
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'op_code' integer NOT NULL DEFAULT 0,
+  'relation_type' integer NOT NULL DEFAULT 1,
+  'to_contentobject_id' integer NOT NULL DEFAULT 0
 );
 CREATE TABLE 'ezcontentobject_name' (
-	'content_translation' text(20) NOT NULL,
-	'content_version' integer NOT NULL DEFAULT 0,
-	'contentobject_id' integer NOT NULL DEFAULT 0,
-	'language_id' integer NOT NULL DEFAULT 0,
-	'name' text(255),
-	'real_translation' text(20)
+  'content_translation' text(20) NOT NULL,
+  'content_version' integer NOT NULL DEFAULT 0,
+  'contentobject_id' integer NOT NULL DEFAULT 0,
+  'language_id' integer NOT NULL DEFAULT 0,
+  'name' text(255),
+  'real_translation' text(20)
 );
 CREATE TABLE 'ezcontentobject_trash' (
-	'contentobject_id' integer,
-	'contentobject_version' integer,
-	'depth' integer NOT NULL DEFAULT 0,
-	'is_hidden' integer NOT NULL DEFAULT 0,
-	'is_invisible' integer NOT NULL DEFAULT 0,
-	'main_node_id' integer,
-	'modified_subnode' integer DEFAULT 0,
-	'node_id' integer NOT NULL DEFAULT 0,
-	'parent_node_id' integer NOT NULL DEFAULT 0,
-	'path_identification_string' clob,
-	'path_string' text(255) NOT NULL,
-	'priority' integer NOT NULL DEFAULT 0,
-	'remote_id' text(100) NOT NULL,
-	'sort_field' integer DEFAULT 1,
-	'sort_order' integer DEFAULT 1
+  'contentobject_id' integer,
+  'contentobject_version' integer,
+  'depth' integer NOT NULL DEFAULT 0,
+  'is_hidden' integer NOT NULL DEFAULT 0,
+  'is_invisible' integer NOT NULL DEFAULT 0,
+  'main_node_id' integer,
+  'modified_subnode' integer DEFAULT 0,
+  'node_id' integer NOT NULL DEFAULT 0,
+  'parent_node_id' integer NOT NULL DEFAULT 0,
+  'path_identification_string' clob,
+  'path_string' text(255) NOT NULL,
+  'priority' integer NOT NULL DEFAULT 0,
+  'remote_id' text(100) NOT NULL,
+  'sort_field' integer DEFAULT 1,
+  'sort_order' integer DEFAULT 1
 );
 CREATE TABLE 'ezcontentobject_tree' (
-	'contentobject_id' integer,
-	'contentobject_is_published' integer,
-	'contentobject_version' integer,
-	'depth' integer NOT NULL DEFAULT 0,
-	'is_hidden' integer NOT NULL DEFAULT 0,
-	'is_invisible' integer NOT NULL DEFAULT 0,
-	'main_node_id' integer,
-	'modified_subnode' integer DEFAULT 0,
-	'node_id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'parent_node_id' integer NOT NULL DEFAULT 0,
-	'path_identification_string' clob,
-	'path_string' text(255) NOT NULL,
-	'priority' integer NOT NULL DEFAULT 0,
-	'remote_id' text(100) NOT NULL,
-	'sort_field' integer DEFAULT 1,
-	'sort_order' integer DEFAULT 1
+  'contentobject_id' integer,
+  'contentobject_is_published' integer,
+  'contentobject_version' integer,
+  'depth' integer NOT NULL DEFAULT 0,
+  'is_hidden' integer NOT NULL DEFAULT 0,
+  'is_invisible' integer NOT NULL DEFAULT 0,
+  'main_node_id' integer,
+  'modified_subnode' integer DEFAULT 0,
+  'node_id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'parent_node_id' integer NOT NULL DEFAULT 0,
+  'path_identification_string' clob,
+  'path_string' text(255) NOT NULL,
+  'priority' integer NOT NULL DEFAULT 0,
+  'remote_id' text(100) NOT NULL,
+  'sort_field' integer DEFAULT 1,
+  'sort_order' integer DEFAULT 1
 );
 CREATE TABLE 'ezcontentobject_version' (
-	'contentobject_id' integer,
-	'created' integer NOT NULL DEFAULT 0,
-	'creator_id' integer NOT NULL DEFAULT 0,
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'initial_language_id' integer NOT NULL DEFAULT 0,
-	'language_mask' integer NOT NULL DEFAULT 0,
-	'modified' integer NOT NULL DEFAULT 0,
-	'status' integer NOT NULL DEFAULT 0,
-	'user_id' integer NOT NULL DEFAULT 0,
-	'version' integer NOT NULL DEFAULT 0,
-	'workflow_event_pos' integer DEFAULT 0
+  'contentobject_id' integer,
+  'created' integer NOT NULL DEFAULT 0,
+  'creator_id' integer NOT NULL DEFAULT 0,
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'initial_language_id' integer NOT NULL DEFAULT 0,
+  'language_mask' integer NOT NULL DEFAULT 0,
+  'modified' integer NOT NULL DEFAULT 0,
+  'status' integer NOT NULL DEFAULT 0,
+  'user_id' integer NOT NULL DEFAULT 0,
+  'version' integer NOT NULL DEFAULT 0,
+  'workflow_event_pos' integer DEFAULT 0
 );
 CREATE TABLE 'eznode_assignment' (
-	'contentobject_id' integer,
-	'contentobject_version' integer,
-	'from_node_id' integer DEFAULT 0,
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'is_main' integer NOT NULL DEFAULT 0,
-	'op_code' integer NOT NULL DEFAULT 0,
-	'parent_node' integer,
-	'parent_remote_id' text(100) NOT NULL,
-	'remote_id' integer NOT NULL DEFAULT 0,
-	'sort_field' integer DEFAULT 1,
-	'sort_order' integer DEFAULT 1
+  'contentobject_id' integer,
+  'contentobject_version' integer,
+  'from_node_id' integer DEFAULT 0,
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'is_main' integer NOT NULL DEFAULT 0,
+  'op_code' integer NOT NULL DEFAULT 0,
+  'parent_node' integer,
+  'parent_remote_id' text(100) NOT NULL,
+  'remote_id' integer NOT NULL DEFAULT 0,
+  'sort_field' integer DEFAULT 1,
+  'sort_order' integer DEFAULT 1
 );
 CREATE TABLE 'ezurl' (
-	'created' integer NOT NULL DEFAULT 0,
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'is_valid' integer NOT NULL DEFAULT 1,
-	'last_checked' integer NOT NULL DEFAULT 0,
-	'modified' integer NOT NULL DEFAULT 0,
-	'original_url_md5' text(32) NOT NULL,
-	'url' clob
+  'created' integer NOT NULL DEFAULT 0,
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'is_valid' integer NOT NULL DEFAULT 1,
+  'last_checked' integer NOT NULL DEFAULT 0,
+  'modified' integer NOT NULL DEFAULT 0,
+  'original_url_md5' text(32) NOT NULL,
+  'url' clob
 );
 CREATE TABLE 'ezurl_object_link' (
-	'contentobject_attribute_id' integer NOT NULL DEFAULT 0,
-	'contentobject_attribute_version' integer NOT NULL DEFAULT 0,
-	'url_id' integer NOT NULL DEFAULT 0
+  'contentobject_attribute_id' integer NOT NULL DEFAULT 0,
+  'contentobject_attribute_version' integer NOT NULL DEFAULT 0,
+  'url_id' integer NOT NULL DEFAULT 0
 );
 CREATE TABLE 'ezurlalias' (
-	'destination_url' clob NOT NULL,
-	'forward_to_id' integer NOT NULL DEFAULT 0,
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'is_imported' integer NOT NULL DEFAULT 0,
-	'is_internal' integer NOT NULL DEFAULT 1,
-	'is_wildcard' integer NOT NULL DEFAULT 0,
-	'source_md5' text(32),
-	'source_url' clob NOT NULL
+  'destination_url' clob NOT NULL,
+  'forward_to_id' integer NOT NULL DEFAULT 0,
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'is_imported' integer NOT NULL DEFAULT 0,
+  'is_internal' integer NOT NULL DEFAULT 1,
+  'is_wildcard' integer NOT NULL DEFAULT 0,
+  'source_md5' text(32),
+  'source_url' clob NOT NULL
 );
 CREATE TABLE 'ezurlalias_ml' (
-	'action' clob NOT NULL,
-	'action_type' text(32) NOT NULL,
-	'alias_redirects' integer NOT NULL DEFAULT 1,
-	'id' integer NOT NULL DEFAULT 0,
-	'is_alias' integer NOT NULL DEFAULT 0,
-	'is_original' integer NOT NULL DEFAULT 0,
-	'lang_mask' integer NOT NULL DEFAULT 0,
-	'link' integer NOT NULL DEFAULT 0,
-	'parent' integer NOT NULL DEFAULT 0,
-	'text' clob NOT NULL,
-	'text_md5' text(32) NOT NULL
+  'action' clob NOT NULL,
+  'action_type' text(32) NOT NULL,
+  'alias_redirects' integer NOT NULL DEFAULT 1,
+  'id' integer NOT NULL DEFAULT 0,
+  'is_alias' integer NOT NULL DEFAULT 0,
+  'is_original' integer NOT NULL DEFAULT 0,
+  'lang_mask' integer NOT NULL DEFAULT 0,
+  'link' integer NOT NULL DEFAULT 0,
+  'parent' integer NOT NULL DEFAULT 0,
+  'text' clob NOT NULL,
+  'text_md5' text(32) NOT NULL
 );
 CREATE TABLE 'ezurlalias_ml_incr' (
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT
 );
 CREATE TABLE 'ezurlwildcard' (
-	'destination_url' clob NOT NULL,
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'source_url' clob NOT NULL,
-	'type' integer NOT NULL DEFAULT 0
+  'destination_url' clob NOT NULL,
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'source_url' clob NOT NULL,
+  'type' integer NOT NULL DEFAULT 0
 );
 CREATE TABLE 'ezuser' (
-	'contentobject_id' integer NOT NULL DEFAULT 0,
-	'email' text(150) NOT NULL,
-	'login' text(150) NOT NULL,
-	'password_hash' text(50),
-	'password_hash_type' integer NOT NULL DEFAULT 1
+  'contentobject_id' integer NOT NULL DEFAULT 0,
+  'email' text(150) NOT NULL,
+  'login' text(150) NOT NULL,
+  'password_hash' text(50),
+  'password_hash_type' integer NOT NULL DEFAULT 1
 );
 CREATE TABLE 'ezuser_role' (
-	'contentobject_id' integer,
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'limit_identifier' text(255),
-	'limit_value' text(255),
-	'role_id' integer
+  'contentobject_id' integer,
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'limit_identifier' text(255),
+  'limit_value' text(255),
+  'role_id' integer
 );
 CREATE TABLE 'ezrole' (
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'is_new' integer NOT NULL DEFAULT 0,
-	'name' text(255) NOT NULL,
-	'value' text(1),
-	'version' integer DEFAULT 0
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'is_new' integer NOT NULL DEFAULT 0,
+  'name' text(255) NOT NULL,
+  'value' text(1),
+  'version' integer DEFAULT 0
 );
 CREATE TABLE 'ezpolicy' (
-	'function_name' text(255),
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'module_name' text(255),
-	'original_id' integer NOT NULL DEFAULT 0,
-	'role_id' integer
+  'function_name' text(255),
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'module_name' text(255),
+  'original_id' integer NOT NULL DEFAULT 0,
+  'role_id' integer
 );
 CREATE TABLE 'ezpolicy_limitation' (
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'identifier' text(255) NOT NULL,
-	'policy_id' integer
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'identifier' text(255) NOT NULL,
+  'policy_id' integer
 );
 CREATE TABLE 'ezpolicy_limitation_value' (
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'limitation_id' integer,
-	'value' text(255)
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'limitation_id' integer,
+  'value' text(255)
 );
 CREATE TABLE 'ezuser_setting' (
-	'is_enabled' integer NOT NULL DEFAULT 0,
-	'max_login' integer,
-	'user_id' integer NOT NULL DEFAULT 0
+  'is_enabled' integer NOT NULL DEFAULT 0,
+  'max_login' integer,
+  'user_id' integer NOT NULL DEFAULT 0
 );
 CREATE TABLE 'ezsearch_object_word_link' (
-      'contentclass_attribute_id' integer NOT NULL DEFAULT '0',
-      'contentclass_id' integer NOT NULL DEFAULT '0',
-      'contentobject_id' integer NOT NULL DEFAULT '0',
-      'frequency' float NOT NULL DEFAULT '0',
-      'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-      'identifier' text(255) NOT NULL DEFAULT '',
-      'integer_value' integer NOT NULL DEFAULT '0',
-      'next_word_id' integer NOT NULL DEFAULT '0',
-      'placement' integer NOT NULL DEFAULT '0',
-      'prev_word_id' integer NOT NULL DEFAULT '0',
-      'published' integer NOT NULL DEFAULT '0',
-      'section_id' integer NOT NULL DEFAULT '0',
-      'word_id' integer NOT NULL DEFAULT '0'
+  'contentclass_attribute_id' integer NOT NULL DEFAULT '0',
+  'contentclass_id' integer NOT NULL DEFAULT '0',
+  'contentobject_id' integer NOT NULL DEFAULT '0',
+  'frequency' float NOT NULL DEFAULT '0',
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'identifier' text(255) NOT NULL DEFAULT '',
+  'integer_value' integer NOT NULL DEFAULT '0',
+  'next_word_id' integer NOT NULL DEFAULT '0',
+  'placement' integer NOT NULL DEFAULT '0',
+  'prev_word_id' integer NOT NULL DEFAULT '0',
+  'published' integer NOT NULL DEFAULT '0',
+  'section_id' integer NOT NULL DEFAULT '0',
+  'word_id' integer NOT NULL DEFAULT '0'
 );
 CREATE TABLE 'ezsearch_word' (
-      'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-      'object_count' integer NOT NULL DEFAULT '0',
-      'word' text(150) DEFAULT NULL COLLATE NOCASE
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'object_count' integer NOT NULL DEFAULT '0',
+  'word' text(150) DEFAULT NULL COLLATE NOCASE
 );
 CREATE TABLE 'ezsection' (
   'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,

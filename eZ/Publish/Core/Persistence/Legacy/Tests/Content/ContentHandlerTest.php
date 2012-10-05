@@ -1070,7 +1070,12 @@ class ContentHandlerTest extends TestCase
                             "versionInfo" => new VersionInfo(
                                 array(
                                     "names" => array( "eng-US" => "Test" ),
-                                    "contentInfo" => new ContentInfo( array( "alwaysAvailable" => true ) ),
+                                    "contentInfo" => new ContentInfo(
+                                        array(
+                                            "id" => 24,
+                                            "alwaysAvailable" => true
+                                        )
+                                    ),
                                 )
                             ),
                             "fields" => array()
@@ -1085,7 +1090,6 @@ class ContentHandlerTest extends TestCase
                 $this->equalTo(
                     new VersionInfo(
                         array(
-                            "contentId" => 24,
                             "creationDate" => $time,
                             "modificationDate" => $time,
                             "names" => array( "eng-US" => "Test" ),
@@ -1110,7 +1114,6 @@ class ContentHandlerTest extends TestCase
                             "versionInfo" => new VersionInfo(
                                 array(
                                     "id" => 42,
-                                    "contentId" => 24,
                                     "creationDate" => $time,
                                     "modificationDate" => $time,
                                     "names" => array( "eng-US" => "Test" ),

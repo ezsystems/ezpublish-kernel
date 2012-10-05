@@ -107,7 +107,7 @@ class TrashHandlerTest extends HandlerTest
                 )
             );
 
-            $this->lastContentId = $content->contentInfo->id;
+            $this->lastContentId = $content->versionInfo->contentInfo->id;
 
             $this->locations[] = $location = $this->persistenceHandler->locationHandler()->create(
                 new CreateStruct(
@@ -155,7 +155,7 @@ class TrashHandlerTest extends HandlerTest
         {
             try
             {
-                $contentHandler->deleteContent( $content->contentInfo->id );
+                $contentHandler->deleteContent( $content->versionInfo->contentInfo->id );
             }
             catch ( NotFound $e )
             {

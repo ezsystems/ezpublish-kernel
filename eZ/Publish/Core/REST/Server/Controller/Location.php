@@ -13,6 +13,7 @@ use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Values;
+use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\ContentService;
@@ -20,27 +21,11 @@ use eZ\Publish\API\Repository\TrashService;
 
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 
-use Qafoo\RMF;
-
 /**
  * Location controller
  */
-class Location
+class Location extends RestController
 {
-    /**
-     * Input dispatcher
-     *
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
-     */
-    protected $inputDispatcher;
-
-    /**
-     * URL handler
-     *
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
-     */
-    protected $urlHandler;
-
     /**
      * Location service
      *
@@ -65,16 +50,12 @@ class Location
     /**
      * Construct controller
      *
-     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\TrashService $trashService
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, LocationService $locationService, ContentService $contentService, TrashService $trashService )
+    public function __construct( LocationService $locationService, ContentService $contentService, TrashService $trashService )
     {
-        $this->inputDispatcher = $inputDispatcher;
-        $this->urlHandler      = $urlHandler;
         $this->locationService = $locationService;
         $this->contentService  = $contentService;
         $this->trashService    = $trashService;
@@ -83,17 +64,16 @@ class Location
     /**
      * Creates a new location for the given content object
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedLocation
      */
-    public function createLocation( RMF\Request $request )
+    public function createLocation()
     {
-        $values = $this->urlHandler->parse( 'objectLocations', $request->path );
+        $values = $this->urlHandler->parse( 'objectLocations', $this->request->path );
 
         $locationCreateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $request->contentType ),
-                $request->body
+                array( 'Content-Type' => $this->request->contentType ),
+                $this->request->body
             )
         );
 
@@ -111,12 +91,11 @@ class Location
     /**
      * Loads a location
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function loadLocation( RMF\Request $request )
+    public function loadLocation()
     {
-        $values = $this->urlHandler->parse( 'location', $request->path );
+        $values = $this->urlHandler->parse( 'location', $this->request->path );
         return $this->locationService->loadLocation(
             $this->extractLocationIdFromPath( $values['location'] )
         );
@@ -125,12 +104,11 @@ class Location
     /**
      * Deletes a location
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
-    public function deleteSubtree( RMF\Request $request )
+    public function deleteSubtree()
     {
-        $values = $this->urlHandler->parse( 'location', $request->path );
+        $values = $this->urlHandler->parse( 'location', $this->request->path );
         $location = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $values['location'] ) );
         $this->locationService->deleteLocation( $location );
 
@@ -140,15 +118,14 @@ class Location
     /**
      * Copies a subtree to a new destination
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
-    public function copySubtree( RMF\Request $request )
+    public function copySubtree()
     {
-        $values = $this->urlHandler->parse( 'location', $request->path );
+        $values = $this->urlHandler->parse( 'location', $this->request->path );
         $location = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $values['location'] ) );
 
-        $destinationValues = $this->urlHandler->parse( 'location', $request->destination );
+        $destinationValues = $this->urlHandler->parse( 'location', $this->request->destination );
         $destinationLocation = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $destinationValues['location'] ) );
 
         $newLocation = $this->locationService->copySubtree( $location, $destinationLocation );
@@ -166,15 +143,14 @@ class Location
     /**
      * Moves a subtree to a new location
      *
-     * @param \QaFoo\RMF\Request $request
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException if the Destination header cannot be parsed as location or trash
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
-    public function moveSubtree( RMF\Request $request )
+    public function moveSubtree()
     {
-        $values = $this->urlHandler->parse( 'location', $request->path );
+        $values = $this->urlHandler->parse( 'location', $this->request->path );
 
         $locationToMove = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath( $values['location'] )
@@ -184,7 +160,7 @@ class Location
         try
         {
             // First check to see if the destination is for moving within another subtree
-            $destinationValues = $this->urlHandler->parse( 'location', $request->destination );
+            $destinationValues = $this->urlHandler->parse( 'location', $this->request->destination );
             $destinationLocationId = $this->extractLocationIdFromPath( $destinationValues['location'] );
         }
         catch ( Exceptions\InvalidArgumentException $e )
@@ -192,13 +168,13 @@ class Location
             try
             {
                 // If parsing of destination fails, let's try to see if destination is trash
-                $this->urlHandler->parse( 'trashItems', $request->destination );
+                $this->urlHandler->parse( 'trashItems', $this->request->destination );
             }
             catch ( Exceptions\InvalidArgumentException $e )
             {
                 // If that fails, the Destination header is not formatted right
                 // so just throw the BadRequestException
-                throw new BadRequestException( "{$request->destination} is not formatted correctly" );
+                throw new BadRequestException( "{$this->request->destination} is not formatted correctly" );
             }
         }
 
@@ -230,18 +206,17 @@ class Location
     /**
      * Swaps a location with another one
      *
-     * @param \QaFoo\RMF\Request $request
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceSwapped
      */
-    public function swapLocation( RMF\Request $request )
+    public function swapLocation()
     {
-        $values = $this->urlHandler->parse( 'location', $request->path );
+        $values = $this->urlHandler->parse( 'location', $this->request->path );
 
         $locationId = $this->extractLocationIdFromPath($values['location']);
         $location = $this->locationService->loadLocation( $locationId );
 
-        $destinationValues = $this->urlHandler->parse( 'location', $request->destination );
+        $destinationValues = $this->urlHandler->parse( 'location', $this->request->destination );
         $destinationLocation = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $destinationValues['location'] ) );
 
         $this->locationService->swapLocation( $location, $destinationLocation );
@@ -252,48 +227,45 @@ class Location
     /**
      * Loads a location by remote ID
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\LocationList
      */
-    public function loadLocationByRemoteId( RMF\Request $request )
+    public function loadLocationByRemoteId()
     {
         return new Values\LocationList(
             array(
                 $this->locationService->loadLocationByRemoteId(
-                    $request->variables['remoteId']
+                    $this->request->variables['remoteId']
                 )
             ),
-            $request->path
+            $this->request->path
         );
     }
 
     /**
      * Loads all locations for content object
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\LocationList
      */
-    public function loadLocationsForContent( RMF\Request $request )
+    public function loadLocationsForContent()
     {
-        $values = $this->urlHandler->parse( 'objectLocations', $request->path );
+        $values = $this->urlHandler->parse( 'objectLocations', $this->request->path );
 
         return new Values\LocationList(
             $this->locationService->loadLocations(
                 $this->contentService->loadContentInfo( $values['object'] )
             ),
-            $request->path
+            $this->request->path
         );
     }
 
     /**
      * Loads child locations of a location
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\LocationList
      */
-    public function loadLocationChildren( RMF\Request $request )
+    public function loadLocationChildren()
     {
-        $values = $this->urlHandler->parse( 'locationChildren', $request->path );
+        $values = $this->urlHandler->parse( 'locationChildren', $this->request->path );
 
         return new Values\LocationList(
             $this->locationService->loadLocationChildren(
@@ -301,24 +273,23 @@ class Location
                     $this->extractLocationIdFromPath( $values['location'] )
                 )
             ),
-            $request->path
+            $this->request->path
         );
     }
 
     /**
      * Updates a location
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function updateLocation( RMF\Request $request )
+    public function updateLocation()
     {
-        $values = $this->urlHandler->parse( 'location', $request->path );
+        $values = $this->urlHandler->parse( 'location', $this->request->path );
 
         $locationUpdate = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $request->contentType ),
-                $request->body
+                array( 'Content-Type' => $this->request->contentType ),
+                $this->request->body
             )
         );
 

@@ -9,7 +9,9 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
-class PermanentRedirect
+use eZ\Publish\Core\REST\Common\Value as RestValue;
+
+class PermanentRedirect extends RestValue
 {
     /**
      * Redirect URI

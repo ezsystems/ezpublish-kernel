@@ -13,6 +13,7 @@ use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Common\Values\RestObjectState;
+use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use eZ\Publish\API\Repository\ObjectStateService;
 use eZ\Publish\API\Repository\ContentService;
@@ -21,27 +22,11 @@ use eZ\Publish\Core\REST\Common\Values\ContentObjectStates;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 
-use Qafoo\RMF;
-
 /**
  * ObjectState controller
  */
-class ObjectState
+class ObjectState extends RestController
 {
-    /**
-     * Input dispatcher
-     *
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
-     */
-    protected $inputDispatcher;
-
-    /**
-     * URL handler
-     *
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
-     */
-    protected $urlHandler;
-
     /**
      * ObjectState service
      *
@@ -59,15 +44,11 @@ class ObjectState
     /**
      * Construct controller
      *
-     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\ObjectStateService $objectStateService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, ObjectStateService $objectStateService, ContentService $contentService )
+    public function __construct( ObjectStateService $objectStateService, ContentService $contentService )
     {
-        $this->inputDispatcher = $inputDispatcher;
-        $this->urlHandler = $urlHandler;
         $this->objectStateService = $objectStateService;
         $this->contentService = $contentService;
     }
@@ -75,10 +56,9 @@ class ObjectState
     /**
      * Creates a new object state group
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedObjectStateGroup
      */
-    public function createObjectStateGroup( RMF\Request $request )
+    public function createObjectStateGroup()
     {
         //@todo Error handling if identifier already exists
         //Problem being, PAPI does not specify exception in that case
@@ -88,8 +68,8 @@ class ObjectState
                 'objectStateGroup' => $this->objectStateService->createObjectStateGroup(
                     $this->inputDispatcher->parse(
                         new Message(
-                            array( 'Content-Type' => $request->contentType ),
-                            $request->body
+                            array( 'Content-Type' => $this->request->contentType ),
+                            $this->request->body
                         )
                     )
                 )
@@ -100,15 +80,14 @@ class ObjectState
     /**
      * Creates a new object state
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedObjectState
      */
-    public function createObjectState( RMF\Request $request )
+    public function createObjectState()
     {
         //@todo Error handling if identifier already exists
         //Problem being, PAPI does not specify exception in that case
 
-        $values = $this->urlHandler->parse( 'objectstates', $request->path );
+        $values = $this->urlHandler->parse( 'objectstates', $this->request->path );
 
         $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] );
 
@@ -119,8 +98,8 @@ class ObjectState
                         $objectStateGroup,
                         $this->inputDispatcher->parse(
                             new Message(
-                                array( 'Content-Type' => $request->contentType ),
-                                $request->body
+                                array( 'Content-Type' => $this->request->contentType ),
+                                $this->request->body
                             )
                         )
                     ),
@@ -133,24 +112,22 @@ class ObjectState
     /**
      * Loads an object state group
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function loadObjectStateGroup( RMF\Request $request )
+    public function loadObjectStateGroup()
     {
-        $values = $this->urlHandler->parse( 'objectstategroup', $request->path );
+        $values = $this->urlHandler->parse( 'objectstategroup', $this->request->path );
         return $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] );
     }
 
     /**
      * Loads an object state
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Common\Values\RestObjectState
      */
-    public function loadObjectState( RMF\Request $request )
+    public function loadObjectState()
     {
-        $values = $this->urlHandler->parse( 'objectstate', $request->path );
+        $values = $this->urlHandler->parse( 'objectstate', $this->request->path );
         return new RestObjectState(
             $this->objectStateService->loadObjectState( $values['objectstate'] ),
             $values['objectstategroup']
@@ -160,10 +137,9 @@ class ObjectState
     /**
      * Returns a list of all object state groups
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ObjectStateGroupList
      */
-    public function loadObjectStateGroups( RMF\Request $request )
+    public function loadObjectStateGroups()
     {
         return new Values\ObjectStateGroupList(
             $this->objectStateService->loadObjectStateGroups()
@@ -173,12 +149,11 @@ class ObjectState
     /**
      * Returns a list of all object states of the given group
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ObjectStateList
      */
-    public function loadObjectStates( RMF\Request $request )
+    public function loadObjectStates()
     {
-        $values = $this->urlHandler->parse( 'objectstates', $request->path );
+        $values = $this->urlHandler->parse( 'objectstates', $this->request->path );
 
         $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] );
         return new Values\ObjectStateList(
@@ -190,12 +165,11 @@ class ObjectState
     /**
      * The given object state group including the object states is deleted
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
-    public function deleteObjectStateGroup( RMF\Request $request )
+    public function deleteObjectStateGroup()
     {
-        $values = $this->urlHandler->parse( 'objectstategroup', $request->path );
+        $values = $this->urlHandler->parse( 'objectstategroup', $this->request->path );
         $this->objectStateService->deleteObjectStateGroup(
             $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] )
         );
@@ -206,12 +180,11 @@ class ObjectState
     /**
      * The given object state is deleted
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
-    public function deleteObjectState( RMF\Request $request )
+    public function deleteObjectState()
     {
-        $values = $this->urlHandler->parse( 'objectstate', $request->path );
+        $values = $this->urlHandler->parse( 'objectstate', $this->request->path );
         $this->objectStateService->deleteObjectState(
             $this->objectStateService->loadObjectState( $values['objectstate'] )
         );
@@ -222,19 +195,18 @@ class ObjectState
     /**
      * Updates an object state group
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function updateObjectStateGroup( RMF\Request $request )
+    public function updateObjectStateGroup()
     {
         //@todo Error handling if identifier already exists
         //Problem being, PAPI does not specify exception in that case
 
-        $values = $this->urlHandler->parse( 'objectstategroup', $request->path );
+        $values = $this->urlHandler->parse( 'objectstategroup', $this->request->path );
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $request->contentType ),
-                $request->body
+                array( 'Content-Type' => $this->request->contentType ),
+                $this->request->body
             )
         );
         return $this->objectStateService->updateObjectStateGroup(
@@ -246,19 +218,18 @@ class ObjectState
     /**
      * Updates an object state
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Common\Values\RestObjectState
      */
-    public function updateObjectState( RMF\Request $request )
+    public function updateObjectState()
     {
         //@todo Error handling if identifier already exists
         //Problem being, PAPI does not specify exception in that case
 
-        $values = $this->urlHandler->parse( 'objectstate', $request->path );
+        $values = $this->urlHandler->parse( 'objectstate', $this->request->path );
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $request->contentType ),
-                $request->body
+                array( 'Content-Type' => $this->request->contentType ),
+                $this->request->body
             )
         );
         return new RestObjectState(
@@ -273,12 +244,11 @@ class ObjectState
     /**
      * Returns the object states of content
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Common\Values\ContentObjectStates
      */
-    public function getObjectStatesForContent( RMF\Request $request )
+    public function getObjectStatesForContent()
     {
-        $values = $this->urlHandler->parse( 'objectObjectStates', $request->path );
+        $values = $this->urlHandler->parse( 'objectObjectStates', $this->request->path );
         $groups = $this->objectStateService->loadObjectStateGroups();
         $contentInfo = $this->contentService->loadContentInfo( $values['object'] );
 
@@ -304,16 +274,15 @@ class ObjectState
      * Updates object states of content
      * An object state in the input overrides the state of the object state group
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Common\Values\ContentObjectStates
      */
-    public function setObjectStatesForContent( RMF\Request $request )
+    public function setObjectStatesForContent()
     {
-        $values = $this->urlHandler->parse( 'objectObjectStates', $request->path );
+        $values = $this->urlHandler->parse( 'objectObjectStates', $this->request->path );
         $newObjectStates = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $request->contentType ),
-                $request->body
+                array( 'Content-Type' => $this->request->contentType ),
+                $this->request->body
             )
         );
 

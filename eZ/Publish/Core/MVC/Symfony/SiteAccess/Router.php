@@ -93,7 +93,16 @@ class Router
             $this->siteAccess = new $siteAccessClass();
         }
 
-        // First check environment variable
+        // Request header always have precedence
+        if ( isset( $request->headers['X-Siteaccess'] ) )
+        {
+            // TODO: Check siteaccess validity and throw \RuntimeException if invalid
+            $this->siteAccess->name = $request->headers['X-Siteaccess'];
+            $this->siteAccess->matchingType = 'header';
+            return $this->siteAccess;
+        }
+
+        // Then check environment variable
         $siteaccessEnvName = getenv( 'EZPUBLISH_SITEACCESS' );
         if ( $siteaccessEnvName !== false )
         {

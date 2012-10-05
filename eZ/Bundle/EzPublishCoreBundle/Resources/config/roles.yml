@@ -8,6 +8,7 @@ parameters:
     ezpublish.api.role.limitation_type.parent_owner.class: eZ\Publish\Core\Limitation\ParentOwnerLimitationType
     ezpublish.api.role.limitation_type.parent_group.class: eZ\Publish\Core\Limitation\ParentUserGroupLimitationType
     ezpublish.api.role.limitation_type.section.class: eZ\Publish\Core\Limitation\SectionLimitationType
+    ezpublish.api.role.limitation_type.new_section.class: eZ\Publish\Core\Limitation\NewSectionLimitationType
     ezpublish.api.role.limitation_type.siteaccess.class: eZ\Publish\Core\Limitation\SiteAccessLimitationType
     ezpublish.api.role.limitation_type.state.class: eZ\Publish\Core\Limitation\StateLimitationType
     ezpublish.api.role.limitation_type.subtree.class: eZ\Publish\Core\Limitation\SubtreeLimitationType
@@ -58,6 +59,11 @@ services:
         class: %ezpublish.api.role.limitation_type.section.class%
         tags:
             - {name: ezpublish.limitationType, alias: Section}
+
+    ezpublish.api.role.limitation_type.new_section:
+        class: %ezpublish.api.role.limitation_type.new_section.class%
+        tags:
+            - {name: ezpublish.limitationType, alias: NewSection}
 
     ezpublish.api.role.limitation_type.siteaccess:
         class: %ezpublish.api.role.limitation_type.siteaccess.class%

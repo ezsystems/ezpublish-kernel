@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\Content,
     eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\Core\MVC\Symfony\MVCEvents,
     eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent,
+    eZ\Publish\Core\Repository\Repository,
     Symfony\Component\Templating\EngineInterface,
     Symfony\Component\HttpKernel\Log\LoggerInterface,
     Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -45,14 +46,29 @@ class Manager
     protected $sortedViewProviders;
 
     /**
+     * @var \eZ\Publish\Core\Repository\Repository
+     */
+    protected $repository;
+
+    /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
 
-    public function __construct( EngineInterface $templateEngine, EventDispatcherInterface $eventDispatcher, LoggerInterface $logger = null )
+    /**
+     * The base layout template to use when the view is requested to be generated
+     * outside of the pagelayout.
+     *
+     * @var string
+     */
+    protected $viewBaseLayout;
+
+    public function __construct( EngineInterface $templateEngine, EventDispatcherInterface $eventDispatcher, Repository $repository, $viewBaseLayout, LoggerInterface $logger = null )
     {
         $this->templateEngine = $templateEngine;
         $this->eventDispatcher = $eventDispatcher;
+        $this->repository = $repository;
+        $this->viewBaseLayout = $viewBaseLayout;
         $this->logger = $logger;
     }
 
@@ -108,10 +124,13 @@ class Manager
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param string $viewType Variation of display for your content. Default is 'full'.
+     * @param array $parameters Parameters to pass to the template called to
+     *        render the view. By default, it's empty. 'content' entry is
+     *        reserved for the Content that is rendered.
      * @throws \RuntimeException
      * @return string
      */
-    public function renderContent( Content $content, $viewType = self::VIEW_TYPE_FULL )
+    public function renderContent( Content $content, $viewType = self::VIEW_TYPE_FULL, $parameters = array() )
     {
         $contentInfo = $content->getVersionInfo()->getContentInfo();
         foreach ( $this->getAllViewProviders() as $viewProvider )
@@ -119,7 +138,8 @@ class Manager
             $view = $viewProvider->getViewForContent( $contentInfo, $viewType );
             if ( $view instanceof ContentViewInterface )
             {
-                return $this->renderContentView( $view, array( 'content' => $content ) );
+                $parameters['content'] = $content;
+                return $this->renderContentView( $view, $parameters );
             }
         }
 
@@ -131,25 +151,24 @@ class Manager
      * $content and $location will be injected in the selected template.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param string $viewType Variation of display for your content. Default is 'full'.
+     * @param array $parameters Parameters to pass to the template called to
+     *        render the view. By default, it's empty. 'location' and 'content'
+     *        entries are reserved for the Location (and its Content) that is
+     *        viewed.
      * @throws \RuntimeException
      * @return string
      */
-    public function renderLocation( Location $location, Content $content, $viewType = self::VIEW_TYPE_FULL )
+    public function renderLocation( Location $location, $viewType = self::VIEW_TYPE_FULL, $parameters = array() )
     {
         foreach ( $this->getAllViewProviders() as $viewProvider )
         {
             $view = $viewProvider->getViewForLocation( $location, $viewType );
             if ( $view instanceof ContentViewInterface )
             {
-                return $this->renderContentView(
-                    $view,
-                    array(
-                         'location' => $location,
-                         'content' => $content
-                    )
-                );
+                $parameters['location'] = $location;
+                $parameters['content'] = $this->repository->getContentService()->loadContentByContentInfo( $location->getContentInfo() );
+                return $this->renderContentView( $view, $parameters );
             }
         }
 
@@ -166,6 +185,7 @@ class Manager
      */
     public function renderContentView( ContentViewInterface $view, array $defaultParams = array() )
     {
+        $defaultParams['viewbaseLayout'] = $this->viewBaseLayout;
         $view->addParameters( $defaultParams );
         $this->eventDispatcher->dispatch(
             MVCEvents::PRE_CONTENT_VIEW,

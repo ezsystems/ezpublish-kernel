@@ -12,6 +12,7 @@ use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
+use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use eZ\Publish\API\Repository\SectionService;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
@@ -21,27 +22,11 @@ use eZ\Publish\Core\REST\Server\Values\ResourceDeleted;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 
-use Qafoo\RMF;
-
 /**
  * Section controller
  */
-class Section
+class Section extends RestController
 {
-    /**
-     * Input dispatcher
-     *
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
-     */
-    protected $inputDispatcher;
-
-    /**
-     * URL handler
-     *
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
-     */
-    protected $urlHandler;
-
     /**
      * Section service
      *
@@ -52,24 +37,19 @@ class Section
     /**
      * Construct controller
      *
-     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\SectionService $sectionService
      */
-    public function __construct( Input\Dispatcher $inputDispatcher, UrlHandler $urlHandler, SectionService $sectionService )
+    public function __construct( SectionService $sectionService )
     {
-        $this->inputDispatcher = $inputDispatcher;
-        $this->urlHandler      = $urlHandler;
         $this->sectionService  = $sectionService;
     }
 
     /**
      * List sections
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\SectionList
      */
-    public function listSections( RMF\Request $request )
+    public function listSections()
     {
         return new Values\SectionList(
             $this->sectionService->loadSections()
@@ -79,16 +59,15 @@ class Section
     /**
      * Load section by identifier
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\SectionList
      */
-    public function loadSectionByIdentifier( RMF\Request $request )
+    public function loadSectionByIdentifier()
     {
         return new Values\SectionList(
             array(
                 $this->sectionService->loadSectionByIdentifier(
                     // GET variable
-                    $request->variables['identifier']
+                    $this->request->variables['identifier']
                 )
             )
         );
@@ -97,18 +76,17 @@ class Section
     /**
      * Create new section
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedSection
      */
-    public function createSection( RMF\Request $request )
+    public function createSection()
     {
         try
         {
             $createdSection = $this->sectionService->createSection(
                 $this->inputDispatcher->parse(
                     new Message(
-                        array( 'Content-Type' => $request->contentType ),
-                        $request->body
+                        array( 'Content-Type' => $this->request->contentType ),
+                        $this->request->body
                     )
                 )
             );
@@ -128,28 +106,26 @@ class Section
     /**
      * Loads a section
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function loadSection( RMF\Request $request )
+    public function loadSection()
     {
-        $values = $this->urlHandler->parse( 'section', $request->path );
+        $values = $this->urlHandler->parse( 'section', $this->request->path );
         return $this->sectionService->loadSection( $values['section'] );
     }
 
     /**
      * Updates a section
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function updateSection( RMF\Request $request )
+    public function updateSection()
     {
-        $values = $this->urlHandler->parse( 'section', $request->path );
+        $values = $this->urlHandler->parse( 'section', $this->request->path );
         $createStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $request->contentType ),
-                $request->body
+                array( 'Content-Type' => $this->request->contentType ),
+                $this->request->body
             )
         );
 
@@ -169,12 +145,11 @@ class Section
     /**
      * Delete a section by ID
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
-    public function deleteSection( RMF\Request $request )
+    public function deleteSection()
     {
-        $values = $this->urlHandler->parse( 'section', $request->path );
+        $values = $this->urlHandler->parse( 'section', $this->request->path );
         $this->sectionService->deleteSection(
             $this->sectionService->loadSection( $values['section'] )
         );

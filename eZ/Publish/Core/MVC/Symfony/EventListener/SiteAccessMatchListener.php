@@ -58,7 +58,8 @@ class SiteAccessMatchListener
                               'port'        => $request->getPort(),
                               'pathinfo'    => $request->getPathInfo(),
                               'queryParams' => $request->query->all(),
-                              'languages'   => $request->getLanguages()
+                              'languages'   => $request->getLanguages(),
+                              'headers'     => $request->headers->all()
                          )
                      )
                  )

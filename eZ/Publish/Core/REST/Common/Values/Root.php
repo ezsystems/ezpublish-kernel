@@ -9,9 +9,11 @@
 
 namespace eZ\Publish\Core\REST\Common\Values;
 
+use eZ\Publish\Core\REST\Common\Value as RestValue;
+
 /**
  * This class represents the root resource
  */
-class Root
+class Root extends RestValue
 {
 }

@@ -103,7 +103,6 @@ class Mapper
         $versionInfo = new VersionInfo;
 
         $versionInfo->id = null;
-        $versionInfo->contentId = null;
         $versionInfo->contentInfo = $this->createContentInfoFromCreateStruct( $struct, $versionNo );
         $versionInfo->versionNo = $versionNo;
         $versionInfo->creatorId = $struct->ownerId;
@@ -140,7 +139,6 @@ class Mapper
     {
         $versionInfo = new VersionInfo;
 
-        $versionInfo->contentId = $content->versionInfo->contentInfo->id;
         $versionInfo->contentInfo = $content->versionInfo->contentInfo;
         $versionInfo->versionNo = $versionNo;
         $versionInfo->creatorId = $userId;
@@ -294,7 +292,6 @@ class Mapper
     {
         $versionInfo = new VersionInfo;
         $versionInfo->id = (int)$row["ezcontentobject_version_id"];
-        $versionInfo->contentId = (int)$row["ezcontentobject_version_contentobject_id"];
         $versionInfo->contentInfo = null;
         $versionInfo->versionNo = (int)$row["ezcontentobject_version_version"];
         $versionInfo->creatorId = (int)$row["ezcontentobject_version_creator_id"];
@@ -326,7 +323,6 @@ class Mapper
                 $versionInfo = new VersionInfo;
                 $versionInfo->id = (int)$row["ezcontentobject_version_id"];
                 $versionInfo->contentInfo = $this->extractContentInfoFromRow( $row, "ezcontentobject_" );
-                $versionInfo->contentId = (int)$row["ezcontentobject_version_contentobject_id"];
                 $versionInfo->versionNo = (int)$row["ezcontentobject_version_version"];
                 $versionInfo->creatorId = (int)$row["ezcontentobject_version_creator_id"];
                 $versionInfo->creationDate = (int)$row["ezcontentobject_version_created"];

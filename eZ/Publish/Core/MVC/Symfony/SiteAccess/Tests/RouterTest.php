@@ -73,6 +73,27 @@ class RouterTest extends PHPUnit_Framework_TestCase
         putenv( 'EZPUBLISH_SITEACCESS' );
     }
 
+    /**
+     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router $router
+     *
+     * @depends testContruct
+     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::match
+     */
+    public function testMatchWithRequestHeader( $router )
+    {
+        $saName = 'headerbased_sa';
+        $sa = $router->match(
+            new SimplifiedRequest(
+                array(
+                     'X-Siteaccess' => $saName
+                )
+            )
+        );
+        $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa );
+        $this->assertSame( $saName, $sa->name );
+        $this->assertSame( 'header', $sa->matchingType );
+    }
+
     public function matchProvider()
     {
         return array(

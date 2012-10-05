@@ -18,7 +18,6 @@ use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface,
     eZ\Publish\SPI\Persistence\Content\URLAlias as SPIURLAlias,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\Base\Exceptions\UnauthorizedException,
     eZ\Publish\API\Repository\Exceptions\ForbiddenException,
     Exception;
 
@@ -57,8 +56,8 @@ class URLAliasService implements URLAliasServiceInterface
     {
         $this->repository = $repository;
         $this->urlAliasHandler = $urlAliasHandler;
-        $this->settings = $settings + array(
-            "prioritizedLanguageList" => array(
+        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+            'prioritizedLanguageList' => array(// @todo These settings should probably be exposed from Language Service
                 "eng-US",
                 "eng-GB"
             ),
@@ -448,7 +447,7 @@ class URLAliasService implements URLAliasServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $success = $this->urlAliasHandler->removeURLAliases( $spiUrlAliasList );
+            $this->urlAliasHandler->removeURLAliases( $spiUrlAliasList );
             $this->repository->commit();
         }
         catch ( Exception $e )

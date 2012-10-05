@@ -62,7 +62,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
             $this->backend->create(
                 "Content\\VersionInfo",
                 array(
-                    "contentId" => 1,
+                    "_contentId" => 1,
                     "versionNo" => 1,
                     "names" => array( "eng-GB" => "bar{$i}" ),
                     "creatorId" => 42,
@@ -73,7 +73,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
             $this->backend->create(
                 "Content\\VersionInfo",
                 array(
-                    "contentId" => 1,
+                    "_contentId" => 1,
                     "versionNo" => 1,
                     "names" => array( "eng-GB" => "foo{$i}" ),
                 )
@@ -260,10 +260,17 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                     'type' => 'Content\\Location',
                     'match' => array( 'contentId' => 'id' )
                 ),
-                'contentInfo' => array(
-                    'type' => 'Content\\ContentInfo',
-                    'match' => array( 'id' => 'id' ),
-                    'single' => true
+                'versionInfo' => array(
+                    'type' => 'Content\\VersionInfo',
+                    'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
+                    'single' => true,
+                    'sub' => array(
+                        'contentInfo' => array(
+                            'type' => 'Content\\ContentInfo',
+                            'match' => array( 'id' => '_contentId' ),
+                            'single' => true
+                        ),
+                    )
                 )
             )
         );
@@ -272,8 +279,8 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         foreach ( $list as $key => $content )
         {
             $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content', $content );
-            $this->assertEquals( 1, $content->contentInfo->id );
-            $this->assertEquals( 1, $content->contentInfo->sectionId );
+            $this->assertEquals( 1, $content->versionInfo->contentInfo->id );
+            $this->assertEquals( 1, $content->versionInfo->contentInfo->sectionId );
             $this->assertEquals( 1, count( $content->locations ) );
             foreach ( $content->locations as $location )
             {
@@ -303,10 +310,17 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                     'type' => 'Content\\Location',
                     'match' => array( 'contentId' => 'id' )
                 ),
-                'contentInfo' => array(
-                    'type' => 'Content\\ContentInfo',
-                    'match' => array( 'id' => 'id' ),
-                    'single' => true
+                'versionInfo' => array(
+                    'type' => 'Content\\VersionInfo',
+                    'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
+                    'single' => true,
+                    'sub' => array(
+                        'contentInfo' => array(
+                            'type' => 'Content\\ContentInfo',
+                            'match' => array( 'id' => '_contentId' ),
+                            'single' => true
+                        ),
+                    )
                 )
             )
         );
@@ -315,8 +329,8 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         foreach ( $list as $content )
         {
             $this->assertTrue( $content instanceof Content );
-            $this->assertEquals( 1, $content->contentInfo->id );
-            $this->assertEquals( 1, $content->contentInfo->sectionId );
+            $this->assertEquals( 1, $content->versionInfo->contentInfo->id );
+            $this->assertEquals( 1, $content->versionInfo->contentInfo->sectionId );
             $this->assertEquals( 1, count( $content->locations ) );
             foreach ( $content->locations as $location )
             {
@@ -357,10 +371,17 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                     'type' => 'Content\\Location',
                     'match' => array( 'contentId' => 'id' )
                 ),
-                'contentInfo' => array(
-                    'type' => 'Content\\ContentInfo',
-                    'match' => array( 'id' => 'id' ),
-                    'single' => true
+                'versionInfo' => array(
+                    'type' => 'Content\\VersionInfo',
+                    'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
+                    'single' => true,
+                    'sub' => array(
+                        'contentInfo' => array(
+                            'type' => 'Content\\ContentInfo',
+                            'match' => array( 'id' => '_contentId' ),
+                            'single' => true
+                        ),
+                    )
                 )
             )
         );
@@ -368,8 +389,8 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         foreach ( $list as $content )
         {
             $this->assertTrue( $content instanceof Content );
-            $this->assertEquals( 1, $content->contentInfo->id );
-            $this->assertEquals( 1, $content->contentInfo->sectionId );
+            $this->assertEquals( 1, $content->versionInfo->contentInfo->id );
+            $this->assertEquals( 1, $content->versionInfo->contentInfo->sectionId );
             $this->assertEquals( 2, count( $content->locations ) );
             foreach ( $content->locations as $location )
             {
@@ -423,11 +444,11 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                 'version' => array(
                     'type' => 'Content\\VersionInfo',
                     'single' => true,
-                    'match' => array( 'contentId' => 'id', 'versionNo' => 'currentVersionNo' ),
+                    'match' => array( '_contentId' => 'id', 'versionNo' => 'currentVersionNo' ),
                     'sub' => array(
                         'fields' => array(
                             'type' => 'Content\\Field',
-                            'match' => array( '_contentId' => 'contentId', 'versionNo' => 'versionNo' ),
+                            'match' => array( '_contentId' => '_contentId', 'versionNo' => 'versionNo' ),
                         )
                     )
                 ),
@@ -521,9 +542,17 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                         'type' => 'Content\\Location',
                         'match' => array( 'contentId' => 'id' )
                     ),
-                    'contentInfo' => array(
-                        'type' => 'Content\\ContentInfo',
-                        'match' => array( 'id' => 'id' )
+                    'versionInfo' => array(
+                        'type' => 'Content\\VersionInfo',
+                        'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
+                        'single' => true,
+                        'sub' => array(
+                            'contentInfo' => array(
+                                'type' => 'Content\\ContentInfo',
+                                'match' => array( 'id' => '_contentId' ),
+                                'single' => true
+                            ),
+                        )
                     )
                 )
             )

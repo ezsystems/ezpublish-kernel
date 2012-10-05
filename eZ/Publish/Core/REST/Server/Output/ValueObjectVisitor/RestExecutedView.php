@@ -75,7 +75,7 @@ class RestExecutedView extends ValueObjectVisitor
 
         // BEGIN searchHits
         $generator->startHashElement( 'searchHits' );
-    	$generator->startList( 'searchHit' );
+        $generator->startList( 'searchHit' );
 
         foreach( $data->searchResults->searchHits as $searchHit )
         {
@@ -93,13 +93,14 @@ class RestExecutedView extends ValueObjectVisitor
             $restContent = new RestContentValue(
                 $contentInfo,
                 $this->locationService->loadLocation( $contentInfo->mainLocationId ),
-		$searchHit->valueObject
+                $searchHit->valueObject
             );
             $visitor->visitValueObject( $restContent );
             $generator->endObjectElement( 'value' );
             $generator->endObjectElement( 'searchHit' );
         }
-	$generator->endList( 'searchHit' );
+
+        $generator->endList( 'searchHit' );
 
         $generator->endHashElement( 'searchHits' );
         // END searchHits

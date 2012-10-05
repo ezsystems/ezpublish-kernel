@@ -46,14 +46,13 @@ class ViewController extends Controller
 
         $response = new Response();
         $request = $this->getRequest();
-        $repository = $this->getRepository();
         // TODO: Use a dedicated etag generator, generating a hash instead of plain text
         $etag = "ezpublish-location-$locationId-$viewType";
 
         try
         {
             // Assume that location is cached by the repository
-            $location = $repository->getLocationService()->loadLocation( $locationId );
+            $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
 
             if ( $this->getParameter( 'content.view_cache' ) === true )
             {
@@ -76,14 +75,7 @@ class ViewController extends Controller
                 }
             }
 
-            $response->setContent(
-                $this->viewManager->renderLocation(
-                    $location,
-                    $repository
-                        ->getContentService()
-                        ->loadContentByContentInfo( $location->getContentInfo() )
-                )
-            );
+            $response->setContent( $this->viewManager->renderLocation( $location ) );
 
             return $response;
         }
