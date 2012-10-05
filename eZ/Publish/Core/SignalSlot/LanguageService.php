@@ -60,6 +60,7 @@ class LanguageService implements LanguageServiceInterface
         $returnValue = $this->service->createLanguage( $languageCreateStruct );
         $this->signalDispatcher()->emit(
             new Signal\LanguageService\CreateLanguageSignal( array(
+                'languageId' => $returnValue->id,
             ) )
         );
         return $returnValue;
@@ -213,6 +214,7 @@ class LanguageService implements LanguageServiceInterface
         $returnValue = $this->service->getDefaultLanguageCode();
         $this->signalDispatcher()->emit(
             new Signal\LanguageService\GetDefaultLanguageCodeSignal( array(
+                'languageCode' => $returnValue,
             ) )
         );
         return $returnValue;

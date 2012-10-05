@@ -16,5 +16,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
  */
 class GetDefaultLanguageCodeSignal extends Signal
 {
+    /**
+     * Language Code
+     *
+     * @var mixed
+     */
+    public $languageCode;
 }
 
