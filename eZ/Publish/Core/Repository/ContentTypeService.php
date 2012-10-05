@@ -80,7 +80,9 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         $this->repository = $repository;
         $this->contentTypeHandler = $contentTypeHandler;
-        $this->settings = $settings;
+        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+            //'defaultSetting' => array(),
+        );
     }
 
     /**

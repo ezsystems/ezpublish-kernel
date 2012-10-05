@@ -80,10 +80,10 @@ class UserService implements UserServiceInterface
     {
         $this->repository = $repository;
         $this->userHandler = $userHandler;
-        $this->settings = $settings + array(
+        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
             'anonymousUserID' => 10,
             'defaultUserPlacement' => 12,
-            'userClassID' => 4,
+            'userClassID' => 4,// @todo Rename this settings to swap out "Class" for "Type"
             'userGroupClassID' => 3,
             'hashType' => User::PASSWORD_HASH_MD5_USER,
             'siteName' => 'ez.no'

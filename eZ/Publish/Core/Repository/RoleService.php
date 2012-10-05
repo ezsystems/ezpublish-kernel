@@ -75,7 +75,10 @@ class RoleService implements RoleServiceInterface
     {
         $this->repository = $repository;
         $this->userHandler = $userHandler;
-        $this->settings = $settings;
+        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+            'limitationTypes' => array(),
+            'limitationMap' => array(),
+        );
     }
 
     /**

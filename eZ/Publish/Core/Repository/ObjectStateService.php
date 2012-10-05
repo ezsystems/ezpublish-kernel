@@ -66,7 +66,9 @@ class ObjectStateService implements ObjectStateServiceInterface
     {
         $this->repository = $repository;
         $this->objectStateHandler = $objectStateHandler;
-        $this->settings = $settings;
+        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+            //'defaultSetting' => array(),
+        );
     }
 
     /**

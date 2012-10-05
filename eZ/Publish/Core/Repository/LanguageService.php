@@ -59,8 +59,8 @@ class LanguageService implements LanguageServiceInterface
     {
         $this->repository = $repository;
         $this->languageHandler = $languageHandler;
-        $this->settings = $settings + array(
-            'languages' => array( 'eng-GB' ),// Union will skip this if $settings contains 'languages'
+        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+            'languages' => array( 'eng-GB' ),// @todo This setting overlaps with UrlAliasService prioritizedLanguageList
         );
     }
 
