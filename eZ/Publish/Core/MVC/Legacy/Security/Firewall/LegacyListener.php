@@ -25,13 +25,14 @@ class LegacyListener extends AbstractPreAuthenticatedListener
      */
     protected function getPreAuthenticatedData( Request $request )
     {
-        // -1 stands for not logged in user (aka anonymous), since PreAuthenticatedAuthenticationProvider needs a non empty value
-        $userId = -1;
-
+        $userId = null;
         if ( $request->cookies->has( 'is_logged_in' ) && $request->cookies->get( 'is_logged_in' ) === 'true' )
         {
             $userId = $request->getSession()->get( 'eZUserLoggedInID' );
         }
+
+        // -1 stands for not logged in user (aka anonymous), since PreAuthenticatedAuthenticationProvider needs a non empty value
+        $userId = $userId ?: -1;
 
         return array( (string)$userId, '' );
     }
