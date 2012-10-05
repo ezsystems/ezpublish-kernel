@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  *
  * @internal
  */
-abstract class Signal extends ValueObject;
+abstract class Signal extends ValueObject
 {
 }
 
