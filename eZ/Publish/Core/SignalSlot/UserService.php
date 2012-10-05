@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
-use \eZ\Publish\API\Repository\UserService as UserServiceInterface,
+use \eZ\Publish\API\Repository\UserService as UserServiceInterface;
 
 /**
  * UserService class

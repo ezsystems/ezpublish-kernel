@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
-use \eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface,
+use \eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
 
 /**
  * FieldTypeService class

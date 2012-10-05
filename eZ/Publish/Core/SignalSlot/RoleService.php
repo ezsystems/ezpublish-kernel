@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
-use \eZ\Publish\API\Repository\RoleService as RoleServiceInterface,
+use \eZ\Publish\API\Repository\RoleService as RoleServiceInterface;
 
 /**
  * RoleService class

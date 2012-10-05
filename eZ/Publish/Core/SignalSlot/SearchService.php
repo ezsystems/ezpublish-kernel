@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
-use \eZ\Publish\API\Repository\SearchService as SearchServiceInterface,
+use \eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
 
 /**
  * SearchService class

@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
-use \eZ\Publish\API\Repository\ContentService as ContentServiceInterface,
+use \eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 
 /**
  * ContentService class

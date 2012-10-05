@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
-use eZ\Publish\API\Repository\Repository as RepositoryInterface,
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 
 /**
  * Repository class

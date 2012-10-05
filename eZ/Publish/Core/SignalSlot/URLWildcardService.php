@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
-use \eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface,
+use \eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
 
 /**
  * URLWildcardService class

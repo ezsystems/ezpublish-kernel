@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
-use \eZ\Publish\API\Repository\TrashService as TrashServiceInterface,
+use \eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
 
 /**
  * TrashService class

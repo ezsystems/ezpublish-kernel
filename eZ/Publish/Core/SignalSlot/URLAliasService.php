@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
-use \eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface,
+use \eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
 
 /**
  * URLAliasService class

@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
-use \eZ\Publish\API\Repository\SectionService as SectionServiceInterface,
+use \eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
 
 /**
  * SectionService class

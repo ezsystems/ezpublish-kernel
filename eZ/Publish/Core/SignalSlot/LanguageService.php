@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
-use \eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface,
+use \eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
 
 /**
  * LanguageService class

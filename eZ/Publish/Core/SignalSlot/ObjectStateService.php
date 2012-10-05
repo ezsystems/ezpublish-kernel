@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
-use \eZ\Publish\API\Repository\ObjectStateService as ObjectStateServiceInterface,
+use \eZ\Publish\API\Repository\ObjectStateService as ObjectStateServiceInterface;
 
 /**
  * ObjectStateService class

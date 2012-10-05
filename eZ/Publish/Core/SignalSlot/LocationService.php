@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
-use \eZ\Publish\API\Repository\LocationService as LocationServiceInterface,
+use \eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
 
 /**
  * LocationService class
