@@ -204,6 +204,7 @@ class LocationService implements LocationServiceInterface
         $this->signalDispatcher()->emit(
             new Signal\LocationService\CreateLocationSignal( array(
                 'contentId' => $contentInfo->id,
+                'locationId' => $returnValue->id,
             ) )
         );
         return $returnValue;
