@@ -1,9 +1,16 @@
+# Root resource
+
+
 ezpublish_rest_loadRootResource:
     pattern: /
     defaults:
         _controller: ezpublish_rest.controller.root:loadRootResource
     requirements:
         _method: GET
+
+
+# Sections
+
 
 ezpublish_rest_listSections:
     # @todo fix controller due to GET parameter (/content/sections?identifier={identifier}
@@ -51,6 +58,10 @@ ezpublish_rest_deleteSection:
     requirements:
         _method: DELETE
         sectionId: \d+
+
+
+# Content
+
 
 ezpublish_rest_listContent:
     # @todo handle ?remoteid= filter in controller method. See loadContentInfoByRemoteId
@@ -248,12 +259,20 @@ ezpublish_rest_setObjectStatesForContent:
         _method: PATCH
         contentId: \d+
 
+
+# Views
+
+
 ezpublish_rest_createView:
     pattern: /content/views
     defaults:
         _controller: ezpublish_rest.controller.content:createView
     requirements:
         _method: POST
+
+
+# Object states
+
 
 ezpublish_rest_loadObjectStateGroups:
     pattern: /content/objectstategroups
@@ -336,6 +355,10 @@ ezpublish_rest_deleteObjectState:
         objectStateGroupId: \d+
         objectStateId: \d+
 
+
+# Locations
+
+
 ezpublish_rest_loadLocationByRemoteId:
     # @todo Handle GET parameter remoteId. See loadLocationByRemoteId
     pattern: /content/locations
@@ -399,6 +422,10 @@ ezpublish_rest_loadLocationChildren:
     requirements:
         _method: GET
         locationPath: "[0-9/]+"
+
+
+# Content types
+
 
 ezpublish_rest_loadContentTypeGroupList:
     pattern: /content/typegroups
@@ -607,6 +634,10 @@ ezpublish_rest_unlinkContentTypeFromGroup:
         contentTypeId: \d+
         contentTypeGroupId: \d+
 
+
+# Trash
+
+
 ezpublish_rest_loadTrashItems:
     pattern: /content/trash
     defaults:
@@ -645,6 +676,10 @@ ezpublish_rest_restoreTrashItem:
         _method: MOVE
         trashId: \d+
 
+
+# URL wildcards
+
+
 ezpublish_rest_listURLWildcards:
     pattern: /content/urlwildcards
     defaults:
@@ -675,6 +710,10 @@ ezpublish_rest_deleteURLWildcard:
         _method: DELETE
         urlWildcardId: \d+
 
+
+# User policies
+
+
 ezpublish_rest_listPoliciesForUser:
     # @todo Handle GET parameter userId. See method.
     pattern: /user/policies
@@ -682,6 +721,10 @@ ezpublish_rest_listPoliciesForUser:
         _controller: ezpublish_rest.controller.role:listPoliciesForUser
     requirements:
         _method: GET
+
+
+# Roles
+
 
 ezpublish_rest_listRoles:
     # @todo Handle GET filter "identifier". See method loadRoleByIdentifier
@@ -772,6 +815,10 @@ ezpublish_rest_deletePolicy:
         _method: DELETE
         roleId: \d+
         policyId: \d+
+
+
+# Users
+
 
 ezpublish_rest_loadUsersAssignedToRole:
     # @todo: Handle all GET parameters
