@@ -103,7 +103,7 @@ class RestListener implements EventSubscriberInterface
 
     public function onKernelRequest( GetResponseEvent $event )
     {
-	if ( $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
+	    if ( $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
             return;
 
         if ( !$this->isRestRequest( $event->getRequest() ) )
@@ -112,7 +112,7 @@ class RestListener implements EventSubscriberInterface
         /**  @var \eZ\Publish\Core\REST\Server\Request $request */
         $request = $this->container->get( 'ezpublish_rest.request' );
         if ( !isset( $request->testUser ) )
-	    return;
+	        return;
 
         /**  @var \eZ\Publish\API\Repository\Repository $repository */
         $repository = $this->container->get( 'ezpublish.api.repository' );
