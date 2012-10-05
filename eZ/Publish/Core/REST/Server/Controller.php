@@ -41,7 +41,6 @@ abstract class Controller
 
     public function setRequest( HttpRequest $request )
     {
-        $request->path = str_replace( '/api/ezp/v2', '', $request->path );
         $this->request = $request;
     }
     
