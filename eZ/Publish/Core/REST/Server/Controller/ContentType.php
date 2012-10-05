@@ -140,7 +140,7 @@ class ContentType extends RestController
             $this->contentTypeService->loadContentTypeGroup( $urlValues['typegroup'] )
         );
 
-        if ( $this->getMediaType( $request ) == 'application/vnd.ez.api.contenttypelist' )
+        if ( $this->getMediaType( $this->request ) == 'application/vnd.ez.api.contenttypelist' )
         {
             return new Values\ContentTypeList( $contentTypes, $this->request->path );
         }
@@ -203,7 +203,7 @@ class ContentType extends RestController
             $this->request->variables['identifier']
         );
 
-        if ( $this->getMediaType( $request ) == 'application/vnd.ez.api.contenttypelist' )
+        if ( $this->getMediaType( $this->request ) == 'application/vnd.ez.api.contenttypelist' )
         {
             return new Values\ContentTypeList( array( $contentType ), $this->request->path );
         }
@@ -225,7 +225,7 @@ class ContentType extends RestController
             $this->request->variables['remoteId']
         );
 
-        if ( $this->getMediaType( $request ) == 'application/vnd.ez.api.contenttypelist' )
+        if ( $this->getMediaType( $this->request ) == 'application/vnd.ez.api.contenttypelist' )
         {
             return new Values\ContentTypeList( array( $contentType ), $this->request->path );
         }
