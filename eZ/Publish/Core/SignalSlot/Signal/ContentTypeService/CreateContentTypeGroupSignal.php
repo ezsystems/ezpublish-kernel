@@ -16,5 +16,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
  */
 class CreateContentTypeGroupSignal extends Signal
 {
+    /**
+     * Group ID
+     *
+     * @var mixed
+     */
+    public $groupId;
 }
 

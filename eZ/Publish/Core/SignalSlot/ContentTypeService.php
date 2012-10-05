@@ -60,6 +60,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $returnValue = $this->service->createContentTypeGroup( $contentTypeGroupCreateStruct );
         $this->signalDispatcher()->emit(
             new Signal\ContentTypeService\CreateContentTypeGroupSignal( array(
+                'groupId' => $returnValue->id,
             ) )
         );
         return $returnValue;
@@ -183,7 +184,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $returnValue = $this->service->createContentType( $contentTypeCreateStruct, $contentTypeGroups );
         $this->signalDispatcher()->emit(
             new Signal\ContentTypeService\CreateContentTypeSignal( array(
-                'contentTypeGroups' => $contentTypeGroups,
+                'contentTypeId' => $returnValue->id,
             ) )
         );
         return $returnValue;

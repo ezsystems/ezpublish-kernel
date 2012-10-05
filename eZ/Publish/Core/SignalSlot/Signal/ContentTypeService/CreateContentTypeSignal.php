@@ -17,11 +17,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class CreateContentTypeSignal extends Signal
 {
     /**
-     * ContentTypeGroups
+     * Content Type ID
      *
      * @var mixed
      */
-    public $contentTypeGroups;
+    public $contentTypeId;
 
 }
 
