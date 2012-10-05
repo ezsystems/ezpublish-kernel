@@ -11,7 +11,8 @@ namespace eZ\Publish\Core\MVC\Symfony\Controller;
 
 use Symfony\Component\DependencyInjection\ContainerAware,
     Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\HttpFoundation\Response;
+    Symfony\Component\HttpFoundation\Response,
+    eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 
 abstract class Controller extends ContainerAware
 {
@@ -106,5 +107,16 @@ abstract class Controller extends ContainerAware
     public function getEventDispatcher()
     {
         return $this->container->get( 'event_dispatcher' );
+    }
+
+    /**
+     * Checks if current user has granted access to provided attribute
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute $attribute
+     * @return bool
+     */
+    public function isGranted( AuthorizationAttribute $attribute )
+    {
+        return $this->container->get( 'security.context' )->isGranted( $attribute );
     }
 }

@@ -13,7 +13,9 @@ use eZ\Publish\Core\MVC\Symfony\Controller\Controller,
     eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager,
     eZ\Publish\Core\MVC\Symfony\MVCEvents,
     eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent,
-    Symfony\Component\HttpFoundation\Response;
+    eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute,
+    Symfony\Component\HttpFoundation\Response,
+    Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ViewController extends Controller
 {
@@ -33,11 +35,15 @@ class ViewController extends Controller
      *
      * @param int $locationId
      * @param string $viewType
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @throws \Exception
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function viewLocation( $locationId, $viewType )
     {
+        if ( !$this->isGranted( new AuthorizationAttribute( 'content', 'read' ) ) )
+            throw new AccessDeniedException();
+
         $response = new Response();
         $request = $this->getRequest();
         $repository = $this->getRepository();

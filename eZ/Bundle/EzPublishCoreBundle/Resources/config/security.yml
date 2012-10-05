@@ -1,7 +1,7 @@
 parameters:
-    ezpublish.security.firewall_listener.default.class: eZ\Publish\Core\MVC\Symfony\Security\Firewall\Listener
     ezpublish.security.authentication_provider.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\Provider
     ezpublish.security.user_provider.class: eZ\Publish\Core\MVC\Symfony\Security\User\Provider
+    ezpublish.security.voter.core.class: eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\CoreVoter
 
 services:
     ezpublish.security.user_provider:
@@ -14,3 +14,10 @@ services:
         parent: security.authentication.provider.pre_authenticated
         calls:
             - [setLazyRepository, [@ezpublish.api.repository.lazy]]
+
+    ezpublish.security.voter.core:
+        class: %ezpublish.security.voter.core.class%
+        arguments: [@ezpublish.api.repository.lazy]
+        public: false
+        tags:
+            - { name: security.voter }

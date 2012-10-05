@@ -9,7 +9,8 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController,
+    eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 
 class Controller extends BaseController
 {
@@ -50,5 +51,16 @@ class Controller extends BaseController
     protected function getConfigResolver()
     {
         return $this->container->get( 'ezpublish.config.resolver' );
+    }
+
+    /**
+     * Checks if current user has granted access to provided attribute
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute $attribute
+     * @return bool
+     */
+    public function isGranted( AuthorizationAttribute $attribute )
+    {
+        return $this->container->get( 'security.context' )->isGranted( $attribute );
     }
 }
