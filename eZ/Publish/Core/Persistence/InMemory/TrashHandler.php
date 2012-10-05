@@ -61,6 +61,7 @@ class TrashHandler implements TrashHandlerInterface
         $isLocationRemoved = false;
         $parentLocationId = null;
 
+        $subtreeLocations[] = $location;
         foreach ( $subtreeLocations as $location )
         {
             if ( $location->id == $locationId )
@@ -68,9 +69,9 @@ class TrashHandler implements TrashHandlerInterface
                 $parentLocationId = $location->parentId;
             }
 
-            if ( $this->backend->find( 'Content\\Location', array( 'contentId' => $location->contentId ) ) == 1 )
+            if ( count( $this->backend->find( 'Content\\Location', array( 'contentId' => $location->contentId ) ) ) == 1 )
             {
-                $this->backend->delete( 'Content\\Location', $locationId );
+                $this->backend->delete( 'Content\\Location', $location->id );
                 $this->backend->create( 'Content\\Location\\Trashed', (array)$location, false );
             }
             else
