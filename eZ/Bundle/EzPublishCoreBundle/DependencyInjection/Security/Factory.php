@@ -19,7 +19,6 @@ class Factory extends AbstractFactory
 {
     const AUTHENTICATION_PROVIDER_ID = 'ezpublish.security.authentication_provider';
     const AUTHENTICATION_LISTENER_ID = 'ezpublish_legacy.security.firewall_listener';
-    const AUTHENTICATION_ENTRY_POINT_ID = 'ezpublish_legacy.security.auth.entry_point';
 
     /**
      * Subclasses must return the id of a service which implements the
@@ -42,14 +41,6 @@ class Factory extends AbstractFactory
         ;
 
         return $providerId;
-    }
-
-    protected function createEntryPoint( $container, $id, $config, $defaultEntryPointId )
-    {
-        $entryPointId = self::AUTHENTICATION_ENTRY_POINT_ID . ".$id";
-        $container->setDefinition( $entryPointId, new DefinitionDecorator( self::AUTHENTICATION_ENTRY_POINT_ID ) );
-
-        return $entryPointId;
     }
 
     protected function createListener( $container, $id, $config, $userProvider )
