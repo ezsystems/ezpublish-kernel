@@ -56,7 +56,8 @@ class RestListener implements EventSubscriberInterface
         return array(
             KernelEvents::VIEW => 'onKernelResultView',
             KernelEvents::EXCEPTION => 'onKernelExceptionView',
-            KernelEvents::REQUEST => 'onKernelRequest'
+            // @todo delete completely when this auth. method has been totally removed
+            // KernelEvents::REQUEST => 'onKernelRequest'
         );
     }
 
