@@ -23,5 +23,11 @@ class UpdatePolicySignal extends Signal
      */
     public $policyId;
 
+    /**
+     * PolicyId
+     *
+     * @var mixed
+     */
+    public $policyId;
 }
 

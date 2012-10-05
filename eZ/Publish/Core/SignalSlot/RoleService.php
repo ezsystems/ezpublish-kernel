@@ -60,6 +60,7 @@ class RoleService implements RoleServiceInterface
         $returnValue = $this->service->createRole( $roleCreateStruct );
         $this->signalDispatcher()->emit(
             new Signal\RoleService\CreateRoleSignal( array(
+                'roleId' => $returnValue->id,
             ) )
         );
         return $returnValue;
@@ -103,6 +104,7 @@ class RoleService implements RoleServiceInterface
         $this->signalDispatcher()->emit(
             new Signal\RoleService\AddPolicySignal( array(
                 'roleId' => $role->id,
+                'policyId' => $returnValue->id,
             ) )
         );
         return $returnValue;

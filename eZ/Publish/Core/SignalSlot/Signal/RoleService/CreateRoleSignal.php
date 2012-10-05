@@ -16,5 +16,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
  */
 class CreateRoleSignal extends Signal
 {
+    /**
+     * RoleId
+     *
+     * @var mixed
+     */
+    public $roleId;
 }
 
