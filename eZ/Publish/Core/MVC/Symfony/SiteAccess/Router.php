@@ -103,6 +103,14 @@ class Router
             return $this->siteAccess;
         }
 
+        if ( isset( $request->headers['X-Siteaccess'] ) )
+        {
+            // TODO: Check siteaccess validity and throw \RuntimeException if invalid
+            $this->siteAccess->name = $request->headers['X-Siteaccess'];
+            $this->siteAccess->matchingType = 'header';
+            return $this->siteAccess;
+        }
+
         foreach ( $this->siteAccessesConfiguration as $matchingClass => $matchingConfiguration )
         {
             // If class begins with a '\' it means it's a FQ class name,
