@@ -34,7 +34,7 @@ ezpublish_rest_loadSection:
         _controller: ezpublish_rest.controller.section:loadSection
     requirements:
         _method: GET
-        id:  \d+
+        sectionId:  \d+
 
 ezpublish_rest_updateSection:
     pattern: /content/sections/{sectionId}
