@@ -33,8 +33,6 @@ class URLWildcard extends RestController
     /**
      * Construct controller
      *
-     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\URLWildcardService $urlWildcardService
      */
     public function __construct( URLWildcardService $urlWildcardService )
