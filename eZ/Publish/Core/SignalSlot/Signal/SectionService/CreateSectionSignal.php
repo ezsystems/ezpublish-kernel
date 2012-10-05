@@ -16,5 +16,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
  */
 class CreateSectionSignal extends Signal
 {
+    /**
+     * SectionId
+     *
+     * @var mixed
+     */
+    public $sectionId;
 }
 

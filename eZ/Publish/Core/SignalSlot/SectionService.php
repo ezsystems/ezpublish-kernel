@@ -60,6 +60,7 @@ class SectionService implements SectionServiceInterface
         $returnValue = $this->service->createSection( $sectionCreateStruct );
         $this->signalDispatcher()->emit(
             new Signal\SectionService\CreateSectionSignal( array(
+                'sectionId' => $returnValue->id,
             ) )
         );
         return $returnValue;
@@ -156,11 +157,6 @@ class SectionService implements SectionServiceInterface
     public function countAssignedContents( eZ\Publish\API\Repository\Values\Content\Section $section )
     {
         $returnValue = $this->service->countAssignedContents( $section );
-        $this->signalDispatcher()->emit(
-            new Signal\SectionService\CountAssignedContentsSignal( array(
-                'sectionId' => $section->id,
-            ) )
-        );
         return $returnValue;
     }
 
