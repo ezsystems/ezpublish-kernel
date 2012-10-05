@@ -19,7 +19,7 @@ abstract class Controller
     protected $inputDispatcher;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
+     * @var \eZ\Publish\Core\REST\Common\UrlHandler\eZPublish
      */
     protected $urlHandler;
     
