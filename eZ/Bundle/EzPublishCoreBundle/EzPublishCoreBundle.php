@@ -20,6 +20,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass,
     eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension,
     eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser as ConfigParser,
     eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\Factory as EzPublishSecurityFactory,
+    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\HttpBasicFactory,
     Symfony\Component\HttpKernel\Bundle\Bundle,
     Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -39,6 +40,7 @@ class EzPublishCoreBundle extends Bundle
 
         $securityExtension = $container->getExtension( 'security' );
         $securityExtension->addSecurityListenerFactory( new EzPublishSecurityFactory );
+        $securityExtension->addSecurityListenerFactory( new HttpBasicFactory );
     }
 
     public function getContainerExtension()
