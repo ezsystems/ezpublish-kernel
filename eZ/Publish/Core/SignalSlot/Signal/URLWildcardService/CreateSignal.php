@@ -17,25 +17,10 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class CreateSignal extends Signal
 {
     /**
-     * SourceUrl
+     * UrlWildcardId
      *
      * @var mixed
      */
-    public $sourceUrl;
-
-    /**
-     * DestinationUrl
-     *
-     * @var mixed
-     */
-    public $destinationUrl;
-
-    /**
-     * Foreward
-     *
-     * @var mixed
-     */
-    public $foreward;
-
+    public $urlWildcardId;
 }
 
