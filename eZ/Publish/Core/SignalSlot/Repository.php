@@ -236,11 +236,11 @@ class Repository implements RepositoryInterface
      */
     public function getContentLanguageService()
     {
-        if ( $this->contentLanguageService !== null )
-            return $this->contentLanguageService;
+        if ( $this->languageService !== null )
+            return $this->languageService;
 
-        $this->contentLanguageService = new ContentLanguageService( $this->repository->getContentLanguageService(), $this->signalDispatcher );
-        return $this->contentLanguageService;
+        $this->languageService = new LanguageService( $this->repository->getContentLanguageService(), $this->signalDispatcher );
+        return $this->languageService;
     }
 
     /**
@@ -332,11 +332,11 @@ class Repository implements RepositoryInterface
      */
     public function getURLAliasService()
     {
-        if ( $this->URLAliasService !== null )
-            return $this->URLAliasService;
+        if ( $this->urlAliasService !== null )
+            return $this->urlAliasService;
 
-        $this->URLAliasService = new URLAliasService( $this->repository->getURLAliasService(), $this->signalDispatcher );
-        return $this->URLAliasService;
+        $this->urlAliasService = new URLAliasService( $this->repository->getURLAliasService(), $this->signalDispatcher );
+        return $this->urlAliasService;
     }
 
     /**
@@ -346,11 +346,11 @@ class Repository implements RepositoryInterface
      */
     public function getURLWildcardService()
     {
-        if ( $this->URLWildcardService !== null )
-            return $this->URLWildcardService;
+        if ( $this->urlWildcardService !== null )
+            return $this->urlWildcardService;
 
-        $this->URLWildcardService = new URLWildcardService( $this->repository->getURLWildcardService(), $this->signalDispatcher );
-        return $this->URLWildcardService;
+        $this->urlWildcardService = new URLWildcardService( $this->repository->getURLWildcardService(), $this->signalDispatcher );
+        return $this->urlWildcardService;
     }
 
     /**
@@ -376,11 +376,8 @@ class Repository implements RepositoryInterface
      */
     public function getIOService()
     {
-        if ( $this->IOServiceService !== null )
-            return $this->IOServiceService;
-
-        $this->IOServiceService = new IOServiceService( $this->repository->getIOServiceService(), $this->signalDispatcher );
-        return $this->IOServiceService;
+        // FIXME: IOService is to be deprecated
+        return $this->repository->getIOService();
     }
 
     /**

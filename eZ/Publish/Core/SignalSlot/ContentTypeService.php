@@ -335,7 +335,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $this->signalDispatcher->emit(
             new Signal\ContentTypeService\CopyContentTypeSignal( array(
                 'contentTypeId' => $contentType->id,
-                'userId' => $user->id,
+                'userId' => ( $user !== null ? $user->id : null ),
             ) )
         );
         return $returnValue;

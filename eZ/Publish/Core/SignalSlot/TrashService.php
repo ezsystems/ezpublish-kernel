@@ -103,7 +103,7 @@ class TrashService implements TrashServiceInterface
         $this->signalDispatcher->emit(
             new Signal\TrashService\RecoverSignal( array(
                 'trashItemId' => $trashItem->id,
-                'newParentLocationId' => $newParentLocation->id,
+                'newParentLocationId' => ( $newParentLocation !== null ? $newParentLocation->id : null ),
             ) )
         );
         return $returnValue;

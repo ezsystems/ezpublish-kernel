@@ -65,7 +65,7 @@ class URLWildcardService implements URLWildcardServiceInterface
         $returnValue = $this->service->create( $sourceUrl, $destinationUrl, $foreward );
         $this->signalDispatcher->emit(
             new Signal\URLWildcardService\CreateSignal( array(
-                'urlWildcardId' => $urlWildcard->id,
+                'urlWildcardId' => $returnValue->id,
             ) )
         );
         return $returnValue;

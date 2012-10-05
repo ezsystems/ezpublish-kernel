@@ -292,8 +292,8 @@ class ContentService implements ContentServiceInterface
         $this->signalDispatcher->emit(
             new Signal\ContentService\CreateContentDraftSignal( array(
                 'contentId' => $contentInfo->id,
-                'versionNo' => $versionInfo->versionNo,
-                'userId' => $user->id,
+                'versionNo' => ( $versionInfo !== null ? $versionInfo->versionNo : null ),
+                'userId' => ( $user !== null ? $user->id : null ),
             ) )
         );
         return $returnValue;
@@ -341,7 +341,7 @@ class ContentService implements ContentServiceInterface
         $returnValue = $this->service->translateVersion( $translationInfo, $translationValues, $user );
         $this->signalDispatcher->emit(
             new Signal\ContentService\TranslateVersionSignal( array(
-                'userId' => $user->id,
+                'userId' => ( $user !== null ? $user->id : null ),
             ) )
         );
         return $returnValue;
@@ -446,7 +446,7 @@ class ContentService implements ContentServiceInterface
         $this->signalDispatcher->emit(
             new Signal\ContentService\CopyContentSignal( array(
                 'srcContentId' => $contentInfo->id,
-                'srcVersionNo' => $versionInfo->versionNo,
+                'srcVersionNo' => ( $versionInfo !== null ? $versionInfo->versionNo : null ),
                 'dstContentId' => $returnValue->getVersionInfo()->getContentInfo()->id,
                 'dstVersionNo' => $returnValue->getVersionInfo()->versionNo,
             ) )

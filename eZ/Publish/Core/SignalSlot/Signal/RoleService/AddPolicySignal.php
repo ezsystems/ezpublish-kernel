@@ -23,5 +23,11 @@ class AddPolicySignal extends Signal
      */
     public $roleId;
 
+    /**
+     * PolicyId
+     *
+     * @var mixed
+     */
+    public $policyId;
 }
 

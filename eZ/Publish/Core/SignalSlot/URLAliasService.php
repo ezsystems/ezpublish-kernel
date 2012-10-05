@@ -149,7 +149,7 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @return void
      */
-    public function removeAliases( $aliasList )
+    public function removeAliases( array $aliasList )
     {
         $returnValue = $this->service->removeAliases( $aliasList );
         $this->signalDispatcher->emit(
