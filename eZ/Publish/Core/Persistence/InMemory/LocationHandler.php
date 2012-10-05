@@ -571,6 +571,7 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * Updates subtree modification time for all locations starting from $startPathString
      * @param string $startPathString
+     * @todo fix updating downtree instead of uptree
      */
     private function updateSubtreeModificationTime( $startPathString )
     {
