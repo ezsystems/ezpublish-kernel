@@ -59,6 +59,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         $returnValue = $this->service->createObjectStateGroup( $objectStateGroupCreateStruct );
         $this->signalDispatcher()->emit(
             new Signal\ObjectStateService\CreateObjectStateGroupSignal( array(
+                'objectStateGroupId' => $returnValue->id,
             ) )
         );
         return $returnValue;
@@ -180,6 +181,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         $this->signalDispatcher()->emit(
             new Signal\ObjectStateService\CreateObjectStateSignal( array(
                 'objectStateGroupId' => $objectStateGroup->id,
+                'objectStateId' => $returnValue->id,
             ) )
         );
         return $returnValue;

@@ -16,5 +16,11 @@ use eZ\Publish\Core\SignalSlot\Signal;
  */
 class CreateObjectStateGroupSignal extends Signal
 {
+    /**
+     * ObjectStateGroupId
+     *
+     * @var mixed
+     */
+    public $objectStateGroupId;
 }
 
