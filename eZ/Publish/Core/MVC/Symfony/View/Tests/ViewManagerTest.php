@@ -37,6 +37,8 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
      */
     private $repositoryMock;
 
+    private $viewBaseLayout = 'EzPublishCoreBundle::viewbase.html.twig';
+
     protected  function setUp()
     {
         parent::setUp();
@@ -48,7 +50,8 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
         $this->viewManager = new Manager(
             $this->templateEngineMock,
             $this->eventDispatcherMock,
-            $this->repositoryMock
+            $this->repositoryMock,
+            $this->viewBaseLayout
         );
     }
 
@@ -124,7 +127,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
         $this->templateEngineMock
             ->expects( $this->once() )
             ->method( 'render' )
-            ->with( $templateIdentifier, $params + array( 'content' => $content ) )
+            ->with( $templateIdentifier, $params + array( 'content' => $content, 'viewbaseLayout' => $this->viewBaseLayout ) )
             ->will( $this->returnValue( $expectedTemplateResult ) )
         ;
 
@@ -173,7 +176,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
         ;
 
         // Configuring template engine behaviour
-        $params += array( 'content' => $content );
+        $params += array( 'content' => $content, 'viewbaseLayout' => $this->viewBaseLayout );
         $expectedTemplateResult = serialize( array_keys( $params ) );
         $this->templateEngineMock
             ->expects( $this->never() )
@@ -239,7 +242,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
         $this->templateEngineMock
             ->expects( $this->once() )
             ->method( 'render' )
-            ->with( $templateIdentifier, $params + array( 'location' => $location, 'content' => $content ) )
+            ->with( $templateIdentifier, $params + array( 'location' => $location, 'content' => $content, 'viewbaseLayout' => $this->viewBaseLayout ) )
             ->will( $this->returnValue( $expectedTemplateResult ) )
         ;
 
@@ -301,7 +304,7 @@ class ViewManagerTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $contentInfo ) );
 
         // Configuring template engine behaviour
-        $params += array( 'location' => $location, 'content' => $content );
+        $params += array( 'location' => $location, 'content' => $content, 'viewbaseLayout' => $this->viewBaseLayout );
         $expectedTemplateResult = serialize( array_keys( $params ) );
         $this->templateEngineMock
             ->expects( $this->never() )

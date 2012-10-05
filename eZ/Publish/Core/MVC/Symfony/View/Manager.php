@@ -55,11 +55,20 @@ class Manager
      */
     protected $eventDispatcher;
 
-    public function __construct( EngineInterface $templateEngine, EventDispatcherInterface $eventDispatcher, Repository $repository, LoggerInterface $logger = null )
+    /**
+     * The base layout template to use when the view is requested to be generated
+     * outside of the pagelayout.
+     *
+     * @var string
+     */
+    protected $viewBaseLayout;
+
+    public function __construct( EngineInterface $templateEngine, EventDispatcherInterface $eventDispatcher, Repository $repository, $viewBaseLayout, LoggerInterface $logger = null )
     {
         $this->templateEngine = $templateEngine;
         $this->eventDispatcher = $eventDispatcher;
         $this->repository = $repository;
+        $this->viewBaseLayout = $viewBaseLayout;
         $this->logger = $logger;
     }
 
@@ -176,6 +185,7 @@ class Manager
      */
     public function renderContentView( ContentViewInterface $view, array $defaultParams = array() )
     {
+        $defaultParams['viewbaseLayout'] = $this->viewBaseLayout;
         $view->addParameters( $defaultParams );
         $this->eventDispatcher->dispatch(
             MVCEvents::PRE_CONTENT_VIEW,

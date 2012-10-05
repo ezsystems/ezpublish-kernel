@@ -3,7 +3,8 @@ parameters:
     ezpublish_legacy.content_view_decorator.twig.class: eZ\Publish\Core\MVC\Legacy\View\TwigContentViewLayoutDecorator
     ezpublish_legacy.content_view_decorator.options:
         layout: %ezpublish_legacy.view.default_layout%
-        contentBlockName: %ezpublish_legacy.view.content_block_name%
+        viewbaseLayout: %ezpublish.content_view.viewbase_layout%
+        contentBlockName: %ezpublish.content_view.content_block_name%
 
 services:
     ezpublish_legacy.content_view_provider:

@@ -6,6 +6,8 @@ parameters:
 
     ezpublish.view_manager.class: eZ\Publish\Core\MVC\Symfony\View\Manager
     ezpublish.content_view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\ContentViewProvider\Configured
+    ezpublish.content_view.viewbase_layout: "EzPublishCoreBundle::viewbase_layout.html.twig"
+    ezpublish.content_view.content_block_name: "content"
 
 services:
     # Redefining twig loader to use the chain loader instead of only the file system loader.
@@ -37,7 +39,7 @@ services:
 
     ezpublish.view_manager:
         class: %ezpublish.view_manager.class%
-        arguments: [@templating, @event_dispatcher, @ezpublish.api.repository, @?logger]
+        arguments: [@templating, @event_dispatcher, @ezpublish.api.repository, %ezpublish.content_view.viewbase_layout%, @?logger]
 
     ezpublish.content_view_provider.configured:
         class: %ezpublish.content_view_provider.configured.class%
