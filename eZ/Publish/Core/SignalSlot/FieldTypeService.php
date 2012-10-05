@@ -79,11 +79,6 @@ class FieldTypeService implements FieldTypeServiceInterface
     public function hasFieldType( $identifier )
     {
         $returnValue = $this->service->hasFieldType( $identifier );
-        $this->signalDispatcher()->emit(
-            new Signal\FieldTypeService\HasFieldTypeSignal( array(
-                'identifier' => $identifier,
-            ) )
-        );
         return $returnValue;
     }
 
