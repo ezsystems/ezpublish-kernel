@@ -799,11 +799,12 @@ class ContentHandlerTest extends TestCase
      */
     public function testRemoveRawContent()
     {
-        $handler = $this->getContentHandler();
+        $handler = $this->getPartlyMockedHandler( array( "loadContentInfo" ) );
 
         $gatewayMock = $this->getGatewayMock();
         $mapperMock = $this->getMapperMock();
         $fieldHandlerMock = $this->getFieldHandlerMock();
+        $locationGatewayMock = $this->getLocationGatewayMock();
 
         // Method needs to list versions
         $mapperMock->expects( $this->once() )
@@ -832,6 +833,14 @@ class ContentHandlerTest extends TestCase
         $gatewayMock->expects( $this->once() )
             ->method( "deleteContent" )
             ->with( $this->equalTo( 23 ) );
+
+        $handler->expects( $this->once() )
+            ->method( 'loadContentInfo' )
+            ->with( 23 )
+            ->will( $this->returnValue( new ContentInfo( array( "mainLocationId" => 42 ) ) ) );
+        $locationGatewayMock->expects( $this->once() )
+            ->method( "removeElementFromTrash" )
+            ->with( $this->equalTo( 42 ) );
 
         $handler->removeRawContent( 23 );
     }
