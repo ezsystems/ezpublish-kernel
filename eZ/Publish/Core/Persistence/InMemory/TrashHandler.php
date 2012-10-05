@@ -51,48 +51,51 @@ class TrashHandler implements TrashHandlerInterface
      * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      * @todo Handle field types actions
      */
-    public function trash( $locationId )
+    public function trashSubtree( $locationId )
     {
-        $trashedLocation = $this->trashLocation( $locationId );
+        $location = $this->handler->locationHandler()->load( $locationId );
+        $subtreeLocations = $this->backend->find(
+            'Content\\Location',
+            array( 'pathString' => $location->pathString . '%' )
+        );
+        $isLocationRemoved = false;
+        $parentLocationId = null;
 
-        // Begin recursive call on children, if any
-        $directChildren = $this->backend->find( 'Content\\Location', array( 'parentId' => $locationId ) );
-        if ( !empty( $directChildren ) )
+        foreach ( $subtreeLocations as $location )
         {
-            foreach ( $directChildren as $child )
+            if ( $location->id == $locationId )
             {
-                $this->trash( $child->id );
+                $parentLocationId = $location->parentId;
+            }
+
+            if ( $this->backend->find( 'Content\\Location', array( 'contentId' => $location->contentId ) ) == 1 )
+            {
+                $this->backend->delete( 'Content\\Location', $locationId );
+                $this->backend->create( 'Content\\Location\\Trashed', (array)$location, false );
+            }
+            else
+            {
+                if ( $location->id == $locationId )
+                {
+                    $isLocationRemoved = true;
+                }
+                $this->backend->delete( 'Content\\Location', $location->id );
+                $remainingLocations = $this->backend->find( 'Content\\Location', array( 'contentId' => $location->contentId ) );
+                $this->backend->updateByMatch(
+                    'Content\\Location',
+                    array( 'contentId' => $location->contentId ),
+                    array( 'mainLocationId' => $remainingLocations[0]->id )
+                );
             }
         }
 
-        return $trashedLocation;
-    }
-
-    /**
-     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
-     */
-    private function trashLocation( $locationId )
-    {
-        $location = $this->handler->locationHandler()->load( $locationId );
-
-        // First delete location from tree
-        // If there are remaining locations for content, update the mainLocationId
-        $this->backend->delete( 'Content\\Location', $locationId );
-        $remainingLocations = $this->backend->find( 'Content\\Location', array( 'contentId' => $location->contentId ) );
-        if ( !empty( $remainingLocations ) )
+        if ( isset( $parentLocationId ) )
         {
-            $this->backend->updateByMatch(
-                'Content\\Location',
-                array( 'contentId' => $location->contentId ),
-                array( 'mainLocationId' => $remainingLocations[0]->id )
-            );
+            $parentLocation = $this->handler->locationHandler()->load( $parentLocationId );
+            $this->updateSubtreeModificationTime( $parentLocation->pathString );
         }
 
-        $this->updateSubtreeModificationTime( $this->getParentPathString( $location->pathString ) );
-
-        // Create new trashed location and return it
-        $params = (array)$location;
-        return $this->backend->create( 'Content\\Location\\Trashed', $params, false );
+        return $isLocationRemoved ? null : $this->loadTrashItem( $locationId );
     }
 
     /**
@@ -172,24 +175,15 @@ class TrashHandler implements TrashHandlerInterface
 
     /**
      * Updates subtree modification time for all locations starting from $startPathString
-     * @param string $startPathString
+     * @param string $pathString
      */
-    private function updateSubtreeModificationTime( $startPathString )
+    private function updateSubtreeModificationTime( $pathString )
     {
+        $locationIdList = array_filter( explode( '/', $pathString ) );
         $this->backend->updateByMatch(
             'Content\\Location',
-            array( 'pathString' => $startPathString . '%' ),
+            array( 'id' => $locationIdList ),
             array( 'modifiedSubLocation' => time() )
         );
-    }
-
-    /**
-     * Returns parent path string for $pathString
-     * @param string $pathString
-     * @return string
-     */
-    private function getParentPathString( $pathString )
-    {
-        return substr( $pathString, 0, -2 );
     }
 }
