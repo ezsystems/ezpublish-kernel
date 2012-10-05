@@ -58,6 +58,22 @@ class EzpDatabaseTest extends TestCase
     /**
      * @dataProvider getLoadLocationValues
      */
+    public function testLoadLocationByRemoteId( $field, $value )
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+        $data = $handler->getBasicNodeDataByRemoteId( 'dbc2f3c8716c12f32c379dbf0b1cb133' );
+
+        $this->assertEquals(
+            $value,
+            $data[$field],
+            "Value in property $field not as expected."
+        );
+    }
+
+    /**
+     * @dataProvider getLoadLocationValues
+     */
     public function testLoadLocation( $field, $value )
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );

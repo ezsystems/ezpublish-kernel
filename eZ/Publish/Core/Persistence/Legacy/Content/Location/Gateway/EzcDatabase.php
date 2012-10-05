@@ -76,6 +76,36 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Returns an array with basic node data
+     *
+     * @optimze
+     * @param mixed $remoteId
+     * @return array
+     */
+    public function getBasicNodeDataByRemoteId( $remoteId )
+    {
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select( '*' )
+            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->where(
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'remote_id' ),
+                    $query->bindValue( $remoteId )
+                )
+            );
+        $statement = $query->prepare();
+        $statement->execute();
+
+        if ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
+        {
+            return $row;
+        }
+
+        throw new NotFound( 'location', $nodeId );
+    }
+
+    /**
      * Loads data for all Locations for $contentId, optionally only in the
      * subtree starting at $rootLocationId
      *

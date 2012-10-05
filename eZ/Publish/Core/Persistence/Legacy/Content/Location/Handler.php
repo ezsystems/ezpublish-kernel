@@ -99,6 +99,19 @@ class Handler implements BaseLocationHandler
     }
 
     /**
+     * Loads the data for the location identified by $remoteId.
+     *
+     * @param string $remoteId
+     * @return \eZ\Publish\SPI\Persistence\Content\Location
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function loadByRemoteId( $remoteId )
+    {
+        $data = $this->locationGateway->getBasicNodeDataByRemoteId( $remoteId );
+        return $this->locationMapper->createLocationFromRow( $data );
+    }
+
+    /**
      * Loads all locations for $contentId, optionally limited to a sub tree
      * identified by $rootLocationId
      *

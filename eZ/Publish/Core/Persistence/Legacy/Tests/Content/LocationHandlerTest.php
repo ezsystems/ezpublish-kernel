@@ -91,6 +91,33 @@ class LocationHandlerTest extends TestCase
         $this->assertTrue( $location instanceof \eZ\Publish\SPI\Persistence\Content\Location );
     }
 
+    public function testLoadLocationByRemoteId()
+    {
+        $handler = $this->getLocationHandler();
+
+        $this->locationGateway
+            ->expects( $this->once() )
+            ->method( 'getBasicNodeDataByRemoteId' )
+            ->with( 'abc123' )
+            ->will(
+                $this->returnValue(
+                    array(
+                        'node_id' => 77,
+                    )
+                )
+            );
+
+        $this->locationMapper
+            ->expects( $this->once() )
+            ->method( 'createLocationFromRow' )
+            ->with( array( 'node_id' => 77 ) )
+            ->will( $this->returnValue( new \eZ\Publish\SPI\Persistence\Content\Location() ) );
+
+        $location = $handler->loadByRemoteId( 'abc123' );
+
+        $this->assertTrue( $location instanceof \eZ\Publish\SPI\Persistence\Content\Location );
+    }
+
     public function testLoadLocationsByContent()
     {
         $handler = $this->getLocationHandler();
