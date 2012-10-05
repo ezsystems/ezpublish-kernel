@@ -167,11 +167,6 @@ class RoleService implements RoleServiceInterface
     public function loadRole( $id )
     {
         $returnValue = $this->service->loadRole( $id );
-        $this->signalDispatcher()->emit(
-            new Signal\RoleService\LoadRoleSignal( array(
-                'id' => $id,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -188,11 +183,6 @@ class RoleService implements RoleServiceInterface
     public function loadRoleByIdentifier( $identifier )
     {
         $returnValue = $this->service->loadRoleByIdentifier( $identifier );
-        $this->signalDispatcher()->emit(
-            new Signal\RoleService\LoadRoleByIdentifierSignal( array(
-                'identifier' => $identifier,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -206,10 +196,6 @@ class RoleService implements RoleServiceInterface
     public function loadRoles()
     {
         $returnValue = $this->service->loadRoles();
-        $this->signalDispatcher()->emit(
-            new Signal\RoleService\LoadRolesSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 
@@ -243,11 +229,6 @@ class RoleService implements RoleServiceInterface
     public function loadPoliciesByUserId( $userId )
     {
         $returnValue = $this->service->loadPoliciesByUserId( $userId );
-        $this->signalDispatcher()->emit(
-            new Signal\RoleService\LoadPoliciesByUserIdSignal( array(
-                'userId' => $userId,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -349,11 +330,6 @@ class RoleService implements RoleServiceInterface
     public function getRoleAssignments( eZ\Publish\API\Repository\Values\User\Role $role )
     {
         $returnValue = $this->service->getRoleAssignments( $role );
-        $this->signalDispatcher()->emit(
-            new Signal\RoleService\GetRoleAssignmentsSignal( array(
-                'roleId' => $role->id,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -369,11 +345,6 @@ class RoleService implements RoleServiceInterface
     public function getRoleAssignmentsForUser( eZ\Publish\API\Repository\Values\User\User $user )
     {
         $returnValue = $this->service->getRoleAssignmentsForUser( $user );
-        $this->signalDispatcher()->emit(
-            new Signal\RoleService\GetRoleAssignmentsForUserSignal( array(
-                'userId' => $user->id,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -389,11 +360,6 @@ class RoleService implements RoleServiceInterface
     public function getRoleAssignmentsForUserGroup( eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
     {
         $returnValue = $this->service->getRoleAssignmentsForUserGroup( $userGroup );
-        $this->signalDispatcher()->emit(
-            new Signal\RoleService\GetRoleAssignmentsForUserGroupSignal( array(
-                'userGroupId' => $userGroup->id,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -458,11 +424,6 @@ class RoleService implements RoleServiceInterface
     public function getLimitationType( $identifier )
     {
         $returnValue = $this->service->getLimitationType( $identifier );
-        $this->signalDispatcher()->emit(
-            new Signal\RoleService\GetLimitationTypeSignal( array(
-                'identifier' => $identifier,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -484,12 +445,6 @@ class RoleService implements RoleServiceInterface
     public function getLimitationTypesByModuleFunction( $module, $function )
     {
         $returnValue = $this->service->getLimitationTypesByModuleFunction( $module, $function );
-        $this->signalDispatcher()->emit(
-            new Signal\RoleService\GetLimitationTypesByModuleFunctionSignal( array(
-                'module' => $module,
-                'function' => $function,
-            ) )
-        );
         return $returnValue;
     }
 

@@ -60,11 +60,6 @@ class ContentService implements ContentServiceInterface
     public function loadContentInfo( $contentId )
     {
         $returnValue = $this->service->loadContentInfo( $contentId );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentService\LoadContentInfoSignal( array(
-                'contentId' => $contentId,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -83,11 +78,6 @@ class ContentService implements ContentServiceInterface
     public function loadContentInfoByRemoteId( $remoteId )
     {
         $returnValue = $this->service->loadContentInfoByRemoteId( $remoteId );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentService\LoadContentInfoByRemoteIdSignal( array(
-                'remoteId' => $remoteId,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -107,12 +97,6 @@ class ContentService implements ContentServiceInterface
     public function loadVersionInfo( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, $versionNo = null )
     {
         $returnValue = $this->service->loadVersionInfo( $contentInfo, $versionNo );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentService\LoadVersionInfoSignal( array(
-                'contentId' => $contentInfo->id,
-                'versionNo' => $versionNo,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -132,12 +116,6 @@ class ContentService implements ContentServiceInterface
     public function loadVersionInfoById( $contentId, $versionNo = null )
     {
         $returnValue = $this->service->loadVersionInfoById( $contentId, $versionNo );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentService\LoadVersionInfoByIdSignal( array(
-                'contentId' => $contentId,
-                'versionNo' => $versionNo,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -158,13 +136,6 @@ class ContentService implements ContentServiceInterface
     public function loadContentByContentInfo( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, $languages = null, $versionNo = null )
     {
         $returnValue = $this->service->loadContentByContentInfo( $contentInfo, $languages, $versionNo );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentService\LoadContentByContentInfoSignal( array(
-                'contentId' => $contentInfo->id,
-                'languages' => $languages,
-                'versionNo' => $versionNo,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -181,12 +152,6 @@ class ContentService implements ContentServiceInterface
     public function loadContentByVersionInfo( eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo, $languages = null )
     {
         $returnValue = $this->service->loadContentByVersionInfo( $versionInfo, $languages );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentService\LoadContentByVersionInfoSignal( array(
-                'versionNo' => $versionInfo->versionNo,
-                'languages' => $languages,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -207,13 +172,6 @@ class ContentService implements ContentServiceInterface
     public function loadContent( $contentId, $languages = null, $versionNo = null )
     {
         $returnValue = $this->service->loadContent( $contentId, $languages, $versionNo );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentService\LoadContentSignal( array(
-                'contentId' => $contentId,
-                'languages' => $languages,
-                'versionNo' => $versionNo,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -234,13 +192,6 @@ class ContentService implements ContentServiceInterface
     public function loadContentByRemoteId( $remoteId, $languages = null, $versionNo = null )
     {
         $returnValue = $this->service->loadContentByRemoteId( $remoteId, $languages, $versionNo );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentService\LoadContentByRemoteIdSignal( array(
-                'remoteId' => $remoteId,
-                'languages' => $languages,
-                'versionNo' => $versionNo,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -362,11 +313,6 @@ class ContentService implements ContentServiceInterface
     public function loadContentDrafts( eZ\Publish\API\Repository\Values\User\User $user = null )
     {
         $returnValue = $this->service->loadContentDrafts( $user );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentService\LoadContentDraftsSignal( array(
-                'userId' => $user->id,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -479,11 +425,6 @@ class ContentService implements ContentServiceInterface
     public function loadVersions( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo )
     {
         $returnValue = $this->service->loadVersions( $contentInfo );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentService\LoadVersionsSignal( array(
-                'contentId' => $contentInfo->id,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -525,11 +466,6 @@ class ContentService implements ContentServiceInterface
     public function loadRelations( eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo )
     {
         $returnValue = $this->service->loadRelations( $versionInfo );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentService\LoadRelationsSignal( array(
-                'versionNo' => $versionInfo->versionNo,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -547,11 +483,6 @@ class ContentService implements ContentServiceInterface
     public function loadReverseRelations( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo )
     {
         $returnValue = $this->service->loadReverseRelations( $contentInfo );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentService\LoadReverseRelationsSignal( array(
-                'contentId' => $contentInfo->id,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -640,12 +571,6 @@ class ContentService implements ContentServiceInterface
     public function loadTranslationInfos( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, $filter = array() )
     {
         $returnValue = $this->service->loadTranslationInfos( $contentInfo, $filter );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentService\LoadTranslationInfosSignal( array(
-                'contentId' => $contentInfo->id,
-                'filter' => $filter,
-            ) )
-        );
         return $returnValue;
     }
 

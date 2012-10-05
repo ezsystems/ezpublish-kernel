@@ -101,11 +101,6 @@ class SectionService implements SectionServiceInterface
     public function loadSection( $sectionId )
     {
         $returnValue = $this->service->loadSection( $sectionId );
-        $this->signalDispatcher()->emit(
-            new Signal\SectionService\LoadSectionSignal( array(
-                'sectionId' => $sectionId,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -119,10 +114,6 @@ class SectionService implements SectionServiceInterface
     public function loadSections()
     {
         $returnValue = $this->service->loadSections();
-        $this->signalDispatcher()->emit(
-            new Signal\SectionService\LoadSectionsSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 
@@ -139,11 +130,6 @@ class SectionService implements SectionServiceInterface
     public function loadSectionByIdentifier( $sectionIdentifier )
     {
         $returnValue = $this->service->loadSectionByIdentifier( $sectionIdentifier );
-        $this->signalDispatcher()->emit(
-            new Signal\SectionService\LoadSectionByIdentifierSignal( array(
-                'sectionIdentifier' => $sectionIdentifier,
-            ) )
-        );
         return $returnValue;
     }
 

@@ -102,11 +102,6 @@ class URLWildcardService implements URLWildcardServiceInterface
     public function load( $id )
     {
         $returnValue = $this->service->load( $id );
-        $this->signalDispatcher()->emit(
-            new Signal\URLWildcardService\LoadSignal( array(
-                'id' => $id,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -121,12 +116,6 @@ class URLWildcardService implements URLWildcardServiceInterface
     public function loadAll( $offset = 0, $limit = -1 )
     {
         $returnValue = $this->service->loadAll( $offset, $limit );
-        $this->signalDispatcher()->emit(
-            new Signal\URLWildcardService\LoadAllSignal( array(
-                'offset' => $offset,
-                'limit' => $limit,
-            ) )
-        );
         return $returnValue;
     }
 

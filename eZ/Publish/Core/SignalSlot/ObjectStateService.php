@@ -77,11 +77,6 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function loadObjectStateGroup( $objectStateGroupId )
     {
         $returnValue = $this->service->loadObjectStateGroup( $objectStateGroupId );
-        $this->signalDispatcher()->emit(
-            new Signal\ObjectStateService\LoadObjectStateGroupSignal( array(
-                'objectStateGroupId' => $objectStateGroupId,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -96,12 +91,6 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function loadObjectStateGroups( $offset = 0, $limit = -1 )
     {
         $returnValue = $this->service->loadObjectStateGroups( $offset, $limit );
-        $this->signalDispatcher()->emit(
-            new Signal\ObjectStateService\LoadObjectStateGroupsSignal( array(
-                'offset' => $offset,
-                'limit' => $limit,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -115,11 +104,6 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function loadObjectStates( eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup )
     {
         $returnValue = $this->service->loadObjectStates( $objectStateGroup );
-        $this->signalDispatcher()->emit(
-            new Signal\ObjectStateService\LoadObjectStatesSignal( array(
-                'objectStateGroupId' => $objectStateGroup->id,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -199,11 +183,6 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function loadObjectState( $stateId )
     {
         $returnValue = $this->service->loadObjectState( $stateId );
-        $this->signalDispatcher()->emit(
-            new Signal\ObjectStateService\LoadObjectStateSignal( array(
-                'stateId' => $stateId,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -303,12 +282,6 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function getObjectState( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup )
     {
         $returnValue = $this->service->getObjectState( $contentInfo, $objectStateGroup );
-        $this->signalDispatcher()->emit(
-            new Signal\ObjectStateService\GetObjectStateSignal( array(
-                'contentId' => $contentInfo->id,
-                'objectStateGroupId' => $objectStateGroup->id,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -322,11 +295,6 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function getContentCount( eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState )
     {
         $returnValue = $this->service->getContentCount( $objectState );
-        $this->signalDispatcher()->emit(
-            new Signal\ObjectStateService\GetContentCountSignal( array(
-                'objectStateId' => $objectState->id,
-            ) )
-        );
         return $returnValue;
     }
 

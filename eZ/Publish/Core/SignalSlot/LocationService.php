@@ -86,11 +86,6 @@ class LocationService implements LocationServiceInterface
     public function loadLocation( $locationId )
     {
         $returnValue = $this->service->loadLocation( $locationId );
-        $this->signalDispatcher()->emit(
-            new Signal\LocationService\LoadLocationSignal( array(
-                'locationId' => $locationId,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -107,11 +102,6 @@ class LocationService implements LocationServiceInterface
     public function loadLocationByRemoteId( $remoteId )
     {
         $returnValue = $this->service->loadLocationByRemoteId( $remoteId );
-        $this->signalDispatcher()->emit(
-            new Signal\LocationService\LoadLocationByRemoteIdSignal( array(
-                'remoteId' => $remoteId,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -128,11 +118,6 @@ class LocationService implements LocationServiceInterface
     public function loadMainLocation( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo )
     {
         $returnValue = $this->service->loadMainLocation( $contentInfo );
-        $this->signalDispatcher()->emit(
-            new Signal\LocationService\LoadMainLocationSignal( array(
-                'contentId' => $contentInfo->id,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -152,12 +137,6 @@ class LocationService implements LocationServiceInterface
     public function loadLocations( eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, eZ\Publish\API\Repository\Values\Content\Location $rootLocation = null )
     {
         $returnValue = $this->service->loadLocations( $contentInfo, $rootLocation );
-        $this->signalDispatcher()->emit(
-            new Signal\LocationService\LoadLocationsSignal( array(
-                'contentId' => $contentInfo->id,
-                'rootLocationId' => $rootLocation->id,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -174,13 +153,6 @@ class LocationService implements LocationServiceInterface
     public function loadLocationChildren( eZ\Publish\API\Repository\Values\Content\Location $location, $offset = 0, $limit = -1 )
     {
         $returnValue = $this->service->loadLocationChildren( $location, $offset, $limit );
-        $this->signalDispatcher()->emit(
-            new Signal\LocationService\LoadLocationChildrenSignal( array(
-                'locationId' => $location->id,
-                'offset' => $offset,
-                'limit' => $limit,
-            ) )
-        );
         return $returnValue;
     }
 

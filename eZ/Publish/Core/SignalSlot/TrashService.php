@@ -60,11 +60,6 @@ class TrashService implements TrashServiceInterface
     public function loadTrashItem( $trashItemId )
     {
         $returnValue = $this->service->loadTrashItem( $trashItemId );
-        $this->signalDispatcher()->emit(
-            new Signal\TrashService\LoadTrashItemSignal( array(
-                'trashItemId' => $trashItemId,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -164,11 +159,6 @@ class TrashService implements TrashServiceInterface
     public function findTrashItems( eZ\Publish\API\Repository\Values\Content\Query $query )
     {
         $returnValue = $this->service->findTrashItems( $query );
-        $this->signalDispatcher()->emit(
-            new Signal\TrashService\FindTrashItemsSignal( array(
-                'query' => $query,
-            ) )
-        );
         return $returnValue;
     }
 

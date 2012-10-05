@@ -86,11 +86,6 @@ class UserService implements UserServiceInterface
     public function loadUserGroup( $id )
     {
         $returnValue = $this->service->loadUserGroup( $id );
-        $this->signalDispatcher()->emit(
-            new Signal\UserService\LoadUserGroupSignal( array(
-                'id' => $id,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -106,11 +101,6 @@ class UserService implements UserServiceInterface
     public function loadSubUserGroups( eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
     {
         $returnValue = $this->service->loadSubUserGroups( $userGroup );
-        $this->signalDispatcher()->emit(
-            new Signal\UserService\LoadSubUserGroupsSignal( array(
-                'userGroupId' => $userGroup->id,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -217,11 +207,6 @@ class UserService implements UserServiceInterface
     public function loadUser( $userId )
     {
         $returnValue = $this->service->loadUser( $userId );
-        $this->signalDispatcher()->emit(
-            new Signal\UserService\LoadUserSignal( array(
-                'userId' => $userId,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -234,10 +219,6 @@ class UserService implements UserServiceInterface
     public function loadAnonymousUser()
     {
         $returnValue = $this->service->loadAnonymousUser();
-        $this->signalDispatcher()->emit(
-            new Signal\UserService\LoadAnonymousUserSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 
@@ -254,12 +235,6 @@ class UserService implements UserServiceInterface
     public function loadUserByCredentials( $login, $password )
     {
         $returnValue = $this->service->loadUserByCredentials( $login, $password );
-        $this->signalDispatcher()->emit(
-            new Signal\UserService\LoadUserByCredentialsSignal( array(
-                'login' => $login,
-                'password' => $password,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -363,11 +338,6 @@ class UserService implements UserServiceInterface
     public function loadUserGroupsOfUser( eZ\Publish\API\Repository\Values\User\User $user )
     {
         $returnValue = $this->service->loadUserGroupsOfUser( $user );
-        $this->signalDispatcher()->emit(
-            new Signal\UserService\LoadUserGroupsOfUserSignal( array(
-                'userId' => $user->id,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -385,13 +355,6 @@ class UserService implements UserServiceInterface
     public function loadUsersOfUserGroup( eZ\Publish\API\Repository\Values\User\UserGroup $userGroup, $offset = 0, $limit = -1 )
     {
         $returnValue = $this->service->loadUsersOfUserGroup( $userGroup, $offset, $limit );
-        $this->signalDispatcher()->emit(
-            new Signal\UserService\LoadUsersOfUserGroupSignal( array(
-                'userGroupId' => $userGroup->id,
-                'offset' => $offset,
-                'limit' => $limit,
-            ) )
-        );
         return $returnValue;
     }
 

@@ -78,11 +78,6 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function loadContentTypeGroup( $contentTypeGroupId )
     {
         $returnValue = $this->service->loadContentTypeGroup( $contentTypeGroupId );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentTypeService\LoadContentTypeGroupSignal( array(
-                'contentTypeGroupId' => $contentTypeGroupId,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -98,11 +93,6 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function loadContentTypeGroupByIdentifier( $contentTypeGroupIdentifier )
     {
         $returnValue = $this->service->loadContentTypeGroupByIdentifier( $contentTypeGroupIdentifier );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentTypeService\LoadContentTypeGroupByIdentifierSignal( array(
-                'contentTypeGroupIdentifier' => $contentTypeGroupIdentifier,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -114,10 +104,6 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function loadContentTypeGroups()
     {
         $returnValue = $this->service->loadContentTypeGroups();
-        $this->signalDispatcher()->emit(
-            new Signal\ContentTypeService\LoadContentTypeGroupsSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 
@@ -202,11 +188,6 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function loadContentType( $contentTypeId )
     {
         $returnValue = $this->service->loadContentType( $contentTypeId );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentTypeService\LoadContentTypeSignal( array(
-                'contentTypeId' => $contentTypeId,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -222,11 +203,6 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function loadContentTypeByIdentifier( $identifier )
     {
         $returnValue = $this->service->loadContentTypeByIdentifier( $identifier );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentTypeService\LoadContentTypeByIdentifierSignal( array(
-                'identifier' => $identifier,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -242,11 +218,6 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function loadContentTypeByRemoteId( $remoteId )
     {
         $returnValue = $this->service->loadContentTypeByRemoteId( $remoteId );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentTypeService\LoadContentTypeByRemoteIdSignal( array(
-                'remoteId' => $remoteId,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -262,11 +233,6 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function loadContentTypeDraft( $contentTypeId )
     {
         $returnValue = $this->service->loadContentTypeDraft( $contentTypeId );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentTypeService\LoadContentTypeDraftSignal( array(
-                'contentTypeId' => $contentTypeId,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -280,11 +246,6 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function loadContentTypes( eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup )
     {
         $returnValue = $this->service->loadContentTypes( $contentTypeGroup );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentTypeService\LoadContentTypesSignal( array(
-                'contentTypeGroupId' => $contentTypeGroup->id,
-            ) )
-        );
         return $returnValue;
     }
 

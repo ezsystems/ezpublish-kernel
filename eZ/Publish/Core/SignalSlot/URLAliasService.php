@@ -119,13 +119,6 @@ class URLAliasService implements URLAliasServiceInterface
     public function listLocationAliases( eZ\Publish\API\Repository\Values\Content\Location $location, $custom = true, $languageCode = null )
     {
         $returnValue = $this->service->listLocationAliases( $location, $custom, $languageCode );
-        $this->signalDispatcher()->emit(
-            new Signal\URLAliasService\ListLocationAliasesSignal( array(
-                'locationId' => $location->id,
-                'custom' => $custom,
-                'languageCode' => $languageCode,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -141,13 +134,6 @@ class URLAliasService implements URLAliasServiceInterface
     public function listGlobalAliases( $languageCode = null, $offset = 0, $limit = -1 )
     {
         $returnValue = $this->service->listGlobalAliases( $languageCode, $offset, $limit );
-        $this->signalDispatcher()->emit(
-            new Signal\URLAliasService\ListGlobalAliasesSignal( array(
-                'languageCode' => $languageCode,
-                'offset' => $offset,
-                'limit' => $limit,
-            ) )
-        );
         return $returnValue;
     }
 

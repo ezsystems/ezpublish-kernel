@@ -140,11 +140,6 @@ class LanguageService implements LanguageServiceInterface
     public function loadLanguage( $languageCode )
     {
         $returnValue = $this->service->loadLanguage( $languageCode );
-        $this->signalDispatcher()->emit(
-            new Signal\LanguageService\LoadLanguageSignal( array(
-                'languageCode' => $languageCode,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -156,10 +151,6 @@ class LanguageService implements LanguageServiceInterface
     public function loadLanguages()
     {
         $returnValue = $this->service->loadLanguages();
-        $this->signalDispatcher()->emit(
-            new Signal\LanguageService\LoadLanguagesSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 
@@ -175,11 +166,6 @@ class LanguageService implements LanguageServiceInterface
     public function loadLanguageById( $languageId )
     {
         $returnValue = $this->service->loadLanguageById( $languageId );
-        $this->signalDispatcher()->emit(
-            new Signal\LanguageService\LoadLanguageByIdSignal( array(
-                'languageId' => $languageId,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -212,11 +198,6 @@ class LanguageService implements LanguageServiceInterface
     public function getDefaultLanguageCode()
     {
         $returnValue = $this->service->getDefaultLanguageCode();
-        $this->signalDispatcher()->emit(
-            new Signal\LanguageService\GetDefaultLanguageCodeSignal( array(
-                'languageCode' => $returnValue,
-            ) )
-        );
         return $returnValue;
     }
 
