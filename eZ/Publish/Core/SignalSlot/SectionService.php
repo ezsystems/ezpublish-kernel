@@ -214,10 +214,6 @@ class SectionService implements SectionServiceInterface
     public function newSectionCreateStruct()
     {
         $returnValue = $this->service->newSectionCreateStruct();
-        $this->signalDispatcher()->emit(
-            new Signal\SectionService\NewSectionCreateStructSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 
@@ -229,10 +225,6 @@ class SectionService implements SectionServiceInterface
     public function newSectionUpdateStruct()
     {
         $returnValue = $this->service->newSectionUpdateStruct();
-        $this->signalDispatcher()->emit(
-            new Signal\SectionService\NewSectionUpdateStructSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 

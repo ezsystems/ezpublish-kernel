@@ -337,11 +337,6 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function newObjectStateGroupCreateStruct( $identifier )
     {
         $returnValue = $this->service->newObjectStateGroupCreateStruct( $identifier );
-        $this->signalDispatcher()->emit(
-            new Signal\ObjectStateService\NewObjectStateGroupCreateStructSignal( array(
-                'identifier' => $identifier,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -353,10 +348,6 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function newObjectStateGroupUpdateStruct()
     {
         $returnValue = $this->service->newObjectStateGroupUpdateStruct();
-        $this->signalDispatcher()->emit(
-            new Signal\ObjectStateService\NewObjectStateGroupUpdateStructSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 
@@ -369,11 +360,6 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function newObjectStateCreateStruct( $identifier )
     {
         $returnValue = $this->service->newObjectStateCreateStruct( $identifier );
-        $this->signalDispatcher()->emit(
-            new Signal\ObjectStateService\NewObjectStateCreateStructSignal( array(
-                'identifier' => $identifier,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -385,10 +371,6 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function newObjectStateUpdateStruct()
     {
         $returnValue = $this->service->newObjectStateUpdateStruct();
-        $this->signalDispatcher()->emit(
-            new Signal\ObjectStateService\NewObjectStateUpdateStructSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 

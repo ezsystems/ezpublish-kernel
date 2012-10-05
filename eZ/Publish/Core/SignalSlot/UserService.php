@@ -409,15 +409,6 @@ class UserService implements UserServiceInterface
     public function newUserCreateStruct( $login, $email, $password, $mainLanguageCode, $contentType = null )
     {
         $returnValue = $this->service->newUserCreateStruct( $login, $email, $password, $mainLanguageCode, $contentType );
-        $this->signalDispatcher()->emit(
-            new Signal\UserService\NewUserCreateStructSignal( array(
-                'login' => $login,
-                'email' => $email,
-                'password' => $password,
-                'mainLanguageCode' => $mainLanguageCode,
-                'contentType' => $contentType,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -432,12 +423,6 @@ class UserService implements UserServiceInterface
     public function newUserGroupCreateStruct( $mainLanguageCode, $contentType = null )
     {
         $returnValue = $this->service->newUserGroupCreateStruct( $mainLanguageCode, $contentType );
-        $this->signalDispatcher()->emit(
-            new Signal\UserService\NewUserGroupCreateStructSignal( array(
-                'mainLanguageCode' => $mainLanguageCode,
-                'contentType' => $contentType,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -449,10 +434,6 @@ class UserService implements UserServiceInterface
     public function newUserUpdateStruct()
     {
         $returnValue = $this->service->newUserUpdateStruct();
-        $this->signalDispatcher()->emit(
-            new Signal\UserService\NewUserUpdateStructSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 
@@ -464,10 +445,6 @@ class UserService implements UserServiceInterface
     public function newUserGroupUpdateStruct()
     {
         $returnValue = $this->service->newUserGroupUpdateStruct();
-        $this->signalDispatcher()->emit(
-            new Signal\UserService\NewUserGroupUpdateStructSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 

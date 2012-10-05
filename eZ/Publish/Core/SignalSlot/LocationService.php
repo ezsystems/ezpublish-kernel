@@ -345,11 +345,6 @@ class LocationService implements LocationServiceInterface
     public function newLocationCreateStruct( $parentLocationId )
     {
         $returnValue = $this->service->newLocationCreateStruct( $parentLocationId );
-        $this->signalDispatcher()->emit(
-            new Signal\LocationService\NewLocationCreateStructSignal( array(
-                'parentLocationId' => $parentLocationId,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -361,10 +356,6 @@ class LocationService implements LocationServiceInterface
     public function newLocationUpdateStruct()
     {
         $returnValue = $this->service->newLocationUpdateStruct();
-        $this->signalDispatcher()->emit(
-            new Signal\LocationService\NewLocationUpdateStructSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 

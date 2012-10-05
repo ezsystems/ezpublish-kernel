@@ -520,11 +520,6 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function newContentTypeGroupCreateStruct( $identifier )
     {
         $returnValue = $this->service->newContentTypeGroupCreateStruct( $identifier );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentTypeService\NewContentTypeGroupCreateStructSignal( array(
-                'identifier' => $identifier,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -538,11 +533,6 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function newContentTypeCreateStruct( $identifier )
     {
         $returnValue = $this->service->newContentTypeCreateStruct( $identifier );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentTypeService\NewContentTypeCreateStructSignal( array(
-                'identifier' => $identifier,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -554,10 +544,6 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function newContentTypeUpdateStruct()
     {
         $returnValue = $this->service->newContentTypeUpdateStruct();
-        $this->signalDispatcher()->emit(
-            new Signal\ContentTypeService\NewContentTypeUpdateStructSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 
@@ -569,10 +555,6 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function newContentTypeGroupUpdateStruct()
     {
         $returnValue = $this->service->newContentTypeGroupUpdateStruct();
-        $this->signalDispatcher()->emit(
-            new Signal\ContentTypeService\NewContentTypeGroupUpdateStructSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 
@@ -587,12 +569,6 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function newFieldDefinitionCreateStruct( $identifier, $fieldTypeIdentifier )
     {
         $returnValue = $this->service->newFieldDefinitionCreateStruct( $identifier, $fieldTypeIdentifier );
-        $this->signalDispatcher()->emit(
-            new Signal\ContentTypeService\NewFieldDefinitionCreateStructSignal( array(
-                'identifier' => $identifier,
-                'fieldTypeIdentifier' => $fieldTypeIdentifier,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -604,10 +580,6 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function newFieldDefinitionUpdateStruct()
     {
         $returnValue = $this->service->newFieldDefinitionUpdateStruct();
-        $this->signalDispatcher()->emit(
-            new Signal\ContentTypeService\NewFieldDefinitionUpdateStructSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 

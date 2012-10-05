@@ -226,10 +226,6 @@ class LanguageService implements LanguageServiceInterface
     public function newLanguageCreateStruct()
     {
         $returnValue = $this->service->newLanguageCreateStruct();
-        $this->signalDispatcher()->emit(
-            new Signal\LanguageService\NewLanguageCreateStructSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 

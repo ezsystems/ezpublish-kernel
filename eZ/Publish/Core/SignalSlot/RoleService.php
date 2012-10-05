@@ -405,11 +405,6 @@ class RoleService implements RoleServiceInterface
     public function newRoleCreateStruct( $name )
     {
         $returnValue = $this->service->newRoleCreateStruct( $name );
-        $this->signalDispatcher()->emit(
-            new Signal\RoleService\NewRoleCreateStructSignal( array(
-                'name' => $name,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -424,12 +419,6 @@ class RoleService implements RoleServiceInterface
     public function newPolicyCreateStruct( $module, $function )
     {
         $returnValue = $this->service->newPolicyCreateStruct( $module, $function );
-        $this->signalDispatcher()->emit(
-            new Signal\RoleService\NewPolicyCreateStructSignal( array(
-                'module' => $module,
-                'function' => $function,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -441,10 +430,6 @@ class RoleService implements RoleServiceInterface
     public function newPolicyUpdateStruct()
     {
         $returnValue = $this->service->newPolicyUpdateStruct();
-        $this->signalDispatcher()->emit(
-            new Signal\RoleService\NewPolicyUpdateStructSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 
@@ -456,10 +441,6 @@ class RoleService implements RoleServiceInterface
     public function newRoleUpdateStruct()
     {
         $returnValue = $this->service->newRoleUpdateStruct();
-        $this->signalDispatcher()->emit(
-            new Signal\RoleService\NewRoleUpdateStructSignal( array(
-            ) )
-        );
         return $returnValue;
     }
 
