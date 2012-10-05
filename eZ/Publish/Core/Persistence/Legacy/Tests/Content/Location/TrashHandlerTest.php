@@ -18,6 +18,13 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
 class TrashHandlerTest extends TestCase
 {
     /**
+     * Mocked location handler instance
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
+     */
+    protected $locationHandler;
+
+    /**
      * Mocked location gateway instance
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
@@ -52,6 +59,9 @@ class TrashHandlerTest extends TestCase
     {
         $dbHandler = $this->getDatabaseHandler();
         return new Handler(
+            $this->locationHandler = $this->getMockBuilder( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Handler' )
+                ->disableOriginalConstructor()
+                ->getMock(),
             $this->locationGateway = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway' ),
             $this->locationMapper = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper' ),
             $this->contentHandler = $this->getMockBuilder( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler' )
@@ -61,46 +71,231 @@ class TrashHandlerTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler::trash
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler::trashSubtree
      */
-    public function testTrash()
+    public function testTrashSubtree()
     {
         $handler = $this->getTrashHandler();
 
         $this->locationGateway
             ->expects( $this->at( 0 ) )
-            ->method( 'getBasicNodeData' )
-            ->with( 69 )
+            ->method( 'getSubtreeContent' )
+            ->with( 20 )
             ->will(
-                $this->returnValue(
+            $this->returnValue(
+                array(
                     array(
-                        'node_id' => 69,
-                        'path_string' => '/1/2/69/',
-                        'contentobject_id' => 67,
+                        "contentobject_id" => 10,
+                        "node_id" => 20,
+                        "main_node_id" => 30,
+                        "parent_node_id" => 40
+                    ),
+                    array(
+                        "contentobject_id" => 11,
+                        "node_id" => 21,
+                        "main_node_id" => 31,
+                        "parent_node_id" => 41
                     )
                 )
-            );
+            )
+        );
 
         $this->locationGateway
-            ->expects( $this->once() )
-            ->method( 'trashSubtree' )
-            ->with( '/1/2/69/' );
+            ->expects( $this->at( 1 ) )
+            ->method( 'countLocationsByContentId' )
+            ->with( 10 )
+            ->will( $this->returnValue( 1 ) );
 
         $this->locationGateway
+            ->expects( $this->at( 2 ) )
+            ->method( 'trashLocation' )
+            ->with( 20 );
+
+        $this->locationGateway
+            ->expects( $this->at( 3 ) )
+            ->method( 'countLocationsByContentId' )
+            ->with( 11 )
+            ->will( $this->returnValue( 2 ) );
+
+        $this->locationGateway
+            ->expects( $this->at( 4 ) )
+            ->method( 'removeLocation' )
+            ->with( 21 );
+
+        $this->locationHandler
             ->expects( $this->once() )
+            ->method( 'markSubtreeModified' )
+            ->with( 40 );
+
+        $this->locationGateway
+            ->expects( $this->at( 5 ) )
             ->method( 'loadTrashByLocation' )
-            ->with( 69 )
+            ->with( 20 )
             ->will( $this->returnValue( $array = array( 'data…' ) ) );
 
         $this->locationMapper
             ->expects( $this->once() )
             ->method( 'createLocationFromRow' )
             ->with( $array, null, new Trashed() )
-            ->will( $this->returnValue( new Trashed( array( 'id' => 69 ) ) ) );
+            ->will( $this->returnValue( new Trashed( array( 'id' => 20 ) ) ) );
 
-        $trashedObject = $handler->trash( 69 );
+        $trashedObject = $handler->trashSubtree( 20 );
         self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trashed', $trashedObject );
-        self::assertSame( 69, $trashedObject->id );
+        self::assertSame( 20, $trashedObject->id );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler::trashSubtree
+     */
+    public function testTrashSubtreeReturnsNull()
+    {
+        $handler = $this->getTrashHandler();
+
+        $this->locationGateway
+            ->expects( $this->at( 0 ) )
+            ->method( 'getSubtreeContent' )
+            ->with( 20 )
+            ->will(
+            $this->returnValue(
+                array(
+                    array(
+                        "contentobject_id" => 10,
+                        "node_id" => 20,
+                        "main_node_id" => 30,
+                        "parent_node_id" => 40
+                    ),
+                    array(
+                        "contentobject_id" => 11,
+                        "node_id" => 21,
+                        "main_node_id" => 31,
+                        "parent_node_id" => 41
+                    )
+                )
+            )
+        );
+
+        $this->locationGateway
+            ->expects( $this->at( 1 ) )
+            ->method( 'countLocationsByContentId' )
+            ->with( 10 )
+            ->will( $this->returnValue( 2 ) );
+
+        $this->locationGateway
+            ->expects( $this->at( 2 ) )
+            ->method( 'removeLocation' )
+            ->with( 20 );
+
+        $this->locationGateway
+            ->expects( $this->at( 3 ) )
+            ->method( 'countLocationsByContentId' )
+            ->with( 11 )
+            ->will( $this->returnValue( 1 ) );
+
+        $this->locationGateway
+            ->expects( $this->at( 4 ) )
+            ->method( 'trashLocation' )
+            ->with( 21 );
+
+        $this->locationHandler
+            ->expects( $this->once() )
+            ->method( 'markSubtreeModified' )
+            ->with( 40 );
+
+        $returnValue = $handler->trashSubtree( 20 );
+        self::assertNull( $returnValue );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler::trashSubtree
+     */
+    public function testTrashSubtreeUpdatesMainLocation()
+    {
+        $handler = $this->getTrashHandler();
+
+        $this->locationGateway
+            ->expects( $this->at( 0 ) )
+            ->method( 'getSubtreeContent' )
+            ->with( 20 )
+            ->will(
+            $this->returnValue(
+                array(
+                    array(
+                        "contentobject_id" => 10,
+                        "node_id" => 20,
+                        "main_node_id" => 30,
+                        "parent_node_id" => 40
+                    ),
+                    array(
+                        "contentobject_id" => 11,
+                        "node_id" => 21,
+                        "main_node_id" => 21,
+                        "parent_node_id" => 41
+                    )
+                )
+            )
+        );
+
+        $this->locationGateway
+            ->expects( $this->at( 1 ) )
+            ->method( 'countLocationsByContentId' )
+            ->with( 10 )
+            ->will( $this->returnValue( 1 ) );
+
+        $this->locationGateway
+            ->expects( $this->at( 2 ) )
+            ->method( 'trashLocation' )
+            ->with( 20 );
+
+        $this->locationGateway
+            ->expects( $this->at( 3 ) )
+            ->method( 'countLocationsByContentId' )
+            ->with( 11 )
+            ->will( $this->returnValue( 2 ) );
+
+        $this->locationGateway
+            ->expects( $this->at( 4 ) )
+            ->method( 'removeLocation' )
+            ->with( 21 );
+
+        $this->locationGateway
+            ->expects( $this->at( 5 ) )
+            ->method( 'getFallbackMainNodeData' )
+            ->with( 11, 21 )
+            ->will(
+            $this->returnValue(
+                array(
+                    "node_id" => 100,
+                    "contentobject_version" => 101,
+                    "parent_node_id" => 102,
+                )
+            )
+        );
+
+        $this->locationHandler
+            ->expects( $this->once() )
+            ->method( 'changeMainLocation' )
+            ->with( 11, 100, 101, 102 );
+
+        $this->locationHandler
+            ->expects( $this->once() )
+            ->method( 'markSubtreeModified' )
+            ->with( 40 );
+
+        $this->locationGateway
+            ->expects( $this->at( 6 ) )
+            ->method( 'loadTrashByLocation' )
+            ->with( 20 )
+            ->will( $this->returnValue( $array = array( 'data…' ) ) );
+
+        $this->locationMapper
+            ->expects( $this->once() )
+            ->method( 'createLocationFromRow' )
+            ->with( $array, null, new Trashed() )
+            ->will( $this->returnValue( new Trashed( array( 'id' => 20 ) ) ) );
+
+        $trashedObject = $handler->trashSubtree( 20 );
+        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trashed', $trashedObject );
+        self::assertSame( 20, $trashedObject->id );
     }
 
     /**
