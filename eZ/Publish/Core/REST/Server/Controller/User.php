@@ -429,7 +429,7 @@ class User extends RestController
             }
         }
 
-        if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.userlist' )
+        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.userlist' )
         {
             return new Values\UserList( $restUsers, $this->request->path );
         }
@@ -463,7 +463,7 @@ class User extends RestController
             }
         }
 
-        if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.usergrouplist' )
+        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.usergrouplist' )
         {
             return new Values\UserGroupList( $restUserGroups, $this->request->path );
         }
@@ -565,7 +565,7 @@ class User extends RestController
             $restUserGroups[] = new Values\RestUserGroup( $subGroup, $subGroupContentInfo, $subGroupLocation );
         }
 
-        if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.usergrouplist' )
+        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.usergrouplist' )
         {
             return new Values\UserGroupList( $restUserGroups, $this->request->path );
         }
@@ -625,7 +625,7 @@ class User extends RestController
             $restUsers[] = new Values\RestUser( $user, $userContentInfo, $userLocation );
         }
 
-        if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.userlist' )
+        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.userlist' )
         {
             return new Values\UserList( $restUsers, $this->request->path );
         }
