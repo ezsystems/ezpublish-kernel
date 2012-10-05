@@ -58,7 +58,7 @@ class SectionService implements SectionServiceInterface
     public function createSection( \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct $sectionCreateStruct )
     {
         $returnValue = $this->service->createSection( $sectionCreateStruct );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\SectionService\CreateSectionSignal( array(
                 'sectionId' => $returnValue->id,
             ) )
@@ -80,7 +80,7 @@ class SectionService implements SectionServiceInterface
     public function updateSection( \eZ\Publish\API\Repository\Values\Content\Section $section, \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct $sectionUpdateStruct )
     {
         $returnValue = $this->service->updateSection( $section, $sectionUpdateStruct );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\SectionService\UpdateSectionSignal( array(
                 'sectionId' => $section->id,
             ) )
@@ -158,7 +158,7 @@ class SectionService implements SectionServiceInterface
     public function assignSection( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, \eZ\Publish\API\Repository\Values\Content\Section $section )
     {
         $returnValue = $this->service->assignSection( $contentInfo, $section );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\SectionService\AssignSectionSignal( array(
                 'contentId' => $contentInfo->id,
                 'sectionId' => $section->id,
@@ -180,7 +180,7 @@ class SectionService implements SectionServiceInterface
     public function deleteSection( \eZ\Publish\API\Repository\Values\Content\Section $section )
     {
         $returnValue = $this->service->deleteSection( $section );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\SectionService\DeleteSectionSignal( array(
                 'sectionId' => $section->id,
             ) )

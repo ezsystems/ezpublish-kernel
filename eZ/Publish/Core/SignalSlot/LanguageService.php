@@ -58,7 +58,7 @@ class LanguageService implements LanguageServiceInterface
     public function createLanguage( \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct $languageCreateStruct )
     {
         $returnValue = $this->service->createLanguage( $languageCreateStruct );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\LanguageService\CreateLanguageSignal( array(
                 'languageId' => $returnValue->id,
             ) )
@@ -79,7 +79,7 @@ class LanguageService implements LanguageServiceInterface
     public function updateLanguageName( \eZ\Publish\API\Repository\Values\Content\Language $language, $newName )
     {
         $returnValue = $this->service->updateLanguageName( $language, $newName );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\LanguageService\UpdateLanguageNameSignal( array(
                 'languageId' => $language->id,
                 'newName' => $newName,
@@ -100,7 +100,7 @@ class LanguageService implements LanguageServiceInterface
     public function enableLanguage( \eZ\Publish\API\Repository\Values\Content\Language $language )
     {
         $returnValue = $this->service->enableLanguage( $language );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\LanguageService\EnableLanguageSignal( array(
                 'languageId' => $language->id,
             ) )
@@ -120,7 +120,7 @@ class LanguageService implements LanguageServiceInterface
     public function disableLanguage( \eZ\Publish\API\Repository\Values\Content\Language $language )
     {
         $returnValue = $this->service->disableLanguage( $language );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\LanguageService\DisableLanguageSignal( array(
                 'languageId' => $language->id,
             ) )
@@ -182,7 +182,7 @@ class LanguageService implements LanguageServiceInterface
     public function deleteLanguage( \eZ\Publish\API\Repository\Values\Content\Language $language )
     {
         $returnValue = $this->service->deleteLanguage( $language );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\LanguageService\DeleteLanguageSignal( array(
                 'languageId' => $language->id,
             ) )

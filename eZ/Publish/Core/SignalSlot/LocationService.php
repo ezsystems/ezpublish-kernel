@@ -64,7 +64,7 @@ class LocationService implements LocationServiceInterface
     public function copySubtree( \eZ\Publish\API\Repository\Values\Content\Location $subtree, \eZ\Publish\API\Repository\Values\Content\Location $targetParentLocation )
     {
         $returnValue = $this->service->copySubtree( $subtree, $targetParentLocation );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\LocationService\CopySubtreeSignal( array(
                 'subtreeId' => $subtree->id,
                 'targetParentLocationId' => $targetParentLocation->id,
@@ -173,7 +173,7 @@ class LocationService implements LocationServiceInterface
     public function createLocation( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $locationCreateStruct )
     {
         $returnValue = $this->service->createLocation( $contentInfo, $locationCreateStruct );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\LocationService\CreateLocationSignal( array(
                 'contentId' => $contentInfo->id,
                 'locationId' => $returnValue->id,
@@ -196,7 +196,7 @@ class LocationService implements LocationServiceInterface
     public function updateLocation( \eZ\Publish\API\Repository\Values\Content\Location $location, \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct $locationUpdateStruct )
     {
         $returnValue = $this->service->updateLocation( $location, $locationUpdateStruct );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\LocationService\UpdateLocationSignal( array(
                 'locationId' => $location->id,
             ) )
@@ -215,7 +215,7 @@ class LocationService implements LocationServiceInterface
     public function swapLocation( \eZ\Publish\API\Repository\Values\Content\Location $location1, \eZ\Publish\API\Repository\Values\Content\Location $location2 )
     {
         $returnValue = $this->service->swapLocation( $location1, $location2 );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\LocationService\SwapLocationSignal( array(
                 'location1Id' => $location1->id,
                 'location2Id' => $location2->id,
@@ -236,7 +236,7 @@ class LocationService implements LocationServiceInterface
     public function hideLocation( \eZ\Publish\API\Repository\Values\Content\Location $location )
     {
         $returnValue = $this->service->hideLocation( $location );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\LocationService\HideLocationSignal( array(
                 'locationId' => $location->id,
             ) )
@@ -259,7 +259,7 @@ class LocationService implements LocationServiceInterface
     public function unhideLocation( \eZ\Publish\API\Repository\Values\Content\Location $location )
     {
         $returnValue = $this->service->unhideLocation( $location );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\LocationService\UnhideLocationSignal( array(
                 'locationId' => $location->id,
             ) )
@@ -281,7 +281,7 @@ class LocationService implements LocationServiceInterface
     public function moveSubtree( \eZ\Publish\API\Repository\Values\Content\Location $location, \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation )
     {
         $returnValue = $this->service->moveSubtree( $location, $newParentLocation );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\LocationService\MoveSubtreeSignal( array(
                 'locationId' => $location->id,
                 'newParentLocationId' => $newParentLocation->id,
@@ -300,7 +300,7 @@ class LocationService implements LocationServiceInterface
     public function deleteLocation( \eZ\Publish\API\Repository\Values\Content\Location $location )
     {
         $returnValue = $this->service->deleteLocation( $location );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\LocationService\DeleteLocationSignal( array(
                 'locationId' => $location->id,
             ) )

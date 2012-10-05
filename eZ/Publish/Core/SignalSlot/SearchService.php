@@ -57,7 +57,7 @@ class SearchService implements SearchServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContent( \eZ\Publish\API\Repository\Values\Content\Query $query, $fieldFilters = array(), $filterOnUserPermissions = true )
+    public function findContent( \eZ\Publish\API\Repository\Values\Content\Query $query, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
         $returnValue = $this->service->findContent( $query, $fieldFilters, $filterOnUserPermissions );
         return $returnValue;
@@ -77,7 +77,7 @@ class SearchService implements SearchServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function findSingle( \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion, $fieldFilters = array(), $filterOnUserPermissions = true )
+    public function findSingle( \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
         $returnValue = $this->service->findSingle( $criterion, $fieldFilters, $filterOnUserPermissions );
         return $returnValue;

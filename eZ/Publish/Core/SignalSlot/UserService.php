@@ -65,7 +65,7 @@ class UserService implements UserServiceInterface
     public function createUserGroup( \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct $userGroupCreateStruct, \eZ\Publish\API\Repository\Values\User\UserGroup $parentGroup )
     {
         $returnValue = $this->service->createUserGroup( $userGroupCreateStruct, $parentGroup );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\UserService\CreateUserGroupSignal( array(
                 'userGroupId' => $returnValue->id,
             ) )
@@ -116,7 +116,7 @@ class UserService implements UserServiceInterface
     public function deleteUserGroup( \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
     {
         $returnValue = $this->service->deleteUserGroup( $userGroup );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\UserService\DeleteUserGroupSignal( array(
                 'userGroupId' => $userGroup->id,
             ) )
@@ -135,7 +135,7 @@ class UserService implements UserServiceInterface
     public function moveUserGroup( \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup, \eZ\Publish\API\Repository\Values\User\UserGroup $newParent )
     {
         $returnValue = $this->service->moveUserGroup( $userGroup, $newParent );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\UserService\MoveUserGroupSignal( array(
                 'userGroupId' => $userGroup->id,
                 'newParentId' => $newParent->id,
@@ -163,7 +163,7 @@ class UserService implements UserServiceInterface
     public function updateUserGroup( \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup, \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct $userGroupUpdateStruct )
     {
         $returnValue = $this->service->updateUserGroup( $userGroup, $userGroupUpdateStruct );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\UserService\UpdateUserGroupSignal( array(
                 'userGroupId' => $userGroup->id,
             ) )
@@ -187,7 +187,7 @@ class UserService implements UserServiceInterface
     public function createUser( \eZ\Publish\API\Repository\Values\User\UserCreateStruct $userCreateStruct, array $parentGroups )
     {
         $returnValue = $this->service->createUser( $userCreateStruct, $parentGroups );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\UserService\CreateUserSignal( array(
                 'userId' => $returnValue->id,
             ) )
@@ -248,7 +248,7 @@ class UserService implements UserServiceInterface
     public function deleteUser( \eZ\Publish\API\Repository\Values\User\User $user )
     {
         $returnValue = $this->service->deleteUser( $user );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\UserService\DeleteUserSignal( array(
                 'userId' => $user->id,
             ) )
@@ -275,7 +275,7 @@ class UserService implements UserServiceInterface
     public function updateUser( \eZ\Publish\API\Repository\Values\User\User $user, \eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct )
     {
         $returnValue = $this->service->updateUser( $user, $userUpdateStruct );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\UserService\UpdateUserSignal( array(
                 'userId' => $user->id,
             ) )
@@ -296,7 +296,7 @@ class UserService implements UserServiceInterface
     public function assignUserToUserGroup( \eZ\Publish\API\Repository\Values\User\User $user, \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
     {
         $returnValue = $this->service->assignUserToUserGroup( $user, $userGroup );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\UserService\AssignUserToUserGroupSignal( array(
                 'userId' => $user->id,
                 'userGroupId' => $userGroup->id,
@@ -317,7 +317,7 @@ class UserService implements UserServiceInterface
     public function unAssignUserFromUserGroup( \eZ\Publish\API\Repository\Values\User\User $user, \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
     {
         $returnValue = $this->service->unAssignUserFromUserGroup( $user, $userGroup );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\UserService\UnAssignUserFromUserGroupSignal( array(
                 'userId' => $user->id,
                 'userGroupId' => $userGroup->id,

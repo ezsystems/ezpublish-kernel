@@ -58,7 +58,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function createContentTypeGroup( \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct )
     {
         $returnValue = $this->service->createContentTypeGroup( $contentTypeGroupCreateStruct );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ContentTypeService\CreateContentTypeGroupSignal( array(
                 'groupId' => $returnValue->id,
             ) )
@@ -119,7 +119,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function updateContentTypeGroup( \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup, \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct )
     {
         $returnValue = $this->service->updateContentTypeGroup( $contentTypeGroup, $contentTypeGroupUpdateStruct );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ContentTypeService\UpdateContentTypeGroupSignal( array(
                 'contentTypeGroupId' => $contentTypeGroup->id,
             ) )
@@ -140,7 +140,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function deleteContentTypeGroup( \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup )
     {
         $returnValue = $this->service->deleteContentTypeGroup( $contentTypeGroup );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ContentTypeService\DeleteContentTypeGroupSignal( array(
                 'contentTypeGroupId' => $contentTypeGroup->id,
             ) )
@@ -265,7 +265,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function createContentTypeDraft( \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType )
     {
         $returnValue = $this->service->createContentTypeDraft( $contentType );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ContentTypeService\CreateContentTypeDraftSignal( array(
                 'contentTypeId' => $contentType->id,
             ) )
@@ -287,7 +287,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function updateContentTypeDraft( \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft, \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct $contentTypeUpdateStruct )
     {
         $returnValue = $this->service->updateContentTypeDraft( $contentTypeDraft, $contentTypeUpdateStruct );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ContentTypeService\UpdateContentTypeDraftSignal( array(
                 'contentTypeDraftId' => $contentTypeDraft->id,
             ) )
@@ -308,7 +308,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function deleteContentType( \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType )
     {
         $returnValue = $this->service->deleteContentType( $contentType );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ContentTypeService\DeleteContentTypeSignal( array(
                 'contentTypeId' => $contentType->id,
             ) )
@@ -332,7 +332,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function copyContentType( \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType, \eZ\Publish\API\Repository\Values\User\User $user = null )
     {
         $returnValue = $this->service->copyContentType( $contentType, $user );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ContentTypeService\CopyContentTypeSignal( array(
                 'contentTypeId' => $contentType->id,
                 'userId' => $user->id,
@@ -353,7 +353,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function assignContentTypeGroup( \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType, \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup )
     {
         $returnValue = $this->service->assignContentTypeGroup( $contentType, $contentTypeGroup );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ContentTypeService\AssignContentTypeGroupSignal( array(
                 'contentTypeId' => $contentType->id,
                 'contentTypeGroupId' => $contentTypeGroup->id,
@@ -375,7 +375,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function unassignContentTypeGroup( \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType, \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup )
     {
         $returnValue = $this->service->unassignContentTypeGroup( $contentType, $contentTypeGroup );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ContentTypeService\UnassignContentTypeGroupSignal( array(
                 'contentTypeId' => $contentType->id,
                 'contentTypeGroupId' => $contentTypeGroup->id,
@@ -398,7 +398,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function addFieldDefinition( \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft, \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
     {
         $returnValue = $this->service->addFieldDefinition( $contentTypeDraft, $fieldDefinitionCreateStruct );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ContentTypeService\AddFieldDefinitionSignal( array(
                 'contentTypeDraftId' => $contentTypeDraft->id,
             ) )
@@ -418,7 +418,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function removeFieldDefinition( \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft, \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition )
     {
         $returnValue = $this->service->removeFieldDefinition( $contentTypeDraft, $fieldDefinition );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ContentTypeService\RemoveFieldDefinitionSignal( array(
                 'contentTypeDraftId' => $contentTypeDraft->id,
                 'fieldDefinitionId' => $fieldDefinition->id,
@@ -441,7 +441,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function updateFieldDefinition( \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft, \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition, \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct )
     {
         $returnValue = $this->service->updateFieldDefinition( $contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ContentTypeService\UpdateFieldDefinitionSignal( array(
                 'contentTypeDraftId' => $contentTypeDraft->id,
                 'fieldDefinitionId' => $fieldDefinition->id,
@@ -464,7 +464,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function publishContentTypeDraft( \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft )
     {
         $returnValue = $this->service->publishContentTypeDraft( $contentTypeDraft );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ContentTypeService\PublishContentTypeDraftSignal( array(
                 'contentTypeDraftId' => $contentTypeDraft->id,
             ) )

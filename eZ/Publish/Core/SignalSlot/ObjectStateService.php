@@ -57,7 +57,7 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function createObjectStateGroup( \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct $objectStateGroupCreateStruct )
     {
         $returnValue = $this->service->createObjectStateGroup( $objectStateGroupCreateStruct );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ObjectStateService\CreateObjectStateGroupSignal( array(
                 'objectStateGroupId' => $returnValue->id,
             ) )
@@ -120,7 +120,7 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function updateObjectStateGroup( \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup, \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct )
     {
         $returnValue = $this->service->updateObjectStateGroup( $objectStateGroup, $objectStateGroupUpdateStruct );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ObjectStateService\UpdateObjectStateGroupSignal( array(
                 'objectStateGroupId' => $objectStateGroup->id,
             ) )
@@ -138,7 +138,7 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function deleteObjectStateGroup( \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup )
     {
         $returnValue = $this->service->deleteObjectStateGroup( $objectStateGroup );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ObjectStateService\DeleteObjectStateGroupSignal( array(
                 'objectStateGroupId' => $objectStateGroup->id,
             ) )
@@ -162,7 +162,7 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function createObjectState( \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup, \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct $objectStateCreateStruct )
     {
         $returnValue = $this->service->createObjectState( $objectStateGroup, $objectStateCreateStruct );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ObjectStateService\CreateObjectStateSignal( array(
                 'objectStateGroupId' => $objectStateGroup->id,
                 'objectStateId' => $returnValue->id,
@@ -199,7 +199,7 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function updateObjectState( \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState, \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct $objectStateUpdateStruct )
     {
         $returnValue = $this->service->updateObjectState( $objectState, $objectStateUpdateStruct );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ObjectStateService\UpdateObjectStateSignal( array(
                 'objectStateId' => $objectState->id,
             ) )
@@ -218,7 +218,7 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function setPriorityOfObjectState( \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState, $priority )
     {
         $returnValue = $this->service->setPriorityOfObjectState( $objectState, $priority );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ObjectStateService\SetPriorityOfObjectStateSignal( array(
                 'objectStateId' => $objectState->id,
                 'priority' => $priority,
@@ -238,7 +238,7 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function deleteObjectState( \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState )
     {
         $returnValue = $this->service->deleteObjectState( $objectState );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ObjectStateService\DeleteObjectStateSignal( array(
                 'objectStateId' => $objectState->id,
             ) )
@@ -259,7 +259,7 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function setObjectState( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup, \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState )
     {
         $returnValue = $this->service->setObjectState( $contentInfo, $objectStateGroup, $objectState );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\ObjectStateService\SetObjectStateSignal( array(
                 'contentId' => $contentInfo->id,
                 'objectStateGroupId' => $objectStateGroup->id,

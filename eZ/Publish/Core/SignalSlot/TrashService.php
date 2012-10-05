@@ -77,7 +77,7 @@ class TrashService implements TrashServiceInterface
     public function trash( \eZ\Publish\API\Repository\Values\Content\Location $location )
     {
         $returnValue = $this->service->trash( $location );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\TrashService\TrashSignal( array(
                 'locationId' => $location->id,
             ) )
@@ -100,7 +100,7 @@ class TrashService implements TrashServiceInterface
     public function recover( \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem, \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation = null )
     {
         $returnValue = $this->service->recover( $trashItem, $newParentLocation );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\TrashService\RecoverSignal( array(
                 'trashItemId' => $trashItem->id,
                 'newParentLocationId' => $newParentLocation->id,
@@ -120,7 +120,7 @@ class TrashService implements TrashServiceInterface
     public function emptyTrash()
     {
         $returnValue = $this->service->emptyTrash();
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\TrashService\EmptyTrashSignal( array(
             ) )
         );
@@ -139,7 +139,7 @@ class TrashService implements TrashServiceInterface
     public function deleteTrashItem( \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem )
     {
         $returnValue = $this->service->deleteTrashItem( $trashItem );
-        $this->signalDispatcher()->emit(
+        $this->signalDispatcher->emit(
             new Signal\TrashService\DeleteTrashItemSignal( array(
                 'trashItemId' => $trashItem->id,
             ) )
