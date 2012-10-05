@@ -67,11 +67,7 @@ class URLAliasService implements URLAliasServiceInterface
         $returnValue = $this->service->createUrlAlias( $location, $path, $languageCode, $forwarding, $alwaysAvailable );
         $this->signalDispatcher()->emit(
             new Signal\URLAliasService\CreateUrlAliasSignal( array(
-                'locationId' => $location->id,
-                'path' => $path,
-                'languageCode' => $languageCode,
-                'forwarding' => $forwarding,
-                'alwaysAvailable' => $alwaysAvailable,
+                'urlAliasId' => $returnValue->id,
             ) )
         );
         return $returnValue;
@@ -103,11 +99,7 @@ class URLAliasService implements URLAliasServiceInterface
         $returnValue = $this->service->createGlobalUrlAlias( $resource, $path, $languageCode, $forwarding, $alwaysAvailable );
         $this->signalDispatcher()->emit(
             new Signal\URLAliasService\CreateGlobalUrlAliasSignal( array(
-                'resource' => $resource,
-                'path' => $path,
-                'languageCode' => $languageCode,
-                'forwarding' => $forwarding,
-                'alwaysAvailable' => $alwaysAvailable,
+                'urlAliasId' => $returnValue->id,
             ) )
         );
         return $returnValue;
@@ -195,12 +187,6 @@ class URLAliasService implements URLAliasServiceInterface
     public function lookup( $url, $languageCode = null )
     {
         $returnValue = $this->service->lookup( $url, $languageCode );
-        $this->signalDispatcher()->emit(
-            new Signal\URLAliasService\LookupSignal( array(
-                'url' => $url,
-                'languageCode' => $languageCode,
-            ) )
-        );
         return $returnValue;
     }
 
@@ -219,12 +205,6 @@ class URLAliasService implements URLAliasServiceInterface
     public function reverseLookup( eZ\Publish\API\Repository\Values\Content\Location $location, $languageCode = null )
     {
         $returnValue = $this->service->reverseLookup( $location, $languageCode );
-        $this->signalDispatcher()->emit(
-            new Signal\URLAliasService\ReverseLookupSignal( array(
-                'locationId' => $location->id,
-                'languageCode' => $languageCode,
-            ) )
-        );
         return $returnValue;
     }
 
