@@ -67,7 +67,7 @@ class UserService implements UserServiceInterface
         $returnValue = $this->service->createUserGroup( $userGroupCreateStruct, $parentGroup );
         $this->signalDispatcher()->emit(
             new Signal\UserService\CreateUserGroupSignal( array(
-                'parentGroupId' => $parentGroup->id,
+                'userGroupId' => $returnValue->id,
             ) )
         );
         return $returnValue;
@@ -199,7 +199,7 @@ class UserService implements UserServiceInterface
         $returnValue = $this->service->createUser( $userCreateStruct, $parentGroups );
         $this->signalDispatcher()->emit(
             new Signal\UserService\CreateUserSignal( array(
-                'parentGroups' => $parentGroups,
+                'userId' => $returnValue->id,
             ) )
         );
         return $returnValue;
