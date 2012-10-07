@@ -37,6 +37,7 @@ return array (
     'ezcontentobject_attribute_data_text' => 'Guest accounts',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
+    'ezcontentobject_tree_main_node_id' => NULL,
   ),
   1 =>
   array (
@@ -74,6 +75,7 @@ return array (
     'ezcontentobject_attribute_data_text' => '',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
+    'ezcontentobject_tree_main_node_id' => NULL,
   ),
   2 =>
   array (
@@ -111,6 +113,7 @@ return array (
     'ezcontentobject_attribute_data_text' => 'Members',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => 'members',
+    'ezcontentobject_tree_main_node_id' => '12',
   ),
   3 =>
   array (
@@ -148,5 +151,6 @@ return array (
     'ezcontentobject_attribute_data_text' => '',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
+    'ezcontentobject_tree_main_node_id' => '12',
   ),
 );
