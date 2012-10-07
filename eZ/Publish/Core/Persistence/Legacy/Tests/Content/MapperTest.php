@@ -53,34 +53,6 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createContentFromCreateStruct
-     * @todo remove
-     */
-    public function xtestCreateContentFromCreateStruct()
-    {
-        $struct = $this->getCreateStructFixture();
-
-        $mapper = $this->getMapper();
-        $content = $mapper->createContentFromCreateStruct( $struct );
-
-        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' , $content );
-        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo', $content->contentInfo );
-        $this->assertStructsEqual(
-            $struct,
-            $content->contentInfo,
-            array( 'sectionId', 'ownerId', 'remoteId' )
-        );
-        self::assertSame( $struct->typeId, $content->contentInfo->contentTypeId );
-        self::assertSame( 'eng-US', $content->contentInfo->mainLanguageCode );
-        self::assertSame( $struct->alwaysAvailable, $content->contentInfo->alwaysAvailable );
-        self::assertSame( 0, $content->contentInfo->publicationDate );
-        self::assertSame( 0, $content->contentInfo->modificationDate );
-        self::assertEquals( 1, $content->contentInfo->currentVersionNo );
-        self::assertFalse( $content->contentInfo->isPublished );
-    }
-
-    /**
      * Returns a eZ\Publish\SPI\Persistence\Content\CreateStruct fixture
      *
      * @return \eZ\Publish\SPI\Persistence\Content\CreateStruct
@@ -304,7 +276,6 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return CreateStruct
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      */
     public function testCreateCreateStructFromContent()
@@ -331,7 +302,6 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return CreateStruct
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      * @depends testCreateCreateStructFromContent
      */
@@ -353,7 +323,6 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return CreateStruct
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      * @depends testCreateCreateStructFromContent
      */
@@ -366,7 +335,6 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return CreateStruct
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      * @depends testCreateCreateStructFromContent
      */
@@ -379,7 +347,6 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return CreateStruct
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      * @depends testCreateCreateStructFromContent
      */
