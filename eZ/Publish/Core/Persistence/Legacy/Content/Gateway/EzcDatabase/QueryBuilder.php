@@ -81,7 +81,9 @@ class QueryBuilder
             $this->dbHandler->aliasedColumn( $query, 'sort_key_string', 'ezcontentobject_attribute' ),
             // Content object names
             $this->dbHandler->aliasedColumn( $query, 'name', 'ezcontentobject_name' ),
-            $this->dbHandler->aliasedColumn( $query, 'content_translation', 'ezcontentobject_name' )
+            $this->dbHandler->aliasedColumn( $query, 'content_translation', 'ezcontentobject_name' ),
+            // Content object locations
+            $this->dbHandler->aliasedColumn( $query, 'main_node_id', 'ezcontentobject_tree' )
         )->from(
             $this->dbHandler->quoteTable( 'ezcontentobject' )
         )->leftJoin(
@@ -99,6 +101,18 @@ class QueryBuilder
                 ),
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_attribute' ),
+                    $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' )
+                )
+            )
+        )->leftJoin(
+            $this->dbHandler->quoteTable( 'ezcontentobject_tree' ),
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' ),
+                    $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentobject_version', 'ezcontentobject_tree' ),
                     $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' )
                 )
             )
