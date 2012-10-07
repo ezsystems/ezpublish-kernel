@@ -9,29 +9,22 @@
  * @version //autogentag//
  */
 
-use eZ\Publish\Core\Base\ConfigurationManager;
-use eZ\Publish\Core\Base\ServiceContainer;
-
-if ( !isset( $settings ) )
+if ( !isset( $_ENV['SYMFONY__ez_publish_legacy__root_dir'] ) )
 {
-    throw new \RuntimeException( '$settings not provided to container.php' );
+    // set the path to eZ Publish legacy (4.x)
+    $dir = getcwd();
+    if ( strpos( $dir, '/vendor/ezsystems/ezpublish' ) !== false )
+    {
+        // eZ Publish 5 context
+        $_ENV['SYMFONY__ez_publish_legacy__root_dir'] =
+            str_replace( '/vendor/ezsystems/ezpublish', '', $dir ) .
+            '/app/ezpublish_legacy';
+    }
+    else
+    {
+        // API context (unit testing)
+        $_ENV['SYMFONY__ez_publish_legacy__root_dir'] = $dir . '/vendor/ezsystems/ezpublish-legacy';
+    }
 }
 
-// Setup Configuration object to be able to read service.ini settings
-$configManager = new ConfigurationManager(
-    $settings,
-    $settings['base']['Configuration']['Paths']
-);
-
-// [temp] Inject legacy kernel, as it does not yet have a factory
-$dependencies = array();
-if ( isset( $_ENV['legacyKernel'] ) )
-{
-    $dependencies['@legacyKernel'] = $_ENV['legacyKernel'];
-}
-
-// Return Service container with service.ini settings
-return new ServiceContainer(
-    $configManager->getConfiguration('service')->getAll(),
-    $dependencies
-);
+return new eZ\Publish\Core\Base\TestKernel();
