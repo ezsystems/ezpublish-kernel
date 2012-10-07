@@ -29,7 +29,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * Database gateway to test.
      *
-     * @var eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase
      */
     protected $databaseGateway;
 
@@ -101,7 +101,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * Returns a Content fixture
      *
-     * @return eZ\Publish\SPI\Persistence\Content\CreateStruct
+     * @return \eZ\Publish\SPI\Persistence\Content\CreateStruct
      */
     protected function getCreateStructFixture()
     {
