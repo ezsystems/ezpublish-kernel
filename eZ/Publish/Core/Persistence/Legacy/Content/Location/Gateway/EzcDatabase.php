@@ -102,7 +102,7 @@ class EzcDatabase extends Gateway
             return $row;
         }
 
-        throw new NotFound( 'location', $nodeId );
+        throw new NotFound( 'location', $remoteId );
     }
 
     /**
