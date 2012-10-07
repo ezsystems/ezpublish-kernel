@@ -61,7 +61,9 @@ class SectionService implements SectionServiceInterface
     {
         $this->repository = $repository;
         $this->sectionHandler = $sectionHandler;
-        $this->settings = $settings;
+        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+            //'defaultSetting' => array(),
+        );
     }
 
     /**

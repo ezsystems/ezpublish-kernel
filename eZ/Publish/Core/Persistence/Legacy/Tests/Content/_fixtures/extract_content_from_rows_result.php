@@ -8,19 +8,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 $content = new Content();
-$content->contentInfo = new ContentInfo();
-$content->contentInfo->id = 226;
-$content->contentInfo->contentTypeId = 16;
-$content->contentInfo->sectionId = 1;
-$content->contentInfo->ownerId = 14;
-$content->contentInfo->remoteId = '95a226fb62c1533f60c16c3769bc7c6c';
-$content->contentInfo->alwaysAvailable = false;
-$content->contentInfo->modificationDate = 1313061404;
-$content->contentInfo->publicationDate = 1313047907;
-$content->contentInfo->currentVersionNo = 2;
-$content->contentInfo->isPublished = true;
-$content->contentInfo->mainLanguageCode = 'eng-US';
-$content->contentInfo->name = 'Something';
+
 $content->fields = array();
 
 $versionInfo = new VersionInfo();
@@ -31,9 +19,25 @@ $versionInfo->modificationDate = 1313061404;
 $versionInfo->creatorId = 14;
 $versionInfo->creationDate = 1313061317;
 $versionInfo->status = 1;
-$versionInfo->contentId = 226;
 $versionInfo->initialLanguageCode = 'eng-US';
 $versionInfo->languageIds = array( 2 );
+
+$versionInfo->contentInfo = new ContentInfo();
+$versionInfo->contentInfo->id = 226;
+$versionInfo->contentInfo->contentTypeId = 16;
+$versionInfo->contentInfo->sectionId = 1;
+$versionInfo->contentInfo->ownerId = 14;
+$versionInfo->contentInfo->remoteId = '95a226fb62c1533f60c16c3769bc7c6c';
+$versionInfo->contentInfo->alwaysAvailable = false;
+$versionInfo->contentInfo->modificationDate = 1313061404;
+$versionInfo->contentInfo->publicationDate = 1313047907;
+$versionInfo->contentInfo->currentVersionNo = 2;
+$versionInfo->contentInfo->isPublished = true;
+$versionInfo->contentInfo->mainLanguageCode = 'eng-US';
+$versionInfo->contentInfo->name = 'Something';
+$versionInfo->contentInfo->mainLocationId = 228;
+
+$content->versionInfo = $versionInfo;
 
 $field = new Field();
 $field->id = 4000;
@@ -164,7 +168,5 @@ $field->languageCode = 'eng-US';
 $field->versionNo = 2;
 
 $content->fields[] = $field;
-
-$content->versionInfo = $versionInfo;
 
 return $content;

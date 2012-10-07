@@ -196,7 +196,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     public function postCreationHook( Legacy\Handler $handler, Content $content )
     {
         $user = new User();
-        $user->id            = $content->contentInfo->id;
+        $user->id            = $content->versionInfo->contentInfo->id;
         $user->login         = 'hans';
         $user->email         = 'hans@example.com';
         $user->passwordHash  = '*';

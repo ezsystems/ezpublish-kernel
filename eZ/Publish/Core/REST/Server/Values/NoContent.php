@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
-class NoContent
+use eZ\Publish\Core\REST\Common\Value as RestValue;
+
+class NoContent extends RestValue
 {
 }

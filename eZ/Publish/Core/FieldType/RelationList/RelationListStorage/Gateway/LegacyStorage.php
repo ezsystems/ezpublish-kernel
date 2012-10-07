@@ -36,7 +36,7 @@ class LegacyStorage extends RelationLegacyStorage
             $q->bindValue( $field->fieldDefinitionId, null, \PDO::PARAM_INT )
         )->set(
             $dbHandler->quoteColumn( "from_contentobject_id" ),
-            $q->bindValue( $versionInfo->contentId, null, \PDO::PARAM_INT )
+            $q->bindValue( $versionInfo->contentInfo->id, null, \PDO::PARAM_INT )
         )->set(
             $dbHandler->quoteColumn( "from_contentobject_version" ),
             $q->bindValue( $versionInfo->versionNo, null, \PDO::PARAM_INT )

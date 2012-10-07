@@ -1,0 +1,33 @@
+parameters:
+    ezpublish.security.authentication_provider.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\Provider
+    ezpublish.security.user_provider.class: eZ\Publish\Core\MVC\Symfony\Security\User\Provider
+    ezpublish.security.voter.core.class: eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\CoreVoter
+    ezpublish.security.authentication_provider.basic.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\BasicAuthProvider
+
+services:
+    ezpublish.security.user_provider:
+        class: %ezpublish.security.user_provider.class%
+        arguments: [@ezpublish.api.repository.lazy]
+
+    ezpublish.security.authentication_provider:
+        class: %ezpublish.security.authentication_provider.class%
+        abstract: true
+        parent: security.authentication.provider.pre_authenticated
+        calls:
+            - [setLazyRepository, [@ezpublish.api.repository.lazy]]
+
+    ezpublish.security.authentication_provider.basic:
+        class: %ezpublish.security.authentication_provider.basic.class%
+        abstract: true
+        arguments:
+            - @ezpublish.api.repository.lazy
+            - @security.user_checker
+            - ~     # Provider-shared Key
+            - %security.authentication.hide_user_not_found%
+
+    ezpublish.security.voter.core:
+        class: %ezpublish.security.voter.core.class%
+        arguments: [@ezpublish.api.repository.lazy]
+        public: false
+        tags:
+            - { name: security.voter }

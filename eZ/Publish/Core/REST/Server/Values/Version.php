@@ -10,11 +10,12 @@
 namespace eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
  * Version view model
  */
-class Version
+class Version extends RestValue
 {
     /**
      * Version info

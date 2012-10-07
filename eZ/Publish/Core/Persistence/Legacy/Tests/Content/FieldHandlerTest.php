@@ -240,10 +240,10 @@ class FieldHandlerTest extends TestCase
     protected function getContentFixture()
     {
         $content = new Content;
-        $content->contentInfo = new ContentInfo;
-        $content->contentInfo->id = 42;
         $content->versionInfo = new VersionInfo;
         $content->versionInfo->versionNo = 2;
+        $content->versionInfo->contentInfo = new ContentInfo;
+        $content->versionInfo->contentInfo->id = 42;
 
         $firstField = new Field();
         $firstField->type = 'some-type';

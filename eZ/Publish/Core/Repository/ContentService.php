@@ -45,7 +45,6 @@ use eZ\Publish\API\Repository\ContentService as ContentServiceInterface,
 
     eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo,
     eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo,
-    eZ\Publish\SPI\Persistence\Content\Version as SPIVersion,
     eZ\Publish\SPI\Persistence\Content as SPIContent,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct as SPIMetadataUpdateStruct,
     eZ\Publish\SPI\Persistence\Content\CreateStruct as SPIContentCreateStruct,
@@ -93,7 +92,9 @@ class ContentService implements ContentServiceInterface
     {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
-        $this->settings = $settings;
+        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+            //'defaultSetting' => array(),
+        );
     }
 
     /**
@@ -1285,7 +1286,7 @@ class ContentService implements ContentServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $success = $this->persistenceHandler->contentHandler()->deleteVersion(
+            $this->persistenceHandler->contentHandler()->deleteVersion(
                 $versionInfo->getContentInfo()->id,
                 $versionInfo->versionNo
             );
@@ -1387,7 +1388,7 @@ class ContentService implements ContentServiceInterface
             );
 
             $content = $this->internalPublishVersion(
-                $this->buildVersionInfoDomainObject( $spiContent->versionInfo, $spiContent ),
+                $this->buildVersionInfoDomainObject( $spiContent->versionInfo ),
                 $spiContent->versionInfo->creationDate
             );
 
@@ -1711,7 +1712,7 @@ class ContentService implements ContentServiceInterface
      */
     public function buildContentDomainObject( SPIContent $spiContent )
     {
-        $versionInfo = $this->buildVersionInfoDomainObject( $spiContent->versionInfo, $spiContent );
+        $versionInfo = $this->buildVersionInfoDomainObject( $spiContent->versionInfo );
         return new Content(
             array(
                 "internalFields" => $this->buildDomainFields( $spiContent->fields ),
@@ -1760,31 +1761,11 @@ class ContentService implements ContentServiceInterface
      * build* methods.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $spiContentInfo
-     * @param \eZ\Publish\SPI\Persistence\Content|null $spiContent
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\ContentInfo
      */
-    public function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo, SPIContent $spiContent = null )
+    public function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo )
     {
-
-        if ( $spiContent === null )
-        {
-            $spiContent = $this->persistenceHandler->contentHandler()->load(
-                $spiContentInfo->id,
-                $spiContentInfo->currentVersionNo
-            );
-        }
-        // @todo: $mainLocationId should have been removed through SPI refactoring?
-        $mainLocationId = null;
-        foreach ( $spiContent->locations as $spiLocation )
-        {
-            if ( $spiLocation->mainLocationId === $spiLocation->id )
-            {
-                $mainLocationId = $spiLocation->mainLocationId;
-                break;
-            }
-        }
-
         return new ContentInfo(
             array(
                 "id" => $spiContentInfo->id,
@@ -1802,7 +1783,7 @@ class ContentService implements ContentServiceInterface
                 "alwaysAvailable" => $spiContentInfo->alwaysAvailable,
                 "remoteId" => $spiContentInfo->remoteId,
                 "mainLanguageCode" => $spiContentInfo->mainLanguageCode,
-                "mainLocationId" => $mainLocationId,
+                "mainLocationId" => $spiContentInfo->mainLocationId,
                 "contentType" => $this->repository->getContentTypeService()->loadContentType(
                     $spiContentInfo->contentTypeId
                 )
@@ -1813,15 +1794,14 @@ class ContentService implements ContentServiceInterface
     /**
      * Builds a VersionInfo domain object from value object returned from persistence
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $persistenceVersionInfo
-     * @param \eZ\Publish\SPI\Persistence\Content|null $spiContent
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $spiVersionInfo
      *
      * @return VersionInfo
      */
-    protected function buildVersionInfoDomainObject( SPIVersionInfo $persistenceVersionInfo, SPIContent $spiContent = null )
+    protected function buildVersionInfoDomainObject( SPIVersionInfo $spiVersionInfo )
     {
         $languageCodes = array();
-        foreach ( $persistenceVersionInfo->languageIds as $languageId )
+        foreach ( $spiVersionInfo->languageIds as $languageId )
         {
             $languageCodes[] = $this->persistenceHandler->contentLanguageHandler()->load(
                 $languageId
@@ -1830,18 +1810,16 @@ class ContentService implements ContentServiceInterface
 
         return new VersionInfo(
             array(
-                "id" => $persistenceVersionInfo->id,
-                "versionNo" => $persistenceVersionInfo->versionNo,
-                "modificationDate" => $this->getDateTime( $persistenceVersionInfo->modificationDate ),
-                "creatorId" => $persistenceVersionInfo->creatorId,
-                "creationDate" => $this->getDateTime( $persistenceVersionInfo->creationDate ),
-                "status" => $this->getDomainVersionStatus( $persistenceVersionInfo->status ),
-                "initialLanguageCode" => $persistenceVersionInfo->initialLanguageCode,
+                "id" => $spiVersionInfo->id,
+                "versionNo" => $spiVersionInfo->versionNo,
+                "modificationDate" => $this->getDateTime( $spiVersionInfo->modificationDate ),
+                "creatorId" => $spiVersionInfo->creatorId,
+                "creationDate" => $this->getDateTime( $spiVersionInfo->creationDate ),
+                "status" => $this->getDomainVersionStatus( $spiVersionInfo->status ),
+                "initialLanguageCode" => $spiVersionInfo->initialLanguageCode,
                 "languageCodes" => $languageCodes,
-                "names" => $persistenceVersionInfo->names,
-                "contentInfo" => ( $spiContent !== null ?
-                    $this->buildContentInfoDomainObject( $spiContent->contentInfo, $spiContent ) :
-                    $this->loadContentInfo( $persistenceVersionInfo->contentId ) )
+                "names" => $spiVersionInfo->names,
+                "contentInfo" => $this->buildContentInfoDomainObject( $spiVersionInfo->contentInfo )
             )
         );
     }
@@ -1892,7 +1870,7 @@ class ContentService implements ContentServiceInterface
      */
     protected function buildRelationDomainObject( SPIRelation $spiRelation, APIContentInfo $sourceContentInfo = null, APIContentInfo $destinationContentInfo = null )
     {
-        // @todo Shoudl relations really be loaded w/o checking permissions just because User needs to be accisible??
+        // @todo Should relations really be loaded w/o checking permissions just because User needs to be accessible??
         if ( $sourceContentInfo === null )
             $sourceContentInfo = $this->internalLoadContentInfo( $spiRelation->sourceContentId );
 

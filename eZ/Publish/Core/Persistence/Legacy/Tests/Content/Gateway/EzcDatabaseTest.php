@@ -127,24 +127,11 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * Returns a Content fixture
      *
-     * @return eZ\Publish\SPI\Persistence\Content
+     * @return \eZ\Publish\SPI\Persistence\Content
      */
     protected function getContentFixture()
     {
         $content = new Content;
-
-        $content->contentInfo = new ContentInfo;
-        $content->contentInfo->contentTypeId = 23;
-        $content->contentInfo->sectionId = 42;
-        $content->contentInfo->ownerId = 13;
-        $content->contentInfo->currentVersionNo = 2;
-        $content->contentInfo->mainLanguageCode = 'eng-US';
-        $content->contentInfo->remoteId = 'some_remote_id';
-        $content->contentInfo->alwaysAvailable = true;
-        $content->contentInfo->publicationDate = 123;
-        $content->contentInfo->modificationDate = 456;
-        $content->contentInfo->isPublished = false;
-        $content->contentInfo->name = 'Content name';
 
         $content->versionInfo = new VersionInfo;
         $content->versionInfo->names = array(
@@ -152,6 +139,19 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             'eng-US' => 'Content name',
         );
         $content->versionInfo->status = VersionInfo::STATUS_PENDING;
+
+        $content->versionInfo->contentInfo = new ContentInfo;
+        $content->versionInfo->contentInfo->contentTypeId = 23;
+        $content->versionInfo->contentInfo->sectionId = 42;
+        $content->versionInfo->contentInfo->ownerId = 13;
+        $content->versionInfo->contentInfo->currentVersionNo = 2;
+        $content->versionInfo->contentInfo->mainLanguageCode = 'eng-US';
+        $content->versionInfo->contentInfo->remoteId = 'some_remote_id';
+        $content->versionInfo->contentInfo->alwaysAvailable = true;
+        $content->versionInfo->contentInfo->publicationDate = 123;
+        $content->versionInfo->contentInfo->modificationDate = 456;
+        $content->versionInfo->contentInfo->isPublished = false;
+        $content->versionInfo->contentInfo->name = 'Content name';
 
         return $content;
     }
@@ -169,10 +169,15 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $version->versionNo = 1;
         $version->creatorId = 13;
         $version->status = 0;
-        $version->contentId = 2342;
         $version->creationDate = 1312278322;
         $version->modificationDate = 1312278323;
         $version->initialLanguageCode = 'eng-GB';
+        $version->contentInfo = new ContentInfo(
+            array(
+                "id" => 2342,
+                "alwaysAvailable" => true
+            )
+        );
 
         return $version;
     }
@@ -187,7 +192,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $version = $this->getVersionFixture();
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->insertVersion( $version, array(), true );
+        $gateway->insertVersion( $version, array() );
 
         $this->assertQueryResult(
             array(
@@ -237,11 +242,11 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         // insert version
         $version = $this->getVersionFixture();
-        $version->contentId = $contentId;
-        $gateway->insertVersion( $version, array(), true );
+        $version->contentInfo->id = $contentId;
+        $gateway->insertVersion( $version, array() );
 
         $this->assertTrue(
-            $gateway->setStatus( $version->contentId, $version->versionNo, VersionInfo::STATUS_PENDING )
+            $gateway->setStatus( $version->contentInfo->id, $version->versionNo, VersionInfo::STATUS_PENDING )
         );
 
         $this->assertQueryResult(
@@ -276,11 +281,11 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         // insert version
         $version = $this->getVersionFixture();
-        $version->contentId = $contentId;
-        $gateway->insertVersion( $version, array(), true );
+        $version->contentInfo->id = $contentId;
+        $gateway->insertVersion( $version, array() );
 
         $this->assertTrue(
-            $gateway->setStatus( $version->contentId, $version->versionNo, VersionInfo::STATUS_PUBLISHED )
+            $gateway->setStatus( $version->contentInfo->id, $version->versionNo, VersionInfo::STATUS_PUBLISHED )
         );
 
         $this->assertQueryResult(
@@ -433,7 +438,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     public function testInsertNewField()
     {
         $content = $this->getContentFixture();
-        $content->contentInfo->id = 2342;
+        $content->versionInfo->contentInfo->id = 2342;
         // $content->versionInfo->versionNo = 3;
 
         $field = $this->getFieldFixture();
@@ -488,7 +493,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     public function testUpdateField()
     {
         $content = $this->getContentFixture();
-        $content->contentInfo->id = 2342;
+        $content->versionInfo->contentInfo->id = 2342;
 
         $field = $this->getFieldFixture();
         $value = $this->getStorageValueFixture();
@@ -540,7 +545,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     public function testUpdateNonTranslatableField()
     {
         $content = $this->getContentFixture();
-        $content->contentInfo->id = 2342;
+        $content->versionInfo->contentInfo->id = 2342;
 
         $fieldGb = $this->getFieldFixture();
         $fieldUs = $this->getOtherLanguageFieldFixture();
@@ -562,7 +567,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             )
         );
 
-        $gateway->updateNonTranslatableField( $fieldGb, $newValue, $content->contentInfo->id );
+        $gateway->updateNonTranslatableField( $fieldGb, $newValue, $content->versionInfo->contentInfo->id );
 
         $this->assertQueryResult(
             array(
@@ -610,14 +615,14 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $res = $gateway->listVersions( 226 );
 
         $this->assertEquals(
-            3,
+            2,
             count( $res )
         );
 
         foreach ( $res as $row )
         {
             $this->assertEquals(
-                13,
+                24,
                 count( $row )
             );
         }
@@ -629,10 +634,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $this->assertEquals(
             676,
             $res[1]['ezcontentobject_version_id']
-        );
-        $this->assertEquals(
-            676,
-            $res[2]['ezcontentobject_version_id']
         );
 
         //$orig = include __DIR__ . '/../_fixtures/restricted_version_rows.php';
@@ -666,7 +667,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         foreach ( $res as $row )
         {
             $this->assertEquals(
-                13,
+                24,
                 count( $row )
             );
         }

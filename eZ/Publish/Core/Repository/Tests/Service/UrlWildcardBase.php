@@ -472,7 +472,6 @@ abstract class UrlWildcardBase extends BaseServiceTest
      */
     public function testTranslateThrowsNotFoundException()
     {
-        $this->markTestSkipped( "Specification needs to be checked: " . __METHOD__ );
         $service = $this->repository->getURLWildcardService();
 
         $service->translate( "cant/get/there/from/here" );

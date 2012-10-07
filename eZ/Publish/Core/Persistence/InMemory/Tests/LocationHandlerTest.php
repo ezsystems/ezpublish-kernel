@@ -102,7 +102,7 @@ class LocationHandlerTest extends HandlerTest
                 )
             );
 
-            $this->lastContentId = $content->contentInfo->id;
+            $this->lastContentId = $content->versionInfo->contentInfo->id;
 
             $this->locations[] = $location = $this->persistenceHandler->locationHandler()->create(
                 new CreateStruct(
@@ -148,7 +148,7 @@ class LocationHandlerTest extends HandlerTest
         {
             try
             {
-                $contentHandler->deleteContent( $content->contentInfo->id );
+                $contentHandler->deleteContent( $content->versionInfo->contentInfo->id );
             }
             catch ( NotFound $e )
             {
@@ -451,7 +451,7 @@ class LocationHandlerTest extends HandlerTest
 
         $this->assertEquals(
             2,
-            $content->contentInfo->sectionId,
+            $content->versionInfo->contentInfo->sectionId,
             "Subtree section has not been changed"
         );
     }

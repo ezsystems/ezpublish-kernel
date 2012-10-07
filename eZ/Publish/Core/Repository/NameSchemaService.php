@@ -67,7 +67,10 @@ class NameSchemaService
     public function __construct( RepositoryInterface $repository, array $settings = array() )
     {
         $this->repository = $repository;
-        $this->settings = $settings;
+        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+            'limit' => 150,
+            'sequence' => '...',
+        );
     }
 
     /**
@@ -254,7 +257,7 @@ class NameSchemaService
      */
     private function extractTokens( $nameSchema )
     {
-        $foundTokens = preg_match_all(
+        preg_match_all(
             "|<([^>]+)>|U",
             $nameSchema,
             $tokenArray

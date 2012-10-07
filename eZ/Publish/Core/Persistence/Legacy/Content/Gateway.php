@@ -43,10 +43,9 @@ abstract class Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
-     * @param boolean $alwaysAvailable
      * @return int ID
      */
-    abstract public function insertVersion( VersionInfo $versionInfo, array $fields, $alwaysAvailable );
+    abstract public function insertVersion( VersionInfo $versionInfo, array $fields );
 
     /**
      * Updates an existing content identified by $contentId in respect to $struct

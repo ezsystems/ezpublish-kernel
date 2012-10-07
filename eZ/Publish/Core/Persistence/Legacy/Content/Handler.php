@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
     eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler,
+    eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct,
@@ -104,40 +105,32 @@ class Handler implements BaseContentHandler
      * Will contain always a complete list of fields.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct Content creation struct.
-     * @param int $versionNo Used by self::copy() to maintain version numbers
+     * @param mixed $versionNo Used by self::copy() to maintain version numbers
+     *
+     * @todo remove $copy param
+     * @param bool $copy
      *
      * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
     protected function internalCreate( CreateStruct $struct, $versionNo = 1, $copy = false )
     {
-        $content = $this->mapper->createContentFromCreateStruct(
-            $struct,
-            $versionNo
-        );
+        $content = new Content();
 
-        $content->contentInfo->id = $this->contentGateway->insertContentObject( $struct, $versionNo );
-
-        $content->versionInfo = $this->mapper->createVersionInfoForContent(
-            $content,
-            $versionNo,
-            $struct->fields,
-            $content->contentInfo->mainLanguageCode,
-            $struct->ownerId
-        );
-        $content->versionInfo->creationDate = $struct->modified;
-        $content->versionInfo->modificationDate = $struct->modified;
-        $content->versionInfo->id = $this->contentGateway->insertVersion(
-            $content->versionInfo, $struct->fields, $content->contentInfo->alwaysAvailable
-        );
         $content->fields = $struct->fields;
-        $content->versionInfo->names = $struct->name;
+        $content->versionInfo = $this->mapper->createVersionInfoFromCreateStruct( $struct, $versionNo );
+
+        $content->versionInfo->contentInfo->id =  $this->contentGateway->insertContentObject( $struct, $versionNo );
+        $content->versionInfo->id = $this->contentGateway->insertVersion(
+            $content->versionInfo,
+            $struct->fields
+        );
 
         $this->fieldHandler->createNewFields( $content );
 
         // Create node assignments
         foreach ( $struct->locations as $location )
         {
-            $location->contentId = $content->contentInfo->id;
+            $location->contentId = $content->versionInfo->contentInfo->id;
             $location->contentVersion = $content->versionInfo->versionNo;
             $this->locationGateway->createNodeAssignment(
                 $location,
@@ -146,11 +139,11 @@ class Handler implements BaseContentHandler
             );
         }
 
-        // Create name
+        // Create names
         foreach ( $content->versionInfo->names as $language => $name )
         {
             $this->contentGateway->setName(
-                $content->contentInfo->id,
+                $content->versionInfo->contentInfo->id,
                 $content->versionInfo->versionNo,
                 $name,
                 $language
@@ -218,23 +211,19 @@ class Handler implements BaseContentHandler
     {
         $content = $this->load( $contentId, $srcVersion );
 
-        $fields = $content->fields;
-
         // Create new version
         $content->versionInfo = $this->mapper->createVersionInfoForContent(
             $content,
             $this->contentGateway->getLastVersionNumber( $contentId ) + 1,
-            $fields,
-            $content->versionInfo->initialLanguageCode,
             $userId
         );
         $content->versionInfo->id = $this->contentGateway->insertVersion(
             $content->versionInfo,
-            $content->fields,
-            $content->contentInfo->alwaysAvailable
+            $content->fields
         );
 
         // Clone fields from previous version and append them to the new one
+        $fields = $content->fields;
         $content->fields = array();
         foreach ( $fields as $field )
         {
@@ -242,7 +231,6 @@ class Handler implements BaseContentHandler
             $newField->versionNo = $content->versionInfo->versionNo;
             $content->fields[] = $newField;
         }
-        $content->fields;
         $this->fieldHandler->createExistingFieldsInNewVersion( $content );
 
         // Create name
@@ -308,6 +296,8 @@ class Handler implements BaseContentHandler
     /**
      * Returns the version object for a content/version identified by $contentId and $versionNo
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If version is not found
+     *
      * @param int|string $contentId
      * @param int $versionNo Version number to load
      *
@@ -315,9 +305,15 @@ class Handler implements BaseContentHandler
      */
     public function loadVersionInfo( $contentId, $versionNo )
     {
-        return $this->mapper->extractVersionInfoFromRow(
-            $this->contentGateway->loadVersionInfo( $contentId, $versionNo )
-        );
+        $rows = $this->contentGateway->loadVersionInfo( $contentId, $versionNo );
+        if ( empty( $rows ) )
+        {
+            throw new NotFound( 'content', $contentId );
+        }
+
+        $versionInfo = $this->mapper->extractVersionInfoListFromRows( $rows );
+
+        return reset( $versionInfo );
     }
 
     /**
@@ -506,27 +502,28 @@ class Handler implements BaseContentHandler
         {
             foreach ( $this->listVersions( $contentId ) as $versionInfo )
             {
-                if ( $versionInfo->versionNo === $currentVersionNo ) continue;
+                if ( $versionInfo->versionNo === $currentVersionNo )
+                {
+                    continue;
+                }
 
                 $versionContent = $this->load( $contentId, $versionInfo->versionNo );
 
-                $versionContent->contentInfo->id = $content->contentInfo->id;
-                $versionContent->versionInfo->contentId = $content->contentInfo->id;
+                $versionContent->versionInfo->contentInfo->id = $content->versionInfo->contentInfo->id;
                 $versionContent->versionInfo->modificationDate = $createStruct->modified;
                 $versionContent->versionInfo->creationDate = $createStruct->modified;
                 $versionContent->versionInfo->id = $this->contentGateway->insertVersion(
                     $versionContent->versionInfo,
-                    $versionContent->fields,
-                    $versionContent->contentInfo->alwaysAvailable
+                    $versionContent->fields
                 );
 
                 $this->fieldHandler->createNewFields( $versionContent );
 
-                // Create name
+                // Create names
                 foreach ( $versionContent->versionInfo->names as $language => $name )
                 {
                     $this->contentGateway->setName(
-                        $content->contentInfo->id,
+                        $content->versionInfo->contentInfo->id,
                         $versionInfo->versionNo,
                         $name,
                         $language

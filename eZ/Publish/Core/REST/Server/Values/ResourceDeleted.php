@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
-class ResourceDeleted
+use eZ\Publish\Core\REST\Common\Value as RestValue;
+
+class ResourceDeleted extends RestValue
 {
 }

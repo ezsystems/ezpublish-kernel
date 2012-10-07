@@ -51,7 +51,7 @@ class FieldTypeTools implements FieldTypeToolsInterface
                                  FieldDefinition $fieldDefinition = null )
     {
         throw new NotImplementedException(
-        // @todo Figure out if this is needed or not, there is a need for it in xmltext and relation fieldtypes to avoid using db directly for this
+        // @todo Figure out if this is needed or not, there is a need for it in xmltext and relation field types to avoid using db directly for this
             __METHOD__ .
             " not implemented, & unclear if it should as relation handing is done in gateways in relation field types"
         );

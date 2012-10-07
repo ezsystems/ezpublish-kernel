@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read string $pathinfo The path being requested relative to the executed script
  * @property-read array $queryParams Array of parameters extracted from the query string
  * @property-read array $languages List of languages acceptable by the client browser
+ * @property-read array $headers Hash of request headers
  */
 class SimplifiedRequest extends ValueObject
 {
@@ -64,6 +65,13 @@ class SimplifiedRequest extends ValueObject
      * @var array
      */
     protected $languages;
+
+    /**
+     * Hash of request headers.
+     *
+     * @var array
+     */
+    protected $headers;
 
     /**
      * Constructs a SimplifiedRequest object from a standard URL (http://www.example.com/foo/bar?queryParam=value)

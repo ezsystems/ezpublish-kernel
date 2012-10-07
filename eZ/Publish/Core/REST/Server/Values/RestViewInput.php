@@ -10,11 +10,12 @@
 namespace eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
  * RestContentCreateStruct view model
  */
-class RestViewInput
+class RestViewInput extends RestValue
 {
     /**
      * The search query

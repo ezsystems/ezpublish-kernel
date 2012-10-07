@@ -10,11 +10,12 @@
 namespace eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
+use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
  * RestUserUpdateStruct view model
  */
-class RestUserUpdateStruct
+class RestUserUpdateStruct extends RestValue
 {
     /**
      * User update struct

@@ -53,7 +53,9 @@ class SearchService implements SearchServiceInterface
     {
         $this->repository = $repository;
         $this->searchHandler = $searchHandler;
-        $this->settings = $settings;
+        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+            //'defaultSetting' => array(),
+        );
     }
 
      /**
@@ -90,7 +92,7 @@ class SearchService implements SearchServiceInterface
      * Performs a query for a single content object
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than one result matching the criterions
      *
      * @TODO define structs for the field filters
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
@@ -116,7 +118,7 @@ class SearchService implements SearchServiceInterface
      * Suggests a list of values for the given prefix
      *
      * @param string $prefix
-     * @param string[] $fieldpath
+     * @param string[] $fieldPaths
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
@@ -128,14 +130,14 @@ class SearchService implements SearchServiceInterface
     /**
      * Add content, read Permission criteria if needed and return false if no access at all
      *
-     * @access private Temporarly made accessible until Location service stops using searchHandler()
+     * @access private Temporarily made accessible until Location service stops using searchHandler()
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
      * @return boolean|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
     public function addPermissionsCriterion( Criterion &$criterion )
     {
-        $permissionSets = $this->repository->hasAccess( 'content', 'read', null, true );
+        $permissionSets = $this->repository->hasAccess( 'content', 'read' );
         if ( $permissionSets === false || $permissionSets === true )
         {
             return $permissionSets;

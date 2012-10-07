@@ -13,7 +13,8 @@ use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
     eZ\Publish\SPI\IO\Handler as IoHandler,
     eZ\Publish\SPI\Limitation\Type as SPILimitationType,
     eZ\Publish\API\Repository\Repository,
-    Symfony\Component\DependencyInjection\ContainerInterface;
+    Symfony\Component\DependencyInjection\ContainerInterface,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 class RepositoryFactory
 {
@@ -142,5 +143,23 @@ class RepositoryFactory
     public function getExternalStorageHandlers()
     {
         return $this->externalStorages;
+    }
+
+    /**
+     * Returns a service based on a name string (content => contentService, etc)
+     *
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param $serviceName
+     * @return mixed
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the method/service is invalid
+     */
+    public function buildService( Repository $repository, $serviceName )
+    {
+        $methodName = 'get' . $serviceName . 'Service';
+        if ( !method_exists( $repository, $methodName ) )
+        {
+            throw new InvalidArgumentException( $serviceName, "No such service" );
+        }
+        return $repository->$methodName();
     }
 }

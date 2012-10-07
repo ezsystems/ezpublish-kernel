@@ -1291,42 +1291,48 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $locationId = $this->generateId( 'location', 13 );
+        $mediaLocationId = $this->generateId( 'location', 43 );
         /* BEGIN: Use Case */
-        // $locationId is the ID of an existing location
+        // $mediaLocationId is the ID of the location of the
+        // "Media" location in an eZ Publish demo installation
         $locationService = $repository->getLocationService();
 
-        $location = $locationService->loadLocation( $locationId );
+        $location = $locationService->loadLocation( $mediaLocationId );
 
         $locationService->deleteLocation( $location );
         /* END: Use Case */
 
         try
         {
-            $locationService->loadLocation( $locationId );
-            $this->fail( "Location $locationId not deleted." );
-        }
-        catch ( Exceptions\NotFoundException $e ) {}
-        try
-        {
-            $locationService->loadLocation( $this->generateId( 'locationId', 15 ) );
-            $this->fail( "Location 15 not deleted." );
+            $locationService->loadLocation( $mediaLocationId );
+            $this->fail( "Location $mediaLocationId not deleted." );
         }
         catch ( Exceptions\NotFoundException $e ) {}
 
-        $contentService = $repository->getContentService();
-        try
+        // The following IDs are IDs of child locations of $mediaLocationId location
+        // ( Media/Images, Media/Files, Media/Multimedia respectively )
+        foreach ( array( 51, 52, 53 ) as $childLocationId )
         {
-            $contentService->loadContentInfo( $this->generateId( 'object', 12 ) );
-            $this->fail( "Content 12 at location 13 not delete." );
+            try
+            {
+                $locationService->loadLocation( $this->generateId( 'location', $childLocationId ) );
+                $this->fail( "Location $childLocationId not deleted." );
+            }
+            catch ( Exceptions\NotFoundException $e ) {}
         }
-        catch ( Exceptions\NotFoundException $e ) {}
-        try
+
+        // The following IDs are IDs of content below $mediaLocationId location
+        // ( Media/Images, Media/Files, Media/Multimedia respectively )
+        $contentService = $this->getRepository()->getContentService();
+        foreach ( array( 49, 50, 51 ) as $childContentId )
         {
-            $contentService->loadContentInfo( $this->generateId( 'location', 14 ) );
-            $this->fail( "Content 14 at location 15 not delete." );
+            try
+            {
+                $contentService->loadContentInfo( $this->generateId( 'object', $childContentId ) );
+                $this->fail( "Content $childContentId not deleted." );
+            }
+            catch ( Exceptions\NotFoundException $e ) {}
         }
-        catch ( Exceptions\NotFoundException $e ) {}
     }
 
     /**

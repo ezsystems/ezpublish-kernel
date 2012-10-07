@@ -68,7 +68,7 @@ class ContentHandlerTest extends HandlerTest
 
         $this->content = $this->persistenceHandler->contentHandler()->create( $struct );
         $this->contentToDelete[] = $this->content;
-        $this->contentId = $this->content->contentInfo->id;
+        $this->contentId = $this->content->versionInfo->contentInfo->id;
     }
 
     /**
@@ -83,7 +83,7 @@ class ContentHandlerTest extends HandlerTest
             // Removing default objects as well as those created by tests
             foreach ( $this->contentToDelete as $content )
             {
-                $contentHandler->deleteContent( $content->contentInfo->id );
+                $contentHandler->deleteContent( $content->versionInfo->contentInfo->id );
             }
         }
         catch ( NotFound $e )
@@ -125,9 +125,9 @@ class ContentHandlerTest extends HandlerTest
         $content = $this->persistenceHandler->contentHandler()->create( $struct );
         $this->contentToDelete[] = $content;
         $this->assertTrue( $content instanceof Content );
-        $this->assertEquals( $this->contentId + 1, $content->contentInfo->id );
-        $this->assertEquals( 14, $content->contentInfo->ownerId );
-        $this->assertEquals( false , $content->contentInfo->isPublished );
+        $this->assertEquals( $this->contentId + 1, $content->versionInfo->contentInfo->id );
+        $this->assertEquals( 14, $content->versionInfo->contentInfo->ownerId );
+        $this->assertEquals( false , $content->versionInfo->contentInfo->isPublished );
 
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo', $content->versionInfo );
         $this->assertEquals( 14, $content->versionInfo->creatorId );
@@ -137,7 +137,7 @@ class ContentHandlerTest extends HandlerTest
         $this->assertGreaterThanOrEqual( $struct->modified, $content->versionInfo->modificationDate );
         $this->assertEquals( "eng-GB", $content->versionInfo->initialLanguageCode );
         $this->assertEquals( array( $struct->initialLanguageId ), $content->versionInfo->languageIds );
-        $this->assertEquals( $content->contentInfo->id, $content->versionInfo->contentId );
+        $this->assertEquals( $content->versionInfo->contentInfo->id, $content->versionInfo->contentInfo->id );
         $this->assertEquals( 1, count( $content->fields ) );
 
         $field = $content->fields[0];
@@ -162,9 +162,9 @@ class ContentHandlerTest extends HandlerTest
 
         $publishedContent = $contentHandler->publish( 1, 2, $metadataUpdateStruct );
 
-        $this->assertEquals( 2, $publishedContent->contentInfo->currentVersionNo );
-        $this->assertTrue( $publishedContent->contentInfo->isPublished );
-        $this->assertEquals( $time, $publishedContent->contentInfo->modificationDate );
+        $this->assertEquals( 2, $publishedContent->versionInfo->contentInfo->currentVersionNo );
+        $this->assertTrue( $publishedContent->versionInfo->contentInfo->isPublished );
+        $this->assertEquals( $time, $publishedContent->versionInfo->contentInfo->modificationDate );
 
         $this->assertEquals( VersionInfo::STATUS_PUBLISHED, $publishedContent->versionInfo->status );
         $this->assertEquals( $time, $publishedContent->versionInfo->modificationDate );
@@ -212,11 +212,11 @@ class ContentHandlerTest extends HandlerTest
     public function testDelete()
     {
         $contentHandler = $this->persistenceHandler->contentHandler();
-        $contentHandler->deleteContent( $this->content->contentInfo->id );
+        $contentHandler->deleteContent( $this->content->versionInfo->contentInfo->id );
 
         try
         {
-            $this->persistenceHandler->searchHandler()->findSingle( new ContentId( $this->content->contentInfo->id ) );
+            $this->persistenceHandler->searchHandler()->findSingle( new ContentId( $this->content->versionInfo->contentInfo->id ) );
             $this->fail( "Content not removed correctly" );
         }
         catch ( NotFound $e )
@@ -225,7 +225,7 @@ class ContentHandlerTest extends HandlerTest
 
         try
         {
-            $contentHandler->listVersions( $this->content->contentInfo->id );
+            $contentHandler->listVersions( $this->content->versionInfo->contentInfo->id );
             $this->fail( "No version should have been returned but a NotFound exception!" );
         }
         catch ( NotFound $e )
@@ -249,7 +249,7 @@ class ContentHandlerTest extends HandlerTest
 
         $this->assertEquals( 2, $versionInfo->id );
         $this->assertEquals( 2, $versionInfo->versionNo );
-        $this->assertEquals( 1, $versionInfo->contentId );
+        $this->assertEquals( 1, $versionInfo->contentInfo->id );
     }
 
     /**
@@ -320,18 +320,18 @@ class ContentHandlerTest extends HandlerTest
         $time = time();
         $contentHandler = $this->persistenceHandler->contentHandler();
         $copy = $contentHandler->copy( 1, 1 );
-        $this->assertEquals( 1, $copy->contentInfo->sectionId, "Section ID does not match" );
-        $this->assertEquals( 1, $copy->contentInfo->contentTypeId, "Type ID does not match" );
-        $this->assertEquals( 14, $copy->contentInfo->ownerId, "Owner ID does not match" );
-        $this->assertEquals( 1, $copy->contentInfo->currentVersionNo, "Current version no does not match" );
+        $this->assertEquals( 1, $copy->versionInfo->contentInfo->sectionId, "Section ID does not match" );
+        $this->assertEquals( 1, $copy->versionInfo->contentInfo->contentTypeId, "Type ID does not match" );
+        $this->assertEquals( 14, $copy->versionInfo->contentInfo->ownerId, "Owner ID does not match" );
+        $this->assertEquals( 1, $copy->versionInfo->contentInfo->currentVersionNo, "Current version no does not match" );
         $this->assertEmpty( $copy->locations, "Locations must be empty" );
 
-        $versions = $contentHandler->listVersions( $copy->contentInfo->id );
+        $versions = $contentHandler->listVersions( $copy->versionInfo->contentInfo->id );
         $this->assertEquals( 1, count( $versions ) );
         $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $versions[0]->names );
         $this->assertEquals( 1, $versions[0]->versionNo, "Version number does not match" );
         $this->assertEquals( 14, $versions[0]->creatorId, "Creator ID does not match" );
-        $this->assertEquals( $copy->contentInfo->id, $versions[0]->contentId );
+        $this->assertEquals( $copy->versionInfo->contentInfo->id, $versions[0]->contentInfo->id );
         $this->assertGreaterThanOrEqual( $time, $versions[0]->modificationDate );
         $this->assertGreaterThanOrEqual( $time, $versions[0]->creationDate );
     }
@@ -348,18 +348,18 @@ class ContentHandlerTest extends HandlerTest
         $versionNoToCopy = 2;
         $contentHandler = $this->persistenceHandler->contentHandler();
         $copy = $contentHandler->copy( 1, $versionNoToCopy );
-        $this->assertEquals( 1, $copy->contentInfo->sectionId, "Section ID does not match" );
-        $this->assertEquals( 1, $copy->contentInfo->contentTypeId, "Type ID does not match" );
-        $this->assertEquals( 14, $copy->contentInfo->ownerId, "Owner ID does not match" );
-        $this->assertEquals( $versionNoToCopy, $copy->contentInfo->currentVersionNo, "Current version no does not match" );
+        $this->assertEquals( 1, $copy->versionInfo->contentInfo->sectionId, "Section ID does not match" );
+        $this->assertEquals( 1, $copy->versionInfo->contentInfo->contentTypeId, "Type ID does not match" );
+        $this->assertEquals( 14, $copy->versionInfo->contentInfo->ownerId, "Owner ID does not match" );
+        $this->assertEquals( $versionNoToCopy, $copy->versionInfo->contentInfo->currentVersionNo, "Current version no does not match" );
         $this->assertEmpty( $copy->locations, "Locations must be empty" );
 
-        $versions = $contentHandler->listVersions( $copy->contentInfo->id );
+        $versions = $contentHandler->listVersions( $copy->versionInfo->contentInfo->id );
         $this->assertEquals( 1, count( $versions ) );
         $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $versions[0]->names );
         $this->assertEquals( 2, $versions[0]->versionNo, "Version number does not match" );
         $this->assertEquals( 14, $versions[0]->creatorId, "Creator ID does not match" );
-        $this->assertEquals( $copy->contentInfo->id, $versions[0]->contentId );
+        $this->assertEquals( $copy->versionInfo->contentInfo->id, $versions[0]->contentInfo->id );
         $this->assertGreaterThanOrEqual( $time, $versions[0]->modificationDate );
         $this->assertGreaterThanOrEqual( $time, $versions[0]->creationDate );
     }
@@ -375,13 +375,13 @@ class ContentHandlerTest extends HandlerTest
         $time = time();
         $contentHandler = $this->persistenceHandler->contentHandler();
         $copy = $contentHandler->copy( 1 );
-        $this->assertEquals( 1, $copy->contentInfo->sectionId, "Section ID does not match" );
-        $this->assertEquals( 1, $copy->contentInfo->contentTypeId, "Type ID does not match" );
-        $this->assertEquals( 14, $copy->contentInfo->ownerId, "Owner ID does not match" );
-        $this->assertEquals( 1, $copy->contentInfo->currentVersionNo, "Current version no does not match" );
+        $this->assertEquals( 1, $copy->versionInfo->contentInfo->sectionId, "Section ID does not match" );
+        $this->assertEquals( 1, $copy->versionInfo->contentInfo->contentTypeId, "Type ID does not match" );
+        $this->assertEquals( 14, $copy->versionInfo->contentInfo->ownerId, "Owner ID does not match" );
+        $this->assertEquals( 1, $copy->versionInfo->contentInfo->currentVersionNo, "Current version no does not match" );
         $this->assertEmpty( $copy->locations, "Locations must be empty" );
 
-        $versions = $contentHandler->listVersions( $copy->contentInfo->id );
+        $versions = $contentHandler->listVersions( $copy->versionInfo->contentInfo->id );
         $this->assertEquals( 2, count( $versions ) );
         $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $versions[0]->names );
         $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $versions[1]->names );
@@ -389,8 +389,8 @@ class ContentHandlerTest extends HandlerTest
         $this->assertEquals( 2, $versions[1]->versionNo );
         $this->assertEquals( 14, $versions[0]->creatorId );
         $this->assertEquals( 14, $versions[1]->creatorId );
-        $this->assertEquals( $copy->contentInfo->id, $versions[0]->contentId );
-        $this->assertEquals( $copy->contentInfo->id, $versions[1]->contentId );
+        $this->assertEquals( $copy->versionInfo->contentInfo->id, $versions[0]->contentInfo->id );
+        $this->assertEquals( $copy->versionInfo->contentInfo->id, $versions[1]->contentInfo->id );
         $this->assertGreaterThanOrEqual( $time, $versions[0]->modificationDate );
         $this->assertGreaterThanOrEqual( $time, $versions[1]->modificationDate );
         $this->assertGreaterThanOrEqual( $time, $versions[0]->creationDate );
@@ -426,7 +426,7 @@ class ContentHandlerTest extends HandlerTest
         $content = $this->persistenceHandler->contentHandler()->updateContent( $this->contentId, 1, $struct );
 
         $this->assertTrue( $content instanceof Content );
-        $this->assertEquals( $this->contentId, $content->contentInfo->id );
+        $this->assertEquals( $this->contentId, $content->versionInfo->contentInfo->id );
         $this->assertEquals( VersionInfo::STATUS_DRAFT, $content->versionInfo->status );
         $this->assertEquals( 10, $content->versionInfo->creatorId );
         $this->assertEquals( $time, $content->versionInfo->modificationDate );
@@ -455,13 +455,13 @@ class ContentHandlerTest extends HandlerTest
         $content = $contentHandler->copy( 1, 1 );
         $this->contentToDelete[] = $content;
 
-        $draft = $contentHandler->createDraftFromVersion( $content->contentInfo->id, 1, 10 );
+        $draft = $contentHandler->createDraftFromVersion( $content->versionInfo->contentInfo->id, 1, 10 );
 
-        self::assertSame( $content->contentInfo->currentVersionNo + 1, $draft->versionInfo->versionNo );
+        self::assertSame( $content->versionInfo->contentInfo->currentVersionNo + 1, $draft->versionInfo->versionNo );
         self::assertGreaterThanOrEqual( $time, $draft->versionInfo->creationDate );
         self::assertGreaterThanOrEqual( $time, $draft->versionInfo->modificationDate );
         self::assertSame( VersionInfo::STATUS_DRAFT, $draft->versionInfo->status, 'Created version must be a draft' );
-        self::assertSame( $content->contentInfo->id, $draft->versionInfo->contentId );
+        self::assertSame( $content->versionInfo->contentInfo->id, $draft->versionInfo->contentInfo->id );
         self::assertSame( $content->versionInfo->initialLanguageCode, $draft->versionInfo->initialLanguageCode );
         self::assertSame( $content->versionInfo->languageIds, $draft->versionInfo->languageIds );
 
@@ -494,8 +494,8 @@ class ContentHandlerTest extends HandlerTest
         $content = $this->content;
 
         self::assertEquals( VersionInfo::STATUS_DRAFT, $content->versionInfo->status );
-        $this->persistenceHandler->contentHandler()->setStatus( $content->contentInfo->id, VersionInfo::STATUS_PUBLISHED, $content->versionInfo->versionNo );
-        $content = $this->persistenceHandler->contentHandler()->load( $content->contentInfo->id, $content->versionInfo->versionNo );
+        $this->persistenceHandler->contentHandler()->setStatus( $content->versionInfo->contentInfo->id, VersionInfo::STATUS_PUBLISHED, $content->versionInfo->versionNo );
+        $content = $this->persistenceHandler->contentHandler()->load( $content->versionInfo->contentInfo->id, $content->versionInfo->versionNo );
 
         self::assertEquals( VersionInfo::STATUS_PUBLISHED, $content->versionInfo->status );
     }

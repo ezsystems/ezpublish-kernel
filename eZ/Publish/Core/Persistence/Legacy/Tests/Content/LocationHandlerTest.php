@@ -13,6 +13,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
     eZ\Publish\SPI\Persistence\Content\Location,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper;
@@ -602,10 +603,14 @@ class LocationHandlerTest extends TestCase
                     $this->returnValue(
                         new Content(
                             array(
-                                "contentInfo" => new ContentInfo(
+                                "versionInfo" => new VersionInfo(
                                     array(
-                                        "id" => $contentId + $offset,
-                                        "currentVersionNo" => 1
+                                        "contentInfo" => new ContentInfo(
+                                            array(
+                                                "id" => $contentId + $offset,
+                                                "currentVersionNo" => 1
+                                            )
+                                        )
                                     )
                                 )
                             )
@@ -625,7 +630,15 @@ class LocationHandlerTest extends TestCase
                     $this->returnValue(
                         new Content(
                             array(
-                                "contentInfo" => new ContentInfo( array( "id" => $contentId + $offset ) )
+                                "versionInfo" => new VersionInfo(
+                                    array(
+                                        "contentInfo" => new ContentInfo(
+                                            array(
+                                                "id" => $contentId + $offset
+                                            )
+                                        )
+                                    )
+                                )
                             )
                         )
                     )

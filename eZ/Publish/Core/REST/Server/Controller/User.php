@@ -13,6 +13,7 @@ use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Exceptions;
+use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\ContentService;
@@ -29,27 +30,11 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 
 use eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException AS RestInvalidArgumentException;
 
-use Qafoo\RMF;
-
 /**
  * User controller
  */
-class User
+class User extends RestController
 {
-    /**
-     * Input dispatcher
-     *
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
-     */
-    protected $inputDispatcher;
-
-    /**
-     * URL handler
-     *
-     * @var \eZ\Publish\Core\REST\Common\UrlHandler
-     */
-    protected $urlHandler;
-
     /**
      * User service
      *
@@ -95,8 +80,6 @@ class User
     /**
      * Construct controller
      *
-     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\Core\REST\Common\UrlHandler $urlHandler
      * @param \eZ\Publish\API\Repository\UserService $userService
      * @param \eZ\Publish\API\Repository\RoleService $roleService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
@@ -105,8 +88,6 @@ class User
      * @param \eZ\Publish\API\Repository\Repository $repository
      */
     public function __construct(
-        Input\Dispatcher $inputDispatcher,
-        UrlHandler $urlHandler,
         UserService $userService,
         RoleService $roleService,
         ContentService $contentService,
@@ -114,8 +95,6 @@ class User
         SectionService $sectionService,
         Repository $repository )
     {
-        $this->inputDispatcher = $inputDispatcher;
-        $this->urlHandler = $urlHandler;
         $this->userService = $userService;
         $this->roleService = $roleService;
         $this->contentService = $contentService;
@@ -127,10 +106,9 @@ class User
     /**
      * Redirects to the root user group
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\PermanentRedirect
      */
-    public function loadRootUserGroup( RMF\Request $request )
+    public function loadRootUserGroup()
     {
         //@todo Replace hardcoded value with one loaded from settings
         return new Values\PermanentRedirect(
@@ -142,12 +120,11 @@ class User
     /**
      * Loads a user group for the given path
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RestUserGroup
      */
-    public function loadUserGroup( RMF\Request $request )
+    public function loadUserGroup()
     {
-        $urlValues = $this->urlHandler->parse( 'group', $request->path );
+        $urlValues = $this->urlHandler->parse( 'group', $this->request->path );
 
         $userGroupLocation = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath( $urlValues['group'] )
@@ -167,12 +144,11 @@ class User
     /**
      * Loads a user for the given ID
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RestUser
      */
-    public function loadUser( RMF\Request $request )
+    public function loadUser()
     {
-        $urlValues = $this->urlHandler->parse( 'user', $request->path );
+        $urlValues = $this->urlHandler->parse( 'user', $this->request->path );
 
         $user = $this->userService->loadUser(
             $urlValues['user']
@@ -192,21 +168,20 @@ class User
      * Create a new user group under the given parent
      * To create a top level group use /user/groups/subgroups
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedUserGroup
      */
-    public function createUserGroup( RMF\Request $request )
+    public function createUserGroup()
     {
         try
         {
-            $urlValues = $this->urlHandler->parse( 'groupSubgroups', $request->path );
+            $urlValues = $this->urlHandler->parse( 'groupSubgroups', $this->request->path );
             $userGroupPath = $urlValues['group'];
         }
         catch ( RestInvalidArgumentException $e )
         {
             try
             {
-                $this->urlHandler->parse( 'rootUserGroupSubGroups', $request->path );
+                $this->urlHandler->parse( 'rootUserGroupSubGroups', $this->request->path );
                 //@todo Load from settings instead of using hardcoded value
                 $userGroupPath = '/1/5';
             }
@@ -223,8 +198,8 @@ class User
         $createdUserGroup = $this->userService->createUserGroup(
             $this->inputDispatcher->parse(
                 new Message(
-                    array( 'Content-Type' => $request->contentType ),
-                    $request->body
+                    array( 'Content-Type' => $this->request->contentType ),
+                    $this->request->body
                 )
             ),
             $this->userService->loadUserGroup(
@@ -248,12 +223,11 @@ class User
     /**
      * Create a new user group in the given group
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedUser
      */
-    public function createUser( RMF\Request $request )
+    public function createUser()
     {
-        $urlValues = $this->urlHandler->parse( 'groupUsers', $request->path );
+        $urlValues = $this->urlHandler->parse( 'groupUsers', $this->request->path );
 
         $userGroupLocation = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath( $urlValues['group'] )
@@ -261,8 +235,8 @@ class User
 
         $userGroupCreateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $request->contentType ),
-                $request->body
+                array( 'Content-Type' => $this->request->contentType ),
+                $this->request->body
             )
         );
 
@@ -292,12 +266,11 @@ class User
     /**
      * Updates a user group
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RestUserGroup
      */
-    public function updateUserGroup( RMF\Request $request )
+    public function updateUserGroup()
     {
-        $urlValues = $this->urlHandler->parse( 'group', $request->path );
+        $urlValues = $this->urlHandler->parse( 'group', $this->request->path );
 
         $userGroupLocation = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath( $urlValues['group'] )
@@ -310,11 +283,11 @@ class User
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
                 array(
-                    'Content-Type' => $request->contentType,
+                    'Content-Type' => $this->request->contentType,
                     // @todo Needs refactoring! Temporary solution so parser has access to URL
-                    'Url' => $request->path
+                    'Url' => $this->request->path
                 ),
-                $request->body
+                $this->request->body
             )
         );
 
@@ -339,23 +312,22 @@ class User
     /**
      * Updates a user
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\RestUser
      */
-    public function updateUser( RMF\Request $request )
+    public function updateUser()
     {
-        $urlValues = $this->urlHandler->parse( 'user', $request->path );
+        $urlValues = $this->urlHandler->parse( 'user', $this->request->path );
 
         $user = $this->userService->loadUser( $urlValues['user'] );
 
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
                 array(
-                    'Content-Type' => $request->contentType,
+                    'Content-Type' => $this->request->contentType,
                     // @todo Needs refactoring! Temporary solution so parser has access to URL
-                    'Url' => $request->path
+                    'Url' => $this->request->path
                 ),
-                $request->body
+                $this->request->body
             )
         );
 
@@ -382,12 +354,11 @@ class User
     /**
      * Given user group is deleted
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
-    public function deleteUserGroup( RMF\Request $request )
+    public function deleteUserGroup()
     {
-        $urlValues = $this->urlHandler->parse( 'group', $request->path );
+        $urlValues = $this->urlHandler->parse( 'group', $this->request->path );
 
         $userGroupLocation = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath( $urlValues['group'] )
@@ -412,12 +383,11 @@ class User
     /**
      * Given user is deleted
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
      */
-    public function deleteUser( RMF\Request $request )
+    public function deleteUser()
     {
-        $urlValues = $this->urlHandler->parse( 'user', $request->path );
+        $urlValues = $this->urlHandler->parse( 'user', $this->request->path );
 
         $user = $this->userService->loadUser(
             $urlValues['user']
@@ -436,12 +406,11 @@ class User
     /**
      * Loads a list of users assigned to role
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\UserList|\eZ\Publish\Core\REST\Server\Values\UserRefList
      */
-    public function loadUsersAssignedToRole( RMF\Request $request )
+    public function loadUsersAssignedToRole()
     {
-        $roleValues = $this->urlHandler->parse( 'role', $request->variables['roleId'] );
+        $roleValues = $this->urlHandler->parse( 'role', $this->request->variables['roleId'] );
 
         $role = $this->roleService->loadRole( $roleValues['role'] );
         $roleAssignments = $this->roleService->getRoleAssignments( $role );
@@ -460,23 +429,22 @@ class User
             }
         }
 
-        if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.userlist' )
+        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.userlist' )
         {
-            return new Values\UserList( $restUsers, $request->path );
+            return new Values\UserList( $restUsers, $this->request->path );
         }
 
-        return new Values\UserRefList( $restUsers, $request->path );
+        return new Values\UserRefList( $restUsers, $this->request->path );
     }
 
     /**
      * Loads a list of user groups assigned to role
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\UserGroupList|\eZ\Publish\Core\REST\Server\Values\UserGroupRefList
      */
-    public function loadUserGroupsAssignedToRole( RMF\Request $request )
+    public function loadUserGroupsAssignedToRole()
     {
-        $roleValues = $this->urlHandler->parse( 'role', $request->variables['roleId'] );
+        $roleValues = $this->urlHandler->parse( 'role', $this->request->variables['roleId'] );
 
         $role = $this->roleService->loadRole( $roleValues['role'] );
         $roleAssignments = $this->roleService->getRoleAssignments( $role );
@@ -495,40 +463,38 @@ class User
             }
         }
 
-        if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.usergrouplist' )
+        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.usergrouplist' )
         {
-            return new Values\UserGroupList( $restUserGroups, $request->path );
+            return new Values\UserGroupList( $restUserGroups, $this->request->path );
         }
 
-        return new Values\UserGroupRefList( $restUserGroups, $request->path );
+        return new Values\UserGroupRefList( $restUserGroups, $this->request->path );
     }
 
     /**
      * Loads drafts assigned to user
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\VersionList
      */
-    public function loadUserDrafts( RMF\Request $request )
+    public function loadUserDrafts()
     {
-        $urlValues = $this->urlHandler->parse( 'userDrafts', $request->path );
+        $urlValues = $this->urlHandler->parse( 'userDrafts', $this->request->path );
 
         $contentDrafts = $this->contentService->loadContentDrafts(
             $this->userService->loadUser( $urlValues['user'] )
         );
 
-        return new Values\VersionList( $contentDrafts, $request->path );
+        return new Values\VersionList( $contentDrafts, $this->request->path );
     }
 
     /**
      * Moves the user group to another parent
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
-    public function moveUserGroup( RMF\Request $request )
+    public function moveUserGroup()
     {
-        $urlValues = $this->urlHandler->parse( 'group', $request->path );
+        $urlValues = $this->urlHandler->parse( 'group', $this->request->path );
 
         $userGroupLocation = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath( $urlValues['group'] )
@@ -538,7 +504,7 @@ class User
             $userGroupLocation->contentId
         );
 
-        $destinationParts = $this->urlHandler->parse( 'group', $request->destination );
+        $destinationParts = $this->urlHandler->parse( 'group', $this->request->destination );
 
         try
         {
@@ -575,12 +541,11 @@ class User
     /**
      * Returns a list of the sub groups
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\UserGroupList|\eZ\Publish\Core\REST\Server\Values\UserGroupRefList
      */
-    public function loadSubUserGroups( RMF\Request $request )
+    public function loadSubUserGroups()
     {
-        $urlValues = $this->urlHandler->parse( 'groupSubgroups', $request->path );
+        $urlValues = $this->urlHandler->parse( 'groupSubgroups', $this->request->path );
 
         $userGroupLocation = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath( $urlValues['group'] )
@@ -600,12 +565,12 @@ class User
             $restUserGroups[] = new Values\RestUserGroup( $subGroup, $subGroupContentInfo, $subGroupLocation );
         }
 
-        if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.usergrouplist' )
+        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.usergrouplist' )
         {
-            return new Values\UserGroupList( $restUserGroups, $request->path );
+            return new Values\UserGroupList( $restUserGroups, $this->request->path );
         }
 
-        return new Values\UserGroupRefList( $restUserGroups, $request->path );
+        return new Values\UserGroupRefList( $restUserGroups, $this->request->path );
     }
 
     /**
@@ -613,12 +578,11 @@ class User
      * The returned list includes the resources for unassigning
      * a user group if the user is in multiple groups.
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\UserGroupRefList
      */
-    public function loadUserGroupsOfUser( RMF\Request $request )
+    public function loadUserGroupsOfUser()
     {
-        $urlValues = $this->urlHandler->parse( 'userGroups', $request->path );
+        $urlValues = $this->urlHandler->parse( 'userGroups', $this->request->path );
 
         $user = $this->userService->loadUser( $urlValues['user'] );
         $userGroups = $this->userService->loadUserGroupsOfUser( $user );
@@ -631,18 +595,17 @@ class User
             $restUserGroups[] = new Values\RestUserGroup( $userGroup, $userGroupContentInfo, $userGroupLocation );
         }
 
-        return new Values\UserGroupRefList( $restUserGroups, $request->path, $urlValues['user'] );
+        return new Values\UserGroupRefList( $restUserGroups, $this->request->path, $urlValues['user'] );
     }
 
     /**
      * Loads the users of the group with the given path
      *
-     * @param RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\UserList|\eZ\Publish\Core\REST\Server\Values\UserRefList
      */
-    public function loadUsersFromGroup( RMF\Request $request )
+    public function loadUsersFromGroup()
     {
-        $urlValues = $this->urlHandler->parse( 'groupUsers', $request->path );
+        $urlValues = $this->urlHandler->parse( 'groupUsers', $this->request->path );
 
         $userGroupLocation = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath( $urlValues['group'] )
@@ -662,23 +625,22 @@ class User
             $restUsers[] = new Values\RestUser( $user, $userContentInfo, $userLocation );
         }
 
-        if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.userlist' )
+        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.userlist' )
         {
-            return new Values\UserList( $restUsers, $request->path );
+            return new Values\UserList( $restUsers, $this->request->path );
         }
 
-        return new Values\UserRefList( $restUsers, $request->path );
+        return new Values\UserRefList( $restUsers, $this->request->path );
     }
 
     /**
      * Unassigns the user from a user group
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\UserGroupRefList
      */
-    public function unassignUserFromUserGroup( RMF\Request $request )
+    public function unassignUserFromUserGroup()
     {
-        $urlValues = $this->urlHandler->parse( 'userGroup', $request->path );
+        $urlValues = $this->urlHandler->parse( 'userGroup', $this->request->path );
 
         $user = $this->userService->loadUser( $urlValues['user'] );
         $userGroupLocation = $this->locationService->loadLocation( trim( $urlValues['group'], '/' ) );
@@ -716,19 +678,18 @@ class User
     /**
      * Assigns the user to a user group
      *
-     * @param \Qafoo\RMF\Request $request
      * @return \eZ\Publish\Core\REST\Server\Values\UserGroupRefList
      */
-    public function assignUserToUserGroup( RMF\Request $request )
+    public function assignUserToUserGroup()
     {
-        $urlValues = $this->urlHandler->parse( 'userGroupAssign', $request->path );
+        $urlValues = $this->urlHandler->parse( 'userGroupAssign', $this->request->path );
 
         $user = $this->userService->loadUser( $urlValues['user'] );
 
         try
         {
             $userGroupLocation = $this->locationService->loadLocation(
-                $this->extractLocationIdFromPath( $request->variables['group'] )
+                $this->extractLocationIdFromPath( $this->request->variables['group'] )
             );
         }
         catch ( NotFoundException $e )
@@ -783,12 +744,11 @@ class User
     /**
      * Extracts the requested media type from $request
      *
-     * @param RMF\Request $request
      * @return string
      */
-    protected function getMediaType( RMF\Request $request )
+    protected function getMediaType()
     {
-        foreach ( $request->mimetype as $mimeType )
+        foreach ( $this->request->mimetype as $mimeType )
         {
             if ( preg_match( '(^([a-z0-9-/.]+)\+.*$)', $mimeType['value'], $matches ) )
             {

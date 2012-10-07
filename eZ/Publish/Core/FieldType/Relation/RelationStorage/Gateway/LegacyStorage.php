@@ -85,7 +85,7 @@ class LegacyStorage extends Gateway
             $q->bindValue( $field->fieldDefinitionId, null, \PDO::PARAM_INT )
         )->set(
             $dbHandler->quoteColumn( "from_contentobject_id" ),
-            $q->bindValue( $versionInfo->contentId, null, \PDO::PARAM_INT )
+            $q->bindValue( $versionInfo->contentInfo->id, null, \PDO::PARAM_INT )
         )->set(
             $dbHandler->quoteColumn( "from_contentobject_version" ),
             $q->bindValue( $versionInfo->versionNo, null, \PDO::PARAM_INT )
@@ -119,6 +119,6 @@ class LegacyStorage extends Gateway
      */
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldId, array $context )
     {
-	// @todo implement when content deleting is fixed in the service
+        // @todo implement when content deleting is fixed in the service
     }
 }

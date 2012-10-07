@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
+use eZ\Publish\Core\REST\Common\Value as RestValue;
+
 /**
  * ObjectState list view model
  */
-class ObjectStateList
+class ObjectStateList extends RestValue
 {
     /**
      * Object states

@@ -46,11 +46,11 @@ class VersionInfo extends ValueObject
     public $versionNo;
 
     /**
-     * Content of the content this version belongs to.
+     * ContentInfo of the content this VersionInfo belongs to.
      *
-     * @var int $contentId
+     * @var \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
-    public $contentId;
+    public $contentInfo;
 
     /**
      * Returns the names computed from the name schema in the available languages.

@@ -12,6 +12,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
     eZ\Publish\Core\Persistence\Legacy\Content,
     eZ\Publish\SPI\Persistence\Content as ContentObject,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
+    eZ\Publish\SPI\Persistence\Content\VersionInfo,
     eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry,
@@ -191,8 +192,9 @@ class SearchHandlerTest extends LanguageAwareTestCase
                             if ( !isset( $contentObjs[$contentId] ) )
                             {
                                 $contentObjs[$contentId] = new ContentObject();
-                                $contentObjs[$contentId]->contentInfo = new ContentInfo;
-                                $contentObjs[$contentId]->contentInfo->id = $contentId;
+                                $contentObjs[$contentId]->versionInfo = new VersionInfo;
+                                $contentObjs[$contentId]->versionInfo->contentInfo = new ContentInfo;
+                                $contentObjs[$contentId]->versionInfo->contentInfo->id = $contentId;
                             }
                         }
                         return array_values( $contentObjs );
@@ -351,7 +353,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
 
         $content = $locator->findSingle( new Criterion\ContentId( 10 ) );
 
-        $this->assertEquals( 10, $content->contentInfo->id );
+        $this->assertEquals( 10, $content->versionInfo->contentInfo->id );
     }
 
     /**
@@ -393,7 +395,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 4, 10 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -444,7 +446,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 4 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -476,7 +478,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 4, 10, 12 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -510,7 +512,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 4 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -537,7 +539,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 67, 68, 69, 70, 71, 72, 73, 74 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -562,7 +564,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 67, 68, 69, 70, 71, 72, 73, 74 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -587,7 +589,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 10, 14 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -612,7 +614,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 4, 11, 12, 13, 42, 225, 10, 14 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -639,7 +641,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 11, 225 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -666,7 +668,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 11, 14, 225 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -693,7 +695,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 11, 14, 225 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -720,7 +722,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 11, 14, 225 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -747,7 +749,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 131, 66, 225 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -772,7 +774,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 4, 65 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -797,7 +799,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 4, 41, 45, 56, 65 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -822,7 +824,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 4, 10 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -847,7 +849,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 4, 65 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -872,7 +874,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 42 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -897,7 +899,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -924,7 +926,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 11 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -951,7 +953,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 11, 42 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -978,7 +980,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 69, 71 ,72 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -1015,7 +1017,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 11, 69, 71 ,72 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -1040,7 +1042,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 191 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -1065,7 +1067,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array( 191 ),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -1094,7 +1096,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array(),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -1119,7 +1121,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             array(),
             array_map(
-                function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                 $result->searchHits
             )
         );
@@ -1149,7 +1151,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
             10,
             count(
                 array_map(
-                    function ( $hit ) { return $hit->valueObject->contentInfo->id; },
+                    function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
                     $result->searchHits
                 )
             )

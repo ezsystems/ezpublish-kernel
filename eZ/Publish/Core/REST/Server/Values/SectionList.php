@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
+use eZ\Publish\Core\REST\Common\Value as RestValue;
+
 /**
  * Section list view model
  */
-class SectionList
+class SectionList extends RestValue
 {
     /**
      * Sections

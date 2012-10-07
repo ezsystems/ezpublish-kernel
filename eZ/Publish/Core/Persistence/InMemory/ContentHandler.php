@@ -51,8 +51,10 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function create( CreateStruct $content )
     {
+        /** @var \eZ\Publish\SPI\Persistence\Content $contentObj */
         $contentObj = $this->backend->create( 'Content', array( '_currentVersionNo' => 1 ) );
-        $contentObj->contentInfo = $this->backend->create(
+        /** @var \eZ\Publish\SPI\Persistence\Content\ContentInfo $contentInfo */
+        $contentInfo = $this->backend->create(
             'Content\\ContentInfo',
             array(
                 'contentTypeId' => $content->typeId,
@@ -80,7 +82,7 @@ class ContentHandler implements ContentHandlerInterface
                 array(
                     'versionNo' => 1,
                     // Using internal _contentId since it's not directly exposed by Persistence
-                    '_contentId' => $contentObj->contentInfo->id,
+                    '_contentId' => $contentInfo->id,
                     'value' => new FieldValue(
                         array(
                             'data' => $field->value->data,
@@ -96,6 +98,7 @@ class ContentHandler implements ContentHandlerInterface
             $languageIds[] = $this->handler->contentLanguageHandler()
                 ->loadByLanguageCode( $languageCode )->id;
         }
+        /** @var \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo */
         $versionInfo = $this->backend->create(
             'Content\\VersionInfo',
             array(
@@ -104,7 +107,7 @@ class ContentHandler implements ContentHandlerInterface
                 'creatorId' => $content->ownerId,
                 'creationDate' => $content->modified,
                 'modificationDate' => $content->modified,
-                'contentId' => $contentObj->contentInfo->id,
+                '_contentId' => $contentInfo->id,
                 'status' => VersionInfo::STATUS_DRAFT,
                 'versionNo' => 1,
                 'languageIds' => $languageIds,
@@ -112,13 +115,14 @@ class ContentHandler implements ContentHandlerInterface
                     ->load( $content->initialLanguageId )->languageCode
             )
         );
+        $versionInfo->contentInfo = $contentInfo;
         $contentObj->versionInfo = $versionInfo;
 
         $locationHandler = $this->handler->locationHandler();
         foreach ( $content->locations as $locationStruct )
         {
-            $locationStruct->contentId = $contentObj->contentInfo->id;
-            $locationStruct->contentVersion = $contentObj->contentInfo->currentVersionNo;
+            $locationStruct->contentId = $contentInfo->id;
+            $locationStruct->contentVersion = $contentInfo->currentVersionNo;
             $contentObj->locations[] = $locationHandler->create( $locationStruct );
         }
         return $contentObj;
@@ -130,11 +134,13 @@ class ContentHandler implements ContentHandlerInterface
     public function createDraftFromVersion( $contentId, $srcVersion, $userId )
     {
         $content = $this->load( $contentId, $srcVersion );
+        $contentInfo = $content->versionInfo->contentInfo;
         $fields = $content->fields;
+        /** @var \eZ\Publish\SPI\Persistence\Content\VersionInfo $aVersion */
         $aVersion = $this->backend->find(
             'Content\\VersionInfo',
             array(
-                'contentId' => $contentId,
+                '_contentId' => $contentId,
                 'versionNo' => $srcVersion
             )
         );
@@ -150,7 +156,7 @@ class ContentHandler implements ContentHandlerInterface
                 'modificationDate' => $time,
                 'creatorId' => $userId,
                 'creationDate' => $time,
-                'contentId' => $contentId,
+                '_contentId' => $contentId,
                 'status' => VersionInfo::STATUS_DRAFT,
                 'versionNo' => $newVersionNo,
                 'initialLanguageCode' => $content->versionInfo->initialLanguageCode,
@@ -168,6 +174,9 @@ class ContentHandler implements ContentHandlerInterface
                 array( 'versionNo' => $newVersionNo, '_contentId' => $contentId ) + (array)$field
             );
         }
+
+        // set content info back on new version info
+        $content->versionInfo->contentInfo = $contentInfo;
 
         return $content;
     }
@@ -188,26 +197,26 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function copy( $contentId, $versionNo = null )
     {
-        $contentInfo = $this->backend->load( 'Content\\ContentInfo', $contentId );
-        if ( !$contentInfo )
+        $originalContentInfo = $this->backend->load( 'Content\\ContentInfo', $contentId );
+        if ( !$originalContentInfo )
             throw new NotFound( 'Content\\ContentInfo', "contentId: $contentId" );
 
         $time = time();
 
-        $currentVersionNo = isset( $versionNo ) ? $versionNo : $contentInfo->currentVersionNo;
+        $currentVersionNo = isset( $versionNo ) ? $versionNo : $originalContentInfo->currentVersionNo;
         $contentObj = $this->backend->create( 'Content', array( '_currentVersionNo' => $currentVersionNo ) );
-        $contentObj->contentInfo = $this->backend->create(
+        $contentInfo = $this->backend->create(
             'Content\\ContentInfo',
             array(
-                "contentTypeId" => $contentInfo->contentTypeId,
-                "sectionId" => $contentInfo->sectionId,
-                "ownerId" => $contentInfo->ownerId,
+                "contentTypeId" => $originalContentInfo->contentTypeId,
+                "sectionId" => $originalContentInfo->sectionId,
+                "ownerId" => $originalContentInfo->ownerId,
                 "isPublished" => false,
                 "currentVersionNo" => $currentVersionNo,
-                "mainLanguageCode" => $contentInfo->mainLanguageCode,
+                "mainLanguageCode" => $originalContentInfo->mainLanguageCode,
                 "modificationDate" => 0,
                 "publicationDate" => 0,
-                "alwaysAvailable" => $contentInfo->alwaysAvailable
+                "alwaysAvailable" => $originalContentInfo->alwaysAvailable
             )
         );
 
@@ -216,8 +225,8 @@ class ContentHandler implements ContentHandlerInterface
             $this->backend->find(
                 "Content\\VersionInfo",
                 isset( $versionNo ) ?
-                    array( "contentId" => $contentInfo->id, "versionNo" => $versionNo ) :
-                    array( "contentId" => $contentInfo->id )
+                    array( "_contentId" => $originalContentInfo->id, "versionNo" => $versionNo ) :
+                    array( "_contentId" => $originalContentInfo->id )
             ) as $versionInfo )
         {
             $this->backend->create(
@@ -228,7 +237,7 @@ class ContentHandler implements ContentHandlerInterface
                     "modificationDate" => $time,
                     "creatorId" => $versionInfo->creatorId,
                     "creationDate" => $time,
-                    "contentId" => $contentObj->contentInfo->id,
+                    "_contentId" => $contentInfo->id,
                     "initialLanguageCode" => $versionInfo->initialLanguageCode,
                     "languageIds" => $versionInfo->languageIds,
                     "status" => $versionInfo->versionNo === $currentVersionNo ?
@@ -242,14 +251,15 @@ class ContentHandler implements ContentHandlerInterface
         $aVersion = $this->backend->find(
             'Content\\VersionInfo',
             array(
-                'contentId' => $contentObj->contentInfo->id,
+                '_contentId' => $contentInfo->id,
                 'versionNo' => $currentVersionNo
             )
         );
         if ( empty( $aVersion ) )
-            throw new NotFound( "Version", "contentId: {$contentObj->contentInfo->id} // versionNo: $currentVersionNo" );
+            throw new NotFound( "Version", "contentId: {$contentInfo->id} // versionNo: $currentVersionNo" );
 
         $contentObj->versionInfo = $aVersion[0];
+        $contentObj->versionInfo->contentInfo = $contentInfo;
 
         // Copy fields
         // @todo: language support
@@ -258,14 +268,14 @@ class ContentHandler implements ContentHandlerInterface
                 "Content\\Field",
                 // Using internal _contentId since it's not directly exposed by Persistence
                 isset( $versionNo ) ?
-                    array( "_contentId" => $contentInfo->id, "versionNo" => $versionNo ) :
-                    array( "_contentId" => $contentInfo->id )
+                    array( "_contentId" => $originalContentInfo->id, "versionNo" => $versionNo ) :
+                    array( "_contentId" => $originalContentInfo->id )
             ) as $field
         )
         {
             $this->backend->create(
                 'Content\\Field',
-                array( '_contentId' => $contentObj->contentInfo->id ) + (array)$field
+                array( '_contentId' => $contentInfo->id ) + (array)$field
             );
         }
 
@@ -274,7 +284,7 @@ class ContentHandler implements ContentHandlerInterface
         $contentObj->fields = $this->backend->find(
             "Content\\Field",
             array(
-                "_contentId" => $contentObj->contentInfo->id,
+                "_contentId" => $contentInfo->id,
                 "versionNo" => $currentVersionNo
             )
         );
@@ -294,11 +304,6 @@ class ContentHandler implements ContentHandlerInterface
                 'locations' => array(
                     'type' => 'Content\\Location',
                     'match' => array( 'contentId' => 'id' )
-                ),
-                'contentInfo' => array(
-                    'type' => 'Content\\ContentInfo',
-                    'match' => array( 'id' => 'id' ),
-                    'single' => true
                 )
             )
         );
@@ -306,15 +311,28 @@ class ContentHandler implements ContentHandlerInterface
             throw new NotFound( "Content", "contentId:{$id}" );
 
         $content = $res[0];
-        if ( !$content->contentInfo instanceof ContentInfo )
-            throw new NotFound( "Content\\ContentInfo", "contentId:{$id}" );
-
-        $versions = $this->backend->find( 'Content\\VersionInfo', array( 'contentId' => $content->contentInfo->id, 'versionNo' => $version ) );
+        $versions = $this->backend->find(
+            'Content\\VersionInfo',
+            array(
+                '_contentId' => $id,
+                'versionNo' => $version
+            ),
+            array(
+                'contentInfo' => array(
+                    'type' => 'Content\\ContentInfo',
+                    'match' => array( 'id' => '_contentId' ),
+                    'single' => true
+                )
+            )
+        );
         if ( !isset( $versions[0] ) )
             throw new NotFound( "Version", "contentId:{$id}, versionNo:{$version}" );
 
+        if ( !$versions[0]->contentInfo instanceof ContentInfo )
+            throw new NotFound( "Content\\ContentInfo", "contentId:{$id}" );
+
         $fieldMatch = array(
-            "_contentId" => $content->contentInfo->id,
+            "_contentId" => $id,
             "versionNo" => $version
         );
         if ( isset( $translations ) )
@@ -322,7 +340,6 @@ class ContentHandler implements ContentHandlerInterface
         $content->fields = $this->backend->find( 'Content\\Field', $fieldMatch );
 
         $content->versionInfo = $versions[0];
-        $content->locations = $this->backend->find( 'Content\\Location', array( 'contentId' => $content->contentInfo->id ) );
         return $content;
     }
 
@@ -349,18 +366,25 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function loadVersionInfo( $contentId, $versionNo )
     {
-        $versionInfo = $this->backend->find(
+        $versions = $this->backend->find(
             'Content\\VersionInfo',
             array(
-                'contentId' => $contentId,
+                '_contentId' => $contentId,
                 'versionNo' => $versionNo
+            ),
+            array(
+                'contentInfo' => array(
+                    'type' => 'Content\\ContentInfo',
+                    'match' => array( 'id' => '_contentId' ),
+                    'single' => true
+                )
             )
         );
 
-        if ( empty( $versionInfo ) )
+        if ( empty( $versions ) )
             throw new NotFound( "Content\\VersionInfo", "contentId: $contentId, versionNo: $versionNo" );
 
-        return reset( $versionInfo );
+        return reset( $versions );
     }
 
     /**
@@ -369,10 +393,17 @@ class ContentHandler implements ContentHandlerInterface
     public function loadDraftsForUser( $userId )
     {
         return $this->backend->find(
-            "Content\\VersionInfo",
+            'Content\\VersionInfo',
             array(
                 "status" => VersionInfo::STATUS_DRAFT,
                 "creatorId" => $userId
+            ),
+            array(
+                'contentInfo' => array(
+                    'type' => 'Content\\ContentInfo',
+                    'match' => array( 'id' => '_contentId' ),
+                    'single' => true
+                )
             )
         );
     }
@@ -382,7 +413,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function setStatus( $contentId, $status, $version )
     {
-        $versions = $this->backend->find( 'Content\\VersionInfo', array( 'contentId' => $contentId, 'versionNo' => $version ) );
+        $versions = $this->backend->find( 'Content\\VersionInfo', array( '_contentId' => $contentId, 'versionNo' => $version ) );
 
         if ( !count( $versions ) )
         {
@@ -445,7 +476,7 @@ class ContentHandler implements ContentHandlerInterface
 
         $this->backend->updateByMatch(
             "Content\\VersionInfo",
-            array( "contentId" => $contentId, "versionNo" => $versionNo ),
+            array( "_contentId" => $contentId, "versionNo" => $versionNo ),
             $versionUpdateData
         );
 
@@ -482,9 +513,10 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function deleteContent( $contentId )
     {
+        $this->backend->delete( 'Content', $contentId );
         $this->backend->delete( 'Content\\ContentInfo', $contentId );
 
-        $versions = $this->backend->find( 'Content\\VersionInfo', array( 'contentId' => $contentId ) );
+        $versions = $this->backend->find( 'Content\\VersionInfo', array( '_contentId' => $contentId ) );
         foreach ( $versions as $version )
         {
             $fields = $this->backend->find(
@@ -526,7 +558,7 @@ class ContentHandler implements ContentHandlerInterface
         $versions = $this->backend->find(
             'Content\\VersionInfo',
             array(
-                "contentId" => $contentId,
+                "_contentId" => $contentId,
                 "versionNo" => $versionNo
             )
         );
@@ -568,7 +600,19 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function listVersions( $contentId )
     {
-        $versions = $this->backend->find( "Content\\VersionInfo", array( "contentId" => $contentId ) );
+        $versions = $this->backend->find(
+            'Content\\VersionInfo',
+            array(
+                '_contentId' => $contentId
+            ),
+            array(
+                'contentInfo' => array(
+                    'type' => 'Content\\ContentInfo',
+                    'match' => array( 'id' => '_contentId' ),
+                    'single' => true
+                )
+            )
+        );
 
         if ( empty( $versions ) )
             throw new NotFound( "Content\\VersionInfo", "contentId: $contentId" );
@@ -594,7 +638,7 @@ class ContentHandler implements ContentHandlerInterface
         // Ensure source content exists if version is specified
         if ( $relation->sourceContentVersionNo !== null )
         {
-            $version = $this->backend->find( "Content\\VersionInfo", array( "contentId" => $relation->sourceContentId, "versionNo" => $relation->sourceContentVersionNo ) );
+            $version = $this->backend->find( "Content\\VersionInfo", array( "_contentId" => $relation->sourceContentId, "versionNo" => $relation->sourceContentVersionNo ) );
 
             if ( empty( $version ) )
                 throw new NotFound( "Content\\VersionInfo", "contentId: {$relation->sourceContentId}, versionNo: {$relation->sourceContentVersionNo}" );
@@ -743,7 +787,7 @@ class ContentHandler implements ContentHandlerInterface
         // Update VersionInfo with modified timestamp and published status
         $this->backend->updateByMatch(
             'Content\\VersionInfo',
-            array( 'contentId' => $contentId, 'versionNo' => $versionNo ),
+            array( '_contentId' => $contentId, 'versionNo' => $versionNo ),
             array(
                 "modificationDate" => $metaDataUpdateStruct->modificationDate,
                 "status" => VersionInfo::STATUS_PUBLISHED,
@@ -765,7 +809,7 @@ class ContentHandler implements ContentHandlerInterface
         $allVersions = $this->backend->find(
             'Content\\VersionInfo',
             array(
-                'contentId' => $contentId
+                '_contentId' => $contentId
             )
         );
 

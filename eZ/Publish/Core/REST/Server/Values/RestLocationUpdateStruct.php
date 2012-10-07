@@ -10,11 +10,12 @@
 namespace eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
+use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
  * RestLocationUpdateStruct view model
  */
-class RestLocationUpdateStruct
+class RestLocationUpdateStruct extends RestValue
 {
     /**
      * Location update struct

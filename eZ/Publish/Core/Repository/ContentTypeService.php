@@ -26,7 +26,6 @@ use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface,
     eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct as APIContentTypeCreateStruct,
     eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct,
     eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct,
-    eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup,
     eZ\Publish\Core\Repository\Values\ContentType\ContentType,
     eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft,
@@ -81,7 +80,9 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         $this->repository = $repository;
         $this->contentTypeHandler = $contentTypeHandler;
-        $this->settings = $settings;
+        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+            //'defaultSetting' => array(),
+        );
     }
 
     /**
@@ -846,7 +847,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @param int $contentTypeId
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
-     * @todo Use another excpetion when user of draft is someone else
+     * @todo Use another exception when user of draft is someone else
      */
     public function loadContentTypeDraft( $contentTypeId )
     {

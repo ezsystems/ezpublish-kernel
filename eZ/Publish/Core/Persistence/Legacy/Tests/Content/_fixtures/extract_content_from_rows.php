@@ -37,13 +37,6 @@ return array (
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => false,
-    'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' =>
-    array (
-      0 => 2,
-    ),
-    'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
   1 =>
   array (
@@ -81,13 +74,6 @@ return array (
     'ezcontentobject_attribute_sort_key_string' => 'new test article (2)',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => false,
-    'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' =>
-    array (
-      0 => 2,
-    ),
-    'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
   2 =>
   array (
@@ -125,13 +111,6 @@ return array (
     'ezcontentobject_attribute_sort_key_string' => 'something',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => false,
-    'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' =>
-    array (
-      0 => 2,
-    ),
-    'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
   3 =>
   array (
@@ -171,13 +150,6 @@ return array (
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => false,
-    'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' =>
-    array (
-      0 => 2,
-    ),
-    'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
   4 =>
   array (
@@ -217,13 +189,6 @@ return array (
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => false,
-    'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' =>
-    array (
-      0 => 2,
-    ),
-    'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
   5 =>
   array (
@@ -263,13 +228,6 @@ return array (
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => false,
-    'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' =>
-    array (
-      0 => 2,
-    ),
-    'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
   6 =>
   array (
@@ -307,13 +265,6 @@ return array (
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => false,
-    'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' =>
-    array (
-      0 => 2,
-    ),
-    'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
   7 =>
   array (
@@ -353,13 +304,6 @@ return array (
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => false,
-    'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' =>
-    array (
-      0 => 2,
-    ),
-    'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
   8 =>
   array (
@@ -399,13 +343,6 @@ return array (
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => false,
-    'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' =>
-    array (
-      0 => 2,
-    ),
-    'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
   9 =>
   array (
@@ -443,13 +380,6 @@ return array (
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => false,
-    'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' =>
-    array (
-      0 => 2,
-    ),
-    'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
   10 =>
   array (
@@ -487,13 +417,6 @@ return array (
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => false,
-    'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' =>
-    array (
-      0 => 2,
-    ),
-    'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
   11 =>
   array (
@@ -531,13 +454,6 @@ return array (
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => false,
-    'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' =>
-    array (
-      0 => 2,
-    ),
-    'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
   12 =>
   array (
@@ -575,12 +491,5 @@ return array (
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_name_name' => 'Something',
     'ezcontentobject_name_content_translation' => 'eng-US',
-    'ezcontentobject_always_available' => false,
-    'ezcontentobject_main_language_code' => 'eng-US',
-    'ezcontentobject_version_languages' =>
-    array (
-      0 => 2,
-    ),
-    'ezcontentobject_version_initial_language_code' => 'eng-US',
   ),
 );

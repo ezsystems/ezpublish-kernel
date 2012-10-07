@@ -16,7 +16,6 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     eZ\Publish\API\Repository\Values\User\User,
     eZ\Publish\API\Repository\Values\User\Limitation,
     Exception,
-    LogicException,
     RuntimeException;
 
 /**
@@ -236,11 +235,10 @@ class Repository implements RepositoryInterface
      * @param string $module
      * @param string $function
      * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param bool $returnLimitations Return
      *
-     * @return boolean|array Bool if user has full or no access, array if limitations & $returnLimitations = true
+     * @return boolean|array Bool if user has full or no access, array if limitations if not
      */
-    public function hasAccess( $module, $function, User $user = null, $returnLimitations = false )
+    public function hasAccess( $module, $function, User $user = null )
     {
         if ( $user === null )
             $user = $this->getCurrentUser();
@@ -269,8 +267,7 @@ class Repository implements RepositoryInterface
                 if ( $spiPolicy->limitations === '*' && $spiRoleAssignment->limitationIdentifier === null )
                     return true;
 
-                if ( $returnLimitations )
-                    $permissionSet['policies'][] = $roleService->buildDomainPolicyObject( $spiPolicy );
+                $permissionSet['policies'][] = $roleService->buildDomainPolicyObject( $spiPolicy );
             }
 
 
@@ -288,7 +285,7 @@ class Repository implements RepositoryInterface
         if ( !empty( $permissionSets ) )
             return $permissionSets;
 
-        return false;// No policies matching $module and $function, or they contained limitations & !$returnLimitations
+        return false;// No policies matching $module and $function, or they contained limitations
     }
 
     /**
@@ -309,7 +306,7 @@ class Repository implements RepositoryInterface
      */
     public function canUser( $module, $function, ValueObject $object, ValueObject $target = null )
     {
-        $permissionSets = $this->hasAccess( $module, $function, null, true );
+        $permissionSets = $this->hasAccess( $module, $function );
         if ( $permissionSets === false || $permissionSets === true )
         {
             return $permissionSets;

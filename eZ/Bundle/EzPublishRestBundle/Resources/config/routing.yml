@@ -1,0 +1,1043 @@
+# Root resource
+
+
+ezpublish_rest_loadRootResource:
+    pattern: /
+    defaults:
+        _controller: ezpublish_rest.controller.root:loadRootResource
+    requirements:
+        _method: GET
+
+
+# Sections
+
+
+ezpublish_rest_listSections:
+    # @todo fix controller due to GET parameter (/content/sections?identifier={identifier}
+    pattern: /content/sections
+    defaults:
+        _controller: ezpublish_rest.controller.section:listSections
+    requirements:
+        _method: GET
+
+ezpublish_rest_createSection:
+    pattern: /content/sections
+    defaults:
+        _controller: ezpublish_rest.controller.section:createSection
+    requirements:
+        _method: POST
+
+#ezpublish_rest_loadSectionByIdentifier:
+#    @see ezpublish_rest_listSections
+#    pattern: /content/sections
+#    defaults:
+#        _controller: ezpublish_rest.controller.section:listSections
+#    requirements:
+#        _method: GET
+
+ezpublish_rest_loadSection:
+    pattern: /content/sections/{sectionId}
+    defaults:
+        _controller: ezpublish_rest.controller.section:loadSection
+    requirements:
+        _method: GET
+        sectionId: \d+
+
+ezpublish_rest_updateSection:
+    pattern: /content/sections/{sectionId}
+    defaults:
+        _controller: ezpublish_rest.controller.section:updateSection
+    requirements:
+        _method: PATCH
+        sectionId: \d+
+
+ezpublish_rest_deleteSection:
+    pattern: /content/sections/{sectionId}
+    defaults:
+        _controller: ezpublish_rest.controller.section:deleteSection
+    requirements:
+        _method: DELETE
+        sectionId: \d+
+
+
+# Content
+
+
+ezpublish_rest_listContent:
+    # @todo handle ?remoteid= filter in controller method. See loadContentInfoByRemoteId
+    pattern: /content/objects
+    defaults:
+        _controller: ezpublish_rest.controller.content:listContent
+    requirements:
+        _method: GET
+
+ezpublish_rest_createContent:
+    pattern: /content/objects
+    defaults:
+        _controller: ezpublish_rest.controller.content:createContent
+    requirements:
+        _method: POST
+
+ezpublish_rest_updateContentMetadata:
+    pattern: /content/objects/{contentId}
+    defaults:
+        _controller: ezpublish_rest.controller.content:updateContentMetadata
+    requirements:
+        _method: PATCH
+        contentId: \d+
+
+ezpublish_rest_loadContent:
+    # @todo handle ?language= filter in controller method
+    pattern: /content/objects/{contentId}
+    defaults:
+        _controller: ezpublish_rest.controller.content:loadContent
+    requirements:
+        _method: GET
+        contentId: \d+
+
+ezpublish_rest_deleteContent:
+    pattern: /content/objects/{contentId}
+    defaults:
+        _controller: ezpublish_rest.controller.content:deleteContent
+    requirements:
+        _method: DELETE
+        contentId: \d+
+
+ezpublish_rest_copyContent:
+    pattern: /content/objects/{contentId}
+    defaults:
+        _controller: ezpublish_rest.controller.content:copyContent
+    requirements:
+        _method: COPY
+        contentId: \d+
+
+ezpublish_rest_redirectCurrentVersionRelations:
+    pattern: /content/objects/{contentId}/relations
+    defaults:
+        _controller: ezpublish_rest.controller.content:redirectCurrentVersionRelations
+    requirements:
+        _method: GET
+        contentId: \d+
+
+ezpublish_rest_loadContentVersions:
+    pattern: /content/objects/{contentId}/versions
+    defaults:
+        _controller: ezpublish_rest.controller.content:loadContentVersions
+    requirements:
+        _method: GET
+        contentId: \d+
+
+ezpublish_rest_loadVersionRelations:
+    pattern: /content/objects/{contentId}/versions/{versionNumber}/relations
+    defaults:
+        _controller: ezpublish_rest.controller.content:loadVersionRelations
+    requirements:
+        _method: GET
+        contentId: \d+
+        versionNumber: \d+
+
+ezpublish_rest_createRelation:
+    pattern: /content/objects/{contentId}/versions/{versionNumber}/relations
+    defaults:
+        _controller: ezpublish_rest.controller.content:createRelation
+    requirements:
+        _method: POST
+        contentId: \d+
+        versionNumber: \d+
+
+ezpublish_rest_loadVersionRelation:
+    pattern: /content/objects/{contentId}/versions/{versionNumber}/relations/{relationId}
+    defaults:
+        _controller: ezpublish_rest.controller.content:loadVersionRelation
+    requirements:
+        _method: GET
+        contentId: \d+
+        versionNumber: \d+
+        relationId: \d+
+
+ezpublish_rest_removeRelation:
+    pattern: /content/objects/{contentId}/versions/{versionNumber}/relations/{relationId}
+    defaults:
+        _controller: ezpublish_rest.controller.content:removeRelation
+    requirements:
+        _method: DELETE
+        contentId: \d+
+        versionNumber: \d+
+        relationId: \d+
+
+ezpublish_rest_loadContentInVersion:
+    pattern: /content/objects/{contentId}/versions/{versionNumber}
+    defaults:
+        _controller: ezpublish_rest.controller.content:loadContentInVersion
+    requirements:
+        _method: GET
+        contentId: \d+
+        versionNumber: \d+
+
+ezpublish_rest_updateVersion:
+    # @todo Check language GET parameter. Note: should already be covered by the method
+    pattern: /content/objects/{contentId}/versions/{versionNumber}
+    defaults:
+        _controller: ezpublish_rest.controller.content:updateVersion
+    requirements:
+        _method: PATCH
+        contentId: \d+
+        versionNumber: \d+
+
+ezpublish_rest_deleteContentVersion:
+    pattern: /content/objects/{contentId}/versions/{versionNumber}
+    defaults:
+        _controller: ezpublish_rest.controller.content:deleteContentVersion
+    requirements:
+        _method: DELETE
+        contentId: \d+
+        versionNumber: \d+
+
+ezpublish_rest_createDraftFromVersion:
+    pattern: /content/objects/{contentId}/versions/{versionNumber}
+    defaults:
+        _controller: ezpublish_rest.controller.content:createDraftFromVersion
+    requirements:
+        _method: COPY
+        contentId: \d+
+        versionNumber: \d+
+
+ezpublish_rest_publishVersion:
+    pattern: /content/objects/{contentId}/versions/{versionNumber}
+    defaults:
+        _controller: ezpublish_rest.controller.content:publishVersion
+    requirements:
+        _method: PUBLISH
+        contentId: \d+
+        versionNumber: \d+
+
+ezpublish_rest_redirectCurrentVersion:
+    pattern: /content/objects/{contentId}/currentversion
+    defaults:
+        _controller: ezpublish_rest.controller.content:redirectCurrentVersion
+    requirements:
+        _method: GET
+        contentId: \d+
+
+ezpublish_rest_createDraftFromCurrentVersion:
+    pattern: /content/objects/{contentId}/currentversion
+    defaults:
+        _controller: ezpublish_rest.controller.content:createDraftFromCurrentVersion
+    requirements:
+        _method: COPY
+        contentId: \d+
+
+ezpublish_rest_loadLocationsForContent:
+    pattern: /content/objects/{contentId}/locations
+    defaults:
+        _controller: ezpublish_rest.controller.content:loadLocationsForContent
+    requirements:
+        _method: GET
+        contentId: \d+
+
+ezpublish_rest_createLocation:
+    pattern: /content/objects/{contentId}/locations
+    defaults:
+        _controller: ezpublish_rest.controller.content:createLocation
+    requirements:
+        _method: POST
+        contentId: \d+
+
+ezpublish_rest_getObjectStatesForContent:
+    pattern: /content/objects/{contentId}/objectstates
+    defaults:
+        _controller: ezpublish_rest.controller.content:getObjectStatesForContent
+    requirements:
+        _method: GET
+        contentId: \d+
+
+ezpublish_rest_setObjectStatesForContent:
+    pattern: /content/objects/{contentId}/objectstates
+    defaults:
+        _controller: ezpublish_rest.controller.content:setObjectStatesForContent
+    requirements:
+        _method: PATCH
+        contentId: \d+
+
+
+# Views
+
+
+ezpublish_rest_createView:
+    pattern: /content/views
+    defaults:
+        _controller: ezpublish_rest.controller.content:createView
+    requirements:
+        _method: POST
+
+
+# Object states
+
+
+ezpublish_rest_loadObjectStateGroups:
+    pattern: /content/objectstategroups
+    defaults:
+        _controller: ezpublish_rest.controller.object_state:loadObjectStateGroups
+    requirements:
+        _method: GET
+
+ezpublish_rest_createObjectStateGroup:
+    pattern: /content/objectstategroups
+    defaults:
+        _controller: ezpublish_rest.controller.object_state:createObjectStateGroup
+    requirements:
+        _method: POST
+
+ezpublish_rest_loadObjectStateGroup:
+    pattern: /content/objectstategroups/{objectStateGroupId}
+    defaults:
+        _controller: ezpublish_rest.controller.object_state:loadObjectStateGroup
+    requirements:
+        _method: GET
+        objectStateGroupId: \d+
+
+ezpublish_rest_updateObjectStateGroup:
+    pattern: /content/objectstategroups/{objectStateGroupId}
+    defaults:
+        _controller: ezpublish_rest.controller.object_state:updateObjectStateGroup
+    requirements:
+        _method: PATCH
+        objectStateGroupId: \d+
+
+ezpublish_rest_deleteObjectStateGroup:
+    pattern: /content/objectstategroups/{objectStateGroupId}
+    defaults:
+        _controller: ezpublish_rest.controller.object_state:deleteObjectStateGroup
+    requirements:
+        _method: DELETE
+        objectStateGroupId: \d+
+
+ezpublish_rest_loadObjectStates:
+    pattern: /content/objectstategroups/{objectStateGroupId}/objectstates
+    defaults:
+        _controller: ezpublish_rest.controller.object_state:loadObjectStates
+    requirements:
+        _method: GET
+        objectStateGroupId: \d+
+
+ezpublish_rest_createObjectState:
+    pattern: /content/objectstategroups/{objectStateGroupId}/objectstates
+    defaults:
+        _controller: ezpublish_rest.controller.object_state:createObjectState
+    requirements:
+        _method: POST
+        objectStateGroupId: \d+
+
+ezpublish_rest_loadObjectState:
+    pattern: /content/objectstategroups/{objectStateGroupId}/objectstates/{objectStateId}
+    defaults:
+        _controller: ezpublish_rest.controller.object_state:loadObjectState
+    requirements:
+        _method: GET
+        objectStateGroupId: \d+
+        objectStateId: \d+
+
+ezpublish_rest_updateObjectState:
+    pattern: /content/objectstategroups/{objectStateGroupId}/objectstates/{objectStateId}
+    defaults:
+        _controller: ezpublish_rest.controller.object_state:updateObjectState
+    requirements:
+        _method: PATCH
+        objectStateGroupId: \d+
+        objectStateId: \d+
+
+ezpublish_rest_deleteObjectState:
+    pattern: /content/objectstategroups/{objectStateGroupId}/objectstates/{objectStateId}
+    defaults:
+        _controller: ezpublish_rest.controller.object_state:deleteObjectState
+    requirements:
+        _method: DELETE
+        objectStateGroupId: \d+
+        objectStateId: \d+
+
+
+# Locations
+
+
+ezpublish_rest_loadLocationByRemoteId:
+    # @todo Handle GET parameter remoteId. See loadLocationByRemoteId
+    pattern: /content/locations
+    defaults:
+        _controller: ezpublish_rest.controller.location:loadLocationByRemoteId
+    requirements:
+        _method: GET
+
+ezpublish_rest_loadLocation:
+    pattern: /content/locations/{locationPath}
+    defaults:
+        _controller: ezpublish_rest.controller.location:loadLocation
+    requirements:
+        _method: GET
+        locationPath: "[0-9/]+"
+
+ezpublish_rest_updateLocation:
+    pattern: /content/locations/{locationPath}
+    defaults:
+        _controller: ezpublish_rest.controller.location:updateLocation
+    requirements:
+        _method: PATCH
+        locationPath: "[0-9/]+"
+
+ezpublish_rest_deleteSubtree:
+    pattern: /content/locations/{locationPath}
+    defaults:
+        _controller: ezpublish_rest.controller.location:deleteSubtree
+    requirements:
+        _method: DELETE
+        locationPath: "[0-9/]+"
+
+ezpublish_rest_copySubtree:
+    pattern: /content/locations/{locationPath}
+    defaults:
+        _controller: ezpublish_rest.controller.location:copySubtree
+    requirements:
+        _method: COPY
+        locationPath: "[0-9/]+"
+
+ezpublish_rest_moveSubtree:
+    pattern: /content/locations/{locationPath}
+    defaults:
+        _controller: ezpublish_rest.controller.location:moveSubtree
+    requirements:
+        _method: MOVE
+        locationPath: "[0-9/]+"
+
+ezpublish_rest_swapLocation:
+    pattern: /content/locations/{locationPath}
+    defaults:
+        _controller: ezpublish_rest.controller.location:swapLocation
+    requirements:
+        _method: SWAP
+        locationPath: "[0-9/]+"
+
+ezpublish_rest_loadLocationChildren:
+    pattern: /content/locations/{locationPath}/children
+    defaults:
+        _controller: ezpublish_rest.controller.location:loadLocationChildren
+    requirements:
+        _method: GET
+        locationPath: "[0-9/]+"
+
+
+# Content types
+
+
+ezpublish_rest_loadContentTypeGroupList:
+    pattern: /content/typegroups
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:loadContentTypeGroupList
+    requirements:
+        _method: GET
+
+ezpublish_rest_createContentTypeGroup:
+    pattern: /content/typegroups
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:createContentTypeGroup
+    requirements:
+        _method: POST
+
+ezpublish_rest_loadContentTypeGroup:
+    pattern: /content/typegroups/{contentTypeGroupId}
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:loadContentTypeGroup
+    requirements:
+        _method: GET
+        contentTypeGroupId: \d+
+
+ezpublish_rest_updateContentTypeGroup:
+    pattern: /content/typegroups/{contentTypeGroupId}
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:updateContentTypeGroup
+    requirements:
+        _method: PATCH
+        contentTypeGroupId: \d+
+
+ezpublish_rest_deleteContentTypeGroup:
+    pattern: /content/typegroups/{contentTypeGroupId}
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:deleteContentTypeGroup
+    requirements:
+        _method: DELETE
+        contentTypeGroupId: \d+
+
+ezpublish_rest_listContentTypesForGroup:
+    # @todo: Handle an optional publish parameter. Already handled by controller method
+    pattern: /content/typegroups/{contentTypeGroupId}/types
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:listContentTypesForGroup
+    requirements:
+        _method: GET
+        contentTypeGroupId: \d+
+
+ezpublish_rest_createContentType:
+    pattern: /content/typegroups/{contentTypeGroupId}/types
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:createContentType
+    requirements:
+        _method: POST
+        contentTypeGroupId: \d+
+
+ezpublish_rest_listContentTypes:
+    # @todo Check if it is actually implemented
+    # @todo Handle GET parameter identifier. See loadContentTypeByIdentifier
+    # @todo Handle GET parameter remoteId. See loadContentTypeByRemoteId
+    pattern: /content/types
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:listContentTypes
+    requirements:
+        _method: GET
+
+ezpublish_rest_copyContentType:
+    pattern: /content/types/{contentTypeId}
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:copyContentType
+    requirements:
+        _method: COPY
+        contentTypeId: \d+
+
+ezpublish_rest_loadContentType:
+    pattern: /content/types/{contentTypeId}
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:loadContentType
+    requirements:
+        _method: GET
+        contentTypeId: \d+
+
+ezpublish_rest_createContentTypeDraft:
+    pattern: /content/types/{contentTypeId}
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:createContentTypeDraft
+    requirements:
+        _method: POST
+        contentTypeId: \d+
+
+ezpublish_rest_deleteContentType:
+    pattern: /content/types/{contentTypeId}
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:deleteContentType
+    requirements:
+        _method: DELETE
+        contentTypeId: \d+
+
+ezpublish_rest_loadFieldDefinitionList:
+    pattern: /content/types/{contentTypeId}/fieldDefinitions
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:loadFieldDefinitionList
+    requirements:
+        _method: GET
+        contentTypeId: \d+
+
+ezpublish_rest_loadFieldDefinition:
+    pattern: /content/types/{contentTypeId}/fieldDefinitions/{fieldDefinitionId}
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:loadFieldDefinition
+    requirements:
+        _method: GET
+        contentTypeId: \d+
+        fieldDefinitionId: \d+
+
+ezpublish_rest_loadContentTypeDraft:
+    pattern: /content/types/{contentTypeId}/drafts
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:loadContentTypeDraft
+    requirements:
+        _method: GET
+        contentTypeId: \d+
+
+ezpublish_rest_updateContentTypeDraft:
+    pattern: /content/types/{contentTypeId}/drafts
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:updateContentTypeDraft
+    requirements:
+        _method: PATCH
+        contentTypeId: \d+
+
+ezpublish_rest_publishContentTypeDraft:
+    pattern: /content/types/{contentTypeId}/drafts
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:publishContentTypeDraft
+    requirements:
+        _method: PUBLISH
+        contentTypeId: \d+
+
+ezpublish_rest_loadDraftFieldDefinitionList:
+    pattern: /content/types/{contentTypeId}/draft/fieldDefinitions
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:loadDraftFieldDefinitionList
+    requirements:
+        _method: GET
+        contentTypeId: \d+
+
+ezpublish_rest_addFieldDefinition:
+    pattern: /content/types/{contentTypeId}/draft/fieldDefinitions
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:addFieldDefinition
+    requirements:
+        _method: POST
+        contentTypeId: \d+
+
+ezpublish_rest_loadDraftFieldDefinition:
+    pattern: /content/types/{contentTypeId}/draft/fieldDefinitions/{fieldDefinitionId}
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:loadDraftFieldDefinition
+    requirements:
+        _method: GET
+        contentTypeId: \d+
+        fieldDefinitionId: \d+
+
+ezpublish_rest_updateFieldDefinition:
+    pattern: /content/types/{contentTypeId}/draft/fieldDefinitions/{fieldDefinitionId}
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:updateFieldDefinition
+    requirements:
+        _method: PATCH
+        contentTypeId: \d+
+        fieldDefinitionId: \d+
+
+ezpublish_rest_removeFieldDefinition:
+    pattern: /content/types/{contentTypeId}/draft/fieldDefinitions/{fieldDefinitionId}
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:removeFieldDefinition
+    requirements:
+        _method: DELETE
+        contentTypeId: \d+
+        fieldDefinitionId: \d+
+
+ezpublish_rest_loadGroupsOfContentType:
+    pattern: /content/types/{contentTypeId}/groups
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:loadGroupsOfContentType
+    requirements:
+        _method: GET
+        contentTypeId: \d+
+
+ezpublish_rest_linkContentTypeToGroup:
+    # Handle GET parameter group in controller. Most likely already done
+    pattern: /content/types/{contentTypeId}/groups
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:linkContentTypeToGroup
+    requirements:
+        _method: POST
+        contentTypeId: \d+
+
+ezpublish_rest_unlinkContentTypeFromGroup:
+    pattern: /content/types/{contentTypeId}/groups/{contentTypeGroupId}
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:unlinkContentTypeFromGroup
+    requirements:
+        _method: DELETE
+        contentTypeId: \d+
+        contentTypeGroupId: \d+
+
+
+# Trash
+
+
+ezpublish_rest_loadTrashItems:
+    pattern: /content/trash
+    defaults:
+        _controller: ezpublish_rest.controller.trash:loadTrashItems
+    requirements:
+        _method: GET
+
+ezpublish_rest_emptyTrash:
+    pattern: /content/trash
+    defaults:
+        _controller: ezpublish_rest.controller.trash:emptyTrash
+    requirements:
+        _method: DELETE
+
+ezpublish_rest_loadTrashItem:
+    pattern: /content/trash/{trashId}
+    defaults:
+        _controller: ezpublish_rest.controller.trash:loadTrashItem
+    requirements:
+        _method: GET
+        trashId: \d+
+
+ezpublish_rest_deleteTrashItem:
+    pattern: /content/trash/{trashId}
+    defaults:
+        _controller: ezpublish_rest.controller.trash:deleteTrashItem
+    requirements:
+        _method: DELETE
+        trashId: \d+
+
+ezpublish_rest_restoreTrashItem:
+    pattern: /content/trash/{trashId}
+    defaults:
+        _controller: ezpublish_rest.controller.trash:restoreTrashItem
+    requirements:
+        _method: MOVE
+        trashId: \d+
+
+
+# URL wildcards
+
+
+ezpublish_rest_listURLWildcards:
+    pattern: /content/urlwildcards
+    defaults:
+        _controller: ezpublish_rest.controller.url_wildcard:listURLWildcards
+    requirements:
+        _method: GET
+
+ezpublish_rest_createURLWildcard:
+    pattern: /content/urlwildcards
+    defaults:
+        _controller: ezpublish_rest.controller.url_wildcard:createURLWildcard
+    requirements:
+        _method: POST
+
+ezpublish_rest_loadURLWildcard:
+    pattern: /content/urlwildcards/{urlWildcardId}
+    defaults:
+        _controller: ezpublish_rest.controller.url_wildcard:loadURLWildcard
+    requirements:
+        _method: GET
+        urlWildcardId: \d+
+
+ezpublish_rest_deleteURLWildcard:
+    pattern: /content/urlwildcards/{urlWildcardId}
+    defaults:
+        _controller: ezpublish_rest.controller.url_wildcard:deleteURLWildcard
+    requirements:
+        _method: DELETE
+        urlWildcardId: \d+
+
+
+# User policies
+
+
+ezpublish_rest_listPoliciesForUser:
+    # @todo Handle GET parameter userId. See method.
+    pattern: /user/policies
+    defaults:
+        _controller: ezpublish_rest.controller.role:listPoliciesForUser
+    requirements:
+        _method: GET
+
+
+# Roles
+
+
+ezpublish_rest_listRoles:
+    # @todo Handle GET filter "identifier". See method loadRoleByIdentifier
+    pattern: /user/roles
+    defaults:
+        _controller: ezpublish_rest.controller.role:listRoles
+    requirements:
+        _method: GET
+
+ezpublish_rest_createRole:
+    pattern: /user/roles
+    defaults:
+        _controller: ezpublish_rest.controller.role:createRole
+    requirements:
+        _method: POST
+
+ezpublish_rest_loadRole:
+    pattern: /user/roles/{roleId}
+    defaults:
+        _controller: ezpublish_rest.controller.role:loadRole
+    requirements:
+        _method: GET
+        roleId: \d+
+
+ezpublish_rest_updateRole:
+    pattern: /user/roles/{roleId}
+    defaults:
+        _controller: ezpublish_rest.controller.role:updateRole
+    requirements:
+        _method: PATCH
+        roleId: \d+
+
+ezpublish_rest_deleteRole:
+    pattern: /user/roles/{roleId}
+    defaults:
+        _controller: ezpublish_rest.controller.role:deleteRole
+    requirements:
+        _method: DELETE
+        roleId: \d+
+
+ezpublish_rest_loadPolicies:
+    pattern: /user/roles/{roleId}/policies
+    defaults:
+        _controller: ezpublish_rest.controller.role:loadPolicies
+    requirements:
+        _method: GET
+        roleId: \d+
+
+ezpublish_rest_addPolicy:
+    pattern: /user/roles/{roleId}/policies
+    defaults:
+        _controller: ezpublish_rest.controller.role:addPolicy
+    requirements:
+        _method: POST
+        roleId: \d+
+
+ezpublish_rest_deletePolicies:
+    pattern: /user/roles/{roleId}/policies
+    defaults:
+        _controller: ezpublish_rest.controller.role:deletePolicies
+    requirements:
+        _method: DELETE
+        roleId: \d+
+
+ezpublish_rest_loadPolicy:
+    pattern: /user/roles/{roleId}/policies/{policyId}
+    defaults:
+        _controller: ezpublish_rest.controller.role:loadPolicy
+    requirements:
+        _method: GET
+        roleId: \d+
+        policyId: \d+
+
+ezpublish_rest_updatePolicy:
+    pattern: /user/roles/{roleId}/policies/{policyId}
+    defaults:
+        _controller: ezpublish_rest.controller.role:updatePolicy
+    requirements:
+        _method: PATCH
+        roleId: \d+
+        policyId: \d+
+
+ezpublish_rest_deletePolicy:
+    pattern: /user/roles/{roleId}/policies/{policyId}
+    defaults:
+        _controller: ezpublish_rest.controller.role:deletePolicy
+    requirements:
+        _method: DELETE
+        roleId: \d+
+        policyId: \d+
+
+
+# Users
+
+
+ezpublish_rest_loadUsersAssignedToRole:
+    # @todo: Handle all GET parameters
+    pattern: /user/users
+    defaults:
+        _controller: ezpublish_rest.controller.user:loadUsersAssignedToRole
+    requirements:
+        _method: GET
+
+ezpublish_rest_loadUser:
+    pattern: /user/users/{userId}
+    defaults:
+        _controller: ezpublish_rest.controller.user:loadUser
+    requirements:
+        _method: GET
+        userId: \d+
+
+ezpublish_rest_updateUser:
+    pattern: /user/users/{userId}
+    defaults:
+        _controller: ezpublish_rest.controller.user:updateUser
+    requirements:
+        _method: PATCH
+        userId: \d+
+
+ezpublish_rest_deleteUser:
+    pattern: /user/users/{userId}
+    defaults:
+        _controller: ezpublish_rest.controller.user:deleteUser
+    requirements:
+        _method: DELETE
+        userId: \d+
+
+ezpublish_rest_loadUserGroupsOfUser:
+    pattern: /user/users/{userId}/groups
+    defaults:
+        _controller: ezpublish_rest.controller.user:loadUserGroupsOfUser
+    requirements:
+        _method: GET
+        userId: \d+
+
+ezpublish_rest_assignUserToUserGroup:
+    # @todo Handle group GET parameter.
+    pattern: /user/users/{userId}/groups
+    defaults:
+        _controller: ezpublish_rest.controller.user:assignUserToUserGroup
+    requirements:
+        _method: POST
+        userId: \d+
+
+ezpublish_rest_unassignUserFromUserGroup:
+    # @todo Handle group GET parameter.
+    pattern: /user/users/{userId}/groups/{groupId}
+    defaults:
+        _controller: ezpublish_rest.controller.user:unassignUserFromUserGroup
+    requirements:
+        _method: DELETE
+        userId: \d+
+        groupId: \d+
+
+ezpublish_rest_loadUserDrafts:
+    # @todo Handle group GET parameter.
+    pattern: /user/users/{userId}/drafts
+    defaults:
+        _controller: ezpublish_rest.controller.user:loadUserDrafts
+    requirements:
+        _method: GET
+        userId: \d+
+
+ezpublish_rest_loadRoleAssignmentsForUser:
+    pattern: /user/users/{userId}/roles
+    defaults:
+        _controller: ezpublish_rest.controller.role:loadRoleAssignmentsForUser
+    requirements:
+        _method: GET
+        userId: \d+
+
+ezpublish_rest_assignRoleToUser:
+    pattern: /user/users/{userId}/roles
+    defaults:
+        _controller: ezpublish_rest.controller.role:assignRoleToUser
+    requirements:
+        _method: POST
+        userId: \d+
+
+ezpublish_rest_loadRoleAssignmentForUser:
+    pattern: /user/users/{userId}/roles/{roleId}
+    defaults:
+        _controller: ezpublish_rest.controller.role:loadRoleAssignmentForUser
+    requirements:
+        _method: GET
+        userId: \d+
+        roleId: \d+
+
+ezpublish_rest_unassignRoleFromUser:
+    pattern: /user/users/{userId}/roles/{roleId}
+    defaults:
+        _controller: ezpublish_rest.controller.role:unassignRoleFromUser
+    requirements:
+        _method: DELETE
+        userId: \d+
+        roleId: \d+
+
+ezpublish_rest_loadUserGroupsAssignedToRole:
+    # @todo Handle all GET parameters
+    pattern: /user/groups
+    defaults:
+        _controller: ezpublish_rest.controller.user:loadUserGroupsAssignedToRole
+    requirements:
+        _method: GET
+
+ezpublish_rest_loadRootUserGroup:
+    pattern: /user/groups/root
+    defaults:
+        _controller: ezpublish_rest.controller.user:loadRootUserGroup
+    requirements:
+        _method: GET
+
+ezpublish_rest_createRootUserGroup:
+    pattern: /user/groups/subgroups
+    defaults:
+        _controller: ezpublish_rest.controller.user:createUserGroup
+    requirements:
+        _method: POST
+
+ezpublish_rest_loadUserGroup:
+    pattern: /user/groups/{groupId}
+    defaults:
+        _controller: ezpublish_rest.controller.user:loadUserGroup
+    requirements:
+        _method: GET
+        groupId: "[0-9/]+"
+
+ezpublish_rest_updateUserGroup:
+    pattern: /user/groups/{groupId}
+    defaults:
+        _controller: ezpublish_rest.controller.user:updateUserGroup
+    requirements:
+        _method: PATCH
+        groupId: "[0-9/]+"
+
+ezpublish_rest_deleteUserGroup:
+    pattern: /user/groups/{groupId}
+    defaults:
+        _controller: ezpublish_rest.controller.user:deleteUserGroup
+    requirements:
+        _method: DELETE
+        groupId: "[0-9/]+"
+
+ezpublish_rest_moveUserGroup:
+    pattern: /user/groups/{groupId}
+    defaults:
+        _controller: ezpublish_rest.controller.user:moveUserGroup
+    requirements:
+        _method: MOVE
+        groupId: "[0-9/]+"
+
+ezpublish_rest_loadSubUserGroups:
+    pattern: /user/groups/{groupId}/subgroups
+    defaults:
+        _controller: ezpublish_rest.controller.user:loadSubUserGroups
+    requirements:
+        _method: GET
+        groupId: "[0-9/]+"
+
+ezpublish_rest_createUserGroup:
+    pattern: /user/groups/{groupId}/subgroups
+    defaults:
+        _controller: ezpublish_rest.controller.user:createUserGroup
+    requirements:
+        _method: POST
+        groupId: "[0-9/]+"
+
+ezpublish_rest_loadUsersFromGroup:
+    pattern: /user/groups/{groupId}/users
+    defaults:
+        _controller: ezpublish_rest.controller.user:loadUsersFromGroup
+    requirements:
+        _method: GET
+        groupId: "[0-9/]+"
+
+ezpublish_rest_createUser:
+    pattern: /user/groups/{groupId}/users
+    defaults:
+        _controller: ezpublish_rest.controller.user:createUser
+    requirements:
+        _method: POST
+        groupId: "[0-9/]+"
+
+ezpublish_rest_loadRoleAssignmentsForUserGroup:
+    pattern: /user/groups/{groupId}/roles
+    defaults:
+        _controller: ezpublish_rest.controller.role:loadRoleAssignmentsForUserGroup
+    requirements:
+        _method: GET
+        groupId: "[0-9/]+"
+
+ezpublish_rest_assignRoleToUserGroup:
+    pattern: /user/groups/{groupId}/roles
+    defaults:
+        _controller: ezpublish_rest.controller.role:assignRoleToUserGroup
+    requirements:
+        _method: POST
+        groupId: "[0-9/]+"
+
+ezpublish_rest_loadRoleAssignmentForUserGroup:
+    pattern: /user/groups/{groupId}/roles/{roleId}
+    defaults:
+        _controller: ezpublish_rest.controller.role:loadRoleAssignmentForUserGroup
+    requirements:
+        _method: GET
+        groupId: "[0-9/]+"
+        roleId: \d+
+
+ezpublish_rest_unassignRoleFromUserGroup:
+    pattern: /user/groups/{groupId}/roles/{roleId}
+    defaults:
+        _controller: ezpublish_rest.controller.role:unassignRoleFromUserGroup
+    requirements:
+        _method: DELETE
+        groupId: "[0-9/]+"
+        roleId: \d+

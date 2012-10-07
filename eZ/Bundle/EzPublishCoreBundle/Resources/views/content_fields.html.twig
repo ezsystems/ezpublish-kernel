@@ -27,7 +27,7 @@
 
 {% block ezxmltext_field %}
 {% spaceless %}
-    {% set field_value = field.value|xmltext_to_html5 %}
+    {% set field_value = field.value.text|xmltext_to_html5 %}
     {{ block( 'simple_block_field' ) }}
 {% endspaceless %}
 {% endblock %}

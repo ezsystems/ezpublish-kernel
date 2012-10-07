@@ -87,7 +87,7 @@ class LegacyStorage extends Gateway
                 $selectQuery->expr->lAnd(
                     $selectQuery->expr->eq(
                         $connection->quoteColumn( 'contentobject_id' ),
-                        $selectQuery->bindValue( $versionInfo->contentId )
+                        $selectQuery->bindValue( $versionInfo->contentInfo->id )
                     ),
                     $selectQuery->expr->eq(
                         $connection->quoteColumn( 'contentobject_version' ),

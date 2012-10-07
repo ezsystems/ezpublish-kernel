@@ -193,13 +193,13 @@ class EzcDatabase extends Gateway
     /**
      * Inserts a new version.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Version $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
-     * @param boolean $alwaysAvailable
      * @return int ID
      */
-    public function insertVersion( VersionInfo $versionInfo, array $fields, $alwaysAvailable )
+    public function insertVersion( VersionInfo $versionInfo, array $fields )
     {
+        /** @var $q \ezcQueryInsert */
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
             $this->dbHandler->quoteTable( 'ezcontentobject_version' )
@@ -226,7 +226,7 @@ class EzcDatabase extends Gateway
             $q->bindValue( $this->languageHandler->loadByLanguageCode( $versionInfo->initialLanguageCode )->id, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'contentobject_id' ),
-            $q->bindValue( $versionInfo->contentId, null, \PDO::PARAM_INT )
+            $q->bindValue( $versionInfo->contentInfo->id, null, \PDO::PARAM_INT )
         )->set(
             // As described in field mapping document
             $this->dbHandler->quoteColumn( 'workflow_event_pos' ),
@@ -235,7 +235,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'language_mask' ),
             $q->bindValue(
                 $this->generateLanguageMask(
-                    $fields, $alwaysAvailable
+                    $fields, $versionInfo->contentInfo->alwaysAvailable
                 ),
                 null,
                 \PDO::PARAM_INT
@@ -367,7 +367,7 @@ class EzcDatabase extends Gateway
      *
      * @param int $contentId
      * @param bool $newAlwaysAvailable New "always available" value
-     * @todo This needs to be done within a transaction
+     * @todo fix storing composite mask to ezcontentobject_name.language_id
      */
     public function updateAlwaysAvailableFlag( $contentId, $newAlwaysAvailable )
     {
@@ -457,6 +457,7 @@ class EzcDatabase extends Gateway
      * @param int $contentId
      * @return array
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException Thrown if content cannot be found
+     * @todo remove
      */
     private function getLanguageMaskInfo( $contentId )
     {
@@ -465,8 +466,8 @@ class EzcDatabase extends Gateway
             'current_version' => (int)$row['current_version'],
             'language_mask' => $row['language_mask'],
             'initial_language_id' => (int)$row['initial_language_id'],
-            'main_language_code' => $row['main_language_code'],
-            'always_available' => $row['always_available']
+            //'main_language_code' => $row['main_language_code'],
+            'always_available' => (int)$row['language_mask'] & 1
         );
     }
 
@@ -606,7 +607,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
         )->set(
             $this->dbHandler->quoteColumn( 'contentobject_id' ),
-            $q->bindValue( $content->contentInfo->id, null, \PDO::PARAM_INT )
+            $q->bindValue( $content->versionInfo->contentInfo->id, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
             $q->bindValue( $field->fieldDefinitionId, null, \PDO::PARAM_INT )
@@ -641,7 +642,7 @@ class EzcDatabase extends Gateway
             $q->bindValue(
                 $this->languageMaskGenerator->generateLanguageIndicator(
                     $field->languageCode,
-                    $content->contentInfo->alwaysAvailable
+                    $content->versionInfo->contentInfo->alwaysAvailable
                 ),
                 null,
                 \PDO::PARAM_INT
@@ -771,17 +772,7 @@ class EzcDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        $rows = array();
-        while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
-        {
-            $row['ezcontentobject_always_available'] = $this->languageMaskGenerator->isAlwaysAvailable( $row['ezcontentobject_language_mask'] );
-            $row['ezcontentobject_main_language_code'] = $this->languageHandler->load( $row['ezcontentobject_initial_language_id'] )->languageCode;
-            $row['ezcontentobject_version_languages'] = $this->languageMaskGenerator->extractLanguageIdsFromMask( $row['ezcontentobject_version_language_mask'] );
-            $row['ezcontentobject_version_initial_language_code'] = $this->languageHandler->load( $row['ezcontentobject_version_initial_language_id'] )->languageCode;
-            $rows[] = $row;
-        }
-
-        return $rows;
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
     }
 
     /**
@@ -798,7 +789,7 @@ class EzcDatabase extends Gateway
             $query->expr->lAnd(
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
-                    $query->bindValue( $contentId )
+                    $query->bindValue( $contentId, null, \PDO::PARAM_INT )
                 ),
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' ),
@@ -809,17 +800,7 @@ class EzcDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        $rows = array();
-        while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
-        {
-            $row['ezcontentobject_always_available'] = $this->languageMaskGenerator->isAlwaysAvailable( $row['ezcontentobject_version_language_mask'] );
-            $row['ezcontentobject_main_language_code'] = $this->languageHandler->load( $row['ezcontentobject_initial_language_id'] )->languageCode;
-            $row['ezcontentobject_version_languages'] = $this->languageMaskGenerator->extractLanguageIdsFromMask( $row['ezcontentobject_version_language_mask'] );
-            $row['ezcontentobject_version_initial_language_code'] = $this->languageHandler->load( $row['ezcontentobject_version_initial_language_id'] )->languageCode;
-            $rows[] = $row;
-        }
-
-        return $rows;
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
     }
 
     /**
@@ -834,26 +815,41 @@ class EzcDatabase extends Gateway
      */
     public function loadContentInfo( $contentId )
     {
-        $q = $this->dbHandler->createSelectQuery();
-        $q
-            ->select( '*' )
-            ->from( $this->dbHandler->quoteTable( 'ezcontentobject' ) )
-            ->where(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn( 'id' ),
-                    $q->bindValue( $contentId )
+        /** @var $query \ezcQuerySelect */
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            "ezcontentobject.*",
+            $this->dbHandler->aliasedColumn( $query, 'main_node_id', 'ezcontentobject_tree' )
+        )->from(
+            $this->dbHandler->quoteTable( "ezcontentobject" )
+        )->leftJoin(
+            $this->dbHandler->quoteTable( "ezcontentobject_tree" ),
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "contentobject_id", "ezcontentobject_tree" ),
+                    $this->dbHandler->quoteColumn( "id", "ezcontentobject" )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "main_node_id", "ezcontentobject_tree" ),
+                    $this->dbHandler->quoteColumn( "node_id", "ezcontentobject_tree" )
                 )
-            );
-        $stmt = $q->prepare();
-        $stmt->execute();
-        $rows = $stmt->fetchAll( \PDO::FETCH_ASSOC );
-        if ( empty( $rows ) )
-            throw new NotFound( 'content', $contentId );
+            )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( "id" ),
+                $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+            )
+        );
+        $statement = $query->prepare();
+        $statement->execute();
+        $row = $statement->fetch( \PDO::FETCH_ASSOC );
 
-        $contentInfo = $rows[0];
-        $contentInfo['always_available'] = $this->languageMaskGenerator->isAlwaysAvailable( $contentInfo['language_mask'] );
-        $contentInfo['main_language_code'] = $this->languageHandler->load( $contentInfo['initial_language_id'] )->languageCode;
-        return $contentInfo;
+        if ( empty( $row ) )
+        {
+            throw new NotFound( "content", $contentId );
+        }
+
+        return $row;
     }
 
     /**
@@ -870,57 +866,23 @@ class EzcDatabase extends Gateway
      */
     public function loadVersionInfo( $contentId, $versionNo )
     {
-        $q = $this->dbHandler->createSelectQuery();
-        $q
-            ->select( '*' )
-            ->from( $this->dbHandler->quoteTable( 'ezcontentobject_version' ) )
-            ->where(
-                $q->expr->lAnd(
-                    $q->expr->eq(
-                        $this->dbHandler->quoteColumn( 'contentobject_id' ),
-                        $q->bindValue( $contentId )
-                    ),
-                    $q->expr->eq(
-                        $this->dbHandler->quoteColumn( 'version' ),
-                        $q->bindValue( $versionNo )
-                    )
+        $query = $this->queryBuilder->createVersionInfoFindQuery();
+        $query->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'ezcontentobject_version_contentobject_id' ),
+                    $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'ezcontentobject_version_version' ),
+                    $query->bindValue( $versionNo, null, \PDO::PARAM_INT )
                 )
-            );
-        $stmt = $q->prepare();
-        $stmt->execute();
-        $rows = $stmt->fetchAll( \PDO::FETCH_ASSOC );
-        if ( empty( $rows ) )
-            throw new NotFound( 'content', $contentId );
-        $row = $rows[0];
+            )
+        );
+        $statement = $query->prepare();
+        $statement->execute();
 
-        // Now load content object names
-        $qName = $this->dbHandler->createSelectQuery();
-        $qName
-            ->select( '*' )
-            ->from( $this->dbHandler->quoteTable( 'ezcontentobject_name' ) )
-            ->where(
-                $qName->expr->lAnd(
-                    $qName->expr->eq(
-                            $this->dbHandler->quoteColumn( 'contentobject_id' ),
-                        $qName->bindValue( $contentId )
-                        ),
-                    $qName->expr->eq(
-                            $this->dbHandler->quoteColumn( 'content_version' ),
-                        $qName->bindValue( $versionNo )
-                        )
-                    )
-                );
-        $stmt = $qName->prepare();
-        $stmt->execute();
-        $row['names'] = $stmt->fetchAll( \PDO::FETCH_ASSOC );
-
-        // Get languages for version
-        $row['languages'] = $this->languageMaskGenerator->extractLanguageIdsFromMask( $row['language_mask'] );
-
-        // Get initial language code
-        $row['initial_language_code'] = $this->languageHandler->load( $row['initial_language_id'] )->languageCode;
-
-        return $row;
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
     }
 
     /**
@@ -933,7 +895,7 @@ class EzcDatabase extends Gateway
      */
     public function listVersionsForUser( $userId, $status = VersionInfo::STATUS_DRAFT )
     {
-        $query = $this->queryBuilder->createVersionFindQuery();
+        $query = $this->queryBuilder->createVersionInfoFindQuery();
         $query->where(
             $query->expr->lAnd(
                 $query->expr->eq(
@@ -946,8 +908,7 @@ class EzcDatabase extends Gateway
                 )
             )
         )->groupBy(
-            $this->dbHandler->quoteColumn( 'id', 'ezcontentobject_version' ),
-            $this->dbHandler->quoteColumn( 'language_code', 'ezcontentobject_attribute' )
+            $this->dbHandler->quoteColumn( 'id', 'ezcontentobject_version' )
         );
 
         $statement = $query->prepare();
@@ -964,15 +925,14 @@ class EzcDatabase extends Gateway
      */
     public function listVersions( $contentId )
     {
-        $query = $this->queryBuilder->createVersionFindQuery();
+        $query = $this->queryBuilder->createVersionInfoFindQuery();
         $query->where(
             $query->expr->eq(
                 $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' ),
                 $query->bindValue( $contentId, null, \PDO::PARAM_INT )
             )
         )->groupBy(
-            $this->dbHandler->quoteColumn( 'id', 'ezcontentobject_version' ),
-            $this->dbHandler->quoteColumn( 'language_code', 'ezcontentobject_attribute' )
+            $this->dbHandler->quoteColumn( 'id', 'ezcontentobject_version' )
         );
 
         $statement = $query->prepare();

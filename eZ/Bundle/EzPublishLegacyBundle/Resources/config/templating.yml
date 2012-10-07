@@ -13,12 +13,10 @@ services:
 
     ezpublish_legacy.templating.generic_converter:
         class: %ezpublish_legacy.templating.generic_converter.class%
-        public: false
 
     ezpublish_legacy.templating.delegating_converter:
         class: %ezpublish_legacy.templating.delegating_converter.class%
         arguments: [@ezpublish_legacy.templating.generic_converter]
-        public: false
 
     ezpublish_legacy.templating.object_converter:
         alias: ezpublish_legacy.templating.delegating_converter
@@ -29,5 +27,4 @@ services:
         tags:
             - {name: ezpublish_legacy.templating.converter, for: %ezpublish.api.content.class%}
             - {name: ezpublish_legacy.templating.converter, for: %ezpublish.api.location.class%}
-        public: false
 

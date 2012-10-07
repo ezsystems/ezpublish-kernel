@@ -13,7 +13,9 @@ use eZ\Publish\Core\MVC\Symfony\Controller\Controller,
     eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager,
     eZ\Publish\Core\MVC\Symfony\MVCEvents,
     eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent,
-    Symfony\Component\HttpFoundation\Response;
+    eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute,
+    Symfony\Component\HttpFoundation\Response,
+    Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ViewController extends Controller
 {
@@ -33,21 +35,24 @@ class ViewController extends Controller
      *
      * @param int $locationId
      * @param string $viewType
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @throws \Exception
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function viewLocation( $locationId, $viewType )
     {
+        if ( !$this->isGranted( new AuthorizationAttribute( 'content', 'read' ) ) )
+            throw new AccessDeniedException();
+
         $response = new Response();
         $request = $this->getRequest();
-        $repository = $this->getRepository();
         // TODO: Use a dedicated etag generator, generating a hash instead of plain text
         $etag = "ezpublish-location-$locationId-$viewType";
 
         try
         {
             // Assume that location is cached by the repository
-            $location = $repository->getLocationService()->loadLocation( $locationId );
+            $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
 
             if ( $this->getParameter( 'content.view_cache' ) === true )
             {
@@ -70,14 +75,7 @@ class ViewController extends Controller
                 }
             }
 
-            $response->setContent(
-                $this->viewManager->renderLocation(
-                    $location,
-                    $repository
-                        ->getContentService()
-                        ->loadContentByContentInfo( $location->getContentInfo() )
-                )
-            );
+            $response->setContent( $this->viewManager->renderLocation( $location ) );
 
             return $response;
         }
