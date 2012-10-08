@@ -340,6 +340,16 @@ class ContentHandler implements ContentHandlerInterface
         $content->fields = $this->backend->find( 'Content\\Field', $fieldMatch );
 
         $content->versionInfo = $versions[0];
+
+        $locations = $this->backend->find(
+            'Content\\Location',
+            array( 'contentId' => $content->versionInfo->contentInfo->id )
+        );
+        if ( !empty( $locations ) )
+        {
+            $content->versionInfo->contentInfo->mainLocationId = $locations[0]->mainLocationId;
+        }
+
         return $content;
     }
 
@@ -351,7 +361,17 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function loadContentInfo( $contentId )
     {
-        return $this->backend->load( 'Content\\ContentInfo', $contentId );
+        $contentInfo = $this->backend->load( 'Content\\ContentInfo', $contentId );
+        $locations = $this->backend->find(
+            'Content\\Location',
+            array( 'contentId' => $contentInfo->id )
+        );
+        if ( !empty( $locations ) )
+        {
+            $contentInfo->mainLocationId = $locations[0]->mainLocationId;
+        }
+
+        return $contentInfo;
     }
 
     /**
@@ -366,7 +386,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function loadVersionInfo( $contentId, $versionNo )
     {
-        $versions = $this->backend->find(
+        $versionInfoList = $this->backend->find(
             'Content\\VersionInfo',
             array(
                 '_contentId' => $contentId,
@@ -381,10 +401,20 @@ class ContentHandler implements ContentHandlerInterface
             )
         );
 
-        if ( empty( $versions ) )
+        if ( empty( $versionInfoList ) )
             throw new NotFound( "Content\\VersionInfo", "contentId: $contentId, versionNo: $versionNo" );
 
-        return reset( $versions );
+        $versionInfo = reset( $versionInfoList );
+        $locations = $this->backend->find(
+            'Content\\Location',
+            array( 'contentId' => $contentId )
+        );
+        if ( !empty( $locations ) )
+        {
+            $versionInfo->contentInfo->mainLocationId = $locations[0]->mainLocationId;
+        }
+
+        return $versionInfo;
     }
 
     /**
@@ -392,7 +422,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function loadDraftsForUser( $userId )
     {
-        return $this->backend->find(
+        $versionInfoList = $this->backend->find(
             'Content\\VersionInfo',
             array(
                 "status" => VersionInfo::STATUS_DRAFT,
@@ -406,6 +436,20 @@ class ContentHandler implements ContentHandlerInterface
                 )
             )
         );
+
+        foreach ( $versionInfoList as $versionInfo )
+        {
+            $locations = $this->backend->find(
+                'Content\\Location',
+                array( 'contentId' => $versionInfo->contentInfo->id )
+            );
+            if ( !empty( $locations ) )
+            {
+                $versionInfo->contentInfo->mainLocationId = $locations[0]->mainLocationId;
+            }
+        }
+
+        return $versionInfoList;
     }
 
     /**

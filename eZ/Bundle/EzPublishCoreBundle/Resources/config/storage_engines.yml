@@ -26,7 +26,7 @@ parameters:
     ezpublish.fieldType.ezbinaryfile.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\BinaryFile
     ezpublish.fieldType.ezbinaryfile.storage_gateway.class: eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezboolean.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Checkbox
-    #ezpublish.fieldType.ezcountry.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country
+    ezpublish.fieldType.ezcountry.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country
     ezpublish.fieldType.ezdatetime.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime
     ezpublish.fieldType.ezemail.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\EmailAddress
     ezpublish.fieldType.ezfloat.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Float
@@ -113,6 +113,11 @@ services:
         class: %ezpublish.fieldType.ezboolean.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezboolean, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezcountry.converter:
+        class: %ezpublish.fieldType.ezcountry.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezcountry, lazy: true, callback: '::create'}
 
     ezpublish.fieldType.ezdatetime.converter:
         class: %ezpublish.fieldType.ezdatetime.converter.class%

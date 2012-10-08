@@ -90,7 +90,7 @@ services:
 
     ezpublish_legacy.content_exception_handler:
         class: %ezpublish_legacy.content_exception_handler.class%
-        arguments: [@ezpublish_legacy.content_view_provider, @?logger]
+        arguments: [@ezpublish_legacy.content_view_provider, @ezpublish_legacy.location_view_provider, @?logger]
         tags:
             - { name: kernel.event_subscriber }
 
