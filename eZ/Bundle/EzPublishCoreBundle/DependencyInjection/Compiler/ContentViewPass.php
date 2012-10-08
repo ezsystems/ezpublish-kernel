@@ -41,7 +41,7 @@ class ContentViewPass implements CompilerPassInterface
                 $priority = -255;
 
             $viewManagerDef->addMethodCall(
-                'addViewProvider',
+                'addContentViewProvider',
                 array(
                      new Reference( $id ),
                      $priority
