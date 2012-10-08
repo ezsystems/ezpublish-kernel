@@ -16,6 +16,7 @@ parameters:
     ezpublish.fieldType.ezkeyword.externalStorage.class: eZ\Publish\Core\FieldType\Keyword\KeywordStorage
     ezpublish.fieldType.ezmedia.class: eZ\Publish\Core\FieldType\Media\Type
     ezpublish.fieldType.ezmedia.externalStorage.class: eZ\Publish\Core\FieldType\Media\MediaStorage
+    ezpublish.fieldType.ezobjectrelation.class: eZ\Publish\Core\FieldType\Relation\Type
     ezpublish.fieldType.ezsrrating.class: eZ\Publish\Core\FieldType\Rating\Type
     ezpublish.fieldType.ezselection.class: eZ\Publish\Core\FieldType\Selection\Type
     ezpublish.fieldType.eztext.class: eZ\Publish\Core\FieldType\TextBlock\Type
@@ -144,6 +145,12 @@ services:
         class: %ezpublish.fieldType.ezmedia.externalStorage.class%
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezmedia}
+
+    ezpublish.fieldType.ezobjectrelation:
+        class: %ezpublish.fieldType.ezobjectrelation.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezobjectrelation}
 
     ezpublish.fieldType.ezsrrating:
         class: %ezpublish.fieldType.ezsrrating.class%

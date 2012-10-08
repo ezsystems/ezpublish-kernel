@@ -36,6 +36,7 @@ parameters:
     ezpublish.fieldType.ezkeyword.storage_gateway.class: eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezmedia.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Media
     ezpublish.fieldType.ezmedia.storage_gateway.class: eZ\Publish\Core\FieldType\Media\MediaStorage\Gateway\LegacyStorage
+    ezpublish.fieldType.ezobjectrelation.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Relation
     #ezpublish.fieldType.ezobjectrelationlist.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ObjectRelationList
     ezpublish.fieldType.ezselection.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection
     ezpublish.fieldType.ezstring.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
@@ -212,6 +213,11 @@ services:
         class: %ezpublish.fieldType.ezcomcomments.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezcomcomments, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezobjectrelation.converter:
+        class: %ezpublish.fieldType.ezobjectrelation.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezobjectrelation, lazy: true, callback: '::create'}
 
     ezpublish.fieldType.ezobjectrelationlist.converter:
         class: %ezpublish.fieldType.ezobjectrelationlist.converter.class%
