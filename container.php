@@ -16,14 +16,13 @@ if ( !isset( $_ENV['SYMFONY__ez_publish_legacy__root_dir'] ) )
     if ( strpos( $dir, '/vendor/ezsystems/ezpublish' ) !== false )
     {
         // eZ Publish 5 context
-        $_ENV['SYMFONY__ez_publish_legacy__root_dir'] =
-            str_replace( '/vendor/ezsystems/ezpublish', '', $dir ) .
-            '/app/ezpublish_legacy';
+        putenv ( 'SYMFONY__ez_publish_legacy__root_dir=' .
+            str_replace( '/vendor/ezsystems/ezpublish', '', $dir ) . '/app/ezpublish_legacy' );
     }
     else
     {
         // API context (unit testing)
-        $_ENV['SYMFONY__ez_publish_legacy__root_dir'] = $dir . '/vendor/ezsystems/ezpublish-legacy';
+        putenv ( 'SYMFONY__ez_publish_legacy__root_dir=' . $dir . '/vendor/ezsystems/ezpublish-legacy' );
     }
 }
 
