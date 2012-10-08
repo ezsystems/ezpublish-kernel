@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured,
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Content\Configured,
     eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher,
     eZ\Publish\API\Repository\Values\Content\Location;
 
@@ -18,9 +18,9 @@ class ConfiguredTest extends BaseTest
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testGetViewForLocationWrongMatcher()
+    public function testGetViewWrongMatcher()
     {
-        $cvp = $this->getPartiallyMockedContentViewProvider(
+        $lvp = $this->getPartiallyMockedLocationViewProvider(
             array(
                  'full' => array(
                      'failingMatchBlock' => array(
@@ -32,14 +32,14 @@ class ConfiguredTest extends BaseTest
                  )
             )
         );
-        $cvp
+        $lvp
             ->expects( $this->once() )
             ->method( 'getMatcher' )
             ->with( 'wrongMatcher' )
             ->will( $this->returnValue( new \stdClass() ) )
         ;
 
-        $cvp->getViewForLocation(
+        $lvp->getView(
             $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' ),
             'full'
         );
@@ -47,19 +47,19 @@ class ConfiguredTest extends BaseTest
 
     /**
      * @param \PHPUnit_Framework_MockObject_MockObject[] $matchers
-     * @param array $locationMatchingConfig
+     * @param array $matchingConfig
      * @param bool $match
      *
      * @return void
-     * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured::getViewForLocation
+     * @covers eZ\Publish\Core\MVC\Symfony\View\Provider\Content\Configured::__construct
+     * @covers eZ\Publish\Core\MVC\Symfony\View\Provider\Content\Configured::getView
      *
-     * @dataProvider getViewForLocationProvider
+     * @dataProvider getViewLocationProvider
      */
-    public function testGetViewForLocation( array $matchers, array $locationMatchingConfig, $match )
+    public function testGetViewLocation( array $matchers, array $matchingConfig, $match )
     {
-        $cvp = $this->getPartiallyMockedContentViewProvider( $locationMatchingConfig );
-        $cvp
+        $lvp = $this->getPartiallyMockedLocationViewProvider( $matchingConfig );
+        $lvp
             ->expects(
                 $this->exactly( count( $matchers ) )
             )
@@ -71,7 +71,7 @@ class ConfiguredTest extends BaseTest
             )
         ;
 
-        $contentView = $cvp->getViewForLocation(
+        $contentView = $lvp->getView(
             $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' ),
             'full'
         );
@@ -87,7 +87,7 @@ class ConfiguredTest extends BaseTest
      *
      * @return array
      */
-    public function getViewForLocationProvider()
+    public function getViewLocationProvider()
     {
         $arguments = array();
         for ( $i = 0; $i < 10; ++$i )
