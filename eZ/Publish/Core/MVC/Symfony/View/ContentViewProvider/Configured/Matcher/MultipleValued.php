@@ -13,7 +13,7 @@ use eZ\Publish\Core\MVC\RepositoryAware,
     eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher;
 
 /**
- * Abstract class for basic matchers to be used with ContentViewProvider\Configured, accepting multiple values to match against.
+ * Abstract class for basic matchers to be used with View\Provider\Content\Configured, accepting multiple values to match against.
  */
 abstract class MultipleValued extends RepositoryAware implements Matcher
 {

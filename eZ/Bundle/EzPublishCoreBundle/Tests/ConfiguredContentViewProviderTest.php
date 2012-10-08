@@ -11,9 +11,9 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest,
     eZ\Publish\Core\MVC\Symfony\SiteAccess,
-    eZ\Bundle\EzPublishCoreBundle\View\ContentViewProvider\Configured;
+    eZ\Bundle\EzPublishCoreBundle\View\Provider\Location\Configured;
 
-class ConfiguredContentViewProviderTest extends BaseTest
+class ConfiguredLocationViewProviderTest extends BaseTest
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
@@ -27,8 +27,8 @@ class ConfiguredContentViewProviderTest extends BaseTest
     }
 
     /**
-     * @covers \eZ\Bundle\EzPublishCoreBundle\View\ContentViewProvider\Configured::__construct
-     * @covers \eZ\Bundle\EzPublishCoreBundle\View\ContentViewProvider\Configured::getMatcher
+     * @covers \eZ\Bundle\EzPublishCoreBundle\View\Provider\Location\Configured::__construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\View\Provider\Location\Configured::getMatcher
      */
     public function testGetMatcherForLocation()
     {
@@ -51,8 +51,8 @@ class ConfiguredContentViewProviderTest extends BaseTest
         ;
 
         $resolverMock = $this->getResolverMock( $matcherServiceIdentifier );
-        $cvp = new Configured( $resolverMock, $this->repositoryMock, $container );
-        $cvp->getViewForLocation(
+        $lvp = new Configured( $resolverMock, $this->repositoryMock, $container );
+        $lvp->getView(
             $this->getLocationMock(),
             'full'
         );

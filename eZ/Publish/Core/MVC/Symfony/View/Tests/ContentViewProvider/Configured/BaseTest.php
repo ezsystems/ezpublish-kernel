@@ -23,19 +23,17 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $locationMatchingConfig
-     * @param array $contentMatchingConfig
+     * @param array $matchingConfig
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getPartiallyMockedContentViewProvider( array $locationMatchingConfig = array(), $contentMatchingConfig = array() )
+    protected function getPartiallyMockedLocationViewProvider( array $matchingConfig = array() )
     {
         return $this
-            ->getMockBuilder( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentViewProvider\\Configured' )
+            ->getMockBuilder( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\Provider\\Location\\Configured' )
             ->setConstructorArgs(
                 array(
                     $this->repositoryMock,
-                    $locationMatchingConfig,
-                    $contentMatchingConfig
+                    $matchingConfig
                 )
             )
             ->setMethods( array( 'getMatcher' ) )
