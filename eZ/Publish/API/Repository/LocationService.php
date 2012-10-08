@@ -69,6 +69,9 @@ interface LocationService
     /**
      * loads the main location of a content object
      *
+     * @deprecated
+     * @todo This method will be removed, use ContentInfo::mainLocationId
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if there is no published version yet
      *

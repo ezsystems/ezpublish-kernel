@@ -51,20 +51,29 @@ class Provider implements APIUserProviderInterface
     }
 
     /**
-     * Loads the user for the given username.
-     * $username actually represents the user ID, not the user login.
+     * Loads the user for the given user ID.
+     * $user can be either the user ID or an instance of \eZ\Publish\Core\MVC\Symfony\Security\User
+     * (anonymous user we try to check access via SecurityContext::isGranted())
      *
-     * @param string $userId The user ID. A value of -1 represents an anonymous user.
+     * @param string|\eZ\Publish\Core\MVC\Symfony\Security\User $user Either the user ID to load an instance of User object. A value of -1 represents an anonymous user.
      * @return \Symfony\Component\Security\Core\User\UserInterface
      * @throws UsernameNotFoundException if the user is not found
      *
      */
-    public function loadUserByUsername( $userId )
+    public function loadUserByUsername( $user )
     {
         try
         {
-            $apiUser = $userId != -1 ? $this->getUserService()->loadUser( $userId ) : $this->getUserService()->loadAnonymousUser();
-            return new User( $apiUser );
+            // SecurityContext always tries to authenticate anonymous users when checking granted access.
+            // In that case $user is an instance of \eZ\Publish\Core\MVC\Symfony\Security\User.
+            // We don't need to reload the user here.
+            if ( $user instanceof User )
+                return $user;
+
+            $isLoggedIn = $user != -1;
+            $apiUser = $isLoggedIn ? $this->getUserService()->loadUser( $user ) : $this->getUserService()->loadAnonymousUser();
+            $roles = $isLoggedIn ? array( 'ROLE_USER' ) : array();
+            return new User( $apiUser, $roles );
         }
         catch ( NotFoundException $e )
         {

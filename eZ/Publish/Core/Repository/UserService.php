@@ -123,12 +123,13 @@ class UserService implements UserServiceInterface
         }
 
         $loadedParentGroup = $this->loadUserGroup( $parentGroup->id );
-        $mainParentGroupLocation = $locationService->loadMainLocation( $loadedParentGroup->getVersionInfo()->getContentInfo() );
 
-        if ( $mainParentGroupLocation === null )
+        if ( $loadedParentGroup->getVersionInfo()->getContentInfo()->mainLocationId === null )
             throw new InvalidArgumentException( "parentGroup", "parent user group has no main location" );
 
-        $locationCreateStruct = $locationService->newLocationCreateStruct( $mainParentGroupLocation->id );
+        $locationCreateStruct = $locationService->newLocationCreateStruct(
+            $loadedParentGroup->getVersionInfo()->getContentInfo()->mainLocationId
+        );
 
         $this->repository->beginTransaction();
         try
@@ -186,10 +187,12 @@ class UserService implements UserServiceInterface
         if ( !$this->repository->canUser( 'content', 'read', $loadedUserGroup ) )
             throw new UnauthorizedException( 'content', 'read' );
 
-        $mainGroupLocation = $locationService->loadMainLocation( $loadedUserGroup->getVersionInfo()->getContentInfo() );
-
-        if ( $mainGroupLocation === null )
+        if ( $loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId === null )
             return array();
+
+        $mainGroupLocation = $locationService->loadLocation(
+            $loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId
+        );
 
         $searchResult = $this->searchSubGroups(
             $mainGroupLocation->id,
@@ -294,14 +297,18 @@ class UserService implements UserServiceInterface
 
         $locationService = $this->repository->getLocationService();
 
-        $userGroupMainLocation = $locationService->loadMainLocation( $loadedUserGroup->getVersionInfo()->getContentInfo() );
-        $newParentMainLocation = $locationService->loadMainLocation( $loadedNewParent->getVersionInfo()->getContentInfo() );
-
-        if ( $userGroupMainLocation === null )
+        if ( $loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId === null )
             throw new BadStateException( "userGroup", 'existing user group is not stored and/or does not have any location yet' );
 
-        if ( $newParentMainLocation === null )
+        if ( $loadedNewParent->getVersionInfo()->getContentInfo()->mainLocationId === null )
             throw new BadStateException( "newParent", 'new user group is not stored and/or does not have any location yet' );
+
+        $userGroupMainLocation = $locationService->loadLocation(
+            $loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId
+        );
+        $newParentMainLocation = $locationService->loadLocation(
+            $loadedNewParent->getVersionInfo()->getContentInfo()->mainLocationId
+        );
 
         $this->repository->beginTransaction();
         try
@@ -337,7 +344,7 @@ class UserService implements UserServiceInterface
             throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
 
         if ( $userGroupUpdateStruct->contentUpdateStruct === null &&
-             $userGroupUpdateStruct->contentMetadataUpdateStruct === null )
+            $userGroupUpdateStruct->contentMetadataUpdateStruct === null )
         {
             // both update structs are empty, nothing to do
             return $userGroup;
@@ -428,9 +435,12 @@ class UserService implements UserServiceInterface
         foreach ( $parentGroups as $parentGroup )
         {
             $parentGroup = $this->loadUserGroup( $parentGroup->id );
-            $mainLocation = $locationService->loadMainLocation( $parentGroup->getVersionInfo()->getContentInfo() );
-            if ( $mainLocation !== null )
-                $locationCreateStructs[] = $locationService->newLocationCreateStruct( $mainLocation->id );
+            if ( $parentGroup->getVersionInfo()->getContentInfo()->mainLocationId !== null )
+            {
+                $locationCreateStructs[] = $locationService->newLocationCreateStruct(
+                    $parentGroup->getVersionInfo()->getContentInfo()->mainLocationId
+                );
+            }
         }
 
         // Search for the first ezuser field type in content type
@@ -769,15 +779,16 @@ class UserService implements UserServiceInterface
             $existingGroupIds[] = $userLocation->parentLocationId;
         }
 
-        $groupMainLocation = $locationService->loadMainLocation( $loadedGroup->getVersionInfo()->getContentInfo() );
-        if ( $groupMainLocation === null )
+        if ( $loadedGroup->getVersionInfo()->getContentInfo()->mainLocationId === null )
             throw new InvalidArgumentException( "userGroup", "user group has no main location or no locations" );
 
-        if ( in_array( $groupMainLocation->id, $existingGroupIds ) )
+        if ( in_array( $loadedGroup->getVersionInfo()->getContentInfo()->mainLocationId, $existingGroupIds ) )
             // user is already assigned to the user group
             return;
 
-        $locationCreateStruct = $locationService->newLocationCreateStruct( $groupMainLocation->id );
+        $locationCreateStruct = $locationService->newLocationCreateStruct(
+            $loadedGroup->getVersionInfo()->getContentInfo()->mainLocationId
+        );
 
         $this->repository->beginTransaction();
         try
@@ -820,13 +831,12 @@ class UserService implements UserServiceInterface
         if ( empty( $userLocations ) )
             throw new InvalidArgumentException( "user", "user has no locations, cannot unassign from group" );
 
-        $groupMainLocation = $locationService->loadMainLocation( $loadedGroup->getVersionInfo()->getContentInfo() );
-        if ( $groupMainLocation === null )
+        if ( $loadedGroup->getVersionInfo()->getContentInfo()->mainLocationId === null )
             throw new InvalidArgumentException( "userGroup", "user group has no main location or no locations, cannot unassign" );
 
         foreach ( $userLocations as $userLocation )
         {
-            if ( $userLocation->parentLocationId == $groupMainLocation->id )
+            if ( $userLocation->parentLocationId == $loadedGroup->getVersionInfo()->getContentInfo()->mainLocationId )
             {
                 $this->repository->beginTransaction();
                 try
@@ -910,12 +920,14 @@ class UserService implements UserServiceInterface
      */
     public function loadUsersOfUserGroup( APIUserGroup $userGroup, $offset = 0, $limit = -1 )
     {
-        $mainGroupLocation = $this->repository->getLocationService()->loadMainLocation(
-            $userGroup->getVersionInfo()->getContentInfo()
-        );
+        $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
 
-        if ( $mainGroupLocation === null )
+        if ( $loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId === null )
             return array();
+
+        $mainGroupLocation = $this->repository->getLocationService()->loadLocation(
+            $loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId
+        );
 
         $searchQuery = new Query();
 
@@ -1037,13 +1049,13 @@ class UserService implements UserServiceInterface
     {
         $locationService = $this->repository->getLocationService();
 
-        $contentInfo = $content->getVersionInfo()->getContentInfo();
-        $mainLocation = $locationService->loadMainLocation( $contentInfo );
-        $parentLocation = $locationService->loadLocation( $mainLocation->parentLocationId );
-
         $subGroupCount = 0;
-        if ( $mainLocation !== null )
+        if ( $content->getVersionInfo()->getContentInfo()->mainLocationId !== null )
         {
+            $mainLocation = $locationService->loadLocation(
+                $content->getVersionInfo()->getContentInfo()->mainLocationId
+            );
+            $parentLocation = $locationService->loadLocation( $mainLocation->parentLocationId );
             $subGroups = $this->searchSubGroups( $mainLocation->id, null, Location::SORT_ORDER_ASC, 0, 0 );
             $subGroupCount = $subGroups->totalCount;
         }
@@ -1051,7 +1063,7 @@ class UserService implements UserServiceInterface
         return new UserGroup(
             array(
                 'content' => $content,
-                'parentId' => $parentLocation ? $parentLocation->contentId : null,
+                'parentId' => isset( $parentLocation ) ? $parentLocation->contentId : null,
                 'subGroupCount' => $subGroupCount
             )
         );
