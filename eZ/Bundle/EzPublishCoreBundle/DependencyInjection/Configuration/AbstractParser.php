@@ -135,7 +135,8 @@ abstract class AbstractParser implements Parser
      */
     protected function registerGlobalConfigArray( $id, array $config, ContainerBuilder $container )
     {
-        if ( isset( $config[$this->baseKey][ConfigResolver::SCOPE_GLOBAL][$id] ) )
+        if ( isset( $config[$this->baseKey][ConfigResolver::SCOPE_GLOBAL][$id] )
+            && !empty( $config[$this->baseKey][ConfigResolver::SCOPE_GLOBAL][$id] ) )
         {
             $key = 'ezsettings.' . ConfigResolver::SCOPE_GLOBAL . '.' . $id;
             $globalValue = $config[$this->baseKey][ConfigResolver::SCOPE_GLOBAL][$id];
