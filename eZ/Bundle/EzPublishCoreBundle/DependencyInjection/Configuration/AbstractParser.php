@@ -126,6 +126,31 @@ abstract class AbstractParser implements Parser
     }
 
     /**
+     * Make sure settings array defined in "global" siteaccess are registered
+     * in the internal global scope.
+     *
+     * @param string $id
+     * @param array $config
+     * @param ContainerBuilder $container
+     */
+    protected function registerGlobalConfigArray( $id, array $config, ContainerBuilder $container )
+    {
+        if ( isset( $config[$this->baseKey][ConfigResolver::SCOPE_GLOBAL][$id] ) )
+        {
+            $key = 'ezsettings.' . ConfigResolver::SCOPE_GLOBAL . '.' . $id;
+            $globalValue = $config[$this->baseKey][ConfigResolver::SCOPE_GLOBAL][$id];
+            if ( $container->hasParameter( $key ) )
+            {
+                $globalValue = array_merge(
+                    $container->getParameter( $key ),
+                    $globalValue
+                );
+            }
+            $container->setParameter( $key, $globalValue );
+        }
+    }
+
+    /**
      * Registers the internal configuration. For array settings, we merge the
      * arrays defined in scopes default, in the siteaccess groups, in the
      * siteaccess itself and in the global scope. To calculate the precedence
@@ -138,6 +163,7 @@ abstract class AbstractParser implements Parser
      */
     protected function registerInternalConfigArray( $id, array $config, ContainerBuilder $container, $options = 0 )
     {
+        $this->registerGlobalConfigArray( $id, $config, $container );
         $defaultSettings = $this->getContainerParameter(
             $container,
             'ezsettings.' . ConfigResolver::SCOPE_DEFAULT . '.' . $id,
