@@ -5,7 +5,8 @@ parameters:
     ezpublish.twig.extension.content.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ContentExtension
 
     ezpublish.view_manager.class: eZ\Publish\Core\MVC\Symfony\View\Manager
-    ezpublish.content_view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\ContentViewProvider\Configured
+    ezpublish.content_view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\Provider\Content\Configured
+    ezpublish.location_view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\Provider\Location\Configured
     ezpublish.content_view.viewbase_layout: "EzPublishCoreBundle::viewbase_layout.html.twig"
     ezpublish.content_view.content_block_name: "content"
 
@@ -46,3 +47,9 @@ services:
         arguments: [@ezpublish.config.resolver, @ezpublish.api.repository, @service_container]
         tags:
             - {name: ezpublish.content_view_provider, priority: 10}
+
+    ezpublish.location_view_provider.configured:
+        class: %ezpublish.location_view_provider.configured.class%
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository, @service_container]
+        tags:
+            - {name: ezpublish.location_view_provider, priority: 10}
