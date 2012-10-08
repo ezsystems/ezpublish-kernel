@@ -34,7 +34,7 @@ class Depth extends MultipleValued
      */
     public function matchContentInfo( ContentInfo $contentInfo )
     {
-        $location = $this->repository->getLocationService()->loadMainLocation( $contentInfo );
+        $location = $this->repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
         return isset( $this->values[$location->depth] );
     }
 }
