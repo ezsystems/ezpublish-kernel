@@ -33,8 +33,7 @@ services:
 
     ezpublish.twig.extension.content:
         class: %ezpublish.twig.extension.content.class%
-        arguments: [@ezpublish.fieldtype.ezxmltext.converter.html5, @ezpublish.config.resolver]
-        public: false
+        arguments: [@service_container, @ezpublish.config.resolver]
         tags:
             - {name: twig.extension}
 
