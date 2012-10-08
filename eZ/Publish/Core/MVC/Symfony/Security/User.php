@@ -21,9 +21,15 @@ class User implements AdvancedUserInterface, EquatableInterface
      */
     private $user;
 
-    public function __construct( APIUser $user = null )
+    /**
+     * @var array
+     */
+    private $roles;
+
+    public function __construct( APIUser $user = null, array $roles = array() )
     {
         $this->user = $user;
+        $this->roles = $roles;
     }
 
     /**
@@ -44,7 +50,7 @@ class User implements AdvancedUserInterface, EquatableInterface
      */
     public function getRoles()
     {
-        return array( 'ROLE_USER' );
+        return $this->roles;
     }
 
     /**
@@ -132,6 +138,11 @@ class User implements AdvancedUserInterface, EquatableInterface
         }
 
         return false;
+    }
+
+    public function __toString()
+    {
+        return $this->user->contentInfo->name;
     }
 
     /**
