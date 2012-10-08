@@ -52,6 +52,7 @@ class EzPublishCoreBundle extends Bundle
             $this->extension = new EzPublishCoreExtension(
                 array(
                      new ConfigParser\LocationView,
+                     new ConfigParser\ContentView,
                      new ConfigParser\Common,
                      new ConfigParser\Content,
                      new ConfigParser\FieldTemplates,

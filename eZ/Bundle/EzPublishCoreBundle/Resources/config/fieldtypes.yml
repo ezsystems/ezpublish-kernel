@@ -28,6 +28,7 @@ parameters:
     ezpublish.fieldType.ezxmltext.xmlSchema.options: []
     ezpublish.fieldType.ezxmltext.converter.html5.class: eZ\Publish\Core\FieldType\XmlText\Converter\Output\Html5
     ezpublish.fieldType.ezxmltext.converter.html5.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish/eZ/Bundle/EzPublishCoreBundle/Resources/stylesheets/eZXml2Html5.xsl
+    ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\Output\EmbedToHtml5
     # ezpublish.fieldType.ezxmltext.xmlSchema.options:
     #    customAttributes:
     #         table:
@@ -202,8 +203,11 @@ services:
 
     ezpublish.fieldType.ezxmltext.converter.html5:
         class: %ezpublish.fieldType.ezxmltext.converter.html5.class%
-        arguments: [%ezpublish.fieldType.ezxmltext.converter.html5.resources%]
-        public: false
+        arguments: [%ezpublish.fieldType.ezxmltext.converter.html5.resources%, [@ezpublish.fieldType.ezxmltext.converter.embedToHtml5]]
+
+    ezpublish.fieldType.ezxmltext.converter.embedToHtml5:
+        class: %ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class%
+        arguments: [@ezpublish.view_manager,@ezpublish.api.repository]
 
     ezpublish.fieldType.ezpage:
         class: %ezpublish.fieldType.ezpage.class%
