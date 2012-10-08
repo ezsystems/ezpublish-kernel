@@ -29,6 +29,7 @@ class TestKernel extends Kernel implements Container
     {
         parent::__construct( 'test', true );
         $this->loadClassCache();
+        $this->boot();
     }
 
     /**
@@ -43,6 +44,7 @@ class TestKernel extends Kernel implements Container
         $bundles = array(
             new FrameworkBundle(),
             new TwigBundle(),
+            //new SensioGeneratorBundle(),
             new EzPublishCoreBundle(),
             new EzPublishLegacyBundle(),
             new EzPublishRestBundle()
@@ -72,6 +74,6 @@ class TestKernel extends Kernel implements Container
      */
     public function getRepository()
     {
-        return $this->getContainer()->get( 'repository' );
+        return $this->getContainer()->get( 'ezpublish.api.repository' );
     }
 }
