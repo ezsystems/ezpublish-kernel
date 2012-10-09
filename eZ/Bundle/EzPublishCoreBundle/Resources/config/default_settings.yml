@@ -1,7 +1,6 @@
 parameters:
     # Kernel related params
     webroot_dir: %kernel.root_dir%/../web
-    binaryfile_identifier_prefix:
 
     ###
     # ezsettings namespace, default scope

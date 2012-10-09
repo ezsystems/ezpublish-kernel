@@ -320,7 +320,7 @@ services:
 
     ezpublish.fieldType.ezbinaryfile.fileService:
         class: %ezpublish.fieldType.ezbinaryfile.fileService.class%
-        arguments: [@ezpublish.config.resolver, %webroot_dir%, %binaryfile_identifier_prefix%]
+        arguments: [@ezpublish.config.resolver, %webroot_dir%]
 
     ezpublish.fieldType.ezbinaryfile.mimeTypeDetector:
         class: %ezpublish.fieldType.ezbinaryfile.mimeTypeDetector.class%
