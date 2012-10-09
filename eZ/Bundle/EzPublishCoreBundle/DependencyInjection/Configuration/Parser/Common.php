@@ -45,17 +45,16 @@ class Common extends AbstractParser
             ->end()
             ->scalarNode( 'var_dir' )
                 ->cannotBeEmpty()
-                ->defaultValue( 'var' )
                 ->example( 'var/ezdemo_site' )
-                ->info( 'The directory relative to web/ where files are stored' )
+                ->info( 'The directory relative to web/ where files are stored. Default value is "var"' )
             ->end()
             ->scalarNode( 'storage_dir' )
                 ->cannotBeEmpty()
-                ->defaultValue( 'storage' )
+                ->info( "Directory where to place new files for storage, it's relative to var directory. Default value is 'storage'" )
             ->end()
             ->scalarNode( 'binary_dir' )
                 ->cannotBeEmpty()
-                ->defaultValue( 'original' )
+                ->info( 'Directory where binary files (from ezbinaryfile field type) are stored. Default value is "original"' )
             ->end()
             ->booleanNode( 'url_alias_router' )
                 ->info( 'Whether to use UrlAliasRouter or not. If false, will let the legacy kernel handle url aliases.' )
@@ -96,14 +95,14 @@ class Common extends AbstractParser
         }
         foreach ( $config[$this->baseKey] as $sa => $settings )
         {
-            $container->setParameter( "ezsettings.$sa.url_alias_router", $settings['url_alias_router'] );
-            $container->setParameter( "ezsettings.$sa.var_dir", $settings['var_dir'] );
-            $storageDir = rtrim( $settings['var_dir'], '/' ) . '/' . $settings['storage_dir'];
-            $container->setParameter( "ezsettings.$sa.storage_dir", $storageDir );
-            $container->setParameter(
-                "ezsettings.$sa.binary_dir",
-                ltrim( $storageDir, '/' ) . '/' . $settings['binary_dir']
-            );
+            if ( isset( $settings['url_alias_router'] ) )
+                $container->setParameter( "ezsettings.$sa.url_alias_router", $settings['url_alias_router'] );
+            if ( isset( $settings['var_dir'] ) )
+                $container->setParameter( "ezsettings.$sa.var_dir", $settings['var_dir'] );
+            if ( isset( $settings['storage_dir'] ) )
+                $container->setParameter( "ezsettings.$sa.storage_dir", $settings['storage_dir'] );
+            if ( isset( $settings['binary_dir'] ) )
+                $container->setParameter( "ezsettings.$sa.binary_dir", $settings['binary_dir'] );
         }
     }
 }
