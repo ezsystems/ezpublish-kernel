@@ -15,7 +15,8 @@ use eZ\Publish\Core\MVC\Symfony\Controller\Controller,
     eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent,
     eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute,
     Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\Security\Core\Exception\AccessDeniedException;
+    Symfony\Component\Security\Core\Exception\AccessDeniedException,
+    \DateTime;
 
 class ViewController extends Controller
 {
@@ -29,7 +30,14 @@ class ViewController extends Controller
         $this->viewManager = $viewManager;
     }
 
-    protected function buildResponse( $etag, $lastModified )
+    /**
+     * Build the response so that depending on settings it's cacheable
+     *
+     * @param string $etag
+     * @param DateTime $lastModified
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function buildResponse( $etag, DateTime $lastModified )
     {
         $request = $this->getRequest();
         $response = new Response();
