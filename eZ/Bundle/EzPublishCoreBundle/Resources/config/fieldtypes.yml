@@ -397,6 +397,7 @@ services:
 
     ezpublish.fieldType.ezmedia.externalStorage:
         class: %ezpublish.fieldType.ezmedia.externalStorage.class%
+        arguments: [[], @ezpublish.fieldType.ezbinaryfile.fileService, @ezpublish.fieldType.ezbinaryfile.pathGenerator]
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezmedia}
 
