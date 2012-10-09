@@ -13,8 +13,7 @@ use eZ\Publish\Core\MVC\Legacy\View\Provider,
     eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProviderInterface,
     eZ\Publish\API\Repository\Values\Content\Location as APILocation,
     eZ\Publish\Core\MVC\Symfony\View\ContentView,
-    eZModule,
-    eZTemplate;
+    eZModule;
 
 class Location extends Provider implements LocationViewProviderInterface
 {

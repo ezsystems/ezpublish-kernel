@@ -12,13 +12,9 @@ namespace eZ\Publish\Core\MVC\Legacy\Kernel;
 use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel,
     eZ\Publish\Core\MVC\Legacy\LegacyEvents,
     eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess,
     ezpKernelHandler,
-    ezpKernelWeb,
-    ezpKernelTreeMenu,
     eZURI,
     Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\DependencyInjection\Exception\InactiveScopeException,
     Symfony\Component\HttpKernel\Log\LoggerInterface,
     Symfony\Component\HttpFoundation\ParameterBag;
 
