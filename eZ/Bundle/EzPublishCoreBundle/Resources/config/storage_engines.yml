@@ -1,7 +1,9 @@
 parameters:
     ezpublish.api.storage_engine.in_memory.class: eZ\Publish\Core\Persistence\InMemory\Handler
     ezpublish.api.storage_engine.legacy.class: eZ\Publish\Core\Persistence\Legacy\Handler
+    ezpublish.api.storage_engine.legacy.dbhandler.class: eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
     ezpublish.api.storage_engine.legacy.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\LegacyStorageEngineFactory
+    ezpublish.api.storage_engine.legacy.dbhandler.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\LegacyDbHandlerFactory
     #ezpublish.api.storage_engine.legacy.dsn: <database_type>://<user>:<password>@<host>/<database_name>
     ezpublish.api.storage_engine.legacy.defer_type_update: false
 
@@ -38,7 +40,8 @@ parameters:
     ezpublish.fieldType.ezmedia.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Media
     ezpublish.fieldType.ezmedia.storage_gateway.class: eZ\Publish\Core\FieldType\Media\MediaStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezobjectrelation.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Relation
-    #ezpublish.fieldType.ezobjectrelationlist.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ObjectRelationList
+    ezpublish.fieldType.ezobjectrelationlist.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RelationList
+    ezpublish.fieldType.externalStorageHandler.ezobjectrelationlist.gateway.class: eZ\Publish\Core\FieldType\RelationList\RelationListStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezselection.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection
     ezpublish.fieldType.ezstring.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
     ezpublish.fieldType.eztext.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlock
@@ -54,7 +57,6 @@ parameters:
     ezpublish.fieldType.ezgmaplocation.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
     ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezcomcomments.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
-    ezpublish.fieldType.ezobjectrelationlist.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
 
 services:
     ezpublish.api.storage_engine.in_memory:
@@ -65,13 +67,23 @@ services:
     # Legacy storage engine
     ezpublish.api.storage_engine.legacy.factory:
         class: %ezpublish.api.storage_engine.legacy.factory.class%
-        arguments: [@ezpublish.config.resolver, @service_container]
+        arguments: [@service_container]
+
+    ezpublish.api.storage_engine.legacy.dbhandler.factory:
+        class: %ezpublish.api.storage_engine.legacy.dbhandler.factory.class%
+        arguments: [@ezpublish.config.resolver]
+
+    ezpublish.api.storage_engine.legacy.dbhandler:
+        class: %ezpublish.api.storage_engine.legacy.dbhandler.class%
+        factory_service: ezpublish.api.storage_engine.legacy.dbhandler.factory
+        factory_method: buildLegacyDbHandler
 
     ezpublish.api.storage_engine.legacy:
         class: %ezpublish.api.storage_engine.legacy.class%
         factory_service: ezpublish.api.storage_engine.legacy.factory
         factory_method: buildLegacyEngine
         arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
             - %ezpublish.api.storage_engine.legacy.defer_type_update%
         tags:
             - {name: ezpublish.storageEngine, alias: legacy}
@@ -231,8 +243,14 @@ services:
 
     ezpublish.fieldType.ezobjectrelationlist.converter:
         class: %ezpublish.fieldType.ezobjectrelationlist.converter.class%
+        arguments: [@ezpublish.api.storage_engine.legacy.dbhandler]
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezobjectrelationlist, lazy: true, callback: '::create'}
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezobjectrelationlist}
+
+    ezpublish.fieldType.externalStorageHandler.ezobjectrelationlist.gateway:
+        class: %ezpublish.fieldType.externalStorageHandler.ezobjectrelationlist.gateway.class%
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezobjectrelationlist, identifier: LegacyStorage}
 
     ezpublish.fieldType.ezurl.converter:
         class: %ezpublish.fieldType.ezuser.converter.class%
