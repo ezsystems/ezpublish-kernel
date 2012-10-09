@@ -500,9 +500,8 @@ class LocationService implements LocationServiceInterface
         // @todo: set pathIdentificationString
         // $createStruct->pathIdentificationString = null;
 
-        $mainLocation = $this->loadMainLocation( $contentInfo );
-        if ( $mainLocation !== null )
-            $createStruct->mainLocationId = $mainLocation->id;
+        if ( $contentInfo->mainLocationId !== null )
+            $createStruct->mainLocationId = $contentInfo->mainLocationId;
 
         $createStruct->sortField = $locationCreateStruct->sortField !== null ? (int) $locationCreateStruct->sortField : APILocation::SORT_FIELD_NAME;
         $createStruct->sortOrder = $locationCreateStruct->sortOrder !== null ? (int) $locationCreateStruct->sortOrder : APILocation::SORT_ORDER_ASC;
