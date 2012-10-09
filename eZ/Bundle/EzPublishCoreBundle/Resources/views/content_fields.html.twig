@@ -160,6 +160,20 @@
 {% endspaceless %}
 {% endblock %}
 
+{% block ezobjectrelationlist_field %}
+{% spaceless %}
+    {% if field.value.destinationContentIds|length > 0 %}
+    <ul {{ block( 'field_attributes' ) }}>
+        {% for contentId in field.value.destinationContentIds %}
+        <li>
+            {% render "ez_content:viewContent" with {'contentId': contentId, 'viewType': 'embed', 'noLayout': 1} %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endspaceless %}
+{% endblock %}
+
 {# TODO:
  # - include Gmaps JS only once if the field is used several times in the page
  # - add translate filter
