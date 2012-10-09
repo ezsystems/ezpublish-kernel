@@ -89,7 +89,9 @@ class ViewController extends Controller
                 return $response;
             }
 
-            $response->setContent( $this->viewManager->renderLocation( $location ) );
+            $response->setContent(
+                $this->viewManager->renderLocation( $location, $viewType )
+            );
 
             return $response;
         }
