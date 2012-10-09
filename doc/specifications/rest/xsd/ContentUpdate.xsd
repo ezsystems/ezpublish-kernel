@@ -2,7 +2,7 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
   <xsd:include schemaLocation="CommonDefinitions.xsd" />
-  <xsd:complexType name="vnd.ez.api.ContentUpdate">
+  <xsd:complexType name="contentUpdateType">
     <xsd:all>
       <xsd:element name="mainLanguageCode" type="xsd:string" minOccurs="0" />
       <xsd:element name="Section" type="ref" minOccurs="0" />
@@ -18,5 +18,6 @@
         minOccurs="0" />
     </xsd:all>
   </xsd:complexType>
-  <xsd:element name="ContentUpdate" type="vnd.ez.api.ContentUpdate"></xsd:element>
+  <xsd:element name="ContentUpdate" type="contentUpdateType"></xsd:element>
 </xsd:schema>
+

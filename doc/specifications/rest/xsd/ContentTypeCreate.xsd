@@ -129,3 +129,4 @@
   </xsd:complexType>
   <xsd:element name="ContentTypeCreate" type="vnd.ez.api.ContentTypeCreate"></xsd:element>
 </xsd:schema>
+

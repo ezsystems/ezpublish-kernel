@@ -20,3 +20,4 @@
   </xsd:complexType>
   <xsd:element name="UserGroupUpdate" type="vnd.ez.api.UserGroupUpdate"></xsd:element>
 </xsd:schema>
+

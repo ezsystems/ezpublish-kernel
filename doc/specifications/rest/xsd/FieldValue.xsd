@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:complexType name="valueType" mixed="true">
+    <xsd:sequence>
+      <xsd:element name="value" type="valueType" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="key" type="xsd:string" />
+  </xsd:complexType>
+  <xsd:complexType name="fieldValueType" mixed="true">
+    <xsd:sequence>
+      <xsd:element name="value" type="valueType" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema> 

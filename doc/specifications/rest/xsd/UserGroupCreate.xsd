@@ -21,3 +21,4 @@
   </xsd:complexType>
   <xsd:element name="UserGroupCreate" type="vnd.ez.api.UserGroupCreate"></xsd:element>
 </xsd:schema>
+

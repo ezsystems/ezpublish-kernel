@@ -42,3 +42,5 @@
   </xsd:complexType>
   <xsd:element name="LocationCreate" type="vnd.ez.api.LocationCreate" />
 </xsd:schema>
+
+

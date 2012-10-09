@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:include schemaLocation="CommonDefinitions.xsd" />
+  <xsd:complexType name="vnd.ez.api.UrlWildcard">
+    <xsd:complexContent>
+      <xsd:extension base="ref">
+        <xsd:all>
+          <xsd:element name="sourceUrl" type="xsd:string" />
+          <xsd:element name="destinationUrl" type="xsd:string" />
+          <xsd:element name="forward" type="xsd:boolean" />
+        </xsd:all>
+        <xsd:attribute name="id" type="xsd:string" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="vnd.ez.api.UrlWildcardList">
+    <xsd:sequence>
+      <xsd:element name="UrlWildcard" type="vnd.ez.api.UrlWildcard"
+        minOccurs="0" maxOccurs="unbounded" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="vnd.ez.api.UrlWildcardCreate">
+    <xsd:all>
+      <xsd:element name="sourceUrl" type="xsd:string" />
+      <xsd:element name="destinationUrl" type="xsd:string" />
+      <xsd:element name="forward" type="xsd:boolean" />
+    </xsd:all>
+  </xsd:complexType>
+</xsd:schema>
+
