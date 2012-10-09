@@ -262,6 +262,15 @@
 {% endspaceless %}
 {% endblock %}
 
+{% block ezimage_field %}
+{% spaceless %}
+{# TODO: Handle image variations #}
+<figure {{ block( 'field_attributes' ) }}>
+    <img src="{{ asset( field.value.path ) }}" alt="{{ field.value.alternativeText }}" />
+</figure>
+{% endspaceless %}
+{% endblock %}
+
 
 {# The simple_block_field block is a shorthand html block-based fields (like eztext or ezxmltext) #}
 {# You can define a field_value variable before rendering this one if you need special operation for rendering content (i.e. nl2br) #}
