@@ -5934,6 +5934,7 @@ Root Resources
           <xsd:element name="rootMediaFolder" type="ref"/>
           <xsd:element name="trash" type="ref"/>
           <xsd:element name="sections" type="ref"/>
+          <xsd:element name="views" type="ref"/>
         </xsd:all>
       </xsd:complexType>
       <xsd:element name="Root" type="vnd.ez.api.Root"/>
@@ -6257,6 +6258,7 @@ ContentCreate XML Schema
 
 .. code:: xml
 
+    <?xml version="1.0" encoding="UTF-8"?>
     <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
       xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
       <xsd:include schemaLocation="CommonDefinitions.xsd" />
@@ -7317,8 +7319,6 @@ Section XML Schema
       <xsd:element name="Section" type="vnd.ez.api.Section"></xsd:element>
       <xsd:element name="SectionList" type="vnd.ez.api.SectionList"></xsd:element>
       <xsd:element name="SectionInput" type="vnd.ez.api.SectionInput"></xsd:element>
-      
-      
     </xsd:schema>
 
 .. _ObjectStateGroup:
@@ -8409,65 +8409,6 @@ FieldDefinitionUpdate XML Schema
     </xsd:schema>
 
 
-.. _UserGroup:
-
-UserGroup JSON Schema
----------------------
-
-.. code:: xml
-
-    <?xml version="1.0" encoding="utf-8"?>
-    <xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-      xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
-      <xsd:include schemaLocation="Content.xsd" />
-      <xsd:include schemaLocation="Version.xsd" />
-      <xsd:include schemaLocation="CommonDefinitions.xsd" />
-
-      <xsd:complexType name="vnd.ez.api.UserGroup">
-        <xsd:complexContent>
-          <xsd:extension base="contentInfoType">
-            <xsd:sequence>
-              <xsd:element name="Content" type="vnd.ez.api.Version+xml" />
-              <xsd:element name="ParentUserGroup" type="ref" />
-              <xsd:element name="Subgroups" type="ref" />
-              <xsd:element name="Users" type="ref" />
-              <xsd:element name="Roles" type="ref" />
-            </xsd:sequence>
-          </xsd:extension>
-        </xsd:complexContent>
-      </xsd:complexType>
-      <xsd:complexType name="vnd.ez.api.UserGroupList">
-        <xsd:complexContent>
-          <xsd:extension base="ref">
-            <xsd:all>
-              <xsd:eleemnt name="User" type="vnd.ez.api.UserGroup"
-                maxOccurs="unbounded" />
-            </xsd:all>
-          </xsd:extension>
-        </xsd:complexContent>
-      </xsd:complexType>
-      <xsd:complexType name="vnd.ez.api.UserGroupRefList">
-        <xsd:complexContent>
-          <xsd:extension base="ref">
-            <xsd:all>
-              <xsd:eleemnt name="UserGroup" minOccurs="1" maxOccurs="unbounded">
-                <xsd:complexType>
-                  <xsd:all>
-                    <xsd:element name="unassign" type="controllerRef" minOccurs="0"/>
-                  </xsd:all>
-                </xsd:complexType>
-              </xsd:eleemnt>
-            </xsd:all>
-          </xsd:extension>
-        </xsd:complexContent>
-      </xsd:complexType>
-      <xsd:element name="UserGroupRefList" type="vnd.ez.api.UserGroupRefList" />
-      <xsd:element name="UserGroupList" type="vnd.ez.api.UserGroupList" />
-      <xsd:element name="UserGroup" type="vnd.ez.api.UserGroup" />
-    </xsd:schema>
-
-
-
 .. _UserGroupCreate:
 
 UserGroupCreate XML Schema
@@ -8526,6 +8467,8 @@ UserGroupUpdate XML Schema
       </xsd:complexType>
       <xsd:element name="UserGroupUpdate" type="vnd.ez.api.UserGroupUpdate"></xsd:element>
     </xsd:schema>
+
+.. _UserGroup:
 
 UserGroup XML Schema
 --------------------
@@ -8751,9 +8694,10 @@ Limitation XML Schema
       </xsd:complexType>
 
       <xsd:complexType name="limitationType">
-        <xsd:all>
-          <xsd:element name="values" type="refValueList" />
-        </xsd:all>
+        <xsd:choice>
+          <xsd:element name="values" type="valueType"</xsd:element>
+          <xsd:element name="refs" type="refValueList" />
+        </xsd:choice>
         <xsd:attribute name="identifier" type="limitationIdentifierType" />
       </xsd:complexType>
 

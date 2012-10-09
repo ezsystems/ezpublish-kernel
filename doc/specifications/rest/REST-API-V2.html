@@ -736,17 +736,16 @@ ul.auto-toc {
 <li><a class="reference internal" href="#fielddefinition-json-schema" id="id268">6.25&nbsp;&nbsp;&nbsp;FieldDefinition JSON Schema</a></li>
 <li><a class="reference internal" href="#fielddefinitioncreate-xml-schema" id="id269">6.26&nbsp;&nbsp;&nbsp;FieldDefinitionCreate XML Schema</a></li>
 <li><a class="reference internal" href="#fielddefinitionupdate-xml-schema" id="id270">6.27&nbsp;&nbsp;&nbsp;FieldDefinitionUpdate XML Schema</a></li>
-<li><a class="reference internal" href="#usergroup-json-schema" id="id271">6.28&nbsp;&nbsp;&nbsp;UserGroup JSON Schema</a></li>
-<li><a class="reference internal" href="#usergroupcreate-xml-schema" id="id272">6.29&nbsp;&nbsp;&nbsp;UserGroupCreate XML Schema</a></li>
-<li><a class="reference internal" href="#usergroupupdate-xml-schema" id="id273">6.30&nbsp;&nbsp;&nbsp;UserGroupUpdate XML Schema</a></li>
-<li><a class="reference internal" href="#usergroup-xml-schema" id="id274">6.31&nbsp;&nbsp;&nbsp;UserGroup XML Schema</a></li>
-<li><a class="reference internal" href="#usercreate-xml-schema" id="id275">6.32&nbsp;&nbsp;&nbsp;UserCreate XML Schema</a></li>
-<li><a class="reference internal" href="#userupdate-xml-schema" id="id276">6.33&nbsp;&nbsp;&nbsp;UserUpdate XML Schema</a></li>
-<li><a class="reference internal" href="#user-xml-schema" id="id277">6.34&nbsp;&nbsp;&nbsp;User XML Schema</a></li>
-<li><a class="reference internal" href="#limitation-xml-schema" id="id278">6.35&nbsp;&nbsp;&nbsp;Limitation XML Schema</a></li>
-<li><a class="reference internal" href="#policy-xml-schema" id="id279">6.36&nbsp;&nbsp;&nbsp;Policy XML Schema</a></li>
-<li><a class="reference internal" href="#role-xml-schema" id="id280">6.37&nbsp;&nbsp;&nbsp;Role XML Schema</a></li>
-<li><a class="reference internal" href="#errormessage-xml-schema" id="id281">6.38&nbsp;&nbsp;&nbsp;ErrorMessage XML Schema</a></li>
+<li><a class="reference internal" href="#usergroupcreate-xml-schema" id="id271">6.28&nbsp;&nbsp;&nbsp;UserGroupCreate XML Schema</a></li>
+<li><a class="reference internal" href="#usergroupupdate-xml-schema" id="id272">6.29&nbsp;&nbsp;&nbsp;UserGroupUpdate XML Schema</a></li>
+<li><a class="reference internal" href="#usergroup-xml-schema" id="id273">6.30&nbsp;&nbsp;&nbsp;UserGroup XML Schema</a></li>
+<li><a class="reference internal" href="#usercreate-xml-schema" id="id274">6.31&nbsp;&nbsp;&nbsp;UserCreate XML Schema</a></li>
+<li><a class="reference internal" href="#userupdate-xml-schema" id="id275">6.32&nbsp;&nbsp;&nbsp;UserUpdate XML Schema</a></li>
+<li><a class="reference internal" href="#user-xml-schema" id="id276">6.33&nbsp;&nbsp;&nbsp;User XML Schema</a></li>
+<li><a class="reference internal" href="#limitation-xml-schema" id="id277">6.34&nbsp;&nbsp;&nbsp;Limitation XML Schema</a></li>
+<li><a class="reference internal" href="#policy-xml-schema" id="id278">6.35&nbsp;&nbsp;&nbsp;Policy XML Schema</a></li>
+<li><a class="reference internal" href="#role-xml-schema" id="id279">6.36&nbsp;&nbsp;&nbsp;Role XML Schema</a></li>
+<li><a class="reference internal" href="#errormessage-xml-schema" id="id280">6.37&nbsp;&nbsp;&nbsp;ErrorMessage XML Schema</a></li>
 </ul>
 </li>
 </ul>
@@ -2613,6 +2612,7 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
   <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
   <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://ez.no/API/Values ../VersionUpdate.xsd &quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;modificationDate&gt;</span>2001-12-31T12:00:00<span class="nt">&lt;/modificationDate&gt;</span>
+  <span class="nt">&lt;initialLanguageCode&gt;</span>ger-DE<span class="nt">&lt;/initialLanguageCode&gt;</span>
   <span class="nt">&lt;fields&gt;</span>
     <span class="nt">&lt;field&gt;</span>
       <span class="nt">&lt;id&gt;</span>1234<span class="nt">&lt;/id&gt;</span>
@@ -12096,6 +12096,7 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
       <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;rootMediaFolder&quot;</span> <span class="na">type=</span><span class="s">&quot;ref&quot;</span><span class="nt">/&gt;</span>
       <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;trash&quot;</span> <span class="na">type=</span><span class="s">&quot;ref&quot;</span><span class="nt">/&gt;</span>
       <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;sections&quot;</span> <span class="na">type=</span><span class="s">&quot;ref&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;views&quot;</span> <span class="na">type=</span><span class="s">&quot;ref&quot;</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;/xsd:all&gt;</span>
   <span class="nt">&lt;/xsd:complexType&gt;</span>
   <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;Root&quot;</span> <span class="na">type=</span><span class="s">&quot;vnd.ez.api.Root&quot;</span><span class="nt">/&gt;</span>
@@ -12373,6 +12374,7 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
     <span class="nt">&lt;xsd:all&gt;</span>
       <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;User&quot;</span> <span class="na">type=</span><span class="s">&quot;ref&quot;</span> <span class="na">minOccurs=</span><span class="s">&quot;0&quot;</span> <span class="nt">/&gt;</span>
       <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;modificationDate&quot;</span> <span class="na">type=</span><span class="s">&quot;xsd:dateTime&quot;</span>
+      <span class="err">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;initialLanguageCode&quot;</span> <span class="na">type=</span><span class="s">&quot;xsd:string&quot;</span>
         <span class="na">minOccurs=</span><span class="s">&quot;0&quot;</span> <span class="nt">/&gt;</span>
       <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;fields&quot;</span><span class="nt">&gt;</span>
         <span class="nt">&lt;xsd:complexType&gt;</span>
@@ -12390,6 +12392,7 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
 <div class="section" id="contentcreate-xml-schema">
 <span id="contentcreate"></span><h2><a class="toc-backref" href="#id251">6.8&nbsp;&nbsp;&nbsp;ContentCreate XML Schema</a></h2>
 <pre class="code xml literal-block">
+<span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
 <span class="nt">&lt;xsd:schema</span> <span class="na">xmlns:xsd=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema&quot;</span>
   <span class="na">xmlns=</span><span class="s">&quot;http://ez.no/API/Values&quot;</span> <span class="na">targetNamespace=</span><span class="s">&quot;http://ez.no/API/Values&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;xsd:include</span> <span class="na">schemaLocation=</span><span class="s">&quot;CommonDefinitions.xsd&quot;</span> <span class="nt">/&gt;</span>
@@ -13407,8 +13410,6 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
   <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;Section&quot;</span> <span class="na">type=</span><span class="s">&quot;vnd.ez.api.Section&quot;</span><span class="nt">&gt;&lt;/xsd:element&gt;</span>
   <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;SectionList&quot;</span> <span class="na">type=</span><span class="s">&quot;vnd.ez.api.SectionList&quot;</span><span class="nt">&gt;&lt;/xsd:element&gt;</span>
   <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;SectionInput&quot;</span> <span class="na">type=</span><span class="s">&quot;vnd.ez.api.SectionInput&quot;</span><span class="nt">&gt;&lt;/xsd:element&gt;</span>
-
-
 <span class="nt">&lt;/xsd:schema&gt;</span>
 </pre>
 </div>
@@ -14463,62 +14464,8 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
 <span class="nt">&lt;/xsd:schema&gt;</span>
 </pre>
 </div>
-<div class="section" id="usergroup-json-schema">
-<span id="usergroup"></span><h2><a class="toc-backref" href="#id271">6.28&nbsp;&nbsp;&nbsp;UserGroup JSON Schema</a></h2>
-<pre class="code xml literal-block">
-<span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
-<span class="nt">&lt;xsd:schema</span> <span class="na">version=</span><span class="s">&quot;1.0&quot;</span> <span class="na">xmlns:xsd=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema&quot;</span>
-  <span class="na">xmlns=</span><span class="s">&quot;http://ez.no/API/Values&quot;</span> <span class="na">targetNamespace=</span><span class="s">&quot;http://ez.no/API/Values&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;xsd:include</span> <span class="na">schemaLocation=</span><span class="s">&quot;Content.xsd&quot;</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;xsd:include</span> <span class="na">schemaLocation=</span><span class="s">&quot;Version.xsd&quot;</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;xsd:include</span> <span class="na">schemaLocation=</span><span class="s">&quot;CommonDefinitions.xsd&quot;</span> <span class="nt">/&gt;</span>
-
-  <span class="nt">&lt;xsd:complexType</span> <span class="na">name=</span><span class="s">&quot;vnd.ez.api.UserGroup&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;xsd:complexContent&gt;</span>
-      <span class="nt">&lt;xsd:extension</span> <span class="na">base=</span><span class="s">&quot;contentInfoType&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;xsd:sequence&gt;</span>
-          <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;Content&quot;</span> <span class="na">type=</span><span class="s">&quot;vnd.ez.api.Version+xml&quot;</span> <span class="nt">/&gt;</span>
-          <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;ParentUserGroup&quot;</span> <span class="na">type=</span><span class="s">&quot;ref&quot;</span> <span class="nt">/&gt;</span>
-          <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;Subgroups&quot;</span> <span class="na">type=</span><span class="s">&quot;ref&quot;</span> <span class="nt">/&gt;</span>
-          <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;Users&quot;</span> <span class="na">type=</span><span class="s">&quot;ref&quot;</span> <span class="nt">/&gt;</span>
-          <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;Roles&quot;</span> <span class="na">type=</span><span class="s">&quot;ref&quot;</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;/xsd:sequence&gt;</span>
-      <span class="nt">&lt;/xsd:extension&gt;</span>
-    <span class="nt">&lt;/xsd:complexContent&gt;</span>
-  <span class="nt">&lt;/xsd:complexType&gt;</span>
-  <span class="nt">&lt;xsd:complexType</span> <span class="na">name=</span><span class="s">&quot;vnd.ez.api.UserGroupList&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;xsd:complexContent&gt;</span>
-      <span class="nt">&lt;xsd:extension</span> <span class="na">base=</span><span class="s">&quot;ref&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;xsd:all&gt;</span>
-          <span class="nt">&lt;xsd:eleemnt</span> <span class="na">name=</span><span class="s">&quot;User&quot;</span> <span class="na">type=</span><span class="s">&quot;vnd.ez.api.UserGroup&quot;</span>
-            <span class="na">maxOccurs=</span><span class="s">&quot;unbounded&quot;</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;/xsd:all&gt;</span>
-      <span class="nt">&lt;/xsd:extension&gt;</span>
-    <span class="nt">&lt;/xsd:complexContent&gt;</span>
-  <span class="nt">&lt;/xsd:complexType&gt;</span>
-  <span class="nt">&lt;xsd:complexType</span> <span class="na">name=</span><span class="s">&quot;vnd.ez.api.UserGroupRefList&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;xsd:complexContent&gt;</span>
-      <span class="nt">&lt;xsd:extension</span> <span class="na">base=</span><span class="s">&quot;ref&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;xsd:all&gt;</span>
-          <span class="nt">&lt;xsd:eleemnt</span> <span class="na">name=</span><span class="s">&quot;UserGroup&quot;</span> <span class="na">minOccurs=</span><span class="s">&quot;1&quot;</span> <span class="na">maxOccurs=</span><span class="s">&quot;unbounded&quot;</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;xsd:complexType&gt;</span>
-              <span class="nt">&lt;xsd:all&gt;</span>
-                <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;unassign&quot;</span> <span class="na">type=</span><span class="s">&quot;controllerRef&quot;</span> <span class="na">minOccurs=</span><span class="s">&quot;0&quot;</span><span class="nt">/&gt;</span>
-              <span class="nt">&lt;/xsd:all&gt;</span>
-            <span class="nt">&lt;/xsd:complexType&gt;</span>
-          <span class="nt">&lt;/xsd:eleemnt&gt;</span>
-        <span class="nt">&lt;/xsd:all&gt;</span>
-      <span class="nt">&lt;/xsd:extension&gt;</span>
-    <span class="nt">&lt;/xsd:complexContent&gt;</span>
-  <span class="nt">&lt;/xsd:complexType&gt;</span>
-  <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;UserGroupRefList&quot;</span> <span class="na">type=</span><span class="s">&quot;vnd.ez.api.UserGroupRefList&quot;</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;UserGroupList&quot;</span> <span class="na">type=</span><span class="s">&quot;vnd.ez.api.UserGroupList&quot;</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;UserGroup&quot;</span> <span class="na">type=</span><span class="s">&quot;vnd.ez.api.UserGroup&quot;</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/xsd:schema&gt;</span>
-</pre>
-</div>
 <div class="section" id="usergroupcreate-xml-schema">
-<span id="usergroupcreate"></span><h2><a class="toc-backref" href="#id272">6.29&nbsp;&nbsp;&nbsp;UserGroupCreate XML Schema</a></h2>
+<span id="usergroupcreate"></span><h2><a class="toc-backref" href="#id271">6.28&nbsp;&nbsp;&nbsp;UserGroupCreate XML Schema</a></h2>
 <pre class="code xml literal-block">
 <span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
 <span class="nt">&lt;xsd:schema</span> <span class="na">xmlns:xsd=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema&quot;</span>
@@ -14546,7 +14493,7 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
 </pre>
 </div>
 <div class="section" id="usergroupupdate-xml-schema">
-<span id="usergroupupdate"></span><h2><a class="toc-backref" href="#id273">6.30&nbsp;&nbsp;&nbsp;UserGroupUpdate XML Schema</a></h2>
+<span id="usergroupupdate"></span><h2><a class="toc-backref" href="#id272">6.29&nbsp;&nbsp;&nbsp;UserGroupUpdate XML Schema</a></h2>
 <pre class="code xml literal-block">
 <span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
 <span class="nt">&lt;xsd:schema</span> <span class="na">xmlns:xsd=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema&quot;</span>
@@ -14573,7 +14520,7 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
 </pre>
 </div>
 <div class="section" id="usergroup-xml-schema">
-<h2><a class="toc-backref" href="#id274">6.31&nbsp;&nbsp;&nbsp;UserGroup XML Schema</a></h2>
+<span id="usergroup"></span><h2><a class="toc-backref" href="#id273">6.30&nbsp;&nbsp;&nbsp;UserGroup XML Schema</a></h2>
 <pre class="code xml literal-block">
 <span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
 <span class="nt">&lt;xsd:schema</span> <span class="na">version=</span><span class="s">&quot;1.0&quot;</span> <span class="na">xmlns:xsd=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema&quot;</span>
@@ -14627,7 +14574,7 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
 </pre>
 </div>
 <div class="section" id="usercreate-xml-schema">
-<span id="usercreate"></span><h2><a class="toc-backref" href="#id275">6.32&nbsp;&nbsp;&nbsp;UserCreate XML Schema</a></h2>
+<span id="usercreate"></span><h2><a class="toc-backref" href="#id274">6.31&nbsp;&nbsp;&nbsp;UserCreate XML Schema</a></h2>
 <pre class="code xml literal-block">
 <span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
 <span class="nt">&lt;xsd:schema</span> <span class="na">xmlns:xsd=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema&quot;</span>
@@ -14659,7 +14606,7 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
 </pre>
 </div>
 <div class="section" id="userupdate-xml-schema">
-<span id="userupdate"></span><h2><a class="toc-backref" href="#id276">6.33&nbsp;&nbsp;&nbsp;UserUpdate XML Schema</a></h2>
+<span id="userupdate"></span><h2><a class="toc-backref" href="#id275">6.32&nbsp;&nbsp;&nbsp;UserUpdate XML Schema</a></h2>
 <pre class="code xml literal-block">
 <span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
 <span class="nt">&lt;xsd:schema</span> <span class="na">xmlns:xsd=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema&quot;</span>
@@ -14692,7 +14639,7 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
 </pre>
 </div>
 <div class="section" id="user-xml-schema">
-<span id="user"></span><h2><a class="toc-backref" href="#id277">6.34&nbsp;&nbsp;&nbsp;User XML Schema</a></h2>
+<span id="user"></span><h2><a class="toc-backref" href="#id276">6.33&nbsp;&nbsp;&nbsp;User XML Schema</a></h2>
 <pre class="code xml literal-block">
 <span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
 <span class="nt">&lt;xsd:schema</span> <span class="na">version=</span><span class="s">&quot;1.0&quot;</span> <span class="na">xmlns:xsd=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema&quot;</span>
@@ -14742,7 +14689,7 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
 </pre>
 </div>
 <div class="section" id="limitation-xml-schema">
-<span id="limitation"></span><h2><a class="toc-backref" href="#id278">6.35&nbsp;&nbsp;&nbsp;Limitation XML Schema</a></h2>
+<span id="limitation"></span><h2><a class="toc-backref" href="#id277">6.34&nbsp;&nbsp;&nbsp;Limitation XML Schema</a></h2>
 <pre class="code xml literal-block">
 <span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
 <span class="nt">&lt;xsd:schema</span> <span class="na">version=</span><span class="s">&quot;1.0&quot;</span> <span class="na">xmlns:xsd=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema&quot;</span>
@@ -14782,9 +14729,10 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
   <span class="nt">&lt;/xsd:complexType&gt;</span>
 
   <span class="nt">&lt;xsd:complexType</span> <span class="na">name=</span><span class="s">&quot;limitationType&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;xsd:all&gt;</span>
-      <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;values&quot;</span> <span class="na">type=</span><span class="s">&quot;refValueList&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;/xsd:all&gt;</span>
+    <span class="nt">&lt;xsd:choice&gt;</span>
+      <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;values&quot;</span> <span class="na">type=</span><span class="s">&quot;valueType&quot;</span><span class="err">&lt;/xsd:element</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;refs&quot;</span> <span class="na">type=</span><span class="s">&quot;refValueList&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/xsd:choice&gt;</span>
     <span class="nt">&lt;xsd:attribute</span> <span class="na">name=</span><span class="s">&quot;identifier&quot;</span> <span class="na">type=</span><span class="s">&quot;limitationIdentifierType&quot;</span> <span class="nt">/&gt;</span>
   <span class="nt">&lt;/xsd:complexType&gt;</span>
 
@@ -14799,7 +14747,7 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
 </pre>
 </div>
 <div class="section" id="policy-xml-schema">
-<span id="policyupdate"></span><span id="policycreate"></span><span id="policy"></span><h2><a class="toc-backref" href="#id279">6.36&nbsp;&nbsp;&nbsp;Policy XML Schema</a></h2>
+<span id="policyupdate"></span><span id="policycreate"></span><span id="policy"></span><h2><a class="toc-backref" href="#id278">6.35&nbsp;&nbsp;&nbsp;Policy XML Schema</a></h2>
 <pre class="code xml literal-block">
 <span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
 <span class="nt">&lt;xsd:schema</span> <span class="na">version=</span><span class="s">&quot;1.0&quot;</span> <span class="na">xmlns:xsd=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema&quot;</span>
@@ -14852,7 +14800,7 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
 </pre>
 </div>
 <div class="section" id="role-xml-schema">
-<span id="roleinput"></span><span id="roleassigninput"></span><span id="role"></span><h2><a class="toc-backref" href="#id280">6.37&nbsp;&nbsp;&nbsp;Role XML Schema</a></h2>
+<span id="roleinput"></span><span id="roleassigninput"></span><span id="role"></span><h2><a class="toc-backref" href="#id279">6.36&nbsp;&nbsp;&nbsp;Role XML Schema</a></h2>
 <pre class="code xml literal-block">
 <span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
 <span class="nt">&lt;xsd:schema</span> <span class="na">version=</span><span class="s">&quot;1.0&quot;</span> <span class="na">xmlns:xsd=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema&quot;</span>
@@ -14947,7 +14895,7 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
 </pre>
 </div>
 <div class="section" id="errormessage-xml-schema">
-<span id="errormessage"></span><h2><a class="toc-backref" href="#id281">6.38&nbsp;&nbsp;&nbsp;ErrorMessage XML Schema</a></h2>
+<span id="errormessage"></span><h2><a class="toc-backref" href="#id280">6.37&nbsp;&nbsp;&nbsp;ErrorMessage XML Schema</a></h2>
 <pre class="code xml literal-block">
 <span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
 <span class="nt">&lt;xsd:schema</span> <span class="na">version=</span><span class="s">&quot;1.0&quot;</span> <span class="na">xmlns:xsd=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema&quot;</span>
