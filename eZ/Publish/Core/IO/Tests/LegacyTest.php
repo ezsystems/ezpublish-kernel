@@ -25,14 +25,12 @@ class LegacyTest extends BaseHandlerTest
      */
     protected function getIoHandler()
     {
-        if ( !isset( $_ENV['legacyKernel'] ) )
-        {
-            self::markTestSkipped(
-                'Legacy kernel is needed to run these tests. Please ensure that "legacyKernel" environment variable is properly set with a eZ\\Publish\\Core\\MVC\\Legacy\\Kernel instance'
-            );
-        }
-
-        return new Legacy( $_ENV['legacyKernel'] );
+        /**
+         * @var \eZ\Publish\Core\Base\TestKernel $testKernel
+         */
+        $testKernel = require 'container.php';
+        $legacyKernelClosure = $testKernel->getContainer()->get('ezpublish_legacy.kernel');
+        return new Legacy( $legacyKernelClosure() );
     }
 
     public function setUp()
