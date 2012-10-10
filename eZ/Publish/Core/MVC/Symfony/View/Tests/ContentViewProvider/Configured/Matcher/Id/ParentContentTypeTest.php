@@ -63,7 +63,7 @@ class ParentContentTypeTest extends BaseTest
             ->disableOriginalConstructor()
             ->getMock()
         ;
-        $locationServiceMock->expects( $this->once() )
+        $locationServiceMock->expects( $this->atLeastOnce() )
             ->method( 'loadLocation' )
             ->will(
                 $this->returnValue( $parentLocation )
@@ -71,7 +71,7 @@ class ParentContentTypeTest extends BaseTest
         ;
         // The following is used in the case of a match by contentInfo
         $locationServiceMock->expects( $this->any() )
-            ->method( 'loadMainLocation' )
+            ->method( 'loadLocation' )
             ->will(
                 $this->returnValue( $this->getLocationMock() )
             )

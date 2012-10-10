@@ -26,3 +26,4 @@
   </xsd:complexType>
   <xsd:element name="UserUpdate" type="vnd.ez.api.UserUpdate"></xsd:element>
 </xsd:schema>
+

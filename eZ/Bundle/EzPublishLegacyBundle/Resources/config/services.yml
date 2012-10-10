@@ -16,6 +16,7 @@ parameters:
     ezpublish_legacy.url_generator.class: eZ\Bundle\EzPublishLegacyBundle\Routing\UrlGenerator
     ezpublish_legacy.siteaccess_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess
     ezpublish_legacy.session_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Session
+    ezpublish_legacy.configuration_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Configuration
     ezpublish_legacy.content_exception_handler.class: eZ\Publish\Core\MVC\Legacy\EventListener\APIContentExceptionListener
     ezpublish_legacy.config.resolver.class: eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver
     ezpublish_legacy.config.default_scope: site
@@ -88,9 +89,15 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    ezpublish_legacy.configuration_mapper:
+        class: %ezpublish_legacy.configuration_mapper.class%
+        arguments: [@ezpublish.config.resolver]
+        tags:
+            - { name: kernel.event_subscriber }
+
     ezpublish_legacy.content_exception_handler:
         class: %ezpublish_legacy.content_exception_handler.class%
-        arguments: [@ezpublish_legacy.content_view_provider, @?logger]
+        arguments: [@ezpublish_legacy.content_view_provider, @ezpublish_legacy.location_view_provider, @?logger]
         tags:
             - { name: kernel.event_subscriber }
 

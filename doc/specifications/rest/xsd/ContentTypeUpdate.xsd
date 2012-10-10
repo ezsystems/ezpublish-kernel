@@ -13,8 +13,8 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="names"
-        type="multiLanguageValuesType" minOccurs="0" />
+      <xsd:element name="names" type="multiLanguageValuesType"
+        minOccurs="0" />
       <xsd:element name="descriptions" type="multiLanguageValuesType"
         minOccurs="0" />
       <xsd:element name="modificationDate" type="xsd:dateTime"
@@ -129,3 +129,4 @@
   </xsd:complexType>
   <xsd:element name="ContentTypeUpdate" type="vnd.ez.api.ContentTypeUpdate"></xsd:element>
 </xsd:schema>
+

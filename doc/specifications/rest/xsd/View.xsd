@@ -515,3 +515,4 @@
   <xsd:element name="FacetBuilder" type="facetBuilderListType" />
   <xsd:element name="View" type="viewType" />
 </xsd:schema>
+

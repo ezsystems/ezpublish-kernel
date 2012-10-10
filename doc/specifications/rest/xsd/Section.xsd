@@ -4,7 +4,7 @@
 
   <xsd:include schemaLocation="CommonDefinitions.xsd" />
   
-    <xsd:complexType name="vnd.ez.api.Section">
+  <xsd:complexType name="vnd.ez.api.Section">
     <xsd:complexContent>
       <xsd:extension base="ref">
         <xsd:all>
@@ -33,6 +33,5 @@
   <xsd:element name="Section" type="vnd.ez.api.Section"></xsd:element>
   <xsd:element name="SectionList" type="vnd.ez.api.SectionList"></xsd:element>
   <xsd:element name="SectionInput" type="vnd.ez.api.SectionInput"></xsd:element>
-  
-  
 </xsd:schema>
+

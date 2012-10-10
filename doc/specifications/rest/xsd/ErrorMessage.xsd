@@ -12,3 +12,4 @@
   </xsd:complexType>
   <xsd:element name="ErrorMessage" type="vnd.ez.api.ErrorMessage"></xsd:element>
 </xsd:schema>
+

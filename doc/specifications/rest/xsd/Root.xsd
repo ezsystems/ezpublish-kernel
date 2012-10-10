@@ -14,7 +14,10 @@
       <xsd:element name="rootMediaFolder" type="ref"/>
       <xsd:element name="trash" type="ref"/>
       <xsd:element name="sections" type="ref"/>
+      <xsd:element name="views" type="ref"/>
     </xsd:all>
   </xsd:complexType>
   <xsd:element name="Root" type="vnd.ez.api.Root"/>
 </xsd:schema>
+
+

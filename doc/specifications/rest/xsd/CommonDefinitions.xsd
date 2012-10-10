@@ -11,7 +11,7 @@
     <xsd:attribute name="media-type" type="xsd:string" />
   </xsd:complexType>
 
-  <xsd:complexType name="vnd.ez.api.RefList">
+  <xsd:complexType name="refValueList">
     <xsd:sequence>
       <xsd:element name="ref" type="ref" maxOccurs="unbounded" />
     </xsd:sequence>
@@ -28,6 +28,19 @@
     <xsd:attribute name="method" type="xsd:string" />
   </xsd:complexType>
 
+  <xsd:complexType name="valueType" mixed="true">
+    <xsd:sequence>
+      <xsd:element name="value" type="valueType" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="key" type="xsd:string" />
+  </xsd:complexType>
+
+  <xsd:complexType name="fieldValueType" mixed="true">
+    <xsd:sequence>
+      <xsd:element name="value" type="valueType" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
   <xsd:complexType name="fieldInputValueType">
     <xsd:annotation>
       <xsd:documentation>
@@ -38,16 +51,7 @@
     <xsd:all>
       <xsd:element name="fieldDefinitionIdentifer" type="xsd:string" />
       <xsd:element name="languageCode" type="xsd:string" />
-      <xsd:element name="value" type="xsd:anyType"/>
-    </xsd:all>
-  </xsd:complexType>
-
-  <xsd:complexType name="fieldValueType">
-    <xsd:all>
-      <xsd:element name="id" type="xsd:integer" />
-      <xsd:element name="fieldDefinitionIdentifer" type="xsd:string" />
-      <xsd:element name="languageCode" type="xsd:string" />
-      <xsd:element name="value" type="xsd:anyType"/>
+      <xsd:element name="fieldValue" type="fieldValueType" />
     </xsd:all>
   </xsd:complexType>
 
@@ -115,3 +119,4 @@
     <xsd:list itemType="xsd:string" />
   </xsd:simpleType>
 </xsd:schema>
+

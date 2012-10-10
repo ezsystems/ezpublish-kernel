@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\FieldType\XmlText\Converter\Output;
 
 use eZ\Publish\Core\FieldType\XmlText\Converter,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     DOMDocument,
     XSLTProcessor;
 
@@ -26,13 +27,33 @@ class Html5 implements Converter
     protected $stylesheet;
 
     /**
+     * Array of converters that needs to be called before actual processing.
+     *
+     * @var array[eZ\Publish\Core\FieldType\XmlText\Converter]
+     */
+    protected $preConverters;
+
+    /**
      * Constructor
      *
      * @param string $stylesheet Stylesheet to use for conversion
+     * @param array[eZ\Publish\Core\FieldType\XmlText\Converter] $preConverters Array of pre-converters
      */
-    public function __construct( $stylesheet )
+    public function __construct( $stylesheet, array $preConverters = array() )
     {
         $this->stylesheet = $stylesheet;
+
+        foreach ( $preConverters as $preConverter )
+        {
+            if ( !$preConverter instanceof Converter )
+                throw new InvalidArgumentType(
+                    '$preConverters',
+                    "array[eZ\Publish\\Core\\FieldType\\XmlText\\Converter]",
+                    $preConverter
+                );
+        }
+
+        $this->preConverters = $preConverters;
     }
 
     /**
@@ -43,6 +64,11 @@ class Html5 implements Converter
      */
     public function convert( $xmlString )
     {
+        foreach ( $this->preConverters as $preConverter )
+        {
+            $xmlString = $preConverter->convert( $xmlString );
+        }
+
         $doc = new DOMDocument;
         $doc->load( $this->stylesheet );
         $xsl = new XSLTProcessor();

@@ -12,7 +12,7 @@
     </xsd:restriction>
   </xsd:simpleType>
 
-  <xsd:complexType name="vnd.ez.api.Relation">
+  <xsd:complexType name="relationValueType">
     <xsd:complexContent>
       <xsd:extension base="ref">
         <xsd:all>
@@ -25,21 +25,24 @@
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
-  <xsd:complexType name="vnd.ez.api.RelationList">
+
+  <xsd:complexType name="relationListType">
     <xsd:complexContent>
       <xsd:extension base="ref">
         <xsd:sequence>
-          <xsd:element name="Relation" type="vnd.ez.api.Relation" />
+          <xsd:element name="Relation" type="relationValueType" />
         </xsd:sequence>
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
-  <xsd:complexType name="vnd.ez.api.RelationCreate">
+
+  <xsd:complexType name="relationCreateType">
     <xsd:all>
       <xsd:element name="Destination" type="ref" />
     </xsd:all>
   </xsd:complexType>
-  <xsd:element name="Relation" type="vnd.ez.api.Relation"></xsd:element>
-  <xsd:element name="RelationList" type="vnd.ez.api.RelationList"></xsd:element>
-  <xsd:element name="RelationCreate" type="vnd.ez.api.RelationCreate"></xsd:element>
+  <xsd:element name="Relation" type="relationValueType"></xsd:element>
+  <xsd:element name="RelationList" type="relationListType"></xsd:element>
+  <xsd:element name="RelationCreate" type="relationCreateType"></xsd:element>
 </xsd:schema>
+

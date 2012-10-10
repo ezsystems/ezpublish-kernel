@@ -3,6 +3,14 @@
   xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
   <xsd:include schemaLocation="VersionInfo.xsd" />
   <xsd:include schemaLocation="Relation.xsd" />
+  <xsd:complexType name="fieldOutputValueType">
+    <xsd:all>
+      <xsd:element name="id" type="xsd:integer" />
+      <xsd:element name="fieldDefinitionIdentifer" type="xsd:string" />
+      <xsd:element name="languageCode" type="xsd:string" />
+      <xsd:element name="value" type="fieldValueType" />
+    </xsd:all>
+  </xsd:complexType>
   <xsd:complexType name="vnd.ez.api.Version">
     <xsd:complexContent>
       <xsd:extension base="ref">
@@ -34,3 +42,4 @@
   </xsd:complexType>
   <xsd:element name="Version" type="vnd.ez.api.Version"></xsd:element>
 </xsd:schema>
+

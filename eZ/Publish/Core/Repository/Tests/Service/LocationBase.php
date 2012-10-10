@@ -294,20 +294,6 @@ abstract class LocationBase extends BaseServiceTest
         $this->repository->getLocationService()->loadLocationByRemoteId( "not-existing" );
     }
 
-    /**
-     * Test loading main location
-     * @covers \eZ\Publish\API\Repository\LocationService::loadMainLocation
-     */
-    public function testLoadMainLocation()
-    {
-        $contentInfo = $this->repository->getContentService()->loadContentInfo( 42 );
-        $location = $this->repository->getLocationService()->loadMainLocation( $contentInfo );
-
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $location );
-        self::assertGreaterThan( 0, $location->id );
-        self::assertEquals( true, $location->id == $contentInfo->mainLocationId );
-    }
-
     protected function createContentDraft()
     {
         $contentTypeService = $this->repository->getContentTypeService();
@@ -327,21 +313,6 @@ abstract class LocationBase extends BaseServiceTest
         $locationCreateStruct = $locationService->newLocationCreateStruct( 5 );
 
         return $contentService->createContent( $contentCreateStruct, array( $locationCreateStruct ) );
-    }
-
-    /**
-     * Test loading main location throwing BadStateException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @covers \eZ\Publish\API\Repository\LocationService::loadMainLocation
-     */
-    public function testLoadMainLocationThrowsBadStateException()
-    {
-        $contentDraft = $this->createContentDraft();
-
-        // Throws an exception because content does not have published version
-        $this->repository->getLocationService()->loadMainLocation(
-            $contentDraft->getVersionInfo()->getContentInfo()
-        );
     }
 
     /**

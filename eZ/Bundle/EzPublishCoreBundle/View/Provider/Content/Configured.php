@@ -1,15 +1,15 @@
 <?php
 /**
- * File containing the Configured ContentViewProvider class.
+ * File containing the Configured Content View Provider class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishCoreBundle\View\ContentViewProvider;
+namespace eZ\Bundle\EzPublishCoreBundle\View\Provider\Content;
 
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured as BaseConfigured,
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Content\Configured as BaseConfigured,
     eZ\Publish\Core\MVC\ConfigResolverInterface,
     eZ\Publish\API\Repository\Repository,
     Symfony\Component\DependencyInjection\ContainerInterface;
@@ -33,10 +33,7 @@ class Configured extends BaseConfigured
     {
         $this->container = $container;
 
-        $locationMatchConfig = $configResolver->getParameter( 'location_view' );
-        $contentMatchConfig = $configResolver->getParameter( 'content_view' );
-
-        parent::__construct( $repository, $locationMatchConfig, $contentMatchConfig );
+        parent::__construct( $repository, $configResolver->getParameter( 'content_view' ) );
     }
 
     /**
