@@ -336,7 +336,7 @@ abstract class UserBase extends BaseServiceTest
 
         $newMainLocation = $locationService->loadLocation( $movedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId );
         self::assertEquals(
-            $parentUserGroup->getVersionInfo()->getContentInfo()->mainLocationId ,
+            $parentUserGroup->getVersionInfo()->getContentInfo()->mainLocationId,
             $newMainLocation->parentLocationId
         );
     }
