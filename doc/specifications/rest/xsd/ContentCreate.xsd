@@ -2,13 +2,11 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
   <xsd:include schemaLocation="CommonDefinitions.xsd" />
-  <xsd:include schemaLocation="LocationCreate.xsd" />
-  
-  <xsd:complexType name="vnd.ez.api.ContentCreate">
+  <xsd:complexType name="contentCreateType">
     <xsd:all>
       <xsd:element name="ContentType" type="ref" />
       <xsd:element name="mainLanguageCode" type="xsd:string" />
-      <xsd:element name="LocationCreate" type="vnd.ez.api.LocationCreate"/>
+      <xsd:element name="LocationCreate" type="locationCreateType"/>
       <xsd:element name="Section" type="ref" minOccurs="0" />
       <xsd:element name="User" type="ref" minOccurs="0" />
       <xsd:element name="alwaysAvailable" type="xsd:boolean"
@@ -20,11 +18,12 @@
       <xsd:element name="fields">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="field" type="fieldInputValueType" maxOccurs="unbounded"/>
+            <xsd:element name="field" type="fieldInputValueType" />
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
     </xsd:all>
   </xsd:complexType>
-  <xsd:element name="ContentCreate" type="vnd.ez.api.ContentCreate"></xsd:element>
+  <xsd:element name="ContentCreate" type="contentCreateType"></xsd:element>
 </xsd:schema>
+

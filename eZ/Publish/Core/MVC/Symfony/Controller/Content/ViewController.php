@@ -15,7 +15,8 @@ use eZ\Publish\Core\MVC\Symfony\Controller\Controller,
     eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent,
     eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute,
     Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\Security\Core\Exception\AccessDeniedException;
+    Symfony\Component\Security\Core\Exception\AccessDeniedException,
+    \DateTime;
 
 class ViewController extends Controller
 {
@@ -27,6 +28,40 @@ class ViewController extends Controller
     public function __construct( ViewManager $viewManager )
     {
         $this->viewManager = $viewManager;
+    }
+
+    /**
+     * Build the response so that depending on settings it's cacheable
+     *
+     * @param string $etag
+     * @param DateTime $lastModified
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function buildResponse( $etag, DateTime $lastModified )
+    {
+        $request = $this->getRequest();
+        $response = new Response();
+        if ( $this->getParameter( 'content.view_cache' ) === true )
+        {
+            $response->setPublic();
+            $response->setEtag( $etag );
+
+            // If-None-Match is the request counterpart of Etag response header
+            // Making the response to vary against it ensures that an HTTP
+            // reverse proxy caches the different possible variations of the
+            // response as it can depend on user role for instance.
+            if ( $request->headers->has( 'If-None-Match' )
+                && $this->getParameter( 'content.ttl_cache' ) === true )
+            {
+                $response->setVary( 'If-None-Match' );
+                $response->setMaxAge(
+                    $this->getParameter( 'content.default_ttl' )
+                );
+            }
+
+            $response->setLastModified( $lastModified );
+        }
+        return $response;
     }
 
     /**
@@ -44,38 +79,27 @@ class ViewController extends Controller
         if ( !$this->isGranted( new AuthorizationAttribute( 'content', 'read' ) ) )
             throw new AccessDeniedException();
 
-        $response = new Response();
-        $request = $this->getRequest();
-        // TODO: Use a dedicated etag generator, generating a hash instead of plain text
-        $etag = "ezpublish-location-$locationId-$viewType";
-
         try
         {
             // Assume that location is cached by the repository
             $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
 
-            if ( $this->getParameter( 'content.view_cache' ) === true )
+            // TODO: Use a dedicated etag generator, generating a hash
+            // instead of plain text
+            $response = $this->buildResponse(
+                "ezpublish-location-$locationId-$viewType",
+                $location->getContentInfo()->modificationDate
+            );
+
+
+            if ( $response->isNotModified( $this->getRequest() ) )
             {
-                $response->setPublic();
-                $response->setEtag( $etag );
-
-                // If-None-Match is the request counterpart of Etag response header
-                // Making the response to vary against it ensures that an HTTP reverse proxy caches the different possible variations of the response
-                // as it can depend on user role for instance.
-                if ( $request->headers->has( 'If-None-Match' ) && $this->getParameter( 'content.ttl_cache' ) === true )
-                {
-                    $response->setVary( 'If-None-Match' );
-                    $response->setMaxAge( $this->getParameter( 'content.default_ttl' ) );
-                }
-
-                $response->setLastModified( $location->getContentInfo()->modificationDate );
-                if ( $response->isNotModified( $this->getRequest() ) )
-                {
-                    return $response;
-                }
+                return $response;
             }
 
-            $response->setContent( $this->viewManager->renderLocation( $location ) );
+            $response->setContent(
+                $this->viewManager->renderLocation( $location, $viewType )
+            );
 
             return $response;
         }
@@ -86,6 +110,74 @@ class ViewController extends Controller
                 array(
                      'contentId'    => null,
                      'locationId'   => $locationId,
+                     'viewType'     => $viewType
+                )
+            );
+            $this->getEventDispatcher()->dispatch( MVCEvents::API_CONTENT_EXCEPTION, $event );
+            if ( $event->hasContentView() )
+            {
+                $response->setContent(
+                    $this->viewManager->renderContentView(
+                        $event->getContentView()
+                    )
+                );
+
+                return $response;
+            }
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Main action for viewing content.
+     * Response will be cached with HttpCache validation model (Etag)
+     *
+     * @param int $contentId
+     * @param string $viewType
+     * @param boolean $noLayout
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \Exception
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewContent( $contentId, $viewType, $noLayout )
+    {
+        if ( !$this->isGranted( new AuthorizationAttribute( 'content', 'read' ) ) )
+            throw new AccessDeniedException();
+
+        try
+        {
+            $content = $this->getRepository()->getContentService()->loadContent( $contentId );
+
+            // TODO: Use a dedicated etag generator, generating a hash
+            // instead of plain text
+            $response = $this->buildResponse(
+                "ezpublish-content-$contentId-$viewType-$noLayout",
+                $content->contentInfo->modificationDate
+            );
+
+            if ( $response->isNotModified( $this->getRequest() ) )
+            {
+                return $response;
+            }
+
+            $response->setContent(
+                $this->viewManager->renderContent(
+                    $content,
+                    $viewType,
+                    array( 'noLayout' => $noLayout )
+                )
+            );
+
+            return $response;
+        }
+        catch ( \Exception $e )
+        {
+            $event = new APIContentExceptionEvent(
+                $e,
+                array(
+                     'contentId'    => $contentId,
+                     'locationId'   => null,
                      'viewType'     => $viewType
                 )
             );

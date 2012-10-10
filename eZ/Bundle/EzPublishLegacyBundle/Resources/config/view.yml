@@ -1,7 +1,8 @@
 parameters:
-    ezpublish_legacy.content_view_provider.class: eZ\Publish\Core\MVC\Legacy\View\ContentViewProvider
-    ezpublish_legacy.content_view_decorator.twig.class: eZ\Publish\Core\MVC\Legacy\View\TwigContentViewLayoutDecorator
-    ezpublish_legacy.content_view_decorator.options:
+    ezpublish_legacy.content_view_provider.class: eZ\Publish\Core\MVC\Legacy\View\Provider\Content
+    ezpublish_legacy.location_view_provider.class: eZ\Publish\Core\MVC\Legacy\View\Provider\Location
+    ezpublish_legacy.view_decorator.twig.class: eZ\Publish\Core\MVC\Legacy\View\TwigContentViewLayoutDecorator
+    ezpublish_legacy.view_decorator.options:
         layout: %ezpublish_legacy.view.default_layout%
         viewbaseLayout: %ezpublish.content_view.viewbase_layout%
         contentBlockName: %ezpublish.content_view.content_block_name%
@@ -9,13 +10,19 @@ parameters:
 services:
     ezpublish_legacy.content_view_provider:
         class: %ezpublish_legacy.content_view_provider.class%
-        arguments: [@ezpublish_legacy.kernel, @ezpublish_legacy.content_view_decorator, @?logger]
+        arguments: [@ezpublish_legacy.kernel, @ezpublish_legacy.view_decorator, @?logger]
         tags:
             - {name: ezpublish.content_view_provider, priority: -255}
 
-    ezpublish_legacy.content_view_decorator.twig:
-        class: %ezpublish_legacy.content_view_decorator.twig.class%
-        arguments: [@twig, %ezpublish_legacy.content_view_decorator.options%]
+    ezpublish_legacy.location_view_provider:
+        class: %ezpublish_legacy.location_view_provider.class%
+        arguments: [@ezpublish_legacy.kernel, @ezpublish_legacy.view_decorator, @?logger]
+        tags:
+            - {name: ezpublish.location_view_provider, priority: -255}
 
-    ezpublish_legacy.content_view_decorator:
-        alias: ezpublish_legacy.content_view_decorator.twig
+    ezpublish_legacy.view_decorator.twig:
+        class: %ezpublish_legacy.view_decorator.twig.class%
+        arguments: [@twig, %ezpublish_legacy.view_decorator.options%]
+
+    ezpublish_legacy.view_decorator:
+        alias: ezpublish_legacy.view_decorator.twig

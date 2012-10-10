@@ -8,7 +8,7 @@
     <xsd:complexContent>
       <xsd:extension base="ref">
         <xsd:sequence>
-          <xsd:element name="id" type="xsd:string">
+          <xsd:element name="id" type="xsd:int">
             <xsd:annotation>
               <xsd:documentation>
                 Content type ID
@@ -183,3 +183,4 @@
   <xsd:element name="ContentTypeList" type="vnd.ez.api.ContentTypeList"></xsd:element>
 
 </xsd:schema>
+

@@ -7,11 +7,11 @@
     <xsd:complexContent>
       <xsd:extension base="ref">
         <xsd:all>
-          <xsd:element name="id" type="xsd:string">
+          <xsd:element name="id" type="xsd:int">
             <xsd:annotation>
               <xsd:documentation>
                 Location ID.
-              </xsd:documentation>
+                          </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="priority" type="xsd:int">
@@ -84,6 +84,7 @@
           </xsd:element>
           <xsd:element name="remoteId" type="xsd:string"
             minOccurs="0" />
+          <xsd:element name="Children" type="ref" />
           <xsd:element name="Content" type="ref" />
           <xsd:element name="sortField" type="sortFieldType" />
           <xsd:element name="sortOrder" type="sortOrderType" />
@@ -104,3 +105,4 @@
   <xsd:element name="Location" type="vnd.ez.api.Location" />
   <xsd:element name="LocationList" type="vnd.ez.api.LocationList" />
 </xsd:schema>
+

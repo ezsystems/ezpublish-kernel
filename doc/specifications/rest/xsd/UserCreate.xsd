@@ -25,3 +25,4 @@
   </xsd:complexType>
   <xsd:element name="UserCreate" type="vnd.ez.api.UserCreate"></xsd:element>
 </xsd:schema>
+

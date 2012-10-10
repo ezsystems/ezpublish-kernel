@@ -65,7 +65,7 @@ class LegacyStorage extends Gateway
     }
 
     /**
-     * @see \eZ\Publish\SPI\FieldType\Url\UrlStorage\Gateway
+     * @see \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field )
     {
@@ -106,7 +106,7 @@ class LegacyStorage extends Gateway
     }
 
     /**
-     * @see \eZ\Publish\SPI\FieldType\Relation\RelationStorage\Gateway
+     * @see \eZ\Publish\Core\FieldType\Relation\RelationStorage\Gateway
      */
     public function getFieldData( Field $field )
     {
@@ -115,7 +115,7 @@ class LegacyStorage extends Gateway
     }
 
     /**
-     * @see \eZ\Publish\SPI\FieldType\Relation\RelationStorage\Gateway
+     * @see \eZ\Publish\Core\FieldType\Relation\RelationStorage\Gateway
      */
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldId, array $context )
     {

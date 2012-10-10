@@ -11,10 +11,9 @@ namespace eZ\Publish\Core\MVC\Legacy\View\Provider;
 
 use eZ\Publish\Core\MVC\Legacy\View\Provider,
     eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProviderInterface,
-    eZ\Publish\API\Repository\Values\Content\Location,
+    eZ\Publish\API\Repository\Values\Content\Location as APILocation,
     eZ\Publish\Core\MVC\Symfony\View\ContentView,
     eZModule;
-    eZTemplate,
 
 class Location extends Provider implements LocationViewProviderInterface
 {
@@ -26,7 +25,7 @@ class Location extends Provider implements LocationViewProviderInterface
      * @param string $viewType Variation of display for your content.
      * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|void
      */
-    public function getView( Location $location, $viewType )
+    public function getView( APILocation $location, $viewType )
     {
         $legacyKernel = $this->getLegacyKernel();
         $logger = $this->logger;

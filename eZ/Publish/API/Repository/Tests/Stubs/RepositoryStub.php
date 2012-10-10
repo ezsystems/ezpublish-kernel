@@ -478,7 +478,7 @@ class RepositoryStub implements Repository
     }
 
     /**
-     * Get UrlAliasService
+     * Get URLAliasService
      *
      * @return \eZ\Publish\API\Repository\URLAliasService
      */

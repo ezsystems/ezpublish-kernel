@@ -209,57 +209,6 @@ class LocationService implements LocationServiceInterface
     }
 
     /**
-     * loads the main location of a content object
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if there is no published version yet
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location|null Null if no location exists
-     */
-    public function loadMainLocation( APIContentInfo $contentInfo )
-    {
-        if ( !is_numeric( $contentInfo->id ) )
-            throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
-
-        $query = new Query(
-            array(
-                'criterion' => new CriterionLogicalAnd(
-                    array(
-                        new CriterionContentId( $contentInfo->id ),
-                        new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
-                    )
-                )
-            )
-        );
-
-        $searchResult = $this->persistenceHandler->searchHandler()->findContent( $query );
-        if ( $searchResult->totalCount == 0 )
-            throw new BadStateException( "contentInfo", 'content info has no published versions yet' );
-        if ( $searchResult->totalCount > 1 )
-            throw new BadStateException( "contentInfo", 'several content info exists for id:' . $contentInfo->id );
-
-        $spiLocations = $searchResult->searchHits[0]->valueObject->locations;
-        if ( empty( $spiLocations ) || !is_array( $spiLocations ) )
-            return null;
-
-        foreach ( $spiLocations as $spiLocation )
-        {
-            if ( $spiLocation->id == $spiLocation->mainLocationId )
-            {
-                $location = $this->buildDomainLocationObject( $spiLocation );
-                if ( !$this->repository->canUser( 'content', 'read', $location->getContentInfo(), $location ) )
-                    throw new UnauthorizedException( 'content', 'read' );
-
-                return $location;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Loads the locations for the given content object.
      *
      * If a $rootLocation is given, only locations that belong to this location are returned.
@@ -500,9 +449,8 @@ class LocationService implements LocationServiceInterface
         // @todo: set pathIdentificationString
         // $createStruct->pathIdentificationString = null;
 
-        $mainLocation = $this->loadMainLocation( $contentInfo );
-        if ( $mainLocation !== null )
-            $createStruct->mainLocationId = $mainLocation->id;
+        if ( $contentInfo->mainLocationId !== null )
+            $createStruct->mainLocationId = $contentInfo->mainLocationId;
 
         $createStruct->sortField = $locationCreateStruct->sortField !== null ? (int) $locationCreateStruct->sortField : APILocation::SORT_FIELD_NAME;
         $createStruct->sortOrder = $locationCreateStruct->sortOrder !== null ? (int) $locationCreateStruct->sortOrder : APILocation::SORT_ORDER_ASC;

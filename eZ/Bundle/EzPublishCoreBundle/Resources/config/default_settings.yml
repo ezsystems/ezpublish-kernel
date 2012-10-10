@@ -1,7 +1,6 @@
 parameters:
     # Kernel related params
     webroot_dir: %kernel.root_dir%/../web
-    binaryfile_identifier_prefix:
 
     ###
     # ezsettings namespace, default scope
@@ -17,8 +16,8 @@ parameters:
     ezsettings.default.url_alias_router: true                       # Use UrlAliasRouter by default
     ezsettings.default.languages: ["eng-GB"]
     ezsettings.default.var_dir: "var"
-    ezsettings.default.storage_dir: "%ezsettings.default.var_dir%/storage"
-    ezsettings.default.binary_dir: "%ezsettings.default.storage_dir%/original"
+    ezsettings.default.storage_dir: "storage"
+    ezsettings.default.binary_dir: "original"
 
     # Content settings
     ezsettings.default.content.view_cache: true         # Whether to use content view cache or not (Etag/Last-Modified based)

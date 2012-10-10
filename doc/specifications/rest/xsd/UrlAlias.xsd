@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
+  <xsd:include schemaLocation="CommonDefinitions.xsd" />
+  <xsd:simpleType name="urlAliasType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="LOCATION" />
+      <xsd:enumeration value="RESOURCE" />
+      <xsd:enumeration value="VIRTUAL" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="vnd.ez.api.UrlAlias">
+    <xsd:complexContent>
+      <xsd:extension base="ref">
+        <xsd:sequence>
+          <xsd:choice>
+            <xsd:element name="location" type="ref" />
+            <xsd:element name="url" type="xsd:string" />
+          </xsd:choice>
+          <xsd:element name="path" type="xsd:string" />
+          <xsd:element name="languageCodes" type="xsd:string" />
+          <xsd:element name="alwaysAvailable" type="xsd:boolean" />
+          <xsd:element name="isHistory" type="xsd:boolean" />
+          <xsd:element name="forward" type="xsd:boolean" />
+          <xsd:element name="custom" type="xsd:boolean" />
+        </xsd:sequence>
+        <xsd:attribute name="id" type="xsd:string" />
+        <xsd:attribute name="type" type="urlAliasType" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="vnd.ez.api.UrlAliasList">
+    <xsd:sequence>
+      <xsd:element name="UrlAlias" type="vnd.ez.api.UrlAlias"
+        minOccurs="0" maxOccurs="unbounded" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="vnd.ez.api.UrlAliasCreate">
+    <xsd:sequence>
+      <xsd:choice>
+        <xsd:element name="location" type="ref" />
+        <xsd:element name="url" type="xsd:string" />
+      </xsd:choice>
+      <xsd:element name="resource" type="xsd:string" />
+      <xsd:element name="path" type="xsd:string" />
+      <xsd:element name="languageCode" type="xsd:string" />
+      <xsd:element name="alwaysAvailable" type="xsd:boolean"
+        default="false" />
+      <xsd:element name="forward" type="xsd:boolean"
+        default="false" />
+    </xsd:sequence>
+    <xsd:attribute name="type" type="urlAliasType" />
+  </xsd:complexType>
+</xsd:schema>
+

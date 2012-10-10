@@ -495,8 +495,8 @@ class URLAliasServiceStub implements URLAliasService
     /**
      * Marks the given alias as being historical.
      *
-     * @param \eZ\Public\API\Repository\Values\Content\URLAlias $alias
-     * @return \eZ\Public\API\Repository\Values\Content\URLAlias
+     * @param \eZ\Publish\API\Repository\Values\Content\URLAlias $alias
+     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
     private function obsoleteAlias( URLAlias $alias )
     {

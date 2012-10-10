@@ -86,7 +86,7 @@ class ParentLocationTest extends BaseTest
         $this->matcher->setMatchingConfig( $matchingConfig );
         $this->assertSame(
             $expectedResult,
-            $this->matcher->matchContentInfo( $this->getContentInfoMock() )
+            $this->matcher->matchContentInfo( $this->getContentInfoMock( array( "mainLocationId" => 42 ) ) )
         );
     }
 
@@ -130,8 +130,8 @@ class ParentLocationTest extends BaseTest
             ->getMock()
         ;
         $locationServiceMock->expects( $this->once() )
-            ->method( 'loadMainLocation' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' ) )
+            ->method( 'loadLocation' )
+            ->with( 42 )
             ->will(
                 $this->returnValue(
                     $this->getLocationMock( array( 'parentLocationId' => $parentLocationId ) )
