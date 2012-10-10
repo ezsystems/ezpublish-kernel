@@ -205,21 +205,6 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
     }
 
     /**
-     * loads the main location of a content object
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if there is no published version yet
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location|null Null if no location exists
-     */
-    public function loadMainLocation( ContentInfo $contentInfo )
-    {
-        throw new \Exception( "@TODO: Implement." );
-    }
-
-    /**
      * Loads the locations for the given content object.
      *
      * If a $rootLocation is given, only locations that belong to this location are returned.

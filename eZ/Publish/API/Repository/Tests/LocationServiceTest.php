@@ -468,68 +468,6 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
-     * Test for the loadMainLocation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::loadMainLocation()
-     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
-     */
-    public function testLoadMainLocation()
-    {
-        $repository = $this->getRepository();
-
-        $contentId = $this->generateId( 'object', 4 );
-        /* BEGIN: Use Case */
-        // $contentId is the ID of an existing content object
-        $contentService = $repository->getContentService();
-        $locationService = $repository->getLocationService();
-
-        $contentInfo = $contentService->loadContentInfo( $contentId );
-
-        $location = $locationService->loadMainLocation(
-            $contentInfo
-        );
-        /* END: Use Case */
-
-        $this->assertEquals(
-            $locationService->loadLocation( $this->generateId( 'location', 5 ) ),
-            $location
-        );
-    }
-
-    /**
-     * Test for the loadMainLocation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::loadMainLocation()
-     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadMainLocation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     */
-    public function testLoadMainLocationThrowsBadStateException()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */;
-        $contentTypeService = $repository->getContentTypeService();
-        $contentService = $repository->getContentService();
-        $locationService = $repository->getLocationService();
-
-        // Create new content, which is not published
-        $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
-        $contentCreate = $contentService->newContentCreateStruct(
-            $folderType, 'eng-US'
-        );
-        $contentCreate->setField( 'name', 'New Folder' );
-        $content = $contentService->createContent( $contentCreate );
-
-        // Throws Exception, since $content has no published version, yet
-        $location = $locationService->loadMainLocation(
-            $content->contentInfo
-        );
-        /* END: Use Case */
-    }
-
-    /**
      * Test for the loadLocations() method.
      *
      * @return void

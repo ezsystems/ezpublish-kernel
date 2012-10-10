@@ -4009,8 +4009,8 @@ class ContentServiceTest extends BaseContentServiceTest
         $liveContent = $contentService->publishVersion( $draft->getVersionInfo() );
         /* END: Use Case */
 
-        $location = $locationService->loadMainLocation(
-            $liveContent->getVersionInfo()->getContentInfo()
+        $location = $locationService->loadLocation(
+            $liveContent->getVersionInfo()->getContentInfo()->mainLocationId
         );
 
         $aliases = $urlAliasService->listLocationAliases( $location );
@@ -4050,8 +4050,8 @@ class ContentServiceTest extends BaseContentServiceTest
         $liveContent = $contentService->publishVersion( $draft->getVersionInfo() );
         /* END: Use Case */
 
-        $location = $locationService->loadMainLocation(
-            $liveContent->getVersionInfo()->getContentInfo()
+        $location = $locationService->loadLocation(
+            $liveContent->getVersionInfo()->getContentInfo()->mainLocationId
         );
 
         $aliases = $urlAliasService->listLocationAliases( $location, false );
@@ -4098,7 +4098,9 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // Create a custom URL alias
         $urlAliasService->createUrlAlias(
-            $locationService->loadMainLocation( $content->getVersionInfo()->getContentInfo() ),
+            $locationService->loadLocation(
+                $content->getVersionInfo()->getContentInfo()->mainLocationId
+            ),
             '/my/fancy/story-about-ez-publish',
             'eng-US'
         );
@@ -4119,8 +4121,8 @@ class ContentServiceTest extends BaseContentServiceTest
         $liveContent = $contentService->publishVersion( $draftVersion2->getVersionInfo() );
         /* END: Use Case */
 
-        $location = $locationService->loadMainLocation(
-            $liveContent->getVersionInfo()->getContentInfo()
+        $location = $locationService->loadLocation(
+            $liveContent->getVersionInfo()->getContentInfo()->mainLocationId
         );
 
         $aliases = $urlAliasService->listLocationAliases( $location );
