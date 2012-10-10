@@ -1,0 +1,24 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+
+framework:
+    esi:             { enabled: true }
+    #translator:      { fallback: %locale% }
+    # The secret parameter is used to generate CSRF tokens
+    secret:          %secret%
+    router:          { resource: "%kernel.root_dir%/config/routing.yml" }
+    form:            true
+    csrf_protection: false
+    validation:      { enable_annotations: true }
+    templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
+    session:
+        # Use the following line to get session name per siteaccess
+        # name: "eZSESSID{siteaccess_hash}"
+        name: %session_name%
+
+ez_publish_legacy:
+    enabled: true
+    # root_dir: %kernel.root_dir%/ezpublish_legacy
+
+parameters:

@@ -14,6 +14,7 @@ use eZ\Bundle\EzPublishCoreBundle\EzPublishCoreBundle,
     eZ\Bundle\EzPublishRestBundle\EzPublishRestBundle,
     Symfony\Component\HttpKernel\Kernel,
     Symfony\Bundle\FrameworkBundle\FrameworkBundle,
+    Symfony\Bundle\SecurityBundle\SecurityBundle,
     Symfony\Bundle\TwigBundle\TwigBundle,
     Symfony\Component\Config\Loader\LoaderInterface,
     eZ\Publish\API\Container;
@@ -43,6 +44,7 @@ class TestKernel extends Kernel implements Container
     {
         $bundles = array(
             new FrameworkBundle(),
+            new SecurityBundle(),
             new TwigBundle(),
             //new SensioGeneratorBundle(),
             new EzPublishCoreBundle(),
@@ -62,7 +64,7 @@ class TestKernel extends Kernel implements Container
      */
     public function registerContainerConfiguration( LoaderInterface $loader )
     {
-        //$loader->load( __DIR__ . '/config/config_' . $this->getEnvironment() . '.yml' );
+        $loader->load( __DIR__ . '/config/config.yml' );
     }
 
     /**

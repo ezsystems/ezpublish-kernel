@@ -9,20 +9,20 @@
  * @version //autogentag//
  */
 
-if ( !isset( $_ENV['SYMFONY__ez_publish_legacy__root_dir'] ) )
+if ( empty( $_SERVER['SYMFONY__ezpublish_legacy__root_dir'] ) )
 {
     // set the path to eZ Publish legacy (4.x)
     $dir = getcwd();
     if ( strpos( $dir, '/vendor/ezsystems/ezpublish' ) !== false )
     {
         // eZ Publish 5 context
-        putenv ( 'SYMFONY__ez_publish_legacy__root_dir=' .
-            str_replace( '/vendor/ezsystems/ezpublish', '', $dir ) . '/app/ezpublish_legacy' );
+        $_SERVER['SYMFONY__ezpublish_legacy__root_dir'] =
+            str_replace( '/vendor/ezsystems/ezpublish', '', $dir ) . '/app/ezpublish_legacy';
     }
     else
     {
         // API context (unit testing)
-        putenv ( 'SYMFONY__ez_publish_legacy__root_dir=' . $dir . '/vendor/ezsystems/ezpublish-legacy' );
+        $_SERVER['SYMFONY__ezpublish_legacy__root_dir'] = $dir . '/vendor/ezsystems/ezpublish-legacy';
     }
 }
 
