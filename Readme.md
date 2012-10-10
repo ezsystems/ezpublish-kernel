@@ -41,17 +41,14 @@ The API is still very much work in progress, and so is documentation, hence why 
 * **PHPUnit 3.6**
 * **PHP 5 Modules**: php5_sqlite
 * **Database**: sqlite3 if not installed by above stage
-* **eZ Publish 4 (aka *legacy*)**: Get the latest sources from [ezpublish5-integration branch](https://github.com/ezsystems/ezpublish/tree/ezpublish5-integration).
-  Rather clone it or directly [download the zip package from Github](https://github.com/ezsystems/ezpublish/zipball/ezpublish5-integration).
+* **eZ Publish 4 (aka *legacy*)**: Get the latest sources from [eZ Publish 4](https://github.com/ezsystems/ezpublish/).
+  Rather clone it or directly [download the zip package from Github](https://github.com/ezsystems/ezpublish/zipball/master).
 
 ##How to get started
 * Clone this repo
 * Install dependencies with **Composer**: `php composer.phar install`
 * Copy config.php-DEVELOPMENT to config.php
 * Modify `config.php` and adjust the path to eZ Publish Legacy root
-
-> Remember: eZ Publish Legacy must have been taken from [ezpublish5-integration branch](https://github.com/ezsystems/ezpublish/tree/ezpublish5-integration).
-
 * Execute `php index.php` (cli) to verify that it manages to output some text
 * Execute `phpunit` to see current status of missing tests / implementations
 
