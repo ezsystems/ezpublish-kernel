@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Base\ConfigurationManager,
-    eZ\Publish\Core\Base\ServiceContainer,
     eZ\Publish\Core\Persistence\Legacy\Handler;
 
 /**
@@ -358,32 +356,13 @@ class HandlerTest extends TestCase
      */
     protected function getHandlerFixture()
     {
-        // get configuration config
-        if ( !( $settings = include 'config.php' ) )
-        {
-            throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
-        }
-
-        // load configuration uncached
-        $configManager = new ConfigurationManager(
-            array_merge_recursive( $settings, array(
-                'base' => array(
-                    'Configuration' => array(
-                        'UseCache' => false
-                    )
-                )
-            ) ),
-            $settings['base']['Configuration']['Paths']
-        );
-
-        $serviceSettings = $configManager->getConfiguration('service')->getAll();
-        $serviceSettings['legacy_db_handler']['arguments']['dsn'] = $this->getDsn();
-        $sc = new ServiceContainer(
-            $serviceSettings,
-            array()
-        );
-
-        return $sc->get( 'persistence_handler_legacy' );
+        $_SERVER['SYMFONY__ezpublish__system__ezdemo_group__database__dsn'] = $this->getDsn();
+        /**
+         * @var \eZ\Publish\Core\Base\TestKernel $testKernel
+         */
+        $testKernel = require 'container.php';
+        unset( $_SERVER['SYMFONY__ezpublish__system__ezdemo_group__database__dsn'] );
+        return $testKernel->getContainer()->get( 'ezpublish.api.storage_engine.legacy' );
     }
 
     /**

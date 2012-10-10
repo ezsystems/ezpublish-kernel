@@ -24,14 +24,11 @@ abstract class Utils extends InMemoryUtils
     public static function getRepository()
     {
         // Override to set legacy handlers
-        $sc = self::getServiceContainer(
-            '@persistence_handler_legacy',
-            '@io_handler_legacy',
-            ( !empty( $_ENV['DATABASE'] ) ? $_ENV['DATABASE'] : 'sqlite://:memory:' )
-        );
+
+        $sc = self::getTestKernel( 'legacy', !empty( $_ENV['DATABASE'] ) ? $_ENV['DATABASE'] : 'sqlite://:memory:' );
 
         // And inject data
-        self::insertLegacyData( $sc->get( 'legacy_db_handler' ) );
+        self::insertLegacyData( $sc->getContainer()->get( 'ezpublish.api.storage_engine.legacy.dbhandler' ) );
 
         // Return repository
         return $sc->getRepository();

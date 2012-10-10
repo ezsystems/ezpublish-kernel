@@ -19,34 +19,27 @@ abstract class Utils
     /**
      * @static
      *
-     * @param string $persistenceHandler
-     * @param string $ioHandler
+     * @param string $defaultSE Default storage engine, one of: [ inMemory, legacy ]
      * @param string $dsn
      *
      * @throws \RuntimeException
      *
-     * @return \eZ\Publish\Core\Base\ServiceContainer
+     * @return \eZ\Publish\Core\Base\TestKernel
      */
-    protected static function getServiceContainer(
-        $persistenceHandler = '@persistence_handler_inmemory',
-        $ioHandler = '@io_handler_inmemory',
-        $dsn = 'sqlite://:memory:'
-    )
+    protected static function getTestKernel( $defaultSE = 'inMemory', $dsn = 'sqlite://:memory:' )
     {
-        // Get configuration config
-        if ( !( $settings = include ( 'config.php' ) ) )
-        {
-            throw new RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
-        }
+        // ezpublish.api.storage_engine.legacy.dsn
+        // ezsettings.default.database.dsn
+        $_SERVER['SYMFONY__ezpublish__api__storage_engine__default'] = $defaultSE;
+        $_SERVER['SYMFONY__ezpublish__system__ezdemo_group__database__dsn'] = $dsn;
+        /**
+         * @var \eZ\Publish\Core\Base\TestKernel $testKernel
+         */
+        $testKernel = require 'container.php';
 
-        $settings['base']['Configuration']['UseCache'] = false;
-        $settings['service']['repository']['arguments']['persistence_handler'] = $persistenceHandler;
-        $settings['service']['repository']['arguments']['io_handler'] = $ioHandler;
-        $settings['service']['parameters']['legacy_dsn'] = $dsn;
-
-        // Return Service Container
-        return require 'container.php';
-
+        unset( $_SERVER['SYMFONY__ezpublish__api__storage_engine__default'] );
+        unset( $_SERVER['SYMFONY__ezpublish__system__ezdemo_group__database__dsn'] );
+        return $testKernel;
     }
 
     /**
@@ -55,6 +48,6 @@ abstract class Utils
      */
     public static function getRepository()
     {
-        return self::getServiceContainer()->getRepository();
+        return self::getTestKernel()->getRepository();
     }
 }
