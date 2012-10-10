@@ -388,6 +388,7 @@ class ContentService implements ContentServiceInterface
         $returnValue = $this->service->publishVersion( $versionInfo );
         $this->signalDispatcher->emit(
             new Signal\ContentService\PublishVersionSignal( array(
+                'contentId' => $versionInfo->getContentInfo()->id,
                 'versionNo' => $versionInfo->versionNo,
             ) )
         );
