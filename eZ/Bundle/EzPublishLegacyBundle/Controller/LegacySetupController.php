@@ -80,7 +80,7 @@ class LegacySetupController
             $settings['ezpublish']['siteaccess']['groups'] = array();
             $groupName = $defaultSiteaccess . '_group';
             $settings['ezpublish']['siteaccess']['groups'][$groupName] = $siteList;
-            $settings['ezpublish']['siteacces']['match'] = $this->resolveMatching( $legacyResolver );
+            $settings['ezpublish']['siteaccess']['match'] = $this->resolveMatching( $legacyResolver );
 
             $databaseMapping = array(
                 'ezmysqli' => 'mysql',
