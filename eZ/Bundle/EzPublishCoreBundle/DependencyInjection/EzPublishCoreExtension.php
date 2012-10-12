@@ -85,6 +85,15 @@ class EzPublishCoreExtension extends Extension
 
     private function registerSiteAcccessConfiguration( array $config, ContainerBuilder $container )
     {
+        if ( !isset( $config['siteaccess'] ) )
+        {
+            $config['siteaccess'] = array();
+            $config['siteaccess']['list'] = array( 'setup');
+            $config['siteaccess']['default_siteaccess'] = 'setup';
+            $config['siteaccess']['groups'] = array();
+            $config['siteaccess']['match'] = null;
+        }
+
         $container->setParameter( 'ezpublish.siteaccess.list', $config['siteaccess']['list'] );
         $container->setParameter( 'ezpublish.siteaccess.default', $config['siteaccess']['default_siteaccess'] );
         $container->setParameter( 'ezpublish.siteaccess.match_config', $config['siteaccess']['match'] );

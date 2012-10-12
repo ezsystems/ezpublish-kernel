@@ -11,6 +11,7 @@ parameters:
     ezpublish_legacy.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\LegacyKernelController
     ezpublish_legacy.treemenu.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\LegacyTreeMenuController
     ezpublish_legacy.treemenu.controller.options: {}
+    ezpublish_legacy.setup.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\LegacySetupController
 
     ezpublish_legacy.router.class: eZ\Bundle\EzPublishLegacyBundle\Routing\FallbackRouter
     ezpublish_legacy.url_generator.class: eZ\Bundle\EzPublishLegacyBundle\Routing\UrlGenerator
@@ -65,6 +66,11 @@ services:
             - %ezpublish_legacy.treemenu.controller.options%
         parent: ezpublish.controller.base
         scope: request
+
+    ezpublish_legacy.setup.controller:
+        class: %ezpublish_legacy.setup.controller.class%
+        parent: ezpublish.controller.base
+        arguments: [@ezpublish_legacy.kernel]
 
     ezpublish_legacy.router:
         class: %ezpublish_legacy.router.class%
