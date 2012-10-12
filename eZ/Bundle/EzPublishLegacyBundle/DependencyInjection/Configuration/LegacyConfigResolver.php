@@ -96,6 +96,44 @@ class LegacyConfigResolver implements ConfigResolverInterface
     }
 
     /**
+     * Returns values for $groupName, in $namespace.
+     *
+     * @param string $groupName String containing an INI group name.
+     * @param string $namespace The legacy INI file name, without the suffix (i.e. without ".ini").
+     * @param string $scope A specific siteaccess to look into. Defaults to the current siteaccess.
+     *
+     * @throws \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException
+     *
+     * @todo Implement in ConfigResolver interface
+     * @return array
+     */
+    public function getGroup( $groupName, $namespace = null, $scope = null )
+    {
+        $namespace = $namespace ?: $this->defaultNamespace;
+        $namespace = str_replace( '.ini', '', $namespace );
+
+        return $this->getLegacyKernel()->runCallback(
+            function () use ( $groupName, $namespace, $scope )
+            {
+                if ( isset( $scope ) )
+                {
+                    $ini = eZINI::getSiteAccessIni( $scope, "$namespace.ini" );
+                }
+                else
+                {
+                    $ini = eZINI::instance( "$namespace.ini" );
+                }
+
+                if ( !$ini->hasGroup( $groupName ) )
+                    throw new ParameterNotFoundException( $groupName, "$namespace.ini" );
+
+                return $ini->group( $groupName );
+            },
+            false
+        );
+    }
+
+    /**
      * Checks if $paramName exists in $namespace
      *
      * @param string $paramName
