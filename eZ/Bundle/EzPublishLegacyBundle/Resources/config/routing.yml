@@ -6,6 +6,6 @@ _ezpublishLegacyTreeMenu:
         _format: json
 
 ezpublishSetup:
-    pattern: /setup
+    pattern: /ezsetup
     defaults:
         _controller: ezpublish_legacy.setup.controller:init
