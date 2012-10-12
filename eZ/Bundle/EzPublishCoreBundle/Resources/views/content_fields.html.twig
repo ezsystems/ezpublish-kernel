@@ -160,6 +160,49 @@
 {% endspaceless %}
 {% endblock %}
 
+{% block ezmedia_field %}
+{% if field.value %}
+{% spaceless %}
+    {% set type = fieldSettings.mediaType %}
+    {% set value = field.value %}
+    {% set uri = 'content/download/' ~ contentInfo.id ~ '/' ~ field.id
+                    ~ '/' ~ value.fileName|escape( 'url' ) %}
+    <div {{ block( 'field_attributes' ) }}>
+    {% autoescape false %}
+    {% if fieldSettings.mediaType == "html5_video" %}
+        <video src="{{ path( 'ez_legacy', {'module_uri': uri} ) }}"
+            {{ value.width > 0 ? 'width="' ~ value.width ~ '"' : "" }}
+            {{ value.height > 0 ? 'height="' ~ value.height ~ '"' : "" }}
+            {{ value.autoplay ? 'autoplay="autoplay"' : "" }}
+            {{ value.hasController ? 'controls="controls"' : "" }}
+            {{ value.loop ? 'loop="loop"' : "" }}>
+            Your browser does not support html5 video.
+        </video>
+    {% elseif type == "html5_audio" %}
+        <audio src="{{ path( 'ez_legacy', {'module_uri': uri} ) }}"
+            {{ value.autoplay ? 'autoplay="autoplay"' : "" }}
+            {{ value.hasController ? 'controls="controls"' : "" }}
+            {{ value.loop ? 'loop="loop"' : "" }}
+            preload="none">
+            Your browser does not support html5 audio.
+        </audio>
+    {% elseif type == 'flash' %}
+        <object type="application/x-shockwave-flash"
+            {{ value.width > 0 ? 'width="' ~ value.width ~ '"' : "" }}
+            {{ value.height > 0 ? 'height="' ~ value.height ~ '"' : "" }}
+            data="{{ path( 'ez_legacy', {'module_uri': uri} ) }}">
+            <param name="movie" value="{{ path( 'ez_legacy', {'module_uri': uri} ) }}" />
+            <param name="play" value="{{ value.autoplay ? 'true' : 'false' }}" />
+            <param name="loop" value="{{ value.loop ? 'true' : 'false' }}" />
+            <param name="quality" value="{{ value.quality }}" />
+        </object>
+    {% endif %}
+    {% endautoescape %}
+    </div>
+{% endspaceless %}
+{% endif %}
+{% endblock %}
+
 {% block ezobjectrelationlist_field %}
 {% spaceless %}
     {% if field.value.destinationContentIds|length > 0 %}
