@@ -90,6 +90,7 @@ class LegacySetupController
 
             $settings['ezpublish']['system'] = array();
 
+            $response->setContent( "<pre>" . print_r( $response, true ) . "</pre>" );
         }
 
         return $response;
@@ -97,7 +98,7 @@ class LegacySetupController
 
     protected function resolveMatching( $legacyResolver )
     {
-        $siteaccessSettings = $legacyResolver->getGroup( 'SiteAccessSettings' ):
+        $siteaccessSettings = $legacyResolver->getGroup( 'SiteAccessSettings' );
 
         $matching = array();
         foreach( explode( ';', $siteaccessSettings['MatchOrder'] ) as $matchMethod )
@@ -320,4 +321,3 @@ class LegacySetupController
         );
     }
 }
-
