@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the bootstrapping of eZ Publish API
+ * File containing the bootstrapping of eZ Publish API for unit tests
  *
  * Setups class loading.
  *
@@ -10,7 +10,7 @@
  */
 
 
-// Get globl config.php settings
+// Get composer autoloader from current working dir
 if ( !( $classLoader = include './vendor/autoload.php' ) )
 {
     throw new \RuntimeException(
@@ -19,4 +19,4 @@ if ( !( $classLoader = include './vendor/autoload.php' ) )
     );
 }
 
-return include 'container.php';
+return include __DIR__ . '/test_container.php';

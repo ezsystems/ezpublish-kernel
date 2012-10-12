@@ -28,7 +28,7 @@ class LegacyTest extends BaseHandlerTest
         /**
          * @var \eZ\Publish\Core\Base\TestKernel $testKernel
          */
-        $testKernel = require 'container.php';
+        $testKernel = require 'test_container.php';
         $legacyKernelClosure = $testKernel->getContainer()->get('ezpublish_legacy.kernel');
         return new Legacy( $legacyKernelClosure() );
     }

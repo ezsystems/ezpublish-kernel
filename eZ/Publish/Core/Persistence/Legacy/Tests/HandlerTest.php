@@ -360,7 +360,7 @@ class HandlerTest extends TestCase
         /**
          * @var \eZ\Publish\Core\Base\TestKernel $testKernel
          */
-        $testKernel = require 'container.php';
+        $testKernel = require 'test_container.php';
         unset( $_SERVER['SYMFONY__ezpublish__system__ezdemo_group__database__dsn'] );
         return $testKernel->getContainer()->get( 'ezpublish.api.storage_engine.legacy' );
     }

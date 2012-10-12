@@ -37,7 +37,7 @@ $indexFile = __FILE__;
  * Get ServiceContainer
  * @var \eZ\Publish\API\Container $container
  */
-$container = require 'bootstrap.php';
+$container = require 'test_bootstrap.php';
 
 // Ignore user abort now that we are about to run controller
 ignore_user_abort( true );

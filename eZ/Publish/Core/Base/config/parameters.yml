@@ -20,6 +20,7 @@ ezpublish:
     system:
         ezdemo_group:
             database:
+                # This is set on purpose to force test to use $_ENV['DATABASE'] variable
                 dsn: mysql://root:pwd@localhost/ezdemo
             languages: [eng-US, eng-GB, ger-DE]
         ezdemo_site:

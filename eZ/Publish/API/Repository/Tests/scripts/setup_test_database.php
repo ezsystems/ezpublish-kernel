@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-require_once __DIR__ . '/../../../../../../bootstrap.php';
+require_once __DIR__ . '/../../../../../../test_bootstrap.php';
 
 if ( isset( $argv[1] ) )
 {

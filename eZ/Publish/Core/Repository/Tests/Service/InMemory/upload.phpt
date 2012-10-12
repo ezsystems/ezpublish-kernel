@@ -25,7 +25,7 @@ Upload
 
 chdir( '../../../../../../../' );
 
-require_once 'bootstrap.php';
+require_once 'test_bootstrap.php';
 require_once 'PHPUnit/Autoload.php';
 
 $repository = \eZ\Publish\Core\Repository\Tests\Service\InMemory\IOUploadPHPT::getRepository( array() );

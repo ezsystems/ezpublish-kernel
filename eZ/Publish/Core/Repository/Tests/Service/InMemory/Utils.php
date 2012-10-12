@@ -35,7 +35,7 @@ abstract class Utils
         /**
          * @var \eZ\Publish\Core\Base\TestKernel $testKernel
          */
-        $testKernel = require 'container.php';
+        $testKernel = require 'test_container.php';
 
         unset( $_SERVER['SYMFONY__ezpublish__api__storage_engine__default'] );
         unset( $_SERVER['SYMFONY__ezpublish__system__ezdemo_group__database__dsn'] );

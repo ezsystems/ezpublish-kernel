@@ -34,7 +34,7 @@ The API is still very much work in progress, and so is documentation, hence why 
 * config.php-DEVELOPMENT  *Default config file for development use*
 * phpunit.xml  *PHPUnit 3.6+ xml configuration*
 * Readme.md  *This text*
-* bootstrap.php  *System Bootstrap*
+* test_bootstrap.php  *Unit test Bootstrap*
 
 ##Dependencies
 * **Composer**: Just run `curl -s http://getcomposer.org/installer | php` to get **composer.phar**
