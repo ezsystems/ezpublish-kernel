@@ -11,8 +11,10 @@ namespace eZ\Publish\Core\MVC\Legacy\Kernel;
 
 use ezpKernelHandler,
     eZScript,
+    eZINI,
     RuntimeException,
-    eZ\Publish\Core\MVC\Symfony\SiteAccess;
+    eZ\Publish\Core\MVC\Symfony\SiteAccess,
+    Symfony\Component\DependencyInjection\ContainerInterface;
 
 class CLIHandler implements ezpKernelHandler
 {
@@ -22,13 +24,33 @@ class CLIHandler implements ezpKernelHandler
     protected $script;
 
     /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    protected $container;
+
+    /**
      * Constructor
      *
      * @param array $settings Settings to pass to \eZScript constructor.
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
-    public function __construct( array $settings = array(), SiteAccess $siteAccess = null )
+    public function __construct( array $settings = array(), SiteAccess $siteAccess = null, ContainerInterface $container = null )
     {
+        $this->container = $container;
+        if ( isset( $settings['injected-settings'] ) )
+        {
+            $injectedSettings = array();
+            foreach ( $settings["injected-settings"] as $keySetting => $injectedSetting )
+            {
+                list( $file, $section, $setting ) = explode( "/", $keySetting );
+                $injectedSettings[$file][$section][$setting] = $injectedSetting;
+            }
+            // those settings override anything else in local .ini files and
+            // their overrides
+            eZINI::injectSettings( $injectedSettings );
+        }
+
         $this->script = eZScript::instance( $settings );
         $this->script->startup();
         if ( isset( $siteAccess ) )
@@ -95,7 +117,7 @@ class CLIHandler implements ezpKernelHandler
      */
     public function hasServiceContainer()
     {
-        return false;
+        return isset( $this->container );
     }
 
     /**
@@ -106,6 +128,6 @@ class CLIHandler implements ezpKernelHandler
      */
     public function getServiceContainer()
     {
-        return null;
+        return $this->container;
     }
 }
