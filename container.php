@@ -26,4 +26,12 @@ if ( empty( $_SERVER['SYMFONY__ezpublish_legacy__root_dir'] ) )
     }
 }
 
-return new eZ\Publish\Core\Base\TestKernel();
+$testKernel = new eZ\Publish\Core\Base\TestKernel();
+$container = $testKernel->getContainer();
+$siteAccessName = $container->hasParameter( 'ezpublish.siteaccess.default' ) ?
+    $container->getParameter( 'ezpublish.siteaccess.default' ) :
+    'default';
+$siteAccess = new eZ\Bundle\EzPublishCoreBundle\SiteAccess( $siteAccessName, 'cli' );
+$container->set( 'ezpublish.siteaccess', $siteAccess );
+
+return $testKernel;
