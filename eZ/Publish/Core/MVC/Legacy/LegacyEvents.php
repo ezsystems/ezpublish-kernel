@@ -16,8 +16,20 @@ final class LegacyEvents
      * kernel web handler. This event allows to inject parameters into the web
      * handler.
      *
+     * Listen to this event for pure web related stuff (i.e. sessions or request related).
+     * If you need your settings to be injected both in web and CLI context, listen to PRE_BUILD_LEGACY_KERNEL
+     *
      * The event listener method receives a
      * \eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent
      */
     const PRE_BUILD_LEGACY_KERNEL_WEB = 'ezpublish_legacy.build_kernel_web_handler';
+
+    /**
+     * The PRE_BUID_LEGACY_KERNEL occurs right before the build of the legacy handler (whatever the handler is used).
+     * This event allows to inject parameters in the legacy kernel (such as INI settings).
+     *
+     * The event listener method receives a
+     * \eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent
+     */
+    const PRE_BUILD_LEGACY_KERNEL = 'epzublish_legacy.build_kernel';
 }

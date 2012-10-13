@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Session class.
+ * File containing the Configuration class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,7 +10,7 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\LegacyMapper;
 
 use eZ\Publish\Core\MVC\Legacy\LegacyEvents,
-    eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent,
+    eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent,
     eZ\Publish\Core\MVC\ConfigResolverInterface,
     Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -33,16 +33,17 @@ class Configuration implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            LegacyEvents::PRE_BUILD_LEGACY_KERNEL_WEB => array( "onBuildKernelWebHandler", 128 )
+            LegacyEvents::PRE_BUILD_LEGACY_KERNEL => array( "onBuildKernel", 128 )
         );
     }
 
     /**
      * Adds settings to the parameters that will be injected into the legacy kernel
      *
-     * @param \eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent $event
+     * @param \eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent $event
+     * @return void
      */
-    public function onBuildKernelWebHandler( PreBuildKernelWebHandlerEvent $event )
+    public function onBuildKernel( PreBuildKernelEvent $event )
     {
         $databaseSettings = $this->configResolver->getParameter( "database" );
         $settings = array();
