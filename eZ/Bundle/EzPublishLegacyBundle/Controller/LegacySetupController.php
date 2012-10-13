@@ -96,10 +96,10 @@ class LegacySetupController
             $settings['ezpublish']['system'][$groupName] = array();
             $settings['ezpublish']['system'][$groupName]['database'] = array(
                 'type' => $databaseType,
-                'user' => $legacyResolver->getParameter( 'DatabaseSettings.User' ),
-                'password' => $legacyResolver->getParameter( 'DatabaseSettings.Password' ),
-                'server' => $legacyResolver->getParameter( 'DatabaseSettings.Server' ),
-                'database_name' => $legacyResolver->getParameter( 'DatabaseSettings.Database', 'site', 'eng' ),
+                'user' => $legacyResolver->getParameter( 'DatabaseSettings.User', $defaultSiteaccess ),
+                'password' => $legacyResolver->getParameter( 'DatabaseSettings.Password', $defaultSiteaccess ),
+                'server' => $legacyResolver->getParameter( 'DatabaseSettings.Server', $defaultSiteaccess ),
+                'database_name' => $legacyResolver->getParameter( 'DatabaseSettings.Database', 'site', $defaultSiteaccess ),
             );
 
             $yaml = $dumper->dump( $settings, 5 );
