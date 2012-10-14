@@ -1,5 +1,6 @@
 parameters:
     ezpublish.siteaccess.class: eZ\Bundle\EzPublishCoreBundle\SiteAccess
+    ezpublish.siteaccess.default.name: default
     ezpublish.config.resolver.dynamic.class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver
     ezpublish.config.resolver.chain.class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver
     ezpublish.config.default_scope: ezsettings
@@ -9,7 +10,8 @@ parameters:
 services:
     # Siteaccess is injected in the container at runtime
     ezpublish.siteaccess:
-        synthetic: true
+        class: %ezpublish.siteaccess.class%
+        arguments: [%ezpublish.siteaccess.default.name%]
 
     ezpublish.config.resolver.core:
         class: %ezpublish.config.resolver.dynamic.class%
