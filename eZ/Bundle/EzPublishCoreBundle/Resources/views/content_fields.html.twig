@@ -169,7 +169,10 @@
                     ~ '/' ~ value.fileName|escape( 'url' ) %}
     <div {{ block( 'field_attributes' ) }}>
     {% autoescape false %}
-    {% if fieldSettings.mediaType == "html5_video" %}
+    {% if type == "html5_video"
+        or type == "quick_time"
+        or type == "windows_media_player"
+        or type == "real_player" %}
         <video src="{{ path( 'ez_legacy', {'module_uri': uri} ) }}"
             {{ value.width > 0 ? 'width="' ~ value.width ~ '"' : "" }}
             {{ value.height > 0 ? 'height="' ~ value.height ~ '"' : "" }}
