@@ -33,7 +33,7 @@ class LegacySetupController
      */
     public function __construct( \Closure $kernelClosure )
     {
-        $this->legacyKernelClosure = $kernelClosure();
+        $this->legacyKernelClosure = $kernelClosure;
     }
 
     public function setContainer( Container $container )
