@@ -4,3 +4,8 @@ _ezpublishLegacyTreeMenu:
     defaults:
         _controller: ezpublish_legacy.treemenu.controller:viewMenu
         _format: json
+
+ezpublishSetup:
+    pattern: /ezsetup
+    defaults:
+        _controller: ezpublish_legacy.setup.controller:init
