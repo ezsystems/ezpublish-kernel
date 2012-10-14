@@ -24,6 +24,7 @@ parameters:
     ezpublish_legacy.content_exception_handler.class: eZ\Publish\Core\MVC\Legacy\EventListener\APIContentExceptionListener
     ezpublish_legacy.config.resolver.class: eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver
     ezpublish_legacy.config.default_scope: site
+    ezpublish_legacy.setup_wizard.configuration_converter.class: eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfigurationConverter
 
 services:
     ezpublish_legacy.kernel:
@@ -121,3 +122,7 @@ services:
         arguments: [@ezpublish_legacy.kernel, %ezpublish_legacy.config.default_scope%]
         tags:
             - { name: ezpublish.config.resolver, priority: -255 }
+
+    ezpublish_legacy.setup_wizard.configuration_converter:
+        class: %ezpublish_legacy.setup_wizard.configuration_converter.class%
+        arguments: [@ezpublish_legacy.config.resolver]
