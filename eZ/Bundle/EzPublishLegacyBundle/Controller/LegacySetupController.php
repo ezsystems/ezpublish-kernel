@@ -73,9 +73,16 @@ class LegacySetupController
 
             $dumper = new Dumper();
 
-            $yaml = $dumper->dump( $configurationConverter->fromLegacy( $chosenSitePackage, $adminSiteaccess ), 5 );
+            $settingsArray = $configurationConverter->fromLegacy( $chosenSitePackage, $adminSiteaccess );
+
+            // add the import statement for the root YAML file
+            $settingsArray['imports'] = array( array( 'resource' => 'ezpublish.yml' ) );
+
             $kernel = $this->container->get( 'kernel' );
-            file_put_contents( $kernel->getRootdir() . '/config/ezpublish_' . $kernel->getEnvironment(). '.yml', $yaml );
+            file_put_contents(
+                $kernel->getRootdir() . '/config/ezpublish_' . $kernel->getEnvironment(). '.yml',
+                $dumper->dump( $settingsArray, 5 )
+            );
         }
 
         return $response;
