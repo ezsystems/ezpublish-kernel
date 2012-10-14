@@ -13,6 +13,9 @@ parameters:
     ezpublish_legacy.treemenu.controller.options: {}
     ezpublish_legacy.setup.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\LegacySetupController
 
+    ezpublish_legacy.kernel_handler.cli.class: eZ\Publish\Core\MVC\Legacy\Kernel\CLIHandler
+    ezpublish_legacy.kernel_handler.cli.options: {}
+
     ezpublish_legacy.router.class: eZ\Bundle\EzPublishLegacyBundle\Routing\FallbackRouter
     ezpublish_legacy.url_generator.class: eZ\Bundle\EzPublishLegacyBundle\Routing\UrlGenerator
     ezpublish_legacy.siteaccess_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess
@@ -49,6 +52,12 @@ services:
         class: %ezpublish_legacy.kernel_handler.treemenu.class%
         factory_service: ezpublish_legacy.kernel.lazy_loader
         factory_method: buildLegacyKernelHandlerTreeMenu
+        arguments: [@service_container]
+
+    ezpublish_legacy.kernel_handler.cli:
+        class: %ezpublish_legacy.kernel_handler.cli.class%
+        factory_service: ezpublish_legacy.kernel.lazy_loader
+        factory_method: buildLegacyKernelHandlerCLI
         arguments: [@service_container]
 
     ezpublish_legacy.kernel_handler:

@@ -276,12 +276,14 @@
 {% endspaceless %}
 {% endblock %}
 
+{# TODO: Handle image variations #}
 {% block ezimage_field %}
 {% spaceless %}
-{# TODO: Handle image variations #}
+{% if field.value %}
 <figure {{ block( 'field_attributes' ) }}>
     <img src="{{ asset( field.value.path ) }}" alt="{{ field.value.alternativeText }}" />
 </figure>
+{% endif %}
 {% endspaceless %}
 {% endblock %}
 

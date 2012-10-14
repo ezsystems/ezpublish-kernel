@@ -49,6 +49,12 @@ class Application extends BaseApplication
         $this->siteAccessName = $this->siteAccessName ?: $container->getParameter( 'ezpublish.siteaccess.default' );
         $siteAccess = new SiteAccess( $this->siteAccessName, 'cli' );
         $container->set( 'ezpublish.siteaccess', $siteAccess );
+
+        // Replacing legacy kernel handler web by the CLI one
+        // TODO: this should be somewhat done in the legacy bundle
+        $legacyHandlerCLI = $container->get( 'ezpublish_legacy.kernel_handler.cli' );
+        $container->set( 'ezpublish_legacy.kernel_handler', $legacyHandlerCLI );
+        $container->set( 'ezpublish_legacy.kernel_handler.web', $legacyHandlerCLI );
     }
 
 }
