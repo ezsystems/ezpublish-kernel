@@ -117,14 +117,6 @@ class ContentHandler implements ContentHandlerInterface
         );
         $versionInfo->contentInfo = $contentInfo;
         $contentObj->versionInfo = $versionInfo;
-
-        $locationHandler = $this->handler->locationHandler();
-        foreach ( $content->locations as $locationStruct )
-        {
-            $locationStruct->contentId = $contentInfo->id;
-            $locationStruct->contentVersion = $contentInfo->currentVersionNo;
-            $contentObj->locations[] = $locationHandler->create( $locationStruct );
-        }
         return $contentObj;
     }
 
@@ -299,13 +291,7 @@ class ContentHandler implements ContentHandlerInterface
     {
         $res = $this->backend->find(
             'Content',
-            array( 'id' => $id ),
-            array(
-                'locations' => array(
-                    'type' => 'Content\\Location',
-                    'match' => array( 'contentId' => 'id' )
-                )
-            )
+            array( 'id' => $id )
         );
         if ( empty( $res ) )
             throw new NotFound( "Content", "contentId:{$id}" );

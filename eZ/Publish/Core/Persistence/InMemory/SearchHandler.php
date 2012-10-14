@@ -106,7 +106,8 @@ class SearchHandler extends SearchHandlerInterface
             array(
                 'locations' => array(
                     'type' => 'Content\\Location',
-                    'match' => array( 'contentId' => 'id' )
+                    'match' => array( 'contentId' => 'id' ),
+                    'skip' => true
                 ),
                 'versionInfo' => array(
                     'type' => 'Content\\VersionInfo',

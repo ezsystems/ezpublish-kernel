@@ -445,7 +445,7 @@ class LocationHandlerTest extends HandlerTest
 
         $this->assertEquals(
             $location->id,
-            $content->locations[0]->mainLocationId,
+            $content->versionInfo->contentInfo->mainLocationId,
             "Main location has not been changed"
         );
 

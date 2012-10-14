@@ -427,9 +427,10 @@ class Backend
             {
                 // Returns true if $item[$matchProperty] begins with $matchValue (minus '%' wildcard char)
                 $matchValue = substr( $matchValue, 0, -1 );
-                $pos = strpos( $item[$matchProperty], $matchValue );
                 if ( $matchValue === $item[$matchProperty] )
                     return false;
+
+                $pos = strpos( $item[$matchProperty], $matchValue );
                 if ( $pos !== 0 )
                     return false;
             }
@@ -536,6 +537,9 @@ class Backend
     {
         foreach ( $joinInfo as $property => $info )
         {
+            if ( isset( $info['skip'] ) && $info['skip'] )
+                continue;
+
             if ( isset( $info['single'] ) && $info['single'] )
             {
                 $value =& $item->$property;
