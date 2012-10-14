@@ -54,6 +54,6 @@ services:
 
     ezpublish.request_redirect_listener:
         class: %ezpublish.request_redirect_listener.class%
-        arguments: [@http_kernel, @?logger]
+        arguments: [@service_container, @?logger]
         tags:
             - { name: kernel.event_subscriber }
