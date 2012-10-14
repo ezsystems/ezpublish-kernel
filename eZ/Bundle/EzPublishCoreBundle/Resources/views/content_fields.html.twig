@@ -199,6 +199,22 @@
             <param name="loop" value="{{ value.loop ? 'true' : 'false' }}" />
             <param name="quality" value="{{ value.quality }}" />
         </object>
+    {% elseif type == 'silverlight' %}
+        <script type="text/javascript">
+            function onErrorHandler(sender, args) { }
+            function onResizeHandler(sender, args) { }
+        </script>
+        <object data="data:application/x-silverlight," type="application/x-silverlight-2"
+            {{ value.width > 0 ? 'width="' ~ value.width ~ '"' : "" }}
+            {{ value.height > 0 ? 'height="' ~ value.height ~ '"' : "" }}>
+            <param name="source" value="{{ path( 'ez_legacy', {'module_uri': uri} ) }}" />
+            <param name="onError" value="onErrorHandler" />
+            <param name="onResize" value="onResizeHandler" />
+            <a href="http://go.microsoft.com/fwlink/?LinkID=108182">
+                <img src="http://go.microsoft.com/fwlink/?LinkId=108181" alt="Get Microsoft Silverlight" />
+            </a>
+        </object>
+        <iframe style="visibility: hidden; height: 0; width: 0; border: 0px;"></iframe>
     {% endif %}
     {% endautoescape %}
     </div>
