@@ -55,7 +55,7 @@ class LegacySetupController
         $response = new Response();
 
         /** @var \ezpKernelResult $result  */
-        $result = $this->legacyKernelClosure->run();
+        $result = $this->getLegacyKernel()->run();
         $result->getContent();
         $response->setContent( $result->getContent() );
 
