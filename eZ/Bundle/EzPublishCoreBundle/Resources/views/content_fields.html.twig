@@ -167,22 +167,23 @@
     {% set value = field.value %}
     {% set uri = 'content/download/' ~ contentInfo.id ~ '/' ~ field.id
                     ~ '/' ~ value.fileName|escape( 'url' ) %}
+    {% set download = path( 'ez_legacy', {'module_uri': uri } ) %}
+    {% set width = value.width > 0 ? 'width="' ~ value.width ~ '"' : "" %}
+    {% set height = value.height > 0 ? 'height="' ~ value.height ~ '"' : "" %}
     <div {{ block( 'field_attributes' ) }}>
     {% autoescape false %}
     {% if type == "html5_video"
         or type == "quick_time"
         or type == "windows_media_player"
         or type == "real_player" %}
-        <video src="{{ path( 'ez_legacy', {'module_uri': uri} ) }}"
-            {{ value.width > 0 ? 'width="' ~ value.width ~ '"' : "" }}
-            {{ value.height > 0 ? 'height="' ~ value.height ~ '"' : "" }}
+        <video src="{{ download }}" {{ width }} {{ height }}
             {{ value.autoplay ? 'autoplay="autoplay"' : "" }}
             {{ value.hasController ? 'controls="controls"' : "" }}
             {{ value.loop ? 'loop="loop"' : "" }}>
             Your browser does not support html5 video.
         </video>
     {% elseif type == "html5_audio" %}
-        <audio src="{{ path( 'ez_legacy', {'module_uri': uri} ) }}"
+        <audio src="{{ download }}"
             {{ value.autoplay ? 'autoplay="autoplay"' : "" }}
             {{ value.hasController ? 'controls="controls"' : "" }}
             {{ value.loop ? 'loop="loop"' : "" }}
@@ -190,11 +191,8 @@
             Your browser does not support html5 audio.
         </audio>
     {% elseif type == 'flash' %}
-        <object type="application/x-shockwave-flash"
-            {{ value.width > 0 ? 'width="' ~ value.width ~ '"' : "" }}
-            {{ value.height > 0 ? 'height="' ~ value.height ~ '"' : "" }}
-            data="{{ path( 'ez_legacy', {'module_uri': uri} ) }}">
-            <param name="movie" value="{{ path( 'ez_legacy', {'module_uri': uri} ) }}" />
+        <object type="application/x-shockwave-flash" {{ width }} {{ height }} data="{{ download }}">
+            <param name="movie" value="{{ download }}" />
             <param name="play" value="{{ value.autoplay ? 'true' : 'false' }}" />
             <param name="loop" value="{{ value.loop ? 'true' : 'false' }}" />
             <param name="quality" value="{{ value.quality }}" />
@@ -204,10 +202,8 @@
             function onErrorHandler(sender, args) { }
             function onResizeHandler(sender, args) { }
         </script>
-        <object data="data:application/x-silverlight," type="application/x-silverlight-2"
-            {{ value.width > 0 ? 'width="' ~ value.width ~ '"' : "" }}
-            {{ value.height > 0 ? 'height="' ~ value.height ~ '"' : "" }}>
-            <param name="source" value="{{ path( 'ez_legacy', {'module_uri': uri} ) }}" />
+        <object data="data:application/x-silverlight," type="application/x-silverlight-2" {{ width }} {{ height }}>
+            <param name="source" value="{{ download }}" />
             <param name="onError" value="onErrorHandler" />
             <param name="onResize" value="onResizeHandler" />
             <a href="http://go.microsoft.com/fwlink/?LinkID=108182">
