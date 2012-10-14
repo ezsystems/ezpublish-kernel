@@ -65,141 +65,19 @@ class LegacySetupController
         // eZPublish 5 post install
         if ( $request->request->get( 'eZSetup_current_step' ) == 'Registration' )
         {
-            /** @var $legacyResolver \eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver*/
-            $legacyResolver = $this->container->get( 'ezpublish_legacy.config.resolver' );
+            $chosenSitePackage = $request->request->get( 'P_chosen_site_package-0' );
+            $adminSiteaccess = $request->request->get( 'P_site_extra_data_admin_access_type_value-' . $chosenSitePackage );
+
+            /** @var $configurationConverter \eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfigurationConverter */
+            $configurationConverter = $this->container->get( 'ezpublish_legacy.setup_wizard.configuration_converter' );
 
             $dumper = new Dumper();
 
-            $settings = array();
-            $settings['ezpublish'] = array();
-            $settings['ezpublish']['siteaccess'] = array();
-            $defaultSiteaccess = $legacyResolver->getParameter( 'SiteSettings.DefaultAccess' );
-            $settings['ezpublish']['siteaccess']['default_siteaccess'] = $defaultSiteaccess;
-            $siteList = $legacyResolver->getParameter( 'SiteSettings.SiteList' );
-            $settings['ezpublish']['siteaccess']['list'] = $siteList;
-            $settings['ezpublish']['siteaccess']['groups'] = array();
-            $groupName = $defaultSiteaccess . '_group';
-            $settings['ezpublish']['siteaccess']['groups'][$groupName] = $siteList;
-            $settings['ezpublish']['siteaccess']['match'] = $this->resolveMatching( $legacyResolver );
-
-            $databaseMapping = array(
-                'ezmysqli' => 'mysql',
-                'eZMySQLiDB' => 'mysql',
-                'ezmysql' => 'mysql',
-                'eZMySQLDB' => 'mysql',
-            );
-            $databaseType = $legacyResolver->getParameter( 'DatabaseSettings.DatabaseImplementation' );
-            if ( isset( $databaseMapping[$databaseType] ) )
-                $databaseType = $databaseMapping[$legacyResolver->getParameter( 'DatabaseSettings.DatabaseImplementation' )];
-
-            $settings['ezpublish']['system'] = array();
-            $settings['ezpublish']['system'][$groupName] = array();
-            $settings['ezpublish']['system'][$groupName]['database'] = array(
-                'type' => $databaseType,
-                'user' => $legacyResolver->getParameter( 'DatabaseSettings.User', $defaultSiteaccess ),
-                'password' => $legacyResolver->getParameter( 'DatabaseSettings.Password', $defaultSiteaccess ),
-                'server' => $legacyResolver->getParameter( 'DatabaseSettings.Server', $defaultSiteaccess ),
-                'database_name' => $legacyResolver->getParameter( 'DatabaseSettings.Database', 'site', $defaultSiteaccess ),
-            );
-
-            $yaml = $dumper->dump( $settings, 5 );
-            file_put_contents( $this->container->get('kernel')->getRootdir() . '/config/ezpublish.yml', $yaml );
+            $yaml = $dumper->dump( $configurationConverter->fromLegacy( $chosenSitePackage, $adminSiteaccess ), 5 );
+            $kernel = $this->container->get( 'kernel' );
+            file_put_contents( $kernel->getRootdir() . '/config/ezpublish_' . $kernel->getEnvironment(). '.yml', $yaml );
         }
 
         return $response;
-    }
-
-    protected function resolveMatching( $legacyResolver )
-    {
-        $siteaccessSettings = $legacyResolver->getGroup( 'SiteAccessSettings' );
-
-        $matching = array();
-        foreach( explode( ';', $siteaccessSettings['MatchOrder'] ) as $matchMethod )
-        {
-            switch( $matchMethod )
-            {
-                case 'uri':
-                    $match = $this->resolveURIMatching( $siteaccessSettings );
-                    break;
-                case 'host':
-                    $match = $this->resolveHostMatching( $siteaccessSettings );
-                    break;
-                case 'host_uri':
-                    // @todo Not implemented yet
-                    $match = false;
-                    break;
-                case 'port':
-                    $match = array( 'Map\Port' => $legacyResolver->getGroup( 'PortAccessSettings' ) );
-                    break;
-            }
-            if ( $match !== false )
-                $matching += $match;
-        }
-        return $match;
-    }
-
-    protected function resolveUriMatching( $siteaccessSettings )
-    {
-        switch( $siteaccessSettings['URIMatchType'] )
-        {
-            case 'disabled':
-                return false;
-
-            case 'map':
-                return array( "Map\Uri" => $this->resolveMapMatch( $siteaccessSettings['URIMatchMapItems'] ) );
-
-            case 'element':
-                return array( "URIElement" => $siteaccessSettings['URIMatchElement'] );
-
-            case 'text':
-                return array( "URIText" => $this->resolveTextMatch( $siteaccessSettings, 'URIMatchSubtextPre', 'URIMatchSubtextPost' ) );
-
-            case 'regexp':
-                return array( "Regex\URI" => array( $siteaccessSettings['URIMatchRegexp'], $siteaccessSettings['URIMatchRegexpItem'] ) );
-        }
-    }
-
-    protected function resolveHostMatching( $siteaccessSettings )
-    {
-        switch( $siteaccessSettings['HostMatchType'] )
-        {
-            case 'disabled':
-                return false;
-
-            case 'map':
-                return array( "Map\Host" => $this->resolveMapMatch( $siteaccessSettings['HostMatchMapItems'] ) );
-
-            case 'element':
-                return array( "HostElement" => $siteaccessSettings['HostMatchElement'] );
-
-            case 'text':
-                return array( "HostText" => $this->resolveTextMatch( $siteaccessSettings, 'HostMatchSubtextPre', 'HostMatchSubtextPost' ) );
-
-            case 'regexp':
-                return array( "Regex\Host" => array( $siteaccessSettings['HostMatchRegexp'], $siteaccessSettings['HostMatchRegexpItem'] ) );
-        }
-    }
-
-    protected function resolveTextMatch( $siteaccessSettings, $prefixKey, $suffixKey )
-    {
-        $settings = array();
-        if ( isset( $siteaccessSettings[$prefixKey] ) )
-            $settings['prefix'] = $siteaccessSettings[$prefixKey];
-        if ( isset( $siteaccessSettings[$suffixKey] ) )
-            $settings['suffix'] = $siteaccessSettings[$suffixKey];
-
-        return $settings;
-    }
-
-    protected function resolveMapMatch( $mapArray )
-    {
-        $map = array();
-        foreach ( $mapArray as $mapItem )
-        {
-            $elements = explode( ';', $mapItem );
-            $map[$elements[0]] = count( $elements ) > 2 ? array_slice( $elements, 1 ) : $elements[1];
-        }
-
-        return $map;
     }
 }
