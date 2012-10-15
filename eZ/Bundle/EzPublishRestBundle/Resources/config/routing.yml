@@ -13,7 +13,6 @@ ezpublish_rest_loadRootResource:
 
 
 ezpublish_rest_listSections:
-    # @todo fix controller due to GET parameter (/content/sections?identifier={identifier}
     pattern: /content/sections
     defaults:
         _controller: ezpublish_rest.controller.section:listSections
@@ -26,14 +25,6 @@ ezpublish_rest_createSection:
         _controller: ezpublish_rest.controller.section:createSection
     requirements:
         _method: POST
-
-#ezpublish_rest_loadSectionByIdentifier:
-#    @see ezpublish_rest_listSections
-#    pattern: /content/sections
-#    defaults:
-#        _controller: ezpublish_rest.controller.section:listSections
-#    requirements:
-#        _method: GET
 
 ezpublish_rest_loadSection:
     pattern: /content/sections/{sectionId}
@@ -731,7 +722,6 @@ ezpublish_rest_listPoliciesForUser:
 
 
 ezpublish_rest_listRoles:
-    # @todo Handle GET filter "identifier". See method loadRoleByIdentifier
     pattern: /user/roles
     defaults:
         _controller: ezpublish_rest.controller.role:listRoles

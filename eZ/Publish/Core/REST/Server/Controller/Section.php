@@ -51,6 +51,11 @@ class Section extends RestController
      */
     public function listSections()
     {
+        if ( isset( $this->request->variables['identifier'] ) )
+        {
+            return $this->loadSectionByIdentifier();
+        }
+
         return new Values\SectionList(
             $this->sectionService->loadSections()
         );

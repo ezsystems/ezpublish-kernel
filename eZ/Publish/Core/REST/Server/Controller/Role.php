@@ -90,9 +90,21 @@ class Role extends RestController
      */
     public function listRoles()
     {
-        return new Values\RoleList(
-            $this->roleService->loadRoles()
+        if ( isset( $this->request->variables['identifier'] ) )
+        {
+            return $this->loadRoleByIdentifier();
+        }
+
+        $offset = isset( $this->request->variables['offset'] ) ? (int)$this->request->variables['offset'] : 0;
+        $limit = isset( $this->request->variables['limit'] ) ? (int)$this->request->variables['limit'] : -1;
+
+        $roles = array_slice(
+            $this->roleService->loadRoles(),
+            $offset >= 0 ? $offset : 0,
+            $limit >= 0 ? $limit : null
         );
+
+        return new Values\RoleList( $roles );
     }
 
     /**
