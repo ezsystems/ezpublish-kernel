@@ -92,7 +92,9 @@ class Role extends RestController
     {
         if ( isset( $this->request->variables['identifier'] ) )
         {
-            $roles =  $this->loadRoleByIdentifier();
+            $roles = array(
+                $this->loadRoleByIdentifier()
+            );
         }
         else
         {
@@ -106,7 +108,7 @@ class Role extends RestController
             );
         }
 
-        return new Values\RoleList( $roles );
+        return new Values\RoleList( $roles, $this->request->path );
     }
 
     /**

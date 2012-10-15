@@ -24,12 +24,21 @@ class RoleList extends RestValue
     public $roles;
 
     /**
+     * Path used to load the list of roles
+     *
+     * @var string
+     */
+    public $path;
+
+    /**
      * Construct
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role[] $roles
+     * @param string $path
      */
-    public function __construct( array $roles )
+    public function __construct( array $roles, $path )
     {
         $this->roles = $roles;
+        $this->path = $path;
     }
 }
