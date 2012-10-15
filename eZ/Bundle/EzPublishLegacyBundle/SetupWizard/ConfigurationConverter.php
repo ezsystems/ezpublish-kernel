@@ -44,7 +44,10 @@ class ConfigurationConverter
         $siteList = $this->legacyResolver->getParameter( 'SiteSettings.SiteList' );
 
         if ( !is_array( $siteList ) || empty( $siteList ) )
-            throw new \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException( 'siteList', 'can not be empty' );
+            throw new InvalidArgumentException( 'siteList', 'can not be empty' );
+
+        if ( !in_array( $adminSiteaccess, $siteList ) )
+            throw new InvalidArgumentException( "adminSiteaccess", "Siteacces $adminSiteaccess wasn't found in SiteSettings.SiteList" );
 
         $settings['ezpublish']['siteaccess']['list'] = $siteList;
         $settings['ezpublish']['siteaccess']['groups'] = array();

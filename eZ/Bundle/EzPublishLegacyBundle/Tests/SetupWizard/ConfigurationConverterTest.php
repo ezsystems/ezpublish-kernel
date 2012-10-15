@@ -20,7 +20,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
      * @param $exception exception type, if expected
      * @dataProvider providerForTestFromLegacy
      */
-    public function testFromLegacy( $mockParameters, $expectedResult, $exception = null )
+    public function testFromLegacy( $package, $adminSiteaccess, $mockParameters, $expectedResult, $exception = null )
     {
         $legacyResolver = $this->getLegacyConfigResolverMock();
         foreach( $mockParameters as $method => $map )
@@ -53,6 +53,12 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
 
     public function providerForTestFromLegacy()
     {
+        define( 'IDX_PACKAGE', 0 );
+        define( 'IDX_ADMIN_SITEACCESS', 1 );
+        define( 'IDX_MOCK_PARAMETERS', 2 );
+        define( 'IDX_EXPECTED_RESULT', 3 );
+        define( 'IDX_EXCEPTION', 4 );
+
         $commonResult = array (
             'ezpublish' => array (
                 'siteaccess' => array(
@@ -100,39 +106,50 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
             )
         );
 
+        $baseData = array( 'ezdemo', 'ezdemo_site_admin', $commonMockParameters, $commonResult );
+
         $data = array();
-        $data[] = array(
-            $commonMockParameters,
-            $commonResult
-        );
+        $data[] = $baseData;
 
         // empty site list => invalid argument exception
-        $mockParameters = $commonMockParameters;
-        $mockParameters['getParameter']['SiteSettings.SiteList'] = array( 'SiteSettings.SiteList', null, null, array() );
-        $data[] = array(
-            $mockParameters,
-            null,
-            $exceptionType
-        );
+        $element = $baseData;
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['SiteSettings.SiteList'] = array( 'SiteSettings.SiteList', null, null, array() );
+        $element[IDX_EXCEPTION] = $exceptionType;
+        $data[] = $element;
 
         // host match, with map
-        $mockParameters = $commonMockParameters;
-        $mockParameters['getGroup']['SiteAccessSettings'] = array( 'SiteAccessSettings', null, null, array(
+        $element = $baseData;
+        $element[IDX_MOCK_PARAMETERS]['getGroup']['SiteAccessSettings'] = array( 'SiteAccessSettings', null, null, array(
             'MatchOrder' => 'host',
             'HostMatchType' => 'map',
             'HostMatchMapItems' => array( 'site.com;eng', 'admin.site.com;ezdemo_site_admin' )
         ) );
-        $result = $commonResult;
-        $result['ezpublish']['siteaccess']['match'] = array(
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['siteaccess']['match'] = array(
             "Map\\Host" => array( 'site.com' => 'eng', 'admin.site.com' => 'ezdemo_site_admin' )
         );
-        $data[] = array(
-            $mockParameters,
-            $result
+        $data[] = $element;
+
+        // host match, with map
+        $element = $baseData;
+        $element[IDX_MOCK_PARAMETERS]['getGroup']['SiteAccessSettings'] = array( 'SiteAccessSettings', null, null, array(
+            'MatchOrder' => 'host',
+            'HostMatchType' => 'map',
+            'HostMatchMapItems' => array( 'site.com;eng', 'admin.site.com;ezdemo_site_admin' )
+        ) );
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['siteaccess']['match'] = array(
+            "Map\\Host" => array( 'site.com' => 'eng', 'admin.site.com' => 'ezdemo_site_admin' )
         );
+        $data[] = $element;
+
+        // host match, with map
+        $element = $baseData;
+        $element[IDX_ADMIN_SITEACCESS] = 'winter';
+        $element[IDX_EXCEPTION] = $exceptionType;
+        $data[] = $element;
 
         return $data;
     }
+
     /**
      * @param array $methodsToMock
      * @return \PHPUnit_Framework_MockObject_MockObject|eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver
