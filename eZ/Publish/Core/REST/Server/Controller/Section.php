@@ -51,8 +51,6 @@ class Section extends RestController
      */
     public function listSections()
     {
-        $sections = array();
-
         if ( isset( $this->request->variables['identifier'] ) )
         {
             $sections = array(
