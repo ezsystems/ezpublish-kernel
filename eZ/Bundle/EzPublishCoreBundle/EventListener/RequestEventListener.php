@@ -81,7 +81,7 @@ class RequestEventListener implements EventSubscriberInterface
             $this->router->setContext( $requestContext );
             $setupURI = $this->router->generate( 'ezpublishSetup' );
 
-            if ( $request->getPathInfo() === $setupURI )
+            if ( ( $requestContext->getBaseUrl() . $request->getPathInfo() ) === $setupURI )
                 return;
 
             $event->setResponse( new RedirectResponse( $setupURI ) );
