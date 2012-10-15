@@ -84,7 +84,7 @@ class LegacySetupController
                 $dumper->dump( $settingsArray, 5 )
             );
 
-            $this->container->get( 'cache_clearer' )->clear( $this->container()->getParameter( 'kernel.cache_dir' ) );
+            $this->container->get( 'cache_clearer' )->clear( $this->container->getParameter( 'kernel.cache_dir' ) );
         }
 
         return $response;
