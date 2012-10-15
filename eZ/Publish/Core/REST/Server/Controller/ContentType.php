@@ -190,25 +190,45 @@ class ContentType extends RestController
     }
 
     /**
+     * Returns a list of content types
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeList|\eZ\Publish\Core\REST\Server\Values\ContentTypeInfoList
+     */
+    public function listContentTypes()
+    {
+        $contentTypes = array();
+
+        if ( isset( $this->request->variables['identifier'] ) )
+        {
+            $contentTypes = array(
+                $this->loadContentTypeByIdentifier()
+            );
+        }
+        else if ( isset( $this->request->variables['remoteId'] ) )
+        {
+            $contentTypes = array(
+                $this->loadContentTypeByRemoteId()
+            );
+        }
+
+        if ( $this->getMediaType( $this->request ) == 'application/vnd.ez.api.contenttypelist' )
+        {
+            return new Values\ContentTypeList( $contentTypes, $this->request->path );
+        }
+
+        return new Values\ContentTypeInfoList( $contentTypes, $this->request->path );
+    }
+
+    /**
      * Loads a content type by its identifier
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeList|\eZ\Publish\Core\REST\Server\Values\ContentTypeInfoList
      */
     public function loadContentTypeByIdentifier()
     {
-        // Serves only to verify that the URI is correct
-        $this->urlHandler->parse( 'typeByIdentifier', $this->request->path );
-
-        $contentType = $this->contentTypeService->loadContentTypeByIdentifier(
+        return $this->contentTypeService->loadContentTypeByIdentifier(
             $this->request->variables['identifier']
         );
-
-        if ( $this->getMediaType( $this->request ) == 'application/vnd.ez.api.contenttypelist' )
-        {
-            return new Values\ContentTypeList( array( $contentType ), $this->request->path );
-        }
-
-        return new Values\ContentTypeInfoList( array( $contentType ), $this->request->path );
     }
 
     /**
@@ -218,19 +238,9 @@ class ContentType extends RestController
      */
     public function loadContentTypeByRemoteId()
     {
-        // Serves only to verify that the URI is correct
-        $this->urlHandler->parse( 'typeByRemoteId', $this->request->path );
-
-        $contentType = $this->contentTypeService->loadContentTypeByRemoteId(
+        return $this->contentTypeService->loadContentTypeByRemoteId(
             $this->request->variables['remoteId']
         );
-
-        if ( $this->getMediaType( $this->request ) == 'application/vnd.ez.api.contenttypelist' )
-        {
-            return new Values\ContentTypeList( array( $contentType ), $this->request->path );
-        }
-
-        return new Values\ContentTypeInfoList( array( $contentType ), $this->request->path );
     }
 
     /**

@@ -471,9 +471,7 @@ ezpublish_rest_createContentType:
         contentTypeGroupId: \d+
 
 ezpublish_rest_listContentTypes:
-    # @todo Check if it is actually implemented
-    # @todo Handle GET parameter identifier. See loadContentTypeByIdentifier
-    # @todo Handle GET parameter remoteId. See loadContentTypeByRemoteId
+    # @todo: Handle all GET parameters
     pattern: /content/types
     defaults:
         _controller: ezpublish_rest.controller.content_type:listContentTypes
