@@ -814,11 +814,11 @@ ezpublish_rest_deletePolicy:
 # Users
 
 
-ezpublish_rest_loadUsersAssignedToRole:
+ezpublish_rest_loadUsers:
     # @todo: Handle all GET parameters
     pattern: /user/users
     defaults:
-        _controller: ezpublish_rest.controller.user:loadUsersAssignedToRole
+        _controller: ezpublish_rest.controller.user:loadUsers
     requirements:
         _method: GET
 
@@ -913,11 +913,11 @@ ezpublish_rest_unassignRoleFromUser:
         userId: \d+
         roleId: \d+
 
-ezpublish_rest_loadUserGroupsAssignedToRole:
+ezpublish_rest_loadUserGroups:
     # @todo Handle all GET parameters
     pattern: /user/groups
     defaults:
-        _controller: ezpublish_rest.controller.user:loadUserGroupsAssignedToRole
+        _controller: ezpublish_rest.controller.user:loadUserGroups
     requirements:
         _method: GET
 

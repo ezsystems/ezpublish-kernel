@@ -404,6 +404,47 @@ class User extends RestController
     }
 
     /**
+     * Loads users
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\UserList|\eZ\Publish\Core\REST\Server\Values\UserRefList
+     */
+    public function loadUsers()
+    {
+        $restUsers = array();
+        if ( isset( $this->request->variables['roleId'] ) )
+        {
+             $restUsers = $this->loadUsersAssignedToRole();
+        }
+        else if ( isset( $this->request->variables['remoteId'] ) )
+        {
+            $restUsers = array(
+                $this->loadUserByRemoteId()
+            );
+        }
+
+        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.userlist' )
+        {
+            return new Values\UserList( $restUsers, $this->request->path );
+        }
+
+        return new Values\UserRefList( $restUsers, $this->request->path );
+    }
+
+    /**
+     * Loads a user by its remote ID
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\RestUser
+     */
+    public function loadUserByRemoteId()
+    {
+        $contentInfo = $this->contentService->loadContentInfoByRemoteId( $this->request->variables['remoteId'] );
+        $user = $this->userService->loadUser( $contentInfo->id );
+        $userLocation = $this->locationService->loadLocation( $contentInfo->mainLocationId );
+
+        return new Values\RestUserGroup( $user, $contentInfo, $userLocation );
+    }
+
+    /**
      * Loads a list of users assigned to role
      *
      * @return \eZ\Publish\Core\REST\Server\Values\UserList|\eZ\Publish\Core\REST\Server\Values\UserRefList
@@ -429,12 +470,48 @@ class User extends RestController
             }
         }
 
-        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.userlist' )
+        return $restUsers;
+    }
+
+    /**
+     * Loads user groups
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\UserGroupList|\eZ\Publish\Core\REST\Server\Values\UserGroupRefList
+     */
+    public function loadUserGroups()
+    {
+        $restUserGroups = array();
+        if ( isset( $this->request->variables['roleId'] ) )
         {
-            return new Values\UserList( $restUsers, $this->request->path );
+             $restUserGroups = $this->loadUserGroupsAssignedToRole();
+        }
+        else if ( isset( $this->request->variables['remoteId'] ) )
+        {
+            $restUserGroups = array(
+                $this->loadUserGroupByRemoteId()
+            );
         }
 
-        return new Values\UserRefList( $restUsers, $this->request->path );
+        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.usergrouplist' )
+        {
+            return new Values\UserGroupList( $restUserGroups, $this->request->path );
+        }
+
+        return new Values\UserGroupRefList( $restUserGroups, $this->request->path );
+    }
+
+    /**
+     * Loads a user group by its remote ID
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\RestUserGroup
+     */
+    public function loadUserGroupByRemoteId()
+    {
+        $contentInfo = $this->contentService->loadContentInfoByRemoteId( $this->request->variables['remoteId'] );
+        $userGroup = $this->userService->loadUserGroup( $contentInfo->id );
+        $userGroupLocation = $this->locationService->loadLocation( $contentInfo->mainLocationId );
+
+        return new Values\RestUserGroup( $userGroup, $contentInfo, $userGroupLocation );
     }
 
     /**
@@ -463,12 +540,7 @@ class User extends RestController
             }
         }
 
-        if ( $this->getMediaType( $this->request ) === 'application/vnd.ez.api.usergrouplist' )
-        {
-            return new Values\UserGroupList( $restUserGroups, $this->request->path );
-        }
-
-        return new Values\UserGroupRefList( $restUserGroups, $this->request->path );
+        return $restUserGroups;
     }
 
     /**
