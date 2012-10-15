@@ -32,10 +32,7 @@ class SectionList extends ValueObjectVisitor
         //@TODO Needs refactoring, disabling certain headers should not be done this way
         $visitor->setHeader( 'Accept-Patch', false );
 
-        $generator->startAttribute(
-            'href',
-            $this->urlHandler->generate( 'sections' )
-        );
+        $generator->startAttribute( 'href', $data->path );
         $generator->endAttribute( 'href' );
 
         $generator->startList( 'Section' );

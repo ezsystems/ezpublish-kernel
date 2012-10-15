@@ -24,12 +24,21 @@ class SectionList extends RestValue
     public $sections;
 
     /**
+     * Path used to load the list of sections
+     *
+     * @var string
+     */
+    public $path;
+
+    /**
      * Construct
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section[] $sections
+     * @param string $path
      */
-    public function __construct( array $sections )
+    public function __construct( array $sections, $path )
     {
         $this->sections = $sections;
+        $this->path = $path;
     }
 }

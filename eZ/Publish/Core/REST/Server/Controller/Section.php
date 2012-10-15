@@ -62,7 +62,7 @@ class Section extends RestController
             $sections = $this->sectionService->loadSections();
         }
 
-        return new Values\SectionList( $sections );
+        return new Values\SectionList( $sections, $this->request->path );
     }
 
     /**
