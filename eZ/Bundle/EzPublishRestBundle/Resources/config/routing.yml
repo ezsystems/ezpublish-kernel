@@ -87,7 +87,6 @@ ezpublish_rest_updateContentMetadata:
         contentId: \d+
 
 ezpublish_rest_loadContent:
-    # @todo handle ?language= filter in controller method
     pattern: /content/objects/{contentId}
     defaults:
         _controller: ezpublish_rest.controller.content:loadContent
@@ -175,7 +174,6 @@ ezpublish_rest_loadContentInVersion:
         versionNumber: \d+
 
 ezpublish_rest_updateVersion:
-    # @todo Check language GET parameter. Note: should already be covered by the method
     pattern: /content/objects/{contentId}/versions/{versionNumber}
     defaults:
         _controller: ezpublish_rest.controller.content:updateVersion
@@ -466,7 +464,6 @@ ezpublish_rest_deleteContentTypeGroup:
         contentTypeGroupId: \d+
 
 ezpublish_rest_listContentTypesForGroup:
-    # @todo: Handle an optional publish parameter. Already handled by controller method
     pattern: /content/typegroups/{contentTypeGroupId}/types
     defaults:
         _controller: ezpublish_rest.controller.content_type:listContentTypesForGroup
@@ -723,7 +720,6 @@ ezpublish_rest_deleteURLWildcard:
 
 
 ezpublish_rest_listPoliciesForUser:
-    # @todo Handle GET parameter userId. See method.
     pattern: /user/policies
     defaults:
         _controller: ezpublish_rest.controller.role:listPoliciesForUser
@@ -869,7 +865,6 @@ ezpublish_rest_loadUserGroupsOfUser:
         userId: \d+
 
 ezpublish_rest_assignUserToUserGroup:
-    # @todo Handle group GET parameter.
     pattern: /user/users/{userId}/groups
     defaults:
         _controller: ezpublish_rest.controller.user:assignUserToUserGroup
@@ -878,7 +873,6 @@ ezpublish_rest_assignUserToUserGroup:
         userId: \d+
 
 ezpublish_rest_unassignUserFromUserGroup:
-    # @todo Handle group GET parameter.
     pattern: /user/users/{userId}/groups/{groupId}
     defaults:
         _controller: ezpublish_rest.controller.user:unassignUserFromUserGroup
@@ -888,7 +882,6 @@ ezpublish_rest_unassignUserFromUserGroup:
         groupId: \d+
 
 ezpublish_rest_loadUserDrafts:
-    # @todo Handle group GET parameter.
     pattern: /user/users/{userId}/drafts
     defaults:
         _controller: ezpublish_rest.controller.user:loadUserDrafts
