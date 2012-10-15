@@ -2361,16 +2361,17 @@ class UrlAliasHandlerTest extends TestCase
 
     public function getProcessor()
     {
-        $processor = new TransformationProcessor(
-            new TransformationParser( self::getInstallationDir() ),
-            new TransformationPcreCompiler( new Utf8Converter() )
-        );
-
+        $rules = array();
         foreach ( glob( __DIR__ . '/_fixtures/transformations/*.tr' ) as $file )
         {
-            $processor->loadRules( str_replace( self::getInstallationDir(), '', $file ) );
+            $rules[] = str_replace( self::getInstallationDir(), '', $file );
         }
-        return $processor;
+
+        return new TransformationProcessor(
+            new TransformationParser( self::getInstallationDir() ),
+            new TransformationPcreCompiler( new Utf8Converter() ),
+            $rules
+        );
     }
 
     /**

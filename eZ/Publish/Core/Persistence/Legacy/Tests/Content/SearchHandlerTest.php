@@ -77,16 +77,10 @@ class SearchHandlerTest extends LanguageAwareTestCase
      */
     protected function getContentSearchHandler( array $fullTextSearchConfiguration = array() )
     {
-        $processor = new Content\Search\TransformationProcessor(
-            new Content\Search\TransformationParser( self::getInstallationDir() ),
-            new Content\Search\TransformationPcreCompiler(
-                new Content\Search\Utf8Converter()
-            )
-        );
-
+        $rules = array();
         foreach ( glob( __DIR__ . '/SearchHandler/_fixtures/transformations/*.tr' ) as $file )
         {
-            $processor->loadRules( str_replace( self::getInstallationDir(), '', $file ) );
+            $rules[] = str_replace( self::getInstallationDir(), '', $file );
         }
 
         return new Content\Search\Handler(
@@ -138,7 +132,13 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         ),
                         new Content\Search\Gateway\CriterionHandler\FullText(
                             $this->getDatabaseHandler(),
-                            $processor,
+                            new Content\Search\TransformationProcessor(
+                                new Content\Search\TransformationParser( self::getInstallationDir() ),
+                                new Content\Search\TransformationPcreCompiler(
+                                    new Content\Search\Utf8Converter()
+                                ),
+                                $rules
+                            ),
                             $fullTextSearchConfiguration
                         ),
                         new Content\Search\Gateway\CriterionHandler\Field(

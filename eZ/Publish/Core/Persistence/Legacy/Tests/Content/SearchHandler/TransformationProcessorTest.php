@@ -18,16 +18,17 @@ class TransformationProcessorTest extends TestCase
 {
     public function getProcessor()
     {
-        $processor = new Search\TransformationProcessor(
-            new Search\TransformationParser( self::getInstallationDir() ),
-            new Search\TransformationPcreCompiler( new Search\Utf8Converter() )
-        );
-
+        $rules = array();
         foreach ( glob( __DIR__ . '/_fixtures/transformations/*.tr' ) as $file )
         {
-            $processor->loadRules( str_replace( self::getInstallationDir(), '', $file ) );
+            $rules[] = str_replace( self::getInstallationDir(), '', $file );
         }
-        return $processor;
+
+        return new Search\TransformationProcessor(
+            new Search\TransformationParser( self::getInstallationDir() ),
+            new Search\TransformationPcreCompiler( new Search\Utf8Converter() ),
+            $rules
+        );
     }
 
     public function testSimpleNormalizationLowercase()

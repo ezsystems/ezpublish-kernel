@@ -76,7 +76,7 @@ class TransformationProcessor
      * @param string $file
      * @return void
      */
-    public function loadRules( $file )
+    protected function loadRules( $file )
     {
         $this->rules = array_merge(
             $this->rules,
