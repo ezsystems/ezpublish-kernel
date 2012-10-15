@@ -160,6 +160,64 @@
 {% endspaceless %}
 {% endblock %}
 
+{% block ezmedia_field %}
+{% if field.value %}
+{% spaceless %}
+    {% set type = fieldSettings.mediaType %}
+    {% set value = field.value %}
+    {% set uri = 'content/download/' ~ contentInfo.id ~ '/' ~ field.id
+                    ~ '/' ~ value.fileName|escape( 'url' ) %}
+    {% set download = path( 'ez_legacy', {'module_uri': uri } ) %}
+    {% set width = value.width > 0 ? 'width="' ~ value.width ~ '"' : "" %}
+    {% set height = value.height > 0 ? 'height="' ~ value.height ~ '"' : "" %}
+    <div {{ block( 'field_attributes' ) }}>
+    {% autoescape false %}
+    {% if type == "html5_video"
+        or type == "quick_time"
+        or type == "windows_media_player"
+        or type == "real_player" %}
+        <video src="{{ download }}" {{ width }} {{ height }}
+            {{ value.autoplay ? 'autoplay="autoplay"' : "" }}
+            {{ value.hasController ? 'controls="controls"' : "" }}
+            {{ value.loop ? 'loop="loop"' : "" }}>
+            Your browser does not support html5 video.
+        </video>
+    {% elseif type == "html5_audio" %}
+        <audio src="{{ download }}"
+            {{ value.autoplay ? 'autoplay="autoplay"' : "" }}
+            {{ value.hasController ? 'controls="controls"' : "" }}
+            {{ value.loop ? 'loop="loop"' : "" }}
+            preload="none">
+            Your browser does not support html5 audio.
+        </audio>
+    {% elseif type == 'flash' %}
+        <object type="application/x-shockwave-flash" {{ width }} {{ height }} data="{{ download }}">
+            <param name="movie" value="{{ download }}" />
+            <param name="play" value="{{ value.autoplay ? 'true' : 'false' }}" />
+            <param name="loop" value="{{ value.loop ? 'true' : 'false' }}" />
+            <param name="quality" value="{{ value.quality }}" />
+        </object>
+    {% elseif type == 'silverlight' %}
+        <script type="text/javascript">
+            function onErrorHandler(sender, args) { }
+            function onResizeHandler(sender, args) { }
+        </script>
+        <object data="data:application/x-silverlight," type="application/x-silverlight-2" {{ width }} {{ height }}>
+            <param name="source" value="{{ download }}" />
+            <param name="onError" value="onErrorHandler" />
+            <param name="onResize" value="onResizeHandler" />
+            <a href="http://go.microsoft.com/fwlink/?LinkID=108182">
+                <img src="http://go.microsoft.com/fwlink/?LinkId=108181" alt="Get Microsoft Silverlight" />
+            </a>
+        </object>
+        <iframe style="visibility: hidden; height: 0; width: 0; border: 0px;"></iframe>
+    {% endif %}
+    {% endautoescape %}
+    </div>
+{% endspaceless %}
+{% endif %}
+{% endblock %}
+
 {% block ezobjectrelationlist_field %}
 {% spaceless %}
     {% if field.value.destinationContentIds|length > 0 %}
