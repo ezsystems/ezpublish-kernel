@@ -13,58 +13,139 @@ use eZ\Publish\Core\MVC\Legacy\Tests\LegacyBasedTestCase,
 
 class ConfigurationConverterTest extends LegacyBasedTestCase
 {
-    public function testFromLegacy()
-    {
-        $configurationConverter = new ConfigurationConverter( $this->getLegacyConfigResolverMock() );
 
-        self::assertEquals( $this->getExpectedResultForTestFromLegacy(), $configurationConverter->fromLegacy( 'ezdemo_site', 'ezdemo_site_admin' ) );
+    /**
+     * @param $mockParameter
+     * @param $expectedResult
+     * @param $exception exception type, if expected
+     * @dataProvider providerForTestFromLegacy
+     */
+    public function testFromLegacy( $mockParameters, $expectedResult, $exception = null )
+    {
+        $legacyResolver = $this->getLegacyConfigResolverMock();
+        foreach( $mockParameters as $method => $map )
+        {
+            $legacyResolver->expects( $this->any() )->method( $method )->will( $this->returnValueMap( $map ) );
+        }
+
+        $configurationConverter = new ConfigurationConverter( $legacyResolver );
+
+        try
+        {
+            $result = $configurationConverter->fromLegacy( 'ezdemo_site', 'ezdemo_site_admin' );
+        }
+        catch( \Exception $e )
+        {
+            if ( $exception !== null && $e instanceof $exception )
+            {
+                return;
+            }
+            else
+            {
+                throw $e;
+            }
+        }
+        self::assertSame(
+            $expectedResult,
+            $result
+        );
     }
 
+    public function providerForTestFromLegacy()
+    {
+        $commonResult = array (
+            'ezpublish' => array (
+                'siteaccess' => array(
+                    'default_siteaccess' => 'eng',
+                    'list' => array(
+                        0 => 'eng',
+                        1 => 'ezdemo_site',
+                        2 => 'ezdemo_site_admin',
+                    ),
+                    'groups' => array(
+                        'ezdemo_site_group' =>
+                        array (
+                            0 => 'eng',
+                            1 => 'ezdemo_site',
+                            2 => 'ezdemo_site_admin',
+                        ),
+                    ),
+                    'match' => array( 'URIElement' => 1 ),
+                ),
+                'system' => array(
+                    'ezdemo_site_group' => array(
+                        'database' => array(
+                            'type' => 'mysql',
+                            'user' => 'root',
+                            'password' => null,
+                            'server' => 'localhost',
+                            'database_name' => 'ezdemo',
+                        ),
+                    ),
+                    'ezdemo_site_admin' => array( 'url_alias_router' => false )
+                ),
+            ),
+        );
+
+        $exceptionType = 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException';
+
+        $commonMockParameters = array(
+            'getParameter' => array(
+                'SiteSettings.DefaultAccess' => array( 'SiteSettings.DefaultAccess', null, null, 'eng' ),
+                'SiteSettings.SiteList' => array( 'SiteSettings.SiteList', null, null, array( 'eng', 'ezdemo_site', 'ezdemo_site_admin' ) ),
+            ),
+            'getGroup' => array(
+                'SiteAccessSettings' => array( 'SiteAccessSettings', null, null, array( 'MatchOrder' => 'uri', 'URIMatchType' => 'element', 'URIMatchElement' => 1 ) ),
+                'DatabaseSettings' => array( 'DatabaseSettings', 'site', 'eng', array( 'DatabaseImplementation' => 'ezmysqli', 'Server' => 'localhost', 'User' => 'root', 'Password' => '', 'Database' => 'ezdemo' ) ),
+            )
+        );
+
+        $data = array();
+        $data[] = array(
+            $commonMockParameters,
+            $commonResult
+        );
+
+        // empty site list => invalid argument exception
+        $mockParameters = $commonMockParameters;
+        $mockParameters['getParameter']['SiteSettings.SiteList'] = array( 'SiteSettings.SiteList', null, null, array() );
+        $data[] = array(
+            $mockParameters,
+            null,
+            $exceptionType
+        );
+
+        // host match, with map
+        $mockParameters = $commonMockParameters;
+        $mockParameters['getGroup']['SiteAccessSettings'] = array( 'SiteAccessSettings', null, null, array(
+            'MatchOrder' => 'host',
+            'HostMatchType' => 'map',
+            'HostMatchMapItems' => array( 'site.com;eng', 'admin.site.com;ezdemo_site_admin' )
+        ) );
+        $result = $commonResult;
+        $result['ezpublish']['siteaccess']['match'] = array(
+            "Map\\Host" => array( 'site.com' => 'eng', 'admin.site.com' => 'ezdemo_site_admin' )
+        );
+        $data[] = array(
+            $mockParameters,
+            $result
+        );
+
+        return $data;
+    }
     /**
      * @param array $methodsToMock
      * @return \PHPUnit_Framework_MockObject_MockObject|eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver
      */
     protected function getLegacyConfigResolverMock( array $methodsToMock = array() )
     {
+
         $mock = $this
             ->getMockBuilder( 'eZ\\Bundle\\EzPublishLegacyBundle\\DependencyInjection\\Configuration\\LegacyConfigResolver' )
+            ->setMethods( array( 'getParameter', 'getGroup' ) )
             ->disableOriginalConstructor()
             ->setMethods( $methodsToMock )
             ->getMock();
-
-        $mock
-            ->expects( $this->at( 0 ) )
-            ->method( 'getParameter' )
-            ->with( 'SiteSettings.DefaultAccess' )
-            ->will( $this->returnValue( 'eng' ) );
-
-        $mock
-            ->expects( $this->at( 1 ) )
-            ->method( 'getParameter' )
-            ->with( 'SiteSettings.SiteList' )
-            ->will( $this->returnValue( array( 'eng', 'ezdemo_site', 'ezdemo_site_admin' ) ) );
-
-        $mock
-            ->expects( $this->at( 2 ) )
-            ->method( 'getGroup' )
-            ->with( 'SiteAccessSettings' )
-            ->will( $this->returnValue( array(
-                'MatchOrder' => 'uri',
-                'URIMatchType' => 'element',
-                'URIMatchElement' => 1
-            ) ) );
-
-        $mock
-            ->expects( $this->at( 3 ) )
-            ->method( 'getGroup' )
-            ->with( 'DatabaseSettings', 'site', 'eng' )
-            ->will( $this->returnValue( array(
-                'DatabaseImplementation' => 'ezmysqli',
-                'Server' => 'localhost',
-                'User' => 'root',
-                'Password' => '',
-                'Database' => 'ezdemo',
-            ) ) );
 
         return $mock;
     }
@@ -105,7 +186,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                         array (
                             'type' => 'mysql',
                             'user' => 'root',
-                            'password' => '',
+                            'password' => null,
                             'server' => 'localhost',
                             'database_name' => 'ezdemo',
                         ),

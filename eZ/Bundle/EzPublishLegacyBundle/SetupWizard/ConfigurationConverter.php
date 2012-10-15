@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\SetupWizard;
 
 use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * Handles conversionlegacy eZ Publish 4 parameters from a set of settings to a configuration array
@@ -31,6 +32,7 @@ class ConfigurationConverter
      * @param string $sitePackage Name of the chosen install package
      * @param string $adminSiteaccess Name of the admin siteaccess
      * @return array
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
     public function fromLegacy( $sitePackage, $adminSiteaccess )
     {
@@ -40,6 +42,10 @@ class ConfigurationConverter
         $defaultSiteaccess = $this->legacyResolver->getParameter( 'SiteSettings.DefaultAccess' );
         $settings['ezpublish']['siteaccess']['default_siteaccess'] = $defaultSiteaccess;
         $siteList = $this->legacyResolver->getParameter( 'SiteSettings.SiteList' );
+
+        if ( !is_array( $siteList ) || empty( $siteList ) )
+            throw new \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException( 'siteList', 'can not be empty' );
+
         $settings['ezpublish']['siteaccess']['list'] = $siteList;
         $settings['ezpublish']['siteaccess']['groups'] = array();
         $groupName = $sitePackage . '_group';
@@ -59,10 +65,11 @@ class ConfigurationConverter
 
         $settings['ezpublish']['system'] = array();
         $settings['ezpublish']['system'][$groupName] = array();
+        $databasePassword = $databaseSettings['Password'] != '' ? $databaseSettings['Password'] : null;
         $settings['ezpublish']['system'][$groupName]['database'] = array(
             'type' => $databaseType,
             'user' => $databaseSettings['User'],
-            'password' => $databaseSettings['Password'],
+            'password' => $databasePassword,
             'server' => $databaseSettings['Server'],
             'database_name' => $databaseSettings['Database'],
         );
@@ -75,7 +82,7 @@ class ConfigurationConverter
     {
         $siteaccessSettings = $this->legacyResolver->getGroup( 'SiteAccessSettings' );
 
-        $matching = array();
+        $matching = array(); $match = false;
         foreach( explode( ';', $siteaccessSettings['MatchOrder'] ) as $matchMethod )
         {
             switch( $matchMethod )
@@ -91,13 +98,16 @@ class ConfigurationConverter
                     $match = false;
                     break;
                 case 'port':
-                    $match = array( 'Map\Port' => $legacyResolver->getGroup( 'PortAccessSettings' ) );
+                    $match = array( 'Map\Port' => $this->legacyResolver->getGroup( 'PortAccessSettings' ) );
                     break;
             }
             if ( $match !== false )
-                $matching += $match;
+            {
+                $matching = $match + $matching;
+            }
+
         }
-        return $match;
+        return $matching;
     }
 
     protected function resolveUriMatching( $siteaccessSettings )
@@ -108,7 +118,7 @@ class ConfigurationConverter
                 return false;
 
             case 'map':
-                return array( "Map\Uri" => $this->resolveMapMatch( $siteaccessSettings['URIMatchMapItems'] ) );
+                return array( "Map\\Uri" => $this->resolveMapMatch( $siteaccessSettings['URIMatchMapItems'] ) );
 
             case 'element':
                 return array( "URIElement" => $siteaccessSettings['URIMatchElement'] );
@@ -117,10 +127,17 @@ class ConfigurationConverter
                 return array( "URIText" => $this->resolveTextMatch( $siteaccessSettings, 'URIMatchSubtextPre', 'URIMatchSubtextPost' ) );
 
             case 'regexp':
-                return array( "Regex\URI" => array( $siteaccessSettings['URIMatchRegexp'], $siteaccessSettings['URIMatchRegexpItem'] ) );
+                return array( "Regex\\URI" => array( $siteaccessSettings['URIMatchRegexp'], $siteaccessSettings['URIMatchRegexpItem'] ) );
         }
     }
 
+    /**
+     * Parses Legacy HostMatching settings to a matching array
+     * @param $siteaccessSettings
+     *
+     * @return array|bool
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     */
     protected function resolveHostMatching( $siteaccessSettings )
     {
         switch( $siteaccessSettings['HostMatchType'] )
@@ -129,7 +146,7 @@ class ConfigurationConverter
                 return false;
 
             case 'map':
-                return array( "Map\Host" => $this->resolveMapMatch( $siteaccessSettings['HostMatchMapItems'] ) );
+                return array( "Map\\Host" => $this->resolveMapMatch( $siteaccessSettings['HostMatchMapItems'] ) );
 
             case 'element':
                 return array( "HostElement" => $siteaccessSettings['HostMatchElement'] );
@@ -138,7 +155,10 @@ class ConfigurationConverter
                 return array( "HostText" => $this->resolveTextMatch( $siteaccessSettings, 'HostMatchSubtextPre', 'HostMatchSubtextPost' ) );
 
             case 'regexp':
-                return array( "Regex\Host" => array( $siteaccessSettings['HostMatchRegexp'], $siteaccessSettings['HostMatchRegexpItem'] ) );
+                return array( "Regex\\Host" => array( $siteaccessSettings['HostMatchRegexp'], $siteaccessSettings['HostMatchRegexpItem'] ) );
+
+            default:
+                throw new InvalidArgumentException( "HostMatchType", "Invalid value for legacy setting site.ini '{$siteaccessSettings['HostMatchType']}'" );
         }
     }
 
