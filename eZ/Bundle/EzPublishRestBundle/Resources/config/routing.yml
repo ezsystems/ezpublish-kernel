@@ -524,6 +524,14 @@ ezpublish_rest_deleteContentType:
         _method: DELETE
         contentTypeId: \d+
 
+ezpublish_rest_deleteContentTypeDraft:
+    pattern: /content/types/{contentTypeId}/draft
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:deleteContentTypeDraft
+    requirements:
+        _method: DELETE
+        contentTypeId: \d+
+
 ezpublish_rest_loadFieldDefinitionList:
     pattern: /content/types/{contentTypeId}/fieldDefinitions
     defaults:

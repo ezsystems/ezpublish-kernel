@@ -681,6 +681,23 @@ class ContentType extends RestController
     }
 
     /**
+     * The given content type draft is deleted
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     */
+    public function deleteContentTypeDraft()
+    {
+        $urlValues = $this->urlHandler->parse( 'typeDraft', $this->request->path );
+
+        // @TODO Throw NotFoundException if the content type does not have a draft for the current user
+
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
+        $this->contentTypeService->deleteContentType( $contentTypeDraft );
+
+        return new Values\ResourceDeleted();
+    }
+
+    /**
      * Returns the content type groups the content type belongs to
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeGroupRefList
