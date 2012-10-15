@@ -36,11 +36,17 @@ class RequestEventListener implements EventSubscriberInterface
      */
     private $container;
 
+    /**
+     * @var \Symfony\Component\Routing\RouterInterface
+     */
+    private $router;
+
     public function __construct( ContainerInterface $container, LoggerInterface $logger = null )
     {
         $this->httpKernel = $container->get( 'http_kernel' );
         $this->container = $container;
         $this->logger = $logger;
+        $this->router = $container->get( 'router' );
     }
 
     public static function getSubscribedEvents()
@@ -66,19 +72,19 @@ class RequestEventListener implements EventSubscriberInterface
             && $this->container->hasParameter( 'ezpublish.siteaccess.default' )
         )
         {
-            $setupURI = $this->container->get( 'router' )->generate( 'ezpublishSetup' );
-            if ( $event->getRequest()->getPathInfo() === $setupURI )
+            if ( $this->container->getParameter( 'ezpublish.siteaccess.default' ) !== 'setup' )
                 return;
 
-            if (
-                $this->container->getParameter( 'ezpublish.siteaccess.default' ) === 'setup'
-                || !$this->container->getParameter( 'ezpublish.siteaccess.list' )
-            )
-            {
-                $event->setResponse(
-                    new RedirectResponse( $this->container->get( 'router' )->generate( 'ezpublishSetup' ) )
-                );
-            }
+            $request = $event->getRequest();
+            $requestContext = $this->container->get( 'router.request_context' );
+            $requestContext->fromRequest( $request );
+            $this->router->setContext( $requestContext );
+            $setupURI = $this->router->generate( 'ezpublishSetup' );
+
+            if ( $request->getPathInfo() === $setupURI )
+                return;
+
+            $event->setResponse( new RedirectResponse( $setupURI ) );
         }
     }
 
