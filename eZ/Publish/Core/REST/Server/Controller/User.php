@@ -441,13 +441,13 @@ class User extends RestController
         $user = $this->userService->loadUser( $contentInfo->id );
         $userLocation = $this->locationService->loadLocation( $contentInfo->mainLocationId );
 
-        return new Values\RestUserGroup( $user, $contentInfo, $userLocation );
+        return new Values\RestUser( $user, $contentInfo, $userLocation );
     }
 
     /**
      * Loads a list of users assigned to role
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\UserList|\eZ\Publish\Core\REST\Server\Values\UserRefList
+     * @return \eZ\Publish\Core\REST\Server\Values\RestUser[]
      */
     public function loadUsersAssignedToRole()
     {
@@ -517,7 +517,7 @@ class User extends RestController
     /**
      * Loads a list of user groups assigned to role
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\UserGroupList|\eZ\Publish\Core\REST\Server\Values\UserGroupRefList
+     * @return \eZ\Publish\Core\REST\Server\Values\RestUserGroup[]
      */
     public function loadUserGroupsAssignedToRole()
     {

@@ -222,7 +222,7 @@ class ContentType extends RestController
     /**
      * Loads a content type by its identifier
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeList|\eZ\Publish\Core\REST\Server\Values\ContentTypeInfoList
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     public function loadContentTypeByIdentifier()
     {
@@ -234,7 +234,7 @@ class ContentType extends RestController
     /**
      * Loads a content type by its remote ID
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeList|\eZ\Publish\Core\REST\Server\Values\ContentTypeInfoList
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     public function loadContentTypeByRemoteId()
     {
