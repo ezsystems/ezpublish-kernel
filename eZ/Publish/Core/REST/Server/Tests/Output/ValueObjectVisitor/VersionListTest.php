@@ -103,7 +103,8 @@ class VersionListTest extends ValueObjectVisitorBaseTest
                             array(
                                 'id' => 42
                             )
-                        )
+                        ),
+                        'versionNo' => 1
                     )
                 ),
                 new VersionInfo(
@@ -112,7 +113,8 @@ class VersionListTest extends ValueObjectVisitorBaseTest
                             array(
                                 'id' => 42
                             )
-                        )
+                        ),
+                        'versionNo' => 2
                     )
                 )
             ),
@@ -121,7 +123,7 @@ class VersionListTest extends ValueObjectVisitorBaseTest
 
         $this->getVisitorMock()->expects( $this->exactly( 2 ) )
             ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Server\\Values\\Version' ) );
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo' ) );
 
         $visitor->visit(
             $this->getVisitorMock(),

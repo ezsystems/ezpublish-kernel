@@ -213,11 +213,6 @@ class Factory
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\VersionList'                 => new Output\ValueObjectVisitor\VersionList( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedVersion'              => new Output\ValueObjectVisitor\CreatedVersion( $urlHandler, $fieldTypeSerializer ),
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo'           => new Output\ValueObjectVisitor\VersionInfo( $urlHandler ),
-
-            // The following two visitors are quite similar, as they both generate
-            // <Version> resource. However, "Version" visitor DOES NOT generate embedded
-            // <Fields> and <Relations> elements, while "Content" visitor DOES
-            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\Version'                     => new Output\ValueObjectVisitor\Version( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content'               => new Output\ValueObjectVisitor\Content(
                 $urlHandler,
                 $fieldTypeSerializer
