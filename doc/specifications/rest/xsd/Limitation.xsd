@@ -36,9 +36,10 @@
   </xsd:complexType>
 
   <xsd:complexType name="limitationType">
-    <xsd:all>
-      <xsd:element name="values" type="refValueList" />
-    </xsd:all>
+    <xsd:choice>
+      <xsd:element name="values" type="valueType"</xsd:element>
+      <xsd:element name="refs" type="refValueList" />
+    </xsd:choice>
     <xsd:attribute name="identifier" type="limitationIdentifierType" />
   </xsd:complexType>
 
@@ -50,3 +51,4 @@
   </xsd:complexType>
   
 </xsd:schema>
+

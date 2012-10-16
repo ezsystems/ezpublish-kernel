@@ -54,6 +54,45 @@ class LocationHandler implements LocationHandlerInterface
         return $this->backend->load( 'Content\\Location', $locationId );
     }
 
+
+    /**
+     * Loads all locations for $contentId, optionally limited to a sub tree
+     * identified by $rootLocationId
+     *
+     * @param int $contentId
+     * @param int $rootLocationId
+     * @return \eZ\Publish\SPI\Persistence\Content\Location[]
+     * @todo Add support for $rootLocationId when not child of node 1
+     */
+    public function loadLocationsByContent( $contentId, $rootLocationId = null )
+    {
+        if ( $rootLocationId )
+            return $this->backend->find(
+                'Content\\Location',
+                array( 'contentId' => $contentId, 'pathString' => "/1/{$rootLocationId}/%" )
+            );
+
+        return $this->backend->find(
+            'Content\\Location',
+            array( 'contentId' => $contentId )
+        );
+    }
+
+    /**
+     * Loads the data for the location identified by $remoteId.
+     *
+     * @param string $remoteId
+     * @return \eZ\Publish\SPI\Persistence\Content\Location
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function loadByRemoteId( $remoteId )
+    {
+        return $this->backend->find(
+            'Content\\Location',
+            array( 'remoteId' => $remoteId )
+        );
+    }
+
     /**
      * Get all subtree locations for the given location (including), sorted by path string
      *

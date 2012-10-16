@@ -256,10 +256,6 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
             'Content',
             array( 'id' => 1 ),
             array(
-                'locations' => array(
-                    'type' => 'Content\\Location',
-                    'match' => array( 'contentId' => 'id' )
-                ),
                 'versionInfo' => array(
                     'type' => 'Content\\VersionInfo',
                     'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
@@ -281,8 +277,12 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
             $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content', $content );
             $this->assertEquals( 1, $content->versionInfo->contentInfo->id );
             $this->assertEquals( 1, $content->versionInfo->contentInfo->sectionId );
-            $this->assertEquals( 1, count( $content->locations ) );
-            foreach ( $content->locations as $location )
+            $locations = $this->backend->find(
+                'Content\\Location',
+                array( 'contentId' => $content->versionInfo->contentInfo->id )
+            );
+            $this->assertEquals( 1, count( $locations ) );
+            foreach ( $locations as $location )
             {
                 $this->assertInstanceof( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location', $location );
                 $this->assertEquals( 2, $location->id );
@@ -304,12 +304,8 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
          */
         $list = $this->backend->find(
             'Content',
-            array( "locations" => array( 'id' => 2 ) ),
+            array( "versionInfo" => array( 'id' => 2 ) ),
             array(
-                'locations' => array(
-                    'type' => 'Content\\Location',
-                    'match' => array( 'contentId' => 'id' )
-                ),
                 'versionInfo' => array(
                     'type' => 'Content\\VersionInfo',
                     'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
@@ -331,8 +327,12 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
             $this->assertTrue( $content instanceof Content );
             $this->assertEquals( 1, $content->versionInfo->contentInfo->id );
             $this->assertEquals( 1, $content->versionInfo->contentInfo->sectionId );
-            $this->assertEquals( 1, count( $content->locations ) );
-            foreach ( $content->locations as $location )
+            $locations = $this->backend->find(
+                'Content\\Location',
+                array( 'contentId' => $content->versionInfo->contentInfo->id )
+            );
+            $this->assertEquals( 1, count( $locations ) );
+            foreach ( $locations as $location )
             {
                 $this->assertTrue( $location instanceof Location );
                 $this->assertEquals( 2, $location->id );
@@ -365,12 +365,8 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
          */
         $list = $this->backend->find(
             'Content',
-            array( "locations" => array( 'id' => 2 ) ),
+            array( "versionInfo" => array( 'id' => 2 ) ),
             array(
-                'locations' => array(
-                    'type' => 'Content\\Location',
-                    'match' => array( 'contentId' => 'id' )
-                ),
                 'versionInfo' => array(
                     'type' => 'Content\\VersionInfo',
                     'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
@@ -391,8 +387,12 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
             $this->assertTrue( $content instanceof Content );
             $this->assertEquals( 1, $content->versionInfo->contentInfo->id );
             $this->assertEquals( 1, $content->versionInfo->contentInfo->sectionId );
-            $this->assertEquals( 2, count( $content->locations ) );
-            foreach ( $content->locations as $location )
+            $locations = $this->backend->find(
+                'Content\\Location',
+                array( 'contentId' => $content->versionInfo->contentInfo->id )
+            );
+            $this->assertEquals( 2, count( $locations ) );
+            foreach ( $locations as $location )
             {
                 $this->assertTrue( $location instanceof Location );
                 $this->assertEquals( 1, $location->contentId );
@@ -437,10 +437,6 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
             'Content\\ContentInfo',
             array( "locations" => array( 'id' => 2 ) ),
             array(
-                'locations' => array(
-                    'type' => 'Content\\Location',
-                    'match' => array( 'contentId' => 'id' )
-                ),
                 'version' => array(
                     'type' => 'Content\\VersionInfo',
                     'single' => true,
@@ -459,8 +455,12 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         {
             $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content', $content );
             $this->assertEquals( 1, $content->id );
-            $this->assertEquals( 1, count( $content->locations ) );
-            foreach ( $content->locations as $location )
+            $locations = $this->backend->find(
+                'Content\\Location',
+                array( 'contentId' => $content->versionInfo->contentInfo->id )
+            );
+            $this->assertEquals( 1, count( $locations ) );
+            foreach ( $locations as $location )
             {
                 $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location', $location );
                 $this->assertEquals( 2, $location->id );
@@ -536,12 +536,8 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
             1,
             $this->backend->count(
                 'Content',
-                array( "locations" => array( 'id' => 2 ) ),
+                array( "versionInfo" => array( 'id' => 2 ) ),
                 array(
-                    'locations' => array(
-                        'type' => 'Content\\Location',
-                        'match' => array( 'contentId' => 'id' )
-                    ),
                     'versionInfo' => array(
                         'type' => 'Content\\VersionInfo',
                         'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),

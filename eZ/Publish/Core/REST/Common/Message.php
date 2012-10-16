@@ -39,6 +39,7 @@ class Message
      *
      * @param array $headers
      * @param string $body
+     * @param int $statusCode
      */
     public function __construct( array $headers = array(), $body = '', $statusCode = 200 )
     {

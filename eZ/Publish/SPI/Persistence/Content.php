@@ -40,9 +40,4 @@ class Content extends ValueObject
      * @var \eZ\Publish\SPI\Persistence\Content\Field[]
      */
     public $fields;
-
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Location[]
-     */
-    public $locations = array();
 }

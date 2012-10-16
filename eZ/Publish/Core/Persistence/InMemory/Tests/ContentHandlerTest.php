@@ -324,7 +324,10 @@ class ContentHandlerTest extends HandlerTest
         $this->assertEquals( 1, $copy->versionInfo->contentInfo->contentTypeId, "Type ID does not match" );
         $this->assertEquals( 14, $copy->versionInfo->contentInfo->ownerId, "Owner ID does not match" );
         $this->assertEquals( 1, $copy->versionInfo->contentInfo->currentVersionNo, "Current version no does not match" );
-        $this->assertEmpty( $copy->locations, "Locations must be empty" );
+        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent(
+            $copy->versionInfo->contentInfo->id
+        );
+        $this->assertEmpty( $locations, "Locations must be empty" );
 
         $versions = $contentHandler->listVersions( $copy->versionInfo->contentInfo->id );
         $this->assertEquals( 1, count( $versions ) );
@@ -352,7 +355,10 @@ class ContentHandlerTest extends HandlerTest
         $this->assertEquals( 1, $copy->versionInfo->contentInfo->contentTypeId, "Type ID does not match" );
         $this->assertEquals( 14, $copy->versionInfo->contentInfo->ownerId, "Owner ID does not match" );
         $this->assertEquals( $versionNoToCopy, $copy->versionInfo->contentInfo->currentVersionNo, "Current version no does not match" );
-        $this->assertEmpty( $copy->locations, "Locations must be empty" );
+        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent(
+            $copy->versionInfo->contentInfo->id
+        );
+        $this->assertEmpty( $locations, "Locations must be empty" );
 
         $versions = $contentHandler->listVersions( $copy->versionInfo->contentInfo->id );
         $this->assertEquals( 1, count( $versions ) );
@@ -379,7 +385,10 @@ class ContentHandlerTest extends HandlerTest
         $this->assertEquals( 1, $copy->versionInfo->contentInfo->contentTypeId, "Type ID does not match" );
         $this->assertEquals( 14, $copy->versionInfo->contentInfo->ownerId, "Owner ID does not match" );
         $this->assertEquals( 1, $copy->versionInfo->contentInfo->currentVersionNo, "Current version no does not match" );
-        $this->assertEmpty( $copy->locations, "Locations must be empty" );
+        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent(
+            $copy->versionInfo->contentInfo->id
+        );
+        $this->assertEmpty( $locations, "Locations must be empty" );
 
         $versions = $contentHandler->listVersions( $copy->versionInfo->contentInfo->id );
         $this->assertEquals( 2, count( $versions ) );

@@ -19,11 +19,13 @@ class ConfiguredLocalFileService extends LocalFileService
      *
      * @param ConfigResolverInterface $resolver
      * @param string $installDir
-     * @param string $identifierPrefix
      */
-    public function __construct( ConfigResolverInterface $resolver, $installDir, $identifierPrefix = '' )
+    public function __construct( ConfigResolverInterface $resolver, $installDir )
     {
-        parent::__construct( $installDir, $resolver->getParameter( 'binary_dir' ), $identifierPrefix );
+        parent::__construct(
+            $installDir,
+            $resolver->getParameter( 'var_dir' ) . '/' . $resolver->getParameter( 'storage_dir' ) . '/' . $resolver->getParameter( 'binary_dir' )
+        );
     }
 }
 

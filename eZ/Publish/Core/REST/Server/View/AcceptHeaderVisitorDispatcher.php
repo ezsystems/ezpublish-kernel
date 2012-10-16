@@ -10,11 +10,10 @@
 namespace eZ\Publish\Core\REST\Server\View;
 use eZ\Publish\Core\REST\Server\Request;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use Qafoo\RMF\View\NowViewFoundException;
 
 /**
  * Dispatcher for various visitors depending on the mime-type accept header
- *
- * @version $Revision$
  */
 class AcceptHeaderVisitorDispatcher
 {
@@ -27,10 +26,9 @@ class AcceptHeaderVisitorDispatcher
     protected $mapping = array();
 
     /**
-     * Cosntruct from view handler mapping
+     * Construct from view handler mapping
      *
      * @param array $mapping
-     * @return void
      */
     public function __construct( array $mapping )
     {
@@ -44,8 +42,7 @@ class AcceptHeaderVisitorDispatcher
      * Add view handler
      *
      * @param string $regexp
-     * @param Visitor $visitor
-     * @return void
+     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      */
     public function addVisitor( $regexp, Visitor $visitor )
     {
@@ -55,7 +52,7 @@ class AcceptHeaderVisitorDispatcher
     /**
      * Dispatches a visitable result to the mapped visitor
      *
-     * @param Request $request
+     * @param \eZ\Publish\Core\REST\Server\Request $request
      * @param mixed $result
      * @return void
      */
@@ -75,4 +72,3 @@ class AcceptHeaderVisitorDispatcher
         throw new NowViewFoundException( "No view mapping found." );
     }
 }
-

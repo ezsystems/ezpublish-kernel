@@ -14,25 +14,32 @@ use eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound as ConverterNotFound,
     eZ\Publish\Core\Repository\Values\Content\Location,
     eZ\Publish\Core\Repository\Values\Content\ContentInfo,
-    eZ\Publish\Core\MVC\Legacy\View\ContentViewProvider as LegacyContentViewProvider,
+    eZ\Publish\Core\MVC\Legacy\View\Provider\Content as LegacyContentViewProvider,
+    eZ\Publish\Core\MVC\Legacy\View\Provider\Location as LegacyLocationViewProvider,
     Symfony\Component\EventDispatcher\EventSubscriberInterface,
     Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 class APIContentExceptionListener implements EventSubscriberInterface
 {
     /**
-     * @var eZ\Publish\Core\MVC\Legacy\View\ContentViewProvider
+     * @var eZ\Publish\Core\MVC\Legacy\View\Provider\Content
      */
     protected $legacyCVP;
+
+    /**
+     * @var eZ\Publish\Core\MVC\Legacy\View\Provider\Location
+     */
+    protected $legacyLVP;
 
     /**
      * @var \Symfony\Component\HttpKernel\Log\LoggerInterface
      */
     protected $logger;
 
-    public function __construct( LegacyContentViewProvider $legacyCVP, LoggerInterface $logger = null )
+    public function __construct( LegacyContentViewProvider $legacyCVP, LegacyLocationViewProvider $legacyLVP, LoggerInterface $logger = null )
     {
         $this->legacyCVP = $legacyCVP;
+        $this->legacyLVP = $legacyLVP;
         $this->logger = $logger;
     }
 
@@ -58,7 +65,7 @@ class APIContentExceptionListener implements EventSubscriberInterface
             if ( isset( $contentMeta['locationId'] ) )
             {
                 $event->setContentView(
-                    $this->legacyCVP->getViewForLocation(
+                    $this->legacyLVP->getView(
                         new Location( array( 'id' => $contentMeta['locationId'] ) ),
                         $contentMeta['viewType']
                     )
@@ -67,7 +74,7 @@ class APIContentExceptionListener implements EventSubscriberInterface
             else if ( isset( $contentMeta['contentId'] ) )
             {
                 $event->setContentView(
-                    $this->legacyCVP->getViewForContent(
+                    $this->legacyCVP->getView(
                         new ContentInfo( array( 'id' => $contentMeta['contentId'] ) ),
                         $contentMeta['viewType']
                     )

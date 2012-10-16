@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\MVC\Symfony\View;
 
 use eZ\Publish\API\Repository\Values\Content\Content,
     eZ\Publish\API\Repository\Values\Content\Location,
+    eZ\Publish\Core\MVC\Symfony\View\Provider\Content as ContentViewProvider,
+    eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProvider,
     eZ\Publish\Core\MVC\Symfony\MVCEvents,
     eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent,
     eZ\Publish\Core\Repository\Repository,
@@ -35,15 +37,27 @@ class Manager
 
     /**
      * @var array Array indexed by priority.
-     *            Each priority key is an array of ContentViewProvider objects having this priority.
+     *            Each priority key is an array of Content View Provider objects having this priority.
      *            The highest priority number is the highest priority
      */
-    protected $viewProviders = array();
+    protected $contentViewProviders = array();
 
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider[]
+     * @var array Array indexed by priority.
+     *            Each priority key is an array of Location View Provider objects having this priority.
+     *            The highest priority number is the highest priority
      */
-    protected $sortedViewProviders;
+    protected $locationViewProviders = array();
+
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\View\Provider\Content[]
+     */
+    protected $sortedContentViewProviders;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\View\Provider\Location[]
+     */
+    protected $sortedLocationViewProviders;
 
     /**
      * @var \eZ\Publish\Core\Repository\Repository
@@ -73,46 +87,80 @@ class Manager
     }
 
     /**
-     * Registers $viewProvider as a valid view provider.
-     * When this view provider will be called in the chain depends on $priority. The highest $priority is, the earliest the router will be called.
-     *
-     * @param \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider $viewProvider
+     * Helper for {@see addContentViewProvider()} and {@see addLocationViewProvider()}
+     * @param array $property
+     * @param \eZ\Publish\Core\MVC\Symfony\View\Provider\Content $viewProvider
      * @param int $priority
      */
-    public function addViewProvider( ContentViewProvider $viewProvider, $priority = 0 )
+    private function addViewProvider( &$property, $viewProvider, $priority )
     {
         $priority = (int)$priority;
-        if ( !isset( $this->viewProviders[$priority] ) )
-            $this->viewProviders[$priority] = array();
+        if ( !isset( $property[$priority] ) )
+            $property[$priority] = array();
 
-        $this->viewProviders[$priority][] = $viewProvider;
+        $property[$priority][] = $viewProvider;
     }
 
     /**
-     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider[]
+     * Registers $viewProvider as a valid content view provider.
+     * When this view provider will be called in the chain depends on $priority. The highest $priority is, the earliest the router will be called.
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\View\Provider\Content $viewProvider
+     * @param int $priority
      */
-    public function getAllViewProviders()
+    public function addContentViewProvider( ContentViewProvider $viewProvider, $priority = 0 )
     {
-        if ( empty( $this->sortedViewProviders ) )
-            $this->sortedViewProviders = $this->sortViewProviders();
+        $this->addViewProvider( $this->contentViewProviders, $viewProvider, $priority );
+    }
 
-        return $this->sortedViewProviders;
+    /**
+     * Registers $viewProvider as a valid location view provider.
+     * When this view provider will be called in the chain depends on $priority. The highest $priority is, the earliest the router will be called.
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\View\Provider\Location $viewProvider
+     * @param int $priority
+     */
+    public function addLocationViewProvider( LocationViewProvider $viewProvider, $priority = 0 )
+    {
+        $this->addViewProvider( $this->locationViewProviders, $viewProvider, $priority );
+    }
+
+    /**
+     * @return \eZ\Publish\Core\MVC\Symfony\View\Provider\Content[]
+     */
+    public function getAllContentViewProviders()
+    {
+        if ( empty( $this->sortedContentViewProviders ) )
+            $this->sortedContentViewProviders = $this->sortViewProviders( $this->contentViewProviders );
+
+        return $this->sortedContentViewProviders;
+    }
+
+    /**
+     * @return \eZ\Publish\Core\MVC\Symfony\View\Provider\Location[]
+     */
+    public function getAllLocationViewProviders()
+    {
+        if ( empty( $this->sortedLocationViewProviders ) )
+            $this->sortedLocationViewProviders = $this->sortViewProviders( $this->locationViewProviders );
+
+        return $this->sortedLocationViewProviders;
     }
 
     /**
      * Sort the registered view providers by priority.
      * The highest priority number is the highest priority (reverse sorting)
      *
-     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider[]
+     * @return \eZ\Publish\Core\MVC\Symfony\View\Provider\Content[]|\eZ\Publish\Core\MVC\Symfony\View\Provider\Location[]
      */
-    protected function sortViewProviders()
+    protected function sortViewProviders( $property )
     {
         $sortedViewProviders = array();
-        krsort( $this->viewProviders );
+        krsort( $property );
 
-        foreach ( $this->viewProviders as $viewProviders )
+        foreach ( $property as $viewProvider )
         {
-            $sortedViewProviders = array_merge( $sortedViewProviders, $viewProviders );
+            $sortedViewProviders = array_merge( $sortedViewProviders, $viewProvider );
         }
 
         return $sortedViewProviders;
@@ -133,9 +181,9 @@ class Manager
     public function renderContent( Content $content, $viewType = self::VIEW_TYPE_FULL, $parameters = array() )
     {
         $contentInfo = $content->getVersionInfo()->getContentInfo();
-        foreach ( $this->getAllViewProviders() as $viewProvider )
+        foreach ( $this->getAllContentViewProviders() as $viewProvider )
         {
-            $view = $viewProvider->getViewForContent( $contentInfo, $viewType );
+            $view = $viewProvider->getView( $contentInfo, $viewType );
             if ( $view instanceof ContentViewInterface )
             {
                 $parameters['content'] = $content;
@@ -161,9 +209,9 @@ class Manager
      */
     public function renderLocation( Location $location, $viewType = self::VIEW_TYPE_FULL, $parameters = array() )
     {
-        foreach ( $this->getAllViewProviders() as $viewProvider )
+        foreach ( $this->getAllLocationViewProviders() as $viewProvider )
         {
-            $view = $viewProvider->getViewForLocation( $location, $viewType );
+            $view = $viewProvider->getView( $location, $viewType );
             if ( $view instanceof ContentViewInterface )
             {
                 $parameters['location'] = $location;

@@ -31,7 +31,7 @@ class VisitorTest extends BaseTest
         $viewVisitor = new View\Visitor( $this->getVisitorMock() );
 
         $request = new RMF\Request();
-        $result  = new Values\SectionList( array() );
+        $result  = new Values\SectionList( array(), '/content/sections' );
 
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'visit' )

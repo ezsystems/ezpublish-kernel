@@ -39,11 +39,12 @@ class SiteAccessListener implements EventSubscriberInterface
 
     public function onSiteAccessMatch( PostSiteAccessMatchEvent $event )
     {
+        $request = $event->getRequest();
         $siteAccess = $event->getSiteAccess();
         $this->container->set( 'ezpublish.siteaccess', $siteAccess );
 
         // Analyse the pathinfo if needed since it might contain the siteaccess (i.e. like in URI mode)
-        $pathinfo = $event->getRequest()->getPathInfo();
+        $pathinfo = $request->getPathInfo();
         if ( $siteAccess->matcher instanceof URILexer )
         {
             $semanticPathinfo = $siteAccess->matcher->analyseURI( $pathinfo );
@@ -53,12 +54,14 @@ class SiteAccessListener implements EventSubscriberInterface
             $semanticPathinfo = $pathinfo;
         }
 
+        // Get view parameters and cleaned up pathinfo (without view parameters string)
+        list( $semanticPathinfo, $viewParameters ) = $this->getViewParameters( $semanticPathinfo );
+
         // Storing the modified pathinfo in 'semanticPathinfo' request attribute, to keep a trace of it.
         // Routers implementing RequestMatcherInterface should thus use this attribute instead of the original pathinfo
-        $event->getRequest()->attributes->set(
-            'semanticPathinfo',
-            $semanticPathinfo
-        );
+        $request->attributes->set( 'semanticPathinfo', $semanticPathinfo );
+        $request->attributes->set( 'viewParameters', $viewParameters );
+
 
         if ( $this->container->hasParameter( "ezpublish.siteaccess.config.$siteAccess->name" ) )
         {
@@ -66,5 +69,58 @@ class SiteAccessListener implements EventSubscriberInterface
                 $this->container->getParameter( "ezpublish.siteaccess.config.$siteAccess->name" )
             );
         }
+    }
+
+    /**
+     * Extracts view parameters from $pathinfo.
+     * In the pathinfo, view parameters are in the form /(param_name)/param_value.
+     *
+     * @param $pathinfo
+     * @return array First element is the cleaned up pathinfo (without the view parameters string).
+     *               Second element is the view parameters hash.
+     */
+    private function getViewParameters( $pathinfo )
+    {
+        // No view parameters, get out of here.
+        if ( ( $vpStart = strpos( $pathinfo, '/(' ) ) === false )
+        {
+            return array( $pathinfo, array() );
+        }
+
+        $viewParameters = array();
+        $vpSegments = explode( '/', substr( $pathinfo, $vpStart + 1 ) );
+        for ( $i = 0, $iMax = count( $vpSegments ); $i < $iMax; ++$i )
+        {
+            if ( !isset( $vpSegments[$i] ) )
+                continue;
+
+            // View parameter name.
+            // We extract it + the value from the following segment (next element in $vpSegments array)
+            if ( $vpSegments[$i]{0} === '(' )
+            {
+                $paramName = str_replace( array( '(', ')' ), '', $vpSegments[$i] );
+                // A value is present (e.g. /(foo)/bar)
+                if ( isset( $vpSegments[$i + 1] ) )
+                {
+                    $viewParameters[$paramName] = $vpSegments[$i + 1];
+                    unset( $vpSegments[$i + 1] );
+                }
+                // No value (e.g. /(foo)) => set it to empty string
+                else
+                {
+                    $viewParameters[$paramName] = '';
+                }
+            }
+            // Orphan segment (no previous parameter name), e.g. /(foo)/bar/baz
+            // Add it to the previous parameter.
+            else if ( isset( $paramName ) )
+            {
+                $viewParameters[$paramName] .= '/' . $vpSegments[$i];
+            }
+        }
+
+        // Now remove the view parameters string from $semanticPathinfo
+        $pathinfo = substr( $pathinfo, 0, $vpStart );
+        return array( $pathinfo, $viewParameters );
     }
 }

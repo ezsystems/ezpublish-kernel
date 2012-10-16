@@ -51,8 +51,10 @@ class EzPublishCoreExtension extends Extension
         $configuration = $this->getConfiguration( $configs, $container );
         $config = $this->processConfiguration( $configuration, $configs );
 
-        // Base services override
+        // Base services and services overrides
         $loader->load( 'services.yml' );
+        // Security services
+        $loader->load( 'security.yml' );
         // Default settings
         $loader->load( 'default_settings.yml' );
         $this->registerSiteAcccessConfiguration( $config, $container );
@@ -83,6 +85,15 @@ class EzPublishCoreExtension extends Extension
 
     private function registerSiteAcccessConfiguration( array $config, ContainerBuilder $container )
     {
+        if ( !isset( $config['siteaccess'] ) )
+        {
+            $config['siteaccess'] = array();
+            $config['siteaccess']['list'] = array( 'setup');
+            $config['siteaccess']['default_siteaccess'] = 'setup';
+            $config['siteaccess']['groups'] = array();
+            $config['siteaccess']['match'] = null;
+        }
+
         $container->setParameter( 'ezpublish.siteaccess.list', $config['siteaccess']['list'] );
         $container->setParameter( 'ezpublish.siteaccess.default', $config['siteaccess']['default_siteaccess'] );
         $container->setParameter( 'ezpublish.siteaccess.match_config', $config['siteaccess']['match'] );

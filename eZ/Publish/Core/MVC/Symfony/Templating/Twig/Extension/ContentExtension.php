@@ -14,8 +14,8 @@ use \Twig_Environment;
 use \Twig_Function_Method;
 use \Twig_Filter_Method;
 use \Twig_Template;
+use \Symfony\Component\DependencyInjection\ContainerInterface;
 use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\FieldType\XmlText\Converter\Output\Html5 as XmlTextToHtml5Converter;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use \SplObjectStorage;
@@ -72,7 +72,18 @@ class ContentExtension extends Twig_Extension
      */
     protected $fieldTypeIdentifiers = array();
 
-    public function __construct( XmlTextToHtml5Converter $converter, ConfigResolverInterface $resolver )
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    protected $container;
+
+    /**
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $resolver
+     * @return type
+     */
+    public function __construct( ContainerInterface $container, ConfigResolverInterface $resolver )
     {
         $this->resources = $resolver->getParameter( 'field_templates' );
         usort(
@@ -84,7 +95,7 @@ class ContentExtension extends Twig_Extension
         );
 
         $this->blocks = new SplObjectStorage();
-        $this->xmlTextConverter = $converter;
+        $this->container = $container;
     }
 
     /**
@@ -206,9 +217,26 @@ class ContentExtension extends Twig_Extension
         );
     }
 
+    /**
+     * @return eZ\Publish\Core\FieldType\XmlText\Converter\Output\Html5
+     */
+    protected function getXmlTextConverter()
+    {
+        if ( !isset( $this->xmlTextConverter ) )
+            $this->xmlTextConverter = $this->container->get( "ezpublish.fieldType.ezxmltext.converter.html5" );
+
+        return $this->xmlTextConverter;
+    }
+
+    /**
+     * Implements the "xmltext_to_html5" filter
+     *
+     * @param string $xmlData
+     * @return string
+     */
     public function xmltextToHtml5( $xmlData )
     {
-        return $this->xmlTextConverter->convert( $xmlData );
+        return $this->getXmlTextConverter()->convert( $xmlData );
     }
 
     /**

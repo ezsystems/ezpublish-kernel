@@ -29,7 +29,7 @@ class SectionListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $sectionList = new SectionList( array() );
+        $sectionList = new SectionList( array(), '/content/sections' );
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -94,10 +94,13 @@ class SectionListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $sectionList = new SectionList( array(
-            new Content\Section(),
-            new Content\Section(),
-        ) );
+        $sectionList = new SectionList(
+            array(
+                new Content\Section(),
+                new Content\Section(),
+            ),
+            '/content/sections'
+        );
 
         $this->getVisitorMock()->expects( $this->exactly( 2 ) )
             ->method( 'visitValueObject' )

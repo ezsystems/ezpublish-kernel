@@ -90,9 +90,25 @@ class Role extends RestController
      */
     public function listRoles()
     {
-        return new Values\RoleList(
-            $this->roleService->loadRoles()
-        );
+        if ( isset( $this->request->variables['identifier'] ) )
+        {
+            $roles = array(
+                $this->loadRoleByIdentifier()
+            );
+        }
+        else
+        {
+            $offset = isset( $this->request->variables['offset'] ) ? (int)$this->request->variables['offset'] : 0;
+            $limit = isset( $this->request->variables['limit'] ) ? (int)$this->request->variables['limit'] : -1;
+
+            $roles = array_slice(
+                $this->roleService->loadRoles(),
+                $offset >= 0 ? $offset : 0,
+                $limit >= 0 ? $limit : null
+            );
+        }
+
+        return new Values\RoleList( $roles, $this->request->path );
     }
 
     /**
@@ -109,15 +125,11 @@ class Role extends RestController
     /**
      * Load role by identifier
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\RoleList
+     * @return \eZ\Publish\API\Repository\Values\User\Role
      */
     public function loadRoleByIdentifier()
     {
-        return new Values\RoleList(
-            array(
-                $this->roleService->loadRoleByIdentifier( $this->request->variables['identifier'] )
-            )
-        );
+        return $this->roleService->loadRoleByIdentifier( $this->request->variables['identifier'] );
     }
 
     /**

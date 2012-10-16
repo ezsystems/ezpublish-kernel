@@ -18,8 +18,6 @@ class ObjectStateUpdateStruct extends ValueObject
     /**
      * Readable unique string identifier of a group
      *
-     * @required
-     *
      * @var string
      */
     public $identifier;
@@ -27,16 +25,12 @@ class ObjectStateUpdateStruct extends ValueObject
     /**
      * The default language code
      *
-     * @required
-     *
      * @var string
      */
     public $defaultLanguageCode;
 
      /**
      * An array of names with languageCode keys
-     *
-     * @required - at least one name in the main language is required
      *
      * @var string[]
      */

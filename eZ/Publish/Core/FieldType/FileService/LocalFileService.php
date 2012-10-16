@@ -87,7 +87,7 @@ class LocalFileService implements FileService
 
         if ( false === $copyResult )
         {
-            throw new RuntimeException(
+            throw new \RuntimeException(
                 sprintf(
                     'Could not copy "%s" to "%s"',
                     $fullSourcePath,
@@ -100,7 +100,7 @@ class LocalFileService implements FileService
 
         if ( false === $chmodResult )
         {
-            throw new RuntimeException(
+            throw new \RuntimeException(
                 sprintf(
                     'Could not change permissions of "%s" to "%s"',
                     $fullTargetPath,

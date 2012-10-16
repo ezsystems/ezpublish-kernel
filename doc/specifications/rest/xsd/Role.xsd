@@ -88,3 +88,4 @@
   <xsd:element name="RoleAssignInput" type="vnd.ez.api.RoleAssignInput"/>
   <xsd:element name="RoleAssignmentList" type="vnd.ez.api.RoleAssignmentList"/>
 </xsd:schema>
+

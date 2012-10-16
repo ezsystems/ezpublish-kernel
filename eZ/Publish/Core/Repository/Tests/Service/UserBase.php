@@ -330,13 +330,15 @@ abstract class UserBase extends BaseServiceTest
 
         $userGroupToMove = $userService->loadUserGroup( 42 );
         $parentUserGroup = $userService->loadUserGroup( 12 );
-        $parentUserGroupLocation = $locationService->loadMainLocation( $parentUserGroup->getVersionInfo()->getContentInfo() );
         $userService->moveUserGroup( $userGroupToMove, $parentUserGroup );
 
         $movedUserGroup = $userService->loadUserGroup( $userGroupToMove->id );
 
         $newMainLocation = $locationService->loadLocation( $movedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId );
-        self::assertEquals( $parentUserGroupLocation->id, $newMainLocation->parentLocationId );
+        self::assertEquals(
+            $parentUserGroup->getVersionInfo()->getContentInfo()->mainLocationId,
+            $newMainLocation->parentLocationId
+        );
     }
 
     /**
@@ -694,7 +696,6 @@ abstract class UserBase extends BaseServiceTest
 
         $user = $userService->loadUser( 14 );
         $userGroup = $userService->loadUserGroup( 42 );
-        $userGroupMainLocation = $locationService->loadMainLocation( $userGroup->getVersionInfo()->getContentInfo() );
 
         $userService->assignUserToUserGroup( $user, $userGroup );
 
@@ -706,7 +707,7 @@ abstract class UserBase extends BaseServiceTest
         $hasAddedLocation = false;
         foreach ( $userLocations as $location )
         {
-            if ( $location->parentLocationId == $userGroupMainLocation->id )
+            if ( $location->parentLocationId == $userGroup->getVersionInfo()->getContentInfo()->mainLocationId )
             {
                 $hasAddedLocation = true;
                 break;
@@ -728,7 +729,6 @@ abstract class UserBase extends BaseServiceTest
 
         $user = $userService->loadUser( 14 );
         $userGroup = $userService->loadUserGroup( 12 );
-        $userGroupMainLocation = $locationService->loadMainLocation( $userGroup->getVersionInfo()->getContentInfo() );
 
         $userService->unAssignUserFromUserGroup( $user, $userGroup );
 
@@ -749,7 +749,7 @@ abstract class UserBase extends BaseServiceTest
             $hasRemovedLocation = false;
             foreach ( $userLocations as $location )
             {
-                if ( $location->parentLocationId == $userGroupMainLocation->id )
+                if ( $location->parentLocationId == $userGroup->getVersionInfo()->getContentInfo()->mainLocationId )
                 {
                     $hasRemovedLocation = true;
                     break;
@@ -801,10 +801,10 @@ abstract class UserBase extends BaseServiceTest
         foreach ( $userGroups as $userGroup )
         {
             self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroup', $userGroup );
-
-            $userGroupLocation = $locationService->loadMainLocation( $userGroup->getVersionInfo()->getContentInfo() );
-
-            self::assertContains( $userGroupLocation->id, $groupLocationIds );
+            self::assertContains(
+                $userGroup->getVersionInfo()->getContentInfo()->mainLocationId,
+                $groupLocationIds
+            );
         }
     }
 
@@ -818,11 +818,6 @@ abstract class UserBase extends BaseServiceTest
         $locationService = $this->repository->getLocationService();
 
         $userGroup = $userService->loadUserGroup( 12 );
-
-        $mainGroupLocation = $this->repository->getLocationService()->loadMainLocation(
-            $userGroup->getVersionInfo()->getContentInfo()
-        );
-
         $users = $userService->loadUsersOfUserGroup( $userGroup );
 
         self::assertInternalType( "array", $users );
@@ -832,9 +827,12 @@ abstract class UserBase extends BaseServiceTest
         {
             self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\User', $user );
 
-            $userLocation = $locationService->loadMainLocation( $user->getVersionInfo()->getContentInfo() );
+            $userLocation = $locationService->loadLocation( $user->getVersionInfo()->getContentInfo()->mainLocationId );
 
-            self::assertEquals( $mainGroupLocation->id, $userLocation->parentLocationId );
+            self::assertEquals(
+                $userGroup->getVersionInfo()->getContentInfo()->mainLocationId,
+                $userLocation->parentLocationId
+            );
         }
     }
 

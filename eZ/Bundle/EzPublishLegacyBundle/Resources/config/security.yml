@@ -1,0 +1,12 @@
+parameters:
+    ezpublish_legacy.security.firewall_listener.class: eZ\Publish\Core\MVC\Legacy\Security\Firewall\LegacyListener
+
+services:
+    ezpublish_legacy.security.firewall_listener:
+        class: %ezpublish_legacy.security.firewall_listener.class%
+        abstract: true
+        arguments:
+            - @security.context
+            - @security.authentication.manager
+            - ~     # Will be replaced at compile time by the security factory to be the right user provider
+            - @?logger

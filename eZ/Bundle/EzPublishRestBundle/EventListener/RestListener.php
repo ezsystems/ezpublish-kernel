@@ -40,6 +40,7 @@ class RestListener implements EventSubscriberInterface
 
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param \eZ\Publish\Core\REST\Server\Request $request
      */
     public function __construct( ContainerInterface $container, RESTRequest $request )
     {
@@ -55,7 +56,8 @@ class RestListener implements EventSubscriberInterface
         return array(
             KernelEvents::VIEW => 'onKernelResultView',
             KernelEvents::EXCEPTION => 'onKernelExceptionView',
-            KernelEvents::REQUEST => 'onKernelRequest'
+            // @todo delete completely when this auth. method has been totally removed
+            // KernelEvents::REQUEST => 'onKernelRequest'
         );
     }
 
@@ -101,7 +103,7 @@ class RestListener implements EventSubscriberInterface
 
     public function onKernelRequest( GetResponseEvent $event )
     {
-        if ( $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
+	    if ( $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
             return;
 
         if ( !$this->isRestRequest( $event->getRequest() ) )
@@ -109,8 +111,10 @@ class RestListener implements EventSubscriberInterface
 
         /**  @var \eZ\Publish\Core\REST\Server\Request $request */
         $request = $this->container->get( 'ezpublish_rest.request' );
+        if ( !isset( $request->testUser ) )
+	        return;
 
-        /**  @var \eZ\Publish\API\Repository $repository */
+        /**  @var \eZ\Publish\API\Repository\Repository $repository */
         $repository = $this->container->get( 'ezpublish.api.repository' );
 
         $repository->setCurrentUser(

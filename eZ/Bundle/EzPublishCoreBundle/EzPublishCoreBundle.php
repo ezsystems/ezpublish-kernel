@@ -17,8 +17,11 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass,
     eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainConfigResolverPass,
     eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\TwigTweaksPass,
     eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ContentViewPass,
+    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LocationViewPass,
     eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension,
     eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser as ConfigParser,
+    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\Factory as EzPublishSecurityFactory,
+    eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\HttpBasicFactory,
     Symfony\Component\HttpKernel\Bundle\Bundle,
     Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -35,6 +38,11 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new LegacyStorageEnginePass );
         $container->addCompilerPass( new TwigTweaksPass );
         $container->addCompilerPass( new ContentViewPass );
+        $container->addCompilerPass( new LocationViewPass );
+
+        $securityExtension = $container->getExtension( 'security' );
+        $securityExtension->addSecurityListenerFactory( new EzPublishSecurityFactory );
+        $securityExtension->addSecurityListenerFactory( new HttpBasicFactory );
     }
 
     public function getContainerExtension()
@@ -44,6 +52,7 @@ class EzPublishCoreBundle extends Bundle
             $this->extension = new EzPublishCoreExtension(
                 array(
                      new ConfigParser\LocationView,
+                     new ConfigParser\ContentView,
                      new ConfigParser\Common,
                      new ConfigParser\Content,
                      new ConfigParser\FieldTemplates,

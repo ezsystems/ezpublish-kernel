@@ -1,12 +1,18 @@
-ezpublish_rest_root:
-    pattern:  /
+# Root resource
+
+
+ezpublish_rest_loadRootResource:
+    pattern: /
     defaults:
         _controller: ezpublish_rest.controller.root:loadRootResource
     requirements:
         _method: GET
 
+
+# Sections
+
+
 ezpublish_rest_listSections:
-    # @todo fix controller due to GET parameter (/content/sections?identifier=[identifier}
     pattern: /content/sections
     defaults:
         _controller: ezpublish_rest.controller.section:listSections
@@ -20,21 +26,13 @@ ezpublish_rest_createSection:
     requirements:
         _method: POST
 
-#ezpublish_rest_loadSectionByIdentifier:
-#    @see ezpublish_rest_listSections
-#    pattern: /content/sections
-#    defaults:
-#        _controller: ezpublish_rest.controller.section:listSections
-#    requirements:
-#        _method: GET
-
 ezpublish_rest_loadSection:
     pattern: /content/sections/{sectionId}
     defaults:
         _controller: ezpublish_rest.controller.section:loadSection
     requirements:
         _method: GET
-        sectionId:  \d+
+        sectionId: \d+
 
 ezpublish_rest_updateSection:
     pattern: /content/sections/{sectionId}
@@ -44,17 +42,20 @@ ezpublish_rest_updateSection:
         _method: PATCH
         sectionId: \d+
 
-ezpublish_rest_loadSection:
+ezpublish_rest_deleteSection:
     pattern: /content/sections/{sectionId}
     defaults:
         _controller: ezpublish_rest.controller.section:deleteSection
     requirements:
         _method: DELETE
-        sectionId:  \d+
+        sectionId: \d+
+
+
+# Content
+
 
 ezpublish_rest_listContent:
     # @todo handle ?remoteid= filter in controller method. See loadContentInfoByRemoteId
-    # @todo handle ?language= filter in controller method. Note: already handled by loadContent
     pattern: /content/objects
     defaults:
         _controller: ezpublish_rest.controller.content:listContent
@@ -90,7 +91,7 @@ ezpublish_rest_deleteContent:
         _controller: ezpublish_rest.controller.content:deleteContent
     requirements:
         _method: DELETE
-        contentId:  \d+
+        contentId: \d+
 
 ezpublish_rest_copyContent:
     pattern: /content/objects/{contentId}
@@ -98,7 +99,7 @@ ezpublish_rest_copyContent:
         _controller: ezpublish_rest.controller.content:copyContent
     requirements:
         _method: COPY
-        contentId:  \d+
+        contentId: \d+
 
 ezpublish_rest_redirectCurrentVersionRelations:
     pattern: /content/objects/{contentId}/relations
@@ -123,16 +124,16 @@ ezpublish_rest_loadVersionRelations:
     requirements:
         _method: GET
         contentId: \d+
-        versionId: \d+
+        versionNumber: \d+
 
-ezpublish_rest_loadVersionRelations:
+ezpublish_rest_createRelation:
     pattern: /content/objects/{contentId}/versions/{versionNumber}/relations
     defaults:
         _controller: ezpublish_rest.controller.content:createRelation
     requirements:
         _method: POST
         contentId: \d+
-        versionId: \d+
+        versionNumber: \d+
 
 ezpublish_rest_loadVersionRelation:
     pattern: /content/objects/{contentId}/versions/{versionNumber}/relations/{relationId}
@@ -141,7 +142,7 @@ ezpublish_rest_loadVersionRelation:
     requirements:
         _method: GET
         contentId: \d+
-        versionId: \d+
+        versionNumber: \d+
         relationId: \d+
 
 ezpublish_rest_removeRelation:
@@ -151,54 +152,53 @@ ezpublish_rest_removeRelation:
     requirements:
         _method: DELETE
         contentId: \d+
-        versionId: \d+
+        versionNumber: \d+
         relationId: \d+
 
 ezpublish_rest_loadContentInVersion:
-    pattern: /content/objects/{contentId}/versions/{versionId}
+    pattern: /content/objects/{contentId}/versions/{versionNumber}
     defaults:
         _controller: ezpublish_rest.controller.content:loadContentInVersion
     requirements:
         _method: GET
         contentId: \d+
-        versionId: \d+
+        versionNumber: \d+
 
 ezpublish_rest_updateVersion:
-    # @todo Check language GET parameter. Note: should already be covered by the method
-    pattern: /content/objects/{contentId}/versions/{versionId}
+    pattern: /content/objects/{contentId}/versions/{versionNumber}
     defaults:
         _controller: ezpublish_rest.controller.content:updateVersion
     requirements:
         _method: PATCH
         contentId: \d+
-        versionId: \d+
+        versionNumber: \d+
 
 ezpublish_rest_deleteContentVersion:
-    pattern: /content/objects/{contentId}/versions/{versionId}
+    pattern: /content/objects/{contentId}/versions/{versionNumber}
     defaults:
         _controller: ezpublish_rest.controller.content:deleteContentVersion
     requirements:
         _method: DELETE
         contentId: \d+
-        versionId: \d+
+        versionNumber: \d+
 
 ezpublish_rest_createDraftFromVersion:
-    pattern: /content/objects/{contentId}/versions/{versionId}
+    pattern: /content/objects/{contentId}/versions/{versionNumber}
     defaults:
         _controller: ezpublish_rest.controller.content:createDraftFromVersion
     requirements:
         _method: COPY
         contentId: \d+
-        versionId: \d+
+        versionNumber: \d+
 
 ezpublish_rest_publishVersion:
-    pattern: /content/objects/{contentId}/versions/{versionId}
+    pattern: /content/objects/{contentId}/versions/{versionNumber}
     defaults:
         _controller: ezpublish_rest.controller.content:publishVersion
     requirements:
         _method: PUBLISH
         contentId: \d+
-        versionId: \d+
+        versionNumber: \d+
 
 ezpublish_rest_redirectCurrentVersion:
     pattern: /content/objects/{contentId}/currentversion
@@ -248,12 +248,20 @@ ezpublish_rest_setObjectStatesForContent:
         _method: PATCH
         contentId: \d+
 
+
+# Views
+
+
 ezpublish_rest_createView:
     pattern: /content/views
     defaults:
         _controller: ezpublish_rest.controller.content:createView
     requirements:
         _method: POST
+
+
+# Object states
+
 
 ezpublish_rest_loadObjectStateGroups:
     pattern: /content/objectstategroups
@@ -318,10 +326,10 @@ ezpublish_rest_loadObjectState:
         objectStateGroupId: \d+
         objectStateId: \d+
 
-ezpublish_rest_deleteObjectState:
+ezpublish_rest_updateObjectState:
     pattern: /content/objectstategroups/{objectStateGroupId}/objectstates/{objectStateId}
     defaults:
-        _controller: ezpublish_rest.controller.object_state:deleteObjectState
+        _controller: ezpublish_rest.controller.object_state:updateObjectState
     requirements:
         _method: PATCH
         objectStateGroupId: \d+
@@ -336,6 +344,18 @@ ezpublish_rest_deleteObjectState:
         objectStateGroupId: \d+
         objectStateId: \d+
 
+
+# Locations
+
+
+ezpublish_rest_loadLocationByRemoteId:
+    # @todo Handle GET parameter remoteId. See loadLocationByRemoteId
+    pattern: /content/locations
+    defaults:
+        _controller: ezpublish_rest.controller.location:loadLocationByRemoteId
+    requirements:
+        _method: GET
+
 ezpublish_rest_loadLocation:
     pattern: /content/locations/{locationPath}
     defaults:
@@ -344,11 +364,10 @@ ezpublish_rest_loadLocation:
         _method: GET
         locationPath: "[0-9/]+"
 
-ezpublish_rest_loadLocation:
-    # @todo Handle GET parameter remoteId. See loadLocationByRemoteId
+ezpublish_rest_updateLocation:
     pattern: /content/locations/{locationPath}
     defaults:
-        _controller: ezpublish_rest.controller.location:loadLocation
+        _controller: ezpublish_rest.controller.location:updateLocation
     requirements:
         _method: PATCH
         locationPath: "[0-9/]+"
@@ -392,6 +411,10 @@ ezpublish_rest_loadLocationChildren:
     requirements:
         _method: GET
         locationPath: "[0-9/]+"
+
+
+# Content types
+
 
 ezpublish_rest_loadContentTypeGroupList:
     pattern: /content/typegroups
@@ -448,15 +471,12 @@ ezpublish_rest_createContentType:
         contentTypeGroupId: \d+
 
 ezpublish_rest_listContentTypes:
-    # @todo Check if it is actually implemented
-    # @todo Handle GET parameter identifier. See loadContentTypeByIdentifier
-    # @todo Handle GET parameter remoteId. See loadContentTypeByRemoteId
+    # @todo: Handle all GET parameters
     pattern: /content/types
     defaults:
         _controller: ezpublish_rest.controller.content_type:listContentTypes
     requirements:
         _method: GET
-
 
 ezpublish_rest_copyContentType:
     pattern: /content/types/{contentTypeId}
@@ -490,6 +510,14 @@ ezpublish_rest_deleteContentType:
         _method: DELETE
         contentTypeId: \d+
 
+ezpublish_rest_deleteContentTypeDraft:
+    pattern: /content/types/{contentTypeId}/draft
+    defaults:
+        _controller: ezpublish_rest.controller.content_type:deleteContentTypeDraft
+    requirements:
+        _method: DELETE
+        contentTypeId: \d+
+
 ezpublish_rest_loadFieldDefinitionList:
     pattern: /content/types/{contentTypeId}/fieldDefinitions
     defaults:
@@ -501,7 +529,7 @@ ezpublish_rest_loadFieldDefinitionList:
 ezpublish_rest_loadFieldDefinition:
     pattern: /content/types/{contentTypeId}/fieldDefinitions/{fieldDefinitionId}
     defaults:
-        _controller: ezpublish_rest.controller.content_type:loadFieldDefinitionList
+        _controller: ezpublish_rest.controller.content_type:loadFieldDefinition
     requirements:
         _method: GET
         contentTypeId: \d+
@@ -581,7 +609,6 @@ ezpublish_rest_loadGroupsOfContentType:
     requirements:
         _method: GET
         contentTypeId: \d+
-        fieldDefinitionId: \d+
 
 ezpublish_rest_linkContentTypeToGroup:
     # Handle GET parameter group in controller. Most likely already done
@@ -591,16 +618,19 @@ ezpublish_rest_linkContentTypeToGroup:
     requirements:
         _method: POST
         contentTypeId: \d+
-        fieldDefinitionId: \d+
 
-ezpublish_restunlinkContentTypeFromGroup:
+ezpublish_rest_unlinkContentTypeFromGroup:
     pattern: /content/types/{contentTypeId}/groups/{contentTypeGroupId}
     defaults:
         _controller: ezpublish_rest.controller.content_type:unlinkContentTypeFromGroup
     requirements:
         _method: DELETE
         contentTypeId: \d+
-        fieldDefinitionId: \d+
+        contentTypeGroupId: \d+
+
+
+# Trash
+
 
 ezpublish_rest_loadTrashItems:
     pattern: /content/trash
@@ -640,6 +670,10 @@ ezpublish_rest_restoreTrashItem:
         _method: MOVE
         trashId: \d+
 
+
+# URL wildcards
+
+
 ezpublish_rest_listURLWildcards:
     pattern: /content/urlwildcards
     defaults:
@@ -670,16 +704,22 @@ ezpublish_rest_deleteURLWildcard:
         _method: DELETE
         urlWildcardId: \d+
 
+
+# User policies
+
+
 ezpublish_rest_listPoliciesForUser:
-    # @todo Handle GET parameter userId. See method.
     pattern: /user/policies
     defaults:
         _controller: ezpublish_rest.controller.role:listPoliciesForUser
     requirements:
         _method: GET
 
+
+# Roles
+
+
 ezpublish_rest_listRoles:
-    # @todo Handle GET filter "identifier". See method loadRoleByIdentifier
     pattern: /user/roles
     defaults:
         _controller: ezpublish_rest.controller.role:listRoles
@@ -718,7 +758,7 @@ ezpublish_rest_deleteRole:
         roleId: \d+
 
 ezpublish_rest_loadPolicies:
-    pattern: /user/roles/{roleId}
+    pattern: /user/roles/{roleId}/policies
     defaults:
         _controller: ezpublish_rest.controller.role:loadPolicies
     requirements:
@@ -726,7 +766,7 @@ ezpublish_rest_loadPolicies:
         roleId: \d+
 
 ezpublish_rest_addPolicy:
-    pattern: /user/roles/{roleId}
+    pattern: /user/roles/{roleId}/policies
     defaults:
         _controller: ezpublish_rest.controller.role:addPolicy
     requirements:
@@ -734,7 +774,7 @@ ezpublish_rest_addPolicy:
         roleId: \d+
 
 ezpublish_rest_deletePolicies:
-    pattern: /user/roles/{roleId}
+    pattern: /user/roles/{roleId}/policies
     defaults:
         _controller: ezpublish_rest.controller.role:deletePolicies
     requirements:
@@ -748,7 +788,7 @@ ezpublish_rest_loadPolicy:
     requirements:
         _method: GET
         roleId: \d+
-        policy: \d+
+        policyId: \d+
 
 ezpublish_rest_updatePolicy:
     pattern: /user/roles/{roleId}/policies/{policyId}
@@ -757,25 +797,30 @@ ezpublish_rest_updatePolicy:
     requirements:
         _method: PATCH
         roleId: \d+
-        policy: \d+
+        policyId: \d+
 
-ezpublish_rest_deletePolicies:
+ezpublish_rest_deletePolicy:
     pattern: /user/roles/{roleId}/policies/{policyId}
     defaults:
         _controller: ezpublish_rest.controller.role:deletePolicy
     requirements:
         _method: DELETE
         roleId: \d+
-        policy: \d+
+        policyId: \d+
 
-ezpublish_rest_loadUsersAssignedToRole:
+
+# Users
+
+
+ezpublish_rest_loadUsers:
+    # @todo: Handle all GET parameters
     pattern: /user/users
     defaults:
-        _controller: ezpublish_rest.controller.user:loadUsersAssignedToRole
+        _controller: ezpublish_rest.controller.user:loadUsers
     requirements:
         _method: GET
 
-ezpublish_rest_deleteUser:
+ezpublish_rest_loadUser:
     pattern: /user/users/{userId}
     defaults:
         _controller: ezpublish_rest.controller.user:loadUser
@@ -800,8 +845,7 @@ ezpublish_rest_deleteUser:
         userId: \d+
 
 ezpublish_rest_loadUserGroupsOfUser:
-    # @todo Handle group GET parameter. See loadUsersAssignedToRole
-    pattern: /user/users/{userId}
+    pattern: /user/users/{userId}/groups
     defaults:
         _controller: ezpublish_rest.controller.user:loadUserGroupsOfUser
     requirements:
@@ -809,7 +853,6 @@ ezpublish_rest_loadUserGroupsOfUser:
         userId: \d+
 
 ezpublish_rest_assignUserToUserGroup:
-    # @todo Handle group GET parameter.
     pattern: /user/users/{userId}/groups
     defaults:
         _controller: ezpublish_rest.controller.user:assignUserToUserGroup
@@ -818,7 +861,6 @@ ezpublish_rest_assignUserToUserGroup:
         userId: \d+
 
 ezpublish_rest_unassignUserFromUserGroup:
-    # @todo Handle group GET parameter.
     pattern: /user/users/{userId}/groups/{groupId}
     defaults:
         _controller: ezpublish_rest.controller.user:unassignUserFromUserGroup
@@ -828,7 +870,6 @@ ezpublish_rest_unassignUserFromUserGroup:
         groupId: \d+
 
 ezpublish_rest_loadUserDrafts:
-    # @todo Handle group GET parameter.
     pattern: /user/users/{userId}/drafts
     defaults:
         _controller: ezpublish_rest.controller.user:loadUserDrafts
@@ -859,20 +900,22 @@ ezpublish_rest_loadRoleAssignmentForUser:
     requirements:
         _method: GET
         userId: \d+
+        roleId: \d+
 
 ezpublish_rest_unassignRoleFromUser:
-    pattern: /user/users/{userId}/roles
+    pattern: /user/users/{userId}/roles/{roleId}
     defaults:
         _controller: ezpublish_rest.controller.role:unassignRoleFromUser
     requirements:
         _method: DELETE
         userId: \d+
+        roleId: \d+
 
-ezpublish_rest_loadUserGroupsAssignedToRole:
-    # @todo Handle roleId GET parameter. See method.
+ezpublish_rest_loadUserGroups:
+    # @todo Handle all GET parameters
     pattern: /user/groups
     defaults:
-        _controller: ezpublish_rest.controller.user:loadUserGroupsAssignedToRole
+        _controller: ezpublish_rest.controller.user:loadUserGroups
     requirements:
         _method: GET
 
@@ -883,7 +926,7 @@ ezpublish_rest_loadRootUserGroup:
     requirements:
         _method: GET
 
-ezpublish_rest_createUserGroup:
+ezpublish_rest_createRootUserGroup:
     pattern: /user/groups/subgroups
     defaults:
         _controller: ezpublish_rest.controller.user:createUserGroup

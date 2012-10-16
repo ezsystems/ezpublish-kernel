@@ -75,18 +75,6 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
      */
     protected function getContentSearchHandler( array $fullTextSearchConfiguration = array() )
     {
-        $processor = new Content\Search\TransformationProcessor(
-            new Content\Search\TransformationParser( self::getInstallationDir() ),
-            new Content\Search\TransformationPcreCompiler(
-                new Content\Search\Utf8Converter()
-            )
-        );
-
-        foreach ( glob( __DIR__ . '/SearchHandler/_fixtures/transformations/*.tr' ) as $file )
-        {
-            $processor->loadRules( str_replace( self::getInstallationDir(), '', $file ) );
-        }
-
         $db = $this->getDatabaseHandler();
         return new Content\Search\Handler(
             new Content\Search\Gateway\EzcDatabase(
@@ -129,13 +117,6 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
             array( 'extractContentFromRows' ),
             array(
-                $this->locationMapperMock = $this->getMock(
-                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
                 $this->getFieldRegistry(),
                 $this->getLanguageHandler()
             )

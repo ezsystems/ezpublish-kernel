@@ -9,7 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 
-use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
+use eZ\Publish\Core\MVC\Symfony\Routing\Generator,
+    Symfony\Component\Routing\RouterInterface;
 
 /**
  * URL generator for UrlAlias based links
@@ -18,11 +19,19 @@ use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
  */
 class UrlAliasGenerator extends Generator
 {
+    const INTERNAL_LOCATION_ROUTE = '_ezpublishLocation';
+
     private $lazyRepository;
 
-    public function __construct( \Closure $lazyRepository )
+    /**
+     * @var \Symfony\Component\Routing\RouterInterface
+     */
+    private $router;
+
+    public function __construct( \Closure $lazyRepository, RouterInterface $router )
     {
         $this->lazyRepository = $lazyRepository;
+        $this->router = $router;
     }
 
     /**
@@ -57,6 +66,14 @@ class UrlAliasGenerator extends Generator
             $queryString = '?' . http_build_query( $parameters, '', '&' );
         }
 
-        return $urlAliases[0]->path . $queryString;
+        if ( !empty( $urlAliases ) )
+            $path = $urlAliases[0]->path;
+        else
+            $path = $this->router->generate(
+                self::INTERNAL_LOCATION_ROUTE,
+                array( 'locationId' => $location->id )
+            );
+
+        return $path . $queryString;
     }
 }

@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 abstract class Controller
 {
     /**
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var \eZ\Publish\Core\REST\Server\Request
      */
     protected $request;
 
@@ -22,7 +22,7 @@ abstract class Controller
      * @var \eZ\Publish\Core\REST\Common\UrlHandler\eZPublish
      */
     protected $urlHandler;
-    
+
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
@@ -43,7 +43,7 @@ abstract class Controller
     {
         $this->request = $request;
     }
-    
+
     public function setContainer( Container $container )
     {
         $this->container = $container;

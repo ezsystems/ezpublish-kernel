@@ -190,47 +190,57 @@ class ContentType extends RestController
     }
 
     /**
-     * Loads a content type by its identifier
+     * Returns a list of content types
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeList|\eZ\Publish\Core\REST\Server\Values\ContentTypeInfoList
      */
-    public function loadContentTypeByIdentifier()
+    public function listContentTypes()
     {
-        // Serves only to verify that the URI is correct
-        $this->urlHandler->parse( 'typeByIdentifier', $this->request->path );
+        $contentTypes = array();
 
-        $contentType = $this->contentTypeService->loadContentTypeByIdentifier(
-            $this->request->variables['identifier']
-        );
+        if ( isset( $this->request->variables['identifier'] ) )
+        {
+            $contentTypes = array(
+                $this->loadContentTypeByIdentifier()
+            );
+        }
+        else if ( isset( $this->request->variables['remoteId'] ) )
+        {
+            $contentTypes = array(
+                $this->loadContentTypeByRemoteId()
+            );
+        }
 
         if ( $this->getMediaType( $this->request ) == 'application/vnd.ez.api.contenttypelist' )
         {
-            return new Values\ContentTypeList( array( $contentType ), $this->request->path );
+            return new Values\ContentTypeList( $contentTypes, $this->request->path );
         }
 
-        return new Values\ContentTypeInfoList( array( $contentType ), $this->request->path );
+        return new Values\ContentTypeInfoList( $contentTypes, $this->request->path );
+    }
+
+    /**
+     * Loads a content type by its identifier
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     */
+    public function loadContentTypeByIdentifier()
+    {
+        return $this->contentTypeService->loadContentTypeByIdentifier(
+            $this->request->variables['identifier']
+        );
     }
 
     /**
      * Loads a content type by its remote ID
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeList|\eZ\Publish\Core\REST\Server\Values\ContentTypeInfoList
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     public function loadContentTypeByRemoteId()
     {
-        // Serves only to verify that the URI is correct
-        $this->urlHandler->parse( 'typeByRemoteId', $this->request->path );
-
-        $contentType = $this->contentTypeService->loadContentTypeByRemoteId(
+        return $this->contentTypeService->loadContentTypeByRemoteId(
             $this->request->variables['remoteId']
         );
-
-        if ( $this->getMediaType( $this->request ) == 'application/vnd.ez.api.contenttypelist' )
-        {
-            return new Values\ContentTypeList( array( $contentType ), $this->request->path );
-        }
-
-        return new Values\ContentTypeInfoList( array( $contentType ), $this->request->path );
     }
 
     /**
@@ -676,6 +686,23 @@ class ContentType extends RestController
         {
             throw new ForbiddenException( $e->getMessage() );
         }
+
+        return new Values\ResourceDeleted();
+    }
+
+    /**
+     * The given content type draft is deleted
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     */
+    public function deleteContentTypeDraft()
+    {
+        $urlValues = $this->urlHandler->parse( 'typeDraft', $this->request->path );
+
+        // @TODO Throw NotFoundException if the content type does not have a draft for the current user
+
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
+        $this->contentTypeService->deleteContentType( $contentTypeDraft );
 
         return new Values\ResourceDeleted();
     }

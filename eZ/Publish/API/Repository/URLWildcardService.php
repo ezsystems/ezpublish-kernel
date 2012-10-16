@@ -70,11 +70,8 @@ interface URLWildcardService
     public function loadAll( $offset = 0, $limit = -1 );
 
     /**
-     * translates an url to an existing uri resource based on the
-     * source/destination patterns of the url wildcard. If the resulting
-     * url is an alias it will be transltated to the system uri.
-     *
-     * This method runs also configured url translations and filter
+     * Translates an url to an existing uri resource based on the
+     * source/destination patterns of the url wildcard.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url could not be translated
      *

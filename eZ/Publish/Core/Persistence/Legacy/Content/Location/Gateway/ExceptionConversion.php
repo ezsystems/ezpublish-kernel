@@ -61,6 +61,53 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * Returns an array with basic node data for the node with $remoteId
+     *
+     * @optimze
+     * @param mixed $remoteId
+     * @return array
+     */
+    public function getBasicNodeDataByRemoteId( $remoteId )
+    {
+        try
+        {
+            return $this->innerGateway->getBasicNodeDataByRemoteId( $remoteId );
+        }
+        catch ( \ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( \PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
+     * Loads data for all Locations for $contentId, optionally only in the
+     * subtree starting at $rootLocationId
+     *
+     * @param int $contentId
+     * @param int $rootLocationId
+     * @return array
+     */
+    public function loadLocationDataByContent( $contentId, $rootLocationId = null )
+    {
+        try
+        {
+            return $this->innerGateway->loadLocationDataByContent( $contentId, $rootLocationId );
+        }
+        catch ( \ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( \PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
      * Find all content in the given subtree
      *
      * @param mixed $sourceId

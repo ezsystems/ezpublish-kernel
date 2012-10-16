@@ -11,14 +11,20 @@ parameters:
     ezpublish_legacy.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\LegacyKernelController
     ezpublish_legacy.treemenu.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\LegacyTreeMenuController
     ezpublish_legacy.treemenu.controller.options: {}
+    ezpublish_legacy.setup.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\LegacySetupController
+
+    ezpublish_legacy.kernel_handler.cli.class: eZ\Publish\Core\MVC\Legacy\Kernel\CLIHandler
+    ezpublish_legacy.kernel_handler.cli.options: {}
 
     ezpublish_legacy.router.class: eZ\Bundle\EzPublishLegacyBundle\Routing\FallbackRouter
     ezpublish_legacy.url_generator.class: eZ\Bundle\EzPublishLegacyBundle\Routing\UrlGenerator
     ezpublish_legacy.siteaccess_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess
     ezpublish_legacy.session_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Session
+    ezpublish_legacy.configuration_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Configuration
     ezpublish_legacy.content_exception_handler.class: eZ\Publish\Core\MVC\Legacy\EventListener\APIContentExceptionListener
     ezpublish_legacy.config.resolver.class: eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver
     ezpublish_legacy.config.default_scope: site
+    ezpublish_legacy.setup_wizard.configuration_converter.class: eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfigurationConverter
 
 services:
     ezpublish_legacy.kernel:
@@ -49,6 +55,12 @@ services:
         factory_method: buildLegacyKernelHandlerTreeMenu
         arguments: [@service_container]
 
+    ezpublish_legacy.kernel_handler.cli:
+        class: %ezpublish_legacy.kernel_handler.cli.class%
+        factory_service: ezpublish_legacy.kernel.lazy_loader
+        factory_method: buildLegacyKernelHandlerCLI
+        arguments: [@service_container]
+
     ezpublish_legacy.kernel_handler:
         alias: ezpublish_legacy.kernel_handler.web
 
@@ -64,6 +76,11 @@ services:
             - %ezpublish_legacy.treemenu.controller.options%
         parent: ezpublish.controller.base
         scope: request
+
+    ezpublish_legacy.setup.controller:
+        class: %ezpublish_legacy.setup.controller.class%
+        parent: ezpublish.controller.base
+        arguments: [@ezpublish_legacy.kernel]
 
     ezpublish_legacy.router:
         class: %ezpublish_legacy.router.class%
@@ -88,9 +105,15 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    ezpublish_legacy.configuration_mapper:
+        class: %ezpublish_legacy.configuration_mapper.class%
+        arguments: [@ezpublish.config.resolver]
+        tags:
+            - { name: kernel.event_subscriber }
+
     ezpublish_legacy.content_exception_handler:
         class: %ezpublish_legacy.content_exception_handler.class%
-        arguments: [@ezpublish_legacy.content_view_provider, @?logger]
+        arguments: [@ezpublish_legacy.content_view_provider, @ezpublish_legacy.location_view_provider, @?logger]
         tags:
             - { name: kernel.event_subscriber }
 
@@ -99,3 +122,7 @@ services:
         arguments: [@ezpublish_legacy.kernel, %ezpublish_legacy.config.default_scope%]
         tags:
             - { name: ezpublish.config.resolver, priority: -255 }
+
+    ezpublish_legacy.setup_wizard.configuration_converter:
+        class: %ezpublish_legacy.setup_wizard.configuration_converter.class%
+        arguments: [@ezpublish_legacy.config.resolver]

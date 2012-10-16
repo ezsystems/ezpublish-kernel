@@ -1245,13 +1245,16 @@ class ContentService implements ContentServiceInterface
         $content = $this->buildContentDomainObject( $spiContent );
 
         $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
-        foreach ( $spiContent->locations as $spiLocation )
+        $locations = $this->repository->getLocationService()->loadLocations(
+            $content->getVersionInfo()->getContentInfo()
+        );
+        foreach ( $locations as $location )
         {
             foreach ( $urlAliasNames as $languageCode => $name )
             {
                 $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
-                    $spiLocation->id,
-                    $spiLocation->parentId,
+                    $location->id,
+                    $location->parentLocationId,
                     $name,
                     $languageCode,
                     $content->contentInfo->alwaysAvailable

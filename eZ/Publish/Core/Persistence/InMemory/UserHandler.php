@@ -292,27 +292,12 @@ class UserHandler implements UserHandlerInterface
 
 
         $contentIds = array( $groupId );
-        $list = $this->backend->find(
-            'Content',
-            array( 'id' => $groupId ),
-            array(
-                'locations' => array(
-                    'type' => 'Content\\Location',
-                    'match' => array( 'contentId' => 'id' )
-                ),
-                /*'contentInfo' => array(
-                    'type' => 'Content\\ContentInfo',
-                    'match' => array( 'id' => 'id' ),
-                    'single' => true
-                )*/
-            )
-        );
-
-        if ( empty( $list ) )
+        $locations = $this->handler->locationHandler()->loadLocationsByContent( $groupId );
+        if ( empty( $locations ) )
             return array();
 
         // crawl up path on all locations
-        foreach ( $list[0]->locations as $location )
+        foreach ( $locations as $location )
         {
             $parentIds = array_reverse( explode( '/', trim( $location->pathString, '/' ) ) );
             foreach ( $parentIds as $parentId )
@@ -320,14 +305,11 @@ class UserHandler implements UserHandlerInterface
                 if ( $parentId == $location->id )
                     continue;
 
+                $location = $this->backend->load( 'Content\\Location', $parentId );
                 $list = $this->backend->find(
                     'Content',
-                    array( 'locations' => array( 'id' => $parentId ) ),
+                    array( 'id' => $location->contentId ),
                     array(
-                        'locations' => array(
-                            'type' => 'Content\\Location',
-                            'match' => array( 'contentId' => 'id' )
-                        ),
                         'versionInfo' => array(
                             'type' => 'Content\\VersionInfo',
                             'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
@@ -518,10 +500,6 @@ class UserHandler implements UserHandlerInterface
             'Content',
             array( 'id' => $userId ),
             array(
-                'locations' => array(
-                    'type' => 'Content\\Location',
-                    'match' => array( 'contentId' => 'id' )
-                ),
                 'versionInfo' => array(
                     'type' => 'Content\\VersionInfo',
                     'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),
@@ -544,7 +522,10 @@ class UserHandler implements UserHandlerInterface
         $this->getPermissionsForObject( $list[0], 4, $policies );
 
         // crawl up path on all locations
-        foreach ( $list[0]->locations as $location )
+        $locations = $this->handler->locationHandler()->loadLocationsByContent(
+            $list[0]->versionInfo->contentInfo->id
+        );
+        foreach ( $locations as $location )
         {
             $parentIds = array_reverse( explode( '/', trim( $location->pathString, '/' ) ) );
             foreach ( $parentIds as $parentId )
@@ -552,14 +533,11 @@ class UserHandler implements UserHandlerInterface
                 if ( $parentId == $location->id )
                     continue;
 
+                $location = $this->backend->load( 'Content\\Location', $parentId );
                 $list2 = $this->backend->find(
                     'Content',
-                    array( 'locations' => array( 'id' => $parentId ) ),
+                    array( 'id' => $location->contentId ),
                     array(
-                        'locations' => array(
-                            'type' => 'Content\\Location',
-                            'match' => array( 'contentId' => 'id' )
-                        ),
                         'versionInfo' => array(
                             'type' => 'Content\\VersionInfo',
                             'match' => array( '_contentId' => 'id', 'versionNo' => '_currentVersionNo' ),

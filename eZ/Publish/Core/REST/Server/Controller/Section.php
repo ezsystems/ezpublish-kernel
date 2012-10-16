@@ -51,25 +51,30 @@ class Section extends RestController
      */
     public function listSections()
     {
-        return new Values\SectionList(
-            $this->sectionService->loadSections()
-        );
+        if ( isset( $this->request->variables['identifier'] ) )
+        {
+            $sections = array(
+                $this->loadSectionByIdentifier()
+            );
+        }
+        else
+        {
+            $sections = $this->sectionService->loadSections();
+        }
+
+        return new Values\SectionList( $sections, $this->request->path );
     }
 
     /**
      * Load section by identifier
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\SectionList
+     * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
     public function loadSectionByIdentifier()
     {
-        return new Values\SectionList(
-            array(
-                $this->sectionService->loadSectionByIdentifier(
-                    // GET variable
-                    $this->request->variables['identifier']
-                )
-            )
+        return $this->sectionService->loadSectionByIdentifier(
+            // GET variable
+            $this->request->variables['identifier']
         );
     }
 

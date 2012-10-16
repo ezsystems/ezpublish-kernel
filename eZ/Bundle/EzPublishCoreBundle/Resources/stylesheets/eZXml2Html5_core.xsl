@@ -107,6 +107,10 @@
 <a><xsl:attribute name="href"><xsl:value-of select="@url"/></xsl:attribute><xsl:attribute name="target"><xsl:choose><xsl:when test="@target"><xsl:value-of select="@target"/></xsl:when><xsl:otherwise>_self</xsl:otherwise></xsl:choose></xsl:attribute><xsl:if test="@title"><xsl:attribute name="title"><xsl:value-of select="@title"/></xsl:attribute></xsl:if><xsl:apply-templates/></a>
 </xsl:template>
 
+<xsl:template match="embed">
+<xsl:value-of select="text()" disable-output-escaping="yes"/>
+</xsl:template>
+
 <!-- copy unknown elements as-is -->
 <xsl:template match="@* | node()">
 <xsl:copy>

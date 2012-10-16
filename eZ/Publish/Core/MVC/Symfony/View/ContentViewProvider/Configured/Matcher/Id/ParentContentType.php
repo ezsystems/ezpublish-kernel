@@ -37,7 +37,7 @@ class ParentContentType extends MultipleValued
     public function matchContentInfo( ContentInfo $contentInfo )
     {
         return $this->matchLocation(
-            $this->repository->getLocationService()->loadMainLocation( $contentInfo )
+            $this->repository->getLocationService()->loadLocation( $contentInfo->mainLocationId )
         );
     }
 }

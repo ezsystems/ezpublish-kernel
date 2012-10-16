@@ -32,7 +32,7 @@ class Prefixed extends EzPublishUrlHandler
     {
         if ( strpos( $url, $this->prefix ) === 0 )
         {
-            $url = substr( $url, strpos( $url, $this->prefix ) );
+            $url = substr( $url, strlen( $this->prefix ) );
         }
         return parent::parse( $type, $url );
     }

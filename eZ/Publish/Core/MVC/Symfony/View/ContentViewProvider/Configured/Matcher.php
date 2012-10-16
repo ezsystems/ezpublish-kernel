@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 /**
- * Main interface for matchers to be used with ContentViewProvider\Configured.
+ * Main interface for matchers to be used with View\Provider\Content\Configured.
  */
 interface Matcher
 {

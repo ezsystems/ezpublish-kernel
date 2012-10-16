@@ -6,6 +6,7 @@
     <xsd:all>
       <xsd:element name="User" type="ref" minOccurs="0" />
       <xsd:element name="modificationDate" type="xsd:dateTime"
+      <xsd:element name="initialLanguageCode" type="xsd:string"
         minOccurs="0" />
       <xsd:element name="fields">
         <xsd:complexType>
@@ -18,3 +19,5 @@
   </xsd:complexType>
   <xsd:element name="VersionUpdate" type="versionUpdateType"></xsd:element>
 </xsd:schema>
+
+

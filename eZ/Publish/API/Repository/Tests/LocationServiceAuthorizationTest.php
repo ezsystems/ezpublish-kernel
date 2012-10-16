@@ -156,36 +156,6 @@ class LocationServiceAuthorizationTest extends BaseTest
     }
 
     /**
-     * Test for the loadMainLocation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::loadMainLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadMainLocation
-     */
-    public function testLoadMainLocationThrowsUnauthorizedException()
-    {
-        $repository = $this->getRepository();
-
-        $editorsGroupId = $this->generateId( 'group', 13 );
-
-        /* BEGIN: Use Case */;
-        $user = $this->createUserVersion1();
-
-        $contentService = $repository->getContentService();
-        $locationService = $repository->getLocationService();
-
-        $contentInfo = $contentService->loadContentInfo( $editorsGroupId );
-
-        // Set current user to newly created user
-        $repository->setCurrentUser( $user );
-
-        // This call will fail with an "UnauthorizedException"
-        $locationService->loadMainLocation( $contentInfo );
-        /* END: Use Case */
-    }
-
-    /**
      * Test for the swapLocation() method.
      *
      * @return void

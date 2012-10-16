@@ -80,3 +80,4 @@
   
   <xsd:element name="FieldDefinitionInput" type="vnd.ez.api.FieldDefinitionCreate" />
 </xsd:schema>
+

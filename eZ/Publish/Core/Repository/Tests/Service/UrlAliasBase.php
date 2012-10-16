@@ -2594,7 +2594,7 @@ abstract class UrlAliasBase extends BaseServiceTest
     protected function getPartlyMockedService( array $methods = array() )
     {
         return $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\UrlAliasService",
+            "eZ\\Publish\\Core\\Repository\\URLAliasService",
             $methods,
             array(
                 $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' ),

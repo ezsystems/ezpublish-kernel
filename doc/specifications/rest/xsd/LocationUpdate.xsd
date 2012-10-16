@@ -28,3 +28,4 @@
   </xsd:complexType>
   <xsd:element name="LocationUpdate" type="vnd.ez.api.LocationUpdate" />
 </xsd:schema>
+

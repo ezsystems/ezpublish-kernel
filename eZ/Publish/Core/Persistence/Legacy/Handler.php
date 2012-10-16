@@ -323,7 +323,6 @@ class Handler implements HandlerInterface
         if ( !isset( $this->contentMapper ) )
         {
             $this->contentMapper = new ContentMapper(
-                $this->getLocationMapper(),
                 $this->converterRegistry,
                 $this->contentLanguageHandler()
             );

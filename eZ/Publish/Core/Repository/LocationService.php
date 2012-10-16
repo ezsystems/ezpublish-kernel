@@ -172,91 +172,12 @@ class LocationService implements LocationServiceInterface
         if ( !is_string( $remoteId ) )
             throw new InvalidArgumentValue( "remoteId", $remoteId );
 
-        $query = new Query(
-            array(
-                'criterion' => new CriterionLogicalAnd(
-                    array(
-                        new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
-                        new CriterionLocationRemoteId( $remoteId )
-                    )
-                )
-            )
-        );
+        $spiLocation = $this->persistenceHandler->locationHandler()->loadByRemoteId( $remoteId );
+        $location = $this->buildDomainLocationObject( $spiLocation );
+        if ( !$this->repository->canUser( 'content', 'read', $location->getContentInfo(), $location ) )
+            throw new UnauthorizedException( 'content', 'read' );
 
-        $searchResult = $this->persistenceHandler->searchHandler()->findContent( $query );
-        if ( $searchResult->totalCount == 0 )
-            throw new NotFoundException( "location", $remoteId );
-
-        if ( $searchResult->totalCount > 1 )
-            throw new BadStateException( "remoteId", "more than one location with specified remote ID found" );
-
-        if ( is_array( $searchResult->searchHits[0]->valueObject->locations ) )
-        {
-            foreach ( $searchResult->searchHits[0]->valueObject->locations as $spiLocation )
-            {
-                if ( $spiLocation->remoteId === $remoteId )
-                {
-                    $location = $this->buildDomainLocationObject( $spiLocation );
-                    if ( !$this->repository->canUser( 'content', 'read', $location->getContentInfo(), $location ) )
-                        throw new UnauthorizedException( 'content', 'read' );
-
-                    return $location;
-                }
-            }
-        }
-
-        throw new NotFoundException( "location", $remoteId );
-    }
-
-    /**
-     * loads the main location of a content object
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if there is no published version yet
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location|null Null if no location exists
-     */
-    public function loadMainLocation( APIContentInfo $contentInfo )
-    {
-        if ( !is_numeric( $contentInfo->id ) )
-            throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
-
-        $query = new Query(
-            array(
-                'criterion' => new CriterionLogicalAnd(
-                    array(
-                        new CriterionContentId( $contentInfo->id ),
-                        new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
-                    )
-                )
-            )
-        );
-
-        $searchResult = $this->persistenceHandler->searchHandler()->findContent( $query );
-        if ( $searchResult->totalCount == 0 )
-            throw new BadStateException( "contentInfo", 'content info has no published versions yet' );
-        if ( $searchResult->totalCount > 1 )
-            throw new BadStateException( "contentInfo", 'several content info exists for id:' . $contentInfo->id );
-
-        $spiLocations = $searchResult->searchHits[0]->valueObject->locations;
-        if ( empty( $spiLocations ) || !is_array( $spiLocations ) )
-            return null;
-
-        foreach ( $spiLocations as $spiLocation )
-        {
-            if ( $spiLocation->id == $spiLocation->mainLocationId )
-            {
-                $location = $this->buildDomainLocationObject( $spiLocation );
-                if ( !$this->repository->canUser( 'content', 'read', $location->getContentInfo(), $location ) )
-                    throw new UnauthorizedException( 'content', 'read' );
-
-                return $location;
-            }
-        }
-
-        return null;
+        return $location;
     }
 
     /**
@@ -275,40 +196,32 @@ class LocationService implements LocationServiceInterface
     public function loadLocations( APIContentInfo $contentInfo, APILocation $rootLocation = null )
     {
         if ( !is_numeric( $contentInfo->id ) )
-            throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
-
-        if ( $rootLocation !== null && !is_string( $rootLocation->pathString ) )
-            throw new InvalidArgumentValue( "pathString", $rootLocation->pathString, "Location" );
-
-        $query = new Query(
-            array(
-                'criterion' => new CriterionLogicalAnd(
-                    array(
-                        new CriterionContentId( $contentInfo->id ),
-                        new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
-                    )
-                )
-            )
-        );
-
-        $searchResult = $this->persistenceHandler->searchHandler()->findContent( $query );
-        if ( $searchResult->totalCount == 0 )
-            throw new BadStateException( "contentInfo", 'content info has no published versions yet' );
-        if ( $searchResult->totalCount > 1 )
-            throw new BadStateException( "contentInfo", 'several content info exists for id:' . $contentInfo->id );
-
-        $spiLocations = $searchResult->searchHits[0]->valueObject->locations;
-        if ( !is_array( $spiLocations ) || empty( $spiLocations ) )
-            return array();
-
-        $contentLocations = array();
-        foreach ( $spiLocations as $location )
         {
-            if ( $rootLocation === null || stripos( $location->pathString, $rootLocation->pathString ) !== false )
-                $contentLocations[] = $this->buildDomainLocationObject( $location );
+            throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
         }
 
-        return $contentLocations;
+        if ( $rootLocation !== null && !is_numeric( $rootLocation->id ) )
+        {
+            throw new InvalidArgumentValue( "pathString", $rootLocation->pathString, "Location" );
+        }
+
+        if ( !$contentInfo->published )
+        {
+            throw new BadStateException( "\$contentInfo", "ContentInfo has no published versions" );
+        }
+
+        $spiLocations = $this->persistenceHandler->locationHandler()->loadLocationsByContent(
+            $contentInfo->id,
+            isset( $rootLocation ) ? $rootLocation->id : null
+        );
+
+        $locations = array();
+        foreach ( $spiLocations as $spiLocation )
+        {
+            $locations[] = $this->buildDomainLocationObject( $spiLocation );
+        }
+
+        return $locations;
     }
 
     /**
@@ -352,12 +265,19 @@ class LocationService implements LocationServiceInterface
         $childLocations = array();
         foreach ( $searchResult->searchHits as $spiSearchHit )
         {
-            if ( is_array( $spiSearchHit->valueObject->locations ) )
+            $spiContentLocations = $this->persistenceHandler->locationHandler()->loadLocationsByContent(
+                $spiSearchHit->valueObject->versionInfo->contentInfo->id,
+                $location->id
+            );
+            foreach ( $spiContentLocations as $spiLocation )
             {
-                foreach ( $spiSearchHit->valueObject->locations as $spiLocation )
+                if ( $spiLocation->parentId == $location->id )
                 {
-                    if ( $spiLocation->parentId == $location->id )
-                        $childLocations[] = $this->buildDomainLocationObject( $spiLocation );
+                    $childLocation = $this->buildDomainLocationObject( $spiLocation );
+                    if ( $this->repository->canUser( 'content', 'read', $childLocation->getContentInfo(), $childLocation ) )
+                    {
+                        $childLocations[] = $childLocation;
+                    }
                 }
             }
         }
@@ -500,9 +420,8 @@ class LocationService implements LocationServiceInterface
         // @todo: set pathIdentificationString
         // $createStruct->pathIdentificationString = null;
 
-        $mainLocation = $this->loadMainLocation( $contentInfo );
-        if ( $mainLocation !== null )
-            $createStruct->mainLocationId = $mainLocation->id;
+        if ( $contentInfo->mainLocationId !== null )
+            $createStruct->mainLocationId = $contentInfo->mainLocationId;
 
         $createStruct->sortField = $locationCreateStruct->sortField !== null ? (int) $locationCreateStruct->sortField : APILocation::SORT_FIELD_NAME;
         $createStruct->sortOrder = $locationCreateStruct->sortOrder !== null ? (int) $locationCreateStruct->sortOrder : APILocation::SORT_ORDER_ASC;
