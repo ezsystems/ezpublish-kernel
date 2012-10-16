@@ -11,8 +11,12 @@
 namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
+
     eZ\Publish\SPI\Persistence\Handler,
+    eZ\Publish\SPI\FieldType\FieldType as SPIFieldType,
+
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Repository\Values\ContentType\FieldType;
 
 /**
@@ -34,7 +38,7 @@ class FieldTypeService implements FieldTypeServiceInterface
     protected $persistenceHandler;
 
     /**
-     * @var array
+     * @var array Hash of SPI FieldTypes or callable callbacks to generate one.
      */
     protected $settings;
 
@@ -50,7 +54,7 @@ class FieldTypeService implements FieldTypeServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
-     * @param array $settings
+     * @param array $settings Hash of SPI FieldTypes or callable callbacks to generate one.
      */
     public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
     {
@@ -66,13 +70,12 @@ class FieldTypeService implements FieldTypeServiceInterface
      */
     public function getFieldTypes()
     {
-        /** @var $closure \Closure */
-        foreach ( $this->settings as $identifier => $closure )
+        foreach ( array_keys( $this->settings ) as $identifier )
         {
-            if ( !isset( $this->fieldTypes[$identifier] ) )
-            {
-                $this->fieldTypes[$identifier] = new FieldType( $closure() );
-            }
+            if ( isset( $this->fieldTypes[$identifier] ) )
+                continue;
+
+            $this->fieldTypes[$identifier] = $this->getFieldType( $identifier );
         }
 
         return $this->fieldTypes;
@@ -90,12 +93,10 @@ class FieldTypeService implements FieldTypeServiceInterface
     {
         if ( isset( $this->fieldTypes[$identifier] ) )
         {
-            $this->fieldTypes[$identifier];
+            return $this->fieldTypes[$identifier];
         }
 
-        $this->fieldTypes[$identifier] = new FieldType( $this->buildFieldType( $identifier ) );
-
-        return $this->fieldTypes[$identifier];
+        return ( $this->fieldTypes[$identifier] = new FieldType( $this->buildFieldType( $identifier ) ) );
     }
 
     /**
@@ -127,6 +128,15 @@ class FieldTypeService implements FieldTypeServiceInterface
                 "FieldType",
                 "Provided \$identifier is unknown: '{$identifier}', has: " . var_export( array_keys( $this->settings ), true )
             );
+        }
+
+        if ( $this->settings[$identifier] instanceof SPIFieldType )
+        {
+            return $this->settings[$identifier];
+        }
+        else if ( !is_callable( $this->settings[$identifier] ) )
+        {
+            throw new InvalidArgumentException( "\$settings[$identifier]", 'must be instance of SPI\\FieldType\\FieldType or callback to generate it' );
         }
 
         /** @var $closure \Closure */

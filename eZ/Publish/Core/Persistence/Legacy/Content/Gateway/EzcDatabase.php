@@ -870,11 +870,11 @@ class EzcDatabase extends Gateway
         $query->where(
             $query->expr->lAnd(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'ezcontentobject_version_contentobject_id' ),
+                    $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' ),
                     $query->bindValue( $contentId, null, \PDO::PARAM_INT )
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'ezcontentobject_version_version' ),
+                    $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' ),
                     $query->bindValue( $versionNo, null, \PDO::PARAM_INT )
                 )
             )

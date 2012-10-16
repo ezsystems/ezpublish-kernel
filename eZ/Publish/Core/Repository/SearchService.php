@@ -53,7 +53,9 @@ class SearchService implements SearchServiceInterface
     {
         $this->repository = $repository;
         $this->searchHandler = $searchHandler;
-        $this->settings = $settings;
+        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+            //'defaultSetting' => array(),
+        );
     }
 
      /**

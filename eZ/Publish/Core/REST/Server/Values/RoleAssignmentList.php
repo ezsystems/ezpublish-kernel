@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
+use eZ\Publish\Core\REST\Common\Value as RestValue;
+
 /**
  * RoleAssignment list view model
  */
-class RoleAssignmentList
+class RoleAssignmentList extends RestValue
 {
     /**
      * Role assignments

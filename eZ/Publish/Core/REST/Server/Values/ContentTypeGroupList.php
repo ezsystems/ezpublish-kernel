@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
+use eZ\Publish\Core\REST\Common\Value as RestValue;
+
 /**
  * ContentTypeGroup list view model
  */
-class ContentTypeGroupList
+class ContentTypeGroupList extends RestValue
 {
     /**
      * Content type groups

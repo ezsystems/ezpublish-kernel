@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
+use eZ\Publish\Core\REST\Common\Value as RestValue;
+
 /**
  * Location list view model
  */
-class LocationList
+class LocationList extends RestValue
 {
     /**
      * Locations

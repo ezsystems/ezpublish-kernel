@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface,
     eZ\Publish\API\Repository\Values\Content\URLWildcard,
     eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult,
     eZ\Publish\SPI\Persistence\Content\UrlWildcard as SPIUrlWildcard,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\Core\Base\Exceptions\ContentValidationException,
     eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
@@ -55,7 +56,9 @@ class URLWildcardService implements URLWildcardServiceInterface
     {
         $this->repository = $repository;
         $this->urlWildcardHandler = $urlWildcardHandler;
-        $this->settings = $settings;
+        $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
+            //'defaultSetting' => array(),
+        );
     }
 
     /**
@@ -203,12 +206,8 @@ class URLWildcardService implements URLWildcardServiceInterface
     }
 
     /**
-     * translates an url to an existing uri resource based on the
-     * source/destination patterns of the url wildcard. If the resulting
-     * url is an alias it will be translated to the system uri.
-     *
-     * This method runs also configured url translations and filter
-     * @todo lookup should not happen here?
+     * Translates an url to an existing uri resource based on the
+     * source/destination patterns of the url wildcard.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url could not be translated
      *
@@ -243,14 +242,7 @@ class URLWildcardService implements URLWildcardServiceInterface
             }
         }
 
-        $alias = $this->repository->getURLAliasService()->lookup( $url );
-
-        return new URLWildcardTranslationResult(
-            array(
-                'uri' => $alias->path,
-                'forward' => $alias->forward
-            )
-        );
+        throw new NotFoundException( "URLWildcard", $url );
     }
 
     /**

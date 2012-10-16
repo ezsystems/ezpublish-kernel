@@ -12,11 +12,12 @@ namespace eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
  * REST User, as received by /user/users/<ID>
  */
-class RestUser
+class RestUser extends RestValue
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Content

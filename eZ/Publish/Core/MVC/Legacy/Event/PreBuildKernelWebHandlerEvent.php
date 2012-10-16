@@ -14,9 +14,8 @@ use Symfony\Component\EventDispatcher\Event,
     Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
- * This event is triggered right before the initialization of the legacy kernel
- * web handler. It allows to inject parameters into the legacy kernel through
- * the parameter bag.
+ * This event is triggered right before the initialization of the legacy kernel web handler.
+ * It allows to inject parameters into the legacy kernel through the parameter bag.
  */
 class PreBuildKernelWebHandlerEvent extends Event
 {

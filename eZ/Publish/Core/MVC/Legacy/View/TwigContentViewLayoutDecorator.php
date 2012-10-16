@@ -76,8 +76,13 @@ class TwigContentViewLayoutDecorator implements ContentViewInterface
         return function ( array $params ) use ( $options, $contentView, $twig )
         {
             $contentViewClosure = $contentView->getTemplateIdentifier();
+            $layout = $options['layout'];
+            if ( isset( $params['noLayout'] ) && $params['noLayout'] )
+            {
+                $layout = $options['viewbaseLayout'];
+            }
             $twigContentTemplate = <<<EOT
-{% extends "{$options['layout']}" %}
+{% extends "{$layout}" %}
 
 {% block {$options['contentBlockName']} %}
 {$contentViewClosure( $params )}

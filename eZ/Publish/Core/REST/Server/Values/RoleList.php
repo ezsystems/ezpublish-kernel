@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
+use eZ\Publish\Core\REST\Common\Value as RestValue;
+
 /**
  * Role list view model
  */
-class RoleList
+class RoleList extends RestValue
 {
     /**
      * Roles
@@ -22,12 +24,21 @@ class RoleList
     public $roles;
 
     /**
+     * Path used to load the list of roles
+     *
+     * @var string
+     */
+    public $path;
+
+    /**
      * Construct
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role[] $roles
+     * @param string $path
      */
-    public function __construct( array $roles )
+    public function __construct( array $roles, $path )
     {
         $this->roles = $roles;
+        $this->path = $path;
     }
 }

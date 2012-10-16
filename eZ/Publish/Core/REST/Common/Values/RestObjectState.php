@@ -11,10 +11,12 @@ namespace eZ\Publish\Core\REST\Common\Values;
 
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 
+use eZ\Publish\Core\REST\Common\Value as RestValue;
+
 /**
  * This class wraps the object state with added groupId property
  */
-class RestObjectState
+class RestObjectState extends RestValue
 {
     /**
      * Wrapped object state

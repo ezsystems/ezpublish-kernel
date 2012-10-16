@@ -479,6 +479,25 @@ class RoleServiceStub implements RoleService
     }
 
     /**
+     * Loads all policies from a role
+     *
+     * @private
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Role $role
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\Policy[]
+     */
+    public function __getRolePolicies( Role $role )
+    {
+        $policies = array();
+        foreach ( $this->role2policy[$role->id] as $policyId )
+        {
+            $policies[] = $this->policies[$policyId];
+        }
+        return $policies;
+    }
+
+    /**
      * assigns a role to the given user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
@@ -608,13 +627,28 @@ class RoleServiceStub implements RoleService
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment[] an array of {@link UserRoleAssignment}
      */
-    public function getRoleAssignmentsForUser( User $user )
+    public function getRoleAssignmentsForUser( User $user, $inherited = false )
     {
         if ( false === $this->repository->hasAccess( 'role', '*' ) )
         {
             throw new UnauthorizedExceptionStub( 'What error code should be used?' );
         }
-        return $this->getRoleAssignmentsForContent( $user );
+
+        $roleAssignments =  $this->getRoleAssignmentsForContent( $user );
+
+        if ( $inherited )
+        {
+            $userGroups = $this->repository->getUserService()->__loadUserGroupsByUserId( $user->id );
+            foreach ( $userGroups as $userGroup )
+            {
+                $roleAssignments = array_merge(
+                    $roleAssignments,
+                    $this->getRoleAssignmentsForContent( $userGroup )
+                );
+            }
+        }
+
+        return  $roleAssignments;
     }
 
     /**

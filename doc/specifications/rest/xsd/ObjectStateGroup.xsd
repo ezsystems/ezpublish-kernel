@@ -92,3 +92,4 @@
   <xsd:element name="ObjectStateGroup" type="vnd.ez.api.ObjectStateGroup" />
   <xsd:element name="ObjectStateGroupList" type="vnd.ez.api.ObjectStateGroupList" />
 </xsd:schema>
+

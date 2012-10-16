@@ -52,7 +52,7 @@ class Repository implements \eZ\Publish\API\Repository\Repository
     private $roleService;
 
     /**
-     * @var \eZ\Publish\Core\REST\Client\UrlAliasService
+     * @var \eZ\Publish\Core\REST\Client\URLAliasService
      */
     private $urlAliasService;
 
@@ -400,7 +400,7 @@ class Repository implements \eZ\Publish\API\Repository\Repository
     }
 
     /**
-     * Get UrlAliasService
+     * Get URLAliasService
      *
      * @return \eZ\Publish\API\Repository\URLAliasService
      */

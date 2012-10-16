@@ -46,3 +46,4 @@
   <xsd:element name="PolicyCreate" type="vnd.ez.api.PolityCreate"/>
   <xsd:element name="PolicyUpdate" type="vnd.ez.api.PolityUpdate"/>
 </xsd:schema>
+

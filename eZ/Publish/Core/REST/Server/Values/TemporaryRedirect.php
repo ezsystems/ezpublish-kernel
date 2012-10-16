@@ -9,7 +9,9 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
-class TemporaryRedirect
+use eZ\Publish\Core\REST\Common\Value as RestValue;
+
+class TemporaryRedirect extends RestValue
 {
     /**
      * Redirect URI

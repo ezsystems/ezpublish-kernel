@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
+use eZ\Publish\Core\REST\Common\Value as RestValue;
+
 /**
  * Section list view model
  */
-class SectionList
+class SectionList extends RestValue
 {
     /**
      * Sections
@@ -22,12 +24,21 @@ class SectionList
     public $sections;
 
     /**
+     * Path used to load the list of sections
+     *
+     * @var string
+     */
+    public $path;
+
+    /**
      * Construct
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section[] $sections
+     * @param string $path
      */
-    public function __construct( array $sections )
+    public function __construct( array $sections, $path )
     {
         $this->sections = $sections;
+        $this->path = $path;
     }
 }

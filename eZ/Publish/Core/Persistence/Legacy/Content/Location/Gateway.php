@@ -43,6 +43,25 @@ abstract class Gateway
     abstract public function getBasicNodeData( $nodeId );
 
     /**
+     * Returns an array with basic node data for the node with $remoteId
+     *
+     * @optimze
+     * @param mixed $remoteId
+     * @return array
+     */
+    abstract public function getBasicNodeDataByRemoteId( $remoteId );
+
+    /**
+     * Loads data for all Locations for $contentId, optionally only in the
+     * subtree starting at $rootLocationId
+     *
+     * @param int $contentId
+     * @param int $rootLocationId
+     * @return array
+     */
+    abstract public function loadLocationDataByContent( $contentId, $rootLocationId = null );
+
+    /**
      * Find all content in the given subtree
      *
      * @param mixed $sourceId

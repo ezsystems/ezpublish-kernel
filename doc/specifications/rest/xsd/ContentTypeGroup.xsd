@@ -1,73 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://ez.no/API/Values" targetNamespace="http://ez.no/API/Values">
-  <xsd:include schemaLocation="CommonDefinitions.xsd" />
-  <xsd:include schemaLocation="ContentType.xsd" />
-  <xsd:complexType name="vnd.ez.api.ContentTypeGroup">
-    <xsd:complexContent>
-      <xsd:extension base="ref">
-        <xsd:all>
-          <xsd:element name="id" type="xsd:int">
-          </xsd:element>
-          <xsd:element name="identifier" type="xsd:string">
-            <xsd:annotation>
-              <xsd:documentation>
-                Readable string identifier of a group
-              </xsd:documentation>
-            </xsd:annotation>
-          </xsd:element>
-          <xsd:element name="created" type="xsd:dateTime">
-            <xsd:annotation>
-              <xsd:documentation>
-                Created date
-              </xsd:documentation>
-            </xsd:annotation>
-          </xsd:element>
-          <xsd:element name="modified" type="xsd:dateTime">
-            <xsd:annotation>
-              <xsd:documentation>
-                Modified date
-              </xsd:documentation>
-            </xsd:annotation>
-          </xsd:element>
-          <xsd:element name="Creator" type="ref">
-            <xsd:annotation>
-              <xsd:documentation>
-                Creator user
-              </xsd:documentation>
-            </xsd:annotation>
-          </xsd:element>
-          <xsd:element name="Modifier" type="ref">
-            <xsd:annotation>
-              <xsd:documentation>
-                Modifier user
-              </xsd:documentation>
-            </xsd:annotation>
-          </xsd:element>
-          <xsd:element name="ContentTypes" type="vnd.ez.api.ContentTypeInfoList" />
-        </xsd:all>
-      </xsd:extension>
-    </xsd:complexContent>
-  </xsd:complexType>
-  <xsd:complexType name="vnd.ez.api.ContentTypeGroupList">
-    <xsd:complexContent>
-      <xsd:extension base="ref">
-        <xsd:sequence>
-          <xsd:element name="ContentTypeGroup" type="vnd.ez.api.ContentTypeGroup"
-            maxOccurs="unbounded"></xsd:element>
-        </xsd:sequence>
-      </xsd:extension>
-    </xsd:complexContent>
-  </xsd:complexType>
-  <xsd:complexType name="vnd.ez.api.ContentTypeGroupRefList">
-    <xsd:complexContent>
-      <xsd:extension base="ref">
-        <xsd:sequence>
-          <xsd:element name="ContentTypeGroupRef" maxOccurs="unbounded">
-            <xsd:complexType>
-              <xsd:complexContent>
-                <xsd:extension base="ref">
-                  <xsd:all>
                     <xsd:element name="unlink" type="controllerRef"
                       minOccurs="0" />
                   </xsd:all>
@@ -92,3 +22,4 @@
   <xsd:element name="ContentTypeGroupList" type="vnd.ez.api.ContentTypeGroupList" />
   <xsd:element name="ContentTypeGroupRefList" type="vnd.ez.api.ContentTypeGroupRefList" />
 </xsd:schema>
+

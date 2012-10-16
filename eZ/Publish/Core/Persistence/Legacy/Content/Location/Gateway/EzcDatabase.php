@@ -76,6 +76,68 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Returns an array with basic node data
+     *
+     * @optimze
+     * @param mixed $remoteId
+     * @return array
+     */
+    public function getBasicNodeDataByRemoteId( $remoteId )
+    {
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select( '*' )
+            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->where(
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'remote_id' ),
+                    $query->bindValue( $remoteId )
+                )
+            );
+        $statement = $query->prepare();
+        $statement->execute();
+
+        if ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
+        {
+            return $row;
+        }
+
+        throw new NotFound( 'location', $remoteId );
+    }
+
+    /**
+     * Loads data for all Locations for $contentId, optionally only in the
+     * subtree starting at $rootLocationId
+     *
+     * @param int $contentId
+     * @param int $rootLocationId
+     * @return array
+     */
+    public function loadLocationDataByContent( $contentId, $rootLocationId = null )
+    {
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select( '*' )
+            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->where(
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'contentobject_id' ),
+                    $query->bindValue( $contentId )
+                )
+            );
+
+        if ( $rootLocationId !== null )
+        {
+            $this->applySubtreeLimitation( $query, $rootLocationId );
+        }
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Find all content in the given subtree
      *
      * @param mixed $sourceId
@@ -86,18 +148,32 @@ class EzcDatabase extends Gateway
         $query = $this->handler->createSelectQuery();
         $query->select( '*' )->from(
             $this->handler->quoteTable( 'ezcontentobject_tree' )
-        )->where(
-            $query->expr->like(
-                $this->handler->quoteColumn( 'path_string', 'ezcontentobject_tree' ),
-                $query->bindValue( '%/' . $sourceId . '/%' )
-            )
-        )->orderBy(
+        );
+        $this->applySubtreeLimitation( $query, $sourceId );
+        $query->orderBy(
             $this->handler->quoteColumn( 'path_string', 'ezcontentobject_tree' )
         );
         $statement = $query->prepare();
         $statement->execute();
 
         return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
+     * Limits the given $query to the subtree starting at $rootLocationId
+     *
+     * @param \ezcQuery $query
+     * @param string $rootLocationId
+     * @return void
+     */
+    protected function applySubtreeLimitation( \ezcQuery $query, $rootLocationId )
+    {
+        $query->where(
+            $query->expr->like(
+                $this->handler->quoteColumn( 'path_string', 'ezcontentobject_tree' ),
+                $query->bindValue( '%/' . $rootLocationId . '/%' )
+            )
+        );
     }
 
     /**

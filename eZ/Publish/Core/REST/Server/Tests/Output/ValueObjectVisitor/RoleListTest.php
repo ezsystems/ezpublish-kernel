@@ -29,7 +29,7 @@ class RoleListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $roleList = new RoleList( array() );
+        $roleList = new RoleList( array(), '/user/roles' );
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -94,10 +94,13 @@ class RoleListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $roleList = new RoleList( array(
-            new User\Role(),
-            new User\Role(),
-        ) );
+        $roleList = new RoleList(
+            array(
+                new User\Role(),
+                new User\Role(),
+            ),
+            '/user/roles'
+        );
 
         $this->getVisitorMock()->expects( $this->exactly( 2 ) )
             ->method( 'visitValueObject' )

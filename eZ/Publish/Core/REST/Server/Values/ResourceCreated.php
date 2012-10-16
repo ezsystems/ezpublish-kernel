@@ -9,7 +9,9 @@
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
-class ResourceCreated
+use eZ\Publish\Core\REST\Common\Value as RestValue;
+
+class ResourceCreated extends RestValue
 {
     public function __construct( $redirectUri )
     {

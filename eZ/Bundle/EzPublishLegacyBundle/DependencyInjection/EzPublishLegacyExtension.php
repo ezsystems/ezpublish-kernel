@@ -39,6 +39,8 @@ class EzPublishLegacyExtension extends Extension
                 new FileLocator( __DIR__ . '/../Resources/config' )
             );
             $loader->load( 'services.yml' );
+            // Security services
+            $loader->load( 'security.yml' );
 
             $container->setParameter( 'ezpublish_legacy.root_dir', $config['root_dir'] );
 

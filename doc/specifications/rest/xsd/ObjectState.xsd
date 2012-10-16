@@ -100,3 +100,4 @@
   <xsd:element name="ObjectState" type="vnd.ez.api.ObjectState" />
   <xsd:element name="ObjectStateList" type="vnd.ez.api.ObjectStateList" />
 </xsd:schema>
+

@@ -1,0 +1,162 @@
+parameters:
+    ezpublish_rest.controller.base.class: eZ\Publish\Core\REST\Server\Controller
+    ezpublish_rest.controller.content.class: eZ\Publish\Core\REST\Server\Controller\Content
+    ezpublish_rest.controller.content_type.class: eZ\Publish\Core\REST\Server\Controller\ContentType
+    ezpublish_rest.controller.location.class: eZ\Publish\Core\REST\Server\Controller\Location
+    ezpublish_rest.controller.object_state.class: eZ\Publish\Core\REST\Server\Controller\ObjectState
+    ezpublish_rest.controller.role.class: eZ\Publish\Core\REST\Server\Controller\Role
+    ezpublish_rest.controller.root.class: eZ\Publish\Core\REST\Server\Controller\Root
+    ezpublish_rest.controller.section.class: eZ\Publish\Core\REST\Server\Controller\Section
+    ezpublish_rest.controller.trash.class: eZ\Publish\Core\REST\Server\Controller\Trash
+    ezpublish_rest.controller.user.class: eZ\Publish\Core\REST\Server\Controller\User
+    ezpublish_rest.controller.url_wildcard.class: eZ\Publish\Core\REST\Server\Controller\URLWildcard
+
+    ezpublish_rest.response_visitor_dispatcher.class: eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher
+    ezpublish_rest.factory.class: eZ\Bundle\EzPublishRestBundle\ApiLoader\Factory
+    ezpublish_rest.input_dispatcher.class: eZ\Publish\Core\REST\Common\Input\Dispatcher
+    ezpublish_rest.url_handler.class: eZ\Publish\Core\REST\Common\UrlHandler\Prefixed
+    ezpublish_rest.parser_tools.class: eZ\Publish\Core\REST\Common\Input\ParserTools
+    ezpublish_rest.field_type_parser.class: eZ\Publish\Core\REST\Common\Input\FieldTypeParser
+    ezpublish_rest.listener.class: eZ\Bundle\EzPublishRestBundle\EventListener\RestListener
+    ezpublish_rest.field_type_serializer.class: eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer
+    ezpublish_rest.field_type_processor_registry.class: eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry
+    ezpublish_rest.request.class: eZ\Publish\Core\REST\Server\Request
+
+services:
+    ezpublish_rest.field_type_serializer:
+        class: %ezpublish_rest.field_type_serializer.class%
+        arguments:
+            - @ezpublish.api.service.field_type
+            - @ezpublish_rest.field_type_processor_registry
+
+    ezpublish_rest.url_handler:
+        class: %ezpublish_rest.url_handler.class%
+        arguments:
+            # Note: everything related to prefix will be removed when UrlGeneration is handled by Symfony instead
+            - /api/ezp/v2
+
+    ezpublish_rest.parser_tools:
+        class: %ezpublish_rest.parser_tools.class%
+
+    ezpublish_rest.field_type_processor_registry:
+        class: %ezpublish_rest.field_type_processor_registry.class%
+        factory_service: ezpublish_rest.factory
+        factory_method: buildFieldTypeProcessorRegistry
+
+    ezpublish_rest.field_type_parser:
+        class: %ezpublish_rest.field_type_parser.class%
+        arguments:
+            - @ezpublish.api.service.content
+            - @ezpublish.api.service.content_type
+            - @ezpublish.api.service.field_type
+            - @ezpublish_rest.field_type_processor_registry
+
+    ezpublish_rest.factory:
+        class: %ezpublish_rest.factory.class%
+        arguments: [@service_container, @ezpublish.api.repository]
+
+    ezpublish_rest.input_dispatcher:
+        class: %ezpublish_rest.input_dispatcher.class%
+        factory_service: ezpublish_rest.factory
+        factory_method: buildInputDispatcher
+
+    ezpublish_rest.controller.base:
+        class: %ezpublish_rest.controller.base.class%
+        abstract: true
+        calls:
+            - [ setInputDispatcher, [@ezpublish_rest.input_dispatcher] ]
+            - [ setUrlHandler, [@ezpublish_rest.url_handler] ]
+            - [ setRequest, [@ezpublish_rest.request] ]
+
+    ezpublish_rest.controller.root:
+        class: %ezpublish_rest.controller.root.class%
+        parent: ezpublish_rest.controller.base
+
+    ezpublish_rest.controller.section:
+        class: %ezpublish_rest.controller.section.class%
+        parent: ezpublish_rest.controller.base
+        arguments:
+            - @ezpublish.api.service.section
+
+    ezpublish_rest.controller.content:
+        class: %ezpublish_rest.controller.content.class%
+        parent: ezpublish_rest.controller.base
+        arguments:
+            - @ezpublish.api.service.content
+            - @ezpublish.api.service.location
+            - @ezpublish.api.service.section
+            - @ezpublish.api.service.search
+
+    ezpublish_rest.controller.content_type:
+        class: %ezpublish_rest.controller.content_type.class%
+        parent: ezpublish_rest.controller.base
+        arguments:
+            - @ezpublish.api.service.content_type
+
+    ezpublish_rest.controller.role:
+        class: %ezpublish_rest.controller.role.class%
+        parent: ezpublish_rest.controller.base
+        arguments:
+            - @ezpublish.api.service.role
+            - @ezpublish.api.service.user
+            - @ezpublish.api.service.location
+
+    ezpublish_rest.controller.location:
+        class: %ezpublish_rest.controller.location.class%
+        parent: ezpublish_rest.controller.base
+        arguments:
+            - @ezpublish.api.service.location
+            - @ezpublish.api.service.content
+            - @ezpublish.api.service.trash
+
+    ezpublish_rest.controller.object_state:
+        class: %ezpublish_rest.controller.object_state.class%
+        parent: ezpublish_rest.controller.base
+        arguments:
+            - @ezpublish.api.service.object_state
+            - @ezpublish.api.service.content
+
+    ezpublish_rest.controller.trash:
+        class: %ezpublish_rest.controller.trash.class%
+        parent: ezpublish_rest.controller.base
+        arguments:
+            - @ezpublish.api.service.trash
+            - @ezpublish.api.service.location
+
+    ezpublish_rest.controller.user:
+        class: %ezpublish_rest.controller.user.class%
+        parent: ezpublish_rest.controller.base
+        arguments:
+            - @ezpublish.api.service.user
+            - @ezpublish.api.service.role
+            - @ezpublish.api.service.content
+            - @ezpublish.api.service.location
+            - @ezpublish.api.service.section
+            - @ezpublish.api.repository
+
+    ezpublish_rest.controller.url_wildcard:
+        class: %ezpublish_rest.controller.url_wildcard.class%
+        parent: ezpublish_rest.controller.base
+        arguments:
+            - @ezpublish.api.service.url_wildcard
+
+    ezpublish_rest.listener:
+        class: %ezpublish_rest.listener.class%
+        arguments:
+            - @service_container
+            - @ezpublish_rest.request
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish_rest.response_visitor_dispatcher:
+        class: %ezpublish_rest.response_visitor_dispatcher.class%
+        factory_service: ezpublish_rest.factory
+        factory_method: buildResponseVisitorDispatcher
+        arguments:
+            - @ezpublish_rest.url_handler
+            - @ezpublish_rest.field_type_serializer
+            - @ezpublish.api.repository
+
+    ezpublish_rest.request:
+        class: %ezpublish_rest.request.class%
+

@@ -653,7 +653,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the newFieldDefinitionCreateStruct() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\FieldDefinitionService::newFieldDefinitionCreateStruct()
+     * @see \eZ\Publish\API\Repository\ContentTypeService::newFieldDefinitionCreateStruct()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewFieldDefinitionCreateStruct
      */
     public function testNewFieldDefinitionCreateStructValues( $createStruct )

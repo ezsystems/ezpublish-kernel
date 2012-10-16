@@ -108,6 +108,33 @@ class LocationHandlerTest extends TestCase
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationsFromRows
+     */
+    public function testCreateLocationsFromRows()
+    {
+        $inputRows = array();
+        for ( $i = 0; $i < 3; $i++ )
+        {
+            $row = $this->locationRow;
+            $row['node_id'] += $i;
+            $inputRows[] = $row;
+        }
+
+        $mapper = new Mapper();
+
+        $locations = $mapper->createLocationsFromRows( $inputRows );
+
+        $this->assertCount( 3, $locations );
+        foreach ( $locations as $location )
+        {
+            $this->assertInstanceOf(
+                'eZ\\Publish\\SPI\\Persistence\\Content\\Location',
+                $location
+            );
+        }
+    }
+
+    /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
      */
     public function testCreateTrashedFromRow()
