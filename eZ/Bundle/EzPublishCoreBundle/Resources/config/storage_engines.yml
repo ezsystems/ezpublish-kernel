@@ -9,10 +9,10 @@ parameters:
 
     # Legacy storage engine configuration
     # Transformation parser/compiler for search purpose
-    ezpublish.api.storage_engine.legacy.transformation_parser.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationParser
-    ezpublish.api.storage_engine.legacy.pcre_compiler.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationPcreCompiler
+    ezpublish.api.storage_engine.legacy.transformation_parser.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased\Parser
+    ezpublish.api.storage_engine.legacy.pcre_compiler.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PcreCompiler
     ezpublish.api.storage_engine.legacy.transformation_converter.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter
-    ezpublish.api.storage_engine.legacy.transformation_processor.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor
+    ezpublish.api.storage_engine.legacy.transformation_processor.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased
     # Transormation rules resources.
     # TODO: Should they be somewhat configurable for the developer?
     ezpublish.api.storage_engine.legacy.transformation_rules.resources:

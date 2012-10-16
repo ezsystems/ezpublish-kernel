@@ -132,9 +132,9 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         ),
                         new Content\Search\Gateway\CriterionHandler\FullText(
                             $this->getDatabaseHandler(),
-                            new Content\Search\TransformationProcessor(
-                                new Content\Search\TransformationParser( self::getInstallationDir() ),
-                                new Content\Search\TransformationPcreCompiler(
+                            new Content\Search\TransformationProcessor\DefinitionBased(
+                                new Content\Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() ),
+                                new Content\Search\TransformationProcessor\PcreCompiler(
                                     new Content\Search\Utf8Converter()
                                 ),
                                 $rules

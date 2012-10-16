@@ -17,9 +17,9 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase as LanguageGateway,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper,
     eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationParser,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationPcreCompiler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased\Parser,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PcreCompiler,
     eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter,
     eZ\Publish\SPI\Persistence\Content\UrlAlias,
     eZ\Publish\Core\Base\Exceptions\NotFoundException;
@@ -2322,7 +2322,7 @@ class UrlAliasHandlerTest extends TestCase
                     false
                 ),
                 self::getMock(
-                    "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Search\\TransformationProcessor",
+                    "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Search\\TransformationProcessor\\DefinitionBased",
                     array(),
                     array(),
                     '',
@@ -2367,9 +2367,9 @@ class UrlAliasHandlerTest extends TestCase
             $rules[] = str_replace( self::getInstallationDir(), '', $file );
         }
 
-        return new TransformationProcessor(
-            new TransformationParser( self::getInstallationDir() ),
-            new TransformationPcreCompiler( new Utf8Converter() ),
+        return new DefinitionBased(
+            new Parser( self::getInstallationDir() ),
+            new PcreCompiler( new Utf8Converter() ),
             $rules
         );
     }

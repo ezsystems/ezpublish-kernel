@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandler/TransformationParserTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandler/TransformationProcessorPcreCompilerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -14,7 +14,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
 /**
  * Test case for LocationHandlerTest
  */
-class TransformationPcreCompilerTest extends TestCase
+class TransformationProcessorPcreCompilerTest extends TestCase
 {
     /**
      * Applies the transformations
@@ -38,8 +38,8 @@ class TransformationPcreCompilerTest extends TestCase
 
     public function testCompileMap()
     {
-        $parser = new Search\TransformationParser( self::getInstallationDir() );
-        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
+        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -56,8 +56,8 @@ class TransformationPcreCompilerTest extends TestCase
 
     public function testCompileMapRemove()
     {
-        $parser = new Search\TransformationParser( self::getInstallationDir() );
-        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
+        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -74,8 +74,8 @@ class TransformationPcreCompilerTest extends TestCase
 
     public function testCompileMapKeep()
     {
-        $parser = new Search\TransformationParser( self::getInstallationDir() );
-        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
+        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -92,8 +92,8 @@ class TransformationPcreCompilerTest extends TestCase
 
     public function testCompileMapAscii()
     {
-        $parser = new Search\TransformationParser( self::getInstallationDir() );
-        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
+        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -110,8 +110,8 @@ class TransformationPcreCompilerTest extends TestCase
 
     public function testCompileMapUnicode()
     {
-        $parser = new Search\TransformationParser( self::getInstallationDir() );
-        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
+        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -128,8 +128,8 @@ class TransformationPcreCompilerTest extends TestCase
 
     public function testCompileReplace()
     {
-        $parser = new Search\TransformationParser( self::getInstallationDir() );
-        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
+        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -146,8 +146,8 @@ class TransformationPcreCompilerTest extends TestCase
 
     public function testCompileTranspose()
     {
-        $parser = new Search\TransformationParser( self::getInstallationDir() );
-        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
+        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -164,8 +164,8 @@ class TransformationPcreCompilerTest extends TestCase
 
     public function testCompileTransposeAsciiLowercase()
     {
-        $parser = new Search\TransformationParser( self::getInstallationDir() );
-        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
+        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -182,8 +182,8 @@ class TransformationPcreCompilerTest extends TestCase
 
     public function testCompileTransposePlus()
     {
-        $parser = new Search\TransformationParser( self::getInstallationDir() );
-        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
+        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -200,8 +200,8 @@ class TransformationPcreCompilerTest extends TestCase
 
     public function testCompileModuloTranspose()
     {
-        $parser = new Search\TransformationParser( self::getInstallationDir() );
-        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
+        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $compiler = new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(

@@ -512,7 +512,7 @@ abstract class BaseIntegrationTest extends TestCase
                 array()
             ),
             $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Search\\TransformationProcessor',
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Search\\TransformationProcessor\\DefinitionBased',
                 array(),
                 array(),
                 '',
