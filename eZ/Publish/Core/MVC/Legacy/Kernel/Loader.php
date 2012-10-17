@@ -113,11 +113,12 @@ class Loader
                     throw new \InvalidArgumentException( 'A legacy kernel handler must be an instance of ezpKernelHandler.' );
 
                 $webHandler = new $webHandlerClass( $legacyParameters->all() );
-                eZURI::instance()->setURIString(
+                $uri = eZURI::instance();
+                $uri->setURIString(
                     $request->attributes->get(
                         'semanticPathinfo',
                         $request->getPathinfo()
-                    )
+                    ) . $request->attributes->get( 'viewParametersString' )
                 );
                 chdir( $webrootDir );
             }
