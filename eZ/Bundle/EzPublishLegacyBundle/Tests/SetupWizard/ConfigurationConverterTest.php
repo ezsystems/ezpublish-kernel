@@ -22,6 +22,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
      */
     public function testFromLegacy( $package, $adminSiteaccess, $mockParameters, $expectedResult, $exception = null )
     {
+        // @todo Change to a callback mock so that exceptions can be thrown by getGroup/getParameter
         $legacyResolver = $this->getLegacyConfigResolverMock();
         foreach( $mockParameters as $method => $map )
         {
