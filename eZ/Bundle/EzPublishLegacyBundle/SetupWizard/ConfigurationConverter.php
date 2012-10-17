@@ -75,7 +75,16 @@ class ConfigurationConverter
             'ezmysql' => 'mysql',
             'eZMySQLDB' => 'mysql',
         );
-        $databaseSettings = $this->legacyResolver->getGroup( 'DatabaseSettings', 'site', $defaultSiteaccess );
+
+        try
+        {
+            $databaseSettings = $this->legacyResolver->getGroup( 'DatabaseSettings', 'site', $defaultSiteaccess );
+        }
+        catch( \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException $e )
+        {
+            $databaseSettings = $this->legacyResolver->getGroup( 'DatabaseSettings', 'site' );
+        }
+
         $databaseType = $databaseSettings['DatabaseImplementation'];
         if ( isset( $databaseMapping[$databaseType] ) )
             $databaseType = $databaseMapping[$databaseType];
