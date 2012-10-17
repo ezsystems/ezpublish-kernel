@@ -15,9 +15,18 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
 {
 
     /**
-     * @param $mockParameter
+     * @param $package
+     * @param $adminSiteaccess
+     * @param $mockParameters
      * @param $expectedResult
      * @param $exception exception type, if expected
+     *
+     * @throws \Exception
+     * @return void
+     * @internal param $mockParameter
+     *
+     * @param $exception exception type, if expected
+     *
      * @dataProvider providerForTestFromLegacy
      */
     public function testFromLegacy( $package, $adminSiteaccess, $mockParameters, $expectedResult, $exception = null )
@@ -33,7 +42,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
 
         try
         {
-            $result = $configurationConverter->fromLegacy( 'ezdemo_site', 'ezdemo_site_admin' );
+            $result = $configurationConverter->fromLegacy( $package, $adminSiteaccess );
         }
         catch( \Exception $e )
         {
