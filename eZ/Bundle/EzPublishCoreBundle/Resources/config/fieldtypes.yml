@@ -396,6 +396,12 @@ services:
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezimage}
 
+    # Image alias generator
+    # TODO: Implement a new one not to rely only on legacy
+    # See @EzPublishLegacyBundle/config/services.yml
+    #ezpublish.fieldType.ezimage.aliasGenerator:
+    #    alias: ezpublish.fieldType.ezimage.aliasGenerator.default
+
     ezpublish.fieldType.ezkeyword:
         class: %ezpublish.fieldType.ezkeyword.class%
         parent: ezpublish.fieldType

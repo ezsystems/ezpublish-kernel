@@ -9,18 +9,19 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
-use \Twig_Extension;
-use \Twig_Environment;
-use \Twig_Function_Method;
-use \Twig_Filter_Method;
-use \Twig_Template;
-use \Symfony\Component\DependencyInjection\ContainerInterface;
-use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use \SplObjectStorage;
-use \InvalidArgumentException;
-use \LogicException;
+use eZ\Publish\Core\Repository\Values\Content\Content,
+    eZ\Publish\API\Repository\Values\Content\Field,
+    eZ\Publish\API\Repository\Values\Content\VersionInfo,
+    eZ\Publish\Core\MVC\ConfigResolverInterface,
+    Symfony\Component\DependencyInjection\ContainerInterface,
+    Twig_Extension,
+    Twig_Environment,
+    Twig_Function_Method,
+    Twig_Filter_Method,
+    Twig_Template,
+    SplObjectStorage,
+    InvalidArgumentException,
+    LogicException;
 
 /**
  * Twig content extension for eZ Publish specific usage.
@@ -73,16 +74,15 @@ class ContentExtension extends Twig_Extension
     protected $fieldTypeIdentifiers = array();
 
     /**
+     * @var \eZ\Publish\SPI\VariantService
+     */
+    protected $imageVariantService;
+
+    /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
     protected $container;
 
-    /**
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $resolver
-     * @return type
-     */
     public function __construct( ContainerInterface $container, ConfigResolverInterface $resolver )
     {
         $this->resources = $resolver->getParameter( 'field_templates' );
@@ -120,7 +120,20 @@ class ContentExtension extends Twig_Extension
                 $this,
                 'renderField',
                 array( 'is_safe' => array( 'html' ) )
-            )
+            ),
+            'ez_image_alias' => new Twig_Function_Method( $this, 'getImageVariant' )
+        );
+    }
+
+    /**
+     * Returns a list of filters to add to the existing list
+     *
+     * @return array
+     */
+    public function getFilters()
+    {
+        return array(
+            'xmltext_to_html5' => new Twig_Filter_Method( $this, 'xmltextToHtml5' ),
         );
     }
 
@@ -157,14 +170,16 @@ class ContentExtension extends Twig_Extension
         if ( !$field instanceof Field )
             throw new InvalidArgumentException( "Invalid field identifier '$fieldIdentifier' for content #{$content->contentInfo->id}" );
 
-        $contentInfo = $content->getVersionInfo()->getContentInfo();
+        $versionInfo = $content->getVersionInfo();
+        $contentInfo = $versionInfo->getContentInfo();
         $contentType = $contentInfo->getContentType();
         // Adding Field, FieldSettings and ContentInfo objects to
         // parameters to be passed to the template
         $params += array(
-            'field' => $field,
-            'contentInfo' => $contentInfo,
-            'fieldSettings' => $contentType->getFieldDefinition( $fieldIdentifier )->getFieldSettings()
+            'field'             => $field,
+            'contentInfo'       => $contentInfo,
+            'versionInfo'       => $versionInfo,
+            'fieldSettings'     => $contentType->getFieldDefinition( $fieldIdentifier )->getFieldSettings()
         );
 
         // Ensure that not edit metadata has been injected from the template
@@ -210,13 +225,6 @@ class ContentExtension extends Twig_Extension
         );
     }
 
-    public function getFilters()
-    {
-        return array(
-            'xmltext_to_html5' => new Twig_Filter_Method( $this, 'xmltextToHtml5' ),
-        );
-    }
-
     /**
      * @return eZ\Publish\Core\FieldType\XmlText\Converter\Output\Html5
      */
@@ -237,6 +245,23 @@ class ContentExtension extends Twig_Extension
     public function xmltextToHtml5( $xmlData )
     {
         return $this->getXmlTextConverter()->convert( $xmlData );
+    }
+
+    /**
+     * Returns the image variant object for $field/$versionInfo
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Field $field
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param $variantName
+     *
+     * @return \eZ\Publish\API\Repository\Values\File\ImageVariant
+     */
+    public function getImageVariant( Field $field, VersionInfo $versionInfo, $variantName )
+    {
+        if ( !isset( $this->imageVariantService ) )
+            $this->imageVariantService = $this->container->get( 'ezpublish.fieldType.ezimage.variant_service' );
+
+        return $this->imageVariantService->getVariant( $field, $versionInfo, $variantName );
     }
 
     /**
