@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\MVC\Legacy\FieldType\Image;
+namespace eZ\Publish\Core\MVC\Legacy\Image;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface,
     eZ\Publish\SPI\VariationHandlerInterface,
