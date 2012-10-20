@@ -27,9 +27,9 @@ interface VariationHandlerInterface
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param string $variantName
-     * @return \eZ\Publish\API\Repository\Values\File\Variant
+     * @return \eZ\Publish\API\Repository\Values\File\Variation
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidVariantException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidVariationException
      */
     public function getVariation( Field $field, VersionInfo $versionInfo, $variantName );
 }
