@@ -10,15 +10,15 @@
 namespace eZ\Publish\Core\MVC\Legacy\FieldType\Image;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface,
-    eZ\Publish\SPI\VariantService,
+    eZ\Publish\SPI\VariationHandlerInterface,
     eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\API\Repository\Values\Content\VersionInfo,
-    eZ\Publish\API\Repository\Values\File\ImageVariant,
-    eZ\Publish\API\Repository\Exceptions\InvalidVariantException,
+    eZ\Publish\API\Repository\Values\File\ImageVariation,
+    eZ\Publish\API\Repository\Exceptions\InvalidVariationException,
     eZContentObjectAttribute,
     eZImageAliasHandler;
 
-class AliasGenerator implements VariantService
+class AliasGenerator implements VariationHandlerInterface
 {
     /**
      * @var \Closure
@@ -39,9 +39,9 @@ class AliasGenerator implements VariantService
      * Image variant objects, indexed by <fieldId>-<versionNo>-<variantName>.
      * Storing them avoids to run the legacy kernel each time if there are similar images variations required.
      *
-     * @var \eZ\Publish\API\Repository\Values\File\ImageVariant[]
+     * @var \eZ\Publish\API\Repository\Values\File\ImageVariation[]
      */
-    private $variants;
+    private $variations;
 
     public function __construct( \Closure $legacyKernelClosure, ConfigResolverInterface $configResolver )
     {
@@ -60,28 +60,28 @@ class AliasGenerator implements VariantService
 
     /**
      * Returns an image variant object.
-     * Variant creation will be done through the legacy eZImageAliasHandler, using the legacy kernel.
+     * Variation creation will be done through the legacy eZImageAliasHandler, using the legacy kernel.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     * @param string $variantName
-     * @return \eZ\Publish\API\Repository\Values\File\ImageVariant
+     * @param string $variationName
+     * @return \eZ\Publish\API\Repository\Values\File\ImageVariation
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidVariantException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidVariationException
      */
-    public function getVariant( Field $field, VersionInfo $versionInfo, $variantName )
+    public function getVariation( Field $field, VersionInfo $versionInfo, $variationName )
     {
-        $variantIdentifier = "$field->id-$versionInfo->versionNo-$variantName";
-        if ( isset( $this->variants[$variantIdentifier] ) )
-            return $this->variants[$variantIdentifier];
+        $variationIdentifier = "$field->id-$versionInfo->versionNo-$variationName";
+        if ( isset( $this->variations[$variationIdentifier] ) )
+            return $this->variations[$variationIdentifier];
 
         $configResolver = $this->configResolver;
         // Assigning by reference to be able to modify those arrays within the closure (due to PHP 5.3 limitation with access to $this)
         $allAliasHandlers = &$this->aliasHandlers;
-        $allVariants = &$this->variants;
+        $allVariations = &$this->variations;
 
         return $this->getLegacyKernel()->runCallback(
-            function () use ( $field, $versionInfo, $variantName, $configResolver, $allAliasHandlers, $allVariants, $variantIdentifier )
+            function () use ( $field, $versionInfo, $variationName, $configResolver, $allAliasHandlers, $allVariations, $variationIdentifier )
             {
                 $aliasHandlerIdentifier = "$field->id-$versionInfo->versionNo";
                 if ( !isset( $allAliasHandlers[$aliasHandlerIdentifier] ) )
@@ -93,13 +93,13 @@ class AliasGenerator implements VariantService
 
                 /** @var $imageAliasHandler \eZImageAliasHandler */
                 $imageAliasHandler = $allAliasHandlers[$aliasHandlerIdentifier];
-                $aliasArray = $imageAliasHandler->imageAlias( $variantName );
+                $aliasArray = $imageAliasHandler->imageAlias( $variationName );
                 if ( $aliasArray === null )
-                    throw new InvalidVariantException( $variantName, 'image' );
+                    throw new InvalidVariationException( $variationName, 'image' );
 
-                $allVariants[$variantIdentifier] = new ImageVariant(
+                $allVariations[$variationIdentifier] = new ImageVariation(
                     array(
-                         'name'         => $variantName,
+                         'name'         => $variationName,
                          'fileName'     => $aliasArray['filename'],
                          'dirPath'      => $aliasArray['dirpath'],
                          'fileSize'     => $aliasArray['filesize'],
@@ -111,7 +111,7 @@ class AliasGenerator implements VariantService
                     )
                 );
 
-                return $allVariants[$variantIdentifier];
+                return $allVariations[$variationIdentifier];
             },
             false
         );

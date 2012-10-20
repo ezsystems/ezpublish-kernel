@@ -25,7 +25,7 @@ parameters:
     ezpublish_legacy.config.resolver.class: eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver
     ezpublish_legacy.config.default_scope: site
     ezpublish_legacy.setup_wizard.configuration_converter.class: eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfigurationConverter
-    ezpublish_legacy.fieldType.ezimage.variant_service.class: eZ\Publish\Core\MVC\Legacy\FieldType\Image\AliasGenerator
+    ezpublish_legacy.fieldType.ezimage.variation_service.class: eZ\Publish\Core\MVC\Legacy\FieldType\Image\AliasGenerator
 
 services:
     ezpublish_legacy.kernel:
@@ -129,9 +129,9 @@ services:
         arguments: [@ezpublish_legacy.config.resolver]
 
     # Image alias generator using legacy
-    ezpublish_legacy.fieldType.ezimage.variant_service:
-        class: %ezpublish_legacy.fieldType.ezimage.variant_service.class%
+    ezpublish_legacy.fieldType.ezimage.variation_service:
+        class: %ezpublish_legacy.fieldType.ezimage.variation_service.class%
         arguments: [@ezpublish_legacy.kernel, @ezpublish.config.resolver]
 
-    ezpublish.fieldType.ezimage.variant_service:
-        alias: ezpublish_legacy.fieldType.ezimage.variant_service
+    ezpublish.fieldType.ezimage.variation_service:
+        alias: ezpublish_legacy.fieldType.ezimage.variation_service

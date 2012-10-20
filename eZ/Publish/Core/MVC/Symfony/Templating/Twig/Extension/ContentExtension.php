@@ -74,9 +74,9 @@ class ContentExtension extends Twig_Extension
     protected $fieldTypeIdentifiers = array();
 
     /**
-     * @var \eZ\Publish\SPI\VariantService
+     * @var \eZ\Publish\SPI\VariationHandlerInterface
      */
-    protected $imageVariantService;
+    protected $imageVariationService;
 
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
@@ -121,7 +121,7 @@ class ContentExtension extends Twig_Extension
                 'renderField',
                 array( 'is_safe' => array( 'html' ) )
             ),
-            'ez_image_alias' => new Twig_Function_Method( $this, 'getImageVariant' )
+            'ez_image_alias' => new Twig_Function_Method( $this, 'getImageVariation' )
         );
     }
 
@@ -252,16 +252,16 @@ class ContentExtension extends Twig_Extension
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     * @param $variantName
+     * @param $variationName
      *
      * @return \eZ\Publish\API\Repository\Values\File\ImageVariant
      */
-    public function getImageVariant( Field $field, VersionInfo $versionInfo, $variantName )
+    public function getImageVariation( Field $field, VersionInfo $versionInfo, $variationName )
     {
-        if ( !isset( $this->imageVariantService ) )
-            $this->imageVariantService = $this->container->get( 'ezpublish.fieldType.ezimage.variant_service' );
+        if ( !isset( $this->imageVariationService ) )
+            $this->imageVariationService = $this->container->get( 'ezpublish.fieldType.ezimage.variation_service' );
 
-        return $this->imageVariantService->getVariant( $field, $versionInfo, $variantName );
+        return $this->imageVariationService->getVariation( $field, $versionInfo, $variationName );
     }
 
     /**
