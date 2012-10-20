@@ -26,11 +26,6 @@ class AliasGenerator implements VariationHandlerInterface
     private $kernelClosure;
 
     /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    private $configResolver;
-
-    /**
      * @var \eZImageAliasHandler[]
      */
     private $aliasHandlers;
@@ -43,10 +38,9 @@ class AliasGenerator implements VariationHandlerInterface
      */
     private $variations;
 
-    public function __construct( \Closure $legacyKernelClosure, ConfigResolverInterface $configResolver )
+    public function __construct( \Closure $legacyKernelClosure )
     {
         $this->kernelClosure = $legacyKernelClosure;
-        $this->configResolver = $configResolver;
     }
 
     /**
@@ -75,13 +69,12 @@ class AliasGenerator implements VariationHandlerInterface
         if ( isset( $this->variations[$variationIdentifier] ) )
             return $this->variations[$variationIdentifier];
 
-        $configResolver = $this->configResolver;
         // Assigning by reference to be able to modify those arrays within the closure (due to PHP 5.3 limitation with access to $this)
         $allAliasHandlers = &$this->aliasHandlers;
         $allVariations = &$this->variations;
 
         return $this->getLegacyKernel()->runCallback(
-            function () use ( $field, $versionInfo, $variationName, $configResolver, $allAliasHandlers, $allVariations, $variationIdentifier )
+            function () use ( $field, $versionInfo, $variationName, $allAliasHandlers, $allVariations, $variationIdentifier )
             {
                 $aliasHandlerIdentifier = "$field->id-$versionInfo->versionNo";
                 if ( !isset( $allAliasHandlers[$aliasHandlerIdentifier] ) )

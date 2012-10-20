@@ -131,7 +131,7 @@ services:
     # Image alias generator using legacy
     ezpublish_legacy.fieldType.ezimage.variation_service:
         class: %ezpublish_legacy.fieldType.ezimage.variation_service.class%
-        arguments: [@ezpublish_legacy.kernel, @ezpublish.config.resolver]
+        arguments: [@ezpublish_legacy.kernel]
 
     ezpublish.fieldType.ezimage.variation_service:
         alias: ezpublish_legacy.fieldType.ezimage.variation_service
