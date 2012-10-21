@@ -32,6 +32,96 @@ parameters:
     ezsettings.default.field_templates:
         - {template: EzPublishCoreBundle::content_fields.html.twig, priority: 0}
 
+    # Image settings
+    ezsettings.default.image.temporary_dir: imagetmp
+    ezsettings.default.image.published_images_dir: images
+    ezsettings.default.image.versioned_images_dir: images-versioned
+    ezsettings.default.image.aliases:
+        reference:
+            reference: ~
+            filters:
+                - {name: geometry/scaledownonly, params: [600, 600]}
+        small:
+            reference: reference
+            filters:
+                - {name: geometry/scaledownonly, params: [100, 100]}
+        tiny:
+            reference: reference
+            filters:
+                - {name: geometry/scaledownonly, params: [30, 30]}
+        medium:
+            reference: reference
+            filters:
+                - {name: geometry/scaledownonly, params: [200, 200]}
+        large:
+            reference: reference
+            filters:
+                - {name: geometry/scaledownonly, params: [300, 300]}
+        rss:
+            reference: reference
+            filters:
+                - {name: geometry/scale, params: [88, 31]}
+        campaign:
+            reference: ~
+            filters:
+                - {name: geometry/scalewidthdownonly, params: [770]}
+                - {name: geometry/crop, params: [770,390,0,0]}
+        backgroundimage:
+            reference: ~
+            filters:
+                - {name: geometry/scalewidthdownonly, params: [770]}
+                - {name: geometry/crop, params: [770,390,0,0]}
+        highlighted:
+            reference: ~
+            filters:
+                - {name: geometry/scalewidthdownonly, params: [300]}
+                - {name: geometry/crop, params: [300,300,0,0]}
+        galleryfull:
+            reference: ~
+            filters:
+                - {name: geometry/scalewidthdownonly, params: [770]}
+        contentgrid:
+            reference: ~
+            filters:
+                - {name: geometry/scalewidthdownonly, params: [770]}
+                - {name: geometry/crop, params: [370,160,0,0]}
+        gallery:
+            reference: ~
+            filters:
+                - {name: geometry/scalewidthdownonly, params: [770]}
+                - {name: geometry/crop, params: [770,390,0,0]}
+        imagefull:
+            reference: ~
+            filters:
+                - {name: geometry/scalewidthdownonly, params: [770]}
+
+    # ImageMagick
+    ezpublish.image.imagemagick.enabled: true
+    ezpublish.image.imagemagick.executable_path:
+    ezpublish.image.imagemagick.executable: convert
+    ezpublish.image.imagemagick.pre_parameters:
+    ezpublish.image.imagemagick.post_parameters:
+    ezpublish.image.imagemagick.filters:
+        geometry/scale: "-geometry {1}x{2}"
+        geometry/scalewidth: "-geometry {1}"
+        geometry/scaleheight: "-geometry x{1}"
+        geometry/scaledownonly: "-geometry {1}x{2}>"
+        geometry/scalewidthdownonly: "-geometry {1}>"
+        geometry/scaleheightdownonly: "-geometry x{1}>"
+        geometry/scaleexact: "-geometry {1}x{2}!"
+        geometry/scalepercent: "-geometry {1}x{2}%"
+        geometry/crop: "-crop {1}x{2}+{3}+{4}"
+        filter/noise: "-noise {1}"
+        filter/swirl: "-swirl {1}"
+        colorspace/gray: "-colorspace GRAY"
+        colorspace/transparent: "-colorspace Transparent"
+        colorspace: "-colorspace {1}"
+        border: "-border {1}x{2}"
+        border/color: "-bordercolor rgb({1},{2},{3})"
+        border/width: "-borderwidth {1}"
+        flatten: "-flatten"
+        resize: "-resize {1}"
+
     ###
     # Internal settings
     ###

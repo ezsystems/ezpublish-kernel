@@ -108,7 +108,7 @@ services:
 
     ezpublish_legacy.configuration_mapper:
         class: %ezpublish_legacy.configuration_mapper.class%
-        arguments: [@ezpublish.config.resolver]
+        arguments: [@ezpublish.config.resolver, @service_container]
         tags:
             - { name: kernel.event_subscriber }
 

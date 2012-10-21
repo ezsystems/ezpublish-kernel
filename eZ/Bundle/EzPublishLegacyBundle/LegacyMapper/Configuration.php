@@ -12,7 +12,8 @@ namespace eZ\Bundle\EzPublishLegacyBundle\LegacyMapper;
 use eZ\Publish\Core\MVC\Legacy\LegacyEvents,
     eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent,
     eZ\Publish\Core\MVC\ConfigResolverInterface,
-    Symfony\Component\EventDispatcher\EventSubscriberInterface;
+    Symfony\Component\EventDispatcher\EventSubscriberInterface,
+    Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Maps configuration parameters to the legacy parameters
@@ -24,9 +25,15 @@ class Configuration implements EventSubscriberInterface
      */
     private $configResolver;
 
-    public function __construct( ConfigResolverInterface $configResolver )
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    private $container;
+
+    public function __construct( ConfigResolverInterface $configResolver, ContainerInterface $container )
     {
         $this->configResolver = $configResolver;
+        $this->container = $container;
     }
 
 
@@ -42,6 +49,8 @@ class Configuration implements EventSubscriberInterface
      *
      * @param \eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent $event
      * @return void
+     *
+     * @todo Cache computed settings somehow
      */
     public function onBuildKernel( PreBuildKernelEvent $event )
     {
@@ -62,6 +71,8 @@ class Configuration implements EventSubscriberInterface
                 $settings["site.ini/DatabaseSettings/$iniKey"] = $databaseSettings[$key];
         }
 
+        $settings += $this->getImageSettings();
+
         // File settings
         $settings['site.ini/FileSettings/VarDir'] = $this->configResolver->getParameter( 'var_dir' );
         $settings['site.ini/FileSettings/StorageDir'] = $this->configResolver->getParameter( 'storage_dir' );
@@ -70,5 +81,44 @@ class Configuration implements EventSubscriberInterface
             "injected-settings",
             $settings + (array)$event->getParameters()->get( "injected-settings" )
         );
+    }
+
+    private function getImageSettings()
+    {
+        // Basic settings
+        $imageSettings = array(
+            'image.ini/FileSettings/TemporaryDir'       => $this->configResolver->getParameter( 'image.temporary_dir' ),
+            'image.ini/FileSettings/PublishedImages'    => $this->configResolver->getParameter( 'image.published_images_dir' ),
+            'image.ini/FileSettings/VersionedImages'    => $this->configResolver->getParameter( 'image.versioned_images_dir' ),
+            'image.ini/AliasSettings/AliasList'         => array(),
+        );
+
+        // Aliases configuration
+        foreach ( $this->configResolver->getParameter( 'image.aliases' ) as $aliasName => $aliasSettings )
+        {
+            $imageSettings['image.ini/AliasSettings/AliasList'][] = $aliasName;
+            if ( $aliasSettings['reference'] )
+                $imageSettings["image.ini/$aliasName/Reference"] = $aliasSettings['reference'];
+
+            foreach ( $aliasSettings['filters'] as $filter )
+            {
+                $imageSettings["image.ini/$aliasName/Filters"][] = $filter['name'] . '=' . implode( ', ', $filter['params'] );
+            }
+        }
+
+        // ImageMagick configuration
+        $imageMagickEnabled = $this->container->getParameter( 'ezpublish.image.imagemagick.enabled' );
+        $imageSettings['image.ini/ImageMagick/IsEnabled'] = $imageMagickEnabled ? 'true' : 'false';
+        $imageSettings['image.ini/ImageMagick/ExecutablePath'] = $this->container->getParameter( 'ezpublish.image.imagemagick.executable_path' );
+        $imageSettings['image.ini/ImageMagick/Executable'] = $this->container->getParameter( 'ezpublish.image.imagemagick.executable' );
+        $imageSettings['image.ini/ImageMagick/PreParameters'] = $this->container->getParameter( 'ezpublish.image.imagemagick.pre_parameters' );
+        $imageSettings['image.ini/ImageMagick/PostParameters'] = $this->container->getParameter( 'ezpublish.image.imagemagick.post_parameters' );
+        $imageSettings['image.ini/ImageMagick/Filters'] = array();
+        foreach ( $this->container->getParameter( 'ezpublish.image.imagemagick.filters' ) as $filterName => $filter )
+        {
+            $imageSettings['image.ini/ImageMagick/Filters'][] = "$filterName=" . strtr( $filter, array( '{' => '%', '}' => '' ) );
+        }
+
+        return $imageSettings;
     }
 }
