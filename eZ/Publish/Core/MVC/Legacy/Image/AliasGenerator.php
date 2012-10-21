@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\MVC\Legacy\Image;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface,
-    eZ\Publish\SPI\VariationHandlerInterface,
+    eZ\Publish\SPI\VariationHandler,
     eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\API\Repository\Values\Content\VersionInfo,
     eZ\Publish\API\Repository\Values\File\ImageVariation,
@@ -18,7 +18,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface,
     eZContentObjectAttribute,
     eZImageAliasHandler;
 
-class AliasGenerator implements VariationHandlerInterface
+class AliasGenerator implements VariationHandler
 {
     /**
      * @var \Closure
