@@ -10,10 +10,10 @@
 namespace eZ\Publish\Core\MVC\Legacy\Image;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface,
-    eZ\Publish\SPI\VariationHandler,
+    eZ\Publish\SPI\Variation\VariationHandler,
     eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\API\Repository\Values\Content\VersionInfo,
-    eZ\Publish\API\Repository\Values\File\ImageVariation,
+    eZ\Publish\SPI\Variation\Values\ImageVariation,
     eZ\Publish\API\Repository\Exceptions\InvalidVariationException,
     eZContentObjectAttribute,
     eZImageAliasHandler;
@@ -34,7 +34,7 @@ class AliasGenerator implements VariationHandler
      * Image variant objects, indexed by <fieldId>-<versionNo>-<variantName>.
      * Storing them avoids to run the legacy kernel each time if there are similar images variations required.
      *
-     * @var \eZ\Publish\API\Repository\Values\File\ImageVariation[]
+     * @var \eZ\Publish\SPI\Variation\Values\ImageVariation[]
      */
     private $variations;
 
@@ -59,7 +59,7 @@ class AliasGenerator implements VariationHandler
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param string $variationName
-     * @return \eZ\Publish\API\Repository\Values\File\ImageVariation
+     * @return \eZ\Publish\SPI\Variation\Values\ImageVariation
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidVariationException
      */
@@ -95,7 +95,7 @@ class AliasGenerator implements VariationHandler
                          'name'         => $variationName,
                          'fileName'     => $aliasArray['filename'],
                          'dirPath'      => $aliasArray['dirpath'],
-                         'fileSize'     => $aliasArray['filesize'],
+                         'fileSize'     => isset( $aliasArray['filesize'] ) ? $aliasArray['filesize'] : 0,
                          'mimeType'     => $aliasArray['mime_type'],
                          'lastModified' => new \DateTime( '@' . $aliasArray['timestamp'] ),
                          'uri'          => $aliasArray['url'],

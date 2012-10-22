@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\Repository\Values\File;
+namespace eZ\Publish\SPI\Variation\Values;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
 
