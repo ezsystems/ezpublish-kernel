@@ -44,6 +44,18 @@
 {% endspaceless %}
 {% endblock %}
 
+{% block ezcountry_field %}
+{% spaceless %}
+    {% if field.value.countries|length() > 0 %}
+        <p {{ block( 'field_attributes' ) }}>
+        {% for country in field.value.countries %}
+            {{ country['Name'] }}{{ loop.last ? '' : ', ' }}
+        {% endfor %}
+        </p>
+    {% endif %}
+{% endspaceless %}
+{% endblock %}
+
 {# TODO: add translate filter #}
 {% block ezboolean_field %}
 {% spaceless %}
