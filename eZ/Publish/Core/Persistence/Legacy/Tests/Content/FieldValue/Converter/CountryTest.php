@@ -179,7 +179,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
             $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"]
         );
         self::assertEquals(
-            $this->type->buildValue( array( "BE", "FR" ) ),
+            $this->type->fromHash( array( "BE", "FR" ) ),
             $fieldDef->defaultValue->data
         );
     }

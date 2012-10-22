@@ -109,7 +109,7 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
-        if ( $inputValue === null || is_array( $inputValue ) && empty( $inputValue ) )
+        if ( $inputValue === null || empty( $inputValue ) && is_array( $inputValue ) )
         {
             return $this->getEmptyValue();
         }
