@@ -360,8 +360,8 @@ class Legacy extends SetupFactory
 
             $serviceSettings = $configManager->getConfiguration('service')->getAll();
 
-            $serviceSettings['repository']['arguments']['persistence_handler'] = '@persistence_handler_legacy';
-            $serviceSettings['repository']['arguments']['io_handler'] = '@io_handler_legacy';
+            $serviceSettings['inner_repository']['arguments']['persistence_handler'] = '@persistence_handler_legacy';
+            $serviceSettings['inner_repository']['arguments']['io_handler'] = '@io_handler_legacy';
             $serviceSettings['persistence_handler_legacy']['arguments']['config']['dsn'] = self::$dsn;
             $serviceSettings['legacy_db_handler']['arguments']['dsn'] = self::$dsn;
 
