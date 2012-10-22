@@ -102,7 +102,7 @@ class Configuration implements EventSubscriberInterface
 
             foreach ( $aliasSettings['filters'] as $filter )
             {
-                $imageSettings["image.ini/$aliasName/Filters"][] = $filter['name'] . '=' . implode( ', ', $filter['params'] );
+                $imageSettings["image.ini/$aliasName/Filters"][] = $filter['name'] . '=' . implode( ';', $filter['params'] );
             }
         }
 
