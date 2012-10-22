@@ -679,7 +679,7 @@ abstract class StandardizedFieldTypeTest extends FieldTypeTest
     {
         switch( ( $actualHashType = gettype( $actualHash ) ) )
         {
-            case 'boolead':
+            case 'boolean':
             case 'integer':
             case 'double':
             case 'string':
