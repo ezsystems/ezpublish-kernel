@@ -125,4 +125,4 @@ services:
 
     ezpublish_legacy.setup_wizard.configuration_converter:
         class: %ezpublish_legacy.setup_wizard.configuration_converter.class%
-        arguments: [@ezpublish_legacy.config.resolver]
+        arguments: [@ezpublish_legacy.config.resolver, @ezpublish_legacy.kernel]

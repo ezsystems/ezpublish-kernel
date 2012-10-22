@@ -84,7 +84,7 @@ class SiteAccess implements EventSubscriberInterface
         }
 
         // uri_part
-        $pathinfo = $request->getPathInfo();
+        $pathinfo = str_replace( $request->attributes->get( 'viewParametersString' ), '', $request->getPathInfo() );
         $semanticPathinfo = $request->attributes->get( 'semanticPathinfo', $pathinfo );
         if ( $pathinfo != $semanticPathinfo )
         {

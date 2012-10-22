@@ -9,7 +9,8 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\SetupWizard;
 
 use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 
 /**
  * Handles conversionlegacy eZ Publish 4 parameters from a set of settings to a configuration array
@@ -22,9 +23,15 @@ class ConfigurationConverter
      */
     protected $legacyResolver;
 
-    public function __construct( LegacyConfigResolver $legacyResolver )
+    /**
+     * @var \eZ\Publish\Core\MVC\Legacy\Kernel
+     */
+    protected $legacyKernel;
+
+    public function __construct( LegacyConfigResolver $legacyResolver, \Closure $legacyKernel )
     {
         $this->legacyResolver = $legacyResolver;
+        $this->legacyKernel = $legacyKernel();
     }
 
     /**
@@ -36,6 +43,13 @@ class ConfigurationConverter
      */
     public function fromLegacy( $sitePackage, $adminSiteaccess )
     {
+        $this->legacyKernel->runCallback(
+            function()
+            {
+               \eZINI::injectSettings( array() );
+            }
+        );
+
         $settings = array();
         $settings['ezpublish'] = array();
         $settings['ezpublish']['siteaccess'] = array();
@@ -61,7 +75,16 @@ class ConfigurationConverter
             'ezmysql' => 'mysql',
             'eZMySQLDB' => 'mysql',
         );
-        $databaseSettings = $this->legacyResolver->getGroup( 'DatabaseSettings', 'site', $defaultSiteaccess );
+
+        try
+        {
+            $databaseSettings = $this->legacyResolver->getGroup( 'DatabaseSettings', 'site', $defaultSiteaccess );
+        }
+        catch( \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException $e )
+        {
+            $databaseSettings = $this->legacyResolver->getGroup( 'DatabaseSettings', 'site' );
+        }
+
         $databaseType = $databaseSettings['DatabaseImplementation'];
         if ( isset( $databaseMapping[$databaseType] ) )
             $databaseType = $databaseMapping[$databaseType];
