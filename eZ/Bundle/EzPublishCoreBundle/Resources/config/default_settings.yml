@@ -99,8 +99,8 @@ parameters:
     ezpublish.image.imagemagick.enabled: true
     ezpublish.image.imagemagick.executable_path:
     ezpublish.image.imagemagick.executable: convert
-    ezpublish.image.imagemagick.pre_parameters:
-    ezpublish.image.imagemagick.post_parameters:
+    ezsettings.default.imagemagick.pre_parameters:
+    ezsettings.default.imagemagick.post_parameters:
     ezpublish.image.imagemagick.filters:
         geometry/scale: "-geometry {1}x{2}"
         geometry/scalewidth: "-geometry {1}"
