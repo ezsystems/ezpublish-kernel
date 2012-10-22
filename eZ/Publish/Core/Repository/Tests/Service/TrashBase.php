@@ -190,6 +190,55 @@ abstract class TrashBase extends BaseServiceTest
     }
 
     /**
+     * Test sending a location to trash
+     * @covers \eZ\Publish\API\Repository\TrashService::trash
+     */
+    public function testTrashUpdatesMainLocation()
+    {
+        $contentService = $this->repository->getContentService();
+        $locationService = $this->repository->getLocationService();
+        $trashService = $this->repository->getTrashService();
+
+        $contentInfo = $contentService->loadContentInfo( 42 );
+
+        // Create additional location that will become new main location
+        $location = $locationService->createLocation(
+            $contentInfo,
+            new LocationCreateStruct( array( "parentLocationId" => 2 ) )
+        );
+
+        $trashService->trash(
+            $locationService->loadLocation( $contentInfo->mainLocationId )
+        );
+
+        self::assertEquals(
+            $location->id,
+            $contentService->loadContentInfo( 42 )->mainLocationId
+        );
+    }
+
+    /**
+     * Test sending a location to trash
+     * @covers \eZ\Publish\API\Repository\TrashService::trash
+     */
+    public function testTrashReturnsNull()
+    {
+        $contentService = $this->repository->getContentService();
+        $locationService = $this->repository->getLocationService();
+        $trashService = $this->repository->getTrashService();
+
+        // Create additional location to trash
+        $location = $locationService->createLocation(
+            $contentService->loadContentInfo( 42 ),
+            new LocationCreateStruct( array( "parentLocationId" => 2 ) )
+        );
+
+        $trashItem = $trashService->trash( $location );
+
+        self::assertNull( $trashItem );
+    }
+
+    /**
      * Test recovering a location from trash to original location
      * @covers \eZ\Publish\API\Repository\TrashService::recover
      */
@@ -227,6 +276,7 @@ abstract class TrashBase extends BaseServiceTest
 
         self::assertEquals( $newPathString, $recoveredLocation->pathString );
         self::assertGreaterThan( 0, $recoveredLocation->id );
+        self::assertEquals( $recoveredLocation->id, $recoveredLocation->contentInfo->mainLocationId );
     }
 
     /**

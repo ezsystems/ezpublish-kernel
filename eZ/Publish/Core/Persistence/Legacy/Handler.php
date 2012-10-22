@@ -736,6 +736,7 @@ class Handler implements HandlerInterface
         if ( !isset( $this->trashHandler ) )
         {
             $this->trashHandler = new TrashHandler(
+                $this->locationHandler(),
                 $this->getLocationGateway(),
                 $this->getLocationMapper(),
                 $this->contentHandler()
