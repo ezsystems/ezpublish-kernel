@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\SPI;
+namespace eZ\Publish\SPI\Variation;
 
 use eZ\Publish\API\Repository\Values\Content\Field,
     eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -27,7 +27,7 @@ interface VariationHandler
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param string $variantName
-     * @return \eZ\Publish\API\Repository\Values\File\Variation
+     * @return \eZ\Publish\SPI\Variation\Values\Variation
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidVariationException
      */

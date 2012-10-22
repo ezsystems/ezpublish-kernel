@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\Repository\Values\File;
+namespace eZ\Publish\SPI\Variation\Values;
 
 class ImageVariation extends Variation
 {
