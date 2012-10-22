@@ -65,17 +65,17 @@ parameters:
             reference: ~
             filters:
                 - {name: geometry/scalewidthdownonly, params: [770]}
-                - {name: geometry/crop, params: [770,390,0,0]}
+                - {name: geometry/crop, params: [770, 390, 0, 0]}
         backgroundimage:
             reference: ~
             filters:
                 - {name: geometry/scalewidthdownonly, params: [770]}
-                - {name: geometry/crop, params: [770,390,0,0]}
+                - {name: geometry/crop, params: [770, 390, 0, 0]}
         highlighted:
             reference: ~
             filters:
                 - {name: geometry/scalewidthdownonly, params: [300]}
-                - {name: geometry/crop, params: [300,300,0,0]}
+                - {name: geometry/crop, params: [300, 300, 0, 0]}
         galleryfull:
             reference: ~
             filters:
