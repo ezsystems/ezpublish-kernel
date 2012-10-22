@@ -59,11 +59,12 @@ class AliasGenerator implements VariationHandler
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param string $variationName
-     * @return \eZ\Publish\SPI\Variation\Values\ImageVariation
+     * @param array $parameters
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidVariationException
+     * @return \eZ\Publish\SPI\Variation\Values\ImageVariation
      */
-    public function getVariation( Field $field, VersionInfo $versionInfo, $variationName )
+    public function getVariation( Field $field, VersionInfo $versionInfo, $variationName, array $parameters = array() )
     {
         $variationIdentifier = "$field->id-$versionInfo->versionNo-$variationName";
         if ( isset( $this->variations[$variationIdentifier] ) )
