@@ -100,13 +100,14 @@ class TrashService implements TrashServiceInterface
     /**
      * Sends $location and all its children to trash and returns the corresponding trash item.
      *
+     *
      * Content is left untouched.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to trash the given location
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
+     * @return null|\eZ\Publish\API\Repository\Values\Content\TrashItem null if location was deleted, otherwise TrashItem
      */
     public function trash( Location $location )
     {
@@ -119,7 +120,7 @@ class TrashService implements TrashServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $spiTrashItem = $this->persistenceHandler->trashHandler()->trash( $location->id );
+            $spiTrashItem = $this->persistenceHandler->trashHandler()->trashSubtree( $location->id );
             $this->persistenceHandler->urlAliasHandler()->locationDeleted( $location->id );
             $this->repository->commit();
         }
@@ -129,7 +130,9 @@ class TrashService implements TrashServiceInterface
             throw $e;
         }
 
-        return $this->buildDomainTrashItemObject( $spiTrashItem );
+        return isset( $spiTrashItem )
+            ? $this->buildDomainTrashItemObject( $spiTrashItem )
+            : null;
     }
 
     /**
@@ -167,24 +170,10 @@ class TrashService implements TrashServiceInterface
                 $newParentLocationId
             );
 
-            // There is a possibility for content to loose main location when one of its locations is recovered
-            // from trash, so we need to check for it and set the newly recovered location to be the main one
-            $contentService = $this->repository->getContentService();
-
-            $content = $contentService->loadContent( $trashItem->contentId );
-            if ( !is_numeric( $content->contentInfo->mainLocationId ) )
-            {
-                $contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
-                $contentMetadataUpdateStruct->mainLocationId = $newLocationId;
-
-                $contentService->updateContentMetadata(
-                    $content->contentInfo,
-                    $contentMetadataUpdateStruct
-                );
-            }
+            $content = $this->repository->getContentService()->loadContent( $trashItem->contentId );
+            $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
 
             // Publish URL aliases for recovered location
-            $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
             foreach ( $urlAliasNames as $languageCode => $name )
             {
                 $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
