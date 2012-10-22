@@ -36,7 +36,7 @@ parameters:
     ezsettings.default.image.temporary_dir: imagetmp
     ezsettings.default.image.published_images_dir: images
     ezsettings.default.image.versioned_images_dir: images-versioned
-    ezsettings.default.image.aliases:
+    ezsettings.default.image_variations:
         reference:
             reference: ~
             filters:

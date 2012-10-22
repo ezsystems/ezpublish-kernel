@@ -36,6 +36,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root( 'ezpublish' );
 
         $this->addSiteaccessSection( $rootNode );
+        $this->addImageMagickSection( $rootNode );
         $this->addSystemSection( $rootNode );
 
         return $treeBuilder;
@@ -138,5 +139,37 @@ class Configuration implements ConfigurationInterface
         {
             $parser->addSemanticConfig( $systemNodeBuilder );
         }
+    }
+
+    private function addImageMagickSection( ArrayNodeDefinition $rootNode )
+    {
+        $filtersInfo =
+<<<EOT
+Hash of filters to be used for your image variations config.
+#   Key is the filter name, value is an argument passed to "convert" binary.
+#   You can use numbered placeholders (aka input variables) that will be replaced by defined parameters in your image variations config
+EOT;
+
+        $rootNode
+            ->children()
+                ->arrayNode( 'imagemagick' )
+                    ->info( 'ImageMagick configuration' )
+                    ->children()
+                        ->booleanNode( 'enabled' )->defaultTrue()->end()
+                        ->scalarNode( 'path' )
+                            ->info( 'Absolute path of ImageMagick "convert" binary.' )
+                            ->validate()
+                                ->ifTrue( function ( $v ) { return !is_executable( $v ); } )
+                                ->thenInvalid( 'Please provide full path to ImageMagick "convert" binary. Please also check that it is executable.' )
+                            ->end()
+                        ->end()
+                        ->arrayNode( 'filters' )
+                            ->info( $filtersInfo )
+                            ->example( array( 'geometry/scaledownonly' => '"-geometry {1}x{2}>"' ) )
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
     }
 }
