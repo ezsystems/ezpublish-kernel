@@ -24,7 +24,7 @@ class UpdateContentSignal extends Signal
     public $contentId;
 
     /**
-     * VersionNo
+     * Verion Number
      *
      * @var int
      */

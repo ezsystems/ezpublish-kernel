@@ -26,9 +26,8 @@ class CreateContentSignal extends Signal
     /**
      * Verion Number
      *
-     * @var mixed
+     * @var int
      */
     public $versionNo;
-
 }
 

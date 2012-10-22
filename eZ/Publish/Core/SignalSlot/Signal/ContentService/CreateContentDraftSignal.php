@@ -24,7 +24,7 @@ class CreateContentDraftSignal extends Signal
     public $contentId;
 
     /**
-     * VersionNo
+     * Verion Number
      *
      * @var int
      */

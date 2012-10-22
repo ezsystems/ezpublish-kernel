@@ -341,6 +341,8 @@ class ContentService implements ContentServiceInterface
         $returnValue = $this->service->translateVersion( $translationInfo, $translationValues, $user );
         $this->signalDispatcher->emit(
             new Signal\ContentService\TranslateVersionSignal( array(
+                'contentId' => $translationInfo->srcVersionInfo->contentInfo->id,
+                'versionNo' => $translationInfo->srcVersionInfo->versionNo,
                 'userId' => ( $user !== null ? $user->id : null ),
             ) )
         );
@@ -408,6 +410,7 @@ class ContentService implements ContentServiceInterface
         $returnValue = $this->service->deleteVersion( $versionInfo );
         $this->signalDispatcher->emit(
             new Signal\ContentService\DeleteVersionSignal( array(
+                'contentId' => $versionInfo->contentInfo->id,
                 'versionNo' => $versionInfo->versionNo,
             ) )
         );
@@ -506,8 +509,9 @@ class ContentService implements ContentServiceInterface
         $returnValue = $this->service->addRelation( $sourceVersion, $destinationContent );
         $this->signalDispatcher->emit(
             new Signal\ContentService\AddRelationSignal( array(
-                'versionNo' => $sourceVersion->versionNo,
-                'contentId' => $destinationContent->id,
+                'srcContentId' => $sourceVersion->contentInfo->id,
+                'srcVersionNo' => $sourceVersion->versionNo,
+                'dstContentId' => $destinationContent->id,
             ) )
         );
         return $returnValue;
@@ -528,8 +532,9 @@ class ContentService implements ContentServiceInterface
         $returnValue = $this->service->deleteRelation( $sourceVersion, $destinationContent );
         $this->signalDispatcher->emit(
             new Signal\ContentService\DeleteRelationSignal( array(
-                'versionNo' => $sourceVersion->versionNo,
-                'contentId' => $destinationContent->id,
+                'srcContentId' => $sourceVersion->contentInfo->id,
+                'srcVersionNo' => $sourceVersion->versionNo,
+                'dstContentId' => $destinationContent->id,
             ) )
         );
         return $returnValue;

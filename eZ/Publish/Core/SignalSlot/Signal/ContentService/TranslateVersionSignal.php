@@ -17,9 +17,23 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class TranslateVersionSignal extends Signal
 {
     /**
-     * UserId
+     * Content ID
      *
      * @var mixed
+     */
+    public $contentId;
+
+    /**
+     * Verion Number
+     *
+     * @var int
+     */
+    public $versionNo;
+
+    /**
+     * UserId
+     *
+     * @var mixed|null
      */
     public $userId;
 
