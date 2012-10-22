@@ -184,6 +184,6 @@ abstract class FieldTypeBase extends BaseServiceTest
     public function testBuildFieldTypeThrowsNotFoundException( $identifier )
     {
         $fieldTypeService = $this->repository->getFieldTypeService();
-        $fieldTypeService->buildFieldType( $identifier );
+        $fieldTypeService->getFieldType( $identifier );
     }
 }

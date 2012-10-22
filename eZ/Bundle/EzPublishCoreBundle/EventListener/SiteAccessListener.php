@@ -55,13 +55,13 @@ class SiteAccessListener implements EventSubscriberInterface
         }
 
         // Get view parameters and cleaned up pathinfo (without view parameters string)
-        list( $semanticPathinfo, $viewParameters ) = $this->getViewParameters( $semanticPathinfo );
+        list( $semanticPathinfo, $viewParameters, $viewParametersString ) = $this->getViewParameters( $semanticPathinfo );
 
         // Storing the modified pathinfo in 'semanticPathinfo' request attribute, to keep a trace of it.
         // Routers implementing RequestMatcherInterface should thus use this attribute instead of the original pathinfo
         $request->attributes->set( 'semanticPathinfo', $semanticPathinfo );
         $request->attributes->set( 'viewParameters', $viewParameters );
-
+        $request->attributes->set( 'viewParametersString', $viewParametersString );
 
         if ( $this->container->hasParameter( "ezpublish.siteaccess.config.$siteAccess->name" ) )
         {
@@ -78,17 +78,19 @@ class SiteAccessListener implements EventSubscriberInterface
      * @param $pathinfo
      * @return array First element is the cleaned up pathinfo (without the view parameters string).
      *               Second element is the view parameters hash.
+     *               Third element is the view parameters string (e.g. /(foo)/bar)
      */
     private function getViewParameters( $pathinfo )
     {
         // No view parameters, get out of here.
         if ( ( $vpStart = strpos( $pathinfo, '/(' ) ) === false )
         {
-            return array( $pathinfo, array() );
+            return array( $pathinfo, array(), '' );
         }
 
         $viewParameters = array();
-        $vpSegments = explode( '/', substr( $pathinfo, $vpStart + 1 ) );
+        $vpString = substr( $pathinfo, $vpStart + 1 );
+        $vpSegments = explode( '/', $vpString );
         for ( $i = 0, $iMax = count( $vpSegments ); $i < $iMax; ++$i )
         {
             if ( !isset( $vpSegments[$i] ) )
@@ -121,6 +123,6 @@ class SiteAccessListener implements EventSubscriberInterface
 
         // Now remove the view parameters string from $semanticPathinfo
         $pathinfo = substr( $pathinfo, 0, $vpStart );
-        return array( $pathinfo, $viewParameters );
+        return array( $pathinfo, $viewParameters, "/$vpString" );
     }
 }
