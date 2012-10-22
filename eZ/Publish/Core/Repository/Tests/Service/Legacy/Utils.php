@@ -34,7 +34,7 @@ abstract class Utils extends InMemoryUtils
         self::insertLegacyData( $sc->get( 'legacy_db_handler' ) );
 
         // Return repository
-        return $sc->getRepository();
+        return $sc->get( 'inner_repository' );
     }
 
     /**
