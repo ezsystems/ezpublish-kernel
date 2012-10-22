@@ -33,9 +33,10 @@ interface Handler
      * objects are left untouched.
      *
      * @param mixed $locationId
-     * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed
+     *
+     * @return null|\eZ\Publish\SPI\Persistence\Content\Location\Trashed null if location was deleted, otherwise Trashed object
      */
-    public function trash( $locationId );
+    public function trashSubtree( $locationId );
 
     /**
      * Returns a trashed location to normal state.

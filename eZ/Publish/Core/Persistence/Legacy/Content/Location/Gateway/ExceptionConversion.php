@@ -489,19 +489,19 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Sends a subtree to the trash
+     * Sends a single location identified by given $locationId to the trash.
      *
-     * Moves all locations in the subtree to the Trash. The associated content
-     * objects are left untouched.
+     * The associated content object is left untouched.
      *
-     * @param string $pathString
+     * @param mixed $locationId
+     *
      * @return boolean
      */
-    public function trashSubtree( $pathString )
+    public function trashLocation( $locationId )
     {
         try
         {
-            return $this->innerGateway->trashSubtree( $pathString );
+            return $this->innerGateway->trashLocation( $locationId );
         }
         catch ( \ezcDbException $e )
         {

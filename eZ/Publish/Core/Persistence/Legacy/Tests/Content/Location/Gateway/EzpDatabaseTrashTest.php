@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
     eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase,
+    eZ\Publish\SPI\Persistence\Content\ContentInfo,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
     eZ\Publish\API\Repository\Values\Content\Query;
 
@@ -34,42 +35,44 @@ class EzpDatabaseTrashTest extends TestCase
         return new EzcDatabase( $dbHandler );
     }
 
-    public function testTrashSubtree()
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::trashLocation
+     * @todo test updated content status
+     */
+    public function testTrashLocation()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->trashSubtree( '/1/2/69/' );
+        $handler->trashLocation( 71 );
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
             array(
                 array( 1, 0 ),
                 array( 2, 0 ),
+                array( 69, 0 ),
+                array( 70, 0 ),
             ),
             $query
                 ->select( 'node_id', 'priority' )
                 ->from( 'ezcontentobject_tree' )
-                ->where( $query->expr->in( 'node_id', array( 1, 2, 69, 70 ) ) )
+                ->where( $query->expr->in( 'node_id', array( 1, 2, 69, 70, 71 ) ) )
         );
     }
 
-    public function testTrashSubtreeUpdateTrashTable()
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::trashLocation
+     */
+    public function testTrashLocationUpdateTrashTable()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->trashSubtree( '/1/2/69/' );
+        $handler->trashLocation( 71 );
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
             array(
-                array( 69, '/1/2/69/' ),
-                array( 70, '/1/2/69/70/' ),
                 array( 71, '/1/2/69/70/71/' ),
-                array( 72, '/1/2/69/72/' ),
-                array( 73, '/1/2/69/72/73/' ),
-                array( 74, '/1/2/69/72/74/' ),
-                array( 75, '/1/2/69/72/75/' ),
-                array( 76, '/1/2/69/76/' ),
             ),
             $query
                 ->select( 'node_id', 'path_string' )
@@ -82,31 +85,32 @@ class EzpDatabaseTrashTest extends TestCase
         return array(
             array( 'contentobject_is_published', 1 ),
             array( 'contentobject_version', 1 ),
-            array( 'depth', 2 ),
+            array( 'depth', 4 ),
             array( 'is_hidden', 0 ),
             array( 'is_invisible', 0 ),
             array( 'main_node_id', 228 ),
             array( 'node_id', 228 ),
-            array( 'parent_node_id', 2 ),
+            array( 'parent_node_id', 70 ),
             array( 'path_identification_string', '' ),
-            array( 'path_string', '/1/2/228/' ),
+            array( 'path_string', '/1/2/69/70/228/' ),
             array( 'priority', 0 ),
-            array( 'remote_id', '9cec85d730eec7578190ee95ce5a36f5' ),
-            array( 'sort_field', 2 ),
+            array( 'remote_id', '087adb763245e0cdcac593fb4a5996cf' ),
+            array( 'sort_field', 1 ),
             array( 'sort_order', 1 ),
         );
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::untrashLocation
      * @dataProvider getUntrashedLocationValues
      */
     public function testUntrashLocationDefault( $property, $value )
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->trashSubtree( '/1/2/69/' );
+        $handler->trashLocation( 71 );
 
-        $handler->untrashLocation( 69 );
+        $handler->untrashLocation( 71 );
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
@@ -114,17 +118,20 @@ class EzpDatabaseTrashTest extends TestCase
             $query
                 ->select( $property )
                 ->from( 'ezcontentobject_tree' )
-                ->where( $query->expr->in( 'contentobject_id', array( 67 ) ) )
+                ->where( $query->expr->in( 'contentobject_id', array( 69 ) ) )
         );
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::untrashLocation
+     */
     public function testUntrashLocationNewParent()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->trashSubtree( '/1/2/69/' );
+        $handler->trashLocation( 71 );
 
-        $handler->untrashLocation( 69, 1 );
+        $handler->untrashLocation( 71, 1 );
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
@@ -132,11 +139,12 @@ class EzpDatabaseTrashTest extends TestCase
             $query
                 ->select( 'node_id', 'parent_node_id', 'path_string' )
                 ->from( 'ezcontentobject_tree' )
-                ->where( $query->expr->in( 'contentobject_id', array( 67 ) ) )
+                ->where( $query->expr->in( 'contentobject_id', array( 69 ) ) )
         );
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::untrashLocation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testUntrashInvalidLocation()
@@ -148,60 +156,64 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::untrashLocation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testUntrashLocationInvalidParent()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->trashSubtree( '/1/2/69/' );
+        $handler->trashLocation( 71 );
 
-        $handler->untrashLocation( 69, 1337 );
+        $handler->untrashLocation( 71, 1337 );
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::untrashLocation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testUntrashLocationInvalidOldParent()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->trashSubtree( '/1/2/69/' );
+        $handler->trashLocation( 71 );
+        $handler->trashLocation( 70 );
 
-        $handler->untrashLocation( 69 );
         $handler->untrashLocation( 70 );
+        $handler->untrashLocation( 71 );
     }
 
     public static function getLoadTrashValues()
     {
         return array(
-            array( 'node_id', 69 ),
+            array( 'node_id', 71 ),
             array( 'priority', 0 ),
             array( 'is_hidden', 0 ),
             array( 'is_invisible', 0 ),
-            array( 'remote_id', '9cec85d730eec7578190ee95ce5a36f5' ),
-            array( 'contentobject_id', 67 ),
-            array( 'parent_node_id', 2 ),
-            array( 'path_identification_string', 'products' ),
-            array( 'path_string', '/1/2/69/' ),
-            array( 'modified_subnode', 1311065014 ),
-            array( 'main_node_id', 69 ),
-            array( 'depth', 2 ),
-            array( 'sort_field', 2 ),
+            array( 'remote_id', '087adb763245e0cdcac593fb4a5996cf' ),
+            array( 'contentobject_id', 69 ),
+            array( 'parent_node_id', 70 ),
+            array( 'path_identification_string', 'products/software/os_type_i' ),
+            array( 'path_string', '/1/2/69/70/71/' ),
+            array( 'modified_subnode', 1311065013 ),
+            array( 'main_node_id', 71 ),
+            array( 'depth', 4 ),
+            array( 'sort_field', 1 ),
             array( 'sort_order', 1 ),
         );
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::loadTrashByLocation
      * @dataProvider getLoadTrashValues
      */
     public function testLoadTrashByLocationId( $field, $value )
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->trashSubtree( '/1/2/69/' );
+        $handler->trashLocation( 71 );
 
-        $data = $handler->loadTrashByLocation( 69 );
+        $data = $handler->loadTrashByLocation( 71 );
 
         $this->assertEquals(
             $value,
@@ -210,6 +222,9 @@ class EzpDatabaseTrashTest extends TestCase
         );
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::listTrashed
+     */
     public function testListEmptyTrash()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
@@ -221,11 +236,27 @@ class EzpDatabaseTrashTest extends TestCase
         );
     }
 
+    protected function trashSubtree()
+    {
+        $handler = $this->getLocationGateway();
+        $handler->trashLocation( 69 );
+        $handler->trashLocation( 70 );
+        $handler->trashLocation( 71 );
+        $handler->trashLocation( 72 );
+        $handler->trashLocation( 73 );
+        $handler->trashLocation( 74 );
+        $handler->trashLocation( 75 );
+        $handler->trashLocation( 76 );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::listTrashed
+     */
     public function testListFullTrash()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->trashSubtree( '/1/2/69/' );
+        $this->trashSubtree();
 
         $this->assertEquals(
             8,
@@ -233,11 +264,14 @@ class EzpDatabaseTrashTest extends TestCase
         );
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::listTrashed
+     */
     public function testListTrashLimited()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->trashSubtree( '/1/2/69/' );
+        $this->trashSubtree();
 
         $this->assertEquals(
             5,
@@ -267,23 +301,27 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::listTrashed
      * @dataProvider getTrashValues
      */
     public function testListTrashItem( $key, $value )
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->trashSubtree( '/1/2/69/' );
+        $this->trashSubtree();
 
         $trashList = $handler->listTrashed( 0, 1, array() );
         $this->assertEquals( $value, $trashList[0][$key] );
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::listTrashed
+     */
     public function testListTrashSortedPathStringDesc()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->trashSubtree( '/1/2/69/' );
+        $this->trashSubtree();
 
         $this->assertEquals(
             array(
@@ -308,11 +346,14 @@ class EzpDatabaseTrashTest extends TestCase
         );
     }
 
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::listTrashed
+     */
     public function testListTrashSortedDepth()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->trashSubtree( '/1/2/69/' );
+        $this->trashSubtree();
 
         $this->assertEquals(
             array(
@@ -345,7 +386,7 @@ class EzpDatabaseTrashTest extends TestCase
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->trashSubtree( '/1/2/69' );
+        $this->trashSubtree();
         $handler->cleanupTrash();
 
         $query = $this->handler->createSelectQuery();
@@ -364,8 +405,8 @@ class EzpDatabaseTrashTest extends TestCase
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->trashSubtree( '/1/2/69' );
-        $handler->removeElementFromTrash( 69 );
+        $this->trashSubtree();
+        $handler->removeElementFromTrash( 71 );
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
@@ -373,7 +414,7 @@ class EzpDatabaseTrashTest extends TestCase
             $query
                 ->select( '*' )
                 ->from( 'ezcontentobject_trash' )
-                ->where( $query->expr->eq( 'node_id', 69 ) )
+                ->where( $query->expr->eq( 'node_id', 71 ) )
         );
     }
 

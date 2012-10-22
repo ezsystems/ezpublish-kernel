@@ -1236,7 +1236,7 @@ abstract class ContentTypeBase extends BaseServiceTest
             switch ( $propertyName )
             {
                 case "fieldSettings":
-                    $defaultSettings = $this->repository->getFieldTypeService()->buildFieldType(
+                    $defaultSettings = $this->repository->getFieldTypeService()->getFieldType(
                         $fieldDefinitionCreateStruct->fieldTypeIdentifier
                     )->getSettingsSchema();
                     $fieldDefinitionPropertyValue = (array)$fieldDefinition->$propertyName + $defaultSettings;

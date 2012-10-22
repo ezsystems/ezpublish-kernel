@@ -174,7 +174,7 @@ class TrashHandlerTest extends HandlerTest
      */
     public function testLoad()
     {
-        $trashed = $this->trashHandler->trash( $this->locations[0]->id );
+        $trashed = $this->trashHandler->trashSubtree( $this->locations[0]->id );
         $trashedId = $trashed->id;
         unset( $trashed );
 

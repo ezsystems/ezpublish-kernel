@@ -219,15 +219,15 @@ abstract class Gateway
     abstract public function getFallbackMainNodeData( $contentId, $locationId );
 
     /**
-     * Sends a subtree to the trash
+     * Sends a single location identified by given $locationId to the trash.
      *
-     * Moves all locations in the subtree to the Trash. The associated content
-     * objects are left untouched.
+     * The associated content object is left untouched.
      *
-     * @param string $pathString
+     * @param mixed $locationId
+     *
      * @return boolean
      */
-    abstract public function trashSubtree( $pathString );
+    abstract public function trashLocation( $locationId );
 
     /**
      * Returns a trashed location to normal state.
