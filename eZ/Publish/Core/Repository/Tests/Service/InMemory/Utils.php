@@ -55,6 +55,6 @@ abstract class Utils
      */
     public static function getRepository()
     {
-        return self::getServiceContainer()->getRepository();
+        return self::getServiceContainer()->get( 'inner_repository' );
     }
 }
