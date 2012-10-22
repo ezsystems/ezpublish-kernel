@@ -107,8 +107,8 @@ class Configuration implements EventSubscriberInterface
         $imageSettings['image.ini/ImageMagick/IsEnabled'] = $imageMagickEnabled ? 'true' : 'false';
         $imageSettings['image.ini/ImageMagick/ExecutablePath'] = $this->container->getParameter( 'ezpublish.image.imagemagick.executable_path' );
         $imageSettings['image.ini/ImageMagick/Executable'] = $this->container->getParameter( 'ezpublish.image.imagemagick.executable' );
-        $imageSettings['image.ini/ImageMagick/PreParameters'] = $this->container->getParameter( 'ezpublish.image.imagemagick.pre_parameters' );
-        $imageSettings['image.ini/ImageMagick/PostParameters'] = $this->container->getParameter( 'ezpublish.image.imagemagick.post_parameters' );
+        $imageSettings['image.ini/ImageMagick/PreParameters'] = $this->configResolver->getParameter( 'imagemagick.pre_parameters' );
+        $imageSettings['image.ini/ImageMagick/PostParameters'] = $this->configResolver->getParameter( 'imagemagick.post_parameters' );
         $imageSettings['image.ini/ImageMagick/Filters'] = array();
         foreach ( $this->container->getParameter( 'ezpublish.image.imagemagick.filters' ) as $filterName => $filter )
         {
