@@ -481,7 +481,7 @@ class ContentService implements ContentServiceInterface
         {
             $fieldDefinition = $contentCreateStruct->contentType->getFieldDefinition( $field->fieldDefIdentifier );
 
-            if ( !isset( $fieldDefinition ) )
+            if ( $fieldDefinition === null )
             {
                 throw new ContentValidationException(
                     "Field definition '{$field->fieldDefIdentifier}' does not exist in given ContentType"
@@ -1017,7 +1017,7 @@ class ContentService implements ContentServiceInterface
         foreach ( $contentUpdateStruct->fields as $field )
         {
             $fieldDefinition = $content->contentType->getFieldDefinition( $field->fieldDefIdentifier );
-            if ( !isset( $fieldDefinition ) )
+            if ( $fieldDefinition === null )
             {
                 throw new ContentValidationException(
                     "Field definition '{$field->fieldDefIdentifier}' does not exist in given ContentType"
