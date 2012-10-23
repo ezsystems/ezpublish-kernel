@@ -16,7 +16,7 @@ class NullSlotFactory extends SlotFactory
      * Returns a Slot with the given $slotIdentifier
      *
      * @param string $slotIdentifier
-     * @return Slot
+     * @return \eZ\Publish\Core\SignalSlot\Slot
      */
     public function getSlot( $slotIdentifier )
     {

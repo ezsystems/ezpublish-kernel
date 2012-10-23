@@ -28,7 +28,7 @@ class DefaultSignalDispatcher extends SignalDispatcher
     /**
      * Slot factory
      *
-     * @var SlotFactory
+     * @var \eZ\Publish\Core\SignalSlot\SlotFactory
      */
     protected $factory;
 
@@ -37,17 +37,18 @@ class DefaultSignalDispatcher extends SignalDispatcher
      *
      * @var array
      */
-    protected $mapping;
+    protected $mapping = array();
 
     /**
      * Construct from factory
      *
-     * @param SlotFactory $factory
-     * @return void
+     * @param \eZ\Publish\Core\SignalSlot\SlotFactory $factory
+     * @param array $mapping
      */
-    public function __construct( SlotFactory $factory )
+    public function __construct( SlotFactory $factory, array $mapping = array() )
     {
         $this->factory = $factory;
+        $this->mapping = $mapping;
     }
 
     /**
@@ -77,13 +78,10 @@ class DefaultSignalDispatcher extends SignalDispatcher
      * Attachtes the Slot with $slotIdentifier to the signal with
      * $signalIdentifier
      *
+     * @access private For unit test use.
+     *
      * @param string $signalIdentifier
      * @param string $slotIdentifier
-     * @return void
-     *
-     * @TODO Are we sure we want to expose this method? Might lead to dynamic
-     * attachements at runtime, which can lead to hard debugging. Better only
-     * accept attachements during construction (config).
      */
     public function attach( $signalIdentifier, $slotIdentifier )
     {
