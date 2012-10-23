@@ -26,14 +26,14 @@ class Configuration implements EventSubscriberInterface
     private $configResolver;
 
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var array
      */
-    private $container;
+    private $options;
 
-    public function __construct( ConfigResolverInterface $configResolver, ContainerInterface $container )
+    public function __construct( ConfigResolverInterface $configResolver, array $options = array() )
     {
         $this->configResolver = $configResolver;
-        $this->container = $container;
+        $this->options = $options;
     }
 
 
@@ -87,9 +87,9 @@ class Configuration implements EventSubscriberInterface
             'image.ini/FileSettings/VersionedImages'    => $this->configResolver->getParameter( 'image.versioned_images_dir' ),
             'image.ini/AliasSettings/AliasList'         => array(),
             // ImageMagick configuration
-            'image.ini/ImageMagick/IsEnabled'           => $this->container->getParameter( 'ezpublish.image.imagemagick.enabled' ) ? 'true' : 'false',
-            'image.ini/ImageMagick/ExecutablePath'      => $this->container->getParameter( 'ezpublish.image.imagemagick.executable_path' ),
-            'image.ini/ImageMagick/Executable'          => $this->container->getParameter( 'ezpublish.image.imagemagick.executable' ),
+            'image.ini/ImageMagick/IsEnabled'           => $this->options['imagemagick_enabled'] ? 'true' : 'false',
+            'image.ini/ImageMagick/ExecutablePath'      => $this->options['imagemagick_executable_path'],
+            'image.ini/ImageMagick/Executable'          => $this->options['imagemagick_executable'],
             'image.ini/ImageMagick/PreParameters'       => $this->configResolver->getParameter( 'imagemagick.pre_parameters' ),
             'image.ini/ImageMagick/PostParameters'      => $this->configResolver->getParameter( 'imagemagick.post_parameters' ),
             'image.ini/ImageMagick/Filters'             => array()
@@ -108,7 +108,7 @@ class Configuration implements EventSubscriberInterface
             }
         }
 
-        foreach ( $this->container->getParameter( 'ezpublish.image.imagemagick.filters' ) as $filterName => $filter )
+        foreach ( $this->options['imagemagick_filters'] as $filterName => $filter )
         {
             $imageSettings['image.ini/ImageMagick/Filters'][] = "$filterName=" . strtr( $filter, array( '{' => '%', '}' => '' ) );
         }
