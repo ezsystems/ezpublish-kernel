@@ -258,7 +258,7 @@ class ObjectState extends RestController
         {
             try
             {
-                $state = $this->objectStateService->getObjectState( $contentInfo, $group );
+                $state = $this->objectStateService->getContentState( $contentInfo, $group );
                 $contentObjectStates[] = new RestObjectState( $state, $group->id );
             }
             catch ( NotFoundException $e )

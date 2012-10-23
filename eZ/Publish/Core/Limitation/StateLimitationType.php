@@ -94,7 +94,7 @@ class StateLimitationType implements SPILimitationTypeInterface
         $contentStateService = $repository->getObjectStateService();
         $stateGroups = $contentStateService->loadObjectStateGroups();
         foreach ( $stateGroups as $stateGroup )
-            $objectStateIdArray[] = $contentStateService->getObjectState( $object, $stateGroup )->id;
+            $objectStateIdArray[] = $contentStateService->getContentState( $object, $stateGroup )->id;
 
         $intersect = array_intersect( $value->limitationValues, $objectStateIdArray );
         return !empty( $intersect );

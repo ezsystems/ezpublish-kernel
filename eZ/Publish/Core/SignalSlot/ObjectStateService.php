@@ -279,9 +279,9 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function getObjectState( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup )
+    public function getContentState( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup )
     {
-        $returnValue = $this->service->getObjectState( $contentInfo, $objectStateGroup );
+        $returnValue = $this->service->getContentState( $contentInfo, $objectStateGroup );
         return $returnValue;
     }
 

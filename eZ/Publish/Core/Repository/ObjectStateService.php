@@ -486,7 +486,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function getObjectState( ContentInfo $contentInfo, APIObjectStateGroup $objectStateGroup )
+    public function getContentState( ContentInfo $contentInfo, APIObjectStateGroup $objectStateGroup )
     {
         if ( !is_numeric( $contentInfo->id ) )
             throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
@@ -494,7 +494,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         if ( !is_numeric( $objectStateGroup->id ) )
             throw new InvalidArgumentValue( "id", $objectStateGroup->id, "ObjectStateGroup" );
 
-        $spiObjectState = $this->objectStateHandler->getObjectState(
+        $spiObjectState = $this->objectStateHandler->getContentState(
             $contentInfo->id,
             $objectStateGroup->id
         );

@@ -506,9 +506,9 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::getObjectState
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::getContentState
      */
-    public function testGetObjectState()
+    public function testGetContentState()
     {
         $handler = $this->getObjectStateHandler();
         $mapperMock = $this->getMapperMock();
@@ -524,7 +524,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
             ->with( $this->equalTo( array( array() ) ) )
             ->will( $this->returnValue( $this->getObjectStateFixture() ) );
 
-        $result = $handler->getObjectState( 42, 2 );
+        $result = $handler->getContentState( 42, 2 );
 
         $this->assertInstanceOf(
             'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState',

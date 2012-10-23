@@ -169,7 +169,7 @@ interface ObjectStateService
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function getObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup );
+    public function getContentState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup );
 
     /**
      * Returns the number of objects which are in this state

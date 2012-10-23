@@ -905,14 +905,14 @@ class ObjectStateServiceTest extends BaseTest
     }
 
     /**
-     * Test for the getObjectState() method.
+     * Test for the getContentState() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ObjectStateService::getObjectState()
+     * @see \eZ\Publish\API\Repository\ObjectStateService::getContentState()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      * @depends testLoadObjectState
      */
-    public function testGetObjectState()
+    public function testGetContentState()
     {
         $repository = $this->getRepository();
 
@@ -930,7 +930,7 @@ class ObjectStateServiceTest extends BaseTest
         );
 
         // Loads the state of $contentInfo in the "ez_lock" object state group
-        $ezLockObjectState = $objectStateService->getObjectState(
+        $ezLockObjectState = $objectStateService->getContentState(
             $contentInfo,
             $ezLockObjectStateGroup
         );
@@ -994,7 +994,7 @@ class ObjectStateServiceTest extends BaseTest
         );
 
         // Loads the initial state of the custom state group
-        $initialObjectState = $objectStateService->getObjectState(
+        $initialObjectState = $objectStateService->getContentState(
             $contentInfo,
             $customObjectStateGroup
         );
@@ -1047,7 +1047,7 @@ class ObjectStateServiceTest extends BaseTest
         );
         /* END: Use Case */
 
-        $ezLockObjectState = $objectStateService->getObjectState(
+        $ezLockObjectState = $objectStateService->getContentState(
             $contentInfo,
             $ezLockObjectStateGroup
         );

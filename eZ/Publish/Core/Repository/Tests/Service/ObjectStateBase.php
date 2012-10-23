@@ -599,7 +599,7 @@ abstract class ObjectStateBase extends BaseServiceTest
             $state
         );
 
-        $newObjectState = $objectStateService->getObjectState( $contentInfo, $group );
+        $newObjectState = $objectStateService->getContentState( $contentInfo, $group );
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectState',
@@ -645,13 +645,13 @@ abstract class ObjectStateBase extends BaseServiceTest
 
     /**
      * Test service method for getting the object state of content
-     * @covers \eZ\Publish\API\Repository\ObjectStateService::getObjectState
+     * @covers \eZ\Publish\API\Repository\ObjectStateService::getContentState
      */
-    public function testGetObjectState()
+    public function testGetContentState()
     {
         $objectStateService = $this->repository->getObjectStateService();
 
-        $objectState = $objectStateService->getObjectState(
+        $objectState = $objectStateService->getContentState(
             $this->repository->getContentService()->loadContentInfo( 4 ),
             $objectStateService->loadObjectStateGroup( 2 )
         );

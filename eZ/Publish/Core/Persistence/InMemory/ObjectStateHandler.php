@@ -320,7 +320,7 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
-    public function getObjectState( $contentId, $stateGroupId )
+    public function getContentState( $contentId, $stateGroupId )
     {
         $groupStateIds = $this->getGroupStateList( $stateGroupId );
         if ( empty( $groupStateIds ) )
