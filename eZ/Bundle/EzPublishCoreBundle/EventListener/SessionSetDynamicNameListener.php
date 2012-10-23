@@ -11,7 +11,8 @@ namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use eZ\Publish\Core\MVC\Symfony\MVCEvents,
     eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent,
-    Symfony\Component\EventDispatcher\EventSubscriberInterface;
+    Symfony\Component\EventDispatcher\EventSubscriberInterface,
+    Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * SiteAccess match listener.
@@ -21,6 +22,21 @@ use eZ\Publish\Core\MVC\Symfony\MVCEvents,
 class SessionSetDynamicNameListener implements EventSubscriberInterface
 {
     const MARKER = "{siteaccess_hash}";
+
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    private $container;
+
+    /**
+     * @note Injecting the service container is mandatory since event listeners are instantiated before siteaccess matching
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     */
+    public function __construct( ContainerInterface $container )
+    {
+        $this->container = $container;
+    }
 
     public static function getSubscribedEvents()
     {
@@ -37,13 +53,14 @@ class SessionSetDynamicNameListener implements EventSubscriberInterface
             return;
         }
 
-        $siteAccess = $event->getSiteAccess();
-        $sessionName = $session->getName();
+        /** @var $configResolver \eZ\Publish\Core\MVC\ConfigResolverInterface */
+        $configResolver = $this->container->get( 'ezpublish.config.resolver' );
+        $sessionName = $configResolver->getParameter( 'session_name' );
         if ( strpos( $sessionName, self::MARKER ) !== false )
         {
             $session->setName(
                 str_replace(
-                    self::MARKER, md5( $siteAccess->name ), $sessionName
+                    self::MARKER, md5( $event->getSiteAccess()->name ), $sessionName
                 )
             );
         }
