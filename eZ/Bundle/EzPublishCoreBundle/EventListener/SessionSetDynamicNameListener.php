@@ -11,8 +11,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use eZ\Publish\Core\MVC\Symfony\MVCEvents,
     eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent,
-    Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    Symfony\Component\DependencyInjection\ContainerInterface;
+    Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * SiteAccess match listener.
@@ -23,16 +22,6 @@ class SessionSetDynamicNameListener implements EventSubscriberInterface
 {
     const MARKER = "{siteaccess_hash}";
 
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    private $container;
-
-    public function __construct( ContainerInterface $container )
-    {
-        $this->container = $container;
-    }
-
     public static function getSubscribedEvents()
     {
         return array(
@@ -42,12 +31,13 @@ class SessionSetDynamicNameListener implements EventSubscriberInterface
 
     public function onSiteAccessMatch( PostSiteAccessMatchEvent $event )
     {
-        if ( !$this->container->has( 'session' ) )
+        $session = $event->getRequest()->getSession();
+        if ( !$session )
         {
             return;
         }
+
         $siteAccess = $event->getSiteAccess();
-        $session = $this->container->get( 'session' );
         $sessionName = $session->getName();
         if ( strpos( $sessionName, self::MARKER ) !== false )
         {
