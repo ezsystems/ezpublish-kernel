@@ -490,24 +490,10 @@ class ContentService implements ContentServiceInterface
 
             if ( $fieldDefinition->isTranslatable )
             {
-                if ( isset( $fields[$field->fieldDefIdentifier][$field->languageCode] ) )
-                {
-                    throw new ContentValidationException(
-                        "More than one field is set for translatable field definition '{$field->fieldDefIdentifier}' on language '{$field->languageCode}'"
-                    );
-                }
-
                 $fields[$field->fieldDefIdentifier][$field->languageCode] = $field;
             }
             else
             {
-                if ( isset( $fields[$field->fieldDefIdentifier][$contentCreateStruct->mainLanguageCode] ) )
-                {
-                    throw new ContentValidationException(
-                        "More than one field is set for non translatable field definition '{$field->fieldDefIdentifier}'"
-                    );
-                }
-
                 if ( $field->languageCode != $contentCreateStruct->mainLanguageCode )
                 {
                     throw new ContentValidationException(
@@ -1028,24 +1014,10 @@ class ContentService implements ContentServiceInterface
 
             if ( $fieldDefinition->isTranslatable )
             {
-                if ( isset( $fields[$field->fieldDefIdentifier][$fieldLanguageCode] ) )
-                {
-                    throw new ContentValidationException(
-                        "More than one field is set for translatable field definition '{$field->fieldDefIdentifier}' on language with code '{$fieldLanguageCode}'"
-                    );
-                }
-
                 $fields[$field->fieldDefIdentifier][$fieldLanguageCode] = $field;
             }
             else
             {
-                if ( isset( $fields[$field->fieldDefIdentifier][$initialLanguageCode] ) )
-                {
-                    throw new ContentValidationException(
-                        "More than one field is set for non translatable field definition '{$field->fieldDefIdentifier}'"
-                    );
-                }
-
                 if ( $fieldLanguageCode != $initialLanguageCode )
                 {
                     throw new ContentValidationException(
