@@ -80,12 +80,19 @@ class Configuration implements EventSubscriberInterface
 
     private function getImageSettings()
     {
-        // Basic settings
         $imageSettings = array(
+            // Basic settings
             'image.ini/FileSettings/TemporaryDir'       => $this->configResolver->getParameter( 'image.temporary_dir' ),
             'image.ini/FileSettings/PublishedImages'    => $this->configResolver->getParameter( 'image.published_images_dir' ),
             'image.ini/FileSettings/VersionedImages'    => $this->configResolver->getParameter( 'image.versioned_images_dir' ),
             'image.ini/AliasSettings/AliasList'         => array(),
+            // ImageMagick configuration
+            'image.ini/ImageMagick/IsEnabled'           => $this->container->getParameter( 'ezpublish.image.imagemagick.enabled' ) ? 'true' : 'false',
+            'image.ini/ImageMagick/ExecutablePath'      => $this->container->getParameter( 'ezpublish.image.imagemagick.executable_path' ),
+            'image.ini/ImageMagick/Executable'          => $this->container->getParameter( 'ezpublish.image.imagemagick.executable' ),
+            'image.ini/ImageMagick/PreParameters'       => $this->configResolver->getParameter( 'imagemagick.pre_parameters' ),
+            'image.ini/ImageMagick/PostParameters'      => $this->configResolver->getParameter( 'imagemagick.post_parameters' ),
+            'image.ini/ImageMagick/Filters'             => array()
         );
 
         // Aliases configuration
@@ -101,14 +108,6 @@ class Configuration implements EventSubscriberInterface
             }
         }
 
-        // ImageMagick configuration
-        $imageMagickEnabled = $this->container->getParameter( 'ezpublish.image.imagemagick.enabled' );
-        $imageSettings['image.ini/ImageMagick/IsEnabled'] = $imageMagickEnabled ? 'true' : 'false';
-        $imageSettings['image.ini/ImageMagick/ExecutablePath'] = $this->container->getParameter( 'ezpublish.image.imagemagick.executable_path' );
-        $imageSettings['image.ini/ImageMagick/Executable'] = $this->container->getParameter( 'ezpublish.image.imagemagick.executable' );
-        $imageSettings['image.ini/ImageMagick/PreParameters'] = $this->configResolver->getParameter( 'imagemagick.pre_parameters' );
-        $imageSettings['image.ini/ImageMagick/PostParameters'] = $this->configResolver->getParameter( 'imagemagick.post_parameters' );
-        $imageSettings['image.ini/ImageMagick/Filters'] = array();
         foreach ( $this->container->getParameter( 'ezpublish.image.imagemagick.filters' ) as $filterName => $filter )
         {
             $imageSettings['image.ini/ImageMagick/Filters'][] = "$filterName=" . strtr( $filter, array( '{' => '%', '}' => '' ) );
