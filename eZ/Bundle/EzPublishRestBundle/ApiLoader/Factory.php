@@ -89,6 +89,7 @@ class Factory
                         $fieldTypeParser,
                         $parserTools
                     ),
+                    'application/vnd.ez.api.ContentTypeGroupInput'  => new Input\Parser\ContentTypeGroupInput( $urlHandler, $this->repository->getContentTypeService(), $parserTools ),
                     'application/vnd.ez.api.ContentTypeCreate'      => new Input\Parser\ContentTypeCreate(
                         $urlHandler,
                         $this->repository->getContentTypeService(),
@@ -119,6 +120,7 @@ class Factory
                     'application/vnd.ez.api.ContentObjectStates'    => new Input\Parser\ContentObjectStates( $urlHandler ),
                     'application/vnd.ez.api.RelationCreate'         => new Input\Parser\RelationCreate( $urlHandler ),
                     'application/vnd.ez.api.ViewInput'              => new Input\Parser\ViewInput( $urlHandler ),
+                    'application/vnd.ez.api.UrlWildcardCreate'      => new Input\Parser\URLWildcardCreate( $urlHandler, $parserTools ),
 
                     // internal Media-Types
                     'application/vnd.ez.api.internal.criterion.ContentId'              => new Input\Parser\Criterion\ContentId( $urlHandler ),
