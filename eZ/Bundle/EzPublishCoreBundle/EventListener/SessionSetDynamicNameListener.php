@@ -12,7 +12,8 @@ namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents,
     eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent,
     Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    Symfony\Component\DependencyInjection\ContainerInterface;
+    Symfony\Component\DependencyInjection\ContainerInterface,
+    Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * SiteAccess match listener.
@@ -47,11 +48,14 @@ class SessionSetDynamicNameListener implements EventSubscriberInterface
 
     public function onSiteAccessMatch( PostSiteAccessMatchEvent $event )
     {
-        $session = $event->getRequest()->getSession();
-        if ( !$session )
+        if ( !$this->container->has( 'session' ) )
         {
             return;
         }
+
+        // Getting from the container and not from the request because the session object is assigned to the request only when session has started.
+        $session = $this->container->get( 'session' );
+
 
         /** @var $configResolver \eZ\Publish\Core\MVC\ConfigResolverInterface */
         $configResolver = $this->container->get( 'ezpublish.config.resolver' );
@@ -63,6 +67,10 @@ class SessionSetDynamicNameListener implements EventSubscriberInterface
                     self::MARKER, md5( $event->getSiteAccess()->name ), $sessionName
                 )
             );
+        }
+        else
+        {
+            $session->setName( $sessionName );
         }
     }
 }
