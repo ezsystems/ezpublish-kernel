@@ -22,7 +22,6 @@ class Image extends AbstractParser
      * Adds semantic configuration definition.
      *
      * @param \Symfony\Component\Config\Definition\Builder\NodeBuilder $nodeBuilder Node just under ezpublish.system.<siteaccess>
-     * @return void
      */
     public function addSemanticConfig( NodeBuilder $nodeBuilder )
     {
@@ -94,7 +93,6 @@ class Image extends AbstractParser
      *
      * @param array $config
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @return void
      */
     public function registerInternalConfig( array $config, ContainerBuilder $container )
     {
