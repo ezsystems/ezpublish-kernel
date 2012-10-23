@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use eZ\Publish\Core\FieldType\Country\Type as CountryType,
-    eZ\Publish\Core\FieldType\FieldSettings,
+use eZ\Publish\Core\FieldType\FieldSettings,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
@@ -24,11 +23,6 @@ use eZ\Publish\Core\FieldType\Country\Type as CountryType,
 class CountryTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\FieldType\Country\Type
-     */
-    protected $type;
-
-    /**
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country
      */
     protected $converter;
@@ -36,22 +30,6 @@ class CountryTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->type = new CountryType(
-            array(
-                "BE" => array(
-                    "Name" => "Belgium",
-                    "Alpha2" => "BE",
-                    "Alpha3" => "BEL",
-                    "IDC" => 32,
-                ),
-                "FR" => array(
-                    "Name" => "France",
-                    "Alpha2" => "FR",
-                    "Alpha3" => "FRA",
-                    "IDC" => 33,
-                ),
-            )
-        );
         $this->converter = new CountryConverter();
     }
 
@@ -63,7 +41,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
     public function testToStorageValue()
     {
         $value = new FieldValue;
-        $value->data = "BE,FR";
+        $value->data = array( "BE", "FR" );
         $value->sortKey = "belgium,france";
         $storageFieldValue = new StorageFieldValue;
 
@@ -85,7 +63,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertSame( "BE,FR", $fieldValue->data );
+        self::assertSame( array( "BE", "FR" ), $fieldValue->data );
     }
 
     /**
@@ -96,7 +74,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
     public function testToStorageFieldDefinitionMultiple()
     {
         $defaultValue = new FieldValue;
-        $defaultValue->data = "BE,FR";
+        $defaultValue->data = array( "BE", "FR" );
         $fieldTypeConstraints = new FieldTypeConstraints;
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
@@ -179,7 +157,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
             $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"]
         );
         self::assertEquals(
-            $this->type->fromHash( array( "BE", "FR" ) ),
+            array( "BE", "FR" ),
             $fieldDef->defaultValue->data
         );
     }
