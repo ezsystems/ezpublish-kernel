@@ -16,7 +16,8 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface,
     eZ\Publish\SPI\Variation\Values\ImageVariation,
     eZ\Publish\API\Repository\Exceptions\InvalidVariationException,
     eZContentObjectAttribute,
-    eZImageAliasHandler;
+    eZImageAliasHandler,
+    Closure;
 
 class AliasGenerator implements VariationHandler
 {
@@ -38,7 +39,7 @@ class AliasGenerator implements VariationHandler
      */
     private $variations;
 
-    public function __construct( \Closure $legacyKernelClosure )
+    public function __construct( Closure $legacyKernelClosure )
     {
         $this->kernelClosure = $legacyKernelClosure;
     }
