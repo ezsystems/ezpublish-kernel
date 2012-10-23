@@ -76,7 +76,7 @@ class AliasGenerator implements VariationHandler
         $allVariations = &$this->variations;
 
         return $this->getLegacyKernel()->runCallback(
-            function () use ( $field, $versionInfo, $variationName, $allAliasHandlers, $allVariations, $variationIdentifier )
+            function () use ( $field, $versionInfo, $variationName, &$allAliasHandlers, &$allVariations, $variationIdentifier )
             {
                 $aliasHandlerIdentifier = "$field->id-$versionInfo->versionNo";
                 if ( !isset( $allAliasHandlers[$aliasHandlerIdentifier] ) )
