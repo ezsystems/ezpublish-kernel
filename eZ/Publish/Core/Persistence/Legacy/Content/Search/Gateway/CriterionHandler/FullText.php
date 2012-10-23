@@ -67,7 +67,7 @@ class FullText extends CriterionHandler
     /**
      * Transformation processor to normalize search strings
      *
-     * @var TransformationProcessor
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor
      */
     protected $processor;
 

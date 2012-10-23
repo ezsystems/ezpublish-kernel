@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the TransformationProcessor class
+ * File containing the TransformationProcessor abstract class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,31 +9,27 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
 
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PcreCompiler;
+
 /**
- * Class for processing a set of transformations on a string
+ * Interface for processing a set of transformations on a string
  */
-class TransformationProcessor
+abstract class TransformationProcessor
 {
-    /**
-     * Transformation parser
-     *
-     * @var TransformationParser
-     */
-    protected $parser = null;
+    const T_COMMENT = 1;
+    const T_WHITESPACE = 2;
+    const T_SECTION = 10;
+    const T_MAP = 11;
+    const T_REPLACE = 12;
+    const T_TRANSPOSE = 13;
+    const T_TRANSPOSE_MODULO = 14;
 
     /**
-     * Transformation compiler
-     *
-     * @var TransformationPcreCompiler
-     */
-    protected $compiler = null;
-
-    /**
-     * Parsed rules
+     * Parsed rule files
      *
      * @var array
      */
-    protected $rules = array();
+    protected $ruleFiles = array();
 
     /**
      * Compiled rules, which can directly be applied to the input strings
@@ -43,47 +39,33 @@ class TransformationProcessor
     protected $compiledRules = null;
 
     /**
+     * Transformation compiler
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PcreCompiler
+     */
+    protected $compiler = null;
+
+    /**
      * Construct instance of TransformationProcessor
      *
-     * Through the $rules array, a list of files with full text
-     * transformation rules is given. These files are parsed by
-     * {@link \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationParser}
-     * and then used for normalization in the full text search.
+     * Through the $ruleFiles array, a list of files with full text
+     * transformation rules is given.
      *
-     * @param TransformationParser $parser
-     * @param TransformationPcreCompiler $compiler
-     * @param array $rules
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PcreCompiler $compiler
+     * @param array $ruleFiles
      */
-    public function __construct(
-        TransformationParser $parser,
-        TransformationPcreCompiler $compiler,
-        array $rules = array()
-    )
+    public function __construct( PcreCompiler $compiler, array $ruleFiles = array() )
     {
-        $this->parser = $parser;
+        $this->ruleFiles = $ruleFiles;
         $this->compiler = $compiler;
-        foreach( $rules as $file )
-        {
-            $this->loadRules( $file );
-        }
     }
 
     /**
-     * Load rules from the given file
+     * Load rules
      *
-     * @param string $file
-     * @return void
+     * @return array
      */
-    public function loadRules( $file )
-    {
-        $this->rules = array_merge(
-            $this->rules,
-            $this->parser->parse( $file )
-        );
-        $this->compiledRules = null;
-    }
+    abstract protected function getRules();
 
     /**
      * Transform the given string
@@ -97,23 +79,18 @@ class TransformationProcessor
      */
     public function transform( $string, array $ruleNames = null )
     {
-        if ( $this->compiledRules === null )
-        {
-            $this->compiledRules = $this->compiler->compile( $this->rules );
-        }
+        $rules = $this->getRules();
 
-        $ruleNames = $ruleNames ?: array_keys( $this->compiledRules );
-
-        foreach ( $ruleNames as $ruleName )
+        foreach ( $ruleNames ?: array_keys( $rules ) as $ruleName )
         {
-            if ( !isset( $this->compiledRules[$ruleName] ) )
+            if ( !isset( $rules[$ruleName] ) )
             {
                 // Just continue on unknow rules, or should we throw an error
                 // here?
                 continue;
             }
 
-            foreach ( $this->compiledRules[$ruleName] as $rule )
+            foreach ( $rules[$ruleName] as $rule )
             {
                 $string = preg_replace_callback(
                     $rule['regexp'],
@@ -126,4 +103,3 @@ class TransformationProcessor
         return $string;
     }
 }
-
