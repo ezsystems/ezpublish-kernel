@@ -269,9 +269,9 @@ class Handler implements BaseObjectStateHandler
      * @param mixed $stateId
      * @return boolean
      */
-    public function setObjectState( $contentId, $groupId, $stateId )
+    public function setContentState( $contentId, $groupId, $stateId )
     {
-        $this->objectStateGateway->setObjectState( $contentId, $groupId, $stateId );
+        $this->objectStateGateway->setContentState( $contentId, $groupId, $stateId );
         return true;
     }
 

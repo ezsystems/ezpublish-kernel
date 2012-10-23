@@ -314,7 +314,7 @@ class ObjectState extends RestController
         foreach ( $newObjectStates as $newObjectState )
         {
             $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $newObjectState->groupId );
-            $this->objectStateService->setObjectState( $contentInfo, $objectStateGroup, $newObjectState->objectState );
+            $this->objectStateService->setContentState( $contentInfo, $objectStateGroup, $newObjectState->objectState );
             $contentObjectStates[(int) $objectStateGroup->id] = $newObjectState;
         }
 

@@ -256,11 +256,11 @@ class ObjectStateService implements ObjectStateServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      */
-    public function setObjectState( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup, \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState )
+    public function setContentState( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup, \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState )
     {
-        $returnValue = $this->service->setObjectState( $contentInfo, $objectStateGroup, $objectState );
+        $returnValue = $this->service->setContentState( $contentInfo, $objectStateGroup, $objectState );
         $this->signalDispatcher->emit(
-            new Signal\ObjectStateService\SetObjectStateSignal( array(
+            new Signal\ObjectStateService\SetContentStateSignal( array(
                 'contentId' => $contentInfo->id,
                 'objectStateGroupId' => $objectStateGroup->id,
                 'objectStateId' => $objectState->id,

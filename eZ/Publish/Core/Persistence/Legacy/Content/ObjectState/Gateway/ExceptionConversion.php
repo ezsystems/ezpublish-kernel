@@ -300,11 +300,11 @@ class ExceptionConversion extends Gateway
      * @param mixed $groupId
      * @param mixed $stateId
      */
-    public function setObjectState( $contentId, $groupId, $stateId )
+    public function setContentState( $contentId, $groupId, $stateId )
     {
         try
         {
-            return $this->innerGateway->setObjectState( $contentId, $groupId, $stateId );
+            return $this->innerGateway->setContentState( $contentId, $groupId, $stateId );
         }
         catch ( \ezcDbException $e )
         {

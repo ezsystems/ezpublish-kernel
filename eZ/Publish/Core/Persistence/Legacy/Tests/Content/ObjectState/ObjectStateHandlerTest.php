@@ -488,18 +488,18 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::setObjectState
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::setContentState
      */
-    public function testSetObjectState()
+    public function testSetContentState()
     {
         $handler = $this->getObjectStateHandler();
         $gatewayMock = $this->getGatewayMock();
 
         $gatewayMock->expects( $this->once() )
-            ->method( 'setObjectState' )
+            ->method( 'setContentState' )
             ->with( $this->equalTo( 42 ), $this->equalTo( 2 ), $this->equalTo( 2 ) );
 
-        $result = $handler->setObjectState( 42, 2, 2 );
+        $result = $handler->setContentState( 42, 2, 2 );
 
         $this->assertEquals( true, $result );
     }

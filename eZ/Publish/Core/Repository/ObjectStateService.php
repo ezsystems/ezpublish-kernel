@@ -440,7 +440,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      */
-    public function setObjectState( ContentInfo $contentInfo, APIObjectStateGroup $objectStateGroup, APIObjectState $objectState )
+    public function setContentState( ContentInfo $contentInfo, APIObjectStateGroup $objectStateGroup, APIObjectState $objectState )
     {
         if ( !is_numeric( $contentInfo->id ) )
             throw new InvalidArgumentValue( "id", $contentInfo->id, "ContentInfo" );
@@ -462,7 +462,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->objectStateHandler->setObjectState(
+            $this->objectStateHandler->setContentState(
                 $contentInfo->id,
                 $objectStateGroup->id,
                 $loadedObjectState->id

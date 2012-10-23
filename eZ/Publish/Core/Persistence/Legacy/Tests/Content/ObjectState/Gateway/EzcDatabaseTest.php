@@ -452,13 +452,13 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::setObjectState
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::setContentState
      */
-    public function testSetObjectState()
+    public function testSetContentState()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $gateway->setObjectState( 42, 2, 2 );
+        $gateway->setContentState( 42, 2, 2 );
 
         $this->assertQueryResult(
             array(

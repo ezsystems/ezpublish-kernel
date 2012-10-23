@@ -584,16 +584,16 @@ abstract class ObjectStateBase extends BaseServiceTest
 
     /**
      * Test service method for setting the object state to content
-     * @covers \eZ\Publish\API\Repository\ObjectStateService::setObjectState
+     * @covers \eZ\Publish\API\Repository\ObjectStateService::setContentState
      */
-    public function testSetObjectState()
+    public function testSetContentState()
     {
         $objectStateService = $this->repository->getObjectStateService();
 
         $state = $objectStateService->loadObjectState( 2 );
         $group = $state->getObjectStateGroup();
         $contentInfo = $this->repository->getContentService()->loadContentInfo( 4 );
-        $objectStateService->setObjectState(
+        $objectStateService->setContentState(
             $contentInfo,
             $group,
             $state
@@ -611,10 +611,10 @@ abstract class ObjectStateBase extends BaseServiceTest
 
     /**
      * Test service method for setting the object state to content throwing InvalidArgumentException
-     * @covers \eZ\Publish\API\Repository\ObjectStateService::setObjectState
+     * @covers \eZ\Publish\API\Repository\ObjectStateService::setContentState
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function testSetObjectStateThrowsInvalidArgumentException()
+    public function testSetContentStateThrowsInvalidArgumentException()
     {
         $objectStateService = $this->repository->getObjectStateService();
 
@@ -636,7 +636,7 @@ abstract class ObjectStateBase extends BaseServiceTest
             $stateCreateStruct
         );
 
-        $objectStateService->setObjectState(
+        $objectStateService->setContentState(
             $this->repository->getContentService()->loadContentInfo( 4 ),
             $objectStateService->loadObjectStateGroup( 2 ),
             $createdState

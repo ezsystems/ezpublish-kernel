@@ -128,7 +128,7 @@ interface Handler
      * @param mixed $stateId
      * @return boolean
      */
-    public function setObjectState( $contentId, $groupId, $stateId );
+    public function setContentState( $contentId, $groupId, $stateId );
 
     /**
      * Gets the object-state of object identified by $contentId.

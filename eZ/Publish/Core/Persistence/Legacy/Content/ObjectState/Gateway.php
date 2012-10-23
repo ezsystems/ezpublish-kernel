@@ -115,7 +115,7 @@ abstract class Gateway
      * @param mixed $groupId
      * @param mixed $stateId
      */
-    abstract public function setObjectState( $contentId, $groupId, $stateId );
+    abstract public function setContentState( $contentId, $groupId, $stateId );
 
     /**
      * Loads object state data for $contentId content from $stateGroupId state group
