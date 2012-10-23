@@ -1,34 +1,35 @@
 <?php
 /**
- * File containing the TransformationPcreCompiler class
+ * File containing the PcreCompiler class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
 
-use RuntimeException;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor,
+    RuntimeException;
 
 /**
  * Compiles the AST of parsed transformation rules into a set of PCRE replace
  * regular expressions.
  */
-class TransformationPcreCompiler
+class PcreCompiler
 {
     /**
      * Class for converting UTF-8 characters
      *
-     * @var Utf8Converter
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter
      */
     protected $converter;
 
     /**
      * Construct from UTF8Converter
      *
-     * @param Utf8Converter $converter
-     * @return void
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter $converter
      */
     public function __construct( Utf8Converter $converter )
     {
@@ -70,16 +71,16 @@ class TransformationPcreCompiler
     {
         switch ( $rule['type'] )
         {
-            case TransformationParser::T_MAP:
+            case TransformationProcessor::T_MAP:
                 return $this->compileMap( $rule );
 
-            case TransformationParser::T_REPLACE:
+            case TransformationProcessor::T_REPLACE:
                 return $this->compileReplace( $rule );
 
-            case TransformationParser::T_TRANSPOSE:
+            case TransformationProcessor::T_TRANSPOSE:
                 return $this->compileTranspose( $rule );
 
-            case TransformationParser::T_TRANSPOSE_MODULO:
+            case TransformationProcessor::T_TRANSPOSE_MODULO:
                 return $this->compileTransposeModulo( $rule );
 
             default:

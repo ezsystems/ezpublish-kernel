@@ -1,15 +1,16 @@
 <?php
 /**
- * File containing the TransformationParser class
+ * File containing the Transformation Parser class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased;
 
-use RuntimeException;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor,
+    RuntimeException;
 
 /**
  * Parser for transformation specifications
@@ -33,16 +34,8 @@ use RuntimeException;
  *  keep : Keep character as it is, can only be used in destination
  *  "xxxx" : Multiple characters as a string, can only be used in destination, \\ means \ and \" means "
  */
-class TransformationParser
+class Parser
 {
-    const T_COMMENT = 1;
-    const T_WHITESPACE = 2;
-    const T_SECTION = 10;
-    const T_MAP = 11;
-    const T_REPLACE = 12;
-    const T_TRANSPOSE = 13;
-    const T_TRANSPOSE_MODULO = 14;
-
     /**
      * Array of token specifications.
      *
@@ -73,18 +66,18 @@ class TransformationParser
         $character = '(?:U\\+[0-9a-fA-F]{4}|remove|keep|[0-9a-fA-F]+|"(?:[^\\\\"]+|\\\\\\\\|\\\\\'|\\\\")*?")';
 
         $this->tokenSpecifications = array(
-            self::T_COMMENT => '(\\A#(?P<comment>.*)$)m',
-            self::T_WHITESPACE => '(\\A\\s+)',
-            self::T_SECTION => '(\\A(?P<section>[a-z0-9_-]+):\s*$)m',
-            self::T_MAP => '(\\A(?P<src>' . $character . ')\\s*=\\s*(?P<dest>' .  $character . '))',
-            self::T_REPLACE => '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
+            TransformationProcessor::T_COMMENT => '(\\A#(?P<comment>.*)$)m',
+            TransformationProcessor::T_WHITESPACE => '(\\A\\s+)',
+            TransformationProcessor::T_SECTION => '(\\A(?P<section>[a-z0-9_-]+):\s*$)m',
+            TransformationProcessor::T_MAP => '(\\A(?P<src>' . $character . ')\\s*=\\s*(?P<dest>' .  $character . '))',
+            TransformationProcessor::T_REPLACE => '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
                 '(?P<srcEnd>'   . $character . ')\\s*=\\s*' .
                 '(?P<dest>'    .  $character . '))',
-            self::T_TRANSPOSE => '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
+            TransformationProcessor::T_TRANSPOSE => '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
                 '(?P<srcEnd>'   . $character . ')\\s*' .
                 '(?P<op>[+-])\\s*' .
                 '(?P<dest>' .     $character . '))',
-            self::T_TRANSPOSE_MODULO => '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
+            TransformationProcessor::T_TRANSPOSE_MODULO => '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
                 '(?P<srcEnd>'   . $character . ')\\s*%\\s*' .
                 '(?P<modulo>'   . $character . ')\\s*' .
                 '(?P<op>[+-])\\s*' .
@@ -119,8 +112,8 @@ class TransformationParser
             $tokens,
             function ( $token )
             {
-                return !( $token['type'] === TransformationParser::T_WHITESPACE ||
-                          $token['type'] === TransformationParser::T_COMMENT );
+                return !( $token['type'] === TransformationProcessor::T_WHITESPACE ||
+                          $token['type'] === TransformationProcessor::T_COMMENT );
             }
         );
 
@@ -128,7 +121,7 @@ class TransformationParser
         $section = null;
         while ( $token = array_shift( $tokens ) )
         {
-            if ( $token['type'] === self::T_SECTION )
+            if ( $token['type'] === TransformationProcessor::T_SECTION )
             {
                 $section = $token['data']['section'];
                 continue;

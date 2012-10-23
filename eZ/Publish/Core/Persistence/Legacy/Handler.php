@@ -254,7 +254,7 @@ class Handler implements HandlerInterface
     /**
      * Transform Processor
      *
-     * @var Content\Search\TransformationProcessor
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor
      */
     protected $transformationProcessor;
 
@@ -271,7 +271,7 @@ class Handler implements HandlerInterface
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler The database handler
      * @param Content\FieldValue\ConverterRegistry $converterRegistry Should contain Field Type converters
      * @param Content\StorageRegistry $storageRegistry Should contain Field Type external storage handlers
-     * @param Content\Search\TransformationProcessor $transformationProcessor Search Text Transformation processor
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor $transformationProcessor Search Text Transformation processor
      * @param array $config List of optional configuration flags:
      *                      The flag 'defer_type_update' defines if content types should be
      *                      published immediately (false), when the
