@@ -81,7 +81,7 @@ abstract class AbstractParser implements Parser
      * @param array $groups array of group name
      * @param string $id id of the setting array under ezpublish.<base_key>.<group_name>
      * @param array $config the full configuration array
-     * @param bool $options only self::MERGE_FROM_SECOND_LEVEL is recognized
+     * @param int $options only self::MERGE_FROM_SECOND_LEVEL or self::UNIQUE are recognized
      * @return array
      */
     protected function groupsArraySetting( array $groups, $id, array $config, $options = 0 )
