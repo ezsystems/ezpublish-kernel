@@ -68,7 +68,7 @@ class Country implements Converter
         }
 
         $storageDef->dataText5 = $fieldDef->defaultValue->data === null
-            ? null
+            ? ""
             : implode( ",", $fieldDef->defaultValue->data );
     }
 
@@ -86,7 +86,7 @@ class Country implements Converter
             )
         );
 
-        $fieldDef->defaultValue->data = $storageDef->dataText5 === null
+        $fieldDef->defaultValue->data = empty( $storageDef->dataText5 )
             ? null
             : explode( ",", $storageDef->dataText5 );
     }
