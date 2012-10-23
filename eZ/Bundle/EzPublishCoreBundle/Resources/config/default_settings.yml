@@ -96,7 +96,7 @@ parameters:
                 - {name: geometry/scalewidthdownonly, params: [770]}
 
     # ImageMagick
-    ezpublish.image.imagemagick.enabled: true
+    ezpublish.image.imagemagick.enabled: false
     ezpublish.image.imagemagick.executable_path:
     ezpublish.image.imagemagick.executable: convert
     ezsettings.default.imagemagick.pre_parameters:

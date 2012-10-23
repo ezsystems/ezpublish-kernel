@@ -117,9 +117,12 @@ class EzPublishCoreExtension extends Extension
 
     private function registerImageMagickConfiguration( array $config, ContainerBuilder $container )
     {
-        $container->setParameter( 'ezpublish.image.imagemagick.enabled', $config['imagemagick']['enabled'] );
-        $container->setParameter( 'ezpublish.image.imagemagick.executable_path', dirname( $config['imagemagick']['path'] ) );
-        $container->setParameter( 'ezpublish.image.imagemagick.executable', basename( $config['imagemagick']['path'] ) );
+        if ( isset( $config['imagemagick'] ) )
+        {
+            $container->setParameter( 'ezpublish.image.imagemagick.enabled', $config['imagemagick']['enabled'] );
+            $container->setParameter( 'ezpublish.image.imagemagick.executable_path', dirname( $config['imagemagick']['path'] ) );
+            $container->setParameter( 'ezpublish.image.imagemagick.executable', basename( $config['imagemagick']['path'] ) );
+        }
 
         $filters = isset( $config['imagemagick']['filters'] ) ? $config['imagemagick']['filters'] : array();
         $filters = $filters + $container->getParameter( 'ezpublish.image.imagemagick.filters' );
