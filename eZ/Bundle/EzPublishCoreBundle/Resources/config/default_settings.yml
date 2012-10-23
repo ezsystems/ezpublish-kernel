@@ -84,12 +84,12 @@ parameters:
             reference: ~
             filters:
                 - {name: geometry/scalewidthdownonly, params: [770]}
-                - {name: geometry/crop, params: [370,160,0,0]}
+                - {name: geometry/crop, params: [370, 160, 0, 0]}
         gallery:
             reference: ~
             filters:
                 - {name: geometry/scalewidthdownonly, params: [770]}
-                - {name: geometry/crop, params: [770,390,0,0]}
+                - {name: geometry/crop, params: [770, 390, 0, 0]}
         imagefull:
             reference: ~
             filters:
