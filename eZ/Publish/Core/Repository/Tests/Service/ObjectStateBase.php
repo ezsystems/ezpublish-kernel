@@ -306,6 +306,43 @@ abstract class ObjectStateBase extends BaseServiceTest
     }
 
     /**
+     * Test service method for partially updating object state group
+     * @covers \eZ\Publish\API\Repository\ObjectStateService::updateObjectStateGroup
+     */
+    public function testPartiallyUpdateObjectStateGroup()
+    {
+        $objectStateService = $this->repository->getObjectStateService();
+
+        $groupUpdateStruct = $objectStateService->newObjectStateGroupUpdateStruct();
+        $groupUpdateStruct->defaultLanguageCode = 'eng-GB';
+        $groupUpdateStruct->names = array( 'eng-GB' => 'Test' );
+
+        $group = $objectStateService->loadObjectStateGroup( 2 );
+
+        $updatedGroup = $objectStateService->updateObjectStateGroup( $group, $groupUpdateStruct );
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup',
+            $updatedGroup
+        );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id' => 2,
+                'identifier' => 'ez_lock',
+                'defaultLanguageCode' => 'eng-GB',
+                'languageCodes' => array( 'eng-GB' ),
+                'names' => array( 'eng-GB' => 'Test' ),
+                // descriptions array should have an empty value for eng-GB
+                // without the original descriptions
+                // since the descriptions were not in the update struct and we're changing default language
+                'descriptions' => array( 'eng-GB' => '' )
+            ),
+            $updatedGroup
+        );
+    }
+
+    /**
      * Test service method for deleting object state group
      * @covers \eZ\Publish\API\Repository\ObjectStateService::deleteObjectStateGroup
      */
@@ -524,6 +561,49 @@ abstract class ObjectStateBase extends BaseServiceTest
                 'languageCodes' => array( 'eng-GB' ),
                 'names' => array( 'eng-GB' => 'Test' ),
                 'descriptions' => array( 'eng-GB' => 'Test description' )
+            ),
+            $updatedState
+        );
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroup',
+            $updatedState->getObjectStateGroup()
+        );
+
+        $this->assertEquals( $state->getObjectStateGroup()->id, $updatedState->getObjectStateGroup()->id );
+    }
+
+    /**
+     * Test service method for partially updating object state
+     * @covers \eZ\Publish\API\Repository\ObjectStateService::updateObjectState
+     */
+    public function testPartiallyUpdateObjectState()
+    {
+        $objectStateService = $this->repository->getObjectStateService();
+
+        $stateUpdateStruct = $objectStateService->newObjectStateUpdateStruct();
+        $stateUpdateStruct->identifier = 'test';
+        $stateUpdateStruct->names = array( 'eng-US' => 'Test' );
+
+        $state = $objectStateService->loadObjectState( 1 );
+
+        $updatedState = $objectStateService->updateObjectState( $state, $stateUpdateStruct );
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectState',
+            $updatedState
+        );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id' => 1,
+                'identifier' => 'test',
+                'priority' => 0,
+                'defaultLanguageCode' => 'eng-US',
+                'languageCodes' => array( 'eng-US' ),
+                'names' => array( 'eng-US' => 'Test' ),
+                // Original value of empty description for eng-US should be kept
+                'descriptions' => array( 'eng-US' => '' )
             ),
             $updatedState
         );
