@@ -71,14 +71,6 @@ class Router
     }
 
     /**
-     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
-     */
-    public function setSiteAccess( SiteAccess $siteAccess )
-    {
-        $this->siteAccess = $siteAccess;
-    }
-
-    /**
      * Performs SiteAccess matching given the $request.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
@@ -87,11 +79,11 @@ class Router
      */
     public function match( SimplifiedRequest $request )
     {
-        if ( !isset( $this->siteAccess ) )
-        {
-            $siteAccessClass = $this->siteAccessClass ?: 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess';
-            $this->siteAccess = new $siteAccessClass();
-        }
+        if ( isset( $this->siteAccess ) )
+            return $this->siteAccess;
+
+        $siteAccessClass = $this->siteAccessClass ?: 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess';
+        $this->siteAccess = new $siteAccessClass();
 
         // Request header always have precedence
         if ( isset( $request->headers['X-Siteaccess'] ) )
@@ -133,6 +125,14 @@ class Router
 
         $this->siteAccess->name = $this->defaultSiteAccess;
         $this->siteAccess->matchingType = 'default';
+        return $this->siteAccess;
+    }
+
+    /**
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess|null
+     */
+    public function getSiteAccess()
+    {
         return $this->siteAccess;
     }
 }
