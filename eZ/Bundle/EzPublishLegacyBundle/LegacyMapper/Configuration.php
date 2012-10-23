@@ -70,7 +70,13 @@ class Configuration implements EventSubscriberInterface
                 $settings["site.ini/DatabaseSettings/$iniKey"] = $databaseSettings[$key];
         }
 
+        // Image settings
         $settings += $this->getImageSettings();
+        // File settings
+        $settings += array(
+            'site.ini/FileSettings/VarDir'      => $this->configResolver->getParameter( 'var_dir' ),
+            'site.ini/FileSettings/StorageDir'  => $this->configResolver->getParameter( 'storage_dir' )
+        );
 
         $event->getParameters()->set(
             "injected-settings",
