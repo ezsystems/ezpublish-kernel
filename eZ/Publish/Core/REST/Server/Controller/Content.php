@@ -204,12 +204,21 @@ class Content extends RestController
      */
     public function loadContentInVersion()
     {
-        $urlValues = $this->urlHandler->parse( 'objectVersion', $this->request->path );
+        $questionMark = strpos( $this->request->path, '?' );
+        $requestPath = $questionMark !== false ? substr( $this->request->path, 0, $questionMark ) : $this->request->path;
+
+        $urlValues = $this->urlHandler->parse( 'objectVersion', $requestPath );
+
+        $languages = null;
+        if ( isset( $this->request->variables['languages'] ) )
+        {
+            $languages = explode( ',', $this->request->variables['languages'] );
+        }
 
         return new Values\Version(
             $this->contentService->loadContent(
                 $urlValues['object'],
-                null,               // TODO: Implement using language filter on request URI
+                $languages,
                 $urlValues['version']
             ),
             $this->request->path
