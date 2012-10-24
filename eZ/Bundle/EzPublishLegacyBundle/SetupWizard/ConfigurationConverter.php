@@ -117,7 +117,6 @@ class ConfigurationConverter
             $settings['ezpublish']['imagemagick']['enabled'] = false;
         }
 
-
         return $settings;
     }
 
