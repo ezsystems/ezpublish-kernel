@@ -192,8 +192,7 @@ class Content extends RestController
                     'object' => $urlValues['object'],
                     'version' => $versionInfo->versionNo
                 )
-            ),
-            'Version'
+            )
         );
     }
 
@@ -497,8 +496,7 @@ class Content extends RestController
                     'object' => $urlValues['object'],
                     'version' => $contentInfo->currentVersionNo
                 )
-            ),
-            'RelationList'
+            )
         );
     }
 

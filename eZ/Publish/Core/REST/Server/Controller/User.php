@@ -112,8 +112,7 @@ class User extends RestController
     {
         //@todo Replace hardcoded value with one loaded from settings
         return new Values\PermanentRedirect(
-            $this->urlHandler->generate( 'group', array( 'group' => '/1/5' ) ),
-            'UserGroup'
+            $this->urlHandler->generate( 'group', array( 'group' => '/1/5' ) )
         );
     }
 
