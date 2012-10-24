@@ -17,7 +17,7 @@ use eZ\Publish\Core\REST\Server\Controller as RestController;
 use eZ\Publish\API\Repository\SectionService;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
-use eZ\Publish\Core\REST\Server\Values\ResourceDeleted;
+use eZ\Publish\Core\REST\Server\Values\NoContent;
 
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
@@ -150,7 +150,7 @@ class Section extends RestController
     /**
      * Delete a section by ID
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteSection()
     {
@@ -159,7 +159,7 @@ class Section extends RestController
             $this->sectionService->loadSection( $values['section'] )
         );
 
-        return new ResourceDeleted();
+        return new NoContent();
     }
 
     /**

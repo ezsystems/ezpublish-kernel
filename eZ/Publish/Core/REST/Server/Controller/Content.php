@@ -265,7 +265,7 @@ class Content extends RestController
      * The content is deleted. If the content has locations (which is required in 4.x)
      * on delete all locations assigned the content object are deleted via delete subtree.
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteContent()
     {
@@ -275,7 +275,7 @@ class Content extends RestController
             $this->contentService->loadContentInfo( $urlValues['object'] )
         );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
@@ -323,7 +323,7 @@ class Content extends RestController
     /**
      * The version is deleted
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteContentVersion()
     {
@@ -343,7 +343,7 @@ class Content extends RestController
             $versionInfo
         );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
@@ -568,7 +568,7 @@ class Content extends RestController
     /**
      * Deletes a relation of the given draft.
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function removeRelation()
     {
@@ -595,7 +595,7 @@ class Content extends RestController
                 }
 
                 $this->contentService->deleteRelation( $versionInfo, $relation->getDestinationContentInfo() );
-                return new Values\ResourceDeleted();
+                return new Values\NoContent();
             }
         }
 

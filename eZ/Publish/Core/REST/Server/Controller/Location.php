@@ -104,7 +104,7 @@ class Location extends RestController
     /**
      * Deletes a location
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteSubtree()
     {
@@ -112,7 +112,7 @@ class Location extends RestController
         $location = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $values['location'] ) );
         $this->locationService->deleteLocation( $location );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**

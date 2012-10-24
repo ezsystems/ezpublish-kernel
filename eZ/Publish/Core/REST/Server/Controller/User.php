@@ -354,7 +354,7 @@ class User extends RestController
     /**
      * Given user group is deleted
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteUserGroup()
     {
@@ -377,13 +377,13 @@ class User extends RestController
 
         $this->userService->deleteUserGroup( $userGroup );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
      * Given user is deleted
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteUser()
     {
@@ -400,7 +400,7 @@ class User extends RestController
 
         $this->userService->deleteUser( $user );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**

@@ -154,7 +154,7 @@ class Role extends RestController
     /**
      * Delete a role by ID
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteRole()
     {
@@ -166,7 +166,7 @@ class Role extends RestController
             $this->roleService->loadRole( $values['role'] )
         );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
@@ -186,7 +186,7 @@ class Role extends RestController
     /**
      * Deletes all policies from a role
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deletePolicies()
     {
@@ -199,7 +199,7 @@ class Role extends RestController
             $this->roleService->removePolicy( $loadedRole, $rolePolicy );
         }
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
@@ -290,7 +290,7 @@ class Role extends RestController
     /**
      * Delete a policy from role
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deletePolicy()
     {
@@ -311,7 +311,7 @@ class Role extends RestController
         if ( $policy !== null )
         {
             $this->roleService->removePolicy( $role, $policy );
-            return new Values\ResourceDeleted();
+            return new Values\NoContent();
         }
 
         throw new Exceptions\NotFoundException( "Policy not found: '{$this->request->path}'." );

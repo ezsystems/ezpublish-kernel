@@ -89,19 +89,19 @@ class Trash extends RestController
     /**
      * Empties the trash
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function emptyTrash()
     {
         $this->trashService->emptyTrash();
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
      * Deletes the given trash item
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteTrashItem()
     {
@@ -110,7 +110,7 @@ class Trash extends RestController
             $this->trashService->loadTrashItem( $values['trash'] )
         );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
