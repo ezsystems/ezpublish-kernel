@@ -28,7 +28,7 @@ class TrashTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $trash = new Trash( array() );
+        $trash = new Trash( array(), '/content/trash' );
 
         $visitor->visit(
             $this->getVisitorMock(),

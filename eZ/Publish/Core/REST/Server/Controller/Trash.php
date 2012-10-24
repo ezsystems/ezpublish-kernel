@@ -60,9 +60,16 @@ class Trash extends RestController
      */
     public function loadTrashItems()
     {
+        $offset = isset( $this->request->variables['offset'] ) ? (int)$this->request->variables['offset'] : 0;
+        $limit = isset( $this->request->variables['limit'] ) ? (int)$this->request->variables['limit'] : -1;
+
+        $query = new Query();
+        $query->offset = $offset >= 0 ? $offset : null;
+        $query->limit = $limit >= 0 ? $limit : null;
+
         return new Values\Trash(
             $this->trashService->findTrashItems(
-                new Query()
+                $query
             )->items,
             $this->request->path
         );
