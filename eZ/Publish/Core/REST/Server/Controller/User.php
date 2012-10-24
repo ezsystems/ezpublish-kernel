@@ -481,7 +481,17 @@ class User extends RestController
     public function loadUserGroups()
     {
         $restUserGroups = array();
-        if ( isset( $this->request->variables['roleId'] ) )
+        if ( isset( $this->request->variables['id'] ) )
+        {
+            $userGroup = $this->userService->loadUserGroup( $this->request->variables['id'] );
+            $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
+            $userGroupMainLocation = $this->locationService->loadLocation( $userGroupContentInfo->mainLocationId );
+
+            $restUserGroups = array(
+                new Values\RestUserGroup( $userGroup, $userGroupContentInfo, $userGroupMainLocation )
+            );
+        }
+        else if ( isset( $this->request->variables['roleId'] ) )
         {
              $restUserGroups = $this->loadUserGroupsAssignedToRole();
         }
