@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Content ValueObjectVisitor class
+ * File containing the Version ValueObjectVisitor class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -15,15 +15,15 @@ use eZ\Publish\Core\REST\Common\UrlHandler,
     eZ\Publish\Core\REST\Common\Output\Visitor,
     eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer,
 
-    eZ\Publish\Core\REST\Server\Values\RelationList,
+    eZ\Publish\Core\REST\Server\Values\RelationList as RelationListValue,
 
     eZ\Publish\API\Repository\Values\ContentType\ContentType,
     eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
- * Content value object visitor
+ * Version value object visitor
  */
-class Content extends ValueObjectVisitor
+class Version extends ValueObjectVisitor
 {
     /**
      * @var \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer
@@ -45,11 +45,11 @@ class Content extends ValueObjectVisitor
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $data
+     * @param \eZ\Publish\Core\REST\Server\Values\Version $data
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $content = $data;
+        $content = $data->content;
 
         $versionInfo = $content->getVersionInfo();
         $contentInfo = $versionInfo->getContentInfo();
@@ -60,16 +60,19 @@ class Content extends ValueObjectVisitor
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Version' ) );
         $visitor->setHeader( 'Accept-Patch', $generator->getMediaType( 'VersionUpdate' ) );
 
-        $generator->startAttribute(
-            'href',
-            $this->urlHandler->generate(
+        $path = $data->path;
+        if ( $path == null )
+        {
+            $path = $this->urlHandler->generate(
                 'objectVersion',
                 array(
                     'object' => $content->id,
                     'version' => $versionInfo->versionNo,
                 )
-            )
-        );
+            );
+        }
+
+        $generator->startAttribute( 'href', $path );
         $generator->endAttribute( 'href' );
 
         $visitor->visitValueObject( $versionInfo );
@@ -84,7 +87,7 @@ class Content extends ValueObjectVisitor
         $generator->endHashElement( 'Fields' );
 
         $visitor->visitValueObject(
-            new RelationList(
+            new RelationListValue(
                 $content->getRelations(),
                 $content->id,
                 $versionInfo->versionNo

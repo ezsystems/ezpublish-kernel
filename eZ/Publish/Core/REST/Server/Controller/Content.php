@@ -200,16 +200,19 @@ class Content extends RestController
     /**
      * Loads a specific version of a given content object
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @return \eZ\Publish\Core\REST\Server\Values\Version
      */
     public function loadContentInVersion()
     {
         $urlValues = $this->urlHandler->parse( 'objectVersion', $this->request->path );
 
-        return $this->contentService->loadContent(
-            $urlValues['object'],
-            null,               // TODO: Implement using language filter on request URI
-            $urlValues['version']
+        return new Values\Version(
+            $this->contentService->loadContent(
+                $urlValues['object'],
+                null,               // TODO: Implement using language filter on request URI
+                $urlValues['version']
+            ),
+            $this->request->path
         );
     }
 
@@ -353,7 +356,9 @@ class Content extends RestController
 
         return new Values\CreatedVersion(
             array(
-                'version' => $contentDraft
+                'version' => new Values\Version(
+                    $contentDraft
+                )
             )
         );
     }
@@ -381,7 +386,9 @@ class Content extends RestController
 
         return new Values\CreatedVersion(
             array(
-                'version' => $contentDraft
+                'version' => new Values\Version(
+                    $contentDraft
+                )
             )
         );
     }
@@ -389,7 +396,7 @@ class Content extends RestController
     /**
      * A specific draft is updated.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @return \eZ\Publish\Core\REST\Server\Values\Version
      */
     public function updateVersion()
     {
@@ -428,7 +435,14 @@ class Content extends RestController
         }
 
         // Reload the content to handle languages GET parameter
-        return $this->contentService->loadContent( $urlValues['object'], $languages, $versionInfo->versionNo );
+        return new Values\Version(
+            $this->contentService->loadContent(
+                $urlValues['object'],
+                $languages,
+                $versionInfo->versionNo
+            ),
+            $this->request->path
+        );
     }
 
     /**
