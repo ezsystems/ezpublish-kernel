@@ -805,7 +805,6 @@ ezpublish_rest_deletePolicy:
 
 
 ezpublish_rest_loadUsers:
-    # @todo: Handle all GET parameters
     pattern: /user/users
     defaults:
         _controller: ezpublish_rest.controller.user:loadUsers
@@ -904,7 +903,6 @@ ezpublish_rest_unassignRoleFromUser:
         roleId: \d+
 
 ezpublish_rest_loadUserGroups:
-    # @todo Handle all GET parameters
     pattern: /user/groups
     defaults:
         _controller: ezpublish_rest.controller.user:loadUserGroups
