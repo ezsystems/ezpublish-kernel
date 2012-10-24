@@ -150,9 +150,9 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                 'SiteSettings.SiteList' => array( 'SiteSettings.SiteList', null, null, array( 'eng', 'ezdemo_site', 'ezdemo_site_admin' ) ),
                 'FileSettings.VarDir' => array( 'FileSettings.VarDir', 'site', 'eng', 'var/ezdemo_site' ),
                 'FileSettings.StorageDir' => array( 'FileSettings.StorageDir', 'site', 'eng', 'storage' ),
-                'ImageMagick.IsEnabled' => array( 'ImageMagick.IsEnabled', 'site', 'eng', 'true' ),
-                'ImageMagick.ExecutablePath' => array( 'ImageMagick.ExecutablePath', 'site', 'eng', '/usr/bin' ),
-                'ImageMagick.Executable' => array( 'ImageMagick.Executable', 'site', 'eng', 'convert' ),
+                'ImageMagick.IsEnabled' => array( 'ImageMagick.IsEnabled', 'image', 'eng', 'true' ),
+                'ImageMagick.ExecutablePath' => array( 'ImageMagick.ExecutablePath', 'image', 'eng', '/usr/bin' ),
+                'ImageMagick.Executable' => array( 'ImageMagick.Executable', 'image', 'eng', 'convert' ),
             ),
             'getGroup' => array(
                 'SiteAccessSettings' => array( 'SiteAccessSettings', null, null, array( 'MatchOrder' => 'uri', 'URIMatchType' => 'element', 'URIMatchElement' => 1 ) ),
@@ -173,7 +173,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
 
         // imagemagick disabled
         $element = $baseData;
-        $element[IDX_MOCK_PARAMETERS]['getParameter']['ImageMagick.IsEnabled'] = array( 'ImageMagick.IsEnabled', 'eng', 'site', 'false' );
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['ImageMagick.IsEnabled'] = array( 'ImageMagick.IsEnabled', 'eng', 'image', 'false' );
         $element[IDX_EXPECTED_RESULT]['ezpublish']['imagemagick']['enabled'] = false;
         unset( $element[IDX_EXPECTED_RESULT]['ezpublish']['imagemagick']['path'] );
         $data[] = $element;

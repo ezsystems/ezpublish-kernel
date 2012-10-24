@@ -104,12 +104,12 @@ class ConfigurationConverter
             $settings['ezpublish']['system'][$groupName]['storage_dir'] = $storageDir;
 
         // ImageMagick settings
-        $imageMagickEnabled = $this->getParameterWithFallback( 'ImageMagick.IsEnabled', 'site', $defaultSiteaccess );
+        $imageMagickEnabled = $this->getParameterWithFallback( 'ImageMagick.IsEnabled', 'image', $defaultSiteaccess );
         if ( $imageMagickEnabled == 'true' )
         {
             $settings['ezpublish']['imagemagick']['enabled'] = true;
-            $imageMagickExecutablePath = $imageMagickEnabled = $this->getParameterWithFallback( 'ImageMagick.ExecutablePath', 'site', $defaultSiteaccess );
-            $imageMagickExecutable = $imageMagickEnabled = $this->getParameterWithFallback( 'ImageMagick.Executable', 'site', $defaultSiteaccess );
+            $imageMagickExecutablePath = $imageMagickEnabled = $this->getParameterWithFallback( 'ImageMagick.ExecutablePath', 'image', $defaultSiteaccess );
+            $imageMagickExecutable = $imageMagickEnabled = $this->getParameterWithFallback( 'ImageMagick.Executable', 'image', $defaultSiteaccess );
             $settings['ezpublish']['imagemagick']['path'] = rtrim( $imageMagickExecutablePath, '/\\' ) . '/' . $imageMagickExecutable;
         }
         else
