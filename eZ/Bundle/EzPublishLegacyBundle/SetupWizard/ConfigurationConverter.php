@@ -94,8 +94,29 @@ class ConfigurationConverter
         );
         $settings['ezpublish']['system'][$adminSiteaccess] = array( 'url_alias_router' => false );
 
+        // FileSettings
         $settings['ezpublish']['system'][$groupName]['var_dir'] =
             $this->getParameterWithFallback( 'FileSettings.VarDir', 'site', $defaultSiteaccess );
+
+        // we don't map the default FileSettings.StorageDir value
+        $storageDir = $this->getParameterWithFallback( 'FileSettings.StorageDir', 'site', $defaultSiteaccess );
+        if ( $storageDir !== 'storage' )
+            $settings['ezpublish']['system'][$groupName]['storage_dir'] = $storageDir;
+
+        // ImageMagick settings
+        $imageMagickEnabled = $this->getParameterWithFallback( 'ImageMagick.IsEnabled', 'site', $defaultSiteaccess );
+        if ( $imageMagickEnabled == 'true' )
+        {
+            $settings['ezpublish']['imagemagick']['enabled'] = true;
+            $imageMagickExecutablePath = $imageMagickEnabled = $this->getParameterWithFallback( 'ImageMagick.ExecutablePath', 'site', $defaultSiteaccess );
+            $imageMagickExecutable = $imageMagickEnabled = $this->getParameterWithFallback( 'ImageMagick.Executable', 'site', $defaultSiteaccess );
+            $settings['ezpublish']['imagemagick']['path'] = rtrim( $imageMagickExecutablePath, '/\\' ) . '/' . $imageMagickExecutable;
+        }
+        else
+        {
+            $settings['ezpublish']['imagemagick']['enabled'] = false;
+        }
+
 
         return $settings;
     }
