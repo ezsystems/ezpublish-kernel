@@ -54,14 +54,6 @@ ezpublish_rest_deleteSection:
 # Content
 
 
-ezpublish_rest_listContent:
-    # @todo handle ?remoteid= filter in controller method. See loadContentInfoByRemoteId
-    pattern: /content/objects
-    defaults:
-        _controller: ezpublish_rest.controller.content:listContent
-    requirements:
-        _method: GET
-
 ezpublish_rest_createContent:
     pattern: /content/objects
     defaults:
