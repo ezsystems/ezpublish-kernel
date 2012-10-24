@@ -687,7 +687,10 @@ class User extends RestController
      */
     public function loadUsersFromGroup()
     {
-        $urlValues = $this->urlHandler->parse( 'groupUsers', $this->request->path );
+        $questionMark = strpos( $this->request->path, '?' );
+        $requestPath = $questionMark !== false ? substr( $this->request->path, 0, $questionMark ) : $this->request->path;
+
+        $urlValues = $this->urlHandler->parse( 'groupUsers', $requestPath );
 
         $userGroupLocation = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath( $urlValues['group'] )
@@ -697,7 +700,14 @@ class User extends RestController
             $userGroupLocation->contentId
         );
 
-        $users = $this->userService->loadUsersOfUserGroup( $userGroup );
+        $offset = isset( $this->request->variables['offset'] ) ? (int)$this->request->variables['offset'] : 0;
+        $limit = isset( $this->request->variables['limit'] ) ? (int)$this->request->variables['limit'] : -1;
+
+        $users = $this->userService->loadUsersOfUserGroup(
+            $userGroup,
+            $offset >= 0 ? $offset : 0,
+            $limit >= 0 ? $limit : -1
+        );
 
         $restUsers = array();
         foreach ( $users as $user )
