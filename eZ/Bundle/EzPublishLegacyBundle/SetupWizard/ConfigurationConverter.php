@@ -97,6 +97,10 @@ class ConfigurationConverter
         $settings['ezpublish']['system'][$groupName]['var_dir'] =
             $this->getParameterWithFallback( 'FileSettings.VarDir', 'site', $defaultSiteaccess );
 
+        $storageDir = $this->getParameterWithFallback( 'FileSettings.StorageDir', 'site', $defaultSiteaccess );
+        // we don't map the default value
+        if ( $storageDir !== 'storage' )
+            $settings['ezpublish']['system'][$groupName]['storage_dir'] = $storageDir;
         return $settings;
     }
 

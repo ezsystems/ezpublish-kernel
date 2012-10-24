@@ -31,6 +31,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
      */
     public function testFromLegacy( $package, $adminSiteaccess, $mockParameters, $expectedResult, $exception = null )
     {
+        // a map of arguments + return value for getParameter/getGroup is converted to a callback in order to allow exceptions
         $legacyResolver = $this->getLegacyConfigResolverMock();
         foreach( $mockParameters as $method => $callbackMap )
         {
@@ -71,15 +72,21 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
         {
             foreach( $callbackMap as $map )
             {
-                if ( count( array_diff( func_get_args(), array_slice( $map, 0, -1 ) ) ) == 0 )
+                $mapArguments = array_slice( $map, 0, -1 );
+                // pad the call arguments array with nulls to match the map
+                $callArguments = array_pad( func_get_args(), count( $mapArguments ), null );
+
+                if ( count( array_diff( $callArguments, $mapArguments ) ) == 0 )
                 {
-                    $return = $map[count( $map ) - 1];;
+                    $return = $map[count( $map ) - 1];
                     if ( is_callable( $return ) )
                         return $return();
                     else
                         return $return;
                 }
+
             }
+            throw new \Exception( "No callback match found for " . var_export( func_get_args(), true ) );
         };
     }
 
@@ -128,11 +135,17 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
 
         $exceptionType = 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException';
 
+        $parameterNotFoundException = function()
+        {
+            throw new \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException( 'Test', 'test' );
+        };
+
         $commonMockParameters = array(
             'getParameter' => array(
                 'SiteSettings.DefaultAccess' => array( 'SiteSettings.DefaultAccess', null, null, 'eng' ),
                 'SiteSettings.SiteList' => array( 'SiteSettings.SiteList', null, null, array( 'eng', 'ezdemo_site', 'ezdemo_site_admin' ) ),
                 'FileSettings.VarDir' => array( 'FileSettings.VarDir', 'site', 'eng', 'var/ezdemo_site' ),
+                'FileSettings.StorageDir' => array( 'FileSettings.StorageDir', 'site', 'eng', 'storage' ),
             ),
             'getGroup' => array(
                 'SiteAccessSettings' => array( 'SiteAccessSettings', null, null, array( 'MatchOrder' => 'uri', 'URIMatchType' => 'element', 'URIMatchElement' => 1 ) ),
@@ -173,6 +186,12 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
         $element[IDX_EXPECTED_RESULT]['ezpublish']['siteaccess']['match'] = array(
             "Map\\Host" => array( 'site.com' => 'eng', 'admin.site.com' => 'ezdemo_site_admin' )
         );
+        $data[] = $element;
+
+        // customized storage dir
+        $element = $baseData;
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['FileSettings.StorageDir'] = array( 'FileSettings.StorageDir', 'site', 'eng', 'customstorage');
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['storage_dir'] = 'customstorage';
         $data[] = $element;
 
         // host match, with map
