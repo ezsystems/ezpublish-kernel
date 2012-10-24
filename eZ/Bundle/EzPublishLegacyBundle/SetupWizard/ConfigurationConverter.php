@@ -76,14 +76,7 @@ class ConfigurationConverter
             'eZMySQLDB' => 'mysql',
         );
 
-        try
-        {
-            $databaseSettings = $this->legacyResolver->getGroup( 'DatabaseSettings', 'site', $defaultSiteaccess );
-        }
-        catch( \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException $e )
-        {
-            $databaseSettings = $this->legacyResolver->getGroup( 'DatabaseSettings', 'site' );
-        }
+        $databaseSettings = $this->getGroupWithFallback( 'DatabaseSettings', 'site', $defaultSiteaccess );
 
         $databaseType = $databaseSettings['DatabaseImplementation'];
         if ( isset( $databaseMapping[$databaseType] ) )
@@ -101,7 +94,62 @@ class ConfigurationConverter
         );
         $settings['ezpublish']['system'][$adminSiteaccess] = array( 'url_alias_router' => false );
 
+        $settings['ezpublish']['system'][$groupName]['var_dir'] =
+            $this->getParameterWithFallback( 'FileSettings.VarDir', 'site', $defaultSiteaccess );
+
         return $settings;
+    }
+
+    /**
+     * Returns the contents of the legacy group $groupName, either in $defaultSiteaccess or,
+     * if not found, in the global settings
+     *
+     * @param $groupName
+     * @param $namespace
+     * @param $siteaccess
+     *
+     * @internal param $defaultSiteaccess
+     * @return array
+     *
+     * @throws \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException
+     */
+    public function getGroupWithFallback( $groupName, $namespace, $siteaccess )
+    {
+        try
+        {
+            return $this->legacyResolver->getGroup( $groupName, $namespace, $siteaccess );
+        }
+        // fallback to global override
+        catch ( \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException $e )
+        {
+            return $this->legacyResolver->getGroup( $groupName, $namespace );
+        }
+    }
+
+    /**
+     * Returns the value of the legacy parameter $parameterName, either in $defaultSiteaccess or,
+     * if not found, in the global settings
+     *
+     * @param $parameterName
+     * @param $namespace
+     * @param $siteaccess
+     *
+     * @internal param $groupName
+     * @internal param $defaultSiteaccess
+     * @return array
+     *
+     */
+    public function getParameterWithFallback( $parameterName, $namespace, $siteaccess )
+    {
+        try
+        {
+            return $this->legacyResolver->getParameter( $parameterName, $namespace, $siteaccess );
+        }
+            // fallback to global override
+        catch ( \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException $e )
+        {
+            return $this->legacyResolver->getParameter( $parameterName, $namespace );
+        }
     }
 
     protected function resolveMatching()

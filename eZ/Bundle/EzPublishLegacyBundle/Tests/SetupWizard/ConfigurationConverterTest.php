@@ -38,7 +38,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
             $legacyResolver->expects( $this->any() )->method( $method )->will( $this->returnValueMap( $map ) );
         }
 
-        $configurationConverter = new ConfigurationConverter( $legacyResolver );
+        $configurationConverter = new ConfigurationConverter( $legacyResolver, $this->getLegacyKernelMock() );
 
         try
         {
@@ -79,7 +79,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                         2 => 'ezdemo_site_admin',
                     ),
                     'groups' => array(
-                        'ezdemo_site_group' =>
+                        'ezdemo_group' =>
                         array (
                             0 => 'eng',
                             1 => 'ezdemo_site',
@@ -89,7 +89,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                     'match' => array( 'URIElement' => 1 ),
                 ),
                 'system' => array(
-                    'ezdemo_site_group' => array(
+                    'ezdemo_group' => array(
                         'database' => array(
                             'type' => 'mysql',
                             'user' => 'root',
@@ -97,6 +97,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                             'server' => 'localhost',
                             'database_name' => 'ezdemo',
                         ),
+                        'var_dir' => 'var/ezdemo_site',
                     ),
                     'ezdemo_site_admin' => array( 'url_alias_router' => false )
                 ),
@@ -109,6 +110,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
             'getParameter' => array(
                 'SiteSettings.DefaultAccess' => array( 'SiteSettings.DefaultAccess', null, null, 'eng' ),
                 'SiteSettings.SiteList' => array( 'SiteSettings.SiteList', null, null, array( 'eng', 'ezdemo_site', 'ezdemo_site_admin' ) ),
+                'FileSettings.VarDir' => array( 'FileSettings.VarDir', 'site', 'eng', 'var/ezdemo_site' ),
             ),
             'getGroup' => array(
                 'SiteAccessSettings' => array( 'SiteAccessSettings', null, null, array( 'MatchOrder' => 'uri', 'URIMatchType' => 'element', 'URIMatchElement' => 1 ) ),
@@ -166,12 +168,10 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
      */
     protected function getLegacyConfigResolverMock( array $methodsToMock = array() )
     {
-
         $mock = $this
             ->getMockBuilder( 'eZ\\Bundle\\EzPublishLegacyBundle\\DependencyInjection\\Configuration\\LegacyConfigResolver' )
-            ->setMethods( array( 'getParameter', 'getGroup' ) )
+            ->setMethods( array_merge( $methodsToMock, array( 'getParameter', 'getGroup' ) ) )
             ->disableOriginalConstructor()
-            ->setMethods( $methodsToMock )
             ->getMock();
 
         return $mock;
@@ -225,5 +225,29 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                 ),
             ),
         );
+    }
+
+    /**
+     * @return \Closure
+     */
+    protected function getLegacyKernelMock()
+    {
+        $legacyKernelMock = $this
+            ->getMockBuilder( 'eZ\\Publish\\Core\\MVC\\Legacy\\Kernel' )
+            ->setMethods( array( 'runCallback' ) )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $legacyKernelMock
+            ->expects( $this->any() )
+            ->method( 'runCallback' )
+            ->will( $this->returnValue( 'ezpKernelResult' ) );
+
+        $closureMock = function() use ( $legacyKernelMock )
+        {
+            return $legacyKernelMock;
+        };
+
+        return $closureMock;
     }
 }
