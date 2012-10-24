@@ -265,13 +265,21 @@ class Location extends RestController
      */
     public function loadLocationChildren()
     {
-        $values = $this->urlHandler->parse( 'locationChildren', $this->request->path );
+        $questionMark = strpos( $this->request->path, '?' );
+        $requestPath = $questionMark !== false ? substr( $this->request->path, 0, $questionMark ) : $this->request->path;
+
+        $values = $this->urlHandler->parse( 'locationChildren', $requestPath );
+
+        $offset = isset( $this->request->variables['offset'] ) ? (int)$this->request->variables['offset'] : 0;
+        $limit = isset( $this->request->variables['limit'] ) ? (int)$this->request->variables['limit'] : -1;
 
         return new Values\LocationList(
             $this->locationService->loadLocationChildren(
                 $this->locationService->loadLocation(
                     $this->extractLocationIdFromPath( $values['location'] )
-                )
+                ),
+                $offset >= 0 ? $offset : 0,
+                $limit >= 0 ? $limit : -1
             ),
             $this->request->path
         );
