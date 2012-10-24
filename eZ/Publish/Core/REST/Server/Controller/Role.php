@@ -21,6 +21,8 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+
 /**
  * Role controller
  */
@@ -90,11 +92,18 @@ class Role extends RestController
      */
     public function listRoles()
     {
+        $roles = array();
         if ( isset( $this->request->variables['identifier'] ) )
         {
-            $roles = array(
-                $this->loadRoleByIdentifier()
-            );
+            try
+            {
+                $role = $this->roleService->loadRoleByIdentifier( $this->request->variables['identifier'] );
+                $roles[] = $role;
+            }
+            catch ( APINotFoundException $e )
+            {
+                // Do nothing
+            }
         }
         else
         {
@@ -120,16 +129,6 @@ class Role extends RestController
     {
         $values = $this->urlHandler->parse( 'role', $this->request->path );
         return $this->roleService->loadRole( $values['role'] );
-    }
-
-    /**
-     * Load role by identifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
-    public function loadRoleByIdentifier()
-    {
-        return $this->roleService->loadRoleByIdentifier( $this->request->variables['identifier'] );
     }
 
     /**
