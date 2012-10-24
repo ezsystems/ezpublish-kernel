@@ -32,16 +32,19 @@ class RelationList extends ValueObjectVisitor
         $generator->startObjectElement( 'Relations', 'RelationList' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'RelationList' ) );
 
-        $generator->startAttribute(
-            'href',
-            $this->urlHandler->generate(
+        $path = $data->path;
+        if ( $path === null )
+        {
+            $path = $this->urlHandler->generate(
                 'objectVersionRelations',
                 array(
                     'object' => $data->contentId,
                     'version' => $data->versionNo
                 )
-            )
-        );
+            );
+        }
+
+        $generator->startAttribute( 'href', $path );
         $generator->endAttribute( 'href' );
 
         $generator->startList( 'Relation' );

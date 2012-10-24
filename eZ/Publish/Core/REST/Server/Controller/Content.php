@@ -486,7 +486,13 @@ class Content extends RestController
      */
     public function loadVersionRelations()
     {
-        $urlValues = $this->urlHandler->parse( 'objectVersionRelations', $this->request->path );
+        $questionMark = strpos( $this->request->path, '?' );
+        $requestPath = $questionMark !== false ? substr( $this->request->path, 0, $questionMark ) : $this->request->path;
+
+        $urlValues = $this->urlHandler->parse( 'objectVersionRelations', $requestPath );
+
+        $offset = isset( $this->request->variables['offset'] ) ? (int)$this->request->variables['offset'] : 0;
+        $limit = isset( $this->request->variables['limit'] ) ? (int)$this->request->variables['limit'] : -1;
 
         $relationList = $this->contentService->loadRelations(
             $this->contentService->loadVersionInfo(
@@ -495,7 +501,18 @@ class Content extends RestController
             )
         );
 
-        return new Values\RelationList( $relationList, $urlValues['object'], $urlValues['version'] );
+        $relationList = array_slice(
+            $relationList,
+            $offset >= 0 ? $offset : 0,
+            $limit >= 0 ? $limit : null
+        );
+
+        return new Values\RelationList(
+            $relationList,
+            $urlValues['object'],
+            $urlValues['version'],
+            $this->request->path
+        );
     }
 
     /**
