@@ -211,7 +211,7 @@ ezpublish_rest_createDraftFromCurrentVersion:
 ezpublish_rest_loadLocationsForContent:
     pattern: /content/objects/{contentId}/locations
     defaults:
-        _controller: ezpublish_rest.controller.content:loadLocationsForContent
+        _controller: ezpublish_rest.controller.location:loadLocationsForContent
     requirements:
         _method: GET
         contentId: \d+
@@ -219,7 +219,7 @@ ezpublish_rest_loadLocationsForContent:
 ezpublish_rest_createLocation:
     pattern: /content/objects/{contentId}/locations
     defaults:
-        _controller: ezpublish_rest.controller.content:createLocation
+        _controller: ezpublish_rest.controller.location:createLocation
     requirements:
         _method: POST
         contentId: \d+
