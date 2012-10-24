@@ -31,11 +31,10 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
      */
     public function testFromLegacy( $package, $adminSiteaccess, $mockParameters, $expectedResult, $exception = null )
     {
-        // @todo Change to a callback mock so that exceptions can be thrown by getGroup/getParameter
         $legacyResolver = $this->getLegacyConfigResolverMock();
-        foreach( $mockParameters as $method => $map )
+        foreach( $mockParameters as $method => $callbackMap )
         {
-            $legacyResolver->expects( $this->any() )->method( $method )->will( $this->returnValueMap( $map ) );
+            $legacyResolver->expects( $this->any() )->method( $method )->will( $this->returnCallback( $this->convertMapToCallback( $callbackMap ) ) );
         }
 
         $configurationConverter = new ConfigurationConverter( $legacyResolver, $this->getLegacyKernelMock() );
@@ -59,6 +58,29 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
             $expectedResult,
             $result
         );
+    }
+
+    /**
+     * @param array $callbackMap array of callback parameter arrays [0..n-1 => arguments, n => return value]
+     *
+     * @return callable
+     */
+    protected function convertMapToCallback( $callbackMap )
+    {
+        return function() use ( $callbackMap )
+        {
+            foreach( $callbackMap as $map )
+            {
+                if ( count( array_diff( func_get_args(), array_slice( $map, 0, -1 ) ) ) == 0 )
+                {
+                    $return = $map[count( $map ) - 1];;
+                    if ( is_callable( $return ) )
+                        return $return();
+                    else
+                        return $return;
+                }
+            }
+        };
     }
 
     public function providerForTestFromLegacy()
