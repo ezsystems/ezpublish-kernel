@@ -59,6 +59,11 @@ class ImageProcessor extends BinaryInputProcessor
      */
     public function postProcessHash( $outgoingValueHash )
     {
+        if ( !is_array( $outgoingValueHash ) )
+        {
+            return $outgoingValueHash;
+        }
+
         $outgoingValueHash['variants'] = array();
         foreach ( $this->variants as $variant => $mimeType )
         {

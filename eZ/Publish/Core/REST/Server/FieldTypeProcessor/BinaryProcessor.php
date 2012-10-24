@@ -46,6 +46,11 @@ class BinaryProcessor extends BinaryInputProcessor
      */
     public function postProcessHash( $outgoingValueHash )
     {
+        if ( !is_array( $outgoingValueHash ) )
+        {
+            return $outgoingValueHash;
+        }
+
         $outgoingValueHash['url'] = $this->generateUrl(
             $outgoingValueHash['path']
         );
