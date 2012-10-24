@@ -206,8 +206,7 @@ class Location extends RestController
     /**
      * Swaps a location with another one
      *
-     *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceSwapped
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function swapLocation()
     {
@@ -221,7 +220,7 @@ class Location extends RestController
 
         $this->locationService->swapLocation( $location, $destinationLocation );
 
-        return new Values\ResourceSwapped();
+        return new Values\NoContent();
     }
 
     /**
