@@ -54,7 +54,7 @@ class AcceptHeaderVisitorDispatcher
      *
      * @param \eZ\Publish\Core\REST\Server\Request $request
      * @param mixed $result
-     * @return void
+     * @return \eZ\Publish\Core\REST\Common\Message
      */
     public function dispatch( Request $request, $result )
     {
@@ -64,6 +64,7 @@ class AcceptHeaderVisitorDispatcher
             {
                 if ( preg_match( $regexp, $mimeType['value'] ) )
                 {
+                    /** @var \eZ\Publish\Core\REST\Common\Output\Visitor $visitor */
                     return $visitor->visit( $result );
                 }
             }
