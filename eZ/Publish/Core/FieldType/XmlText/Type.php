@@ -10,7 +10,9 @@
 namespace eZ\Publish\Core\FieldType\XmlText;
 use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
-    eZ\Publish\Core\FieldType\ValidationError;
+    eZ\Publish\Core\FieldType\ValidationError,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    DOMDocument;
 
 /**
  * XmlText field type.
@@ -78,13 +80,7 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value( <<<EOF
-<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />
-EOF
-        );
+        return new Value;
     }
 
     /**
@@ -101,18 +97,19 @@ EOF
      * from validators, but only plausibility checks for the general data
      * format.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
      *
      * @param \eZ\Publish\Core\FieldType\XmlText\Value|string $inputValue
      *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
      * @return mixed The potentially converted and structurally plausible value.
      */
     public function acceptValue( $inputValue )
     {
         if ( is_string( $inputValue ) )
         {
-            $inputValue = new Value( $inputValue );
+            $doc = new DOMDocument;
+            $doc->loadXML( $inputValue );
+            $inputValue = new Value( $doc );
         }
 
         if ( !$inputValue instanceof Value )
@@ -142,7 +139,9 @@ EOF
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
+     * $hash accepts the following keys:
+     *  - xml (XML string which complies internal format)
      *
      * @param mixed $hash
      *
@@ -150,7 +149,9 @@ EOF
      */
     public function fromHash( $hash )
     {
-        return new Value( $hash );
+        $doc = new DOMDocument;
+        $doc->loadXML( $hash['xml'] );
+        return new Value( $doc );
     }
 
     /**
@@ -162,7 +163,34 @@ EOF
      */
     public function toHash( $value )
     {
-        return $value->text;
+        return array( 'xml' => (string)$value );
+    }
+
+    /**
+     * Creates a new Value object from persistence data.
+     * $fieldValue->data is supposed to be a DOMDocument object.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
+     * @return Value
+     */
+    public function fromPersistenceValue( FieldValue $fieldValue )
+    {
+        return new Value( $fieldValue->data );
+    }
+
+    /**
+     * @param Value $value
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
+     */
+    public function toPersistenceValue( $value )
+    {
+        return new FieldValue(
+            array(
+                 'data'         => $value->xml,
+                 'externalData' => null,
+                 'sortKey'      => $this->getSortInfo( $value )
+            )
+        );
     }
 
     /**
