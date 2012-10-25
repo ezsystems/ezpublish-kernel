@@ -52,6 +52,6 @@ EOT;
      */
     public function __toString()
     {
-        return isset( $this->xml ) ? $this->xml->saveXML() : '';
+        return isset( $this->xml ) ? $this->xml->saveXML() : self::EMPTY_VALUE;
     }
 }
