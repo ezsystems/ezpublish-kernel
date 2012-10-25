@@ -36,7 +36,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                     "id" => "0-d41d8cd98f00b204e9800998ecf8427e",
                     "type" => UrlAlias::LOCATION,
                     "destination" => $this->repository->getLocationService()->loadLocation( 2 ),
-                    "path" => "",
+                    "path" => "/",
                     "languageCodes" => array( "eng-US", "eng-GB" ),
                     "alwaysAvailable" => true,
                     "isHistory" => false,
@@ -65,7 +65,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                     "id" => "0-9bc65c2abec141778ffaa729489f3e87",
                     "type" => UrlAlias::LOCATION,
                     "destination" => $this->repository->getLocationService()->loadLocation( 5 ),
-                    "path" => "Users",
+                    "path" => "/Users",
                     "languageCodes" => array( "eng-US" ),
                     "alwaysAvailable" => true,
                     "isHistory" => false,
@@ -99,7 +99,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                     "id" => "0-9bc65c2abec141778ffaa729489f3e87",
                     "type" => UrlAlias::LOCATION,
                     "destination" => $this->repository->getLocationService()->loadLocation( 5 ),
-                    "path" => "Users",
+                    "path" => "/Users",
                     "languageCodes" => array( "eng-US" ),
                     "alwaysAvailable" => true,
                     "isHistory" => false,
@@ -141,7 +141,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                     "id" => "9-2e5bc8831f7ae6a29530e7f1bbf2de9c",
                     "type" => UrlAlias::LOCATION,
                     "destination" => $this->repository->getLocationService()->loadLocation( 53 ),
-                    "path" => "Media/Multimedia",
+                    "path" => "/Media/Multimedia",
                     "languageCodes" => array( "eng-US" ),
                     "alwaysAvailable" => true,
                     "isHistory" => false,
@@ -170,7 +170,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                     "id" => "9-2e5bc8831f7ae6a29530e7f1bbf2de9c",
                     "type" => UrlAlias::LOCATION,
                     "destination" => $this->repository->getLocationService()->loadLocation( 53 ),
-                    "path" => "Media/Multimedia",
+                    "path" => "/Media/Multimedia",
                     "languageCodes" => array( "eng-US" ),
                     "alwaysAvailable" => true,
                     "isHistory" => false,
@@ -199,7 +199,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                     "id" => "9-2e5bc8831f7ae6a29530e7f1bbf2de9c",
                     "type" => UrlAlias::LOCATION,
                     "destination" => $this->repository->getLocationService()->loadLocation( 53 ),
-                    "path" => "Media/Multimedia",
+                    "path" => "/Media/Multimedia",
                     "languageCodes" => array( "eng-US" ),
                     "alwaysAvailable" => true,
                     "isHistory" => false,
@@ -246,7 +246,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                     "id" => "9-2e5bc8831f7ae6a29530e7f1bbf2de9c",
                     "type" => UrlAlias::LOCATION,
                     "destination" => $this->repository->getLocationService()->loadLocation( 53 ),
-                    "path" => "Media/Multimedia",
+                    "path" => "/Media/Multimedia",
                     "languageCodes" => array( "eng-US" ),
                     "alwaysAvailable" => true,
                     "isHistory" => false,
@@ -275,7 +275,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                     "id" => "2-e57843d836e3af8ab611fde9e2139b3a",
                     "type" => UrlAlias::LOCATION,
                     "destination" => $this->repository->getLocationService()->loadLocation( 12 ),
-                    "path" => "Users/Guest-accounts",
+                    "path" => "/Users/Guest-accounts",
                     "languageCodes" => array( "eng-US" ),
                     "alwaysAvailable" => true,
                     "isHistory" => true,
@@ -367,7 +367,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases1,
                 array( "cro-HR" ),
                 array(
-                    "cro-HR" => "jedan",
+                    "cro-HR" => "/jedan",
                 ),
                 "cro-HR",
             ),
@@ -375,7 +375,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases1,
                 array( "eng-GB" ),
                 array(
-                    "cro-HR" => "jedan",
+                    "cro-HR" => "/jedan",
                 ),
                 "cro-HR",
             ),
@@ -383,7 +383,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases1,
                 array( "ger-DE" ),
                 array(
-                    "cro-HR" => "jedan",
+                    "cro-HR" => "/jedan",
                 ),
                 "cro-HR",
             ),
@@ -391,7 +391,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases1,
                 array( "cro-HR", "eng-GB", "ger-DE" ),
                 array(
-                    "cro-HR" => "jedan",
+                    "cro-HR" => "/jedan",
                 ),
                 "cro-HR",
             ),
@@ -399,7 +399,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases2,
                 array( "cro-HR" ),
                 array(
-                    "cro-HR" => "jedan/dva",
+                    "cro-HR" => "/jedan/dva",
                 ),
                 "cro-HR",
             ),
@@ -407,7 +407,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases2,
                 array( "eng-GB" ),
                 array(
-                    "eng-GB" => "jedan/two",
+                    "eng-GB" => "/jedan/two",
                 ),
                 "eng-GB",
             ),
@@ -415,8 +415,8 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases2,
                 array( "cro-HR", "eng-GB" ),
                 array(
-                    "cro-HR" => "jedan/dva",
-                    "eng-GB" => "jedan/two",
+                    "cro-HR" => "/jedan/dva",
+                    "eng-GB" => "/jedan/two",
                 ),
                 "cro-HR",
             ),
@@ -424,7 +424,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases2,
                 array( "cro-HR", "ger-DE" ),
                 array(
-                    "cro-HR" => "jedan/dva",
+                    "cro-HR" => "/jedan/dva",
                 ),
                 "cro-HR",
             ),
@@ -432,8 +432,8 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases2,
                 array( "eng-GB", "cro-HR" ),
                 array(
-                    "cro-HR" => "jedan/dva",
-                    "eng-GB" => "jedan/two",
+                    "cro-HR" => "/jedan/dva",
+                    "eng-GB" => "/jedan/two",
                 ),
                 "eng-GB",
             ),
@@ -441,7 +441,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases2,
                 array( "eng-GB", "ger-DE" ),
                 array(
-                    "eng-GB" => "jedan/two",
+                    "eng-GB" => "/jedan/two",
                 ),
                 "eng-GB",
             ),
@@ -449,7 +449,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases2,
                 array( "ger-DE", "cro-HR" ),
                 array(
-                    "cro-HR" => "jedan/dva",
+                    "cro-HR" => "/jedan/dva",
                 ),
                 "cro-HR",
             ),
@@ -457,7 +457,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases2,
                 array( "ger-DE", "eng-GB" ),
                 array(
-                    "eng-GB" => "jedan/two",
+                    "eng-GB" => "/jedan/two",
                 ),
                 "eng-GB",
             ),
@@ -465,8 +465,8 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases2,
                 array( "cro-HR", "eng-GB", "ger-DE" ),
                 array(
-                    "cro-HR" => "jedan/dva",
-                    "eng-GB" => "jedan/two",
+                    "cro-HR" => "/jedan/dva",
+                    "eng-GB" => "/jedan/two",
                 ),
                 "cro-HR",
             ),
@@ -474,8 +474,8 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases2,
                 array( "cro-HR", "ger-DE", "eng-GB" ),
                 array(
-                    "cro-HR" => "jedan/dva",
-                    "eng-GB" => "jedan/two",
+                    "cro-HR" => "/jedan/dva",
+                    "eng-GB" => "/jedan/two",
                 ),
                 "cro-HR",
             ),
@@ -483,8 +483,8 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases2,
                 array( "eng-GB", "cro-HR", "ger-DE" ),
                 array(
-                    "cro-HR" => "jedan/dva",
-                    "eng-GB" => "jedan/two",
+                    "cro-HR" => "/jedan/dva",
+                    "eng-GB" => "/jedan/two",
                 ),
                 "eng-GB",
             ),
@@ -492,8 +492,8 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases2,
                 array( "eng-GB", "ger-DE", "cro-HR" ),
                 array(
-                    "cro-HR" => "jedan/dva",
-                    "eng-GB" => "jedan/two",
+                    "cro-HR" => "/jedan/dva",
+                    "eng-GB" => "/jedan/two",
                 ),
                 "eng-GB",
             ),
@@ -501,8 +501,8 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases2,
                 array( "ger-DE", "cro-HR", "eng-GB" ),
                 array(
-                    "cro-HR" => "jedan/dva",
-                    "eng-GB" => "jedan/two",
+                    "cro-HR" => "/jedan/dva",
+                    "eng-GB" => "/jedan/two",
                 ),
                 "cro-HR",
             ),
@@ -510,8 +510,8 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases2,
                 array( "ger-DE", "eng-GB", "cro-HR" ),
                 array(
-                    "cro-HR" => "jedan/dva",
-                    "eng-GB" => "jedan/two",
+                    "cro-HR" => "/jedan/dva",
+                    "eng-GB" => "/jedan/two",
                 ),
                 "eng-GB",
             ),
@@ -519,7 +519,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases3,
                 array( "cro-HR" ),
                 array(
-                    "cro-HR" => "jedan/dva/tri",
+                    "cro-HR" => "/jedan/dva/tri",
                 ),
                 "cro-HR",
             ),
@@ -527,7 +527,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases3,
                 array( "eng-GB" ),
                 array(
-                    "eng-GB" => "jedan/two/three",
+                    "eng-GB" => "/jedan/two/three",
                 ),
                 "eng-GB",
             ),
@@ -535,8 +535,8 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases3,
                 array( "cro-HR", "eng-GB" ),
                 array(
-                    "cro-HR" => "jedan/dva/tri",
-                    "eng-GB" => "jedan/dva/three",
+                    "cro-HR" => "/jedan/dva/tri",
+                    "eng-GB" => "/jedan/dva/three",
                 ),
                 "cro-HR",
             ),
@@ -544,8 +544,8 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases3,
                 array( "cro-HR", "ger-DE" ),
                 array(
-                    "cro-HR" => "jedan/dva/tri",
-                    "ger-DE" => "jedan/dva/drei",
+                    "cro-HR" => "/jedan/dva/tri",
+                    "ger-DE" => "/jedan/dva/drei",
                 ),
                 "cro-HR",
             ),
@@ -553,8 +553,8 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases3,
                 array( "eng-GB", "cro-HR" ),
                 array(
-                    "cro-HR" => "jedan/two/tri",
-                    "eng-GB" => "jedan/two/three",
+                    "cro-HR" => "/jedan/two/tri",
+                    "eng-GB" => "/jedan/two/three",
                 ),
                 "eng-GB",
             ),
@@ -562,8 +562,8 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases3,
                 array( "eng-GB", "ger-DE" ),
                 array(
-                    "eng-GB" => "jedan/two/three",
-                    "ger-DE" => "jedan/two/drei",
+                    "eng-GB" => "/jedan/two/three",
+                    "ger-DE" => "/jedan/two/drei",
                 ),
                 "eng-GB",
             ),
@@ -571,8 +571,8 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases3,
                 array( "ger-DE", "eng-GB" ),
                 array(
-                    "eng-GB" => "jedan/two/three",
-                    "ger-DE" => "jedan/two/drei",
+                    "eng-GB" => "/jedan/two/three",
+                    "ger-DE" => "/jedan/two/drei",
                 ),
                 "ger-DE",
             ),
@@ -580,8 +580,8 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases3,
                 array( "ger-DE", "cro-HR" ),
                 array(
-                    "cro-HR" => "jedan/dva/tri",
-                    "ger-DE" => "jedan/dva/drei",
+                    "cro-HR" => "/jedan/dva/tri",
+                    "ger-DE" => "/jedan/dva/drei",
                 ),
                 "ger-DE",
             ),
@@ -589,9 +589,9 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases3,
                 array( "cro-HR", "eng-GB", "ger-DE" ),
                 array(
-                    "cro-HR" => "jedan/dva/tri",
-                    "eng-GB" => "jedan/dva/three",
-                    "ger-DE" => "jedan/dva/drei",
+                    "cro-HR" => "/jedan/dva/tri",
+                    "eng-GB" => "/jedan/dva/three",
+                    "ger-DE" => "/jedan/dva/drei",
                 ),
                 "cro-HR",
             ),
@@ -599,9 +599,9 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases3,
                 array( "cro-HR", "ger-DE", "eng-GB" ),
                 array(
-                    "cro-HR" => "jedan/dva/tri",
-                    "eng-GB" => "jedan/dva/three",
-                    "ger-DE" => "jedan/dva/drei",
+                    "cro-HR" => "/jedan/dva/tri",
+                    "eng-GB" => "/jedan/dva/three",
+                    "ger-DE" => "/jedan/dva/drei",
                 ),
                 "cro-HR",
             ),
@@ -609,9 +609,9 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases3,
                 array( "eng-GB", "cro-HR", "ger-DE" ),
                 array(
-                    "cro-HR" => "jedan/two/tri",
-                    "eng-GB" => "jedan/two/three",
-                    "ger-DE" => "jedan/two/drei",
+                    "cro-HR" => "/jedan/two/tri",
+                    "eng-GB" => "/jedan/two/three",
+                    "ger-DE" => "/jedan/two/drei",
                 ),
                 "eng-GB",
             ),
@@ -619,9 +619,9 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases3,
                 array( "eng-GB", "ger-DE", "cro-HR" ),
                 array(
-                    "cro-HR" => "jedan/two/tri",
-                    "eng-GB" => "jedan/two/three",
-                    "ger-DE" => "jedan/two/drei",
+                    "cro-HR" => "/jedan/two/tri",
+                    "eng-GB" => "/jedan/two/three",
+                    "ger-DE" => "/jedan/two/drei",
                 ),
                 "eng-GB",
             ),
@@ -629,9 +629,9 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases3,
                 array( "ger-DE", "cro-HR", "eng-GB" ),
                 array(
-                    "cro-HR" => "jedan/dva/tri",
-                    "eng-GB" => "jedan/dva/three",
-                    "ger-DE" => "jedan/dva/drei",
+                    "cro-HR" => "/jedan/dva/tri",
+                    "eng-GB" => "/jedan/dva/three",
+                    "ger-DE" => "/jedan/dva/drei",
                 ),
                 "ger-DE",
             ),
@@ -639,9 +639,9 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases3,
                 array( "ger-DE", "eng-GB", "cro-HR" ),
                 array(
-                    "cro-HR" => "jedan/two/tri",
-                    "eng-GB" => "jedan/two/three",
-                    "ger-DE" => "jedan/two/drei",
+                    "cro-HR" => "/jedan/two/tri",
+                    "eng-GB" => "/jedan/two/three",
+                    "ger-DE" => "/jedan/two/drei",
                 ),
                 "ger-DE",
             ),
@@ -702,7 +702,7 @@ abstract class UrlAliasBase extends BaseServiceTest
         $pathElement1 = array(
             "always-available" => true,
             "translations" => array(
-                "cro-HR" => "jedan",
+                "cro-HR" => "/jedan",
             )
         );
         $pathElement2 = array(
@@ -887,7 +887,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "cro-HR",
                 array( "cro-HR" ),
                 array(
-                    "jedan",
+                    "/jedan",
                 ),
             ),
             array(
@@ -895,7 +895,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "cro-HR",
                 array( "eng-GB" ),
                 array(
-                    "jedan",
+                    "/jedan",
                 ),
             ),
             array(
@@ -903,7 +903,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "cro-HR",
                 array( "cro-HR" ),
                 array(
-                    "jedan/dva",
+                    "/jedan/dva",
                 ),
             ),
             array(
@@ -911,7 +911,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "eng-GB",
                 array( "eng-GB" ),
                 array(
-                    "jedan/two",
+                    "/jedan/two",
                 ),
             ),
             array(
@@ -919,7 +919,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "eng-GB",
                 array( "cro-HR", "eng-GB" ),
                 array(
-                    "jedan/two",
+                    "/jedan/two",
                 ),
             ),
             array(
@@ -927,7 +927,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "cro-HR",
                 array( "cro-HR", "ger-DE" ),
                 array(
-                    "jedan/dva",
+                    "/jedan/dva",
                 ),
             ),
             array(
@@ -935,7 +935,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "cro-HR",
                 array( "eng-GB", "cro-HR" ),
                 array(
-                    "jedan/dva",
+                    "/jedan/dva",
                 ),
             ),
             array(
@@ -943,7 +943,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "eng-GB",
                 array( "eng-GB", "ger-DE" ),
                 array(
-                    "jedan/two",
+                    "/jedan/two",
                 ),
             ),
             array(
@@ -951,7 +951,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "cro-HR",
                 array( "ger-DE", "cro-HR" ),
                 array(
-                    "jedan/dva",
+                    "/jedan/dva",
                 ),
             ),
             array(
@@ -959,7 +959,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "eng-GB",
                 array( "ger-DE", "eng-GB" ),
                 array(
-                    "jedan/two",
+                    "/jedan/two",
                 ),
             ),
             array(
@@ -967,7 +967,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "cro-HR",
                 array( "cro-HR", "eng-GB", "ger-DE" ),
                 array(
-                    "jedan/dva",
+                    "/jedan/dva",
                 ),
             ),
             array(
@@ -975,7 +975,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "eng-GB",
                 array( "cro-HR", "ger-DE", "eng-GB" ),
                 array(
-                    "jedan/two",
+                    "/jedan/two",
                 ),
             ),
             array(
@@ -983,7 +983,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "cro-HR",
                 array( "eng-GB", "cro-HR", "ger-DE" ),
                 array(
-                    "jedan/dva",
+                    "/jedan/dva",
                 ),
             ),
             array(
@@ -991,7 +991,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "cro-HR",
                 array( "eng-GB", "ger-DE", "cro-HR" ),
                 array(
-                    "jedan/dva",
+                    "/jedan/dva",
                 ),
             ),
             array(
@@ -999,7 +999,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "cro-HR",
                 array( "ger-DE", "cro-HR", "eng-GB" ),
                 array(
-                    "jedan/dva",
+                    "/jedan/dva",
                 ),
             ),
             array(
@@ -1007,7 +1007,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "cro-HR",
                 array( "ger-DE", "eng-GB", "cro-HR" ),
                 array(
-                    "jedan/dva",
+                    "/jedan/dva",
                 ),
             ),
             array(
@@ -1015,7 +1015,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "cro-HR",
                 array( "cro-HR" ),
                 array(
-                    "jedan/dva/tri",
+                    "/jedan/dva/tri",
                 ),
             ),
             array(
@@ -1023,7 +1023,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "eng-GB",
                 array( "eng-GB" ),
                 array(
-                    "jedan/two/three",
+                    "/jedan/two/three",
                 ),
             ),
             array(
@@ -1031,7 +1031,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "eng-GB",
                 array( "cro-HR", "eng-GB" ),
                 array(
-                    "jedan/dva/three",
+                    "/jedan/dva/three",
                 ),
             ),
             array(
@@ -1039,7 +1039,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "ger-DE",
                 array( "cro-HR", "ger-DE" ),
                 array(
-                    "jedan/dva/drei",
+                    "/jedan/dva/drei",
                 ),
             ),
             array(
@@ -1047,7 +1047,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "cro-HR",
                 array( "eng-GB", "cro-HR" ),
                 array(
-                    "jedan/two/tri",
+                    "/jedan/two/tri",
                 ),
             ),
             array(
@@ -1055,7 +1055,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "ger-DE",
                 array( "eng-GB", "ger-DE" ),
                 array(
-                    "jedan/two/drei",
+                    "/jedan/two/drei",
                 ),
             ),
             array(
@@ -1063,7 +1063,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "eng-GB",
                 array( "ger-DE", "eng-GB" ),
                 array(
-                    "jedan/two/three",
+                    "/jedan/two/three",
                 ),
             ),
             array(
@@ -1071,7 +1071,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "ger-DE",
                 array( "ger-DE", "cro-HR" ),
                 array(
-                    "jedan/dva/drei",
+                    "/jedan/dva/drei",
                 ),
             ),
             array(
@@ -1079,7 +1079,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "ger-DE",
                 array( "cro-HR", "eng-GB", "ger-DE" ),
                 array(
-                    "jedan/dva/drei",
+                    "/jedan/dva/drei",
                 ),
             ),
             array(
@@ -1087,7 +1087,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "ger-DE",
                 array( "cro-HR", "ger-DE", "eng-GB" ),
                 array(
-                    "jedan/dva/drei",
+                    "/jedan/dva/drei",
                 ),
             ),
             array(
@@ -1095,7 +1095,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "ger-DE",
                 array( "eng-GB", "cro-HR", "ger-DE" ),
                 array(
-                    "jedan/two/drei",
+                    "/jedan/two/drei",
                 ),
             ),
             array(
@@ -1103,7 +1103,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "ger-DE",
                 array( "eng-GB", "ger-DE", "cro-HR" ),
                 array(
-                    "jedan/two/drei",
+                    "/jedan/two/drei",
                 ),
             ),
             array(
@@ -1111,7 +1111,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "eng-GB",
                 array( "ger-DE", "cro-HR", "eng-GB" ),
                 array(
-                    "jedan/dva/three",
+                    "/jedan/dva/three",
                 ),
             ),
             array(
@@ -1119,7 +1119,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "cro-HR",
                 array( "ger-DE", "eng-GB", "cro-HR" ),
                 array(
-                    "jedan/two/tri",
+                    "/jedan/two/tri",
                 ),
             ),
         );
@@ -1178,7 +1178,7 @@ abstract class UrlAliasBase extends BaseServiceTest
         $pathElement1 = array(
             "always-available" => true,
             "translations" => array(
-                "cro-HR" => "jedan",
+                "cro-HR" => "/jedan",
             )
         );
         $pathElement2 = array(
@@ -1430,28 +1430,28 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases,
                 array( "cro-HR", "ger-DE" ),
                 array(
-                    "jedan/dva",
+                    "/jedan/dva",
                 ),
             ),
             array(
                 $spiUrlAliases,
                 array( "ger-DE", "cro-HR" ),
                 array(
-                    "jedan/dva",
+                    "/jedan/dva",
                 ),
             ),
             array(
                 $spiUrlAliases,
                 array( "eng-GB" ),
                 array(
-                    "jedan/dva",
+                    "/jedan/dva",
                 ),
             ),
             array(
                 $spiUrlAliases,
                 array( "eng-GB", "ger-DE", "cro-HR" ),
                 array(
-                    "jedan/dva",
+                    "/jedan/dva",
                 ),
             ),
         );
@@ -1509,8 +1509,8 @@ abstract class UrlAliasBase extends BaseServiceTest
                         array(
                             "always-available" => false,
                             "translations" => array(
-                                "cro-HR" => "jedan",
-                                "eng-GB" => "jedan",
+                                "cro-HR" => "/jedan",
+                                "eng-GB" => "/jedan",
                             )
                         ),
                         array(
@@ -1604,7 +1604,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "ger-DE",
                 array( "cro-HR", "ger-DE" ),
                 array(
-                    "jedan/dva",
+                    "/jedan/dva",
                 ),
             ),
             array(
@@ -1612,7 +1612,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "ger-DE",
                 array( "ger-DE", "cro-HR" ),
                 array(
-                    "jedan/dva",
+                    "/jedan/dva",
                 ),
             ),
             array(
@@ -1620,7 +1620,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "eng-GB",
                 array( "eng-GB" ),
                 array(
-                    "jedan/dva",
+                    "/jedan/dva",
                 ),
             ),
             array(
@@ -1628,7 +1628,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "eng-GB",
                 array( "eng-GB", "ger-DE", "cro-HR" ),
                 array(
-                    "jedan/dva",
+                    "/jedan/dva",
                 ),
             ),
         );
@@ -1691,8 +1691,8 @@ abstract class UrlAliasBase extends BaseServiceTest
                         array(
                             "always-available" => false,
                             "translations" => array(
-                                "cro-HR" => "jedan",
-                                "eng-GB" => "jedan",
+                                "cro-HR" => "/jedan",
+                                "eng-GB" => "/jedan",
                             )
                         ),
                         array(
@@ -1800,35 +1800,35 @@ abstract class UrlAliasBase extends BaseServiceTest
                 $spiUrlAliases,
                 array( "cro-HR", "ger-DE" ),
                 array(
-                    "jedan/zwei",
+                    "/jedan/zwei",
                 ),
             ),
             array(
                 $spiUrlAliases,
                 array( "ger-DE", "cro-HR" ),
                 array(
-                    "jedan/zwei",
+                    "/jedan/zwei",
                 ),
             ),
             array(
                 $spiUrlAliases,
                 array( "eng-GB" ),
                 array(
-                    "one/zwei",
+                    "/one/zwei",
                 ),
             ),
             array(
                 $spiUrlAliases,
                 array( "cro-HR", "eng-GB", "ger-DE" ),
                 array(
-                    "jedan/zwei",
+                    "/jedan/zwei",
                 ),
             ),
             array(
                 $spiUrlAliases,
                 array( "eng-GB", "ger-DE", "cro-HR" ),
                 array(
-                    "one/zwei",
+                    "/one/zwei",
                 ),
             ),
         );
@@ -1913,7 +1913,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "ger-DE",
                 array( "cro-HR", "ger-DE" ),
                 array(
-                    "jedan/zwei",
+                    "/jedan/zwei",
                 ),
             ),
             array(
@@ -1921,7 +1921,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 "ger-DE",
                 array( "ger-DE", "cro-HR" ),
                 array(
-                    "jedan/zwei",
+                    "/jedan/zwei",
                 ),
             ),
         );
@@ -2172,7 +2172,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                     "id" => "9-2e5bc8831f7ae6a29530e7f1bbf2de9c",
                     "type" => UrlAlias::LOCATION,
                     "destination" => $this->repository->getLocationService()->loadLocation( 53 ),
-                    "path" => "Media/Multimedia",
+                    "path" => "/Media/Multimedia",
                     "languageCodes" => array( "eng-US" ),
                     "alwaysAvailable" => true,
                     "isHistory" => false,
@@ -2264,7 +2264,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                     "id" => "42-724874d1be77f450a09b305fc1534afb",
                     "type" => UrlAlias::LOCATION,
                     "destination" => $this->repository->getLocationService()->loadLocation( 53 ),
-                    "path" => "my/custom/alias",
+                    "path" => "/my/custom/alias",
                     "languageCodes" => array( "eng-GB" ),
                     "alwaysAvailable" => $alwaysAvailable,
                     "isHistory" => false,
@@ -2354,7 +2354,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                     "id" => "42-724874d1be77f450a09b305fc1534afb",
                     "type" => UrlAlias::RESOURCE,
                     "destination" => "content/search",
-                    "path" => "my/global/alias",
+                    "path" => "/my/global/alias",
                     "languageCodes" => array( "eng-GB" ),
                     "alwaysAvailable" => $alwaysAvailable,
                     "isHistory" => false,
@@ -2425,7 +2425,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                         "id" => "42-" . md5( "alias{$index}" ),
                         "type" => UrlAlias::RESOURCE,
                         "destination" => "content/search",
-                        "path" => "my/global/alias" . $index,
+                        "path" => "/my/global/alias" . $index,
                         "languageCodes" => array( "eng-GB" ),
                         "alwaysAvailable" => true,
                         "isHistory" => false,
@@ -2467,7 +2467,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                         "id" => "42-" . md5( "alias{$index}" ),
                         "type" => UrlAlias::RESOURCE,
                         "destination" => "content/search",
-                        "path" => "my/global/alias" . $index,
+                        "path" => "/my/global/alias" . $index,
                         "languageCodes" => array( "eng-GB" ),
                         "alwaysAvailable" => true,
                         "isHistory" => false,
@@ -2509,7 +2509,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                         "id" => "42-" . md5( "alias" . ( $index + $offset ) ),
                         "type" => UrlAlias::RESOURCE,
                         "destination" => "content/search",
-                        "path" => "my/global/alias" . ( $index + $offset ),
+                        "path" => "/my/global/alias" . ( $index + $offset ),
                         "languageCodes" => array( "eng-GB" ),
                         "alwaysAvailable" => true,
                         "isHistory" => false,
