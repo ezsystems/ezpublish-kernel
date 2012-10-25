@@ -37,7 +37,8 @@ class MapLocation implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataInt = $value->data['hasData'] ? 1 : 0;
+        $storageFieldValue->dataInt = isset( $value->externalData['address'] ) ? 1 : 0;
+        $storageFieldValue->dataText = '';
         $storageFieldValue->sortKeyString = (string)$value->sortKey;
     }
 

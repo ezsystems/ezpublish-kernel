@@ -507,6 +507,12 @@ services:
         class: %ezpublish.fieldType.ezpage.pageService.class%
         arguments: [%ezpublish.fieldtype.ezpage.zoneDefinition%, %ezpublish.fieldtype.ezpage.blockDefinition%]
 
+    ezpublish.fieldType.ezgmaplocation:
+        class: %ezpublish.fieldType.ezgmaplocation.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezgmaplocation}
+
     # Temporary workaround for ezemail, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
     # a ezstring until proper implementation will be in place
 
@@ -515,12 +521,6 @@ services:
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezemail}
-
-    ezpublish.fieldType.ezgmaplocation:
-        class: %ezpublish.fieldType.ezgmaplocation.class%
-        parent: ezpublish.fieldType
-        tags:
-            - {name: ezpublish.fieldType, alias: ezgmaplocation}
 
     ezpublish.fieldType.ezgmaplocation.externalStorage:
         class: %ezpublish.fieldType.ezgmaplocation.externalStorage.class%
