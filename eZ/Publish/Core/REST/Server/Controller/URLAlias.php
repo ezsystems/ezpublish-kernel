@@ -44,6 +44,8 @@ class URLAlias extends RestController
      */
     public function loadURLAlias()
     {
+        $urlValues = $this->urlHandler->parse( 'urlAlias', $this->request->path );
+        return $this->urlAliasService->load( $urlValues['urlalias'] );
     }
 
     /**

@@ -207,6 +207,10 @@ class Factory
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\URLWildcard'           => new Output\ValueObjectVisitor\URLWildcard( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedURLWildcard'          => new Output\ValueObjectVisitor\CreatedURLWildcard( $urlHandler ),
 
+            // URLAlias
+
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias'              => new Output\ValueObjectVisitor\URLAlias( $urlHandler ),
+
             // Content
 
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentList'                 => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
