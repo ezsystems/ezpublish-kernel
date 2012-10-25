@@ -1661,25 +1661,15 @@ Load locations by id
 :Description: loads the location for a given id (x)or remote id
 :Parameters: :id: the id of the location. If present the location is with the given id is returned.
              :remoteId: the remoteId of the location. If present the location with the given remoteId is returned
-:Headers:
-    :Accept:
-         :application/vnd.ez.api.Location+xml:  if set the new location is returned in xml format (see Location_)
-         :application/vnd.ez.api.Location+json:  if set the new location is returned in json format (see Location_)
-    :If-None-Match: <etag>
 :Response: 
 
 .. code:: http
 
-          HTTP/1.1 200 OK
+          HTTP/1.1 307 Temporary Redirect
           Location: /content/locations/<path>
-          ETag: "<new etag>"
-          Accept-Patch: application/vnd.ez.api.LocationUpdate+(json|xml)
-          Content-Type: <depending on accept header>
-          Content-Length: <length>
 
 :Error Codes:
-    :404: If the  location with the given id does not exist
-    :401: If the user is not authorized to read this location  
+    :404: If the  location with the given id (remoteId) does not exist
 
 Load location 
 `````````````
@@ -4127,7 +4117,7 @@ Load User Groups
 :Description: Load user groups for either an id or remoteId or role.
 :Parameters: 
     :roleId: lists user groups assigned to the given role
-    :remoteId: retieves the user group for the given Id 
+    :id: retieves the user group for the given Id 
     :remoteId: retieves the user group for the given remoteId 
 :Headers:
     :Accept:

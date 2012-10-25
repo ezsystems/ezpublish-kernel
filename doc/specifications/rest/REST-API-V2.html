@@ -3496,42 +3496,13 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
 </table>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Headers:</th><td class="field-body"><table class="first docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Accept:</th><td class="field-body"><table class="first docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name" colspan="2">application/vnd.ez.api.Location+xml:</th></tr>
-<tr class="field"><td>&nbsp;</td><td class="field-body">if set the new location is returned in xml format (see <a class="reference internal" href="#location">Location</a>)</td>
-</tr>
-<tr class="field"><th class="field-name" colspan="2">application/vnd.ez.api.Location+json:</th></tr>
-<tr class="field"><td>&nbsp;</td><td class="field-body">if set the new location is returned in json format (see <a class="reference internal" href="#location">Location</a>)</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="field"><th class="field-name">If-None-Match:</th><td class="field-body"><p class="first last">&lt;etag&gt;</p>
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
 <tr class="field"><th class="field-name">Response:</th><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
 <pre class="code http literal-block">
-<span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+<span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">307</span> <span class="ne">Temporary Redirect</span>
 <span class="na">Location</span><span class="o">:</span> <span class="l">/content/locations/&lt;path&gt;</span>
-<span class="na">ETag</span><span class="o">:</span> <span class="l">&quot;&lt;new etag&gt;&quot;</span>
-<span class="na">Accept-Patch</span><span class="o">:</span> <span class="l">application/vnd.ez.api.LocationUpdate+(json|xml)</span>
-<span class="na">Content-Type</span><span class="o">:</span> <span class="l">&lt;depending on accept header&gt;</span>
-<span class="na">Content-Length</span><span class="o">:</span> <span class="l">&lt;length&gt;</span>
 </pre>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -3541,9 +3512,7 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">404:</th><td class="field-body">If the  location with the given id does not exist</td>
-</tr>
-<tr class="field"><th class="field-name">401:</th><td class="field-body">If the user is not authorized to read this location</td>
+<tr class="field"><th class="field-name">404:</th><td class="field-body">If the  location with the given id (remoteId) does not exist</td>
 </tr>
 </tbody>
 </table>
@@ -8940,7 +8909,7 @@ by the user</td>
 <tbody valign="top">
 <tr class="field"><th class="field-name">roleId:</th><td class="field-body">lists user groups assigned to the given role</td>
 </tr>
-<tr class="field"><th class="field-name">remoteId:</th><td class="field-body">retieves the user group for the given Id</td>
+<tr class="field"><th class="field-name">id:</th><td class="field-body">retieves the user group for the given Id</td>
 </tr>
 <tr class="field"><th class="field-name">remoteId:</th><td class="field-body">retieves the user group for the given remoteId</td>
 </tr>
