@@ -120,6 +120,35 @@ class ConfigurationConverter
             $settings['ezpublish']['imagemagick']['enabled'] = false;
         }
 
+        // image variations settings
+        $settings['ezpublish']['system'][$defaultSiteaccess] = array();
+        $settings['ezpublish']['system'][$defaultSiteaccess]['image_variations'] = array();
+        $imageAliasesList = $this->legacyResolver->getGroup( 'AliasSettings', 'image', $defaultSiteaccess );
+        foreach( $imageAliasesList['AliasList'] as $imageAliasIdentifier )
+        {
+            $variationSettings = array( 'reference' => null, 'filters' => array() );
+            $aliasSettings = $this->legacyResolver->getGroup( $imageAliasIdentifier, 'image', $defaultSiteaccess );
+            if ( isset( $aliasSettings['Reference'] ) && $aliasSettings['Reference'] != '' )
+            {
+                $variationSettings['reference'] = $aliasSettings['Reference'];
+            }
+            if ( isset( $aliasSettings['Filters'] ) && is_array( $aliasSettings['Filters'] ) )
+            {
+                foreach( $aliasSettings['Filters'] as $filterString )
+                {
+                    list( $filterName, $filterParams) = explode( '=', $filterString );
+                    $filterParams = explode( ';', $filterParams );
+                    array_walk( $filterParams, function( &$value, $key ) {
+                        if ( preg_match( '/^[0-9]+$/', $value ) )
+                            $value = (int)$value;
+                    } );
+                    $variationSettings['filters'][] = array( 'name' => $filterName, 'params' => $filterParams );
+                }
+            }
+
+            $settings['ezpublish']['system'][$defaultSiteaccess]['image_variations'][$imageAliasIdentifier] = $variationSettings;
+        }
+
         return $settings;
     }
 

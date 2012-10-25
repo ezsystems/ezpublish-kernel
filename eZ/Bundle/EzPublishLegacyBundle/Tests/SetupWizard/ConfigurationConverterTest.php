@@ -55,6 +55,11 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                 throw $e;
             }
         }
+        self::assertEquals(
+            $expectedResult,
+            $result
+        );
+
         self::assertSame(
             $expectedResult,
             $result
@@ -128,7 +133,13 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                         ),
                         'var_dir' => 'var/ezdemo_site',
                     ),
-                    'ezdemo_site_admin' => array( 'url_alias_router' => false )
+                    'ezdemo_site_admin' => array( 'url_alias_router' => false ),
+                    'eng' => array(
+                        'image_variations' => array(
+                            'large' => array( 'reference' => null, 'filters' => array( array( 'name' => 'geometry/scaledownonly', 'params' => array( 360, 440 ) ) ) ),
+                            'infoboximage' => array( 'reference' => null, 'filters' => array( array( 'name' => 'geometry/scalewidth', 'params' => array( 75 ) ) ) ),
+                        )
+                    )
                 ),
                 'imagemagick' => array(
                     'enabled' => true,
@@ -155,8 +166,16 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                 'ImageMagick.Executable' => array( 'ImageMagick.Executable', 'image', 'eng', 'convert' ),
             ),
             'getGroup' => array(
-                'SiteAccessSettings' => array( 'SiteAccessSettings', null, null, array( 'MatchOrder' => 'uri', 'URIMatchType' => 'element', 'URIMatchElement' => 1 ) ),
-                'DatabaseSettings' => array( 'DatabaseSettings', 'site', 'eng', array( 'DatabaseImplementation' => 'ezmysqli', 'Server' => 'localhost', 'User' => 'root', 'Password' => '', 'Database' => 'ezdemo' ) ),
+                'SiteAccessSettings' => array( 'SiteAccessSettings', null, null,
+                    array( 'MatchOrder' => 'uri', 'URIMatchType' => 'element', 'URIMatchElement' => 1 ) ),
+                'DatabaseSettings' => array( 'DatabaseSettings', 'site', 'eng',
+                    array( 'DatabaseImplementation' => 'ezmysqli', 'Server' => 'localhost', 'User' => 'root', 'Password' => '', 'Database' => 'ezdemo' ) ),
+                'AliasSettings' => array( 'AliasSettings', 'image', 'eng',
+                    array( 'AliasList' => array( 'large', 'infoboximage' ) ) ),
+                'large' => array( 'large', 'image', 'eng',
+                    array( 'Reference' => '', 'Filters' => array( 'geometry/scaledownonly=360;440' ) ) ),
+                'infoboximage' => array( 'infoboximage', 'image', 'eng',
+                    array( 'Reference' => '', 'Filters' => array( 'geometry/scalewidth=75' ) ) ),
             )
         );
 
