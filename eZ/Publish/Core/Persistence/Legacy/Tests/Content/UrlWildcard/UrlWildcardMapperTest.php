@@ -36,8 +36,8 @@ class UrlWildcardMapperTest extends TestCase
             new UrlWildcard(
                 array(
                     "id" => null,
-                    "sourceUrl" => "pancake/*",
-                    "destinationUrl" => "cake/{1}",
+                    "sourceUrl" => "/pancake/*",
+                    "destinationUrl" => "/cake/{1}",
                     "forward" => true
                 )
             ),
@@ -66,8 +66,8 @@ class UrlWildcardMapperTest extends TestCase
             new UrlWildcard(
                 array(
                     "id" => 42,
-                    "sourceUrl" => "faq/*",
-                    "destinationUrl" => "42",
+                    "sourceUrl" => "/faq/*",
+                    "destinationUrl" => "/42",
                     "forward" => true
                 )
             ),
@@ -105,16 +105,16 @@ class UrlWildcardMapperTest extends TestCase
                 new UrlWildcard(
                     array(
                         "id" => 24,
-                        "sourceUrl" => "contact-information",
-                        "destinationUrl" => "contact",
+                        "sourceUrl" => "/contact-information",
+                        "destinationUrl" => "/contact",
                         "forward" => false
                     )
                 ),
                 new UrlWildcard(
                     array(
                         "id" => 42,
-                        "sourceUrl" => "faq/*",
-                        "destinationUrl" => "42",
+                        "sourceUrl" => "/faq/*",
+                        "destinationUrl" => "/42",
                         "forward" => true
                     )
                 )

@@ -154,8 +154,8 @@ class EzcDatabaseTest extends TestCase
         $id = $gateway->insertUrlWildcard(
             new UrlWildcard(
                 array(
-                    "sourceUrl" => "contact-information/*",
-                    "destinationUrl" => "contact/{1}",
+                    "sourceUrl" => "/contact-information/*",
+                    "destinationUrl" => "/contact/{1}",
                     "forward" => true,
                 )
             )
