@@ -121,6 +121,7 @@ class Factory
                     'application/vnd.ez.api.RelationCreate'         => new Input\Parser\RelationCreate( $urlHandler ),
                     'application/vnd.ez.api.ViewInput'              => new Input\Parser\ViewInput( $urlHandler ),
                     'application/vnd.ez.api.UrlWildcardCreate'      => new Input\Parser\URLWildcardCreate( $urlHandler, $parserTools ),
+                    'application/vnd.ez.api.UrlAliasCreate'         => new Input\Parser\URLAliasCreate( $urlHandler, $parserTools ),
 
                     // internal Media-Types
                     'application/vnd.ez.api.internal.criterion.ContentId'              => new Input\Parser\Criterion\ContentId( $urlHandler ),
@@ -210,6 +211,7 @@ class Factory
             // URLAlias
 
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias'              => new Output\ValueObjectVisitor\URLAlias( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedURLAlias'             => new Output\ValueObjectVisitor\CreatedURLAlias( $urlHandler ),
 
             // Content
 

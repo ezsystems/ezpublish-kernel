@@ -9,11 +9,16 @@
 
 namespace eZ\Publish\Core\REST\Server\Controller;
 use eZ\Publish\Core\REST\Common\UrlHandler;
+use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use eZ\Publish\API\Repository\URLAliasService;
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\Values\Content\URLAlias as APIURLAlias;
 
 /**
  * URLAlias controller
@@ -28,13 +33,22 @@ class URLAlias extends RestController
     protected $urlAliasService;
 
     /**
+     * Location service
+     *
+     * @var \eZ\Publish\API\Repository\LocationService
+     */
+    protected $locationService;
+
+    /**
      * Construct controller
      *
      * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
+     * @param \eZ\Publish\API\Repository\LocationService $locationService
      */
-    public function __construct( URLAliasService $urlAliasService )
+    public function __construct( URLAliasService $urlAliasService, LocationService $locationService )
     {
         $this->urlAliasService = $urlAliasService;
+        $this->locationService = $locationService;
     }
 
     /**
@@ -64,6 +78,60 @@ class URLAlias extends RestController
      */
     public function createURLAlias()
     {
+        $urlAliasCreate = $this->inputDispatcher->parse(
+            new Message(
+                array( 'Content-Type' => $this->request->contentType ),
+                $this->request->body
+            )
+        );
+
+        if ( $urlAliasCreate['_type'] === 'LOCATION' )
+        {
+            $locationUrlValues = $this->urlHandler->parse( 'location', $urlAliasCreate['location']['_href'] );
+            $locationPathParts = explode( '/', $locationUrlValues['location'] );
+
+            $location = $this->locationService->loadLocation(
+                array_pop( $locationPathParts )
+            );
+
+            try
+            {
+                $createdURLAlias = $this->urlAliasService->createUrlAlias(
+                    $location,
+                    $urlAliasCreate['path'],
+                    $urlAliasCreate['languageCode'],
+                    $urlAliasCreate['forward'],
+                    $urlAliasCreate['alwaysAvailable']
+                );
+            }
+            catch ( InvalidArgumentException $e )
+            {
+                throw new ForbiddenException( $e->getMessage() );
+            }
+        }
+        else
+        {
+            try
+            {
+                $createdURLAlias = $this->urlAliasService->createGlobalUrlAlias(
+                    $urlAliasCreate['resource'],
+                    $urlAliasCreate['path'],
+                    $urlAliasCreate['languageCode'],
+                    $urlAliasCreate['forward'],
+                    $urlAliasCreate['alwaysAvailable']
+                );
+            }
+            catch ( InvalidArgumentException $e )
+            {
+                throw new ForbiddenException( $e->getMessage() );
+            }
+        }
+
+        return new Values\CreatedURLAlias(
+            array(
+                'urlAlias' => $createdURLAlias
+            )
+        );
     }
 
     /**

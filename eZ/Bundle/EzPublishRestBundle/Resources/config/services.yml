@@ -146,6 +146,7 @@ services:
         parent: ezpublish_rest.controller.base
         arguments:
             - @ezpublish.api.service.url_alias
+            - @ezpublish.api.service.location
 
     ezpublish_rest.listener:
         class: %ezpublish_rest.listener.class%
