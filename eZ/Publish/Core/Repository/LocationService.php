@@ -651,6 +651,26 @@ class LocationService implements LocationServiceInterface
         try
         {
             $this->persistenceHandler->locationHandler()->move( $location->id, $newParentLocation->id );
+
+            $content = $this->repository->getContentService()->loadContent( $location->contentId );
+            $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
+            foreach ( $urlAliasNames as $languageCode => $name )
+            {
+                $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
+                    $location->id,
+                    $newParentLocation->id,
+                    $name,
+                    $languageCode,
+                    $content->contentInfo->alwaysAvailable
+                );
+            }
+
+            $this->persistenceHandler->urlAliasHandler()->locationMoved(
+                $location->id,
+                $location->parentLocationId,
+                $newParentLocation->id
+            );
+
             $this->repository->commit();
         }
         catch ( \Exception $e )
