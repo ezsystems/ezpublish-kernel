@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\FieldType\XmlText\Converter\Output;
 
 use eZ\Publish\Core\FieldType\XmlText\Converter\Output,
-    eZ\Publish\Core\FieldType\XmlText\Converter,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     DOMDocument,
     XSLTProcessor;
@@ -30,7 +29,7 @@ class Html5 implements Output
     /**
      * Array of converters that needs to be called before actual processing.
      *
-     * @var array[eZ\Publish\Core\FieldType\XmlText\Converter]
+     * @var \eZ\Publish\Core\FieldType\XmlText\Converter\Output[]
      */
     protected $preConverters;
 
@@ -48,10 +47,10 @@ class Html5 implements Output
 
         foreach ( $preConverters as $preConverter )
         {
-            if ( !$preConverter instanceof Converter )
+            if ( !$preConverter instanceof Output )
                 throw new InvalidArgumentType(
                     '$preConverters',
-                    "eZ\\Publish\\Core\\FieldType\\XmlText\\Converter[]",
+                    "eZ\\Publish\\Core\\FieldType\\XmlText\\Converter\\Output[]",
                     $preConverter
                 );
         }
@@ -67,10 +66,10 @@ class Html5 implements Output
      */
     public function convert( DOMDocument $xmlDoc )
     {
-//        foreach ( $this->preConverters as $preConverter )
-//        {
-//            $xmlString = $preConverter->convert( $xmlDoc );
-//        }
+        foreach ( $this->preConverters as $preConverter )
+        {
+            $preConverter->convert( $xmlDoc );
+        }
 
         $xslDoc = new DOMDocument;
         $xslDoc->load( $this->stylesheet );
