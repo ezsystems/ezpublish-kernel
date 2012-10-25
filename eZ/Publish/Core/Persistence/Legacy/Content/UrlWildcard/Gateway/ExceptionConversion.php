@@ -22,7 +22,7 @@ class ExceptionConversion extends Gateway
     /**
      * The wrapped gateway
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway
      */
     protected $innerGateway;
 
@@ -93,7 +93,7 @@ class ExceptionConversion extends Gateway
     {
         try
         {
-            return $this->innerGateway->loadLocationAliasDataByParentId( $parentId );
+            return $this->innerGateway->loadUrlWildcardData( $parentId );
         }
         catch ( ezcDbException $e )
         {
