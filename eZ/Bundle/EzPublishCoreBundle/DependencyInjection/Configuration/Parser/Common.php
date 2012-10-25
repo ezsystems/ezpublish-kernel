@@ -96,7 +96,7 @@ class Common extends AbstractParser
                 // DSN is prioritary to any other setting
                 if ( isset( $database['dsn'] ) )
                 {
-                    $container->setParameter( "ezsettings.$sa.database.dsn", $database['dsn'] );
+                    $container->setParameter( "ezsettings.$sa.database.params", $database['dsn'] );
                 }
                 else
                 {
@@ -105,7 +105,7 @@ class Common extends AbstractParser
                     $database['host'] = $database['server'];
                     $database['driver-opts'] = $database['options'];
                     unset( $database['database_name'], $database['server'], $database['options'] );
-                    $container->setParameter( "ezsettings.$sa.database.dsn", $database );
+                    $container->setParameter( "ezsettings.$sa.database.params", $database );
                 }
             }
         }
