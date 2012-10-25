@@ -64,6 +64,8 @@ class eZPublish extends Pattern
         'groupOfType'               => '/content/types/{type}/groups/{group}',
         'urlWildcards'              => '/content/urlwildcards',
         'urlWildcard'               => '/content/urlwildcards/{urlwildcard}',
+        'urlAliases'                => '/content/urlaliases',
+        'urlAlias'                  => '/content/urlaliases/{urlalias}',
         'views'                     => '/content/views',
         'view'                      => '/content/views/{view}',
         'viewResults'               => '/content/views/{view}/results',

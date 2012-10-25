@@ -10,6 +10,7 @@ parameters:
     ezpublish_rest.controller.trash.class: eZ\Publish\Core\REST\Server\Controller\Trash
     ezpublish_rest.controller.user.class: eZ\Publish\Core\REST\Server\Controller\User
     ezpublish_rest.controller.url_wildcard.class: eZ\Publish\Core\REST\Server\Controller\URLWildcard
+    ezpublish_rest.controller.url_alias.class: eZ\Publish\Core\REST\Server\Controller\URLAlias
 
     ezpublish_rest.response_visitor_dispatcher.class: eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher
     ezpublish_rest.factory.class: eZ\Bundle\EzPublishRestBundle\ApiLoader\Factory
@@ -139,6 +140,12 @@ services:
         parent: ezpublish_rest.controller.base
         arguments:
             - @ezpublish.api.service.url_wildcard
+
+    ezpublish_rest.controller.url_alias:
+        class: %ezpublish_rest.controller.url_alias.class%
+        parent: ezpublish_rest.controller.base
+        arguments:
+            - @ezpublish.api.service.url_alias
 
     ezpublish_rest.listener:
         class: %ezpublish_rest.listener.class%

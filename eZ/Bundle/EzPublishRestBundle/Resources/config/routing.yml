@@ -1020,3 +1020,35 @@ ezpublish_rest_unassignRoleFromUserGroup:
         _method: DELETE
         groupId: "[0-9/]+"
         roleId: \d+
+
+
+# URL aliases
+
+
+ezpublish_rest_listURLAliases:
+    pattern: /content/urlaliases
+    defaults:
+        _controller: ezpublish_rest.controller.url_alias:listURLAliases
+    requirements:
+        _method: GET
+
+ezpublish_rest_createURLAlias:
+    pattern: /content/urlaliases
+    defaults:
+        _controller: ezpublish_rest.controller.url_alias:createURLAlias
+    requirements:
+        _method: POST
+
+ezpublish_rest_loadURLAlias:
+    pattern: /content/urlaliases/{urlAliasId}
+    defaults:
+        _controller: ezpublish_rest.controller.url_alias:loadURLAlias
+    requirements:
+        _method: GET
+
+ezpublish_rest_deleteURLAlias:
+    pattern: /content/urlaliases/{urlAliasId}
+    defaults:
+        _controller: ezpublish_rest.controller.url_alias:deleteURLAlias
+    requirements:
+        _method: DELETE
