@@ -108,6 +108,8 @@ class Type extends FieldType
         if ( is_string( $inputValue ) )
         {
             $doc = new DOMDocument;
+            if ( empty( $inputValue ) )
+                $inputValue = Value::EMPTY_VALUE;
             $doc->loadXML( $inputValue );
             $inputValue = new Value( $doc );
         }

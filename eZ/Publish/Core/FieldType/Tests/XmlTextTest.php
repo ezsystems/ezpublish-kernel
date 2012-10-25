@@ -97,12 +97,15 @@ class XmlTextTest extends FieldTypeTest
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">Header 1</header></section>';
+        $xmlDoc = new \DOMDocument;
+        $xmlDoc->loadXML( $xmlData );
         // @todo Do one per value class
         $ft = $this->getFieldType();
 
         $fieldValue = $ft->toPersistenceValue( $ft->acceptValue( $xmlData ) );
 
-        self::assertSame( $xmlData, $fieldValue->data );
+        self::assertInstanceOf( 'DOMDocument', $fieldValue->data );
+        self::assertSame( $xmlDoc->saveXML(), $fieldValue->data->saveXML() );
     }
 
     public static function providerForTestAcceptValueValidFormat()
