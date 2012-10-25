@@ -80,7 +80,7 @@ class LegacySetupController
             $kernel = $this->container->get( 'kernel' );
             file_put_contents(
                 $kernel->getRootdir() . '/config/ezpublish_' . $kernel->getEnvironment(). '.yml',
-                $dumper->dump( $settingsArray, 5 )
+                $dumper->dump( $settingsArray, 7 )
             );
 
             /** @var $filesystem \Symfony\Component\Filesystem\Filesystem */

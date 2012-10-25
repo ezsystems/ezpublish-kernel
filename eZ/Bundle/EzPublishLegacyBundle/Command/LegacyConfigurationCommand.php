@@ -54,7 +54,7 @@ EOT
         $dumper = new Dumper();
         file_put_contents(
             $configurationFile,
-            $dumper->dump( $yamlConfiguration, 5 )
+            $dumper->dump( $yamlConfiguration, 7 )
         );
 
         $output->writeln( "Configuration written to $configurationFile" );
