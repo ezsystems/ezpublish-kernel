@@ -62,6 +62,37 @@ class Location extends RestController
     }
 
     /**
+     * Loads the location for a given ID (x)or remote ID
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\TemporaryRedirect
+     */
+    public function redirectLocation()
+    {
+        if ( !isset( $this->request->variables['id'] ) && !isset( $this->request->variables['remoteId'] ) )
+        {
+            throw new BadRequestException( "At least one of 'id' or 'remoteId' parameters is required." );
+        }
+
+        if ( isset( $this->request->variables['id'] ) )
+        {
+            $location = $this->locationService->loadLocation( $this->request->variables['id'] );
+        }
+        else
+        {
+            $location = $this->locationService->loadLocationByRemoteId( $this->request->variables['remoteId'] );
+        }
+
+        return new Values\TemporaryRedirect(
+            $this->urlHandler->generate(
+                'location',
+                array(
+                    'location' => rtrim( $location->pathString, '/' )
+                )
+            )
+        );
+    }
+
+    /**
      * Creates a new location for the given content object
      *
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedLocation

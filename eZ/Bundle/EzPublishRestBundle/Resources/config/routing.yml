@@ -324,11 +324,10 @@ ezpublish_rest_setObjectStatesForContent:
 # Locations
 
 
-ezpublish_rest_loadLocationByRemoteId:
-    # @todo Handle GET parameter remoteId. See loadLocationByRemoteId
+ezpublish_rest_redirectLocation:
     pattern: /content/locations
     defaults:
-        _controller: ezpublish_rest.controller.location:loadLocationByRemoteId
+        _controller: ezpublish_rest.controller.location:redirectLocation
     requirements:
         _method: GET
 
