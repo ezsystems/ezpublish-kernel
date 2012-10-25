@@ -47,10 +47,16 @@
 
 {% block ezcountry_field %}
 {% spaceless %}
-    {% if field.value.countries|length() > 0 %}
+    {% if fieldSettings.isMultiple and field.value.countries|length > 0 %}
+        <ul {{ block( 'field_attributes' ) }}>
+            {% for country in field.value.countries %}
+                <li>{{ country['Name'] }}</li>
+            {% endfor %}
+        </ul>
+    {% elseif field.value.countries|length() == 1 %}
         <p {{ block( 'field_attributes' ) }}>
         {% for country in field.value.countries %}
-            {{ country['Name'] }}{{ loop.last ? '' : ', ' }}
+            {{ country['Name'] }}
         {% endfor %}
         </p>
     {% endif %}
