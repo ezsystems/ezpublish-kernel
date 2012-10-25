@@ -80,20 +80,22 @@ class EzcDatabaseTest extends TestCase
                 "ezurlalias_ml0_alias_redirects" => "1",
                 "ezurlalias_ml0_is_original" => "1",
                 "ezurlalias_ml0_action" => "eznode:314",
+                "ezurlalias_ml0_action_type" => "eznode",
                 "ezurlalias_ml0_lang_mask" => "2",
                 "ezurlalias_ml0_text" => "jedan",
                 "ezurlalias_ml0_parent" => "0",
                 "ezurlalias_ml0_text_md5" => "6896260129051a949051c3847c34466f",
-                "ezurlalias_ml1_id" => "3",
-                "ezurlalias_ml1_link" => "3",
-                "ezurlalias_ml1_is_alias" => "0",
-                "ezurlalias_ml1_alias_redirects" => "1",
-                "ezurlalias_ml1_is_original" => "1",
-                "ezurlalias_ml1_action" => "eznode:315",
-                "ezurlalias_ml1_lang_mask" => "3",
-                "ezurlalias_ml1_text" => "dva",
-                "ezurlalias_ml1_parent" => "2",
-                "ezurlalias_ml1_text_md5" => "c67ed9a09ab136fae610b6a087d82e21",
+                "id" => "3",
+                "link" => "3",
+                "is_alias" => "0",
+                "alias_redirects" => "1",
+                "is_original" => "1",
+                "action" => "eznode:315",
+                "action_type" => "eznode",
+                "lang_mask" => "3",
+                "text" => "dva",
+                "parent" => "2",
+                "text_md5" => "c67ed9a09ab136fae610b6a087d82e21",
             ),
             $row
         );
@@ -121,20 +123,22 @@ class EzcDatabaseTest extends TestCase
                 "ezurlalias_ml0_alias_redirects" => "1",
                 "ezurlalias_ml0_is_original" => "1",
                 "ezurlalias_ml0_action" => "eznode:314",
+                "ezurlalias_ml0_action_type" => "eznode",
                 "ezurlalias_ml0_lang_mask" => "3",
                 "ezurlalias_ml0_text" => "jedan",
                 "ezurlalias_ml0_parent" => "0",
                 "ezurlalias_ml0_text_md5" => "6896260129051a949051c3847c34466f",
-                "ezurlalias_ml1_id" => "3",
-                "ezurlalias_ml1_link" => "3",
-                "ezurlalias_ml1_is_alias" => "0",
-                "ezurlalias_ml1_alias_redirects" => "1",
-                "ezurlalias_ml1_is_original" => "1",
-                "ezurlalias_ml1_action" => "eznode:315",
-                "ezurlalias_ml1_lang_mask" => "6",
-                "ezurlalias_ml1_text" => "dva",
-                "ezurlalias_ml1_parent" => "2",
-                "ezurlalias_ml1_text_md5" => "c67ed9a09ab136fae610b6a087d82e21",
+                "id" => "3",
+                "link" => "3",
+                "is_alias" => "0",
+                "alias_redirects" => "1",
+                "is_original" => "1",
+                "action" => "eznode:315",
+                "action_type" => "eznode",
+                "lang_mask" => "6",
+                "text" => "dva",
+                "parent" => "2",
+                "text_md5" => "c67ed9a09ab136fae610b6a087d82e21",
             ),
             $row
         );
@@ -150,7 +154,7 @@ class EzcDatabaseTest extends TestCase
                 2,
                 array(
                     array(
-                        array( "id" => "2", "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
+                        array( "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
                     ),
                 )
             ),
@@ -158,11 +162,11 @@ class EzcDatabaseTest extends TestCase
                 3,
                 array(
                     array(
-                        array( "id" => "2", "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
+                        array( "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
                     ),
                     array(
-                        array( "id" => "3", "parent" => "2", "lang_mask" => "5", "text" => "two" ),
-                        array( "id" => "3", "parent" => "2", "lang_mask" => "3", "text" => "dva" ),
+                        array( "parent" => "2", "lang_mask" => "5", "text" => "two" ),
+                        array( "parent" => "2", "lang_mask" => "3", "text" => "dva" ),
                     ),
                 )
             ),
@@ -170,16 +174,16 @@ class EzcDatabaseTest extends TestCase
                 4,
                 array(
                     array(
-                        array( "id" => "2", "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
+                        array( "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
                     ),
                     array(
-                        array( "id" => "3", "parent" => "2", "lang_mask" => "5", "text" => "two" ),
-                        array( "id" => "3", "parent" => "2", "lang_mask" => "3", "text" => "dva" ),
+                        array( "parent" => "2", "lang_mask" => "5", "text" => "two" ),
+                        array( "parent" => "2", "lang_mask" => "3", "text" => "dva" ),
                     ),
                     array(
-                        array( "id" => "4", "parent" => "3", "lang_mask" => "9", "text" => "drei" ),
-                        array( "id" => "4", "parent" => "3", "lang_mask" => "5", "text" => "three" ),
-                        array( "id" => "4", "parent" => "3", "lang_mask" => "3", "text" => "tri" ),
+                        array( "parent" => "3", "lang_mask" => "9", "text" => "drei" ),
+                        array( "parent" => "3", "lang_mask" => "5", "text" => "three" ),
+                        array( "parent" => "3", "lang_mask" => "3", "text" => "tri" ),
                     ),
                 )
             ),
@@ -215,7 +219,7 @@ class EzcDatabaseTest extends TestCase
                 2,
                 array(
                     array(
-                        array( "id" => "2", "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
+                        array( "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
                     ),
                 )
             ),
@@ -223,10 +227,10 @@ class EzcDatabaseTest extends TestCase
                 3,
                 array(
                     array(
-                        array( "id" => "2", "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
+                        array( "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
                     ),
                     array(
-                        array( "id" => "3", "parent" => "2", "lang_mask" => "6", "text" => "dva" ),
+                        array( "parent" => "2", "lang_mask" => "6", "text" => "dva" ),
                     ),
                 )
             ),
@@ -234,14 +238,14 @@ class EzcDatabaseTest extends TestCase
                 4,
                 array(
                     array(
-                        array( "id" => "2", "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
+                        array( "parent" => "0", "lang_mask" => "3", "text" => "jedan" ),
                     ),
                     array(
-                        array( "id" => "3", "parent" => "2", "lang_mask" => "6", "text" => "dva" ),
+                        array( "parent" => "2", "lang_mask" => "6", "text" => "dva" ),
                     ),
                     array(
-                        array( "id" => "4", "parent" => "3", "lang_mask" => "4", "text" => "three" ),
-                        array( "id" => "4", "parent" => "3", "lang_mask" => "2", "text" => "tri" ),
+                        array( "parent" => "3", "lang_mask" => "4", "text" => "three" ),
+                        array( "parent" => "3", "lang_mask" => "2", "text" => "tri" ),
                     ),
                 )
             ),
