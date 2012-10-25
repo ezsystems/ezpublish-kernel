@@ -138,7 +138,7 @@ class ConfigurationConverter
                 {
                     list( $filterName, $filterParams) = explode( '=', $filterString );
                     $filterParams = explode( ';', $filterParams );
-                    array_walk( $filterParams, function( &$value, $key ) {
+                    array_walk( $filterParams, function( &$value ) {
                         if ( preg_match( '/^[0-9]+$/', $value ) )
                             $value = (int)$value;
                     } );
