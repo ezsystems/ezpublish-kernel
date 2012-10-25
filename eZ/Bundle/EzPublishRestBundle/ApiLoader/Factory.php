@@ -210,6 +210,7 @@ class Factory
 
             // URLAlias
 
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\URLAliasList'                => new Output\ValueObjectVisitor\URLAliasList( $urlHandler ),
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias'              => new Output\ValueObjectVisitor\URLAlias( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedURLAlias'             => new Output\ValueObjectVisitor\CreatedURLAlias( $urlHandler ),
 

@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Controller;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Values;
@@ -18,7 +19,6 @@ use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use eZ\Publish\API\Repository\URLAliasService;
 use eZ\Publish\API\Repository\LocationService;
-use eZ\Publish\API\Repository\Values\Content\URLAlias as APIURLAlias;
 
 /**
  * URLAlias controller
@@ -69,6 +69,27 @@ class URLAlias extends RestController
      */
     public function listURLAliases()
     {
+        if ( !isset( $this->request->variables['type'] ) )
+        {
+            throw new BadRequestException( "Required parameter 'type' is missing." );
+        }
+
+        if ( $this->request->variables['type'] !== 'location' && $this->request->variables['type'] !== 'global' )
+        {
+            throw new BadRequestException( "Request contains unrecognized value for 'type' parameter" );
+        }
+
+        if ( $this->request->variables['type'] === 'location' )
+        {
+            // @todo Implement
+            $urlAliases = array();
+        }
+        else
+        {
+            $urlAliases = $this->urlAliasService->listGlobalAliases();
+        }
+
+        return new Values\URLAliasList( $urlAliases, $this->request->path );
     }
 
     /**
