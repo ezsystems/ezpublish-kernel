@@ -47,6 +47,8 @@ class ConfigurationConverter
             function()
             {
                \eZINI::injectSettings( array() );
+               \eZCache::clearByTag( 'ini' );
+               \eZINI::resetAllInstances();
             }
         );
 

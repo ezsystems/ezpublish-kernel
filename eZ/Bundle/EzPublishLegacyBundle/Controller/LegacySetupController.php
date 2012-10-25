@@ -83,7 +83,13 @@ class LegacySetupController
                 $dumper->dump( $settingsArray, 5 )
             );
 
-            $this->container->get( 'cache_clearer' )->clear( $this->container->getParameter( 'kernel.cache_dir' ) );
+            /** @var $filesystem \Symfony\Component\Filesystem\Filesystem */
+            $filesystem = $this->container->get( 'filesystem' );
+            $cacheDir = $this->container->getParameter( 'kernel.cache_dir' );
+            $oldCacheDirName = $cacheDir . '_old';
+            $filesystem->rename( $cacheDir, $oldCacheDirName );
+            $filesystem->remove( $oldCacheDirName );
+
         }
 
         return $response;
