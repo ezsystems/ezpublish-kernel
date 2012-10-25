@@ -37,13 +37,7 @@ class Trash extends ValueObjectVisitor
 
         foreach ( $data->trashItems as $trashItem )
         {
-            $generator->startObjectElement( 'TrashItem' );
-            $generator->startAttribute(
-                'href',
-                $this->urlHandler->generate( 'trash', array( 'trash' => $trashItem->id ) )
-            );
-            $generator->endAttribute( 'href' );
-            $generator->endObjectElement( 'TrashItem' );
+            $visitor->visitValueObject( $trashItem );
         }
 
         $generator->endList( 'TrashItem' );
