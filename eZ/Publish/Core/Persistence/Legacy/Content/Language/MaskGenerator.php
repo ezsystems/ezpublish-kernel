@@ -126,4 +126,23 @@ class MaskGenerator
 
         return $result;
     }
+
+    /**
+     * Extracts Language codes contained in given $languageMask.
+     *
+     * @param int $languageMask
+     *
+     * @return array
+     */
+    public function extractLanguageCodesFromMask( $languageMask )
+    {
+        $languageCodes = array();
+
+        foreach ( $this->extractLanguageIdsFromMask( $languageMask ) as $languageId )
+        {
+            $languageCodes[] = $this->languageHandler->load( $languageId )->languageCode;
+        }
+
+        return $languageCodes;
+    }
 }
