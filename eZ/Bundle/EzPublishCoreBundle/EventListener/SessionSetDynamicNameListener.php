@@ -12,7 +12,8 @@ namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents,
     eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent,
     Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    Symfony\Component\DependencyInjection\ContainerInterface;
+    Symfony\Component\DependencyInjection\ContainerInterface,
+    Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * SiteAccess match listener.
@@ -28,6 +29,11 @@ class SessionSetDynamicNameListener implements EventSubscriberInterface
      */
     private $container;
 
+    /**
+     * @note Injecting the service container is mandatory since event listeners are instantiated before siteaccess matching
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     */
     public function __construct( ContainerInterface $container )
     {
         $this->container = $container;
@@ -46,16 +52,25 @@ class SessionSetDynamicNameListener implements EventSubscriberInterface
         {
             return;
         }
-        $siteAccess = $event->getSiteAccess();
+
+        // Getting from the container and not from the request because the session object is assigned to the request only when session has started.
         $session = $this->container->get( 'session' );
-        $sessionName = $session->getName();
+
+
+        /** @var $configResolver \eZ\Publish\Core\MVC\ConfigResolverInterface */
+        $configResolver = $this->container->get( 'ezpublish.config.resolver' );
+        $sessionName = $configResolver->getParameter( 'session_name' );
         if ( strpos( $sessionName, self::MARKER ) !== false )
         {
             $session->setName(
                 str_replace(
-                    self::MARKER, md5( $siteAccess->name ), $sessionName
+                    self::MARKER, md5( $event->getSiteAccess()->name ), $sessionName
                 )
             );
+        }
+        else
+        {
+            $session->setName( $sessionName );
         }
     }
 }

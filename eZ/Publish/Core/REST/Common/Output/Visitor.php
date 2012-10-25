@@ -42,12 +42,6 @@ class Visitor
      * @var array
      */
     protected $headers = array();
-
-    /**
-     * @var int
-     */
-    protected $statusCode = 200;
-
     /**
      * Mapping of status codes.
      *
@@ -168,8 +162,6 @@ class Visitor
      */
     public function setStatus( $statusCode )
     {
-        $this->statusCode = $statusCode;
-
         $status = sprintf(
             '%s %s',
             $statusCode,
@@ -208,12 +200,19 @@ class Visitor
             }
         }
 
+        $statusCode = 200;
+        if ( isset( $this->headers['Status'] ) )
+        {
+            $statusCode = sscanf( $this->headers['Status'], '%s %s' );
+            $statusCode = (int)$statusCode[0];
+        }
+
         $result = new Message(
             $filteredHeaders,
             ( $this->generator->isEmpty()
                 ? null
                 : $this->generator->endDocument( $data ) ),
-            $this->statusCode
+            $statusCode
         );
 
         $this->headers = array();

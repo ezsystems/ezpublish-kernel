@@ -21,10 +21,16 @@ parameters:
     ezpublish_legacy.siteaccess_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess
     ezpublish_legacy.session_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Session
     ezpublish_legacy.configuration_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Configuration
+    ezpublish_legacy.configuration_mapper.options:
+        imagemagick_enabled: %ezpublish.image.imagemagick.enabled%
+        imagemagick_executable_path: %ezpublish.image.imagemagick.executable_path%
+        imagemagick_executable: %ezpublish.image.imagemagick.executable%
+        imagemagick_filters: %ezpublish.image.imagemagick.filters%
     ezpublish_legacy.content_exception_handler.class: eZ\Publish\Core\MVC\Legacy\EventListener\APIContentExceptionListener
     ezpublish_legacy.config.resolver.class: eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver
     ezpublish_legacy.config.default_scope: site
     ezpublish_legacy.setup_wizard.configuration_converter.class: eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfigurationConverter
+    ezpublish_legacy.fieldType.ezimage.variation_service.class: eZ\Publish\Core\MVC\Legacy\Image\AliasGenerator
 
 services:
     ezpublish_legacy.kernel:
@@ -107,7 +113,9 @@ services:
 
     ezpublish_legacy.configuration_mapper:
         class: %ezpublish_legacy.configuration_mapper.class%
-        arguments: [@ezpublish.config.resolver]
+        arguments:
+            - @ezpublish.config.resolver.core
+            - %ezpublish_legacy.configuration_mapper.options%
         tags:
             - { name: kernel.event_subscriber }
 
@@ -126,3 +134,11 @@ services:
     ezpublish_legacy.setup_wizard.configuration_converter:
         class: %ezpublish_legacy.setup_wizard.configuration_converter.class%
         arguments: [@ezpublish_legacy.config.resolver, @ezpublish_legacy.kernel]
+
+    # Image alias generator using legacy
+    ezpublish_legacy.fieldType.ezimage.variation_service:
+        class: %ezpublish_legacy.fieldType.ezimage.variation_service.class%
+        arguments: [@ezpublish_legacy.kernel]
+
+    ezpublish.fieldType.ezimage.variation_service:
+        alias: ezpublish_legacy.fieldType.ezimage.variation_service

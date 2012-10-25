@@ -3,6 +3,7 @@
 {# Following variables are passed:
  # - \eZ\Publish\API\Repository\Values\Content\Field field the field to display
  # - \eZ\Publish\API\Repository\Values\Content\ContentInfo contentInfo the contentInfo to which the field belongs to
+ # - \eZ\Publish\API\Repository\Values\Content\VersionInfo versionInfo the versionInfo to which the field belongs to
  # - mixed fieldSettings settings of the field (depends on the fieldtype)
  # - array parameters options passed to ez_render_field under the parameters key
  # - array attr the attributes to add the generate HTML, contains at least a "class" entry
@@ -346,12 +347,15 @@
 {% endspaceless %}
 {% endblock %}
 
-{# TODO: Handle image variations #}
+{# This field accepts the following parameters:
+ #   - alias (image variation name). Defaults to "original" (e.g. image originally uploaded)
+ #}
 {% block ezimage_field %}
 {% spaceless %}
 {% if field.value %}
 <figure {{ block( 'field_attributes' ) }}>
-    <img src="{{ asset( field.value.path ) }}" alt="{{ field.value.alternativeText }}" />
+    {% set imageAlias = ez_image_alias( field, versionInfo, parameters.alias|default( 'original' ) ) %}
+    <img src="{{ asset( imageAlias.uri ) }}" width="{{ imageAlias.width }}" height="{{ imageAlias.height }}" alt="{{ field.value.alternativeText }}" />
 </figure>
 {% endif %}
 {% endspaceless %}

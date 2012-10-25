@@ -41,15 +41,15 @@ abstract class UrlWildcardBase extends BaseServiceTest
     public function testLoad()
     {
         $service = $this->repository->getURLWildcardService();
-        $service->create( "fruit/*", "food/{1}", true );
+        $service->create( "/fruit/*", "/food/{1}", true );
 
         $urlWildcard = $service->load( 1 );
         self::assertEquals(
             new URLWildcard(
                 array(
                     "id" => 1,
-                    "sourceUrl" => "fruit/*",
-                    "destinationUrl" => "food/{1}",
+                    "sourceUrl" => "/fruit/*",
+                    "destinationUrl" => "/food/{1}",
                     "forward" => true
                 )
             ),
@@ -78,11 +78,11 @@ abstract class UrlWildcardBase extends BaseServiceTest
         return array(
             array( "fruit", "food", true ),
             array( " /fruit/ ", " /food/ ", true ),
-            array( "fruit/*", "food", false ),
-            array( "fruit/*", "food/{1}", true ),
-            array( "fruit/*/*", "food/{1}", true ),
-            array( "fruit/*/*", "food/{2}", true ),
-            array( "fruit/*/*", "food/{1}/{2}", true ),
+            array( "/fruit/*", "/food", false ),
+            array( "/fruit/*", "/food/{1}", true ),
+            array( "/fruit/*/*", "/food/{1}", true ),
+            array( "/fruit/*/*", "/food/{2}", true ),
+            array( "/fruit/*/*", "/food/{1}/{2}", true ),
         );
     }
 
@@ -101,8 +101,8 @@ abstract class UrlWildcardBase extends BaseServiceTest
             new URLWildcard(
                 array(
                     "id" => 1,
-                    "sourceUrl" => trim( $sourceUrl, "/ " ),
-                    "destinationUrl" => trim( $destinationUrl, "/ " ),
+                    "sourceUrl" => "/" . trim( $sourceUrl, "/ " ),
+                    "destinationUrl" => "/" . trim( $destinationUrl, "/ " ),
                     "forward" => $forward
                 )
             ),
@@ -159,7 +159,7 @@ abstract class UrlWildcardBase extends BaseServiceTest
         $service = $this->repository->getURLWildcardService();
 
         $service->create( "fruit/*", "food/{1}", true );
-        $service->create( "fruit/*", "food/{1}", true );
+        $service->create( "/fruit/*", "food/{1}", true );
     }
 
     /**
@@ -296,16 +296,16 @@ abstract class UrlWildcardBase extends BaseServiceTest
                 new URLWildcard(
                     array(
                         "id" => 1,
-                        "sourceUrl" => "fruit/*",
-                        "destinationUrl" => "food/{1}",
+                        "sourceUrl" => "/fruit/*",
+                        "destinationUrl" => "/food/{1}",
                         "forward" => true
                     )
                 ),
                 new URLWildcard(
                     array(
                         "id" => 2,
-                        "sourceUrl" => "vegetable/*",
-                        "destinationUrl" => "food/{1}",
+                        "sourceUrl" => "/vegetable/*",
+                        "destinationUrl" => "/food/{1}",
                         "forward" => true
                     )
                 ),
@@ -333,16 +333,16 @@ abstract class UrlWildcardBase extends BaseServiceTest
                 new URLWildcard(
                     array(
                         "id" => 2,
-                        "sourceUrl" => "vegetable/*",
-                        "destinationUrl" => "food/{1}",
+                        "sourceUrl" => "/vegetable/*",
+                        "destinationUrl" => "/food/{1}",
                         "forward" => true
                     )
                 ),
                 new URLWildcard(
                     array(
                         "id" => 3,
-                        "sourceUrl" => "seed/*",
-                        "destinationUrl" => "food/{1}",
+                        "sourceUrl" => "/seed/*",
+                        "destinationUrl" => "/food/{1}",
                         "forward" => true
                     )
                 ),
@@ -370,8 +370,8 @@ abstract class UrlWildcardBase extends BaseServiceTest
                 new URLWildcard(
                     array(
                         "id" => 2,
-                        "sourceUrl" => "vegetable/*",
-                        "destinationUrl" => "food/{1}",
+                        "sourceUrl" => "/vegetable/*",
+                        "destinationUrl" => "/food/{1}",
                         "forward" => true
                     )
                 ),
@@ -387,29 +387,29 @@ abstract class UrlWildcardBase extends BaseServiceTest
     {
         return array(
             array(
-                array( "fruit/apricot", "food/apricot", true ),
-                "fruit/apricot",
-                "food/apricot"
+                array( "/fruit/apricot", "/food/apricot", true ),
+                "/fruit/apricot",
+                "/food/apricot"
             ),
             array(
-                array( "fruit/*", "food/{1}", true ),
-                "fruit/citrus",
-                "food/citrus"
+                array( "/fruit/*", "/food/{1}", true ),
+                "/fruit/citrus",
+                "/food/citrus"
             ),
             array(
-                array( "fruit/*", "food/{1}", true ),
-                "fruit/citrus/orange",
-                "food/citrus/orange"
+                array( "/fruit/*", "/food/{1}", true ),
+                "/fruit/citrus/orange",
+                "/food/citrus/orange"
             ),
             array(
-                array( "fruit/*/*", "food/{2}", true ),
-                "fruit/citrus/orange",
-                "food/orange"
+                array( "/fruit/*/*", "/food/{2}", true ),
+                "/fruit/citrus/orange",
+                "/food/orange"
             ),
             array(
-                array( "fruit/*/*", "food/{1}/{2}", true ),
-                "fruit/citrus/orange",
-                "food/citrus/orange"
+                array( "/fruit/*/*", "/food/{1}/{2}", true ),
+                "/fruit/citrus/orange",
+                "/food/citrus/orange"
             ),
         );
     }
@@ -448,15 +448,15 @@ abstract class UrlWildcardBase extends BaseServiceTest
     public function testTranslateUsesLongestMatchingWildcard()
     {
         $service = $this->repository->getURLWildcardService();
-        $service->create( "something/*", "short", true );
-        $service->create( "something/something/*", "long", false );
+        $service->create( "/something/*", "/short", true );
+        $service->create( "/something/something/*", "/long", false );
 
-        $translationResult = $service->translate( "something/something/thing" );
+        $translationResult = $service->translate( "/something/something/thing" );
 
         self::assertEquals(
             new URLWildcardTranslationResult(
                 array(
-                    "uri" => "long",
+                    "uri" => "/long",
                     "forward" => false
                 )
             ),

@@ -60,6 +60,10 @@ class Common extends AbstractParser
                 ->info( 'Whether to use UrlAliasRouter or not. If false, will let the legacy kernel handle url aliases.' )
                 ->defaultValue( true )
             ->end()
+            ->scalarNode( 'session_name' )
+                ->info( 'The session name. If you want a session name per siteaccess, use "{siteaccess_hash}" token. Will override default session name from framework.session.name' )
+                ->example( array( 'session_name' => 'eZSESSID{siteaccess_hash}' ) )
+            ->end()
         ;
     }
 
@@ -79,19 +83,22 @@ class Common extends AbstractParser
         foreach ( $config['siteaccess']['list'] as $sa )
         {
             $database = $container->getParameter( "ezsettings.$sa.database" );
-            if ( isset( $database['dsn'] ) )
+            if ( !empty( $database ) )
             {
-                $dsn = $database['dsn'];
-            }
-            else
-            {
-                $port = '';
-                if ( isset( $database['port'] ) && !empty( $database['port'] ) )
-                    $port = ":{$database['port']}";
+                if ( isset( $database['dsn'] ) )
+                {
+                    $dsn = $database['dsn'];
+                }
+                else
+                {
+                    $port = '';
+                    if ( isset( $database['port'] ) && !empty( $database['port'] ) )
+                        $port = ":{$database['port']}";
 
-                $dsn = "{$database['type']}://{$database['user']}:{$database['password']}@{$database['server']}$port/{$database['database_name']}";
+                    $dsn = "{$database['type']}://{$database['user']}:{$database['password']}@{$database['server']}$port/{$database['database_name']}";
+                }
+                $container->setParameter( "ezsettings.$sa.database.dsn", $dsn );
             }
-            $container->setParameter( "ezsettings.$sa.database.dsn", $dsn );
         }
         foreach ( $config[$this->baseKey] as $sa => $settings )
         {
@@ -103,6 +110,8 @@ class Common extends AbstractParser
                 $container->setParameter( "ezsettings.$sa.storage_dir", $settings['storage_dir'] );
             if ( isset( $settings['binary_dir'] ) )
                 $container->setParameter( "ezsettings.$sa.binary_dir", $settings['binary_dir'] );
+            if ( isset( $settings['session_name'] ) )
+                $container->setParameter( "ezsettings.$sa.session_name", $settings['session_name'] );
         }
     }
 }

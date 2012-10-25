@@ -104,7 +104,7 @@ class Location extends RestController
     /**
      * Deletes a location
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteSubtree()
     {
@@ -112,7 +112,7 @@ class Location extends RestController
         $location = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $values['location'] ) );
         $this->locationService->deleteLocation( $location );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
@@ -206,8 +206,7 @@ class Location extends RestController
     /**
      * Swaps a location with another one
      *
-     *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceSwapped
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function swapLocation()
     {
@@ -221,7 +220,7 @@ class Location extends RestController
 
         $this->locationService->swapLocation( $location, $destinationLocation );
 
-        return new Values\ResourceSwapped();
+        return new Values\NoContent();
     }
 
     /**
@@ -265,13 +264,21 @@ class Location extends RestController
      */
     public function loadLocationChildren()
     {
-        $values = $this->urlHandler->parse( 'locationChildren', $this->request->path );
+        $questionMark = strpos( $this->request->path, '?' );
+        $requestPath = $questionMark !== false ? substr( $this->request->path, 0, $questionMark ) : $this->request->path;
+
+        $values = $this->urlHandler->parse( 'locationChildren', $requestPath );
+
+        $offset = isset( $this->request->variables['offset'] ) ? (int)$this->request->variables['offset'] : 0;
+        $limit = isset( $this->request->variables['limit'] ) ? (int)$this->request->variables['limit'] : -1;
 
         return new Values\LocationList(
             $this->locationService->loadLocationChildren(
                 $this->locationService->loadLocation(
                     $this->extractLocationIdFromPath( $values['location'] )
-                )
+                ),
+                $offset >= 0 ? $offset : 0,
+                $limit >= 0 ? $limit : -1
             ),
             $this->request->path
         );

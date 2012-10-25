@@ -13,7 +13,6 @@ use eZ\Publish\Core\REST\Common\UrlHandler,
     eZ\Publish\Core\REST\Common\Output\Generator,
     eZ\Publish\Core\REST\Common\Output\Visitor,
 
-    eZ\Publish\API\Repository\Values\Content\Location as APILocation,
     eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType,
     eZ\Publish\Core\REST\Server\Values;
 
@@ -36,7 +35,7 @@ class RestContentType extends RestContentTypeBase
         $urlTypeSuffix = $this->getUrlTypeSuffix( $contentType->status );
         $mediaType = $data->fieldDefinitions !== null ? 'ContentType' : 'ContentTypeInfo';
 
-        $generator->startObjectElement( 'ContentType' );
+        $generator->startObjectElement( $mediaType );
 
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( $mediaType ) );
 
@@ -119,10 +118,10 @@ class RestContentType extends RestContentTypeBase
         $generator->startValueElement( 'defaultAlwaysAvailable', ( $contentType->defaultAlwaysAvailable ? 'true' : 'false' ) );
         $generator->endValueElement( 'defaultAlwaysAvailable' );
 
-        $generator->startValueElement( 'defaultSortField', $this->serializeDefaultSortField( $contentType->defaultSortField ) );
+        $generator->startValueElement( 'defaultSortField', $this->serializeSortField( $contentType->defaultSortField ) );
         $generator->endValueElement( 'defaultSortField' );
 
-        $generator->startValueElement( 'defaultSortOrder', $this->serializeDefaultSortOrder( $contentType->defaultSortOrder ) );
+        $generator->startValueElement( 'defaultSortOrder', $this->serializeSortOrder( $contentType->defaultSortOrder ) );
         $generator->endValueElement( 'defaultSortOrder' );
 
         if ( $data->fieldDefinitions !== null )
@@ -135,87 +134,6 @@ class RestContentType extends RestContentTypeBase
             );
         }
 
-        $generator->endObjectElement( 'ContentType' );
-    }
-
-    /**
-     * Serializes the given $contentTypeStatus to a string representation
-     *
-     * @param int $contentTypeStatus
-     * @return string
-     */
-    protected function serializeStatus( $contentTypeStatus )
-    {
-        switch ( $contentTypeStatus )
-        {
-            case APIContentType::STATUS_DEFINED:
-                return 'DEFINED';
-
-            case APIContentType::STATUS_DRAFT:
-                return 'DRAFT';
-
-            case APIContentType::STATUS_MODIFIED:
-                return 'MODIFIED';
-        }
-
-        throw new \RuntimeException( "Unknown content type status: '{$contentTypeStatus}'." );
-    }
-
-    /**
-     * Serializes the given $defaultSortField to a string representation
-     *
-     * @param int $defaultSortField
-     * @return string
-     */
-    protected function serializeDefaultSortField( $defaultSortField )
-    {
-        switch ( $defaultSortField )
-        {
-            case APILocation::SORT_FIELD_PATH:
-                return 'PATH';
-            case APILocation::SORT_FIELD_PUBLISHED:
-                return 'PUBLISHED';
-            case APILocation::SORT_FIELD_MODIFIED:
-                return 'MODIFIED';
-            case APILocation::SORT_FIELD_SECTION:
-                return 'SECTION';
-            case APILocation::SORT_FIELD_DEPTH:
-                return 'DEPTH';
-            case APILocation::SORT_FIELD_CLASS_IDENTIFIER:
-                return 'CLASS_IDENTIFIER';
-            case APILocation::SORT_FIELD_CLASS_NAME:
-                return 'CLASS_NAME';
-            case APILocation::SORT_FIELD_PRIORITY:
-                return 'PRIORITY';
-            case APILocation::SORT_FIELD_NAME:
-                return 'NAME';
-            case APILocation::SORT_FIELD_MODIFIED_SUBNODE:
-                return 'MODIFIED_SUBNODE';
-            case APILocation::SORT_FIELD_NODE_ID:
-                return 'NODE_ID';
-            case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
-                return 'CONTENTOBJECT_ID';
-        }
-
-        throw new \RuntimeException( "Unknown default sort field: '{$defaultSortField}'." );
-    }
-
-    /**
-     * Serializes the given $defaultSortOrder to a string representation
-     *
-     * @param int $defaultSortOrder
-     * @return string
-     */
-    protected function serializeDefaultSortOrder( $defaultSortOrder )
-    {
-        switch ( $defaultSortOrder )
-        {
-            case APILocation::SORT_ORDER_ASC:
-                return 'ASC';
-            case APILocation::SORT_ORDER_DESC:
-                return 'DESC';
-        }
-
-        throw new \RuntimeException( "Unknown default sort order: '{$defaultSortOrder}'." );
+        $generator->endObjectElement( $mediaType );
     }
 }

@@ -157,7 +157,7 @@ interface ObjectStateService
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      */
-    public function setObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState );
+    public function setContentState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState );
 
     /**
      * Gets the object-state of object identified by $contentId.
@@ -169,7 +169,7 @@ interface ObjectStateService
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function getObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup );
+    public function getContentState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup );
 
     /**
      * Returns the number of objects which are in this state

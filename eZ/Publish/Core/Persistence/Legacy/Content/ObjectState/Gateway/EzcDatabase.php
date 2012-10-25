@@ -421,7 +421,7 @@ class EzcDatabase extends Gateway
      * @param mixed $groupId
      * @param mixed $stateId
      */
-    public function setObjectState( $contentId, $groupId, $stateId )
+    public function setContentState( $contentId, $groupId, $stateId )
     {
         // First find out if $contentId is related to existing states in $groupId
         $query = $this->dbHandler->createSelectQuery();

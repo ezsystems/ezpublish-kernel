@@ -78,27 +78,6 @@ class UrlAlias extends ValueObject
     public $languageCodes;
 
     /**
-     * Language data of url alias path
-     *
-     * Example:
-     * <code>
-     *  array(
-     *      array(
-     *          "always-available" => true,
-     *          "language-codes" => array( "cro-HR" )
-     *      ),
-     *      array(
-     *          "always-available" => false,
-     *          "language-codes" => array( "eng-GB" )
-     *      )
-     *  )
-     * </code>
-     *
-     * @var string[][]|null
-     */
-    public $pathLanguageData;
-
-    /**
      * Fallback indicator for other languages
      *
      * @var boolean

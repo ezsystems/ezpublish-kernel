@@ -340,7 +340,7 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      */
-    public function setObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState )
+    public function setContentState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState )
     {
         $inputMessage = $this->outputVisitor->visit( new ContentObjectStates( array( $objectState ) ) );
         $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'ContentObjectStates' );
@@ -368,7 +368,7 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function getObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup )
+    public function getContentState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup )
     {
         $values = $this->urlHandler->parse( 'object', $contentInfo->id );
         $groupValues = $this->urlHandler->parse( 'objectstategroup', $objectStateGroup->id );

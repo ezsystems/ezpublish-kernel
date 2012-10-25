@@ -905,14 +905,14 @@ class ObjectStateServiceTest extends BaseTest
     }
 
     /**
-     * Test for the getObjectState() method.
+     * Test for the getContentState() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ObjectStateService::getObjectState()
+     * @see \eZ\Publish\API\Repository\ObjectStateService::getContentState()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      * @depends testLoadObjectState
      */
-    public function testGetObjectState()
+    public function testGetContentState()
     {
         $repository = $this->getRepository();
 
@@ -930,7 +930,7 @@ class ObjectStateServiceTest extends BaseTest
         );
 
         // Loads the state of $contentInfo in the "ez_lock" object state group
-        $ezLockObjectState = $objectStateService->getObjectState(
+        $ezLockObjectState = $objectStateService->getContentState(
             $contentInfo,
             $ezLockObjectStateGroup
         );
@@ -994,7 +994,7 @@ class ObjectStateServiceTest extends BaseTest
         );
 
         // Loads the initial state of the custom state group
-        $initialObjectState = $objectStateService->getObjectState(
+        $initialObjectState = $objectStateService->getContentState(
             $contentInfo,
             $customObjectStateGroup
         );
@@ -1010,14 +1010,14 @@ class ObjectStateServiceTest extends BaseTest
     }
 
     /**
-     * Test for the setObjectState() method.
+     * Test for the setContentState() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ObjectStateService::setObjectState()
+     * @see \eZ\Publish\API\Repository\ObjectStateService::setContentState()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      * @depends testLoadObjectState
      */
-    public function testSetObjectState()
+    public function testSetContentState()
     {
         $repository = $this->getRepository();
 
@@ -1040,14 +1040,14 @@ class ObjectStateServiceTest extends BaseTest
         $lockedObjectState = $objectStateService->loadObjectState( $lockedObjectStateId );
 
         // Sets the state of $contentInfo from "not_locked" to "locked"
-        $objectStateService->setObjectState(
+        $objectStateService->setContentState(
             $contentInfo,
             $ezLockObjectStateGroup,
             $lockedObjectState
         );
         /* END: Use Case */
 
-        $ezLockObjectState = $objectStateService->getObjectState(
+        $ezLockObjectState = $objectStateService->getContentState(
             $contentInfo,
             $ezLockObjectStateGroup
         );
@@ -1056,14 +1056,14 @@ class ObjectStateServiceTest extends BaseTest
     }
 
     /**
-     * Test for the setObjectState() method.
+     * Test for the setContentState() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ObjectStateService::setObjectState()
+     * @see \eZ\Publish\API\Repository\ObjectStateService::setContentState()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @depends testSetObjectState
+     * @depends testSetContentState
      */
-    public function testSetObjectStateThrowsInvalidArgumentExceptioon()
+    public function testSetContentStateThrowsInvalidArgumentExceptioon()
     {
         $repository = $this->getRepository();
 
@@ -1090,7 +1090,7 @@ class ObjectStateServiceTest extends BaseTest
 
         // Throws an invalid argument exception since $lockedObjectState does
         // not belong to $differentObjectStateGroup
-        $objectStateService->setObjectState(
+        $objectStateService->setContentState(
             $contentInfo,
             $differentObjectStateGroup,
             $lockedObjectState

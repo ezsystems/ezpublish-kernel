@@ -285,13 +285,15 @@ class RestContentTest extends ValueObjectVisitorBaseTest
         $generator->startDocument( null );
 
         $restContent = $this->getBasicRestContent();
-        $restContent->currentVersion = new Values\Content\Content( array(
-            'internalFields' => array()
-        ) );
+        $restContent->currentVersion = new Values\Content\Content(
+            array(
+                'internalFields' => array()
+            )
+        );
 
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Content' ) );
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Server\\Values\\Version' ) );
 
         $visitor->visit(
             $this->getVisitorMock(),

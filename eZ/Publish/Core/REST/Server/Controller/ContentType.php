@@ -108,7 +108,7 @@ class ContentType extends RestController
     /**
      * The given content type group is deleted
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteContentTypeGroup()
     {
@@ -124,7 +124,7 @@ class ContentType extends RestController
 
         $this->contentTypeService->deleteContentTypeGroup( $contentTypeGroup );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
@@ -607,7 +607,7 @@ class ContentType extends RestController
     /**
      * The given field definition is deleted
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function removeFieldDefinition()
     {
@@ -636,7 +636,7 @@ class ContentType extends RestController
             $fieldDefinition
         );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
@@ -670,7 +670,7 @@ class ContentType extends RestController
     /**
      * The given content type is deleted
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteContentType()
     {
@@ -687,13 +687,13 @@ class ContentType extends RestController
             throw new ForbiddenException( $e->getMessage() );
         }
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
      * The given content type draft is deleted
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteContentTypeDraft()
     {
@@ -704,7 +704,7 @@ class ContentType extends RestController
         $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
         $this->contentTypeService->deleteContentType( $contentTypeDraft );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**

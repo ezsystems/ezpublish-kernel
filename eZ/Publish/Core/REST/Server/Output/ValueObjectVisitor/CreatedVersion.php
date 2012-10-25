@@ -15,7 +15,7 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 /**
  * CreatedVersion value object visitor
  */
-class CreatedVersion extends Content
+class CreatedVersion extends Version
 {
     /**
      * Visit struct returned by controllers
@@ -32,8 +32,8 @@ class CreatedVersion extends Content
             $this->urlHandler->generate(
                 'objectVersion',
                 array(
-                    'object' => $data->version->id,
-                    'version' => $data->version->getVersionInfo()->versionNo
+                    'object' => $data->version->content->id,
+                    'version' => $data->version->content->getVersionInfo()->versionNo
                 )
             )
         );

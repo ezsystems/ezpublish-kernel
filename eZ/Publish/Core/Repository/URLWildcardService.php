@@ -78,7 +78,9 @@ class URLWildcardService implements URLWildcardServiceInterface
     public function create( $sourceUrl, $destinationUrl, $forward = false )
     {
         if ( $this->repository->hasAccess( 'content', 'urltranslator' ) !== true )
+        {
             throw new UnauthorizedException( 'content', 'urltranslator' );
+        }
 
         $sourceUrl = $this->cleanUrl( $sourceUrl );
         $destinationUrl = $this->cleanUrl( $destinationUrl );
@@ -134,7 +136,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     protected function cleanUrl( $url )
     {
-        return trim( $url, "/ " );
+        return "/" . trim( $url, "/ " );
     }
 
     /**
@@ -147,7 +149,9 @@ class URLWildcardService implements URLWildcardServiceInterface
     public function remove( URLWildcard $urlWildcard )
     {
         if ( $this->repository->hasAccess( 'content', 'urltranslator' ) !== true )
+        {
             throw new UnauthorizedException( 'content', 'urltranslator' );
+        }
 
         $this->repository->beginTransaction();
         try

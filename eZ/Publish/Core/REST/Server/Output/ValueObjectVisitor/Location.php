@@ -98,32 +98,12 @@ class Location extends ValueObjectVisitor
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Content' );
 
-        $generator->startValueElement( 'sortField', $this->getSortFieldName( $data->sortField ) );
+        $generator->startValueElement( 'sortField', $this->serializeSortField( $data->sortField ) );
         $generator->endValueElement( 'sortField' );
 
-        $generator->startValueElement( 'sortOrder', $data->sortOrder == APILocation::SORT_ORDER_ASC ? 'ASC' : 'DESC' );
+        $generator->startValueElement( 'sortOrder', $this->serializeSortOrder( $data->sortOrder ) );
         $generator->endValueElement( 'sortOrder' );
 
         $generator->endObjectElement( 'Location' );
-    }
-
-    /**
-     * Returns the '*' part of SORT_FIELD_* constant name
-     *
-     * @param int $sortField
-     * @return string
-     */
-    protected function getSortFieldName( $sortField )
-    {
-        $class = new \ReflectionClass( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
-        foreach ( $class->getConstants() as $constantName => $constantValue )
-        {
-            if ( $constantValue == $sortField && strpos( $constantName, 'SORT_FIELD_' ) >= 0 )
-            {
-                return str_replace( 'SORT_FIELD_', '', $constantName );
-            }
-        }
-
-        return '';
     }
 }

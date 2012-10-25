@@ -62,11 +62,10 @@ class LegacySetupController
         /** @var $request \Symfony\Component\HttpFoundation\Request */
         $request = $this->container->get( 'request' );
 
-        // eZPublish 5 post install
         if ( $request->request->get( 'eZSetup_current_step' ) == 'Registration' )
         {
             $chosenSitePackage = $request->request->get( 'P_chosen_site_package-0' );
-            $adminSiteaccess = $request->request->get( 'P_site_extra_data_admin_access_type_value-' . $chosenSitePackage );
+            $adminSiteaccess = $chosenSitePackage . '_admin';
 
             /** @var $configurationConverter \eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfigurationConverter */
             $configurationConverter = $this->container->get( 'ezpublish_legacy.setup_wizard.configuration_converter' );
@@ -81,10 +80,16 @@ class LegacySetupController
             $kernel = $this->container->get( 'kernel' );
             file_put_contents(
                 $kernel->getRootdir() . '/config/ezpublish_' . $kernel->getEnvironment(). '.yml',
-                $dumper->dump( $settingsArray, 5 )
+                $dumper->dump( $settingsArray, 7 )
             );
 
-            $this->container->get( 'cache_clearer' )->clear( $this->container->getParameter( 'kernel.cache_dir' ) );
+            /** @var $filesystem \Symfony\Component\Filesystem\Filesystem */
+            $filesystem = $this->container->get( 'filesystem' );
+            $cacheDir = $this->container->getParameter( 'kernel.cache_dir' );
+            $oldCacheDirName = $cacheDir . '_old';
+            $filesystem->rename( $cacheDir, $oldCacheDirName );
+            $filesystem->remove( $oldCacheDirName );
+
         }
 
         return $response;

@@ -13,6 +13,8 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
+use eZ\Publish\Core\REST\Server\Values\Version as VersionValue;
+
 /**
  * RestContent value object visitor
  */
@@ -87,7 +89,7 @@ class RestContent extends ValueObjectVisitor
         // Embed current version, if available
         if ( $currentVersion !== null )
         {
-            $visitor->visitValueObject( $currentVersion );
+            $visitor->visitValueObject( new VersionValue( $currentVersion ) );
         }
 
         $generator->endObjectElement( 'CurrentVersion' );

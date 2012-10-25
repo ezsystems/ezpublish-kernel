@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandler/TransformationProcessorTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandler\TransformationProcessorPreprocessedBasedTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,25 +9,28 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandler;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
-    eZ\Publish\Core\Persistence\Legacy\Content\Search;
+    eZ\Publish\Core\Persistence\Legacy\Content\Search,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PreprocessedBased;
 
 /**
  * Test case for LocationHandlerTest
  */
-class TransformationProcessorTest extends TestCase
+class TransformationProcessorPreprocessedBasedTest extends TestCase
 {
     public function getProcessor()
     {
-        $processor = new Search\TransformationProcessor(
-            new Search\TransformationParser( self::getInstallationDir() ),
-            new Search\TransformationPcreCompiler( new Search\Utf8Converter() )
-        );
-
-        foreach ( glob( __DIR__ . '/_fixtures/transformations/*.tr' ) as $file )
+        $installDir = self::getInstallationDir();
+        $rules = array();
+        foreach ( glob( __DIR__ . '/_fixtures/transformations/*.tr.result' ) as $file )
         {
-            $processor->loadRules( str_replace( self::getInstallationDir(), '', $file ) );
+            $rules[] = str_replace( $installDir, '', $file );
         }
-        return $processor;
+
+        return new PreprocessedBased(
+            new Search\TransformationProcessor\PcreCompiler( new Search\Utf8Converter() ),
+            $installDir,
+            $rules
+        );
     }
 
     public function testSimpleNormalizationLowercase()

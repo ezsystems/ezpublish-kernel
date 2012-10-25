@@ -455,22 +455,6 @@ class ContentHandler implements ContentHandlerInterface
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Handler
      */
-    public function setObjectState( $contentId, $stateGroup, $state )
-    {
-        throw new RuntimeException( '@TODO: Implement' );
-    }
-
-    /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler
-     */
-    public function getObjectState( $contentId, $stateGroup )
-    {
-        throw new RuntimeException( '@TODO: Implement' );
-    }
-
-    /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler
-     */
     public function updateMetadata( $contentId, MetadataUpdateStruct $content )
     {
         $updateData = (array) $content;

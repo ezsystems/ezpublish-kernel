@@ -1135,66 +1135,6 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @return array
      */
-    public function testCreateContentThrowsContentValidationExceptionMultipleUntranslatableField()
-    {
-        $testContentType = $this->createTestContentType();
-
-        /* BEGIN: Use Case */
-        $contentService = $this->repository->getContentService();
-
-        $contentCreate = $contentService->newContentCreateStruct( $testContentType, 'eng-GB' );
-        $contentCreate->setField( "test_required_empty", "value for field definition with empty default value" );
-        $contentCreate->setField( "test_untranslatable", "Jabberwock" );
-        $contentCreate->setField( "test_untranslatable", "Bandersnatch" );
-        $contentCreate->sectionId = 1;
-        $contentCreate->ownerId = 14;
-        $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
-        $contentCreate->alwaysAvailable = true;
-
-        // Throws an exception because multiple fields are set in create struct for the same (untranslatable)
-        // field definition
-        $contentService->createContent( $contentCreate );
-        /* END: Use Case */
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     *
-     * @return array
-     */
-    public function testCreateContentThrowsContentValidationExceptionMultipleTranslatableField()
-    {
-        $testContentType = $this->createTestContentType();
-
-        /* BEGIN: Use Case */
-        $contentService = $this->repository->getContentService();
-
-        $contentCreate = $contentService->newContentCreateStruct( $testContentType, 'eng-GB' );
-        $contentCreate->setField( "test_required_empty", "value for field definition with empty default value" );
-        $contentCreate->setField( "test_translatable", "Jabberwock" );
-        $contentCreate->setField( "test_translatable", "Bandersnatch" );
-        $contentCreate->sectionId = 1;
-        $contentCreate->ownerId = 14;
-        $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
-        $contentCreate->alwaysAvailable = true;
-
-        // Throws an exception because multiple fields are set in create struct for the same (translatable)
-        // field definition and language
-        $contentService->createContent( $contentCreate );
-        /* END: Use Case */
-    }
-
-    /**
-     * Test for the createContent() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     *
-     * @return array
-     */
     public function testCreateContentThrowsContentValidationRequiredFieldDefaultValueEmpty()
     {
         $testContentType = $this->createTestContentType();
@@ -1702,64 +1642,6 @@ abstract class ContentBase extends BaseServiceTest
 
         // Throws an exception because field definition with identifier "nonexistent_field_definition_identifier"
         // does not exist in content draft content type
-        $updatedContent = $contentService->updateContent( $versionInfo, $contentUpdateStruct );
-        /* END: Use Case */
-    }
-
-    /**
-     * Test for the updateContent() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     */
-    public function testUpdateContentThrowsContentValidationExceptionMultipleTranslatableField()
-    {
-        $content = $this->createTestContent();
-
-        /* BEGIN: Use Case */
-        $contentService = $this->repository->getContentService();
-
-        $versionInfo = $contentService->loadVersionInfoById(
-            $content->id,
-            $content->getVersionInfo()->versionNo
-        );
-
-        $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->initialLanguageCode = "eng-GB";
-        $contentUpdateStruct->setField( "test_translatable", "Jabberwock" );
-        $contentUpdateStruct->setField( "test_translatable", "Bandersnatch" );
-
-        // Throws an exception because multiple fields are set in update struct for the same (translatable)
-        // field definition and language
-        $updatedContent = $contentService->updateContent( $versionInfo, $contentUpdateStruct );
-        /* END: Use Case */
-    }
-
-    /**
-     * Test for the updateContent() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     */
-    public function testUpdateContentThrowsContentValidationExceptionMultipleUntranslatableField()
-    {
-        $content = $this->createTestContent();
-
-        /* BEGIN: Use Case */
-        $contentService = $this->repository->getContentService();
-
-        $versionInfo = $contentService->loadVersionInfoById(
-            $content->id,
-            $content->getVersionInfo()->versionNo
-        );
-
-        $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->initialLanguageCode = "eng-GB";
-        $contentUpdateStruct->setField( "test_untranslatable", "Jabberwock" );
-        $contentUpdateStruct->setField( "test_untranslatable", "Bandersnatch" );
-
-        // Throws an exception because multiple fields are set in update struct for the same (untranslatable)
-        // field definition
         $updatedContent = $contentService->updateContent( $versionInfo, $contentUpdateStruct );
         /* END: Use Case */
     }

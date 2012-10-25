@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Common\Output;
 use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
  * Basic ValueObjectVisitor
@@ -123,5 +124,63 @@ abstract class ValueObjectVisitor
         $generator->endHashElement( 'values' );
 
         $generator->endHashElement( 'limitation' );
+    }
+
+    /**
+     * Serializes the given $sortField to a string representation
+     *
+     * @param int $sortField
+     * @return string
+     */
+    protected function serializeSortField( $sortField )
+    {
+        switch ( $sortField )
+        {
+            case Location::SORT_FIELD_PATH:
+                return 'PATH';
+            case Location::SORT_FIELD_PUBLISHED:
+                return 'PUBLISHED';
+            case Location::SORT_FIELD_MODIFIED:
+                return 'MODIFIED';
+            case Location::SORT_FIELD_SECTION:
+                return 'SECTION';
+            case Location::SORT_FIELD_DEPTH:
+                return 'DEPTH';
+            case Location::SORT_FIELD_CLASS_IDENTIFIER:
+                return 'CLASS_IDENTIFIER';
+            case Location::SORT_FIELD_CLASS_NAME:
+                return 'CLASS_NAME';
+            case Location::SORT_FIELD_PRIORITY:
+                return 'PRIORITY';
+            case Location::SORT_FIELD_NAME:
+                return 'NAME';
+            case Location::SORT_FIELD_MODIFIED_SUBNODE:
+                return 'MODIFIED_SUBNODE';
+            case Location::SORT_FIELD_NODE_ID:
+                return 'NODE_ID';
+            case Location::SORT_FIELD_CONTENTOBJECT_ID:
+                return 'CONTENTOBJECT_ID';
+        }
+
+        throw new \RuntimeException( "Unknown default sort field: '{$sortField}'." );
+    }
+
+    /**
+     * Serializes the given $sortOrder to a string representation
+     *
+     * @param int $sortOrder
+     * @return string
+     */
+    protected function serializeSortOrder( $sortOrder )
+    {
+        switch ( $sortOrder )
+        {
+            case Location::SORT_ORDER_ASC:
+                return 'ASC';
+            case Location::SORT_ORDER_DESC:
+                return 'DESC';
+        }
+
+        throw new \RuntimeException( "Unknown default sort order: '{$sortOrder}'." );
     }
 }

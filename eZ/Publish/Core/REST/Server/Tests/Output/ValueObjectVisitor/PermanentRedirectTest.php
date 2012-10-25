@@ -28,10 +28,7 @@ class PermanentRedirectTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $redirect = new Values\PermanentRedirect(
-            '/some/redirect/uri',
-            'Version'
-        );
+        $redirect = new Values\PermanentRedirect( '/some/redirect/uri' );
 
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'setStatus' )

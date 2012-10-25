@@ -28,10 +28,7 @@ class TemporaryRedirectTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $redirect = new Values\TemporaryRedirect(
-            '/some/redirect/uri',
-            'Version'
-        );
+        $redirect = new Values\TemporaryRedirect( '/some/redirect/uri' );
 
         $this->getVisitorMock()->expects( $this->once() )
             ->method( 'setStatus' )

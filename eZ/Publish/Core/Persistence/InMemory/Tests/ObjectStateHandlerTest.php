@@ -321,24 +321,24 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::setObjectState
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::setContentState
      */
-    public function testSetObjectState()
+    public function testSetContentState()
     {
-        $returnValue = $this->handler->setObjectState( 14, 2, 2 );
+        $returnValue = $this->handler->setContentState( 14, 2, 2 );
         $this->assertEquals( true, $returnValue );
 
-        $newObjectState = $this->handler->getObjectState( 14, 2 );
+        $newObjectState = $this->handler->getContentState( 14, 2 );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState', $newObjectState );
         $this->assertEquals( 2, $newObjectState->id );
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::getObjectState
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::getContentState
      */
-    public function testGetObjectState()
+    public function testGetContentState()
     {
-        $objectState = $this->handler->getObjectState( 14, 2 );
+        $objectState = $this->handler->getContentState( 14, 2 );
 
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState', $objectState );
         $this->assertEquals( 1, $objectState->id );

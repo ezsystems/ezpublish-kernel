@@ -16,8 +16,6 @@ use eZ\Publish\API\Repository\ObjectStateService;
 
 /**
  * Parser for ObjectStateGroupUpdate
- * @todo There's a clear mismatch between XSD and PAPI specs for updating object state groups
- * @todo XSD says some fields are not mandatory, while PAPI says they are
  */
 class ObjectStateGroupUpdate extends Base
 {
@@ -58,31 +56,30 @@ class ObjectStateGroupUpdate extends Base
     {
         $objectStateGroupUpdateStruct = $this->objectStateService->newObjectStateGroupUpdateStruct();
 
-        if ( !array_key_exists( 'identifier', $data ) )
+        if ( array_key_exists( 'identifier', $data ) )
         {
-            throw new Exceptions\Parser( "Missing 'identifier' attribute for ObjectStateGroupUpdate." );
+            $objectStateGroupUpdateStruct->identifier = $data['identifier'];
         }
 
-        $objectStateGroupUpdateStruct->identifier = $data['identifier'];
-
-        if ( !array_key_exists( 'defaultLanguageCode', $data ) )
+        if ( array_key_exists( 'defaultLanguageCode', $data ) )
         {
-            throw new Exceptions\Parser( "Missing 'defaultLanguageCode' attribute for ObjectStateGroupUpdate." );
+            $objectStateGroupUpdateStruct->defaultLanguageCode = $data['defaultLanguageCode'];
         }
 
-        $objectStateGroupUpdateStruct->defaultLanguageCode = $data['defaultLanguageCode'];
-
-        if ( !array_key_exists( 'names', $data ) || !is_array( $data['names'] ) )
+        if ( array_key_exists( 'names', $data ) )
         {
-            throw new Exceptions\Parser( "Missing or invalid 'names' element for ObjectStateGroupUpdate." );
-        }
+            if ( !is_array( $data['names'] ) )
+            {
+                throw new Exceptions\Parser( "Missing or invalid 'names' element for ObjectStateGroupUpdate." );
+            }
 
-        if ( !array_key_exists( 'value', $data['names'] ) || !is_array( $data['names']['value'] ) )
-        {
-            throw new Exceptions\Parser( "Missing or invalid 'names' element for ObjectStateGroupUpdate." );
-        }
+            if ( !array_key_exists( 'value', $data['names'] ) || !is_array( $data['names']['value'] ) )
+            {
+                throw new Exceptions\Parser( "Missing or invalid 'names' element for ObjectStateGroupUpdate." );
+            }
 
-        $objectStateGroupUpdateStruct->names = $this->parserTools->parseTranslatableList( $data['names'] );
+            $objectStateGroupUpdateStruct->names = $this->parserTools->parseTranslatableList( $data['names'] );
+        }
 
         if ( array_key_exists( 'descriptions', $data ) && is_array( $data['descriptions'] ) )
         {

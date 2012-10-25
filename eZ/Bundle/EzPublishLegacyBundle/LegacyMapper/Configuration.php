@@ -12,7 +12,8 @@ namespace eZ\Bundle\EzPublishLegacyBundle\LegacyMapper;
 use eZ\Publish\Core\MVC\Legacy\LegacyEvents,
     eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent,
     eZ\Publish\Core\MVC\ConfigResolverInterface,
-    Symfony\Component\EventDispatcher\EventSubscriberInterface;
+    Symfony\Component\EventDispatcher\EventSubscriberInterface,
+    Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Maps configuration parameters to the legacy parameters
@@ -24,9 +25,15 @@ class Configuration implements EventSubscriberInterface
      */
     private $configResolver;
 
-    public function __construct( ConfigResolverInterface $configResolver )
+    /**
+     * @var array
+     */
+    private $options;
+
+    public function __construct( ConfigResolverInterface $configResolver, array $options = array() )
     {
         $this->configResolver = $configResolver;
+        $this->options = $options;
     }
 
 
@@ -41,7 +48,8 @@ class Configuration implements EventSubscriberInterface
      * Adds settings to the parameters that will be injected into the legacy kernel
      *
      * @param \eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent $event
-     * @return void
+     *
+     * @todo Cache computed settings somehow
      */
     public function onBuildKernel( PreBuildKernelEvent $event )
     {
@@ -62,9 +70,55 @@ class Configuration implements EventSubscriberInterface
                 $settings["site.ini/DatabaseSettings/$iniKey"] = $databaseSettings[$key];
         }
 
+        // Image settings
+        $settings += $this->getImageSettings();
+        // File settings
+        $settings += array(
+            'site.ini/FileSettings/VarDir'      => $this->configResolver->getParameter( 'var_dir' ),
+            'site.ini/FileSettings/StorageDir'  => $this->configResolver->getParameter( 'storage_dir' )
+        );
+
         $event->getParameters()->set(
             "injected-settings",
             $settings + (array)$event->getParameters()->get( "injected-settings" )
         );
+    }
+
+    private function getImageSettings()
+    {
+        $imageSettings = array(
+            // Basic settings
+            'image.ini/FileSettings/TemporaryDir'       => $this->configResolver->getParameter( 'image.temporary_dir' ),
+            'image.ini/FileSettings/PublishedImages'    => $this->configResolver->getParameter( 'image.published_images_dir' ),
+            'image.ini/FileSettings/VersionedImages'    => $this->configResolver->getParameter( 'image.versioned_images_dir' ),
+            'image.ini/AliasSettings/AliasList'         => array(),
+            // ImageMagick configuration
+            'image.ini/ImageMagick/IsEnabled'           => $this->options['imagemagick_enabled'] ? 'true' : 'false',
+            'image.ini/ImageMagick/ExecutablePath'      => $this->options['imagemagick_executable_path'],
+            'image.ini/ImageMagick/Executable'          => $this->options['imagemagick_executable'],
+            'image.ini/ImageMagick/PreParameters'       => $this->configResolver->getParameter( 'imagemagick.pre_parameters' ),
+            'image.ini/ImageMagick/PostParameters'      => $this->configResolver->getParameter( 'imagemagick.post_parameters' ),
+            'image.ini/ImageMagick/Filters'             => array()
+        );
+
+        // Aliases configuration
+        foreach ( $this->configResolver->getParameter( 'image_variations' ) as $aliasName => $aliasSettings )
+        {
+            $imageSettings['image.ini/AliasSettings/AliasList'][] = $aliasName;
+            if ( isset( $aliasSettings['reference'] ) )
+                $imageSettings["image.ini/$aliasName/Reference"] = $aliasSettings['reference'];
+
+            foreach ( $aliasSettings['filters'] as $filter )
+            {
+                $imageSettings["image.ini/$aliasName/Filters"][] = $filter['name'] . '=' . implode( ';', $filter['params'] );
+            }
+        }
+
+        foreach ( $this->options['imagemagick_filters'] as $filterName => $filter )
+        {
+            $imageSettings['image.ini/ImageMagick/Filters'][] = "$filterName=" . strtr( $filter, array( '{' => '%', '}' => '' ) );
+        }
+
+        return $imageSettings;
     }
 }

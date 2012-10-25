@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandler/TransformationParserTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandler/TransformationProcessorDefinitionBasedParserTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -14,7 +14,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
 /**
  * Test case for LocationHandlerTest
  */
-class TransformationParserTest extends TestCase
+class TransformationProcessorDefinitionBasedParserTest extends TestCase
 {
     public static function getTestFiles()
     {
@@ -32,7 +32,7 @@ class TransformationParserTest extends TestCase
      */
     public function testParse( $file )
     {
-        $parser = new Search\TransformationParser( self::getInstallationDir() );
+        $parser = new Search\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
 
         $fixture = include $file . '.result';
         $this->assertEquals(

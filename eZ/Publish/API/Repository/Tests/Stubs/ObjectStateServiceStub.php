@@ -518,7 +518,7 @@ class ObjectStateServiceStub implements ObjectStateService
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      *
      */
-    public function setObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState )
+    public function setContentState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState )
     {
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
@@ -542,7 +542,7 @@ class ObjectStateServiceStub implements ObjectStateService
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function getObjectState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup )
+    public function getContentState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup )
     {
         $contentId = $contentInfo->id;
         $groupId   = $objectStateGroup->id;

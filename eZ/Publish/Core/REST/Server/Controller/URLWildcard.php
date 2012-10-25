@@ -100,7 +100,7 @@ class URLWildcard extends RestController
     /**
      * The given URL wildcard is deleted
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteURLWildcard()
     {
@@ -109,6 +109,6 @@ class URLWildcard extends RestController
             $this->urlWildcardService->load( $values['urlwildcard'] )
         );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 }

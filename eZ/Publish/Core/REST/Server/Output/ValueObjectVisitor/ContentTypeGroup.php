@@ -65,7 +65,7 @@ class ContentTypeGroup extends ValueObjectVisitor
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Modifier' );
 
-        $generator->startObjectElement( 'ContentTypes', 'ContentTypeList' );
+        $generator->startObjectElement( 'ContentTypes', 'ContentTypeInfoList' );
         $generator->startAttribute(
             'href',
             $this->urlHandler->generate( 'grouptypes', array( 'typegroup' => $data->id ) )

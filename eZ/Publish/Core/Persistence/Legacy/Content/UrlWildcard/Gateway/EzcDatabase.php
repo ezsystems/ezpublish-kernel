@@ -56,13 +56,21 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteTable( "ezurlwildcard" )
         )->set(
             $this->dbHandler->quoteColumn( "destination_url" ),
-            $query->bindValue( $urlWildcard->destinationUrl, null, \PDO::PARAM_STR )
+            $query->bindValue(
+                trim( $urlWildcard->destinationUrl, "/ " ),
+                null,
+                \PDO::PARAM_STR
+            )
         )->set(
             $this->dbHandler->quoteColumn( "id" ),
             $this->dbHandler->getAutoIncrementValue( "ezurlwildcard", "id" )
         )->set(
             $this->dbHandler->quoteColumn( "source_url" ),
-            $query->bindValue( $urlWildcard->sourceUrl, null, \PDO::PARAM_STR )
+            $query->bindValue(
+                trim( $urlWildcard->sourceUrl, "/ " ),
+                null,
+                \PDO::PARAM_STR
+            )
         )->set(
             $this->dbHandler->quoteColumn( "type" ),
             $query->bindValue(
