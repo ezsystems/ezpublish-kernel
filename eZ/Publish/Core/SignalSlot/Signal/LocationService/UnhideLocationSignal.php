@@ -17,13 +17,6 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class UnhideLocationSignal extends Signal
 {
     /**
-     * ContentId
-     *
-     * @var mixed
-     */
-    public $contentId;
-
-    /**
      * Location ID
      *
      * @var mixed

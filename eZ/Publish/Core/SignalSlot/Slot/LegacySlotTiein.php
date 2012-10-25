@@ -71,7 +71,8 @@ class LegacySlotTiein extends Slot
                 elseif ( $signal instanceof Signal\LocationService\CreateLocationSignal )
                 {
                     \eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
-                    \eZSearch::addNodeAssignment( $signal->mainLocationId, $signal->contentId, $signal->locationId );
+                    $object = \eZContentObject::fetch( $signal->contentId );
+                    \eZSearch::addNodeAssignment( $object->mainNodeID(), $signal->contentId, $signal->locationId );
                 }
                 elseif ( $signal instanceof Signal\LocationService\DeleteLocationSignal )
                 {
@@ -84,12 +85,14 @@ class LegacySlotTiein extends Slot
                 }
                 elseif ( $signal instanceof Signal\LocationService\UnhideLocationSignal )
                 {
-                    \eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
+                    $node = \eZContentObjectTreeNode::fetch( $signal->locationId );
+                    \eZContentObjectTreeNode::clearViewCacheForSubtree( $node );
                     \eZSearch::updateNodeVisibility( $signal->locationId, 'show' );
                 }
                 elseif ( $signal instanceof Signal\LocationService\HideLocationSignal )
                 {
-                    \eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
+                    $node = \eZContentObjectTreeNode::fetch( $signal->locationId );
+                    \eZContentObjectTreeNode::clearViewCacheForSubtree( $node );
                     \eZSearch::updateNodeVisibility( $signal->locationId, 'hide' );
                 }
                 elseif ( $signal instanceof Signal\LocationService\SwapLocationSignal )
@@ -100,9 +103,9 @@ class LegacySlotTiein extends Slot
                 }
                 elseif ( $signal instanceof Signal\LocationService\MoveSubtreeSignal )
                 {
-                    \eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
                     $node = \eZContentObjectTreeNode::fetch( $signal->locationId );
                     \eZContentObjectTreeNode::clearViewCacheForSubtree( $node );
+                    // @todo What about eZSearch in this case?
                 }
                 elseif ( $signal instanceof Signal\ObjectStateService\SetContentStateSignal )
                 {

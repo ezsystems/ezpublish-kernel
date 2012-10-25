@@ -24,13 +24,6 @@ class DeleteLocationSignal extends Signal
     public $contentId;
 
     /**
-     * Main Location ID
-     *
-     * @var mixed
-     */
-    public $mainLocationId;
-
-    /**
      * Location ID
      *
      * @var mixed

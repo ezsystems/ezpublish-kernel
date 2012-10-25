@@ -17,13 +17,6 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class MoveSubtreeSignal extends Signal
 {
     /**
-     * ContentId
-     *
-     * @var mixed
-     */
-    public $contentId;
-
-    /**
      * LocationId
      *
      * @var mixed

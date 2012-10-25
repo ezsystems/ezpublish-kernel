@@ -176,7 +176,6 @@ class LocationService implements LocationServiceInterface
         $this->signalDispatcher->emit(
             new Signal\LocationService\CreateLocationSignal( array(
                 'contentId' => $contentInfo->id,
-                'mainLocationId' => $contentInfo->mainLocationId,
                 'locationId' => $returnValue->id,
             ) )
         );
@@ -200,7 +199,6 @@ class LocationService implements LocationServiceInterface
         $this->signalDispatcher->emit(
             new Signal\LocationService\UpdateLocationSignal( array(
                 'contentId' => $location->contentId,
-                'mainLocationId' => $location->contentInfo->mainLocationId,
                 'locationId' => $location->id,
             ) )
         );
@@ -243,7 +241,6 @@ class LocationService implements LocationServiceInterface
         $returnValue = $this->service->hideLocation( $location );
         $this->signalDispatcher->emit(
             new Signal\LocationService\HideLocationSignal( array(
-                'contentId' => $location->contentId,
                 'locationId' => $location->id,
             ) )
         );
@@ -267,7 +264,6 @@ class LocationService implements LocationServiceInterface
         $returnValue = $this->service->unhideLocation( $location );
         $this->signalDispatcher->emit(
             new Signal\LocationService\UnhideLocationSignal( array(
-                'contentId' => $location->contentId,
                 'locationId' => $location->id,
             ) )
         );
@@ -290,7 +286,6 @@ class LocationService implements LocationServiceInterface
         $returnValue = $this->service->moveSubtree( $location, $newParentLocation );
         $this->signalDispatcher->emit(
             new Signal\LocationService\MoveSubtreeSignal( array(
-                'contentId' => $location->contentId,
                 'locationId' => $location->id,
                 'newParentLocationId' => $newParentLocation->id,
             ) )
@@ -311,7 +306,6 @@ class LocationService implements LocationServiceInterface
         $this->signalDispatcher->emit(
             new Signal\LocationService\DeleteLocationSignal( array(
                 'contentId' => $location->contentId,
-                'mainLocationId' => $location->contentInfo->mainLocationId,
                 'locationId' => $location->id,
             ) )
         );
