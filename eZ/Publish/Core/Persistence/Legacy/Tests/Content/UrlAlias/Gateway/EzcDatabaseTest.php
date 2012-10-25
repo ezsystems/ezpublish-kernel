@@ -140,6 +140,9 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function providerForTestLoadPathData()
     {
         return array(
@@ -202,6 +205,9 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function providerForTestLoadPathDataMultipleLanguages()
     {
         return array(
@@ -261,6 +267,9 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function providerForTestDowngradeMarksAsHistory()
     {
         return array(
@@ -293,14 +302,19 @@ class EzcDatabaseTest extends TestCase
 
         $loadedRow = $gateway->loadRow( $parentId, $textMD5 );
 
-        $gateway->downgrade( $action, $languageId, $parentId, "jabberwocky" );
+        $gateway->cleanupAfterPublish( $action, $languageId, 42, $parentId, "jabberwocky" );
 
         $reloadedRow = $gateway->loadRow( $parentId, $textMD5 );
         $loadedRow["is_original"] = "0";
+        $loadedRow["link"] = 42;
+        $loadedRow["id"] = 6;
 
         self::assertEquals( $reloadedRow, $loadedRow );
     }
 
+    /**
+     * @return array
+     */
     public function providerForTestDowngradeRemovesLanguage()
     {
         return array(
@@ -333,73 +347,12 @@ class EzcDatabaseTest extends TestCase
 
         $loadedRow = $gateway->loadRow( $parentId, $textMD5 );
 
-        $gateway->downgrade( $action, $languageId, $parentId, "jabberwocky" );
+        $gateway->cleanupAfterPublish( $action, $languageId, 42, $parentId, "jabberwocky" );
 
         $reloadedRow = $gateway->loadRow( $parentId, $textMD5 );
         $loadedRow["lang_mask"] = $loadedRow["lang_mask"] & ~$languageId;
 
         self::assertEquals( $reloadedRow, $loadedRow );
-    }
-
-    /**
-     * Test for the relink() method.
-     *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::relink
-     */
-    public function testRelinkUpdatesLink()
-    {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_relink.php" );
-        $gateway = $this->getGateway();
-
-        $gateway->relink( "eznode:314", 2, 4, 0, "banderdash" );
-
-        self::assertEquals(
-            array(
-                "action" => "eznode:314",
-                "action_type" => "eznode",
-                "alias_redirects" => "1",
-                "id" => "2",
-                "is_alias" => "0",
-                "is_original" => "0",
-                "lang_mask" => "2",
-                "link" => "4",
-                "parent" => "0",
-                "text" => "history",
-                "text_md5" => "3cd15f8f2940aff879df34df4e5c2cd1"
-            ),
-            $gateway->loadRow( 0, "3cd15f8f2940aff879df34df4e5c2cd1" )
-        );
-    }
-
-    /**
-     * Test for the relink() method.
-     *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::relink
-     * @depends testRelinkUpdatesLink
-     */
-    public function testRelinkUpdatesWithNextId()
-    {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_relink.php" );
-        $gateway = $this->getGateway();
-
-        $gateway->relink( "eznode:315", 2, 3, 0, "banderdash" );
-
-        self::assertEquals(
-            array(
-                "action" => "eznode:315",
-                "action_type" => "eznode",
-                "alias_redirects" => "1",
-                "id" => "5",
-                "is_alias" => "0",
-                "is_original" => "0",
-                "lang_mask" => "2",
-                "link" => "3",
-                "parent" => "0",
-                "text" => "reused-history",
-                "text_md5" => "51e775a611265b7b0cde62a413c91cdc"
-            ),
-            $gateway->loadRow( 0, "51e775a611265b7b0cde62a413c91cdc" )
-        );
     }
 
     /**
@@ -411,26 +364,26 @@ class EzcDatabaseTest extends TestCase
      */
     public function testReparent()
     {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_reparent.php" );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_simple.php" );
         $gateway = $this->getGateway();
 
-        $gateway->reparent( "eznode:315", 2, 3, 2, "new-location" );
+        $gateway->reparent( 2, 42 );
 
         self::assertEquals(
             array(
-                "action" => "eznode:316",
+                "action" => "eznode:315",
                 "action_type" => "eznode",
                 "alias_redirects" => "1",
-                "id" => "5",
+                "id" => "3",
                 "is_alias" => "0",
                 "is_original" => "1",
-                "lang_mask" => "2",
-                "link" => "5",
-                "parent" => "3",
-                "text" => "to-be-reparented",
-                "text_md5" => "97d0d0299c217478587ca24fcc5bdb2e"
+                "lang_mask" => "3",
+                "link" => "3",
+                "parent" => "42",
+                "text" => "dva",
+                "text_md5" => "c67ed9a09ab136fae610b6a087d82e21"
             ),
-            $gateway->loadRow( 3, "97d0d0299c217478587ca24fcc5bdb2e" )
+            $gateway->loadRow( 42, "c67ed9a09ab136fae610b6a087d82e21" )
         );
     }
 
