@@ -21,7 +21,7 @@ class XmlTextStorage extends GatewayBasedStorage
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
-        // TODO: Implement storeFieldData() method.
+        $this->getGateway( $context )->storageFieldData( $versionInfo, $field );
     }
 
     /**
