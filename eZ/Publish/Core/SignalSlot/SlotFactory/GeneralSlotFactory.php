@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the NullSlotFactory class
+ * File containing the GeneralSlotFactory class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,6 +10,9 @@
 namespace eZ\Publish\Core\SignalSlot\SlotFactory;
 use eZ\Publish\Core\SignalSlot\SlotFactory;
 
+/**
+ * Slot factory that is able to lookup slots based on identifier.
+ */
 class GeneralSlotFactory extends SlotFactory
 {
     /**

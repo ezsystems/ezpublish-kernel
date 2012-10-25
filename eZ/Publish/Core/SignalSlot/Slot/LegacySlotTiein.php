@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the SignalDispatcher class
+ * File containing the LegacySlotTiein class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -13,7 +13,7 @@ use eZ\Publish\Core\SignalSlot\Slot;
 use Closure;
 
 /**
- * A generic slot made to be able to be catch all on content & Location related signals.
+ * A generic slot made to be able to be catch all on content & Location related signals and pass it on to legacy.
  */
 class LegacySlotTiein extends Slot
 {
