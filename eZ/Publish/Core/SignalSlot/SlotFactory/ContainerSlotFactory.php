@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the GeneralSlotFactory class
+ * File containing the ContainerSlotFactory class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,25 +9,23 @@
 
 namespace eZ\Publish\Core\SignalSlot\SlotFactory;
 use eZ\Publish\Core\SignalSlot\SlotFactory;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Slot factory that is able to lookup slots based on identifier.
- *
- * @deprecated To be removed when unit test runs on Sf stack, and ContainerSlotFactory is used everywhere.
  */
-class GeneralSlotFactory extends SlotFactory
+class ContainerSlotFactory extends SlotFactory implements ContainerAwareInterface
 {
     /**
-     * @var \eZ\Publish\Core\SignalSlot\Slot[]
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
-    protected $slots = array();
+    protected $container;
 
     /**
-     * @param \eZ\Publish\Core\SignalSlot\Slot[] $slots
      */
-    public function __construct( array $slots = array() )
+    public function __construct()
     {
-        $this->slots = $slots;
     }
 
     /**
@@ -39,9 +37,19 @@ class GeneralSlotFactory extends SlotFactory
      */
     public function getSlot( $slotIdentifier )
     {
-        if ( !isset( $this->slots[$slotIdentifier] ) )
+        if ( $this->container === null || !$this->container->has( $slotIdentifier ) )
             throw new \eZ\Publish\Core\Base\Exceptions\NotFoundException( 'slot', $slotIdentifier );
 
-        return $this->slots[$slotIdentifier];
+        return $this->container->get( $slotIdentifier );
+    }
+
+    /**
+     * Sets the Container.
+     *
+     * @param ContainerInterface $container A ContainerInterface instance
+     */
+    public function setContainer( ContainerInterface $container = null )
+    {
+        $this->container = $container;
     }
 }
