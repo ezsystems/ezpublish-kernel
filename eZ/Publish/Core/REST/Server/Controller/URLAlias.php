@@ -73,5 +73,14 @@ class URLAlias extends RestController
      */
     public function deleteURLAlias()
     {
+        $urlValues = $this->urlHandler->parse( 'urlAlias', $this->request->path );
+
+        $this->urlAliasService->removeAliases(
+            array(
+                $this->urlAliasService->load( $urlValues['urlalias'] )
+            )
+        );
+
+        return new Values\NoContent();
     }
 }
