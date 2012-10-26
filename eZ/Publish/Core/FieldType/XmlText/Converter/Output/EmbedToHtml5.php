@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\XmlText\Converter\Output;
 
-use eZ\Publish\Core\FieldType\XmlText\Converter,
+use eZ\Publish\Core\FieldType\XmlText\Converter\Output as OutputConverter,
     eZ\Publish\Core\MVC\Symfony\View\Manager,
     eZ\Publish\Core\Repository\Repository,
     DOMDocument;
@@ -17,7 +17,7 @@ use eZ\Publish\Core\FieldType\XmlText\Converter,
 /**
  * Converts internal
  */
-class EmbedToHtml5 implements Converter
+class EmbedToHtml5 implements OutputConverter
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\View\Manager
@@ -36,17 +36,14 @@ class EmbedToHtml5 implements Converter
     }
 
     /**
-     * Convert embed elements in $xmlString from internal representation to HTML5
+     * Converts embed elements in $xmlDoc from internal representation to HTML5
      *
-     * @param string $xmlString
-     * @return string
+     * @param \DOMDocument $xmlDoc
+     * @return null
      */
-    public function convert( $xmlString )
+    public function convert( DOMDocument $xmlDoc )
     {
-        $doc = new DOMDocument;
-        $doc->loadXML( $xmlString );
-
-        foreach ( $doc->getElementsByTagName( "embed" ) as $embed )
+        foreach ( $xmlDoc->getElementsByTagName( "embed" ) as $embed )
         {
             if ( !$view = $embed->getAttribute( "view" ) )
             {
@@ -91,9 +88,7 @@ class EmbedToHtml5 implements Converter
             }
 
             if ( $embedContent !== null )
-                $embed->appendChild( $doc->createCDATASection( $embedContent ) );
+                $embed->appendChild( $xmlDoc->createCDATASection( $embedContent ) );
         }
-
-        return $doc->saveXML();
     }
 }

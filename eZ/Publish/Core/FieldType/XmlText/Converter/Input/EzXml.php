@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\FieldType\XmlText\Converter\Input;
 
-use eZ\Publish\Core\FieldType\XmlText\Converter,
+use eZ\Publish\Core\FieldType\XmlText\Converter\Input,
     DOMDocument,
     Exception;
 
-class EzXml implements Converter
+class EzXml implements Input
 {
     /**
      * Path to XSD
@@ -38,6 +38,8 @@ class EzXml implements Converter
      *
      * @param string $xmlString
      * @return string
+     *
+     * @throws \Exception
      */
     public function convert( $xmlString )
     {

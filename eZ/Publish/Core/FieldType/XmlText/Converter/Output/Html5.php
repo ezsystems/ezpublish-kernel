@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\XmlText\Converter\Output;
 
-use eZ\Publish\Core\FieldType\XmlText\Converter,
+use eZ\Publish\Core\FieldType\XmlText\Converter\Output,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     DOMDocument,
     XSLTProcessor;
@@ -17,7 +17,7 @@ use eZ\Publish\Core\FieldType\XmlText\Converter,
 /**
  * Converts internal
  */
-class Html5 implements Converter
+class Html5 implements Output
 {
     /**
      * Path to stylesheet to use
@@ -29,7 +29,7 @@ class Html5 implements Converter
     /**
      * Array of converters that needs to be called before actual processing.
      *
-     * @var array[eZ\Publish\Core\FieldType\XmlText\Converter]
+     * @var \eZ\Publish\Core\FieldType\XmlText\Converter\Output[]
      */
     protected $preConverters;
 
@@ -37,7 +37,9 @@ class Html5 implements Converter
      * Constructor
      *
      * @param string $stylesheet Stylesheet to use for conversion
-     * @param array[eZ\Publish\Core\FieldType\XmlText\Converter] $preConverters Array of pre-converters
+     * @param \eZ\Publish\Core\FieldType\XmlText\Converter[] $preConverters Array of pre-converters
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
      */
     public function __construct( $stylesheet, array $preConverters = array() )
     {
@@ -45,10 +47,10 @@ class Html5 implements Converter
 
         foreach ( $preConverters as $preConverter )
         {
-            if ( !$preConverter instanceof Converter )
+            if ( !$preConverter instanceof Output )
                 throw new InvalidArgumentType(
                     '$preConverters',
-                    "array[eZ\Publish\\Core\\FieldType\\XmlText\\Converter]",
+                    "eZ\\Publish\\Core\\FieldType\\XmlText\\Converter\\Output[]",
                     $preConverter
                 );
         }
@@ -57,29 +59,23 @@ class Html5 implements Converter
     }
 
     /**
-     * Convert $xmlString from internal representation to HTML5
+     * Convert $xmlDoc from internal representation DOMDocument to HTML5
      *
-     * @param string $xmlString
+     * @param \DOMDocument $xmlDoc
      * @return string
      */
-    public function convert( $xmlString )
+    public function convert( DOMDocument $xmlDoc )
     {
         foreach ( $this->preConverters as $preConverter )
         {
-            $xmlString = $preConverter->convert( $xmlString );
+            $preConverter->convert( $xmlDoc );
         }
 
-        $doc = new DOMDocument;
-        $doc->load( $this->stylesheet );
+        $xslDoc = new DOMDocument;
+        $xslDoc->load( $this->stylesheet );
         $xsl = new XSLTProcessor();
-        $xsl->importStyleSheet( $doc );
-        $doc->loadXML( $xmlString );
+        $xsl->importStyleSheet( $xslDoc );
 
-        foreach ( $doc->getElementsByTagName( "link" ) as $link )
-        {
-            $link->setAttribute( "url", "http://ez.no/url/id/" . $link->getAttribute( "url_id" ) );
-        }
-
-        return $xsl->transformToXML( $doc );
+        return $xsl->transformToXML( $xmlDoc );
     }
 }

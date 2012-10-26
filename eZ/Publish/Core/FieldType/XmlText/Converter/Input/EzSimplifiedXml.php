@@ -9,12 +9,12 @@
 
 namespace eZ\Publish\Core\FieldType\XmlText\Converter\Input;
 
-use eZ\Publish\Core\FieldType\XmlText\Converter,
+use eZ\Publish\Core\FieldType\XmlText\Converter\Input,
     DOMDocument,
     Exception,
     XSLTProcessor;
 
-class EzSimplifiedXml implements Converter
+class EzSimplifiedXml implements Input
 {
     /**
      * Path to XSD
@@ -48,6 +48,8 @@ class EzSimplifiedXml implements Converter
      *
      * @param string $xmlString
      * @return string
+     *
+     * @throws \Exception
      */
     public function convert( $xmlString )
     {

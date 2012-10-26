@@ -27,6 +27,7 @@ parameters:
     ezpublish.fieldType.ezurl.class: eZ\Publish\Core\FieldType\Url\Type
     ezpublish.fieldType.ezurl.externalStorage.class: eZ\Publish\Core\FieldType\Url\UrlStorage
     ezpublish.fieldType.ezxmltext.class: eZ\Publish\Core\FieldType\XmlText\Type
+    ezpublish.fieldType.ezxmltext.externalStorage.class: eZ\Publish\Core\FieldType\XmlText\XmlTextStorage
     ezpublish.fieldType.ezxmltext.simplifiedInputParser.class: eZ\Publish\Core\FieldType\XmlText\Input\Parser\Simplified
     ezpublish.fieldType.ezxmltext.xmlSchema.class: eZ\Publish\Core\FieldType\XmlText\Schema
     ezpublish.fieldType.ezxmltext.xmlSchema.options: []
@@ -474,6 +475,12 @@ services:
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezxmltext}
+
+    ezpublish.fieldType.ezxmltext.externalStorage:
+        class: %ezpublish.fieldType.ezxmltext.externalStorage.class%
+        arguments: [[]]
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezxmltext}
 
     ezpublish.fieldType.ezxmltext.simplifiedInputParser:
         class: %ezpublish.fieldType.ezxmltext.simplifiedInputParser.class%

@@ -8,28 +8,43 @@
  */
 
 namespace eZ\Publish\Core\FieldType\XmlText;
-use eZ\Publish\Core\FieldType\Value as BaseValue;
+
+use eZ\Publish\Core\FieldType\Value as BaseValue,
+    DOMDocument;
 
 /**
  * Basic for TextLine field type
  */
 class Value extends BaseValue
 {
-    /**
-     * Text content
-     *
-     * @var string
-     */
-    public $text;
+    const EMPTY_VALUE = <<<EOT
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />
+EOT;
 
     /**
-     * Initializes a new XmlText Value object with $text in
+     * XML content as DOMDocument
      *
-     * @param string $text
+     * @var \DOMDocument
      */
-    public function __construct( $text = "" )
+    public $xml;
+
+    /**
+     * Initializes a new XmlText Value object with $xmlDoc in
+     *
+     * @param \DOMDocument $xmlDoc
+     */
+    public function __construct( DOMDocument $xmlDoc = null )
     {
-        $this->text = $text;
+        if ( $xmlDoc === null )
+        {
+            $xmlDoc = new DOMDocument;
+            $xmlDoc->loadXML( self::EMPTY_VALUE );
+        }
+
+        $this->xml = $xmlDoc;
     }
 
     /**
@@ -37,6 +52,6 @@ class Value extends BaseValue
      */
     public function __toString()
     {
-        return (string)$this->text;
+        return isset( $this->xml ) ? $this->xml->saveXML() : self::EMPTY_VALUE;
     }
 }
