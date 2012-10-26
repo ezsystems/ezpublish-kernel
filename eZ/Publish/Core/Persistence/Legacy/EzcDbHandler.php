@@ -58,15 +58,31 @@ class EzcDbHandler
      * {@see http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html#handler-usage}
      *
      * @static
-     * @param $dsn
+     * @param $dbParams
      * @return EzcDbHandler
      */
-    public static function create( $dsn )
+    public static function create( $dbParams )
     {
-        $connection = ezcDbFactory::create( $dsn );
-        $database = preg_replace( '(^([a-z]+).*)', '\\1', $dsn );
+        if ( !is_array( $dbParams ) )
+        {
+            $databaseType = preg_replace( '(^([a-z]+).*)', '\\1', $dbParams );
+        }
+        else
+        {
+            $databaseType = $dbParams['type'];
+            // PDOMySQL ignores the "charset" param until PHP 5.3.6.
+            // We then need to force it to use an init command.
+            // @link http://php.net/manual/en/ref.pdo-mysql.connection.php
+            if ( $databaseType === 'mysql' && $dbParams['charset'] === 'utf8' )
+            {
+                $dbParams['driver-opts'] += array(
+                    \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+                );
+            }
+        }
+        $connection = ezcDbFactory::create( $dbParams );
 
-        switch ( $database )
+        switch ( $databaseType )
         {
             case 'pgsql':
                 $dbHandler = new Pgsql( $connection );

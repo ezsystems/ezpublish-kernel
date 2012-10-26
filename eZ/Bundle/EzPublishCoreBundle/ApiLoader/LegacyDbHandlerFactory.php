@@ -33,7 +33,7 @@ class LegacyDbHandlerFactory
     public function buildLegacyDbHandler()
     {
         return EzcDbHandler::create(
-            $this->configResolver->getParameter( 'database.dsn' )
+            $this->configResolver->getParameter( 'database.params' )
         );
     }
 }
