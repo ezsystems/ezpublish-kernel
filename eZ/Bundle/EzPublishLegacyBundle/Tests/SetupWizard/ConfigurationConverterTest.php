@@ -136,8 +136,13 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                     'ezdemo_site_admin' => array( 'url_alias_router' => false ),
                     'eng' => array(
                         'image_variations' => array(
-                            'large' => array( 'reference' => null, 'filters' => array( array( 'name' => 'geometry/scaledownonly', 'params' => array( 360, 440 ) ) ) ),
-                            'infoboximage' => array( 'reference' => null, 'filters' => array( array( 'name' => 'geometry/scalewidth', 'params' => array( 75 ) ) ) ),
+                            'large' => array( 'reference' => null, 'filters' => array(
+                                array( 'name' => 'geometry/scaledownonly', 'params' => array( 360, 440 ) )
+                            ) ),
+                            'infoboximage' => array( 'reference' => null, 'filters' => array(
+                                array( 'name' => 'geometry/scalewidth', 'params' => array( 75 ) ),
+                                array( 'name' => 'flatten' )
+                            ) ),
                         )
                     )
                 ),
@@ -175,7 +180,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                 'large' => array( 'large', 'image', 'eng',
                     array( 'Reference' => '', 'Filters' => array( 'geometry/scaledownonly=360;440' ) ) ),
                 'infoboximage' => array( 'infoboximage', 'image', 'eng',
-                    array( 'Reference' => '', 'Filters' => array( 'geometry/scalewidth=75' ) ) ),
+                    array( 'Reference' => '', 'Filters' => array( 'geometry/scalewidth=75', 'flatten' ) ) ),
             )
         );
 

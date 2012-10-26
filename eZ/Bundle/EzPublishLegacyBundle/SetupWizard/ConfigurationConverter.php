@@ -134,15 +134,30 @@ class ConfigurationConverter
             }
             if ( isset( $aliasSettings['Filters'] ) && is_array( $aliasSettings['Filters'] ) )
             {
+                // parse filters. Format: filtername=param1;param2...paramN
                 foreach( $aliasSettings['Filters'] as $filterString )
                 {
-                    list( $filterName, $filterParams) = explode( '=', $filterString );
-                    $filterParams = explode( ';', $filterParams );
-                    array_walk( $filterParams, function( &$value ) {
-                        if ( preg_match( '/^[0-9]+$/', $value ) )
-                            $value = (int)$value;
-                    } );
-                    $variationSettings['filters'][] = array( 'name' => $filterName, 'params' => $filterParams );
+                    $filteringSettings = array();
+
+                    if ( strstr( $filterString, '=' ) !== false )
+                    {
+                        list( $filteringSettings['name'], $filterParams) = explode( '=', $filterString );
+                        $filterParams = explode( ';', $filterParams );
+
+                        // make sure integers are actually integers, not strings
+                        array_walk( $filterParams, function( &$value ) {
+                            if ( preg_match( '/^[0-9]+$/', $value ) )
+                                $value = (int)$value;
+                        } );
+
+                        $filteringSettings['params'] = $filterParams;
+                    }
+                    else
+                    {
+                        $filteringSettings['name'] = $filterString;
+                    }
+
+                    $variationSettings['filters'][] = $filteringSettings;
                 }
             }
 
