@@ -624,7 +624,7 @@ class URLAliasServiceTest extends BaseTest
             'module:content/search?SearchText=eZ', 'My/Special-Support', 'eng-US'
         );
         $urlAliasService->createGlobalUrlAlias(
-            'module:content/search?SearchText=eZ', 'My/Spezial-Unterstützung', 'ger-DE'
+            'module:content/search?SearchText=eZ', 'My/London-Office', 'eng-GB'
         );
         $urlAliasService->createGlobalUrlAlias(
             'module:content/search?SearchText=Sindelfingen', 'My/Fancy-Site', 'eng-US'
