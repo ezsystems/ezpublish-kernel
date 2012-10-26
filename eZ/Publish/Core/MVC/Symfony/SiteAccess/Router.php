@@ -165,6 +165,7 @@ class Router
 
     /**
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
+     * @access private Only for unit tests use
      */
     public function setSiteAccess( SiteAccess $siteAccess = null )
     {
