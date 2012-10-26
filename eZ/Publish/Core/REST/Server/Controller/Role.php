@@ -21,6 +21,8 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+
 /**
  * Role controller
  */
@@ -90,11 +92,18 @@ class Role extends RestController
      */
     public function listRoles()
     {
+        $roles = array();
         if ( isset( $this->request->variables['identifier'] ) )
         {
-            $roles = array(
-                $this->loadRoleByIdentifier()
-            );
+            try
+            {
+                $role = $this->roleService->loadRoleByIdentifier( $this->request->variables['identifier'] );
+                $roles[] = $role;
+            }
+            catch ( APINotFoundException $e )
+            {
+                // Do nothing
+            }
         }
         else
         {
@@ -123,16 +132,6 @@ class Role extends RestController
     }
 
     /**
-     * Load role by identifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
-    public function loadRoleByIdentifier()
-    {
-        return $this->roleService->loadRoleByIdentifier( $this->request->variables['identifier'] );
-    }
-
-    /**
      * Updates a role
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
@@ -155,7 +154,7 @@ class Role extends RestController
     /**
      * Delete a role by ID
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteRole()
     {
@@ -167,7 +166,7 @@ class Role extends RestController
             $this->roleService->loadRole( $values['role'] )
         );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
@@ -187,7 +186,7 @@ class Role extends RestController
     /**
      * Deletes all policies from a role
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deletePolicies()
     {
@@ -200,7 +199,7 @@ class Role extends RestController
             $this->roleService->removePolicy( $loadedRole, $rolePolicy );
         }
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
@@ -291,7 +290,7 @@ class Role extends RestController
     /**
      * Delete a policy from role
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deletePolicy()
     {
@@ -312,7 +311,7 @@ class Role extends RestController
         if ( $policy !== null )
         {
             $this->roleService->removePolicy( $role, $policy );
-            return new Values\ResourceDeleted();
+            return new Values\NoContent();
         }
 
         throw new Exceptions\NotFoundException( "Policy not found: '{$this->request->path}'." );

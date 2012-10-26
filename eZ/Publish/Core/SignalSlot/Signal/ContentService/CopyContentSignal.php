@@ -44,6 +44,7 @@ class CopyContentSignal extends Signal
      */
     public $dstVersionNo;
 
+
     /**
      * Destination Parent Location ID
      *

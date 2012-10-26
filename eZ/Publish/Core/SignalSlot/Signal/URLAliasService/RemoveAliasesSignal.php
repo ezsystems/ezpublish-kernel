@@ -22,6 +22,4 @@ class RemoveAliasesSignal extends Signal
      * @var mixed
      */
     public $aliasList;
-
 }
-

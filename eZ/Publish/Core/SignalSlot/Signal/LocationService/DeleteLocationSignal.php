@@ -30,4 +30,3 @@ class DeleteLocationSignal extends Signal
      */
     public $locationId;
 }
-

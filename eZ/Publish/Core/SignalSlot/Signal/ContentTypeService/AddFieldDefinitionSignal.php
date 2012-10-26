@@ -22,6 +22,4 @@ class AddFieldDefinitionSignal extends Signal
      * @var mixed
      */
     public $contentTypeDraftId;
-
 }
-

@@ -29,6 +29,4 @@ class RemovePolicySignal extends Signal
      * @var mixed
      */
     public $policyId;
-
 }
-

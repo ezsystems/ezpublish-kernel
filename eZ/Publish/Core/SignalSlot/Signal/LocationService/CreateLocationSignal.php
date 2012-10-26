@@ -30,4 +30,3 @@ class CreateLocationSignal extends Signal
      */
     public $locationId;
 }
-

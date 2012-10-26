@@ -47,6 +47,8 @@ class ConfigurationConverter
             function()
             {
                \eZINI::injectSettings( array() );
+               \eZCache::clearByTag( 'ini' );
+               \eZINI::resetAllInstances();
             }
         );
 
@@ -76,14 +78,7 @@ class ConfigurationConverter
             'eZMySQLDB' => 'mysql',
         );
 
-        try
-        {
-            $databaseSettings = $this->legacyResolver->getGroup( 'DatabaseSettings', 'site', $defaultSiteaccess );
-        }
-        catch( \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException $e )
-        {
-            $databaseSettings = $this->legacyResolver->getGroup( 'DatabaseSettings', 'site' );
-        }
+        $databaseSettings = $this->getGroupWithFallback( 'DatabaseSettings', 'site', $defaultSiteaccess );
 
         $databaseType = $databaseSettings['DatabaseImplementation'];
         if ( isset( $databaseMapping[$databaseType] ) )
@@ -101,7 +96,127 @@ class ConfigurationConverter
         );
         $settings['ezpublish']['system'][$adminSiteaccess] = array( 'url_alias_router' => false );
 
+        // FileSettings
+        $settings['ezpublish']['system'][$groupName]['var_dir'] =
+            $this->getParameterWithFallback( 'FileSettings.VarDir', 'site', $defaultSiteaccess );
+
+        // we don't map the default FileSettings.StorageDir value
+        $storageDir = $this->getParameterWithFallback( 'FileSettings.StorageDir', 'site', $defaultSiteaccess );
+        if ( $storageDir !== 'storage' )
+            $settings['ezpublish']['system'][$groupName]['storage_dir'] = $storageDir;
+
+
+        // ImageMagick settings
+        $imageMagickEnabled = $this->getParameterWithFallback( 'ImageMagick.IsEnabled', 'image', $defaultSiteaccess );
+        if ( $imageMagickEnabled == 'true' )
+        {
+            $settings['ezpublish']['imagemagick']['enabled'] = true;
+            $imageMagickExecutablePath = $this->getParameterWithFallback( 'ImageMagick.ExecutablePath', 'image', $defaultSiteaccess );
+            $imageMagickExecutable = $this->getParameterWithFallback( 'ImageMagick.Executable', 'image', $defaultSiteaccess );
+            $settings['ezpublish']['imagemagick']['path'] = rtrim( $imageMagickExecutablePath, '/\\' ) . '/' . $imageMagickExecutable;
+        }
+        else
+        {
+            $settings['ezpublish']['imagemagick']['enabled'] = false;
+        }
+
+        // image variations settings
+        $settings['ezpublish']['system'][$defaultSiteaccess] = array();
+        $settings['ezpublish']['system'][$defaultSiteaccess]['image_variations'] = array();
+        $imageAliasesList = $this->legacyResolver->getGroup( 'AliasSettings', 'image', $defaultSiteaccess );
+        foreach( $imageAliasesList['AliasList'] as $imageAliasIdentifier )
+        {
+            $variationSettings = array( 'reference' => null, 'filters' => array() );
+            $aliasSettings = $this->legacyResolver->getGroup( $imageAliasIdentifier, 'image', $defaultSiteaccess );
+            if ( isset( $aliasSettings['Reference'] ) && $aliasSettings['Reference'] != '' )
+            {
+                $variationSettings['reference'] = $aliasSettings['Reference'];
+            }
+            if ( isset( $aliasSettings['Filters'] ) && is_array( $aliasSettings['Filters'] ) )
+            {
+                // parse filters. Format: filtername=param1;param2...paramN
+                foreach( $aliasSettings['Filters'] as $filterString )
+                {
+                    $filteringSettings = array();
+
+                    if ( strstr( $filterString, '=' ) !== false )
+                    {
+                        list( $filteringSettings['name'], $filterParams) = explode( '=', $filterString );
+                        $filterParams = explode( ';', $filterParams );
+
+                        // make sure integers are actually integers, not strings
+                        array_walk( $filterParams, function( &$value ) {
+                            if ( preg_match( '/^[0-9]+$/', $value ) )
+                                $value = (int)$value;
+                        } );
+
+                        $filteringSettings['params'] = $filterParams;
+                    }
+                    else
+                    {
+                        $filteringSettings['name'] = $filterString;
+                    }
+
+                    $variationSettings['filters'][] = $filteringSettings;
+                }
+            }
+
+            $settings['ezpublish']['system'][$defaultSiteaccess]['image_variations'][$imageAliasIdentifier] = $variationSettings;
+        }
+
         return $settings;
+    }
+
+    /**
+     * Returns the contents of the legacy group $groupName, either in $defaultSiteaccess or,
+     * if not found, in the global settings
+     *
+     * @param $groupName
+     * @param $namespace
+     * @param $siteaccess
+     *
+     * @internal param $defaultSiteaccess
+     * @return array
+     *
+     * @throws \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException
+     */
+    public function getGroupWithFallback( $groupName, $namespace, $siteaccess )
+    {
+        try
+        {
+            return $this->legacyResolver->getGroup( $groupName, $namespace, $siteaccess );
+        }
+        // fallback to global override
+        catch ( \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException $e )
+        {
+            return $this->legacyResolver->getGroup( $groupName, $namespace );
+        }
+    }
+
+    /**
+     * Returns the value of the legacy parameter $parameterName, either in $defaultSiteaccess or,
+     * if not found, in the global settings
+     *
+     * @param $parameterName
+     * @param $namespace
+     * @param $siteaccess
+     *
+     * @internal param $groupName
+     * @internal param $defaultSiteaccess
+     * @return array
+     *
+     */
+    public function getParameterWithFallback( $parameterName, $namespace, $siteaccess )
+    {
+        try
+        {
+            return $this->legacyResolver->getParameter( $parameterName, $namespace, $siteaccess );
+        }
+            // fallback to global override
+        catch ( \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException $e )
+        {
+            return $this->legacyResolver->getParameter( $parameterName, $namespace );
+        }
     }
 
     protected function resolveMatching()

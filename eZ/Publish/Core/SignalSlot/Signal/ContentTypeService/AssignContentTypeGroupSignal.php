@@ -29,6 +29,4 @@ class AssignContentTypeGroupSignal extends Signal
      * @var mixed
      */
     public $contentTypeGroupId;
-
 }
-

@@ -73,7 +73,7 @@ class UrlGenerator extends Generator
                     $unorderedParams .= "/($paramName)/$paramValue";
                 }
 
-                return $legacyModuleUri . $unorderedParams;
+                return "/$legacyModuleUri$unorderedParams";
             },
             false
         );

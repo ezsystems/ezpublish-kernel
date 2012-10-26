@@ -57,8 +57,8 @@ class UrlWildcardHandlerTest extends TestCase
             new UrlWildcard(
                 array(
                     "id" => 1,
-                    "sourceUrl" => "developer/*",
-                    "destinationUrl" => "dev/{1}",
+                    "sourceUrl" => "/developer/*",
+                    "destinationUrl" => "/dev/{1}",
                     "forward" => false
                 )
             ),
@@ -101,8 +101,8 @@ class UrlWildcardHandlerTest extends TestCase
             new UrlWildcard(
                 array(
                     "id" => 4,
-                    "sourceUrl" => "amber",
-                    "destinationUrl" => "pattern",
+                    "sourceUrl" => "/amber",
+                    "destinationUrl" => "/pattern",
                     "forward" => true
                 )
             ),
@@ -196,20 +196,20 @@ class UrlWildcardHandlerTest extends TestCase
     protected $fixtureData = array(
         array(
             "id" => 1,
-            "sourceUrl" => "developer/*",
-            "destinationUrl" => "dev/{1}",
+            "sourceUrl" => "/developer/*",
+            "destinationUrl" => "/dev/{1}",
             "forward" => false
         ),
         array(
             "id" => 2,
-            "sourceUrl" => "repository/*",
-            "destinationUrl" => "repo/{1}",
+            "sourceUrl" => "/repository/*",
+            "destinationUrl" => "/repo/{1}",
             "forward" => false
         ),
         array(
             "id" => 3,
-            "sourceUrl" => "information/*",
-            "destinationUrl" => "info/{1}",
+            "sourceUrl" => "/information/*",
+            "destinationUrl" => "/info/{1}",
             "forward" => false
         )
     );

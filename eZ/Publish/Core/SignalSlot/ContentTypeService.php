@@ -135,7 +135,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete a content type group
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If  a to be deleted content type has instances
      *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $ContentTypeGroup
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      */
     public function deleteContentTypeGroup( \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup )
     {
@@ -473,7 +473,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * instanciates a new content type group create class
+     * Instantiates a new content type group create class
      *
      * @param string $identifier
      *
@@ -486,7 +486,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * instanciates a new content type create class
+     * Instantiates a new content type create class
      *
      * @param string $identifier
      *
@@ -510,7 +510,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * instanciates a new content type update struct
+     * Instantiates a new content type update struct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct
      */
@@ -521,7 +521,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * instanciates a field definition create struct
+     * Instantiates a field definition create struct
      *
      * @param string $fieldTypeIdentifier the required  field type identifier
      * @param string $identifier the required identifier for the field definition
@@ -535,7 +535,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
     /**
-     * instanciates a field definition update class
+     * Instantiates a field definition update class
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct
      */
@@ -546,4 +546,3 @@ class ContentTypeService implements ContentTypeServiceInterface
     }
 
 }
-

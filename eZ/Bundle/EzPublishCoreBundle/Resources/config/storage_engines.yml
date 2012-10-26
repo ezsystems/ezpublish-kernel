@@ -49,6 +49,8 @@ parameters:
     ezpublish.fieldType.ezdatetime.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime
     ezpublish.fieldType.ezemail.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\EmailAddress
     ezpublish.fieldType.ezfloat.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Float
+    ezpublish.fieldType.ezgmaplocation.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\MapLocation
+    ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezinteger.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer
     ezpublish.fieldType.ezimage.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Image
     ezpublish.fieldType.ezimage.storage_gateway.class: eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway\LegacyStorage
@@ -63,6 +65,7 @@ parameters:
     ezpublish.fieldType.ezstring.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
     ezpublish.fieldType.eztext.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlock
     ezpublish.fieldType.ezxmltext.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText
+    ezpublish.fieldType.ezxmltext.storage_gateway.class: eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezsrrating.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating
     ezpublish.fieldType.ezurl.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url
     ezpublish.fieldType.ezurl.storage_gateway.class: eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage
@@ -72,8 +75,6 @@ parameters:
     ezpublish.fieldType.ezpaex.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
 
     # Temporary workaround  to treat those field types as a ezstring until proper implementation will be in place
-    ezpublish.fieldType.ezgmaplocation.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
-    ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezcomcomments.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
 
 services:
@@ -212,6 +213,11 @@ services:
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezxmltext, lazy: true, callback: '::create'}
 
+    ezpublish.fieldType.ezxmltext.storage_gateway:
+        class: %ezpublish.fieldType.ezxmltext.storage_gateway.class%
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezxmltext, identifier: LegacyStorage}
+
     ezpublish.fieldType.ezsrrating.converter:
         class: %ezpublish.fieldType.ezsrrating.converter.class%
         tags:
@@ -243,6 +249,16 @@ services:
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezimage, identifier: LegacyStorage}
 
+    ezpublish.fieldType.ezgmaplocation.converter:
+        class: %ezpublish.fieldType.ezgmaplocation.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezgmaplocation, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway:
+        class: %ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway.class%
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezgmaplocation, identifier: LegacyStorage}
+
     # Temporary workaround for ezemail, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
     # a ezstring until proper implementation will be in place
 
@@ -250,11 +266,6 @@ services:
         class: %ezpublish.fieldType.ezemail.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezemail, lazy: true, callback: '::create'}
-
-    ezpublish.fieldType.ezgmaplocation.converter:
-        class: %ezpublish.fieldType.ezgmaplocation.converter.class%
-        tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezgmaplocation, lazy: true, callback: '::create'}
 
     ezpublish.fieldType.ezcomcomments.converter:
         class: %ezpublish.fieldType.ezcomcomments.converter.class%
@@ -286,11 +297,6 @@ services:
         class: %ezpublish.fieldType.ezuser.storage_gateway.class%
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezuser, identifier: LegacyStorage}
-
-    ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway:
-        class: %ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway.class%
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezgmaplocation, identifier: LegacyStorage}
 
     ezpublish.fieldType.ezpaex.converter:
         class: %ezpublish.fieldType.ezstring.converter.class%

@@ -22,6 +22,4 @@ class DeleteLanguageSignal extends Signal
      * @var mixed
      */
     public $languageId;
-
 }
-

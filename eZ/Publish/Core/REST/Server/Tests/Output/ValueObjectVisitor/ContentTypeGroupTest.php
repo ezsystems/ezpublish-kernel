@@ -292,7 +292,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
                 'tag'      => 'ContentTypes',
                 'attributes' => array(
                     'href'       => '/content/typegroups/42/types',
-                    'media-type' => 'application/vnd.ez.api.ContentTypeList+xml',
+                    'media-type' => 'application/vnd.ez.api.ContentTypeInfoList+xml',
                 )
             ),
             $result,

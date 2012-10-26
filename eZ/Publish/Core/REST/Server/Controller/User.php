@@ -112,8 +112,7 @@ class User extends RestController
     {
         //@todo Replace hardcoded value with one loaded from settings
         return new Values\PermanentRedirect(
-            $this->urlHandler->generate( 'group', array( 'group' => '/1/5' ) ),
-            'UserGroup'
+            $this->urlHandler->generate( 'group', array( 'group' => '/1/5' ) )
         );
     }
 
@@ -354,7 +353,7 @@ class User extends RestController
     /**
      * Given user group is deleted
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteUserGroup()
     {
@@ -377,13 +376,13 @@ class User extends RestController
 
         $this->userService->deleteUserGroup( $userGroup );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
      * Given user is deleted
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteUser()
     {
@@ -400,7 +399,7 @@ class User extends RestController
 
         $this->userService->deleteUser( $user );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
@@ -481,7 +480,17 @@ class User extends RestController
     public function loadUserGroups()
     {
         $restUserGroups = array();
-        if ( isset( $this->request->variables['roleId'] ) )
+        if ( isset( $this->request->variables['id'] ) )
+        {
+            $userGroup = $this->userService->loadUserGroup( $this->request->variables['id'] );
+            $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
+            $userGroupMainLocation = $this->locationService->loadLocation( $userGroupContentInfo->mainLocationId );
+
+            $restUserGroups = array(
+                new Values\RestUserGroup( $userGroup, $userGroupContentInfo, $userGroupMainLocation )
+            );
+        }
+        else if ( isset( $this->request->variables['roleId'] ) )
         {
              $restUserGroups = $this->loadUserGroupsAssignedToRole();
         }
@@ -677,7 +686,10 @@ class User extends RestController
      */
     public function loadUsersFromGroup()
     {
-        $urlValues = $this->urlHandler->parse( 'groupUsers', $this->request->path );
+        $questionMark = strpos( $this->request->path, '?' );
+        $requestPath = $questionMark !== false ? substr( $this->request->path, 0, $questionMark ) : $this->request->path;
+
+        $urlValues = $this->urlHandler->parse( 'groupUsers', $requestPath );
 
         $userGroupLocation = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath( $urlValues['group'] )
@@ -687,7 +699,14 @@ class User extends RestController
             $userGroupLocation->contentId
         );
 
-        $users = $this->userService->loadUsersOfUserGroup( $userGroup );
+        $offset = isset( $this->request->variables['offset'] ) ? (int)$this->request->variables['offset'] : 0;
+        $limit = isset( $this->request->variables['limit'] ) ? (int)$this->request->variables['limit'] : -1;
+
+        $users = $this->userService->loadUsersOfUserGroup(
+            $userGroup,
+            $offset >= 0 ? $offset : 0,
+            $limit >= 0 ? $limit : -1
+        );
 
         $restUsers = array();
         foreach ( $users as $user )

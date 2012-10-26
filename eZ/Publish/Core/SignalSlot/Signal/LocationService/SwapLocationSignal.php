@@ -43,6 +43,4 @@ class SwapLocationSignal extends Signal
      * @var mixed
      */
     public $location2Id;
-
 }
-

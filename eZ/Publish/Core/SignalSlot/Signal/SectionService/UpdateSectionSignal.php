@@ -22,6 +22,4 @@ class UpdateSectionSignal extends Signal
      * @var mixed
      */
     public $sectionId;
-
 }
-

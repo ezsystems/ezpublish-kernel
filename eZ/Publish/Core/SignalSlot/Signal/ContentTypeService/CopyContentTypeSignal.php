@@ -29,6 +29,4 @@ class CopyContentTypeSignal extends Signal
      * @var mixed
      */
     public $userId;
-
 }
-

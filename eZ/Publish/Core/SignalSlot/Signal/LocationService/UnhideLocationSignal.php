@@ -23,4 +23,3 @@ class UnhideLocationSignal extends Signal
      */
     public $locationId;
 }
-

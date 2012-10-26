@@ -29,8 +29,8 @@ class Mapper
     {
         $urlWildcard = new UrlWildcard();
 
-        $urlWildcard->destinationUrl = $destinationUrl;
-        $urlWildcard->sourceUrl = $sourceUrl;
+        $urlWildcard->destinationUrl = $this->cleanUrl( $destinationUrl );
+        $urlWildcard->sourceUrl = $this->cleanUrl( $sourceUrl );
         $urlWildcard->forward = $forward;
 
         return $urlWildcard;
@@ -47,12 +47,24 @@ class Mapper
     {
         $urlWildcard = new UrlWildcard();
 
-        $urlWildcard->destinationUrl = $row["destination_url"];
         $urlWildcard->id = (int)$row["id"];
-        $urlWildcard->sourceUrl = $row["source_url"];
+        $urlWildcard->destinationUrl = $this->cleanUrl( $row["destination_url"] );
+        $urlWildcard->sourceUrl = $this->cleanUrl( $row["source_url"] );
         $urlWildcard->forward = (int)$row["type"] === 1 ? true : false;
 
         return $urlWildcard;
+    }
+
+    /**
+     *
+     *
+     * @param string $url
+     *
+     * @return string
+     */
+    protected function cleanUrl( $url )
+    {
+        return "/" . trim( $url, "/ " );
     }
 
     /**

@@ -29,6 +29,4 @@ class CreateObjectStateSignal extends Signal
      * @var mixed
      */
     public $objectStateId;
-
 }
-

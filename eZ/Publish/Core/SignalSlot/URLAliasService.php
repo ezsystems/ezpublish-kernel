@@ -194,5 +194,18 @@ class URLAliasService implements URLAliasServiceInterface
         return $returnValue;
     }
 
+    /**
+     * Loads URL alias by given $id
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @param string $id
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     */
+    public function load( $id )
+    {
+        $returnValue = $this->service->load( $id );
+        return $returnValue;
+    }
 }
-

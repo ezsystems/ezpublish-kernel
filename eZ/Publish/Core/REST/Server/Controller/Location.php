@@ -62,6 +62,37 @@ class Location extends RestController
     }
 
     /**
+     * Loads the location for a given ID (x)or remote ID
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\TemporaryRedirect
+     */
+    public function redirectLocation()
+    {
+        if ( !isset( $this->request->variables['id'] ) && !isset( $this->request->variables['remoteId'] ) )
+        {
+            throw new BadRequestException( "At least one of 'id' or 'remoteId' parameters is required." );
+        }
+
+        if ( isset( $this->request->variables['id'] ) )
+        {
+            $location = $this->locationService->loadLocation( $this->request->variables['id'] );
+        }
+        else
+        {
+            $location = $this->locationService->loadLocationByRemoteId( $this->request->variables['remoteId'] );
+        }
+
+        return new Values\TemporaryRedirect(
+            $this->urlHandler->generate(
+                'location',
+                array(
+                    'location' => rtrim( $location->pathString, '/' )
+                )
+            )
+        );
+    }
+
+    /**
      * Creates a new location for the given content object
      *
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedLocation
@@ -104,7 +135,7 @@ class Location extends RestController
     /**
      * Deletes a location
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteSubtree()
     {
@@ -112,7 +143,7 @@ class Location extends RestController
         $location = $this->locationService->loadLocation( $this->extractLocationIdFromPath( $values['location'] ) );
         $this->locationService->deleteLocation( $location );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
@@ -206,8 +237,7 @@ class Location extends RestController
     /**
      * Swaps a location with another one
      *
-     *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceSwapped
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function swapLocation()
     {
@@ -221,7 +251,7 @@ class Location extends RestController
 
         $this->locationService->swapLocation( $location, $destinationLocation );
 
-        return new Values\ResourceSwapped();
+        return new Values\NoContent();
     }
 
     /**
@@ -265,13 +295,21 @@ class Location extends RestController
      */
     public function loadLocationChildren()
     {
-        $values = $this->urlHandler->parse( 'locationChildren', $this->request->path );
+        $questionMark = strpos( $this->request->path, '?' );
+        $requestPath = $questionMark !== false ? substr( $this->request->path, 0, $questionMark ) : $this->request->path;
+
+        $values = $this->urlHandler->parse( 'locationChildren', $requestPath );
+
+        $offset = isset( $this->request->variables['offset'] ) ? (int)$this->request->variables['offset'] : 0;
+        $limit = isset( $this->request->variables['limit'] ) ? (int)$this->request->variables['limit'] : -1;
 
         return new Values\LocationList(
             $this->locationService->loadLocationChildren(
                 $this->locationService->loadLocation(
                     $this->extractLocationIdFromPath( $values['location'] )
-                )
+                ),
+                $offset >= 0 ? $offset : 0,
+                $limit >= 0 ? $limit : -1
             ),
             $this->request->path
         );

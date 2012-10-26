@@ -29,6 +29,4 @@ class UpdateLanguageNameSignal extends Signal
      * @var mixed
      */
     public $newName;
-
 }
-

@@ -12,10 +12,11 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values;
+use eZ\Publish\Core\REST\Server\Values\Version;
 use eZ\Publish\Core\REST\Common;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
-class ContentTest extends ValueObjectVisitorBaseTest
+class VersionTest extends ValueObjectVisitorBaseTest
 {
     protected $fieldTypeSerializerMock;
 
@@ -31,42 +32,56 @@ class ContentTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test the Content visitor
+     * Test the Version visitor
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getContentVisitor();
+        $visitor   = $this->getVersionVisitor();
         $generator = $this->getGenerator();
 
         $generator->startDocument( null );
 
-        $section = new Values\Content\Content( array(
-            'versionInfo' => new Values\Content\VersionInfo( array(
-                'versionNo' => 5,
-                'contentInfo' => new Values\Content\ContentInfo( array(
-                    'id' => 23,
-                    'contentType' => ( $contentType = new Values\ContentType\ContentType( array(
-                        'id' => 42,
-                        'fieldDefinitions' => array(),
-                    ) ) ),
-                ) ),
-            ) ),
-            'internalFields' => array(
-                new Field( array(
-                    'id' => 1,
-                    'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'ezauthor',
-                ) ),
-                new Field( array(
-                    'id' => 2,
-                    'languageCode' => 'eng-US',
-                    'fieldDefIdentifier' => 'ezimage',
-                ) ),
-            ),
-            'relations' => array(),
-        ) );
+        $version = new Version(
+            new Values\Content\Content(
+                array(
+                    'versionInfo' => new Values\Content\VersionInfo(
+                        array(
+                            'versionNo' => 5,
+                            'contentInfo' => new Values\Content\ContentInfo(
+                                array(
+                                    'id' => 23,
+                                    'contentType' => new Values\ContentType\ContentType(
+                                        array(
+                                            'id' => 42,
+                                            'fieldDefinitions' => array(),
+                                        )
+                                    ),
+                                )
+                            ),
+                        )
+                    ),
+                    'internalFields' => array(
+                        new Field(
+                            array(
+                                'id' => 1,
+                                'languageCode' => 'eng-US',
+                                'fieldDefIdentifier' => 'ezauthor',
+                            )
+                        ),
+                        new Field(
+                            array(
+                                'id' => 2,
+                                'languageCode' => 'eng-US',
+                                'fieldDefIdentifier' => 'ezimage',
+                            )
+                        ),
+                    ),
+                    'relations' => array(),
+                )
+            )
+        );
 
         $this->fieldTypeSerializerMock->expects( $this->exactly( 2 ) )
             ->method( 'serializeFieldValue' )
@@ -82,7 +97,7 @@ class ContentTest extends ValueObjectVisitorBaseTest
         $visitor->visit(
             $this->getVisitorMock(),
             $generator,
-            $section
+            $version
         );
 
         $result = $generator->endDocument( null );
@@ -153,13 +168,13 @@ class ContentTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the Content visitor
+     * Get the Version visitor
      *
-     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Content
+     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Version
      */
-    protected function getContentVisitor()
+    protected function getVersionVisitor()
     {
-        return new ValueObjectVisitor\Content(
+        return new ValueObjectVisitor\Version(
             new Common\UrlHandler\eZPublish(),
             $this->fieldTypeSerializerMock
         );

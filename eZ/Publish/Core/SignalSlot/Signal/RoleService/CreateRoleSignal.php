@@ -23,4 +23,3 @@ class CreateRoleSignal extends Signal
      */
     public $roleId;
 }
-

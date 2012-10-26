@@ -60,11 +60,11 @@ class URLWildcardServiceStub implements URLWildcardService
      *
      * @param string $sourceUrl
      * @param string $destinationUrl
-     * @param boolean $foreward
+     * @param boolean $forward
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
      */
-    public function create( $sourceUrl, $destinationUrl, $foreward = false )
+    public function create( $sourceUrl, $destinationUrl, $forward = false )
     {
         if ( false === $this->repository->hasAccess( 'content', 'edit' ) )
         {
@@ -100,7 +100,7 @@ class URLWildcardServiceStub implements URLWildcardService
                 'id' => ++$this->id,
                 'sourceUrl' => $sourceUrl,
                 'destinationUrl' => $destinationUrl,
-                'forward' => $foreward
+                'forward' => $forward
             )
         );
 

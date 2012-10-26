@@ -29,6 +29,4 @@ class SetPriorityOfObjectStateSignal extends Signal
      * @var mixed
      */
     public $priority;
-
 }
-

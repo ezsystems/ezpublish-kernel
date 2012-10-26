@@ -115,7 +115,4 @@ class Handler implements BaseUrlWildcardHandler
             $this->gateway->loadUrlWildcardsData( $offset, $limit )
         );
     }
-
-
-
 }

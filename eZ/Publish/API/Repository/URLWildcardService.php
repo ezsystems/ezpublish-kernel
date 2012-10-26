@@ -32,11 +32,11 @@ interface URLWildcardService
      *
      * @param string $sourceUrl
      * @param string $destinationUrl
-     * @param boolean $foreward
+     * @param boolean $forward
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
      */
-    public function create( $sourceUrl, $destinationUrl, $foreward = false );
+    public function create( $sourceUrl, $destinationUrl, $forward = false );
 
     /**
      * removes an url wildcard

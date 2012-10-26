@@ -30,11 +30,14 @@ class Root extends ValueObjectVisitor
         $generator->startObjectElement( 'Root' );
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Root' ) );
 
-        //@todo Media type not yet defined, may be changed
-        $generator->startObjectElement( 'content', 'ContentList' );
+        // Uses hashElement instead of objectElement as a workaround to be able to have
+        // an empty media-type, since there is no media type for list of content yet
+        $generator->startHashElement( 'content' );
+        $generator->startAttribute( 'media-type', '' );
+        $generator->endAttribute( 'media-type' );
         $generator->startAttribute( 'href', $this->urlHandler->generate( 'objects' ) );
         $generator->endAttribute( 'href' );
-        $generator->endObjectElement( 'content' );
+        $generator->endHashElement( 'content' );
 
         $generator->startObjectElement( 'contentTypes', 'ContentTypeInfoList' );
         $generator->startAttribute( 'href', $this->urlHandler->generate( 'types' ) );

@@ -167,7 +167,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      * @param mixed $locationId
      * @param mixed $newParentId
      */
-    public function locationMoved( $locationId, $newParentId )
+    public function locationMoved( $locationId, $oldParentId, $newParentId )
     {
       throw new NotImplementedException( __METHOD__ );
     }
@@ -180,7 +180,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      * @param mixed $locationId
      * @param mixed $newParentId
      */
-    public function locationCopied( $locationId, $newParentId )
+    public function locationCopied( $locationId, $oldParentId, $newParentId )
     {
       throw new NotImplementedException( __METHOD__ );
     }
@@ -192,6 +192,20 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      */
     public function locationDeleted( $locationId )
     {
-      throw new NotImplementedException( __METHOD__ );
+        throw new NotImplementedException( __METHOD__ );
+    }
+
+    /**
+     * Loads URL alias by given $id
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @param string $id
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
+     */
+    public function loadUrlAlias( $id )
+    {
+        throw new NotImplementedException( __METHOD__ );
     }
 }

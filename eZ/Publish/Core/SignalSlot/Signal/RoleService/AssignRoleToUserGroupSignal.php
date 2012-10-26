@@ -33,9 +33,7 @@ class AssignRoleToUserGroupSignal extends Signal
     /**
      * RoleLimitation
      *
-     * @var eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation
+     * @var \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation
      */
     public $roleLimitation;
-
 }
-

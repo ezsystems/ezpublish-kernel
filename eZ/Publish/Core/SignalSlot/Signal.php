@@ -22,4 +22,3 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 abstract class Signal extends ValueObject
 {
 }
-

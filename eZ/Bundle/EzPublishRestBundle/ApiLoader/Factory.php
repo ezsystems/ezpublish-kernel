@@ -121,6 +121,7 @@ class Factory
                     'application/vnd.ez.api.RelationCreate'         => new Input\Parser\RelationCreate( $urlHandler ),
                     'application/vnd.ez.api.ViewInput'              => new Input\Parser\ViewInput( $urlHandler ),
                     'application/vnd.ez.api.UrlWildcardCreate'      => new Input\Parser\URLWildcardCreate( $urlHandler, $parserTools ),
+                    'application/vnd.ez.api.UrlAliasCreate'         => new Input\Parser\URLAliasCreate( $urlHandler, $parserTools ),
 
                     // internal Media-Types
                     'application/vnd.ez.api.internal.criterion.ContentId'              => new Input\Parser\Criterion\ContentId( $urlHandler ),
@@ -207,6 +208,13 @@ class Factory
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\URLWildcard'           => new Output\ValueObjectVisitor\URLWildcard( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedURLWildcard'          => new Output\ValueObjectVisitor\CreatedURLWildcard( $urlHandler ),
 
+            // URLAlias
+
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\URLAliasList'                => new Output\ValueObjectVisitor\URLAliasList( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\URLAliasRefList'             => new Output\ValueObjectVisitor\URLAliasRefList( $urlHandler ),
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias'              => new Output\ValueObjectVisitor\URLAlias( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedURLAlias'             => new Output\ValueObjectVisitor\CreatedURLAlias( $urlHandler ),
+
             // Content
 
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ContentList'                 => new Output\ValueObjectVisitor\ContentList( $urlHandler ),
@@ -215,7 +223,7 @@ class Factory
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\VersionList'                 => new Output\ValueObjectVisitor\VersionList( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedVersion'              => new Output\ValueObjectVisitor\CreatedVersion( $urlHandler, $fieldTypeSerializer ),
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo'           => new Output\ValueObjectVisitor\VersionInfo( $urlHandler ),
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content'               => new Output\ValueObjectVisitor\Content(
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\Version'                     => new Output\ValueObjectVisitor\Version(
                 $urlHandler,
                 $fieldTypeSerializer
             ),
@@ -304,9 +312,7 @@ class Factory
             // REST specific
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\TemporaryRedirect'           => new Output\ValueObjectVisitor\TemporaryRedirect( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\PermanentRedirect'           => new Output\ValueObjectVisitor\PermanentRedirect( $urlHandler ),
-            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceDeleted'             => new Output\ValueObjectVisitor\ResourceDeleted( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceCreated'             => new Output\ValueObjectVisitor\ResourceCreated( $urlHandler ),
-            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\ResourceSwapped'             => new Output\ValueObjectVisitor\ResourceSwapped( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\NoContent'                   => new Output\ValueObjectVisitor\NoContent( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Common\\Values\\Root'                        => new Output\ValueObjectVisitor\Root( $urlHandler ),
         );

@@ -222,7 +222,8 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
             new Common\Message( array(
                     'Status' => '201 Created',
                 ),
-                null
+                null,
+                201
             ),
             $visitor->visit( $data )
         );
@@ -244,7 +245,8 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
             new Common\Message( array(
                     'Status' => '2342 Unknown',
                 ),
-                null
+                null,
+                2342
             ),
             $visitor->visit( $data )
         );
@@ -268,7 +270,8 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
             new Common\Message( array(
                     'Status' => '201 Created',
                 ),
-                null
+                null,
+                201
             ),
             $visitor->visit( $data )
         );

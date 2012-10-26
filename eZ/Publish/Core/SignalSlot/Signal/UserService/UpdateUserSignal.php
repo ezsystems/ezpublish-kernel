@@ -22,6 +22,4 @@ class UpdateUserSignal extends Signal
      * @var mixed
      */
     public $userId;
-
 }
-

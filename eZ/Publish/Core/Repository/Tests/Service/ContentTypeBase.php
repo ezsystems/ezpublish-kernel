@@ -11,7 +11,8 @@ namespace eZ\Publish\Core\Repository\Tests\Service;
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\Location,
     eZ\Publish\API\Repository\Values\ContentType\ContentType,
-    eZ\Publish\API\Repository\Exceptions;
+    eZ\Publish\API\Repository\Exceptions,
+    eZ\Publish\Core\FieldType\XmlText\Value as XmlValue;
 
 /**
  * Test case for ContentType service
@@ -2938,7 +2939,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $fieldDefCreate->isTranslatable = true;
         $fieldDefCreate->isRequired = false;
         $fieldDefCreate->isInfoCollector = false;
-        $fieldDefCreate->defaultValue = "";
+        $fieldDefCreate->defaultValue = new XmlValue;
         $fieldDefCreate->validatorConfiguration = array();
         $fieldDefCreate->fieldSettings = array(
             'numRows' => 10,

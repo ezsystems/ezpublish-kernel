@@ -11,7 +11,8 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 use eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText as XmlTextConverter,
-    PHPUnit_Framework_TestCase;
+    PHPUnit_Framework_TestCase,
+    DOMDocument;
 
 /**
  * Test case for XmlText converter in Legacy storage
@@ -38,6 +39,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
         $this->xmlText = <<<EOT
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>Some paragraph content</paragraph></section>
+
 EOT;
     }
 
@@ -53,11 +55,12 @@ EOT;
     public function testToStorageValue()
     {
         $value = new FieldValue;
-        $value->data = $this->xmlText;
+        $value->data = new DOMDocument;
+        $value->data->loadXML( $this->xmlText );
         $storageFieldValue = new StorageFieldValue;
 
         $this->converter->toStorageValue( $value, $storageFieldValue );
-        self::assertSame( $value->data, $storageFieldValue->dataText );
+        self::assertSame( $value->data->saveXML(), $storageFieldValue->dataText );
     }
 
     /**
@@ -70,6 +73,6 @@ EOT;
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertSame( $storageFieldValue->dataText, $fieldValue->data );
+        self::assertSame( $storageFieldValue->dataText, $fieldValue->data->saveXML() );
     }
 }

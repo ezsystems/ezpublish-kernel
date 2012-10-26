@@ -29,6 +29,4 @@ class AssignUserToUserGroupSignal extends Signal
      * @var mixed
      */
     public $userGroupId;
-
 }
-

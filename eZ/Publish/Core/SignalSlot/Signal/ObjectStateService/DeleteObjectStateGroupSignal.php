@@ -22,6 +22,4 @@ class DeleteObjectStateGroupSignal extends Signal
      * @var mixed
      */
     public $objectStateGroupId;
-
 }
-

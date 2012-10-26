@@ -22,6 +22,4 @@ class CreateUserGroupSignal extends Signal
      * @var mixed
      */
     public $userGroupId;
-
 }
-

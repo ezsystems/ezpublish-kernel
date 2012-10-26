@@ -29,6 +29,4 @@ class UpdateFieldDefinitionSignal extends Signal
      * @var mixed
      */
     public $fieldDefinitionId;
-
 }
-

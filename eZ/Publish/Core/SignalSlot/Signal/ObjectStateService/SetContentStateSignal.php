@@ -36,6 +36,4 @@ class SetContentStateSignal extends Signal
      * @var mixed
      */
     public $objectStateId;
-
 }
-

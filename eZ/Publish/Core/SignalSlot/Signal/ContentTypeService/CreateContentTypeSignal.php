@@ -22,6 +22,4 @@ class CreateContentTypeSignal extends Signal
      * @var mixed
      */
     public $contentTypeId;
-
 }
-

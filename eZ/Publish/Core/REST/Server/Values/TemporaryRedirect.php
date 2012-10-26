@@ -21,21 +21,12 @@ class TemporaryRedirect extends RestValue
     public $redirectUri;
 
     /**
-     * Resource type
-     *
-     * @var string
-     */
-    public $resourceType;
-
-    /**
      * Construct
      *
      * @param string $redirectUri
-     * @param string $resourceType
      */
-    public function __construct( $redirectUri, $resourceType )
+    public function __construct( $redirectUri )
     {
         $this->redirectUri = $redirectUri;
-        $this->resourceType = $resourceType;
     }
 }

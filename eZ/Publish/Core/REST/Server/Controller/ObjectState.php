@@ -165,7 +165,7 @@ class ObjectState extends RestController
     /**
      * The given object state group including the object states is deleted
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteObjectStateGroup()
     {
@@ -174,13 +174,13 @@ class ObjectState extends RestController
             $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] )
         );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**
      * The given object state is deleted
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\ResourceDeleted
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
     public function deleteObjectState()
     {
@@ -189,7 +189,7 @@ class ObjectState extends RestController
             $this->objectStateService->loadObjectState( $values['objectstate'] )
         );
 
-        return new Values\ResourceDeleted();
+        return new Values\NoContent();
     }
 
     /**

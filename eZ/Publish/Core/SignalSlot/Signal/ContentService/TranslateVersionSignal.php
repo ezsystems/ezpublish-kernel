@@ -24,7 +24,7 @@ class TranslateVersionSignal extends Signal
     public $contentId;
 
     /**
-     * Verion Number
+     * Version Number
      *
      * @var int
      */
@@ -36,6 +36,4 @@ class TranslateVersionSignal extends Signal
      * @var mixed|null
      */
     public $userId;
-
 }
-

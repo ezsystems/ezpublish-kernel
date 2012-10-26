@@ -80,6 +80,17 @@ class TrashItem extends ValueObjectVisitor
         $generator->startValueElement( 'remoteId', $data->remoteId );
         $generator->endValueElement( 'remoteId' );
 
+        $generator->startObjectElement( 'Content' );
+        $generator->startAttribute( 'href', $this->urlHandler->generate( 'object', array( 'object' => $data->contentId ) ) );
+        $generator->endAttribute( 'href' );
+        $generator->endObjectElement( 'Content' );
+
+        $generator->startValueElement( 'sortField', $this->serializeSortField( $data->sortField ) );
+        $generator->endValueElement( 'sortField' );
+
+        $generator->startValueElement( 'sortOrder', $this->serializeSortOrder( $data->sortOrder ) );
+        $generator->endValueElement( 'sortOrder' );
+
         $generator->endObjectElement( 'TrashItem' );
     }
 }

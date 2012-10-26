@@ -75,7 +75,7 @@ class DefaultSignalDispatcher extends SignalDispatcher
     }
 
     /**
-     * Attachtes the Slot with $slotIdentifier to the signal with
+     * Attaches the Slot with $slotIdentifier to the signal with
      * $signalIdentifier
      *
      * @access private For unit test use.
@@ -88,4 +88,3 @@ class DefaultSignalDispatcher extends SignalDispatcher
         $this->mapping[$signalIdentifier][] = $slotIdentifier;
     }
 }
-

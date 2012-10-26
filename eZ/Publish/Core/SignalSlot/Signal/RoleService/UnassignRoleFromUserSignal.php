@@ -29,6 +29,4 @@ class UnassignRoleFromUserSignal extends Signal
      * @var mixed
      */
     public $userId;
-
 }
-

@@ -24,4 +24,3 @@ abstract class Slot
      */
     abstract public function receive( Signal $signal );
 }
-

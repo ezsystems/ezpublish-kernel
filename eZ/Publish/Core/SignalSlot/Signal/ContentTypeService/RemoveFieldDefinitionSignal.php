@@ -29,6 +29,4 @@ class RemoveFieldDefinitionSignal extends Signal
      * @var mixed
      */
     public $fieldDefinitionId;
-
 }
-

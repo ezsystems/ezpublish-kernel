@@ -22,6 +22,4 @@ class UpdateContentTypeGroupSignal extends Signal
      * @var mixed
      */
     public $contentTypeGroupId;
-
 }
-

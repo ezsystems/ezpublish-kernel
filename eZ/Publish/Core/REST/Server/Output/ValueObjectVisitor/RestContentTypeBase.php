@@ -44,4 +44,27 @@ abstract class RestContentTypeBase extends ValueObjectVisitor
 
         return '';
     }
+
+    /**
+     * Serializes the given $contentTypeStatus to a string representation
+     *
+     * @param int $contentTypeStatus
+     * @return string
+     */
+    protected function serializeStatus( $contentTypeStatus )
+    {
+        switch ( $contentTypeStatus )
+        {
+            case Values\ContentType\ContentType::STATUS_DEFINED:
+                return 'DEFINED';
+
+            case Values\ContentType\ContentType::STATUS_DRAFT:
+                return 'DRAFT';
+
+            case Values\ContentType\ContentType::STATUS_MODIFIED:
+                return 'MODIFIED';
+        }
+
+        throw new \RuntimeException( "Unknown content type status: '{$contentTypeStatus}'." );
+    }
 }

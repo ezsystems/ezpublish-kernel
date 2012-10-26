@@ -18,7 +18,7 @@ class CreatedVersion extends ValueObject
     /**
      * The created version
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\Content
+     * @var \eZ\Publish\Core\REST\Server\Values\Version
      */
     public $version;
 }

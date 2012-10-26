@@ -87,7 +87,7 @@ class SearchService implements SearchServiceInterface
      * Suggests a list of values for the given prefix
      *
      * @param string $prefix
-     * @param string[] $fieldpath
+     * @param string[] $fieldPaths
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
@@ -98,4 +98,3 @@ class SearchService implements SearchServiceInterface
     }
 
 }
-

@@ -29,6 +29,4 @@ class MoveSubtreeSignal extends Signal
      * @var mixed
      */
     public $newParentLocationId;
-
 }
-

@@ -32,7 +32,8 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
                     "first_sa" => "first_sa",
                     "first_siteaccess" => "first_sa",
                 ),
-            )
+            ),
+            array( 'first_sa', 'second_sa', 'third_sa', 'fourth_sa', 'fifth_sa', 'foo_baz', 'test_foo', 'first_sa_foo', 'second_sa_foo' )
         );
     }
 
@@ -54,6 +55,7 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
         $sa = $router->match( $request );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa );
         $this->assertSame( $siteAccess, $sa->name );
+        $router->setSiteAccess();
     }
 
     public function matchProvider()

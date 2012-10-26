@@ -23,4 +23,3 @@ class CreateContentTypeGroupSignal extends Signal
      */
     public $groupId;
 }
-

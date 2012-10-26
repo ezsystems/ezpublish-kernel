@@ -35,11 +35,19 @@ class Common extends AbstractParser
             ->arrayNode( 'database' )
                 ->children()
                     ->enumNode( 'type' )->values( array( 'mysql', 'pgsql', 'sqlite' ) )->info( 'The database driver. Can be mysql, pgsql or sqlite.' )->end()
-                    ->scalarNode( 'server' )->defaultValue( 'localhost' )->end()
+                    ->scalarNode( 'server' )->end()
                     ->scalarNode( 'port' )->end()
                     ->scalarNode( 'user' )->cannotBeEmpty()->end()
                     ->scalarNode( 'password' )->end()
                     ->scalarNode( 'database_name' )->cannotBeEmpty()->end()
+                    ->scalarNode( 'charset' )->defaultValue( 'utf8' )->end()
+                    ->scalarNode( 'socket' )->end()
+                    ->arrayNode( 'options' )
+                        ->info( 'Arbitrary options, supported by your DB driver ("driver-opts" in PDO)' )
+                        ->example( array( 'foo' => 'bar', 'someOptionName' => array( 'one', 'two', 'three' ) ) )
+                        ->useAttributeAsKey( 'key' )
+                        ->prototype( 'variable' )->end()
+                    ->end()
                     ->scalarNode( 'dsn' )->info( 'Full database DSN. Will replace settings above.' )->example( 'mysql://root:root@localhost:3306/ezdemo' )->end()
                 ->end()
             ->end()
@@ -59,6 +67,10 @@ class Common extends AbstractParser
             ->booleanNode( 'url_alias_router' )
                 ->info( 'Whether to use UrlAliasRouter or not. If false, will let the legacy kernel handle url aliases.' )
                 ->defaultValue( true )
+            ->end()
+            ->scalarNode( 'session_name' )
+                ->info( 'The session name. If you want a session name per siteaccess, use "{siteaccess_hash}" token. Will override default session name from framework.session.name' )
+                ->example( array( 'session_name' => 'eZSESSID{siteaccess_hash}' ) )
             ->end()
         ;
     }
@@ -81,19 +93,20 @@ class Common extends AbstractParser
             $database = $container->getParameter( "ezsettings.$sa.database" );
             if ( !empty( $database ) )
             {
+                // DSN is prioritary to any other setting
                 if ( isset( $database['dsn'] ) )
                 {
-                    $dsn = $database['dsn'];
+                    $container->setParameter( "ezsettings.$sa.database.params", $database['dsn'] );
                 }
                 else
                 {
-                    $port = '';
-                    if ( isset( $database['port'] ) && !empty( $database['port'] ) )
-                        $port = ":{$database['port']}";
-
-                    $dsn = "{$database['type']}://{$database['user']}:{$database['password']}@{$database['server']}$port/{$database['database_name']}";
+                    // Renaming dbParams to parameters supported by ezcDb.
+                    $database['database'] = $database['database_name'];
+                    $database['host'] = $database['server'];
+                    $database['driver-opts'] = $database['options'];
+                    unset( $database['database_name'], $database['server'], $database['options'] );
+                    $container->setParameter( "ezsettings.$sa.database.params", $database );
                 }
-                $container->setParameter( "ezsettings.$sa.database.dsn", $dsn );
             }
         }
         foreach ( $config[$this->baseKey] as $sa => $settings )
@@ -106,6 +119,8 @@ class Common extends AbstractParser
                 $container->setParameter( "ezsettings.$sa.storage_dir", $settings['storage_dir'] );
             if ( isset( $settings['binary_dir'] ) )
                 $container->setParameter( "ezsettings.$sa.binary_dir", $settings['binary_dir'] );
+            if ( isset( $settings['session_name'] ) )
+                $container->setParameter( "ezsettings.$sa.session_name", $settings['session_name'] );
         }
     }
 }

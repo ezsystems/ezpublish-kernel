@@ -22,6 +22,4 @@ class DeleteUserSignal extends Signal
      * @var mixed
      */
     public $userId;
-
 }
-

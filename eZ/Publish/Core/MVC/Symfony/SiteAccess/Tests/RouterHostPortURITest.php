@@ -39,7 +39,8 @@ class RouterHostPortURITest extends PHPUnit_Framework_TestCase
                     "first_sa" => "first_sa",
                     "second_sa" => "second_sa",
                 ),
-            )
+            ),
+            array( 'first_sa', 'second_sa', 'third_sa', 'fourth_sa', 'fifth_sa' )
         );
     }
 
@@ -58,6 +59,7 @@ class RouterHostPortURITest extends PHPUnit_Framework_TestCase
         $sa = $router->match( $request );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa );
         $this->assertSame( $siteAccess, $sa->name );
+        $router->setSiteAccess();
     }
 
     public function matchProvider()

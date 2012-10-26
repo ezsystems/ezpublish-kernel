@@ -22,6 +22,4 @@ class DeleteSectionSignal extends Signal
      * @var mixed
      */
     public $sectionId;
-
 }
-
