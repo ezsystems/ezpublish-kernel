@@ -307,7 +307,7 @@ class URLAliasServiceTest extends BaseTest
             array(
                 'type' => URLAlias::RESOURCE,
                 'destination' => 'content/search?SearchText=eZ',
-                'path' => 'Home/My-New-Site',
+                'path' => '/Home/My-New-Site',
                 'languageCodes' => array( 'eng-US' ),
                 'alwaysAvailable' => false,
                 'isHistory' => false,
@@ -357,7 +357,7 @@ class URLAliasServiceTest extends BaseTest
             array(
                 'type' => URLAlias::RESOURCE,
                 'destination' => 'content/search?SearchText=eZ',
-                'path' => 'Home/My-New-Site',
+                'path' => '/Home/My-New-Site',
                 'languageCodes' => array( 'eng-US' ),
                 'alwaysAvailable' => false,
                 'isHistory' => false,
@@ -407,7 +407,7 @@ class URLAliasServiceTest extends BaseTest
             array(
                 'type' => URLAlias::RESOURCE,
                 'destination' => 'content/search?SearchText=eZ',
-                'path' => 'Home/My-New-Site',
+                'path' => '/Home/My-New-Site',
                 'languageCodes' => array( 'eng-US' ),
                 'alwaysAvailable' => true,
                 'isHistory' => false,
