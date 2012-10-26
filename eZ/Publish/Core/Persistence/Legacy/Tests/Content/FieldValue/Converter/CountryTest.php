@@ -33,37 +33,55 @@ class CountryTest extends PHPUnit_Framework_TestCase
         $this->converter = new CountryConverter();
     }
 
-    /**
-     * @group fieldType
-     * @group country
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country::toStorageValue
-     */
-    public function testToStorageValue()
+    public function providerForTestToStorageValue()
     {
-        $value = new FieldValue;
-        $value->data = array( "BE", "FR" );
-        $value->sortKey = "belgium,france";
-        $storageFieldValue = new StorageFieldValue;
-
-        $this->converter->toStorageValue( $value, $storageFieldValue );
-        self::assertSame( "BE,FR", $storageFieldValue->dataText );
-        self::assertSame( "belgium,france", $storageFieldValue->sortKeyString );
+        return array(
+            array( array( "BE", "FR" ), "belgium,france", "BE,FR", "belgium,france" ),
+            array( null, "", "", "" ),
+        );
     }
 
     /**
      * @group fieldType
      * @group country
+     * @dataProvider providerForTestToStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country::toStorageValue
+     */
+    public function testToStorageValue( $data, $sortKey, $dataText, $sortKeyString )
+    {
+        $value = new FieldValue;
+        $value->data = $data;
+        $value->sortKey = $sortKey;
+        $storageFieldValue = new StorageFieldValue;
+
+        $this->converter->toStorageValue( $value, $storageFieldValue );
+        self::assertSame( $dataText, $storageFieldValue->dataText );
+        self::assertSame( $sortKeyString, $storageFieldValue->sortKeyString );
+    }
+
+    public function providerForTestToFieldValue()
+    {
+        return array(
+            array( "BE,FR", "belgium,france", array( "BE", "FR" ) ),
+            array( "", "", null ),
+        );
+    }
+
+    /**
+     * @group fieldType
+     * @group country
+     * @dataProvider providerForTestToFieldValue
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country::toFieldValue
      */
-    public function testToFieldValue()
+    public function testToFieldValue( $dataText, $sortKeyString, $data )
     {
         $storageFieldValue = new StorageFieldValue;
-        $storageFieldValue->dataText = "BE,FR";
-        $storageFieldValue->sortKeyString = "belgium,france";
+        $storageFieldValue->dataText = $dataText;
+        $storageFieldValue->sortKeyString = $sortKeyString;
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertSame( array( "BE", "FR" ), $fieldValue->data );
+        self::assertSame( $data, $fieldValue->data );
     }
 
     /**
