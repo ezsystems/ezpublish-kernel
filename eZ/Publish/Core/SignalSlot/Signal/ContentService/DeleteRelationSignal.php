@@ -24,7 +24,7 @@ class DeleteRelationSignal extends Signal
     public $srcContentId;
 
     /**
-     * Verion Number
+     * Version Number
      *
      * @var int
      */
@@ -36,6 +36,4 @@ class DeleteRelationSignal extends Signal
      * @var mixed
      */
     public $dstContentId;
-
 }
-

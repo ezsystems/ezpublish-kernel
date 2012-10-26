@@ -22,6 +22,4 @@ class RemoveSignal extends Signal
      * @var mixed
      */
     public $urlWildcardId;
-
 }
-

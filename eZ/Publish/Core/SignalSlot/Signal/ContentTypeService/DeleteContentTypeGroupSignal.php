@@ -22,6 +22,4 @@ class DeleteContentTypeGroupSignal extends Signal
      * @var mixed
      */
     public $contentTypeGroupId;
-
 }
-

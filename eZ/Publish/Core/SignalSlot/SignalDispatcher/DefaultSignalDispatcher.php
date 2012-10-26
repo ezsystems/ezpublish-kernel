@@ -42,8 +42,7 @@ class DefaultSignalDispatcher extends SignalDispatcher
     /**
      * Construct from factory
      *
-     * @param SlotFactory $factory
-     * @return void
+     * @param \eZ\Publish\Core\SignalSlot\SlotFactory $factory
      */
     public function __construct( SlotFactory $factory )
     {
@@ -74,7 +73,7 @@ class DefaultSignalDispatcher extends SignalDispatcher
     }
 
     /**
-     * Attachtes the Slot with $slotIdentifier to the signal with
+     * Attaches the Slot with $slotIdentifier to the signal with
      * $signalIdentifier
      *
      * @param string $signalIdentifier
@@ -82,12 +81,11 @@ class DefaultSignalDispatcher extends SignalDispatcher
      * @return void
      *
      * @TODO Are we sure we want to expose this method? Might lead to dynamic
-     * attachements at runtime, which can lead to hard debugging. Better only
-     * accept attachements during construction (config).
+     * attachments at runtime, which can lead to hard debugging. Better only
+     * accept attachments during construction (config).
      */
     public function attach( $signalIdentifier, $slotIdentifier )
     {
         $this->mapping[$signalIdentifier][] = $slotIdentifier;
     }
 }
-

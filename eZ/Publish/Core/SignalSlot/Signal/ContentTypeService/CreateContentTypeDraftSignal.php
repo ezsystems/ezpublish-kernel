@@ -22,6 +22,4 @@ class CreateContentTypeDraftSignal extends Signal
      * @var mixed
      */
     public $contentTypeId;
-
 }
-

@@ -22,6 +22,4 @@ class CreateUserSignal extends Signal
      * @var mixed
      */
     public $userId;
-
 }
-

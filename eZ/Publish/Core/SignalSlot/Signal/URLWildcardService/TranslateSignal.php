@@ -22,6 +22,4 @@ class TranslateSignal extends Signal
      * @var mixed
      */
     public $url;
-
 }
-

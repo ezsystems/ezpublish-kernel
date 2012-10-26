@@ -22,6 +22,4 @@ class UpdateUserGroupSignal extends Signal
      * @var mixed
      */
     public $userGroupId;
-
 }
-

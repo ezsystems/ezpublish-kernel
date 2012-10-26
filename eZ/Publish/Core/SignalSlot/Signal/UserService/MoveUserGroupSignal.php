@@ -29,6 +29,4 @@ class MoveUserGroupSignal extends Signal
      * @var mixed
      */
     public $newParentId;
-
 }
-

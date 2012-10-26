@@ -22,6 +22,4 @@ class UpdateContentMetadataSignal extends Signal
      * @var mixed
      */
     public $contentId;
-
 }
-

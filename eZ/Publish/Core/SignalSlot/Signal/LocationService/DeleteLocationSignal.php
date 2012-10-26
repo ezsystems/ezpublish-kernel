@@ -22,6 +22,4 @@ class DeleteLocationSignal extends Signal
      * @var mixed
      */
     public $locationId;
-
 }
-

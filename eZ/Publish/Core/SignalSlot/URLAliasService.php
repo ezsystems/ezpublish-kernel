@@ -209,4 +209,3 @@ class URLAliasService implements URLAliasServiceInterface
         return $returnValue;
     }
 }
-

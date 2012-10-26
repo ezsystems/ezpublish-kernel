@@ -32,7 +32,7 @@ abstract class SignalDispatcher
     abstract public function emit( Signal $signal );
 
     /**
-     * Attachtes the Slot with $slotIdentifier to the signal with
+     * Attaches the Slot with $slotIdentifier to the signal with
      * $signalIdentifier
      *
      * @param string $signalIdentifier
@@ -40,8 +40,8 @@ abstract class SignalDispatcher
      * @return void
      *
      * @TODO Are we sure we want to expose this method? Might lead to dynamic
-     * attachements at runtime, which can lead to hard debugging. Better only
-     * accept attachements during construction (config).
+     * attachments at runtime, which can lead to hard debugging. Better only
+     * accept attachments during construction (config).
      */
     abstract public function attach( $signalIdentifier, $slotIdentifier );
 }

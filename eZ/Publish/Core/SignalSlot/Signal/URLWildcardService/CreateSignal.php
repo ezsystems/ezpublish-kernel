@@ -23,4 +23,3 @@ class CreateSignal extends Signal
      */
     public $urlWildcardId;
 }
-

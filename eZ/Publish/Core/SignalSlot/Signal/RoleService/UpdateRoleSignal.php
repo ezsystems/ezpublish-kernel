@@ -22,6 +22,4 @@ class UpdateRoleSignal extends Signal
      * @var mixed
      */
     public $roleId;
-
 }
-

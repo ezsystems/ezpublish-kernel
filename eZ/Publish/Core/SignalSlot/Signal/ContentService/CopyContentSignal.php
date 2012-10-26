@@ -24,7 +24,7 @@ class CopyContentSignal extends Signal
     public $srcContentId;
 
     /**
-     * Verion Number
+     * Version Number
      *
      * @var int
      */
@@ -38,11 +38,9 @@ class CopyContentSignal extends Signal
     public $dstContentId;
 
     /**
-     * Verion Number
+     * Version Number
      *
      * @var int
      */
     public $dstVersionNo;
-
 }
-

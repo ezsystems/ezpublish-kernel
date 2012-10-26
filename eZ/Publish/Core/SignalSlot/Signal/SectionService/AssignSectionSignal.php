@@ -29,6 +29,4 @@ class AssignSectionSignal extends Signal
      * @var mixed
      */
     public $sectionId;
-
 }
-

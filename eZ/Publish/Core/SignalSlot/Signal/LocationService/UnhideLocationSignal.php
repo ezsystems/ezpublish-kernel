@@ -22,6 +22,4 @@ class UnhideLocationSignal extends Signal
      * @var mixed
      */
     public $locationId;
-
 }
-

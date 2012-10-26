@@ -22,6 +22,4 @@ class DeleteTrashItemSignal extends Signal
      * @var mixed
      */
     public $trashItemId;
-
 }
-

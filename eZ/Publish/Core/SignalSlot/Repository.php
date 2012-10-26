@@ -453,7 +453,7 @@ class Repository implements RepositoryInterface
      *
      * Commit transaction, or throw exceptions if no transactions has been started.
      *
-     * @throws RuntimeException If no transaction has been started
+     * @throws \RuntimeException If no transaction has been started
      */
     public function commit()
     {
@@ -465,7 +465,7 @@ class Repository implements RepositoryInterface
      *
      * Rollback transaction, or throw exceptions if no transactions has been started.
      *
-     * @throws RuntimeException If no transaction has been started
+     * @throws \RuntimeException If no transaction has been started
      */
     public function rollback()
     {

@@ -23,4 +23,3 @@ class CreateUrlAliasSignal extends Signal
      */
     public $urlAliasId;
 }
-

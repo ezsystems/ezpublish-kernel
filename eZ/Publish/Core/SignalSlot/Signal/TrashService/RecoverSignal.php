@@ -29,6 +29,4 @@ class RecoverSignal extends Signal
      * @var mixed
      */
     public $newParentLocationId;
-
 }
-

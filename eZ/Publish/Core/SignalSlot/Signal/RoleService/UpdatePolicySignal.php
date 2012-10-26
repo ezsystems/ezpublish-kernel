@@ -23,4 +23,3 @@ class UpdatePolicySignal extends Signal
      */
     public $policyId;
 }
-

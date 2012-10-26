@@ -29,6 +29,4 @@ class CreateLocationSignal extends Signal
      * @var mixed
      */
     public $locationId;
-
 }
-

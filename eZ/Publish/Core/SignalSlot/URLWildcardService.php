@@ -56,13 +56,13 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @param string $sourceUrl
      * @param string $destinationUrl
-     * @param boolean $foreward
+     * @param boolean $forward
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
      */
-    public function create( $sourceUrl, $destinationUrl, $foreward = false )
+    public function create( $sourceUrl, $destinationUrl, $forward = false )
     {
-        $returnValue = $this->service->create( $sourceUrl, $destinationUrl, $foreward );
+        $returnValue = $this->service->create( $sourceUrl, $destinationUrl, $forward );
         $this->signalDispatcher->emit(
             new Signal\URLWildcardService\CreateSignal( array(
                 'urlWildcardId' => $returnValue->id,
@@ -122,7 +122,7 @@ class URLWildcardService implements URLWildcardServiceInterface
     /**
      * translates an url to an existing uri resource based on the
      * source/destination patterns of the url wildcard. If the resulting
-     * url is an alias it will be transltated to the system uri.
+     * url is an alias it will be translated to the system uri.
      *
      * This method runs also configured url translations and filter
      *
@@ -144,4 +144,3 @@ class URLWildcardService implements URLWildcardServiceInterface
     }
 
 }
-

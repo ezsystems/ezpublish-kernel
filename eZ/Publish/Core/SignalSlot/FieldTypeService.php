@@ -83,4 +83,3 @@ class FieldTypeService implements FieldTypeServiceInterface
     }
 
 }
-

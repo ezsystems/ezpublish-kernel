@@ -22,6 +22,4 @@ class HideLocationSignal extends Signal
      * @var mixed
      */
     public $locationId;
-
 }
-

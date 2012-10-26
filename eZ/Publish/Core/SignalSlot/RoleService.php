@@ -449,4 +449,3 @@ class RoleService implements RoleServiceInterface
     }
 
 }
-

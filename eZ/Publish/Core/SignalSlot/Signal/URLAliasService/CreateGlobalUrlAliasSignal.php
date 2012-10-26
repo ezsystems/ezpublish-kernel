@@ -23,4 +23,3 @@ class CreateGlobalUrlAliasSignal extends Signal
      */
     public $urlAliasId;
 }
-

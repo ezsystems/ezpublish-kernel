@@ -24,4 +24,3 @@ abstract class SlotFactory
      */
     abstract public function getSlot( $slotIdentifier );
 }
-

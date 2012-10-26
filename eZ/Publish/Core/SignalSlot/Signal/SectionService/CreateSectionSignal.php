@@ -23,4 +23,3 @@ class CreateSectionSignal extends Signal
      */
     public $sectionId;
 }
-

@@ -22,6 +22,4 @@ class DeleteRoleSignal extends Signal
      * @var mixed
      */
     public $roleId;
-
 }
-

@@ -22,6 +22,4 @@ class DeleteUserGroupSignal extends Signal
      * @var mixed
      */
     public $userGroupId;
-
 }
-

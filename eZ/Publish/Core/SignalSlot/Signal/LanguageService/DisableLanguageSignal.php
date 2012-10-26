@@ -22,6 +22,4 @@ class DisableLanguageSignal extends Signal
      * @var mixed
      */
     public $languageId;
-
 }
-

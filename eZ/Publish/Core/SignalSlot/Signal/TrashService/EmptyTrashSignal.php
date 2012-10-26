@@ -17,4 +17,3 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class EmptyTrashSignal extends Signal
 {
 }
-

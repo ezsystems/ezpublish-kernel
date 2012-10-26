@@ -30,4 +30,3 @@ class AddPolicySignal extends Signal
      */
     public $policyId;
 }
-

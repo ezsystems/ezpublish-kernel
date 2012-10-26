@@ -22,6 +22,4 @@ class DeleteContentTypeSignal extends Signal
      * @var mixed
      */
     public $contentTypeId;
-
 }
-

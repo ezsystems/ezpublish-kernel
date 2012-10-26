@@ -24,7 +24,7 @@ class AddRelationSignal extends Signal
     public $srcContentId;
 
     /**
-     * Verion Number
+     * Version Number
      *
      * @var int
      */
@@ -37,4 +37,3 @@ class AddRelationSignal extends Signal
      */
     public $dstContentId;
 }
-

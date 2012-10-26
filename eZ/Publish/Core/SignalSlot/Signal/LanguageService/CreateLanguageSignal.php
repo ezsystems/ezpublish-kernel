@@ -23,4 +23,3 @@ class CreateLanguageSignal extends Signal
      */
     public $languageId;
 }
-
