@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Country;
 use eZ\Publish\Core\FieldType\FieldType,
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\Core\FieldType\Country\Exception\InvalidValue,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\Core\FieldType\ValidationError;
@@ -41,34 +42,6 @@ class Type extends FieldType
     }
 
     /**
-     * @param array $countries
-     * @return Value
-     * @throws Exception\InvalidValue
-     */
-    public function buildValue( $countries )
-    {
-        $countryValue = new Value( (array)$countries );
-        foreach ( $countryValue->values as $country )
-        {
-            foreach ( $this->countriesInfo as $countryInfo )
-            {
-                switch ( $country )
-                {
-                    case $countryInfo["Name"]:
-                    case $countryInfo["Alpha2"]:
-                    case $countryInfo["Alpha3"]:
-                        $countryValue->data[$countryInfo["Alpha2"]] = $countryInfo;
-                        continue 3;
-                }
-            }
-
-            throw new InvalidValue( $country );
-        }
-
-        return $countryValue;
-    }
-
-    /**
      * Return the field type identifier for this field type
      *
      * @return string
@@ -90,22 +63,27 @@ class Type extends FieldType
      */
     public function getName( $value )
     {
-        $value = $this->acceptValue( $value );
-
-        return implode( ",", $value->values );
+        return implode(
+            ", ",
+            array_map(
+                function ( $countryInfo )
+                {
+                    return $countryInfo["Name"];
+                },
+                $this->countriesInfo
+            )
+        );
     }
 
     /**
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
-     * @todo Is a default value really possible with this type?
-     *       Shouldn't an exception be used?
      * @return \eZ\Publish\Core\FieldType\Country\Value
      */
     public function getEmptyValue()
     {
-        return new Value();
+        return null;
     }
 
     /**
@@ -131,6 +109,16 @@ class Type extends FieldType
      */
     public function acceptValue( $inputValue )
     {
+        if ( $inputValue === null || is_array( $inputValue ) && empty( $inputValue ) )
+        {
+            return $this->getEmptyValue();
+        }
+
+        if ( is_array( $inputValue ) )
+        {
+            $inputValue = $this->fromHash( $inputValue );
+        }
+
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
@@ -140,7 +128,60 @@ class Type extends FieldType
             );
         }
 
+        if ( !is_array( $inputValue->countries ) )
+        {
+            throw new InvalidArgumentType(
+                '$inputValue->countries',
+                'array',
+                $inputValue->countries
+            );
+        }
+
         return $inputValue;
+    }
+
+    /**
+     * Validates field value against 'isMultiple' setting.
+     *
+     * Does not use validators.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
+     * @param \eZ\Publish\Core\FieldType\Value $fieldValue The field for which an action is performed
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validate( FieldDefinition $fieldDefinition, $fieldValue )
+    {
+        $validationErrors = array();
+        $fieldSettings = $fieldDefinition->fieldSettings;
+
+        if ( ( !isset( $fieldSettings["isMultiple"] ) || $fieldSettings["isMultiple"] === false )
+            && count( $fieldValue->countries ) > 1 )
+        {
+            $validationErrors[] = new ValidationError(
+                "Field definition does not allow multiple countries to be selected.",
+                null,
+                array()
+            );
+        }
+
+        foreach ( $fieldValue->countries as $alpha2 => $countryInfo )
+        {
+            if ( !isset( $this->countriesInfo[$alpha2] ) )
+            {
+                $validationErrors[] = new ValidationError(
+                    "Country with Alpha2 code '%alpha2%' is not defined in FieldType settings.",
+                    null,
+                    array(
+                        "alpha2" => $alpha2
+                    )
+                );
+            }
+        }
+
+        return $validationErrors;
     }
 
     /**
@@ -150,8 +191,13 @@ class Type extends FieldType
      */
     protected function getSortInfo( $value )
     {
+        if ( $value === null )
+        {
+            return "";
+        }
+
         $countries = array();
-        foreach ( $value->data as $countryInfo )
+        foreach ( $value->countries as $countryInfo )
         {
             $countries[] = strtolower( $countryInfo["Name"] );
         }
@@ -170,7 +216,30 @@ class Type extends FieldType
      */
     public function fromHash( $hash )
     {
-        return new Value( $hash );
+        if ( $hash === null )
+        {
+            return null;
+        }
+
+        $countries = array();
+        foreach ( $hash as $country )
+        {
+            foreach ( $this->countriesInfo as $countryInfo )
+            {
+                switch ( $country )
+                {
+                    case $countryInfo["Name"]:
+                    case $countryInfo["Alpha2"]:
+                    case $countryInfo["Alpha3"]:
+                    $countries[$countryInfo["Alpha2"]] = $countryInfo;
+                        continue 3;
+                }
+            }
+
+            throw new InvalidValue( $country );
+        }
+
+        return new Value( $countries );
     }
 
     /**
@@ -182,7 +251,12 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
-        return $value->values;
+        if ( $value === null )
+        {
+            return null;
+        }
+
+        return array_keys( $value->countries );
     }
 
     /**

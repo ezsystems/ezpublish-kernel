@@ -16,29 +16,32 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 class Value extends BaseValue
 {
     /**
-     * Countries values
+     * Associative array with Alpha2 codes as keys and countries data as values.
      *
-     * @var array
+     * Example:
+     * <code>
+     *  array(
+     *      "JP" => array(
+     *          "Name" => "Japan",
+     *          "Alpha2" => "JP",
+     *          "Alpha3" => "JPN",
+     *          "IDC" => 81
+     *      )
+     *  )
+     * </code>
+     *
+     * @var array[]
      */
-    public $values;
+    public $countries = array();
 
     /**
-     * Countries data
+     * Construct a new Value object and initialize it with given $data
      *
-     * @var array
+     * @param array[] $countries
      */
-    public $data = array();
-
-    /**
-     * Construct a new Value object and initialize it with its $values and associated $data
-     *
-     * @param string[] $values
-     * @param array[] $data
-     */
-    public function __construct( array $values = array(), array $data = array() )
+    public function __construct( array $countries = array() )
     {
-        $this->values = $values;
-        $this->data = $data;
+        $this->countries = $countries;
     }
 
     /**
@@ -46,6 +49,15 @@ class Value extends BaseValue
      */
     public function __toString()
     {
-        return implode( ",", $this->values );
+        return implode(
+            ", ",
+            array_map(
+                function ( $country )
+                {
+                    return $country["Name"];
+                },
+                $this->countries
+            )
+        );
     }
 }

@@ -113,7 +113,7 @@ abstract class FieldType implements FieldTypeInterface
      * Validates a field based on the validators in the field definition
      *
      * This is a base implementation, returning an empty array() that indicates
-     * that no validation errors occured. Overwrite in derived types, if
+     * that no validation errors occurred. Overwrite in derived types, if
      * validation is supported.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
