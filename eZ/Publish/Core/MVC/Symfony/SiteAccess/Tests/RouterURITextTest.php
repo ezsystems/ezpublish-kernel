@@ -35,7 +35,8 @@ class RouterURITextTest extends PHPUnit_Framework_TestCase
                     "first_sa" => "first_sa",
                     "first_siteaccess" => "first_sa",
                 ),
-            )
+            ),
+            array( 'first_sa', 'second_sa', 'third_sa', 'fourth_sa', 'fifth_sa', 'test' )
         );
     }
 
@@ -56,6 +57,7 @@ class RouterURITextTest extends PHPUnit_Framework_TestCase
         $sa = $router->match( $request );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa );
         $this->assertSame( $siteAccess, $sa->name );
+        $router->setSiteAccess();
     }
 
     public function matchProvider()
