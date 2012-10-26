@@ -39,7 +39,7 @@ abstract class Generator
      */
     public function generate( $urlResource, array $parameters, $absolute = false )
     {
-        $url = $this->requestContext->getBaseUrl() . '/' . $this->doGenerate( $urlResource, $parameters );
+        $url = $this->requestContext->getBaseUrl() . $this->doGenerate( $urlResource, $parameters );
         if ( $absolute )
         {
             $url = $this->generateAbsoluteUrl( $url );
