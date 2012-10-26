@@ -17,7 +17,7 @@ use Closure;
 abstract class AbstractLegacySlot extends Slot
 {
     /**
-     * @var \Closure|\eZ\Publish\Core\MVC\Legacy\Kernel
+     * @var \Closure|\ezpKernelHandler
      */
     private $legacyKernelClosure;
 
@@ -32,7 +32,7 @@ abstract class AbstractLegacySlot extends Slot
     /**
      * Returns the legacy kernel object.
      *
-     * @return \eZ\Publish\Core\MVC\Legacy\Kernel
+     * @return \ezpKernelHandler
      */
     protected function getLegacyKernel()
     {
