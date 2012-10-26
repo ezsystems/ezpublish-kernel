@@ -1024,12 +1024,20 @@ ezpublish_rest_unassignRoleFromUserGroup:
 # URL aliases
 
 
-ezpublish_rest_listURLAliases:
+ezpublish_rest_listGlobalURLAliases:
     pattern: /content/urlaliases
     defaults:
-        _controller: ezpublish_rest.controller.url_alias:listURLAliases
+        _controller: ezpublish_rest.controller.url_alias:listGlobalURLAliases
     requirements:
         _method: GET
+
+ezpublish_rest_listLocationURLAliases:
+    pattern: /content/locations/{locationPath}/urlaliases
+    defaults:
+        _controller: ezpublish_rest.controller.url_alias:listLocationURLAliases
+    requirements:
+        _method: GET
+        locationPath: "[0-9/]+"
 
 ezpublish_rest_createURLAlias:
     pattern: /content/urlaliases

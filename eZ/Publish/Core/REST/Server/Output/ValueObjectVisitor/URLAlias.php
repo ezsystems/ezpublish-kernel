@@ -55,8 +55,8 @@ class URLAlias extends ValueObjectVisitor
         }
         else
         {
-            $generator->startValueElement( 'url', $data->destination );
-            $generator->endValueElement( 'url' );
+            $generator->startValueElement( 'resource', $data->destination );
+            $generator->endValueElement( 'resource' );
         }
 
         $generator->startValueElement( 'path', $data->path );

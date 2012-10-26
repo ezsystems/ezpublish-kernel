@@ -111,7 +111,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     {
         $this->assertTag(
             array(
-                'tag'      => 'url',
+                'tag'      => 'resource',
                 'content'  => '/destination/url',
 
             ),

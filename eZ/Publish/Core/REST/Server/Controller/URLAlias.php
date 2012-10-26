@@ -63,33 +63,41 @@ class URLAlias extends RestController
     }
 
     /**
-     * Returns a list of URL aliases
+     * Returns the list of global URL aliases
      *
-     * @return \eZ\Publish\Core\REST\Server\Values\URLAliasList
+     * @return \eZ\Publish\Core\REST\Server\Values\URLAliasRefList
      */
-    public function listURLAliases()
+    public function listGlobalURLAliases()
     {
-        if ( !isset( $this->request->variables['type'] ) )
-        {
-            throw new BadRequestException( "Required parameter 'type' is missing." );
-        }
+        return new Values\URLAliasRefList(
+            $this->urlAliasService->listGlobalAliases(),
+            $this->urlHandler->generate( 'urlAliases' )
+        );
+    }
 
-        if ( $this->request->variables['type'] !== 'location' && $this->request->variables['type'] !== 'global' )
-        {
-            throw new BadRequestException( "Request contains unrecognized value for 'type' parameter" );
-        }
+    /**
+     * Returns the list of URL aliases for a location
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\URLAliasRefList
+     */
+    public function listLocationURLAliases()
+    {
+        $questionMark = strpos( $this->request->path, '?' );
+        $requestPath = $questionMark !== false ? substr( $this->request->path, 0, $questionMark ) : $this->request->path;
 
-        if ( $this->request->variables['type'] === 'location' )
-        {
-            // @todo Implement
-            $urlAliases = array();
-        }
-        else
-        {
-            $urlAliases = $this->urlAliasService->listGlobalAliases();
-        }
+        $urlValues = $this->urlHandler->parse( 'locationUrlAliases', $requestPath );
+        $locationPathParts = explode( '/', $urlValues['location'] );
 
-        return new Values\URLAliasList( $urlAliases, $this->request->path );
+        $location = $this->locationService->loadLocation(
+            array_pop( $locationPathParts )
+        );
+
+        $custom = isset( $this->request->variables['custom'] ) && $this->request->variables['custom'] === 'false' ? false : true;
+
+        return new Values\URLAliasRefList(
+            $this->urlAliasService->listLocationAliases( $location, $custom ),
+            $this->request->path
+        );
     }
 
     /**

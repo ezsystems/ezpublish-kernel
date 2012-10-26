@@ -71,8 +71,6 @@ class URLAliasCreate extends Base
             }
         }
 
-        // @TODO What about url element? We don't use it, but create struct XSD has it
-
         if ( !array_key_exists( 'path', $data ) )
         {
             throw new Exceptions\Parser( "Missing 'path' value for URLAliasCreate." );
