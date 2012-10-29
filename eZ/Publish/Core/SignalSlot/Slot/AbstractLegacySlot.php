@@ -17,7 +17,7 @@ use Closure;
 abstract class AbstractLegacySlot extends Slot
 {
     /**
-     * @var \Closure|\ezpKernelHandler
+     * @var \Closure
      */
     private $legacyKernelClosure;
 
@@ -36,11 +36,7 @@ abstract class AbstractLegacySlot extends Slot
      */
     protected function getLegacyKernel()
     {
-        if ( $this->legacyKernelClosure instanceof Closure )
-        {
-            $legacyKernelClosure = $this->legacyKernelClosure;
-            $this->legacyKernelClosure = $legacyKernelClosure();
-        }
-        return $this->legacyKernelClosure;
+        $legacyKernelClosure = $this->legacyKernelClosure;
+        return $legacyKernelClosure();
     }
 }
