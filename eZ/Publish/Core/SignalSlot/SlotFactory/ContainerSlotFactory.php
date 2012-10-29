@@ -9,13 +9,12 @@
 
 namespace eZ\Publish\Core\SignalSlot\SlotFactory;
 use eZ\Publish\Core\SignalSlot\SlotFactory;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Slot factory that is able to lookup slots based on identifier.
  */
-class ContainerSlotFactory extends SlotFactory implements ContainerAwareInterface
+class ContainerSlotFactory extends SlotFactory
 {
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
@@ -23,9 +22,11 @@ class ContainerSlotFactory extends SlotFactory implements ContainerAwareInterfac
     protected $container;
 
     /**
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
-    public function __construct()
+    public function __construct( ContainerInterface $container )
     {
+        $this->container = $container;
     }
 
     /**
@@ -37,19 +38,9 @@ class ContainerSlotFactory extends SlotFactory implements ContainerAwareInterfac
      */
     public function getSlot( $slotIdentifier )
     {
-        if ( $this->container === null || !$this->container->has( $slotIdentifier ) )
+        if ( !$this->container->has( $slotIdentifier ) )
             throw new \eZ\Publish\Core\Base\Exceptions\NotFoundException( 'slot', $slotIdentifier );
 
         return $this->container->get( $slotIdentifier );
-    }
-
-    /**
-     * Sets the Container.
-     *
-     * @param ContainerInterface $container A ContainerInterface instance
-     */
-    public function setContainer( ContainerInterface $container = null )
-    {
-        $this->container = $container;
     }
 }

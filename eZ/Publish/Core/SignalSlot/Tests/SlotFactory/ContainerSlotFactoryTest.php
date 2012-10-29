@@ -60,9 +60,8 @@ class ContainerSlotFactoryTest extends \PHPUnit_Framework_TestCase
 
     private function setUpFactory( $slots, $hasReturnValue = true )
     {
-        $factory = new SignalSlot\SlotFactory\ContainerSlotFactory();
         $container = $this->getMock( '\\Symfony\\Component\\DependencyInjection\\ContainerInterface' );
-        $factory->setContainer( $container );
+        $factory = new SignalSlot\SlotFactory\ContainerSlotFactory( $container );
 
         $i = 0;
         foreach ( $slots as $slotIdentifier => $slotValue )
