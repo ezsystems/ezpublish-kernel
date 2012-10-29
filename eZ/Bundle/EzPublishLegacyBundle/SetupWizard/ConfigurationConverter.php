@@ -88,7 +88,7 @@ class ConfigurationConverter
         $settings['ezpublish']['system'][$groupName] = array();
         $databasePassword = $databaseSettings['Password'] != '' ? $databaseSettings['Password'] : null;
         $settings['ezpublish']['system'][$groupName]['database'] = array(
-            'type' => $databaseType,
+            'type' => $this->mapDatabaseType( $databaseType ),
             'user' => $databaseSettings['User'],
             'password' => $databasePassword,
             'server' => $databaseSettings['Server'],
@@ -165,6 +165,16 @@ class ConfigurationConverter
         }
 
         return $settings;
+    }
+
+    protected function mapDatabaseType( $databaseType )
+    {
+        $map = array(
+            'ezpostgresql' => 'pgsql',
+            'postgresql' => 'pgsql'
+        );
+
+        return isset( $map[$databaseType] ) ? $map[$databaseType] : $databaseType;
     }
 
     /**

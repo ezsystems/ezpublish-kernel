@@ -202,6 +202,12 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
         unset( $element[IDX_EXPECTED_RESULT]['ezpublish']['imagemagick']['path'] );
         $data[] = $element;
 
+        // postgresql
+        $element = $baseData;
+        $element[IDX_MOCK_PARAMETERS]['getGroup']['DatabaseSettings'][3]['DatabaseImplementation'] = 'ezpostgresql';
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['database']['type'] = 'pgsql';
+        $data[] = $element;
+
         // host match, with map
         $element = $baseData;
         $element[IDX_MOCK_PARAMETERS]['getGroup']['SiteAccessSettings'] = array( 'SiteAccessSettings', null, null, array(
