@@ -470,7 +470,9 @@ class Handler implements UrlAliasHandlerInterface
             || $row["is_original"] == 0
         )
         {
-            $data["lang_mask"] = $row["lang_mask"] | $languageId | (int)$alwaysAvailable;
+            $data["lang_mask"] = $languageId | (int)$alwaysAvailable;
+            // If history is reused move link to id
+            $data["link"] = $row["id"];
             $this->gateway->updateRow(
                 $parentId,
                 $topElementMD5,

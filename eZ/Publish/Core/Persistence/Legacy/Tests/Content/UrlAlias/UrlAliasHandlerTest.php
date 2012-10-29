@@ -1791,7 +1791,7 @@ class UrlAliasHandlerTest extends TestCase
             "cro-HR",
             false
         );
-        $loadedCustomUrlAlias = $handler->lookup( "custom-location-alias" );
+        $loadedCustomUrlAlias = $handler->lookup( $path );
 
         self::assertEquals( 2, $this->countRows() );
 
@@ -1803,7 +1803,7 @@ class UrlAliasHandlerTest extends TestCase
                     array(
                         array(
                             "always-available" => false,
-                            "translations" => array( "cro-HR" => "custom-location-alias" )
+                            "translations" => array( "cro-HR" => $path )
                         ),
                     ),
                     $loadedCustomUrlAlias->$propertyName
@@ -1886,13 +1886,12 @@ class UrlAliasHandlerTest extends TestCase
      * @group create
      * @group custom
      */
-    public function testCreateCustomUrlAliasReusesHistoryElement()
+    public function testCreateCustomUrlAliasReusesHistory()
     {
         $handler = $this->getHandler();
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_reusing.php" );
 
         $countBeforeReusing = $this->countRows();
-        $historyUrlAlias = $handler->lookup( "history-hello" );
         $handler->createCustomUrlAlias(
             314,
             "history-hello",
@@ -1905,8 +1904,73 @@ class UrlAliasHandlerTest extends TestCase
             $countBeforeReusing,
             $this->countRows()
         );
-        self::assertNotEquals(
-            $historyUrlAlias,
+        self::assertEquals(
+            new UrlAlias(
+                array(
+                    "id" => "0-da94285592c46d4396d3ca6904a4aa8f",
+                    "type" => UrlAlias::LOCATION,
+                    "destination" => 314,
+                    "languageCodes" => array( "eng-GB" ),
+                    "pathData" => array(
+                        array(
+                            "always-available" => true,
+                            "translations" => array( "eng-GB" => "history-hello" )
+                        )
+                    ),
+                    "alwaysAvailable" => true,
+                    "isHistory" => false,
+                    "isCustom" => true,
+                    "forward" => true
+                )
+            ),
+            $handler->lookup( "history-hello" )
+        );
+    }
+
+    /**
+     * Test for the createUrlAlias() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::createUrlAlias
+     * @group create
+     * @group custom
+     */
+    public function testCreateCustomUrlAliasReusesHistoryOfDifferentLanguage()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_reusing.php" );
+
+        $countBeforeReusing = $this->countRows();
+        $handler->createCustomUrlAlias(
+            314,
+            "history-hello",
+            true,
+            "cro-HR",
+            true
+        );
+
+        self::assertEquals(
+            $countBeforeReusing,
+            $this->countRows()
+        );
+        self::assertEquals(
+            new UrlAlias(
+                array(
+                    "id" => "0-da94285592c46d4396d3ca6904a4aa8f",
+                    "type" => UrlAlias::LOCATION,
+                    "destination" => 314,
+                    "languageCodes" => array( "cro-HR" ),
+                    "pathData" => array(
+                        array(
+                            "always-available" => true,
+                            "translations" => array( "cro-HR" => "history-hello" )
+                        )
+                    ),
+                    "alwaysAvailable" => true,
+                    "isHistory" => false,
+                    "isCustom" => true,
+                    "forward" => true
+                )
+            ),
             $handler->lookup( "history-hello" )
         );
     }
