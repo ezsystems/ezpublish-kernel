@@ -65,7 +65,8 @@ class XmlText implements Converter
     {
         $storageDefinition->dataInt1 = $fieldDefinition->fieldTypeConstraints->fieldSettings['numRows'];
         $storageDefinition->dataText2 = $fieldDefinition->fieldTypeConstraints->fieldSettings['tagPreset'];
-        $storageDefinition->dataText1 = $fieldDefinition->defaultValue->data->saveXML();
+        if ( !empty( $fieldDefinition->defaultValue->data ) )
+            $storageDefinition->dataText1 = $fieldDefinition->defaultValue->data->saveXML();
     }
 
     /**
