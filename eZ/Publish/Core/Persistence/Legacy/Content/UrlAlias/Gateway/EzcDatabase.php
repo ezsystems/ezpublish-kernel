@@ -990,7 +990,6 @@ class EzcDatabase extends Gateway
         /** @var $query \ezcQueryUpdate */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update( $this->dbHandler->quoteColumn( "ezurlalias_ml" ) );
-        // @todo set link to id
         $this->setQueryValues(
             $query,
             array(
@@ -1001,6 +1000,10 @@ class EzcDatabase extends Gateway
                 "is_original" => 0,
                 "alias_redirects" => 1
             )
+        );
+        $query->set(
+            $this->dbHandler->quoteColumn( "link" ),
+            $this->dbHandler->quoteColumn( "id" )
         );
         $query->where(
             $query->expr->lAnd(
