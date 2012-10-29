@@ -54,6 +54,7 @@ class SessionInitByPostListener implements EventSubscriberInterface
         )
         {
             $session->setId( $request->request->get( $sessionName ) );
+            $session->start();
         }
     }
 }
