@@ -70,17 +70,6 @@ abstract class Gateway
     abstract public function insertRow( array $values );
 
     /**
-     * Inserts new NOP type row in urlalias_ml table.
-     *
-     * @param mixed $parentId
-     * @param string $text
-     * @param string $textMD5
-     *
-     * @return mixed
-     */
-    abstract public function insertNopRow( $parentId, $text, $textMD5 );
-
-    /**
      * Loads single row matched by composite primary key.
      *
      * @param mixed $parentId

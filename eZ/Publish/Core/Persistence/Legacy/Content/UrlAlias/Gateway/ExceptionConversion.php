@@ -201,7 +201,6 @@ class ExceptionConversion extends Gateway
      *
      * @param array $values
      *
-     * @throws \Exception
      * @return mixed
      */
     public function insertRow( array $values )
@@ -209,29 +208,6 @@ class ExceptionConversion extends Gateway
         try
         {
             return $this->innerGateway->insertRow( $values );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-    }
-
-    /**
-     * @param mixed $parentId
-     * @param string $text
-     * @param string $textMD5
-     *
-     * @return mixed
-     */
-    public function insertNopRow( $parentId, $text, $textMD5 )
-    {
-        try
-        {
-            return $this->innerGateway->insertNopRow( $parentId, $text, $textMD5 );
         }
         catch ( ezcDbException $e )
         {

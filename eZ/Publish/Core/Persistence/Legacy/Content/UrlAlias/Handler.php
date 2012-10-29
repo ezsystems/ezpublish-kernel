@@ -422,7 +422,7 @@ class Handler implements UrlAliasHandlerInterface
             $row = $this->gateway->loadRow( $parentId, $pathElementMD5 );
 
             $parentId = empty( $row )
-                ? $this->gateway->insertNopRow( $parentId, $pathElement, $pathElementMD5 )
+                ? $this->insertNopEntry( $parentId, $pathElement, $pathElementMD5 )
                 : $row["link"];
 
             $createdPath[] = $pathElement;
@@ -487,6 +487,28 @@ class Handler implements UrlAliasHandlerInterface
         $createdPath[] = $topElement;
 
         return $this->mapper->extractUrlAliasFromData( $data );
+    }
+
+    /**
+     * Convenience method for inserting nop type row.
+     *
+     * @param mixed $parentId
+     * @param string $text
+     * @param string $textMD5
+     *
+     * @return mixed
+     */
+    public function insertNopEntry( $parentId, $text, $textMD5 )
+    {
+        return $this->gateway->insertRow(
+            array(
+                "lang_mask" => 1,
+                "action" => "nop:",
+                "parent" => $parentId,
+                "text" => $text,
+                "text_md5" => $textMD5
+            )
+        );
     }
 
     /**

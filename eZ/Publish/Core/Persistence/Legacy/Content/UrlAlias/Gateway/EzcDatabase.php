@@ -592,28 +592,6 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     *
-     *
-     * @param mixed $parentId
-     * @param string $text
-     * @param string $textMD5
-     *
-     * @return mixed
-     */
-    public function insertNopRow( $parentId, $text, $textMD5 )
-    {
-        return $this->insertRow(
-            array(
-                "lang_mask" => 1,
-                "action" => "nop:",
-                "parent" => $parentId,
-                "text" => $text,
-                "text_md5" => $textMD5
-            )
-        );
-    }
-
-    /**
      * Returns next value for "id" column.
      *
      * @return mixed
