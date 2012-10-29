@@ -9,10 +9,13 @@
 
 namespace eZ\Publish\SPI\Tests\FieldType;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText as XmlTextConverter,
+    eZ\Publish\Core\FieldType\XmlText\XmlTextStorage,
     eZ\Publish\Core\FieldType\NullStorage,
     eZ\Publish\Core\FieldType\FieldSettings,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
+    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
+    DOMDocument;
+use eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway\LegacyStorage;
 
 /**
  * Integration test for legacy storage field types
@@ -57,7 +60,11 @@ class XmlTextIntergrationTest extends BaseIntegrationTest
 
         $handler->getStorageRegistry()->register(
             'ezxmltext',
-            new NullStorage()
+            new XmlTextStorage(
+                array(
+                     'LegacyStorage' => new LegacyStorage()
+                )
+            )
         );
         $handler->getFieldValueConverterRegistry()->register(
             'ezxmltext',
@@ -114,9 +121,11 @@ class XmlTextIntergrationTest extends BaseIntegrationTest
      */
     public function getInitialValue()
     {
+        $xml = new DOMDocument;
+        $xml->loadXML( '<?xml version="1.0" encoding="utf-8"?><section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>Paragraph content…</paragraph></section>' );
         return new FieldValue(
             array(
-                'data' => '<?xml version="1.0" encoding="utf-8"?><section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>Paragraph content…</paragraph></section>',
+                'data' => $xml,
                 'externalData' => null,
                 'sortKey' => null,
             )
@@ -132,9 +141,11 @@ class XmlTextIntergrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
+        $xml = new DOMDocument;
+        $xml->loadXML( '<?xml version="1.0" encoding="utf-8"?><section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>Some different content…</paragraph></section>' );
         return new FieldValue(
             array(
-                'data' => '<?xml version="1.0" encoding="utf-8"?><section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>Some different content…</paragraph></section>',
+                'data' => $xml,
                 'externalData' => null,
                 'sortKey' => null,
             )
