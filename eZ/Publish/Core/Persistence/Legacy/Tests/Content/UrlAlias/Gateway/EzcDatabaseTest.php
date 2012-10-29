@@ -391,6 +391,51 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * Test for the removeByAction() method.
+     *
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::removeByAction
+     */
+    public function testRemoveByAction()
+    {
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_reparent.php" );
+        $gateway = $this->getGateway();
+
+        $gateway->removeByAction( "eznode:315" );
+
+        self::assertEquals(
+            array(
+                "action" => "nop:",
+                "action_type" => "nop",
+                "alias_redirects" => "1",
+                "id" => "3",
+                "is_alias" => "0",
+                "is_original" => "0",
+                "lang_mask" => "1",
+                "link" => "3",
+                "parent" => "2",
+                "text" => "new-location",
+                "text_md5" => "1cdf796099b4596aed1c1c86c102526f"
+            ),
+            $gateway->loadRow( 2, "1cdf796099b4596aed1c1c86c102526f" )
+        );
+        self::assertEquals(
+            array(
+                "action" => "nop:",
+                "action_type" => "nop",
+                "alias_redirects" => "1",
+                "id" => "6",
+                "is_alias" => "0",
+                "is_original" => "0",
+                "lang_mask" => "1",
+                "link" => "6",
+                "parent" => "0",
+                "text" => "old-location-historized",
+                "text_md5" => "e504bfae32f8c3ecd2922bcd1b9a8b6a"
+            ),
+            $gateway->loadRow( 0, "e504bfae32f8c3ecd2922bcd1b9a8b6a" )
+        );
+    }
 
 
 
