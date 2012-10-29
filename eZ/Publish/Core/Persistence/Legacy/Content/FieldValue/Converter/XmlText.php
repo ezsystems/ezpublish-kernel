@@ -14,6 +14,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     eZ\Publish\Core\FieldType\FieldSettings,
+    eZ\Publish\Core\FieldType\XmlText\Value,
     DOMDocument;
 
 class XmlText implements Converter
@@ -51,7 +52,7 @@ class XmlText implements Converter
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
         $domDoc = new DOMDocument;
-        $domDoc->loadXML( $value->dataText );
+        $domDoc->loadXML( $value->dataText ?: Value::EMPTY_VALUE );
         $fieldValue->data = $domDoc;
     }
 
