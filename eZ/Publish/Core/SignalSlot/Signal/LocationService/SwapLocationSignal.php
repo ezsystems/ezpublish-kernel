@@ -17,14 +17,28 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class SwapLocationSignal extends Signal
 {
     /**
-     * Location1Id
+     * Content1 Id
+     *
+     * @var mixed
+     */
+    public $content1Id;
+
+    /**
+     * Location1 Id
      *
      * @var mixed
      */
     public $location1Id;
 
     /**
-     * Location2Id
+     * Content2 Id
+     *
+     * @var mixed
+     */
+    public $content2Id;
+
+    /**
+     * Location2 Id
      *
      * @var mixed
      */

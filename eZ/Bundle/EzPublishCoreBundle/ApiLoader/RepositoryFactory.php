@@ -52,13 +52,16 @@ class RepositoryFactory
     /**
      * Builds the main repository, heart of eZ Publish API
      *
+     * This always returns the true inner Repository, please depend on ezpublish.api.repository and not this method
+     * directly to make sure you get an instance wrapped inside Signal / Cache / * functionality.
+     *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\SPI\IO\Handler $ioHandler
      * @return \eZ\Publish\API\Repository\Repository
      */
     public function buildRepository( PersistenceHandler $persistenceHandler, IoHandler $ioHandler )
     {
-        $repositoryClass = $this->container->getParameter( 'ezpublish.api.repository.class' );
+        $repositoryClass = $this->container->getParameter( 'ezpublish.api.inner_repository.class' );
         return new $repositoryClass(
             $persistenceHandler,
             $ioHandler,
@@ -72,7 +75,8 @@ class RepositoryFactory
     }
 
     /**
-     * Returns a closure which returns the repository.
+     * Returns a closure which returns ezpublish.api.repository when called.
+     *
      * To be used when lazy loading is needed.
      *
      * @return \Closure
