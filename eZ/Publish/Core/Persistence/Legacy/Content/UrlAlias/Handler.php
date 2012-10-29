@@ -495,7 +495,7 @@ class Handler implements UrlAliasHandlerInterface
      *
      * @return mixed
      */
-    public function insertNopEntry( $parentId, $text, $textMD5 )
+    protected function insertNopEntry( $parentId, $text, $textMD5 )
     {
         return $this->gateway->insertRow(
             array(
