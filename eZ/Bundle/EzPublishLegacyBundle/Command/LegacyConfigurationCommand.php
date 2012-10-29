@@ -28,10 +28,10 @@ class LegacyConfigurationCommand extends ContainerAwareCommand
                     new InputArgument( 'adminsiteaccess', InputArgument::REQUIRED, 'Name of your admin siteaccess. Example: ezdemo_site_admin' ),
                 )
             )
-            ->setDescription( 'Creates the ezpublish 5 configuration based on an existing app/ezpublish_legacy' )
+            ->setDescription( 'Creates the ezpublish 5 configuration based on an existing ezpublish_legacy' )
             ->setHelp( <<<EOT
 The command <info>%command.name%</info> creates the ezpublish 5 configuration,
-based on an existing app/ezpublish_legacy installation.
+based on an existing ezpublish_legacy installation.
 
 Settings will be picked based on the default siteaccess.
 EOT
