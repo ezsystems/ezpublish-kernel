@@ -453,6 +453,7 @@ class ContentService implements ContentServiceInterface
                 'srcVersionNo' => ( $versionInfo !== null ? $versionInfo->versionNo : null ),
                 'dstContentId' => $returnValue->getVersionInfo()->getContentInfo()->id,
                 'dstVersionNo' => $returnValue->getVersionInfo()->versionNo,
+                'dstParentLocationId' => $destinationLocationCreateStruct->parentLocationId,
             ) )
         );
         return $returnValue;

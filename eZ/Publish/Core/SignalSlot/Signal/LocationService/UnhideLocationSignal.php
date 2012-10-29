@@ -17,7 +17,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class UnhideLocationSignal extends Signal
 {
     /**
-     * LocationId
+     * Location ID
      *
      * @var mixed
      */

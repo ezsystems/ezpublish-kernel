@@ -182,6 +182,7 @@ class LocationService implements LocationServiceInterface
         $returnValue = $this->service->updateLocation( $location, $locationUpdateStruct );
         $this->signalDispatcher->emit(
             new Signal\LocationService\UpdateLocationSignal( array(
+                'contentId' => $location->contentId,
                 'locationId' => $location->id,
             ) )
         );
@@ -202,7 +203,9 @@ class LocationService implements LocationServiceInterface
         $this->signalDispatcher->emit(
             new Signal\LocationService\SwapLocationSignal( array(
                 'location1Id' => $location1->id,
+                'content1Id' => $location1->contentId,
                 'location2Id' => $location2->id,
+                'content2Id' => $location2->contentId,
             ) )
         );
         return $returnValue;
@@ -286,6 +289,7 @@ class LocationService implements LocationServiceInterface
         $returnValue = $this->service->deleteLocation( $location );
         $this->signalDispatcher->emit(
             new Signal\LocationService\DeleteLocationSignal( array(
+                'contentId' => $location->contentId,
                 'locationId' => $location->id,
             ) )
         );
