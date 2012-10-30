@@ -855,13 +855,18 @@ class ContentService implements ContentServiceInterface
 
         if ( $versionInfo !== null )
         {
-            if ( !in_array( $versionInfo->status, array( VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED ) ) )
+            switch ( $versionInfo->status )
             {
-                // @TODO: throw an exception here, to be defined
-                throw new BadStateException(
-                    "\$versionInfo",
-                    "Draft can not be created from a draft version"
-                );
+                case VersionInfo::STATUS_PUBLISHED:
+                case VersionInfo::STATUS_ARCHIVED:
+                    break;
+
+                default:
+                    // @TODO: throw an exception here, to be defined
+                    throw new BadStateException(
+                        "\$versionInfo",
+                        "Draft can not be created from a draft version"
+                    );
             }
 
             $versionNo = $versionInfo->versionNo;
