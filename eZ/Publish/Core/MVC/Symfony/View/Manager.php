@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\Content,
     eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProvider,
     eZ\Publish\Core\MVC\Symfony\MVCEvents,
     eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent,
-    eZ\Publish\Core\Repository\Repository,
+    eZ\Publish\API\Repository\Repository,
     Symfony\Component\Templating\EngineInterface,
     Symfony\Component\HttpKernel\Log\LoggerInterface,
     Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -60,7 +60,7 @@ class Manager
     protected $sortedLocationViewProviders;
 
     /**
-     * @var \eZ\Publish\Core\Repository\Repository
+     * @var \eZ\Publish\API\Repository\Repository
      */
     protected $repository;
 
