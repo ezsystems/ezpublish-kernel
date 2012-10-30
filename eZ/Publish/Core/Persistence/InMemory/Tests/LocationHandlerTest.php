@@ -173,7 +173,7 @@ class LocationHandlerTest extends HandlerTest
         $this->assertEquals( $this->lastContentId, $location->contentId );
         // @todo contentVersion not yet implemented
         //$this->assertEquals( 1, $location->contentVersion );
-        $this->assertEquals( "test_0/test_1/test_2/test_3/test_4", $location->pathIdentificationString );
+        $this->assertEmpty( $location->pathIdentificationString );
         $this->assertEquals( $this->lastLocationId, $location->mainLocationId );
         $this->assertEquals( Location::SORT_FIELD_NAME, $location->sortField );
         $this->assertEquals( Location::SORT_ORDER_ASC, $location->sortOrder );

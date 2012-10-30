@@ -87,10 +87,17 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function loadByRemoteId( $remoteId )
     {
-        return $this->backend->find(
+        $locations = $this->backend->find(
             'Content\\Location',
             array( 'remoteId' => $remoteId )
         );
+
+        if ( empty( $locations ) )
+            throw new NotFound( 'Location by remote id', $remoteId );
+        else if ( isset( $locations[1] ) )
+            throw new \RuntimeException( "Several Locations found with same remote id: {$remoteId}" );
+
+        return $locations[0];
     }
 
     /**
