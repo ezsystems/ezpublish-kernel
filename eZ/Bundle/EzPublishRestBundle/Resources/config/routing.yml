@@ -527,7 +527,7 @@ ezpublish_rest_loadFieldDefinition:
         fieldDefinitionId: \d+
 
 ezpublish_rest_loadContentTypeDraft:
-    pattern: /content/types/{contentTypeId}/drafts
+    pattern: /content/types/{contentTypeId}/draft
     defaults:
         _controller: ezpublish_rest.controller.content_type:loadContentTypeDraft
     requirements:
@@ -535,7 +535,7 @@ ezpublish_rest_loadContentTypeDraft:
         contentTypeId: \d+
 
 ezpublish_rest_updateContentTypeDraft:
-    pattern: /content/types/{contentTypeId}/drafts
+    pattern: /content/types/{contentTypeId}/draft
     defaults:
         _controller: ezpublish_rest.controller.content_type:updateContentTypeDraft
     requirements:
@@ -543,7 +543,7 @@ ezpublish_rest_updateContentTypeDraft:
         contentTypeId: \d+
 
 ezpublish_rest_publishContentTypeDraft:
-    pattern: /content/types/{contentTypeId}/drafts
+    pattern: /content/types/{contentTypeId}/draft
     defaults:
         _controller: ezpublish_rest.controller.content_type:publishContentTypeDraft
     requirements:
