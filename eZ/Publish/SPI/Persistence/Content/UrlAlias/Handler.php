@@ -70,7 +70,7 @@ interface Handler
     public function createGlobalUrlAlias( $resource, $path, $forwarding = false, $languageName = null, $alwaysAvailable = false );
 
     /**
-     * @todo document
+     * List global aliases.
      *
      * @param string|null $languageCode
      * @param int $offset

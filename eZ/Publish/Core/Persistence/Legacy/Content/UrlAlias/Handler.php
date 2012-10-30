@@ -528,7 +528,7 @@ class Handler implements UrlAliasHandlerInterface
     }
 
     /**
-     * @todo document
+     * List global aliases.
      *
      * @param string|null $languageCode
      * @param int $offset
