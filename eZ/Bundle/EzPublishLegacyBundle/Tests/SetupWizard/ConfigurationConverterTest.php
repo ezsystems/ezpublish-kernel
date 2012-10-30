@@ -163,7 +163,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
         $commonMockParameters = array(
             'getParameter' => array(
                 'SiteSettings.DefaultAccess' => array( 'SiteSettings.DefaultAccess', null, null, 'eng' ),
-                'SiteSettings.SiteList' => array( 'SiteSettings.SiteList', null, null, array( 'eng', 'ezdemo_site', 'ezdemo_site_admin' ) ),
+                'SiteAccessSettings.AvailableSiteAccessList' => array( 'SiteAccessSettings.AvailableSiteAccessList', null, null, array( 'eng', 'ezdemo_site', 'ezdemo_site_admin' ) ),
                 'FileSettings.VarDir' => array( 'FileSettings.VarDir', 'site', 'eng', 'var/ezdemo_site' ),
                 'FileSettings.StorageDir' => array( 'FileSettings.StorageDir', 'site', 'eng', 'storage' ),
                 'ImageMagick.IsEnabled' => array( 'ImageMagick.IsEnabled', 'image', 'eng', 'true' ),

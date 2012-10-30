@@ -57,13 +57,13 @@ class ConfigurationConverter
         $settings['ezpublish']['siteaccess'] = array();
         $defaultSiteaccess = $this->legacyResolver->getParameter( 'SiteSettings.DefaultAccess' );
         $settings['ezpublish']['siteaccess']['default_siteaccess'] = $defaultSiteaccess;
-        $siteList = $this->legacyResolver->getParameter( 'SiteSettings.SiteList' );
+        $siteList = $this->legacyResolver->getParameter( 'SiteAccessSettings.AvailableSiteAccessList' );
 
         if ( !is_array( $siteList ) || empty( $siteList ) )
             throw new InvalidArgumentException( 'siteList', 'can not be empty' );
 
         if ( !in_array( $adminSiteaccess, $siteList ) )
-            throw new InvalidArgumentException( "adminSiteaccess", "Siteacces $adminSiteaccess wasn't found in SiteSettings.SiteList" );
+            throw new InvalidArgumentException( "adminSiteaccess", "Siteacces $adminSiteaccess wasn't found in SiteAccessSettings.AvailableSiteAccessList" );
 
         $settings['ezpublish']['siteaccess']['list'] = $siteList;
         $settings['ezpublish']['siteaccess']['groups'] = array();
