@@ -791,7 +791,6 @@ class EzcDatabase extends Gateway
             /** @var $query \ezcQuerySelect */
             $query = $this->dbHandler->createSelectQuery();
             $query->select(
-                //$this->dbHandler->quoteColumn( "id" ),
                 $this->dbHandler->quoteColumn( "parent" ),
                 $this->dbHandler->quoteColumn( "lang_mask" ),
                 $this->dbHandler->quoteColumn( "text" )
@@ -874,11 +873,7 @@ class EzcDatabase extends Gateway
 
         $query->select(
             $this->dbHandler->quoteColumn( "action" ),
-            //$this->dbHandler->quoteColumn( "id" ),
-            //$this->dbHandler->quoteColumn( "link" ),
-            //$this->dbHandler->quoteColumn( "parent" ),
             $this->dbHandler->quoteColumn( "lang_mask" ),
-            //$this->dbHandler->quoteColumn( "is_original" ),
             $this->dbHandler->quoteColumn( "text" )
         )->from(
             $this->dbHandler->quoteTable( "ezurlalias_ml" )
