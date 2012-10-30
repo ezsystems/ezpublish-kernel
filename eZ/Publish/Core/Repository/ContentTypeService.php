@@ -471,7 +471,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             $contentTypeCreateStruct->mainLanguageCode
         )->id;
         $groupIds = array_map(
-            function( $contentTypeGroup )
+            function ( $contentTypeGroup )
             {
                 return $contentTypeGroup->id;
             },
