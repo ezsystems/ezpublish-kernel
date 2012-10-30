@@ -361,54 +361,6 @@ class TrashServiceTest extends BaseTrashServiceTest
      * @see \eZ\Publish\API\Repository\TrashService::recover($trashItem, $newParentLocation)
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecoverWithLocationCreateStructParameter
      */
-    public function testRecoverSetsNewMainLocationId()
-    {
-        $repository = $this->getRepository();
-
-        $homeLocationId = $this->generateId( 'location', 2 );
-        $mediaLocationRemoteId = '75c715a51699d2d309a924eca6a95145';
-        /* BEGIN: Use Case */
-        // $homeLocationId is the ID of the "Home" location in an eZ Publish
-        // demo installation
-        // $mediaLocationRemoteId is the ID of the "Media" location in an eZ Publish
-        // demo installation
-
-        $trashService = $repository->getTrashService();
-        $locationService = $repository->getLocationService();
-
-        // Load "media" page location
-        $mediaLocation = $locationService->loadLocationByRemoteId(
-            $mediaLocationRemoteId
-        );
-
-        // Create a second Location for the content
-        $locationCreate = $locationService->newLocationCreateStruct( $homeLocationId );
-        $newLocation = $locationService->createLocation(
-            $mediaLocation->getContentInfo(),
-            $locationCreate
-        );
-
-        // Trash the both locations
-        $newTrashItem = $trashService->trash( $newLocation );
-        $mediaTrashItem = $trashService->trash( $mediaLocation );
-
-        // Recover the new Location, which now becomes the main location
-        $location = $trashService->recover( $newTrashItem );
-        /* END: Use Case */
-
-        $this->assertEquals(
-            $location->id,
-            $location->getContentInfo()->mainLocationId
-        );
-    }
-
-    /**
-     * Test for the recover() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\TrashService::recover($trashItem, $newParentLocation)
-     * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecoverWithLocationCreateStructParameter
-     */
     public function testRecoverWithLocationCreateStructParameterIncrementsChildCountOnNewParent()
     {
         $repository = $this->getRepository();
