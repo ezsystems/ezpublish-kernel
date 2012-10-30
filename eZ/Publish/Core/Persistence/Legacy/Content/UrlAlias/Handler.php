@@ -287,9 +287,9 @@ class Handler implements UrlAliasHandlerInterface
                 $newId = $row["id"];
                 if ( !empty( $existingLocationEntry ) )
                 {
-                    $cleanup = true;
                     if ( $existingLocationEntry["id"] != $row["id"] )
                     {
+                        $cleanup = true;
                         $newId = $existingLocationEntry["id"];
                     }
                     else
