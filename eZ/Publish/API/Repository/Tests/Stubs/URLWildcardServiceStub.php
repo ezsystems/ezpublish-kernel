@@ -191,14 +191,7 @@ class URLWildcardServiceStub implements URLWildcardService
             }
         }
 
-        $alias = $this->repository->getURLAliasService()->lookUp( $url );
-
-        return new URLWildcardTranslationResult(
-            array(
-                'uri' => $alias->path,
-                'forward' => $alias->forward
-            )
-        );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
