@@ -25,9 +25,9 @@ class LegacySolr extends Legacy
      *
      * @return \eZ\Publish\API\Repository\Repository
      */
-    public function getRepository()
+    public function getRepository( $initializeFromScratch = true )
     {
-        $repository = parent::getRepository();
+        $repository = parent::getRepository( $initializeFromScratch );
 
         // @HACK: This is a hack to inject a different search handler -- is
         // there a well supported way to do this? I don't think so.

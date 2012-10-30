@@ -94,7 +94,7 @@ class Legacy extends SetupFactory
             $this->insertData();
         }
 
-        $repository = $this->getServiceContainer()->getRepository();
+        $repository = $this->getServiceContainer()->get( 'inner_repository' );
         $repository->setCurrentUser(
             $repository->getUserService()->loadUser( 14 )
         );
