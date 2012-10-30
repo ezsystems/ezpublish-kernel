@@ -411,16 +411,10 @@ class Handler implements UrlAliasHandlerInterface
             $data["lang_mask"] = $languageId | (int)$alwaysAvailable;
             $this->gateway->insertRow( $data );
         }
-        // If a entry was returned check if it is reusable
-        // There are 3 possible cases:
-        // 1. same action and linked to another entry (history entry)
-        // 2. NOP entry
-        // 3. history entry
-        elseif (
-            $row["action"] == $action && $row["id"] != $row["link"]
-            || $row["action"] == "nop:"
-            || $row["is_original"] == 0
-        )
+        // Row exists, check if it is reusable. There are 2 cases when this is possible:
+        // 1. NOP entry
+        // 2. history entry
+        elseif ( $row["action"] == "nop:" || $row["is_original"] == 0 )
         {
             $data["lang_mask"] = $languageId | (int)$alwaysAvailable;
             // If history is reused move link to id
