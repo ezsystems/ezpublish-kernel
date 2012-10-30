@@ -58,17 +58,20 @@ class LegacyStorage extends Gateway
      */
     public function storeFieldData( Field $field, $contentTypeID )
     {
-        $existingKeywordMap = $this->getExistingKeywords( $field->value->externalData, $field->fieldDefinitionId );
-
-        $keywordsToInsert = $this->getKeywordsToInsert( $existingKeywordMap, $field->value->externalData );
-
-        $insertedKeywordMap = $this->insertKeywords( $keywordsToInsert, $contentTypeID );
+        $existingKeywordMap = $this->getExistingKeywords( $field->value->externalData, $contentTypeID );
 
         $this->deleteOldKeywordAssignements( $field );
 
-        $keywordsToAssignMap = array_merge( $existingKeywordMap, $insertedKeywordMap );
-
-        $this->assignKeywords( $field->id, $keywordsToAssignMap );
+        $this->assignKeywords(
+            $field->id,
+            array_merge(
+                $existingKeywordMap,
+                $this->insertKeywords(
+                    $this->getKeywordsToInsert( $existingKeywordMap, $field->value->externalData ),
+                    $contentTypeID
+                )
+            )
+        );
     }
 
     /**
