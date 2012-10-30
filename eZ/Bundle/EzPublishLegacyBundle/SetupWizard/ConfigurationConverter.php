@@ -63,7 +63,7 @@ class ConfigurationConverter
             throw new InvalidArgumentException( 'siteList', 'can not be empty' );
 
         if ( !in_array( $adminSiteaccess, $siteList ) )
-            throw new InvalidArgumentException( "adminSiteaccess", "Siteacces $adminSiteaccess wasn't found in SiteAccessSettings.AvailableSiteAccessList" );
+            throw new InvalidArgumentException( "adminSiteaccess", "Siteaccess $adminSiteaccess wasn't found in SiteAccessSettings.AvailableSiteAccessList" );
 
         $settings['ezpublish']['siteaccess']['list'] = $siteList;
         $settings['ezpublish']['siteaccess']['groups'] = array();
