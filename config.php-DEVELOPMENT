@@ -37,7 +37,7 @@ return array(
             ),
 
             // Enable strict ini parsing using parse_ini_string(), default false using eZ/Zeta Components INI Reader
-            'IniParserStrict' => true,
+            'IniParserStrict' => false,
 
             // Switch for development mode or not, default false
             'DevelopmentMode' => true,
