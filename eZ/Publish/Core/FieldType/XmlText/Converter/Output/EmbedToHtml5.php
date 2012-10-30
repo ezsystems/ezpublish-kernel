@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\FieldType\XmlText\Converter\Output;
 
 use eZ\Publish\Core\FieldType\XmlText\Converter\Output as OutputConverter,
     eZ\Publish\Core\MVC\Symfony\View\Manager,
-    eZ\Publish\Core\Repository\Repository,
+    eZ\Publish\API\Repository\Repository,
     DOMDocument;
 
 /**
@@ -25,7 +25,7 @@ class EmbedToHtml5 implements OutputConverter
     protected $viewManager;
 
     /**
-     * @var \eZ\Publish\Core\Repository\Repository
+     * @var \eZ\Publish\API\Repository\Repository
      */
     protected $repository;
 

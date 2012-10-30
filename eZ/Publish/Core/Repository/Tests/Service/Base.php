@@ -22,7 +22,7 @@ use PHPUnit_Framework_TestCase,
 abstract class Base extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\Repository\Repository
+     * @var \eZ\Publish\API\Repository\Repository
      */
     protected $repository;
 
@@ -107,11 +107,11 @@ abstract class Base extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Generate \eZ\Publish\Core\Repository\Repository
+     * Generate \eZ\Publish\API\Repository\Repository
      *
      * Makes it possible to inject different Io / Persistence handlers
      *
-     * @return \eZ\Publish\Core\Repository\Repository
+     * @return \eZ\Publish\API\Repository\Repository
      */
     abstract protected function getRepository();
 
