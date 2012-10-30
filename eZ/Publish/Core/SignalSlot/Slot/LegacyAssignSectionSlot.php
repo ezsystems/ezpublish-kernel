@@ -31,7 +31,7 @@ class LegacyAssignSectionSlot extends AbstractLegacySlot
         $kernel->runCallback( function() use( $signal )
             {
                 \eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
-                \eZSearch::updateObjectsSection( $signal->contentId, $signal->sectionId );
+                \eZSearch::updateObjectsSection( array( $signal->contentId ), $signal->sectionId );
             },
             false
         );
