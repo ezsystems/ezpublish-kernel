@@ -64,13 +64,13 @@ class LegacyStorage extends Gateway
 
         $this->assignKeywords(
             $field->id,
-            array_merge(
-                $existingKeywordMap,
-                $this->insertKeywords(
-                    $this->getKeywordsToInsert( $existingKeywordMap, $field->value->externalData ),
-                    $contentTypeID
-                )
-            )
+            $this->insertKeywords(
+                array_diff_key(
+                    array_fill_keys( $field->value->externalData, true ),
+                    $existingKeywordMap
+                ),
+                $contentTypeID
+            ) + $existingKeywordMap
         );
     }
 
@@ -206,35 +206,6 @@ class LegacyStorage extends Gateway
         }
 
         return $existingKeywordMap;
-    }
-
-    /**
-     * Returns a list of keywords to insert.
-     *
-     * Returns an array in the following format:
-     * <code>
-     *  array(
-     *      '<keyword>' => true,
-     *      // ...
-     *  );
-     * </code>
-     *
-     * @param mixed[] $existingKeywords
-     * @param string[] $keywordList
-     * @return mixed[]
-     */
-    protected function getKeywordsToInsert( $existingKeywords, $keywordList )
-    {
-        $keywordsToInsert = array_fill_keys( $keywordList, true );
-
-        $keywordIds = array();
-
-        foreach ( $existingKeywords as $keyword => $id )
-        {
-            unset( $keywordsToInsert[$keyword] );
-        }
-
-        return $keywordsToInsert;
     }
 
     /**
