@@ -176,27 +176,6 @@ class URLWildcardServiceTest extends BaseTest
     }
 
     /**
-     * Test for the create() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\URLWildcardService::create()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testCreate
-     */
-    public function testCreateThrowsContentValidationExceptionWhenPlaceholderSequenceNotStartsWithOne()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $urlWildcardService = $repository->getURLWildcardService();
-
-        // This call will fail with a ContentValidationException because the
-        // number of patterns '*' does not match the number of {\d} placeholders
-        $urlWildcardService->create( '/articles/*/*/*', '/content/{0}/year/{1}/{2}' );
-        /* END: Use Case */
-    }
-
-    /**
      * Test for the load() method.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLWildcard
@@ -498,35 +477,6 @@ class URLWildcardServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertEquals( '/content/42/bar/2012', $result->uri );
-    }
-
-    /**
-     * Test for the translate() method.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult
-     * @see \eZ\Publish\API\Repository\URLWildcardService::translate()
-     * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testTranslate
-     */
-    public function testTranslateReturnsUrlAliasWhenNoMatchingWildcardExists()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $urlWildcardService = $repository->getURLWildcardService();
-
-        // Create new url wildcards
-        $urlWildcardService->create( '/articles/*/05/*', '/content/{2}/year/{1}' );
-
-        // Translate a given url into an url alias
-        $result = $urlWildcardService->translate( '/Design' );
-        /* END: Use Case */
-
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\URLWildcardTranslationResult',
-            $result
-        );
-
-        return $result;
     }
 
     /**
