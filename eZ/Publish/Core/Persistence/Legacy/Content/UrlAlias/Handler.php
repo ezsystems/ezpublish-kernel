@@ -72,51 +72,6 @@ class Handler implements UrlAliasHandlerInterface
                 "commands" => array(),
                 "cleanupMethod" => "url_cleanup_iri",
             ),
-            "urlalias_compat" => array(
-                "commands" => array(
-                    //normalize
-                    "space_normalize",
-                    "hyphen_normalize",
-                    "apostrophe_normalize",
-                    "doublequote_normalize",
-                    "greek_normalize",
-                    "endline_search_normalize",
-                    "tab_search_normalize",
-                    "specialwords_search_normalize",
-                    "punctuation_normalize",
-
-                    //transform
-                    "apostrophe_to_doublequote",
-                    "math_to_ascii",
-                    "inverted_to_normal",
-
-                    //decompose
-                    "special_decompose",
-                    "latin_search_decompose",
-
-                    //transliterate
-                    "cyrillic_transliterate_ascii",
-                    "greek_transliterate_ascii",
-                    "hebrew_transliterate_ascii",
-                    "latin1_transliterate_ascii",
-                    "latin-exta_transliterate_ascii",
-
-                    //diacritical
-                    "cyrillic_diacritical",
-                    "greek_diacritical",
-                    "latin1_diacritical",
-                    "latin-exta_diacritical",
-
-                    //lowercase
-                    "ascii_lowercase",
-                    "cyrillic_lowercase",
-                    "greek_lowercase",
-                    "latin1_lowercase",
-                    "latin-exta_lowercase",
-                    "latin_lowercase",
-                ),
-                "cleanupMethod" => "url_cleanup_compat",
-            ),
         ),
         "reservedNames" => array(
             "class",
