@@ -368,7 +368,7 @@ class ServiceContainer implements Container
         foreach ( $this->settings as $service => $settings )
         {
             if ( stripos( $service, $parent ) !== false &&
-                 empty( $settings['abstract'] ) &&
+                 !empty( $settings['class'] ) &&
                  preg_match( "/^(?P<prefix>[\w:]+){$parent}$/", $service, $match ) )
             {
                 $services[$match['prefix']] = $prefix . $match['prefix'] . $parent . $function;

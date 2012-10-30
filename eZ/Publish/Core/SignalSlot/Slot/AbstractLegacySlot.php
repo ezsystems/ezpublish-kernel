@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\SignalSlot\Slot;
 use eZ\Publish\Core\SignalSlot\Slot;
 use Closure;
+use ezpKernelHandler;
 
 /**
  * A abstract legacy slot covering common functions needed for legacy slots.
@@ -17,16 +18,19 @@ use Closure;
 abstract class AbstractLegacySlot extends Slot
 {
     /**
-     * @var \Closure
+     * @var \Closure|\ezpKernelHandler
      */
-    private $legacyKernelClosure;
+    private $legacyKernel;
 
     /**
-     * @param \Closure $legacyKernelClosure
+     * @param \Closure|\ezpKernelHandler $legacyKernel
      */
-    public function __construct( Closure $legacyKernelClosure )
+    public function __construct( $legacyKernel )
     {
-        $this->legacyKernelClosure = $legacyKernelClosure;
+        if ( $legacyKernel instanceof Closure || $legacyKernel instanceof ezpKernelHandler )
+            $this->legacyKernel = $legacyKernel;
+        else
+            throw new \RuntimeException( "Legacy slot only accepts \$legacyKernel instance of Closure or ezpKernelHandler" );
     }
 
     /**
@@ -36,7 +40,10 @@ abstract class AbstractLegacySlot extends Slot
      */
     protected function getLegacyKernel()
     {
-        $legacyKernelClosure = $this->legacyKernelClosure;
+        if ( $this->legacyKernel instanceof ezpKernelHandler )
+            return $this->legacyKernel;
+
+        $legacyKernelClosure = $this->legacyKernel;
         return $legacyKernelClosure();
     }
 }
