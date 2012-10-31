@@ -780,7 +780,7 @@ class UserService implements UserServiceInterface
         }
 
         if ( $loadedGroup->getVersionInfo()->getContentInfo()->mainLocationId === null )
-            throw new InvalidArgumentException( "userGroup", "user group has no main location or no locations" );
+            throw new BadStateException( "userGroup", "user group has no main location or no locations" );
 
         if ( in_array( $loadedGroup->getVersionInfo()->getContentInfo()->mainLocationId, $existingGroupIds ) )
             // user is already assigned to the user group
@@ -829,10 +829,10 @@ class UserService implements UserServiceInterface
 
         $userLocations = $locationService->loadLocations( $loadedUser->getVersionInfo()->getContentInfo() );
         if ( empty( $userLocations ) )
-            throw new InvalidArgumentException( "user", "user has no locations, cannot unassign from group" );
+            throw new BadStateException( "user", "user has no locations, cannot unassign from group" );
 
         if ( $loadedGroup->getVersionInfo()->getContentInfo()->mainLocationId === null )
-            throw new InvalidArgumentException( "userGroup", "user group has no main location or no locations, cannot unassign" );
+            throw new BadStateException( "userGroup", "user group has no main location or no locations, cannot unassign" );
 
         foreach ( $userLocations as $userLocation )
         {
