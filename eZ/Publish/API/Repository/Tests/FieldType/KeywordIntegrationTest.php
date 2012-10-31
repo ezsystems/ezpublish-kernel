@@ -119,12 +119,9 @@ class KeywordIntegrationTest extends BaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
-            'values' => array( 'foo', 'bar', 'sindelfingen' ),
-        );
-        $this->assertPropertiesCorrect(
-            $expectedData,
-            $field->value
+        $this->assertEquals(
+            array( 'foo' => true, 'bar' => true, 'sindelfingen' => true ),
+            array_fill_keys( $field->value->values, true )
         );
     }
 
@@ -187,12 +184,9 @@ class KeywordIntegrationTest extends BaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
-            'values' => array( 'bielefeld' ),
-        );
-        $this->assertPropertiesCorrect(
-            $expectedData,
-            $field->value
+        $this->assertEquals(
+            array( 'bielefeld' => true ),
+            array_fill_keys( $field->value->values, true )
         );
     }
 
@@ -237,12 +231,9 @@ class KeywordIntegrationTest extends BaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
-            'values' => array( 'foo', 'bar', 'sindelfingen' ),
-        );
-        $this->assertPropertiesCorrect(
-            $expectedData,
-            $field->value
+        $this->assertEquals(
+            array( 'foo' => true, 'bar' => true, 'sindelfingen' => true ),
+            array_fill_keys( $field->value->values, true )
         );
     }
 
