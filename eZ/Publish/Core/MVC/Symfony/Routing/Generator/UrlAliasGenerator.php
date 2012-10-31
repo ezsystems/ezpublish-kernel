@@ -53,12 +53,7 @@ class UrlAliasGenerator extends Generator
      */
     public function doGenerate( $location, array $parameters )
     {
-        $urlAliases = $this->getRepository()->getURLAliasService()->listLocationAliases(
-            $location,
-            false,
-            // TODO : Don't hardcode language. Build the Repository with configured prioritized languages instead.
-            'eng-GB'
-        );
+        $urlAliases = $this->getRepository()->getURLAliasService()->listLocationAliases( $location, false );
 
         $queryString = '';
         if ( !empty( $parameters ) )

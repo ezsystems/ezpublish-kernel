@@ -190,7 +190,14 @@ class Repository implements RepositoryInterface
                 'limit' => 0,
                 'sequence' => ''
             ),
+            'languages' => array()
         );
+
+        if ( !empty( $this->serviceSettings['languages'] ) )
+        {
+            $this->serviceSettings['language']['languages'] = $this->serviceSettings['languages'];
+            $this->serviceSettings['urlAlias']['prioritizedLanguageList'] = $this->serviceSettings['languages'];
+        }
 
         if ( $user !== null )
             $this->setCurrentUser( $user );
