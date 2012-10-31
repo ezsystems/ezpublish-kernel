@@ -43,15 +43,6 @@ class ConfigurationConverter
      */
     public function fromLegacy( $sitePackage, $adminSiteaccess )
     {
-        $this->legacyKernel->runCallback(
-            function()
-            {
-               \eZINI::injectSettings( array() );
-               \eZCache::clearByTag( 'ini' );
-               \eZINI::resetAllInstances();
-            }
-        );
-
         $settings = array();
         $settings['ezpublish'] = array();
         $settings['ezpublish']['siteaccess'] = array();

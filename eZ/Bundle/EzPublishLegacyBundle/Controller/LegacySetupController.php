@@ -65,12 +65,32 @@ class LegacySetupController
         if ( $request->request->get( 'eZSetup_current_step' ) == 'Registration' )
         {
             $chosenSitePackage = $request->request->get( 'P_chosen_site_package-0' );
-            $adminSiteaccess = $chosenSitePackage . '_admin';
+
+            // match mode (host, url or port)
+            $accessType = $request->request->get( 'P_site_extra_data_access_type-' . $chosenSitePackage );
+            if ( $accessType == 'host' )
+            {
+                $adminSiteaccess = $chosenSitePackage . '_admin';
+            }
+            elseif ( $accessType === 'url' )
+            {
+                $adminSiteaccess = $request->request->get( 'P_site_extra_data_admin_access_type_value-' . $chosenSitePackage );
+            }
 
             /** @var $configurationConverter \eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfigurationConverter */
             $configurationConverter = $this->container->get( 'ezpublish_legacy.setup_wizard.configuration_converter' );
 
             $dumper = new Dumper();
+
+            // Clear INI cache since setup has writte new files
+            $this->getLegacyKernel()->runCallback(
+                function()
+                {
+                    \eZINI::injectSettings( array() );
+                    \eZCache::clearByTag( 'ini' );
+                    \eZINI::resetAllInstances();
+                }
+            );
 
             $settingsArray = $configurationConverter->fromLegacy( $chosenSitePackage, $adminSiteaccess );
 
