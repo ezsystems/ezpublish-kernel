@@ -284,6 +284,34 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::loadByIdentifier
+     */
+    public function testLoadByIdentifier()
+    {
+        $state = $this->handler->loadByIdentifier( 'not_locked', 2 );
+
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState', $state );
+
+        $this->assertEquals( 1, $state->id );
+        $this->assertEquals( 2, $state->groupId );
+        $this->assertEquals( 'not_locked', $state->identifier );
+        $this->assertEquals( 'eng-US', $state->defaultLanguage );
+        $this->assertEquals( array( 'eng-US' ), $state->languageCodes );
+        $this->assertEquals( array( 'eng-US' => 'Not locked' ), $state->name );
+        $this->assertEquals( array( 'eng-US' => '' ), $state->description );
+        $this->assertEquals( 0, $state->priority );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::loadByIdentifier
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadByIdentifierThrowsNotFoundException()
+    {
+        $this->handler->loadByIdentifier( 'unknown', 2 );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::update
      */
     public function testUpdate()

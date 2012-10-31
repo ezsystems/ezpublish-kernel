@@ -757,6 +757,49 @@ class ObjectStateServiceTest extends BaseTest
     }
 
     /**
+     * Test for the createObjectState() method.
+     *
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @return void
+     * @see \eZ\Publish\API\Repository\ObjectStateService::createObjectState()
+     * @depends testLoadObjectStateGroup
+     * @depends testCreateObjectState
+     */
+    public function testCreateObjectStateThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+
+        $objectStateGroupId = $this->generateId( 'objectstategroup', 2 );
+        // $objectStateGroupId contains the ID of the standard object state
+        // group ez_lock.
+        $objectStateService = $repository->getObjectStateService();
+
+        $loadedObjectStateGroup = $objectStateService->loadObjectStateGroup(
+            $objectStateGroupId
+        );
+
+        $objectStateCreateStruct = $objectStateService->newObjectStateCreateStruct(
+            // 'not_locked' is the identifier of already existing state
+            'not_locked'
+        );
+        $objectStateCreateStruct->priority = 23;
+        $objectStateCreateStruct->defaultLanguageCode = 'eng-US';
+        $objectStateCreateStruct->names = array(
+            'eng-US' => 'Locked and Unlocked',
+        );
+        $objectStateCreateStruct->descriptions = array(
+            'eng-US' => 'A state between locked and unlocked.',
+        );
+
+        // This call will fail because object state with
+        // 'not_locked' identifier already exists
+        $objectStateService->createObjectState(
+            $loadedObjectStateGroup,
+            $objectStateCreateStruct
+        );
+    }
+
+    /**
      * testCreateObjectStateStructValues
      *
      * @param array $testData
@@ -912,6 +955,47 @@ class ObjectStateServiceTest extends BaseTest
             $loadedObjectState,
             $updateStateStruct,
             $updatedObjectState
+        );
+    }
+
+    /**
+     * Test for the updateObjectState() method.
+     *
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @return void
+     * @see \eZ\Publish\API\Repository\ObjectStateService::updateObjectState()
+     * @depends testUpdateObjectState
+     */
+    public function testUpdateObjectStateThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+
+        $objectStateId = $this->generateId( 'objectstate', 2 );
+        // $objectStateId contains the ID of the "locked" state
+        $objectStateService = $repository->getObjectStateService();
+
+        $loadedObjectState = $objectStateService->loadObjectState(
+            $objectStateId
+        );
+
+        $updateStateStruct = $objectStateService->newObjectStateUpdateStruct();
+        // 'not_locked' is the identifier of already existing state
+        $updateStateStruct->identifier = 'not_locked';
+        $updateStateStruct->defaultLanguageCode = 'ger-DE';
+        $updateStateStruct->names = array(
+            'eng-US' => 'Somehow locked',
+            'ger-DE' => 'Irgendwie gelockt',
+        );
+        $updateStateStruct->descriptions = array(
+            'eng-US' => 'The object is somehow locked',
+            'ger-DE' => 'Sindelfingen',
+        );
+
+        // This call will fail because state with
+        // 'not_locked' identifier already exists
+        $objectStateService->updateObjectState(
+            $loadedObjectState,
+            $updateStateStruct
         );
     }
 

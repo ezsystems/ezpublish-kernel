@@ -525,6 +525,29 @@ abstract class ObjectStateBase extends BaseServiceTest
     }
 
     /**
+     * Test service method for creating object state throwing InvalidArgumentException
+     * @covers \eZ\Publish\API\Repository\ObjectStateService::createObjectState
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testCreateObjectStateThrowsInvalidArgumentException()
+    {
+        $objectStateService = $this->repository->getObjectStateService();
+
+        $group = $objectStateService->loadObjectStateGroup( 2 );
+
+        $stateCreateStruct = $objectStateService->newObjectStateCreateStruct( 'not_locked' );
+        $stateCreateStruct->priority = 2;
+        $stateCreateStruct->defaultLanguageCode = 'eng-GB';
+        $stateCreateStruct->names = array( 'eng-GB' => 'Test' );
+        $stateCreateStruct->descriptions = array( 'eng-GB' => 'Test description' );
+
+        $objectStateService->createObjectState(
+            $group,
+            $stateCreateStruct
+        );
+    }
+
+    /**
      * Test service method for loading object state
      * @covers \eZ\Publish\API\Repository\ObjectStateService::loadObjectState
      */
@@ -653,6 +676,23 @@ abstract class ObjectStateBase extends BaseServiceTest
         );
 
         $this->assertEquals( $state->getObjectStateGroup()->id, $updatedState->getObjectStateGroup()->id );
+    }
+
+    /**
+     * Test service method for updating object state throwing InvalidArgumentException
+     * @covers \eZ\Publish\API\Repository\ObjectStateService::updateObjectState
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testUpdateObjectStateThrowsInvalidArgumentException()
+    {
+        $objectStateService = $this->repository->getObjectStateService();
+
+        $stateUpdateStruct = $objectStateService->newObjectStateUpdateStruct();
+        $stateUpdateStruct->identifier = 'locked';
+
+        $state = $objectStateService->loadObjectState( 1 );
+
+        $objectStateService->updateObjectState( $state, $stateUpdateStruct );
     }
 
     /**

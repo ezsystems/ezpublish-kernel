@@ -225,6 +225,7 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
      * set to this state.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create an object state
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the object state with provided identifier already exists in the same group
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct $objectStateCreateStruct
@@ -270,6 +271,7 @@ class ObjectStateService implements \eZ\Publish\API\Repository\ObjectStateServic
      * Updates an object state
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update an object state
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the object state with provided identifier already exists in the same group
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct $objectStateUpdateStruct

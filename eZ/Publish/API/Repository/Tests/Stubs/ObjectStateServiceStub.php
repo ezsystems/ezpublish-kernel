@@ -300,6 +300,7 @@ class ObjectStateServiceStub implements ObjectStateService
      * set to this state.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create an object state
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the object state with provided identifier already exists in the same group
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct $objectStateCreateStruct
@@ -311,6 +312,15 @@ class ObjectStateServiceStub implements ObjectStateService
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
             throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        foreach ( $this->states as $state )
+        {
+            if ( $state->identifier == $objectStateCreateStruct->identifier
+                 && $state->stateGroup->id == $objectStateGroup->id )
+            {
+                throw new Exceptions\InvalidArgumentExceptionStub( 'What error code should be used?' );
+            }
         }
 
         $stateData = array();
@@ -370,7 +380,9 @@ class ObjectStateServiceStub implements ObjectStateService
      * updates an object state
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update an object state
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the object state with provided identifier already exists in the same group
      *
+     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct $objectStateUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
@@ -380,6 +392,16 @@ class ObjectStateServiceStub implements ObjectStateService
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
             throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        foreach ( $this->states as $state )
+        {
+            if ( $state->identifier == $objectStateUpdateStruct->identifier
+                 && $state->stateGroup->id == $objectState->stateGroup->id
+                 && $state->id != $objectState->id )
+            {
+                throw new Exceptions\InvalidArgumentExceptionStub( 'What error code should be used?' );
+            }
         }
 
         $stateData = array(

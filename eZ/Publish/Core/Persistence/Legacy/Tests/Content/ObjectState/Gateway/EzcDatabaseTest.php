@@ -96,6 +96,34 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateDataByIdentifier
+     */
+    public function testLoadObjectStateDataByIdentifier()
+    {
+        $gateway = $this->getDatabaseGateway();
+
+        $result = $gateway->loadObjectStateDataByIdentifier( 'not_locked', 2 );
+
+        $this->assertEquals(
+            array(
+                array(
+                    'ezcobj_state_default_language_id' => 2,
+                    'ezcobj_state_group_id' => 2,
+                    'ezcobj_state_id' => 1,
+                    'ezcobj_state_identifier' => 'not_locked',
+                    'ezcobj_state_language_mask' => 3,
+                    'ezcobj_state_priority' => 0,
+                    'ezcobj_state_language_description' => '',
+                    'ezcobj_state_language_language_id' => 3,
+                    'ezcobj_state_language_name' => 'Not locked'
+                )
+            ),
+            $result
+        );
+    }
+
+    /**
+     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateListData
      */
     public function testLoadObjectStateListData()

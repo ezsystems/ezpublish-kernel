@@ -91,25 +91,31 @@ class ObjectState extends RestController
      */
     public function createObjectState()
     {
-        //@todo Error handling if identifier already exists
-        //Problem being, PAPI does not specify exception in that case
-
         $values = $this->urlHandler->parse( 'objectstates', $this->request->path );
 
         $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] );
 
+        try
+        {
+            $createdObjectState = $this->objectStateService->createObjectState(
+                $objectStateGroup,
+                $this->inputDispatcher->parse(
+                    new Message(
+                        array( 'Content-Type' => $this->request->contentType ),
+                        $this->request->body
+                    )
+                )
+            );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
+
         return new Values\CreatedObjectState(
             array(
                 'objectState' => new RestObjectState(
-                    $this->objectStateService->createObjectState(
-                        $objectStateGroup,
-                        $this->inputDispatcher->parse(
-                            new Message(
-                                array( 'Content-Type' => $this->request->contentType ),
-                                $this->request->body
-                            )
-                        )
-                    ),
+                    $createdObjectState,
                     $objectStateGroup->id
                 )
             )
@@ -234,9 +240,6 @@ class ObjectState extends RestController
      */
     public function updateObjectState()
     {
-        //@todo Error handling if identifier already exists
-        //Problem being, PAPI does not specify exception in that case
-
         $values = $this->urlHandler->parse( 'objectstate', $this->request->path );
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
@@ -244,13 +247,18 @@ class ObjectState extends RestController
                 $this->request->body
             )
         );
-        return new RestObjectState(
-            $this->objectStateService->updateObjectState(
-                $this->objectStateService->loadObjectState( $values['objectstate'] ),
-                $updateStruct
-            ),
-            $values['objectstategroup']
-        );
+
+        $objectState = $this->objectStateService->loadObjectState( $values['objectstate'] );
+
+        try
+        {
+            $updatedObjectState = $this->objectStateService->updateObjectState( $objectState, $updateStruct );
+            return new RestObjectState( $updatedObjectState, $values['objectstategroup'] );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
     }
 
     /**

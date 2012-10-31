@@ -288,6 +288,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      * set to this state.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create an object state
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the object state with provided identifier already exists in the same group
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct $objectStateCreateStruct
@@ -305,6 +306,19 @@ class ObjectStateService implements ObjectStateServiceInterface
             $objectStateCreateStruct->names,
             $objectStateCreateStruct->descriptions
         );
+
+        try
+        {
+            $this->objectStateHandler->loadByIdentifier( $inputStruct->identifier, $objectStateGroup->id );
+            throw new InvalidArgumentException(
+                "objectStateCreateStruct",
+                "Object state with provided identifier already exists in provided object state group"
+            );
+        }
+        catch ( APINotFoundException $e )
+        {
+            // Do nothing
+        }
 
         $this->repository->beginTransaction();
         try
@@ -357,6 +371,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      * Updates an object state
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update an object state
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the object state with provided identifier already exists in the same group
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct $objectStateUpdateStruct
@@ -380,6 +395,29 @@ class ObjectStateService implements ObjectStateServiceInterface
             $objectStateUpdateStruct->names,
             $objectStateUpdateStruct->descriptions
         );
+
+        if ( $objectStateUpdateStruct->identifier !== null )
+        {
+            try
+            {
+                $existingObjectState = $this->objectStateHandler->loadByIdentifier(
+                    $inputStruct->identifier,
+                    $loadedObjectState->getObjectStateGroup()->id
+                );
+
+                if ( $existingObjectState->id != $objectState->id )
+                {
+                    throw new InvalidArgumentException(
+                        "objectStateUpdateStruct",
+                        "Object state with provided identifier already exists in provided object state group"
+                    );
+                }
+            }
+            catch ( APINotFoundException $e )
+            {
+                // Do nothing
+            }
+        }
 
         $this->repository->beginTransaction();
         try

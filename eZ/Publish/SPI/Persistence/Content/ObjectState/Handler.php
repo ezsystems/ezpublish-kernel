@@ -106,6 +106,18 @@ interface Handler
     public function load( $stateId );
 
     /**
+     * Loads an object state by identifier and group it belongs to
+     *
+     * @param string $identifier
+     * @param mixed $groupId
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the state was not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
+     */
+    public function loadByIdentifier( $identifier, $groupId );
+
+    /**
      * Updates an object state
      *
      * @param mixed $stateId
