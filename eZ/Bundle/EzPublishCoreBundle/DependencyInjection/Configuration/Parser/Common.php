@@ -28,6 +28,7 @@ class Common extends AbstractParser
     {
         $nodeBuilder
             ->arrayNode( 'languages' )
+                ->cannotBeEmpty()
                 ->info( 'Available languages, in order of precedence' )
                 ->example( array( 'fre-FR', 'eng-GB' ) )
                 ->prototype( 'scalar' )->end()
