@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\InMemory;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface,
+    eZ\Publish\SPI\Persistence\Content\UrlAlias,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
@@ -48,16 +49,85 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      * languages.
      *
      * @param mixed $locationId
-     * @param mixed $parentLocationId
+     * @param mixed $parentLocationId In case of empty( $parentLocationId ), threat as root
      * @param string $name the new name computed by the name schema or url alias schema
      * @param string $languageCode
      * @param boolean $alwaysAvailable
      *
-     * @return void
+     * @return void Does not return the UrlAlias created / updated with type URLAlias::LOCATION
      */
     public function publishUrlAliasForLocation( $locationId, $parentLocationId, $name, $languageCode, $alwaysAvailable = false )
     {
-      throw new NotImplementedException( __METHOD__ );
+        // Get current url alias
+        $list = $this->backend->find(
+            'Content\\UrlAlias',
+            array(
+                'destination' => $locationId,
+                'type' => URLAlias::LOCATION,
+                'isHistory' => false,
+                'isCustom' => false
+            )
+        );
+
+        if ( isset( $list[1] ) )
+        {
+            throw new \RuntimeException( 'Found more then 1 url alias pointing to same location: ' . $locationId );
+        }
+        else if ( !empty( $list ) )// Mark as history and use pathData
+        {
+            /** @var \eZ\Publish\SPI\Persistence\Content\UrlAlias[] $list */
+            $this->backend->update( 'Content\\UrlAlias', $list[0]->id, array( 'isHistory' => true ) );
+            $pathData = $list[0]->pathData;
+            $pathIndex = count( $pathData ) -1;
+        }
+        else if ( empty( $parentLocationId ) )
+        {
+            $pathData = array( array( 'translations' => array() ) );
+            $pathIndex = 0;
+        }
+        else
+        {
+            // Get parent url alias for pathData use
+            $list = $this->backend->find(
+                'Content\\UrlAlias',
+                array(
+                    'destination' => $parentLocationId,
+                    'type' => URLAlias::LOCATION,
+                    'isHistory' => false,
+                    'isCustom' => false
+                )
+            );
+
+            if ( isset( $list[1] ) )
+                throw new \RuntimeException( 'Found more then 1 url alias pointing to same location: ' . $locationId );
+            else if ( empty( $list ) )
+                throw new \RuntimeException( "Did not find parent '{$parentLocationId}' for location:  {$locationId}" );
+
+            /** @var \eZ\Publish\SPI\Persistence\Content\UrlAlias[] $list */
+            $pathData = $list[0]->pathData;
+            $pathData[] = array( 'translations' => array() );
+            $pathIndex = count( $pathData ) -1;
+        }
+
+
+        // Update / Set PathData
+        $pathData[$pathIndex]['always-available'] = $alwaysAvailable;
+        $pathData[$pathIndex]['translations'][$languageCode] = $name;
+
+        // Saves the new url alias object
+        $this->backend->create(
+            'Content\\UrlAlias',
+            array(
+                'type' => URLAlias::LOCATION,
+                'destination' => $locationId,
+                'pathData' => $pathData,
+                'languageCodes' => array_keys( $pathData[$pathIndex]['translations'] ),
+                'alwaysAvailable' => $alwaysAvailable,
+                'isHistory' => false,
+                'isCustom' => false,
+                'forward' => false,
+            )
+        );
     }
 
     /**
@@ -72,11 +142,36 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      * @param string|null $languageName
      * @param boolean $alwaysAvailable
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
+     * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias With $type = URLAlias::LOCATION
      */
     public function createCustomUrlAlias( $locationId, $path, $forwarding = false, $languageName = null, $alwaysAvailable = false )
     {
-      throw new NotImplementedException( __METHOD__ );
+        if ( $languageName === null )
+            $languageName = 'eng-GB';// @todo Reuse settings used in Service layer here
+
+        $path = explode( '/', $path );
+        $pathData = array();
+        foreach ( $path as $pathItem )
+        {
+            $pathData[] = array(
+                'always-available' => $alwaysAvailable,
+                'translations' => array( $languageName => $pathItem )
+            );
+        }
+
+        return $this->backend->create(
+            'Content\\UrlAlias',
+            array(
+                'type' => URLAlias::LOCATION,
+                'destination' => $locationId,
+                'pathData' => $pathData,
+                'languageCodes' => array( $languageName ),
+                'alwaysAvailable' => $alwaysAvailable,
+                'isHistory' => false,
+                'isCustom' => true,
+                'forward' => $forwarding,
+            )
+        );
     }
 
     /**
@@ -93,11 +188,36 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      * @param string|null $languageName
      * @param boolean $alwaysAvailable
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
+     * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias With $type = URLAlias::RESOURCE
      */
     public function createGlobalUrlAlias( $resource, $path, $forwarding = false, $languageName = null, $alwaysAvailable = false )
     {
-      throw new NotImplementedException( __METHOD__ );
+        if ( $languageName === null )
+            $languageName = 'eng-GB';// @todo Reuse settings used in Service layer here
+
+        $path = explode( '/', $path );
+        $pathData = array();
+        foreach ( $path as $pathItem )
+        {
+            $pathData[] = array(
+                'always-available' => $alwaysAvailable,
+                'translations' => array( $languageName => $pathItem )
+            );
+        }
+
+        return $this->backend->create(
+            'Content\\UrlAlias',
+            array(
+                'type' => URLAlias::RESOURCE,
+                'destination' => $resource,
+                'pathData' => $pathData,
+                'languageCodes' => array( $languageName ),
+                'alwaysAvailable' => $alwaysAvailable,
+                'isHistory' => false,
+                'isCustom' => true,
+                'forward' => $forwarding,
+            )
+        );
     }
 
     /**
@@ -111,7 +231,24 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      */
     public function listGlobalURLAliases( $languageCode = null, $offset = 0, $limit = -1 )
     {
-        throw new NotImplementedException( __METHOD__ );
+        $filter = array(
+            'type' => URLAlias::RESOURCE,
+            'isHistory' => false,
+            'isCustom' => true
+        );
+
+        if ( $languageCode !== null )
+            $filter['languageCode'] = $languageCode;
+
+        $list = $this->backend->find(
+            'Content\\UrlAlias',
+            $filter
+        );
+
+        if ( empty( $list ) || ( $offset === 0 && $limit === -1 ) )
+            return $list;
+
+        return array_slice( $list, $offset, ( $limit === -1 ? null : $limit ) );
     }
 
     /**
@@ -124,7 +261,14 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      */
     public function listURLAliasesForLocation( $locationId, $custom = false )
     {
-        throw new NotImplementedException( __METHOD__ );
+        return $this->backend->find(
+            'Content\\UrlAlias',
+            array(
+                'destination' => $locationId,
+                'type' => URLAlias::LOCATION,
+                'isCustom' => $custom
+            )
+        );
     }
 
     /**
@@ -138,7 +282,16 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      */
     public function removeURLAliases( array $urlAliases )
     {
-      throw new NotImplementedException( __METHOD__ );
+        foreach ( $urlAliases as $index => $urlAlias )
+        {
+            if ( !$urlAlias instanceof UrlAlias )
+                throw new \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException( "\$urlAliases[$index]", 'Expected UrlAlias instance' );
+
+            if ( !$urlAlias->isCustom )
+                continue;
+
+            $this->backend->delete( 'Content\\UrlAlias', $urlAlias->id );
+        }
     }
 
     /**
@@ -152,7 +305,44 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      */
     public function lookup( $url )
     {
-      throw new NotImplementedException( __METHOD__ );
+        $paths = explode( '/', $url );
+
+        /**
+         * @var \eZ\Publish\SPI\Persistence\Content\UrlAlias[] $urlAliases
+         */
+        $urlAliases = array_reverse( $this->backend->find( 'Content\\UrlAlias' ), true );
+        foreach ( $urlAliases as $urlAlias )
+        {
+            foreach ( $paths as $index => $path )
+            {
+                // skip if url alias does not have this depth
+                if ( empty( $urlAlias->pathData[$index]['translations'] ) )
+                    continue 2;
+
+                // check path against translations in a case in-sensitive manner
+                $match = false;
+                foreach ( $urlAlias->pathData[$index]['translations'] as $translatedPath )
+                {
+                    if ( strcasecmp( $path, $translatedPath ) === 0 )
+                    {
+                        $match = true;
+                        break;
+                    }
+                }
+
+                if ( !$match )
+                    continue 2;
+            }
+
+            // skip if url alias has paths on a deeper depth then what $url has
+            if ( isset( $urlAlias->pathData[$index +1]['translations'] ) )
+                continue;
+
+            // This urlAlias seems to match, return it
+            return $urlAlias;
+        }
+
+        throw new NotFoundException( 'UrlAlias', $url );
     }
 
     /**
@@ -166,7 +356,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      */
     public function loadUrlAlias( $id )
     {
-        throw new NotImplementedException( __METHOD__ );
+        return $this->backend->load( 'Content\\UrlAlias', $id );
     }
 
     /**
@@ -180,7 +370,62 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      */
     public function locationMoved( $locationId, $oldParentId, $newParentId )
     {
-      throw new NotImplementedException( __METHOD__ );
+        // Get url alias for location
+        $list = $this->backend->find(
+            'Content\\UrlAlias',
+            array(
+                'destination' => $locationId,
+                'type' => URLAlias::LOCATION,
+                'isHistory' => false,
+                'isCustom' => false
+            )
+        );
+
+        if ( isset( $list[1] ) )
+            throw new \RuntimeException( 'Found more then 1 url alias pointing to same location: ' . $locationId );
+        else if ( empty( $list ) )
+            throw new \RuntimeException( "Did not find any url alias for location:  {$locationId}" );
+
+        // Mark as history and use pathData form existing location
+        /** @var \eZ\Publish\SPI\Persistence\Content\UrlAlias[] $list */
+        $this->backend->update( 'Content\\UrlAlias', $list[0]->id, array( 'isHistory' => true ) );
+        $pathItem = array_pop( $list[0]->pathData );
+
+        // Get url alias for new parent location
+        $list = $this->backend->find(
+            'Content\\UrlAlias',
+            array(
+                'destination' => $newParentId,
+                'type' => URLAlias::LOCATION,
+                'isHistory' => false,
+                'isCustom' => false
+            )
+        );
+
+        if ( isset( $list[1] ) )
+            throw new \RuntimeException( 'Found more then 1 url alias pointing to same location: ' . $newParentId );
+        else if ( empty( $list ) )
+            throw new \RuntimeException( "Did not find any url alias for new parent location:  {$newParentId}" );
+
+        // Make path data based on new location and the original
+        $pathData = $list[0]->pathData;
+        $pathData[] = $pathItem;
+        $pathIndex = count( $pathData ) -1;
+
+         // Create the new url alias object
+        $this->backend->create(
+            'Content\\UrlAlias',
+            array(
+                'type' => URLAlias::LOCATION,
+                'destination' => $locationId,
+                'pathData' => $pathData,
+                'languageCodes' => array_keys( $pathData[$pathIndex]['translations'] ),
+                'alwaysAvailable' => $pathData[$pathIndex]['always-available'],
+                'isHistory' => false,
+                'isCustom' => false,
+                'forward' => false,
+            )
+        );
     }
 
     /**
@@ -194,7 +439,61 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      */
     public function locationCopied( $locationId, $oldParentId, $newParentId )
     {
-      throw new NotImplementedException( __METHOD__ );
+        // Get url alias for location
+        $list = $this->backend->find(
+            'Content\\UrlAlias',
+            array(
+                'destination' => $locationId,
+                'type' => URLAlias::LOCATION,
+                'isHistory' => false,
+                'isCustom' => false
+            )
+        );
+
+        if ( isset( $list[1] ) )
+            throw new \RuntimeException( 'Found more then 1 url alias pointing to same location: ' . $locationId );
+        else if ( empty( $list ) )
+            throw new \RuntimeException( "Did not find any url alias for location:  {$locationId}" );
+
+        // Use pathData from existing location
+        /** @var \eZ\Publish\SPI\Persistence\Content\UrlAlias[] $list */
+        $pathItem = array_pop( $list[0]->pathData );
+
+        // Get url alias for new parent location
+        $list = $this->backend->find(
+            'Content\\UrlAlias',
+            array(
+                'destination' => $newParentId,
+                'type' => URLAlias::LOCATION,
+                'isHistory' => false,
+                'isCustom' => false
+            )
+        );
+
+        if ( isset( $list[1] ) )
+            throw new \RuntimeException( 'Found more then 1 url alias pointing to same location: ' . $newParentId );
+        else if ( empty( $list ) )
+            throw new \RuntimeException( "Did not find any url alias for new parent location:  {$newParentId}" );
+
+        // Make path data based on new location and the original
+        $pathData = $list[0]->pathData;
+        $pathData[] = $pathItem;
+        $pathIndex = count( $pathData ) -1;
+
+        // Create the new url alias object
+        $this->backend->create(
+            'Content\\UrlAlias',
+            array(
+                'type' => URLAlias::LOCATION,
+                'destination' => $locationId,
+                'pathData' => $pathData,
+                'languageCodes' => array_keys( $pathData[$pathIndex]['translations'] ),
+                'alwaysAvailable' => $pathData[$pathIndex]['always-available'],
+                'isHistory' => false,
+                'isCustom' => false,
+                'forward' => false,
+            )
+        );
     }
 
     /**
@@ -204,6 +503,6 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      */
     public function locationDeleted( $locationId )
     {
-        throw new NotImplementedException( __METHOD__ );
+        $this->backend->deleteByMatch( 'Content\\UrlAlias', array( 'destination' => $locationId ) );
     }
 }

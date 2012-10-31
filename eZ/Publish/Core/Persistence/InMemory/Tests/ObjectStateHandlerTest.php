@@ -226,7 +226,7 @@ class ObjectStateHandlerTest extends HandlerTest
         $this->assertEquals( array( 'eng-US' => 'Test description' ), $createdState->description );
         $this->assertEquals( 0, $createdState->priority );
 
-        $this->assertEquals( 7, $this->handler->getContentCount( $createdState->id ) );
+        $this->assertEquals( $this->handler->getContentCount( 1 ), $this->handler->getContentCount( $createdState->id ) );
     }
 
     /**
@@ -295,8 +295,8 @@ class ObjectStateHandlerTest extends HandlerTest
      */
     public function testDelete()
     {
+        $expectedCount = $this->handler->getContentCount( 1 );
         $this->handler->delete( 1 );
-
         try
         {
             $this->handler->load( 1 );
@@ -308,7 +308,7 @@ class ObjectStateHandlerTest extends HandlerTest
         }
 
         $this->assertEquals( 0, $this->handler->getContentCount( 1 ) );
-        $this->assertEquals( 7, $this->handler->getContentCount( 2 ) );
+        $this->assertEquals( $expectedCount, $this->handler->getContentCount( 2 ) );
     }
 
     /**
@@ -351,8 +351,8 @@ class ObjectStateHandlerTest extends HandlerTest
     {
         $count = $this->handler->getContentCount( 1 );
 
-        // 7 is the count of objects in test fixtures
-        $this->assertEquals( 7, $count );
+        // 9 is the count of objects in test fixtures as of writing
+        $this->assertGreaterThanOrEqual( 9, $count );
     }
 
     /**
