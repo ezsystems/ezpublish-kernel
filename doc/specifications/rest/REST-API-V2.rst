@@ -113,7 +113,7 @@ Authentication
 Basic Authentication
 --------------------
 
-See http://tools.ietf.org/html/rfc261
+See http://tools.ietf.org/html/rfc2617
 
 OAuth
 -----
