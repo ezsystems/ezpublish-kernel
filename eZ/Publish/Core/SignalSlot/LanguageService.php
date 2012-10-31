@@ -8,7 +8,15 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
-use \eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
+
+use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
+use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\Core\SignalSlot\Signal\LanguageService\CreateLanguageSignal;
+use eZ\Publish\Core\SignalSlot\Signal\LanguageService\UpdateLanguageNameSignal;
+use eZ\Publish\Core\SignalSlot\Signal\LanguageService\EnableLanguageSignal;
+use eZ\Publish\Core\SignalSlot\Signal\LanguageService\DisableLanguageSignal;
+use eZ\Publish\Core\SignalSlot\Signal\LanguageService\DeleteLanguageSignal;
 
 /**
  * LanguageService class
@@ -55,13 +63,15 @@ class LanguageService implements LanguageServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
      */
-    public function createLanguage( \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct $languageCreateStruct )
+    public function createLanguage( LanguageCreateStruct $languageCreateStruct )
     {
         $returnValue = $this->service->createLanguage( $languageCreateStruct );
         $this->signalDispatcher->emit(
-            new Signal\LanguageService\CreateLanguageSignal( array(
-                'languageId' => $returnValue->id,
-            ) )
+            new CreateLanguageSignal(
+                array(
+                    'languageId' => $returnValue->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -76,14 +86,16 @@ class LanguageService implements LanguageServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
      */
-    public function updateLanguageName( \eZ\Publish\API\Repository\Values\Content\Language $language, $newName )
+    public function updateLanguageName( Language $language, $newName )
     {
         $returnValue = $this->service->updateLanguageName( $language, $newName );
         $this->signalDispatcher->emit(
-            new Signal\LanguageService\UpdateLanguageNameSignal( array(
-                'languageId' => $language->id,
-                'newName' => $newName,
-            ) )
+            new UpdateLanguageNameSignal(
+                array(
+                    'languageId' => $language->id,
+                    'newName' => $newName,
+                )
+            )
         );
         return $returnValue;
     }
@@ -97,13 +109,15 @@ class LanguageService implements LanguageServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
      */
-    public function enableLanguage( \eZ\Publish\API\Repository\Values\Content\Language $language )
+    public function enableLanguage( Language $language )
     {
         $returnValue = $this->service->enableLanguage( $language );
         $this->signalDispatcher->emit(
-            new Signal\LanguageService\EnableLanguageSignal( array(
-                'languageId' => $language->id,
-            ) )
+            new EnableLanguageSignal(
+                array(
+                    'languageId' => $language->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -117,13 +131,15 @@ class LanguageService implements LanguageServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
      */
-    public function disableLanguage( \eZ\Publish\API\Repository\Values\Content\Language $language )
+    public function disableLanguage( Language $language )
     {
         $returnValue = $this->service->disableLanguage( $language );
         $this->signalDispatcher->emit(
-            new Signal\LanguageService\DisableLanguageSignal( array(
-                'languageId' => $language->id,
-            ) )
+            new DisableLanguageSignal(
+                array(
+                    'languageId' => $language->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -139,8 +155,7 @@ class LanguageService implements LanguageServiceInterface
      */
     public function loadLanguage( $languageCode )
     {
-        $returnValue = $this->service->loadLanguage( $languageCode );
-        return $returnValue;
+        return $this->service->loadLanguage( $languageCode );
     }
 
     /**
@@ -150,8 +165,7 @@ class LanguageService implements LanguageServiceInterface
      */
     public function loadLanguages()
     {
-        $returnValue = $this->service->loadLanguages();
-        return $returnValue;
+        return $this->service->loadLanguages();
     }
 
     /**
@@ -165,8 +179,7 @@ class LanguageService implements LanguageServiceInterface
      */
     public function loadLanguageById( $languageId )
     {
-        $returnValue = $this->service->loadLanguageById( $languageId );
-        return $returnValue;
+        return $this->service->loadLanguageById( $languageId );
     }
 
     /**
@@ -179,13 +192,15 @@ class LanguageService implements LanguageServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
      */
-    public function deleteLanguage( \eZ\Publish\API\Repository\Values\Content\Language $language )
+    public function deleteLanguage( Language $language )
     {
         $returnValue = $this->service->deleteLanguage( $language );
         $this->signalDispatcher->emit(
-            new Signal\LanguageService\DeleteLanguageSignal( array(
-                'languageId' => $language->id,
-            ) )
+            new DeleteLanguageSignal(
+                array(
+                    'languageId' => $language->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -197,8 +212,7 @@ class LanguageService implements LanguageServiceInterface
      */
     public function getDefaultLanguageCode()
     {
-        $returnValue = $this->service->getDefaultLanguageCode();
-        return $returnValue;
+        return $this->service->getDefaultLanguageCode();
     }
 
     /**
@@ -208,8 +222,6 @@ class LanguageService implements LanguageServiceInterface
      */
     public function newLanguageCreateStruct()
     {
-        $returnValue = $this->service->newLanguageCreateStruct();
-        return $returnValue;
+        return $this->service->newLanguageCreateStruct();
     }
-
 }

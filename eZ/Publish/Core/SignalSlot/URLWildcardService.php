@@ -8,7 +8,12 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
-use \eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
+
+use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
+use eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use eZ\Publish\Core\SignalSlot\Signal\URLWildcardService\CreateSignal;
+use eZ\Publish\Core\SignalSlot\Signal\URLWildcardService\RemoveSignal;
+use eZ\Publish\Core\SignalSlot\Signal\URLWildcardService\TranslateSignal;
 
 /**
  * URLWildcardService class
@@ -64,9 +69,11 @@ class URLWildcardService implements URLWildcardServiceInterface
     {
         $returnValue = $this->service->create( $sourceUrl, $destinationUrl, $forward );
         $this->signalDispatcher->emit(
-            new Signal\URLWildcardService\CreateSignal( array(
-                'urlWildcardId' => $returnValue->id,
-            ) )
+            new CreateSignal(
+                array(
+                    'urlWildcardId' => $returnValue->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -76,15 +83,17 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to remove url wildcards
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\UrlWildcard $urlWildcard the url wildcard to remove
+     * @param \eZ\Publish\API\Repository\Values\Content\URLWildcard $urlWildcard the url wildcard to remove
      */
-    public function remove( \eZ\Publish\API\Repository\Values\Content\URLWildcard $urlWildcard )
+    public function remove( URLWildcard $urlWildcard )
     {
         $returnValue = $this->service->remove( $urlWildcard );
         $this->signalDispatcher->emit(
-            new Signal\URLWildcardService\RemoveSignal( array(
-                'urlWildcardId' => $urlWildcard->id,
-            ) )
+            new RemoveSignal(
+                array(
+                    'urlWildcardId' => $urlWildcard->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -101,8 +110,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     public function load( $id )
     {
-        $returnValue = $this->service->load( $id );
-        return $returnValue;
+        return $this->service->load( $id );
     }
 
     /**
@@ -115,8 +123,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     public function loadAll( $offset = 0, $limit = -1 )
     {
-        $returnValue = $this->service->loadAll( $offset, $limit );
-        return $returnValue;
+        return $this->service->loadAll( $offset, $limit );
     }
 
     /**
@@ -136,11 +143,12 @@ class URLWildcardService implements URLWildcardServiceInterface
     {
         $returnValue = $this->service->translate( $url );
         $this->signalDispatcher->emit(
-            new Signal\URLWildcardService\TranslateSignal( array(
-                'url' => $url,
-            ) )
+            new TranslateSignal(
+                array(
+                    'url' => $url,
+                )
+            )
         );
         return $returnValue;
     }
-
 }

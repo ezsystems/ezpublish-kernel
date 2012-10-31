@@ -8,7 +8,15 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
-use \eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
+
+use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
+use eZ\Publish\API\Repository\Values\Content\TrashItem;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\Core\SignalSlot\Signal\TrashService\TrashSignal;
+use eZ\Publish\Core\SignalSlot\Signal\TrashService\RecoverSignal;
+use eZ\Publish\Core\SignalSlot\Signal\TrashService\EmptyTrashSignal;
+use eZ\Publish\Core\SignalSlot\Signal\TrashService\DeleteTrashItemSignal;
 
 /**
  * TrashService class
@@ -59,8 +67,7 @@ class TrashService implements TrashServiceInterface
      */
     public function loadTrashItem( $trashItemId )
     {
-        $returnValue = $this->service->loadTrashItem( $trashItemId );
-        return $returnValue;
+        return $this->service->loadTrashItem( $trashItemId );
     }
 
     /**
@@ -74,13 +81,15 @@ class TrashService implements TrashServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
-    public function trash( \eZ\Publish\API\Repository\Values\Content\Location $location )
+    public function trash( Location $location )
     {
         $returnValue = $this->service->trash( $location );
         $this->signalDispatcher->emit(
-            new Signal\TrashService\TrashSignal( array(
-                'locationId' => $location->id,
-            ) )
+            new TrashSignal(
+                array(
+                    'locationId' => $location->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -97,14 +106,16 @@ class TrashService implements TrashServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created or recovered location
      */
-    public function recover( \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem, \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation = null )
+    public function recover( TrashItem $trashItem, Location $newParentLocation = null )
     {
         $returnValue = $this->service->recover( $trashItem, $newParentLocation );
         $this->signalDispatcher->emit(
-            new Signal\TrashService\RecoverSignal( array(
-                'trashItemId' => $trashItem->id,
-                'newParentLocationId' => ( $newParentLocation !== null ? $newParentLocation->id : null ),
-            ) )
+            new RecoverSignal(
+                array(
+                    'trashItemId' => $trashItem->id,
+                    'newParentLocationId' => $newParentLocation !== null ? $newParentLocation->id : null,
+                )
+            )
         );
         return $returnValue;
     }
@@ -121,9 +132,7 @@ class TrashService implements TrashServiceInterface
     {
         $returnValue = $this->service->emptyTrash();
         $this->signalDispatcher->emit(
-            new Signal\TrashService\EmptyTrashSignal( array(
-            ) )
-        );
+            new EmptyTrashSignal( array() ) );
         return $returnValue;
     }
 
@@ -136,13 +145,15 @@ class TrashService implements TrashServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
      */
-    public function deleteTrashItem( \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem )
+    public function deleteTrashItem( TrashItem $trashItem )
     {
         $returnValue = $this->service->deleteTrashItem( $trashItem );
         $this->signalDispatcher->emit(
-            new Signal\TrashService\DeleteTrashItemSignal( array(
-                'trashItemId' => $trashItem->id,
-            ) )
+            new DeleteTrashItemSignal(
+                array(
+                    'trashItemId' => $trashItem->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -156,10 +167,8 @@ class TrashService implements TrashServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
      */
-    public function findTrashItems( \eZ\Publish\API\Repository\Values\Content\Query $query )
+    public function findTrashItems( Query $query )
     {
-        $returnValue = $this->service->findTrashItems( $query );
-        return $returnValue;
+        return $this->service->findTrashItems( $query );
     }
-
 }

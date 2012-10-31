@@ -8,7 +8,12 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
-use \eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
+
+use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
+use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\Section;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 /**
  * SectionService class
@@ -55,13 +60,15 @@ class SectionService implements SectionServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section The newly create section
      */
-    public function createSection( \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct $sectionCreateStruct )
+    public function createSection( SectionCreateStruct $sectionCreateStruct )
     {
         $returnValue = $this->service->createSection( $sectionCreateStruct );
         $this->signalDispatcher->emit(
-            new Signal\SectionService\CreateSectionSignal( array(
-                'sectionId' => $returnValue->id,
-            ) )
+            new Signal\SectionService\CreateSectionSignal(
+                array(
+                    'sectionId' => $returnValue->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -77,13 +84,15 @@ class SectionService implements SectionServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function updateSection( \eZ\Publish\API\Repository\Values\Content\Section $section, \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct $sectionUpdateStruct )
+    public function updateSection( Section $section, SectionUpdateStruct $sectionUpdateStruct )
     {
         $returnValue = $this->service->updateSection( $section, $sectionUpdateStruct );
         $this->signalDispatcher->emit(
-            new Signal\SectionService\UpdateSectionSignal( array(
-                'sectionId' => $section->id,
-            ) )
+            new Signal\SectionService\UpdateSectionSignal(
+                array(
+                    'sectionId' => $section->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -100,8 +109,7 @@ class SectionService implements SectionServiceInterface
      */
     public function loadSection( $sectionId )
     {
-        $returnValue = $this->service->loadSection( $sectionId );
-        return $returnValue;
+        return $this->service->loadSection( $sectionId );
     }
 
     /**
@@ -113,8 +121,7 @@ class SectionService implements SectionServiceInterface
      */
     public function loadSections()
     {
-        $returnValue = $this->service->loadSections();
-        return $returnValue;
+        return $this->service->loadSections();
     }
 
     /**
@@ -129,8 +136,7 @@ class SectionService implements SectionServiceInterface
      */
     public function loadSectionByIdentifier( $sectionIdentifier )
     {
-        $returnValue = $this->service->loadSectionByIdentifier( $sectionIdentifier );
-        return $returnValue;
+        return $this->service->loadSectionByIdentifier( $sectionIdentifier );
     }
 
     /**
@@ -140,10 +146,9 @@ class SectionService implements SectionServiceInterface
      *
      * @return int
      */
-    public function countAssignedContents( \eZ\Publish\API\Repository\Values\Content\Section $section )
+    public function countAssignedContents( Section $section )
     {
-        $returnValue = $this->service->countAssignedContents( $section );
-        return $returnValue;
+        return $this->service->countAssignedContents( $section );
     }
 
     /**
@@ -155,14 +160,16 @@ class SectionService implements SectionServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      */
-    public function assignSection( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, \eZ\Publish\API\Repository\Values\Content\Section $section )
+    public function assignSection( ContentInfo $contentInfo, Section $section )
     {
         $returnValue = $this->service->assignSection( $contentInfo, $section );
         $this->signalDispatcher->emit(
-            new Signal\SectionService\AssignSectionSignal( array(
-                'contentId' => $contentInfo->id,
-                'sectionId' => $section->id,
-            ) )
+            new Signal\SectionService\AssignSectionSignal(
+                array(
+                    'contentId' => $contentInfo->id,
+                    'sectionId' => $section->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -177,13 +184,15 @@ class SectionService implements SectionServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      */
-    public function deleteSection( \eZ\Publish\API\Repository\Values\Content\Section $section )
+    public function deleteSection( Section $section )
     {
         $returnValue = $this->service->deleteSection( $section );
         $this->signalDispatcher->emit(
-            new Signal\SectionService\DeleteSectionSignal( array(
-                'sectionId' => $section->id,
-            ) )
+            new Signal\SectionService\DeleteSectionSignal(
+                array(
+                    'sectionId' => $section->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -195,8 +204,7 @@ class SectionService implements SectionServiceInterface
      */
     public function newSectionCreateStruct()
     {
-        $returnValue = $this->service->newSectionCreateStruct();
-        return $returnValue;
+        return $this->service->newSectionCreateStruct();
     }
 
     /**
@@ -206,8 +214,6 @@ class SectionService implements SectionServiceInterface
      */
     public function newSectionUpdateStruct()
     {
-        $returnValue = $this->service->newSectionUpdateStruct();
-        return $returnValue;
+        return $this->service->newSectionUpdateStruct();
     }
-
 }

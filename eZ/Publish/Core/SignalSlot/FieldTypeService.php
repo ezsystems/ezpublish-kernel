@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
+
 use \eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
 
 /**
@@ -52,8 +53,7 @@ class FieldTypeService implements FieldTypeServiceInterface
      */
     public function getFieldTypes()
     {
-        $returnValue = $this->service->getFieldTypes();
-        return $returnValue;
+        return $this->service->getFieldTypes();
     }
 
     /**
@@ -66,8 +66,7 @@ class FieldTypeService implements FieldTypeServiceInterface
      */
     public function getFieldType( $identifier )
     {
-        $returnValue = $this->service->getFieldType( $identifier );
-        return $returnValue;
+        return $this->service->getFieldType( $identifier );
     }
 
     /**
@@ -78,8 +77,6 @@ class FieldTypeService implements FieldTypeServiceInterface
      */
     public function hasFieldType( $identifier )
     {
-        $returnValue = $this->service->hasFieldType( $identifier );
-        return $returnValue;
+        return $this->service->hasFieldType( $identifier );
     }
-
 }

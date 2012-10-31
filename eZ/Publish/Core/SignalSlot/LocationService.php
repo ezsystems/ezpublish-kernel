@@ -8,7 +8,20 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
-use \eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
+
+use eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
+use eZ\Publish\Core\SignalSlot\Signal\LocationService\CopySubtreeSignal;
+use eZ\Publish\Core\SignalSlot\Signal\LocationService\CreateLocationSignal;
+use eZ\Publish\Core\SignalSlot\Signal\LocationService\UpdateLocationSignal;
+use eZ\Publish\Core\SignalSlot\Signal\LocationService\SwapLocationSignal;
+use eZ\Publish\Core\SignalSlot\Signal\LocationService\HideLocationSignal;
+use eZ\Publish\Core\SignalSlot\Signal\LocationService\UnhideLocationSignal;
+use eZ\Publish\Core\SignalSlot\Signal\LocationService\MoveSubtreeSignal;
+use eZ\Publish\Core\SignalSlot\Signal\LocationService\DeleteLocationSignal;
 
 /**
  * LocationService class
@@ -61,14 +74,16 @@ class LocationService implements LocationServiceInterface
      * @todo enhancement - this method should return a result structure containing the new location and a list
      *       of locations which are not copied due to permission denials.
      */
-    public function copySubtree( \eZ\Publish\API\Repository\Values\Content\Location $subtree, \eZ\Publish\API\Repository\Values\Content\Location $targetParentLocation )
+    public function copySubtree( Location $subtree, Location $targetParentLocation )
     {
         $returnValue = $this->service->copySubtree( $subtree, $targetParentLocation );
         $this->signalDispatcher->emit(
-            new Signal\LocationService\CopySubtreeSignal( array(
-                'subtreeId' => $subtree->id,
-                'targetParentLocationId' => $targetParentLocation->id,
-            ) )
+            new CopySubtreeSignal(
+                array(
+                    'subtreeId' => $subtree->id,
+                    'targetParentLocationId' => $targetParentLocation->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -85,8 +100,7 @@ class LocationService implements LocationServiceInterface
      */
     public function loadLocation( $locationId )
     {
-        $returnValue = $this->service->loadLocation( $locationId );
-        return $returnValue;
+        return $this->service->loadLocation( $locationId );
     }
 
     /**
@@ -101,8 +115,7 @@ class LocationService implements LocationServiceInterface
      */
     public function loadLocationByRemoteId( $remoteId )
     {
-        $returnValue = $this->service->loadLocationByRemoteId( $remoteId );
-        return $returnValue;
+        return $this->service->loadLocationByRemoteId( $remoteId );
     }
 
     /**
@@ -118,10 +131,9 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[] An array of {@link Location}
      */
-    public function loadLocations( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, \eZ\Publish\API\Repository\Values\Content\Location $rootLocation = null )
+    public function loadLocations( ContentInfo $contentInfo, Location $rootLocation = null )
     {
-        $returnValue = $this->service->loadLocations( $contentInfo, $rootLocation );
-        return $returnValue;
+        return $this->service->loadLocations( $contentInfo, $rootLocation );
     }
 
     /**
@@ -134,10 +146,9 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[] Of {@link Location}
      */
-    public function loadLocationChildren( \eZ\Publish\API\Repository\Values\Content\Location $location, $offset = 0, $limit = -1 )
+    public function loadLocationChildren( Location $location, $offset = 0, $limit = -1 )
     {
-        $returnValue = $this->service->loadLocationChildren( $location, $offset, $limit );
-        return $returnValue;
+        return $this->service->loadLocationChildren( $location, $offset, $limit );
     }
 
     /**
@@ -154,14 +165,16 @@ class LocationService implements LocationServiceInterface
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created Location
      *
      */
-    public function createLocation( \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo, \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $locationCreateStruct )
+    public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
     {
         $returnValue = $this->service->createLocation( $contentInfo, $locationCreateStruct );
         $this->signalDispatcher->emit(
-            new Signal\LocationService\CreateLocationSignal( array(
-                'contentId' => $contentInfo->id,
-                'locationId' => $returnValue->id,
-            ) )
+            new CreateLocationSignal(
+                array(
+                    'contentId' => $contentInfo->id,
+                    'locationId' => $returnValue->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -177,14 +190,16 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the updated Location
      */
-    public function updateLocation( \eZ\Publish\API\Repository\Values\Content\Location $location, \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct $locationUpdateStruct )
+    public function updateLocation( Location $location, LocationUpdateStruct $locationUpdateStruct )
     {
         $returnValue = $this->service->updateLocation( $location, $locationUpdateStruct );
         $this->signalDispatcher->emit(
-            new Signal\LocationService\UpdateLocationSignal( array(
-                'contentId' => $location->contentId,
-                'locationId' => $location->id,
-            ) )
+            new UpdateLocationSignal(
+                array(
+                    'contentId' => $location->contentId,
+                    'locationId' => $location->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -197,16 +212,18 @@ class LocationService implements LocationServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location1
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location2
      */
-    public function swapLocation( \eZ\Publish\API\Repository\Values\Content\Location $location1, \eZ\Publish\API\Repository\Values\Content\Location $location2 )
+    public function swapLocation( Location $location1, Location $location2 )
     {
         $returnValue = $this->service->swapLocation( $location1, $location2 );
         $this->signalDispatcher->emit(
-            new Signal\LocationService\SwapLocationSignal( array(
-                'location1Id' => $location1->id,
-                'content1Id' => $location1->contentId,
-                'location2Id' => $location2->id,
-                'content2Id' => $location2->contentId,
-            ) )
+            new SwapLocationSignal(
+                array(
+                    'location1Id' => $location1->id,
+                    'content1Id' => $location1->contentId,
+                    'location2Id' => $location2->id,
+                    'content2Id' => $location2->contentId,
+                )
+            )
         );
         return $returnValue;
     }
@@ -220,13 +237,15 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location $location, with updated hidden value
      */
-    public function hideLocation( \eZ\Publish\API\Repository\Values\Content\Location $location )
+    public function hideLocation( Location $location )
     {
         $returnValue = $this->service->hideLocation( $location );
         $this->signalDispatcher->emit(
-            new Signal\LocationService\HideLocationSignal( array(
-                'locationId' => $location->id,
-            ) )
+            new HideLocationSignal(
+                array(
+                    'locationId' => $location->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -243,13 +262,15 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location $location, with updated hidden value
      */
-    public function unhideLocation( \eZ\Publish\API\Repository\Values\Content\Location $location )
+    public function unhideLocation( Location $location )
     {
         $returnValue = $this->service->unhideLocation( $location );
         $this->signalDispatcher->emit(
-            new Signal\LocationService\UnhideLocationSignal( array(
-                'locationId' => $location->id,
-            ) )
+            new UnhideLocationSignal(
+                array(
+                    'locationId' => $location->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -265,14 +286,16 @@ class LocationService implements LocationServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
      */
-    public function moveSubtree( \eZ\Publish\API\Repository\Values\Content\Location $location, \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation )
+    public function moveSubtree( Location $location, Location $newParentLocation )
     {
         $returnValue = $this->service->moveSubtree( $location, $newParentLocation );
         $this->signalDispatcher->emit(
-            new Signal\LocationService\MoveSubtreeSignal( array(
-                'locationId' => $location->id,
-                'newParentLocationId' => $newParentLocation->id,
-            ) )
+            new MoveSubtreeSignal(
+                array(
+                    'locationId' => $location->id,
+                    'newParentLocationId' => $newParentLocation->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -284,14 +307,16 @@ class LocationService implements LocationServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      */
-    public function deleteLocation( \eZ\Publish\API\Repository\Values\Content\Location $location )
+    public function deleteLocation( Location $location )
     {
         $returnValue = $this->service->deleteLocation( $location );
         $this->signalDispatcher->emit(
-            new Signal\LocationService\DeleteLocationSignal( array(
-                'contentId' => $location->contentId,
-                'locationId' => $location->id,
-            ) )
+            new DeleteLocationSignal(
+                array(
+                    'contentId' => $location->contentId,
+                    'locationId' => $location->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -305,8 +330,7 @@ class LocationService implements LocationServiceInterface
      */
     public function newLocationCreateStruct( $parentLocationId )
     {
-        $returnValue = $this->service->newLocationCreateStruct( $parentLocationId );
-        return $returnValue;
+        return $this->service->newLocationCreateStruct( $parentLocationId );
     }
 
     /**
@@ -316,8 +340,6 @@ class LocationService implements LocationServiceInterface
      */
     public function newLocationUpdateStruct()
     {
-        $returnValue = $this->service->newLocationUpdateStruct();
-        return $returnValue;
+        return $this->service->newLocationUpdateStruct();
     }
-
 }

@@ -8,7 +8,12 @@
  */
 
 namespace eZ\Publish\Core\SignalSlot;
-use \eZ\Publish\API\Repository\UserService as UserServiceInterface;
+
+use eZ\Publish\API\Repository\UserService as UserServiceInterface;
+use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
+use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
+use eZ\Publish\API\Repository\Values\User\UserGroup;
 
 /**
  * UserService class
@@ -62,13 +67,15 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userGroupCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing or set to an empty value
      */
-    public function createUserGroup( \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct $userGroupCreateStruct, \eZ\Publish\API\Repository\Values\User\UserGroup $parentGroup )
+    public function createUserGroup( UserGroupCreateStruct $userGroupCreateStruct, UserGroup $parentGroup )
     {
         $returnValue = $this->service->createUserGroup( $userGroupCreateStruct, $parentGroup );
         $this->signalDispatcher->emit(
-            new Signal\UserService\CreateUserGroupSignal( array(
-                'userGroupId' => $returnValue->id,
-            ) )
+            new Signal\UserService\CreateUserGroupSignal(
+                array(
+                    'userGroupId' => $returnValue->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -85,8 +92,7 @@ class UserService implements UserServiceInterface
      */
     public function loadUserGroup( $id )
     {
-        $returnValue = $this->service->loadUserGroup( $id );
-        return $returnValue;
+        return $this->service->loadUserGroup( $id );
     }
 
     /**
@@ -98,10 +104,9 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
      */
-    public function loadSubUserGroups( \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
+    public function loadSubUserGroups( UserGroup $userGroup )
     {
-        $returnValue = $this->service->loadSubUserGroups( $userGroup );
-        return $returnValue;
+        return $this->service->loadSubUserGroups( $userGroup );
     }
 
     /**
@@ -113,13 +118,15 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
      */
-    public function deleteUserGroup( \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
+    public function deleteUserGroup( UserGroup $userGroup )
     {
         $returnValue = $this->service->deleteUserGroup( $userGroup );
         $this->signalDispatcher->emit(
-            new Signal\UserService\DeleteUserGroupSignal( array(
-                'userGroupId' => $userGroup->id,
-            ) )
+            new Signal\UserService\DeleteUserGroupSignal(
+                array(
+                    'userGroupId' => $userGroup->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -132,14 +139,16 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to move the user group
      */
-    public function moveUserGroup( \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup, \eZ\Publish\API\Repository\Values\User\UserGroup $newParent )
+    public function moveUserGroup( UserGroup $userGroup, UserGroup $newParent )
     {
         $returnValue = $this->service->moveUserGroup( $userGroup, $newParent );
         $this->signalDispatcher->emit(
-            new Signal\UserService\MoveUserGroupSignal( array(
-                'userGroupId' => $userGroup->id,
-                'newParentId' => $newParent->id,
-            ) )
+            new Signal\UserService\MoveUserGroupSignal(
+                array(
+                    'userGroupId' => $userGroup->id,
+                    'newParentId' => $newParent->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -160,13 +169,15 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set empty
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a field value is not accepted by the field type
      */
-    public function updateUserGroup( \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup, \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct $userGroupUpdateStruct )
+    public function updateUserGroup( UserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct )
     {
         $returnValue = $this->service->updateUserGroup( $userGroup, $userGroupUpdateStruct );
         $this->signalDispatcher->emit(
-            new Signal\UserService\UpdateUserGroupSignal( array(
-                'userGroupId' => $userGroup->id,
-            ) )
+            new Signal\UserService\UpdateUserGroupSignal(
+                array(
+                    'userGroupId' => $userGroup->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -184,13 +195,15 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing or set  to an empty value
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a field value is not accepted by the field type
      */
-    public function createUser( \eZ\Publish\API\Repository\Values\User\UserCreateStruct $userCreateStruct, array $parentGroups )
+    public function createUser( UserCreateStruct $userCreateStruct, array $parentGroups )
     {
         $returnValue = $this->service->createUser( $userCreateStruct, $parentGroups );
         $this->signalDispatcher->emit(
-            new Signal\UserService\CreateUserSignal( array(
-                'userId' => $returnValue->id,
-            ) )
+            new Signal\UserService\CreateUserSignal(
+                array(
+                    'userId' => $returnValue->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -206,8 +219,7 @@ class UserService implements UserServiceInterface
      */
     public function loadUser( $userId )
     {
-        $returnValue = $this->service->loadUser( $userId );
-        return $returnValue;
+        return $this->service->loadUser( $userId );
     }
 
     /**
@@ -218,8 +230,7 @@ class UserService implements UserServiceInterface
      */
     public function loadAnonymousUser()
     {
-        $returnValue = $this->service->loadAnonymousUser();
-        return $returnValue;
+        return $this->service->loadAnonymousUser();
     }
 
     /**
@@ -234,8 +245,7 @@ class UserService implements UserServiceInterface
      */
     public function loadUserByCredentials( $login, $password )
     {
-        $returnValue = $this->service->loadUserByCredentials( $login, $password );
-        return $returnValue;
+        return $this->service->loadUserByCredentials( $login, $password );
     }
 
     /**
@@ -249,9 +259,11 @@ class UserService implements UserServiceInterface
     {
         $returnValue = $this->service->deleteUser( $user );
         $this->signalDispatcher->emit(
-            new Signal\UserService\DeleteUserSignal( array(
-                'userId' => $user->id,
-            ) )
+            new Signal\UserService\DeleteUserSignal(
+                array(
+                    'userId' => $user->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -276,9 +288,11 @@ class UserService implements UserServiceInterface
     {
         $returnValue = $this->service->updateUser( $user, $userUpdateStruct );
         $this->signalDispatcher->emit(
-            new Signal\UserService\UpdateUserSignal( array(
-                'userId' => $user->id,
-            ) )
+            new Signal\UserService\UpdateUserSignal(
+                array(
+                    'userId' => $user->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -293,14 +307,16 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign the user group to the user
      */
-    public function assignUserToUserGroup( \eZ\Publish\API\Repository\Values\User\User $user, \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
+    public function assignUserToUserGroup( \eZ\Publish\API\Repository\Values\User\User $user, UserGroup $userGroup )
     {
         $returnValue = $this->service->assignUserToUserGroup( $user, $userGroup );
         $this->signalDispatcher->emit(
-            new Signal\UserService\AssignUserToUserGroupSignal( array(
-                'userId' => $user->id,
-                'userGroupId' => $userGroup->id,
-            ) )
+            new Signal\UserService\AssignUserToUserGroupSignal(
+                array(
+                    'userId' => $user->id,
+                    'userGroupId' => $userGroup->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -314,14 +330,16 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove the user group from the user
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the user is not in the given user group
      */
-    public function unAssignUserFromUserGroup( \eZ\Publish\API\Repository\Values\User\User $user, \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup )
+    public function unAssignUserFromUserGroup( \eZ\Publish\API\Repository\Values\User\User $user, UserGroup $userGroup )
     {
         $returnValue = $this->service->unAssignUserFromUserGroup( $user, $userGroup );
         $this->signalDispatcher->emit(
-            new Signal\UserService\UnAssignUserFromUserGroupSignal( array(
-                'userId' => $user->id,
-                'userGroupId' => $userGroup->id,
-            ) )
+            new Signal\UserService\UnAssignUserFromUserGroupSignal(
+                array(
+                    'userId' => $user->id,
+                    'userGroupId' => $userGroup->id,
+                )
+            )
         );
         return $returnValue;
     }
@@ -337,8 +355,7 @@ class UserService implements UserServiceInterface
      */
     public function loadUserGroupsOfUser( \eZ\Publish\API\Repository\Values\User\User $user )
     {
-        $returnValue = $this->service->loadUserGroupsOfUser( $user );
-        return $returnValue;
+        return $this->service->loadUserGroupsOfUser( $user );
     }
 
     /**
@@ -352,10 +369,9 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersOfUserGroup( \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup, $offset = 0, $limit = -1 )
+    public function loadUsersOfUserGroup( UserGroup $userGroup, $offset = 0, $limit = -1 )
     {
-        $returnValue = $this->service->loadUsersOfUserGroup( $userGroup, $offset, $limit );
-        return $returnValue;
+        return $this->service->loadUsersOfUserGroup( $userGroup, $offset, $limit );
     }
 
     /**
@@ -371,8 +387,7 @@ class UserService implements UserServiceInterface
      */
     public function newUserCreateStruct( $login, $email, $password, $mainLanguageCode, $contentType = null )
     {
-        $returnValue = $this->service->newUserCreateStruct( $login, $email, $password, $mainLanguageCode, $contentType );
-        return $returnValue;
+        return $this->service->newUserCreateStruct( $login, $email, $password, $mainLanguageCode, $contentType );
     }
 
     /**
@@ -385,8 +400,7 @@ class UserService implements UserServiceInterface
      */
     public function newUserGroupCreateStruct( $mainLanguageCode, $contentType = null )
     {
-        $returnValue = $this->service->newUserGroupCreateStruct( $mainLanguageCode, $contentType );
-        return $returnValue;
+        return $this->service->newUserGroupCreateStruct( $mainLanguageCode, $contentType );
     }
 
     /**
@@ -396,8 +410,7 @@ class UserService implements UserServiceInterface
      */
     public function newUserUpdateStruct()
     {
-        $returnValue = $this->service->newUserUpdateStruct();
-        return $returnValue;
+        return $this->service->newUserUpdateStruct();
     }
 
     /**
@@ -407,8 +420,6 @@ class UserService implements UserServiceInterface
      */
     public function newUserGroupUpdateStruct()
     {
-        $returnValue = $this->service->newUserGroupUpdateStruct();
-        return $returnValue;
+        return $this->service->newUserGroupUpdateStruct();
     }
-
 }
