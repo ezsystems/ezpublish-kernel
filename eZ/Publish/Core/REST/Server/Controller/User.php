@@ -27,8 +27,10 @@ use eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+use eZ\Publish\API\Repository\Exceptions\BadStateException;
 
 use eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException AS RestInvalidArgumentException;
+use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 
 /**
  * User controller
@@ -231,23 +233,23 @@ class User extends RestController
         $userGroupLocation = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath( $urlValues['group'] )
         );
+        $userGroup = $this->userService->loadUserGroup( $userGroupLocation->contentId );
 
-        $userGroupCreateStruct = $this->inputDispatcher->parse(
+        $userCreateStruct = $this->inputDispatcher->parse(
             new Message(
                 array( 'Content-Type' => $this->request->contentType ),
                 $this->request->body
             )
         );
 
-        //@todo Check for existence of user with same login
-        //Problem being, PAPI doesn't specify any distinct error in such case
-
-        $createdUser = $this->userService->createUser(
-            $userGroupCreateStruct,
-            array(
-                $this->userService->loadUserGroup( $userGroupLocation->contentId )
-            )
-        );
+        try
+        {
+            $createdUser = $this->userService->createUser( $userCreateStruct, array( $userGroup ) );
+        }
+        catch ( BadStateException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
 
         $createdContentInfo = $createdUser->getVersionInfo()->getContentInfo();
         $createdLocation = $this->locationService->loadLocation( $createdContentInfo->mainLocationId );

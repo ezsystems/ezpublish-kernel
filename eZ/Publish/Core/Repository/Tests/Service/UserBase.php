@@ -507,6 +507,23 @@ abstract class UserBase extends BaseServiceTest
     }
 
     /**
+     * Test creating a user throwing BadStateException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @covers \eZ\Publish\API\Repository\UserService::createUser
+     */
+    public function testCreateUserThrowsBadStateException()
+    {
+        $userService = $this->repository->getUserService();
+
+        $userCreateStruct = $userService->newUserCreateStruct( "admin", "new_user@ez.no", "password", "eng-GB" );
+        $userCreateStruct->setField( "first_name", "", "eng-GB" );
+        $userCreateStruct->setField( "last_name", "", "eng-GB" );
+
+        $parentGroup = $userService->loadUserGroup( 12 );
+        $userService->createUser( $userCreateStruct, array( $parentGroup ) );
+    }
+
+    /**
      * Test loading a user
      * @covers \eZ\Publish\API\Repository\UserService::loadUser
      */
