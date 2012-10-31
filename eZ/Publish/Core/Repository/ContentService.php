@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\ContentService as ContentServiceInterface,
     eZ\Publish\API\Repository\Values\Content\TranslationValues as APITranslationValues,
     eZ\Publish\API\Repository\Values\Content\ContentCreateStruct as APIContentCreateStruct,
     eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct,
+    eZ\Publish\API\Repository\Values\Content\Content as APIContent,
     eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo,
     eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo,
     eZ\Publish\API\Repository\Values\User\User,
@@ -726,7 +727,10 @@ class ContentService implements ContentServiceInterface
         $propertyCount = 0;
         foreach ( $contentMetadataUpdateStruct as $propertyName => $propertyValue )
         {
-            if ( isset( $contentMetadataUpdateStruct->$propertyName ) ) $propertyCount += 1;
+            if ( isset( $contentMetadataUpdateStruct->$propertyName ) )
+            {
+                $propertyCount += 1;
+            }
         }
         if ( $propertyCount === 0 )
         {
@@ -736,65 +740,75 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        if ( !$this->repository->canUser( 'content', 'edit', $contentInfo ) )
+        $loadedContentInfo = $this->loadContentInfo( $contentInfo->id );
+
+        if ( !$this->repository->canUser( 'content', 'edit', $loadedContentInfo ) )
             throw new UnauthorizedException( 'content', 'edit' );
+
+        if ( isset( $contentMetadataUpdateStruct->remoteId ) )
+        {
+            try
+            {
+                $existingContentInfo = $this->loadContentInfoByRemoteId( $contentMetadataUpdateStruct->remoteId );
+
+                if ( $existingContentInfo->id !== $loadedContentInfo->id )
+                    throw new InvalidArgumentException(
+                        "\$contentMetadataUpdateStruct",
+                        "Another content with remoteId '{$contentMetadataUpdateStruct->remoteId}' exists"
+                    );
+            }
+            catch ( APINotFoundException $e )
+            {
+                // Do nothing
+            }
+        }
 
         $this->repository->beginTransaction();
         try
         {
-            if ( $propertyCount > 1 || empty( $contentMetadataUpdateStruct->mainLocationId ) )
+            if ( $propertyCount > 1 || !isset( $contentMetadataUpdateStruct->mainLocationId ) )
             {
-                if ( !empty( $contentMetadataUpdateStruct->remoteId ) )
-                {
-                    try
-                    {
-                        $existingContent = $this->loadContentByRemoteId( $contentMetadataUpdateStruct->remoteId );
-
-                        if ( $existingContent->id !== $contentInfo->id )
-                            throw new InvalidArgumentException(
-                                "\$contentMetadataUpdateStruct",
-                                "Another content with remoteId '{$contentMetadataUpdateStruct->remoteId}' exists"
-                            );
-                    }
-                    catch ( APINotFoundException $e )
-                    {
-                        // Do nothing
-                    }
-                }
-
-                $spiMetadataUpdateStruct = new SPIMetadataUpdateStruct(
-                    array(
-                        "ownerId" => $contentMetadataUpdateStruct->ownerId,
-                        //@todo changes always available name
-                        //"name" => $contentMetadataUpdateStruct->name,
-                        "publicationDate" => isset( $contentMetadataUpdateStruct->publishedDate )
-                            ? $contentMetadataUpdateStruct->publishedDate->getTimestamp()
-                            : null,
-                        "modificationDate" => isset( $contentMetadataUpdateStruct->modificationDate )
-                            ? $contentMetadataUpdateStruct->modificationDate->getTimestamp()
-                            : null,
-                        "mainLanguageId" => isset( $contentMetadataUpdateStruct->mainLanguageCode )
-                            ? $this->repository->getContentLanguageService()->loadLanguage(
-                                $contentMetadataUpdateStruct->mainLanguageCode
-                            )->id
-                            : null,
-                        "alwaysAvailable" => $contentMetadataUpdateStruct->alwaysAvailable,
-                        "remoteId" => $contentMetadataUpdateStruct->remoteId
-                    )
-                );
                 $this->persistenceHandler->contentHandler()->updateMetadata(
-                    $contentInfo->id,
-                    $spiMetadataUpdateStruct
+                    $loadedContentInfo->id,
+                    new SPIMetadataUpdateStruct(
+                        array(
+                            "ownerId" => $contentMetadataUpdateStruct->ownerId,
+                            "publicationDate" => isset( $contentMetadataUpdateStruct->publishedDate )
+                                ? $contentMetadataUpdateStruct->publishedDate->getTimestamp()
+                                : null,
+                            "modificationDate" => isset( $contentMetadataUpdateStruct->modificationDate )
+                                ? $contentMetadataUpdateStruct->modificationDate->getTimestamp()
+                                : null,
+                            "mainLanguageId" => isset( $contentMetadataUpdateStruct->mainLanguageCode )
+                                ? $this->repository->getContentLanguageService()->loadLanguage(
+                                    $contentMetadataUpdateStruct->mainLanguageCode
+                                )->id
+                                : null,
+                            "alwaysAvailable" => $contentMetadataUpdateStruct->alwaysAvailable,
+                            "remoteId" => $contentMetadataUpdateStruct->remoteId
+                        )
+                    )
                 );
             }
 
-            if ( !empty( $contentMetadataUpdateStruct->mainLocationId ) )
+            // Change main location
+            if ( isset( $contentMetadataUpdateStruct->mainLocationId )
+                && $loadedContentInfo->mainLocationId !== $contentMetadataUpdateStruct->mainLocationId )
             {
                 $this->persistenceHandler->locationHandler()->changeMainLocation(
-                    $contentInfo->id,
+                    $loadedContentInfo->id,
                     $contentMetadataUpdateStruct->mainLocationId
                 );
             }
+
+            // Republish URL aliases to update always-available flag
+            if ( isset( $contentMetadataUpdateStruct->alwaysAvailable )
+                && $loadedContentInfo->alwaysAvailable !== $contentMetadataUpdateStruct->alwaysAvailable )
+            {
+                $content = $this->loadContent( $loadedContentInfo->id );
+                $this->publishUrlAliasesForContent( $content );
+            }
+
             $this->repository->commit();
         }
         catch ( Exception $e )
@@ -803,7 +817,35 @@ class ContentService implements ContentServiceInterface
             throw $e;
         }
 
-        return $this->loadContent( $contentInfo->id );
+        return isset( $content ) ? $content : $this->loadContent( $loadedContentInfo->id );
+    }
+
+    /**
+     * Publishes URL aliases for all locations of a given content.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return void
+     */
+    protected function publishUrlAliasesForContent( APIContent $content )
+    {
+        $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
+        $locations = $this->repository->getLocationService()->loadLocations(
+            $content->getVersionInfo()->getContentInfo()
+        );
+        foreach ( $locations as $location )
+        {
+            foreach ( $urlAliasNames as $languageCode => $name )
+            {
+                $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
+                    $location->id,
+                    $location->parentLocationId,
+                    $name,
+                    $languageCode,
+                    $content->contentInfo->alwaysAvailable
+                );
+            }
+        }
     }
 
     /**
@@ -1221,23 +1263,7 @@ class ContentService implements ContentServiceInterface
         );
         $content = $this->buildContentDomainObject( $spiContent );
 
-        $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
-        $locations = $this->repository->getLocationService()->loadLocations(
-            $content->getVersionInfo()->getContentInfo()
-        );
-        foreach ( $locations as $location )
-        {
-            foreach ( $urlAliasNames as $languageCode => $name )
-            {
-                $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
-                    $location->id,
-                    $location->parentLocationId,
-                    $name,
-                    $languageCode,
-                    $content->contentInfo->alwaysAvailable
-                );
-            }
-        }
+        $this->publishUrlAliasesForContent( $content );
 
         return $content;
     }
