@@ -288,7 +288,7 @@ services:
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezobjectrelationlist, identifier: LegacyStorage}
 
-    ezpublish.fieldType.ezurl.converter:
+    ezpublish.fieldType.ezuser.converter:
         class: %ezpublish.fieldType.ezuser.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezuser, lazy: true, callback: '::create'}
