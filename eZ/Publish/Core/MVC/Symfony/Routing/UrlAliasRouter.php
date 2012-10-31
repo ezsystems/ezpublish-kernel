@@ -55,11 +55,6 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     protected $generator;
 
     /**
-     * @var array
-     */
-    protected $prioritizedLanguages;
-
-    /**
      * @var \Symfony\Component\HttpKernel\Log\LoggerInterface
      */
     protected $logger;
@@ -67,14 +62,12 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     public function __construct(
         \Closure $lazyRepository,
         UrlAliasGenerator $generator,
-        array $prioritizedLanguages,
         RequestContext $requestContext,
         LoggerInterface $logger = null
     )
     {
         $this->lazyRepository = $lazyRepository;
         $this->generator = $generator;
-        $this->prioritizedLanguages = $prioritizedLanguages;
         $this->requestContext = isset( $requestContext ) ? $requestContext : new RequestContext();
         $this->logger = $logger;
     }
@@ -86,16 +79,6 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     {
         $lazyRepository = $this->lazyRepository;
         return $lazyRepository();
-    }
-
-    /**
-     * Returns the locale code having the top priority.
-     *
-     * @return string
-     */
-    protected function getTopLanguage()
-    {
-        return !empty( $this->prioritizedLanguages ) ? $this->prioritizedLanguages[0] : 'eng-GB';
     }
 
     /**
@@ -119,8 +102,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                 $request->attributes->get(
                     'semanticPathinfo',
                     $request->getPathInfo()
-                ),
-                $this->getTopLanguage()
+                )
             );
 
             $params = array(

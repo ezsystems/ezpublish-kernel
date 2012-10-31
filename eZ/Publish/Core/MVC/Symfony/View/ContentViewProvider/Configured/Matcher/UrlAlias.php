@@ -16,18 +16,6 @@ use eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\Mult
 class UrlAlias extends MultipleValued
 {
     /**
-     * Array of language codes
-     *
-     * @var array
-     */
-    protected $languages;
-
-    public function __construct( array $languages = array() )
-    {
-        $this->languages = $languages ?: array( 'eng-GB' );
-    }
-
-    /**
      * Checks if a Location object matches.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
@@ -35,7 +23,7 @@ class UrlAlias extends MultipleValued
      */
     public function matchLocation( Location $location )
     {
-        $locationUrls = $this->repository->getURLAliasService()->listLocationAliases( $location, true, $this->languages );
+        $locationUrls = $this->repository->getURLAliasService()->listLocationAliases( $location, true );
         foreach ( $this->values as $pattern => $val )
         {
             foreach ( $locationUrls as $urlAlias )
