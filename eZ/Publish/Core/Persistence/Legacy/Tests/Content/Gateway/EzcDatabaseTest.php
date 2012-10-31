@@ -1509,6 +1509,64 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
+     * Test for the updateAlwaysAvailableFlag() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase::updateAlwaysAvailableFlag
+     */
+    public function testUpdateAlwaysAvailableFlag()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $gateway->updateAlwaysAvailableFlag( 103, false );
+
+        $this->assertQueryResult(
+            array( array( 'id' => 2, ), ),
+            $this->getDatabaseHandler()->createSelectQuery()->select(
+                array( 'language_mask', )
+            )->from(
+                'ezcontentobject'
+            )->where(
+                'id = 103'
+            )
+        );
+
+        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( 'language_id' => 2, ), ),
+            $query->select(
+                array( 'language_id', )
+            )->from(
+                'ezcontentobject_name'
+            )->where(
+                $query->expr->lAnd(
+                    $query->expr->eq( 'contentobject_id', 103 ),
+                    $query->expr->eq( 'content_version', 1 )
+                )
+            )
+        );
+
+        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array( 'language_id' => 2, ),
+            ),
+            $query->selectDistinct(
+                array( 'language_id', )
+            )->from(
+                'ezcontentobject_attribute'
+            )->where(
+                $query->expr->lAnd(
+                    $query->expr->eq( 'contentobject_id', 103 ),
+                    $query->expr->eq( 'version', 1 )
+                )
+            )
+        );
+    }
+
+    /**
      * Counts the number of relations in the database.
      *
      * @param int $fromId
@@ -1724,7 +1782,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * EzcDatabaseTest::getRelationCreateStructFixture()
      *
-     * @return eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct
+     * @return \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct
      */
     protected function getRelationCreateStructFixture()
     {
