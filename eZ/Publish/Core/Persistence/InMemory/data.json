@@ -93,6 +93,8 @@
         {"id": 4, "name": {"eng-GB": "Setup"}, "description": {"eng-GB": "Setup content type group"}, "identifier": "Setup", "modified": 1310793400, "created": 1310793400, "creatorId": 14, "modifierId": 14 }
     ],
     "Content\\Relation": [],
+    "Content\\UrlAlias": [],
+    "Content\\UrlWildcard": [],
     "User": [
         {"id": 14, "login": "admin", "email": "spam@ez.no", "passwordHash": "c78e3b0f3d9244ed8c6d1c29464bdff9", "hashAlgorithm": 2, "isEnabled": true, "maxLogin": 10},
         {"id": 10, "login": "anonymous", "email": "nospam@ez.no", "passwordHash": "4e6f6184135228ccd45f8233d72a0363", "hashAlgorithm": 2, "isEnabled": true, "maxLogin": 1000}

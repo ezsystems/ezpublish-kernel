@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the SectionHandler implementation
+ * File containing the UrlWildcard Handler implementation
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -50,7 +50,14 @@ class UrlWildcardHandler implements UrlWildcardHandlerInterface
      */
     public function create( $sourceUrl, $destinationUrl, $forward = false )
     {
-      throw new NotImplementedException( __METHOD__ );
+        return $this->backend->create(
+            'Content\\UrlWildcard',
+            array(
+                'sourceUrl' => $sourceUrl,
+                'destinationUrl' => $destinationUrl,
+                'forward' => (bool)$forward
+            )
+        );
     }
 
     /**
@@ -63,7 +70,7 @@ class UrlWildcardHandler implements UrlWildcardHandlerInterface
      */
     public function remove( $id )
     {
-      throw new NotImplementedException( __METHOD__ );
+        $this->backend->delete( 'Content\\UrlWildcard', $id );
     }
 
     /**
@@ -78,7 +85,7 @@ class UrlWildcardHandler implements UrlWildcardHandlerInterface
      */
     public function load( $id )
     {
-      throw new NotImplementedException( __METHOD__ );
+        return $this->backend->load( 'Content\\UrlWildcard', $id );
     }
 
     /**
@@ -91,6 +98,11 @@ class UrlWildcardHandler implements UrlWildcardHandlerInterface
      */
     public function loadAll( $offset = 0, $limit = -1 )
     {
-      throw new NotImplementedException( __METHOD__ );
+        $list = $this->backend->find( 'Content\\UrlWildcard' );
+
+        if ( empty( $list ) || ( $offset === 0 && $limit === -1 ) )
+            return $list;
+
+        return array_slice( $list, $offset, ( $limit === -1 ? null : $limit ) );
     }
 }
