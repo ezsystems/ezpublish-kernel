@@ -52,17 +52,34 @@ class LegacySetupController
 
     public function init()
     {
+        /** @var $request \Symfony\Component\HttpFoundation\Request */
+        $request = $this->container->get( 'request' );
+        $currentStep = $request->request->get( 'eZSetup_current_step' );
+
         $response = new Response();
+
+        // inject the extra ezpublish5 folders we want permissions checked for
+        if ( $currentStep == 'Welcome' || $currentStep == 'SystemCheck')
+        {
+            $this->getLegacyKernel()->runCallback(
+                function()
+                {
+                    $directoriesCheckList = \eZINI::instance( 'setup.ini' )->variable( 'directory_permissions', 'CheckList' );
+                    $injectedSettings = array();
+                    // checked folders are relative to the ezpublish_legacy folder
+                    $injectedSettings['setup.ini']['directory_permissions']['CheckList'] =
+                        "../ezpublish/logs;../ezpublish/cache;../ezpublish/config;" . $directoriesCheckList;
+                    \eZINI::injectSettings( $injectedSettings );
+                }
+            );
+        }
 
         /** @var \ezpKernelResult $result  */
         $result = $this->getLegacyKernel()->run();
         $result->getContent();
         $response->setContent( $result->getContent() );
 
-        /** @var $request \Symfony\Component\HttpFoundation\Request */
-        $request = $this->container->get( 'request' );
-
-        if ( $request->request->get( 'eZSetup_current_step' ) == 'Registration' )
+        if ( $currentStep == 'Registration' )
         {
             $chosenSitePackage = $request->request->get( 'P_chosen_site_package-0' );
 
@@ -82,7 +99,7 @@ class LegacySetupController
 
             $dumper = new Dumper();
 
-            // Clear INI cache since setup has writte new files
+            // Clear INI cache since setup has written new files
             $this->getLegacyKernel()->runCallback(
                 function()
                 {
