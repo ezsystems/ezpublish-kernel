@@ -172,8 +172,8 @@ class Mapper
      * Creates a FieldDefinition from the data in $row.
      *
      * @param array $row
+     * 
      * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
-     * @todo Handle field definition conversion.
      */
     public function extractFieldFromRow( array $row )
     {

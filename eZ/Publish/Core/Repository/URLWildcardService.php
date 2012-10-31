@@ -306,8 +306,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @param string $destinationUrl
      * @param array $values
-     * @todo remove throw?
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     *
      * @return string
      */
     private function substitute( $destinationUrl, array $values )
