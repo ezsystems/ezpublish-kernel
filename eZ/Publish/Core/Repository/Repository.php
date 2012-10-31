@@ -196,7 +196,6 @@ class Repository implements RepositoryInterface
         if ( !empty( $this->serviceSettings['languages'] ) )
         {
             $this->serviceSettings['language']['languages'] = $this->serviceSettings['languages'];
-            $this->serviceSettings['urlAlias']['prioritizedLanguageList'] = $this->serviceSettings['languages'];
         }
 
         if ( $user !== null )
