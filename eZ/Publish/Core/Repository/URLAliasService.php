@@ -57,12 +57,9 @@ class URLAliasService implements URLAliasServiceInterface
         $this->repository = $repository;
         $this->urlAliasHandler = $urlAliasHandler;
         $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
-            'prioritizedLanguageList' => array(// @todo These settings should probably be exposed from Language Service
-                "eng-US",
-                "eng-GB"
-            ),
             "showAllTranslations" => false
         );
+        $this->settings['prioritizedLanguageList'] = $repository->getContentLanguageService()->getPrioritizedLanguageCodeList();
     }
 
      /**
