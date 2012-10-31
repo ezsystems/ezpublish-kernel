@@ -222,11 +222,11 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
     private function assertPropertiesEqual( $propertyName, $expectedValue, $actualValue )
     {
-        if( $expectedValue instanceof \ArrayObject )
+        if ( $expectedValue instanceof \ArrayObject )
         {
             $expectedValue = $expectedValue->getArrayCopy();
         }
-        if( $actualValue instanceof \ArrayObject )
+        if ( $actualValue instanceof \ArrayObject )
         {
             $actualValue = $actualValue->getArrayCopy();
         }
