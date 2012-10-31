@@ -230,7 +230,7 @@ abstract class SearchBase extends BaseServiceTest
      */
     public function testFindSingleThrowsNotFoundExceptionDueToPermissions()
     {
-        $this->markTestIncomplete( "Test is not implemented:" . __METHOD__ );
+        $this->markTestIncomplete( "Test not implemented:" . __METHOD__ );
     }
 
     /**
