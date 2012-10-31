@@ -61,6 +61,8 @@ class RepositoryFactory
      */
     public function buildRepository( PersistenceHandler $persistenceHandler, IoHandler $ioHandler )
     {
+        /** @var $configResolver \eZ\Publish\Core\MVC\ConfigResolverInterface */
+        $configResolver = $this->container->get( 'ezpublish.config.resolver' );
         $repositoryClass = $this->container->getParameter( 'ezpublish.api.inner_repository.class' );
         return new $repositoryClass(
             $persistenceHandler,
@@ -69,7 +71,8 @@ class RepositoryFactory
                 'fieldType'     => $this->fieldTypes,
                 'role'          => array(
                     'limitationTypes'   => $this->roleLimitations
-                )
+                ),
+                'languages'     => $configResolver->getParameter( 'languages' )
             )
         );
     }
@@ -154,8 +157,8 @@ class RepositoryFactory
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param $serviceName
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      * @return mixed
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the method/service is invalid
      */
     public function buildService( Repository $repository, $serviceName )
     {

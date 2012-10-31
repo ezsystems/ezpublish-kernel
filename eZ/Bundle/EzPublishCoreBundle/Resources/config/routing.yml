@@ -31,7 +31,7 @@ services:
 
     ezpublish.urlalias_router:
         class: %ezpublish.urlalias_router.class%
-        arguments: [@ezpublish.api.repository.lazy, @ezpublish.urlalias_generator, %ezsettings.default.languages%, @?router.request_context, @?logger]
+        arguments: [@ezpublish.api.repository.lazy, @ezpublish.urlalias_generator, @?router.request_context, @?logger]
         calls:
             - [setContainer, [@service_container]]
         tags:
