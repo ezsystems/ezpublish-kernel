@@ -60,7 +60,7 @@ class LanguageService implements LanguageServiceInterface
         $this->repository = $repository;
         $this->languageHandler = $languageHandler;
         $this->settings = $settings + array(// Union makes sure default settings are ignored if provided in argument
-            'languages' => array( 'eng-GB' ),// @todo This setting overlaps with URLAliasService prioritizedLanguageList
+            'languages' => array( 'eng-GB' ),
         );
     }
 
@@ -361,6 +361,17 @@ class LanguageService implements LanguageServiceInterface
     public function getDefaultLanguageCode()
     {
         return $this->settings['languages'][0];
+    }
+
+    /**
+     * Returns a configured list of prioritized languageCodes
+     *
+     * @access private This is currently only for internal use in Services
+     * @return string[]
+     */
+    public function getPrioritizedLanguageCodeList()
+    {
+        return $this->settings['languages'];
     }
 
     /**
