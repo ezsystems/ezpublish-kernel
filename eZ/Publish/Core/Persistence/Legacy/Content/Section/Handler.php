@@ -36,7 +36,7 @@ class Handler implements BaseSectionHandler
     }
 
     /**
-     * Creat a new section
+     * Create a new section
      *
      * @param string $name
      * @param string $identifier
