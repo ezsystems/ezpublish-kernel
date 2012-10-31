@@ -21,7 +21,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * Database gateway to test.
      *
-     * @var eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase
      */
     protected $databaseGateway;
 
@@ -146,6 +146,33 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $gateway = $this->getDatabaseGateway();
 
         $result = $gateway->loadObjectStateGroupData( 2 );
+
+        $this->assertEquals(
+            array(
+                array(
+                    'ezcobj_state_group_default_language_id' => 2,
+                    'ezcobj_state_group_id' => 2,
+                    'ezcobj_state_group_identifier' => 'ez_lock',
+                    'ezcobj_state_group_language_mask' => 3,
+                    'ezcobj_state_group_language_description' => '',
+                    'ezcobj_state_group_language_language_id' => 3,
+                    'ezcobj_state_group_language_real_language_id' => 2,
+                    'ezcobj_state_group_language_name' => 'Lock'
+                )
+            ),
+            $result
+        );
+    }
+
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateGroupDataByIdentifier
+     */
+    public function testLoadObjectStateGroupDataByIdentifier()
+    {
+        $gateway = $this->getDatabaseGateway();
+
+        $result = $gateway->loadObjectStateGroupDataByIdentifier( 'ez_lock' );
 
         $this->assertEquals(
             array(
@@ -583,7 +610,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * Returns a ready to test EzcDatabase gateway
      *
-     * @return eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase
      */
     protected function getDatabaseGateway()
     {

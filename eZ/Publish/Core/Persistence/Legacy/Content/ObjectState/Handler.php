@@ -81,6 +81,27 @@ class Handler implements BaseObjectStateHandler
     }
 
     /**
+     * Loads a object state group by identifier
+     *
+     * @param string $identifier
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the group was not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
+     */
+    public function loadGroupByIdentifier( $identifier )
+    {
+        $data = $this->objectStateGateway->loadObjectStateGroupDataByIdentifier( $identifier );
+
+        if ( empty( $data ) )
+        {
+            throw new NotFoundException( "ObjectStateGroup", $identifier );
+        }
+
+        return $this->objectStateMapper->createObjectStateGroupFromData( $data );
+    }
+
+    /**
      * Loads all object state groups
      *
      * @param int $offset

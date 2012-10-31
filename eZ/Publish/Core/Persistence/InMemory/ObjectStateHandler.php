@@ -69,6 +69,26 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
     }
 
     /**
+     * Loads a object state group by identifier
+     *
+     * @param string $identifier
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the group was not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
+     */
+    public function loadGroupByIdentifier( $identifier )
+    {
+        $objectStates = $this->backend->find( 'Content\\ObjectState\\Group', array( 'identifier' => $identifier ) );
+        if ( empty( $objectStates ) )
+        {
+            throw new NotFound( "Content\\ObjectState\\Group", array( "identifier" => $identifier ) );
+        }
+
+        return reset( $objectStates );
+    }
+
+    /**
      * Loads all object state groups
      *
      * @param int $offset

@@ -118,6 +118,28 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Loads data for an object state group by identifier
+     *
+     * @param string $identifier
+     * @return array
+     */
+    public function loadObjectStateGroupDataByIdentifier( $identifier )
+    {
+        $query = $this->createObjectStateGroupFindQuery();
+        $query->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'identifier', 'ezcobj_state_group' ),
+                $query->bindValue( $identifier, null, \PDO::PARAM_STR )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Loads data for all object state groups, filtered by $offset and $limit
      *
      * @param int $offset

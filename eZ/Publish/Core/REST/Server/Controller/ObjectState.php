@@ -20,6 +20,7 @@ use eZ\Publish\API\Repository\ContentService;
 
 use eZ\Publish\Core\REST\Common\Values\ContentObjectStates;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 
 /**
@@ -60,19 +61,25 @@ class ObjectState extends RestController
      */
     public function createObjectStateGroup()
     {
-        //@todo Error handling if identifier already exists
-        //Problem being, PAPI does not specify exception in that case
+        try
+        {
+            $createdStateGroup = $this->objectStateService->createObjectStateGroup(
+                $this->inputDispatcher->parse(
+                    new Message(
+                        array( 'Content-Type' => $this->request->contentType ),
+                        $this->request->body
+                    )
+                )
+            );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
 
         return new Values\CreatedObjectStateGroup(
             array(
-                'objectStateGroup' => $this->objectStateService->createObjectStateGroup(
-                    $this->inputDispatcher->parse(
-                        new Message(
-                            array( 'Content-Type' => $this->request->contentType ),
-                            $this->request->body
-                        )
-                    )
-                )
+                'objectStateGroup' => $createdStateGroup
             )
         );
     }
@@ -199,9 +206,6 @@ class ObjectState extends RestController
      */
     public function updateObjectStateGroup()
     {
-        //@todo Error handling if identifier already exists
-        //Problem being, PAPI does not specify exception in that case
-
         $values = $this->urlHandler->parse( 'objectstategroup', $this->request->path );
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
@@ -209,10 +213,18 @@ class ObjectState extends RestController
                 $this->request->body
             )
         );
-        return $this->objectStateService->updateObjectStateGroup(
-            $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] ),
-            $updateStruct
-        );
+
+        $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $values['objectstategroup'] );
+
+        try
+        {
+            $updatedStateGroup = $this->objectStateService->updateObjectStateGroup( $objectStateGroup, $updateStruct );
+            return $updatedStateGroup;
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
     }
 
     /**

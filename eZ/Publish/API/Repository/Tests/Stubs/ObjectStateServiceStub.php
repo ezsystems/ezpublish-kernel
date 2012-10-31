@@ -97,10 +97,11 @@ class ObjectStateServiceStub implements ObjectStateService
         $this->initFromFixture();
     }
 
-     /**
+    /**
      * creates a new object state group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create an object state group
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the object state group with provided identifier already exists
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct $objectStateGroupCreateStruct
      *
@@ -111,6 +112,14 @@ class ObjectStateServiceStub implements ObjectStateService
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
             throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        foreach ( $this->groups as $group )
+        {
+            if ( $group->identifier == $objectStateGroupCreateStruct->identifier )
+            {
+                throw new Exceptions\InvalidArgumentExceptionStub( 'What error code should be used?' );
+            }
         }
 
         $groupData = array();
@@ -205,6 +214,7 @@ class ObjectStateServiceStub implements ObjectStateService
      * updates an object state group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update an object state group
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the object state group with provided identifier already exists
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct
@@ -216,6 +226,17 @@ class ObjectStateServiceStub implements ObjectStateService
         if ( false === $this->repository->hasAccess( 'class', '*' ) )
         {
             throw new Exceptions\UnauthorizedExceptionStub( 'What error code should be used?' );
+        }
+
+        if ( $objectStateGroupUpdateStruct->identifier !== null )
+        {
+            foreach ( $this->groups as $group )
+            {
+                if ( $group->identifier == $objectStateGroupUpdateStruct->identifier && $group->id != $objectStateGroup->id )
+                {
+                    throw new Exceptions\InvalidArgumentExceptionStub( 'What error code should be used?' );
+                }
+            }
         }
 
         $data = array(

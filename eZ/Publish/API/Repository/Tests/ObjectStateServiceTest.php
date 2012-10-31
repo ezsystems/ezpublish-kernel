@@ -276,6 +276,40 @@ class ObjectStateServiceTest extends BaseTest
     }
 
     /**
+     * Test for the createObjectStateGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ObjectStateService::createObjectStateGroup()
+     * @depends testCreateObjectStateGroup
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testCreateObjectStateGroupThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+
+        $objectStateService = $repository->getObjectStateService();
+
+        $objectStateGroupCreate = $objectStateService->newObjectStateGroupCreateStruct(
+            // 'ez_lock' is already existing identifier
+            'ez_lock'
+        );
+        $objectStateGroupCreate->defaultLanguageCode = 'eng-US';
+        $objectStateGroupCreate->names = array(
+            'eng-US' => 'Publishing',
+            'eng-GB' => 'Sindelfingen',
+        );
+        $objectStateGroupCreate->descriptions = array(
+            'eng-US' => 'Put something online',
+            'eng-GB' => 'Put something ton Sindelfingen.',
+        );
+
+        // This call will fail because group with 'ez_lock' identifier already exists
+        $objectStateService->createObjectStateGroup(
+            $objectStateGroupCreate
+        );
+    }
+
+    /**
      * Test for the loadObjectStateGroup() method.
      *
      * @return void
@@ -593,6 +627,56 @@ class ObjectStateServiceTest extends BaseTest
             $loadedObjectStateGroup,
             $groupUpdateStruct,
             $updatedObjectStateGroup
+        );
+    }
+
+    /**
+     * Test for the updateObjectStateGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ObjectStateService::updateObjectStateGroup()
+     * @depends testUpdateObjectStateGroup
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testUpdateObjectStateGroupThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+
+        $objectStateService = $repository->getObjectStateService();
+
+        // Create object state group which we will later update
+        $objectStateGroupCreate = $objectStateService->newObjectStateGroupCreateStruct(
+            'publishing'
+        );
+        $objectStateGroupCreate->defaultLanguageCode = 'eng-US';
+        $objectStateGroupCreate->names = array(
+            'eng-US' => 'Publishing',
+            'eng-GB' => 'Sindelfingen',
+        );
+        $objectStateGroupCreate->descriptions = array(
+            'eng-US' => 'Put something online',
+            'eng-GB' => 'Put something ton Sindelfingen.',
+        );
+
+        $createdObjectStateGroup = $objectStateService->createObjectStateGroup(
+            $objectStateGroupCreate
+        );
+
+        $groupUpdateStruct = $objectStateService->newObjectStateGroupUpdateStruct();
+        // 'ez_lock' is the identifier of already existing group
+        $groupUpdateStruct->identifier = 'ez_lock';
+        $groupUpdateStruct->defaultLanguageCode = 'ger-DE';
+        $groupUpdateStruct->names = array(
+            'ger-DE' => 'Sindelfingen',
+        );
+        $groupUpdateStruct->descriptions = array(
+            'ger-DE' => 'Sindelfingen ist nicht nur eine Stadt'
+        );
+
+        // This call will fail since state group with 'ez_lock' identifier already exists
+        $objectStateService->updateObjectStateGroup(
+            $createdObjectStateGroup,
+            $groupUpdateStruct
         );
     }
 

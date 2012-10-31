@@ -101,6 +101,28 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * Loads data for an object state group by identifier
+     *
+     * @param string $identifier
+     * @return array
+     */
+    public function loadObjectStateGroupDataByIdentifier( $identifier )
+    {
+        try
+        {
+            return $this->innerGateway->loadObjectStateGroupDataByIdentifier( $identifier );
+        }
+        catch ( \ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( \PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
      * Loads data for all object state groups, filtered by $offset and $limit
      *
      * @param int $offset
