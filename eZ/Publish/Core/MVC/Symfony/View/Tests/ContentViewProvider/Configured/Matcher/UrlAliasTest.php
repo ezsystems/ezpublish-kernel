@@ -81,8 +81,7 @@ class UrlAliasTest extends BaseTest
             ->method( 'listLocationAliases' )
             ->with(
                 $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' ),
-                $this->isType( 'boolean' ),
-                $this->isType( 'array' )
+                $this->isType( 'boolean' )
             )
             ->will( $this->returnValue( $urlAliasList ) )
         ;
