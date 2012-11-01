@@ -96,7 +96,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
     /**
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router $router
      *
-     * @depends testContruct
+     * @depends testConstruct
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::match
      */
     public function testMatchWithRequestHeader( $router )
