@@ -75,7 +75,9 @@ class Configuration implements EventSubscriberInterface
         // File settings
         $settings += array(
             'site.ini/FileSettings/VarDir'      => $this->configResolver->getParameter( 'var_dir' ),
-            'site.ini/FileSettings/StorageDir'  => $this->configResolver->getParameter( 'storage_dir' )
+            'site.ini/FileSettings/StorageDir'  => $this->configResolver->getParameter( 'storage_dir' ),
+            // Allows proper Http cache handling with Last-Modified header.
+            'viewcache.ini/ViewCacheSettings/UpdateModifiedDateOnClearing' => 'enabled'
         );
 
         $event->getParameters()->set(
