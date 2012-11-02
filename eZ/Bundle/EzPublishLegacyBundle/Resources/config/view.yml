@@ -1,4 +1,5 @@
 parameters:
+    ezpublish_legacy.view_provider.class: eZ\Publish\Core\MVC\Legacy\View\Provider
     ezpublish_legacy.content_view_provider.class: eZ\Publish\Core\MVC\Legacy\View\Provider\Content
     ezpublish_legacy.location_view_provider.class: eZ\Publish\Core\MVC\Legacy\View\Provider\Location
     ezpublish_legacy.view_decorator.twig.class: eZ\Publish\Core\MVC\Legacy\View\TwigContentViewLayoutDecorator
@@ -8,15 +9,23 @@ parameters:
         contentBlockName: %ezpublish.content_view.content_block_name%
 
 services:
+    ezpublish_legacy.view_provider:
+        class: %ezpublish_legacy.view_provider.class%
+        arguments: [@ezpublish_legacy.kernel, @ezpublish_legacy.view_decorator, @?logger]
+        abstract: true
+
     ezpublish_legacy.content_view_provider:
         class: %ezpublish_legacy.content_view_provider.class%
-        arguments: [@ezpublish_legacy.kernel, @ezpublish_legacy.view_decorator, @?logger]
+        parent: ezpublish_legacy.view_provider
         tags:
             - {name: ezpublish.content_view_provider, priority: -255}
 
     ezpublish_legacy.location_view_provider:
         class: %ezpublish_legacy.location_view_provider.class%
-        arguments: [@ezpublish_legacy.kernel, @ezpublish_legacy.view_decorator, @?logger]
+        parent: ezpublish_legacy.view_provider
+        calls:
+            # Injecting the request, in non strict mode ("=") avoiding this service to be forced in request scope.
+            - [setRequest, [@request=]]
         tags:
             - {name: ezpublish.location_view_provider, priority: -255}
 
