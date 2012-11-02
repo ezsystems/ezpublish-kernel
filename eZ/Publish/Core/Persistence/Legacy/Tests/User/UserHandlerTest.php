@@ -428,18 +428,27 @@ class UserHandlerTest extends TestCase
 
     public function testDeleteRole()
     {
+        $this->insertDatabaseFixture( __DIR__ . '/../../../../Repository/Tests/Service/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
         $handler = $this->getUserHandler();
 
-        $role = new Persistence\User\Role();
-        $role->identifier = 'Test';
-
-        $role = $handler->createRole( $role );
-
-        $handler->deleteRole( $role->id );
+        // 3 is the ID of Editor role
+        $handler->deleteRole( 3 );
 
         $this->assertQueryResult(
             array( ),
-            $this->handler->createSelectQuery()->select( 'id', 'name' )->from( 'ezrole' ),
+            $this->handler->createSelectQuery()->select( "id" )->from( "ezrole" )->where( "id = 3" ),
+            'Expected an empty set.'
+        );
+
+        $this->assertQueryResult(
+            array(),
+            $this->handler->createSelectQuery()->select( "role_id" )->from( "ezpolicy" )->where( "role_id = 3" ),
+            'Expected an empty set.'
+        );
+
+        $this->assertQueryResult(
+            array(),
+            $this->handler->createSelectQuery()->select( "role_id" )->from( "ezuser_role" )->where( "role_id = 3" ),
             'Expected an empty set.'
         );
     }
