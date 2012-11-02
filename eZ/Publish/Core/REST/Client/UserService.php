@@ -189,7 +189,7 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user group was not found
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if a user with provided login already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a user with provided login already exists
      */
     public function createUser( UserCreateStruct $userCreateStruct, array $parentGroups )
     {

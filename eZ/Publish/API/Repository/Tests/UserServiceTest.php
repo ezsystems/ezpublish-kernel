@@ -961,10 +961,10 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::createUser()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
-    public function testCreateUserThrowsBadStateException()
+    public function testCreateUserThrowsInvalidArgumentException()
     {
         $repository = $this->getRepository();
 
@@ -990,7 +990,7 @@ class UserServiceTest extends BaseTest
         // Load parent group for the user
         $group = $userService->loadUserGroup( $editorsGroupId );
 
-        // This call will fail with a "BadStateException", because the
+        // This call will fail with a "InvalidArgumentException", because the
         // user with "admin" login already exists.
         $userService->createUser( $userCreate, array( $group ) );
         /* END: Use Case */

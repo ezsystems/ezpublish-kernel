@@ -20,7 +20,6 @@ use \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\InvalidArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
-use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserCreateStructStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserGroupStub;
@@ -316,7 +315,7 @@ class UserServiceStub implements UserService
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user group was not found
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if a user with provided login already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a user with provided login already exists
      */
     public function createUser( UserCreateStruct $userCreateStruct, array $parentGroups )
     {
@@ -329,7 +328,7 @@ class UserServiceStub implements UserService
         {
             if ( $user->login == $userCreateStruct->login )
             {
-                throw new BadStateExceptionStub( 'What error code should be used?' );
+                throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
             }
         }
 

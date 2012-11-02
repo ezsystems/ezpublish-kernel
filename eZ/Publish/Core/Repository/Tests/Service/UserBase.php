@@ -507,11 +507,11 @@ abstract class UserBase extends BaseServiceTest
     }
 
     /**
-     * Test creating a user throwing BadStateException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * Test creating a user throwing InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @covers \eZ\Publish\API\Repository\UserService::createUser
      */
-    public function testCreateUserThrowsBadStateException()
+    public function testCreateUserThrowsInvalidArgumentException()
     {
         $userService = $this->repository->getUserService();
 

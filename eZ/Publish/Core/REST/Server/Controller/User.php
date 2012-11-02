@@ -27,7 +27,6 @@ use eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
-use eZ\Publish\API\Repository\Exceptions\BadStateException;
 
 use eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException AS RestInvalidArgumentException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
@@ -246,7 +245,7 @@ class User extends RestController
         {
             $createdUser = $this->userService->createUser( $userCreateStruct, array( $userGroup ) );
         }
-        catch ( BadStateException $e )
+        catch ( InvalidArgumentException $e )
         {
             throw new ForbiddenException( $e->getMessage() );
         }

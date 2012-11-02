@@ -400,7 +400,7 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to move the user group
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing or set to an empty value
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if a user with provided login already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a user with provided login already exists
      */
     public function createUser( APIUserCreateStruct $userCreateStruct, array $parentGroups )
     {
@@ -425,7 +425,7 @@ class UserService implements UserServiceInterface
         try
         {
             $this->userHandler->loadByLogin( $userCreateStruct->login );
-            throw new BadStateException( "userCreateStruct", "User with provided login already exists" );
+            throw new InvalidArgumentException( "userCreateStruct", "User with provided login already exists" );
         }
         catch ( NotFoundException $e )
         {
