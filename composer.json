@@ -29,7 +29,7 @@
         "zetacomponents/signal-slot": "dev-master",
         "zetacomponents/system-information": "dev-master",
         "zetacomponents/webdav": "1.1.0-rc1",
-        "symfony/symfony": "2.1.*",
+        "symfony/symfony": "2.1.3",
         "symfony-cmf/routing": "1.0.*",
         "qafoo/rmf": "1.0.0"
     },

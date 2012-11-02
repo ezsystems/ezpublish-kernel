@@ -1,5 +1,5 @@
 {
-    "hash": "89bf3552343a7264ba93a761407b3f76",
+    "hash": "c5f80f89e733b9725224eef681718431",
     "packages": [
         {
             "name": "doctrine/common",
@@ -54,7 +54,7 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes M. Schmitt",
+                    "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -101,12 +101,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony-cmf/Routing",
-                "reference": "53237ea71d6ecf3a1344737d0d71254b1bf1df2f"
+                "reference": "ad024d9d3125a1ee30c391d4d12e33bf534ac684"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony-cmf/Routing/zipball/53237ea71d6ecf3a1344737d0d71254b1bf1df2f",
-                "reference": "53237ea71d6ecf3a1344737d0d71254b1bf1df2f",
+                "url": "https://github.com/symfony-cmf/Routing/zipball/ad024d9d3125a1ee30c391d4d12e33bf534ac684",
+                "reference": "ad024d9d3125a1ee30c391d4d12e33bf534ac684",
                 "shasum": ""
             },
             "require": {
@@ -114,7 +114,7 @@
                 "symfony/routing": ">=2.1,<2.3-dev",
                 "symfony/http-kernel": ">=2.1,<2.3-dev"
             },
-            "time": "1350903894",
+            "time": "1351276175",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -145,16 +145,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "2.1.x-dev",
+            "version": "v2.1.3",
             "source": {
                 "type": "git",
                 "url": "git://github.com/symfony/symfony.git",
-                "reference": "28482f8216de3289f35519f32d829499a5ffb632"
+                "reference": "v2.1.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/symfony/zipball/28482f8216de3289f35519f32d829499a5ffb632",
-                "reference": "28482f8216de3289f35519f32d829499a5ffb632",
+                "url": "https://github.com/symfony/symfony/zipball/v2.1.3",
+                "reference": "v2.1.3",
                 "shasum": ""
             },
             "require": {
@@ -203,14 +203,14 @@
                 "propel/propel1": "dev-master",
                 "monolog/monolog": "1.*"
             },
-            "time": "1350937201",
+            "time": "2012-10-30 01:14:14",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "2.1-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Symfony": "src/",
@@ -242,18 +242,18 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "61393dc9fb8982110048624aa573aec4aee0b465"
+                "reference": "0879472d7ecfd6b5714b066da152e005d7781b5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/zipball/61393dc9fb8982110048624aa573aec4aee0b465",
-                "reference": "61393dc9fb8982110048624aa573aec4aee0b465",
+                "url": "https://github.com/fabpot/Twig/zipball/0879472d7ecfd6b5714b066da152e005d7781b5b",
+                "reference": "0879472d7ecfd6b5714b066da152e005d7781b5b",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "1350737598",
+            "time": "1351620822",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1530,18 +1530,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezsystems/ezpublish.git",
-                "reference": "a72c1d0fb9f15eaf3c86572974a3431fcabbb39e"
+                "reference": "4ccd3f0b11691ecd6a2ef66cea6a143c2bc5554a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/ezsystems/ezpublish/zipball/a72c1d0fb9f15eaf3c86572974a3431fcabbb39e",
-                "reference": "a72c1d0fb9f15eaf3c86572974a3431fcabbb39e",
+                "url": "https://github.com/ezsystems/ezpublish/zipball/4ccd3f0b11691ecd6a2ef66cea6a143c2bc5554a",
+                "reference": "4ccd3f0b11691ecd6a2ef66cea6a143c2bc5554a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1351001206",
+            "time": "1351872174",
             "type": "library",
             "installation-source": "source",
             "description": "eZ Publish LegacyStack (4.x)",
