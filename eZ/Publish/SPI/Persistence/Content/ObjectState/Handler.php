@@ -35,6 +35,17 @@ interface Handler
     public function loadGroup( $groupId );
 
     /**
+     * Loads a object state group by identifier
+     *
+     * @param string $identifier
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the group was not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
+     */
+    public function loadGroupByIdentifier( $identifier );
+
+    /**
      * Loads all object state groups
      *
      * @param int $offset
@@ -93,6 +104,18 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
     public function load( $stateId );
+
+    /**
+     * Loads an object state by identifier and group it belongs to
+     *
+     * @param string $identifier
+     * @param mixed $groupId
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the state was not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
+     */
+    public function loadByIdentifier( $identifier, $groupId );
 
     /**
      * Updates an object state

@@ -26,6 +26,15 @@ abstract class Gateway
     abstract public function loadObjectStateData( $stateId );
 
     /**
+     * Loads data for an object state by identifier
+     *
+     * @param string $identifier
+     * @param mixed $groupId
+     * @return array
+     */
+    abstract public function loadObjectStateDataByIdentifier( $identifier, $groupId );
+
+    /**
      * Loads data for all object states belonging to group with $groupId ID
      *
      * @param mixed $groupId
@@ -40,6 +49,14 @@ abstract class Gateway
      * @return array
      */
     abstract public function loadObjectStateGroupData( $groupId );
+
+    /**
+     * Loads data for an object state group by identifier
+     *
+     * @param string $identifier
+     * @return array
+     */
+    abstract public function loadObjectStateGroupDataByIdentifier( $identifier );
 
     /**
      * Loads data for all object state groups, filtered by $offset and $limit

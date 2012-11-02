@@ -68,6 +68,35 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Loads data for an object state by identifier
+     *
+     * @param string $identifier
+     * @param mixed $groupId
+     * @return array
+     */
+    public function loadObjectStateDataByIdentifier( $identifier, $groupId )
+    {
+        $query = $this->createObjectStateFindQuery();
+        $query->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'identifier', 'ezcobj_state' ),
+                    $query->bindValue( $identifier, null, \PDO::PARAM_STR )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'group_id', 'ezcobj_state' ),
+                    $query->bindValue( $groupId, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Loads data for all object states belonging to group with $groupId ID
      *
      * @param mixed $groupId
@@ -108,6 +137,28 @@ class EzcDatabase extends Gateway
             $query->expr->eq(
                 $this->dbHandler->quoteColumn( 'id', 'ezcobj_state_group' ),
                 $query->bindValue( $groupId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
+     * Loads data for an object state group by identifier
+     *
+     * @param string $identifier
+     * @return array
+     */
+    public function loadObjectStateGroupDataByIdentifier( $identifier )
+    {
+        $query = $this->createObjectStateGroupFindQuery();
+        $query->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'identifier', 'ezcobj_state_group' ),
+                $query->bindValue( $identifier, null, \PDO::PARAM_STR )
             )
         );
 

@@ -69,6 +69,26 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
     }
 
     /**
+     * Loads a object state group by identifier
+     *
+     * @param string $identifier
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the group was not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
+     */
+    public function loadGroupByIdentifier( $identifier )
+    {
+        $objectStateGroups = $this->backend->find( 'Content\\ObjectState\\Group', array( 'identifier' => $identifier ) );
+        if ( empty( $objectStateGroups ) )
+        {
+            throw new NotFound( "Content\\ObjectState\\Group", array( "identifier" => $identifier ) );
+        }
+
+        return reset( $objectStateGroups );
+    }
+
+    /**
      * Loads all object state groups
      *
      * @param int $offset
@@ -192,6 +212,34 @@ class ObjectStateHandler implements ObjectStateHandlerInterface
     public function load( $stateId )
     {
         return $this->backend->load( 'Content\\ObjectState', $stateId );
+    }
+
+    /**
+     * Loads an object state by identifier and group it belongs to
+     *
+     * @param string $identifier
+     * @param mixed $groupId
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the state was not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
+     */
+    public function loadByIdentifier( $identifier, $groupId )
+    {
+        $objectStates = $this->backend->find(
+            'Content\\ObjectState',
+            array(
+                'identifier' => $identifier,
+                'groupId' => $groupId
+            )
+        );
+
+        if ( empty( $objectStates ) )
+        {
+            throw new NotFound( "Content\\ObjectState", array( "identifier" => $identifier, "groupId" => $groupId ) );
+        }
+
+        return reset( $objectStates );
     }
 
     /**
