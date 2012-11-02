@@ -116,6 +116,52 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
 
     /**
      * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadGroupByIdentifier
+     */
+    public function testLoadGroupByIdentifier()
+    {
+        $handler = $this->getObjectStateHandler();
+        $mapperMock = $this->getMapperMock();
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadObjectStateGroupDataByIdentifier' )
+            ->with( $this->equalTo( 'ez_lock' ) )
+            ->will( $this->returnValue( array( array() ) ) );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'createObjectStateGroupFromData' )
+            ->with( $this->equalTo( array( array() ) ) )
+            ->will( $this->returnValue( $this->getObjectStateGroupFixture() ) );
+
+        $result = $handler->loadGroupByIdentifier( 'ez_lock' );
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Group',
+            $result
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadGroupByIdentifier
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadGroupByIdentifierThrowsNotFoundException()
+    {
+        $handler = $this->getObjectStateHandler();
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadObjectStateGroupDataByIdentifier' )
+            ->with( $this->equalTo( 'unknown' ) )
+            ->will( $this->returnValue( array() ) );
+
+        $handler->loadGroupByIdentifier( 'unknown' );
+    }
+
+    /**
+     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadAllGroups
      */
     public function testLoadAllGroups()
@@ -337,6 +383,52 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
             ->will( $this->returnValue( array() ) );
 
         $handler->load( PHP_INT_MAX );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadByIdentifier
+     */
+    public function testLoadByIdentifier()
+    {
+        $handler = $this->getObjectStateHandler();
+        $mapperMock = $this->getMapperMock();
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadObjectStateDataByIdentifier' )
+            ->with( $this->equalTo( 'not_locked' ), $this->equalTo( 2 ) )
+            ->will( $this->returnValue( array( array() ) ) );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'createObjectStateFromData' )
+            ->with( $this->equalTo( array( array() ) ) )
+            ->will( $this->returnValue( $this->getObjectStateFixture() ) );
+
+        $result = $handler->loadByIdentifier( 'not_locked', 2 );
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState',
+            $result
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadByIdentifier
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadByIdentifierThrowsNotFoundException()
+    {
+        $handler = $this->getObjectStateHandler();
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadObjectStateDataByIdentifier' )
+            ->with( $this->equalTo( 'unknown' ), $this->equalTo( 2 ) )
+            ->will( $this->returnValue( array() ) );
+
+        $handler->loadByIdentifier( 'unknown', 2 );
     }
 
     /**

@@ -83,6 +83,32 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::loadGroupByIdentifier
+     */
+    public function testLoadGroupByIdentifier()
+    {
+        $group = $this->handler->loadGroupByIdentifier( 'ez_lock' );
+
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Group', $group );
+
+        $this->assertEquals( 2, $group->id );
+        $this->assertEquals( 'ez_lock', $group->identifier );
+        $this->assertEquals( 'eng-US', $group->defaultLanguage );
+        $this->assertEquals( array( 'eng-US' ), $group->languageCodes );
+        $this->assertEquals( array( 'eng-US' => 'Lock' ), $group->name );
+        $this->assertEquals( array( 'eng-US' => '' ), $group->description );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::loadGroupByIdentifier
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadGroupByIdentifierThrowsNotFoundException()
+    {
+        $this->handler->loadGroup( 'unknown' );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::loadAllGroups
      */
     public function testLoadAllGroups()
@@ -255,6 +281,34 @@ class ObjectStateHandlerTest extends HandlerTest
     public function testLoadThrowsNotFoundException()
     {
         $this->handler->load( PHP_INT_MAX );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::loadByIdentifier
+     */
+    public function testLoadByIdentifier()
+    {
+        $state = $this->handler->loadByIdentifier( 'not_locked', 2 );
+
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState', $state );
+
+        $this->assertEquals( 1, $state->id );
+        $this->assertEquals( 2, $state->groupId );
+        $this->assertEquals( 'not_locked', $state->identifier );
+        $this->assertEquals( 'eng-US', $state->defaultLanguage );
+        $this->assertEquals( array( 'eng-US' ), $state->languageCodes );
+        $this->assertEquals( array( 'eng-US' => 'Not locked' ), $state->name );
+        $this->assertEquals( array( 'eng-US' => '' ), $state->description );
+        $this->assertEquals( 0, $state->priority );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ObjectStateHandler::loadByIdentifier
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadByIdentifierThrowsNotFoundException()
+    {
+        $this->handler->loadByIdentifier( 'unknown', 2 );
     }
 
     /**

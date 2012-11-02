@@ -81,6 +81,27 @@ class Handler implements BaseObjectStateHandler
     }
 
     /**
+     * Loads a object state group by identifier
+     *
+     * @param string $identifier
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the group was not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
+     */
+    public function loadGroupByIdentifier( $identifier )
+    {
+        $data = $this->objectStateGateway->loadObjectStateGroupDataByIdentifier( $identifier );
+
+        if ( empty( $data ) )
+        {
+            throw new NotFoundException( "ObjectStateGroup", $identifier );
+        }
+
+        return $this->objectStateMapper->createObjectStateGroupFromData( $data );
+    }
+
+    /**
      * Loads all object state groups
      *
      * @param int $offset
@@ -177,6 +198,28 @@ class Handler implements BaseObjectStateHandler
         if ( empty( $data ) )
         {
             throw new NotFoundException( "ObjectState", $stateId );
+        }
+
+        return $this->objectStateMapper->createObjectStateFromData( $data );
+    }
+
+    /**
+     * Loads an object state by identifier and group it belongs to
+     *
+     * @param string $identifier
+     * @param mixed $groupId
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the state was not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
+     */
+    public function loadByIdentifier( $identifier, $groupId )
+    {
+        $data = $this->objectStateGateway->loadObjectStateDataByIdentifier( $identifier, $groupId );
+
+        if ( empty( $data ) )
+        {
+            throw new NotFoundException( "ObjectState", array( 'identifier' => $identifier, 'groupId' => $groupId ) );
         }
 
         return $this->objectStateMapper->createObjectStateFromData( $data );
