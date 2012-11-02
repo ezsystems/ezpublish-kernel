@@ -119,6 +119,7 @@ interface UserService
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing or set  to an empty value
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a field value is not accepted by the field type
+     *                                                                        if a user with provided login already exists
      */
     public function createUser( UserCreateStruct $userCreateStruct, array $parentGroups );
 

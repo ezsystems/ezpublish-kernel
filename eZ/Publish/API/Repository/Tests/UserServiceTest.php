@@ -959,6 +959,46 @@ class UserServiceTest extends BaseTest
     /**
      * Test for the createUser() method.
      *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::createUser()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     */
+    public function testCreateUserThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+
+        $editorsGroupId = $this->generateId( 'group', 13 );
+        /* BEGIN: Use Case */
+        // $editorsGroupId is the ID of the "Editors" user group in an eZ
+        // Publish demo installation
+
+        $userService = $repository->getUserService();
+
+        // Instantiate a create struct with mandatory properties
+        $userCreate = $userService->newUserCreateStruct(
+            // admin is an existing login
+            'admin',
+            'user@example.com',
+            'secret',
+            'eng-US'
+        );
+
+        $userCreate->setField( 'first_name', 'Example' );
+        $userCreate->setField( 'last_name', 'User' );
+
+        // Load parent group for the user
+        $group = $userService->loadUserGroup( $editorsGroupId );
+
+        // This call will fail with a "InvalidArgumentException", because the
+        // user with "admin" login already exists.
+        $userService->createUser( $userCreate, array( $group ) );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the createUser() method.
+     *
      * @return \eZ\Publish\API\Repository\Values\User\User
      * @see \eZ\Publish\API\Repository\UserService::createUser()
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
