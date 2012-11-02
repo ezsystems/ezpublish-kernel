@@ -226,7 +226,19 @@ class Handler implements BaseUserHandler
      */
     public function deleteRole( $roleId )
     {
-        $this->roleGateway->deleteRole( $roleId );
+        $role = $this->loadRole( $roleId );
+
+        foreach ( $role->policies as $policy )
+        {
+            $this->roleGateway->removePolicy( $policy->id );
+        }
+
+        foreach ( $role->groupIds as $groupId )
+        {
+            $this->userGateway->removeRole( $groupId, $role->id );
+        }
+
+        $this->roleGateway->deleteRole( $role->id );
     }
 
     /**
