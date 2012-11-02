@@ -158,9 +158,6 @@ class Role extends RestController
      */
     public function deleteRole()
     {
-        //@todo error handling if the role is assigned to user or user group
-        //problem being that PAPI does not specify throwing an exception in that case
-
         $values = $this->urlHandler->parse( 'role', $this->request->path );
         $this->roleService->deleteRole(
             $this->roleService->loadRole( $values['role'] )
