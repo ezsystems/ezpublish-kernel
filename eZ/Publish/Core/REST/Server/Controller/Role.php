@@ -324,9 +324,6 @@ class Role extends RestController
      */
     public function assignRoleToUser()
     {
-        //@todo error handling if the role is already assigned to user
-        //problem being that PAPI does not specify throwing an exception in this case
-
         $values = $this->urlHandler->parse( 'userRoleAssignments', $this->request->path );
 
         $roleAssignment = $this->inputDispatcher->parse(
@@ -352,9 +349,6 @@ class Role extends RestController
      */
     public function assignRoleToUserGroup()
     {
-        //@todo error handling if the role is already assigned to user group
-        //problem being that PAPI does not specify throwing an exception in this case
-
         $values = $this->urlHandler->parse( 'groupRoleAssignments', $this->request->path );
 
         $roleAssignment = $this->inputDispatcher->parse(
