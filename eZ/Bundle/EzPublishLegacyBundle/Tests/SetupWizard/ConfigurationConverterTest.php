@@ -38,7 +38,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
             $legacyResolver->expects( $this->any() )->method( $method )->will( $this->returnCallback( $this->convertMapToCallback( $callbackMap ) ) );
         }
 
-        $configurationConverter = new ConfigurationConverter( $legacyResolver, $this->getLegacyKernelMock() );
+        $configurationConverter = new ConfigurationConverter( $legacyResolver, $this->getLegacyKernelMock(), array( $package ) );
 
         try
         {
@@ -133,7 +133,6 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                         ),
                         'var_dir' => 'var/ezdemo_site',
                     ),
-                    'ezdemo_site_admin' => array( 'url_alias_router' => false ),
                     'eng' => array(
                         'image_variations' => array(
                             'large' => array( 'reference' => null, 'filters' => array(
@@ -144,7 +143,8 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                                 array( 'name' => 'flatten' )
                             ) ),
                         )
-                    )
+                    ),
+                    'ezdemo_site_admin' => array( 'url_alias_router' => false )
                 ),
                 'imagemagick' => array(
                     'enabled' => true,
