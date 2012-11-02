@@ -5293,7 +5293,6 @@ Assign Role to User or User Group
 
 :Error Codes:
     :401: If the user is not authorized to assign this role
-    :403: If the role is already assigned to the user or user group
 
 XML Example
 '''''''''''
