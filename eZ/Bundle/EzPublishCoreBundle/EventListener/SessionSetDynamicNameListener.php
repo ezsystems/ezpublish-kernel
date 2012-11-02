@@ -54,23 +54,26 @@ class SessionSetDynamicNameListener implements EventSubscriberInterface
         }
 
         // Getting from the container and not from the request because the session object is assigned to the request only when session has started.
+        /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
         $session = $this->container->get( 'session' );
-
 
         /** @var $configResolver \eZ\Publish\Core\MVC\ConfigResolverInterface */
         $configResolver = $this->container->get( 'ezpublish.config.resolver' );
         $sessionName = $configResolver->getParameter( 'session_name' );
-        if ( strpos( $sessionName, self::MARKER ) !== false )
+        if ( $session->getName() != $sessionName )
         {
-            $session->setName(
-                str_replace(
-                    self::MARKER, md5( $event->getSiteAccess()->name ), $sessionName
-                )
-            );
-        }
-        else
-        {
-            $session->setName( $sessionName );
+            if ( strpos( $sessionName, self::MARKER ) !== false )
+            {
+                $session->setName(
+                    str_replace(
+                        self::MARKER, md5( $event->getSiteAccess()->name ), $sessionName
+                    )
+                );
+            }
+            else
+            {
+                $session->setName( $sessionName );
+            }
         }
     }
 }
