@@ -112,9 +112,10 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
             {
                 case UrlAlias::LOCATION:
                     $params += array(
-                        '_controller'   => 'ezpublish.controller.content.view:viewLocation',
-                        'locationId'    => $urlAlias->destination->id,
-                        'viewType'      => ViewManager::VIEW_TYPE_FULL
+                        '_controller' => 'ezpublish.controller.content.view:viewLocation',
+                        'locationId' => $urlAlias->destination->id,
+                        'viewType' => ViewManager::VIEW_TYPE_FULL,
+                        'layout' => true,
                     );
 
                     $request->attributes->set( 'locationId', $urlAlias->destination->id );
