@@ -5177,7 +5177,7 @@ Delete Role
 ```````````
 :Resource: /user/roles/<ID>
 :Method: DELETE
-:Description: the given role is deleted
+:Description: the given role and all assignments to users or user groups are deleted
 :Response: 
 
 .. code:: http
@@ -5185,8 +5185,7 @@ Delete Role
         HTTP/1.1 204 No Content
 
 :Error Codes:
-    :401: If the user is not authorized to delete this content type
-    :403: If the role is assigned to a user or user group
+    :401: If the user is not authorized to delete this role
 
 Load Roles for User or User Group
 `````````````````````````````````
