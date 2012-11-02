@@ -256,20 +256,26 @@ class ContentType extends RestController
             $questionMarkPosition !== false ? substr( $this->request->path, 0, $questionMarkPosition ) : $this->request->path
         );
 
-        //@todo Throw forbidden exception if content type identifier already exists
-        //Cannot be caught as PAPI throws same InvalidArgumentException for couple of situations
+        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $urlValues['typegroup'] );
 
-        $contentTypeDraft = $this->contentTypeService->createContentType(
-            $this->inputDispatcher->parse(
-                new Message(
-                    array(
-                        'Content-Type' => $this->request->contentType,
-                    ),
-                    $this->request->body
-                )
-            ),
-            array( $this->contentTypeService->loadContentTypeGroup( $urlValues['typegroup'] ) )
-        );
+        try
+        {
+            $contentTypeDraft = $this->contentTypeService->createContentType(
+                $this->inputDispatcher->parse(
+                    new Message(
+                        array(
+                            'Content-Type' => $this->request->contentType,
+                        ),
+                        $this->request->body
+                    )
+                ),
+                array( $contentTypeGroup )
+            );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
 
         if ( isset( $this->request->variables['publish'] ) && $this->request->variables['publish'] === 'true' )
         {
@@ -323,12 +329,18 @@ class ContentType extends RestController
     public function createContentTypeDraft()
     {
         $urlValues = $this->urlHandler->parse( 'type', $this->request->path );
+        $contentType = $this->contentTypeService->loadContentType( $urlValues['type'] );
 
-        // @TODO Throw ForbiddenException if the content type already has a draft
-
-        $contentTypeDraft = $this->contentTypeService->createContentTypeDraft(
-            $this->contentTypeService->loadContentType( $urlValues['type'] )
-        );
+        try
+        {
+            $contentTypeDraft = $this->contentTypeService->createContentTypeDraft(
+                $contentType
+            );
+        }
+        catch( BadStateException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
 
         $contentTypeUpdateStruct = $this->inputDispatcher->parse(
             new Message(
@@ -339,13 +351,17 @@ class ContentType extends RestController
             )
         );
 
-        // @TODO Throw ForbiddenException if the content type with the identifier already exists
-        // PAPI throws same exception for various situations
-
-        $this->contentTypeService->updateContentTypeDraft(
-            $contentTypeDraft,
-            $contentTypeUpdateStruct
-        );
+        try
+        {
+            $this->contentTypeService->updateContentTypeDraft(
+                $contentTypeDraft,
+                $contentTypeUpdateStruct
+            );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
 
         return new Values\CreatedContentType(
             array(
@@ -368,8 +384,6 @@ class ContentType extends RestController
     {
         $urlValues = $this->urlHandler->parse( 'typeDraft', $this->request->path );
 
-        // @TODO Throw NotFoundException if the content type does not have a draft for the current user
-
         $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
 
         return new Values\RestContentType(
@@ -387,8 +401,6 @@ class ContentType extends RestController
     {
         $urlValues = $this->urlHandler->parse( 'typeDraft', $this->request->path );
 
-        // @TODO Throw NotFoundException if the content type does not have a draft
-
         $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
         $contentTypeUpdateStruct = $this->inputDispatcher->parse(
             new Message(
@@ -399,13 +411,17 @@ class ContentType extends RestController
             )
         );
 
-        // @TODO Throw ForbiddenException if the content type with the identifier already exists
-        // PAPI throws same exception for various situations
-
-        $this->contentTypeService->updateContentTypeDraft(
-            $contentTypeDraft,
-            $contentTypeUpdateStruct
-        );
+        try
+        {
+            $this->contentTypeService->updateContentTypeDraft(
+                $contentTypeDraft,
+                $contentTypeUpdateStruct
+            );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
 
         return new Values\RestContentType(
             // Reload the content type draft to get the updated values
@@ -581,14 +597,18 @@ class ContentType extends RestController
             throw new Exceptions\NotFoundException( "Field definition not found: '{$this->request->path}'." );
         }
 
-        //@TODO Throw ForbiddenException if identifier already exists
-        // PAPI throws same type of exception for various cases
-
-        $this->contentTypeService->updateFieldDefinition(
-            $contentTypeDraft,
-            $fieldDefinition,
-            $fieldDefinitionUpdate
-        );
+        try
+        {
+            $this->contentTypeService->updateFieldDefinition(
+                $contentTypeDraft,
+                $fieldDefinition,
+                $fieldDefinitionUpdate
+            );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
 
         $updatedDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
         foreach ( $updatedDraft->getFieldDefinitions() as $fieldDef )
@@ -612,8 +632,6 @@ class ContentType extends RestController
     public function removeFieldDefinition()
     {
         $urlValues = $this->urlHandler->parse( 'typeFieldDefinitionDraft', $this->request->path );
-
-        // @TODO Throw NotFoundException if the content type does not have a draft for the current user
 
         $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
 
@@ -647,8 +665,6 @@ class ContentType extends RestController
     public function publishContentTypeDraft()
     {
         $urlValues = $this->urlHandler->parse( 'typeDraft', $this->request->path );
-
-        // @TODO Throw NotFoundException if the content type does not have a draft for the current user
 
         $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
 
@@ -698,8 +714,6 @@ class ContentType extends RestController
     public function deleteContentTypeDraft()
     {
         $urlValues = $this->urlHandler->parse( 'typeDraft', $this->request->path );
-
-        // @TODO Throw NotFoundException if the content type does not have a draft for the current user
 
         $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $urlValues['type'] );
         $this->contentTypeService->deleteContentType( $contentTypeDraft );
