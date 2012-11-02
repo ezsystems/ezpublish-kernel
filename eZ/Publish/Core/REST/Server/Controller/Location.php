@@ -19,7 +19,9 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\TrashService;
 
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
+use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 
 /**
  * Location controller
@@ -108,13 +110,20 @@ class Location extends RestController
             )
         );
 
-        //@todo Error handling if a location under the given parent id already exists
-        //Problem being that PAPI throws same exception for several conditions
-
         $contentInfo = $this->contentService->loadContentInfo( $values['object'] );
+
+        try
+        {
+            $createdLocation = $this->locationService->createLocation( $contentInfo, $locationCreateStruct );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            throw new ForbiddenException( $e->getMessage() );
+        }
+
         return new Values\CreatedLocation(
             array(
-                'location' => $this->locationService->createLocation( $contentInfo, $locationCreateStruct )
+                'location' => $createdLocation
             )
         );
     }
