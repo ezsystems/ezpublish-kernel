@@ -147,17 +147,26 @@ class Content extends RestController
         // update section
         if ( $updateStruct->sectionId !== null )
         {
-            // @todo Exception handling. Section not found ? Not authorized ?
             $section = $this->sectionService->loadSection( $updateStruct->sectionId );
             $this->sectionService->assignSection( $contentInfo, $section );
             $updateStruct->sectionId = null;
         }
 
-        // update content
-        // @todo An exception may be thrown if sectionId was the only property left in the struct. Maybe test the properties list manually here ?
-        $this->contentService->updateContentMetadata( $contentInfo, $updateStruct );
+        // @TODO Consider refactoring! ContentService::updateContentMetadata throws the same exception
+        // in case the updateStruct is empty and if remoteId already exists. Since REST version of update struct
+        // includes section ID in addition to other fields, we cannot throw exception if only sectionId property
+        // is set, so we must skip updating content in that case instead of allowing propagation of the exception.
+        foreach ( $updateStruct as $propertyName => $propertyValue )
+        {
+            if ( $propertyName !== 'sectionId' && $propertyValue !== null )
+            {
+                // update content
+                $this->contentService->updateContentMetadata( $contentInfo, $updateStruct );
+                $contentInfo = $this->contentService->loadContentInfo( $contentId );
+                break;
+            }
+        }
 
-        $contentInfo = $this->contentService->loadContentInfo( $contentId );
         try
         {
             $locationInfo = $this->locationService->loadLocation( $contentInfo->mainLocationId );
@@ -166,6 +175,7 @@ class Content extends RestController
         {
             $locationInfo = null;
         }
+
         return new Values\RestContent(
             $contentInfo,
             $locationInfo
