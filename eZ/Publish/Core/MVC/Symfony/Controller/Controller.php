@@ -86,7 +86,7 @@ abstract class Controller extends ContainerAware
     }
 
     /**
-     * @return \eZ\Publish\API\Repository
+     * @return \eZ\Publish\API\Repository\Repository
      */
     public function getRepository()
     {
