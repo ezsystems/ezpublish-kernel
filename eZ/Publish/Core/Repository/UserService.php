@@ -753,12 +753,11 @@ class UserService implements UserServiceInterface
     /**
      * Assigns a new user group to the user
      *
-     * If the user is already in the given user group this method does nothing.
-     *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign the user group to the user
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the user is already in the given user group
      */
     public function assignUserToUserGroup( APIUser $user, APIUserGroup $userGroup )
     {
@@ -780,11 +779,15 @@ class UserService implements UserServiceInterface
         }
 
         if ( $loadedGroup->getVersionInfo()->getContentInfo()->mainLocationId === null )
-            throw new InvalidArgumentException( "userGroup", "user group has no main location or no locations" );
+        {
+            throw new BadStateException( "userGroup", "user group has no main location or no locations" );
+        }
 
         if ( in_array( $loadedGroup->getVersionInfo()->getContentInfo()->mainLocationId, $existingGroupIds ) )
+        {
             // user is already assigned to the user group
-            return;
+            throw new InvalidArgumentException( "user", "user is already in the given user group" );
+        }
 
         $locationCreateStruct = $locationService->newLocationCreateStruct(
             $loadedGroup->getVersionInfo()->getContentInfo()->mainLocationId
@@ -829,10 +832,10 @@ class UserService implements UserServiceInterface
 
         $userLocations = $locationService->loadLocations( $loadedUser->getVersionInfo()->getContentInfo() );
         if ( empty( $userLocations ) )
-            throw new InvalidArgumentException( "user", "user has no locations, cannot unassign from group" );
+            throw new BadStateException( "user", "user has no locations, cannot unassign from group" );
 
         if ( $loadedGroup->getVersionInfo()->getContentInfo()->mainLocationId === null )
-            throw new InvalidArgumentException( "userGroup", "user group has no main location or no locations, cannot unassign" );
+            throw new BadStateException( "userGroup", "user group has no main location or no locations, cannot unassign" );
 
         foreach ( $userLocations as $userLocation )
         {

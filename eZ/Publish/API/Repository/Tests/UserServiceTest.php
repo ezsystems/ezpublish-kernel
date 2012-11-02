@@ -1532,6 +1532,34 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test for the assignUserToUserGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::assignUserToUserGroup()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testAssignUserToUserGroup
+     */
+    public function testAssignUserToUserGroupThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $editorsGroupId = $this->generateId( 'group', 13 );
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+        // $editorsGroupId is the ID of the "Editors" group in an
+        // eZ Publish demo installation
+
+        // This call will fail with an "InvalidArgumentException", because the
+        // user is already assigned to the "Editors" group
+        $userService->assignUserToUserGroup(
+            $user,
+            $userService->loadUserGroup( $editorsGroupId )
+        );
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the unAssignUssrFromUserGroup() method.
      *
      * @return void

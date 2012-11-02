@@ -270,12 +270,11 @@ class UserService implements \eZ\Publish\API\Repository\UserService, Sessionable
     /**
      * Assigns a new user group to the user
      *
-     * If the user is already in the given user group this method does nothing.
-     *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign the user group to the user
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the user is already in the given user group
      */
     public function assignUserToUserGroup( User $user, UserGroup $userGroup )
     {

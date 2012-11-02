@@ -719,6 +719,20 @@ abstract class UserBase extends BaseServiceTest
     }
 
     /**
+     * Test assigning a user group to user throwing InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @covers \eZ\Publish\API\Repository\UserService::assignUserToUserGroup
+     */
+    public function testAssignUserToUserGroupThrowsInvalidArgumentException()
+    {
+        $userService = $this->repository->getUserService();
+
+        $user = $userService->loadUser( 14 );
+        $userGroup = $userService->loadUserGroup( 12 );
+        $userService->assignUserToUserGroup( $user, $userGroup );
+    }
+
+    /**
      * Test removing a user from user group
      * @covers \eZ\Publish\API\Repository\UserService::unAssignUserFromUserGroup
      */
