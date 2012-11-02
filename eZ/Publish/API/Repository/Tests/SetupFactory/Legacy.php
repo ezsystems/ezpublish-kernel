@@ -362,6 +362,11 @@ class Legacy extends SetupFactory
 
             $serviceSettings['inner_repository']['arguments']['persistence_handler'] = '@persistence_handler_legacy';
             $serviceSettings['inner_repository']['arguments']['io_handler'] = '@io_handler_legacy';
+
+            // Needed for URLAliasService tests
+            $serviceSettings['inner_repository']['arguments']['service_settings']['language']['languages'][] = 'eng-US';
+            $serviceSettings['inner_repository']['arguments']['service_settings']['language']['languages'][] = 'eng-GB';
+
             $serviceSettings['persistence_handler_legacy']['arguments']['config']['dsn'] = self::$dsn;
             $serviceSettings['legacy_db_handler']['arguments']['dsn'] = self::$dsn;
 
