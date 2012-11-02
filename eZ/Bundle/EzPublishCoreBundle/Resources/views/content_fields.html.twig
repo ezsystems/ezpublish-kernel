@@ -114,7 +114,7 @@
 {% block ezurl_field %}
 {% spaceless %}
     {% if field.value %}
-        <a href="{{ field.value.link|escape( 'url' ) }}"
+        <a href="{{ field.value.link }}"
             {{ block( 'field_attributes' ) }}>{{ field.value.text ? field.value.text : field.value.link }}</a>
     {% endif %}
 {% endspaceless %}
