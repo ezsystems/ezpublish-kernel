@@ -28,10 +28,16 @@ class ConfigurationConverter
      */
     protected $legacyKernel;
 
-    public function __construct( LegacyConfigResolver $legacyResolver, \Closure $legacyKernel )
+    /**
+     * @var array
+     */
+    protected $supportedPackages;
+
+    public function __construct( LegacyConfigResolver $legacyResolver, \Closure $legacyKernel, array $supportedPackages )
     {
         $this->legacyResolver = $legacyResolver;
         $this->legacyKernel = $legacyKernel();
+        $this->supportedPackages = array_fill_keys( $supportedPackages, true );
     }
 
     /**
@@ -85,7 +91,21 @@ class ConfigurationConverter
             'server' => $databaseSettings['Server'],
             'database_name' => $databaseSettings['Database'],
         );
-        $settings['ezpublish']['system'][$adminSiteaccess] = array( 'url_alias_router' => false );
+        $settings['ezpublish']['system'][$defaultSiteaccess] = array();
+        $settings['ezpublish']['system'][$adminSiteaccess] = array();
+
+        // If package is not supported, all siteaccesses will have individually url_alias_router to false, forcing legacy fallback
+        if ( !isset( $this->supportedPackages[$sitePackage] ) )
+        {
+            foreach ( $siteList as $siteaccess )
+            {
+                $settings['ezpublish']['system'][$siteaccess] = array( 'url_alias_router' => false );
+            }
+        }
+        else
+        {
+            $settings['ezpublish']['system'][$adminSiteaccess] += array( 'url_alias_router' => false );
+        }
 
         // FileSettings
         $settings['ezpublish']['system'][$groupName]['var_dir'] =
@@ -112,7 +132,6 @@ class ConfigurationConverter
         }
 
         // image variations settings
-        $settings['ezpublish']['system'][$defaultSiteaccess] = array();
         $settings['ezpublish']['system'][$defaultSiteaccess]['image_variations'] = array();
         $imageAliasesList = $this->legacyResolver->getGroup( 'AliasSettings', 'image', $defaultSiteaccess );
         foreach( $imageAliasesList['AliasList'] as $imageAliasIdentifier )

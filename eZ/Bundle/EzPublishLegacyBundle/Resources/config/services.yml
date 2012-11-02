@@ -30,6 +30,8 @@ parameters:
     ezpublish_legacy.config.resolver.class: eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver
     ezpublish_legacy.config.default_scope: site
     ezpublish_legacy.setup_wizard.configuration_converter.class: eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfigurationConverter
+    # Non-supported packages will have url_alias_router to false
+    ezpublish_legacy.setup_wizard.supported_packages: [ezdemo_site, ezdemo_site_clean]
     ezpublish_legacy.fieldType.ezimage.variation_service.class: eZ\Publish\Core\MVC\Legacy\Image\AliasGenerator
 
 services:
@@ -133,7 +135,7 @@ services:
 
     ezpublish_legacy.setup_wizard.configuration_converter:
         class: %ezpublish_legacy.setup_wizard.configuration_converter.class%
-        arguments: [@ezpublish_legacy.config.resolver, @ezpublish_legacy.kernel]
+        arguments: [@ezpublish_legacy.config.resolver, @ezpublish_legacy.kernel, %ezpublish_legacy.setup_wizard.supported_packages%]
 
     # Image alias generator using legacy
     ezpublish_legacy.fieldType.ezimage.variation_service:
