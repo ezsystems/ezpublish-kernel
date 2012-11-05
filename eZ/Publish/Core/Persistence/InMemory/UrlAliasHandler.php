@@ -131,23 +131,23 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
     }
 
     /**
-     * Create a user chosen $alias pointing to $locationId in $languageName.
+     * Create a user chosen $alias pointing to $locationId in $languageCode.
      *
-     * If $languageName is null the $alias is created in the system's default
+     * If $languageCode is null the $alias is created in the system's default
      * language. $alwaysAvailable makes the alias available in all languages.
      *
      * @param mixed $locationId
      * @param string $path
      * @param boolean $forwarding
-     * @param string|null $languageName
+     * @param string|null $languageCode
      * @param boolean $alwaysAvailable
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias With $type = URLAlias::LOCATION
      */
-    public function createCustomUrlAlias( $locationId, $path, $forwarding = false, $languageName = null, $alwaysAvailable = false )
+    public function createCustomUrlAlias( $locationId, $path, $forwarding = false, $languageCode = null, $alwaysAvailable = false )
     {
-        if ( $languageName === null )
-            $languageName = 'eng-GB';// @todo Reuse settings used in Service layer here
+        if ( $languageCode === null )
+            $languageCode = 'eng-GB';// @todo Reuse settings used in Service layer here
 
         $path = explode( '/', $path );
         $pathData = array();
@@ -155,7 +155,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
         {
             $pathData[] = array(
                 'always-available' => $alwaysAvailable,
-                'translations' => array( $languageName => $pathItem )
+                'translations' => array( $languageCode => $pathItem )
             );
         }
 
@@ -165,7 +165,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
                 'type' => URLAlias::LOCATION,
                 'destination' => $locationId,
                 'pathData' => $pathData,
-                'languageCodes' => array( $languageName ),
+                'languageCodes' => array( $languageCode ),
                 'alwaysAvailable' => $alwaysAvailable,
                 'isHistory' => false,
                 'isCustom' => true,
@@ -175,25 +175,25 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
     }
 
     /**
-     * Create a user chosen $alias pointing to a resource in $languageName.
+     * Create a user chosen $alias pointing to a resource in $languageCode.
      * This method does not handle location resources - if a user enters a location target
      * the createCustomUrlAlias method has to be used.
      *
-     * If $languageName is null the $alias is created in the system's default
+     * If $languageCode is null the $alias is created in the system's default
      * language. $alwaysAvailable makes the alias available in all languages.
      *
      * @param string $resource
      * @param string $path
      * @param boolean $forwarding
-     * @param string|null $languageName
+     * @param string|null $languageCode
      * @param boolean $alwaysAvailable
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias With $type = URLAlias::RESOURCE
      */
-    public function createGlobalUrlAlias( $resource, $path, $forwarding = false, $languageName = null, $alwaysAvailable = false )
+    public function createGlobalUrlAlias( $resource, $path, $forwarding = false, $languageCode = null, $alwaysAvailable = false )
     {
-        if ( $languageName === null )
-            $languageName = 'eng-GB';// @todo Reuse settings used in Service layer here
+        if ( $languageCode === null )
+            $languageCode = 'eng-GB';// @todo Reuse settings used in Service layer here
 
         $path = explode( '/', $path );
         $pathData = array();
@@ -201,7 +201,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
         {
             $pathData[] = array(
                 'always-available' => $alwaysAvailable,
-                'translations' => array( $languageName => $pathItem )
+                'translations' => array( $languageCode => $pathItem )
             );
         }
 
@@ -211,7 +211,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
                 'type' => URLAlias::RESOURCE,
                 'destination' => $resource,
                 'pathData' => $pathData,
-                'languageCodes' => array( $languageName ),
+                'languageCodes' => array( $languageCode ),
                 'alwaysAvailable' => $alwaysAvailable,
                 'isHistory' => false,
                 'isCustom' => true,

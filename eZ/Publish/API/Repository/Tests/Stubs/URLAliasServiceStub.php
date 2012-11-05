@@ -90,7 +90,7 @@ class URLAliasServiceStub implements URLAliasService
     }
 
      /**
-     * Create a user chosen $alias pointing to a resource in $languageName.
+     * Create a user chosen $alias pointing to a resource in $languageCode.
      *
      * This method does not handle location resources - if a user enters a location target
      * the createCustomUrlAlias method has to be used.
@@ -101,8 +101,8 @@ class URLAliasServiceStub implements URLAliasService
      *
      * @param string $resource
      * @param string $path
+     * @param string $languageCode
      * @param boolean $forwarding
-     * @param string $languageName
      * @param boolean $alwaysAvailable
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language

@@ -41,7 +41,7 @@ interface URLAliasService
     public function createUrlAlias( Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false );
 
     /**
-     * Create a user chosen $alias pointing to a resource in $languageName.
+     * Create a user chosen $alias pointing to a resource in $languageCode.
      *
      * This method does not handle location resources - if a user enters a location target
      * the createCustomUrlAlias method has to be used.

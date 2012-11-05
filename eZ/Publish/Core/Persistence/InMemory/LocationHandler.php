@@ -486,14 +486,14 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
-    public function storeUrlAliasPath( $path, $locationId, $languageName = null, $alwaysAvailable = false )
+    public function storeUrlAliasPath( $path, $locationId, $languageCode = null, $alwaysAvailable = false )
     {
     }
 
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
-    public function createCustomUrlAlias( $alias, $locationId, $forwarding = false, $languageName = null, $alwaysAvailable = false )
+    public function createCustomUrlAlias( $alias, $locationId, $forwarding = false, $languageCode = null, $alwaysAvailable = false )
     {
     }
 

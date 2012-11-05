@@ -36,38 +36,38 @@ interface Handler
     public function publishUrlAliasForLocation( $locationId, $parentLocationId, $name, $languageCode, $alwaysAvailable = false );
 
     /**
-     * Create a user chosen $alias pointing to $locationId in $languageName.
+     * Create a user chosen $alias pointing to $locationId in $languageCode.
      *
-     * If $languageName is null the $alias is created in the system's default
+     * If $languageCode is null the $alias is created in the system's default
      * language. $alwaysAvailable makes the alias available in all languages.
      *
      * @param mixed $locationId
      * @param string $path
      * @param boolean $forwarding
-     * @param string|null $languageName
+     * @param string|null $languageCode
      * @param boolean $alwaysAvailable
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
-    public function createCustomUrlAlias( $locationId, $path, $forwarding = false, $languageName = null, $alwaysAvailable = false );
+    public function createCustomUrlAlias( $locationId, $path, $forwarding = false, $languageCode = null, $alwaysAvailable = false );
 
     /**
-     * Create a user chosen $alias pointing to a resource in $languageName.
+     * Create a user chosen $alias pointing to a resource in $languageCode.
      * This method does not handle location resources - if a user enters a location target
      * the createCustomUrlAlias method has to be used.
      *
-     * If $languageName is null the $alias is created in the system's default
+     * If $languageCode is null the $alias is created in the system's default
      * language. $alwaysAvailable makes the alias available in all languages.
      *
      * @param string $resource
      * @param string $path
      * @param boolean $forwarding
-     * @param string|null $languageName
+     * @param string|null $languageCode
      * @param boolean $alwaysAvailable
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias
      */
-    public function createGlobalUrlAlias( $resource, $path, $forwarding = false, $languageName = null, $alwaysAvailable = false );
+    public function createGlobalUrlAlias( $resource, $path, $forwarding = false, $languageCode = null, $alwaysAvailable = false );
 
     /**
      * List global aliases.
