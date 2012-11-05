@@ -67,10 +67,22 @@ class Trash extends RestController
         $query->offset = $offset >= 0 ? $offset : null;
         $query->limit = $limit >= 0 ? $limit : null;
 
-        return new Values\Trash(
+        $trashItems = array();
+
+        foreach (
             $this->trashService->findTrashItems(
                 $query
-            )->items,
+            )->items as $trashItem
+        )
+        {
+            $trashItems[] = new Values\RestTrashItem(
+                $trashItem,
+                $this->locationService->getLocationChildCount( $trashItem )
+            );
+        }
+
+        return new Values\Trash(
+            $trashItems,
             $this->request->path
         );
     }
@@ -79,11 +91,15 @@ class Trash extends RestController
      * Returns the trash item given by id
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
+     * @return \eZ\Publish\Core\REST\Server\Values\RestTrashItem
      */
     public function loadTrashItem()
     {
         $values = $this->urlHandler->parse( 'trash', $this->request->path );
-        return $this->trashService->loadTrashItem( $values['trash'] );
+        return new Values\RestTrashItem(
+            $trashItem = $this->trashService->loadTrashItem( $values['trash'] ),
+            $this->locationService->getLocationChildCount( $trashItem )
+        );
     }
 
     /**

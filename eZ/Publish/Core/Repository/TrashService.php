@@ -315,21 +315,9 @@ class TrashService implements TrashServiceInterface
      */
     protected function buildDomainTrashItemObject( Trashed $spiTrashItem )
     {
-        $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiTrashItem->contentId );
-
-        $trashedChildren = array_filter(
-            $this->persistenceHandler->trashHandler()->findTrashItems(
-                new ParentLocationId( $spiTrashItem->id )
-            ),
-            function( $trashedChild ) use ( $spiTrashItem )
-            {
-                return $trashedChild->parentId === $spiTrashItem->id;
-            }
-        );
-
         return new TrashItem(
             array(
-                'contentInfo' => $contentInfo,
+                'contentInfo' => $this->repository->getContentService()->loadContentInfo( $spiTrashItem->contentId ),
                 'id' => (int) $spiTrashItem->id,
                 'priority' => (int) $spiTrashItem->priority,
                 'hidden' => (bool) $spiTrashItem->hidden,
@@ -341,7 +329,6 @@ class TrashService implements TrashServiceInterface
                 'depth' => (int) $spiTrashItem->depth,
                 'sortField' => (int) $spiTrashItem->sortField,
                 'sortOrder' => (int) $spiTrashItem->sortOrder,
-                'childCount' => count( $trashedChildren )
             )
         );
     }

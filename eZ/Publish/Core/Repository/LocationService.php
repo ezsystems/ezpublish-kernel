@@ -283,6 +283,27 @@ class LocationService implements LocationServiceInterface
     }
 
     /**
+     * Returns the number of children which are readable by the current user of a location object
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     *
+     * @return int
+     */
+    public function getLocationChildCount( APILocation $location )
+    {
+        if ( !is_numeric( $location->id ) )
+            throw new InvalidArgumentValue( "id", $location->id, "Location" );
+
+        return $this->searchChildrenLocations(
+            $location->id,
+            null,
+            APILocation::SORT_ORDER_ASC,
+            0,
+            0
+        )->totalCount;
+    }
+
+    /**
      * Searches children locations of the provided parent location id
      *
      * @param int $parentLocationId
@@ -763,8 +784,6 @@ class LocationService implements LocationServiceInterface
         else // @todo This should not be loaded separately, SPI need to change to fix this.
             $contentInfo = $this->repository->getContentService()->internalLoadContentInfo( $spiLocation->contentId );
 
-        $childrenLocations = $this->searchChildrenLocations( $spiLocation->id, null, APILocation::SORT_ORDER_ASC, 0, 0 );
-
         return new Location(
             array(
                 'contentInfo' => $contentInfo,
@@ -779,7 +798,6 @@ class LocationService implements LocationServiceInterface
                 'depth' => (int) $spiLocation->depth,
                 'sortField' => (int) $spiLocation->sortField,
                 'sortOrder' => (int) $spiLocation->sortOrder,
-                'childCount' => $childrenLocations->totalCount
             )
         );
     }

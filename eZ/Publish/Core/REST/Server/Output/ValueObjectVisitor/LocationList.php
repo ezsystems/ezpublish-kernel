@@ -35,12 +35,12 @@ class LocationList extends ValueObjectVisitor
 
         $generator->startList( 'Location' );
 
-        foreach ( $data->locations as $location )
+        foreach ( $data->locations as $restLocation )
         {
             $generator->startObjectElement( 'Location' );
             $generator->startAttribute(
                 'href',
-                $this->urlHandler->generate( 'location', array( 'location' => rtrim( $location->pathString, '/' ) ) )
+                $this->urlHandler->generate( 'location', array( 'location' => rtrim( $restLocation->location->pathString, '/' ) ) )
             );
             $generator->endAttribute( 'href' );
             $generator->endObjectElement( 'Location' );

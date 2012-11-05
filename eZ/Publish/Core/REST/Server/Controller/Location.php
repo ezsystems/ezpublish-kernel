@@ -121,23 +121,22 @@ class Location extends RestController
             throw new ForbiddenException( $e->getMessage() );
         }
 
-        return new Values\CreatedLocation(
-            array(
-                'location' => $createdLocation
-            )
-        );
+        return new Values\CreatedLocation( array( "restLocation" => new Values\RestLocation( $createdLocation, 0 ) ) );
     }
 
     /**
      * Loads a location
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     * @return \eZ\Publish\Core\REST\Server\Values\RestLocation
      */
     public function loadLocation()
     {
         $values = $this->urlHandler->parse( 'location', $this->request->path );
-        return $this->locationService->loadLocation(
-            $this->extractLocationIdFromPath( $values['location'] )
+        return new Values\RestLocation(
+            $location = $this->locationService->loadLocation(
+                $this->extractLocationIdFromPath( $values['location'] )
+            ),
+            $this->locationService->getLocationChildCount( $location )
         );
     }
 
@@ -272,8 +271,11 @@ class Location extends RestController
     {
         return new Values\LocationList(
             array(
-                $this->locationService->loadLocationByRemoteId(
-                    $this->request->variables['remoteId']
+                new Values\RestLocation(
+                    $location = $this->locationService->loadLocationByRemoteId(
+                        $this->request->variables['remoteId']
+                    ),
+                    $this->locationService->getLocationChildCount( $location )
                 )
             ),
             $this->request->path
@@ -288,13 +290,20 @@ class Location extends RestController
     public function loadLocationsForContent()
     {
         $values = $this->urlHandler->parse( 'objectLocations', $this->request->path );
-
-        return new Values\LocationList(
+        $restLocations = array();
+        foreach (
             $this->locationService->loadLocations(
                 $this->contentService->loadContentInfo( $values['object'] )
-            ),
-            $this->request->path
-        );
+            ) as $location
+        )
+        {
+            $restLocations[] = new Values\RestLocation(
+                $location,
+                $this->locationService->getLocationChildCount( $location )
+            );
+        }
+
+        return new Values\LocationList( $restLocations, $this->request->path );
     }
 
     /**
@@ -312,22 +321,30 @@ class Location extends RestController
         $offset = isset( $this->request->variables['offset'] ) ? (int)$this->request->variables['offset'] : 0;
         $limit = isset( $this->request->variables['limit'] ) ? (int)$this->request->variables['limit'] : -1;
 
-        return new Values\LocationList(
+        $restLocations = array();
+        foreach (
             $this->locationService->loadLocationChildren(
                 $this->locationService->loadLocation(
                     $this->extractLocationIdFromPath( $values['location'] )
                 ),
                 $offset >= 0 ? $offset : 0,
                 $limit >= 0 ? $limit : -1
-            ),
-            $this->request->path
-        );
+            ) as $location
+        )
+        {
+            $restLocations[] = new Values\RestLocation(
+                $location,
+                $this->locationService->getLocationChildCount( $location )
+            );
+        }
+
+        return new Values\LocationList( $restLocations, $this->request->path );
     }
 
     /**
      * Updates a location
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     * @return \eZ\Publish\Core\REST\Server\Values\RestLocation
      */
     public function updateLocation()
     {
@@ -355,7 +372,10 @@ class Location extends RestController
             $this->locationService->unhideLocation( $location );
         }
 
-        return $this->locationService->updateLocation( $location, $locationUpdate->locationUpdateStruct );
+        return new Values\RestLocation(
+            $location = $this->locationService->updateLocation( $location, $locationUpdate->locationUpdateStruct ),
+            $this->locationService->getLocationChildCount( $location )
+        );
     }
 
     /**

@@ -115,7 +115,6 @@ class TrashServiceStub implements TrashService
         return new TrashItemStub(
             array(
                 'id' => $location->id,
-                'childCount' => $location->childCount,
                 'depth' => $location->depth,
                 'hidden' => $location->hidden,
                 'invisible' => $location->invisible,

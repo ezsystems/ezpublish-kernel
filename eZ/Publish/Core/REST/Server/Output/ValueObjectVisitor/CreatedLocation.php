@@ -15,7 +15,7 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 /**
  * CreatedLocation value object visitor
  */
-class CreatedLocation extends Location
+class CreatedLocation extends RestLocation
 {
     /**
      * Visit struct returned by controllers
@@ -26,12 +26,12 @@ class CreatedLocation extends Location
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        parent::visit( $visitor, $generator, $data->location );
+        parent::visit( $visitor, $generator, $data->restLocation );
         $visitor->setHeader(
             'Location',
             $this->urlHandler->generate(
                 'location',
-                array( 'location' => rtrim( $data->location->pathString, '/' ) )
+                array( 'location' => rtrim( $data->restLocation->location->pathString, '/' ) )
             )
         );
         $visitor->setStatus( 201 );

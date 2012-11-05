@@ -39,7 +39,6 @@ class TrashItemTest extends PHPUnit_Framework_TestCase
         self::assertContains( 'depth', $properties, 'Property not found' );
         self::assertContains( 'sortField', $properties, 'Property not found' );
         self::assertContains( 'sortOrder', $properties, 'Property not found' );
-        self::assertContains( 'childCount', $properties, 'Property not found' );
 
         // check for duplicates and double check existence of property
         $propertiesHash = array();
