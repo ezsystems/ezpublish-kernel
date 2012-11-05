@@ -70,12 +70,12 @@ class ViewController extends Controller
      *
      * @param int $locationId
      * @param string $viewType
-     * @param boolean $noLayout
+     * @param boolean $layout
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @throws \Exception
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewLocation( $locationId, $viewType, $noLayout = false )
+    public function viewLocation( $locationId, $viewType, $layout = false )
     {
         if ( !$this->isGranted( new AuthorizationAttribute( 'content', 'read' ) ) )
             throw new AccessDeniedException();
@@ -88,7 +88,7 @@ class ViewController extends Controller
             // TODO: Use a dedicated etag generator, generating a hash
             // instead of plain text
             $response = $this->buildResponse(
-                "ezpublish-location-$locationId-$viewType-$noLayout",
+                "ezpublish-location-$locationId-$viewType-$layout",
                 $location->getContentInfo()->modificationDate
             );
 
@@ -102,7 +102,7 @@ class ViewController extends Controller
                 $this->viewManager->renderLocation(
                     $location,
                     $viewType,
-                    array( 'noLayout' => $noLayout )
+                    array( 'noLayout' => !$layout )
                 )
             );
 
@@ -140,12 +140,12 @@ class ViewController extends Controller
      *
      * @param int $contentId
      * @param string $viewType
-     * @param boolean $noLayout
+     * @param boolean $layout
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @throws \Exception
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewContent( $contentId, $viewType, $noLayout )
+    public function viewContent( $contentId, $viewType, $layout = false )
     {
         if ( !$this->isGranted( new AuthorizationAttribute( 'content', 'read' ) ) )
             throw new AccessDeniedException();
@@ -157,7 +157,7 @@ class ViewController extends Controller
             // TODO: Use a dedicated etag generator, generating a hash
             // instead of plain text
             $response = $this->buildResponse(
-                "ezpublish-content-$contentId-$viewType-$noLayout",
+                "ezpublish-content-$contentId-$viewType-$layout",
                 $content->contentInfo->modificationDate
             );
 
@@ -170,7 +170,7 @@ class ViewController extends Controller
                 $this->viewManager->renderContent(
                     $content,
                     $viewType,
-                    array( 'noLayout' => $noLayout )
+                    array( 'noLayout' => !$layout )
                 )
             );
 
