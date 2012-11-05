@@ -85,7 +85,7 @@ class LegacySetupController
 
             // match mode (host, url or port)
             $accessType = $request->request->get( 'P_site_extra_data_access_type-' . $chosenSitePackage );
-            if ( $accessType == 'host' )
+            if ( $accessType == 'hostname' || $accessType == 'port' )
             {
                 $adminSiteaccess = $chosenSitePackage . '_admin';
             }
