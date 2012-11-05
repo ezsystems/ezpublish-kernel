@@ -14,8 +14,6 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 use eZ\Publish\Core\REST\Server\Values\RestFieldDefinition;
 
-use eZ\Publish\API\Repository\Values;
-
 /**
  * FieldDefinitionList value object visitor
  */

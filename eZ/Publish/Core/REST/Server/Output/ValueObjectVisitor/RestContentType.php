@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
-use eZ\Publish\Core\REST\Common\UrlHandler,
-    eZ\Publish\Core\REST\Common\Output\Generator,
+use eZ\Publish\Core\REST\Common\Output\Generator,
     eZ\Publish\Core\REST\Common\Output\Visitor,
 
     eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType,

@@ -13,8 +13,6 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
-use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
-
 /**
  * Location value object visitor
  */
