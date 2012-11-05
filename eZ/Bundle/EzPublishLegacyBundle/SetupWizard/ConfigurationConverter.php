@@ -133,11 +133,11 @@ class ConfigurationConverter
 
         // image variations settings
         $settings['ezpublish']['system'][$defaultSiteaccess]['image_variations'] = array();
-        $imageAliasesList = $this->legacyResolver->getGroup( 'AliasSettings', 'image', $defaultSiteaccess );
+        $imageAliasesList = $this->getGroupWithFallback( 'AliasSettings', 'image', $defaultSiteaccess );
         foreach( $imageAliasesList['AliasList'] as $imageAliasIdentifier )
         {
             $variationSettings = array( 'reference' => null, 'filters' => array() );
-            $aliasSettings = $this->legacyResolver->getGroup( $imageAliasIdentifier, 'image', $defaultSiteaccess );
+            $aliasSettings = $this->getGroupWithFallback( $imageAliasIdentifier, 'image', $defaultSiteaccess );
             if ( isset( $aliasSettings['Reference'] ) && $aliasSettings['Reference'] != '' )
             {
                 $variationSettings['reference'] = $aliasSettings['Reference'];
