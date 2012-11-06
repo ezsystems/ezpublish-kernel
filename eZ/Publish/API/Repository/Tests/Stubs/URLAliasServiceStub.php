@@ -622,4 +622,18 @@ class URLAliasServiceStub implements URLAliasService
             $this->nextAliasId = max( $this->nextAliasId, $alias->id );
         }
     }
+
+    /**
+     * Loads URL alias by given $id
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @param string $id
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     */
+    public function load( $id )
+    {
+        // TODO: Implement load() method.
+    }
 }
