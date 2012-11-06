@@ -8,11 +8,9 @@
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
-use eZ\Publish\Core\REST\Common\UrlHandler;
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 use eZ\Publish\API\Repository\Exceptions\BadStateException;
 use eZ\Publish\Core\REST\Common\Message;
-use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
