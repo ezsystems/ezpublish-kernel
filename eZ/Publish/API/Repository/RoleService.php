@@ -39,7 +39,7 @@ interface RoleService
     public function createRole( RoleCreateStruct $roleCreateStruct );
 
     /**
-     * Updates the name and (5.x) description of the role
+     * Updates the name of the role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
