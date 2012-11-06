@@ -111,6 +111,10 @@
 <xsl:value-of select="text()" disable-output-escaping="yes"/>
 </xsl:template>
 
+<xsl:template match="literal">
+<pre><xsl:copy-of select="@*"/><xsl:apply-templates/></pre>
+</xsl:template>
+
 <!-- copy unknown elements as-is -->
 <xsl:template match="@* | node()">
 <xsl:copy>
