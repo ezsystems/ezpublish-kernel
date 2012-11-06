@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
     eZ\Publish\Core\Repository\Values\Content\ContentInfo,
     eZ\Publish\Core\Repository\Values\ContentType\ContentType,
     eZ\Publish\API\Repository\Values\Content\Location as APILocation,
+    eZ\Publish\API\Repository\Values\Content\LocationList,
 
     eZ\Publish\SPI\Persistence\Content\Location as SPILocation,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
@@ -229,7 +230,7 @@ class LocationService implements LocationServiceInterface
      * @param int $offset the start offset for paging
      * @param int $limit the number of locations returned. If $limit = -1 all children starting at $offset are returned
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     * @return \eZ\Publish\API\Repository\Values\Content\LocationList
      */
     public function loadLocationChildren( APILocation $location, $offset = 0, $limit = -1 )
     {
@@ -279,7 +280,12 @@ class LocationService implements LocationServiceInterface
             }
         }
 
-        return $childLocations;
+        return new LocationList (
+            array(
+                "locations" => $childLocations,
+                "totalCount" => (int)$searchResult->totalCount
+            )
+        );
     }
 
     /**

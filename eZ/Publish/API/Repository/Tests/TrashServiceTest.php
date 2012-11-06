@@ -161,13 +161,13 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         $location = $locationService->loadLocation( $baseLocationId );
 
-        $childCount = count( $locationService->loadLocationChildren( $location ) );
+        $childCount = $locationService->getLocationChildCount( $location );
 
         $this->createTrashItem();
 
         $this->assertEquals(
             $childCount - 1,
-            count( $locationService->loadLocationChildren( $location ) )
+            $locationService->getLocationChildCount( $location )
         );
     }
 
@@ -419,7 +419,7 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         $location = $locationService->loadLocation( $homeLocationId );
 
-        $childCount = count( $locationService->loadLocationChildren( $location ) );
+        $childCount = $locationService->getLocationChildCount( $location );
 
         /* BEGIN: Use Case */
         // $homeLocationId is the ID of the "Home" location in an eZ Publish
@@ -436,7 +436,7 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         $this->assertEquals(
             $childCount + 1,
-            count( $locationService->loadLocationChildren( $location ) )
+            $locationService->getLocationChildCount( $location )
         );
     }
 
@@ -581,16 +581,15 @@ class TrashServiceTest extends BaseTrashServiceTest
         // Load the location service
         $locationService = $repository->getLocationService();
 
-        // Load direct children
-        $children = $locationService->loadLocationChildren(
-            $locationService->loadLocationByRemoteId( $mediaRemoteId )
-        );
-
         $remoteIds = array();
-        foreach ( $children as $child )
+        foreach (
+            $locationService->loadLocationChildren(
+                $locationService->loadLocationByRemoteId( $mediaRemoteId )
+            )->locations as $child
+        )
         {
             $remoteIds[] = $child->remoteId;
-            foreach ( $locationService->loadLocationChildren( $child ) as $grandChild )
+            foreach ( $locationService->loadLocationChildren( $child )->locations as $grandChild )
             {
                 $remoteIds[] = $grandChild->remoteId;
             }

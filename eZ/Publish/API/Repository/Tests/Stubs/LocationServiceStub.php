@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\LocationList;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions;
@@ -168,7 +169,7 @@ class LocationServiceStub implements LocationService
         {
             throw new Exceptions\InvalidArgumentExceptionStub;
         }
-        foreach ( $this->loadLocationChildren( $location ) as $childLocation )
+        foreach ( $this->loadLocationChildren( $location )->locations as $childLocation )
         {
             $this->checkContentNotInTree( $contentInfo, $childLocation );
         }
@@ -383,7 +384,7 @@ class LocationServiceStub implements LocationService
      * @param int $offset the start offset for paging
      * @param int $limit the number of locations returned. If $limit = -1 all children starting at $offset are returned
      *
-     * @return array Of {@link Location}
+     * @return \eZ\Publish\API\Repository\Values\Content\LocationList
      */
     public function loadLocationChildren( Location $location, $offset = 0, $limit = -1 )
     {
@@ -402,7 +403,12 @@ class LocationServiceStub implements LocationService
             }
         );
 
-        return array_slice( $children, $offset, ( $limit == -1 ? null : $limit ) );
+        return new LocationList(
+            array(
+                "locations" => array_slice( $children, $offset, ( $limit == -1 ? null : $limit ) ),
+                "totalCount" => count( $children )
+            )
+        );
     }
 
     /**
@@ -479,7 +485,7 @@ class LocationServiceStub implements LocationService
 
         $location->__hide();
 
-        foreach ( $this->loadLocationChildren( $location ) as $child)
+        foreach ( $this->loadLocationChildren( $location )->locations as $child)
         {
             $this->markInvisible( $child );
         }
@@ -497,7 +503,7 @@ class LocationServiceStub implements LocationService
     {
         $location->__makeInvisible();
 
-        foreach ( $this->loadLocationChildren( $location ) as $child )
+        foreach ( $this->loadLocationChildren( $location )->locations as $child )
         {
             $this->markInvisible( $child );
         }
@@ -524,7 +530,7 @@ class LocationServiceStub implements LocationService
 
         $location->__unhide();
 
-        foreach ( $this->loadLocationChildren( $location ) as $child )
+        foreach ( $this->loadLocationChildren( $location )->locations as $child )
         {
             $this->markVisible( $child );
         }
@@ -549,7 +555,7 @@ class LocationServiceStub implements LocationService
         }
         $location->__makeVisible();
 
-        foreach ( $this->loadLocationChildren( $location ) as $child )
+        foreach ( $this->loadLocationChildren( $location )->locations as $child )
         {
             $this->markVisible( $child );
         }
@@ -580,7 +586,7 @@ class LocationServiceStub implements LocationService
             $contentService->deleteContent( $location->contentInfo );
         }
 
-        foreach ( $this->loadLocationChildren( $location ) as $child )
+        foreach ( $this->loadLocationChildren( $location )->locations as $child )
         {
             $this->deleteLocation( $child );
         }
@@ -664,7 +670,7 @@ class LocationServiceStub implements LocationService
 
         $this->locations[$values['id']] = new LocationStub( $values );
 
-        foreach ( $this->loadLocationChildren( $subtree ) as $childLocation )
+        foreach ( $this->loadLocationChildren( $subtree )->locations as $childLocation )
         {
             $this->copySubtreeInternal( $childLocation, $this->locations[$values['id']] );
         }
@@ -687,7 +693,7 @@ class LocationServiceStub implements LocationService
         {
             throw new InvalidArgumentExceptionStub( 'What error code should be used?' );
         }
-        foreach ( $this->loadLocationChildren( $subtree ) as $childLocation )
+        foreach ( $this->loadLocationChildren( $subtree )->locations as $childLocation )
         {
             $this->checkLocationNotInTree( $childLocation, $location );
         }
@@ -741,7 +747,7 @@ class LocationServiceStub implements LocationService
         $newLocation = $this->locations[$location->id] = new LocationStub( $values );
         $this->repository->getUrlAliasService()->_createAliasesForLocation( $newLocation );
 
-        foreach ( $this->loadLocationChildren( $location ) as $childLocation )
+        foreach ( $this->loadLocationChildren( $location )->locations as $childLocation )
         {
             $this->moveSubtreeInternal(
                 $childLocation,
@@ -763,7 +769,7 @@ class LocationServiceStub implements LocationService
         $this->repository->getUrlAliasService()->_removeAliasesForLocation( $location );
 
         $trashed[] = $location;
-        foreach ( $this->loadLocationChildren( $location ) as $childLocation )
+        foreach ( $this->loadLocationChildren( $location )->locations as $childLocation )
         {
             $trashed = $this->__trashLocation( $childLocation, $trashed );
         }

@@ -3923,7 +3923,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // This array will only contain a single admin user object
         $locations = $locationService->loadLocationChildren(
             $locationService->loadLocation( $locationId )
-        );
+        )->locations;
         /* END: Use Case */
 
         $this->assertEquals( 1, count( $locations ) );
@@ -3985,7 +3985,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // This will contain the admin user and the new child location
         $locations = $locationService->loadLocationChildren(
             $locationService->loadLocation( $locationId )
-        );
+        )->locations;
         /* END: Use Case */
 
         $this->assertEquals( 2, count( $locations ) );

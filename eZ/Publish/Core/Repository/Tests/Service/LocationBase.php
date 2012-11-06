@@ -214,19 +214,19 @@ abstract class LocationBase extends BaseServiceTest
 
         // Check structure
         $subtreeRootChildren = $locationService->loadLocationChildren( $copiedSubtreeRootLocation );
-        self::assertCount( 3, $subtreeRootChildren );
-        self::assertCount( 0, $locationService->loadLocationChildren( $subtreeRootChildren[0] ) );
-        $subLocationChildren = $locationService->loadLocationChildren( $subtreeRootChildren[1] );
-        self::assertCount( 1, $subLocationChildren );
-        self::assertCount( 0, $locationService->loadLocationChildren( $subtreeRootChildren[2] ) );
-        self::assertCount( 0, $locationService->loadLocationChildren( $subLocationChildren[0] ) );
+        self::assertEquals( 3, $subtreeRootChildren->totalCount );
+        self::assertEquals( 0, $locationService->getLocationChildCount( $subtreeRootChildren->locations[0] ) );
+        $subLocationChildren = $locationService->loadLocationChildren( $subtreeRootChildren->locations[1] );
+        self::assertEquals( 1, $subLocationChildren->totalCount );
+        self::assertEquals( 0, $locationService->getLocationChildCount( $subtreeRootChildren->locations[2] ) );
+        self::assertEquals( 0, $locationService->getLocationChildCount( $subLocationChildren->locations[0] ) );
 
         // Check main locations
         self::assertEquals( $copiedSubtreeRootLocation->contentInfo->mainLocationId, $copiedSubtreeRootLocation->id );
-        self::assertEquals( $subtreeRootChildren[0]->contentInfo->mainLocationId, $subtreeRootChildren[0]->id );
-        self::assertEquals( $subtreeRootChildren[1]->contentInfo->mainLocationId, $subtreeRootChildren[1]->id );
-        self::assertEquals( $subtreeRootChildren[2]->contentInfo->mainLocationId, $subtreeRootChildren[2]->id );
-        self::assertEquals( $subLocationChildren[0]->contentInfo->mainLocationId, $subtreeRootChildren[2]->id );
+        self::assertEquals( $subtreeRootChildren->locations[0]->contentInfo->mainLocationId, $subtreeRootChildren->locations[0]->id );
+        self::assertEquals( $subtreeRootChildren->locations[1]->contentInfo->mainLocationId, $subtreeRootChildren->locations[1]->id );
+        self::assertEquals( $subtreeRootChildren->locations[2]->contentInfo->mainLocationId, $subtreeRootChildren->locations[2]->id );
+        self::assertEquals( $subLocationChildren->locations[0]->contentInfo->mainLocationId, $subtreeRootChildren->locations[2]->id );
 
         self::assertInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\Content\\Location", $copiedSubtreeRootLocation );
         self::assertEquals( $targetLocation->id, $copiedSubtreeRootLocation->parentLocationId );
@@ -411,10 +411,12 @@ abstract class LocationBase extends BaseServiceTest
         $rootLocation = $locationService->loadLocation( 5 );
         $childrenLocations = $locationService->loadLocationChildren( $rootLocation );
 
-        self::assertInternalType( "array", $childrenLocations );
-        self::assertNotEmpty( $childrenLocations );
+        self::assertInstanceOf( "\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationList", $childrenLocations );
+        self::assertInternalType( "array", $childrenLocations->locations );
+        self::assertInternalType( "int", $childrenLocations->totalCount );
+        self::assertNotEmpty( $childrenLocations->locations );
 
-        foreach ( $childrenLocations as $childLocation )
+        foreach ( $childrenLocations->locations as $childLocation )
         {
             self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Location', $childLocation );
             self::assertEquals( $rootLocation->id, $childLocation->parentLocationId );

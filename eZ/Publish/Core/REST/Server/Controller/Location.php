@@ -327,7 +327,7 @@ class Location extends RestController
                 ),
                 $offset >= 0 ? $offset : 0,
                 $limit >= 0 ? $limit : -1
-            ) as $location
+            )->locations as $location
         )
         {
             $restLocations[] = new Values\RestLocation(
