@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the TrashItem ValueObjectVisitor class
+ * File containing the RestTrashItem ValueObjectVisitor class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -14,16 +14,16 @@ use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
- * TrashItem value object visitor
+ * RestTrashItem value object visitor
  */
-class TrashItem extends ValueObjectVisitor
+class RestTrashItem extends ValueObjectVisitor
 {
     /**
      * Visit struct returned by controllers
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
-     * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $data
+     * @param \eZ\Publish\Core\REST\Server\Values\RestTrashItem $data
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
@@ -32,23 +32,23 @@ class TrashItem extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'trash', array( 'trash' => $data->id ) )
+            $this->urlHandler->generate( 'trash', array( 'trash' => $data->trashItem->id ) )
         );
         $generator->endAttribute( 'href' );
 
-        $generator->startValueElement( 'id', $data->id );
+        $generator->startValueElement( 'id', $data->trashItem->id );
         $generator->endValueElement( 'id' );
 
-        $generator->startValueElement( 'priority', $data->priority );
+        $generator->startValueElement( 'priority', $data->trashItem->priority );
         $generator->endValueElement( 'priority' );
 
-        $generator->startValueElement( 'hidden', $data->hidden ? 'true' : 'false' );
+        $generator->startValueElement( 'hidden', $data->trashItem->hidden ? 'true' : 'false' );
         $generator->endValueElement( 'hidden' );
 
-        $generator->startValueElement( 'invisible', $data->invisible ? 'true' : 'false' );
+        $generator->startValueElement( 'invisible', $data->trashItem->invisible ? 'true' : 'false' );
         $generator->endValueElement( 'invisible' );
 
-        $pathStringParts = explode( '/', trim( $data->pathString, '/' ) );
+        $pathStringParts = explode( '/', trim( $data->trashItem->pathString, '/' ) );
         $pathStringParts = array_slice( $pathStringParts, 0, count( $pathStringParts ) - 1 );
 
         $generator->startObjectElement( 'ParentLocation', 'Location' );
@@ -64,31 +64,31 @@ class TrashItem extends ValueObjectVisitor
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'ParentLocation' );
 
-        $generator->startValueElement( 'pathString', $data->pathString );
+        $generator->startValueElement( 'pathString', $data->trashItem->pathString );
         $generator->endValueElement( 'pathString' );
 
         // 'c' is the PHP date/time format compatible with XSD dateTime datatype
-        $generator->startValueElement( 'subLocationModificationDate', date( 'c', $data->modifiedSubLocationDate->getTimestamp() ) );
+        $generator->startValueElement( 'subLocationModificationDate', date( 'c', $data->trashItem->modifiedSubLocationDate->getTimestamp() ) );
         $generator->endValueElement( 'subLocationModificationDate' );
 
-        $generator->startValueElement( 'depth', $data->depth );
+        $generator->startValueElement( 'depth', $data->trashItem->depth );
         $generator->endValueElement( 'depth' );
 
         $generator->startValueElement( 'childCount', $data->childCount );
         $generator->endValueElement( 'childCount' );
 
-        $generator->startValueElement( 'remoteId', $data->remoteId );
+        $generator->startValueElement( 'remoteId', $data->trashItem->remoteId );
         $generator->endValueElement( 'remoteId' );
 
         $generator->startObjectElement( 'Content' );
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'object', array( 'object' => $data->contentId ) ) );
+        $generator->startAttribute( 'href', $this->urlHandler->generate( 'object', array( 'object' => $data->trashItem->contentId ) ) );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Content' );
 
-        $generator->startValueElement( 'sortField', $this->serializeSortField( $data->sortField ) );
+        $generator->startValueElement( 'sortField', $this->serializeSortField( $data->trashItem->sortField ) );
         $generator->endValueElement( 'sortField' );
 
-        $generator->startValueElement( 'sortOrder', $this->serializeSortOrder( $data->sortOrder ) );
+        $generator->startValueElement( 'sortOrder', $this->serializeSortOrder( $data->trashItem->sortOrder ) );
         $generator->endValueElement( 'sortOrder' );
 
         $generator->endObjectElement( 'TrashItem' );

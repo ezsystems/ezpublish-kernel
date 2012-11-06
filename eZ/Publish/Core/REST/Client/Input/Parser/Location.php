@@ -63,7 +63,6 @@ class Location extends Parser
                 'depth' => (int) $data['depth'],
                 'sortField' => $this->parserTools->parseDefaultSortField( $data['sortField'] ),
                 'sortOrder' => $this->parserTools->parseDefaultSortOrder( $data['sortOrder'] ),
-                'childCount' => (int) $data['childCount']
             )
         );
     }

@@ -18,7 +18,7 @@ class CreatedLocation extends ValueObject
     /**
      * The created location
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
+     * @var \eZ\Publish\Core\REST\Server\Values\RestLocation
      */
-    public $location;
+    public $restLocation;
 }

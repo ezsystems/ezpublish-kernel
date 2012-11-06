@@ -149,7 +149,6 @@ class LocationServiceTest extends BaseTest
                 'parentLocationId' => $locationCreate->parentLocationId,
                 'pathString' => '/1/5/' . $this->parseId( 'location', $createdLocation->id ) . '/',
                 'depth' => 2,
-                'childCount' => 0,
                 'sortField' => $locationCreate->sortField,
                 'sortOrder' => $locationCreate->sortOrder,
             ),
@@ -158,20 +157,6 @@ class LocationServiceTest extends BaseTest
 
         $this->assertNotNull( $createdLocation->id );
         $this->assertInstanceOf( 'DateTime', $createdLocation->modifiedSubLocationDate );
-    }
-
-    /**
-     * Test for the createLocation() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\LocationService::createLocation()
-     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
-     */
-    public function testCreateLocationParentChildCountRaised( array $data )
-    {
-        $parentLocation = $data['parentLocation'];
-
-        $this->assertEquals( 6, $parentLocation->childCount );
     }
 
     /**
@@ -384,7 +369,6 @@ class LocationServiceTest extends BaseTest
                 'depth' => 1,
                 'sortField' => 1,
                 'sortOrder' => 1,
-                'childCount' => 5,
             ),
             $location
         );
@@ -698,6 +682,25 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test for the getLocationChildCount() method.
+     *
+     * @see \eZ\Publish\API\Repository\LocationService::getLocationChildCount()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     */
+    public function testGetLocationChildCount()
+    {
+        // $locationId is the ID of an existing location
+        $locationService = $this->getRepository()->getLocationService();
+
+        $this->assertSame(
+            5,
+            $locationService->getLocationChildCount(
+                $locationService->loadLocation( $this->generateId( 'location', 5 ) )
+            )
+        );
+    }
+
+    /**
      * Test for the loadLocationChildren() method.
      *
      * @return void
@@ -954,7 +957,6 @@ class LocationServiceTest extends BaseTest
                 'depth' => $originalLocation->depth,
                 'sortField' => $updateStruct->sortField,
                 'sortOrder' => $updateStruct->sortOrder,
-                'childCount' => $originalLocation->childCount,
             ),
             $updatedLocation
         );
@@ -1300,7 +1302,7 @@ class LocationServiceTest extends BaseTest
         );
 
         // Get child count
-        $childCountBefore = $parentLocation->childCount;
+        $childCountBefore = $locationService->getLocationChildCount( $parentLocation );
 
         // Delete the user group location
         $locationService->deleteLocation( $location );
@@ -1311,7 +1313,7 @@ class LocationServiceTest extends BaseTest
         );
 
         // This will be $childCountBefore - 1
-        $childCountAfter = $parentLocation->childCount;
+        $childCountAfter = $locationService->getLocationChildCount( $parentLocation );
         /* END: Use Case */
 
         $this->assertEquals( $childCountBefore - 1, $childCountAfter );
@@ -1447,7 +1449,7 @@ class LocationServiceTest extends BaseTest
         $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
-        $childCountBefore = $locationService->loadLocation( 56 )->childCount;
+        $childCountBefore = $locationService->getLocationChildCount( $locationService->loadLocation( 56 ) );
 
         $mediaLocationId = $this->generateId( 'location', 43 );
         $demoDesignLocationId = $this->generateId( 'location', 56 );
@@ -1474,7 +1476,7 @@ class LocationServiceTest extends BaseTest
         );
         /* END: Use Case */
 
-        $childCountAfter = $locationService->loadLocation( $demoDesignLocationId )->childCount;
+        $childCountAfter = $locationService->getLocationChildCount( $locationService->loadLocation( $demoDesignLocationId ) );
 
         $this->assertEquals( $childCountBefore + 1, $childCountAfter );
     }
@@ -1643,7 +1645,7 @@ class LocationServiceTest extends BaseTest
 
         // Load expected properties before move
         $expected = $this->loadLocationProperties( $newParentLocation );
-        $expected['childCount'] += 1;
+        $childCountBefore = $locationService->getLocationChildCount( $newParentLocation );
 
         $mediaLocationId = $this->generateId( 'location', 43 );
         $demoDesignLocationId = $this->generateId( 'location', 56 );
@@ -1678,8 +1680,10 @@ class LocationServiceTest extends BaseTest
 
         // Load Subtree properties after move
         $actual = $this->loadLocationProperties( $newParentLocation );
+        $childCountAfter = $locationService->getLocationChildCount( $newParentLocation );
 
         $this->assertEquals( $expected, $actual );
+        $this->assertEquals( $childCountBefore + 1, $childCountAfter );
     }
 
     /**
@@ -1698,7 +1702,7 @@ class LocationServiceTest extends BaseTest
 
         // Load expected properties before move
         $expected = $this->loadLocationProperties( $oldParentLocation );
-        $expected['childCount'] -= 1;
+        $childCountBefore = $locationService->getLocationChildCount( $oldParentLocation );
 
         $mediaLocationId = $this->generateId( 'location', 43 );
         $demoDesignLocationId = $this->generateId( 'location', 56 );
@@ -1733,8 +1737,10 @@ class LocationServiceTest extends BaseTest
 
         // Load Subtree properties after move
         $actual = $this->loadLocationProperties( $oldParentLocation );
+        $childCountAfter = $locationService->getLocationChildCount( $oldParentLocation );
 
         $this->assertEquals( $expected, $actual );
+        $this->assertEquals( $childCountBefore - 1, $childCountAfter );
     }
 
     /**
@@ -1773,7 +1779,6 @@ class LocationServiceTest extends BaseTest
                 'depth' => $location->depth,
                 'parentLocationId' => $location->parentLocationId,
                 'pathString' => $location->pathString,
-                'childCount' => $location->childCount,
                 'remoteId' => $location->remoteId,
                 'hidden' => $location->hidden,
                 'invisible' => $location->invisible,

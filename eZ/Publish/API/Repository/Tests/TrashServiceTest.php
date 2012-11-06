@@ -61,7 +61,6 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         $expected = array(
             'id' => $location->id,
-            'childCount' => $location->childCount,
             'depth' => $location->depth,
             'hidden' => $location->hidden,
             'invisible' => $location->invisible,
@@ -160,13 +159,15 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         $baseLocationId = $this->generateId( 'location', 1 );
 
-        $childCount = $locationService->loadLocation( $baseLocationId )->childCount;
+        $location = $locationService->loadLocation( $baseLocationId );
+
+        $childCount = count( $locationService->loadLocationChildren( $location ) );
 
         $this->createTrashItem();
 
         $this->assertEquals(
             $childCount - 1,
-            $locationService->loadLocation( $baseLocationId )->childCount
+            count( $locationService->loadLocationChildren( $location ) )
         );
     }
 
@@ -341,7 +342,6 @@ class TrashServiceTest extends BaseTrashServiceTest
                 'remoteId' => $trashItem->remoteId,
                 'parentLocationId' => $homeLocationId,
                 // Not the full sub tree is restored
-                'childCount' => 0,
                 'depth' => $newParentLocation->depth + 1,
                 'hidden' => false,
                 'invisible' => $trashItem->invisible,
@@ -417,7 +417,9 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         $homeLocationId = $this->generateId( 'location', 2 );
 
-        $childCount = $locationService->loadLocation( $homeLocationId )->childCount;
+        $location = $locationService->loadLocation( $homeLocationId );
+
+        $childCount = count( $locationService->loadLocationChildren( $location ) );
 
         /* BEGIN: Use Case */
         // $homeLocationId is the ID of the "Home" location in an eZ Publish
@@ -434,7 +436,7 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         $this->assertEquals(
             $childCount + 1,
-            $locationService->loadLocation( $homeLocationId )->childCount
+            count( $locationService->loadLocationChildren( $location ) )
         );
     }
 

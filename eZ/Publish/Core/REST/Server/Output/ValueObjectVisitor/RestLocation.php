@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Location ValueObjectVisitor class
+ * File containing the RestLocation ValueObjectVisitor class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -14,16 +14,16 @@ use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
- * Location value object visitor
+ * RestLocation value object visitor
  */
-class Location extends ValueObjectVisitor
+class RestLocation extends ValueObjectVisitor
 {
     /**
      * Visit struct returned by controllers
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $data
+     * @param \eZ\Publish\Core\REST\Server\Values\RestLocation $data
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
@@ -33,20 +33,20 @@ class Location extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->urlHandler->generate( 'location', array( 'location' => rtrim( $data->pathString, '/' ) ) )
+            $this->urlHandler->generate( 'location', array( 'location' => rtrim( $data->location->pathString, '/' ) ) )
         );
         $generator->endAttribute( 'href' );
 
-        $generator->startValueElement( 'id', $data->id );
+        $generator->startValueElement( 'id', $data->location->id );
         $generator->endValueElement( 'id' );
 
-        $generator->startValueElement( 'priority', $data->priority );
+        $generator->startValueElement( 'priority', $data->location->priority );
         $generator->endValueElement( 'priority' );
 
-        $generator->startValueElement( 'hidden', $data->hidden ? 'true' : 'false' );
+        $generator->startValueElement( 'hidden', $data->location->hidden ? 'true' : 'false' );
         $generator->endValueElement( 'hidden' );
 
-        $generator->startValueElement( 'invisible', $data->invisible ? 'true' : 'false' );
+        $generator->startValueElement( 'invisible', $data->location->invisible ? 'true' : 'false' );
         $generator->endValueElement( 'invisible' );
 
         $generator->startObjectElement( 'ParentLocation', 'Location' );
@@ -55,27 +55,27 @@ class Location extends ValueObjectVisitor
             $this->urlHandler->generate(
                 'location',
                 array(
-                    'location' => '/' . implode( '/', array_slice( $data->path, 0, count( $data->path ) - 1 ) )
+                    'location' => '/' . implode( '/', array_slice( $data->location->path, 0, count( $data->location->path ) - 1 ) )
                 )
             )
         );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'ParentLocation' );
 
-        $generator->startValueElement( 'pathString', $data->pathString );
+        $generator->startValueElement( 'pathString', $data->location->pathString );
         $generator->endValueElement( 'pathString' );
 
         // 'c' is the PHP date/time format compatible with XSD dateTime datatype
-        $generator->startValueElement( 'subLocationModificationDate', date( 'c', $data->modifiedSubLocationDate->getTimestamp() ) );
+        $generator->startValueElement( 'subLocationModificationDate', date( 'c', $data->location->modifiedSubLocationDate->getTimestamp() ) );
         $generator->endValueElement( 'subLocationModificationDate' );
 
-        $generator->startValueElement( 'depth', $data->depth );
+        $generator->startValueElement( 'depth', $data->location->depth );
         $generator->endValueElement( 'depth' );
 
         $generator->startValueElement( 'childCount', $data->childCount );
         $generator->endValueElement( 'childCount' );
 
-        $generator->startValueElement( 'remoteId', $data->remoteId );
+        $generator->startValueElement( 'remoteId', $data->location->remoteId );
         $generator->endValueElement( 'remoteId' );
 
         $generator->startObjectElement( 'Children', 'LocationList' );
@@ -84,7 +84,7 @@ class Location extends ValueObjectVisitor
             $this->urlHandler->generate(
                 'locationChildren',
                 array(
-                    'location' => rtrim( $data->pathString, '/' )
+                    'location' => rtrim( $data->location->pathString, '/' )
                 )
             )
         );
@@ -92,14 +92,14 @@ class Location extends ValueObjectVisitor
         $generator->endObjectElement( 'Children' );
 
         $generator->startObjectElement( 'Content' );
-        $generator->startAttribute( 'href', $this->urlHandler->generate( 'object', array( 'object' => $data->contentId ) ) );
+        $generator->startAttribute( 'href', $this->urlHandler->generate( 'object', array( 'object' => $data->location->contentId ) ) );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'Content' );
 
-        $generator->startValueElement( 'sortField', $this->serializeSortField( $data->sortField ) );
+        $generator->startValueElement( 'sortField', $this->serializeSortField( $data->location->sortField ) );
         $generator->endValueElement( 'sortField' );
 
-        $generator->startValueElement( 'sortOrder', $this->serializeSortOrder( $data->sortOrder ) );
+        $generator->startValueElement( 'sortOrder', $this->serializeSortOrder( $data->location->sortOrder ) );
         $generator->endValueElement( 'sortOrder' );
 
         $generator->endObjectElement( 'Location' );

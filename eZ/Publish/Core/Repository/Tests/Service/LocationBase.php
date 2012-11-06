@@ -44,7 +44,6 @@ abstract class LocationBase extends BaseServiceTest
                 'depth' => null,
                 'sortField' => null,
                 'sortOrder' => null,
-                'childCount' => null
             ),
             $location
         );
@@ -464,7 +463,6 @@ abstract class LocationBase extends BaseServiceTest
                 'depth' => $parentLocation->depth + 1,
                 'sortField' => $locationCreateStruct->sortField,
                 'sortOrder' => $locationCreateStruct->sortOrder,
-                'childCount' => 0
             ),
             $createdLocation
         );

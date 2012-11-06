@@ -11,11 +11,12 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Server\Values\RestTrashItem;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\REST\Common;
 
-class TrashItemTest extends ValueObjectVisitorBaseTest
+class RestTrashItemTest extends ValueObjectVisitorBaseTest
 {
     /**
      * Test the TrashItem visitor
@@ -29,26 +30,29 @@ class TrashItemTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $trashItem = new TrashItem(
-            array(
-                'id' => 42,
-                'priority' => 0,
-                'hidden' => false,
-                'invisible' => true,
-                'remoteId' => 'remote-id',
-                'parentLocationId' => 21,
-                'pathString' => '/1/2/21/42/',
-                'modifiedSubLocationDate' => new \DateTime( '2012-09-05 15:27 Europe/Zagreb' ),
-                'depth' => 3,
-                'childCount' => 0,
-                'contentInfo' => new ContentInfo(
-                    array(
-                        'id' => 84
-                    )
-                ),
-                'sortField' => TrashItem::SORT_FIELD_NAME,
-                'sortOrder' => TrashItem::SORT_ORDER_DESC
-            )
+        $trashItem = new RestTrashItem(
+            new TrashItem(
+                array(
+                    'id' => 42,
+                    'priority' => 0,
+                    'hidden' => false,
+                    'invisible' => true,
+                    'remoteId' => 'remote-id',
+                    'parentLocationId' => 21,
+                    'pathString' => '/1/2/21/42/',
+                    'modifiedSubLocationDate' => new \DateTime( '2012-09-05 15:27 Europe/Zagreb' ),
+                    'depth' => 3,
+                    'contentInfo' => new ContentInfo(
+                        array(
+                            'id' => 84
+                        )
+                    ),
+                    'sortField' => TrashItem::SORT_FIELD_NAME,
+                    'sortOrder' => TrashItem::SORT_ORDER_DESC
+                )
+            ),
+            // Dummy value for ChildCount
+            0
         );
 
         $visitor->visit(
@@ -399,11 +403,11 @@ class TrashItemTest extends ValueObjectVisitorBaseTest
     /**
      * Get the TrashItem visitor
      *
-     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\TrashItem
+     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestTrashItem
      */
     protected function getTrashItemVisitor()
     {
-        return new ValueObjectVisitor\TrashItem(
+        return new ValueObjectVisitor\RestTrashItem(
             new Common\UrlHandler\eZPublish()
         );
     }

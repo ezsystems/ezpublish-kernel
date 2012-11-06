@@ -256,6 +256,18 @@ class LocationService implements \eZ\Publish\API\Repository\LocationService, Ses
     }
 
     /**
+     * Returns the number of children which are readable by the current user of a location object
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     *
+     * @return int
+     */
+    public function getLocationChildCount( Location $location )
+    {
+        throw new \Exception( "@TODO: Implement." );
+    }
+
+    /**
      * Swaps the contents hold by the $location1 and $location2
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to swap content

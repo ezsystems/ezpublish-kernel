@@ -118,13 +118,6 @@ class LocationStub extends Location
     // protected $sortOrder;
 
     /**
-     * the number of children visible to the authenticated user which has loaded this instance.
-     *
-     * @var integer
-     */
-    // protected $childCount;
-
-    /**
      * ContentInfo
      *
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
@@ -139,17 +132,6 @@ class LocationStub extends Location
     public function getContentInfo()
     {
         return $this->contentInfo;
-    }
-
-    /**
-     * FOR TEST USE ONLY!
-     *
-     * @param int $childCount
-     * @return void
-     */
-    public function __setChildCount( $childCount )
-    {
-        $this->childCount = $childCount;
     }
 
     /**

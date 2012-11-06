@@ -44,7 +44,6 @@ abstract class TrashBase extends BaseServiceTest
                 'depth' => null,
                 'sortField' => null,
                 'sortOrder' => null,
-                'childCount' => null
             ),
             $trashItem
         );
@@ -136,7 +135,6 @@ abstract class TrashBase extends BaseServiceTest
                 'depth',
                 'sortField',
                 'sortOrder',
-                'childCount'
             ),
             $trashItem,
             $loadedTrashItem
@@ -183,9 +181,7 @@ abstract class TrashBase extends BaseServiceTest
                 'sortOrder'
             ),
             $location,
-            $trashItem,
-            //@todo: enable the following properties
-            array( 'childCount' )
+            $trashItem
         );
     }
 
@@ -266,9 +262,7 @@ abstract class TrashBase extends BaseServiceTest
                 'sortOrder'
             ),
             $location,
-            $recoveredLocation,
-            //@todo: assert child count
-            array( 'childCount' )
+            $recoveredLocation
         );
 
         $parentLocation = $locationService->loadLocation( $location->parentLocationId );
@@ -329,13 +323,12 @@ abstract class TrashBase extends BaseServiceTest
             ),
             $location,
             $recoveredLocation,
-            array( "childCount", "depth" )
+            array( "depth" )
         );
 
         $parentLocation = $locationService->loadLocation( $recoveredLocation->parentLocationId );
         $newPathString = $parentLocation->pathString . $recoveredLocation->id . "/";
 
-        self::assertEquals( 1, $parentLocation->childCount );
         self::assertEquals( $parentLocation->depth + 1, $recoveredLocation->depth );
         self::assertEquals( $newPathString, $recoveredLocation->pathString );
         self::assertGreaterThan( 0, $recoveredLocation->id );
