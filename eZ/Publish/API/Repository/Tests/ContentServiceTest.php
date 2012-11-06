@@ -1344,40 +1344,6 @@ class ContentServiceTest extends BaseContentServiceTest
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
-    public function testUpdateContentThrowsContentValidationExceptionWhenInitialLanguageCodeIsNotSet()
-    {
-        $repository = $this->getRepository();
-
-        $contentService = $repository->getContentService();
-
-        /* BEGIN: Use Case */
-        $draft = $this->createContentDraftVersion1();
-
-        // Now create an update struct and modify some fields
-        $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->setField( 'name', 'An awesome² Sindelfingen forum' );
-
-        // Don't set this, then the above call without languageCode will fail
-        //$contentUpdateStruct->initialLanguageCode = 'eng-US';
-
-        // This call will fail with a "ContentValidationException", because
-        // "title" was set without a languageCode and no initialLanguageCode
-        // is set.
-        $contentService->updateContent(
-            $draft->getVersionInfo(),
-            $contentUpdateStruct
-        );
-        /* END: Use Case */
-    }
-
-    /**
-     * Test for the updateContent() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
-     */
     public function testUpdateContentThrowsContentValidationExceptionWhenMandatoryFieldIsEmpty()
     {
         $repository = $this->getRepository();
