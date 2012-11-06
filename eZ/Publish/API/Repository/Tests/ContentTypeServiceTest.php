@@ -65,7 +65,9 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'identifier' => 'new-group',
                 'creatorId' => null,
                 'creationDate' => null,
+                /* @todo uncomment when support for multilingual names and descriptions is added
                 'mainLanguageCode' => null,
+                */
             ),
             $createStruct
         );
@@ -91,9 +93,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         );
         $groupCreate->creatorId = $repository->getCurrentUser()->id;
         $groupCreate->creationDate = $this->createDateTime();
+        /* @todo uncomment when support for multilingual names and descriptions is added
         $groupCreate->mainLanguageCode = 'ger-DE';
         $groupCreate->names = array( 'eng-GB' => 'A name.' );
         $groupCreate->descriptions = array( 'eng-GB' => 'A description.' );
+        */
 
         $group = $contentTypeService->createContentTypeGroup( $groupCreate );
         /* END: Use Case */
@@ -153,8 +157,10 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         $this->assertStructPropertiesCorrect(
             $createStruct,
-            $group,
+            $group
+            /* @todo uncomment when support for multilingual names and descriptions is added
             array( 'names', 'descriptions', 'mainLanguageCode' )
+            */
         );
     }
 
@@ -423,6 +429,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $groupUpdate->identifier = 'Teardown';
         $groupUpdate->modifierId = $modifierId;
         $groupUpdate->modificationDate = $this->createDateTime();
+        /* @todo uncomment when support for multilingual names and descriptions is added
         $groupUpdate->mainLanguageCode = 'eng-GB';
 
         $groupUpdate->names = array(
@@ -433,6 +440,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             'eng-GB' => 'A description',
             'eng-US' => 'A description',
         );
+        */
 
         $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
         /* END: Use Case */
@@ -490,9 +498,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             'modificationDate' => $data['updateStruct']->modificationDate,
             'creatorId' => $data['originalGroup']->creatorId,
             'modifierId' => $data['updateStruct']->modifierId,
+            /* @todo uncomment when support for multilingual names and descriptions is added
             'mainLanguageCode' => $data['updateStruct']->mainLanguageCode,
             'names' => $data['updateStruct']->names,
             'descriptions' => $data['updateStruct']->descriptions,
+            */
         );
 
         $this->assertPropertiesCorrect(
@@ -2568,7 +2578,9 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         // Get create struct and set language property
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct( 'new-group' );
+        /* @todo uncomment when support for multilingual names and descriptions is added
         $groupCreate->mainLanguageCode = 'eng-GB';
+        */
 
         // Start a new transaction
         $repository->beginTransaction();
@@ -2620,7 +2632,9 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         // Get create struct and set language property
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct( 'new-group' );
+        /* @todo uncomment when support for multilingual names and descriptions is added
         $groupCreate->mainLanguageCode = 'eng-GB';
+        */
 
         // Start a new transaction
         $repository->beginTransaction();

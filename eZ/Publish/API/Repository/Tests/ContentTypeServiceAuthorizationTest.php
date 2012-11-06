@@ -42,9 +42,11 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         // $creatorId is the ID of the administrator user
         $groupCreate->creatorId = $creatorId;
         $groupCreate->creationDate = $this->createDateTime();
+        /* @todo uncomment when support for multilingual names and descriptions is added
         $groupCreate->mainLanguageCode = 'ger-DE';
         $groupCreate->names = array( 'eng-GB' => 'A name.' );
         $groupCreate->descriptions = array( 'eng-GB' => 'A description.' );
+        */
 
         // Set anonymous user
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
@@ -79,6 +81,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         // $modifierId is the ID of a random user
         $groupUpdate->modifierId = $modifierId;
         $groupUpdate->modificationDate = $this->createDateTime();
+        /* @todo uncomment when support for multilingual names and descriptions is added
         $groupUpdate->mainLanguageCode = 'eng-GB';
 
         $groupUpdate->names = array(
@@ -89,6 +92,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
             'eng-GB' => 'A description',
             'eng-US' => 'A description',
         );
+        */
 
         // Set anonymous user
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
