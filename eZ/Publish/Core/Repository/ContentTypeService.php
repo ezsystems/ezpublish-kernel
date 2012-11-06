@@ -115,19 +115,25 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         if ( $contentTypeGroupCreateStruct->creationDate === null )
+        {
             $timestamp = time();
+        }
         else
+        {
             $timestamp = $contentTypeGroupCreateStruct->creationDate->getTimestamp();
+        }
 
         if ( $contentTypeGroupCreateStruct->creatorId === null )
+        {
             $userId = $this->repository->getCurrentUser()->id;
+        }
         else
+        {
             $userId = $contentTypeGroupCreateStruct->creatorId;
+        }
 
         $spiGroupCreateStruct = new SPIContentTypeGroupCreateStruct(
             array(
-                "name" => $contentTypeGroupCreateStruct->names,
-                "description" => $contentTypeGroupCreateStruct->descriptions,
                 "identifier" => $contentTypeGroupCreateStruct->identifier,
                 "created" => $timestamp,
                 "modified" => $timestamp,
@@ -263,8 +269,6 @@ class ContentTypeService implements ContentTypeServiceInterface
         $spiGroupUpdateStruct = new SPIContentTypeGroupUpdateStruct(
             array(
                 "id" => $contentTypeGroup->id,
-                "name" => $contentTypeGroupUpdateStruct->names,
-                "description" => $contentTypeGroupUpdateStruct->descriptions,
                 "identifier" => $contentTypeGroupUpdateStruct->identifier,
                 "modified" => $modifiedTimestamp,
                 "modifierId" => $contentTypeGroupUpdateStruct->modifierId
