@@ -239,7 +239,7 @@ class LegacyHandler implements IoHandlerInterface
         }
         else
         {
-            $file->mimeType = self::getMimeTypeFromPath( $path );
+            $file->mimeType = $this->getMimeTypeFromPath( $path );
         }
 
         $file->uri = $file->path;
@@ -330,6 +330,24 @@ class LegacyHandler implements IoHandlerInterface
     }
 
     /**
+     * Tells whether the filename is a regular file.
+     *
+     * @param string $path
+     *
+     * @return boolean
+     */
+    protected function isFile( $path )
+    {
+        return $this->legacyKernel->runCallback(
+            function () use ( $path )
+            {
+                return is_file( $path );
+            },
+            false
+        );
+    }
+
+    /**
      * Returns a mimeType from a file path, using fileinfo
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If file does not exist
@@ -338,14 +356,20 @@ class LegacyHandler implements IoHandlerInterface
      *
      * @return string
      */
-    protected static function getMimeTypeFromPath( $path )
+    protected function getMimeTypeFromPath( $path )
     {
-        if ( !is_file( $path ) )
+        if ( !$this->isFile( $path ) )
         {
             throw new NotFoundException( 'BinaryFile', $path );
         }
 
-        $finfo = new finfo( FILEINFO_MIME_TYPE );
-        return $finfo->file( $path );
+        return $this->legacyKernel->runCallback(
+            function () use ( $path )
+            {
+                $fileInfo = new finfo( FILEINFO_MIME_TYPE );
+                return $fileInfo->file( $path );
+            },
+            false
+        );
     }
 }
