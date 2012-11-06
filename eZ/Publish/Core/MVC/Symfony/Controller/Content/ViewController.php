@@ -91,7 +91,7 @@ class ViewController extends Controller
                 "ezpublish-location-$locationId-$viewType-$layout",
                 $location->getContentInfo()->modificationDate
             );
-
+            $response->headers->set( 'X-Location-Id', $locationId );
 
             if ( $response->isNotModified( $this->getRequest() ) )
             {
