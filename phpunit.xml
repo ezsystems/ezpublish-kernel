@@ -33,6 +33,9 @@
     <testsuite name="eZ Publish legacy test suite">
         <directory>eZ/Publish/Core/MVC/Legacy</directory>
     </testsuite>
+    <testsuite name="eZ Publish REST test suite">
+        <directory>eZ/Publish/Core/REST</directory>
+    </testsuite>
   </testsuites>
   <filter>
     <whitelist>
