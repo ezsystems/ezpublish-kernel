@@ -66,6 +66,7 @@ class EzPublishCoreExtension extends Extension
         $this->handleApiLoading( $container, $loader );
         $this->handleTemplating( $container, $loader );
         $this->handleSessionLoading( $container, $loader );
+        $this->handleCache( $container, $loader );
 
         // Map settings
         foreach ( $this->configParsers as $configParser )
@@ -184,4 +185,14 @@ class EzPublishCoreExtension extends Extension
         $loader->load( 'session.yml' );
     }
 
+    /**
+     * Handle cache parameters
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \Symfony\Component\DependencyInjection\Loader\FileLoader $loader
+     */
+    private function handleCache( ContainerBuilder $container, FileLoader $loader )
+    {
+        $loader->load( 'cache.yml' );
+    }
 }

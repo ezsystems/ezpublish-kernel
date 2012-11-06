@@ -1,0 +1,19 @@
+parameters:
+    ezpublish.cache.purge_client.http.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\PurgeClient
+    ezpublish.cache.purge_client.http.client.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\MultiCurlClient
+    ezpublish.cache.purge_client.http.client.timeout: 1          # Timeout, in ms. Setting a low value will emulate an asynchronous request
+
+    ezpublish.cache.purge_client.http.browser.class: Buzz\Browser
+
+services:
+    ezpublish.cache.purge_client.http:
+        class: %ezpublish.cache.purge_client.http.class%
+        arguments: [@ezpublish.cache.purge_client.http.browser]
+
+    ezpublish.cache.purge_client.http.browser:
+        class: %ezpublish.cache.purge_client.http.browser.class%
+        arguments: [@ezpublish.cache.purge_client.http.client]
+
+    ezpublish.cache.purge_client.http.client:
+        class: %ezpublish.cache.purge_client.http.client.class%
+        arguments: [%ezpublish.cache.purge_client.http.client.timeout%]
