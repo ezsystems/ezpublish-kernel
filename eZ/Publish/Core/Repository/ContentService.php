@@ -204,15 +204,13 @@ class ContentService implements ContentServiceInterface
      */
     public function loadVersionInfoById( $contentId, $versionNo = null )
     {
+        if ( $versionNo === null )
+        {
+            $versionNo = $this->loadContentInfo( $contentId )->currentVersionNo;
+        }
+
         try
         {
-            if ( $versionNo === null )
-            {
-                $versionNo = $this->persistenceHandler->contentHandler()->loadContentInfo(
-                    $contentId
-                )->currentVersionNo;
-            }
-
             $spiVersionInfo = $this->persistenceHandler->contentHandler()->loadVersionInfo(
                 $contentId,
                 $versionNo
@@ -221,8 +219,11 @@ class ContentService implements ContentServiceInterface
         catch ( APINotFoundException $e )
         {
             throw new NotFoundException(
-                "Content",
-                $contentId,
+                "VersionInfo",
+                array(
+                    "contentId" => $contentId,
+                    "versionNo" => $versionNo
+                ),
                 $e
             );
         }
@@ -890,13 +891,21 @@ class ContentService implements ContentServiceInterface
      */
     public function createContentDraft( APIContentInfo $contentInfo, APIVersionInfo $versionInfo = null, User $user = null )
     {
-        if ( $user === null )
-        {
-            $user = $this->repository->getCurrentUser();
-        }
+        $contentInfo = $this->loadContentInfo( $contentInfo->id );
 
         if ( $versionInfo !== null )
         {
+            // Check that given $contentInfo and $versionInfo belong to the same content
+            if ( $versionInfo->getContentInfo()->id != $contentInfo->id )
+            {
+                throw new InvalidArgumentException(
+                    "\$versionInfo",
+                    "VersionInfo does not belong to the same content as given ContentInfo"
+                );
+            }
+
+            $versionInfo = $this->loadVersionInfoById( $contentInfo->id, $versionInfo->versionNo );
+
             switch ( $versionInfo->status )
             {
                 case VersionInfo::STATUS_PUBLISHED:
@@ -924,6 +933,15 @@ class ContentService implements ContentServiceInterface
                 "\$contentInfo",
                 "Content is not published, draft can be created only from published or archived version"
             );
+        }
+
+        if ( $user === null )
+        {
+            $user = $this->repository->getCurrentUser();
+        }
+        else
+        {
+            $user = $this->repository->getUserService()->loadUser( $user->id );
         }
 
         if ( !$this->repository->canUser( 'content', 'edit', $contentInfo ) )

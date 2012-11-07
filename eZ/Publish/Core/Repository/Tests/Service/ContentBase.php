@@ -1978,18 +1978,14 @@ abstract class ContentBase extends BaseServiceTest
     /**
      * Test for the createContentDraft() method.
      *
-     * @depends testCreateContentDraft
      * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     *
-     * @param array $data
      */
-    public function testCreateContentDraftThrowsBadStateException( array $data )
+    public function testCreateContentDraftThrowsBadStateException()
     {
-        $draftContent = $data["draftContent"];
-
-        /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
+        $contentInfo = $contentService->loadContentInfo( 4 );
+        $draftContent = $contentService->createContentDraft( $contentInfo );
 
         // Throws an exception because version status is not
         // VersionInfo::STATUS_PUBLISHED nor VersionInfo::STATUS_ARCHIVED
@@ -1997,7 +1993,6 @@ abstract class ContentBase extends BaseServiceTest
             $draftContent->contentInfo,
             $draftContent->getVersionInfo()
         );
-        /* END: Use Case */
     }
 
     /**
