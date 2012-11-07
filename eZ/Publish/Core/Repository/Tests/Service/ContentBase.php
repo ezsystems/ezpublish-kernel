@@ -2683,7 +2683,7 @@ abstract class ContentBase extends BaseServiceTest
         $fieldCreate->names = array( "eng-GB" => "Test required empty" );
         $fieldCreate->descriptions = array( "eng-GB" => "Required field with empty default value" );
         $fieldCreate->fieldGroup = "test-field-group";
-        $fieldCreate->position = 0;
+        $fieldCreate->position = 1;
         $fieldCreate->isTranslatable = false;
         $fieldCreate->isRequired = true;
         $fieldCreate->isInfoCollector = false;
@@ -2704,7 +2704,7 @@ abstract class ContentBase extends BaseServiceTest
         $fieldCreate->names = array( "eng-GB" => "Test required not empty" );
         $fieldCreate->descriptions = array( "eng-GB" => "Required field with default value not empty" );
         $fieldCreate->fieldGroup = "test-field-group";
-        $fieldCreate->position = 1;
+        $fieldCreate->position = 2;
         $fieldCreate->isTranslatable = false;
         $fieldCreate->isRequired = true;
         $fieldCreate->isInfoCollector = false;
@@ -2718,7 +2718,7 @@ abstract class ContentBase extends BaseServiceTest
         $fieldCreate->names = array( "eng-GB" => "Test translatable" );
         $fieldCreate->descriptions = array( "eng-GB" => "Translatable field" );
         $fieldCreate->fieldGroup = "test-field-group";
-        $fieldCreate->position = 2;
+        $fieldCreate->position = 3;
         $fieldCreate->isTranslatable = true;
         $fieldCreate->isRequired = false;
         $fieldCreate->isInfoCollector = false;
@@ -2732,7 +2732,7 @@ abstract class ContentBase extends BaseServiceTest
         $fieldCreate->names = array( "eng-GB" => "Test not translatable" );
         $fieldCreate->descriptions = array( "eng-GB" => "Untranslatable field" );
         $fieldCreate->fieldGroup = "test-field-group";
-        $fieldCreate->position = 3;
+        $fieldCreate->position = 4;
         $fieldCreate->isTranslatable = false;
         $fieldCreate->isRequired = false;
         $fieldCreate->isInfoCollector = false;

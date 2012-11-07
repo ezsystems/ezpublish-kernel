@@ -2046,6 +2046,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $typeCreateStruct->mainLanguageCode = 'eng-GB';
 
         $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct( 'title', 'ezstring' );
+        $titleFieldCreate->position = 1;
         $typeCreateStruct->addFieldDefinition( $titleFieldCreate );
 
         $type = $contentTypeService->createContentType(
