@@ -257,9 +257,6 @@ class LocationService implements LocationServiceInterface
             $limit
         );
 
-        if ( $searchResult->totalCount == 0 )
-            return array();
-
         $childLocations = array();
         foreach ( $searchResult->searchHits as $spiSearchHit )
         {
@@ -280,7 +277,7 @@ class LocationService implements LocationServiceInterface
             }
         }
 
-        return new LocationList (
+        return new LocationList(
             array(
                 "locations" => $childLocations,
                 "totalCount" => (int)$searchResult->totalCount
