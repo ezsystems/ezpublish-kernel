@@ -88,7 +88,9 @@ class RoleServiceTest extends BaseTest
 
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct( 'roleName' );
-        $roleCreate->mainLanguageCode = 'eng-US';
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole( $roleCreate );
 
@@ -116,7 +118,9 @@ class RoleServiceTest extends BaseTest
 
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct( 'Editor' );
-        $roleCreate->mainLanguageCode = 'eng-US';
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
 
         // This call will fail with an InvalidArgumentException, because Editor exists
         $roleService->createRole( $roleCreate );
@@ -142,7 +146,9 @@ class RoleServiceTest extends BaseTest
         $repository->beginTransaction();
 
         $roleCreate = $roleService->newRoleCreateStruct( 'roleName' );
-        $roleCreate->mainLanguageCode = 'eng-US';
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
 
         $createdRoleId = $roleService->createRole( $roleCreate )->id;
 
@@ -177,7 +183,9 @@ class RoleServiceTest extends BaseTest
 
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct( 'roleName' );
-        $roleCreate->mainLanguageCode = 'eng-US';
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleId = $roleService->createRole( $roleCreate )->id;
 
@@ -227,7 +235,9 @@ class RoleServiceTest extends BaseTest
 
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct( 'roleName' );
-        $roleCreate->mainLanguageCode = 'eng-US';
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleService->createRole( $roleCreate );
 
@@ -277,7 +287,9 @@ class RoleServiceTest extends BaseTest
         // First create a custom role
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct( 'roleName' );
-        $roleCreate->mainLanguageCode = 'eng-US';
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole( $roleCreate );
 
@@ -368,7 +380,9 @@ class RoleServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
-        $roleCreate->mainLanguageCode = 'eng-US';
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole( $roleCreate );
 
@@ -399,7 +413,9 @@ class RoleServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
-        $roleCreate->mainLanguageCode = 'eng-US';
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole( $roleCreate );
 
@@ -426,7 +442,9 @@ class RoleServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
-        $roleCreate->mainLanguageCode = 'eng-US';
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole( $roleCreate );
 
@@ -493,7 +511,9 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
 
         $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
-        $roleCreate->mainLanguageCode = 'eng-US';
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole( $roleCreate );
 
@@ -549,7 +569,9 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
 
         $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
-        $roleCreate->mainLanguageCode = 'eng-US';
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole( $roleCreate );
 
@@ -609,7 +631,9 @@ class RoleServiceTest extends BaseTest
 
         // Instantiate a new create struct
         $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
-        $roleCreate->mainLanguageCode = 'eng-US';
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
 
         // Add some role policies
         $roleCreate->addPolicy(
@@ -701,7 +725,9 @@ class RoleServiceTest extends BaseTest
 
         // Instantiate a role create and add the policy create
         $roleCreate = $roleService->newRoleCreateStruct( 'myRole' );
-        $roleCreate->mainLanguageCode = 'eng-US';
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleCreate->addPolicy( $policyCreate );
 
@@ -815,7 +841,9 @@ class RoleServiceTest extends BaseTest
 
         // Instantiate a new role create
         $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
-        $roleCreate->mainLanguageCode = 'eng-US';
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
 
         // Create a new role with two policies
         $role = $roleService->createRole(
@@ -1046,7 +1074,9 @@ class RoleServiceTest extends BaseTest
 
         // Instantiate a role create and add some policies
         $roleCreate = $roleService->newRoleCreateStruct( 'Example Role' );
-        $roleCreate->mainLanguageCode = 'eng-US';
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleCreate->addPolicy(
             $roleService->newPolicyCreateStruct( 'user', 'login' )
@@ -1101,7 +1131,7 @@ class RoleServiceTest extends BaseTest
         $roleAssignments = $roleService->getRoleAssignments( $role );
         /* END: Use Case */
 
-        // Adminstrator + Example Group
+        // Administrator + Example Group
         $this->assertEquals( 2, count( $roleAssignments ) );
     }
 
@@ -1238,7 +1268,9 @@ class RoleServiceTest extends BaseTest
 
         // Instantiate a role create and add some policies
         $roleCreate = $roleService->newRoleCreateStruct( 'Example Role' );
-        $roleCreate->mainLanguageCode = 'eng-US';
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleCreate->addPolicy(
             $roleService->newPolicyCreateStruct( 'user', 'login' )
@@ -1291,7 +1323,9 @@ class RoleServiceTest extends BaseTest
 
         // Instantiate a role create and add some policies
         $roleCreate = $roleService->newRoleCreateStruct( 'User Role' );
-        $roleCreate->mainLanguageCode = 'eng-US';
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleCreate->addPolicy(
             $roleService->newPolicyCreateStruct( 'notification', 'use' )
@@ -1348,13 +1382,13 @@ class RoleServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $nonExstingUserId = $this->generateId( 'user', PHP_INT_MAX );
+        $nonExistingUserId = $this->generateId( 'user', PHP_INT_MAX );
         /* BEGIN: Use Case */
         $roleService = $repository->getRoleService();
 
         // This call will fail with a "NotFoundException", because hopefully no
         // user with an ID equal to PHP_INT_MAX exists.
-        $roleService->loadPoliciesByUserId( $nonExstingUserId );
+        $roleService->loadPoliciesByUserId( $nonExistingUserId );
         /* END: Use Case */
     }
 

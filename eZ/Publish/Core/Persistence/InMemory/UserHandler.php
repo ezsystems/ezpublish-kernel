@@ -144,12 +144,6 @@ class UserHandler implements UserHandlerInterface
         if ( !$role->identifier )
             throw new InvalidArgumentValue( '$role->identifier', $role->identifier );
 
-        if ( !is_array( $role->name ) )
-            throw new InvalidArgumentValue( '$role->name', $role->name );
-
-        if ( !is_array( $role->description ) )
-            throw new InvalidArgumentValue( '$role->description', $role->description );
-
         $roleArr = (array)$role;
         $roleArr['policies'] = array();
         $newRole = $this->backend->create( 'User\\Role', $roleArr );
@@ -415,12 +409,6 @@ class UserHandler implements UserHandlerInterface
 
         if ( !$role->identifier )
             throw new InvalidArgumentValue( '$role->identifier', $role->identifier );
-
-        if ( !is_array( $role->name ) )
-            throw new InvalidArgumentValue( '$role->name', $role->name );
-
-        if ( !is_array( $role->description ) )
-            throw new InvalidArgumentValue( '$role->description', $role->description );
 
         $roleArr = (array)$role;
         $this->backend->update( 'User\\Role', $roleArr['id'], $roleArr );

@@ -32,6 +32,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
             array(
                 'id'         => 42,
                 'identifier' => 'some-role',
+                /* @todo uncomment when support for multilingual names and descriptions is added
                 'mainLanguageCode' => 'eng-GB',
                 'names' => array(
                     'eng-GB' => 'Role name EN',
@@ -41,6 +42,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
                     'eng-GB' => 'Role description EN',
                     'eng-US' => 'Role description EN US',
                 )
+                */
             )
         );
 
@@ -69,7 +71,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'Role',
                 'children' => array(
-                    'count' => 5
+                    'count' => 2
                 )
             ),
             $result,
@@ -127,6 +129,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsMainLanguageCodeValueElement( $result )
     {
+        $this->markTestSkipped( '@todo uncomment when support for multilingual names and descriptions is added' );
         $this->assertTag(
             array(
                 'tag'      => 'mainLanguageCode',
@@ -146,6 +149,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsNamesElement( $result )
     {
+        $this->markTestSkipped( '@todo uncomment when support for multilingual names and descriptions is added' );
         $this->assertTag(
             array(
                 'tag'      => 'names',
@@ -167,6 +171,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsDescriptionsElement( $result )
     {
+        $this->markTestSkipped( '@todo uncomment when support for multilingual names and descriptions is added' );
         $this->assertTag(
             array(
                 'tag'      => 'descriptions',

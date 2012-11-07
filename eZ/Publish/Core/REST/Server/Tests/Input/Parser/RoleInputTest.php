@@ -21,6 +21,7 @@ class RoleInputTest extends BaseTest
     {
         $inputArray = array(
             'identifier' => 'Identifier Bar',
+            /* @todo uncomment when support for multilingual names and descriptions is added
             'mainLanguageCode' => 'eng-GB',
             'names' => array(
                 'value' => array(
@@ -38,6 +39,7 @@ class RoleInputTest extends BaseTest
                     )
                 )
             )
+            */
         );
 
         $roleInput = $this->getRoleInput();
@@ -55,6 +57,7 @@ class RoleInputTest extends BaseTest
             'RoleCreateStruct identifier property not created correctly.'
         );
 
+        /* @todo uncomment when support for multilingual names and descriptions is added
         $this->assertEquals(
             array( 'eng-GB' => 'Test role' ),
             $result->names,
@@ -66,6 +69,7 @@ class RoleInputTest extends BaseTest
             $result->descriptions,
             'RoleCreateStruct descriptions property not created correctly.'
         );
+        */
     }
 
     /**

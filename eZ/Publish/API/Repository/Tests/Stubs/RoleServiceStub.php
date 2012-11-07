@@ -133,9 +133,7 @@ class RoleServiceStub implements RoleService
         $role = new RoleStub(
             array(
                 'id' => ++$this->nextRoleId,
-                'identifier' => $roleCreateStruct->identifier,
-                'names' => $roleCreateStruct->names,
-                'descriptions' => $roleCreateStruct->descriptions
+                'identifier' => $roleCreateStruct->identifier
             )
         );
 
@@ -150,7 +148,7 @@ class RoleServiceStub implements RoleService
     }
 
     /**
-     * Updates the name and (5.x) description of the role
+     * Updates the name of the role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
@@ -177,9 +175,7 @@ class RoleServiceStub implements RoleService
         $updatedRole = new RoleStub(
             array(
                 'id' => $role->id,
-                'identifier' => $roleName,
-                'names' => $roleUpdateStruct->names ?: $role->getNames(),
-                'descriptions' => $roleUpdateStruct->descriptions ?: $role->getDescriptions()
+                'identifier' => $roleName
             )
         );
 
@@ -223,9 +219,7 @@ class RoleServiceStub implements RoleService
         $this->roles[$role->id] = new RoleStub(
             array(
                 'id' => $role->id,
-                'identifier' => $role->identifier,
-                'names' => $role->getNames(),
-                'descriptions' => $role->getDescriptions()
+                'identifier' => $role->identifier
             ),
             $policies
         );
@@ -269,9 +263,7 @@ class RoleServiceStub implements RoleService
         $this->roles[$role->id] = new RoleStub(
             array(
                 'id' => $role->id,
-                'identifier' => $role->identifier,
-                'names' => $role->getNames(),
-                'descriptions' => $role->getDescriptions()
+                'identifier' => $role->identifier
             ),
             $policies
         );
@@ -324,9 +316,7 @@ class RoleServiceStub implements RoleService
         $this->roles[$policy->roleId] = new RoleStub(
             array(
                 'id' => $this->roles[$policy->roleId]->id,
-                'identifier' => $this->roles[$policy->roleId]->identifier,
-                'names' => $this->roles[$policy->roleId]->getNames(),
-                'descriptions' => $this->roles[$policy->roleId]->getDescriptions()
+                'identifier' => $this->roles[$policy->roleId]->identifier
             ),
             $policies
         );

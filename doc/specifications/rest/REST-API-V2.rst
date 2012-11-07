@@ -8818,12 +8818,6 @@ Role XML Schema
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="mainLanguageCode" type="xsd:string"
-            minOccurs="0" />
-          <xsd:element name="names" type="multiLanguageValuesType"
-            minOccurs="0" />
-          <xsd:element name="descriptions" type="multiLanguageValuesType"
-            minOccurs="0" />
         </xsd:all>
       </xsd:complexType>
 
@@ -8838,12 +8832,6 @@ Role XML Schema
                   </xsd:documentation>
                 </xsd:annotation>
               </xsd:element>
-              <xsd:element name="mainLanguageCode" type="xsd:string"
-                minOccurs="0" />
-              <xsd:element name="names" type="multiLanguageValuesType"
-                minOccurs="0" />
-              <xsd:element name="descriptions" type="multiLanguageValuesType"
-                minOccurs="0" />
               <xsd:element name="Policies" type="ref" />
             </xsd:all>
           </xsd:extension>
