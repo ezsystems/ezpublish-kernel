@@ -428,18 +428,33 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
         }
 
-        $fieldDefinitionIdentifierCache = array();
+        $fieldDefinitionIdentifierSet = array();
+        $fieldDefinitionPositionSet = array();
         foreach ( $contentTypeCreateStruct->fieldDefinitions as $fieldDefinitionCreateStruct )
         {
-            if ( !isset( $fieldDefinitionIdentifierCache[$fieldDefinitionCreateStruct->identifier] ) )
+            // Check for duplicate identifiers
+            if ( !isset( $fieldDefinitionIdentifierSet[$fieldDefinitionCreateStruct->identifier] ) )
             {
-                $fieldDefinitionIdentifierCache[$fieldDefinitionCreateStruct->identifier] = true;
+                $fieldDefinitionIdentifierSet[$fieldDefinitionCreateStruct->identifier] = true;
             }
             else
             {
                 throw new InvalidArgumentException(
                     "\$contentTypeCreateStruct",
                     "Argument contains duplicate field definition identifier '{$fieldDefinitionCreateStruct->identifier}'"
+                );
+            }
+
+            // Check for duplicate positions
+            if ( !isset( $fieldDefinitionPositionSet[$fieldDefinitionCreateStruct->position] ) )
+            {
+                $fieldDefinitionPositionSet[$fieldDefinitionCreateStruct->position] = true;
+            }
+            else
+            {
+                throw new InvalidArgumentException(
+                    "\$contentTypeCreateStruct",
+                    "Argument contains duplicate field definition position '{$fieldDefinitionCreateStruct->position}'"
                 );
             }
         }

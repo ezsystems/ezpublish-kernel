@@ -20,7 +20,8 @@ use eZ\Publish\SPI\Persistence\Content\Type,
     eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler as UpdateHandler,
     eZ\Publish\Core\Persistence\Legacy\Exception,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exceptions\BadStateException;
+    eZ\Publish\Core\Base\Exceptions\BadStateException,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  */
@@ -255,6 +256,16 @@ class Handler implements BaseContentTypeHandler
      */
     protected function internalCreate( CreateStruct $createStruct, $contentTypeId = null )
     {
+        foreach ( $createStruct->fieldDefinitions as $fieldDef )
+        {
+            if ( !is_int( $fieldDef->position ) || $fieldDef->position <= 0 )
+                throw new InvalidArgumentException(
+                    "position",
+                    "'" . var_export( $fieldDef->position, true ) .
+                    "' is wrong value in class FieldDefinition, an integer strictly greater than 0 is required."
+                );
+        }
+
         $createStruct = clone $createStruct;
         $contentType = $this->mapper->createTypeFromCreateStruct(
             $createStruct
