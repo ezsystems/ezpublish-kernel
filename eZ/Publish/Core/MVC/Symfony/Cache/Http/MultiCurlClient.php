@@ -23,7 +23,6 @@ class MultiCurlClient extends MultiCurl
     public function __construct( $timeoutMs )
     {
         static::$timeoutMs = $timeoutMs;
-        parent::__construct();
     }
 
     static protected function createCurlHandle()

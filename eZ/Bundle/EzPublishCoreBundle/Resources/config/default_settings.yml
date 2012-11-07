@@ -24,6 +24,9 @@ parameters:
     ezsettings.default.content.ttl_cache: false         # Whether to use TTL Cache for content (i.e. Max-Age response header)
     ezsettings.default.content.default_ttl: 60          # Default TTL cache value for content
 
+    # Cache settings
+    ezsettings.default.http_cache.purge_servers: ["http://localhost/"]   # Server(s) URL(s) that will be used for purging HTTP cache with PURGE requests.
+
     # Treemenu settings (admin interface)
     ezsettings.default.treemenu.http_cache: true        # Whether to use HttpCache or not for admin tree menu
     ezsettings.default.treemenu.ttl_cache: 86400        # If HttpCache is used, cache time to live in seconds

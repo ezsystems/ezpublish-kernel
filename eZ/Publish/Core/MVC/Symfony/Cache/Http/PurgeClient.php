@@ -9,62 +9,76 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
-use eZ\Publish\Core\MVC\Symfony\Cache\PurgeInterface,
+use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface,
+    eZ\Publish\Core\MVC\ConfigResolverInterface,
     Buzz\Browser,
     Buzz\Client\BatchClientInterface;
 
-class PurgeClient implements PurgeInterface
+class PurgeClient implements PurgeClientInterface
 {
     /**
      * Array of URIs to be purged
      *
      * @var string[]
      */
-    protected $urlsToPurge;
+    protected $locationIds;
+
+    /**
+     * Servers that will be used to purge HTTP cache.
+     * Each server consists in a full URL (e.g. http://localhost/foo/bar)
+     *
+     * @var mixed
+     */
+    protected $purgeServers;
 
     /**
      * @var \Buzz\Browser
      */
     protected $httpBrowser;
 
-    public function __construct( Browser $httpBrowser )
+    public function __construct( ConfigResolverInterface $configResolver, Browser $httpBrowser )
     {
         $this->httpBrowser = $httpBrowser;
+        $this->purgeServers = $configResolver->getParameter( 'http_cache.purge_servers' );
     }
 
     /**
      * Sets the cache resource(s) to purge (e.g. array of URI to purge in a reverse proxy)
      *
-     * @param array $urlsToPurge
+     * @param array $locationIds
      * @return void
      */
-    public function setCacheElements( $urlsToPurge )
+    public function setCacheElements( $locationIds )
     {
-        if ( !is_array( $urlsToPurge ) )
+        if ( !is_array( $locationIds ) )
         {
-            $urlsToPurge = array( $urlsToPurge );
+            $locationIds = array( $locationIds );
         }
 
-        $this->urlsToPurge = $urlsToPurge;
+        $this->locationIds = $locationIds;
     }
 
     /**
-     * Triggers the cache purge of the elements registered via {@link PurgeInterface::setCacheElements}
+     * Triggers the cache purge of the elements registered via {@link PurgeClientInterface::setCacheElements}
      *
      * @return void
      */
     public function purge()
     {
-        if ( empty( $this->urlsToPurge ) )
+        if ( empty( $this->locationIds ) )
             return;
 
-        foreach ( $this->urlsToPurge as $url )
+        // Purging all HTTP gateways
+        foreach ($this->purgeServers as $server)
         {
-            $this->httpBrowser->call( $url, 'PURGE' );
-        }
+            foreach ( $this->locationIds as $locationId )
+            {
+                $this->httpBrowser->call( $server, 'PURGE', array( 'X-Location-Id' => $locationId ) );
+            }
 
-        $client = $this->httpBrowser->getClient();
-        if ( $client instanceof BatchClientInterface )
-            $client->flush();
+            $client = $this->httpBrowser->getClient();
+            if ( $client instanceof BatchClientInterface )
+                $client->flush();
+        }
     }
 }

@@ -1,19 +1,23 @@
 parameters:
-    ezpublish.cache.purge_client.http.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\PurgeClient
-    ezpublish.cache.purge_client.http.client.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\MultiCurlClient
-    ezpublish.cache.purge_client.http.client.timeout: 1          # Timeout, in ms. Setting a low value will emulate an asynchronous request
-
-    ezpublish.cache.purge_client.http.browser.class: Buzz\Browser
+    ezpublish.http_cache.purger.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\InstantCachePurger
+    ezpublish.http_cache.purge_client.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\PurgeClient
+    ezpublish.http_cache.purge_client.http_client.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\MultiCurlClient
+    ezpublish.http_cache.purge_client.http_client.timeout: 1          # Timeout, in ms. Setting a low value will emulate an asynchronous request
+    ezpublish.http_cache.purge_client.browser.class: Buzz\Browser
 
 services:
-    ezpublish.cache.purge_client.http:
-        class: %ezpublish.cache.purge_client.http.class%
-        arguments: [@ezpublish.cache.purge_client.http.browser]
+    ezpublish.http_cache.purger:
+        class: %ezpublish.http_cache.purger.class%
+        arguments: [@ezpublish.http_cache.purge_client]
 
-    ezpublish.cache.purge_client.http.browser:
-        class: %ezpublish.cache.purge_client.http.browser.class%
-        arguments: [@ezpublish.cache.purge_client.http.client]
+    ezpublish.http_cache.purge_client:
+        class: %ezpublish.http_cache.purge_client.class%
+        arguments: [@ezpublish.config.resolver, @ezpublish.http_cache.purge_client.browser]
 
-    ezpublish.cache.purge_client.http.client:
-        class: %ezpublish.cache.purge_client.http.client.class%
-        arguments: [%ezpublish.cache.purge_client.http.client.timeout%]
+    ezpublish.http_cache.purge_client.browser:
+        class: %ezpublish.http_cache.purge_client.browser.class%
+        arguments: [@ezpublish.http_cache.purge_client.http_client]
+
+    ezpublish.http_cache.purge_client.http_client:
+        class: %ezpublish.http_cache.purge_client.http_client.class%
+        arguments: [%ezpublish.http_cache.purge_client.http_client.timeout%]

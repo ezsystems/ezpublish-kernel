@@ -12,6 +12,8 @@ namespace eZ\Bundle\EzPublishLegacyBundle\LegacyMapper;
 use eZ\Publish\Core\MVC\Legacy\LegacyEvents,
     eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent,
     eZ\Publish\Core\MVC\ConfigResolverInterface,
+    eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger,
+    ezpEvent,
     Symfony\Component\EventDispatcher\EventSubscriberInterface,
     Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -26,13 +28,19 @@ class Configuration implements EventSubscriberInterface
     private $configResolver;
 
     /**
+     * @var \eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger
+     */
+    private $gatewayCachePurger;
+
+    /**
      * @var array
      */
     private $options;
 
-    public function __construct( ConfigResolverInterface $configResolver, array $options = array() )
+    public function __construct( ConfigResolverInterface $configResolver, GatewayCachePurger $gatewayCachePurger, array $options = array() )
     {
         $this->configResolver = $configResolver;
+        $this->gatewayCachePurger = $gatewayCachePurger;
         $this->options = $options;
     }
 
@@ -82,6 +90,9 @@ class Configuration implements EventSubscriberInterface
             "injected-settings",
             $settings + (array)$event->getParameters()->get( "injected-settings" )
         );
+
+        // Register content/cache event listener
+        ezpEvent::getInstance()->attach( 'content/cache', array( $this->gatewayCachePurger, 'purge' ) );
     }
 
     private function getImageSettings()
