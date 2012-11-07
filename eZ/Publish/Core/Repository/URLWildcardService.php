@@ -103,7 +103,7 @@ class URLWildcardService implements URLWildcardServiceInterface
         $patterns = array_map( 'intval', $patterns[0] );
         $placeholders = array_map( 'intval', $placeholders[1] );
 
-        if ( count( $placeholders ) > 0 && max( $placeholders ) > count( $patterns ) )
+        if ( !empty( $placeholders ) && max( $placeholders ) > count( $patterns ) )
         {
             throw new ContentValidationException( "Placeholders are not matching with wildcards." );
         }

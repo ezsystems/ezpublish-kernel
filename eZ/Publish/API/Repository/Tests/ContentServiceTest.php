@@ -2471,7 +2471,7 @@ class ContentServiceTest extends BaseContentServiceTest
             unset( $expectedVersionIds[$actualVersion->id] );
         }
 
-        if ( count( $expectedVersionIds ) !== 0 )
+        if ( !empty( $expectedVersionIds ) )
         {
             $this->fail(
                 sprintf(
@@ -4209,7 +4209,7 @@ class ContentServiceTest extends BaseContentServiceTest
             unset( $expectedAliasProperties[$actualAlias->path] );
         }
 
-        if ( !count( $expectedAliasProperties ) === 0 )
+        if ( !empty( $expectedAliasProperties ) )
         {
             $this->fail(
                 sprintf(

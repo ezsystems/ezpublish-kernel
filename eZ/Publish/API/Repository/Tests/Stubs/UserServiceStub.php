@@ -658,7 +658,7 @@ class UserServiceStub implements UserService
 
         $groupIds = array_keys( $this->user2groups[$userId] );
         $userGroups = array();
-        while ( count( $groupIds ) > 0 )
+        while ( !empty( $groupIds ) )
         {
             $groupId = array_pop( $groupIds );
 

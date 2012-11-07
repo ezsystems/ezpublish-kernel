@@ -157,7 +157,7 @@ class KeywordIntegrationTest extends BaseIntegrationTest
         }
 
         // Assert no additional keywords have been loaded
-        if ( count( $actualKeywords ) !== 0 )
+        if ( !empty( $actualKeywords ) )
         {
             $this->fail(
                 sprintf(

@@ -209,7 +209,7 @@ class Json extends Generator
 
         $jsonValue = null;
 
-        if ( count( $attributes ) === 0 )
+        if ( empty( $attributes ) )
         {
             $jsonValue = $value;
         }

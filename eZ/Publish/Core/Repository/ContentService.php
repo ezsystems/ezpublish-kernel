@@ -1585,7 +1585,7 @@ class ContentService implements ContentServiceInterface
             APIRelation::COMMON
         );
 
-        if ( count( $spiRelations ) == 0 )
+        if ( empty( $spiRelations ) )
         {
             throw new InvalidArgumentException(
                 "\$sourceVersion",

@@ -969,7 +969,7 @@ class ContentTypeServiceStub implements ContentTypeService
         {
             throw new Exceptions\InvalidArgumentExceptionStub;
         }
-        if ( count( $typeData['contentTypeGroups'] ) == 0 )
+        if ( empty( $typeData['contentTypeGroups'] ) )
         {
             throw new Exceptions\BadStateExceptionStub;
         }

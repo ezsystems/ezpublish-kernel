@@ -140,7 +140,7 @@ class ContentService implements \eZ\Publish\API\Repository\ContentService, Sessi
         );
         $contentList = $this->inputDispatcher->parse( $response );
 
-        if ( count( $contentList ) === 0 )
+        if ( empty( $contentList ) )
         {
             throw new Exceptions\NotFoundException( "@TODO: Error message." );
         }

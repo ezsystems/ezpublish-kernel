@@ -807,7 +807,7 @@ class EzcDatabase extends Gateway
             $statement->execute();
 
             $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
-            if ( count( $rows ) == 0 )
+            if ( empty( $rows ) )
             {
                 // Normally this should never happen
                 // @todo remove throw when tested

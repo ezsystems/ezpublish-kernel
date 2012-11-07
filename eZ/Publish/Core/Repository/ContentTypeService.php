@@ -380,7 +380,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function createContentType( APIContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups )
     {
-        if ( count( $contentTypeGroups ) === 0 )
+        if ( empty( $contentTypeGroups ) )
         {
             throw new InvalidArgumentException(
                 "\$contentTypeGroups",
@@ -420,7 +420,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             // Do nothing
         }
 
-        if ( count( $contentTypeCreateStruct->fieldDefinitions ) === 0 )
+        if ( empty( $contentTypeCreateStruct->fieldDefinitions ) )
         {
             throw new InvalidArgumentException(
                 "\$contentTypeCreateStruct",

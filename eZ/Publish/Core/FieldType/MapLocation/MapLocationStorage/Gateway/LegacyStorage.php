@@ -217,7 +217,7 @@ class LegacyStorage extends Gateway
 
         $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
 
-        return ( count( $rows ) > 0 ? $rows[0] : null );
+        return ( isset( $rows[0] ) ? $rows[0] : null );
     }
 
     /**
@@ -241,7 +241,7 @@ class LegacyStorage extends Gateway
      */
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds )
     {
-        if ( count( $fieldIds ) === 0 )
+        if ( empty( $fieldIds ) )
         {
             // Nothing to do
             return;

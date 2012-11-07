@@ -449,7 +449,7 @@ class ObjectStateServiceTest extends BaseTest
             unset( $expectedIdentifiers[$loadedObject->identifier] );
         }
 
-        if ( count( $expectedIdentifiers ) !== 0 )
+        if ( !empty( $expectedIdentifiers ) )
         {
             $this->fail(
                 sprintf(

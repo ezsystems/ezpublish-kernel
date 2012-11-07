@@ -345,7 +345,7 @@ class ContentServiceStub implements ContentService
             }
         }
 
-        if ( null === $languageCodes || 0 === count( $languageCodes ) )
+        if ( empty( $languageCodes ) )
         {
             return $content;
         }
