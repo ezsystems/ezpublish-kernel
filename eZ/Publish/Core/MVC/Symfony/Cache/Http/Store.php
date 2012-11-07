@@ -188,7 +188,8 @@ class Store implements StoreInterface
     /**
      * Returns content digest for $response
      *
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param Response $response
+     *
      * @return string
      */
     protected function generateContentDigest(Response $response)
