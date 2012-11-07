@@ -4013,7 +4013,7 @@ class ContentServiceTest extends BaseContentServiceTest
             $liveContent->getVersionInfo()->getContentInfo()->mainLocationId
         );
 
-        $aliases = $urlAliasService->listLocationAliases( $location );
+        $aliases = $urlAliasService->listLocationAliases( $location, false );
 
         $this->assertAliasesCorrect(
             array(
