@@ -27,9 +27,9 @@ class LocationAwareStore extends Store
      * @param \Symfony\Component\HttpFoundation\Response $response
      * @return string
      */
-    protected function getContentDigest( Response $response )
+    protected function generateContentDigest( Response $response )
     {
-        $digest = parent::getContentDigest( $response );
+        $digest = parent::generateContentDigest( $response );
         if ( !$response->headers->has( 'X-Location-Id' ) )
         {
             return $digest;

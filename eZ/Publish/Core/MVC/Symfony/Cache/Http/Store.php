@@ -147,7 +147,7 @@ class Store implements StoreInterface
 
         // write the response body to the entity store if this is the original response
         if (!$response->headers->has('X-Content-Digest')) {
-            $digest = $this->getContentDigest($response);
+            $digest = $this->generateContentDigest($response);
 
             if (false === $this->save($digest, $response->getContent())) {
                 throw new \RuntimeException('Unable to store the entity.');
@@ -191,7 +191,7 @@ class Store implements StoreInterface
      * @param \Symfony\Component\HttpFoundation\Response $response
      * @return string
      */
-    protected function getContentDigest(Response $response)
+    protected function generateContentDigest(Response $response)
     {
         return 'en'.sha1($response->getContent());
     }
