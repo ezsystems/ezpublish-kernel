@@ -12,6 +12,7 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\Trash;
+use eZ\Publish\Core\REST\Server\Values\RestTrashItem;
 use eZ\Publish\Core\REST\Common;
 use eZ\Publish\Core\Repository\Values\Content;
 
@@ -96,15 +97,23 @@ class TrashTest extends ValueObjectVisitorBaseTest
 
         $trashList = new Trash(
             array(
-                new Content\TrashItem(),
-                new Content\TrashItem(),
+                new RestTrashItem(
+                    new Content\TrashItem(),
+                    // Dummy value for ChildCount
+                    0
+                ),
+                new RestTrashItem(
+                    new Content\TrashItem(),
+                    // Dummy value for ChildCount
+                    0
+                ),
             ),
             '/content/trash'
         );
 
         $this->getVisitorMock()->expects( $this->exactly( 2 ) )
             ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem' ) );
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Server\\Values\\RestTrashItem' ) );
 
         $visitor->visit(
             $this->getVisitorMock(),

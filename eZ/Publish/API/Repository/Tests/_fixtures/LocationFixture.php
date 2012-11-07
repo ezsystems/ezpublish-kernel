@@ -15,7 +15,6 @@ return array(
                 "depth" => 0,
                 "sortField" => 1,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         2 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -32,7 +31,6 @@ return array(
                 "depth" => 1,
                 "sortField" => 8,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         5 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -49,7 +47,6 @@ return array(
                 "depth" => 1,
                 "sortField" => 1,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         12 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -66,7 +63,6 @@ return array(
                 "depth" => 2,
                 "sortField" => 1,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         13 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -83,7 +79,6 @@ return array(
                 "depth" => 2,
                 "sortField" => 1,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         14 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -100,7 +95,6 @@ return array(
                 "depth" => 2,
                 "sortField" => 1,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         15 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -117,7 +111,6 @@ return array(
                 "depth" => 3,
                 "sortField" => 1,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         43 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -134,7 +127,6 @@ return array(
                 "depth" => 1,
                 "sortField" => 9,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         44 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -151,7 +143,6 @@ return array(
                 "depth" => 2,
                 "sortField" => 9,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         45 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -168,7 +159,6 @@ return array(
                 "depth" => 3,
                 "sortField" => 9,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         48 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -185,7 +175,6 @@ return array(
                 "depth" => 1,
                 "sortField" => 9,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         51 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -202,7 +191,6 @@ return array(
                 "depth" => 2,
                 "sortField" => 9,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         52 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -219,7 +207,6 @@ return array(
                 "depth" => 2,
                 "sortField" => 9,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         53 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -236,7 +223,6 @@ return array(
                 "depth" => 2,
                 "sortField" => 9,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         54 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -253,7 +239,6 @@ return array(
                 "depth" => 2,
                 "sortField" => 1,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         56 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -270,7 +255,6 @@ return array(
                 "depth" => 2,
                 "sortField" => 1,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         58 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -287,7 +271,6 @@ return array(
                 "depth" => 1,
                 "sortField" => 2,
                 "sortOrder" => 0,
-                "childCount" => null,
             )
         ),
         60 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -304,7 +287,6 @@ return array(
                 "depth" => 2,
                 "sortField" => 8,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
         61 => new \eZ\Publish\API\Repository\Tests\Stubs\Values\Content\LocationStub(
@@ -321,7 +303,6 @@ return array(
                 "depth" => 2,
                 "sortField" => 1,
                 "sortOrder" => 1,
-                "childCount" => null,
             )
         ),
     ),

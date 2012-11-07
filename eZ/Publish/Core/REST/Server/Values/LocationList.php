@@ -19,7 +19,7 @@ class LocationList extends RestValue
     /**
      * Locations
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\Location[]
+     * @var \eZ\Publish\Core\REST\Server\Values\RestLocation[]
      */
     public $locations;
 
@@ -33,7 +33,7 @@ class LocationList extends RestValue
     /**
      * Construct
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location[] $locations
+     * @param \eZ\Publish\Core\REST\Server\Values\RestLocation[] $locations
      * @param string $path
      */
     public function __construct( array $locations, $path )

@@ -152,6 +152,18 @@ class LocationService implements LocationServiceInterface
     }
 
     /**
+     * Returns the number of children which are readable by the current user of a location object
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     *
+     * @return int
+     */
+    public function getLocationChildCount( Location $location )
+    {
+        return $this->service->getLocationChildCount( $location );
+    }
+
+    /**
      * Creates the new $location in the content repository for the given content
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create this location
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException  if the content is already below the specified parent

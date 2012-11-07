@@ -246,7 +246,6 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
                 'depth' => (int) $location->depth,
                 'sortField' => $location->sortField,
                 'sortOrder' => $location->sortOrder,
-                'childCount' => $location->childCount
             )
         );
     }

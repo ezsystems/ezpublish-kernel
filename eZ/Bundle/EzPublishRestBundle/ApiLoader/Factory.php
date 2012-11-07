@@ -283,13 +283,13 @@ class Factory
             // Location
 
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\CreatedLocation'             => new Output\ValueObjectVisitor\CreatedLocation( $urlHandler ),
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location'              => new Output\ValueObjectVisitor\Location( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestLocation'                => new Output\ValueObjectVisitor\RestLocation( $urlHandler ),
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\LocationList'                => new Output\ValueObjectVisitor\LocationList( $urlHandler ),
 
             // Trash
 
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\Trash'                       => new Output\ValueObjectVisitor\Trash( $urlHandler ),
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem'             => new Output\ValueObjectVisitor\TrashItem( $urlHandler ),
+            '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestTrashItem'               => new Output\ValueObjectVisitor\RestTrashItem( $urlHandler ),
 
             // Views
 

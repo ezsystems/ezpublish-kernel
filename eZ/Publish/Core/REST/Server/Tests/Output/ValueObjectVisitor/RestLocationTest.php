@@ -11,11 +11,12 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Server\Values\RestLocation;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\REST\Common;
 
-class LocationTest extends ValueObjectVisitorBaseTest
+class RestLocationTest extends ValueObjectVisitorBaseTest
 {
     /**
      * Test the Location visitor
@@ -29,26 +30,29 @@ class LocationTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument( null );
 
-        $location = new Location(
-            array(
-                'id' => 42,
-                'priority' => 0,
-                'hidden' => false,
-                'invisible' => true,
-                'remoteId' => 'remote-id',
-                'parentLocationId' => 21,
-                'pathString' => '/1/2/21/42/',
-                'modifiedSubLocationDate' => new \DateTime( '2012-09-05 15:27 Europe/Zagreb' ),
-                'depth' => 3,
-                'sortField' => Location::SORT_FIELD_PATH,
-                'sortOrder' => Location::SORT_ORDER_ASC,
-                'childCount' => 0,
-                'contentInfo' => new ContentInfo(
-                    array(
-                        'id' => 42
+        $location = new RestLocation(
+            new Location(
+                array(
+                    'id' => 42,
+                    'priority' => 0,
+                    'hidden' => false,
+                    'invisible' => true,
+                    'remoteId' => 'remote-id',
+                    'parentLocationId' => 21,
+                    'pathString' => '/1/2/21/42/',
+                    'modifiedSubLocationDate' => new \DateTime( '2012-09-05 15:27 Europe/Zagreb' ),
+                    'depth' => 3,
+                    'sortField' => Location::SORT_FIELD_PATH,
+                    'sortOrder' => Location::SORT_ORDER_ASC,
+                    'contentInfo' => new ContentInfo(
+                        array(
+                            'id' => 42
+                        )
                     )
                 )
-            )
+            ),
+            // Dummy value for ChildCount
+            0
         );
 
         $visitor->visit(
@@ -439,11 +443,11 @@ class LocationTest extends ValueObjectVisitorBaseTest
     /**
      * Get the Location visitor
      *
-     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Location
+     * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestLocation
      */
     protected function getLocationVisitor()
     {
-        return new ValueObjectVisitor\Location(
+        return new ValueObjectVisitor\RestLocation(
             new Common\UrlHandler\eZPublish()
         );
     }

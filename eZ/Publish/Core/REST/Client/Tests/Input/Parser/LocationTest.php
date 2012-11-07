@@ -41,7 +41,6 @@ class LocationTest extends BaseTest
             ),
             'sortField' => 'PATH',
             'sortOrder' => 'ASC',
-            'childCount' => '0'
         );
 
         $result = $locationParser->parse( $inputArray, $this->getParsingDispatcherMock() );
@@ -216,20 +215,6 @@ class LocationTest extends BaseTest
         $this->assertEquals(
             Location::SORT_ORDER_ASC,
             $result->sortOrder
-        );
-    }
-
-    /**
-     * Tests that the resulting location contains child count
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $result
-     * @depends testParse
-     */
-    public function testResultContainsChildCount( $result )
-    {
-        $this->assertEquals(
-            0,
-            $result->childCount
         );
     }
 
