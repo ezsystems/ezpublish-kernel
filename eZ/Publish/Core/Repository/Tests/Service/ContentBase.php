@@ -184,7 +184,10 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentInfoThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $this->repository->getContentService()->loadContentInfo( 4 );
     }
 
     /**
@@ -255,7 +258,10 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentInfoByRemoteIdThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $this->repository->getContentService()->loadContentInfoByRemoteId( "f5c88a2209584891056f987fd965b0ba" );
     }
 
     /**
@@ -366,7 +372,10 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadVersionInfoByIdThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $this->repository->getContentService()->loadVersionInfoById( 4 );
     }
 
     /**
@@ -481,7 +490,10 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $this->repository->getContentService()->loadContent( 4 );
     }
 
     /**
@@ -675,7 +687,10 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentByRemoteIdThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $this->repository->getContentService()->loadContentByRemoteId( "f5c88a2209584891056f987fd965b0ba" );
     }
 
     /**
@@ -1042,7 +1057,55 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testCreateContentThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
+        $testContentType = $this->createTestContentType();
+        $contentService = $this->repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $testContentType, 'eng-GB' );
+        $contentCreate->setField( "test_required_empty", "value for field definition with empty default value" );
+        $contentCreate->setField( "test_translatable", "and thumbs opposable", "eng-US" );
+        $contentCreate->sectionId = 1;
+        $contentCreate->ownerId = $this->repository->getCurrentUser()->id;
+        $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->alwaysAvailable = true;
+
+        $locationCreates = array(
+            new LocationCreateStruct(
+                array(
+                    "remoteId" => "db787a9143f57828dd4331573466a013",
+                    "parentLocationId" => 2
+                )
+            ),
+        );
+
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $contentService->createContent( $contentCreate, $locationCreates );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testCreateContentWithoutLocationsThrowsUnauthorizedException()
+    {
+        $testContentType = $this->createTestContentType();
+        $contentService = $this->repository->getContentService();
+
+        $contentCreate = $contentService->newContentCreateStruct( $testContentType, 'eng-GB' );
+        $contentCreate->setField( "test_required_empty", "value for field definition with empty default value" );
+        $contentCreate->setField( "test_translatable", "and thumbs opposable", "eng-US" );
+        $contentCreate->sectionId = 1;
+        $contentCreate->ownerId = $this->repository->getCurrentUser()->id;
+        $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
+        $contentCreate->alwaysAvailable = true;
+
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $contentService->createContent( $contentCreate, array() );
     }
 
     /**
@@ -1303,7 +1366,14 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContentMetadataThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo( 12 );
+        $contentMetadataUpdateStruct = $this->repository->getContentService()->newContentMetadataUpdateStruct();
+        $contentMetadataUpdateStruct->remoteId = "the-all-new-remoteid";
+
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $this->repository->getContentService()->updateContentMetadata( $contentInfo, $contentMetadataUpdateStruct );
     }
 
     /**
@@ -1538,7 +1608,19 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContentThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
+        $content = $this->createTestContent();
+
+        $contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
+        $contentUpdateStruct->initialLanguageCode = "eng-US";
+        $contentUpdateStruct->setField( "test_required_empty", "new value for test_required_empty" );
+
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $this->repository->getContentService()->updateContent(
+            $content->versionInfo,
+            $contentUpdateStruct
+        );
     }
 
     /**
@@ -1731,7 +1813,12 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testPublishVersionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
+        $draftContent = $this->createTestContent();
+
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $this->repository->getContentService()->publishVersion( $draftContent->versionInfo );
     }
 
     /**
@@ -1921,7 +2008,14 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testCreateContentDraftThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
+        $contentService = $this->repository->getContentService();
+
+        $contentInfo = $contentService->loadContentInfo( 4 );
+
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $contentService->createContentDraft( $contentInfo );
     }
 
     /**
@@ -1993,7 +2087,11 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentDraftsThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        // Now $contentDrafts should contain two drafted versions
+        $this->repository->getContentService()->loadContentDrafts();
     }
 
     /**
@@ -2104,7 +2202,14 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadVersionsThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
+        $contentService = $this->repository->getContentService();
+
+        $contentInfo = $contentService->loadContentInfo( 4 );
+
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $contentService->loadVersions( $contentInfo );
     }
 
     /**
@@ -2166,7 +2271,17 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testDeleteVersionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test not implemented: " . __METHOD__ );
+        $contentService = $this->repository->getContentService();
+
+        $contentInfo = $contentService->loadContentInfo( 4 );
+
+        // Create a version to delete
+        $draftContent = $contentService->createContentDraft( $contentInfo );
+
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $contentService->deleteVersion( $draftContent->versionInfo );
     }
 
     /**
@@ -2205,7 +2320,14 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testDeleteContentThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentService::deleteContent() is not implemented." );
+        $contentService = $this->repository->getContentService();
+
+        $contentInfo = $contentService->loadContentInfo( 4 );
+
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $contentService->deleteContent( $contentInfo );
     }
 
     /**
@@ -2395,7 +2517,16 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testCopyContentThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for ContentService::deleteContent() is not implemented." );
+        $contentService = $this->repository->getContentService();
+        $locationService = $this->repository->getLocationService();
+
+        $contentInfo = $contentService->loadContentInfo( 11 );
+        $destinationLocationCreateStruct = $locationService->newLocationCreateStruct( 5 );
+
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $contentService->copyContent( $contentInfo, $destinationLocationCreateStruct );
     }
 
     /**
