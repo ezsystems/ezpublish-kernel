@@ -35,7 +35,8 @@ abstract class RoleBase extends BaseServiceTest
             array(
                 'id' => null,
                 'identifier' => null,
-                'mainLanguageCode' => null,
+                // @todo uncomment when support for multilingual names and descriptions is added
+                // 'mainLanguageCode' => null,
                 'policies' => array()
             ),
             new Role()
@@ -155,15 +156,17 @@ abstract class RoleBase extends BaseServiceTest
     {
         $roleService = $this->repository->getRoleService();
         $roleCreateStruct = $roleService->newRoleCreateStruct( 'ultimate_permissions' );
-        $roleCreateStruct->mainLanguageCode = 'eng-GB';
-        $roleCreateStruct->names = array( 'eng-GB' => 'Ultimate permissions' );
-        $roleCreateStruct->descriptions = array( 'eng-GB' => 'This is a role with ultimate permissions' );
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreateStruct->mainLanguageCode = 'eng-GB';
+        // $roleCreateStruct->names = array( 'eng-GB' => 'Ultimate permissions' );
+        // $roleCreateStruct->descriptions = array( 'eng-GB' => 'This is a role with ultimate permissions' );
 
         $createdRole = $roleService->createRole( $roleCreateStruct );
 
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $createdRole );
         self::assertGreaterThan( 0, $createdRole->id );
 
+        /* @todo uncomment when support for multilingual names and descriptions is added
         self::assertEquals(
             array(
                 'eng-GB' => $roleCreateStruct->names['eng-GB']
@@ -177,30 +180,31 @@ abstract class RoleBase extends BaseServiceTest
             ),
             $createdRole->getDescriptions()
         );
+        */
 
         $this->assertPropertiesCorrect(
             array(
                 'identifier' => $roleCreateStruct->identifier,
                 'policies' => array()
             ),
-            $createdRole,
-            //@todo: enable mainLanguageCode test
-            array( 'mainLanguageCode' )
+            $createdRole
         );
     }
 
     /**
      * Test creating a role throwing InvalidArgumentException
-     * @expectedException eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      * @covers \eZ\Publish\API\Repository\RoleService::createRole
      */
     public function testCreateRoleThrowsInvalidArgumentException()
     {
         $roleService = $this->repository->getRoleService();
         $roleCreateStruct = $roleService->newRoleCreateStruct( 'Anonymous' );
-        $roleCreateStruct->mainLanguageCode = 'eng-GB';
-        $roleCreateStruct->names = array( 'eng-GB' => 'Anonymous' );
-        $roleCreateStruct->descriptions = array( 'eng-GB' => 'Anonymous role' );
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreateStruct->mainLanguageCode = 'eng-GB';
+        // $roleCreateStruct->names = array( 'eng-GB' => 'Anonymous' );
+        // $roleCreateStruct->descriptions = array( 'eng-GB' => 'Anonymous role' );
 
         $roleService->createRole( $roleCreateStruct );
     }
@@ -234,9 +238,11 @@ abstract class RoleBase extends BaseServiceTest
         $policyCreateStruct2->addLimitation( $limitation4 );
 
         $roleCreateStruct = $roleService->newRoleCreateStruct( 'ultimate_permissions' );
-        $roleCreateStruct->mainLanguageCode = 'eng-GB';
-        $roleCreateStruct->names = array( 'eng-GB' => 'Ultimate permissions' );
-        $roleCreateStruct->descriptions = array( 'eng-GB' => 'This is a role with ultimate permissions' );
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreateStruct->mainLanguageCode = 'eng-GB';
+        // $roleCreateStruct->names = array( 'eng-GB' => 'Ultimate permissions' );
+        // $roleCreateStruct->descriptions = array( 'eng-GB' => 'This is a role with ultimate permissions' );
 
         $roleCreateStruct->addPolicy( $policyCreateStruct1 );
         $roleCreateStruct->addPolicy( $policyCreateStruct2 );
@@ -246,6 +252,7 @@ abstract class RoleBase extends BaseServiceTest
         self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Role', $createdRole );
         self::assertGreaterThan( 0, $createdRole->id );
 
+        /* @todo uncomment when support for multilingual names and descriptions is added
         self::assertEquals(
             array(
                 'eng-GB' => $roleCreateStruct->names['eng-GB']
@@ -259,14 +266,13 @@ abstract class RoleBase extends BaseServiceTest
             ),
             $createdRole->getDescriptions()
         );
+        */
 
         $this->assertPropertiesCorrect(
             array(
                 'identifier' => $roleCreateStruct->identifier
             ),
-            $createdRole,
-            //@todo: enable mainLanguageCode test
-            array( 'mainLanguageCode' )
+            $createdRole
         );
 
         self::assertCount( 2, $createdRole->getPolicies() );
@@ -335,9 +341,11 @@ abstract class RoleBase extends BaseServiceTest
 
         $roleUpdateStruct = $roleService->newRoleUpdateStruct();
         $roleUpdateStruct->identifier = "Anonymous 2";
-        $roleUpdateStruct->mainLanguageCode = 'eng-US';
-        $roleUpdateStruct->names['eng-US'] = 'Anonymous 2';
-        $roleUpdateStruct->descriptions['eng-US'] = 'Anonymous 2 role';
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleUpdateStruct->mainLanguageCode = 'eng-US';
+        // $roleUpdateStruct->names['eng-US'] = 'Anonymous 2';
+        // $roleUpdateStruct->descriptions['eng-US'] = 'Anonymous 2 role';
 
         $updatedRole = $roleService->updateRole( $role, $roleUpdateStruct );
 
@@ -365,15 +373,13 @@ abstract class RoleBase extends BaseServiceTest
                 'identifier' => $roleUpdateStruct->identifier,
                 'policies' => $role->getPolicies()
             ),
-            $updatedRole,
-            //@todo: enable mainLanguageCode test
-            array( 'mainLanguageCode' )
+            $updatedRole
         );
     }
 
     /**
      * Test updating role throwing InvalidArgumentException
-     * @expectedException eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @covers \eZ\Publish\API\Repository\RoleService::updateRole
      */
     public function testUpdateRoleThrowsInvalidArgumentException()
@@ -608,7 +614,7 @@ abstract class RoleBase extends BaseServiceTest
 
     /**
      * Test loading policies by non existing user ID
-     * @expectedException eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @covers \eZ\Publish\API\Repository\RoleService::loadPoliciesByUserId
      */
     public function testLoadPoliciesByNonExistingUserId()
@@ -829,9 +835,10 @@ abstract class RoleBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 'identifier' => "Ultimate permissions",
-                'mainLanguageCode' => null,
-                'names' => null,
-                'descriptions' => null
+                // @todo uncomment when support for multilingual names and descriptions is added
+                // 'mainLanguageCode' => null,
+                // 'names' => null,
+                // 'descriptions' => null
             ),
             $roleCreateStruct
         );
@@ -880,9 +887,10 @@ abstract class RoleBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 'identifier' => null,
-                'mainLanguageCode' => null,
-                'names' => null,
-                'descriptions' => null
+                // @todo uncomment when support for multilingual names and descriptions is added
+                // 'mainLanguageCode' => null,
+                // 'names' => null,
+                // 'descriptions' => null
             ),
             $roleUpdateStruct
         );

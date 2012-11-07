@@ -152,17 +152,14 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
         return new Role(
             array(
                 'id' => $createdRole->id,
-                'identifier' => $createdRole->identifier,
-                'mainLanguageCode' => $createdRole->mainLanguageCode,
-                'names' => $createdRole->getNames(),
-                'descriptions' => $createdRole->getDescriptions()
+                'identifier' => $createdRole->identifier
             ),
             $createdPolicies
         );
     }
 
     /**
-     * Updates the name and (5.x) description of the role
+     * Updates the name of the role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
@@ -227,10 +224,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
         return new Role(
             array(
                 'id' => $role->id,
-                'identifier' => $role->identifier,
-                'mainLanguageCode' => $role->mainLanguageCode,
-                'names' => $role->getNames(),
-                'descriptions' => $role->getDescriptions(),
+                'identifier' => $role->identifier
             ),
             $existingPolicies
         );
@@ -340,10 +334,7 @@ class RoleService implements \eZ\Publish\API\Repository\RoleService, Sessionable
         return new Role(
             array(
                 'id' => $loadedRole->id,
-                'identifier' => $loadedRole->identifier,
-                'mainLanguageCode' => $loadedRole->mainLanguageCode,
-                'names' => $loadedRole->getNames(),
-                'descriptions' => $loadedRole->getDescriptions()
+                'identifier' => $loadedRole->identifier
             ),
             $policies
         );

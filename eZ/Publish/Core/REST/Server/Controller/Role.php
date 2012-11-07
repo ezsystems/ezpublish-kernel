@@ -510,10 +510,7 @@ class Role extends RestController
     {
         return new RoleUpdateStruct(
             array(
-                'identifier' => $createStruct->identifier,
-                'mainLanguageCode' => $createStruct->mainLanguageCode,
-                'names' => $createStruct->names,
-                'descriptions' => $createStruct->descriptions
+                'identifier' => $createStruct->identifier
             )
         );
     }

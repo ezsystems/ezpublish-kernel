@@ -96,15 +96,6 @@ class RoleService implements RoleServiceInterface
         if ( !is_string( $roleCreateStruct->identifier ) || empty( $roleCreateStruct->identifier ) )
             throw new InvalidArgumentValue( "identifier", $roleCreateStruct->identifier, "RoleCreateStruct" );
 
-        if ( $roleCreateStruct->mainLanguageCode !== null && ( !is_string( $roleCreateStruct->mainLanguageCode ) || empty( $roleCreateStruct->mainLanguageCode ) ) )
-            throw new InvalidArgumentValue( "mainLanguageCode", $roleCreateStruct->mainLanguageCode, "RoleCreateStruct" );
-
-        if ( $roleCreateStruct->names !== null && ( !is_array( $roleCreateStruct->names ) || empty( $roleCreateStruct->names ) ) )
-            throw new InvalidArgumentValue( "names", $roleCreateStruct->names, "RoleCreateStruct" );
-
-        if ( $roleCreateStruct->descriptions !== null && ( !is_array( $roleCreateStruct->descriptions ) || empty( $roleCreateStruct->descriptions ) ) )
-            throw new InvalidArgumentValue( "descriptions", $roleCreateStruct->descriptions, "RoleCreateStruct" );
-
         if ( $this->repository->hasAccess( 'role', 'create' ) !== true )
             throw new UnauthorizedException( 'role', 'create' );
 
@@ -137,7 +128,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Updates the name and (5.x) description of the role
+     * Updates the name of the role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
@@ -154,15 +145,6 @@ class RoleService implements RoleServiceInterface
 
         if ( $roleUpdateStruct->identifier !== null && !is_string( $roleUpdateStruct->identifier ) )
             throw new InvalidArgumentValue( "identifier", $roleUpdateStruct->identifier, "RoleUpdateStruct" );
-
-        if ( $roleUpdateStruct->mainLanguageCode !== null && !is_string( $roleUpdateStruct->mainLanguageCode ) )
-            throw new InvalidArgumentValue( "mainLanguageCode", $roleUpdateStruct->mainLanguageCode, "RoleUpdateStruct" );
-
-        if ( $roleUpdateStruct->names !== null && !is_array( $roleUpdateStruct->names ) )
-            throw new InvalidArgumentValue( "names", $roleUpdateStruct->names, "RoleUpdateStruct" );
-
-        if ( $roleUpdateStruct->descriptions !== null && !is_array( $roleUpdateStruct->descriptions ) )
-            throw new InvalidArgumentValue( "descriptions", $roleUpdateStruct->descriptions, "RoleUpdateStruct" );
 
         if ( $this->repository->hasAccess( 'role', 'update' ) !== true )
             throw new UnauthorizedException( 'role', 'update' );
@@ -190,9 +172,7 @@ class RoleService implements RoleServiceInterface
                 new SPIRoleUpdateStruct(
                     array(
                         'id' => $loadedRole->id,
-                        'identifier' => $roleUpdateStruct->identifier ?: $role->identifier,
-                        'name' => $roleUpdateStruct->names ?: $role->getNames(),
-                        'description' => $roleUpdateStruct->descriptions ?: $role->getDescriptions()
+                        'identifier' => $roleUpdateStruct->identifier ?: $role->identifier
                     )
                 )
             );
@@ -840,10 +820,6 @@ class RoleService implements RoleServiceInterface
             array(
                 'id' => (int)$role->id,
                 'identifier' => $role->identifier,
-                //@todo: add main language code
-                'mainLanguageCode' => null,
-                'names' => $role->name,
-                'descriptions' => $role->description,
                 'policies' => $rolePolicies
             )
         );
@@ -1019,9 +995,6 @@ class RoleService implements RoleServiceInterface
         return new SPIRole(
             array(
                 'identifier' => $roleCreateStruct->identifier,
-                //@todo: main language code ?
-                'name' => $roleCreateStruct->names,
-                'description' => $roleCreateStruct->descriptions,
                 'policies' => $policiesToCreate
             )
         );
