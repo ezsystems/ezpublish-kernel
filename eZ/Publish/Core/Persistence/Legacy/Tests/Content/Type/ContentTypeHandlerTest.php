@@ -1244,8 +1244,8 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             42,
         );
 
-        $fieldDefName = new FieldDefinition();
-        $fieldDefShortDescription = new FieldDefinition();
+        $fieldDefName = new FieldDefinition( array( 'position' => 1 ) );
+        $fieldDefShortDescription = new FieldDefinition( array( 'position' => 2 ) );
 
         $struct->fieldDefinitions = array(
             $fieldDefName,
