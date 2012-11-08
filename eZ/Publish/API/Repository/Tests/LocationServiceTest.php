@@ -1527,7 +1527,8 @@ class LocationServiceTest extends BaseTest
         $locationToCopy = $locationService->loadLocation( $communityLocationId );
 
         // Use a child as new parent
-        $newParentLocation = end( $locationService->loadLocationChildren( $locationToCopy )->locations );
+        $childLocations = $locationService->loadLocationChildren( $locationToCopy )->locations;
+        $newParentLocation = end( $childLocations );
 
         // This call will fail with an "InvalidArgumentException", because the
         // new parent is a child location of the subtree to copy.
