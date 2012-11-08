@@ -105,7 +105,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $sa = $router->match(
             new SimplifiedRequest(
                 array(
-                     'X-Siteaccess' => $saName
+                    'headers' => array( 'X-Siteaccess' => $saName )
                 )
             )
         );
