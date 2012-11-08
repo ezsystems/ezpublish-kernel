@@ -85,15 +85,13 @@ class TwigContentViewLayoutDecorator implements ContentViewInterface
 {% extends "{$layout}" %}
 
 {% block {$options['contentBlockName']} %}
-{$contentViewClosure( $params )}
+{{ viewResult|raw }}
 {% endblock %}
 EOT;
             return $twig->render(
                 $twigContentTemplate,
                 array(
-                     'location'     => isset( $params['location'] ) ? $params['location'] : null,
-                     'content'      => isset( $params['content'] ) ? $params['content'] : null,
-                     'params'       => $params
+                     'viewResult' => $contentViewClosure( $params )
                 )
             );
         };
