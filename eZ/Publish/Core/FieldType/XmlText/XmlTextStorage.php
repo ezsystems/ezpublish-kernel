@@ -11,8 +11,7 @@ namespace eZ\Publish\Core\FieldType\XmlText;
 
 use eZ\Publish\Core\FieldType\GatewayBasedStorage,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    DOMDocument;
+    eZ\Publish\SPI\Persistence\Content\Field;
 
 class XmlTextStorage extends GatewayBasedStorage
 {
