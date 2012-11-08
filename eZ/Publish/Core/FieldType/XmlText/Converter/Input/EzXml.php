@@ -10,8 +10,8 @@
 namespace eZ\Publish\Core\FieldType\XmlText\Converter\Input;
 
 use eZ\Publish\Core\FieldType\XmlText\Converter\Input,
-    DOMDocument,
-    Exception;
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    DOMDocument;
 
 class EzXml implements Input
 {
@@ -54,7 +54,7 @@ class EzXml implements Input
             foreach ( libxml_get_errors() as $error )
                 $messages[] = trim( $error->message );
 
-            throw new Exception( join( "\n", $messages ) );
+            throw new InvalidArgumentException( "xmlString", "Validation of XML content failed: " . join( "\n", $messages ) );
         }
 
         return $xmlString;
