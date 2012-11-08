@@ -27,7 +27,7 @@ class Group extends ValueObject
      * @since 5.0
      * @var string[]
      */
-    public $name;
+    public $name = array();
 
     /**
      * Description

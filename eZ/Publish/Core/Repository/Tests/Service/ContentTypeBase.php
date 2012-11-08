@@ -61,9 +61,10 @@ abstract class ContentTypeBase extends BaseServiceTest
                 'identifier' => 'new-group',
                 'creatorId' => null,
                 'creationDate' => null,
-                'mainLanguageCode' => null,
-                'names' => null,
-                'descriptions' => null
+                // @todo uncomment when support for multilingual names and descriptions is added
+                //'mainLanguageCode' => null,
+                //'names' => null,
+                //'descriptions' => null
             ),
             $createStruct
         );
@@ -86,9 +87,10 @@ abstract class ContentTypeBase extends BaseServiceTest
         );
         $groupCreate->creatorId = $this->repository->getCurrentUser()->id;
         $groupCreate->creationDate = new \DateTime();
-        $groupCreate->mainLanguageCode = 'eng-GB';
-        $groupCreate->names = array( 'eng-US' => 'A name.' );
-        $groupCreate->descriptions = array( 'eng-US' => 'A description.' );
+        // @todo uncomment when support for multilingual names and descriptions is added
+        //$groupCreate->mainLanguageCode = 'eng-GB';
+        //$groupCreate->names = array( 'eng-US' => 'A name.' );
+        //$groupCreate->descriptions = array( 'eng-US' => 'A description.' );
 
         $group = $contentTypeService->createContentTypeGroup( $groupCreate );
         /* END: Use Case */
@@ -176,15 +178,17 @@ abstract class ContentTypeBase extends BaseServiceTest
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
-        $groupCreate->names = array( 'eng-GB'=> 'NewGroup' );
-        $groupCreate->descriptions = array();
+        // @todo uncomment when support for multilingual names and descriptions is added
+        //$groupCreate->names = array( 'eng-GB'=> 'NewGroup' );
+        //$groupCreate->descriptions = array();
         $contentTypeService->createContentTypeGroup( $groupCreate );
 
         $secondGroupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
-        $secondGroupCreate->names = array( 'eng-GB'=> 'NewGroup' );
-        $secondGroupCreate->descriptions = array();
+        // @todo uncomment when support for multilingual names and descriptions is added
+        //$secondGroupCreate->names = array( 'eng-GB'=> 'NewGroup' );
+        //$secondGroupCreate->descriptions = array();
 
         // Throws an exception because group with identifier "new-group" already exists
         $contentTypeService->createContentTypeGroup( $secondGroupCreate );
@@ -208,9 +212,10 @@ abstract class ContentTypeBase extends BaseServiceTest
         );
         $groupCreate->creatorId = $this->repository->getCurrentUser()->id;
         $groupCreate->creationDate = new \DateTime();
-        $groupCreate->mainLanguageCode = 'eng-GB';
-        $groupCreate->names = array( 'eng-US' => 'A name.' );
-        $groupCreate->descriptions = array( 'eng-US' => 'A description.' );
+        // @todo uncomment when support for multilingual names and descriptions is added
+        //$groupCreate->mainLanguageCode = 'eng-GB';
+        //$groupCreate->names = array( 'eng-US' => 'A name.' );
+        //$groupCreate->descriptions = array( 'eng-US' => 'A description.' );
 
         $storedGroup = $contentTypeService->createContentTypeGroup( $groupCreate );
 
@@ -483,15 +488,16 @@ abstract class ContentTypeBase extends BaseServiceTest
         $groupUpdate->identifier = 'updated-group';
         $groupUpdate->modifierId = 42;
         $groupUpdate->modificationDate = new \DateTime();
-        $groupUpdate->mainLanguageCode = 'en_US';
-        $groupUpdate->names = array(
-            'en_US' => 'A name',
-            'en_GB' => 'A name',
-        );
-        $groupUpdate->descriptions = array(
-            'en_US' => 'A description',
-            'en_GB' => 'A description',
-        );
+        // @todo uncomment when support for multilingual names and descriptions is added
+        //$groupUpdate->mainLanguageCode = 'en_US';
+        //$groupUpdate->names = array(
+        //    'en_US' => 'A name',
+        //    'en_GB' => 'A name',
+        //);
+        //$groupUpdate->descriptions = array(
+        //    'en_US' => 'A description',
+        //    'en_GB' => 'A description',
+        //);
 
         $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
         /* END: Use Case */
@@ -538,9 +544,10 @@ abstract class ContentTypeBase extends BaseServiceTest
             'modificationDate' => $updateStruct->modificationDate,
             'creatorId' => $originalGroup->creatorId,
             'modifierId' => $updateStruct->modifierId,
-            'mainLanguageCode' => $updateStruct->mainLanguageCode,
-            'names' => $updateStruct->names,
-            'descriptions' => $updateStruct->descriptions,
+            // @todo uncomment when support for multilingual names and descriptions is added
+            //'mainLanguageCode' => $updateStruct->mainLanguageCode,
+            //'names' => $updateStruct->names,
+            //'descriptions' => $updateStruct->descriptions,
         );
 
         $this->assertPropertiesCorrect(
@@ -564,9 +571,10 @@ abstract class ContentTypeBase extends BaseServiceTest
         );
         $groupCreate->creatorId = $this->repository->getCurrentUser()->id;
         $groupCreate->creationDate = new \DateTime();
-        $groupCreate->mainLanguageCode = 'eng-US';
-        $groupCreate->names = array( 'eng-US' => 'Name' );
-        $groupCreate->descriptions = array( 'eng-US' => 'Description' );
+        // @todo uncomment when support for multilingual names and descriptions is added
+        //$groupCreate->mainLanguageCode = 'eng-US';
+        //$groupCreate->names = array( 'eng-US' => 'Name' );
+        //$groupCreate->descriptions = array( 'eng-US' => 'Description' );
 
         return $contentTypeService->createContentTypeGroup( $groupCreate );
     }
@@ -627,8 +635,9 @@ abstract class ContentTypeBase extends BaseServiceTest
             'updated-group'
         );
         $groupCreate->creatorId = $this->repository->getCurrentUser()->id;
-        $groupCreate->names = array( 'eng-US' => 'Name' );
-        $groupCreate->descriptions = array( 'eng-US' => 'Description' );
+        // @todo uncomment when support for multilingual names and descriptions is added
+        //$groupCreate->names = array( 'eng-US' => 'Name' );
+        //$groupCreate->descriptions = array( 'eng-US' => 'Description' );
         $groupToOverwrite = $contentTypeService->createContentTypeGroup( $groupCreate );
 
         $group = $contentTypeService->loadContentTypeGroupByIdentifier( 'new-group' );
@@ -735,9 +744,10 @@ abstract class ContentTypeBase extends BaseServiceTest
             );
             $groupCreate->creatorId = $this->repository->getCurrentUser()->id;
             $groupCreate->creationDate = new \DateTime();
-            $groupCreate->mainLanguageCode = 'de_DE';
-            $groupCreate->names = array( 'en_US' => 'A name.' );
-            $groupCreate->descriptions = array( 'en_US' => 'A description.' );
+            // @todo uncomment when support for multilingual names and descriptions is added
+            //$groupCreate->mainLanguageCode = 'de_DE';
+            //$groupCreate->names = array( 'en_US' => 'A name.' );
+            //$groupCreate->descriptions = array( 'en_US' => 'A description.' );
             $this->contentTypeGroups[] = $contentTypeService->createContentTypeGroup( $groupCreate );
 
             $groupCreate->identifier = 'second-group';
@@ -2107,9 +2117,10 @@ abstract class ContentTypeBase extends BaseServiceTest
         );
         $groupCreate->creatorId = $this->repository->getCurrentUser()->id;
         $groupCreate->creationDate = new \DateTime();
-        $groupCreate->mainLanguageCode = 'ger-DE';
-        $groupCreate->names = array( 'eng-US' => 'A name.' );
-        $groupCreate->descriptions = array( 'eng-US' => 'A description.' );
+        // @todo uncomment when support for multilingual names and descriptions is added
+        //$groupCreate->mainLanguageCode = 'ger-DE';
+        //$groupCreate->names = array( 'eng-US' => 'A name.' );
+        //$groupCreate->descriptions = array( 'eng-US' => 'A description.' );
         $group = $contentTypeService->createContentTypeGroup( $groupCreate );
 
         $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(

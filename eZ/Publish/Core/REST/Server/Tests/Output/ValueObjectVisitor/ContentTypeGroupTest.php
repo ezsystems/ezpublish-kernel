@@ -36,6 +36,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
                 'modificationDate' => new \DateTime( '2012-12-31 19:35 Europe/Zagreb' ),
                 'creatorId' => 14,
                 'modifierId' => 13,
+                /* @todo uncomment when support for multilingual names and descriptions is added
                 'names' => array(
                     'eng-GB' => 'Group name EN',
                     'eng-US' => 'Group name EN US',
@@ -45,6 +46,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
                     'eng-US' => 'Group description EN US',
                 ),
                 'mainLanguageCode' => 'eng-GB'
+                */
             )
         );
 
