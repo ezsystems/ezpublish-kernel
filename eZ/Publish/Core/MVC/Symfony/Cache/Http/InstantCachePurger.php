@@ -34,5 +34,7 @@ class InstantCachePurger implements GatewayCachePurger
     {
         $this->purgeClient->setCacheElements( $cacheElements );
         $this->purgeClient->purge();
+
+        return $cacheElements;
     }
 }
