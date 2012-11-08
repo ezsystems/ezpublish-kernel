@@ -69,7 +69,27 @@ class Type extends FieldType
      */
     public function getName( $value )
     {
-        throw new \RuntimeException( 'Implement this method' );
+        $value = $this->acceptValue( $value );
+
+        $result = null;
+        if ( $section = $value->xml->documentElement->firstChild )
+        {
+            $textDom = $section->firstChild;
+
+            if ( $textDom && $textDom->hasChildNodes() )
+            {
+                $result = $textDom->firstChild->textContent;
+            }
+            elseif ( $textDom )
+            {
+                $result = $textDom->textContent;
+            }
+        }
+
+        if ( $result === null )
+            $result = $value->xml->documentElement->textContent;
+
+        return trim( $result );
     }
 
     /**

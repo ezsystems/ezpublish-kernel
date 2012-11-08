@@ -133,4 +133,116 @@ class XmlTextTest extends FieldTypeTest
             array( '<paragraph><a href="eznode://1">test</a><a href="ezobject://1">test</a></paragraph>', "eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser\\Simplified" ),
         );
     }
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\XmlText\Type::getName
+     * @dataProvider providerForTestGetName
+     */
+    public function testGetNamePassingValue( $xml, $value )
+    {
+        $ft = $this->getFieldType();
+        $this->assertEquals(
+            $value,
+            $ft->getName( $ft->acceptValue( $xml ) )
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\XmlText\Type::getName
+     * @dataProvider providerForTestGetName
+     */
+    public function testGetNamePassingXML( $xml, $value )
+    {
+        $ft = $this->getFieldType();
+        $this->assertEquals(
+            $value,
+            $ft->getName( $xml )
+        );
+    }
+
+    public static function providerForTestGetName()
+    {
+        return array(
+
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">This is a piece of text</header></section>',
+                "This is a piece of text"
+            ),
+
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">This is a piece of <emphasize>text</emphasize></header></section>',
+                /** @FIXME: should probably be "This is a piece of text" */
+                "This is a piece of"
+            ),
+
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1"><strong>This is a piece</strong> of text</header></section>',
+                /** @FIXME: should probably be "This is a piece of text" */
+                "This is a piece"
+            ),
+
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1"><strong><emphasize>This is</emphasize> a piece</strong> of text</header></section>',
+                /** @FIXME: should probably be "This is a piece of text" */
+                "This is"
+            ),
+
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph><table class="default" border="0" width="100%" custom:summary="wai" custom:caption=""><tr><td><paragraph>First cell</paragraph></td><td><paragraph>Second cell</paragraph></td></tr><tr><td><paragraph>Third cell</paragraph></td><td><paragraph>Fourth cell</paragraph></td></tr></table></paragraph><paragraph>Text after table</paragraph></section>',
+                /** @FIXME: should probably be "First cell" */
+                "First cellSecond cell"
+            ),
+
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><ul><li><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">List item</paragraph></li></ul></paragraph></section>',
+                "List item"
+            ),
+
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><ul><li><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">List <emphasize>item</emphasize></paragraph></li></ul></paragraph></section>',
+                "List item"
+            ),
+
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
+                ""
+            ),
+
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph><strong><emphasize>A simple</emphasize></strong> paragraph!</paragraph></section>',
+                "A simple"
+            ),
+
+            array( '<section>test</section>', "test" ),
+
+            array( '<paragraph><a href="eznode://1">test</a><a href="ezobject://1">test</a></paragraph>', "test" ),
+        );
+    }
 }
