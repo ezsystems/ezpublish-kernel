@@ -71,14 +71,28 @@ class PurgeClient implements PurgeClientInterface
         // Purging all HTTP gateways
         foreach ($this->purgeServers as $server)
         {
-            foreach ( $this->locationIds as $locationId )
-            {
-                $this->httpBrowser->call( $server, 'PURGE', array( 'X-Location-Id' => $locationId ) );
-            }
+            $this->doPurge( $server, $this->locationIds );
 
             $client = $this->httpBrowser->getClient();
             if ( $client instanceof BatchClientInterface )
                 $client->flush();
+        }
+    }
+
+    /**
+     * Effectively triggers the purge.
+     * Sends one HTTP PURGE request per location Id.
+     * Used request header is X-Location-Id.
+     *
+     * @param string $server Current purge server (e.g. http://localhost/foo/bar)
+     * @param array $locationIds Location Ids to purge
+     * @return void
+     */
+    protected function doPurge( $server, array $locationIds )
+    {
+        foreach ( $locationIds as $locationId )
+        {
+            $this->httpBrowser->call( $server, 'PURGE', array( 'X-Location-Id' => $locationId ) );
         }
     }
 }

@@ -88,34 +88,42 @@ class LocationAwareStore extends Store implements RequestAwarePurger
      */
     public function purgeByRequest( Request $request )
     {
-        if ( !$request->headers->has( 'X-Location-Id' ) )
+        if ( !$request->headers->has( 'X-Location-Id' ) && !$request->headers->has( 'X-Group-Location-Id' ) )
         {
             return $this->purge( $request->getUri() );
         }
 
-        $locationId = $request->headers->get( 'X-Location-Id' );
-        $locationCacheDir = "$this->root/" . static::LOCATION_CACHE_DIR . "/$locationId";
-        if ( file_exists( $locationCacheDir ) )
-        {
-            // 1. Copy cache files to stale cache dir
-            // 2. Place a lock file indicating to use the stale cache
-            // 3. Remove real cache dir
-            // 4. Remove lock file
-            // 5. Remove stale cache dir
-            // Note that there is no need to remove the meta-file
-            $staleCacheDir = str_replace( static::LOCATION_CACHE_DIR, static::LOCATION_STALE_CACHE_DIR, $locationCacheDir );
-            $fs = new Filesystem();
-            $fs->mkdir( $staleCacheDir );
-            $fs->mirror( $locationCacheDir, $staleCacheDir );
-            $lockFile = $this->getLocationCacheLockName( $locationId );
-            $fs->touch( $lockFile );
-            // array of removal is in reverse order on purpose since remove() starts from the end.
-            $fs->remove( array( $staleCacheDir, $lockFile, $locationCacheDir ) );
+        if ( $request->headers->has( 'X-Group-Location-Id' ) )
+            $aLocationId = explode( '; ', $request->headers->get( 'X-Group-Location-Id' ) );
+        else
+            $aLocationId = array( $request->headers->get( 'X-Location-Id' ) );
 
-            return true;
+        if ( empty( $aLocationId ) )
+            return false;
+
+        foreach ( $aLocationId as $locationId )
+        {
+            $locationCacheDir = "$this->root/" . static::LOCATION_CACHE_DIR . "/$locationId";
+            if ( file_exists( $locationCacheDir ) )
+            {
+                // 1. Copy cache files to stale cache dir
+                // 2. Place a lock file indicating to use the stale cache
+                // 3. Remove real cache dir
+                // 4. Remove lock file
+                // 5. Remove stale cache dir
+                // Note that there is no need to remove the meta-file
+                $staleCacheDir = str_replace( static::LOCATION_CACHE_DIR, static::LOCATION_STALE_CACHE_DIR, $locationCacheDir );
+                $fs = new Filesystem();
+                $fs->mkdir( $staleCacheDir );
+                $fs->mirror( $locationCacheDir, $staleCacheDir );
+                $lockFile = $this->getLocationCacheLockName( $locationId );
+                $fs->touch( $lockFile );
+                // array of removal is in reverse order on purpose since remove() starts from the end.
+                $fs->remove( array( $staleCacheDir, $lockFile, $locationCacheDir ) );
+            }
         }
 
-        return false;
+        return true;
     }
 
     /**
