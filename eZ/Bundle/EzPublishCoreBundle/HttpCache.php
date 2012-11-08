@@ -23,6 +23,9 @@ abstract class HttpCache extends BaseHttpCache
     }
 
     /**
+     * Handle invalidation, including Http PURGE requests.
+     * All non-allowed PURGE requests will receive an HTTP 405
+     *
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param bool $catch
      * @return \Symfony\Component\HttpFoundation\Response
@@ -32,6 +35,12 @@ abstract class HttpCache extends BaseHttpCache
         if ( $request->getMethod() !== 'PURGE' )
         {
             return parent::invalidate( $request, $catch );
+        }
+
+        // Reject all non-authorized clients
+        if ( !$this->isPurgeRequestAllowed( $request ) )
+        {
+            return new Response( '', 405 );
         }
 
         $response = new Response();
@@ -55,5 +64,47 @@ abstract class HttpCache extends BaseHttpCache
         }
 
         return $response;
+    }
+
+    /**
+     * Checks if current purge request is allowed.
+     * This method can be overridden to extend the allowance test.
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return bool
+     */
+    protected function isPurgeRequestAllowed( Request $request )
+    {
+        if ( !$this->isPurgeIPAllowed( $request->getClientIp() ) )
+            return false;
+
+        return true;
+    }
+
+    /**
+     * Checks if $ip is allowed for Http PURGE requests
+     *
+     * @todo Check subnets
+     *
+     * @param string $ip
+     * @return bool
+     */
+    protected function isPurgeIPAllowed( $ip )
+    {
+        $allowedIps = array_fill_keys( $this->getPurgeAllowedIPs(), true );
+        if ( !isset( $allowedIps[$ip] ) )
+            return false;
+
+        return true;
+    }
+
+    /**
+     * Returns an array of allowed IPs for Http PURGE requests.
+     *
+     * @return array
+     */
+    protected function getPurgeAllowedIPs()
+    {
+        return array( '127.0.0.1', '::1' );
     }
 }
