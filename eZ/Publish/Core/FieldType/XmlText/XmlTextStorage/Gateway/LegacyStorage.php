@@ -98,7 +98,7 @@ class LegacyStorage extends Gateway
         /** @var $q \ezcQuerySelect */
         $q = $this->getConnection()->createSelectQuery();
         $q
-            ->select( '*' )
+            ->select( "id", "url" )
             ->from( UrlStorage::URL_TABLE )
             ->where( $q->expr->in( 'id', $linkIds ) )
         ;
@@ -177,7 +177,7 @@ class LegacyStorage extends Gateway
         /** @var $q \ezcQuerySelect */
         $q = $this->getConnection()->createSelectQuery();
         $q
-            ->select( '*' )
+            ->select( "id", "url" )
             ->from( UrlStorage::URL_TABLE )
             ->where( $q->expr->in( 'url', $linksUrls ) )
         ;
