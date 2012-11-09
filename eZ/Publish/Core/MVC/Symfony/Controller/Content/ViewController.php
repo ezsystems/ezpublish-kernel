@@ -84,12 +84,13 @@ class ViewController extends Controller
         {
             // Assume that location is cached by the repository
             $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
+            $contentInfo = $location->getContentInfo();
 
             // TODO: Use a dedicated etag generator, generating a hash
             // instead of plain text
             $response = $this->buildResponse(
-                "ezpublish-location-$locationId-$viewType-$layout",
-                $location->getContentInfo()->modificationDate
+                "ezpublish-location-$locationId-$contentInfo->currentVersionNo-$viewType-$layout",
+                $contentInfo->modificationDate
             );
 
 
