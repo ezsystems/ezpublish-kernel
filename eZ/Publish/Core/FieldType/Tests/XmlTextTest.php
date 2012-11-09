@@ -8,7 +8,13 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
-use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType;
+
+use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType,
+    eZ\Publish\Core\FieldType\XmlText\Input\EzXml,
+    eZ\Publish\Core\FieldType\XmlText\Input\EzSimplifiedXml,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    Exception,
+    DOMDocument;
 
 /**
  * @group fieldType
@@ -82,10 +88,34 @@ class XmlTextTest extends FieldTypeTest
      * @covers \eZ\Publish\Core\FieldType\Author\Type::acceptValue
      * @dataProvider providerForTestAcceptValueValidFormat
      */
-    public function testAcceptValueValidFormat( $text )
+    public function testAcceptValueValidFormat( $input )
     {
         $fieldType = new XmlTextType( $this->getValidatorServiceMock(), $this->getFieldTypeToolsMock() );
-        $fieldType->acceptValue( $text );
+        $fieldType->acceptValue( $input );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\Author\Type::acceptValue
+     * @dataProvider providerForTestAcceptValueInvalidFormat
+     */
+    public function testAcceptValueInvalidFormat( $input, $errorMessage )
+    {
+        try
+        {
+            $fieldType = new XmlTextType( $this->getValidatorServiceMock(), $this->getFieldTypeToolsMock() );
+            $fieldType->acceptValue( $input );
+            $this->fail( "An InvalidArgumentException was expected! None thrown." );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            $this->assertEquals( $errorMessage, $e->getMessage() );
+        }
+        catch ( Exception $e )
+        {
+            $this->fail(
+                "An InvalidArgumentException was expected! " . get_class( $e ) . " thrown with message: " . $e->getMessage()
+            );
+        }
     }
 
     /**
@@ -97,7 +127,7 @@ class XmlTextTest extends FieldTypeTest
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">Header 1</header></section>';
-        $xmlDoc = new \DOMDocument;
+        $xmlDoc = new DOMDocument;
         $xmlDoc->loadXML( $xmlData );
         // @todo Do one per value class
         $ft = $this->getFieldType();
@@ -113,24 +143,46 @@ class XmlTextTest extends FieldTypeTest
         return array(
 
             array(
-                '<?xml version="1.0" encoding="utf-8"?>
+                $xml = '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">This is a piece of text</header></section>',
-                "eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser\\Raw"
             ),
+            array( new EzXml( $xml ) ),
 
             array(
-                '<?xml version="1.0" encoding="utf-8"?>
+                $xml = '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
-                "eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser\\Raw"
+            ),
+            array( new EzXml( $xml ) ),
+
+            array( new EzSimplifiedXml( "<section><p><b>test</b></p></section>" ) ),
+
+            array( new EzSimplifiedXml( '<section><p><a node_id="1">test</a><a object_id="1">test</a></p></section>' ) ),
+        );
+    }
+
+    public static function providerForTestAcceptValueInvalidFormat()
+    {
+        return array(
+
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section><h1>This is a piece of text</h1></section>',
+                "Argument 'xmlString' is invalid: Validation of XML content failed: Element 'h1': This element is not expected. Expected is one of ( section, paragraph, header )."
             ),
 
-            array( '<section>test</section>', "eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser\\Simplified" ),
+            array(
+                'This is not XML at all!',
+                "Argument 'xmlString' is invalid: Validation of XML content failed: Start tag expected, '<' not found\nThe document has no document element."
+            ),
 
-            array( '<paragraph><a href="eznode://1">test</a><a href="ezobject://1">test</a></paragraph>', "eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser\\Simplified" ),
+            array(
+                '<unknown><format /></unknown>',
+                "Argument 'xmlString' is invalid: Validation of XML content failed: Element 'unknown': No matching global declaration available for the validation root."
+            ),
         );
     }
 
@@ -240,9 +292,9 @@ class XmlTextTest extends FieldTypeTest
                 "A simple"
             ),
 
-            array( '<section>test</section>', "test" ),
+            array( '<section><paragraph>test</paragraph></section>', "test" ),
 
-            array( '<paragraph><a href="eznode://1">test</a><a href="ezobject://1">test</a></paragraph>', "test" ),
+            array( '<section><paragraph><link node_id="1">test</link><link object_id="1">test</link></paragraph></section>', "test" ),
         );
     }
 }

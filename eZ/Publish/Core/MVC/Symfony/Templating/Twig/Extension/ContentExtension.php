@@ -62,7 +62,7 @@ class ContentExtension extends Twig_Extension
     /**
      * Converter used to transform XmlText content in HTML5
      *
-     * @var eZ\Publish\Core\FieldType\XmlText\Converter\Output\Html5
+     * @var eZ\Publish\Core\FieldType\XmlText\Converter\Html5
      */
     protected $xmlTextConverter;
 
@@ -226,7 +226,7 @@ class ContentExtension extends Twig_Extension
     }
 
     /**
-     * @return eZ\Publish\Core\FieldType\XmlText\Converter\Output\Html5
+     * @return eZ\Publish\Core\FieldType\XmlText\Converter\Html5
      */
     protected function getXmlTextConverter()
     {

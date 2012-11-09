@@ -1,38 +1,27 @@
 <?php
 /**
- * File containing the XmlText EzXml Converter test
+ * File containing the XmlText EzXml test
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Converter\Input;
+namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Input;
 
-use eZ\Publish\Core\FieldType\XmlText\Converter\Input\EzXml as Converter,
+use eZ\Publish\Core\FieldType\XmlText\Input\EzXml,
     PHPUnit_Framework_TestCase,
     Exception;
 
 class EzXmlTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\FieldType\XmlText\Converter\Input
-     */
-    private $converter;
-
-    public function setUp()
-    {
-        $this->converter = new Converter(
-            __DIR__ . "/../../../../../../../Bundle/EzPublishCoreBundle/Resources/schemas/ezxml.xsd"
-        );
-    }
-
-    /**
      * @dataProvider providerForTestConvertCorrect
      */
     public function testConvertCorrect( $xmlString )
     {
-        $this->assertEquals( $xmlString, $this->converter->convert( $xmlString ) );
+        $input = new EzXml( $xmlString );
+        $this->assertEquals( $xmlString, $input->getInternalRepresentation() );
     }
 
     public function providerForTestConvertCorrect()
@@ -53,7 +42,7 @@ class EzXmlTest extends PHPUnit_Framework_TestCase
     {
         try
         {
-            $this->converter->convert( $xmlString );
+            $input = new EzXml( $xmlString );
         }
         catch ( \Exception $e )
         {
@@ -69,7 +58,7 @@ class EzXmlTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 '<?xml version="1.0" encoding="utf-8"?><section><wrongTag/></section>',
-                "Element 'wrongTag': This element is not expected. Expected is one of ( section, paragraph, header ).",
+                "Argument 'xmlString' is invalid: Validation of XML content failed: Element 'wrongTag': This element is not expected. Expected is one of ( section, paragraph, header ).",
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?><section><paragraph wrongAttribute="foo">Some content</paragraph>
@@ -78,7 +67,7 @@ class EzXmlTest extends PHPUnit_Framework_TestCase
 <link node_id="abc"><link object_id="123">This is a link</link></link>
 </paragraph>
 </section>',
-                "Element 'paragraph', attribute 'wrongAttribute': The attribute 'wrongAttribute' is not allowed.
+                "Argument 'xmlString' is invalid: Validation of XML content failed: Element 'paragraph', attribute 'wrongAttribute': The attribute 'wrongAttribute' is not allowed.
 Element 'tr': Missing child element(s). Expected is one of ( th, td ).
 Element 'link', attribute 'node_id': 'abc' is not a valid value of the atomic type 'xs:integer'.
 Element 'link': This element is not expected. Expected is one of ( custom, strong, emphasize, embed, embed-inline ).",
