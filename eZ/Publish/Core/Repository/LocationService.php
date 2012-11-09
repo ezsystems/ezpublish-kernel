@@ -29,6 +29,8 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
 
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot as CriterionLogicalNot,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree as CriterionSubtree,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
     eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
@@ -86,15 +88,13 @@ class LocationService implements LocationServiceInterface
      * Only the items on which the user has read access are copied.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed copy the subtree to the given parent location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user does not have read access to the whole source subtree
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the target location is a sub location of the given location
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $subtree - the subtree denoted by the location to copy
      * @param \eZ\Publish\API\Repository\Values\Content\Location $targetParentLocation - the target parent location for the copy operation
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location The newly created location of the copied subtree
-     *
-     * @todo enhancement - this method should return a result structure containing the new location and a list
-     *       of locations which are not copied due to permission denials.
      */
     public function copySubtree( APILocation $subtree, APILocation $targetParentLocation )
     {
@@ -110,8 +110,36 @@ class LocationService implements LocationServiceInterface
         if ( stripos( $loadedTargetLocation->pathString, $loadedSubtree->pathString ) !== false )
             throw new InvalidArgumentException("targetParentLocation", "target parent location is a sub location of the given subtree");
 
+        // check create permission on target
         if ( !$this->repository->canUser( 'content', 'create', $loadedSubtree->getContentInfo(), $loadedTargetLocation ) )
             throw new UnauthorizedException( 'content', 'create' );
+
+        /** Check read access to whole source subtree
+         * @var boolean|\eZ\Publish\API\Repository\Values\Content\Query\Criterion $contentReadCriterion
+         */
+        $contentReadCriterion = $this->repository->getSearchService()->getPermissionsCriterion();
+        if ( $contentReadCriterion === false )
+        {
+            throw new UnauthorizedException( 'content', 'read' );
+        }
+        elseif ( $contentReadCriterion !== true )
+        {
+            // Query if there are any content in subtree current user don't have access to
+            $query = new Query(
+                array(
+                    'limit' => 0,
+                    'criterion' => new CriterionLogicalAnd(
+                        new CriterionSubtree( $subtree->pathString ),
+                        new CriterionLogicalNot( $contentReadCriterion )
+                    )
+                )
+            );
+            $result = $this->repository->getSearchService()->findContent( $query, array(), false );
+            if ( $result->totalCount > 0 )
+            {
+                throw new UnauthorizedException( 'content', 'read' );
+            }
+        }
 
         $this->repository->beginTransaction();
         try
@@ -653,6 +681,7 @@ class LocationService implements LocationServiceInterface
      * he can do it regardless of an existing descendant on which the user has no permission.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to move this location to the target
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user does not have read access to the whole source subtree
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
@@ -665,8 +694,36 @@ class LocationService implements LocationServiceInterface
         if ( !is_numeric( $newParentLocation->id ) )
             throw new InvalidArgumentValue( "id", $newParentLocation->id, "Location" );
 
+        // check create permission on target location
         if ( !$this->repository->canUser( 'content', 'create', $location->getContentInfo(), $newParentLocation ) )
             throw new UnauthorizedException( 'content', 'create' );
+
+        /** Check read access to whole source subtree
+         * @var boolean|\eZ\Publish\API\Repository\Values\Content\Query\Criterion $contentReadCriterion
+         */
+        $contentReadCriterion = $this->repository->getSearchService()->getPermissionsCriterion();
+        if ( $contentReadCriterion === false )
+        {
+            throw new UnauthorizedException( 'content', 'read' );
+        }
+        elseif ( $contentReadCriterion !== true )
+        {
+            // Query if there are any content in subtree current user don't have access to
+            $query = new Query(
+                array(
+                    'limit' => 0,
+                    'criterion' => new CriterionLogicalAnd(
+                        new CriterionSubtree( $location->pathString ),
+                        new CriterionLogicalNot( $contentReadCriterion )
+                    )
+                )
+            );
+            $result = $this->repository->getSearchService()->findContent( $query, array(), false );
+            if ( $result->totalCount > 0 )
+            {
+                throw new UnauthorizedException( 'content', 'read' );
+            }
+        }
 
         $this->repository->beginTransaction();
         try
@@ -717,6 +774,33 @@ class LocationService implements LocationServiceInterface
             throw new UnauthorizedException( 'content', 'manage_locations' );
         if ( !$this->repository->canUser( 'content', 'remove', $location->getContentInfo(), $location ) )
             throw new UnauthorizedException( 'content', 'remove' );
+
+        /** Check remove access to descendants
+         * @var boolean|\eZ\Publish\API\Repository\Values\Content\Query\Criterion $contentReadCriterion
+         */
+        $contentReadCriterion = $this->repository->getSearchService()->getPermissionsCriterion( 'content', 'remove' );
+        if ( $contentReadCriterion === false )
+        {
+            throw new UnauthorizedException( 'content', 'remove' );
+        }
+        elseif ( $contentReadCriterion !== true )
+        {
+            // Query if there are any content in subtree current user don't have access to
+            $query = new Query(
+                array(
+                    'limit' => 0,
+                    'criterion' => new CriterionLogicalAnd(
+                        new CriterionSubtree( $location->pathString ),
+                        new CriterionLogicalNot( $contentReadCriterion )
+                    )
+                )
+            );
+            $result = $this->repository->getSearchService()->findContent( $query, array(), false );
+            if ( $result->totalCount > 0 )
+            {
+                throw new UnauthorizedException( 'content', 'remove' );
+            }
+        }
 
         $this->repository->beginTransaction();
         try
