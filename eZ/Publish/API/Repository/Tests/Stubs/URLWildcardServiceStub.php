@@ -55,8 +55,7 @@ class URLWildcardServiceStub implements URLWildcardService
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the $sourceUrl pattern already exists
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create url wildcards
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if the number of "*" patterns in $sourceUrl and
-     *          the number of {\d} placeholders in $destinationUrl doesn't match or
-     *          if the placeholders aren't a valid number sequence({1}/{2}/{3}), starting with 1.
+     *         the numbers in {\d} placeholders in $destinationUrl does not match.
      *
      * @param string $sourceUrl
      * @param string $destinationUrl
@@ -82,15 +81,10 @@ class URLWildcardServiceStub implements URLWildcardService
         preg_match_all( '(\\*)', $sourceUrl, $patterns );
         preg_match_all( '(\{(\d+)\})', $destinationUrl, $placeholders );
 
-        if ( count( $patterns[0] ) !== count( $placeholders[1] ) )
-        {
-            throw new ContentValidationExceptionStub( 'What error code should be used?' );
-        }
-
+        $patterns = array_map( 'intval', $patterns[0] );
         $placeholders = array_map( 'intval', $placeholders[1] );
-        sort( $placeholders );
 
-        if ( array_keys( array_fill( 1, count( $placeholders ), null ) ) !== $placeholders  )
+        if ( count( $placeholders ) > 0 && max( $placeholders ) > count( $patterns ) )
         {
             throw new ContentValidationExceptionStub( 'What error code should be used?' );
         }
@@ -191,14 +185,7 @@ class URLWildcardServiceStub implements URLWildcardService
             }
         }
 
-        $alias = $this->repository->getURLAliasService()->lookUp( $url );
-
-        return new URLWildcardTranslationResult(
-            array(
-                'uri' => $alias->path,
-                'forward' => $alias->forward
-            )
-        );
+        throw new NotFoundExceptionStub( 'What error code should be used?' );
     }
 
     /**
