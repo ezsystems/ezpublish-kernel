@@ -1,15 +1,15 @@
 <?php
 /**
- * File containing the eZ\Publish\Core\FieldType\XmlText\Converter\Output\EmbedToHtml5 class.
+ * File containing the eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5 class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\XmlText\Converter\Output;
+namespace eZ\Publish\Core\FieldType\XmlText\Converter;
 
-use eZ\Publish\Core\FieldType\XmlText\Converter\Output as OutputConverter,
+use eZ\Publish\Core\FieldType\XmlText\Converter,
     eZ\Publish\Core\MVC\Symfony\View\Manager,
     eZ\Publish\API\Repository\Repository,
     DOMDocument;
@@ -17,7 +17,7 @@ use eZ\Publish\Core\FieldType\XmlText\Converter\Output as OutputConverter,
 /**
  * Converts internal
  */
-class EmbedToHtml5 implements OutputConverter
+class EmbedToHtml5 implements Converter
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\View\Manager
