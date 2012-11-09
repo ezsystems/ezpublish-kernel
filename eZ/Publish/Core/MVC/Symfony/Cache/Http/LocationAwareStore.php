@@ -14,9 +14,7 @@ use Symfony\Component\HttpFoundation\Response,
     Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Store implements all the logic for storing cache metadata (Request and Response headers).
- *
- * @author Fabien Potencier <fabien@symfony.com>
+ * LocationAwareStore implements all the logic for storing cache metadata regarding locations.
  */
 class LocationAwareStore extends Store implements RequestAwarePurger
 {
@@ -61,7 +59,7 @@ class LocationAwareStore extends Store implements RequestAwarePurger
             $prefix = substr( $key, 0, $pos ) . DIRECTORY_SEPARATOR;
             $key = substr( $key, $pos + 1 );
 
-            // If cache purge is in progress, service stale cache instead of regular cache
+            // If cache purge is in progress, serve stale cache instead of regular cache
             list( $locationCacheDir, $locationId ) = explode( '/', $prefix );
             if ( is_file( $this->getLocationCacheLockName( $locationId ) ) )
             {
@@ -80,7 +78,7 @@ class LocationAwareStore extends Store implements RequestAwarePurger
 
     /**
      * Purges data from $request.
-     * If X-Location-Id header is present, the store will purge cache for given locationId.
+     * If X-Location-Id or X-Group-Location-Id header is present, the store will purge cache for given locationId or group of locationIds.
      * If not, regular purge by URI will occur.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request

@@ -19,7 +19,7 @@ abstract class HttpCache extends BaseHttpCache
 {
     protected function createStore()
     {
-        return new LocationAwareStore( $this->cacheDir ?: $this->kernel->getCacheDir().'/http_cache' );
+        return new LocationAwareStore( $this->cacheDir ?: $this->kernel->getCacheDir() . '/http_cache' );
     }
 
     /**
