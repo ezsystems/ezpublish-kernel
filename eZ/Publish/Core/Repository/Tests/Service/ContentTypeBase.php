@@ -152,9 +152,10 @@ abstract class ContentTypeBase extends BaseServiceTest
         );
         $groupCreate->creatorId = $this->repository->getCurrentUser()->id;
         $groupCreate->creationDate = new \DateTime();
-        $groupCreate->mainLanguageCode = 'eng-GB';
-        $groupCreate->names = array( 'eng-US' => 'A name.' );
-        $groupCreate->descriptions = array( 'eng-US' => 'A description.' );
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $groupCreate->mainLanguageCode = 'eng-GB';
+        // $groupCreate->names = array( 'eng-US' => 'A name.' );
+        // $groupCreate->descriptions = array( 'eng-US' => 'A description.' );
 
         // Set anonymous as current user
         $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
@@ -598,6 +599,8 @@ abstract class ContentTypeBase extends BaseServiceTest
         $groupUpdate->identifier = 'updated-group';
         $groupUpdate->modifierId = 42;
         $groupUpdate->modificationDate = new \DateTime();
+        // @todo uncomment when support for multilingual names and descriptions is added
+        /*
         $groupUpdate->mainLanguageCode = 'en_US';
         $groupUpdate->names = array(
             'en_US' => 'A name',
@@ -607,6 +610,7 @@ abstract class ContentTypeBase extends BaseServiceTest
             'en_US' => 'A description',
             'en_GB' => 'A description',
         );
+        */
 
         // Set anonymous as current user
         $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
