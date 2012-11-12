@@ -8,11 +8,9 @@
  */
 
 namespace eZ\Publish\Core\FieldType\Relation;
-use eZ\Publish\SPI\FieldType\FieldStorage,
-    eZ\Publish\Core\FieldType\GatewayBasedStorage,
+use eZ\Publish\Core\FieldType\GatewayBasedStorage,
     eZ\Publish\SPI\Persistence\Content\VersionInfo,
-    eZ\Publish\SPI\Persistence\Content\Field,
-    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+    eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Converter for Relation field type external storage
