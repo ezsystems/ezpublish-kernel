@@ -34,7 +34,7 @@ use eZ\Publish\Core\Persistence\Legacy,
  *
  * @group integration
  */
-class MediaIntergrationTest extends FileBaseIntegrationTest
+class MediaIntegrationTest extends FileBaseIntegrationTest
 {
     /**
      * Returns the storage dir used by the file service
@@ -294,7 +294,7 @@ class MediaIntergrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * @dep_ends \eZ\Publish\SPI\Tests\FieldType\MediaIntergrationTest::testCreateContentType
+     * @dep_ends \eZ\Publish\SPI\Tests\FieldType\MediaIntegrationTest::testCreateContentType
      */
     public function testMediasNotDeletedIfReferencesStillExist()
     {

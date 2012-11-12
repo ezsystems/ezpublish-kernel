@@ -34,7 +34,7 @@ use eZ\Publish\Core\Persistence\Legacy,
  *
  * @group integration
  */
-class RelationIntergrationTest extends BaseIntegrationTest
+class RelationIntegrationTest extends BaseIntegrationTest
 {
     /**
      * Get name of tested field tyoe

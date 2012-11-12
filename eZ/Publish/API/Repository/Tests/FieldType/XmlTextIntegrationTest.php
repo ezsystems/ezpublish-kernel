@@ -19,7 +19,7 @@ use eZ\Publish\Core\FieldType\XmlText\Value as XmlTextValue,
  * @group integration
  * @group field-type
  */
-class XmlTextIntergrationTest extends BaseIntegrationTest
+class XmlTextIntegrationTest extends BaseIntegrationTest
 {
     /**
      * @var \DOMDocument

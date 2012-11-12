@@ -33,7 +33,7 @@ use eZ\Publish\Core\Persistence\Legacy,
  *
  * @group integration
  */
-class ImageIntergrationTest extends FileBaseIntegrationTest
+class ImageIntegrationTest extends FileBaseIntegrationTest
 {
     /**
      * Returns the storage dir used by the file service
@@ -268,7 +268,7 @@ class ImageIntergrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * @dep_ends \eZ\Publish\SPI\Tests\FieldType\ImageIntergrationTest::testCreateContentType
+     * @dep_ends \eZ\Publish\SPI\Tests\FieldType\ImageIntegrationTest::testCreateContentType
      */
     public function testImagesNotDeletedIfReferencesStillExist()
     {

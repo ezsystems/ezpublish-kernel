@@ -34,7 +34,7 @@ use eZ\Publish\Core\Persistence\Legacy,
  *
  * @group integration
  */
-class BinaryFileIntergrationTest extends FileBaseIntegrationTest
+class BinaryFileIntegrationTest extends FileBaseIntegrationTest
 {
     /**
      * Returns the storage dir used by the file service
@@ -274,7 +274,7 @@ class BinaryFileIntergrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * @dep_ends \eZ\Publish\SPI\Tests\FieldType\BinaryFileIntergrationTest::testCreateContentType
+     * @dep_ends \eZ\Publish\SPI\Tests\FieldType\BinaryFileIntegrationTest::testCreateContentType
      */
     public function testBinaryFilesNotDeletedIfReferencesStillExist()
     {

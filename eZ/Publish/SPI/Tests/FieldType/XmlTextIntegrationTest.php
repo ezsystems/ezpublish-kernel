@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\SPI\Tests\FieldType\XmlTextIntergrationTest class
+ * File contains: eZ\Publish\SPI\Tests\FieldType\XmlTextIntegrationTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -37,7 +37,7 @@ use eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway\LegacyStorage;
  *
  * @group integration
  */
-class XmlTextIntergrationTest extends BaseIntegrationTest
+class XmlTextIntegrationTest extends BaseIntegrationTest
 {
     /**
      * Get name of tested field tyoe
