@@ -28,4 +28,4 @@ services:
 
     ezpublish.http_cache.purge_client.http_client:
         class: %ezpublish.http_cache.purge_client.http_client.class%
-        arguments: [%ezpublish.http_cache.purge_client.http_client.timeout%]
+        arguments: [%ezpublish.http_cache.purge_client.http_client.timeout%, @?logger]
