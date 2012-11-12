@@ -45,8 +45,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         ;
     }
     /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\Controller::setTemplateEngine
-     * @covers \eZ\Publish\Core\MVC\Symfony\Controller::render
+     * @covers \eZ\Publish\Core\MVC\Symfony\Controller\Controller::setTemplateEngine
+     * @covers \eZ\Publish\Core\MVC\Symfony\Controller\Controller::render
      */
     public function testRender()
     {

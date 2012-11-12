@@ -74,7 +74,7 @@ class ContentExtension extends Twig_Extension
     protected $fieldTypeIdentifiers = array();
 
     /**
-     * @var \eZ\Publish\SPI\VariationHandlerInterface
+     * @var \eZ\Publish\SPI\Variation\VariationHandler
      */
     protected $imageVariationService;
 
