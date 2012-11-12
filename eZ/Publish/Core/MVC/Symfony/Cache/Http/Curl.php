@@ -11,12 +11,19 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
 use Buzz\Client\Curl as BaseCurl,
     Buzz\Message\RequestInterface,
-    Buzz\Message\MessageInterface;
+    Buzz\Message\MessageInterface,
+    Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 class Curl extends BaseCurl
 {
-    public function __construct( $timeout )
+    /**
+     * @var \Symfony\Component\HttpKernel\Log\LoggerInterface
+     */
+    protected $logger;
+
+    public function __construct( $timeout, LoggerInterface $logger = null )
     {
+        $this->logger = $logger;
         $this->setTimeout( $timeout );
         $this->setOption( CURLOPT_NOBODY, true );
     }
@@ -30,6 +37,10 @@ class Curl extends BaseCurl
         catch ( \RuntimeException $e )
         {
             // Catch but do not do anything as we consider the request to be ~ asynchronous
+            if ( isset( $this->logger ) )
+            {
+                $this->logger->notice( "An issue occurred while handling HttpCache purge: {$e->getMessage()}." );
+            }
         }
     }
 }
