@@ -64,6 +64,7 @@ class LanguageCode extends CriterionHandler
         return $query->expr->gt(
             $query->expr->bitAnd(
                 $this->dbHandler->quoteColumn( 'language_mask', 'ezcontentobject' ),
+                // @todo: Use a cached version of mask generator when implemented
                 $this->maskGenerator->generateLanguageMask( $languages )
             ),
             0
