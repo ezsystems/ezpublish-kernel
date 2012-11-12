@@ -26,6 +26,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\UserMetadata,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status,
@@ -94,7 +95,7 @@ class SearchHandler extends SearchHandlerInterface
     {
         // Only some criteria are supported as getting full support for all in InMemory engine is not a priority
         $match = array();
-        self::generateMatchByCriteria( array( $query->criterion ), $match );
+        $this->generateMatchByCriteria( array( $query->criterion ), $match );
 
         if ( empty( $match ) )
         {
@@ -232,13 +233,13 @@ class SearchHandler extends SearchHandlerInterface
      * @param array $match
      * @return void
      */
-    protected static function generateMatchByCriteria( array $criteria, array &$match )
+    protected function generateMatchByCriteria( array $criteria, array &$match )
     {
         foreach ( $criteria as $criterion )
         {
             if ( $criterion instanceof LogicalAnd )
             {
-                self::generateMatchByCriteria( $criterion->criteria, $match );
+                $this->generateMatchByCriteria( $criterion->criteria, $match );
             }
             else if ( $criterion instanceof ContentId && !isset( $match['id'] ) )
             {
@@ -263,6 +264,19 @@ class SearchHandler extends SearchHandlerInterface
             else if ( $criterion instanceof ObjectStateId && !isset( $match['objectStates']['id'] ) )
             {
                 $match['objectStates']['id'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
+            }
+            else if ( $criterion instanceof LanguageCode && !isset( $match['versionInfo']['languageIds'] ) )
+            {
+                $languageHandler = $this->handler->contentLanguageHandler();
+                $languageIds = array_map(
+                    function( $languageCode ) use ( $languageHandler )
+                    {
+                        return $languageHandler->loadByLanguageCode( $languageCode )->id;
+                    },
+                    $criterion->value
+                );
+
+                $match['versionInfo']['languageIds'] = $criterion->operator === Operator::IN ? $languageIds : $languageIds[0];
             }
             else if ( $criterion instanceof SectionId && !isset( $match['versionInfo']['contentInfo']['sectionId'] ) )
             {

@@ -16,6 +16,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
@@ -152,5 +153,31 @@ class SearchHandlerTest extends HandlerTest
             )
         );
         $this->assertEquals( 9, $searchResult->totalCount );
+    }
+
+    /**
+     * Test finding content by language code
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\SearchHandler::find
+     */
+    public function testFindByLanguageCode()
+    {
+        $searchResult = $this->persistenceHandler->searchHandler()->findContent(
+            new Query(
+                array(
+                    'criterion' => new LanguageCode( 'eng-US' )
+                )
+            )
+        );
+
+        $contentIds = array_map(
+            function( $searchHit )
+            {
+                return $searchHit->valueObject->versionInfo->contentInfo->id;
+            },
+            $searchResult->searchHits
+        );
+
+        $this->assertEquals( array( 4, 11, 42, 41, 51 ), $contentIds );
     }
 }

@@ -459,6 +459,10 @@ class Handler implements HandlerInterface
                                     $this->converterRegistry
                                 ),
                                 new CriterionHandler\ObjectStateId( $db ),
+                                new CriterionHandler\LanguageCode(
+                                    $db,
+                                    $this->getLanguageMaskGenerator()
+                                ),
                             )
                         ),
                         new Content\Search\Gateway\SortClauseConverter(

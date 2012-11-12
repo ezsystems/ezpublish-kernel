@@ -111,7 +111,14 @@ class LanguageLimitationType implements SPILimitationTypeInterface
      */
     public function getCriterion( APILimitationValue $value, Repository $repository )
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+        if ( empty( $value->limitationValues )  )// no limitation values
+            throw new \RuntimeException( "\$value->limitationValues is empty, it should not have been stored in the first place" );
+
+        if ( !isset( $value->limitationValues[1] ) )// 1 limitation value: EQ operation
+            return new Criterion\LanguageCode( $value->limitationValues[0] );
+
+        // several limitation values: IN operation
+        return new Criterion\LanguageCode( $value->limitationValues );
     }
 
     /**
