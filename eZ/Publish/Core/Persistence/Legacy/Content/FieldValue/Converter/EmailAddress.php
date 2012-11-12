@@ -16,7 +16,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
 
 class EmailAddress implements Converter
 {
-    const VALIDATOR_IDENTIFIER = "EMailAddressValidator";
+    const VALIDATOR_IDENTIFIER = "EmailAddressValidator";
 
     /**
      * Factory for current class

@@ -69,7 +69,7 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
     public function getValidatorSchema()
     {
         return array(
-            'EMailAddressValidator' => array()
+            'EmailAddressValidator' => array()
         );
     }
 
@@ -81,7 +81,7 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
     public function getValidValidatorConfiguration()
     {
         return array(
-            'EMailAddressValidator' => array()
+            'EmailAddressValidator' => array()
         );
     }
 

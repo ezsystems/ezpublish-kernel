@@ -21,7 +21,7 @@ class EmailAddressValidatorTest extends FieldTypeTest
 {
 
     /**
-     * This test ensure an EMailAddressValidator can be created
+     * This test ensure an EmailAddressValidator can be created
      */
     public function testConstructor()
     {

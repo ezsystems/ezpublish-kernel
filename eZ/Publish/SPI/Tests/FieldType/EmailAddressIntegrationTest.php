@@ -91,7 +91,7 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
             array( 'fieldType', 'ezemail' ),
             array( 'fieldTypeConstraints', new Content\FieldTypeConstraints( array(
                 'validators' => array(
-                    'EMailAddressValidator' => array(),
+                    'EmailAddressValidator' => array(),
                 ),
             ) ) ),
         );

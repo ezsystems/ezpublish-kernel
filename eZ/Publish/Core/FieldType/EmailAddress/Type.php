@@ -22,7 +22,7 @@ use eZ\Publish\Core\FieldType\FieldType,
 class Type extends FieldType
 {
     protected $validatorConfigurationSchema = array(
-        'EMailAddressValidator' => array()
+        'EmailAddressValidator' => array()
     );
 
     /**
@@ -35,11 +35,11 @@ class Type extends FieldType
     public function validateValidatorConfiguration( $validatorConfiguration )
     {
         $validationErrors = array();
-        $validator = new EMailAddressValidator();
+        $validator = new EmailAddressValidator();
 
         foreach ( (array)$validatorConfiguration as $validatorIdentifier => $constraints )
         {
-            if ( $validatorIdentifier !== 'EMailAddressValidator' )
+            if ( $validatorIdentifier !== 'EmailAddressValidator' )
             {
                 $validationErrors[] = new ValidationError(
                     "Validator '%validator%' is unknown",
@@ -69,10 +69,10 @@ class Type extends FieldType
     public function validate( FieldDefinition $fieldDefinition, $fieldValue )
     {
         $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
-        $constraints = isset($validatorConfiguration['EMailAddressValidator']) ?
-            $validatorConfiguration['EMailAddressValidator'] :
+        $constraints = isset($validatorConfiguration['EmailAddressValidator']) ?
+            $validatorConfiguration['EmailAddressValidator'] :
             array();
-        $validator = new EMailAddressValidator();
+        $validator = new EmailAddressValidator();
         $validator->initializeWithConstraints( $constraints );
 
         if ( !$validator->validate( $fieldValue ) )
