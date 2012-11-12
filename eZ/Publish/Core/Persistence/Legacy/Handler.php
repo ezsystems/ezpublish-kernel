@@ -458,6 +458,7 @@ class Handler implements HandlerInterface
                                     $db,
                                     $this->converterRegistry
                                 ),
+                                new CriterionHandler\ObjectStateId( $db ),
                             )
                         ),
                         new Content\Search\Gateway\SortClauseConverter(

@@ -25,6 +25,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\SectionId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\UserMetadata,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status,
@@ -121,6 +122,11 @@ class SearchHandler extends SearchHandlerInterface
                         ),
                     )
                 ),
+                'objectStates' => array(
+                    'type' => 'Content\\ObjectState',
+                    'match' => array( '_contentId' => 'id' ),
+                    'skip' => true
+                )
             )
         );
 
@@ -202,7 +208,7 @@ class SearchHandler extends SearchHandlerInterface
      * Suggests a list of values for the given prefix
      *
      * @param string $prefix
-     * @param string[] $fieldpath
+     * @param string[] $fieldPaths
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
@@ -253,6 +259,10 @@ class SearchHandler extends SearchHandlerInterface
             else if ( $criterion instanceof LocationRemoteId && !isset( $match['locations']['remoteId'] ) )
             {
                 $match['locations']['remoteId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
+            }
+            else if ( $criterion instanceof ObjectStateId && !isset( $match['objectStates']['id'] ) )
+            {
+                $match['objectStates']['id'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
             }
             else if ( $criterion instanceof SectionId && !isset( $match['versionInfo']['contentInfo']['sectionId'] ) )
             {

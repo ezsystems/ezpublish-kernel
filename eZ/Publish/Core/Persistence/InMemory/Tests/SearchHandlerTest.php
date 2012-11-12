@@ -15,6 +15,7 @@ use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\API\Repository\Values\Content\Query,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId,
     eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 
 /**
@@ -134,5 +135,22 @@ class SearchHandlerTest extends HandlerTest
         $content = $this->persistenceHandler->searchHandler()->findSingle( new LocationRemoteId( 'f3e90596361e31d496d4026eb624c983' ) );
         $this->assertTrue( $content instanceof Content );
         $this->assertEquals( 1, $content->versionInfo->contentInfo->id );
+    }
+
+    /**
+     * Test finding content by object state ID
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\SearchHandler::find
+     */
+    public function testFindByObjectStateId()
+    {
+        $searchResult = $this->persistenceHandler->searchHandler()->findContent(
+            new Query(
+                array(
+                    'criterion' => new ObjectStateId( 1 )
+                )
+            )
+        );
+        $this->assertEquals( 9, $searchResult->totalCount );
     }
 }
