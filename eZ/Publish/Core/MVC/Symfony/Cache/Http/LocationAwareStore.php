@@ -11,7 +11,8 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
 use Symfony\Component\HttpFoundation\Response,
     Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\Filesystem\Filesystem;
+    Symfony\Component\Filesystem\Filesystem,
+    Symfony\Component\Filesystem\Exception\IOException;
 
 /**
  * LocationAwareStore implements all the logic for storing cache metadata regarding locations.
@@ -128,8 +129,18 @@ class LocationAwareStore extends Store implements RequestAwarePurger
                 $fs->mirror( $locationCacheDir, $staleCacheDir );
                 $lockFile = $this->getLocationCacheLockName( $locationId );
                 file_put_contents( $lockFile, getmypid() );
-                // array of removal is in reverse order on purpose since remove() starts from the end.
-                $fs->remove( array( $staleCacheDir, $lockFile, $locationCacheDir ) );
+                try
+                {
+                    // array of removal is in reverse order on purpose since remove() starts from the end.
+                    $fs->remove( array( $staleCacheDir, $lockFile, $locationCacheDir ) );
+                }
+                catch ( IOException $e )
+                {
+                    // Log the error in the standard error log and at least try to remove the lock file
+                    error_log( $e->getMessage() );
+                    @unlink( $lockFile );
+                    return false;
+                }
             }
         }
 
