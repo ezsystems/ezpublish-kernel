@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\FieldType\Integer;
 use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\FieldType\ValidationError,
-    eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 

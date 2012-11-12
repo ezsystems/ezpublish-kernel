@@ -27,7 +27,6 @@ use eZ\Publish\API\Repository\TrashService as TrashServiceInterface,
 
     eZ\Publish\API\Repository\Values\Content\SearchResult,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion,
-    eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId,
     eZ\Publish\API\Repository\Values\Content\Query\SortClause,
     DateTime;
 
