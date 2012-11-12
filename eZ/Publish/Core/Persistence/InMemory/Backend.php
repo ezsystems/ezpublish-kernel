@@ -509,6 +509,17 @@ class Backend
                         $value->$propertyName = $propertyValue;
                     }
                 }
+                else if ( $type === "Content\\UrlAlias" && $prop === "id" )
+                {
+                    // id should be <parent>-<hash>, but as there is no property for link in VO and we need it in handler,
+                    // returning everything here
+                    // Note: before returning in handler id must be overwritten with <parent>-<hash>
+                    $value = array(
+                        "id" => $data["id"],
+                        "parent" => $data["parent"],
+                        "link" => $data["link"],
+                    );
+                }
                 else
                 {
                     $value = $data[$prop];
