@@ -72,10 +72,8 @@ parameters:
     ezpublish.fieldType.ezuser.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
     ezpublish.fieldType.ezuser.storage_gateway.class: eZ\Publish\Core\FieldType\User\UserStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezpage.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Page
-    ezpublish.fieldType.ezpaex.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
 
-    # Temporary workaround  to treat those field types as a ezstring until proper implementation will be in place
-    ezpublish.fieldType.ezcomcomments.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
+    ezpublish.fieldType.eznull.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
 
 services:
     ezpublish.api.storage_engine.in_memory:
@@ -259,18 +257,10 @@ services:
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezgmaplocation, identifier: LegacyStorage}
 
-    # Temporary workaround for ezemail, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
-    # a ezstring until proper implementation will be in place
-
     ezpublish.fieldType.ezemail.converter:
         class: %ezpublish.fieldType.ezemail.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezemail, lazy: true, callback: '::create'}
-
-    ezpublish.fieldType.ezcomcomments.converter:
-        class: %ezpublish.fieldType.ezcomcomments.converter.class%
-        tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezcomcomments, lazy: true, callback: '::create'}
 
     ezpublish.fieldType.ezobjectrelation.converter:
         class: %ezpublish.fieldType.ezobjectrelation.converter.class%
@@ -298,7 +288,105 @@ services:
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezuser, identifier: LegacyStorage}
 
+    # Not implemented converters
+    # Configured to use the Null converter which does not nothing
+    ezpublish.fieldType.ezdate.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezdate, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezenum.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezenum, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezidentifier.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezidentifier, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezinisetting.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezinisetting, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezisbn.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezisbn, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezmatrix.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezmatrix, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezmultioption.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezmultioption, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezmultioption2.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezmultioption2, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezmultiprice.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezmultiprice, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezoption.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezoption, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezpackage.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezpackage, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezprice.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezprice, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezproductcategory.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezproductcategory, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezrangeoption.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezrangeoption, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezsubtreesubscription.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezsubtreesubscription, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.eztime.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: eztime, lazy: true, callback: '::create'}
+
+    # not implemented converters from extensions
+    ezpublish.fieldType.ezcomcomments.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezcomcomments, lazy: true, callback: '::create'}
+
     ezpublish.fieldType.ezpaex.converter:
-        class: %ezpublish.fieldType.ezstring.converter.class%
+        class: %ezpublish.fieldType.eznull.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezpaex, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezsurvey.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezsurvey, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.eztags.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: eztags, lazy: true, callback: '::create'}
