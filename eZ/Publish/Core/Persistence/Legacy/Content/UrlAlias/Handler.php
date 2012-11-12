@@ -363,32 +363,41 @@ class Handler implements UrlAliasHandlerInterface
         $pathElements = explode( "/", $path );
         $topElement = array_pop( $pathElements );
         $languageId = $this->languageHandler->loadByLanguageCode( $languageCode )->id;
-        $createdPath = array();
         $parentId = 0;
 
         // Handle all path elements except topmost one
-        foreach ( $pathElements as $pathElement )
+        $isPathNew = false;
+        foreach ( $pathElements as $level => $pathElement )
         {
-            $pathElement = $this->convertToAlias( $pathElement, "noname" . count( $createdPath ) + 1 );
+            $pathElement = $this->convertToAlias( $pathElement, "noname" . $level + 1 );
             $pathElementMD5 = $this->getHash( $pathElement );
-            $row = $this->gateway->loadRow( $parentId, $pathElementMD5 );
+            if ( !$isPathNew )
+            {
+                $row = $this->gateway->loadRow( $parentId, $pathElementMD5 );
+                if ( empty( $row ) )
+                {
+                    $isPathNew = true;
+                }
+                else
+                {
+                    $parentId = $row["link"];
+                }
+            }
 
-            $parentId = empty( $row )
-                ? $this->insertNopEntry( $parentId, $pathElement, $pathElementMD5 )
-                : $row["link"];
-
-            $createdPath[] = $pathElement;
+            if ( $isPathNew )
+            {
+                $parentId = $this->insertNopEntry( $parentId, $pathElement, $pathElementMD5 );
+            }
         }
 
         // Handle topmost path element
-        $topElement = $this->convertToAlias( $topElement, "noname" . count( $createdPath ) + 1 );
+        $topElement = $this->convertToAlias( $topElement, "noname" . count( $pathElements ) + 1 );
 
         // If last (next to topmost) entry parent is special root entry we handle topmost entry as first level entry
         // That is why we need to reset $parentId to 0 and empty $createdPath
         if ( $parentId != 0 && $this->gateway->isRootEntry( $parentId ) )
         {
             $parentId = 0;
-            $createdPath = array();
         }
 
         $topElementMD5 = $this->getHash( $topElement );
@@ -403,10 +412,13 @@ class Handler implements UrlAliasHandlerInterface
             "is_original" => 1
         );
         // Try to load topmost element
-        $row = $this->gateway->loadRow( $parentId, $topElementMD5 );
+        if ( !$isPathNew )
+        {
+            $row = $this->gateway->loadRow( $parentId, $topElementMD5 );
+        }
 
         // If nothing was returned perform insert
-        if ( empty( $row ) )
+        if ( $isPathNew || empty( $row ) )
         {
             $data["lang_mask"] = $languageId | (int)$alwaysAvailable;
             $this->gateway->insertRow( $data );
@@ -429,8 +441,6 @@ class Handler implements UrlAliasHandlerInterface
         {
             throw new ForbiddenException( "Path '$path' already exists for the given language" );
         }
-
-        $createdPath[] = $topElement;
 
         return $this->mapper->extractUrlAliasFromData( $data );
     }
