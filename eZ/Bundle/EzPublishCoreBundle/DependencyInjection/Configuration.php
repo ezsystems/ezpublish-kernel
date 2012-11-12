@@ -37,6 +37,7 @@ class Configuration implements ConfigurationInterface
 
         $this->addSiteaccessSection( $rootNode );
         $this->addImageMagickSection( $rootNode );
+        $this->addHttpCacheSection( $rootNode );
         $this->addSystemSection( $rootNode );
 
         return $treeBuilder;
@@ -166,6 +167,39 @@ EOT;
                         ->arrayNode( 'filters' )
                             ->info( $filtersInfo )
                             ->example( array( 'geometry/scaledownonly' => '"-geometry {1}x{2}>"' ) )
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    private function addHttpCacheSection( ArrayNodeDefinition $rootNode )
+    {
+        $purgeTypeInfo = <<<EOT
+Http cache purge type.
+#   Cache purge for content/locations is triggered when needed (e.g. on publish) and will result in one or several Http PURGE requests.
+#   Can be "single" (default) or "multiple".
+#   If "multiple" is used, an Http PURGE request will be sent for each location, with X-Location-Id header.
+#   If "single" is used, only one Http PURGE request will be sent, with X-Group-Location-Id header (each location id will be separated by "; ".
+EOT;
+
+        $rootNode
+            ->children()
+                ->arrayNode( 'http_cache' )
+                    ->info( 'Http cache configuration' )
+                    ->children()
+                        ->scalarNode( 'purge_type' )
+                            ->info( $purgeTypeInfo )
+                            ->defaultValue( 'single' )
+                        ->end()
+                        ->scalarNode( 'timeout' )
+                            ->info( 'Timeout for each Http PURGE request, in seconds.' )
+                            ->validate()
+                                ->ifTrue( function ( $v ) { return !is_int( $v ); } )
+                                ->thenInvalid( 'ezpublish.http_cache.timeout can only be an integer.' )
+                            ->end()
+                            ->defaultValue( 1 )
                         ->end()
                     ->end()
                 ->end()
