@@ -71,6 +71,9 @@ class Mapper
         $contentInfo->alwaysAvailable = $struct->alwaysAvailable;
         $contentInfo->remoteId = $struct->remoteId;
         $contentInfo->mainLanguageCode = $this->languageHandler->load( $struct->initialLanguageId )->languageCode;
+        $contentInfo->name = isset( $struct->name[$contentInfo->mainLanguageCode] )
+            ? $struct->name[$contentInfo->mainLanguageCode]
+            : "";
         // For drafts published and modified timestamps should be 0
         $contentInfo->publicationDate = 0;
         $contentInfo->modificationDate = 0;

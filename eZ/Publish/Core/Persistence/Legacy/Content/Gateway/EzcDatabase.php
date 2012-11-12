@@ -102,9 +102,10 @@ class EzcDatabase extends Gateway
      */
     public function insertContentObject( CreateStruct $struct, $currentVersionNo = 1 )
     {
-        if ( isset( $struct->name['always-available'] ) )
+        $initialLanguageCode = $this->languageHandler->load( $struct->initialLanguageId )->languageCode;
+        if ( isset( $struct->name[$initialLanguageCode] ) )
         {
-            $name = $struct->name[$struct->name['always-available']];
+            $name = $struct->name[$initialLanguageCode];
         }
         else
         {
@@ -122,7 +123,7 @@ class EzcDatabase extends Gateway
             $q->bindValue( $currentVersionNo, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'name' ),
-            $q->bindValue( $name )
+            $q->bindValue( $name, null, \PDO::PARAM_STR )
         )->set(
             $this->dbHandler->quoteColumn( 'contentclass_id' ),
             $q->bindValue( $struct->typeId, null, \PDO::PARAM_INT )
@@ -137,7 +138,7 @@ class EzcDatabase extends Gateway
             $q->bindValue( $struct->initialLanguageId, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'remote_id' ),
-            $q->bindValue( $struct->remoteId )
+            $q->bindValue( $struct->remoteId, null, \PDO::PARAM_STR )
         )->set(
             $this->dbHandler->quoteColumn( 'modified' ),
             $q->bindValue( 0, null, \PDO::PARAM_INT )
