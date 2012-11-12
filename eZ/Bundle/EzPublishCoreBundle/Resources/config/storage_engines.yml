@@ -385,3 +385,8 @@ services:
         class: %ezpublish.fieldType.eznull.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezsurvey, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.eztags.converter:
+        class: %ezpublish.fieldType.eznull.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: eztags, lazy: true, callback: '::create'}

@@ -673,3 +673,9 @@ services:
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezsurvey}
+
+    ezpublish.fieldType.eztags:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: eztags}
