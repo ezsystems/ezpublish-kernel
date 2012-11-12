@@ -43,35 +43,23 @@ class PurgeClient implements PurgeClientInterface
     }
 
     /**
-     * Sets the cache resource(s) to purge (e.g. array of URI to purge in a reverse proxy)
+     * Triggers the cache purge $cacheElements.
      *
-     * @param array $locationIds
+     * @param mixed $locationIds Cache resource(s) to purge (array of locationId to purge in the reverse proxy)
      * @return void
      */
-    public function setCacheElements( $locationIds )
+    public function purge( $locationIds )
     {
-        if ( !is_array( $locationIds ) )
-        {
-            $locationIds = array( $locationIds );
-        }
-
-        $this->locationIds = $locationIds;
-    }
-
-    /**
-     * Triggers the cache purge of the elements registered via {@link PurgeClientInterface::setCacheElements}
-     *
-     * @return void
-     */
-    public function purge()
-    {
-        if ( empty( $this->locationIds ) )
+        if ( empty( $locationIds ) )
             return;
+
+        if ( !is_array( $locationIds ) )
+            $locationIds = array( $locationIds );
 
         // Purging all HTTP gateways
         foreach ($this->purgeServers as $server)
         {
-            $this->doPurge( $server, $this->locationIds );
+            $this->doPurge( $server, $locationIds );
 
             $client = $this->httpBrowser->getClient();
             if ( $client instanceof BatchClientInterface )
