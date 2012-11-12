@@ -48,15 +48,13 @@ parameters:
     ezpublish.fieldType.ezpage.pageService.class: eZ\Publish\Core\FieldType\Page\Service
     ezpublish.fieldtype.ezpage.zoneDefinition: {}
     ezpublish.fieldType.ezpage.blockDefinition: {}
-    # Temporary workaround to treat those field types as a ezstring until proper implementation will be in place
+
     ezpublish.fieldType.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\Type
     ezpublish.fieldType.ezgmaplocation.externalStorage.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage
-    ezpublish.fieldType.ezcomcomments.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezobjectrelationlist.class: eZ\Publish\Core\FieldType\RelationList\Type
     ezpublish.fieldType.ezobjectrelationlist.externalStorage.class: eZ\Publish\Core\FieldType\Relation\RelationStorage
     ezpublish.fieldType.ezuser.class: eZ\Publish\Core\FieldType\User\Type
     ezpublish.fieldType.ezuser.externalStorage.class: eZ\Publish\Core\FieldType\User\UserStorage
-    ezpublish.fieldType.ezpaex.class: eZ\Publish\Core\FieldType\Null\Type
     ezpublish.fieldType.ezcountry.class: eZ\Publish\Core\FieldType\Country\Type
     ezpublish.fieldType.ezcountry.data:
         AF: {Name: "Afghanistan", Alpha2: "AF", Alpha3: "AFG", IDC: "93"}
@@ -306,6 +304,8 @@ parameters:
         ZM: {Name: "Zambia", Alpha2: "ZM", Alpha3: "ZMB", IDC: "260"}
         ZW: {Name: "Zimbabwe", Alpha2: "ZW", Alpha3: "ZWE", IDC: "263"}
 
+    ezpublish.fieldType.eznull.class: eZ\Publish\Core\FieldType\Null\Type
+
 services:
     ezpublish.fieldType:
         class: %ezpublish.fieldType.class%
@@ -520,9 +520,6 @@ services:
         tags:
             - {name: ezpublish.fieldType, alias: ezgmaplocation}
 
-    # Temporary workaround for ezemail, ezgmaplocation, ezcomcomments, ezobjectrelationlist to treat those field types as
-    # a ezstring until proper implementation will be in place
-
     ezpublish.fieldType.ezemail:
         class: %ezpublish.fieldType.ezemail.class%
         parent: ezpublish.fieldType
@@ -534,12 +531,6 @@ services:
         arguments: [[]]
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezgmaplocation}
-
-    ezpublish.fieldType.ezcomcomments:
-        class: %ezpublish.fieldType.ezcomcomments.class%
-        parent: ezpublish.fieldType
-        tags:
-            - {name: ezpublish.fieldType, alias: ezcomcomments}
 
     ezpublish.fieldType.ezobjectrelationlist:
         class: %ezpublish.fieldType.ezobjectrelationlist.class%
@@ -566,8 +557,119 @@ services:
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezuser}
 
+    # Not implemented fieldtypes
+    # Configured to use the Null type to not throw exception
+    ezpublish.fieldType.ezdate:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezdate}
+
+    ezpublish.fieldType.ezenum:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezenum}
+
+    ezpublish.fieldType.ezidentifier:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezidentifier}
+
+    ezpublish.fieldType.ezinisetting:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezinisetting}
+
+    ezpublish.fieldType.ezisbn:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezisbn}
+
+    ezpublish.fieldType.ezmatrix:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezmatrix}
+
+    ezpublish.fieldType.ezmultioption:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezmultioption}
+
+    ezpublish.fieldType.ezmultioption2:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezmultioption2}
+
+    ezpublish.fieldType.ezmultiprice:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezmultiprice}
+
+    ezpublish.fieldType.ezoption:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezoption}
+
+    ezpublish.fieldType.ezpackage:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezpackage}
+
+    ezpublish.fieldType.ezprice:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezprice}
+
+    ezpublish.fieldType.ezproductcategory:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezproductcategory}
+
+    ezpublish.fieldType.ezrangeoption:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezrangeoption}
+
+    ezpublish.fieldType.ezsubtreesubscription:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezsubtreesubscription}
+
+    ezpublish.fieldType.eztime:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: eztime}
+
+    # not implemented fieldtypes from extensions
+    ezpublish.fieldType.ezcomcomments:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezcomcomments}
+
     ezpublish.fieldType.ezpaex:
-        class: %ezpublish.fieldType.ezpaex.class%
+        class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezpaex}
+
+    ezpublish.fieldType.ezsurvey:
+        class: %ezpublish.fieldType.eznull.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezsurvey}
