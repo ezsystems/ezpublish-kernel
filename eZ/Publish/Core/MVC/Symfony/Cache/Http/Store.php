@@ -15,7 +15,9 @@ use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
 
 /**
  * Store implements all the logic for storing cache metadata (Request and Response headers).
- * This class is a enhanced version of Symfony\Component\HttpKernel\HttpCache\Store.
+ * This class is a enhanced version of Symfony\Component\HttpKernel\HttpCache\Store :
+ *  - Changes $root visibility from private to protected
+ *  - Adds generateContentDigest() protected method allowing some control on content digest generation
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
