@@ -463,6 +463,7 @@ class Handler implements HandlerInterface
                                     $db,
                                     $this->getLanguageMaskGenerator()
                                 ),
+                                new CriterionHandler\Visibility( $db ),
                             )
                         ),
                         new Content\Search\Gateway\SortClauseConverter(

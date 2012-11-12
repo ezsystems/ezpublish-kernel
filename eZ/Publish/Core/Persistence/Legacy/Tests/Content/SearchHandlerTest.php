@@ -158,6 +158,9 @@ class SearchHandlerTest extends LanguageAwareTestCase
                             $this->getDatabaseHandler(),
                             $this->getLanguageMaskGenerator()
                         ),
+                        new Content\Search\Gateway\CriterionHandler\Visibility(
+                            $this->getDatabaseHandler()
+                        ),
                     )
                 ),
                 new Content\Search\Gateway\SortClauseConverter(),
@@ -1252,6 +1255,31 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $result = $locator->findContent( new Query( array(
             'criterion' => new Criterion\LanguageCode(
                 'eng-US', 'eng-GB'
+            ),
+            'limit' => 10,
+        ) ) );
+
+        $this->assertEquals(
+            array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
+            array_map(
+                function ( $hit ) { return $hit->valueObject->versionInfo->contentInfo->id; },
+                $result->searchHits
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Visibility
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testVisibilityFilter()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->findContent( new Query( array(
+            'criterion' => new Criterion\Visibility(
+                Criterion\Visibility::VISIBILITY_VISIBLE
             ),
             'limit' => 10,
         ) ) );
