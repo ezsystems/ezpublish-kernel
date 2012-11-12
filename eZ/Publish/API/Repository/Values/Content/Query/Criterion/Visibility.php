@@ -21,23 +21,23 @@ class Visibility extends Criterion implements CriterionInterface
     /**
      * Visibility constant: visible
      */
-    const VISIBILITY_VISIBLE = 0;
+    const VISIBLE = 0;
 
     /**
      * Visibility constant: hidden
      */
-    const VISIBILITY_HIDDEN = 1;
+    const HIDDEN = 1;
 
     /**
      * Creates a new Visibility criterion
      *
-     * @param integer $value Visibility: self::VISIBILITY_VISIBLE, self::VISIBILITY_HIDDEN
+     * @param integer $value Visibility: self::VISIBLE, self::HIDDEN
      *
      * @throws \InvalidArgumentException
      */
     public function __construct( $value )
     {
-        if ( $value !== self::VISIBILITY_VISIBLE && $value !== self::VISIBILITY_HIDDEN )
+        if ( $value !== self::VISIBLE && $value !== self::HIDDEN )
         {
             throw new InvalidArgumentException( "Invalid visibility value $value" );
         }

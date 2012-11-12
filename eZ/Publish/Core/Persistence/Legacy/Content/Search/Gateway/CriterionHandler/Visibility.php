@@ -46,7 +46,7 @@ class Visibility extends CriterionHandler
     {
         $subSelect = $query->subSelect();
 
-        if ( $criterion->value[0] === Criterion\Visibility::VISIBILITY_VISIBLE )
+        if ( $criterion->value[0] === Criterion\Visibility::VISIBLE )
         {
             $expression = $query->expr->lAnd(
                 $query->expr->eq(

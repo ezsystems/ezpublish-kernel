@@ -1279,7 +1279,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
 
         $result = $locator->findContent( new Query( array(
             'criterion' => new Criterion\Visibility(
-                Criterion\Visibility::VISIBILITY_VISIBLE
+                Criterion\Visibility::VISIBLE
             ),
             'limit' => 10,
         ) ) );
