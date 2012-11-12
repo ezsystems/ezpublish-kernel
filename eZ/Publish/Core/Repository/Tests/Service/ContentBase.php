@@ -13,6 +13,7 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\Core\Repository\Values\Content\ContentInfo,
     eZ\Publish\API\Repository\Values\Content\LocationCreateStruct,
     eZ\Publish\API\Repository\Values\Content\Content as APIContent,
+    eZ\Publish\API\Repository\Values\Content\Relation,
     eZ\Publish\Core\Repository\Values\Content\Content,
     eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
@@ -861,7 +862,6 @@ abstract class ContentBase extends BaseServiceTest
         $this->assertCreateContentStructValuesVersionInfo( $data );
         $this->assertCreateContentStructValuesRelations( $data );
         $this->assertCreateContentStructValuesFields( $data );
-        $this->assertCreateContentStructValuesNodeAssignments( $data );
     }
 
     /**
@@ -879,8 +879,7 @@ abstract class ContentBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 "id" => $contentDraft->id,
-                // @todo
-                //"name" => ,
+                "name" => $contentCreate->fields[0]->value,
                 "sectionId" => $contentCreate->sectionId,
                 "currentVersionNo" => 1,
                 "published" => false,
@@ -892,13 +891,15 @@ abstract class ContentBase extends BaseServiceTest
                 "mainLanguageCode" => $contentCreate->mainLanguageCode,
                 // @todo: should be null, InMemory skips creating node assignments and creates locations right away
                 //"mainLocationId" => null,
-                // implementation properties
-                // @todo: test content type
-                //"contentTypeId" => $contentCreate->contentType->id
+                //"contentType"
             ),
-            $contentDraft->contentInfo
+            $contentDraft->versionInfo->contentInfo
         );
         $this->assertNotNull( $contentDraft->id );
+        $this->assertEquals(
+            $contentCreate->contentType->id,
+            $contentDraft->versionInfo->contentInfo->contentType->id
+        );
     }
 
     /**
@@ -924,10 +925,6 @@ abstract class ContentBase extends BaseServiceTest
                 "status" => VersionInfo::STATUS_DRAFT,
                 "initialLanguageCode" => $contentCreate->mainLanguageCode,
                 //"languageCodes"
-                // implementation properties
-                // @todo: test content draft id
-                //"contentId" => $contentDraft->id,
-                // @todo
                 "names" => array(
                     "eng-GB" => "value for field definition with empty default value",
                     "eng-US" => "value for field definition with empty default value"
@@ -1037,16 +1034,6 @@ abstract class ContentBase extends BaseServiceTest
         $languageCodes = array( $mainLanguageCode );
         foreach ( $fields as $field ) $languageCodes[] = $field->languageCode;
         return array_unique( $languageCodes );
-    }
-
-    /**
-     *
-     *
-     * @param array $data
-     */
-    protected function assertCreateContentStructValuesNodeAssignments( array $data )
-    {
-        //@todo implement
     }
 
     /**
@@ -1344,8 +1331,8 @@ abstract class ContentBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 "ownerId" => $updateStruct->ownerId,
-                // @todo test name change after name scheme resolver is implemented
-                //"name" => $updateStruct->name,
+                // not changeable through MetadataUpdateStruct
+                //"name"
                 "publishedDate" => $updateStruct->publishedDate,
                 "modificationDate" => $updateStruct->modificationDate,
                 "mainLanguageCode" => $updateStruct->mainLanguageCode,
@@ -2566,6 +2553,252 @@ abstract class ContentBase extends BaseServiceTest
 
         foreach ( $translationValues as $propertyName => $propertyValue )
             $this->assertNull( $propertyValue, "Property '{$propertyName}' initial value should be null'" );
+    }
+
+    /**
+     * Test for the loadRelations() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadRelations
+     * @covers \eZ\Publish\Core\Repository\ContentService::addRelation
+     */
+    public function testLoadRelations()
+    {
+        $contentDraft = $this->createTestContent();
+        $contentService = $this->repository->getContentService();
+
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
+
+        $contentService->addRelation(
+            $contentDraft->getVersionInfo(),
+            $mediaContentInfo
+        );
+
+        $relations = $contentService->loadRelations( $contentDraft->versionInfo );
+
+        $this->assertRelations( $relations, $contentDraft->contentInfo, $mediaContentInfo );
+    }
+
+    protected function assertRelations( $relations, $sourceContentInfo, $destinationContentInfo )
+    {
+        self::assertInternalType( "array", $relations );
+        self::assertCount( 1, $relations );
+        self::assertInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\Content\\Relation", $relations[0] );
+        self::assertNotNull( $relations[0]->id );
+        self::assertEquals( Relation::COMMON, $relations[0]->type );
+        self::assertNull( $relations[0]->sourceFieldDefinitionIdentifier );
+        self::assertEquals( $sourceContentInfo, $relations[0]->sourceContentInfo );
+        self::assertEquals( $destinationContentInfo, $relations[0]->destinationContentInfo );
+    }
+
+    /**
+     * Test for the loadRelations() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadRelations
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testLoadRelationsThrowsUnauthorizedException()
+    {
+        $contentDraft = $this->createTestContent();
+        $contentService = $this->repository->getContentService();
+
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
+
+        $contentService->addRelation(
+            $contentDraft->getVersionInfo(),
+            $mediaContentInfo
+        );
+
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $contentService->loadRelations( $contentDraft->versionInfo );
+    }
+
+    /**
+     * Test for the loadReverseRelations() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadReverseRelations
+     */
+    public function testLoadReverseRelations()
+    {
+        $contentDraft = $this->createTestContent();
+        $contentService = $this->repository->getContentService();
+
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
+
+        $contentService->addRelation(
+            $contentDraft->getVersionInfo(),
+            $mediaContentInfo
+        );
+
+        $relations = $contentService->loadReverseRelations( $mediaContentInfo );
+
+        $this->assertRelations( $relations, $contentDraft->contentInfo, $mediaContentInfo );
+    }
+
+    /**
+     * Test for the loadReverseRelations() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadReverseRelations
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testLoadReverseRelationsThrowsUnauthorizedException()
+    {
+        $contentDraft = $this->createTestContent();
+        $contentService = $this->repository->getContentService();
+
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
+
+        $contentService->addRelation(
+            $contentDraft->getVersionInfo(),
+            $mediaContentInfo
+        );
+
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $contentService->loadReverseRelations( $mediaContentInfo );
+    }
+
+    /**
+     * Test for the addRelation() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::addRelation
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testAddRelationThrowsUnauthorizedException()
+    {
+        $contentDraft = $this->createTestContent();
+        $contentService = $this->repository->getContentService();
+
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
+
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $contentService->addRelation(
+            $contentDraft->getVersionInfo(),
+            $mediaContentInfo
+        );
+    }
+
+    /**
+     * Test for the addRelation() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::addRelation
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     */
+    public function testAddRelationThrowsBadStateException()
+    {
+        $contentService = $this->repository->getContentService();
+        $contentDraft = $this->createTestContent();
+        $publishedContent = $contentService->publishVersion( $contentDraft->versionInfo );
+
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
+
+        $contentService->addRelation(
+            $publishedContent->getVersionInfo(),
+            $mediaContentInfo
+        );
+    }
+
+    /**
+     * Test for the deleteRelation() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteRelation
+     */
+    public function testDeleteRelation()
+    {
+        $contentDraft = $this->createTestContent();
+        $contentService = $this->repository->getContentService();
+
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
+
+        $contentService->addRelation(
+            $contentDraft->getVersionInfo(),
+            $mediaContentInfo
+        );
+
+        $contentService->deleteRelation(
+            $contentDraft->getVersionInfo(),
+            $mediaContentInfo
+        );
+
+        $relations = $contentService->loadRelations( $contentDraft->versionInfo );
+
+        self::assertCount( 0, $relations );
+    }
+
+    /**
+     * Test for the deleteRelation() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteRelation
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testDeleteRelationThrowsUnauthorizedException()
+    {
+        $contentDraft = $this->createTestContent();
+        $contentService = $this->repository->getContentService();
+
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
+
+        $contentService->addRelation(
+            $contentDraft->getVersionInfo(),
+            $mediaContentInfo
+        );
+
+        // Set anonymous as current user
+        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+
+        $contentService->deleteRelation(
+            $contentDraft->getVersionInfo(),
+            $mediaContentInfo
+        );
+    }
+
+    /**
+     * Test for the deleteRelation() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteRelation
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     */
+    public function testDeleteRelationThrowsBadStateException()
+    {
+        $contentService = $this->repository->getContentService();
+        $contentDraft = $this->createTestContent();
+
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
+
+        $contentService->addRelation(
+            $contentDraft->getVersionInfo(),
+            $mediaContentInfo
+        );
+
+        $publishedContent = $contentService->publishVersion( $contentDraft->versionInfo );
+
+        $contentService->deleteRelation(
+            $publishedContent->getVersionInfo(),
+            $mediaContentInfo
+        );
+    }
+
+    /**
+     * Test for the deleteRelation() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteRelation
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testDeleteRelationThrowsInvalidArgumentException()
+    {
+        $contentDraft = $this->createTestContent();
+        $contentService = $this->repository->getContentService();
+
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
+
+        $contentService->deleteRelation(
+            $contentDraft->getVersionInfo(),
+            $mediaContentInfo
+        );
     }
 
     /**
