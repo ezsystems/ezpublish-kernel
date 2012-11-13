@@ -83,4 +83,21 @@ class PurgeClient implements PurgeClientInterface
             $this->httpBrowser->call( $server, 'PURGE', array( 'X-Location-Id' => $locationId ) );
         }
     }
+
+    /**
+     * Purges all content elements currently in cache.
+     *
+     * @return void
+     */
+    public function purgeAll()
+    {
+        foreach ( $this->purgeServers as $server )
+        {
+            $this->httpBrowser->call( $server, 'PURGE', array( 'X-Location-Id' => '*' ) );
+
+            $client = $this->httpBrowser->getClient();
+            if ( $client instanceof BatchClientInterface )
+                $client->flush();
+        }
+    }
 }

@@ -19,7 +19,14 @@ interface GatewayCachePurger
      * It's up to the implementor to decide whether to purge $cacheElements right away or to delegate to a separate process.
      *
      * @param mixed $cacheElements
-     * @return void
+     * @return mixed
      */
     public function purge( $cacheElements );
+
+    /**
+     * Triggers the cache purge for all content in cache.
+     *
+     * @return mixed
+     */
+    public function purgeAll();
 }

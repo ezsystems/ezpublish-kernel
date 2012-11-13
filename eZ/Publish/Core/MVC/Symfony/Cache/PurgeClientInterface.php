@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache;
 
 interface PurgeClientInterface
 {
-
     /**
      * Triggers the cache purge $cacheElements.
      *
@@ -19,4 +18,11 @@ interface PurgeClientInterface
      * @return void
      */
     public function purge( $cacheElements );
+
+    /**
+     * Purges all content elements currently in cache.
+     *
+     * @return void
+     */
+    public function purgeAll();
 }

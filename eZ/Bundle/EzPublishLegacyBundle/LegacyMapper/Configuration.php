@@ -93,6 +93,7 @@ class Configuration implements EventSubscriberInterface
 
         // Register content/cache event listener
         ezpEvent::getInstance()->attach( 'content/cache', array( $this->gatewayCachePurger, 'purge' ) );
+        ezpEvent::getInstance()->attach( 'content/cache/all', array( $this->gatewayCachePurger, 'purgeAll' ) );
     }
 
     private function getImageSettings()

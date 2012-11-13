@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response,
 /**
  * LocationAwareStore implements all the logic for storing cache metadata regarding locations.
  */
-class LocationAwareStore extends Store implements RequestAwarePurger
+class LocationAwareStore extends Store implements ContentPurger
 {
     const LOCATION_CACHE_DIR = 'ezlocation',
           LOCATION_STALE_CACHE_DIR = 'ezlocation_stale';
@@ -60,23 +60,26 @@ class LocationAwareStore extends Store implements RequestAwarePurger
             $prefix = substr( $key, 0, $pos ) . DIRECTORY_SEPARATOR;
             $key = substr( $key, $pos + 1 );
 
-            // If cache purge is in progress, serve stale cache instead of regular cache
             list( $locationCacheDir, $locationId ) = explode( '/', $prefix );
-            $cacheLockFile = $this->getLocationCacheLockName( $locationId );
-            if ( is_file( $cacheLockFile ) )
+            // If cache purge is in progress, serve stale cache instead of regular cache.
+            // We first check for a global cache purge, then for the current location.
+            foreach ( array( $this->getLocationCacheLockName(), $this->getLocationCacheLockName( $locationId ) ) as $cacheLockFile )
             {
-                if ( function_exists( 'posix_kill' ) )
+                if ( is_file( $cacheLockFile ) )
                 {
-                    // Check if purge process is still running. If not, remove the lock file to unblock future cache purge
-                    if ( !posix_kill( file_get_contents( $cacheLockFile ), 0 ) )
+                    if ( function_exists( 'posix_kill' ) )
                     {
-                        $fs = new Filesystem();
-                        $fs->remove( array( $cacheLockFile, $this->getLocationCacheDir( $locationId ) ) );
-                        goto returnCachePath;
+                        // Check if purge process is still running. If not, remove the lock file to unblock future cache purge
+                        if ( !posix_kill( file_get_contents( $cacheLockFile ), 0 ) )
+                        {
+                            $fs = new Filesystem();
+                            $fs->remove( array( $cacheLockFile, $this->getLocationCacheDir( $locationId ) ) );
+                            goto returnCachePath;
+                        }
                     }
-                }
 
-                $prefix = str_replace( static::LOCATION_CACHE_DIR, static::LOCATION_STALE_CACHE_DIR, $prefix );
+                    $prefix = str_replace( static::LOCATION_CACHE_DIR, static::LOCATION_STALE_CACHE_DIR, $prefix );
+                }
             }
         }
 
@@ -104,6 +107,12 @@ class LocationAwareStore extends Store implements RequestAwarePurger
             return $this->purge( $request->getUri() );
         }
 
+        // Purge everything
+        if ( $request->headers->get( 'X-Location-Id' ) === '*' )
+        {
+            return $this->purgeAllContent();
+        }
+
         if ( $request->headers->has( 'X-Group-Location-Id' ) )
             $aLocationId = explode( '; ', $request->headers->get( 'X-Group-Location-Id' ) );
         else
@@ -117,30 +126,7 @@ class LocationAwareStore extends Store implements RequestAwarePurger
             $locationCacheDir = $this->getLocationCacheDir( $locationId );
             if ( file_exists( $locationCacheDir ) )
             {
-                // 1. Copy cache files to stale cache dir
-                // 2. Place a lock file indicating to use the stale cache
-                // 3. Remove real cache dir
-                // 4. Remove lock file
-                // 5. Remove stale cache dir
-                // Note that there is no need to remove the meta-file
-                $staleCacheDir = str_replace( static::LOCATION_CACHE_DIR, static::LOCATION_STALE_CACHE_DIR, $locationCacheDir );
-                $fs = new Filesystem();
-                $fs->mkdir( $staleCacheDir );
-                $fs->mirror( $locationCacheDir, $staleCacheDir );
-                $lockFile = $this->getLocationCacheLockName( $locationId );
-                file_put_contents( $lockFile, getmypid() );
-                try
-                {
-                    // array of removal is in reverse order on purpose since remove() starts from the end.
-                    $fs->remove( array( $staleCacheDir, $lockFile, $locationCacheDir ) );
-                }
-                catch ( IOException $e )
-                {
-                    // Log the error in the standard error log and at least try to remove the lock file
-                    error_log( $e->getMessage() );
-                    @unlink( $lockFile );
-                    return false;
-                }
+                $this->purgeLocation( $locationId );
             }
         }
 
@@ -148,13 +134,67 @@ class LocationAwareStore extends Store implements RequestAwarePurger
     }
 
     /**
+     * Purges all cached content
+     *
+     * @return bool
+     */
+    public function purgeAllContent()
+    {
+        if ( file_exists( $this->getLocationCacheDir() ) )
+        {
+            return $this->purgeLocation( null );
+        }
+
+        return false;
+    }
+
+    /**
+     * Purges cache for $locationId
+     *
+     * @param int|null $locationId. If null, all locations will be purged.
+     * @return bool
+     */
+    private function purgeLocation( $locationId )
+    {
+        $locationCacheDir = $this->getLocationCacheDir( $locationId );
+        if ( file_exists( $locationCacheDir ) )
+        {
+            // 1. Copy cache files to stale cache dir
+            // 2. Place a lock file indicating to use the stale cache
+            // 3. Remove real cache dir
+            // 4. Remove lock file
+            // 5. Remove stale cache dir
+            // Note that there is no need to remove the meta-file
+            $staleCacheDir = str_replace( static::LOCATION_CACHE_DIR, static::LOCATION_STALE_CACHE_DIR, $locationCacheDir );
+            $fs = new Filesystem();
+            $fs->mkdir( $staleCacheDir );
+            $fs->mirror( $locationCacheDir, $staleCacheDir );
+            $lockFile = $this->getLocationCacheLockName( $locationId );
+            file_put_contents( $lockFile, getmypid() );
+            try
+            {
+                // array of removal is in reverse order on purpose since remove() starts from the end.
+                $fs->remove( array( $staleCacheDir, $lockFile, $locationCacheDir ) );
+            }
+            catch ( IOException $e )
+            {
+                // Log the error in the standard error log and at least try to remove the lock file
+                error_log( $e->getMessage() );
+                @unlink( $lockFile );
+                return false;
+            }
+        }
+    }
+
+    /**
      * Returns cache lock name for $locationId.
      *
-     * @param int $locationId
+     * @param int $locationId. If null, will return a global cache lock name (purging all content)
      * @return string
      */
-    private function getLocationCacheLockName( $locationId )
+    private function getLocationCacheLockName( $locationId = null )
     {
+        $locationId = $locationId ?: 'all';
         return "$this->root/_ezloc_$locationId.purging";
     }
 
@@ -164,8 +204,12 @@ class LocationAwareStore extends Store implements RequestAwarePurger
      * @param int $locationId
      * @return string
      */
-    private function getLocationCacheDir( $locationId )
+    private function getLocationCacheDir( $locationId = null )
     {
-        return "$this->root/" . static::LOCATION_CACHE_DIR . "/$locationId";
+        $cacheDir = "$this->root/" . static::LOCATION_CACHE_DIR;
+        if ( $locationId )
+            $cacheDir .= "/$locationId";
+
+        return $cacheDir;
     }
 }

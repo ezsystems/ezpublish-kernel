@@ -20,7 +20,7 @@ use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface,
 class LocalPurgeClient implements PurgeClientInterface
 {
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Cache\Http\RequestAwarePurger
+     * @var \eZ\Publish\Core\MVC\Symfony\Cache\Http\ContentPurger
      */
     protected $cacheStore;
 
@@ -46,5 +46,15 @@ class LocalPurgeClient implements PurgeClientInterface
         $purgeRequest = Request::create( 'http://localhost/', 'PURGE' );
         $purgeRequest->headers->set( 'X-Group-Location-Id', implode( '; ', $locationIds ) );
         $this->cacheStore->purgeByRequest( $purgeRequest );
+    }
+
+    /**
+     * Purges all content elements currently in cache.
+     *
+     * @return void
+     */
+    public function purgeAll()
+    {
+        $this->cacheStore->purgeAllContent();
     }
 }
