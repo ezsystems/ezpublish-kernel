@@ -75,7 +75,7 @@ class DateAndTimeTest extends StandardizedFieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return null;
+        return new DateAndTimeValue;
     }
 
     /**
@@ -145,7 +145,7 @@ class DateAndTimeTest extends StandardizedFieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new DateAndTimeValue,
             ),
             array(
                 '2012-08-28 12:20 Europe/Berlin',

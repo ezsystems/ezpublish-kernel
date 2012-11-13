@@ -203,14 +203,11 @@ interface FieldType
     /**
      * Potentially builds and checks the type and structure of the $inputValue.
      *
-     * This method first inspects $inputValue, if it needs to convert it, e.g.
-     * into a dedicated value object. An example would be, that the field type
-     * uses values of MyCustomFieldTypeValue, but can also accept strings as
-     * the input. In that case, $inputValue first needs to be converted into a
-     * MyCustomFieldTypeClass instance.
+     * This method first inspects $inputValue and convert it into a dedicated
+     * value object.
      *
-     * After that, the (possibly converted) value is checked for structural
-     * validity. Note that this does not include validation after the rules
+     * After that, the value is checked for structural validity.
+     * Note that this does not include validation after the rules
      * from validators, but only plausibility checks for the general data
      * format.
      *
@@ -222,7 +219,7 @@ interface FieldType
      *
      * @param mixed $inputValue
      *
-     * @return mixed The potentially converted and structurally plausible value.
+     * @return \eZ\Publish\Core\FieldType\Value The potentially converted and structurally plausible value.
      */
     public function acceptValue( $inputValue );
 

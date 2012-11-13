@@ -603,9 +603,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $spiFieldDefinition->fieldTypeConstraints->validators = $fieldDefinitionCreateStruct->validatorConfiguration;
         $spiFieldDefinition->fieldTypeConstraints->fieldSettings = $fieldDefinitionCreateStruct->fieldSettings;
         $spiFieldDefinition->defaultValue = $fieldType->toPersistenceValue(
-            isset( $fieldDefinitionCreateStruct->defaultValue )
-                ? $fieldType->acceptValue( $fieldDefinitionCreateStruct->defaultValue )
-                : $fieldType->getEmptyValue()
+            $fieldType->acceptValue( $fieldDefinitionCreateStruct->defaultValue )
         );
 
         return $spiFieldDefinition;
@@ -689,9 +687,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $spiFieldDefinition->fieldTypeConstraints->validators = $validatorConfiguration;
         $spiFieldDefinition->fieldTypeConstraints->fieldSettings = $fieldSettings;
         $spiFieldDefinition->defaultValue = $fieldType->toPersistenceValue(
-            isset( $fieldDefinitionUpdateStruct->defaultValue )
-                ? $fieldType->acceptValue( $fieldDefinitionUpdateStruct->defaultValue )
-                : $fieldType->getEmptyValue()
+            $fieldType->acceptValue( $fieldDefinitionUpdateStruct->defaultValue )
         );
 
         return $spiFieldDefinition;

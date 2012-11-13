@@ -145,7 +145,16 @@ EOT
      */
     public function getValidCreationFieldData()
     {
-        return new XmlTextValue( $this->createdDOMValue );
+        $doc = new DOMDocument;
+        $doc->loadXML(
+<<<EOT
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+<paragraph>Example</paragraph>
+</section>
+EOT
+        );
+        return new XmlTextValue( $doc );
     }
 
     /**
@@ -364,5 +373,31 @@ EOT
         $this->assertInstanceOf( 'DOMDocument', $xmlTextValue->xml );
 
         $this->assertEquals( $hash['xml'], (string)$xmlTextValue );
+    }
+
+    public function providerForTestIsEmptyValue()
+    {
+        $doc = new DOMDocument;
+        $doc->loadXML( "<section></section>" );
+
+        return array(
+            array( new XmlTextValue ),
+            array( new XmlTextValue( $doc ) ),
+        );
+    }
+
+    public function providerForTestIsNotEmptyValue()
+    {
+        $doc = new DOMDocument;
+        $doc->loadXML( "<section> </section>" );
+        $doc2 = new DOMDocument;
+        $doc2->loadXML( "<section><paragraph></paragraph></section>" );
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+            array( new XmlTextValue( $doc ) ),
+            array( new XmlTextValue( $doc2 ) ),
+        );
     }
 }

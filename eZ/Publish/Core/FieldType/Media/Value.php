@@ -20,33 +20,33 @@ class Value extends BaseValue
      *
      * @var bool
      */
-    public $hasController;
+    public $hasController = false;
 
     /**
      * if the media should be automatically played
      *
      * @var bool
      */
-    public $autoplay;
+    public $autoplay = false;
 
     /**
      * if the media should be played in a loop
      *
      * @var bool
      */
-    public $loop;
+    public $loop = false;
 
     /**
      * Height of the media
      *
      * @var int
      */
-    public $height;
+    public $height = 0;
 
     /**
      * Width of the media
      *
      * @var int
      */
-    public $width;
+    public $width = 0;
 }

@@ -105,7 +105,7 @@ class CountryTest extends StandardizedFieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return null;
+        return new CountryValue;
     }
 
     /**

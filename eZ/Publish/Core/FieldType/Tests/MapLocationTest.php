@@ -56,7 +56,7 @@ class MapLocationTest extends StandardizedFieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return null;
+        return new MapLocation\Value;
     }
 
     /**
@@ -155,7 +155,7 @@ class MapLocationTest extends StandardizedFieldTypeTest
         return array(
             array(
                 null,
-                null
+                new MapLocation\Value
             ),
             array(
                 array(

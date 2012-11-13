@@ -107,7 +107,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getValidCreationFieldData()
     {
-        return new UserValue();
+        return new UserValue( array( "login" => "hans" ) );
     }
 
     /**
@@ -371,5 +371,21 @@ class UserIntegrationTest extends BaseIntegrationTest
         $contentService = $repository->getContentService();
         return $contentService->createContentDraft( $user->content->contentInfo, $user->content->versionInfo );
     }
-}
 
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array( new UserValue ),
+            array( new UserValue( array() ) ),
+        );
+    }
+
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+        );
+    }
+}

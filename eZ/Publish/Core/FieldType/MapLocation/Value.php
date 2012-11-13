@@ -41,9 +41,9 @@ class Value extends BaseValue
      *
      * @param string[]|string $values
      */
-    public function __construct( array $values )
+    public function __construct( array $values = null )
     {
-        foreach ( $values as $key => $value )
+        foreach ( (array)$values as $key => $value )
         {
             $this->$key = $value;
         }

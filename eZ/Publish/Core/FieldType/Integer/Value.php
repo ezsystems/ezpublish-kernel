@@ -20,7 +20,7 @@ class Value extends BaseValue
      *
      * @var int
      */
-    public $value = 0;
+    public $value;
 
     /**
      * Construct a new Value object and initialize with $value
@@ -29,8 +29,7 @@ class Value extends BaseValue
      */
     public function __construct( $value = null )
     {
-        if ( $value !== null )
-            $this->value = $value;
+        $this->value = $value;
     }
 
     /**

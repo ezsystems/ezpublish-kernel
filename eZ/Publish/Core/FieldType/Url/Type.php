@@ -52,43 +52,23 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return null;
+        return new Value;
     }
 
     /**
-     * Potentially builds and checks the type and structure of the $inputValue.
-     *
-     * This method first inspects $inputValue, if it needs to convert it, e.g.
-     * into a dedicated value object. An example would be, that the field type
-     * uses values of MyCustomFieldTypeValue, but can also accept strings as
-     * the input. In that case, $inputValue first needs to be converted into a
-     * MyCustomFieldTypeClass instance.
-     *
-     * After that, the (possibly converted) value is checked for structural
-     * validity. Note that this does not include validation after the rules
-     * from validators, but only plausibility checks for the general data
-     * format.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
+     * Implements the core of {@see acceptValue()}.
      *
      * @param mixed $inputValue
      *
-     * @return mixed The potentially converted and structurally plausible value.
+     * @return \eZ\Publish\Core\FieldType\Url\Value The potentially converted and structurally plausible value.
      */
-    public function acceptValue( $inputValue )
+    protected function internalAcceptValue( $inputValue )
     {
-        if ( $inputValue === null )
-        {
-            return null;
-        }
-
         if ( is_string( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
         }
-
-        if ( !$inputValue instanceof Value )
+        else if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(
                 '$inputValue',
@@ -158,7 +138,7 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
-        if ( $value === null )
+        if ( $this->isEmptyValue( $value ) )
         {
             return null;
         }
