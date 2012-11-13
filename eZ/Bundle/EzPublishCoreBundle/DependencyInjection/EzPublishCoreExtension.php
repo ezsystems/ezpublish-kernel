@@ -210,7 +210,7 @@ class EzPublishCoreExtension extends Extension
                     $purgeService = 'ezpublish.http_cache.purge_client.single_request';
                     break;
                 case 'multiple_http':
-                    $purgeService = 'ezpublish.http_cache.purge_client.multiple_request';
+                    $purgeService = 'ezpublish.http_cache.purge_client.multi_request';
                     break;
                 default:
                     if ( !$container->has( $config['http_cache']['purge_type'] ) )
