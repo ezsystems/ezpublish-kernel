@@ -173,11 +173,18 @@ class Handler implements BaseContentHandler
     public function publish( $contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct )
     {
         // Archive currently published version
-        $contentInfo = $this->loadContentInfo( $contentId );
-        if ( $contentInfo->currentVersionNo != $versionNo )
+        $versionInfo = $this->loadVersionInfo( $contentId, $versionNo );
+        if ( $versionInfo->contentInfo->currentVersionNo != $versionNo )
         {
-            $this->setStatus( $contentId, VersionInfo::STATUS_ARCHIVED, $contentInfo->currentVersionNo );
+            $this->setStatus(
+                $contentId,
+                VersionInfo::STATUS_ARCHIVED,
+                $versionInfo->contentInfo->currentVersionNo
+            );
         }
+
+        // Set always available name for the content
+        $metaDataUpdateStruct->name = $versionInfo->names[$versionInfo->contentInfo->mainLanguageCode];
 
         $this->contentGateway->updateContent( $contentId, $metaDataUpdateStruct );
         $this->locationGateway->createLocationsFromNodeAssignments(
