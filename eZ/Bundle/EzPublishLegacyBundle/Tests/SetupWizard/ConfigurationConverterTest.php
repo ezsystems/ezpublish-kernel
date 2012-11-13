@@ -14,6 +14,19 @@ use eZ\Publish\Core\MVC\Legacy\Tests\LegacyBasedTestCase,
 class ConfigurationConverterTest extends LegacyBasedTestCase
 {
 
+    protected function getConfigurationConverterMock( array $constructorParams )
+    {
+        return $this->getMock(
+            'eZ\\Bundle\\EzPublishLegacyBundle\\SetupWizard\\ConfigurationConverter',
+            array(
+                'getParameter',
+                'getGroup'
+            ),
+            $constructorParams
+        );
+    }
+
+
     /**
      * @param $package
      * @param $adminSiteaccess
@@ -31,14 +44,24 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
      */
     public function testFromLegacy( $package, $adminSiteaccess, $mockParameters, $expectedResult, $exception = null )
     {
-        // a map of arguments + return value for getParameter/getGroup is converted to a callback in order to allow exceptions
-        $legacyResolver = $this->getLegacyConfigResolverMock();
-        foreach( $mockParameters as $method => $callbackMap )
+        $configurationConverter = $this->getConfigurationConverterMock(
+            array(
+                $this->getLegacyConfigResolverMock(),
+                $this->getLegacyKernelMock(),
+                array( $package )
+            )
+        );
+        foreach ( $mockParameters as $method => $callbackMap )
         {
-            $legacyResolver->expects( $this->any() )->method( $method )->will( $this->returnCallback( $this->convertMapToCallback( $callbackMap ) ) );
+            $configurationConverter->expects( $this->any() )
+                ->method( $method )
+                ->will(
+                    $this->returnCallback(
+                        $this->convertMapToCallback( $callbackMap )
+                    )
+                )
+            ;
         }
-
-        $configurationConverter = new ConfigurationConverter( $legacyResolver, $this->getLegacyKernelMock(), array( $package ) );
 
         try
         {
@@ -67,6 +90,8 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
     }
 
     /**
+     * Converts a map of arguments + return value to a callback in order to allow exceptions
+     *
      * @param array $callbackMap array of callback parameter arrays [0..n-1 => arguments, n => return value]
      *
      * @return callable
@@ -162,24 +187,24 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
 
         $commonMockParameters = array(
             'getParameter' => array(
-                'SiteSettings.DefaultAccess' => array( 'SiteSettings.DefaultAccess', null, null, 'eng' ),
-                'SiteAccessSettings.AvailableSiteAccessList' => array( 'SiteAccessSettings.AvailableSiteAccessList', null, null, array( 'eng', 'ezdemo_site', 'ezdemo_site_admin' ) ),
-                'FileSettings.VarDir' => array( 'FileSettings.VarDir', 'site', 'eng', 'var/ezdemo_site' ),
-                'FileSettings.StorageDir' => array( 'FileSettings.StorageDir', 'site', 'eng', 'storage' ),
-                'ImageMagick.IsEnabled' => array( 'ImageMagick.IsEnabled', 'image', 'eng', 'true' ),
-                'ImageMagick.ExecutablePath' => array( 'ImageMagick.ExecutablePath', 'image', 'eng', '/usr/bin' ),
-                'ImageMagick.Executable' => array( 'ImageMagick.Executable', 'image', 'eng', 'convert' ),
+                'SiteSettingsDefaultAccess' => array( 'SiteSettings', 'DefaultAccess', null, null, 'eng' ),
+                'SiteAccessSettingsAvailableSiteAccessList' => array( 'SiteAccessSettings', 'AvailableSiteAccessList', null, null, array( 'eng', 'ezdemo_site', 'ezdemo_site_admin' ) ),
+                'FileSettingsVarDir' => array( 'FileSettings', 'VarDir', 'site.ini', 'eng', 'var/ezdemo_site' ),
+                'FileSettingsStorageDir' => array( 'FileSettings', 'StorageDir', 'site.ini', 'eng', 'storage' ),
+                'ImageMagickIsEnabled' => array( 'ImageMagick', 'IsEnabled', 'image.ini', 'eng', 'true' ),
+                'ImageMagickExecutablePath' => array( 'ImageMagick', 'ExecutablePath', 'image.ini', 'eng', '/usr/bin' ),
+                'ImageMagickExecutable' => array( 'ImageMagick', 'Executable', 'image.ini', 'eng', 'convert' ),
             ),
             'getGroup' => array(
                 'SiteAccessSettings' => array( 'SiteAccessSettings', null, null,
                     array( 'MatchOrder' => 'uri', 'URIMatchType' => 'element', 'URIMatchElement' => 1 ) ),
-                'DatabaseSettings' => array( 'DatabaseSettings', 'site', 'eng',
+                'DatabaseSettings' => array( 'DatabaseSettings', 'site.ini', 'eng',
                     array( 'DatabaseImplementation' => 'ezmysqli', 'Server' => 'localhost', 'User' => 'root', 'Password' => '', 'Database' => 'ezdemo' ) ),
-                'AliasSettings' => array( 'AliasSettings', 'image', 'eng',
+                'AliasSettings' => array( 'AliasSettings', 'image.ini', 'eng',
                     array( 'AliasList' => array( 'large', 'infoboximage' ) ) ),
-                'large' => array( 'large', 'image', 'eng',
+                'large' => array( 'large', 'image.ini', 'eng',
                     array( 'Reference' => '', 'Filters' => array( 'geometry/scaledownonly=360;440' ) ) ),
-                'infoboximage' => array( 'infoboximage', 'image', 'eng',
+                'infoboximage' => array( 'infoboximage', 'image.ini', 'eng',
                     array( 'Reference' => '', 'Filters' => array( 'geometry/scalewidth=75', 'flatten' ) ) ),
             )
         );
@@ -191,13 +216,13 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
 
         // empty site list => invalid argument exception
         $element = $baseData;
-        $element[IDX_MOCK_PARAMETERS]['getParameter']['SiteSettings.SiteList'] = array( 'SiteSettings.SiteList', null, null, array() );
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['SiteSettingsSiteList'] = array( 'SiteSettings', 'SiteList', null, null, array() );
         $element[IDX_EXCEPTION] = $exceptionType;
         $data[] = $element;
 
         // imagemagick disabled
         $element = $baseData;
-        $element[IDX_MOCK_PARAMETERS]['getParameter']['ImageMagick.IsEnabled'] = array( 'ImageMagick.IsEnabled', 'eng', 'image', 'false' );
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['ImageMagickIsEnabled'] = array( 'ImageMagick', 'IsEnabled', 'eng', 'image.ini', 'false' );
         $element[IDX_EXPECTED_RESULT]['ezpublish']['imagemagick']['enabled'] = false;
         unset( $element[IDX_EXPECTED_RESULT]['ezpublish']['imagemagick']['path'] );
         $data[] = $element;
@@ -234,7 +259,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
 
         // customized storage dir
         $element = $baseData;
-        $element[IDX_MOCK_PARAMETERS]['getParameter']['FileSettings.StorageDir'] = array( 'FileSettings.StorageDir', 'site', 'eng', 'customstorage');
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['FileSettingsStorageDir'] = array( 'FileSettings', 'StorageDir', 'site.ini', 'eng', 'customstorage' );
         $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['storage_dir'] = 'customstorage';
         $data[] = $element;
 
