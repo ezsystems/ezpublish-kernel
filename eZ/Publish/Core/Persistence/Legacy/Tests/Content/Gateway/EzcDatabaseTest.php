@@ -70,9 +70,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'section_id' => '42',
                     'owner_id' => '13',
                     'current_version' => '1',
-                    'initial_language_id' => '1',
+                    'initial_language_id' => '2',
                     'remote_id' => 'some_remote_id',
-                    'language_mask' => '1',
+                    'language_mask' => '3',
                     'modified' => '0',
                     'published' => '0',
                     'status' => ContentInfo::STATUS_DRAFT,
@@ -110,15 +110,16 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $struct->typeId = 23;
         $struct->sectionId = 42;
         $struct->ownerId = 13;
-        $struct->initialLanguageId = 1;
+        $struct->initialLanguageId = 2;
         $struct->remoteId = 'some_remote_id';
         $struct->alwaysAvailable = true;
         $struct->modified = 456;
         $struct->name = array(
-            'always-available' => 'eng-US',
             'eng-US' => 'Content name',
         );
-        $struct->fields = array();
+        $struct->fields = array(
+            new Field( array( "languageCode" => "eng-US" ) )
+        );
         $struct->locations = array();
 
         return $struct;
@@ -135,7 +136,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         $content->versionInfo = new VersionInfo;
         $content->versionInfo->names = array(
-            'always-available' => 'eng-US',
             'eng-US' => 'Content name',
         );
         $content->versionInfo->status = VersionInfo::STATUS_PENDING;
