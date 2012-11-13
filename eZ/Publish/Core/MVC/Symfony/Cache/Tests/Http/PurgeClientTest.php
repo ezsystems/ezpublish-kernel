@@ -13,6 +13,10 @@ use eZ\Publish\Core\MVC\Symfony\Cache\Http\PurgeClient;
 
 class PurgeClientTest extends HttpBasedPurgeClientTest
 {
+    /**
+     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\PurgeClient::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\PurgeClient::purge
+     */
     public function testPurge()
     {
         $purgeServer = 'http://localhost/';
