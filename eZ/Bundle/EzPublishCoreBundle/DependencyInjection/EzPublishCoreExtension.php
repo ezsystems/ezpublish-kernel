@@ -201,18 +201,25 @@ class EzPublishCoreExtension extends Extension
         $loader->load( 'cache.yml' );
         if ( isset( $config['http_cache']['purge_type'] ) )
         {
-            if ( $config['http_cache']['purge_type'] === 'multiple' )
+            switch ( $config['http_cache']['purge_type'] )
             {
-                $container->setAlias( 'ezpublish.http_cache.purge_client', 'ezpublish.http_cache.purge_client.multi_request' );
-            }
-            // Service identifier ("single" is the default value)
-            else if ( $config['http_cache']['purge_type'] !== 'single' )
-            {
-                if ( !$container->has( $config['http_cache']['purge_type'] ) )
-                    throw new \InvalidArgumentException( "Invalid ezpublish.http_cache.purge_type. Can be 'single', 'multiple' or a valid service identifier implementing PurgeClientInterface." );
+                case 'local':
+                    $purgeService = 'ezpublish.http_cache.purge_client.local';
+                    break;
+                case 'single_http':
+                    $purgeService = 'ezpublish.http_cache.purge_client.single_request';
+                    break;
+                case 'multiple_http':
+                    $purgeService = 'ezpublish.http_cache.purge_client.multiple_request';
+                    break;
+                default:
+                    if ( !$container->has( $config['http_cache']['purge_type'] ) )
+                        throw new \InvalidArgumentException( "Invalid ezpublish.http_cache.purge_type. Can be 'single', 'multiple' or a valid service identifier implementing PurgeClientInterface." );
 
-                $container->setAlias( 'ezpublish.http_cache.purge_client', $config['http_cache']['purge_type'] );
+                    $purgeService = $config['http_cache']['purge_type'];
             }
+
+            $container->setAlias( 'ezpublish.http_cache.purge_client', $purgeService );
         }
 
         if ( isset( $config['http_cache']['timeout'] ) )

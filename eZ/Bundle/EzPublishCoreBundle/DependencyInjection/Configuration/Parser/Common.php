@@ -78,7 +78,7 @@ class Common extends AbstractParser
                 ->cannotBeEmpty()
                 ->children()
                     ->arrayNode( 'purge_servers' )
-                        ->info( 'Servers to use for Http PURGE.' )
+                        ->info( 'Servers to use for Http PURGE (will NOT be used if ezpublish.http_cache.purge_type is "local").' )
                         ->example( array( 'http://localhost/', 'http://another.server/' ) )
                         ->requiresAtLeastOneElement()
                         ->prototype( 'scalar' )->end()

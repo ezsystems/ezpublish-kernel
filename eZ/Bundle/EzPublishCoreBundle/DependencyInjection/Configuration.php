@@ -179,9 +179,10 @@ EOT;
         $purgeTypeInfo = <<<EOT
 Http cache purge type.
 #   Cache purge for content/locations is triggered when needed (e.g. on publish) and will result in one or several Http PURGE requests.
-#   Can be "single" (default) or "multiple".
-#   If "multiple" is used, an Http PURGE request will be sent for each location, with X-Location-Id header.
+#   Can be "local", "single_http" or "multiple_http".
+#   If "local" is used, an Http PURGE request will be emulated when needed.
 #   If "single" is used, only one Http PURGE request will be sent, with X-Group-Location-Id header (each location id will be separated by "; ".
+#   If "multiple" is used, an Http PURGE request will be sent for each location, with X-Location-Id header.
 EOT;
 
         $rootNode
@@ -191,7 +192,7 @@ EOT;
                     ->children()
                         ->scalarNode( 'purge_type' )
                             ->info( $purgeTypeInfo )
-                            ->defaultValue( 'single' )
+                            ->defaultValue( 'local' )
                         ->end()
                         ->scalarNode( 'timeout' )
                             ->info( 'Timeout for each Http PURGE request, in seconds.' )
