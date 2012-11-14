@@ -149,7 +149,8 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                 'imagemagick' => array(
                     'enabled' => true,
                     'path' => '/usr/bin/convert',
-                )
+                ),
+                'http_cache' => array( 'purge_type' => 'local' )
             ),
         );
 

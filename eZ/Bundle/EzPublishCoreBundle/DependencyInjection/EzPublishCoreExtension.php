@@ -66,6 +66,7 @@ class EzPublishCoreExtension extends Extension
         $this->handleApiLoading( $container, $loader );
         $this->handleTemplating( $container, $loader );
         $this->handleSessionLoading( $container, $loader );
+        $this->handleCache( $config, $container, $loader );
 
         // Map settings
         foreach ( $this->configParsers as $configParser )
@@ -184,4 +185,46 @@ class EzPublishCoreExtension extends Extension
         $loader->load( 'session.yml' );
     }
 
+    /**
+     * Handle cache parameters
+     *
+     * @param array $config
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \Symfony\Component\DependencyInjection\Loader\FileLoader $loader
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return void
+     */
+    private function handleCache( array $config, ContainerBuilder $container, FileLoader $loader )
+    {
+        $loader->load( 'cache.yml' );
+        if ( isset( $config['http_cache']['purge_type'] ) )
+        {
+            switch ( $config['http_cache']['purge_type'] )
+            {
+                case 'local':
+                    $purgeService = 'ezpublish.http_cache.purge_client.local';
+                    break;
+                case 'single_http':
+                    $purgeService = 'ezpublish.http_cache.purge_client.single_request';
+                    break;
+                case 'multiple_http':
+                    $purgeService = 'ezpublish.http_cache.purge_client.multi_request';
+                    break;
+                default:
+                    if ( !$container->has( $config['http_cache']['purge_type'] ) )
+                        throw new \InvalidArgumentException( "Invalid ezpublish.http_cache.purge_type. Can be 'single', 'multiple' or a valid service identifier implementing PurgeClientInterface." );
+
+                    $purgeService = $config['http_cache']['purge_type'];
+            }
+
+            $container->setAlias( 'ezpublish.http_cache.purge_client', $purgeService );
+        }
+
+        if ( isset( $config['http_cache']['timeout'] ) )
+        {
+            $container->setParameter( 'ezpublish.http_cache.purge_client.http_client.timeout', (int)$config['http_cache']['timeout'] );
+        }
+    }
 }

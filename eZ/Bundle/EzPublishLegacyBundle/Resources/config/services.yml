@@ -117,6 +117,7 @@ services:
         class: %ezpublish_legacy.configuration_mapper.class%
         arguments:
             - @ezpublish.config.resolver.core
+            - @ezpublish.http_cache.purger
             - %ezpublish_legacy.configuration_mapper.options%
         tags:
             - { name: kernel.event_subscriber }
