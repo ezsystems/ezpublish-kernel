@@ -238,18 +238,24 @@ class ContentTypeService implements ContentTypeServiceInterface
         if ( $this->repository->hasAccess( 'class', 'update' ) !== true )
             throw new UnauthorizedException( 'ContentType', 'update' );
 
-        try
-        {
-            $this->loadContentTypeGroupByIdentifier( $contentTypeGroupUpdateStruct->identifier );
+        $loadedContentTypeGroup = $this->loadContentTypeGroup( $contentTypeGroup->id );
 
-            throw new InvalidArgumentException(
-                '$contentTypeGroupUpdateStruct->identifier',
-                "given identifier already exists"
-            );
-        }
-        catch ( APINotFoundException $e )
+        if ( $contentTypeGroupUpdateStruct->identifier !== null
+            && $contentTypeGroupUpdateStruct->identifier !== $loadedContentTypeGroup->identifier )
         {
-            // Do nothing
+            try
+            {
+                $this->loadContentTypeGroupByIdentifier( $contentTypeGroupUpdateStruct->identifier );
+
+                throw new InvalidArgumentException(
+                    '$contentTypeGroupUpdateStruct->identifier',
+                    "given identifier already exists"
+                );
+            }
+            catch ( APINotFoundException $e )
+            {
+                // Do nothing
+            }
         }
 
         if ( $contentTypeGroupUpdateStruct->modificationDate !== null )
@@ -261,17 +267,16 @@ class ContentTypeService implements ContentTypeServiceInterface
             $modifiedTimestamp = time();
         }
 
-        if ( $contentTypeGroupUpdateStruct->modifierId === null )
-        {
-            $contentTypeGroupUpdateStruct->modifierId = $this->repository->getCurrentUser()->id;
-        }
-
         $spiGroupUpdateStruct = new SPIContentTypeGroupUpdateStruct(
             array(
-                "id" => $contentTypeGroup->id,
-                "identifier" => $contentTypeGroupUpdateStruct->identifier,
+                "id" => $loadedContentTypeGroup->id,
+                "identifier" => $contentTypeGroupUpdateStruct->identifier === null
+                    ? $loadedContentTypeGroup->identifier
+                    : $contentTypeGroupUpdateStruct->identifier,
                 "modified" => $modifiedTimestamp,
-                "modifierId" => $contentTypeGroupUpdateStruct->modifierId
+                "modifierId" => $contentTypeGroupUpdateStruct->modifierId === null
+                    ? $this->repository->getCurrentUser()->id
+                    : $contentTypeGroupUpdateStruct->modifierId
             )
         );
 
@@ -305,11 +310,13 @@ class ContentTypeService implements ContentTypeServiceInterface
         if ( $this->repository->hasAccess( 'class', 'delete' ) !== true )
             throw new UnauthorizedException( 'ContentType', 'delete' );
 
+        $loadedContentTypeGroup = $this->loadContentTypeGroup( $contentTypeGroup->id );
+
         $this->repository->beginTransaction();
         try
         {
             $this->contentTypeHandler->deleteGroup(
-                $contentTypeGroup->id
+                $loadedContentTypeGroup->id
             );
             $this->repository->commit();
         }
@@ -1139,15 +1146,6 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $contentType->status
             );
             $this->repository->commit();
-        }
-        catch ( APIBadStateException $e )
-        {
-            $this->repository->rollback();
-            throw new BadStateException(
-                "\$contentType",
-                "Content still exists for the given ContentType",
-                $e
-            );
         }
         catch ( Exception $e )
         {

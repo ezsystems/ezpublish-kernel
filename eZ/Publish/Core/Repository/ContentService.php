@@ -301,7 +301,6 @@ class ContentService implements ContentServiceInterface
         return $content;
     }
 
-
     /**
      * loads content in a version of the given content object.
      *
@@ -1379,16 +1378,14 @@ class ContentService implements ContentServiceInterface
         {
             try
             {
-                $existingLocation = $this->repository->getLocationService()->loadLocationByRemoteId(
+                $this->repository->getLocationService()->loadLocationByRemoteId(
                     $destinationLocationCreateStruct->remoteId
                 );
-                if ( $existingLocation !== null )
-                {
-                    throw new InvalidArgumentException(
-                        "\$destinationLocationCreateStruct",
-                        "Location with remoteId '{$destinationLocationCreateStruct->remoteId}' exists"
-                    );
-                }
+
+                throw new InvalidArgumentException(
+                    "\$destinationLocationCreateStruct",
+                    "Location with remoteId '{$destinationLocationCreateStruct->remoteId}' already exists"
+                );
             }
             catch ( APINotFoundException $e )
             {
@@ -1536,6 +1533,11 @@ class ContentService implements ContentServiceInterface
      */
     public function addRelation( APIVersionInfo $sourceVersion, APIContentInfo $destinationContent )
     {
+        $sourceVersion = $this->loadVersionInfoById(
+            $sourceVersion->contentInfo->id,
+            $sourceVersion->versionNo
+        );
+
         if ( $sourceVersion->status !== APIVersionInfo::STATUS_DRAFT )
         {
             throw new BadStateException(
@@ -1586,6 +1588,11 @@ class ContentService implements ContentServiceInterface
      */
     public function deleteRelation( APIVersionInfo $sourceVersion, APIContentInfo $destinationContent )
     {
+        $sourceVersion = $this->loadVersionInfoById(
+            $sourceVersion->contentInfo->id,
+            $sourceVersion->versionNo
+        );
+
         if ( $sourceVersion->status !== APIVersionInfo::STATUS_DRAFT )
         {
             throw new BadStateException(
