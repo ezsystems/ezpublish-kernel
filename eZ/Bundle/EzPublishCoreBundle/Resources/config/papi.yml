@@ -23,6 +23,7 @@ parameters:
         eZ\Publish\Core\SignalSlot\Signal\LocationService\SwapLocationSignal: [ezpublish.signalslot.legacy_slot.swap_location]
         eZ\Publish\Core\SignalSlot\Signal\LocationService\UnhideLocationSignal: [ezpublish.signalslot.legacy_slot.unhide_location]
         eZ\Publish\Core\SignalSlot\Signal\LocationService\UpdateLocationSignal: [ezpublish.signalslot.legacy_slot.update_location]
+        eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\PublishContentTypeDraftSignal: [ezpublish.signalslot.legacy_slot.publish_content_type_draft]
     ezpublish.signalslot.legacy_slot.assign_section.class: eZ\Publish\Core\SignalSlot\Slot\LegacyAssignSectionSlot
     ezpublish.signalslot.legacy_slot.copy_content.class: eZ\Publish\Core\SignalSlot\Slot\LegacyCopyContentSlot
     ezpublish.signalslot.legacy_slot.create_location.class: eZ\Publish\Core\SignalSlot\Slot\LegacyCreateLocationSlot
@@ -36,6 +37,7 @@ parameters:
     ezpublish.signalslot.legacy_slot.swap_location.class: eZ\Publish\Core\SignalSlot\Slot\LegacySwapLocationSlot
     ezpublish.signalslot.legacy_slot.unhide_location.class: eZ\Publish\Core\SignalSlot\Slot\LegacyUnhideLocationSlot
     ezpublish.signalslot.legacy_slot.update_location.class: eZ\Publish\Core\SignalSlot\Slot\LegacyUpdateLocationSlot
+    ezpublish.signalslot.legacy_slot.publish_content_type_draft.class: eZ\Publish\Core\SignalSlot\Slot\LegacyPublishContentTypeDraftSlot
 
 
     # Using legacy storage engine for data compatibility with 4.x
@@ -224,4 +226,8 @@ services:
 
     ezpublish.signalslot.legacy_slot.update_location:
         class: %ezpublish.signalslot.legacy_slot.update_location.class%
+        arguments: [@ezpublish_legacy.kernel]
+
+    ezpublish.signalslot.legacy_slot.publish_content_type_draft:
+        class: %ezpublish.signalslot.legacy_slot.publish_content_type_draft.class%
         arguments: [@ezpublish_legacy.kernel]

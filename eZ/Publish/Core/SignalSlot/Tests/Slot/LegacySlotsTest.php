@@ -69,6 +69,7 @@ class LegacySlotsTest extends \PHPUnit_Framework_TestCase
             array( 'LegacySwapLocationSlot', 'LocationService\\SwapLocationSignal', array() ),
             array( 'LegacyUnhideLocationSlot', 'LocationService\\UnhideLocationSignal', array() ),
             array( 'LegacyUpdateLocationSlot', 'LocationService\\UpdateLocationSignal', array() ),
+            array( 'LegacyPublishContentTypeDraftSlot', 'ContentTypeService\\PublishContentTypeDraftSignal', array() ),
         );
     }
 
