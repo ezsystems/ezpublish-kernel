@@ -23,6 +23,35 @@ class LocationAwareStore extends Store implements ContentPurger
           LOCATION_STALE_CACHE_DIR = 'ezlocation_stale';
 
     /**
+     * @var \Symfony\Component\Filesystem\Filesystem
+     */
+    private $fs;
+
+    /**
+     * Injects a Filesystem instance
+     * For unit tests only.
+     *
+     * @internal
+     *
+     * @param \Symfony\Component\Filesystem\Filesystem $fs
+     */
+    public function setFilesystem( Filesystem $fs )
+    {
+        $this->fs = $fs;
+    }
+
+    /**
+     * @return \Symfony\Component\Filesystem\Filesystem
+     */
+    public function getFilesystem()
+    {
+        if ( !isset( $this->fs ) )
+            $this->fs = new Filesystem();
+
+        return $this->fs;
+    }
+
+    /**
      * Injects eZ Publish specific information in the content digest if needed.
      * X-Location-Id response header is set in the ViewController
      *
@@ -72,7 +101,7 @@ class LocationAwareStore extends Store implements ContentPurger
                         // Check if purge process is still running. If not, remove the lock file to unblock future cache purge
                         if ( !posix_kill( file_get_contents( $cacheLockFile ), 0 ) )
                         {
-                            $fs = new Filesystem();
+                            $fs = $this->getFilesystem();
                             $fs->remove( array( $cacheLockFile, $this->getLocationCacheDir( $locationId ) ) );
                             goto returnCachePath;
                         }
@@ -156,8 +185,9 @@ class LocationAwareStore extends Store implements ContentPurger
      */
     private function purgeLocation( $locationId )
     {
+        $fs = $this->getFilesystem();
         $locationCacheDir = $this->getLocationCacheDir( $locationId );
-        if ( file_exists( $locationCacheDir ) )
+        if ( $fs->exists( $locationCacheDir ) )
         {
             // 1. Copy cache files to stale cache dir
             // 2. Place a lock file indicating to use the stale cache
@@ -166,7 +196,6 @@ class LocationAwareStore extends Store implements ContentPurger
             // 5. Remove stale cache dir
             // Note that there is no need to remove the meta-file
             $staleCacheDir = str_replace( static::LOCATION_CACHE_DIR, static::LOCATION_STALE_CACHE_DIR, $locationCacheDir );
-            $fs = new Filesystem();
             $fs->mkdir( $staleCacheDir );
             $fs->mirror( $locationCacheDir, $staleCacheDir );
             $lockFile = $this->getLocationCacheLockName( $locationId );
