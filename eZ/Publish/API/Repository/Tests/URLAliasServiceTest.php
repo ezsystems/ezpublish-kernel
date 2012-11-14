@@ -283,7 +283,7 @@ class URLAliasServiceTest extends BaseTest
         $urlAliasService = $repository->getURLAliasService();
 
         $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
-            'module:content/search?SearchText=eZ', 'Home/My-New-Site', 'eng-US'
+            'module:content/search?SearchText=eZ', '/Home/My-New-Site', 'eng-US'
         );
         /* END: Use Case */
 
@@ -333,7 +333,7 @@ class URLAliasServiceTest extends BaseTest
         $urlAliasService = $repository->getURLAliasService();
 
         $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
-            'module:content/search?SearchText=eZ', 'Home/My-New-Site', 'eng-US', true
+            'module:content/search?SearchText=eZ', '/Home/My-New-Site', 'eng-US', true
         );
         /* END: Use Case */
 
@@ -383,7 +383,7 @@ class URLAliasServiceTest extends BaseTest
         $urlAliasService = $repository->getURLAliasService();
 
         $createdUrlAlias = $urlAliasService->createGlobalUrlAlias(
-            'module:content/search?SearchText=eZ', 'Home/My-New-Site', 'eng-US', false, true
+            'module:content/search?SearchText=eZ', '/Home/My-New-Site', 'eng-US', false, true
         );
         /* END: Use Case */
 
@@ -621,13 +621,13 @@ class URLAliasServiceTest extends BaseTest
 
         /* BEGIN: Inline */
         $urlAliasService->createGlobalUrlAlias(
-            'module:content/search?SearchText=eZ', 'My/Special-Support', 'eng-US'
+            'module:content/search?SearchText=eZ', '/My/Special-Support', 'eng-US'
         );
         $urlAliasService->createGlobalUrlAlias(
-            'module:content/search?SearchText=eZ', 'My/London-Office', 'eng-GB'
+            'module:content/search?SearchText=eZ', '/My/London-Office', 'eng-GB'
         );
         $urlAliasService->createGlobalUrlAlias(
-            'module:content/search?SearchText=Sindelfingen', 'My/Fancy-Site', 'eng-US'
+            'module:content/search?SearchText=Sindelfingen', '/My/Fancy-Site', 'eng-US'
         );
         /* END: Inline */
     }
@@ -829,7 +829,7 @@ class URLAliasServiceTest extends BaseTest
         // Create aliases in multiple languages
         $this->createGlobalAliases();
 
-        $loadedAlias = $urlAliasService->lookUp( 'My/Special-Support', 'eng-US' );
+        $loadedAlias = $urlAliasService->lookUp( '/My/Special-Support', 'eng-US' );
         /* END: Use Case */
 
         $this->assertInstanceOf(
