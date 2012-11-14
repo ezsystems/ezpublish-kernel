@@ -152,11 +152,7 @@ class LocationAwareStore extends Store implements ContentPurger
 
         foreach ( $aLocationId as $locationId )
         {
-            $locationCacheDir = $this->getLocationCacheDir( $locationId );
-            if ( file_exists( $locationCacheDir ) )
-            {
-                $this->purgeLocation( $locationId );
-            }
+            $this->purgeLocation( $locationId );
         }
 
         return true;
@@ -169,12 +165,7 @@ class LocationAwareStore extends Store implements ContentPurger
      */
     public function purgeAllContent()
     {
-        if ( file_exists( $this->getLocationCacheDir() ) )
-        {
-            return $this->purgeLocation( null );
-        }
-
-        return false;
+        return $this->purgeLocation( null );
     }
 
     /**
@@ -204,6 +195,7 @@ class LocationAwareStore extends Store implements ContentPurger
             {
                 // array of removal is in reverse order on purpose since remove() starts from the end.
                 $fs->remove( array( $staleCacheDir, $lockFile, $locationCacheDir ) );
+                return true;
             }
             catch ( IOException $e )
             {
@@ -213,6 +205,8 @@ class LocationAwareStore extends Store implements ContentPurger
                 return false;
             }
         }
+
+        return false;
     }
 
     /**
