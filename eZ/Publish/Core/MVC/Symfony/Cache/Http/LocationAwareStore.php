@@ -212,22 +212,32 @@ class LocationAwareStore extends Store implements ContentPurger
     /**
      * Returns cache lock name for $locationId.
      *
+     * This method is public only for unit tests.
+     * Use it only if you know what you are doing.
+     *
+     * @internal
+     *
      * @param int $locationId. If null, will return a global cache lock name (purging all content)
      * @return string
      */
-    private function getLocationCacheLockName( $locationId = null )
+    public function getLocationCacheLockName( $locationId = null )
     {
         $locationId = $locationId ?: 'all';
         return "$this->root/_ezloc_$locationId.purging";
     }
 
     /**
-     * Returns cache dir for $locationId
+     * Returns cache dir for $locationId.
+     *
+     * This method is public only for unit tests.
+     * Use it only if you know what you are doing.
+     *
+     * @internal
      *
      * @param int $locationId
      * @return string
      */
-    private function getLocationCacheDir( $locationId = null )
+    public function getLocationCacheDir( $locationId = null )
     {
         $cacheDir = "$this->root/" . static::LOCATION_CACHE_DIR;
         if ( $locationId )
