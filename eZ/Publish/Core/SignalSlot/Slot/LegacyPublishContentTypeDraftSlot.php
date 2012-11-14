@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\SignalSlot\Slot;
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Slot\AbstractLegacySlot;
+use eZExpiryHandler;
 
 /**
  * A legacy slot handling PublishContentTypeDraftSignal.
@@ -30,8 +31,8 @@ class LegacyPublishContentTypeDraftSlot extends AbstractLegacySlot
         $kernel = $this->getLegacyKernel();
         $kernel->runCallback( function() use( $signal )
             {
-                \eZExpiryHandler::registerShutdownFunction();
-                $handler = \eZExpiryHandler::instance();
+                eZExpiryHandler::registerShutdownFunction();
+                $handler = eZExpiryHandler::instance();
                 $time = time();
                 $handler->setTimestamp( 'user-class-cache', $time );
                 $handler->setTimestamp( 'class-identifier-cache', $time );
