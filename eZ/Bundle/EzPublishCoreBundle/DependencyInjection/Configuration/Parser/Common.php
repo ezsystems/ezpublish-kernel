@@ -73,6 +73,18 @@ class Common extends AbstractParser
                 ->info( 'The session name. If you want a session name per siteaccess, use "{siteaccess_hash}" token. Will override default session name from framework.session.name' )
                 ->example( array( 'session_name' => 'eZSESSID{siteaccess_hash}' ) )
             ->end()
+            ->arrayNode( 'http_cache' )
+                ->info( 'Settings related to Http cache' )
+                ->cannotBeEmpty()
+                ->children()
+                    ->arrayNode( 'purge_servers' )
+                        ->info( 'Servers to use for Http PURGE (will NOT be used if ezpublish.http_cache.purge_type is "local").' )
+                        ->example( array( 'http://localhost/', 'http://another.server/' ) )
+                        ->requiresAtLeastOneElement()
+                        ->prototype( 'scalar' )->end()
+                    ->end()
+                ->end()
+            ->end()
         ;
     }
 
@@ -122,6 +134,8 @@ class Common extends AbstractParser
                 $container->setParameter( "ezsettings.$sa.binary_dir", $settings['binary_dir'] );
             if ( isset( $settings['session_name'] ) )
                 $container->setParameter( "ezsettings.$sa.session_name", $settings['session_name'] );
+            if ( isset( $settings['http_cache']['purge_servers'] ) )
+                $container->setParameter( "ezsettings.$sa.http_cache.purge_servers", $settings['http_cache']['purge_servers'] );
         }
     }
 }
