@@ -52,4 +52,28 @@ class PurgeClientTest extends HttpBasedPurgeClientTest
         $purgeClient = new PurgeClient( $this->configResolver, $this->httpBrowser );
         $purgeClient->purge( $locations );
     }
+
+    /**
+     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\PurgeClient::__construct
+     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\PurgeClient::purge
+     */
+    public function testPurgeAll()
+    {
+        $purgeServer = 'http://localhost/';
+        $this->configResolver
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'http_cache.purge_servers' )
+            ->will( $this->returnValue( array( $purgeServer ) ) )
+        ;
+
+        $this->httpBrowser
+            ->expects( $this->once() )
+            ->method( 'call' )
+            ->with( $purgeServer, 'PURGE', array( 'X-Location-Id' => '*' ) )
+        ;
+
+        $purgeClient = new PurgeClient( $this->configResolver, $this->httpBrowser );
+        $purgeClient->purgeAll();
+    }
 }

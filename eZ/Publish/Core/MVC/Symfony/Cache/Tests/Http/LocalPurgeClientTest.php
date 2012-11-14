@@ -19,7 +19,7 @@ class LocalPurgeClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testPurge()
     {
-        $cacheStore = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\Cache\\Http\\RequestAwarePurger' );
+        $cacheStore = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\Cache\\Http\\ContentPurger' );
         $cacheStore
             ->expects( $this->once() )
             ->method( 'purgeByRequest' )
@@ -28,5 +28,21 @@ class LocalPurgeClientTest extends \PHPUnit_Framework_TestCase
 
         $purgeClient = new LocalPurgeClient( $cacheStore );
         $purgeClient->purge( array( 123, 456, 789 ) );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\MVC\Symfony\Cache\Http\LocalPurgeClient::__construct
+     * @covers eZ\Publish\Core\MVC\Symfony\Cache\Http\LocalPurgeClient::purgeAll
+     */
+    public function testPurgeAll()
+    {
+        $cacheStore = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\Cache\\Http\\ContentPurger' );
+        $cacheStore
+            ->expects( $this->once() )
+            ->method( 'purgeAllContent' )
+        ;
+
+        $purgeClient = new LocalPurgeClient( $cacheStore );
+        $purgeClient->purgeAll();
     }
 }
