@@ -138,7 +138,8 @@ class ConfigurationDumper implements ConfigDumperInterface
      */
     protected function backupConfigFile( $configFile )
     {
-        $this->fs->copy( $configFile, $configFile . '-' . date('Y-m-d_H-i-s') );
+        if ( $this->fs->exists( $configFile ) )
+            $this->fs->copy( $configFile, $configFile . '-' . date('Y-m-d_H-i-s') );
     }
 
     /**
