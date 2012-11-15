@@ -69,7 +69,7 @@ class LocationHandler implements LocationHandlerInterface
         if ( $rootLocationId )
             return $this->backend->find(
                 'Content\\Location',
-                array( 'contentId' => $contentId, 'pathString' => "/1/{$rootLocationId}/%" )
+                array( 'contentId' => $contentId, 'pathString' => "%/{$rootLocationId}/%" )
             );
 
         return $this->backend->find(
