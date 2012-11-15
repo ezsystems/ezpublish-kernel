@@ -143,6 +143,15 @@ class SearchHandler extends SearchHandlerInterface
                     )
                 );
 
+                $locations = $this->backend->find(
+                    'Content\\Location',
+                    array( 'contentId' => $item->versionInfo->contentInfo->id )
+                );
+                if ( !empty( $locations ) )
+                {
+                    $item->versionInfo->contentInfo->mainLocationId = $locations[0]->mainLocationId;
+                }
+
                 $resultList[] = $item;
             }
         }
