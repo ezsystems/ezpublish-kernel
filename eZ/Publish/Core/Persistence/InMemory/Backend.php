@@ -421,17 +421,26 @@ class Backend
                 if ( !in_array( $item[$matchProperty], $matchValue ) )
                     return false;
             }
-            // Use of wildcards like in SQL, at the end of $matchValue
-            // i.e. /1/2/% (for pathString)
-            else if ( ( $wildcardPos = strpos( $matchValue, '%' ) ) > 0 && ( $wildcardPos === strlen( $matchValue ) - 1 ) )
+            // Use of wildcards like in SQL, at the start and/or end of $matchValue
+            // i.e. %/5/% (for pathString)
+            else if ( $ends = substr( $matchValue, -1 ) === "%" || substr( $matchValue, 0, 1 ) === "%" )
             {
-                // Returns true if $item[$matchProperty] begins with $matchValue (minus '%' wildcard char)
-                $matchValue = substr( $matchValue, 0, -1 );
+                $starts = substr( $matchValue, 0, 1 ) === "%";
+                if ( $starts ) $matchValue = substr( $matchValue, 1 );
+                if ( $ends ) $matchValue = substr( $matchValue, 0, -1 );
+
                 if ( $matchValue === $item[$matchProperty] )
                     return false;
 
                 $pos = strpos( $item[$matchProperty], $matchValue );
-                if ( $pos !== 0 )
+
+                if ( $pos === false )
+                    return false;
+
+                if ( !$starts && $pos !== 0 )
+                    return false;
+
+                if ( !$ends && $pos !== ( strlen( $item[$matchProperty] ) - strlen( $matchValue ) ) )
                     return false;
             }
             // plain equal match
