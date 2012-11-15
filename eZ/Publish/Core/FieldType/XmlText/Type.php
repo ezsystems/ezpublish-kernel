@@ -8,9 +8,12 @@
  */
 
 namespace eZ\Publish\Core\FieldType\XmlText;
+
 use eZ\Publish\Core\FieldType\FieldType,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentType,
     eZ\Publish\Core\FieldType\ValidationError,
+    eZ\Publish\Core\FieldType\XmlText\Input,
+    eZ\Publish\Core\FieldType\XmlText\Input\EzXml,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     DOMDocument;
 
@@ -118,7 +121,7 @@ class Type extends FieldType
      * format.
      *
      *
-     * @param \eZ\Publish\Core\FieldType\XmlText\Value|string $inputValue
+     * @param \eZ\Publish\Core\FieldType\XmlText\Value|\eZ\Publish\Core\FieldType\XmlText\Input|string $inputValue
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
      * @return mixed The potentially converted and structurally plausible value.
@@ -127,10 +130,15 @@ class Type extends FieldType
     {
         if ( is_string( $inputValue ) )
         {
-            $doc = new DOMDocument;
             if ( empty( $inputValue ) )
                 $inputValue = Value::EMPTY_VALUE;
-            $doc->loadXML( $inputValue );
+            $inputValue = new EzXml( $inputValue );
+        }
+
+        if ( $inputValue instanceof Input )
+        {
+            $doc = new DOMDocument;
+            $doc->loadXML( $inputValue->getInternalRepresentation() );
             $inputValue = new Value( $doc );
         }
 
