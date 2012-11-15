@@ -11,7 +11,9 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container,
     Symfony\Component\HttpFoundation\Response,
     Symfony\Component\Yaml\Dumper,
-    eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver;
+    eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver,
+    eZINI,
+    eZCache;
 
 class LegacySetupController
 {
@@ -75,12 +77,12 @@ class LegacySetupController
             $this->getLegacyKernel()->runCallback(
                 function()
                 {
-                    $directoriesCheckList = \eZINI::instance( 'setup.ini' )->variable( 'directory_permissions', 'CheckList' );
+                    $directoriesCheckList = eZINI::instance( 'setup.ini' )->variable( 'directory_permissions', 'CheckList' );
                     $injectedSettings = array();
                     // checked folders are relative to the ezpublish_legacy folder
                     $injectedSettings['setup.ini']['directory_permissions']['CheckList'] =
                         "../ezpublish/logs;../ezpublish/cache;../ezpublish/config;" . $directoriesCheckList;
-                    \eZINI::injectSettings( $injectedSettings );
+                    eZINI::injectSettings( $injectedSettings );
                 }
             );
         }
@@ -98,9 +100,9 @@ class LegacySetupController
             $this->getLegacyKernel()->runCallback(
                 function()
                 {
-                    \eZINI::injectSettings( array() );
-                    \eZCache::clearByTag( 'ini' );
-                    \eZINI::resetAllInstances();
+                    eZINI::injectSettings( array() );
+                    eZCache::clearByTag( 'ini' );
+                    eZINI::resetAllInstances();
                 }
             );
 
