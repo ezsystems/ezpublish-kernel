@@ -13,6 +13,7 @@ parameters:
     # Common settings
     ezsettings.default.database.params: ~
     ezsettings.default.session_name: "eZSESSID{siteaccess_hash}"    # Using "{siteaccess_hash}" in session name makes it unique per siteaccess
+    ezsettings.default.legacy_mode: false
     ezsettings.default.url_alias_router: true                       # Use UrlAliasRouter by default
     ezsettings.default.languages: []
     ezsettings.default.var_dir: "var"                   # The root directory where all log files, cache files and other stored files are created

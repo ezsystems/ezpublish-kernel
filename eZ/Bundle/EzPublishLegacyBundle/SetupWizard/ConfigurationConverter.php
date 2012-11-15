@@ -96,17 +96,17 @@ class ConfigurationConverter
         $settings['ezpublish']['system'][$defaultSiteaccess] = array();
         $settings['ezpublish']['system'][$adminSiteaccess] = array();
 
-        // If package is not supported, all siteaccesses will have individually url_alias_router to false, forcing legacy fallback
+        // If package is not supported, all siteaccesses will have individually legacy_mode to true, forcing legacy fallback
         if ( !isset( $this->supportedPackages[$sitePackage] ) )
         {
             foreach ( $siteList as $siteaccess )
             {
-                $settings['ezpublish']['system'][$siteaccess] = array( 'url_alias_router' => false );
+                $settings['ezpublish']['system'][$siteaccess] = array( 'legacy_mode' => true );
             }
         }
         else
         {
-            $settings['ezpublish']['system'][$adminSiteaccess] += array( 'url_alias_router' => false );
+            $settings['ezpublish']['system'][$adminSiteaccess] += array( 'legacy_mode' => true );
         }
 
         // FileSettings
