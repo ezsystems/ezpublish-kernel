@@ -94,6 +94,8 @@ class LegacySolr extends Legacy
                     new Solr\Content\Search\CriterionVisitor\ParentLocationIdIn(),
                     new Solr\Content\Search\CriterionVisitor\SectionIn(),
                     new Solr\Content\Search\CriterionVisitor\RemoteIdIn(),
+                    new Solr\Content\Search\CriterionVisitor\LanguageCodeIn(),
+                    new Solr\Content\Search\CriterionVisitor\ObjectStateIdIn(),
                     new Solr\Content\Search\CriterionVisitor\LocationRemoteIdIn(),
                     new Solr\Content\Search\CriterionVisitor\DateMetadata\ModifiedIn(),
                     new Solr\Content\Search\CriterionVisitor\DateMetadata\PublishedIn(),
@@ -133,7 +135,8 @@ class LegacySolr extends Legacy
                 $nameGenerator
             ),
             $fieldRegistry,
-            $persistenceHandler->contentTypeHandler()
+            $persistenceHandler->contentTypeHandler(),
+            $persistenceHandler->objectStateHandler()
         );
 
         $this->indexAll( $persistenceHandler, $searchHandler );
@@ -148,7 +151,7 @@ class LegacySolr extends Legacy
             return;
         }
 
-        // @TODO: Is there a nicer way to get access to all content objects? We 
+        // @TODO: Is there a nicer way to get access to all content objects? We
         // require this to run a full index here.
         $dbHandlerProperty = new \ReflectionProperty( $persistenceHandler, 'dbHandler' );
         $dbHandlerProperty->setAccessible( true );

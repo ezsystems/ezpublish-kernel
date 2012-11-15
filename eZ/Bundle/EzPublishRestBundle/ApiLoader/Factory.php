@@ -148,6 +148,9 @@ class Factory
                     'application/vnd.ez.api.internal.criterion.Subtree'                => new Input\Parser\Criterion\Subtree( $urlHandler ),
                     'application/vnd.ez.api.internal.criterion.UrlAlias'               => new Input\Parser\Criterion\UrlAlias( $urlHandler ),
                     'application/vnd.ez.api.internal.criterion.UserMetadata'           => new Input\Parser\Criterion\UserMetadata( $urlHandler ),
+                    'application/vnd.ez.api.internal.criterion.ObjectStateId'          => new Input\Parser\Criterion\ObjectStateId( $urlHandler ),
+                    'application/vnd.ez.api.internal.criterion.Visibility'             => new Input\Parser\Criterion\Visibility( $urlHandler ),
+                    'application/vnd.ez.api.internal.criterion.LanguageCode'           => new Input\Parser\Criterion\LanguageCode( $urlHandler ),
                 )
             ),
             array(
