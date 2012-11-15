@@ -54,6 +54,8 @@ class ContentHandler implements ContentHandlerInterface
         /** @var \eZ\Publish\SPI\Persistence\Content $contentObj */
         $contentObj = $this->backend->create( 'Content', array( '_currentVersionNo' => 1 ) );
         /** @var \eZ\Publish\SPI\Persistence\Content\ContentInfo $contentInfo */
+        $mainLanguageCode = $this->handler->contentLanguageHandler()
+            ->load( $content->initialLanguageId )->languageCode;
         $contentInfo = $this->backend->create(
             'Content\\ContentInfo',
             array(
@@ -63,13 +65,15 @@ class ContentHandler implements ContentHandlerInterface
                 'ownerId' => $content->ownerId,
                 'status' => VersionInfo::STATUS_DRAFT,
                 'currentVersionNo' => 1,
+                'name' => isset( $content->name[$mainLanguageCode] )
+                    ? $content->name[$mainLanguageCode]
+                    : null,
                 // Published and modified timestamps for drafts is 0
                 'modificationDate' => 0,
                 'publicationDate' => 0,
                 'alwaysAvailable' => $content->alwaysAvailable,
                 'remoteId' => $content->remoteId,
-                'mainLanguageCode' => $this->handler->contentLanguageHandler()
-                    ->load( $content->initialLanguageId )->languageCode
+                'mainLanguageCode' => $mainLanguageCode
             ),
             true
         );
@@ -115,6 +119,17 @@ class ContentHandler implements ContentHandlerInterface
                     ->load( $content->initialLanguageId )->languageCode
             )
         );
+        $locations = array();
+        foreach ( $content->locations as $location )
+        {
+            $location->contentId = $contentInfo->id;
+            $location->contentVersion = 1;
+            $locations[] = $this->handler->locationHandler()->create( $location );
+        }
+        if ( count( $locations ) )
+        {
+            $contentInfo->mainLocationId = $locations[0]->id;
+        }
         $versionInfo->contentInfo = $contentInfo;
         $contentObj->versionInfo = $versionInfo;
         return $contentObj;
