@@ -326,7 +326,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         }
         $struct->created = $struct->modified = time();
         $struct->creatorId = $struct->modifierId = $userId;
-        $struct->status = Type::STATUS_DRAFT;
+        $struct->status = $status;
         $struct->identifier .= '_' . ( $struct->remoteId = md5( uniqid( get_class( $struct ), true ) ) );
         return $this->create( $struct );// this takes care of resetting _typeId and _status on fields
     }
