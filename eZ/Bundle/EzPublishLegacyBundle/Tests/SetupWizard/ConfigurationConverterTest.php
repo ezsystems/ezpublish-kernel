@@ -144,7 +144,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                             ) ),
                         )
                     ),
-                    'ezdemo_site_admin' => array( 'url_alias_router' => false )
+                    'ezdemo_site_admin' => array( 'legacy_mode' => true )
                 ),
                 'imagemagick' => array(
                     'enabled' => true,
@@ -306,7 +306,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                     ),
                     'ezdemo_site_admin' =>
                     array(
-                        'url_alias_router' => false,
+                        'legacy_mode' => true,
                     )
                 ),
             ),

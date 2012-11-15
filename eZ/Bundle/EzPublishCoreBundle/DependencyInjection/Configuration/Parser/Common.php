@@ -65,9 +65,9 @@ class Common extends AbstractParser
                 ->cannotBeEmpty()
                 ->info( 'Directory where binary files (from ezbinaryfile field type) are stored. Default value is "original"' )
             ->end()
-            ->booleanNode( 'url_alias_router' )
-                ->info( 'Whether to use UrlAliasRouter or not. If false, will let the legacy kernel handle url aliases.' )
-                ->defaultValue( true )
+            ->booleanNode( 'legacy_mode' )
+                ->info( 'Whether to use legacy mode or not. If true, will let the legacy kernel handle url aliases.' )
+                ->defaultValue( false )
             ->end()
             ->scalarNode( 'session_name' )
                 ->info( 'The session name. If you want a session name per siteaccess, use "{siteaccess_hash}" token. Will override default session name from framework.session.name' )
@@ -124,8 +124,11 @@ class Common extends AbstractParser
         }
         foreach ( $config[$this->baseKey] as $sa => $settings )
         {
-            if ( isset( $settings['url_alias_router'] ) )
-                $container->setParameter( "ezsettings.$sa.url_alias_router", $settings['url_alias_router'] );
+            if ( isset( $settings['legacy_mode'] ) )
+            {
+                $container->setParameter( "ezsettings.$sa.legacy_mode", $settings['legacy_mode'] );
+                $container->setParameter( "ezsettings.$sa.url_alias_router", !$settings['legacy_mode'] );
+            }
             if ( isset( $settings['var_dir'] ) )
                 $container->setParameter( "ezsettings.$sa.var_dir", $settings['var_dir'] );
             if ( isset( $settings['storage_dir'] ) )
