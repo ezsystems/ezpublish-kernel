@@ -15,7 +15,8 @@ namespace eZ\Publish\Core\MVC\Symfony;
  */
 interface ConfigDumperInterface
 {
-    const OPT_BACKUP_CONFIG = 1;
+    const OPT_DEFAULT = 0,
+          OPT_BACKUP_CONFIG = 1;
 
     /**
      * Dumps settings contained in $configArray in a configuration storage (e.g. a YAML config file).
@@ -25,5 +26,5 @@ interface ConfigDumperInterface
      *
      * @return void
      */
-    public function dump( array $configArray, $options = 0 );
+    public function dump( array $configArray, $options = ConfigDumperInterface::OPT_DEFAULT );
 }

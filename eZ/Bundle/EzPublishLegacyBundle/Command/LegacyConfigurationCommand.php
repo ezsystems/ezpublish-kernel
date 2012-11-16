@@ -51,7 +51,7 @@ EOT
         $configurationDumper = $this->getContainer()->get( 'ezpublish_legacy.setup_wizard.configuration_dumper' );
         $configurationDumper->addEnvironment( $kernel->getEnvironment() );
 
-        $options = 0;
+        $options = ConfigDumperInterface::OPT_DEFAULT;
         if ( $input->getOption( 'backup' ) )
             $options |= ConfigDumperInterface::OPT_BACKUP_CONFIG;
         $configurationDumper->dump( $configurationConverter->fromLegacy( $package, $adminSiteaccess ), $options );

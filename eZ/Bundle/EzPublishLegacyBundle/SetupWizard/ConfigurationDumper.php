@@ -65,7 +65,7 @@ class ConfigurationDumper implements ConfigDumperInterface
      *
      * @return void
      */
-    public function dump( array $configArray, $options = 0 )
+    public function dump( array $configArray, $options = ConfigDumperInterface::OPT_DEFAULT )
     {
         $configPath = "$this->rootDir/config";
         $mainConfigFile = "$configPath/ezpublish.yml";
