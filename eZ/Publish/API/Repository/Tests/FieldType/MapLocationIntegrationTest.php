@@ -314,5 +314,36 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
             ),
         );
     }
-}
 
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array( new MapLocationValue ),
+            array(
+                new MapLocationValue(
+                    array(
+                        'latitude' => null,
+                        'longitude' => null,
+                    )
+                )
+            )
+        );
+    }
+
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+            array(
+                new MapLocationValue(
+                    array(
+                        'latitude' => 0,
+                        'longitude' => 0,
+                    )
+                )
+            )
+        );
+    }
+}

@@ -406,5 +406,20 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
 
         $contentService->deleteContent( $updatedDraft->contentInfo );
     }
-}
 
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array( new ImageValue ),
+        );
+    }
+
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+        );
+    }
+}

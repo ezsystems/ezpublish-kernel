@@ -102,7 +102,7 @@ class ImageTest extends StandardizedFieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return null;
+        return new ImageValue;
     }
 
     /**
@@ -218,7 +218,7 @@ class ImageTest extends StandardizedFieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new ImageValue,
             ),
             array(
                 $this->getImagePath(),

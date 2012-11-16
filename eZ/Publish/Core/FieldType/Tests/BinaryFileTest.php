@@ -36,6 +36,11 @@ class BinaryFileTest extends BinaryBaseTest
         );
     }
 
+    protected function getEmptyValueExpectation()
+    {
+        return new BinaryFileValue;
+    }
+
     public function provideInvalidInputForAcceptValue()
     {
         $baseInput = parent::provideInvalidInputForAcceptValue();
@@ -57,7 +62,7 @@ class BinaryFileTest extends BinaryBaseTest
         return array(
             array(
                 null,
-                null
+                new BinaryFileValue
             ),
             array(
                 __FILE__,

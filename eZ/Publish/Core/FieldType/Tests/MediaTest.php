@@ -36,6 +36,11 @@ class MediaTest extends BinaryBaseTest
         );
     }
 
+    protected function getEmptyValueExpectation()
+    {
+        return new MediaValue;
+    }
+
     protected function getSettingsSchemaExpectation()
     {
         return array(
@@ -87,7 +92,7 @@ class MediaTest extends BinaryBaseTest
         return array(
             array(
                 null,
-                null
+                new MediaValue
             ),
             array(
                 __FILE__,

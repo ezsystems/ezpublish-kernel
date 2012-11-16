@@ -314,5 +314,23 @@ class IntegerIntegrationTest extends BaseIntegrationTest
             ),
         );
     }
+
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array( new IntegerValue() ),
+        );
+    }
+
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+            array( new IntegerValue( 0 ) ),
+            array( new IntegerValue( 0.0 ) ),
+        );
+    }
 }
 

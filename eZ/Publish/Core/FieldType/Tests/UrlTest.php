@@ -61,7 +61,7 @@ class UrlTest extends StandardizedFieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return null;
+        return new UrlValue;
     }
 
     /**
@@ -135,7 +135,7 @@ class UrlTest extends StandardizedFieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new UrlValue,
             ),
             array(
                 'http://example.com/sindelfingen',

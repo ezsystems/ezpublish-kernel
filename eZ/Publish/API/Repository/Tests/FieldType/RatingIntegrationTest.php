@@ -291,5 +291,25 @@ class RatingIntegrationTest extends BaseIntegrationTest
             ),
         );
     }
-}
 
+    /**
+     * Emptyness for rating doesn't make sense, field is always considered as non empty.
+     */
+    public function testIsEmptyValue( $value = null )
+    {
+    }
+
+    public function providerForTestIsEmptyValue()
+    {
+    }
+
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+            array( new RatingValue ),
+        );
+    }
+}

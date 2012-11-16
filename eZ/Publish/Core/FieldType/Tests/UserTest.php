@@ -61,7 +61,7 @@ class UserTest extends StandardizedFieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return null;
+        return new UserValue;
     }
 
     /**
@@ -131,7 +131,7 @@ class UserTest extends StandardizedFieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new UserValue,
             ),
             array(
                 array(),

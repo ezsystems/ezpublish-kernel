@@ -61,7 +61,7 @@ class RatingTest extends FieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return new Value();
+        return new RatingValue();
     }
 
     /**
