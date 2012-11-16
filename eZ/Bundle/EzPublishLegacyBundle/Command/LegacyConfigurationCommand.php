@@ -9,12 +9,12 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Yaml\Dumper;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand,
+    Symfony\Component\Console\Input\InputInterface,
+    Symfony\Component\Console\Output\OutputInterface,
+    Symfony\Component\Console\Input\InputArgument,
+    Symfony\Component\Console\Input\InputOption,
+    eZ\Publish\Core\MVC\Symfony\ConfigDumperInterface;
 
 class LegacyConfigurationCommand extends ContainerAwareCommand
 {
@@ -26,6 +26,7 @@ class LegacyConfigurationCommand extends ContainerAwareCommand
                 array(
                     new InputArgument( 'package', InputArgument::REQUIRED, 'Name of the installed package. Used to generate the settings group name. Example: ezdemo_site' ),
                     new InputArgument( 'adminsiteaccess', InputArgument::REQUIRED, 'Name of your admin siteaccess. Example: ezdemo_site_admin' ),
+                    new InputOption( 'backup', null, InputOption::VALUE_NONE, 'Makes a backup of existing files if any' ),
                 )
             )
             ->setDescription( 'Creates the ezpublish 5 configuration based on an existing ezpublish_legacy' )
@@ -42,21 +43,19 @@ EOT
     {
         $package = $input->getArgument( 'package' );
         $adminSiteaccess = $input->getArgument( 'adminsiteaccess' );
+        $kernel = $this->getContainer()->get( 'kernel' );
 
         /** @var $configurationConverter \eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfigurationConverter */
         $configurationConverter = $this->getContainer()->get( 'ezpublish_legacy.setup_wizard.configuration_converter' );
+        /** @var $configurationDumper \eZ\Bundle\EzpublishLegacyBundle\SetupWizard\ConfigurationDumper */
+        $configurationDumper = $this->getContainer()->get( 'ezpublish_legacy.setup_wizard.configuration_dumper' );
+        $configurationDumper->addEnvironment( $kernel->getEnvironment() );
 
-        /** @var $kernel */
-        $kernel = $this->getContainer()->get( 'kernel' );
+        $options = ConfigDumperInterface::OPT_DEFAULT;
+        if ( $input->getOption( 'backup' ) )
+            $options |= ConfigDumperInterface::OPT_BACKUP_CONFIG;
+        $configurationDumper->dump( $configurationConverter->fromLegacy( $package, $adminSiteaccess ), $options );
 
-        $configurationFile = $kernel->getRootdir() . '/config/ezpublish_' . $kernel->getEnvironment(). '.yml';
-        $yamlConfiguration = $configurationConverter->fromLegacy( $package, $adminSiteaccess );
-        $dumper = new Dumper();
-        file_put_contents(
-            $configurationFile,
-            $dumper->dump( $yamlConfiguration, 7 )
-        );
-
-        $output->writeln( "Configuration written to $configurationFile" );
+        $output->writeln( "Configuration written to ezpublish.yml and environment related ezpublish configuration files." );
     }
 }

@@ -10,8 +10,10 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 
 use Symfony\Component\DependencyInjection\ContainerInterface as Container,
     Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\Yaml\Dumper,
-    eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver;
+    eZ\Publish\Core\MVC\Symfony\ConfigDumperInterface,
+    eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver,
+    eZINI,
+    eZCache;
 
 class LegacySetupController
 {
@@ -75,12 +77,12 @@ class LegacySetupController
             $this->getLegacyKernel()->runCallback(
                 function()
                 {
-                    $directoriesCheckList = \eZINI::instance( 'setup.ini' )->variable( 'directory_permissions', 'CheckList' );
+                    $directoriesCheckList = eZINI::instance( 'setup.ini' )->variable( 'directory_permissions', 'CheckList' );
                     $injectedSettings = array();
                     // checked folders are relative to the ezpublish_legacy folder
                     $injectedSettings['setup.ini']['directory_permissions']['CheckList'] =
                         "../ezpublish/logs;../ezpublish/cache;../ezpublish/config;" . $directoriesCheckList;
-                    \eZINI::injectSettings( $injectedSettings );
+                    eZINI::injectSettings( $injectedSettings );
                 }
             );
         }
@@ -98,9 +100,9 @@ class LegacySetupController
             $this->getLegacyKernel()->runCallback(
                 function()
                 {
-                    \eZINI::injectSettings( array() );
-                    \eZCache::clearByTag( 'ini' );
-                    \eZINI::resetAllInstances();
+                    eZINI::injectSettings( array() );
+                    eZCache::clearByTag( 'ini' );
+                    eZINI::resetAllInstances();
                 }
             );
 
@@ -122,26 +124,13 @@ class LegacySetupController
 
                 /** @var $configurationConverter \eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfigurationConverter */
                 $configurationConverter = $this->container->get( 'ezpublish_legacy.setup_wizard.configuration_converter' );
-
-                $dumper = new Dumper();
-
-                $settingsArray = $configurationConverter->fromLegacy( $chosenSitePackage, $adminSiteaccess );
-
-                // add the import statement for the root YAML file
-                $settingsArray['imports'] = array( array( 'resource' => 'ezpublish.yml' ) );
-
-                $kernel = $this->container->get( 'kernel' );
-                file_put_contents(
-                    $kernel->getRootdir() . '/config/ezpublish_' . $kernel->getEnvironment(). '.yml',
-                    $dumper->dump( $settingsArray, 7 )
+                /** @var $configurationDumper \eZ\Bundle\EzpublishLegacyBundle\SetupWizard\ConfigurationDumper */
+                $configurationDumper = $this->container->get( 'ezpublish_legacy.setup_wizard.configuration_dumper' );
+                $configurationDumper->addEnvironment( $this->container->get( 'kernel' )->getEnvironment() );
+                $configurationDumper->dump(
+                    $configurationConverter->fromLegacy( $chosenSitePackage, $adminSiteaccess ),
+                    ConfigDumperInterface::OPT_BACKUP_CONFIG
                 );
-
-                /** @var $filesystem \Symfony\Component\Filesystem\Filesystem */
-                $filesystem = $this->container->get( 'filesystem' );
-                $cacheDir = $this->container->getParameter( 'kernel.cache_dir' );
-                $oldCacheDirName = $cacheDir . '_old';
-                $filesystem->rename( $cacheDir, $oldCacheDirName );
-                $filesystem->remove( $oldCacheDirName );
             }
         }
 
