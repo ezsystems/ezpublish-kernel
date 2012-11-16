@@ -35,7 +35,10 @@ class ConfigurationDumper implements ConfigDumperInterface
     protected $cacheDir;
 
     /**
-     * @var array Environments to pre-generate config file for.
+     * Set of environments to pre-generate config file for.
+     * Key is the environment name.
+     *
+     * @var array
      */
     protected $envs;
 
@@ -44,7 +47,7 @@ class ConfigurationDumper implements ConfigDumperInterface
         $this->fs = $fs;
         $this->rootDir = $rootDir;
         $this->cacheDir = $cacheDir;
-        $this->envs = $envs;
+        $this->envs = array_fill_keys( $envs, true );
     }
 
     /**
@@ -54,7 +57,7 @@ class ConfigurationDumper implements ConfigDumperInterface
      */
     public function addEnvironment( $env )
     {
-        $this->envs[] = $env;
+        $this->envs[$env] = true;
     }
 
     /**
@@ -77,7 +80,7 @@ class ConfigurationDumper implements ConfigDumperInterface
         file_put_contents( $mainConfigFile, Yaml::dump( $configArray, 7 ) );
 
         // Now generates environment config files
-        foreach ( array_unique( $this->envs ) as $env )
+        foreach ( array_keys( $this->envs ) as $env )
         {
             $configFile = "$configPath/ezpublish_{$env}.yml";
             // Add the import statement for the root YAML file
