@@ -65,10 +65,6 @@ class RestLocation extends ValueObjectVisitor
         $generator->startValueElement( 'pathString', $data->location->pathString );
         $generator->endValueElement( 'pathString' );
 
-        // 'c' is the PHP date/time format compatible with XSD dateTime datatype
-        $generator->startValueElement( 'subLocationModificationDate', date( 'c', $data->location->modifiedSubLocationDate->getTimestamp() ) );
-        $generator->endValueElement( 'subLocationModificationDate' );
-
         $generator->startValueElement( 'depth', $data->location->depth );
         $generator->endValueElement( 'depth' );
 

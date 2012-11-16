@@ -119,8 +119,6 @@ class LocationServiceStub implements LocationService
         $data['pathString'] = $parentLocation->pathString . $data['id'] . '/';
         $data['depth'] = substr_count( $data['pathString'], '/' ) - 2;
         $data['invisible'] = $locationCreateStruct->hidden;
-        // @TODO: Do parent locations need update?
-        $data['modifiedSubLocationDate'] = new \DateTime();
 
         $location = new LocationStub( $data );
         $this->locations[$location->id] = $location;
@@ -329,7 +327,6 @@ class LocationServiceStub implements LocationService
             'contentInfo' => $location->contentInfo,
             'parentLocationId' => $location->parentLocationId,
             'pathString' => $location->pathString,
-            'modifiedSubLocationDate' => $location->modifiedSubLocationDate,
             'depth' => $location->depth,
             'sortField' => $location->sortField,
             'sortOrder' => $location->sortOrder,

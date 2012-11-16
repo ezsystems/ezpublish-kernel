@@ -324,7 +324,6 @@ class TrashService implements TrashServiceInterface
                 'remoteId' => $spiTrashItem->remoteId,
                 'parentLocationId' => (int) $spiTrashItem->parentId,
                 'pathString' => $spiTrashItem->pathString,
-                'modifiedSubLocationDate' => $this->getDateTime( $spiTrashItem->modifiedSubLocation ),
                 'depth' => (int) $spiTrashItem->depth,
                 'sortField' => (int) $spiTrashItem->sortField,
                 'sortOrder' => (int) $spiTrashItem->sortOrder,

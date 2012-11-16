@@ -44,9 +44,6 @@ class Location extends Parser
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
-        $modifiedSubLocationDate = new \DateTime();
-        $modifiedSubLocationDate->setTimestamp( strtotime( $data['subLocationModificationDate'] ) );
-
         $content = $parsingDispatcher->parse( $data['Content'], 'Content' );
 
         return new Values\Content\Location(
@@ -59,7 +56,6 @@ class Location extends Parser
                 'remoteId' => $data['remoteId'],
                 'parentLocationId' => $data['ParentLocation']['_href'],
                 'pathString' => $data['pathString'],
-                'modifiedSubLocationDate' => $modifiedSubLocationDate,
                 'depth' => (int) $data['depth'],
                 'sortField' => $this->parserTools->parseDefaultSortField( $data['sortField'] ),
                 'sortOrder' => $this->parserTools->parseDefaultSortOrder( $data['sortOrder'] ),

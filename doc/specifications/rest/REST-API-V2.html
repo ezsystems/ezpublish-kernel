@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.9: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.9.1: http://docutils.sourceforge.net/" />
 <title>eZ Publish REST API V2 RFC</title>
 <style type="text/css">
 
@@ -3366,7 +3366,6 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
   <span class="nt">&lt;invisible&gt;</span>false<span class="nt">&lt;/invisible&gt;</span>
   <span class="nt">&lt;ParentLocation</span> <span class="na">href=</span><span class="s">&quot;/content/locations/1/5/73&quot;</span> <span class="na">media-type=</span><span class="s">&quot;application/vnd.ez.api.Location+xml&quot;</span><span class="nt">/&gt;</span>
   <span class="nt">&lt;pathString&gt;</span>/1/5/73/133<span class="nt">&lt;/pathString&gt;</span>
-  <span class="nt">&lt;subLocationModificationDate&gt;</span>2001-01-01T12:45:00<span class="nt">&lt;/subLocationModificationDate&gt;</span>
   <span class="nt">&lt;depth&gt;</span>4<span class="nt">&lt;/depth&gt;</span>
   <span class="nt">&lt;childCount&gt;</span>0<span class="nt">&lt;/childCount&gt;</span>
   <span class="nt">&lt;remoteId&gt;</span>remoteId-qwert567<span class="nt">&lt;/remoteId&gt;</span>
@@ -3619,7 +3618,6 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
   <span class="nt">&lt;invisible&gt;</span>false<span class="nt">&lt;/invisible&gt;</span>
   <span class="nt">&lt;ParentLocation</span> <span class="na">href=</span><span class="s">&quot;/content/locations/1/5/73&quot;</span> <span class="na">media-type=</span><span class="s">&quot;application/vnd.ez.api.Location+xml&quot;</span><span class="nt">/&gt;</span>
   <span class="nt">&lt;pathString&gt;</span>/1/5/73/133<span class="nt">&lt;/pathString&gt;</span>
-  <span class="nt">&lt;subLocationModificationDate&gt;</span>2001-01-01T12:45:00<span class="nt">&lt;/subLocationModificationDate&gt;</span>
   <span class="nt">&lt;depth&gt;</span>4<span class="nt">&lt;/depth&gt;</span>
   <span class="nt">&lt;childCount&gt;</span>0<span class="nt">&lt;/childCount&gt;</span>
   <span class="nt">&lt;remoteId&gt;</span>remoteId-qwert567<span class="nt">&lt;/remoteId&gt;</span>
@@ -3755,7 +3753,6 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
   <span class="nt">&lt;invisible&gt;</span>true<span class="nt">&lt;/invisible&gt;</span>
   <span class="nt">&lt;ParentLocation</span> <span class="na">href=</span><span class="s">&quot;/content/locations/1/5/73&quot;</span> <span class="na">media-type=</span><span class="s">&quot;application/vnd.ez.api.Location+xml&quot;</span><span class="nt">/&gt;</span>
   <span class="nt">&lt;pathString&gt;</span>/1/5/73/133<span class="nt">&lt;/pathString&gt;</span>
-  <span class="nt">&lt;subLocationModificationDate&gt;</span>2001-01-01T12:45:00<span class="nt">&lt;/subLocationModificationDate&gt;</span>
   <span class="nt">&lt;depth&gt;</span>4<span class="nt">&lt;/depth&gt;</span>
   <span class="nt">&lt;childCount&gt;</span>0<span class="nt">&lt;/childCount&gt;</span>
   <span class="nt">&lt;remoteId&gt;</span>remoteId-qwert999<span class="nt">&lt;/remoteId&gt;</span>
@@ -13164,15 +13161,6 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
               <span class="nt">&lt;/xsd:documentation&gt;</span>
             <span class="nt">&lt;/xsd:annotation&gt;</span>
           <span class="nt">&lt;/xsd:element&gt;</span>
-          <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;subLocationModificationDate&quot;</span>
-            <span class="na">type=</span><span class="s">&quot;xsd:dateTime&quot;</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;xsd:annotation&gt;</span>
-              <span class="nt">&lt;xsd:documentation&gt;</span>
-                Timestamp of the latest update of a
-                content object in a sub location.
-              <span class="nt">&lt;/xsd:documentation&gt;</span>
-            <span class="nt">&lt;/xsd:annotation&gt;</span>
-          <span class="nt">&lt;/xsd:element&gt;</span>
           <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;depth&quot;</span> <span class="na">type=</span><span class="s">&quot;xsd:int&quot;</span><span class="nt">&gt;</span>
             <span class="nt">&lt;xsd:annotation&gt;</span>
               <span class="nt">&lt;xsd:documentation&gt;</span>
@@ -13274,15 +13262,6 @@ Content-Length: <span class="nt">&lt;length&gt;</span>
               <span class="nt">&lt;xsd:documentation&gt;</span>
                 The materialized path of the location
                 entry, eg: /1/2/
-              <span class="nt">&lt;/xsd:documentation&gt;</span>
-            <span class="nt">&lt;/xsd:annotation&gt;</span>
-          <span class="nt">&lt;/xsd:element&gt;</span>
-          <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">&quot;subLocationModificationDate&quot;</span>
-            <span class="na">type=</span><span class="s">&quot;xsd:dateTime&quot;</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;xsd:annotation&gt;</span>
-              <span class="nt">&lt;xsd:documentation&gt;</span>
-                Timestamp of the latest update of a
-                content object in a sub location.
               <span class="nt">&lt;/xsd:documentation&gt;</span>
             <span class="nt">&lt;/xsd:annotation&gt;</span>
           <span class="nt">&lt;/xsd:element&gt;</span>

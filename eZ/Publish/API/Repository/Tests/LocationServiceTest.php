@@ -20,8 +20,6 @@ use \eZ\Publish\API\Repository\Exceptions;
  *
  * @see eZ\Publish\API\Repository\LocationService
  * @group location
- *
- * @TODO: Tests for Location::$modifiedSubLocationDate property behavior.
  */
 class LocationServiceTest extends BaseTest
 {
@@ -157,7 +155,6 @@ class LocationServiceTest extends BaseTest
         );
 
         $this->assertNotNull( $createdLocation->id );
-        $this->assertInstanceOf( 'DateTime', $createdLocation->modifiedSubLocationDate );
     }
 
     /**
@@ -365,8 +362,6 @@ class LocationServiceTest extends BaseTest
                 'remoteId' => '3f6d92f8044aed134f32153517850f5a',
                 'parentLocationId' => $this->generateId( 'location', 1 ),
                 'pathString' => '/1/5/',
-                // @todo: Fix date handling in tests
-                'modifiedSubLocationDate' => $this->createDateTime( 1343140542 ),
                 'depth' => 1,
                 'sortField' => 1,
                 'sortOrder' => 1,
@@ -982,8 +977,6 @@ class LocationServiceTest extends BaseTest
             ),
             $updatedLocation
         );
-
-        $this->assertInstanceOf( 'DateTime', $updatedLocation->modifiedSubLocationDate );
     }
 
     /**

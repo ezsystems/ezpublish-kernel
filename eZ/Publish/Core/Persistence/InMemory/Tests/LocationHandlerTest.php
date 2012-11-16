@@ -326,15 +326,7 @@ class LocationHandlerTest extends HandlerTest
             )->locations[0] as $property => $value
         )
         {
-            switch ( $property )
-            {
-                case 'modifiedSubLocation' :
-                    self::assertGreaterThanOrEqual( $newLocation->$property, $value, "Location does not match" );
-                    break;
-
-                default:
-                    self::assertEquals( $newLocation->$property, $value, "Location does not match" );
-            }
+            self::assertEquals( $newLocation->$property, $value, "Location does not match" );
         }
 
         // Verifying the direct child is present
@@ -345,15 +337,7 @@ class LocationHandlerTest extends HandlerTest
             )->locations[0] as $property => $value
         )
         {
-            switch ( $property )
-            {
-                case 'modifiedSubLocation' :
-                    self::assertGreaterThanOrEqual( $loc->$property, $value, "Location does not match" );
-                    break;
-
-                default:
-                    self::assertEquals( $loc->$property, $value, "Location does not match" );
-            }
+            self::assertEquals( $loc->$property, $value, "Location does not match" );
         }
         unset( $loc );
 
@@ -365,15 +349,7 @@ class LocationHandlerTest extends HandlerTest
             )->locations[0] as $property => $value
         )
         {
-            switch ( $property )
-            {
-                case 'modifiedSubLocation' :
-                    self::assertGreaterThanOrEqual( $loc->$property, $value, "Location does not match" );
-                    break;
-
-                default:
-                    self::assertEquals( $loc->$property, $value, "Location does not match" );
-            }
+            self::assertEquals( $loc->$property, $value, "Location does not match" );
         }*/
     }
 

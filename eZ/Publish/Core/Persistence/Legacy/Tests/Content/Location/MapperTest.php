@@ -55,7 +55,6 @@ class LocationHandlerTest extends TestCase
         'parentId' => 2,
         'pathIdentificationString' => 'solutions',
         'pathString' => '/1/2/77/',
-        'modifiedSubLocation' => 1311065017,
         'mainLocationId' => 77,
         'depth' => 2,
         'sortField' => 2,

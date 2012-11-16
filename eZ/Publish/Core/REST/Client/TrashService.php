@@ -242,7 +242,6 @@ class TrashService implements \eZ\Publish\API\Repository\TrashService, Sessionab
                 'remoteId' => $location->remoteId,
                 'parentLocationId' => $location->parentLocationId,
                 'pathString' => $location->pathString,
-                'modifiedSubLocationDate' => $location->modifiedSubLocationDate,
                 'depth' => (int) $location->depth,
                 'sortField' => $location->sortField,
                 'sortOrder' => $location->sortOrder,

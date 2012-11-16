@@ -34,7 +34,6 @@ class LocationTest extends BaseTest
                 '_href' => '/content/locations/1/2/21'
             ),
             'pathString' => '/1/2/21/42',
-            'subLocationModificationDate' => '1970-01-01T01:00+01:00',
             'depth' => '3',
             'Content' => array(
                 '_href' => '/content/objects/42'
@@ -159,20 +158,6 @@ class LocationTest extends BaseTest
         $this->assertEquals(
             '/1/2/21/42',
             $result->pathString
-        );
-    }
-
-    /**
-     * Tests that the resulting location contains the modification date
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $result
-     * @depends testParse
-     */
-    public function testResultContainsModificationDate( $result )
-    {
-        $this->assertInstanceOf(
-            '\\DateTime',
-            $result->modifiedSubLocationDate
         );
     }
 
