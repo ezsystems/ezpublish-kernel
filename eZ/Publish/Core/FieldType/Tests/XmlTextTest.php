@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\XmlText\Type as XmlTextType,
     eZ\Publish\Core\FieldType\XmlText\Input\EzXml,
-    eZ\Publish\Core\FieldType\XmlText\Input\EzSimplifiedXml,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     Exception,
     DOMDocument;
@@ -157,10 +156,6 @@ class XmlTextTest extends FieldTypeTest
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
             ),
             array( new EzXml( $xml ) ),
-
-            array( new EzSimplifiedXml( "<section><p><b>test</b></p></section>" ) ),
-
-            array( new EzSimplifiedXml( '<section><p><a node_id="1">test</a><a object_id="1">test</a></p></section>' ) ),
         );
     }
 

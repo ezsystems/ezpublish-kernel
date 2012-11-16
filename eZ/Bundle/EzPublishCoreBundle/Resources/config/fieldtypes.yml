@@ -28,22 +28,9 @@ parameters:
     ezpublish.fieldType.ezurl.externalStorage.class: eZ\Publish\Core\FieldType\Url\UrlStorage
     ezpublish.fieldType.ezxmltext.class: eZ\Publish\Core\FieldType\XmlText\Type
     ezpublish.fieldType.ezxmltext.externalStorage.class: eZ\Publish\Core\FieldType\XmlText\XmlTextStorage
-    ezpublish.fieldType.ezxmltext.simplifiedInputParser.class: eZ\Publish\Core\FieldType\XmlText\Input\Parser\Simplified
-    ezpublish.fieldType.ezxmltext.xmlSchema.class: eZ\Publish\Core\FieldType\XmlText\Schema
-    ezpublish.fieldType.ezxmltext.xmlSchema.options: []
     ezpublish.fieldType.ezxmltext.converter.html5.class: eZ\Publish\Core\FieldType\XmlText\Converter\Html5
     ezpublish.fieldType.ezxmltext.converter.html5.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5.xsl
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5
-    # ezpublish.fieldType.ezxmltext.xmlSchema.options:
-    #    customAttributes:
-    #         table:
-    #             - cellpadding
-    #     classesList:
-    #         paragraph:
-    #             - pink
-    #     customTags:
-    #         underline:
-    #             isInline: true
     ezpublish.fieldType.ezpage.class: eZ\Publish\Core\FieldType\Page\Type
     ezpublish.fieldType.ezpage.pageService.class: eZ\Publish\Core\FieldType\Page\Service
     ezpublish.fieldtype.ezpage.zoneDefinition: {}
@@ -481,19 +468,6 @@ services:
         arguments: [[]]
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezxmltext}
-
-    ezpublish.fieldType.ezxmltext.simplifiedInputParser:
-        class: %ezpublish.fieldType.ezxmltext.simplifiedInputParser.class%
-        public: false
-        arguments:
-            - @ezpublish.fieldType.ezxmltext.xmlSchema
-        #   - {TrimSpaces: true, AllowMultipleSpaces: true}
-
-    ezpublish.fieldType.ezxmltext.xmlSchema:
-        class: %ezpublish.fieldType.ezxmltext.xmlSchema.class%
-        arguments:
-            - %ezpublish.fieldType.ezxmltext.xmlSchema.options%
-        public: false
 
     ezpublish.fieldType.ezxmltext.converter.html5:
         class: %ezpublish.fieldType.ezxmltext.converter.html5.class%
