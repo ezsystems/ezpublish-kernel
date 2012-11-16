@@ -15,8 +15,7 @@ namespace eZ\Publish\Core\MVC\Symfony;
  */
 interface ConfigDumperInterface
 {
-    const OPT_MERGE_CONFIG = 1,
-          OPT_BACKUP_CONFIG = 2;
+    const OPT_BACKUP_CONFIG = 1;
 
     /**
      * Dumps settings contained in $configArray in a configuration storage (e.g. a YAML config file).

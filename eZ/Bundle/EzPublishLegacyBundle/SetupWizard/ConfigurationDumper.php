@@ -69,17 +69,9 @@ class ConfigurationDumper implements ConfigDumperInterface
     {
         $configPath = "$this->rootDir/config";
         $mainConfigFile = "$configPath/ezpublish.yml";
-        if ( $this->fs->exists( $mainConfigFile ) )
+        if ( $this->fs->exists( $mainConfigFile ) && $options & static::OPT_BACKUP_CONFIG )
         {
-            if ( $options & static::OPT_BACKUP_CONFIG )
-            {
-                $this->backupConfigFile( $mainConfigFile );
-            }
-
-            if ( $options & static::OPT_MERGE_CONFIG )
-            {
-                $configArray = $this->mergeConfig( $configArray, $mainConfigFile );
-            }
+            $this->backupConfigFile( $mainConfigFile );
         }
 
         file_put_contents( $mainConfigFile, Yaml::dump( $configArray, 7 ) );
@@ -94,40 +86,9 @@ class ConfigurationDumper implements ConfigDumperInterface
             );
 
             // File already exists, handle possible options
-            if ( $this->fs->exists( $configFile ) )
+            if ( $this->fs->exists( $configFile ) && $options & static::OPT_BACKUP_CONFIG )
             {
-                if ( $options & static::OPT_BACKUP_CONFIG )
-                {
-                    $this->backupConfigFile( $configFile );
-                }
-
-                if ( $options & static::OPT_MERGE_CONFIG )
-                {
-                    $envConfigArrayStale = Yaml::parse( $configFile );
-                    $hasImport = false;
-
-                    // If previous config file already has an import section, check if we already have the right one.
-                    if ( isset( $envConfigArrayStale['imports'] ) )
-                    {
-                        foreach ( $envConfigArrayStale['imports'] as $import )
-                        {
-                            if ( isset( $import['resource'] ) && $import['resource'] === 'ezpublish.yml' )
-                            {
-                                $hasImport = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    if ( !$hasImport )
-                    {
-                        $envConfigArray = $this->mergeConfig( $envConfigArrayStale, $envConfigArray );
-                    }
-                    else
-                    {
-                        $envConfigArray = $envConfigArrayStale;
-                    }
-                }
+                $this->backupConfigFile( $configFile );
             }
 
             file_put_contents( $configFile, Yaml::dump( $envConfigArray, 7 ) );
@@ -140,29 +101,12 @@ class ConfigurationDumper implements ConfigDumperInterface
      * Makes a backup copy of $configFile.
      *
      * @param $configFile
+     * @return void
      */
     protected function backupConfigFile( $configFile )
     {
         if ( $this->fs->exists( $configFile ) )
             $this->fs->copy( $configFile, $configFile . '-' . date('Y-m-d_H-i-s') );
-    }
-
-    /**
-     * Merges $configArray with settings from $configFile.
-     *
-     * @param array $configArray
-     * @param string $configFile Path to config file to merge settings into. The file must be a valid YAML file.
-     * @return array
-     */
-    protected function mergeConfig( array $configArray, $configFile )
-    {
-        $existingConfig = Yaml::parse( $configFile );
-        if ( is_array( $existingConfig ) )
-        {
-            return array_merge_recursive( Yaml::parse( $configFile ), $configArray );
-        }
-
-        return $configArray;
     }
 
     /**

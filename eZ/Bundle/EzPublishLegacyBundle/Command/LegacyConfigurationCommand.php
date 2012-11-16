@@ -27,7 +27,6 @@ class LegacyConfigurationCommand extends ContainerAwareCommand
                     new InputArgument( 'package', InputArgument::REQUIRED, 'Name of the installed package. Used to generate the settings group name. Example: ezdemo_site' ),
                     new InputArgument( 'adminsiteaccess', InputArgument::REQUIRED, 'Name of your admin siteaccess. Example: ezdemo_site_admin' ),
                     new InputOption( 'backup', null, InputOption::VALUE_NONE, 'Makes a backup of existing files if any' ),
-                    new InputOption( 'merge', null, InputOption::VALUE_NONE, 'Merges into existing ezpublish configuration files' )
                 )
             )
             ->setDescription( 'Creates the ezpublish 5 configuration based on an existing ezpublish_legacy' )
@@ -55,8 +54,6 @@ EOT
         $options = 0;
         if ( $input->getOption( 'backup' ) )
             $options |= ConfigDumperInterface::OPT_BACKUP_CONFIG;
-        if ( $input->getOption( 'merge' ) )
-            $options |= ConfigDumperInterface::OPT_MERGE_CONFIG;
         $configurationDumper->dump( $configurationConverter->fromLegacy( $package, $adminSiteaccess ), $options );
 
         $output->writeln( "Configuration written to ezpublish.yml and environment related ezpublish configuration files." );
