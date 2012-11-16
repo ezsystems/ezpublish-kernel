@@ -49,7 +49,7 @@ EOT
         $configurationConverter = $this->getContainer()->get( 'ezpublish_legacy.setup_wizard.configuration_converter' );
         /** @var $configurationDumper \eZ\Bundle\EzpublishLegacyBundle\SetupWizard\ConfigurationDumper */
         $configurationDumper = $this->getContainer()->get( 'ezpublish_legacy.setup_wizard.configuration_dumper' );
-        $configurationDumper->addEnv( $kernel->getEnvironment() );
+        $configurationDumper->addEnvironment( $kernel->getEnvironment() );
 
         $options = 0;
         if ( $input->getOption( 'backup' ) )

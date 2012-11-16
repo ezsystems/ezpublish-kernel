@@ -52,7 +52,7 @@ class ConfigurationDumper implements ConfigDumperInterface
      *
      * @param string $env
      */
-    public function addEnv( $env )
+    public function addEnvironment( $env )
     {
         $this->envs[] = $env;
     }

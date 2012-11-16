@@ -126,7 +126,7 @@ class LegacySetupController
                 $configurationConverter = $this->container->get( 'ezpublish_legacy.setup_wizard.configuration_converter' );
                 /** @var $configurationDumper \eZ\Bundle\EzpublishLegacyBundle\SetupWizard\ConfigurationDumper */
                 $configurationDumper = $this->container->get( 'ezpublish_legacy.setup_wizard.configuration_dumper' );
-                $configurationDumper->addEnv( $this->container->get( 'kernel' )->getEnvironment() );
+                $configurationDumper->addEnvironment( $this->container->get( 'kernel' )->getEnvironment() );
                 $configurationDumper->dump(
                     $configurationConverter->fromLegacy( $chosenSitePackage, $adminSiteaccess ),
                     ConfigDumperInterface::OPT_BACKUP_CONFIG
