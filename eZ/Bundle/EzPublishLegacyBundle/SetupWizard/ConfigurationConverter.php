@@ -10,7 +10,9 @@ namespace eZ\Bundle\EzPublishLegacyBundle\SetupWizard;
 
 use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
-    eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
+    eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel,
+    eZINI,
+    eZSiteAccess;
 
 /**
  * Handles conversionlegacy eZ Publish 4 parameters from a set of settings to a configuration array
@@ -52,9 +54,9 @@ class ConfigurationConverter
         $settings = array();
         $settings['ezpublish'] = array();
         $settings['ezpublish']['siteaccess'] = array();
-        $defaultSiteaccess = $this->legacyResolver->getParameter( 'SiteSettings.DefaultAccess' );
+        $defaultSiteaccess = $this->getParameter( 'SiteSettings', 'DefaultAccess' );
         $settings['ezpublish']['siteaccess']['default_siteaccess'] = $defaultSiteaccess;
-        $siteList = $this->legacyResolver->getParameter( 'SiteAccessSettings.AvailableSiteAccessList' );
+        $siteList = $this->getParameter( 'SiteAccessSettings', 'AvailableSiteAccessList' );
 
         if ( !is_array( $siteList ) || empty( $siteList ) )
             throw new InvalidArgumentException( 'siteList', 'can not be empty' );
@@ -75,7 +77,7 @@ class ConfigurationConverter
             'eZMySQLDB' => 'mysql',
         );
 
-        $databaseSettings = $this->getGroupWithFallback( 'DatabaseSettings', 'site', $defaultSiteaccess );
+        $databaseSettings = $this->getGroup( 'DatabaseSettings', 'site.ini', $defaultSiteaccess );
 
         $databaseType = $databaseSettings['DatabaseImplementation'];
         if ( isset( $databaseMapping[$databaseType] ) )
@@ -109,21 +111,21 @@ class ConfigurationConverter
 
         // FileSettings
         $settings['ezpublish']['system'][$groupName]['var_dir'] =
-            $this->getParameterWithFallback( 'FileSettings.VarDir', 'site', $defaultSiteaccess );
+            $this->getParameter( 'FileSettings', 'VarDir', 'site.ini', $defaultSiteaccess );
 
         // we don't map the default FileSettings.StorageDir value
-        $storageDir = $this->getParameterWithFallback( 'FileSettings.StorageDir', 'site', $defaultSiteaccess );
+        $storageDir = $this->getParameter( 'FileSettings', 'StorageDir', 'site.ini', $defaultSiteaccess );
         if ( $storageDir !== 'storage' )
             $settings['ezpublish']['system'][$groupName]['storage_dir'] = $storageDir;
 
 
         // ImageMagick settings
-        $imageMagickEnabled = $this->getParameterWithFallback( 'ImageMagick.IsEnabled', 'image', $defaultSiteaccess );
+        $imageMagickEnabled = $this->getParameter( 'ImageMagick', 'IsEnabled', 'image.ini', $defaultSiteaccess );
         if ( $imageMagickEnabled == 'true' )
         {
             $settings['ezpublish']['imagemagick']['enabled'] = true;
-            $imageMagickExecutablePath = $this->getParameterWithFallback( 'ImageMagick.ExecutablePath', 'image', $defaultSiteaccess );
-            $imageMagickExecutable = $this->getParameterWithFallback( 'ImageMagick.Executable', 'image', $defaultSiteaccess );
+            $imageMagickExecutablePath = $this->getParameter( 'ImageMagick', 'ExecutablePath', 'image.ini', $defaultSiteaccess );
+            $imageMagickExecutable = $this->getParameter( 'ImageMagick', 'Executable', 'image.ini', $defaultSiteaccess );
             $settings['ezpublish']['imagemagick']['path'] = rtrim( $imageMagickExecutablePath, '/\\' ) . '/' . $imageMagickExecutable;
         }
         else
@@ -133,11 +135,11 @@ class ConfigurationConverter
 
         // image variations settings
         $settings['ezpublish']['system'][$defaultSiteaccess]['image_variations'] = array();
-        $imageAliasesList = $this->getGroupWithFallback( 'AliasSettings', 'image', $defaultSiteaccess );
+        $imageAliasesList = $this->getGroup( 'AliasSettings', 'image.ini', $defaultSiteaccess );
         foreach( $imageAliasesList['AliasList'] as $imageAliasIdentifier )
         {
             $variationSettings = array( 'reference' => null, 'filters' => array() );
-            $aliasSettings = $this->getGroupWithFallback( $imageAliasIdentifier, 'image', $defaultSiteaccess );
+            $aliasSettings = $this->getGroup( $imageAliasIdentifier, 'image.ini', $defaultSiteaccess );
             if ( isset( $aliasSettings['Reference'] ) && $aliasSettings['Reference'] != '' )
             {
                 $variationSettings['reference'] = $aliasSettings['Reference'];
@@ -191,60 +193,65 @@ class ConfigurationConverter
     }
 
     /**
-     * Returns the contents of the legacy group $groupName, either in $defaultSiteaccess or,
-     * if not found, in the global settings
+     * Returns the contents of the legacy group $groupName. If $file and
+     * $siteaccess are null, the global value is fetched with the legacy resolver.
      *
-     * @param $groupName
-     * @param $namespace
-     * @param $siteaccess
+     * @param string $groupName
+     * @param string|null $namespace
+     * @param string|null $siteaccess
      *
-     * @internal param $defaultSiteaccess
      * @return array
-     *
-     * @throws \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException
      */
-    public function getGroupWithFallback( $groupName, $namespace, $siteaccess )
+    public function getGroup( $groupName, $file = null, $siteaccess = null )
     {
-        try
+        if ( $file === null && $siteaccess === null )
         {
-            return $this->legacyResolver->getGroup( $groupName, $namespace, $siteaccess );
+            // in this case we want the "global" value, no need to use the
+            // legacy kernel, the legacy resolver is enough
+            return $this->legacyResolver->getGroup( $groupName );
         }
-        // fallback to global override
-        catch ( \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException $e )
-        {
-            return $this->legacyResolver->getGroup( $groupName, $namespace );
-        }
+        return $this->legacyKernel->runCallback(
+            function () use ( $file, $groupName, $siteaccess )
+            {
+                eZINI::injectSettings( array() );
+                return eZSiteAccess::getIni( $siteaccess, $file )->group( $groupName );
+            }
+        );
     }
 
     /**
-     * Returns the value of the legacy parameter $parameterName, either in $defaultSiteaccess or,
-     * if not found, in the global settings
+     * Returns the value of the legacy parameter $parameterName in $groupName.
+     * If $file and $siteaccess are null, the global value is fetched with the
+     * legacy resolver.
      *
-     * @param $parameterName
-     * @param $namespace
-     * @param $siteaccess
+     * @param string $groupName
+     * @param string $parameterName
+     * @param string|null $file
+     * @param string|null $siteaccess
      *
-     * @internal param $groupName
-     * @internal param $defaultSiteaccess
      * @return array
-     *
      */
-    public function getParameterWithFallback( $parameterName, $namespace, $siteaccess )
+    public function getParameter( $groupName, $parameterName, $file = null, $siteaccess = null )
     {
-        try
+        if ( $file === null && $siteaccess === null )
         {
-            return $this->legacyResolver->getParameter( $parameterName, $namespace, $siteaccess );
+            // in this case we want the "global" value, no need to use the
+            // legacy kernel, the legacy resolver is enough
+            return $this->legacyResolver->getParameter( "$groupName.$parameterName" );
         }
-            // fallback to global override
-        catch ( \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException $e )
-        {
-            return $this->legacyResolver->getParameter( $parameterName, $namespace );
-        }
+        return $this->legacyKernel->runCallback(
+            function () use ( $file, $groupName, $parameterName, $siteaccess )
+            {
+                eZINI::injectSettings( array() );
+                return eZSiteAccess::getIni( $siteaccess, $file )
+                    ->variable( $groupName, $parameterName );
+            }
+        );
     }
 
     protected function resolveMatching()
     {
-        $siteaccessSettings = $this->legacyResolver->getGroup( 'SiteAccessSettings' );
+        $siteaccessSettings = $this->getGroup( 'SiteAccessSettings' );
 
         $matching = array(); $match = false;
         foreach( explode( ';', $siteaccessSettings['MatchOrder'] ) as $matchMethod )
@@ -262,7 +269,7 @@ class ConfigurationConverter
                     $match = false;
                     break;
                 case 'port':
-                    $match = array( 'Map\Port' => $this->legacyResolver->getGroup( 'PortAccessSettings' ) );
+                    $match = array( 'Map\Port' => $this->getGroup( 'PortAccessSettings' ) );
                     break;
             }
             if ( $match !== false )
