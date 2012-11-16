@@ -47,6 +47,11 @@ class ConfigurationDumper implements ConfigDumperInterface
         $this->envs = $envs;
     }
 
+    /**
+     * Adds an environment to dump a configuration file for.
+     *
+     * @param string $env
+     */
     public function addEnv( $env )
     {
         $this->envs[] = $env;
