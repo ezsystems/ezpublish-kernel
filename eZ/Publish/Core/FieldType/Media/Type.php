@@ -66,6 +66,17 @@ class Type extends BaseType
     }
 
     /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return \eZ\Publish\Core\FieldType\Media\Value
+     */
+    public function getEmptyValue()
+    {
+        return new Value;
+    }
+
+    /**
      * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
      *
      * @param mixed $fieldSettings
@@ -123,35 +134,15 @@ class Type extends BaseType
     }
 
     /**
-     * Potentially builds and checks the type and structure of the $inputValue.
-     *
-     * This method first inspects $inputValue, if it needs to convert it, e.g.
-     * into a dedicated value object. An example would be, that the field type
-     * uses values of MyCustomFieldTypeValue, but can also accept strings as
-     * the input. In that case, $inputValue first needs to be converted into a
-     * MyCustomFieldTypeClass instance.
-     *
-     * After that, the (possibly converted) value is checked for structural
-     * validity. Note that this does not include validation after the rules
-     * from validators, but only plausibility checks for the general data
-     * format.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
+     * Implements the core of {@see acceptValue()}.
      *
      * @param mixed $inputValue
      *
-     * @return mixed The potentially converted and structurally plausible value.
+     * @return \eZ\Publish\Core\FieldType\Media\Value The potentially converted and structurally plausible value.
      */
-    public function acceptValue( $inputValue )
+    protected function internalAcceptValue( $inputValue )
     {
-        $inputValue = parent::acceptValue( $inputValue );
-
-        if ( $inputValue === null )
-        {
-            // Empty value
-            return null;
-        }
+        $inputValue = parent::internalAcceptValue( $inputValue );
 
         if ( !$inputValue instanceof Value )
         {

@@ -314,5 +314,22 @@ class FloatIntegrationTest extends BaseIntegrationTest
             ),
         );
     }
-}
 
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array( new FloatValue ),
+        );
+    }
+
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+            array( new FloatValue( 0 ) ),
+            array( new FloatValue( 0.0 ) ),
+        );
+    }
+}

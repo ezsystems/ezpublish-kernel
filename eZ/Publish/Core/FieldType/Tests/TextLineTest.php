@@ -72,7 +72,7 @@ class TextLineTest extends StandardizedFieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return null;
+        return new TextLineValue;
     }
 
     /**
@@ -146,15 +146,15 @@ class TextLineTest extends StandardizedFieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new TextLineValue,
             ),
             array(
                 "",
-                null,
+                new TextLineValue,
             ),
             array(
                 " ",
-                null,
+                new TextLineValue,
             ),
             array(
                 ' sindelfingen ',
@@ -166,15 +166,15 @@ class TextLineTest extends StandardizedFieldTypeTest
             ),
             array(
                 new TextLineValue( '' ),
-                null,
+                new TextLineValue,
             ),
             array(
                 new TextLineValue( ' ' ),
-                null,
+                new TextLineValue,
             ),
             array(
                 new TextLineValue( null ),
-                null,
+                new TextLineValue,
             ),
         );
     }

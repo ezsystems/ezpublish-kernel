@@ -310,5 +310,24 @@ class SelectionIntegrationTest extends BaseIntegrationTest
             ),
         );
     }
-}
 
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array( new SelectionValue ),
+            array( new SelectionValue( array( ) ) ),
+        );
+    }
+
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+            array(
+                new SelectionValue( array( 0 ) )
+            ),
+        );
+    }
+}

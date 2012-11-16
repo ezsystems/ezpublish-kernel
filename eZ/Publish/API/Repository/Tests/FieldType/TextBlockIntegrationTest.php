@@ -295,5 +295,27 @@ class TextBlockIntegrationTest extends BaseIntegrationTest
             ),
         );
     }
-}
 
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array( new TextBlockValue ),
+            array( new TextBlockValue( null ) ),
+            array( new TextBlockValue( "" ) ),
+            array( new TextBlockValue( "\n\n\n" ) ),
+            array( new TextBlockValue( "\r\r\r" ) ),
+            array( new TextBlockValue( "   " ) ),
+        );
+    }
+
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+            array( new TextBlockValue( 0 ) ),
+            array( new TextBlockValue( "0" ) ),
+        );
+    }
+}

@@ -46,11 +46,6 @@ abstract class BinaryBaseTest extends StandardizedFieldTypeTest
         return array();
     }
 
-    protected function getEmptyValueExpectation()
-    {
-        return null;
-    }
-
     public function provideInvalidInputForAcceptValue()
     {
         return array(

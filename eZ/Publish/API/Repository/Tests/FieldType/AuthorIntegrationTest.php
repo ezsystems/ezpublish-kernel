@@ -343,5 +343,34 @@ class AuthorIntegrationTest extends BaseIntegrationTest
             ),
         );
     }
-}
 
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array( new AuthorValue ),
+            array( new AuthorValue( array() ) ),
+        );
+    }
+
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+            array(
+                new AuthorValue(
+                    array(
+                        new Author(
+                            array(
+                                "id"    => 23,
+                                "name"  => "Hans Mueller",
+                                "email" => "hans@example.com",
+                            )
+                        )
+                    )
+                )
+            ),
+        );
+    }
+}

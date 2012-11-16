@@ -314,5 +314,24 @@ class TextLineIntegrationTest extends BaseIntegrationTest
             ),
         );
     }
-}
 
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array( new TextLineValue() ),
+            array( new TextLineValue( null ) ),
+            array( new TextLineValue( "" ) ),
+            array( new TextLineValue( "   " ) ),
+        );
+    }
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+            array( new TextLineValue( 0 ) ),
+            array( new TextLineValue( "0" ) ),
+        );
+    }
+}

@@ -288,5 +288,25 @@ class CheckboxIntegrationTest extends BaseIntegrationTest
             ),
         );
     }
-}
 
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array( new CheckboxValue ),
+            array( new CheckboxValue( null ) ),
+            array( new CheckboxValue( false ) ),
+        );
+    }
+
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+            array(
+                new CheckboxValue( true )
+            ),
+        );
+    }
+}

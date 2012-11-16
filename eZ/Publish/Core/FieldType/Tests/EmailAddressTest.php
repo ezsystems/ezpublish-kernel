@@ -63,7 +63,7 @@ class EmailAddressTest extends StandardizedFieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return null;
+        return new EmailAddressValue;
     }
 
     /**
@@ -137,7 +137,7 @@ class EmailAddressTest extends StandardizedFieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new EmailAddressValue,
             ),
             array(
                 'spam_mail@ex-something.no',

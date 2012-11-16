@@ -257,8 +257,48 @@ abstract class FieldType implements FieldTypeInterface
      */
     public function isEmptyValue( $value )
     {
-        return ( $value == $this->getEmptyValue() );
+        return $value === null || $value == $this->getEmptyValue();
     }
+
+    /**
+     * Potentially builds and checks the type and structure of the $inputValue.
+     *
+     * This method first inspects $inputValue and convert it into a dedicated
+     * value object.
+     *
+     * After that, the value is checked for structural validity.
+     * Note that this does not include validation after the rules
+     * from validators, but only plausibility checks for the general data
+     * format.
+     *
+     * Note that this method must also cope with the empty value for the field
+     * type as e.g. returned by {@link getEmptyValue()}.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the parameter is not of the supported value sub type
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the value does not match the expected structure
+     *
+     * @param mixed $inputValue
+     *
+     * @return \eZ\Publish\Core\FieldType\Value The potentially converted and structurally plausible value.
+     */
+    final public function acceptValue( $inputValue )
+    {
+        if ( $inputValue === null )
+        {
+            return $this->getEmptyValue();
+        }
+
+        return $this->internalAcceptValue( $inputValue );
+    }
+
+    /**
+     * Implements the core of {@see acceptValue()}.
+     *
+     * @param mixed $inputValue
+     *
+     * @return \eZ\Publish\Core\FieldType\Value The potentially converted and structurally plausible value.
+     */
+    abstract protected function internalAcceptValue( $inputValue );
 
     /**
      * Converts the given $fieldSettings to a simple hash format

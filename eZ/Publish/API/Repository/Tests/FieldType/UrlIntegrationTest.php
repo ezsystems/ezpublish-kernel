@@ -309,5 +309,26 @@ class UrlIntegrationTest extends BaseIntegrationTest
             )
         );
     }
-}
 
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array( new UrlValue ),
+            array( new UrlValue( null ) ),
+            array( new UrlValue( "" ) ),
+            array( new UrlValue( "", "" ) ),
+        );
+    }
+
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+            array(
+                new UrlValue( 'http://example.com' )
+            ),
+        );
+    }
+}

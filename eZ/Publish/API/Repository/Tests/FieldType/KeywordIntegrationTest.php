@@ -283,5 +283,25 @@ class KeywordIntegrationTest extends BaseIntegrationTest
             ),
         );
     }
-}
 
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array( new KeywordValue ),
+            array( new KeywordValue( null ) ),
+            array( new KeywordValue( array() ) ),
+        );
+    }
+
+    public function providerForTestIsNotEmptyValue()
+    {
+        return array(
+            array(
+                $this->getValidCreationFieldData()
+            ),
+            array(
+                new KeywordValue( array( "0" ) )
+            ),
+        );
+    }
+}

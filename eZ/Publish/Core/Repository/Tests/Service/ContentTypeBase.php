@@ -1725,7 +1725,8 @@ abstract class ContentTypeBase extends BaseServiceTest
             "isTranslatable",
             "isRequired",
             "isInfoCollector",
-            "defaultValue",
+            // Do not compare defaultValue as they may have different representations
+            //"defaultValue",
             "isSearchable"
         );
 
@@ -3459,7 +3460,9 @@ abstract class ContentTypeBase extends BaseServiceTest
                     ? $originalField->isSearchable
                     : $updateStruct->isSearchable,
             ),
-            $updatedField
+            $updatedField,
+            // Do not compare defaultValue as they may have different representations
+            array( "defaultValue" )
         );
 
         $expectedFieldSettings = (array)$updateStruct->fieldSettings;

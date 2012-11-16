@@ -133,7 +133,7 @@ class Type extends FieldType
      */
     public function toHash( $value )
     {
-        if ( $value === null )
+        if ( $this->isEmptyValue( $value ) )
         {
             return null;
         }
@@ -222,32 +222,14 @@ class Type extends FieldType
     }
 
     /**
-     * Potentially builds and checks the type and structure of the $inputValue.
-     *
-     * This method first inspects $inputValue, if it needs to convert it, e.g.
-     * into a dedicated value object. An example would be, that the field type
-     * uses values of MyCustomFieldTypeValue, but can also accept strings as
-     * the input. In that case, $inputValue first needs to be converted into a
-     * MyCustomFieldTypeClass instance.
-     *
-     * After that, the (possibly converted) value is checked for structural
-     * validity. Note that this does not include validation after the rules
-     * from validators, but only plausibility checks for the general data
-     * format.
-     *
+     * Implements the core of {@see acceptValue()}.
      *
      * @param mixed $inputValue
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
-     * @return mixed The potentially converted and structurally plausible value.
+     * @return \eZ\Publish\Core\FieldType\Page\Value The potentially converted and structurally plausible value.
      */
-    public function acceptValue( $inputValue )
+    protected function internalAcceptValue( $inputValue )
     {
-        if ( $inputValue === null )
-        {
-            return null;
-        }
-
         if ( !$inputValue instanceof Value )
         {
             throw new InvalidArgumentType(

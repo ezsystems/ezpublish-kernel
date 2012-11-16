@@ -66,7 +66,7 @@ class TextBlockTest extends StandardizedFieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return null;
+        return new TextBlockValue;
     }
 
     /**
@@ -140,11 +140,11 @@ class TextBlockTest extends StandardizedFieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new TextBlockValue,
             ),
             array(
                 '',
-                null,
+                new TextBlockValue,
             ),
             array(
                 'sindelfingen',
@@ -156,11 +156,11 @@ class TextBlockTest extends StandardizedFieldTypeTest
             ),
             array(
                 new TextBlockValue( '' ),
-                null,
+                new TextBlockValue,
             ),
             array(
                 new TextBlockValue( null ),
-                null,
+                new TextBlockValue,
             ),
         );
     }

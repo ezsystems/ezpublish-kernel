@@ -72,7 +72,7 @@ class IntegerTest extends StandardizedFieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return null;
+        return new IntegerValue;
     }
 
     /**
@@ -150,7 +150,7 @@ class IntegerTest extends StandardizedFieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new IntegerValue,
             ),
             array(
                 42,

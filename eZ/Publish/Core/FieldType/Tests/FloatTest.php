@@ -72,7 +72,7 @@ class FloatTest extends StandardizedFieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return null;
+        return new FloatValue;
     }
 
     /**
@@ -150,7 +150,7 @@ class FloatTest extends StandardizedFieldTypeTest
         return array(
             array(
                 null,
-                null,
+                new FloatValue,
             ),
             array(
                 42.23,

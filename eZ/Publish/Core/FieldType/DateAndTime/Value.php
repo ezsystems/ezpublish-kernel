@@ -36,11 +36,11 @@ class Value extends BaseValue
     /**
      * Construct a new Value object and initialize with $dateTime
      *
-     * @param \DateTime $dateTime Date/Time as a DateTime object or a string understood by the DateTime class
+     * @param \DateTime|null $dateTime Date/Time as a DateTime object or a string understood by the DateTime class
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $dateTime does not comply to a valid dateTime or string
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $dateTime does not comply to a valid date format string
      */
-    public function __construct( DateTime $dateTime )
+    public function __construct( DateTime $dateTime = null )
     {
         $this->value = $dateTime;
     }

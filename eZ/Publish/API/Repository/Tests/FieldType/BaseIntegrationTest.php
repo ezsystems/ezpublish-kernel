@@ -362,6 +362,36 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
+     * @covers \eZ\Publish\Core\FieldType\FieldType::isEmptyValue
+     * @dataProvider providerForTestIsEmptyValue
+     */
+    public function testIsEmptyValue( $value )
+    {
+        $this->assertTrue( $this->getRepository()->getFieldTypeService()->buildFieldType( $this->getTypeName() )->isEmptyValue( $value ) );
+    }
+
+    abstract public function providerForTestIsEmptyValue();
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\FieldType::isEmptyValue
+     * @dataProvider providerForTestIsNotEmptyValue
+     */
+    public function testIsNotEmptyValue( $value )
+    {
+        $this->assertFalse( $this->getRepository()->getFieldTypeService()->buildFieldType( $this->getTypeName() )->isEmptyValue( $value ) );
+    }
+
+    abstract public function providerForTestIsNotEmptyValue();
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\FieldType::isEmptyValue
+     */
+    public function testIsEmptyValueWithNull()
+    {
+        $this->assertTrue( $this->getRepository()->getFieldTypeService()->buildFieldType( $this->getTypeName() )->isEmptyValue( null ) );
+    }
+
+    /**
      * @depends testCreateContentType
      */
     public function testContentTypeField( $contentType )
