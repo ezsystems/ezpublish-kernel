@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Solr\Content\Search;
 
 use eZ\Publish\SPI\Persistence\Content,
     eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler,
+    eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler,
     eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler,
     eZ\Publish\SPI\Persistence\Content\Search\Field,
     eZ\Publish\SPI\Persistence\Content\Search\FieldType,
@@ -28,7 +29,7 @@ use eZ\Publish\SPI\Persistence\Content,
  *
  * 1) The find methods retrieve a recursive set of filters, which define which
  * content objects to retrieve from the database. Those may be combined using
- * boolean opeartors.
+ * boolean operators.
  *
  * 2) This recursive criterion definition is visited into a query, which limits
  * the content retrieved from the database. We might not be able to create
@@ -38,7 +39,7 @@ use eZ\Publish\SPI\Persistence\Content,
  * reduce singular and and or constructs…
  *
  * 4) Additionally we might need a post-query filtering step, which filters
- * content objects based on criteria, which could not be convertedd in to
+ * content objects based on criteria, which could not be converted in to
  * database statements.
  */
 class Handler extends BaseSearchHandler
@@ -53,7 +54,7 @@ class Handler extends BaseSearchHandler
     /**
      * Field registry
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\FieldRegistry
+     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry
      */
     protected $fieldRegistry;
 
@@ -65,16 +66,26 @@ class Handler extends BaseSearchHandler
     protected $contentTypeHandler;
 
     /**
+     * Object state handler
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
+     */
+    protected $objectStateHandler;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway $gateway
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler $fieldHandler
+     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry $fieldRegistry
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
      */
-    public function __construct( Gateway $gateway, FieldRegistry $fieldRegistry, ContentTypeHandler $contentTypeHandler )
+    public function __construct( Gateway $gateway, FieldRegistry $fieldRegistry, ContentTypeHandler $contentTypeHandler, ObjectStateHandler $objectStateHandler )
     {
         $this->gateway            = $gateway;
         $this->fieldRegistry      = $fieldRegistry;
         $this->contentTypeHandler = $contentTypeHandler;
+        $this->objectStateHandler = $objectStateHandler;
     }
 
      /**
@@ -127,7 +138,7 @@ class Handler extends BaseSearchHandler
      * Suggests a list of values for the given prefix
      *
      * @param string $prefix
-     * @param string[] $fieldpath
+     * @param string[] $fieldPaths
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
@@ -264,6 +275,11 @@ class Handler extends BaseSearchHandler
                 ),
                 new FieldType\IdentifierField()
             ),
+            new Field(
+                'language_code',
+                array_keys( $content->versionInfo->names ),
+                new FieldType\StringField()
+            ),
         );
 
         $contentType = $this->contentTypeHandler->load( $content->contentInfo->contentTypeId );
@@ -290,6 +306,21 @@ class Handler extends BaseSearchHandler
                 }
             }
         }
+
+        $objectStateIds = array();
+        foreach ( $this->objectStateHandler->loadAllGroups() as $objectStateGroup )
+        {
+            $objectStateIds[] = $this->objectStateHandler->getContentState(
+                $content->contentInfo->id,
+                $objectStateGroup->id
+            )->id;
+        }
+
+        $document[] = new Field(
+            'object_state',
+            $objectStateIds,
+            new FieldType\IdentifierField()
+        );
 
         return $document;
     }
