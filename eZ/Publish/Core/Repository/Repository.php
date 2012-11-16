@@ -610,6 +610,9 @@ class Repository implements RepositoryInterface
      * Get NameSchemaResolverService
      *
      * @access private Internal service for the Core Services
+     *
+     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
+     *
      * @return \eZ\Publish\Core\Repository\NameSchemaService
      */
     public function getNameSchemaService()
