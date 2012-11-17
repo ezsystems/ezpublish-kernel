@@ -15,5 +15,47 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest;
  */
 abstract class NameSchemaBase extends BaseServiceTest
 {
-    // @todo implement tests
+    /**
+     * Test eZ\Publish\Core\Repository\NameSchemaService method
+     * @covers \eZ\Publish\Core\Repository\NameSchemaService ::resolveUrlAliasSchema
+     */
+    public function testResolveUrlAliasSchema()
+    {
+        /** @var \eZ\Publish\Core\Repository\NameSchemaService $service */
+        $service = $this->repository->getNameSchemaService();
+        self::markTestIncomplete( "Not implemented: " . __METHOD__ );
+    }
+
+     /**
+     * Test eZ\Publish\Core\Repository\NameSchemaService method
+     * @covers \eZ\Publish\Core\Repository\NameSchemaService ::resolveNameSchema
+     */
+    public function testResolveNameSchema()
+    {
+        /** @var \eZ\Publish\Core\Repository\NameSchemaService $service */
+        $service = $this->repository->getNameSchemaService();
+        self::markTestIncomplete( "Not implemented: " . __METHOD__ );
+    }
+
+     /**
+     * Test eZ\Publish\Core\Repository\NameSchemaService method
+     * @covers \eZ\Publish\Core\Repository\NameSchemaService ::validate
+     */
+    public function testValidate()
+    {
+        /** @var \eZ\Publish\Core\Repository\NameSchemaService $service */
+        $service = $this->repository->getNameSchemaService();
+        self::assertTrue( $service->validate( '', '' ) );
+    }
+
+     /**
+     * Test eZ\Publish\Core\Repository\NameSchemaService method
+     * @covers \eZ\Publish\Core\Repository\NameSchemaService ::resolve
+     */
+    public function testResolve()
+    {
+        /** @var \eZ\Publish\Core\Repository\NameSchemaService $service */
+        $service = $this->repository->getNameSchemaService();
+        self::markTestIncomplete( "Not implemented: " . __METHOD__ );
+    }
 }
