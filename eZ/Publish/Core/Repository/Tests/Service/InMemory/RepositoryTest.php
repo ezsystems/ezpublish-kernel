@@ -13,7 +13,7 @@ use eZ\Publish\Core\Repository\Tests\Service\RepositoryTest as BaseRepositoryTes
 /**
  * Test case for Repository Service using InMemory storage class
  */
-class RoleTest extends BaseRepositoryTest
+class RepositoryTest extends BaseRepositoryTest
 {
     protected function getRepository()
     {
