@@ -23,6 +23,17 @@ class Type extends FieldType
     protected $fieldTypeIdentifier;
 
     /**
+     * Constructs field type object, initializing internal data structures.
+     *
+     * @param string $fieldTypeIdentifier
+     * @return \eZ\Publish\Core\FieldType\Null\Type
+     */
+    public function __construct( $fieldTypeIdentifier )
+    {
+        $this->fieldTypeIdentifier = $fieldTypeIdentifier;
+    }
+
+    /**
      * Build a Value object of current FieldType
      *
      * Build a FiledType\Value object with the provided $value as value.
