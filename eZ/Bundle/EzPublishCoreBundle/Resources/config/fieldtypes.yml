@@ -536,96 +536,112 @@ services:
     ezpublish.fieldType.ezdate:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "ezdate" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezdate}
 
     ezpublish.fieldType.ezenum:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "ezenum" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezenum}
 
     ezpublish.fieldType.ezidentifier:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "ezidentifier" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezidentifier}
 
     ezpublish.fieldType.ezinisetting:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "ezinisetting" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezinisetting}
 
     ezpublish.fieldType.ezisbn:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "ezisbn" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezisbn}
 
     ezpublish.fieldType.ezmatrix:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "ezmatrix" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezmatrix}
 
     ezpublish.fieldType.ezmultioption:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "ezmultioption" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezmultioption}
 
     ezpublish.fieldType.ezmultioption2:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "ezmultioption2" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezmultioption2}
 
     ezpublish.fieldType.ezmultiprice:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "ezmultiprice" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezmultiprice}
 
     ezpublish.fieldType.ezoption:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "ezoption" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezoption}
 
     ezpublish.fieldType.ezpackage:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "ezpackage" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezpackage}
 
     ezpublish.fieldType.ezprice:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "ezprice" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezprice}
 
     ezpublish.fieldType.ezproductcategory:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "ezproductcategory" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezproductcategory}
 
     ezpublish.fieldType.ezrangeoption:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "ezrangeoption" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezrangeoption}
 
     ezpublish.fieldType.ezsubtreesubscription:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "ezsubtreesubscription" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezsubtreesubscription}
 
     ezpublish.fieldType.eztime:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "eztime" ]
         tags:
             - {name: ezpublish.fieldType, alias: eztime}
 
@@ -633,23 +649,27 @@ services:
     ezpublish.fieldType.ezcomcomments:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "ezcomcomments" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezcomcomments}
 
     ezpublish.fieldType.ezpaex:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "ezpaex" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezpaex}
 
     ezpublish.fieldType.ezsurvey:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "ezsurvey" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezsurvey}
 
     ezpublish.fieldType.eztags:
         class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
+        arguments: [ "eztags" ]
         tags:
             - {name: ezpublish.fieldType, alias: eztags}
