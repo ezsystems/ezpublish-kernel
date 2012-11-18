@@ -129,7 +129,7 @@ class LocationService implements LocationServiceInterface
                 array(
                     'limit' => 0,
                     'criterion' => new CriterionLogicalAnd(
-                        new CriterionSubtree( $subtree->pathString ),
+                        new CriterionSubtree( $loadedSubtree->pathString ),
                         new CriterionLogicalNot( $contentReadCriterion )
                     )
                 )
@@ -148,6 +148,26 @@ class LocationService implements LocationServiceInterface
                 $loadedSubtree->id,
                 $loadedTargetLocation->id
             );
+
+            $content = $this->repository->getContentService()->loadContent( $newLocation->contentId );
+            $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
+            foreach ( $urlAliasNames as $languageCode => $name )
+            {
+                $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
+                    $newLocation->id,
+                    $loadedTargetLocation->id,
+                    $name,
+                    $languageCode,
+                    $content->contentInfo->alwaysAvailable
+                );
+            }
+
+            $this->persistenceHandler->urlAliasHandler()->locationCopied(
+                $newLocation->id,
+                $loadedSubtree->parentLocationId,
+                $loadedTargetLocation->id
+            );
+
             $this->repository->commit();
         }
         catch ( \Exception $e )
