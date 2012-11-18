@@ -46,7 +46,7 @@ class SectionService implements SectionServiceInterface
      */
     public function __construct( SectionServiceInterface $service, CachePool $cachePool )
     {
-        $this->service          = $service;
+        $this->service = $service;
         $this->cachePool = $cachePool;
     }
 

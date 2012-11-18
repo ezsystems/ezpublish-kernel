@@ -19,17 +19,6 @@ use eZ\Publish\API\Repository\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
-use eZ\Publish\Core\RequestCache\Signal\RoleService\CreateRoleSignal;
-use eZ\Publish\Core\RequestCache\Signal\RoleService\UpdateRoleSignal;
-use eZ\Publish\Core\RequestCache\Signal\RoleService\AddPolicySignal;
-use eZ\Publish\Core\RequestCache\Signal\RoleService\RemovePolicySignal;
-use eZ\Publish\Core\RequestCache\Signal\RoleService\UpdatePolicySignal;
-use eZ\Publish\Core\RequestCache\Signal\RoleService\DeleteRoleSignal;
-use eZ\Publish\Core\RequestCache\Signal\RoleService\AssignRoleToUserGroupSignal;
-use eZ\Publish\Core\RequestCache\Signal\RoleService\UnassignRoleFromUserGroupSignal;
-use eZ\Publish\Core\RequestCache\Signal\RoleService\AssignRoleToUserSignal;
-use eZ\Publish\Core\RequestCache\Signal\RoleService\UnassignRoleFromUserSignal;
-
 /**
  * RoleService class
  * @package eZ\Publish\Core\RequestCache
@@ -61,7 +50,7 @@ class RoleService implements RoleServiceInterface
      */
     public function __construct( RoleServiceInterface $service, CachePool $cachePool )
     {
-        $this->service          = $service;
+        $this->service = $service;
         $this->cachePool = $cachePool;
     }
 
@@ -123,7 +112,9 @@ class RoleService implements RoleServiceInterface
      */
     public function removePolicy( Role $role, Policy $policy )
     {
-        return $this->service->removePolicy( $role, $policy );
+        $role = $this->service->removePolicy( $role, $policy );
+        $this->cachePool->purge();
+        return $role;
     }
 
     /**
@@ -139,7 +130,9 @@ class RoleService implements RoleServiceInterface
      */
     public function updatePolicy( Policy $policy, PolicyUpdateStruct $policyUpdateStruct )
     {
-        return $this->service->updatePolicy( $policy, $policyUpdateStruct );
+        $policy = $this->service->updatePolicy( $policy, $policyUpdateStruct );
+        $this->cachePool->purge();
+        return $policy;
     }
 
     /**
@@ -193,7 +186,8 @@ class RoleService implements RoleServiceInterface
      */
     public function deleteRole( Role $role )
     {
-        return $this->service->deleteRole( $role );
+        $this->service->deleteRole( $role );
+        $this->cachePool->purge();
     }
 
     /**
@@ -235,7 +229,8 @@ class RoleService implements RoleServiceInterface
      */
     public function unassignRoleFromUserGroup( Role $role, UserGroup $userGroup )
     {
-        return $this->service->unassignRoleFromUserGroup( $role, $userGroup );
+        $this->service->unassignRoleFromUserGroup( $role, $userGroup );
+        $this->cachePool->purge();
     }
 
     /**

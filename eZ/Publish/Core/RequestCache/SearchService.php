@@ -44,7 +44,7 @@ class SearchService implements SearchServiceInterface
      */
     public function __construct( SearchServiceInterface $service, CachePool $cachePool )
     {
-        $this->service          = $service;
+        $this->service = $service;
         $this->cachePool = $cachePool;
     }
 

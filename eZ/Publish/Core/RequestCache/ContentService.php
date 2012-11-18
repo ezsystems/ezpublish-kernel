@@ -20,18 +20,6 @@ use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
 use eZ\Publish\API\Repository\Values\Content\TranslationValues;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\Core\RequestCache\Signal\ContentService\CreateContentSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentService\UpdateContentMetadataSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentService\DeleteContentSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentService\CreateContentDraftSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentService\TranslateVersionSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentService\UpdateContentSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentService\PublishVersionSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentService\DeleteVersionSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentService\CopyContentSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentService\AddRelationSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentService\DeleteRelationSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentService\AddTranslationInfoSignal;
 
 /**
  * ContentService class
@@ -64,7 +52,7 @@ class ContentService implements ContentServiceInterface
      */
     public function __construct( ContentServiceInterface $service, CachePool $cachePool )
     {
-        $this->service          = $service;
+        $this->service = $service;
         $this->cachePool = $cachePool;
     }
 
@@ -82,6 +70,12 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentInfo( $contentId )
     {
+        if ( ( $object = $this->cachePool->get( 'content_' . $contentId ) ) !== null )
+        {
+            /** @var \eZ\Publish\API\Repository\Values\Content\Content $object */
+            return $object->getVersionInfo()->getContentInfo();
+        }
+
         return $this->service->loadContentInfo( $contentId );
     }
 
@@ -99,6 +93,16 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentInfoByRemoteId( $remoteId )
     {
+        foreach ( $this->cachePool as $key => $object )
+        {
+            /** @var \eZ\Publish\API\Repository\Values\Content\Content $object */
+            if ( strpos( $key, 'content_' ) === 0 &&
+                 $object->getVersionInfo()->getContentInfo()->remoteId === $remoteId )
+            {
+                return $object->getVersionInfo()->getContentInfo();
+            }
+        }
+
         return $this->service->loadContentInfoByRemoteId( $remoteId );
     }
 
@@ -117,6 +121,13 @@ class ContentService implements ContentServiceInterface
      */
     public function loadVersionInfo( ContentInfo $contentInfo, $versionNo = null )
     {
+        if ( ( $object = $this->cachePool->get( 'content_' . $contentInfo->id ) ) !== null )
+        {
+            /** @var \eZ\Publish\API\Repository\Values\Content\Content $object */
+            if ( $versionNo === null || $object->getVersionInfo()->versionNo === $versionNo )
+                return $object->getVersionInfo();
+        }
+
         return $this->service->loadVersionInfo( $contentInfo, $versionNo );
     }
 
@@ -135,6 +146,13 @@ class ContentService implements ContentServiceInterface
      */
     public function loadVersionInfoById( $contentId, $versionNo = null )
     {
+        if ( ( $object = $this->cachePool->get( 'content_' . $contentId ) ) !== null )
+        {
+            /** @var \eZ\Publish\API\Repository\Values\Content\Content $object */
+            if ( $versionNo === null || $object->getVersionInfo()->versionNo === $versionNo )
+                return $object->getVersionInfo();
+        }
+
         return $this->service->loadVersionInfoById( $contentId, $versionNo );
     }
 
@@ -154,7 +172,21 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentByContentInfo( ContentInfo $contentInfo, array $languages = null, $versionNo = null )
     {
-        return $this->service->loadContentByContentInfo( $contentInfo, $languages, $versionNo );
+        if ( $languages === null && ( $object = $this->cachePool->get( 'content_' . $contentInfo->id ) ) !== null )
+        {
+            /** @var \eZ\Publish\API\Repository\Values\Content\Content $object */
+            if ( $versionNo === null || $object->getVersionInfo()->versionNo === $versionNo )
+                return $object;
+        }
+
+        $object = $this->service->loadContentByContentInfo( $contentInfo, $languages, $versionNo );
+        if ( $languages === null &&
+             $object->getVersionInfo()->getContentInfo()->currentVersionNo === $object->getVersionInfo()->versionNo )
+        {
+            $this->cachePool->set( 'content_' . $contentInfo->id, $object );
+        }
+
+        return $object;
     }
 
     /**
@@ -169,7 +201,22 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentByVersionInfo( VersionInfo $versionInfo, array $languages = null )
     {
-        return $this->service->loadContentByVersionInfo( $versionInfo, $languages );
+        if ( $languages === null &&
+           ( $object = $this->cachePool->get( 'content_' . $versionInfo->getContentInfo()->id ) ) !== null )
+        {
+            /** @var \eZ\Publish\API\Repository\Values\Content\Content $object */
+            if ( $object->getVersionInfo()->versionNo === $versionInfo->versionNo )
+                return $object;
+        }
+
+        $object = $this->service->loadContentByVersionInfo( $versionInfo, $languages );
+        if ( $languages === null &&
+             $object->getVersionInfo()->getContentInfo()->currentVersionNo === $object->getVersionInfo()->versionNo )
+        {
+            $this->cachePool->set( 'content_' . $versionInfo->getContentInfo()->id, $object );
+        }
+
+        return $object;
     }
 
     /**
@@ -188,7 +235,21 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContent( $contentId, array $languages = null, $versionNo = null )
     {
-        return $this->service->loadContent( $contentId, $languages, $versionNo );
+        if ( $languages === null && ( $object = $this->cachePool->get( 'content_' . $contentId ) ) !== null )
+        {
+            /** @var \eZ\Publish\API\Repository\Values\Content\Content $object */
+            if ( $versionNo === null || $object->getVersionInfo()->versionNo === $versionNo )
+                return $object;
+        }
+
+        $object = $this->service->loadContent( $contentId, $languages, $versionNo );
+        if ( $languages === null &&
+             $object->getVersionInfo()->getContentInfo()->currentVersionNo === $object->getVersionInfo()->versionNo )
+        {
+            $this->cachePool->set( 'content_' . $contentId, $object );
+        }
+
+        return $object;
     }
 
     /**
@@ -207,7 +268,28 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null )
     {
-        return $this->service->loadContentByRemoteId( $remoteId, $languages, $versionNo );
+        if ( $languages === null )
+        {
+            foreach ( $this->cachePool as $key => $object )
+            {
+                /** @var \eZ\Publish\API\Repository\Values\Content\Content $object */
+                if ( strpos( $key, 'content_' ) === 0 &&
+                   ( $versionNo === null || $object->getVersionInfo()->versionNo === $versionNo ) &&
+                     $object->getVersionInfo()->getContentInfo()->remoteId === $remoteId )
+                {
+                    return $object;
+                }
+            }
+        }
+
+        $object = $this->service->loadContentByRemoteId( $remoteId, $languages, $versionNo );
+        if ( $languages === null &&
+             $object->getVersionInfo()->getContentInfo()->currentVersionNo === $object->getVersionInfo()->versionNo )
+        {
+            $this->cachePool->set( 'content_' . $object->id, $object );
+        }
+
+        return $object;
     }
 
     /**
@@ -252,7 +334,9 @@ class ContentService implements ContentServiceInterface
      */
     public function updateContentMetadata( ContentInfo $contentInfo, ContentMetadataUpdateStruct $contentMetadataUpdateStruct )
     {
-        return $this->service->updateContentMetadata( $contentInfo, $contentMetadataUpdateStruct );
+        $content = $this->service->updateContentMetadata( $contentInfo, $contentMetadataUpdateStruct );
+        $this->cachePool->remove( 'content_' . $contentInfo->id );
+        return $content;
     }
 
     /**
@@ -264,7 +348,8 @@ class ContentService implements ContentServiceInterface
      */
     public function deleteContent( ContentInfo $contentInfo )
     {
-        return $this->service->deleteContent( $contentInfo );
+        $this->service->deleteContent( $contentInfo );
+        $this->cachePool->remove( 'content_' . $contentInfo->id );
     }
 
     /**
@@ -344,7 +429,9 @@ class ContentService implements ContentServiceInterface
      */
     public function updateContent( VersionInfo $versionInfo, ContentUpdateStruct $contentUpdateStruct )
     {
-        return $this->service->updateContent( $versionInfo, $contentUpdateStruct );
+        $content = $this->service->updateContent( $versionInfo, $contentUpdateStruct );
+        $this->cachePool->remove( 'content_' . $versionInfo->getContentInfo()->id );
+        return $content;
     }
 
     /**
@@ -359,7 +446,9 @@ class ContentService implements ContentServiceInterface
      */
     public function publishVersion( VersionInfo $versionInfo )
     {
-        return $this->service->publishVersion( $versionInfo );
+        $content = $this->service->publishVersion( $versionInfo );
+        $this->cachePool->remove( 'content_' . $versionInfo->getContentInfo()->id );
+        return $content;
     }
 
     /**
@@ -372,7 +461,8 @@ class ContentService implements ContentServiceInterface
      */
     public function deleteVersion( VersionInfo $versionInfo )
     {
-        return $this->service->deleteVersion( $versionInfo );
+        $this->service->deleteVersion( $versionInfo );
+        $this->cachePool->remove( 'content_' . $versionInfo->getContentInfo()->id );
     }
 
     /**
@@ -452,7 +542,9 @@ class ContentService implements ContentServiceInterface
      */
     public function addRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent )
     {
-        return $this->service->addRelation( $sourceVersion, $destinationContent );
+        $relation = $this->service->addRelation( $sourceVersion, $destinationContent );
+        $this->cachePool->remove( 'content_' . $sourceVersion->getContentInfo()->id );
+        return $relation;
     }
 
     /**
@@ -467,7 +559,8 @@ class ContentService implements ContentServiceInterface
      */
     public function deleteRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent )
     {
-        return $this->service->deleteRelation( $sourceVersion, $destinationContent );
+        $this->service->deleteRelation( $sourceVersion, $destinationContent );
+        $this->cachePool->remove( 'content_' . $sourceVersion->getContentInfo()->id );
     }
 
     /**

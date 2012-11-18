@@ -12,11 +12,6 @@ namespace eZ\Publish\Core\RequestCache;
 use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Language;
-use eZ\Publish\Core\RequestCache\Signal\LanguageService\CreateLanguageSignal;
-use eZ\Publish\Core\RequestCache\Signal\LanguageService\UpdateLanguageNameSignal;
-use eZ\Publish\Core\RequestCache\Signal\LanguageService\EnableLanguageSignal;
-use eZ\Publish\Core\RequestCache\Signal\LanguageService\DisableLanguageSignal;
-use eZ\Publish\Core\RequestCache\Signal\LanguageService\DeleteLanguageSignal;
 
 /**
  * LanguageService class
@@ -49,7 +44,7 @@ class LanguageService implements LanguageServiceInterface
      */
     public function __construct( LanguageServiceInterface $service, CachePool $cachePool )
     {
-        $this->service          = $service;
+        $this->service = $service;
         $this->cachePool = $cachePool;
     }
 

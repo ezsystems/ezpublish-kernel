@@ -11,9 +11,6 @@ namespace eZ\Publish\Core\RequestCache;
 
 use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
-use eZ\Publish\Core\RequestCache\Signal\URLWildcardService\CreateSignal;
-use eZ\Publish\Core\RequestCache\Signal\URLWildcardService\RemoveSignal;
-use eZ\Publish\Core\RequestCache\Signal\URLWildcardService\TranslateSignal;
 
 /**
  * URLWildcardService class
@@ -46,7 +43,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     public function __construct( URLWildcardServiceInterface $service, CachePool $cachePool )
     {
-        $this->service          = $service;
+        $this->service = $service;
         $this->cachePool = $cachePool;
     }
 

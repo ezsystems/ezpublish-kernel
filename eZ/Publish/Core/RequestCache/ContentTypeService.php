@@ -21,20 +21,6 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\Core\RequestCache\Signal\ContentTypeService\CreateContentTypeGroupSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentTypeService\UpdateContentTypeGroupSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentTypeService\DeleteContentTypeGroupSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentTypeService\CreateContentTypeSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentTypeService\CreateContentTypeDraftSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentTypeService\UpdateContentTypeDraftSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentTypeService\DeleteContentTypeSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentTypeService\CopyContentTypeSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentTypeService\AssignContentTypeGroupSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentTypeService\UnassignContentTypeGroupSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentTypeService\AddFieldDefinitionSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentTypeService\RemoveFieldDefinitionSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentTypeService\UpdateFieldDefinitionSignal;
-use eZ\Publish\Core\RequestCache\Signal\ContentTypeService\PublishContentTypeDraftSignal;
 
 /**
  * ContentTypeService class
@@ -67,7 +53,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function __construct( ContentTypeServiceInterface $service, CachePool $cachePool )
     {
-        $this->service          = $service;
+        $this->service = $service;
         $this->cachePool = $cachePool;
     }
 
@@ -289,7 +275,8 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function deleteContentType( ContentType $contentType )
     {
-        return $this->service->deleteContentType( $contentType );
+        $this->service->deleteContentType( $contentType );
+        $this->cachePool->purge();
     }
 
     /**
@@ -398,7 +385,8 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function publishContentTypeDraft( ContentTypeDraft $contentTypeDraft )
     {
-        return $this->service->publishContentTypeDraft( $contentTypeDraft );
+        $this->service->publishContentTypeDraft( $contentTypeDraft );
+        $this->cachePool->purge();
     }
 
     /**

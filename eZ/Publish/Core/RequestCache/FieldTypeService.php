@@ -42,7 +42,7 @@ class FieldTypeService implements FieldTypeServiceInterface
      */
     public function __construct( FieldTypeServiceInterface $service, CachePool $cachePool )
     {
-        $this->service          = $service;
+        $this->service = $service;
         $this->cachePool = $cachePool;
     }
 

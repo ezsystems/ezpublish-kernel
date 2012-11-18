@@ -11,9 +11,6 @@ namespace eZ\Publish\Core\RequestCache;
 
 use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\RequestCache\Signal\URLAliasService\CreateUrlAliasSignal;
-use eZ\Publish\Core\RequestCache\Signal\URLAliasService\CreateGlobalUrlAliasSignal;
-use eZ\Publish\Core\RequestCache\Signal\URLAliasService\RemoveAliasesSignal;
 
 /**
  * URLAliasService class
@@ -46,7 +43,7 @@ class URLAliasService implements URLAliasServiceInterface
      */
     public function __construct( URLAliasServiceInterface $service, CachePool $cachePool )
     {
-        $this->service          = $service;
+        $this->service = $service;
         $this->cachePool = $cachePool;
     }
 

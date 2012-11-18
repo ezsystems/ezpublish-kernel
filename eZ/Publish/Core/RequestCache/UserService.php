@@ -46,7 +46,7 @@ class UserService implements UserServiceInterface
      */
     public function __construct( UserServiceInterface $service, CachePool $cachePool )
     {
-        $this->service          = $service;
+        $this->service = $service;
         $this->cachePool = $cachePool;
     }
 

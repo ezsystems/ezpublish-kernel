@@ -13,10 +13,6 @@ use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\Core\RequestCache\Signal\TrashService\TrashSignal;
-use eZ\Publish\Core\RequestCache\Signal\TrashService\RecoverSignal;
-use eZ\Publish\Core\RequestCache\Signal\TrashService\EmptyTrashSignal;
-use eZ\Publish\Core\RequestCache\Signal\TrashService\DeleteTrashItemSignal;
 
 /**
  * TrashService class
@@ -49,7 +45,7 @@ class TrashService implements TrashServiceInterface
      */
     public function __construct( TrashServiceInterface $service, CachePool $cachePool )
     {
-        $this->service          = $service;
+        $this->service = $service;
         $this->cachePool = $cachePool;
     }
 

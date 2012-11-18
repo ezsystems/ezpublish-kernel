@@ -17,14 +17,6 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\RequestCache\Signal\ObjectStateService\CreateObjectStateGroupSignal;
-use eZ\Publish\Core\RequestCache\Signal\ObjectStateService\UpdateObjectStateGroupSignal;
-use eZ\Publish\Core\RequestCache\Signal\ObjectStateService\DeleteObjectStateGroupSignal;
-use eZ\Publish\Core\RequestCache\Signal\ObjectStateService\CreateObjectStateSignal;
-use eZ\Publish\Core\RequestCache\Signal\ObjectStateService\UpdateObjectStateSignal;
-use eZ\Publish\Core\RequestCache\Signal\ObjectStateService\SetPriorityOfObjectStateSignal;
-use eZ\Publish\Core\RequestCache\Signal\ObjectStateService\DeleteObjectStateSignal;
-use eZ\Publish\Core\RequestCache\Signal\ObjectStateService\SetContentStateSignal;
 
 /**
  * ObjectStateService class
@@ -57,7 +49,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function __construct( ObjectStateServiceInterface $service, CachePool $cachePool )
     {
-        $this->service          = $service;
+        $this->service = $service;
         $this->cachePool = $cachePool;
     }
 
@@ -230,7 +222,8 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function setContentState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState )
     {
-        return $this->service->setContentState( $contentInfo, $objectStateGroup, $objectState );
+        $this->service->setContentState( $contentInfo, $objectStateGroup, $objectState );
+        $this->cachePool->remove( 'content_' . $contentInfo->id );
     }
 
     /**

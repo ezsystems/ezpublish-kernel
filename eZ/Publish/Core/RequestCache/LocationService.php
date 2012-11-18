@@ -14,14 +14,6 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
-use eZ\Publish\Core\RequestCache\Signal\LocationService\CopySubtreeSignal;
-use eZ\Publish\Core\RequestCache\Signal\LocationService\CreateLocationSignal;
-use eZ\Publish\Core\RequestCache\Signal\LocationService\UpdateLocationSignal;
-use eZ\Publish\Core\RequestCache\Signal\LocationService\SwapLocationSignal;
-use eZ\Publish\Core\RequestCache\Signal\LocationService\HideLocationSignal;
-use eZ\Publish\Core\RequestCache\Signal\LocationService\UnhideLocationSignal;
-use eZ\Publish\Core\RequestCache\Signal\LocationService\MoveSubtreeSignal;
-use eZ\Publish\Core\RequestCache\Signal\LocationService\DeleteLocationSignal;
 
 /**
  * LocationService class
@@ -54,7 +46,7 @@ class LocationService implements LocationServiceInterface
      */
     public function __construct( LocationServiceInterface $service, CachePool $cachePool )
     {
-        $this->service          = $service;
+        $this->service = $service;
         $this->cachePool = $cachePool;
     }
 
@@ -166,11 +158,12 @@ class LocationService implements LocationServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $locationCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created Location
-     *
      */
     public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct )
     {
-        return $this->service->createLocation( $contentInfo, $locationCreateStruct );
+        $location = $this->service->createLocation( $contentInfo, $locationCreateStruct );
+        $this->cachePool->remove( 'content_' . $contentInfo->id );
+        return $location;
     }
 
     /**
@@ -186,7 +179,9 @@ class LocationService implements LocationServiceInterface
      */
     public function updateLocation( Location $location, LocationUpdateStruct $locationUpdateStruct )
     {
-        return $this->service->updateLocation( $location, $locationUpdateStruct );
+        $location = $this->service->updateLocation( $location, $locationUpdateStruct );
+        $this->cachePool->purge();
+        return $location;
     }
 
     /**
@@ -199,7 +194,8 @@ class LocationService implements LocationServiceInterface
      */
     public function swapLocation( Location $location1, Location $location2 )
     {
-        return $this->service->swapLocation( $location1, $location2 );
+        $this->service->swapLocation( $location1, $location2 );
+        $this->cachePool->purge();
     }
 
     /**
@@ -213,7 +209,9 @@ class LocationService implements LocationServiceInterface
      */
     public function hideLocation( Location $location )
     {
-        return $this->service->hideLocation( $location );
+        $location = $this->service->hideLocation( $location );
+        $this->cachePool->purge();
+        return $location;
     }
 
     /**
@@ -246,7 +244,8 @@ class LocationService implements LocationServiceInterface
      */
     public function moveSubtree( Location $location, Location $newParentLocation )
     {
-        return $this->service->moveSubtree( $location, $newParentLocation );
+        $this->service->moveSubtree( $location, $newParentLocation );
+        $this->cachePool->purge();
     }
 
     /**
@@ -258,7 +257,8 @@ class LocationService implements LocationServiceInterface
      */
     public function deleteLocation( Location $location )
     {
-        return $this->service->deleteLocation( $location );
+        $this->service->deleteLocation( $location );
+        $this->cachePool->purge();
     }
 
     /**

@@ -27,12 +27,12 @@ class CachePool extends ArrayObject
     private $limit;
 
     /**
-     * @param mixed $input
-     * @param int $limit
+     * @param array|null $input
+     * @param int $cacheItemLimit
      */
-    public function __construct( $input = null, $limit = 100  )
+    public function __construct( array $input = null, $cacheItemLimit = 100  )
     {
-        $this->limit = $limit;
+        $this->limit = $cacheItemLimit;
         parent::__construct( $input );
     }
 
@@ -41,6 +41,7 @@ class CachePool extends ArrayObject
      *
      * @param mixed $key
      * @param mixed $value
+     * @return mixed The $value provided as param
      */
     public function set( $key, $value )
     {
@@ -58,6 +59,7 @@ class CachePool extends ArrayObject
         }
 
         $this->offsetSet( $key, $value );
+        return $value;
     }
 
     /**
@@ -86,7 +88,7 @@ class CachePool extends ArrayObject
     }
 
     /**
-     * Purge the cache completly
+     * Purge the cache completely
      */
     public function purge()
     {
