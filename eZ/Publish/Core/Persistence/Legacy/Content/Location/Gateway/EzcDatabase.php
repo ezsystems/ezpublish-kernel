@@ -151,7 +151,9 @@ class EzcDatabase extends Gateway
         );
         $this->applySubtreeLimitation( $query, $sourceId );
         $query->orderBy(
-            $this->handler->quoteColumn( 'path_string', 'ezcontentobject_tree' )
+            $this->handler->quoteColumn( 'depth', 'ezcontentobject_tree' )
+        )->orderBy(
+            $this->handler->quoteColumn( 'node_id', 'ezcontentobject_tree' )
         );
         $statement = $query->prepare();
         $statement->execute();
