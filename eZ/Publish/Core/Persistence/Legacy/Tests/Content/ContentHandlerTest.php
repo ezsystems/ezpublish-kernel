@@ -127,7 +127,8 @@ class ContentHandlerTest extends TestCase
                 $this->returnValue(
                     new VersionInfo(
                         array(
-                            "names" => array()
+                            "names" => array(),
+                            "contentInfo" => new ContentInfo
                         )
                     )
                 )

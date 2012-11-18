@@ -392,7 +392,7 @@ class ContentTypeHandlerTest extends HandlerTest
         $this->assertEquals( $userId, $obj->modifierId );
         $this->assertGreaterThanOrEqual( $time, $obj->created );
         $this->assertGreaterThanOrEqual( $time, $obj->modified );
-        $this->assertEquals( Type::STATUS_DRAFT, $obj->status );
+        $this->assertEquals( Type::STATUS_DEFINED, $obj->status );
         $this->assertGreaterThan( $original->created, $obj->created );
         $this->assertEquals( 3, count( $obj->fieldDefinitions ) );
         $this->assertEquals( 'Name', $obj->fieldDefinitions[0]->name['eng-GB'] );
@@ -705,7 +705,6 @@ class ContentTypeHandlerTest extends HandlerTest
     {
         $handler = $this->persistenceHandler->ContentTypeHandler();
         $type = $handler->copy( 10, 1, Type::STATUS_DEFINED );
-        $handler->publish( $type->id );
         try {
             $handler->load( $type->id, Type::STATUS_DRAFT );
             $this->fail( "Draft of Type still exists after publish()" );
