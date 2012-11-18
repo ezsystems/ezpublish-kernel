@@ -2520,11 +2520,11 @@ class UrlAliasHandlerTest extends TestCase
     public function testLocationCopiedCopiedLocationAliasIsValid()
     {
         $handler = $this->getHandler();
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_move.php" );
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_copy.php" );
 
         $urlAlias = $handler->lookup( "move-this" );
 
-        $handler->locationCopied( 4, 2, 3 );
+        $handler->locationCopied( 4, 400, 3 );
 
         self::assertEquals(
             $urlAlias,
@@ -2545,7 +2545,7 @@ class UrlAliasHandlerTest extends TestCase
 
         $urlAlias = $handler->lookup( "move-this/sub1/sub2" );
 
-        $handler->locationCopied( 4, 2, 3 );
+        $handler->locationCopied( 4, 400, 3 );
 
         self::assertEquals(
             $urlAlias,
@@ -2564,7 +2564,7 @@ class UrlAliasHandlerTest extends TestCase
         $handler = $this->getHandler();
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_copy.php" );
 
-        $handler->locationCopied( 4, 2, 3 );
+        $handler->locationCopied( 4, 400, 3 );
 
         $handler->lookup( "move-here/move-this-history" );
     }
@@ -2580,7 +2580,7 @@ class UrlAliasHandlerTest extends TestCase
         $handler = $this->getHandler();
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_copy.php" );
 
-        $handler->locationCopied( 4, 2, 3 );
+        $handler->locationCopied( 4, 400, 3 );
 
         $handler->lookup( "move-here/move-this/sub1/sub2-history" );
     }
@@ -2597,10 +2597,10 @@ class UrlAliasHandlerTest extends TestCase
 
         $countBeforeCopying = $this->countRows();
 
-        $handler->locationCopied( 4, 2, 3 );
+        $handler->locationCopied( 4, 400, 3 );
 
         self::assertEquals(
-            $countBeforeCopying + 3,
+            $countBeforeCopying + 2,
             $this->countRows()
         );
 
