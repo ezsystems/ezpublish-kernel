@@ -33,6 +33,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree as CriterionSubtree,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus,
     eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
+    eZ\Publish\API\Repository\Values\Content\Query\Criterion\Visibility as CriterionVisibility,
     eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
 
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
@@ -274,13 +275,13 @@ class LocationService implements LocationServiceInterface
      * Load children which are readable by the current user of a location object sorted by sortField and sortOrder
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     *
      * @param int $offset the start offset for paging
      * @param int $limit the number of locations returned. If $limit = -1 all children starting at $offset are returned
+     * @param bool $filterHidden
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationList
      */
-    public function loadLocationChildren( APILocation $location, $offset = 0, $limit = -1 )
+    public function loadLocationChildren( APILocation $location, $offset = 0, $limit = -1, $filterHidden = false )
     {
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
@@ -302,7 +303,8 @@ class LocationService implements LocationServiceInterface
             $location->sortField,
             $location->sortOrder,
             $offset,
-            $limit
+            $limit,
+            $filterHidden
         );
 
         $childLocations = array();
@@ -337,10 +339,11 @@ class LocationService implements LocationServiceInterface
      * Returns the number of children which are readable by the current user of a location object
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param bool $filterHidden
      *
      * @return int
      */
-    public function getLocationChildCount( APILocation $location )
+    public function getLocationChildCount( APILocation $location, $filterHidden = false )
     {
         if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
@@ -350,7 +353,8 @@ class LocationService implements LocationServiceInterface
             null,
             APILocation::SORT_ORDER_ASC,
             0,
-            0
+            0,
+            $filterHidden
         )->totalCount;
     }
 
@@ -362,18 +366,26 @@ class LocationService implements LocationServiceInterface
      * @param int $sortOrder
      * @param int $offset
      * @param int $limit
+     * @param bool $filterHidden
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    protected function searchChildrenLocations( $parentLocationId, $sortField = null, $sortOrder = APILocation::SORT_ORDER_ASC, $offset = 0, $limit = -1 )
+    protected function searchChildrenLocations( $parentLocationId, $sortField = null, $sortOrder = APILocation::SORT_ORDER_ASC, $offset = 0, $limit = -1, $filterHidden = false )
     {
+        $filters = array(
+            new CriterionParentLocationId( $parentLocationId ),
+            new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
+        );
+
+        if ( $filterHidden )
+        {
+            $filters[] = new CriterionVisibility( CriterionVisibility::VISIBLE );
+        }
+
         $query = new Query(
             array(
                 'criterion' => new CriterionLogicalAnd(
-                    array(
-                        new CriterionParentLocationId( $parentLocationId ),
-                        new CriterionStatus( CriterionStatus::STATUS_PUBLISHED ),
-                    )
+                    $filters
                 ),
                 'offset' => ( $offset >= 0 ? (int) $offset : 0 ),
                 'limit' => ( $limit  >= 0 ? (int) $limit  : null )
