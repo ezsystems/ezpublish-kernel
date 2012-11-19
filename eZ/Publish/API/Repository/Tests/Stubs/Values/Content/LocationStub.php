@@ -76,13 +76,6 @@ class LocationStub extends Location
     // protected $pathString;
 
     /**
-     * Date of the latest update of a content object in a sub location.
-     *
-     * @var \DateTime
-     */
-    // protected $modifiedSubLocationDate;
-
-    /**
      * Identifier of the main location.
      *
      * If the content object in this location has multiple locations,

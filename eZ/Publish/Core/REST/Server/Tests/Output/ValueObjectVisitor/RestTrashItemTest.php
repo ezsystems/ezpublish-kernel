@@ -40,7 +40,6 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
                     'remoteId' => 'remote-id',
                     'parentLocationId' => 21,
                     'pathString' => '/1/2/21/42/',
-                    'modifiedSubLocationDate' => new \DateTime( '2012-09-05 15:27 Europe/Zagreb' ),
                     'depth' => 3,
                     'contentInfo' => new ContentInfo(
                         array(
@@ -80,7 +79,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'TrashItem',
                 'children' => array(
-                    'count' => 13
+                    'count' => 12
                 )
             ),
             $result,
@@ -261,25 +260,6 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
             ),
             $result,
             'Invalid or non-existing <TrashItem> pathString value element.',
-            false
-        );
-    }
-
-    /**
-     * Test if result contains modified date value element
-     *
-     * @param string $result
-     * @depends testVisit
-     */
-    public function testResultContainsModifiedDateValueElement( $result )
-    {
-        $this->assertTag(
-            array(
-                'tag'      => 'subLocationModificationDate',
-                'content'  => '2012-09-05T15:27:00+02:00'
-            ),
-            $result,
-            'Invalid or non-existing <TrashItem> subLocationModificationDate value element.',
             false
         );
     }

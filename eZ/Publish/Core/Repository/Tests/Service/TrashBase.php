@@ -40,7 +40,6 @@ abstract class TrashBase extends BaseServiceTest
                 'remoteId' => null,
                 'parentLocationId' => null,
                 'pathString' => null,
-                'modifiedSubLocationDate' => null,
                 'depth' => null,
                 'sortField' => null,
                 'sortOrder' => null,
@@ -131,7 +130,6 @@ abstract class TrashBase extends BaseServiceTest
                 'remoteId',
                 'parentLocationId',
                 'pathString',
-                'modifiedSubLocationDate',
                 'depth',
                 'sortField',
                 'sortOrder',
@@ -175,7 +173,6 @@ abstract class TrashBase extends BaseServiceTest
                 'remoteId',
                 'parentLocationId',
                 'pathString',
-                'modifiedSubLocationDate',
                 'depth',
                 'sortField',
                 'sortOrder'

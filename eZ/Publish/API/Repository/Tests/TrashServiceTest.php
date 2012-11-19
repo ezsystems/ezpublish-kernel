@@ -64,7 +64,6 @@ class TrashServiceTest extends BaseTrashServiceTest
             'depth' => $location->depth,
             'hidden' => $location->hidden,
             'invisible' => $location->invisible,
-            'modifiedSubLocationDate' => $location->modifiedSubLocationDate,
             'parentLocationId' => $location->parentLocationId,
             'pathString' => $location->pathString,
             'priority' => $location->priority,

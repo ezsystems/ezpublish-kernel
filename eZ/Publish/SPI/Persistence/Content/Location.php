@@ -105,13 +105,6 @@ class Location extends ValueObject
     public $pathString;
 
     /**
-     * Timestamp of the latest update of a content object in a sub location.
-     *
-     * @var int
-     */
-    public $modifiedSubLocation;
-
-    /**
      * Identifier of the main location.
      *
      * If the content object in this location has multiple locations,

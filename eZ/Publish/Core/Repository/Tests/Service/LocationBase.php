@@ -40,7 +40,6 @@ abstract class LocationBase extends BaseServiceTest
                 'parentLocationId' => null,
                 'pathString' => null,
                 'path' => array(),
-                'modifiedSubLocationDate' => null,
                 'depth' => null,
                 'sortField' => null,
                 'sortOrder' => null,

@@ -561,7 +561,7 @@ class EzcDatabase extends Gateway
                 $query->bindValue( $location->invisible = $createStruct->invisible, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'modified_subnode' ),
-                $query->bindValue( $location->modifiedSubLocation = time(), null, \PDO::PARAM_INT )
+                $query->bindValue( time(), null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'node_id' ),
                 $this->handler->getAutoIncrementValue( 'ezcontentobject_tree', 'node_id' )

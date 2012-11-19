@@ -35,7 +35,6 @@ class LocationTest extends PHPUnit_Framework_TestCase
         self::assertContains( 'parentLocationId', $properties, 'Property not found' );
         self::assertContains( 'pathString', $properties, 'Property not found' );
         self::assertContains( 'path', $properties, 'Property not found' );
-        self::assertContains( 'modifiedSubLocationDate', $properties, 'Property not found' );
         self::assertContains( 'depth', $properties, 'Property not found' );
         self::assertContains( 'sortField', $properties, 'Property not found' );
         self::assertContains( 'sortOrder', $properties, 'Property not found' );

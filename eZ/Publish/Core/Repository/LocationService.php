@@ -901,7 +901,6 @@ class LocationService implements LocationServiceInterface
                 'remoteId' => $spiLocation->remoteId,
                 'parentLocationId' => (int) $spiLocation->parentId,
                 'pathString' => $spiLocation->pathString,
-                'modifiedSubLocationDate' => $this->getDateTime( $spiLocation->modifiedSubLocation ),
                 'depth' => (int) $spiLocation->depth,
                 'sortField' => (int) $spiLocation->sortField,
                 'sortOrder' => (int) $spiLocation->sortOrder,

@@ -1594,7 +1594,6 @@ XML Example
       <invisible>false</invisible>
       <ParentLocation href="/content/locations/1/5/73" media-type="application/vnd.ez.api.Location+xml"/>
       <pathString>/1/5/73/133</pathString>
-      <subLocationModificationDate>2001-01-01T12:45:00</subLocationModificationDate>
       <depth>4</depth>
       <childCount>0</childCount>
       <remoteId>remoteId-qwert567</remoteId>
@@ -1726,7 +1725,6 @@ XML Example
       <invisible>false</invisible>
       <ParentLocation href="/content/locations/1/5/73" media-type="application/vnd.ez.api.Location+xml"/>
       <pathString>/1/5/73/133</pathString>
-      <subLocationModificationDate>2001-01-01T12:45:00</subLocationModificationDate>
       <depth>4</depth>
       <childCount>0</childCount>
       <remoteId>remoteId-qwert567</remoteId>
@@ -1810,7 +1808,6 @@ XML Example
       <invisible>true</invisible>
       <ParentLocation href="/content/locations/1/5/73" media-type="application/vnd.ez.api.Location+xml"/>
       <pathString>/1/5/73/133</pathString>
-      <subLocationModificationDate>2001-01-01T12:45:00</subLocationModificationDate>
       <depth>4</depth>
       <childCount>0</childCount>
       <remoteId>remoteId-qwert999</remoteId>
@@ -7022,15 +7019,6 @@ Location XML Schema
                   </xsd:documentation>
                 </xsd:annotation>
               </xsd:element>
-              <xsd:element name="subLocationModificationDate"
-                type="xsd:dateTime">
-                <xsd:annotation>
-                  <xsd:documentation>
-                    Timestamp of the latest update of a
-                    content object in a sub location.
-                  </xsd:documentation>
-                </xsd:annotation>
-              </xsd:element>
               <xsd:element name="depth" type="xsd:int">
                 <xsd:annotation>
                   <xsd:documentation>
@@ -7137,15 +7125,6 @@ Trash XML Schema
                   <xsd:documentation>
                     The materialized path of the location
                     entry, eg: /1/2/
-                  </xsd:documentation>
-                </xsd:annotation>
-              </xsd:element>
-              <xsd:element name="subLocationModificationDate"
-                type="xsd:dateTime">
-                <xsd:annotation>
-                  <xsd:documentation>
-                    Timestamp of the latest update of a
-                    content object in a sub location.
                   </xsd:documentation>
                 </xsd:annotation>
               </xsd:element>
