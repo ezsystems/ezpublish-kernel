@@ -31,7 +31,7 @@ interface LocationService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed copy the subtree to the given parent location
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user does not have read access to the whole source subtree
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException  if the target location is a sub location of the given location
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the target location is a sub location of the given location
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $subtree - the subtree denoted by the location to copy
      * @param \eZ\Publish\API\Repository\Values\Content\Location $targetParentLocation - the target parent location for the copy operation
@@ -83,7 +83,6 @@ interface LocationService
      * Load children which are readable by the current user of a location object sorted by sortField and sortOrder
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     *
      * @param int $offset the start offset for paging
      * @param int $limit the number of locations returned. If $limit = -1 all children starting at $offset are returned
      *
@@ -103,8 +102,8 @@ interface LocationService
     /**
      * Creates the new $location in the content repository for the given content
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException  if the content is already below the specified parent
-     *                                        or the parent is a sub location of the location the content
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the content is already below the specified parent
+     *                                        or the parent is a sub location of the location of the content
      *                                        or if set the remoteId exists already
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
@@ -130,7 +129,7 @@ interface LocationService
     public function updateLocation( Location $location, LocationUpdateStruct $locationUpdateStruct );
 
     /**
-     * Swaps the contents hold by the $location1 and $location2
+     * Swaps the contents held by $location1 and $location2
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to swap content
      *

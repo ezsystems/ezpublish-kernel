@@ -237,7 +237,7 @@ class LocationService implements LocationServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\Location $rootLocation
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[] An array of {@link Location}
      */
     public function loadLocations( APIContentInfo $contentInfo, APILocation $rootLocation = null )
     {
@@ -591,7 +591,7 @@ class LocationService implements LocationServiceInterface
     }
 
     /**
-     * Swaps the contents held by the $location1 and $location2
+     * Swaps the contents held by $location1 and $location2
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to swap content
      *
