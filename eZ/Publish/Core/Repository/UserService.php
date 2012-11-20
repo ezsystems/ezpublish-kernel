@@ -591,6 +591,9 @@ class UserService implements UserServiceInterface
         if ( !is_string( $password ) || empty( $password ) )
             throw new InvalidArgumentValue( "password", $password );
 
+        // Randomize login time to protect against timing attacks
+        usleep( mt_rand( 2, 24 ) );
+
         $spiUsers = $this->userHandler->loadByLogin( $login );
 
         if ( empty( $spiUsers ) )
