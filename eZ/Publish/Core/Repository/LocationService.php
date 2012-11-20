@@ -486,9 +486,6 @@ class LocationService implements LocationServiceInterface
         $createStruct->contentId = (int) $contentInfo->id;
         $createStruct->contentVersion = (int) $contentInfo->currentVersionNo;
 
-        // @todo: set pathIdentificationString
-        // $createStruct->pathIdentificationString = null;
-
         if ( $contentInfo->mainLocationId !== null )
             $createStruct->mainLocationId = $contentInfo->mainLocationId;
 
@@ -510,7 +507,9 @@ class LocationService implements LocationServiceInterface
                     $newLocation->parentId,
                     $name,
                     $languageCode,
-                    $content->contentInfo->alwaysAvailable
+                    $content->contentInfo->alwaysAvailable,
+                    // @todo: this is legacy storage specific for updating ezcontentobject_tree.path_identification_string, to be removed
+                    $languageCode === $content->contentInfo->mainLanguageCode
                 );
             }
 
