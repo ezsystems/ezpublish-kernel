@@ -57,6 +57,10 @@ class ContentInfo extends APIContentInfo
         {
             case 'contentType':
                 return $this->contentType;
+            case 'contentTypeId':
+                return $this->contentType->id;
+            case 'contentTypeIdentifier':
+                return $this->contentType->identifier;
         }
         return parent::__get( $property );
     }
@@ -70,7 +74,7 @@ class ContentInfo extends APIContentInfo
      */
     public function __isset( $property )
     {
-        if ( $property === 'contentType' )
+        if ( $property === 'contentType' || $property === 'contentTypeId' || $property === 'contentTypeIdentifier' )
             return true;
 
         return parent::__isset( $property );
