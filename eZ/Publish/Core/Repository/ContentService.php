@@ -54,6 +54,8 @@ use eZ\Publish\API\Repository\ContentService as ContentServiceInterface,
     eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as SPILocationCreateStruct,
     eZ\Publish\SPI\Persistence\Content\Relation as SPIRelation,
     eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreateStruct,
+    eZ\Publish\SPI\FieldType\EventListener as EventListenerFieldType,
+    eZ\Publish\SPI\FieldType\Events as FieldTypeEvents,
 
     DateTime,
     Exception;
@@ -513,6 +515,7 @@ class ContentService implements ContentServiceInterface
         $fieldValues = array();
         $spiFields = array();
         $allFieldErrors = array();
+        $eventListenerFieldTypes = array();
         foreach ( $contentCreateStruct->contentType->getFieldDefinitions() as $fieldDefinition )
         {
             /** @var $fieldType \eZ\Publish\Core\FieldType\FieldType */
@@ -570,11 +573,45 @@ class ContentService implements ContentServiceInterface
                     )
                 );
             }
+
+            // Detect event listeners for use right before and after spi call
+            if ( $fieldType instanceof EventListenerFieldType )
+            {
+                $eventListenerFieldTypes[$fieldDefinition->fieldTypeIdentifier] = array(
+                    'type' => $fieldType,
+                    'definition' => $fieldDefinition,
+                );
+            }
         }
 
         if ( !empty( $allFieldErrors ) )
         {
             throw new ContentFieldValidationException( $allFieldErrors );
+        }
+
+        // Execute: pre_create field type event
+        foreach ( $eventListenerFieldTypes as $fieldTypeIdentifier => $eventListenerFieldType )
+        {
+            /** @var EventListenerFieldType $fieldType */
+            $fieldType = $eventListenerFieldType['type'];
+            foreach( $fields[$fieldTypeIdentifier] as $field )
+            {
+                /** @var Field $field */
+                $fieldType->handleEvent(
+                    new FieldTypeEvents\PreCreateEvent(
+                        array(
+                            'fieldDefinition' => $eventListenerFieldType['definition'],
+                            'field' => new Field(// Create new Field to make sure the correct fieldValue is used
+                                array(
+                                    'fieldDefIdentifier' => $fieldTypeIdentifier,
+                                    'value' => $field->$fieldValues[$fieldTypeIdentifier][$field->languageCode],
+                                    'languageCode' => $field->languageCode,
+                                )
+                            )
+                        )
+                    )
+                );
+            }
         }
 
         $spiContentCreateStruct = new SPIContentCreateStruct(
@@ -613,7 +650,33 @@ class ContentService implements ContentServiceInterface
             throw $e;
         }
 
-        return $this->buildContentDomainObject( $spiContent );
+        $apiContent = $this->buildContentDomainObject( $spiContent );
+
+        if ( empty( $eventListenerFieldTypes ) )
+            return $apiContent;
+
+        // Execute: post_create field type event
+        foreach( $apiContent->getFields() as $field )
+        {
+            if ( !isset( $eventListenerFieldTypes[$field->fieldDefIdentifier] ) )
+                continue;
+
+            /** @var EventListenerFieldType $fieldType */
+            $fieldType = $eventListenerFieldTypes[$field->fieldDefIdentifier]['type'];
+
+            /** @var Field $field */
+            $fieldType->handleEvent(
+                new FieldTypeEvents\PostCreateEvent(
+                    array(
+                        'fieldDefinition' => $eventListenerFieldTypes[$field->fieldDefIdentifier]['definition'],
+                        'field' => $field,
+                        'versionInfo' => $apiContent->getVersionInfo(),
+                    )
+                )
+            );
+        }
+
+        return $apiContent;
     }
 
     /**
@@ -1237,10 +1300,44 @@ class ContentService implements ContentServiceInterface
         if ( !$this->repository->canUser( 'content', 'edit', $content ) )
             throw new UnauthorizedException( 'content', 'edit' );
 
+        // Execute: pre_publish field type event
+        $eventListenerFieldTypes = array();
+        $fieldTypeService = $this->repository->getFieldTypeService();
+        foreach ( $content->getFields() as $field )
+        {
+            /** @var $fieldType \eZ\Publish\Core\FieldType\FieldType */
+            $fieldType = $fieldTypeService->buildFieldType(
+                $field->fieldDefIdentifier
+            );
+
+            // Detect event listeners
+            if ( $fieldType instanceof EventListenerFieldType )
+            {
+                $fieldDefinition = $content->contentType->getFieldDefinition( $field->fieldDefIdentifier );
+
+                /** @var Field $field */
+                $fieldType->handleEvent(
+                    new FieldTypeEvents\PrePublishEvent(
+                        array(
+                            'fieldDefinition' => $fieldDefinition,
+                            'field' => $field,
+                            'versionInfo' => $versionInfo,
+                        )
+                    )
+                );
+
+                // Keep for post_publish event
+                $eventListenerFieldTypes[$field->fieldDefIdentifier] = array(
+                    'type' => $fieldType,
+                    'definition' => $fieldDefinition,
+                );
+            }
+        }
+
         $this->repository->beginTransaction();
         try
         {
-            $content = $this->internalPublishVersion( $content->getVersionInfo() );
+            $apiContent = $this->internalPublishVersion( $content->getVersionInfo() );
             $this->repository->commit();
         }
         catch ( Exception $e )
@@ -1249,7 +1346,31 @@ class ContentService implements ContentServiceInterface
             throw $e;
         }
 
-        return $content;
+        if ( empty( $eventListenerFieldTypes ) )
+            return $apiContent;
+
+        // Execute: post_create field type event
+        foreach( $apiContent->getFields() as $field )
+        {
+            if ( !isset( $eventListenerFieldTypes[$field->fieldDefIdentifier] ) )
+                continue;
+
+            /** @var EventListenerFieldType $fieldType */
+            $fieldType = $eventListenerFieldTypes[$field->fieldDefIdentifier]['type'];
+
+            /** @var Field $field */
+            $fieldType->handleEvent(
+                new FieldTypeEvents\PostPublishEvent(
+                    array(
+                        'fieldDefinition' => $eventListenerFieldTypes[$field->fieldDefIdentifier]['definition'],
+                        'field' => $field,
+                        'versionInfo' => $apiContent->getVersionInfo(),
+                    )
+                )
+            );
+        }
+
+        return $apiContent;
     }
 
     /**
