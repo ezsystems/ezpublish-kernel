@@ -699,11 +699,7 @@ function generateURLAliasFixture( array $fixture )
                 break;
 
             case 'eznode':
-                $destination = createRepoCall(
-                    'LocationService',
-                    'loadLocation',
-                    array( substr( $data['action'], 7 ) )
-                );
+                $destination = substr( $data['action'], 7 );
                 break;
 
             case 'module':

@@ -92,7 +92,7 @@ class URLAliasServiceTest extends BaseTest
             'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
             $createdUrlAlias
         );
-        return array( $createdUrlAlias, $location );
+        return array( $createdUrlAlias, $location->id );
     }
 
     /**
@@ -102,14 +102,14 @@ class URLAliasServiceTest extends BaseTest
      */
     public function testCreateUrlAliasPropertyValues( array $testData )
     {
-        list( $createdUrlAlias, $location ) = $testData;
+        list( $createdUrlAlias, $locationId ) = $testData;
 
         $this->assertNotNull( $createdUrlAlias->id );
 
         $this->assertPropertiesCorrect(
             array(
                 'type' => URLAlias::LOCATION,
-                'destination' => $location,
+                'destination' => $locationId,
                 'path' => '/Home/My-New-Site',
                 'languageCodes' => array( 'eng-US' ),
                 'alwaysAvailable' => false,
@@ -151,7 +151,7 @@ class URLAliasServiceTest extends BaseTest
             'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
             $createdUrlAlias
         );
-        return array( $createdUrlAlias, $location );
+        return array( $createdUrlAlias, $location->id );
     }
 
     /**
@@ -161,14 +161,14 @@ class URLAliasServiceTest extends BaseTest
      */
     public function testCreateUrlAliasPropertyValuesWithForwarding( array $testData )
     {
-        list( $createdUrlAlias, $location ) = $testData;
+        list( $createdUrlAlias, $locationId ) = $testData;
 
         $this->assertNotNull( $createdUrlAlias->id );
 
         $this->assertPropertiesCorrect(
             array(
                 'type' => URLAlias::LOCATION,
-                'destination' => $location,
+                'destination' => $locationId,
                 'path' => '/Home/My-New-Site',
                 'languageCodes' => array( 'eng-US' ),
                 'alwaysAvailable' => false,
@@ -210,7 +210,7 @@ class URLAliasServiceTest extends BaseTest
             'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
             $createdUrlAlias
         );
-        return array( $createdUrlAlias, $location );
+        return array( $createdUrlAlias, $location->id );
     }
 
     /**
@@ -220,14 +220,14 @@ class URLAliasServiceTest extends BaseTest
      */
     public function testCreateUrlAliasPropertyValuesWithAlwaysAvailable( array $testData )
     {
-        list( $createdUrlAlias, $location ) = $testData;
+        list( $createdUrlAlias, $locationId ) = $testData;
 
         $this->assertNotNull( $createdUrlAlias->id );
 
         $this->assertPropertiesCorrect(
             array(
                 'type' => URLAlias::LOCATION,
-                'destination' => $location,
+                'destination' => $locationId,
                 'path' => '/Home/My-New-Site',
                 'languageCodes' => array( 'eng-US' ),
                 'alwaysAvailable' => true,
@@ -495,13 +495,9 @@ class URLAliasServiceTest extends BaseTest
                 'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias',
                 $loadedAlias
             );
-            $this->assertInstanceOf(
-                'eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
-                $loadedAlias->destination
-            );
             $this->assertEquals(
                 $location->id,
-                $loadedAlias->destination->id
+                $loadedAlias->destination
             );
         }
     }

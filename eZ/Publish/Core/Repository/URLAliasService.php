@@ -658,20 +658,11 @@ class URLAliasService implements URLAliasServiceInterface
      */
     protected function buildUrlAliasDomainObject( SPIURLAlias $spiUrlAlias, $path )
     {
-        if ( $spiUrlAlias->type === SPIURLAlias::LOCATION )
-        {
-            $destination = $this->repository->getLocationService()->loadLocation( $spiUrlAlias->destination );
-        }
-        else
-        {
-            $destination = $spiUrlAlias->destination;
-        }
-
         return new URLAlias(
             array(
                 "id" => $spiUrlAlias->id,
                 "type" => $spiUrlAlias->type,
-                "destination" => $destination,
+                "destination" => $spiUrlAlias->destination,
                 "languageCodes" => $spiUrlAlias->languageCodes,
                 "alwaysAvailable" => $spiUrlAlias->alwaysAvailable,
                 "path" => "/" . $path,

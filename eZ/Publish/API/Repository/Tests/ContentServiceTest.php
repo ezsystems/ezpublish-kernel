@@ -3985,7 +3985,7 @@ class ContentServiceTest extends BaseContentServiceTest
             array(
                 '/Design/Plain-site/An-awesome-forum' => array(
                     'type' => URLAlias::LOCATION,
-                    'destination' => $location,
+                    'destination' => $location->id,
                     'path' => '/Design/Plain-site/An-awesome-forum',
                     'languageCodes' => array( 'eng-US' ),
                     'isHistory' => false,
@@ -4026,7 +4026,7 @@ class ContentServiceTest extends BaseContentServiceTest
             array(
                 '/Design/Plain-site/An-awesome-forum2' => array(
                     'type' => URLAlias::LOCATION,
-                    'destination' => $location,
+                    'destination' => $location->id,
                     'path' => '/Design/Plain-site/An-awesome-forum2',
                     'languageCodes' => array( 'eng-US' ),
                     'isHistory' => false,
@@ -4035,7 +4035,7 @@ class ContentServiceTest extends BaseContentServiceTest
                 ),
                 '/Design/Plain-site/An-awesome-forum23' => array(
                     'type' => URLAlias::LOCATION,
-                    'destination' => $location,
+                    'destination' => $location->id,
                     'path' => '/Design/Plain-site/An-awesome-forum23',
                     'languageCodes' => array( 'eng-GB' ),
                     'isHistory' => false,
@@ -4097,7 +4097,7 @@ class ContentServiceTest extends BaseContentServiceTest
             array(
                 '/my/fancy/story-about-ez-publish' => array(
                     'type' => URLAlias::LOCATION,
-                    'destination' => $location,
+                    'destination' => $location->id,
                     'path' => '/my/fancy/story-about-ez-publish',
                     'languageCodes' => array( 'eng-US' ),
                     'isHistory' => false,
