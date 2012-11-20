@@ -130,19 +130,29 @@ class EzpDatabaseTest extends TestCase
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->moveSubtreeNodes( '/1/2/69/', '/1/2/77/' );
+        $handler->moveSubtreeNodes(
+            array(
+                'path_string' => '/1/2/69/',
+                'path_identification_string' => 'products'
+            ),
+            array(
+                'path_string' => '/1/2/77/',
+                'path_identification_string' => 'solutions'
+            )
+        );
 
+        /** @var $query \ezcQuerySelect */
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
             array(
-                array( 65, '/1/2/', 1, 1 ),
-                array( 67, '/1/2/77/69/', 77, 3 ),
-                array( 69, '/1/2/77/69/70/71/', 70, 5 ),
-                array( 73, '/1/2/77/69/72/75/', 72, 5 ),
-                array( 75, '/1/2/77/', 2, 2 ),
+                array( 65, '/1/2/', '', 1, 1 ),
+                array( 67, '/1/2/77/69/', 'solutions/products', 77, 3 ),
+                array( 69, '/1/2/77/69/70/71/', 'solutions/products/software/os_type_i', 70, 5 ),
+                array( 73, '/1/2/77/69/72/75/', 'solutions/products/boxes/cd_dvd_box_iii', 72, 5 ),
+                array( 75, '/1/2/77/', 'solutions', 2, 2 ),
             ),
             $query
-                ->select( 'contentobject_id', 'path_string', 'parent_node_id', 'depth' )
+                ->select( 'contentobject_id', 'path_string', 'path_identification_string', 'parent_node_id', 'depth' )
                 ->from( 'ezcontentobject_tree' )
                 ->where( $query->expr->in( 'node_id', array( 69, 71, 75, 77, 2 ) ) )
                 ->orderBy( 'contentobject_id' )
@@ -399,7 +409,7 @@ class EzpDatabaseTest extends TestCase
     {
         return array(
             array( 'contentobject_id', 68 ),
-            array( 'contentobject_is_published', 0 ),
+            array( 'contentobject_is_published', 1 ),
             array( 'contentobject_version', 1 ),
             array( 'depth', 3 ),
             array( 'is_hidden', 0 ),
