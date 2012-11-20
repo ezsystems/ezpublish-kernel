@@ -140,24 +140,26 @@ class LocationService implements LocationServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param int $offset the start offset for paging
      * @param int $limit the number of locations returned. If $limit = -1 all children starting at $offset are returned
+     * @param bool $filterHidden
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationList
      */
-    public function loadLocationChildren( Location $location, $offset = 0, $limit = -1 )
+    public function loadLocationChildren( Location $location, $offset = 0, $limit = -1, $filterHidden = false )
     {
-        return $this->service->loadLocationChildren( $location, $offset, $limit );
+        return $this->service->loadLocationChildren( $location, $offset, $limit, $filterHidden );
     }
 
     /**
      * Returns the number of children which are readable by the current user of a location object
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param bool $filterHidden
      *
      * @return int
      */
-    public function getLocationChildCount( Location $location )
+    public function getLocationChildCount( Location $location, $filterHidden = false )
     {
-        return $this->service->getLocationChildCount( $location );
+        return $this->service->getLocationChildCount( $location, $filterHidden );
     }
 
     /**
