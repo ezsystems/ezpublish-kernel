@@ -1305,17 +1305,16 @@ class ContentService implements ContentServiceInterface
         $fieldTypeService = $this->repository->getFieldTypeService();
         foreach ( $content->getFields() as $field )
         {
+            $fieldDefinition = $content->contentType->getFieldDefinition( $field->fieldDefIdentifier );
+
             /** @var $fieldType \eZ\Publish\Core\FieldType\FieldType */
             $fieldType = $fieldTypeService->buildFieldType(
-                $field->fieldDefIdentifier
+                $fieldDefinition->fieldTypeIdentifier
             );
 
             // Detect event listeners
             if ( $fieldType instanceof EventListenerFieldType )
             {
-                $fieldDefinition = $content->contentType->getFieldDefinition( $field->fieldDefIdentifier );
-
-                /** @var $field Field  */
                 $fieldType->handleEvent(
                     new FieldTypeEvents\PrePublishEvent(
                         array(
