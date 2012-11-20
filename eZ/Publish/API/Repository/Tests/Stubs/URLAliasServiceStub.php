@@ -79,7 +79,7 @@ class URLAliasServiceStub implements URLAliasService
         $this->checkAliasNotExists( $path, $languageCode, true );
 
         $data = array(
-            'destination' => $location,
+            'destination' => $location->id,
             'path' => $path,
             'languageCodes' => array( $languageCode ),
             'alwaysAvailable' => $alwaysAvailable,
@@ -147,7 +147,7 @@ class URLAliasServiceStub implements URLAliasService
         {
             // Filter non-location aliases and location aliases for other
             // locations
-            if ( !( $existingAlias->destination instanceof Location ) || $existingAlias->destination->id != $location->id )
+            if ( $existingAlias->type != URLAlias::LOCATION  || $existingAlias->destination != $location->id )
             {
                 continue;
             }
@@ -481,7 +481,7 @@ class URLAliasServiceStub implements URLAliasService
 
         return $this->createLocationUrlAlias(
             array(
-                'destination' => $location,
+                'destination' => $location->id,
                 'path' => $path,
                 'languageCodes' => array( $languageCode ),
                 'isCustom' => false,
