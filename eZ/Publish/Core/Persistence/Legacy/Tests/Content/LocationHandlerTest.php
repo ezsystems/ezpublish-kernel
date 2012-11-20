@@ -148,38 +148,32 @@ class LocationHandlerTest extends TestCase
     {
         $handler = $this->getLocationHandler();
 
+        $sourceData = array(
+            'node_id' => 69,
+            'path_string' => '/1/2/69/',
+            'parent_node_id' => 2,
+            'contentobject_id' => 67,
+        );
         $this->locationGateway
             ->expects( $this->at( 0 ) )
             ->method( 'getBasicNodeData' )
             ->with( 69 )
-            ->will(
-                $this->returnValue(
-                    array(
-                        'node_id' => 69,
-                        'path_string' => '/1/2/69/',
-                        'parent_node_id' => 2,
-                        'contentobject_id' => 67,
-                    )
-                )
-            );
+            ->will( $this->returnValue( $sourceData ) );
 
+        $destinationData = array(
+            'node_id' => 77,
+            'path_string' => '/1/2/77/',
+        );
         $this->locationGateway
             ->expects( $this->at( 1 ) )
             ->method( 'getBasicNodeData' )
             ->with( 77 )
-            ->will(
-                $this->returnValue(
-                    array(
-                        'node_id' => 77,
-                        'path_string' => '/1/2/77/',
-                    )
-                )
-            );
+            ->will( $this->returnValue( $destinationData ) );
 
         $this->locationGateway
             ->expects( $this->once() )
             ->method( 'moveSubtreeNodes' )
-            ->with( '/1/2/69/', '/1/2/77/' );
+            ->with( $sourceData, $destinationData );
 
         $this->locationGateway
             ->expects( $this->once() )
@@ -566,15 +560,15 @@ class LocationHandlerTest extends TestCase
             )
         );
         $subtreeContentRows = array(
-            array( "node_id" => 10, "main_node_id" => 1, "parent_node_id" => 3, "contentobject_id" => 21, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test", "sort_field" => 2, "sort_order" => 1 ),
-            array( "node_id" => 11, "main_node_id" => 11, "parent_node_id" => 10, "contentobject_id" => 211, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test", "sort_field" => 2, "sort_order" => 1 ),
-            array( "node_id" => 12, "main_node_id" => 15, "parent_node_id" => 10, "contentobject_id" => 215, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test", "sort_field" => 2, "sort_order" => 1 ),
-            array( "node_id" => 13, "main_node_id" => 2, "parent_node_id" => 10, "contentobject_id" => 22, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test", "sort_field" => 2, "sort_order" => 1 ),
-            array( "node_id" => 14, "main_node_id" => 11, "parent_node_id" => 13, "contentobject_id" => 211, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test", "sort_field" => 2, "sort_order" => 1 ),
-            array( "node_id" => 15, "main_node_id" => 15, "parent_node_id" => 13, "contentobject_id" => 215, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test", "sort_field" => 2, "sort_order" => 1 ),
-            array( "node_id" => 16, "main_node_id" => 16, "parent_node_id" => 15, "contentobject_id" => 216, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 10, "main_node_id" => 1, "parent_node_id" => 3, "contentobject_id" => 21, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test_10", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 11, "main_node_id" => 11, "parent_node_id" => 10, "contentobject_id" => 211, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test_11", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 12, "main_node_id" => 15, "parent_node_id" => 10, "contentobject_id" => 215, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test_12", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 13, "main_node_id" => 2, "parent_node_id" => 10, "contentobject_id" => 22, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test_13", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 14, "main_node_id" => 11, "parent_node_id" => 13, "contentobject_id" => 211, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test_14", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 15, "main_node_id" => 15, "parent_node_id" => 13, "contentobject_id" => 215, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test_15", "sort_field" => 2, "sort_order" => 1 ),
+            array( "node_id" => 16, "main_node_id" => 16, "parent_node_id" => 15, "contentobject_id" => 216, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 0, "priority"=> 0, "path_identification_string" => "test_16", "sort_field" => 2, "sort_order" => 1 ),
         );
-        $destinationData = array( "node_id" => 5, "main_node_id" => 5, "parent_node_id" => 4, "contentobject_id" => 200, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 1 );
+        $destinationData = array( "node_id" => 5, "main_node_id" => 5, "parent_node_id" => 4, "contentobject_id" => 200, "contentobject_version" => 1, "is_hidden" => 0, "is_invisible" => 1, "path_identification_string" => "test_destination" );
         $mainLocationsMap = array( true, true, true, true, 1011, 1012, true );
         $updateMainLocationsMap = array( 1215 => 1015 );
         $offset = 1000;
@@ -645,6 +639,7 @@ class LocationHandlerTest extends TestCase
                 );
         }
 
+        $pathStrings = array( $destinationData["node_id"] => $destinationData["path_identification_string"] );
         foreach ( $subtreeContentRows as $index => $row )
         {
             $mapper = new Mapper();
@@ -660,6 +655,8 @@ class LocationHandlerTest extends TestCase
             $createStruct->parentId = $index === 0 ? $destinationData["node_id"] : $createStruct->parentId + $offset;
             $createStruct->invisible = true;
             $createStruct->mainLocationId = $mainLocationsMap[$index];
+            $createStruct->pathIdentificationString = $pathStrings[$createStruct->parentId] . "/" . $row["path_identification_string"];
+            $pathStrings[$row["node_id"] + $offset] = $createStruct->pathIdentificationString;
             $handler
                 ->expects( $this->at( $index ) )
                 ->method( 'create' )
@@ -671,6 +668,7 @@ class LocationHandlerTest extends TestCase
                                 "id" => $row["node_id"] + $offset,
                                 "hidden" => false,
                                 "invisible" => true,
+                                "pathIdentificationString" => $createStruct->pathIdentificationString,
                                 "mainLocationId" => $mainLocationsMap[$index] === true ?
                                     $row["node_id"] + $offset :
                                     $mainLocationsMap[$index]
