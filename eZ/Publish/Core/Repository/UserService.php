@@ -618,7 +618,7 @@ class UserService implements UserServiceInterface
             throw new InvalidArgumentValue( "password", $password );
 
         // Randomize login time to protect against timing attacks
-        usleep( mt_rand( 2, 24 ) );
+        usleep( mt_rand( 0, 30000 ) );
 
         $spiUsers = $this->userHandler->loadByLogin( $login );
 
