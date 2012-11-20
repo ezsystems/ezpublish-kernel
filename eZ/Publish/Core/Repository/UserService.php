@@ -557,8 +557,34 @@ class UserService implements UserServiceInterface
         if ( !is_numeric( $userId ) )
             throw new InvalidArgumentValue( "userId", $userId );
 
-        $spiUser = $this->userHandler->load( $userId );
-        return $this->buildDomainUserObject( $spiUser );
+        /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
+        $content = $this->repository->getContentService()->internalLoadContent( $userId );
+        // Get spiUser value from Field Value
+        foreach ( $content->getFields() as $field )
+        {
+            if ( !$field->value instanceof UserValue )
+                continue;
+
+            /** @var \eZ\Publish\Core\FieldType\User\Value $value */
+            $value = $field->value;
+            $spiUser = new SPIUser();
+            $spiUser->id = $value->contentId;
+            $spiUser->login = $value->login;
+            $spiUser->email = $value->email;
+            $spiUser->hashAlgorithm = $value->passwordHashType;
+            $spiUser->passwordHash = $value->passwordHash;
+            $spiUser->isEnabled = $value->enabled;
+            $spiUser->maxLogin = $value->maxLogin;
+            break;
+        }
+
+        // If for some reason not found, load it
+        if ( !isset( $spiUser ) )
+        {
+            $spiUser = $this->userHandler->load( $userId );
+        }
+
+        return $this->buildDomainUserObject( $spiUser, $content );
     }
 
     /**
