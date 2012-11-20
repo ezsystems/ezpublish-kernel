@@ -133,13 +133,31 @@ class ConfigurationConverter
             $settings['ezpublish']['imagemagick']['enabled'] = false;
         }
 
-        // image variations settings
-        $settings['ezpublish']['system'][$defaultSiteaccess]['image_variations'] = array();
-        $imageAliasesList = $this->getGroup( 'AliasSettings', 'image.ini', $defaultSiteaccess );
+        foreach ( $siteList as $siteaccess )
+        {
+            $settings['ezpublish']['system'][$siteaccess]['image_variations'] = $this->getImageVariationsForSiteaccess( $siteaccess );
+        }
+
+        // Explicitely set Http cache purge type to "local"
+        $settings['ezpublish']['http_cache']['purge_type'] = 'local';
+
+        return $settings;
+    }
+
+    /**
+     * Returns the image variation settings for the siteaccess
+     *
+     * @param string $siteaccess
+     * @return array
+     */
+    protected function getImageVariationsForSiteaccess( $siteaccess )
+    {
+        $variations = array();
+        $imageAliasesList = $this->getGroup( 'AliasSettings', 'image.ini', $siteaccess );
         foreach( $imageAliasesList['AliasList'] as $imageAliasIdentifier )
         {
             $variationSettings = array( 'reference' => null, 'filters' => array() );
-            $aliasSettings = $this->getGroup( $imageAliasIdentifier, 'image.ini', $defaultSiteaccess );
+            $aliasSettings = $this->getGroup( $imageAliasIdentifier, 'image.ini', $siteaccess );
             if ( isset( $aliasSettings['Reference'] ) && $aliasSettings['Reference'] != '' )
             {
                 $variationSettings['reference'] = $aliasSettings['Reference'];
@@ -172,14 +190,9 @@ class ConfigurationConverter
                     $variationSettings['filters'][] = $filteringSettings;
                 }
             }
-
-            $settings['ezpublish']['system'][$defaultSiteaccess]['image_variations'][$imageAliasIdentifier] = $variationSettings;
+            $variations[$imageAliasIdentifier] = $variationSettings;
         }
-
-        // Explicitely set Http cache purge type to "local"
-        $settings['ezpublish']['http_cache']['purge_type'] = 'local';
-
-        return $settings;
+        return $variations;
     }
 
     protected function mapDatabaseType( $databaseType )

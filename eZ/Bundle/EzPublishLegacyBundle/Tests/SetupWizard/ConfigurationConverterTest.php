@@ -169,8 +169,43 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                             ) ),
                         )
                     ),
-                    'ezdemo_site_admin' => array( 'legacy_mode' => true )
+                    'ezdemo_site_admin' => array(
+                        'legacy_mode' => true,
+                        'image_variations' => array(
+                            'large' => array(
+                                'reference' => null,
+                                'filters' => array(
+                                    array(
+                                        'name' => 'geometry/scaledownonly',
+                                        'params' => array( 360, 440 )
+                                    )
+                                )
+                            ),
+                            'infoboximage' => array(
+                                'reference' => null,
+                                'filters' => array(
+                                    array(
+                                        'name' => 'geometry/scalewidth',
+                                        'params' => array( 75 )
+                                    ),
+                                    array( 'name' => 'flatten' )
+                                )
+                            ),
+                        )
+                    ),
+                    'ezdemo_site' => array(
+                        'image_variations' => array(
+                            'large' => array( 'reference' => null, 'filters' => array(
+                                array( 'name' => 'geometry/scaledownonly', 'params' => array( 360, 440 ) )
+                            ) ),
+                            'infoboximage' => array( 'reference' => null, 'filters' => array(
+                                array( 'name' => 'geometry/scalewidth', 'params' => array( 75 ) ),
+                                array( 'name' => 'flatten' )
+                            ) ),
+                        )
+                    ),
                 ),
+
                 'imagemagick' => array(
                     'enabled' => true,
                     'path' => '/usr/bin/convert',
@@ -203,10 +238,23 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                     array( 'DatabaseImplementation' => 'ezmysqli', 'Server' => 'localhost', 'User' => 'root', 'Password' => '', 'Database' => 'ezdemo' ) ),
                 'AliasSettings' => array( 'AliasSettings', 'image.ini', 'eng',
                     array( 'AliasList' => array( 'large', 'infoboximage' ) ) ),
+                'AliasSettings_demo' => array( 'AliasSettings', 'image.ini', 'ezdemo_site',
+                    array( 'AliasList' => array( 'large', 'infoboximage' ) ) ),
+                'AliasSettings_admin' => array( 'AliasSettings', 'image.ini', 'ezdemo_site_admin',
+                    array( 'AliasList' => array( 'large', 'infoboximage' ) ) ),
                 'large' => array( 'large', 'image.ini', 'eng',
                     array( 'Reference' => '', 'Filters' => array( 'geometry/scaledownonly=360;440' ) ) ),
                 'infoboximage' => array( 'infoboximage', 'image.ini', 'eng',
                     array( 'Reference' => '', 'Filters' => array( 'geometry/scalewidth=75', 'flatten' ) ) ),
+                'large_demo' => array( 'large', 'image.ini', 'ezdemo_site',
+                    array( 'Reference' => '', 'Filters' => array( 'geometry/scaledownonly=360;440' ) ) ),
+                'infoboximage_demo' => array( 'infoboximage', 'image.ini', 'ezdemo_site',
+                    array( 'Reference' => '', 'Filters' => array( 'geometry/scalewidth=75', 'flatten' ) ) ),
+                'large_admin' => array( 'large', 'image.ini', 'ezdemo_site_admin',
+                    array( 'Reference' => '', 'Filters' => array( 'geometry/scaledownonly=360;440' ) ) ),
+                'infoboximage_admin' => array( 'infoboximage', 'image.ini', 'ezdemo_site_admin',
+                    array( 'Reference' => '', 'Filters' => array( 'geometry/scalewidth=75', 'flatten' ) ) ),
+
             )
         );
 
