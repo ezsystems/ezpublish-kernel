@@ -1666,6 +1666,25 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * Test for the publishUrlAliasForLocation() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::publishUrlAliasForLocation
+     */
+    public function testPublishUrlAliasForLocationUpdatesLocationPathIdentificationString()
+    {
+        $handler = $this->getHandler();
+        $locationGateway = $this->getLocationGateway();
+        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/publish_base.php" );
+
+        // Publishes the alias indicating that language is main, triggering updating of path_identification_string
+        $handler->publishUrlAliasForLocation( 316, 315, "TEST TEST TEST", "eng-GB", false, true );
+
+        $locationData = $locationGateway->getBasicNodeData( 316 );
+
+        self::assertEquals( "path314/path315/test_test_test", $locationData["path_identification_string"] );
+    }
+
+    /**
      * Test for the createCustomUrlAlias() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::createCustomUrlAlias
@@ -2845,6 +2864,11 @@ class UrlAliasHandlerTest extends TestCase
     protected $dbHandler;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
+     */
+    protected $locationGateway;
+
+    /**
      * @param array $methods
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler|\PHPUnit_Framework_MockObject_MockObject
@@ -2901,16 +2925,33 @@ class UrlAliasHandlerTest extends TestCase
             $this->dbHandler,
             $languageMaskGenerator
         );
-        $locationGateway = new EzcDatabaseLocation( $this->dbHandler );
         $mapper = new Mapper( $languageMaskGenerator );
 
         return new Handler(
             $gateway,
             $mapper,
-            $locationGateway,
+            $this->getLocationGateway(),
             $languageHandler,
             $this->getProcessor()
         );
+    }
+
+    /**
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
+     */
+    protected function getLocationGateway()
+    {
+        if ( !isset( $this->dbHandler) )
+        {
+            $this->dbHandler = $this->getDatabaseHandler();
+        }
+
+        if ( !isset( $this->locationGateway ) )
+        {
+            $this->locationGateway = new EzcDatabaseLocation( $this->dbHandler );
+        }
+
+        return $this->locationGateway;
     }
 
     /**
