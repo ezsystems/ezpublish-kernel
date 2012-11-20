@@ -35,10 +35,10 @@ interface FieldType
     /**
      * Return the field type identifier for this field type
      *
-     * This identifier should be globally unique and the implementor of a
+     * This identifier should be globally unique and the implementer of a
      * FieldType must take care for the uniqueness. It is therefore recommended
      * to prefix the field-type identifier by a unique string that identifies
-     * the implementor. A good identifier could for example take your companies main
+     * the implementer. A good identifier could for example take your companies main
      * domain name as a prefix in reverse order.
      *
      * @return string
@@ -46,7 +46,7 @@ interface FieldType
     public function getFieldTypeIdentifier();
 
     /**
-     * Returns the name of the given field value.
+     * Returns a human readable string representation from the given $value
      *
      * It will be used to generate content name and url alias if current field
      * is designated to be used in the content name/urlAlias pattern.
@@ -55,7 +55,7 @@ interface FieldType
      * acceptValue()}.
      *
      * @param mixed $value
-     * @return mixed
+     * @return string
      */
     public function getName( $value );
 
@@ -236,7 +236,7 @@ interface FieldType
      *
      * @param mixed $value
      *
-     * @return null|array|scalar
+     * @return mixed
      */
     public function toHash( $value );
 
@@ -317,4 +317,3 @@ interface FieldType
      */
     public function fromPersistenceValue( FieldValue $fieldValue );
 }
-

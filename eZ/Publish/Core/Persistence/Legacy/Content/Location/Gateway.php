@@ -198,6 +198,17 @@ abstract class Gateway
     abstract public function update( UpdateStruct $location, $locationId );
 
     /**
+     * Updates path identification string for given $locationId.
+     *
+     * @param mixed $locationId
+     * @param mixed $parentLocationId
+     * @param string $text
+     *
+     * @return void
+     */
+    abstract public function updatePathIdentificationString( $locationId, $parentLocationId, $text );
+
+    /**
      * Deletes ezcontentobject_tree row for given $locationId (node_id)
      *
      * @param mixed $locationId

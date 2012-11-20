@@ -759,7 +759,6 @@ class ContentService implements ContentServiceInterface
                     // contentId and contentVersion are set in ContentHandler upon draft creation
                     "contentId" => null,
                     "contentVersion" => null,
-                    // @todo: set pathIdentificationString
                     "pathIdentificationString" => null,
                     "mainLocationId" => ( $index === 0 ),
                     "sortField" => $locationCreateStruct->sortField,
@@ -871,6 +870,13 @@ class ContentService implements ContentServiceInterface
                 $content = $this->loadContent( $loadedContentInfo->id );
                 $this->publishUrlAliasesForContent( $content );
             }
+            // @todo: this is legacy storage specific for updating ezcontentobject_tree.path_identification_string, to be removed
+            elseif ( isset( $contentMetadataUpdateStruct->mainLanguageCode )
+                && ( $loadedContentInfo->mainLanguageCode !== $contentMetadataUpdateStruct->mainLanguageCode ) )
+            {
+                $content = $this->loadContent( $loadedContentInfo->id );
+                $this->publishUrlAliasesForContent( $content, true );
+            }
 
             $this->repository->commit();
         }
@@ -887,10 +893,11 @@ class ContentService implements ContentServiceInterface
      * Publishes URL aliases for all locations of a given content.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param boolean $onlyMain @todo: this is legacy storage specific for updating ezcontentobject_tree.path_identification_string, to be removed
      *
      * @return void
      */
-    protected function publishUrlAliasesForContent( APIContent $content )
+    protected function publishUrlAliasesForContent( APIContent $content, $onlyMain = false )
     {
         $urlAliasNames = $this->repository->getNameSchemaService()->resolveUrlAliasSchema( $content );
         $locations = $this->repository->getLocationService()->loadLocations(
@@ -900,12 +907,19 @@ class ContentService implements ContentServiceInterface
         {
             foreach ( $urlAliasNames as $languageCode => $name )
             {
+                if ( $onlyMain && $languageCode != $content->contentInfo->mainLanguageCode )
+                {
+                    continue;
+                }
+
                 $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
                     $location->id,
                     $location->parentLocationId,
                     $name,
                     $languageCode,
-                    $content->contentInfo->alwaysAvailable
+                    $content->contentInfo->alwaysAvailable,
+                    // @todo: this is legacy storage specific for updating ezcontentobject_tree.path_identification_string, to be removed
+                    $languageCode === $content->contentInfo->mainLanguageCode
                 );
             }
         }

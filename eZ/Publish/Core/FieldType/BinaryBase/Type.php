@@ -84,17 +84,6 @@ abstract class Type extends FieldType
     }
 
     /**
-     * Returns the fallback default value of field type when no such default
-     * value is provided in the field definition in content types.
-     *
-     * @return \eZ\Publish\Core\FieldType\BinaryBase\Value
-     */
-    public function getEmptyValue()
-    {
-        return new Value;
-    }
-
-    /**
      * Implements the core of {@see acceptValue()}.
      *
      * @param mixed $inputValue

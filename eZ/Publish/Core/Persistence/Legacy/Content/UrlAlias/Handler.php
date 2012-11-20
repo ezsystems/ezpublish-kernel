@@ -72,6 +72,51 @@ class Handler implements UrlAliasHandlerInterface
                 "commands" => array(),
                 "cleanupMethod" => "url_cleanup_iri",
             ),
+            "urlalias_compat" => array(
+                "commands" => array(
+                    //normalize
+                    "space_normalize",
+                    "hyphen_normalize",
+                    "apostrophe_normalize",
+                    "doublequote_normalize",
+                    "greek_normalize",
+                    "endline_search_normalize",
+                    "tab_search_normalize",
+                    "specialwords_search_normalize",
+                    "punctuation_normalize",
+
+                    //transform
+                    "apostrophe_to_doublequote",
+                    "math_to_ascii",
+                    "inverted_to_normal",
+
+                    //decompose
+                    "special_decompose",
+                    "latin_search_decompose",
+
+                    //transliterate
+                    "cyrillic_transliterate_ascii",
+                    "greek_transliterate_ascii",
+                    "hebrew_transliterate_ascii",
+                    "latin1_transliterate_ascii",
+                    "latin-exta_transliterate_ascii",
+
+                    //diacritical
+                    "cyrillic_diacritical",
+                    "greek_diacritical",
+                    "latin1_diacritical",
+                    "latin-exta_diacritical",
+
+                    //lowercase
+                    "ascii_lowercase",
+                    "cyrillic_lowercase",
+                    "greek_lowercase",
+                    "latin1_lowercase",
+                    "latin-exta_lowercase",
+                    "latin_lowercase",
+                ),
+                "cleanupMethod" => "url_cleanup_compat",
+            ),
         ),
         "reservedNames" => array(
             "class",
@@ -178,10 +223,18 @@ class Handler implements UrlAliasHandlerInterface
      * @param string $name the new name computed by the name schema or url alias schema
      * @param string $languageCode
      * @param boolean $alwaysAvailable
+     * @param boolean $isLanguageMain used only for legacy storage for updating ezcontentobject_tree.path_identification_string
      *
      * @return void
      */
-    public function publishUrlAliasForLocation( $locationId, $parentLocationId, $name, $languageCode, $alwaysAvailable = false )
+    public function publishUrlAliasForLocation(
+        $locationId,
+        $parentLocationId,
+        $name,
+        $languageCode,
+        $alwaysAvailable = false,
+        $isLanguageMain = false
+    )
     {
         $parentId = $this->getRealAliasId( $parentLocationId );
         $uniqueCounter = $this->getUniqueCounterValue( $name, $parentId );
@@ -280,6 +333,15 @@ class Handler implements UrlAliasHandlerInterface
 
             // If existing row is not reusable, increment $uniqueCounter and try again
             $uniqueCounter += 1;
+        }
+
+        if ( $isLanguageMain )
+        {
+            $this->locationGateway->updatePathIdentificationString(
+                $locationId,
+                $parentLocationId,
+                $this->convertToAlias( $newText, "node_", "urlalias_compat" )
+            );
         }
 
         /** @var $newId */
@@ -799,12 +861,18 @@ class Handler implements UrlAliasHandlerInterface
      * 'øæå' => 'oeaeaa'
      *
      * @param string $text
-     * @param $defaultValue
+     * @param string $defaultValue
+     * @param string|null $transformation
      *
      * @return string
      */
-    protected function convertToAlias( $text, $defaultValue = "_1" )
+    protected function convertToAlias( $text, $defaultValue = "_1", $transformation = null )
     {
+        if ( !isset( $transformation ) )
+        {
+            $transformation = $this->configuration["transformation"];
+        }
+
         if ( strlen( $text ) === 0 )
         {
             $text = $defaultValue;
@@ -813,8 +881,9 @@ class Handler implements UrlAliasHandlerInterface
         return $this->cleanupText(
             $this->transformationProcessor->transform(
                 $text,
-                $this->configuration["transformationGroups"][$this->configuration["transformation"]]["commands"]
-            )
+                $this->configuration["transformationGroups"][$transformation]["commands"]
+            ),
+            $this->configuration["transformationGroups"][$transformation]["cleanupMethod"]
         );
     }
 
@@ -866,12 +935,13 @@ class Handler implements UrlAliasHandlerInterface
      * Cleans up
      *
      * @param string $text
+     * @param string $method
      *
      * @return string
      */
-    protected function cleanupText( $text )
+    protected function cleanupText( $text, $method )
     {
-        switch ( $this->configuration["transformationGroups"][$this->configuration["transformation"]]["cleanupMethod"] )
+        switch ( $method )
         {
             case "url_cleanup":
                 $sep = $this->getWordSeparator();
@@ -920,6 +990,21 @@ class Handler implements UrlAliasHandlerInterface
                         $sep,
                         $sep,
                         $sep,
+                        ""
+                    ),
+                    $text
+                );
+                break;
+            case "url_cleanup_compat":
+                // Old style of url alias with lowercase only and underscores for separators
+                $text = strtolower( $text );
+                $text = preg_replace(
+                    array(
+                        "#[^a-z0-9]+#",
+                        "#^_+|_+$#"
+                    ),
+                    array(
+                        "_",
                         ""
                     ),
                     $text

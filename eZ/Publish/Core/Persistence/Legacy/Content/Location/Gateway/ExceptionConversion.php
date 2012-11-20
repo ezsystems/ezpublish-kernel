@@ -440,6 +440,31 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * Updates path identification string for given $locationId.
+     *
+     * @param mixed $locationId
+     * @param mixed $parentLocationId
+     * @param string $text
+     *
+     * @return void
+     */
+    public function updatePathIdentificationString( $locationId, $parentLocationId, $text )
+    {
+        try
+        {
+            return $this->innerGateway->updatePathIdentificationString( $locationId, $parentLocationId, $text );
+        }
+        catch ( \ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( \PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
      * Deletes ezcontentobject_tree row for given $locationId (node_id)
      *
      * @param mixed $locationId

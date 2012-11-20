@@ -114,6 +114,8 @@ class FieldTypeService implements FieldTypeServiceInterface
     /**
      * Instantiates a FieldType\Type object
      *
+     * @todo Move this to a internal service provided to services that needs this (including this)
+     *
      * @access private This function is for internal use only.
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $type not properly setup
      *         with settings injected to service
