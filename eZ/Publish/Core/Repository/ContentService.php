@@ -592,11 +592,11 @@ class ContentService implements ContentServiceInterface
         // Execute: pre_create field type event
         foreach ( $eventListenerFieldTypes as $fieldTypeIdentifier => $eventListenerFieldType )
         {
-            /** @var EventListenerFieldType $fieldType */
+            /** @var $fieldType EventListenerFieldType */
             $fieldType = $eventListenerFieldType['type'];
             foreach( $fields[$fieldTypeIdentifier] as $field )
             {
-                /** @var Field $field */
+                /** @var $field Field */
                 $fieldType->handleEvent(
                     new FieldTypeEvents\PreCreateEvent(
                         array(
@@ -661,10 +661,10 @@ class ContentService implements ContentServiceInterface
             if ( !isset( $eventListenerFieldTypes[$field->fieldDefIdentifier] ) )
                 continue;
 
-            /** @var EventListenerFieldType $fieldType */
+            /** @var $fieldType EventListenerFieldType */
             $fieldType = $eventListenerFieldTypes[$field->fieldDefIdentifier]['type'];
 
-            /** @var Field $field */
+            /** @var $field Field */
             $fieldType->handleEvent(
                 new FieldTypeEvents\PostCreateEvent(
                     array(
@@ -1122,7 +1122,7 @@ class ContentService implements ContentServiceInterface
         if ( !$this->repository->canUser( 'content', 'edit', $content ) )
             throw new UnauthorizedException( 'content', 'edit' );
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Field[] $fields */
+        /** @var $fields \eZ\Publish\API\Repository\Values\Content\Field[] */
         $fields = array();
         $languageCodes = $content->versionInfo->languageCodes;
         $initialLanguageCode = $contentUpdateStruct->initialLanguageCode ?: $content->contentInfo->mainLanguageCode;
@@ -1315,7 +1315,7 @@ class ContentService implements ContentServiceInterface
             {
                 $fieldDefinition = $content->contentType->getFieldDefinition( $field->fieldDefIdentifier );
 
-                /** @var Field $field */
+                /** @var $field Field  */
                 $fieldType->handleEvent(
                     new FieldTypeEvents\PrePublishEvent(
                         array(
@@ -1355,10 +1355,10 @@ class ContentService implements ContentServiceInterface
             if ( !isset( $eventListenerFieldTypes[$field->fieldDefIdentifier] ) )
                 continue;
 
-            /** @var EventListenerFieldType $fieldType */
+            /** @var $fieldType EventListenerFieldType */
             $fieldType = $eventListenerFieldTypes[$field->fieldDefIdentifier]['type'];
 
-            /** @var Field $field */
+            /** @var $field Field */
             $fieldType->handleEvent(
                 new FieldTypeEvents\PostPublishEvent(
                     array(
