@@ -82,11 +82,6 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
             $expectedResult,
             $result
         );
-
-        self::assertSame(
-            $expectedResult,
-            $result
-        );
     }
 
     /**
@@ -157,8 +152,6 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                             'database_name' => 'ezdemo',
                         ),
                         'var_dir' => 'var/ezdemo_site',
-                    ),
-                    'eng' => array(
                         'image_variations' => array(
                             'large' => array( 'reference' => null, 'filters' => array(
                                 array( 'name' => 'geometry/scaledownonly', 'params' => array( 360, 440 ) )
@@ -167,42 +160,11 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                                 array( 'name' => 'geometry/scalewidth', 'params' => array( 75 ) ),
                                 array( 'name' => 'flatten' )
                             ) ),
-                        )
+                        ),
                     ),
+                    'eng' => array(),
                     'ezdemo_site_admin' => array(
                         'legacy_mode' => true,
-                        'image_variations' => array(
-                            'large' => array(
-                                'reference' => null,
-                                'filters' => array(
-                                    array(
-                                        'name' => 'geometry/scaledownonly',
-                                        'params' => array( 360, 440 )
-                                    )
-                                )
-                            ),
-                            'infoboximage' => array(
-                                'reference' => null,
-                                'filters' => array(
-                                    array(
-                                        'name' => 'geometry/scalewidth',
-                                        'params' => array( 75 )
-                                    ),
-                                    array( 'name' => 'flatten' )
-                                )
-                            ),
-                        )
-                    ),
-                    'ezdemo_site' => array(
-                        'image_variations' => array(
-                            'large' => array( 'reference' => null, 'filters' => array(
-                                array( 'name' => 'geometry/scaledownonly', 'params' => array( 360, 440 ) )
-                            ) ),
-                            'infoboximage' => array( 'reference' => null, 'filters' => array(
-                                array( 'name' => 'geometry/scalewidth', 'params' => array( 75 ) ),
-                                array( 'name' => 'flatten' )
-                            ) ),
-                        )
                     ),
                 ),
 
@@ -316,6 +278,42 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
         $element = $baseData;
         $element[IDX_ADMIN_SITEACCESS] = 'winter';
         $element[IDX_EXCEPTION] = $exceptionType;
+        $data[] = $element;
+
+        // different alias list for ezdemo_site_admin
+        // each siteaccess has its own variations list
+        $element = $baseData;
+        $element[IDX_MOCK_PARAMETERS]['getGroup']['AliasSettings_admin'] = array(
+            'AliasSettings', 'image.ini', 'ezdemo_site_admin',
+            array(
+                'AliasList' => array( 'large' )
+            )
+        );
+        unset( $element[IDX_MOCK_PARAMETERS]['getGroup']['infoboximage_admin'] );
+
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['eng']['image_variations'] = $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['image_variations'];
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site']['image_variations'] = $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['image_variations'];
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site_admin']['image_variations'] = $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['image_variations'];
+        unset( $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site_admin']['image_variations']['infoboximage'] );
+        unset( $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['image_variations'] );
+        $data[] = $element;
+
+        // different parameter for an alias in ezdemo_site_admin
+        // each siteaccess has its own variations list
+        $element = $baseData;
+        $element[IDX_MOCK_PARAMETERS]['getGroup']['large_admin'] = array(
+            'large', 'image.ini', 'ezdemo_site_admin',
+            array(
+                'Reference' => '',
+                'Filters' => array( 'geometry/scaledownonly=100;100' )
+            )
+        );
+
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['eng']['image_variations'] = $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['image_variations'];
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site']['image_variations'] = $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['image_variations'];
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site_admin']['image_variations'] = $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['image_variations'];
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site_admin']['image_variations']['large']['filters'][0]['params'] = array( 100, 100 );
+        unset( $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['image_variations'] );
         $data[] = $element;
 
         return $data;

@@ -133,15 +133,47 @@ class ConfigurationConverter
             $settings['ezpublish']['imagemagick']['enabled'] = false;
         }
 
-        foreach ( $siteList as $siteaccess )
+        $variations = $this->getImageVariations( $siteList, $groupName );
+
+        foreach ( $variations as $siteaccess => $imgSettings )
         {
-            $settings['ezpublish']['system'][$siteaccess]['image_variations'] = $this->getImageVariationsForSiteaccess( $siteaccess );
+            $settings['ezpublish']['system'][$siteaccess]['image_variations'] = $imgSettings;
         }
 
         // Explicitely set Http cache purge type to "local"
         $settings['ezpublish']['http_cache']['purge_type'] = 'local';
 
         return $settings;
+    }
+
+    /**
+     * Returns the image variations settings for all siteaccess unless it's the
+     * same for each one, in this case, it returns the variations settings for
+     * the group. This avoids to duplicate the image variations settings
+     *
+     * @param array $siteList
+     * @param string $groupName
+     * @return array
+     */
+    protected function getImageVariations( array $siteList, $groupName )
+    {
+        $result = array();
+        $allSame = true;
+        $previousSA = null;
+        foreach ( $siteList as $siteaccess )
+        {
+            $result[$siteaccess] = $this->getImageVariationsForSiteaccess( $siteaccess );
+            if ( $allSame && $previousSA !== null )
+            {
+                $allSame = ( $result[$previousSA] === $result[$siteaccess] );
+            }
+            $previousSA = $siteaccess;
+        }
+        if ( $allSame )
+        {
+            return array( $groupName => $result[$previousSA] );
+        }
+        return $result;
     }
 
     /**
