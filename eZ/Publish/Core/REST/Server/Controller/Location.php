@@ -379,7 +379,7 @@ class Location extends RestController
     /**
      * Extracts and returns an item id from a path, e.g. /1/2/58 => 58
      *
-     * @param string $path Path "/1/2/58", or just id "58"
+     * @param string $path
      * @return mixed
      */
     private function extractLocationIdFromPath( $path )
