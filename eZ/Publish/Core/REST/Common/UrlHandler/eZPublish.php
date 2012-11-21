@@ -24,6 +24,7 @@ class eZPublish extends Pattern
         'root'                      => '/',
         'locations'                 => '/content/locations',
         'locationByRemote'          => '/content/locations?remoteId={location}',
+        'locationById'              => '/content/locations?id={location}',
         'locationChildren'          => '/content/locations{&location}/children',
         'locationUrlAliases'        => '/content/locations{&location}/urlaliases',
         'location'                  => '/content/locations{&location}',
