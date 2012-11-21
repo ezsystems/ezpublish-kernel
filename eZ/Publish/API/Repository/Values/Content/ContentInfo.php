@@ -14,10 +14,9 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 /**
  * This class provides all version independent information of the content object.
  *
- * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType ( @deprecated Use $contentTypeId or $contentTypeIdentifier )
+ * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType ( @deprecated Use $contentTypeId )
  * @property-read mixed $id The unique id of the content object
  * @property-read mixed $contentTypeId The unique id of the content type object this content is an instance of
- * @property-read mixed $contentTypeIdentifier The unique human readable identifier of the content type object this content is an instance of
  * @property-read string $name the computed name (via name schema) in the main language of the content object
  * @property-read mixed $sectionId the section to which the content is assigned
  * @property-read int $currentVersionNo Current Version number is the version number of the published version or the version number of a newly created draft (which is 1).

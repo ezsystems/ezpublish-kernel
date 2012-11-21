@@ -14,8 +14,9 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo;
 /**
  * This class provides all version independent information of the content object.
  *
- * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType calls {@link getContentType()}
+ * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType ( @deprecated Use $contentTypeId )
  * @property-read mixed $id The unique id of the content object
+ * @property-read mixed $contentTypeId The unique id of the content type object this content is an instance of
  * @property-read string $name the computed name (via name schema) in the main language of the content object
  * @property-read mixed $sectionId the section to which the content is assigned
  * @property-read int $currentVersionNo Current Version number is the version number of the published version or the version number of a newly created draft (which is 1).
@@ -31,12 +32,14 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo;
 class ContentInfo extends APIContentInfo
 {
     /**
-     * @var integer
+     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     protected $contentType;
 
     /**
      * The content type of this content object
+     *
+     * @deprecated Use $contentTypeId and ContentTypeService
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     public function getContentType()
@@ -59,8 +62,6 @@ class ContentInfo extends APIContentInfo
                 return $this->contentType;
             case 'contentTypeId':
                 return $this->contentType->id;
-            case 'contentTypeIdentifier':
-                return $this->contentType->identifier;
         }
         return parent::__get( $property );
     }
@@ -74,7 +75,7 @@ class ContentInfo extends APIContentInfo
      */
     public function __isset( $property )
     {
-        if ( $property === 'contentType' || $property === 'contentTypeId' || $property === 'contentTypeIdentifier' )
+        if ( $property === 'contentType' || $property === 'contentTypeId' )
             return true;
 
         return parent::__isset( $property );
