@@ -35,7 +35,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 array(
                     "id" => "0-d41d8cd98f00b204e9800998ecf8427e",
                     "type" => UrlAlias::LOCATION,
-                    "destination" => $this->repository->getLocationService()->loadLocation( 2 ),
+                    "destination" => 2,
                     "path" => "/",
                     "languageCodes" => array( "eng-US", "eng-GB" ),
                     "alwaysAvailable" => true,
@@ -64,7 +64,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 array(
                     "id" => "0-9bc65c2abec141778ffaa729489f3e87",
                     "type" => UrlAlias::LOCATION,
-                    "destination" => $this->repository->getLocationService()->loadLocation( 5 ),
+                    "destination" => 5,
                     "path" => "/Users",
                     "languageCodes" => array( "eng-US" ),
                     "alwaysAvailable" => true,
@@ -98,7 +98,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 array(
                     "id" => "0-9bc65c2abec141778ffaa729489f3e87",
                     "type" => UrlAlias::LOCATION,
-                    "destination" => $this->repository->getLocationService()->loadLocation( 5 ),
+                    "destination" => 5,
                     "path" => "/Users",
                     "languageCodes" => array( "eng-US" ),
                     "alwaysAvailable" => true,
@@ -140,7 +140,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 array(
                     "id" => "9-2e5bc8831f7ae6a29530e7f1bbf2de9c",
                     "type" => UrlAlias::LOCATION,
-                    "destination" => $this->repository->getLocationService()->loadLocation( 53 ),
+                    "destination" => 53,
                     "path" => "/Media/Multimedia",
                     "languageCodes" => array( "eng-US" ),
                     "alwaysAvailable" => true,
@@ -169,7 +169,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 array(
                     "id" => "9-2e5bc8831f7ae6a29530e7f1bbf2de9c",
                     "type" => UrlAlias::LOCATION,
-                    "destination" => $this->repository->getLocationService()->loadLocation( 53 ),
+                    "destination" => 53,
                     "path" => "/Media/Multimedia",
                     "languageCodes" => array( "eng-US" ),
                     "alwaysAvailable" => true,
@@ -198,7 +198,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 array(
                     "id" => "9-2e5bc8831f7ae6a29530e7f1bbf2de9c",
                     "type" => UrlAlias::LOCATION,
-                    "destination" => $this->repository->getLocationService()->loadLocation( 53 ),
+                    "destination" => 53,
                     "path" => "/Media/Multimedia",
                     "languageCodes" => array( "eng-US" ),
                     "alwaysAvailable" => true,
@@ -245,7 +245,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 array(
                     "id" => "9-2e5bc8831f7ae6a29530e7f1bbf2de9c",
                     "type" => UrlAlias::LOCATION,
-                    "destination" => $this->repository->getLocationService()->loadLocation( 53 ),
+                    "destination" => 53,
                     "path" => "/Media/Multimedia",
                     "languageCodes" => array( "eng-US" ),
                     "alwaysAvailable" => true,
@@ -274,7 +274,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 array(
                     "id" => "2-e57843d836e3af8ab611fde9e2139b3a",
                     "type" => UrlAlias::LOCATION,
-                    "destination" => $this->repository->getLocationService()->loadLocation( 12 ),
+                    "destination" => 12,
                     "path" => "/Users/Guest-accounts",
                     "languageCodes" => array( "eng-US" ),
                     "alwaysAvailable" => true,
@@ -2171,7 +2171,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 array(
                     "id" => "9-2e5bc8831f7ae6a29530e7f1bbf2de9c",
                     "type" => UrlAlias::LOCATION,
-                    "destination" => $this->repository->getLocationService()->loadLocation( 53 ),
+                    "destination" => 53,
                     "path" => "/Media/Multimedia",
                     "languageCodes" => array( "eng-US" ),
                     "alwaysAvailable" => true,
@@ -2263,7 +2263,7 @@ abstract class UrlAliasBase extends BaseServiceTest
                 array(
                     "id" => "42-724874d1be77f450a09b305fc1534afb",
                     "type" => UrlAlias::LOCATION,
-                    "destination" => $this->repository->getLocationService()->loadLocation( 53 ),
+                    "destination" => 53,
                     "path" => "/my/custom/alias",
                     "languageCodes" => array( "eng-GB" ),
                     "alwaysAvailable" => $alwaysAvailable,

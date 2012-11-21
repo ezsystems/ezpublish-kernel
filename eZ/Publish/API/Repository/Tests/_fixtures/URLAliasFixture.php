@@ -19,7 +19,7 @@ return array(
             array(
                 "id" => 39,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 60 ),
+                "destination" => 60,
                 "path" => "/Contact-Us",
                 "languageCodes" => array(
                     0 => "eng-GB",
@@ -36,7 +36,7 @@ return array(
             array(
                 "id" => 38,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 59 ),
+                "destination" => 59,
                 "path" => "/eZ-Publish",
                 "languageCodes" => array(
                     0 => "eng-US",
@@ -52,7 +52,7 @@ return array(
             array(
                 "id" => 25,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 58 ),
+                "destination" => 58,
                 "path" => "/Design",
                 "languageCodes" => array(
                     0 => "eng-US",
@@ -67,7 +67,7 @@ return array(
             array(
                 "id" => 13,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 48 ),
+                "destination" => 48,
                 "path" => "/Setup2",
                 "languageCodes" => array(
                     0 => "eng-US",
@@ -96,7 +96,7 @@ return array(
             array(
                 "id" => 9,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 43 ),
+                "destination" => 43,
                 "path" => "/Media",
                 "languageCodes" => array(
                     0 => "eng-US",
@@ -139,7 +139,7 @@ return array(
             array(
                 "id" => 2,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 5 ),
+                "destination" => 5,
                 "path" => "/Users",
                 "languageCodes" => array(
                     0 => "eng-US",
@@ -154,7 +154,7 @@ return array(
             array(
                 "id" => 1,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 2 ),
+                "destination" => 2,
                 "path" => "/",
                 "languageCodes" => array(
                     0 => "eng-US",
@@ -170,7 +170,7 @@ return array(
             array(
                 "id" => 40,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 61 ),
+                "destination" => 61,
                 "path" => "/Users/Partners",
                 "languageCodes" => array(
                     0 => "eng-US",
@@ -185,7 +185,7 @@ return array(
             array(
                 "id" => 6,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 14 ),
+                "destination" => 14,
                 "path" => "/Users/Editors",
                 "languageCodes" => array(
                     0 => "eng-US",
@@ -200,7 +200,7 @@ return array(
             array(
                 "id" => 10,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 44 ),
+                "destination" => 44,
                 "path" => "/Users/Anonymous-Users",
                 "languageCodes" => array(
                     0 => "eng-US",
@@ -215,7 +215,7 @@ return array(
             array(
                 "id" => 4,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 12 ),
+                "destination" => 12,
                 "path" => "/Users/Members",
                 "languageCodes" => array(
                     0 => "eng-US",
@@ -230,7 +230,7 @@ return array(
             array(
                 "id" => 41,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 12 ),
+                "destination" => 12,
                 "path" => "/Users/Guest-accounts",
                 "languageCodes" => array(
                     0 => "eng-US",
@@ -245,7 +245,7 @@ return array(
             array(
                 "id" => 5,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 13 ),
+                "destination" => 13,
                 "path" => "/Users/Administrator-users",
                 "languageCodes" => array(
                     0 => "eng-US",
@@ -274,7 +274,7 @@ return array(
             array(
                 "id" => 26,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 12 ),
+                "destination" => 12,
                 "path" => "/users2/guest_accounts",
                 "languageCodes" => array(
                 ),
@@ -288,7 +288,7 @@ return array(
             array(
                 "id" => 29,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 14 ),
+                "destination" => 14,
                 "path" => "/users2/editors",
                 "languageCodes" => array(
                 ),
@@ -316,7 +316,7 @@ return array(
             array(
                 "id" => 27,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 13 ),
+                "destination" => 13,
                 "path" => "/users2/administrator_users",
                 "languageCodes" => array(
                 ),
@@ -330,7 +330,7 @@ return array(
             array(
                 "id" => 30,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 44 ),
+                "destination" => 44,
                 "path" => "/users2/anonymous_users",
                 "languageCodes" => array(
                 ),
@@ -344,7 +344,7 @@ return array(
             array(
                 "id" => 8,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 15 ),
+                "destination" => 15,
                 "path" => "/Users/Administrator-users/Administrator-User",
                 "languageCodes" => array(
                     0 => "eng-US",
@@ -359,7 +359,7 @@ return array(
             array(
                 "id" => 28,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 15 ),
+                "destination" => 15,
                 "path" => "/users2/administrator_users2/administrator_user",
                 "languageCodes" => array(
                 ),
@@ -373,7 +373,7 @@ return array(
             array(
                 "id" => 20,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 53 ),
+                "destination" => 53,
                 "path" => "/Media/Multimedia",
                 "languageCodes" => array(
                     0 => "eng-US",
@@ -388,7 +388,7 @@ return array(
             array(
                 "id" => 19,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 52 ),
+                "destination" => 52,
                 "path" => "/Media/Files",
                 "languageCodes" => array(
                     0 => "eng-US",
@@ -403,7 +403,7 @@ return array(
             array(
                 "id" => 18,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 51 ),
+                "destination" => 51,
                 "path" => "/Media/Images",
                 "languageCodes" => array(
                     0 => "eng-US",
@@ -418,7 +418,7 @@ return array(
             array(
                 "id" => 12,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 45 ),
+                "destination" => 45,
                 "path" => "/Users/Anonymous-Users/Anonymous-User",
                 "languageCodes" => array(
                     0 => "eng-US",
@@ -433,7 +433,7 @@ return array(
             array(
                 "id" => 31,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 45 ),
+                "destination" => 45,
                 "path" => "/users2/anonymous_users2/anonymous_user",
                 "languageCodes" => array(
                 ),
@@ -447,7 +447,7 @@ return array(
             array(
                 "id" => 22,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 54 ),
+                "destination" => 54,
                 "path" => "/Setup2/Common-INI-settings",
                 "languageCodes" => array(
                     0 => "eng-US",
@@ -476,7 +476,7 @@ return array(
             array(
                 "id" => 34,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 53 ),
+                "destination" => 53,
                 "path" => "/media2/multimedia",
                 "languageCodes" => array(
                 ),
@@ -490,7 +490,7 @@ return array(
             array(
                 "id" => 33,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 52 ),
+                "destination" => 52,
                 "path" => "/media2/files",
                 "languageCodes" => array(
                 ),
@@ -504,7 +504,7 @@ return array(
             array(
                 "id" => 32,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 51 ),
+                "destination" => 51,
                 "path" => "/media2/images",
                 "languageCodes" => array(
                 ),
@@ -518,7 +518,7 @@ return array(
             array(
                 "id" => 35,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 54 ),
+                "destination" => 54,
                 "path" => "/setup3/common_ini_settings",
                 "languageCodes" => array(
                 ),
@@ -532,7 +532,7 @@ return array(
             array(
                 "id" => 37,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 56 ),
+                "destination" => 56,
                 "path" => "/Design/eZ-publish",
                 "languageCodes" => array(
                     0 => "eng-US",
@@ -547,7 +547,7 @@ return array(
             array(
                 "id" => 24,
                 "type" => 0,
-                "destination" => $this->getLocationService()->loadLocation( 56 ),
+                "destination" => 56,
                 "path" => "/Design/Plain-site",
                 "languageCodes" => array(
                     0 => "eng-US",

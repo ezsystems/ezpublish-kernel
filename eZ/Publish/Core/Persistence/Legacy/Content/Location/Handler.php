@@ -143,20 +143,21 @@ class Handler implements BaseLocationHandler
     public function copySubtree( $sourceId, $destinationParentId )
     {
         $children = $this->locationGateway->getSubtreeContent( $sourceId );
-        $parentData = $this->locationGateway->getBasicNodeData( $destinationParentId );
+        $destinationParentData = $this->locationGateway->getBasicNodeData( $destinationParentId );
         $contentMap = array();
         $locationMap = array(
             $children[0]["parent_node_id"] => array(
                 "id" => $destinationParentId,
-                "hidden" => (boolean)$parentData["is_hidden"],
-                "invisible" => (boolean)$parentData["is_invisible"]
+                "hidden" => (boolean)$destinationParentData["is_hidden"],
+                "invisible" => (boolean)$destinationParentData["is_invisible"],
+                "path_identification_string" => $destinationParentData["path_identification_string"]
             )
         );
 
         $locations = array();
         foreach ( $children as $child )
         {
-            $locations[$child["contentobject_id"]][] = $child["node_id"];
+            $locations[$child["contentobject_id"]][$child["node_id"]] = true;
         }
 
         $time = time();
@@ -164,6 +165,7 @@ class Handler implements BaseLocationHandler
         $mainLocationsUpdate = array();
         foreach ( $children as $index => $child )
         {
+            // Copy content
             if ( !isset( $contentMap[$child["contentobject_id"]] ) )
             {
                 $content = $this->contentHandler->copy(
@@ -187,10 +189,14 @@ class Handler implements BaseLocationHandler
 
             $createStruct = $this->locationMapper->getLocationCreateStruct( $child );
             $createStruct->contentId = $contentMap[$child["contentobject_id"]];
-            $createStruct->parentId = $locationMap[$child["parent_node_id"]]["id"];
-            $createStruct->invisible = $createStruct->hidden ||
-                $locationMap[$child["parent_node_id"]]["hidden"] ||
-                $locationMap[$child["parent_node_id"]]["invisible"];
+            $parentData = $locationMap[$child["parent_node_id"]];
+            $createStruct->parentId = $parentData["id"];
+            $createStruct->invisible = $createStruct->hidden || $parentData["hidden"] || $parentData["invisible"];
+            $pathString = explode( "/", $child["path_identification_string"] );
+            $pathString = end( $pathString );
+            $createStruct->pathIdentificationString = strlen( $pathString ) > 0
+                ? $parentData["path_identification_string"] . "/" . $pathString
+                : null;
 
             // Use content main location if already set, otherwise create location as main
             if ( isset( $mainLocations[$child["contentobject_id"]] ) )
@@ -204,7 +210,7 @@ class Handler implements BaseLocationHandler
 
                 // If needed mark for update
                 if (
-                    in_array( $child["main_node_id"], $locations[$child["contentobject_id"]] ) &&
+                    isset( $locations[$child["contentobject_id"]][$child["main_node_id"]] ) &&
                     count( $locations[$child["contentobject_id"]] ) > 1 &&
                     $child["node_id"] !== $child["main_node_id"]
                 )
@@ -218,9 +224,13 @@ class Handler implements BaseLocationHandler
             $locationMap[$child["node_id"]] = array(
                 "id" => $newLocation->id,
                 "hidden" => $newLocation->hidden,
-                "invisible" => $newLocation->invisible
+                "invisible" => $newLocation->invisible,
+                "path_identification_string" => $newLocation->pathIdentificationString
             );
-            if ( $index === 0 ) $copiedSubtreeRootLocation = $newLocation;
+            if ( $index === 0 )
+            {
+                $copiedSubtreeRootLocation = $newLocation;
+            }
         }
 
         // Update main locations
@@ -234,6 +244,7 @@ class Handler implements BaseLocationHandler
 
         // If subtree root is main location for its content, update subtree section to the one of the
         // parent location content
+        /** @var $copiedSubtreeRootLocation */
         if ( $copiedSubtreeRootLocation->mainLocationId === $copiedSubtreeRootLocation->id )
         {
             $this->setSectionForSubtree(
@@ -262,8 +273,8 @@ class Handler implements BaseLocationHandler
         $destinationNodeData = $this->locationGateway->getBasicNodeData( $destinationParentId );
 
         $this->locationGateway->moveSubtreeNodes(
-            $sourceNodeData['path_string'],
-            $destinationNodeData['path_string']
+            $sourceNodeData,
+            $destinationNodeData
         );
 
         $this->locationGateway->updateNodeAssignment(

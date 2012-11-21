@@ -9,7 +9,8 @@
  */
 
 namespace eZ\Publish\Core\Repository\Values\ContentType;
-use eZ\Publish\API\Repository\FieldType as FieldTypeInterface;
+use eZ\Publish\API\Repository\FieldType as FieldTypeInterface,
+    eZ\Publish\SPI\FieldType\FieldType as SPIFieldTypeInterface;
 
 /**
  * This class represents a FieldType available to Public API users
@@ -29,7 +30,7 @@ class FieldType implements FieldTypeInterface
     /**
      * @param \eZ\Publish\SPI\FieldType\FieldType $fieldType
      */
-    public function __construct( $fieldType )
+    public function __construct( SPIFieldTypeInterface $fieldType )
     {
         $this->internalFieldType = $fieldType;
     }

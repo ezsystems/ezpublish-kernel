@@ -208,18 +208,22 @@ class EzcDatabase extends Gateway
      * operations, which then depend on the respective database.
      *
      * @optimize
-     * @param string $fromPathString
-     * @param string $toPathString
+     * @param string $sourceNodeData
+     * @param string $destinationNodeData
      * @return void
      */
-    public function moveSubtreeNodes( $fromPathString, $toPathString )
+    public function moveSubtreeNodes( $sourceNodeData, $destinationNodeData )
     {
+        $fromPathString = $sourceNodeData["path_string"];
+
+        /** @var $query \ezcQuerySelect */
         $query = $this->handler->createSelectQuery();
         $query
             ->select(
                 $this->handler->quoteColumn( 'node_id' ),
                 $this->handler->quoteColumn( 'parent_node_id' ),
-                $this->handler->quoteColumn( 'path_string' )
+                $this->handler->quoteColumn( 'path_string' ),
+                $this->handler->quoteColumn( 'path_identification_string' )
             )
             ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
             ->where(
@@ -232,27 +236,45 @@ class EzcDatabase extends Gateway
         $statement->execute();
 
         $rows = $statement->fetchAll();
-        $oldParentLocation = implode( '/', array_slice( explode( '/', $fromPathString ), 0, -2 ) ) . '/';
+        $oldParentPathString = implode( '/', array_slice( explode( '/', $fromPathString ), 0, -2 ) ) . '/';
+        $oldParentPathIdentificationString = implode(
+            '/', array_slice( explode( '/', $sourceNodeData["path_identification_string"] ), 0, -1 )
+        );
         foreach ( $rows as $row )
         {
-            $newLocation = str_replace( $oldParentLocation, $toPathString, $row['path_string'] );
+            // Prefixing ensures correct replacement when old parent is root node
+            $newPathString = str_replace(
+                "prefix" . $oldParentPathString,
+                $destinationNodeData["path_string"],
+                "prefix" . $row['path_string']
+            );
+            $newPathIdentificationString = str_replace(
+                "prefix" . $oldParentPathIdentificationString,
+                $destinationNodeData["path_identification_string"] . "/",
+                "prefix" . $row['path_identification_string']
+            );
 
             $newParentId = $row['parent_node_id'];
             if ( $row['path_string'] === $fromPathString )
             {
-                $newParentId = (int) implode( '', array_slice( explode( '/', $newLocation ), -3, 1 ) );
+                $newParentId = (int) implode( '', array_slice( explode( '/', $newPathString ), -3, 1 ) );
             }
 
+            /** @var $query \ezcQueryUpdate */
             $query = $this->handler->createUpdateQuery();
             $query
                 ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
-                ->set(
+                    ->set(
                     $this->handler->quoteColumn( 'path_string' ),
-                    $query->bindValue( $newLocation )
+                    $query->bindValue( $newPathString )
+                )
+                ->set(
+                    $this->handler->quoteColumn( 'path_identification_string' ),
+                    $query->bindValue( $newPathIdentificationString )
                 )
                 ->set(
                     $this->handler->quoteColumn( 'depth' ),
-                    $query->bindValue( substr_count( $newLocation, '/' ) - 2 )
+                    $query->bindValue( substr_count( $newPathString, '/' ) - 2 )
                 )
                 ->set(
                     $this->handler->quoteColumn( 'parent_node_id' ),
@@ -531,13 +553,13 @@ class EzcDatabase extends Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
      * @param array $parentNode
-     * @param bool $published
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function create( CreateStruct $createStruct, array $parentNode, $published = false )
+    public function create( CreateStruct $createStruct, array $parentNode )
     {
         $location = new Location();
+        /** @var $query \ezcQueryInsert */
         $query = $this->handler->createInsertQuery();
         $query
             ->insertInto( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
@@ -546,7 +568,7 @@ class EzcDatabase extends Gateway
                 $query->bindValue( $location->contentId = $createStruct->contentId, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'contentobject_is_published' ),
-                $query->bindValue( (int)$published, null, \PDO::PARAM_INT ) // Will be set to 1, once the content object has been published
+                $query->bindValue( 1, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'contentobject_version' ),
                 $query->bindValue( $createStruct->contentVersion, null, \PDO::PARAM_INT )
@@ -570,7 +592,7 @@ class EzcDatabase extends Gateway
                 $query->bindValue( $location->parentId = $parentNode['node_id'], null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'path_identification_string' ),
-                $query->bindValue( null ) // Set after creation
+                $query->bindValue( $location->pathIdentificationString = $createStruct->pathIdentificationString, null, \PDO::PARAM_STR )
             )->set(
                 $this->handler->quoteColumn( 'path_string' ),
                 $query->bindValue( 'dummy' ) // Set later
@@ -579,7 +601,7 @@ class EzcDatabase extends Gateway
                 $query->bindValue( $location->priority = $createStruct->priority, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'remote_id' ),
-                $query->bindValue( $location->remoteId = $createStruct->remoteId )
+                $query->bindValue( $location->remoteId = $createStruct->remoteId, null, \PDO::PARAM_STR )
             )->set(
                 $this->handler->quoteColumn( 'sort_field' ),
                 $query->bindValue( $location->sortField = $createStruct->sortField, null, \PDO::PARAM_INT )
@@ -593,6 +615,7 @@ class EzcDatabase extends Gateway
 
         $location->mainLocationId = $createStruct->mainLocationId === true ? $location->id : $createStruct->mainLocationId;
         $location->pathString = $parentNode['path_string'] . $location->id . '/';
+        /** @var $query \ezcQueryUpdate */
         $query = $this->handler->createUpdateQuery();
         $query
             ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
@@ -909,6 +932,37 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Updates path identification string for given $locationId.
+     *
+     * @param mixed $locationId
+     * @param mixed $parentLocationId
+     * @param string $text
+     *
+     * @return void
+     */
+    public function updatePathIdentificationString( $locationId, $parentLocationId, $text )
+    {
+        $parentData = $this->getBasicNodeData( $parentLocationId );
+
+        $newPathIdentificationString = $parentData["path_identification_string"] . "/" . $text;
+
+        /** @var $query \ezcQueryUpdate */
+        $query = $this->handler->createUpdateQuery();
+        $query->update(
+            "ezcontentobject_tree"
+        )->set(
+            $this->handler->quoteColumn( "path_identification_string" ),
+            $query->bindValue( $newPathIdentificationString, null, \PDO::PARAM_STR )
+        )->where(
+            $query->expr->eq(
+                $this->handler->quoteColumn( "node_id" ),
+                $query->bindValue( $locationId, null, \PDO::PARAM_INT )
+            )
+        );
+        $query->prepare()->execute();
+    }
+
+    /**
      * Deletes ezcontentobject_tree row for given $locationId (node_id)
      *
      * @param mixed $locationId
@@ -1026,8 +1080,7 @@ class EzcDatabase extends Gateway
                     'sortOrder' => $row['sort_order'],
                 )
             ),
-            $this->getBasicNodeData( $newParentId ?: $row['parent_node_id'] ),
-            true
+            $this->getBasicNodeData( $newParentId ?: $row['parent_node_id'] )
         );
 
         $this->removeElementFromTrash( $locationId );

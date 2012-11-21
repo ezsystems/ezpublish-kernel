@@ -133,13 +133,63 @@ class ConfigurationConverter
             $settings['ezpublish']['imagemagick']['enabled'] = false;
         }
 
-        // image variations settings
-        $settings['ezpublish']['system'][$defaultSiteaccess]['image_variations'] = array();
-        $imageAliasesList = $this->getGroup( 'AliasSettings', 'image.ini', $defaultSiteaccess );
+        $variations = $this->getImageVariations( $siteList, $groupName );
+
+        foreach ( $variations as $siteaccess => $imgSettings )
+        {
+            $settings['ezpublish']['system'][$siteaccess]['image_variations'] = $imgSettings;
+        }
+
+        // Explicitely set Http cache purge type to "local"
+        $settings['ezpublish']['http_cache']['purge_type'] = 'local';
+
+        return $settings;
+    }
+
+    /**
+     * Returns the image variations settings for all siteaccess unless it's the
+     * same for each one, in this case, it returns the variations settings for
+     * the group. This avoids to duplicate the image variations settings
+     *
+     * @param array $siteList
+     * @param string $groupName
+     * @return array
+     */
+    protected function getImageVariations( array $siteList, $groupName )
+    {
+        $result = array();
+        $allSame = true;
+        $previousSA = null;
+        foreach ( $siteList as $siteaccess )
+        {
+            $result[$siteaccess] = $this->getImageVariationsForSiteaccess( $siteaccess );
+            if ( $allSame && $previousSA !== null )
+            {
+                $allSame = ( $result[$previousSA] === $result[$siteaccess] );
+            }
+            $previousSA = $siteaccess;
+        }
+        if ( $allSame )
+        {
+            return array( $groupName => $result[$previousSA] );
+        }
+        return $result;
+    }
+
+    /**
+     * Returns the image variation settings for the siteaccess
+     *
+     * @param string $siteaccess
+     * @return array
+     */
+    protected function getImageVariationsForSiteaccess( $siteaccess )
+    {
+        $variations = array();
+        $imageAliasesList = $this->getGroup( 'AliasSettings', 'image.ini', $siteaccess );
         foreach( $imageAliasesList['AliasList'] as $imageAliasIdentifier )
         {
             $variationSettings = array( 'reference' => null, 'filters' => array() );
-            $aliasSettings = $this->getGroup( $imageAliasIdentifier, 'image.ini', $defaultSiteaccess );
+            $aliasSettings = $this->getGroup( $imageAliasIdentifier, 'image.ini', $siteaccess );
             if ( isset( $aliasSettings['Reference'] ) && $aliasSettings['Reference'] != '' )
             {
                 $variationSettings['reference'] = $aliasSettings['Reference'];
@@ -172,14 +222,9 @@ class ConfigurationConverter
                     $variationSettings['filters'][] = $filteringSettings;
                 }
             }
-
-            $settings['ezpublish']['system'][$defaultSiteaccess]['image_variations'][$imageAliasIdentifier] = $variationSettings;
+            $variations[$imageAliasIdentifier] = $variationSettings;
         }
-
-        // Explicitely set Http cache purge type to "local"
-        $settings['ezpublish']['http_cache']['purge_type'] = 'local';
-
-        return $settings;
+        return $variations;
     }
 
     protected function mapDatabaseType( $databaseType )
