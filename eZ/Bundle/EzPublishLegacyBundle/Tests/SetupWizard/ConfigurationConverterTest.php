@@ -161,6 +161,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                                 array( 'name' => 'flatten' )
                             ) ),
                         ),
+                        'languages' => array( 'eng-GB' )
                     ),
                     'eng' => array(),
                     'ezdemo_site_admin' => array(
@@ -192,6 +193,9 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                 'ImageMagickIsEnabled' => array( 'ImageMagick', 'IsEnabled', 'image.ini', 'eng', 'true' ),
                 'ImageMagickExecutablePath' => array( 'ImageMagick', 'ExecutablePath', 'image.ini', 'eng', '/usr/bin' ),
                 'ImageMagickExecutable' => array( 'ImageMagick', 'Executable', 'image.ini', 'eng', 'convert' ),
+                'Languages_eng' => array( 'RegionalSettings', 'SiteLanguageList', 'site.ini', 'eng', array( 'eng-GB' ) ),
+                'Languages_demo' => array( 'RegionalSettings', 'SiteLanguageList', 'site.ini', 'ezdemo_site', array( 'eng-GB' ) ),
+                'Languages_admin' => array( 'RegionalSettings', 'SiteLanguageList', 'site.ini', 'ezdemo_site_admin', array( 'eng-GB' ) ),
             ),
             'getGroup' => array(
                 'SiteAccessSettings' => array( 'SiteAccessSettings', null, null,
@@ -315,6 +319,45 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
         $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site_admin']['image_variations']['large']['filters'][0]['params'] = array( 100, 100 );
         unset( $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['image_variations'] );
         $data[] = $element;
+
+        // several languages and same for all SA
+        // still only a languages setting in ezdemo_group
+        $element = $baseData;
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['Languages_eng'][4] = array( 'eng-GB', 'fre-FR' );
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['Languages_demo'][4] = array( 'eng-GB', 'fre-FR' );
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['Languages_admin'][4] = array( 'eng-GB', 'fre-FR' );
+
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['languages'] = array( 'eng-GB', 'fre-FR' );
+        $data[] = $element;
+
+        // several languages and same list for all SA but not the same order
+        // no more languages setting in ezdemo_group, one by SA
+        $element = $baseData;
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['Languages_eng'][4] = array( 'eng-GB', 'fre-FR' );
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['Languages_demo'][4] = array( 'fre-FR', 'eng-GB' );
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['Languages_admin'][4] = array( 'eng-GB', 'fre-FR' );
+
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['eng']['languages'] = array( 'eng-GB', 'fre-FR' );
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site']['languages'] = array( 'fre-FR', 'eng-GB' );
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site_admin']['languages'] = array( 'eng-GB', 'fre-FR' );
+
+        unset( $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['languages'] );
+        $data[] = $element;
+
+        // several languages and different lists for each SA
+        // no more languages setting in ezdemo_group, one by SA
+        $element = $baseData;
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['Languages_eng'][4] = array( 'eng-GB', 'fre-FR' );
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['Languages_demo'][4] = array( 'Entish', 'Valarin', 'Elvish' );
+        $element[IDX_MOCK_PARAMETERS]['getParameter']['Languages_admin'][4] = array( 'Khuzdul', 'Sindarin' );
+
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['eng']['languages'] = array( 'eng-GB', 'fre-FR' );
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site']['languages'] = array( 'Entish', 'Valarin', 'Elvish' );
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site_admin']['languages'] = array( 'Khuzdul', 'Sindarin' );
+
+        unset( $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['languages'] );
+        $data[] = $element;
+
 
         return $data;
     }

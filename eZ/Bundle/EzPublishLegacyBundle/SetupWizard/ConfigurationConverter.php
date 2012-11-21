@@ -109,6 +109,12 @@ class ConfigurationConverter
             $settings['ezpublish']['system'][$adminSiteaccess] += array( 'legacy_mode' => true );
         }
 
+        $languages = $this->getLanguages( $siteList, $groupName );
+        foreach ( $languages as $siteaccess => $langSettings )
+        {
+            $settings['ezpublish']['system'][$siteaccess]['languages'] = $langSettings;
+        }
+
         // FileSettings
         $settings['ezpublish']['system'][$groupName]['var_dir'] =
             $this->getParameter( 'FileSettings', 'VarDir', 'site.ini', $defaultSiteaccess );
@@ -144,6 +150,37 @@ class ConfigurationConverter
         $settings['ezpublish']['http_cache']['purge_type'] = 'local';
 
         return $settings;
+    }
+
+    /**
+     * Returns the languages list for all siteaccess unless it's the same for
+     * each one, in this case, it returns the languages list for the group.
+     *
+     * @param array $siteList
+     * @param string $groupName
+     * @return array
+     */
+    protected function getLanguages( array $siteList, $groupName )
+    {
+        $result = array();
+        $allSame = true;
+        $previousSA = null;
+        foreach ( $siteList as $siteaccess )
+        {
+            $result[$siteaccess] = $this->getParameter(
+                'RegionalSettings', 'SiteLanguageList', 'site.ini', $siteaccess
+            );
+            if ( $allSame && $previousSA !== null )
+            {
+                $allSame = ( $result[$previousSA] === $result[$siteaccess] );
+            }
+            $previousSA = $siteaccess;
+        }
+        if ( $allSame )
+        {
+            return array( $groupName => $result[$previousSA] );
+        }
+        return $result;
     }
 
     /**
