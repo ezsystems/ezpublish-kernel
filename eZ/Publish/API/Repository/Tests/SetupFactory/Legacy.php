@@ -75,7 +75,10 @@ class Legacy extends SetupFactory
      */
     public function __construct()
     {
-        self::$dsn = ( isset( $_ENV['DATABASE'] ) && $_ENV['DATABASE'] ) ? $_ENV['DATABASE'] : 'sqlite://:memory:';
+        self::$dsn = getenv( "DATABASE" );
+        if ( !self::$dsn )
+            self::$dsn =  "sqlite://:memory:";
+
         self::$db = preg_replace( '(^([a-z]+).*)', '\\1', self::$dsn );
     }
 
