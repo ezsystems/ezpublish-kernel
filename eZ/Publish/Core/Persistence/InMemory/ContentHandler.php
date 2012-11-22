@@ -492,9 +492,12 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function updateContent( $contentId, $versionNo, UpdateStruct $content )
     {
-        $versionNames = $this->loadVersionInfo( $contentId, $versionNo )->names;
+        $versionInfo = $this->loadVersionInfo( $contentId, $versionNo );
+        $versionLanguageIds = $versionInfo->languageIds;
+        $versionNames = $versionInfo->names;
         foreach ( $versionNames as $languageCode => &$versionName )
             if ( array_key_exists( $languageCode, $content->name ) ) $versionName = $content->name[$languageCode];
+
         $versionUpdateData = array(
             "creatorId" => $content->creatorId,
             "modificationDate" => $content->modificationDate,
@@ -503,35 +506,52 @@ class ContentHandler implements ContentHandlerInterface
                 ->load( $content->initialLanguageId )->languageCode
         );
 
+        foreach ( $content->fields as $field )
+        {
+            if ( !isset( $field->id ) )
+            {
+                $versionLanguageIds[] =
+                    $this->handler->contentLanguageHandler()->loadByLanguageCode( $field->languageCode )->id;
+                $this->backend->create(
+                    'Content\\Field',
+                    array( '_contentId' => $contentId, 'versionNo' => $versionNo ) + (array)$field
+                );
+            }
+            else
+            {
+                $fieldDefinition = $this->backend->load( "Content\\Type\\FieldDefinition", $field->fieldDefinitionId );
+                if ( $fieldDefinition->isTranslatable )
+                {
+                    $this->backend->updateByMatch(
+                        "Content\\Field",
+                        array(
+                            "id" => $field->id,
+                            "versionNo" => $versionNo
+                        ),
+                        array( "value" => $field->value )
+                    );
+                }
+                else
+                {
+                    $this->backend->updateByMatch(
+                        "Content\\Field",
+                        array(
+                            "fieldDefinitionId" => $field->fieldDefinitionId,
+                            "versionNo" => $versionNo,
+                            "_contentId" => $contentId
+                        ),
+                        array( "value" => $field->value )
+                    );
+                }
+            }
+        }
+
+        $versionUpdateData["languageIds"] = array_unique( $versionLanguageIds );
         $this->backend->updateByMatch(
             "Content\\VersionInfo",
             array( "_contentId" => $contentId, "versionNo" => $versionNo ),
             $versionUpdateData
         );
-
-        foreach ( $content->fields as $field )
-        {
-            $fieldType = $this->backend->load( "Content\\Type\\FieldDefinition", $field->fieldDefinitionId );
-            if ( $fieldType->isTranslatable )
-                $this->backend->updateByMatch(
-                    "Content\\Field",
-                    array(
-                        "id" => $field->id,
-                        "versionNo" => $versionNo
-                    ),
-                    array( "value" => $field->value )
-                );
-            else
-                $this->backend->updateByMatch(
-                    "Content\\Field",
-                    array(
-                        "fieldDefinitionId" => $field->fieldDefinitionId,
-                        "versionNo" => $versionNo,
-                        "_contentId" => $contentId
-                    ),
-                    array( "value" => $field->value )
-                );
-        }
 
         return $this->load( $contentId, $versionNo );
     }
