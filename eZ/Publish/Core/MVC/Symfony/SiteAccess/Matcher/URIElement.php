@@ -105,7 +105,11 @@ class URIElement implements Matcher, URILexer
     public function analyseURI( $uri )
     {
         $uriElements = '/' . implode( '/', $this->getURIElements() );
-        if ( strpos( $uri, $uriElements ) === 0 )
+        if ( $uri == $uriElements )
+        {
+            $uri = '';
+        }
+        elseif ( strpos( $uri, $uriElements ) === 0 )
         {
             sscanf( $uri, "$uriElements%s", $uri );
         }
