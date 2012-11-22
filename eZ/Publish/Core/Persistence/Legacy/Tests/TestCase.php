@@ -56,7 +56,9 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     {
         if ( !$this->dsn )
         {
-            $this->dsn = isset( $_ENV['DATABASE'] ) ? $_ENV['DATABASE'] : 'sqlite://:memory:';
+            $this->dsn = getenv( "DATABASE" );
+            if ( !$this->dsn )
+                $this->dsn =  "sqlite://:memory:";
             $this->db = preg_replace( '(^([a-z]+).*)', '\\1', $this->dsn );
         }
 

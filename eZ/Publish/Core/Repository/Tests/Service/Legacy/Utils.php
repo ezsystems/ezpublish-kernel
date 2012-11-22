@@ -27,7 +27,7 @@ abstract class Utils extends InMemoryUtils
         $sc = self::getServiceContainer(
             '@persistence_handler_legacy',
             '@io_handler_legacy',
-            ( !empty( $_ENV['DATABASE'] ) ? $_ENV['DATABASE'] : 'sqlite://:memory:' )
+            ( $dsn = getenv( "DATABASE" ) ) ? $dsn : "sqlite://:memory:"
         );
 
         // And inject data
@@ -44,7 +44,9 @@ abstract class Utils extends InMemoryUtils
      */
     protected static function insertLegacyData( EzcDbHandler $handler )
     {
-        $dsn = ( !empty( $_ENV['DATABASE'] ) ? $_ENV['DATABASE'] : 'sqlite://:memory:' );
+        $dsn = getenv( "DATABASE" );
+        if ( !$dsn )
+            $dsn =  "sqlite://:memory:";
         $db = preg_replace( '(^([a-z]+).*)', '\\1', $dsn );
         $legacyHandlerDir = "eZ/Publish/Core/Persistence";
 
