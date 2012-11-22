@@ -2,7 +2,7 @@ parameters:
     # API
     ezpublish.api.repository.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryFactory
     ezpublish.api.inner_repository.class: eZ\Publish\Core\Repository\Repository
-    ezpublish.api.io_handler.class: eZ\Publish\Core\IO\InMemoryHandler
+    ezpublish.api.io_handler.class: eZ\Publish\Core\IO\LegacyHandler
     ezpublish.api.storage_engine.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory
 
     # Signal Slot API wrapper
