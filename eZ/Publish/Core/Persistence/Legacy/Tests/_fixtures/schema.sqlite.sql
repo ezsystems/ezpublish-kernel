@@ -250,7 +250,7 @@ CREATE TABLE 'eznode_assignment' (
   'op_code' integer NOT NULL DEFAULT 0,
   'parent_node' integer,
   'parent_remote_id' text(100) NOT NULL,
-  'remote_id' integer NOT NULL DEFAULT 0,
+  'remote_id' text(100) NOT NULL DEFAULT '0',
   'sort_field' integer DEFAULT 1,
   'sort_order' integer DEFAULT 1
 );
