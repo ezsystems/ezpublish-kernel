@@ -151,6 +151,11 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
             array( 1, '/fre/utf8-with-accent/é/fre/à/à/fre/é', '/utf8-with-accent/é/fre/à/à/fre/é' ),
             array( 2, '/é/fre/utf8-with-accent/é/fre/à/à/fre/é', '/utf8-with-accent/é/fre/à/à/fre/é' ),
             array( 2, '/prefix/fre/url/alias/prefix/fre/prefix/fre/url', '/url/alias/prefix/fre/prefix/fre/url' ),
+            // regression after the first fix of EZP-20125
+            array( 1, '/sitaccess', '' ),
+            array( 1, '/sitaccess/', '/' ),
+            array( 2, '/prefix/siteaccess', '' ),
+            array( 2, '/prefix/siteaccess/', '/' ),
         );
     }
 }
