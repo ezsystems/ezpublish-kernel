@@ -10,8 +10,7 @@
 namespace eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
-    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition,
-    eZ\Publish\SPI\FieldType\Event;
+    eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 
 /**
  * Base class for field types, the most basic storage unit of data inside eZ Publish.
@@ -54,15 +53,6 @@ abstract class FieldType implements FieldTypeInterface
      * @var mixed
      */
     protected $validatorConfigurationSchema = array();
-
-    /**
-     * This method is called on occurring events. Implementations can perform corresponding actions
-     *
-     * @param \eZ\Publish\SPI\FieldType\Event $event
-     */
-    public function handleEvent( Event $event )
-    {
-    }
 
     /**
      * Returns a schema for the settings expected by the FieldType

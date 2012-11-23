@@ -46,16 +46,6 @@ interface FieldType
     public function getFieldTypeIdentifier();
 
     /**
-     * This method is called on occurring events.
-     *
-     * This method is called on occurring events in the Core to allow
-     * FieldTypes to react to such events.
-     *
-     * @param \eZ\Publish\SPI\FieldType\Event $event
-     */
-    public function handleEvent( Event $event );
-
-    /**
      * Returns a human readable string representation from the given $value
      *
      * It will be used to generate content name and url alias if current field
