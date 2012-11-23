@@ -14,7 +14,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * @group signalSlot
- * @covers \eZ\Publish\Core\SignalSlot\SlotFactory\ContainerSlotFactory;
+ * @covers \eZ\Publish\Core\SignalSlot\SlotFactory\ContainerSlotFactory
  */
 class ContainerSlotFactoryTest extends \PHPUnit_Framework_TestCase
 {

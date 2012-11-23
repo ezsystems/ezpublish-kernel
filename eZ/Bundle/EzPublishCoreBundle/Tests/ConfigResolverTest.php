@@ -48,7 +48,7 @@ class ConfigResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::__construct
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::getUndefinedStrategy
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::setUndefinedStrategy
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::getDefaultNamespace
@@ -71,7 +71,7 @@ class ConfigResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::__construct
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::getParameter
      */
     public function testGetParameterFailedWithException()
@@ -81,7 +81,7 @@ class ConfigResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::__construct
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::getParameter
      */
     public function testGetParameterFailedNull()
@@ -119,7 +119,7 @@ class ConfigResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider parameterProvider
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::__construct
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::getParameter
      */
     public function testGetParameterGlobalScope( $paramName, $expectedValue )
@@ -143,7 +143,7 @@ class ConfigResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider parameterProvider
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::__construct
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::getParameter
      */
     public function testGetParameterRelativeScope( $paramName, $expectedValue )
@@ -173,7 +173,7 @@ class ConfigResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider parameterProvider
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::__construct
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::getParameter
      */
     public function testGetParameterSpecificScope( $paramName, $expectedValue )
@@ -207,7 +207,7 @@ class ConfigResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider parameterProvider
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::__construct
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::getParameter
      */
     public function testGetParameterDefaultScope( $paramName, $expectedValue )
@@ -252,7 +252,7 @@ class ConfigResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider hasParameterProvider
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::__construct
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::hasParameter
      */
     public function testHasParameterNoNamespace( $defaultMatch, $scopeMatch, $globalMatch, $expectedResult )
@@ -275,7 +275,7 @@ class ConfigResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider hasParameterProvider
-     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::_construct
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::__construct
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver::hasParameter
      */
     public function testHasParameterWithNamespaceAndScope( $defaultMatch, $scopeMatch, $globalMatch, $expectedResult )

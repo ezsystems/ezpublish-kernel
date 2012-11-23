@@ -18,7 +18,6 @@ use eZ\Publish\Core\Repository\Values\ContentType\ContentType,
 class ContentTypeDraftTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft::getIterator
      * @covers \eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft::getProperties
      */
     public function testObjectProperties()
