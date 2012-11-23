@@ -17,7 +17,6 @@ use eZ\Publish\Core\Repository\Values\Content\Location,
 class LocationTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \eZ\Publish\Core\Repository\Values\Content\Location::getIterator
      * @covers \eZ\Publish\Core\Repository\Values\Content\Location::getProperties
      */
     public function testObjectProperties()

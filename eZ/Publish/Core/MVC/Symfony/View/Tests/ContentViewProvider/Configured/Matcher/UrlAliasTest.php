@@ -29,7 +29,7 @@ class UrlAliasTest extends BaseTest
     /**
      * @dataProvider setMatchingConfigProvider
      * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\UrlAlias::setMatchingConfig
-     * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValue::setMatchingConfig
+     * @covers eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider\Configured\Matcher\MultipleValued::setMatchingConfig
      *
      * @param $matchingConfig
      * @param $expectedValues

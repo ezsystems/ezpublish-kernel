@@ -202,7 +202,7 @@ class UrlAliasMapperTest extends LanguageAwareTestCase
     /**
      * Test for the extractUrlAliasFromData() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::extractUrlAliasFromData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper::extractUrlAliasFromData
      * @dataProvider providerForTestExtractUrlAliasFromData
      */
     public function testExtractUrlAliasFromData( $index )
@@ -221,7 +221,7 @@ class UrlAliasMapperTest extends LanguageAwareTestCase
     /**
      * Test for the extractUrlAliasListFromData() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::extractUrlAliasListFromData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper::extractUrlAliasListFromData
      * @depends testExtractUrlAliasFromData
      */
     public function testExtractUrlAliasListFromData()

@@ -129,7 +129,7 @@ class SearchHandlerTest extends HandlerTest
     /**
      * Test finding content by location remote ID
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\SearchHandler::find
+     * @covers eZ\Publish\Core\Persistence\InMemory\SearchHandler::findSingle
      */
     public function testFindByLocationRemoteId()
     {
@@ -141,7 +141,7 @@ class SearchHandlerTest extends HandlerTest
     /**
      * Test finding content by object state ID
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\SearchHandler::find
+     * @covers eZ\Publish\Core\Persistence\InMemory\SearchHandler::findContent
      */
     public function testFindByObjectStateId()
     {
@@ -158,7 +158,7 @@ class SearchHandlerTest extends HandlerTest
     /**
      * Test finding content by language code
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\SearchHandler::find
+     * @covers eZ\Publish\Core\Persistence\InMemory\SearchHandler::findContent
      */
     public function testFindByLanguageCode()
     {
