@@ -124,10 +124,6 @@ class PageTest extends StandardizedFieldTypeTest
                 new \stdClass(),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException'
             ),
-            array(
-                null,
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException'
-            ),
         );
     }
 
@@ -163,6 +159,10 @@ class PageTest extends StandardizedFieldTypeTest
     public function provideValidInputForAcceptValue()
     {
         return array(
+            array(
+                null,
+                new PageValue()
+            ),
             array(
                 new PageValue(),
                 new PageValue()
