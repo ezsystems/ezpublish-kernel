@@ -117,9 +117,9 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::setRequest
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::getURIElements
      */
-    public function testAnalyseURI( $uri, $expectedFixedUpURI )
+    public function testAnalyseURI( $level, $uri, $expectedFixedUpURI )
     {
-        $matcher = new URIElementMatcher( 2 );
+        $matcher = new URIElementMatcher( $level );
         $matcher->setRequest(
             new SimplifiedRequest( array( 'pathinfo' => $uri ) )
         );
@@ -132,9 +132,9 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
      * @dataProvider analyseProvider
      * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::analyseLink
      */
-    public function testAnalyseLink( $fullUri, $linkUri )
+    public function testAnalyseLink( $level, $fullUri, $linkUri )
     {
-        $matcher = new URIElementMatcher( 2 );
+        $matcher = new URIElementMatcher( $level );
         $matcher->setRequest(
             new SimplifiedRequest( array( 'pathinfo' => $fullUri ) )
         );
@@ -144,8 +144,18 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
     public function analyseProvider()
     {
         return array(
-            array( '/my/siteaccess/foo/bar', '/foo/bar' ),
-            array( '/vive/le/sucre/en-poudre', '/sucre/en-poudre' )
+            array( 2, '/my/siteaccess/foo/bar', '/foo/bar' ),
+            array( 2, '/vive/le/sucre/en-poudre', '/sucre/en-poudre' ),
+            // Issue https://jira.ez.no/browse/EZP-20125
+            array( 1, '/fre/content/edit/104/1/fre-FR', '/content/edit/104/1/fre-FR' ),
+            array( 1, '/fre/utf8-with-accent/é/fre/à/à/fre/é', '/utf8-with-accent/é/fre/à/à/fre/é' ),
+            array( 2, '/é/fre/utf8-with-accent/é/fre/à/à/fre/é', '/utf8-with-accent/é/fre/à/à/fre/é' ),
+            array( 2, '/prefix/fre/url/alias/prefix/fre/prefix/fre/url', '/url/alias/prefix/fre/prefix/fre/url' ),
+            // regression after the first fix of EZP-20125
+            array( 1, '/sitaccess', '' ),
+            array( 1, '/sitaccess/', '/' ),
+            array( 2, '/prefix/siteaccess', '' ),
+            array( 2, '/prefix/siteaccess/', '/' ),
         );
     }
 }

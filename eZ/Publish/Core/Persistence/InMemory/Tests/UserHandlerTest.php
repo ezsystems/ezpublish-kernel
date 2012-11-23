@@ -374,9 +374,9 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * Test loadRoleAssignments function
+     * Test loadRoleAssignmentsByGroupId function
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignmentsByGroupId
      */
     public function testLoadRoleAssignmentsByGroupId()
     {
@@ -399,9 +399,9 @@ class UserHandlerTest extends HandlerTest
 
 
     /**
-     * Test loadRoleAssignments function
+     * Test loadRoleAssignmentsByGroupId function
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignmentsByGroupId
      */
     public function testLoadRoleAssignmentsNotFound()
     {
@@ -411,9 +411,9 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * Test loadRoleAssignments function
+     * Test loadRoleAssignmentsByGroupId function
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignmentsByGroupId
      */
     public function testLoadRoleAssignmentsInherited()
     {
@@ -444,9 +444,9 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * Test loadRoleAssignments function
+     * Test loadRoleAssignmentsByGroupId function
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignmentsByGroupId
      */
     public function testLoadRoleAssignmentsInheritedDeep()
     {
@@ -477,9 +477,9 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * Test loadRoleAssignments function
+     * Test loadRoleAssignmentsByGroupId function
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignmentsByGroupId
      */
     public function testLoadRoleAssignmentsInheritedDuplicates()
     {
@@ -504,9 +504,9 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * Test loadRoleAssignments function
+     * Test loadRoleAssignmentsByGroupId function
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignmentsByGroupId
      */
     public function testLoadRoleAssignmentsInheritedNotFound()
     {
@@ -516,11 +516,11 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * Test loadRoleAssignments function
+     * Test loadRoleAssignmentsByGroupId function
      *
      * Make sure several policies that have same values are not merged (when not same entity)
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignments
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRoleAssignmentsByGroupId
      */
     public function testLoadRoleAssignmentsInheritedWithSameValueRoleAssignments()
     {

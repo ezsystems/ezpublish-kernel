@@ -17,7 +17,6 @@ use eZ\Publish\Core\Repository\Values\User\User,
 class UserTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \eZ\Publish\Core\Repository\Values\User\User::getIterator
      * @covers \eZ\Publish\Core\Repository\Values\User\User::getProperties
      */
     public function testObjectProperties()

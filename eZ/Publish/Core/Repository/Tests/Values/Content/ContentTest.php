@@ -17,7 +17,6 @@ use eZ\Publish\Core\Repository\Values\Content\Content,
 class ContentTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \eZ\Publish\Core\Repository\Values\Content\Content::getIterator
      * @covers \eZ\Publish\Core\Repository\Values\Content\Content::getProperties
      */
     public function testObjectProperties()

@@ -545,6 +545,7 @@ class Repository implements RepositoryInterface
      *
      * Get service object to perform operations on binary files
      *
+     * @deprecated Will be removed in the future!
      * @return \eZ\Publish\API\Repository\IOService
      */
     public function getIOService()

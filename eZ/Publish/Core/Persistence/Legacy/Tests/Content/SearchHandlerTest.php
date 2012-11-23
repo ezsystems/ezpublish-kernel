@@ -234,7 +234,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
      * Bug #80
      * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase::find
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::find
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findContent
      */
     public function testFindWithoutOffsetLimit()
     {
@@ -254,7 +254,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
      * Bug #81, bug #82
      * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase::find
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::find
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findContent
      */
     public function testFindWithZeroLimit()
     {
@@ -281,7 +281,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
      *
      * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase::find
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::find
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findContent
      */
     public function testFindWithNullLimit()
     {
@@ -306,7 +306,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
     /**
      * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase::find
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::find
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findContent
      */
     public function testFindWithExistingLanguageFields()
     {
@@ -330,7 +330,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
     /**
      * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase::find
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::find
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findContent
      */
     public function testFindWithMissingLanguageFields()
     {
@@ -1220,10 +1220,10 @@ class SearchHandlerTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LanguageId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LanguageCode
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
-    public function testLanguageIdFilter()
+    public function testLanguageCodeFilter()
     {
         $locator = $this->getContentSearchHandler();
 
@@ -1245,10 +1245,10 @@ class SearchHandlerTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LanguageId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LanguageCode
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
-    public function testLanguageIdFilterIn()
+    public function testLanguageCodeFilterIn()
     {
         $locator = $this->getContentSearchHandler();
 

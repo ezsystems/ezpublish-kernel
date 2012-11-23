@@ -339,14 +339,6 @@ ezpublish_rest_loadLocation:
         _method: GET
         locationPath: "[0-9/]+"
 
-ezpublish_rest_loadLocationById:
-    pattern: /content/locations/{locationId}
-    defaults:
-        _controller: ezpublish_rest.controller.location:loadLocation
-    requirements:
-        _method: GET
-        locationId: "[0-9]+"
-
 ezpublish_rest_updateLocation:
     pattern: /content/locations/{locationPath}
     defaults:

@@ -17,7 +17,6 @@ use eZ\Publish\Core\Repository\Values\Content\TrashItem,
 class TrashItemTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \eZ\Publish\Core\Repository\Values\Content\TrashItem::getIterator
      * @covers \eZ\Publish\Core\Repository\Values\Content\TrashItem::getProperties
      */
     public function testObjectProperties()
