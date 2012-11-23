@@ -124,7 +124,7 @@ class EzPublishCoreExtension extends Extension
                         if ( !isset( $configurationBlock[$affectedKey] ) )
                             continue;
                         $result = $this->fixUpKeyReference( $configurationBlock[$affectedKey] );
-                        if ( count( $result ) )
+                        if ( !empty( $result ) )
                             $this->fixedUpKeys['system'][$configurationKey][$affectedKey] = $result;
                     }
                 }
