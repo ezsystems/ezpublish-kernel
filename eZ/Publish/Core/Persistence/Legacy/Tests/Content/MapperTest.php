@@ -413,7 +413,7 @@ class MapperTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createContentFromCreateStruct
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createRelationFromCreateStruct
      */
     public function testCreateRelationFromCreateStruct()
     {

@@ -17,7 +17,7 @@ abstract class NameSchemaBase extends BaseServiceTest
 {
     /**
      * Test eZ\Publish\Core\Repository\NameSchemaService method
-     * @covers \eZ\Publish\Core\Repository\NameSchemaService ::resolveUrlAliasSchema
+     * @covers \eZ\Publish\Core\Repository\NameSchemaService::resolveUrlAliasSchema
      */
     public function testResolveUrlAliasSchema()
     {
@@ -28,7 +28,7 @@ abstract class NameSchemaBase extends BaseServiceTest
 
      /**
      * Test eZ\Publish\Core\Repository\NameSchemaService method
-     * @covers \eZ\Publish\Core\Repository\NameSchemaService ::resolveNameSchema
+     * @covers \eZ\Publish\Core\Repository\NameSchemaService::resolveNameSchema
      */
     public function testResolveNameSchema()
     {
@@ -39,7 +39,7 @@ abstract class NameSchemaBase extends BaseServiceTest
 
      /**
      * Test eZ\Publish\Core\Repository\NameSchemaService method
-     * @covers \eZ\Publish\Core\Repository\NameSchemaService ::validate
+     * @covers \eZ\Publish\Core\Repository\NameSchemaService::validate
      */
     public function testValidate()
     {
@@ -50,7 +50,7 @@ abstract class NameSchemaBase extends BaseServiceTest
 
      /**
      * Test eZ\Publish\Core\Repository\NameSchemaService method
-     * @covers \eZ\Publish\Core\Repository\NameSchemaService ::resolve
+     * @covers \eZ\Publish\Core\Repository\NameSchemaService::resolve
      */
     public function testResolve()
     {

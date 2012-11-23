@@ -13,7 +13,7 @@ use eZ\Publish\Core\SignalSlot;
 
 /**
  * @group signalSlot
- * @covers \eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher;
+ * @covers \eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher
  */
 class DefaultSignalDispatcherTest extends \PHPUnit_Framework_TestCase
 {

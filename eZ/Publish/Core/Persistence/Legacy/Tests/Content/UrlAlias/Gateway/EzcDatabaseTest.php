@@ -48,7 +48,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the loadUrlAliasData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadUrlAliasData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::loadUrlAliasData
      */
     public function testLoadUrlaliasDataNonExistent()
     {
@@ -63,7 +63,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the loadUrlAliasData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadUrlAliasData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::loadUrlAliasData
      */
     public function testLoadUrlaliasData()
     {
@@ -106,7 +106,7 @@ class EzcDatabaseTest extends TestCase
      *
      * Test with fixture containing language mask with multiple languages.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadUrlAliasData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::loadUrlAliasData
      */
     public function testLoadUrlaliasDataMultipleLanguages()
     {
@@ -193,7 +193,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the loadPathData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadPathData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::loadPathData
      * @dataProvider providerForTestLoadPathData
      */
     public function testLoadPathData( $id, $pathData )
@@ -255,7 +255,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the loadPathData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadPathData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::loadPathData
      * @dataProvider providerForTestLoadPathDataMultipleLanguages
      */
     public function testLoadPathDataMultipleLanguages( $id, $pathData )
@@ -295,8 +295,8 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the downgrade() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::downgrade
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::markAsHistory
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::downgrade
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::markAsHistory
      * @dataProvider providerForTestDowngradeMarksAsHistory
      */
     public function testDowngradeMarksAsHistory( $action, $languageId, $parentId, $textMD5 )
@@ -340,8 +340,8 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the downgrade() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::downgrade
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::removeLanguage
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::downgrade
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::removeLanguage
      * @dataProvider providerForTestDowngradeRemovesLanguage
      */
     public function testDowngradeRemovesLanguage( $action, $languageId, $parentId, $textMD5 )
@@ -364,7 +364,7 @@ class EzcDatabaseTest extends TestCase
      *
      * @todo document
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::reparent
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::reparent
      */
     public function testReparent()
     {
@@ -394,7 +394,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the removeByAction() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::removeByAction
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::removeByAction
      */
     public function testRemoveByAction()
     {
@@ -447,7 +447,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the getNewId() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::getNextId
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::getNextId
      */
     public function testGetNextId()
     {

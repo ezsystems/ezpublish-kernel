@@ -43,7 +43,7 @@ abstract class ValueObject
     /**
      * Function where list of properties are returned
      *
-     * Used by {@see getIterator()} and {@see attributes()}, override to add dynamic properties
+     * Used by {@see attributes()}, override to add dynamic properties
      * @uses __isset()
      *
      * @todo Make object traversable and reuse this function there (hence why this is not exposed)

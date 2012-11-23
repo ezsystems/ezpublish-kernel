@@ -387,7 +387,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::getDatabase
+     * @covers eZ\Publish\Core\Persistence\Legacy\EzcDbHandler::create
      * @return void
      */
     public function testDatabaseInstance()
