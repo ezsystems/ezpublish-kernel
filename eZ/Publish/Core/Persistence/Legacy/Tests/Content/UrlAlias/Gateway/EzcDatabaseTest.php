@@ -274,7 +274,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * @return array
      */
-    public function providerForTestDowngradeMarksAsHistory()
+    public function providerForTestCleanupAfterPublishMarksAsHistory()
     {
         return array(
             array(
@@ -293,13 +293,13 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * Test for the downgrade() method.
+     * Test for the cleanupAfterPublish() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::downgrade
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::cleanupAfterPublish
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::markAsHistory
-     * @dataProvider providerForTestDowngradeMarksAsHistory
+     * @dataProvider providerForTestCleanupAfterPublishMarksAsHistory
      */
-    public function testDowngradeMarksAsHistory( $action, $languageId, $parentId, $textMD5 )
+    public function testCleanupAfterPublishMarksAsHistory( $action, $languageId, $parentId, $textMD5 )
     {
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_downgrade.php" );
         $gateway = $this->getGateway();
@@ -319,7 +319,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * @return array
      */
-    public function providerForTestDowngradeRemovesLanguage()
+    public function providerForTestCleanupAfterPublishRemovesLanguage()
     {
         return array(
             array(
@@ -338,13 +338,13 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * Test for the downgrade() method.
+     * Test for the cleanupAfterPublish() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::downgrade
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::cleanupAfterPublish
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::removeLanguage
-     * @dataProvider providerForTestDowngradeRemovesLanguage
+     * @dataProvider providerForTestCleanupAfterPublishRemovesLanguage
      */
-    public function testDowngradeRemovesLanguage( $action, $languageId, $parentId, $textMD5 )
+    public function testCleanupAfterPublishRemovesLanguage( $action, $languageId, $parentId, $textMD5 )
     {
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_downgrade.php" );
         $gateway = $this->getGateway();
