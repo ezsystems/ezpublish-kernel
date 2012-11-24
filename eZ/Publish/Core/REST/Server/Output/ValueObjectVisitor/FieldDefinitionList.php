@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
-use eZ\Publish\Core\REST\Server\Values\RestFieldDefinition;
+use eZ\Publish\Core\REST\Server\Values\RestFieldDefinition as ValuesRestFieldDefinition;
 
 /**
  * FieldDefinitionList value object visitor
@@ -53,7 +53,7 @@ class FieldDefinitionList extends RestContentTypeBase
         foreach ( $fieldDefinitionList->fieldDefinitions as $fieldDefinition )
         {
             $visitor->visitValueObject(
-                new RestFieldDefinition( $contentType, $fieldDefinition )
+                new ValuesRestFieldDefinition( $contentType, $fieldDefinition )
             );
         }
         $generator->endList( 'FieldDefinition' );
