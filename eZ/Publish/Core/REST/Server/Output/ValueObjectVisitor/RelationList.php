@@ -13,7 +13,7 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
-use eZ\Publish\Core\REST\Server\Values\RestRelation;
+use eZ\Publish\Core\REST\Server\Values\RestRelation as ValuesRestRelation;
 
 /**
  * RelationList value object visitor
@@ -50,7 +50,7 @@ class RelationList extends ValueObjectVisitor
         $generator->startList( 'Relation' );
         foreach ( $data->relations as $relation )
         {
-            $visitor->visitValueObject( new RestRelation( $relation, $data->contentId, $data->versionNo ) );
+            $visitor->visitValueObject( new ValuesRestRelation( $relation, $data->contentId, $data->versionNo ) );
         }
         $generator->endList( 'Relation' );
 
