@@ -75,17 +75,25 @@ class ContentTypeLimitationType implements SPILimitationTypeInterface
     public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null )
     {
         if ( !$value instanceof APIContentTypeLimitation )
+        {
             throw new InvalidArgumentException( '$value', 'Must be of type: APIContentTypeLimitation' );
+        }
 
         if ( $object instanceof Content )
+        {
             $object = $object->getVersionInfo()->getContentInfo();
+        }
         else if ( $object instanceof VersionInfo )
+        {
             $object = $object->getContentInfo();
+        }
         else if ( !$object instanceof ContentInfo )
             throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
 
         if ( empty( $value->limitationValues ) )
+        {
             return false;
+        }
 
         /**
          * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $object

@@ -78,7 +78,9 @@ class OwnerLimitationType implements SPILimitationTypeInterface
     public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null )
     {
         if ( !$value instanceof APIOwnerLimitation )
+        {
             throw new InvalidArgumentException( '$value', 'Must be of type: APIOwnerLimitation' );
+        }
 
         if ( $value->limitationValues[0] != 1 && $value->limitationValues[0] != 2 )
         {
@@ -89,9 +91,13 @@ class OwnerLimitationType implements SPILimitationTypeInterface
         }
 
         if ( $object instanceof Content )
+        {
             $object = $object->getVersionInfo()->getContentInfo();
+        }
         else if ( $object instanceof VersionInfo )
+        {
             $object = $object->getContentInfo();
+        }
         else if ( !$object instanceof ContentInfo )
             throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
 

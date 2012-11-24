@@ -76,20 +76,30 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
     public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null )
     {
         if ( !$value instanceof APISubtreeLimitation )
+        {
             throw new InvalidArgumentException( '$value', 'Must be of type: APIParentContentTypeLimitation' );
+        }
 
         if ( $object instanceof Content )
+        {
             $object = $object->getVersionInfo()->getContentInfo();
+        }
         else if ( $object instanceof VersionInfo )
+        {
             $object = $object->getContentInfo();
+        }
         else if ( !$object instanceof ContentInfo )
             throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
 
         if ( $target !== null  && !$target instanceof Location )
+        {
             throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
+        }
 
         if ( empty( $value->limitationValues ) )
+        {
             return false;
+        }
 
         /**
          * Use $target if provided, optionally used to check the specific location instead of all

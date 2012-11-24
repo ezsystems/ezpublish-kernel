@@ -76,20 +76,30 @@ class LocationLimitationType implements SPILimitationTypeInterface
     public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null )
     {
         if ( !$value instanceof APILocationLimitation )
+        {
             throw new InvalidArgumentException( '$value', 'Must be of type: APILocationLimitation' );
+        }
 
         if ( $object instanceof Content )
+        {
             $object = $object->getVersionInfo()->getContentInfo();
+        }
         else if ( $object instanceof VersionInfo )
+        {
             $object = $object->getContentInfo();
+        }
         else if ( !$object instanceof ContentInfo )
             throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
 
         if ( $target !== null  && !$target instanceof Location )
+        {
             throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
+        }
 
         if ( empty( $value->limitationValues ) )
+        {
             return false;
+        }
 
         /**
          * Use $target if provided, optionally used to check the specific location instead of all
@@ -99,9 +109,7 @@ class LocationLimitationType implements SPILimitationTypeInterface
          */
         if ( $target instanceof Location )
         {
-            if ( in_array( $target->id, $value->limitationValues ) )
-                return true;
-            return false;
+            return in_array( $target->id, $value->limitationValues ) ;
         }
 
         /**

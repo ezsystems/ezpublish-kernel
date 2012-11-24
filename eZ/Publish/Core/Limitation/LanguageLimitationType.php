@@ -75,15 +75,21 @@ class LanguageLimitationType implements SPILimitationTypeInterface
     public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null )
     {
         if ( !$value instanceof APILanguageLimitation )
+        {
             throw new InvalidArgumentException( '$value', 'Must be of type: APILanguageLimitation' );
+        }
 
         if ( $object instanceof Content )
+        {
             $object = $object->getVersionInfo();
+        }
         else if ( !$object instanceof VersionInfo && !$object instanceof ContentInfo )
             throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
 
         if ( empty( $value->limitationValues ) )
+        {
             return false;
+        }
 
         if ( $object instanceof ContentInfo )
             return in_array( $object->mainLanguageCode, $value->limitationValues, true );

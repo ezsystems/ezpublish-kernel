@@ -74,13 +74,17 @@ class SiteAccessLimitationType implements SPILimitationTypeInterface
     public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null )
     {
         if ( !$value instanceof APISiteAccessLimitation )
+        {
             throw new InvalidArgumentException( '$value', 'Must be of type: APISiteAccessLimitation' );
+        }
 
         if ( !$object instanceof Content && !$object instanceof ContentInfo )
             throw new InvalidArgumentException( '$object', 'Must be of type: Content or ContentInfo' );
 
         if ( empty( $value->limitationValues ) )
+        {
             return false;
+        }
 
         /**
          * @var \eZ\Publish\API\Repository\Values\Content\Content $object

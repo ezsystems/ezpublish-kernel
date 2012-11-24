@@ -74,16 +74,22 @@ class NewSectionLimitationType implements SPILimitationTypeInterface
     public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null )
     {
         if ( !$value instanceof APINewSectionLimitation )
+        {
             throw new InvalidArgumentException( '$value', 'Must be of type: APINewSectionLimitation' );
+        }
 
         if ( !$object instanceof ContentInfo && !$object instanceof Content )
             throw new InvalidArgumentException( '$object', 'Must be of type: Content or ContentInfo' );
 
         if ( !$target instanceof Section )
+        {
             throw new InvalidArgumentException( '$target', 'Must be of type: Section' );
+        }
 
         if ( empty( $value->limitationValues ) )
+        {
             return false;
+        }
 
         /**
          * @var \eZ\Publish\API\Repository\Values\Content\Section $target

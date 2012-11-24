@@ -76,7 +76,9 @@ class UserGroupLimitationType implements SPILimitationTypeInterface
     public function evaluate( APILimitationValue $value, Repository $repository, ValueObject $object, ValueObject $target = null )
     {
         if ( !$value instanceof APIUserGroupLimitation )
+        {
             throw new InvalidArgumentException( '$value', 'Must be of type: APIUserGroupLimitation' );
+        }
 
         if ( $value->limitationValues[0] != 1 )
         {
@@ -87,9 +89,13 @@ class UserGroupLimitationType implements SPILimitationTypeInterface
         }
 
         if ( $object instanceof Content )
+        {
             $object = $object->getVersionInfo()->getContentInfo();
+        }
         else if ( $object instanceof VersionInfo )
+        {
             $object = $object->getContentInfo();
+        }
         else if ( !$object instanceof ContentInfo )
             throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
 
