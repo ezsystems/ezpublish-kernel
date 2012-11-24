@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -88,8 +89,17 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
         {
             $object = $object->getContentInfo();
         }
+        else if ( $object instanceof ContentCreateStruct && !$target instanceof Location )
+        {
+            throw new InvalidArgumentException( '$object', 'Cannot be ContentCreateStruct unless $target is Location' );
+        }
         else if ( !$object instanceof ContentInfo )
-            throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
+        {
+            throw new InvalidArgumentException(
+                '$object',
+                'Must be of type: ContentCreateStruct, Content, VersionInfo or ContentInfo'
+            );
+        }
 
         if ( $target !== null  && !$target instanceof Location )
         {
