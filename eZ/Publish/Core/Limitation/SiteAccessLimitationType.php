@@ -87,7 +87,6 @@ class SiteAccessLimitationType implements SPILimitationTypeInterface
         }
 
         /**
-         * @var \eZ\Publish\API\Repository\Values\Content\Content $object
          * @todo Use current siteaccess as dependency in constructor, or define a way it can be injected in this function
          * 4.x limitationValues in default 64bit mode is: sprintf( '%u', crc32( $siteAccessName ) )
          */

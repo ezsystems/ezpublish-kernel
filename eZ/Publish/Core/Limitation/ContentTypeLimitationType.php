@@ -96,7 +96,7 @@ class ContentTypeLimitationType implements SPILimitationTypeInterface
         }
 
         /**
-         * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $object
+         * @var $object ContentInfo
          */
         return in_array( $object->getContentType()->id, $value->limitationValues );
     }

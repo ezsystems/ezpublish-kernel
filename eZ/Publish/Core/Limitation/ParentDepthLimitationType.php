@@ -83,7 +83,7 @@ class ParentDepthLimitationType implements SPILimitationTypeInterface
             return false;
 
         /**
-         * @var \eZ\Publish\API\Repository\Values\Content\Location $target
+         * @var $target Location
          */
         return in_array( $target->depth, $value->limitationValues );
     }

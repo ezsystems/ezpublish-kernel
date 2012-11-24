@@ -94,7 +94,7 @@ class ParentOwnerLimitationType implements SPILimitationTypeInterface
             return false;
 
         /**
-         * @var \eZ\Publish\API\Repository\Values\Content\Location $target
+         * @var $target Location
          */
         return $target->getContentInfo()->ownerId === $repository->getCurrentUser()->id;
     }

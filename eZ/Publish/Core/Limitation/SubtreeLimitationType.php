@@ -105,7 +105,7 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
          * Use $target if provided, optionally used to check the specific location instead of all
          * e.g.: 'remove' in the context of removal of a specific location, or in case of 'create'
          *
-         * @var \eZ\Publish\API\Repository\Values\Content\Location $target
+         * @var $target Location
          */
         if ( $target instanceof Location )
         {
@@ -122,7 +122,7 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
         /**
          * Check all locations if no placement was provided
          *
-         * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $object
+         * @var $object ContentInfo
          */
         $locations = $repository->getLocationService()->loadLocations( $object );
         foreach ( $locations as $location )

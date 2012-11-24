@@ -102,7 +102,7 @@ class OwnerLimitationType implements SPILimitationTypeInterface
             throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
 
         /**
-         * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $object
+         * @var $object ContentInfo
          */
         return $object->ownerId === $repository->getCurrentUser()->id;
     }

@@ -95,7 +95,7 @@ class LanguageLimitationType implements SPILimitationTypeInterface
             return in_array( $object->mainLanguageCode, $value->limitationValues, true );
 
         /**
-         * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo $object
+         * @var $object VersionInfo
          */
         foreach ( $value->limitationValues as $limitationLanguageCode )
         {

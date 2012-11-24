@@ -92,7 +92,7 @@ class NewSectionLimitationType implements SPILimitationTypeInterface
         }
 
         /**
-         * @var \eZ\Publish\API\Repository\Values\Content\Section $target
+         * @var $target Section
          */
         return in_array( $target->id, $value->limitationValues );
     }

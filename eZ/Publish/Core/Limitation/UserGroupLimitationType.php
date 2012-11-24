@@ -100,7 +100,7 @@ class UserGroupLimitationType implements SPILimitationTypeInterface
             throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
 
          /**
-          * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $object
+          * @var $object ContentInfo
           */
         $currentUser = $repository->getCurrentUser();
         if ( $object->ownerId === $currentUser->id )

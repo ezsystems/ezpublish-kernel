@@ -98,7 +98,7 @@ class StateLimitationType implements SPILimitationTypeInterface
         }
 
         /**
-         * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $object
+         * @var $object ContentInfo
          */
         $objectStateIdArray = array();
         $contentStateService = $repository->getObjectStateService();

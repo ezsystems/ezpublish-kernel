@@ -92,7 +92,7 @@ class ParentUserGroupLimitationType implements SPILimitationTypeInterface
             return false;
 
          /**
-          * @var \eZ\Publish\API\Repository\Values\Content\Location $target
+          * @var $target Location
           */
         $parentContentInfo = $target->getContentInfo();
         $currentUser = $repository->getCurrentUser();
