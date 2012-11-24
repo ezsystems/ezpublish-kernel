@@ -17,6 +17,28 @@ use Symfony\Component\HttpFoundation\Request;
 
 abstract class HttpCache extends BaseHttpCache
 {
+    public function handle( Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true )
+    {
+        // X-User-Hash is purely internal and should never be used from outside
+        if ( $request->headers->has( 'X-User-Hash' ) )
+            $request->headers->remove( 'X-User-Hash' );
+
+        if ( $request->cookies->has( 'user_hash' ) )
+        {
+            $request->headers->set( 'X-User-Hash', $request->cookies->get( 'user_hash' ) );
+        }
+        else
+        {
+            // Forward the request to the kernel to generate the user hash
+            $forwardReq = Request::create( '/_ez_user', 'AUTHENTICATE', array(), $request->cookies->all(), array(), $request->server->all() );
+            $forwardReq->headers->set( 'X-User-Hash', '' );
+            $resp = $this->forward( $forwardReq );
+            $request->headers->set( 'X-User-Hash', $resp->headers->get( 'X-User-Hash' ) );
+        }
+
+        return parent::handle( $request, $type, $catch );
+    }
+
     protected function createStore()
     {
         return new LocationAwareStore( $this->cacheDir ?: $this->kernel->getCacheDir() . '/http_cache' );
