@@ -418,7 +418,7 @@ class ContentHandlerTest extends TestCase
     /**
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::load
-     * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testLoadErrorNotFound()
     {
@@ -1074,6 +1074,17 @@ class ContentHandlerTest extends TestCase
                 )
             );
 
+        $versionInfo = new VersionInfo(
+            array(
+                "names" => array( "eng-US" => "Test" ),
+                "contentInfo" => new ContentInfo(
+                    array(
+                        "id" => 24,
+                        "alwaysAvailable" => true
+                    )
+                ),
+            )
+        );
         $handler->expects( $this->at( 4 ) )
             ->method( "load" )
             ->with( $this->equalTo( 23 ), $this->equalTo( 1 ) )
@@ -1081,64 +1092,31 @@ class ContentHandlerTest extends TestCase
                 $this->returnValue(
                     new Content(
                         array(
-                            "versionInfo" => new VersionInfo(
-                                array(
-                                    "names" => array( "eng-US" => "Test" ),
-                                    "contentInfo" => new ContentInfo(
-                                        array(
-                                            "id" => 24,
-                                            "alwaysAvailable" => true
-                                        )
-                                    ),
-                                )
-                            ),
+                            "versionInfo" => $versionInfo,
                             "fields" => array()
                         )
                     )
                 )
             );
 
+        $versionInfo->creationDate = $time;
+        $versionInfo->modificationDate = $time;
         $gatewayMock->expects( $this->once() )
             ->method( "insertVersion" )
             ->with(
-                $this->equalTo(
-                    new VersionInfo(
-                        array(
-                            "creationDate" => $time,
-                            "modificationDate" => $time,
-                            "names" => array( "eng-US" => "Test" ),
-                            "contentInfo" => new ContentInfo(
-                                array(
-                                    "id" => 24,
-                                    "alwaysAvailable" => true
-                                )
-                            ),
-                        )
-                    )
-                ),
+                $this->equalTo( $versionInfo ),
                 $this->isType( "array" )
             )->will( $this->returnValue( 42 ) );
 
+        $versionInfo = clone $versionInfo;
+        $versionInfo->id = 42;
         $fieldHandlerMock->expects( $this->once() )
             ->method( "createNewFields" )
             ->with(
                 $this->equalTo(
                     new Content(
                         array(
-                            "versionInfo" => new VersionInfo(
-                                array(
-                                    "id" => 42,
-                                    "creationDate" => $time,
-                                    "modificationDate" => $time,
-                                    "names" => array( "eng-US" => "Test" ),
-                                    "contentInfo" => new ContentInfo(
-                                        array(
-                                            "id" => 24,
-                                            "alwaysAvailable" => true
-                                        )
-                                    ),
-                                )
-                            ),
+                            "versionInfo" => $versionInfo,
                             "fields" => array()
                         )
                     )
