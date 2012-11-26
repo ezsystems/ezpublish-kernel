@@ -195,10 +195,6 @@ class HandlerTest extends TestCase
             'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler',
             $contentTypeHandler
         );
-        $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Handler',
-            $contentTypeHandler
-        );
     }
 
     /**
