@@ -54,7 +54,7 @@ class NameSchemaService
     /**
      * @var array
      */
-    private $settings;
+    protected $settings;
 
     /**
      * Constructs a object to resolve $nameSchema with $contentVersion fields values
@@ -136,31 +136,15 @@ class NameSchemaService
 
         foreach ( $content->fields as $fieldIdentifier => $fieldLanguageMap )
         {
-            foreach ( $fieldLanguageMap as $languageCode => $fieldValue )
+            foreach ( $languageCodes as $languageCode )
             {
-                if ( !in_array( $languageCode, $languageCodes ) )
-                {
-                    continue;
-                }
-
                 $mergedFieldMap[$fieldIdentifier][$languageCode] = isset( $fieldMap[$fieldIdentifier][$languageCode] )
                     ? $fieldMap[$fieldIdentifier][$languageCode]
-                    : $fieldValue;
+                    : $fieldLanguageMap[$languageCode];
             }
         }
 
         return $mergedFieldMap;
-    }
-
-    /**
-     * Validates name or URL schema for ContentType
-     *
-     * @return boolean
-     * @todo implement or remove
-     */
-    public function validate( $nameSchema, $contentType )
-    {
-        return true;
     }
 
     /**
@@ -197,7 +181,7 @@ class NameSchemaService
             // Make sure length is not longer then $limit unless it's 0
             if ( $this->settings["limit"] && strlen( $name ) > $this->settings["limit"] )
             {
-                $name = rtrim( substr( $name, 0, $this->settings["limit"] - strlen( $this->settings["sequence"] ) + 1 ) ) . $this->settings["sequence"];
+                $name = rtrim( substr( $name, 0, $this->settings["limit"] - strlen( $this->settings["sequence"] ) ) ) . $this->settings["sequence"];
             }
 
             $names[$languageCode] = $name;
@@ -219,7 +203,7 @@ class NameSchemaService
      *
      * @return string[] Key is the field identifier, value is the title value
      */
-    private function getFieldTitles( array $schemaIdentifiers, ContentType $contentType, array $fieldMap, $languageCode )
+    protected function getFieldTitles( array $schemaIdentifiers, ContentType $contentType, array $fieldMap, $languageCode )
     {
         $fieldTitles = array();
 
@@ -234,10 +218,6 @@ class NameSchemaService
                 $fieldTitles[$fieldDefinitionIdentifier] = $fieldType->getName(
                     $fieldMap[$fieldDefinitionIdentifier][$languageCode]
                 );
-            }
-            else
-            {
-                // @todo: log an error if $fieldIdentifier and $languageCode are invalid
             }
         }
 
@@ -255,7 +235,7 @@ class NameSchemaService
      * @param string $nameSchema
      * @return array
      */
-    private function extractTokens( $nameSchema )
+    protected function extractTokens( $nameSchema )
     {
         preg_match_all(
             "|<([^>]+)>|U",
@@ -278,7 +258,7 @@ class NameSchemaService
      *
      * @return string
      */
-    private function resolveToken( $token, $titles, $groupLookupTable )
+    protected function resolveToken( $token, $titles, $groupLookupTable )
     {
         $replaceString = "";
         $tokenParts = $this->tokenParts( $token );
@@ -287,8 +267,8 @@ class NameSchemaService
         {
             if ( $this->isTokenGroup( $tokenPart ) )
             {
-                $groupTokenArray = $this->extractTokens( $groupLookupTable );
                 $replaceString = $groupLookupTable[$tokenPart];
+                $groupTokenArray = $this->extractTokens( $replaceString );
 
                 foreach ( $groupTokenArray as $groupToken )
                 {
@@ -302,6 +282,8 @@ class NameSchemaService
                         $replaceString
                     );
                 }
+
+
                 // We want to stop after the first matching token part / identifier is found
                 // <id1|id2> if id1 has a value, id2 will not be used.
                 // In this case id1 or id1 is a token group.
@@ -328,7 +310,7 @@ class NameSchemaService
      * @param string $identifier
      * @return boolean
      */
-    private function isTokenGroup( $identifier )
+    protected function isTokenGroup( $identifier )
     {
         if ( strpos( $identifier, self::META_STRING ) === false )
         {
@@ -351,7 +333,7 @@ class NameSchemaService
      * @param string $token
      * @return array
      */
-    private function tokenParts( $token )
+    protected function tokenParts( $token )
     {
         return preg_split( '#\\W#', $token, -1, PREG_SPLIT_NO_EMPTY );
     }
@@ -367,7 +349,7 @@ class NameSchemaService
      * @param string $nameSchema
      * @return string
      */
-    private function filterNameSchema( $nameSchema )
+    protected function filterNameSchema( $nameSchema )
     {
         $retNamePattern = "";
         $foundGroups = preg_match_all( "/[<|\\|](\\(.+\\))[\\||>]/U", $nameSchema, $groupArray );
@@ -402,7 +384,7 @@ class NameSchemaService
      * @param string $schemaString
      * @return array
      */
-    private function getIdentifiers( $schemaString )
+    protected function getIdentifiers( $schemaString )
     {
         $allTokens = '#<(.*)>#U';
         $identifiers = '#\\W#';

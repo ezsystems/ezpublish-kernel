@@ -1585,6 +1585,15 @@ abstract class ContentBase extends BaseServiceTest
         $this->assertEquals( $fields["test_required_not_empty"]["eng-GB"], $fields["test_required_not_empty"]["ger-DE"] );
         $this->assertEquals( "Französisch frites", $fields["test_translatable"]["ger-DE"] );
         $this->assertEquals( $fields["test_untranslatable"]["eng-GB"], $fields["test_untranslatable"]["ger-DE"] );
+
+        $this->assertEquals(
+            array(
+                "eng-GB" => "new value for untranslatable field",
+                "eng-US" => "new value for untranslatable field",
+                "ger-DE" => "new value for untranslatable field",
+            ),
+            $updatedContent->versionInfo->getNames()
+        );
     }
 
     /**
