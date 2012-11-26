@@ -125,6 +125,7 @@ parameters:
         border/width: "-borderwidth {1}"
         flatten: "-flatten"
         resize: "-resize {1}"
+        optimize: "-strip"
 
     ###
     # Internal settings
