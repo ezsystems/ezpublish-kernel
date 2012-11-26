@@ -3,6 +3,8 @@ parameters:
     ezpublish.security.user_provider.class: eZ\Publish\Core\MVC\Symfony\Security\User\Provider
     ezpublish.security.voter.core.class: eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\CoreVoter
     ezpublish.security.authentication_provider.basic.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\BasicAuthProvider
+    ezpublish.user.identity.class: eZ\Publish\Core\MVC\Symfony\Security\User\Identity
+    ezpublish.user.hash_generator: eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator
 
 services:
     ezpublish.security.user_provider:
@@ -31,3 +33,11 @@ services:
         public: false
         tags:
             - { name: security.voter }
+
+    ezpublish.user.identity:
+        class: %ezpublish.user.identity.class%
+
+    # TODO: Allow other services to plug into the hash generator to alter the user hash, through a dedicated service tag
+    ezpublish.user.hash_generator:
+        class: %ezpublish.user.hash_generator.class%
+        arguments: [@ezpublish.user.identity, @ezpublish.api.repository, @ezpublish.config.resolver]
