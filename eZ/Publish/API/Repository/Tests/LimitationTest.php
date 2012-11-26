@@ -168,4 +168,25 @@ class LimitationTest extends BaseTest
         );
         /* END: Use Case */
     }
+
+    /**
+     * Marks the limitation integration tests skipped against memory stub
+     *
+     * Since the limitations integration tests rely on multiple factors which are
+     * complicated and hard to mimic by the memory stub, these should only run
+     * against the real core implementation.
+     *
+     * @return void
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        if ( $this->getRepository() instanceof \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub )
+        {
+            $this->markTestSkipped(
+                'Limitation integration tests cannot be run against memory stub.'
+            );
+        }
+    }
 }
