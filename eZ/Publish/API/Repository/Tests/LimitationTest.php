@@ -58,7 +58,7 @@ class LimitationTest extends BaseTest
 
         $role = $roleService->addPolicy( $role, $policyCreate );
 
-        $roleService->assignRoleToUser( $roleService->loadRole( $role->id ), $user );
+        $roleService->assignRoleToUser( $role, $user );
 
         $repository->setCurrentUser( $user );
 
@@ -131,7 +131,7 @@ class LimitationTest extends BaseTest
 
         $role = $roleService->addPolicy( $role, $policyCreate );
 
-        $roleService->assignRoleToUser( $roleService->loadRole( $role->id ), $user );
+        $roleService->assignRoleToUser( $role, $user );
 
         $repository->setCurrentUser( $user );
 
