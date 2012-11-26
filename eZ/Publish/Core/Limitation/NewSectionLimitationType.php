@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\NewSectionLimitation as APINewSectionLimitation;
@@ -78,8 +79,10 @@ class NewSectionLimitationType implements SPILimitationTypeInterface
             throw new InvalidArgumentException( '$value', 'Must be of type: APINewSectionLimitation' );
         }
 
-        if ( !$object instanceof ContentInfo && !$object instanceof Content )
-            throw new InvalidArgumentException( '$object', 'Must be of type: Content or ContentInfo' );
+        if ( !$object instanceof ContentInfo && !$object instanceof Content && !$object instanceof VersionInfo )
+        {
+            throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
+        }
 
         if ( !$target instanceof Section )
         {

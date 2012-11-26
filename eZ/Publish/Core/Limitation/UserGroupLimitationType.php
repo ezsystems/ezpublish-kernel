@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -96,11 +97,16 @@ class UserGroupLimitationType implements SPILimitationTypeInterface
         {
             $object = $object->getContentInfo();
         }
-        else if ( !$object instanceof ContentInfo )
-            throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
+        else if ( !$object instanceof ContentInfo && !$object instanceof ContentCreateStruct )
+        {
+            throw new InvalidArgumentException(
+                '$object',
+                'Must be of type: ContentCreateStruct, Content, VersionInfo or ContentInfo'
+            );
+        }
 
          /**
-          * @var $object ContentInfo
+          * @var $object ContentInfo|ContentCreateStruct
           */
         $currentUser = $repository->getCurrentUser();
         if ( $object->ownerId === $currentUser->id )

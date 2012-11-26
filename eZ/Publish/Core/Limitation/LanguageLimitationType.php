@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation as APILanguageLimitation;
@@ -83,16 +84,23 @@ class LanguageLimitationType implements SPILimitationTypeInterface
         {
             $object = $object->getVersionInfo();
         }
-        else if ( !$object instanceof VersionInfo && !$object instanceof ContentInfo )
-            throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
+        else if ( !$object instanceof VersionInfo && !$object instanceof ContentInfo && !$object instanceof ContentCreateStruct )
+        {
+            throw new InvalidArgumentException(
+                '$object',
+                'Must be of type: ContentCreateStruct, Content, VersionInfo or ContentInfo'
+            );
+        }
 
         if ( empty( $value->limitationValues ) )
         {
             return false;
         }
 
-        if ( $object instanceof ContentInfo )
+        if ( $object instanceof ContentInfo || $object instanceof ContentCreateStruct )
+        {
             return in_array( $object->mainLanguageCode, $value->limitationValues, true );
+        }
 
         /**
          * @var $object VersionInfo
