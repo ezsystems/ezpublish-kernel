@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface;
-use eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias;
@@ -189,7 +189,7 @@ class Handler implements UrlAliasHandlerInterface
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway $gateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper $mapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $locationGateway
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler $languageHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor $transformationProcessor
      * @param array $configuration
      */
