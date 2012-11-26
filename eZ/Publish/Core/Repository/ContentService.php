@@ -1201,7 +1201,7 @@ class ContentService implements ContentServiceInterface
 
         $spiContentUpdateStruct = new SPIContentUpdateStruct(
             array(
-                "name" => $this->repository->getNameSchemaService()->resolveNameSchema( $content, $fieldValues ),
+                "name" => $this->repository->getNameSchemaService()->resolveNameSchema( $content, $fieldValues, $languageCodes ),
                 "creatorId" => $this->repository->getCurrentUser()->id,
                 "fields" => $spiFields,
                 "modificationDate" => time(),
