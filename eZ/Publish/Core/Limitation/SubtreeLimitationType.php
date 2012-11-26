@@ -90,13 +90,19 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
         {
             $object = $object->getContentInfo();
         }
-        else if ( $object instanceof ContentCreateStruct && !$target instanceof LocationCreateStruct )
+        else if ( $object instanceof ContentCreateStruct)
         {
-            // Return false as user does not have access to create content outside the SubtreeLimitation
+            // If target is null return false as user does not have access to content w/o location with this limitation
             if ( $target === null )
                 return false;
 
-            throw new InvalidArgumentException( '$object', 'Cannot be ContentCreateStruct unless $target is LocationCreateStruct' );
+            if ( !$target instanceof LocationCreateStruct )
+            {
+                throw new InvalidArgumentException(
+                    '$object',
+                    'Cannot be ContentCreateStruct unless $target is LocationCreateStruct'
+                );
+            }
         }
         else if ( !$object instanceof ContentInfo )
         {
@@ -106,7 +112,7 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
             );
         }
 
-        if ( $target !== null  && !$target instanceof Location )
+        if ( $target !== null  && !$target instanceof Location && !$target instanceof LocationCreateStruct )
         {
             throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
         }
