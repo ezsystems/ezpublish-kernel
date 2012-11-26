@@ -274,7 +274,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * @return array
      */
-    public function providerForTestCleanupAfterPublishMarksAsHistory()
+    public function providerForTestCleanupAfterPublishHistorize()
     {
         return array(
             array(
@@ -296,10 +296,10 @@ class EzcDatabaseTest extends TestCase
      * Test for the cleanupAfterPublish() method.
      *
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::cleanupAfterPublish
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::markAsHistory
-     * @dataProvider providerForTestCleanupAfterPublishMarksAsHistory
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::historize
+     * @dataProvider providerForTestCleanupAfterPublishHistorize
      */
-    public function testCleanupAfterPublishMarksAsHistory( $action, $languageId, $parentId, $textMD5 )
+    public function testCleanupAfterPublishHistorize( $action, $languageId, $parentId, $textMD5 )
     {
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlaliases_downgrade.php" );
         $gateway = $this->getGateway();
@@ -341,7 +341,7 @@ class EzcDatabaseTest extends TestCase
      * Test for the cleanupAfterPublish() method.
      *
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::cleanupAfterPublish
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::removeLanguage
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::removeTranslation
      * @dataProvider providerForTestCleanupAfterPublishRemovesLanguage
      */
     public function testCleanupAfterPublishRemovesLanguage( $action, $languageId, $parentId, $textMD5 )
