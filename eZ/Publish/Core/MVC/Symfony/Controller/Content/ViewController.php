@@ -52,6 +52,7 @@ class ViewController extends Controller
 
             if ( $this->getParameter( 'content.ttl_cache' ) === true )
             {
+                $response->setVary( 'X-User-Hash' );
                 $response->setSharedMaxAge(
                     $this->getParameter( 'content.default_ttl' )
                 );
