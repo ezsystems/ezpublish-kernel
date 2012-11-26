@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation as APILocationLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
@@ -89,9 +90,13 @@ class LocationLimitationType implements SPILimitationTypeInterface
         {
             $object = $object->getContentInfo();
         }
-        else if ( $object instanceof ContentCreateStruct && !$target instanceof Location )
+        else if ( $object instanceof ContentCreateStruct && !$target instanceof LocationCreateStruct )
         {
-            throw new InvalidArgumentException( '$object', 'Cannot be ContentCreateStruct unless $target is Location' );
+            // Return false as user does not have access to create content outside the LocationLimitation
+            if ( $target === null )
+                return false;
+
+            throw new InvalidArgumentException( '$object', 'Cannot be ContentCreateStruct unless $target is LocationCreateStruct' );
         }
         else if ( !$object instanceof ContentInfo )
         {
@@ -114,12 +119,14 @@ class LocationLimitationType implements SPILimitationTypeInterface
         /**
          * Use $target if provided, optionally used to check the specific location instead of all
          * e.g.: 'remove' in the context of removal of a specific location, or in case of 'create'
-         *
-         * @var $target Location
          */
         if ( $target instanceof Location )
         {
             return in_array( $target->id, $value->limitationValues ) ;
+        }
+        else if ( $target instanceof LocationCreateStruct )
+        {
+            return in_array( $target->parentLocationId, $value->limitationValues ) ;
         }
 
         /**
