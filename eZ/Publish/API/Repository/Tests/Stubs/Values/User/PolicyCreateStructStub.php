@@ -21,6 +21,11 @@ use \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 class PolicyCreateStructStub extends PolicyCreateStruct
 {
     /**
+     * @var \eZ\Publish\API\Repository\Values\User\Limitation[]
+     */
+    private $limitations;
+
+    /**
      * Instantiates a policy create struct.
      *
      * @param string $module
@@ -43,7 +48,7 @@ class PolicyCreateStructStub extends PolicyCreateStruct
      */
     public function getLimitations()
     {
-        // TODO: Implement getLimitations() method.
+        return $this->limitations;
     }
 
     /**
@@ -54,7 +59,7 @@ class PolicyCreateStructStub extends PolicyCreateStruct
      */
     public function addLimitation( Limitation $limitation )
     {
-        // TODO: Implement addLimitation() method.
+        $this->limitations[] = $limitation;
     }
 
 }
