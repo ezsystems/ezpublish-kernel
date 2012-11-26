@@ -4,7 +4,7 @@ parameters:
     ezpublish.security.voter.core.class: eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\CoreVoter
     ezpublish.security.authentication_provider.basic.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\BasicAuthProvider
     ezpublish.user.identity.class: eZ\Publish\Core\MVC\Symfony\Security\User\Identity
-    ezpublish.user.hash_generator: eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator
+    ezpublish.user.hash_generator.class: eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator
 
 services:
     ezpublish.security.user_provider:
