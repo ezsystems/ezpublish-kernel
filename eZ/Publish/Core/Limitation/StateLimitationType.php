@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\StateLimitation as APIStateLimitation;
@@ -77,6 +78,14 @@ class StateLimitationType implements SPILimitationTypeInterface
         if ( !$value instanceof APIStateLimitation )
         {
             throw new InvalidArgumentException( '$value', 'Must be of type: APIStateLimitation' );
+        }
+
+        if ( $object instanceof ContentCreateStruct )
+        {
+           throw new InvalidArgumentException(
+                '$object',
+                'ContentCreateStruct not yet supported, only possible way would be if state is default state, as created content will be auto assigned'
+            );
         }
 
         if ( $object instanceof Content )

@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\ParentContentTypeLimitation as APIParentContentTypeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
@@ -76,7 +77,9 @@ class ParentContentTypeLimitationType implements SPILimitationTypeInterface
         if ( !$value instanceof APIParentContentTypeLimitation )
             throw new InvalidArgumentException( '$value', 'Must be of type: APIParentContentTypeLimitation' );
 
-        if ( $target !== null  && !$target instanceof Location )
+        if ( $target instanceof LocationCreateStruct )
+            $target = $repository->getLocationService()->loadLocation( $target->parentLocationId );
+        else if ( $target !== null  && !$target instanceof Location )
             throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
 
         if ( $target === null )

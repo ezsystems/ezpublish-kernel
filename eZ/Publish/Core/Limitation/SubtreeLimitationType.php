@@ -13,8 +13,10 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation as APISubtreeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
@@ -88,10 +90,29 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
         {
             $object = $object->getContentInfo();
         }
-        else if ( !$object instanceof ContentInfo )
-            throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
+        else if ( $object instanceof ContentCreateStruct)
+        {
+            // If target is null return false as user does not have access to content w/o location with this limitation
+            if ( $target === null )
+                return false;
 
-        if ( $target !== null  && !$target instanceof Location )
+            if ( !$target instanceof LocationCreateStruct )
+            {
+                throw new InvalidArgumentException(
+                    '$object',
+                    'Cannot be ContentCreateStruct unless $target is LocationCreateStruct'
+                );
+            }
+        }
+        else if ( !$object instanceof ContentInfo )
+        {
+            throw new InvalidArgumentException(
+                '$object',
+                'Must be of type: ContentCreateStruct, Content, VersionInfo or ContentInfo'
+            );
+        }
+
+        if ( $target !== null  && !$target instanceof Location && !$target instanceof LocationCreateStruct )
         {
             throw new InvalidArgumentException( '$target', 'Must be of type: Location' );
         }
@@ -101,11 +122,16 @@ class SubtreeLimitationType implements SPILimitationTypeInterface
             return false;
         }
 
+
+        // Load location in case of LocationCreateStruct for the path comparison below
+        if ( $target instanceof LocationCreateStruct )
+        {
+            $target = $repository->getLocationService()->loadLocation( $target->parentLocationId );
+        }
+
         /**
          * Use $target if provided, optionally used to check the specific location instead of all
          * e.g.: 'remove' in the context of removal of a specific location, or in case of 'create'
-         *
-         * @var $target Location
          */
         if ( $target instanceof Location )
         {
