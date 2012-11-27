@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ParentContentTypeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 
@@ -19,6 +20,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
  *
  * @see eZ\Publish\API\Repository\Values\User\Limitation
  * @see eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
+ * @see eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation
  * @see eZ\Publish\API\Repository\Values\User\Limitation\ParentContentTypeLimitation
  * @see eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation
  * @group integration
@@ -99,7 +101,7 @@ class LimitationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
      * @throws \ErrorException
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testContentTypeLimitationForbid()
     {
@@ -155,7 +157,7 @@ class LimitationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
      * @throws \ErrorException
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testContentTypeLimitationForbidVariant()
     {
@@ -278,7 +280,7 @@ class LimitationTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation
      * @throws \ErrorException
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testSectionLimitationForbid()
     {
@@ -326,11 +328,162 @@ class LimitationTest extends BaseTest
         // cannot access the "Media" section
         $contentService->loadContentByRemoteId( 'e7ff633c6b8e0fd3531e74c6e712bead' );
         /* END: Use Case */
+    }
 
-        $this->assertEquals(
-            'Images',
-            $images->getFieldValue( 'name' )->text
+    /**
+     * Test for the OwnerLimitation
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation
+     * @throws \ErrorException
+     */
+    public function testOwnerLimitationAllow()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $roleService = $repository->getRoleService();
+
+        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+
+        $removePolicy = null;
+        foreach ( $role->getPolicies() as $policy )
+        {
+            if ( 'content' != $policy->module || 'remove' != $policy->function )
+            {
+                continue;
+            }
+            $removePolicy = $policy;
+            break;
+        }
+
+        if ( null === $removePolicy )
+        {
+            throw new \ErrorException( 'No content:remove policy found.' );
+        }
+
+        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
+        $policyCreate->addLimitation(
+            new ParentContentTypeLimitation(
+                array( 'limitationValues' => array( 20 ) )
+            )
         );
+        $policyCreate->addLimitation(
+            new ContentTypeLimitation(
+                array( 'limitationValues' => array( 22 ) )
+            )
+        );
+        $roleService->addPolicy( $role, $policyCreate );
+
+        // Only allow remove for the user's own content
+        $policyUpdate = $roleService->newPolicyUpdateStruct();
+        $policyUpdate->addLimitation(
+            new OwnerLimitation(
+                array( 'limitationValues' => array( 1 ) )
+            )
+        );
+        $roleService->updatePolicy( $removePolicy, $policyUpdate );
+
+        $roleService->assignRoleToUser( $role, $user );
+
+        $content = $this->createWikiPage();
+
+        $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
+        $metadataUpdate->ownerId = $user->id;
+
+        $contentService->updateContentMetadata(
+            $content->contentInfo,
+            $metadataUpdate
+        );
+
+        $repository->setCurrentUser( $user );
+
+        $contentService->deleteContent(
+            $contentService->loadContentInfo( $content->id )
+        );
+        /* END: Use Case */
+
+        $this->setExpectedException(
+            '\\eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException'
+        );
+        $contentService->loadContent( $content->id );
+    }
+
+    /**
+     * Test for the OwnerLimitation
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation
+     * @throws \ErrorException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testOwnerLimitationForbid()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $roleService = $repository->getRoleService();
+
+        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+
+        $removePolicy = null;
+        foreach ( $role->getPolicies() as $policy )
+        {
+            if ( 'content' != $policy->module || 'remove' != $policy->function )
+            {
+                continue;
+            }
+            $removePolicy = $policy;
+            break;
+        }
+
+        if ( null === $removePolicy )
+        {
+            throw new \ErrorException( 'No content:remove policy found.' );
+        }
+
+        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
+        $policyCreate->addLimitation(
+            new ParentContentTypeLimitation(
+                array( 'limitationValues' => array( 20 ) )
+            )
+        );
+        $policyCreate->addLimitation(
+            new ContentTypeLimitation(
+                array( 'limitationValues' => array( 22 ) )
+            )
+        );
+        $roleService->addPolicy( $role, $policyCreate );
+
+        // Only allow remove for the user's own content
+        $policyUpdate = $roleService->newPolicyUpdateStruct();
+        $policyUpdate->addLimitation(
+            new OwnerLimitation(
+                array( 'limitationValues' => array( 1 ) )
+            )
+        );
+        $roleService->updatePolicy( $removePolicy, $policyUpdate );
+
+        $roleService->assignRoleToUser( $role, $user );
+
+        $content = $this->createWikiPage();
+
+        $repository->setCurrentUser( $user );
+
+        // This call fails with an UnauthorizedException, because the current
+        // user is not the content owner
+        $contentService->deleteContent(
+            $contentService->loadContentInfo( $content->id )
+        );
+        /* END: Use Case */
     }
 
     /**
@@ -432,7 +585,7 @@ class LimitationTest extends BaseTest
         /* BEGIN: Inline */
         $draft = $this->createWikiPageDraft();
 
-        $content = $contentService->publishVersion($draft->versionInfo);
+        $content = $contentService->publishVersion( $draft->versionInfo );
         /* END: Inline */
 
         return $content;
