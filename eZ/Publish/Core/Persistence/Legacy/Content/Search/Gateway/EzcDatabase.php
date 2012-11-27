@@ -138,7 +138,13 @@ class EzcDatabase extends Gateway
      */
     protected function getQueryCondition( Criterion $criterion, ezcQuerySelect $query, $translations )
     {
-        $condition = $this->criteriaConverter->convertCriteria( $query, $criterion );
+        $condition = $query->expr->lAnd(
+            $this->criteriaConverter->convertCriteria( $query, $criterion ),
+            $query->expr->eq(
+                'ezcontentobject_version.status',
+                VersionInfo::STATUS_PUBLISHED
+            )
+        );
 
         if ( $translations === null )
         {
@@ -166,11 +172,18 @@ class EzcDatabase extends Gateway
         );
     }
 
-    protected function getResultCount( $criterion, $sort, $translations )
+    /**
+     * Get result count
+     *
+     * @param Criterion $criterion
+     * @param array $sort
+     * @param mixed $translations
+     * @return int
+     */
+    protected function getResultCount( Criterion $criterion, array $sort, $translations )
     {
         // Get full object count
         $query = $this->handler->createSelectQuery();
-        $condition = $this->getQueryCondition( $criterion, $query, $translations );
 
         $query
             ->select( 'COUNT( * )' )
@@ -187,11 +200,7 @@ class EzcDatabase extends Gateway
         }
 
         $query->where(
-            $query->expr->eq(
-                'ezcontentobject_version.status',
-                VersionInfo::STATUS_PUBLISHED
-            ),
-            $condition
+            $this->getQueryCondition( $criterion, $query, $translations )
         );
 
         $statement = $query->prepare();
@@ -203,15 +212,15 @@ class EzcDatabase extends Gateway
     /**
      * Get sorted arrays of content IDs, which should be returned
      *
-     * @param \ezcQuerySelect mixed $query
-     * @param string $condition
-     * @param mixed $sort
-     * @param int $offset
-     * @param int $limit
+     * @param Criterion $criterion
+     * @param array $sort
+     * @param mixed $offset
+     * @param mixed $limit
+     * @param mixed $translations
      *
      * @return int[]
      */
-    protected function getContentIds( $criterion, $sort, $offset, $limit, $translations )
+    protected function getContentIds( Criterion $criterion, array $sort, $offset, $limit, $translations )
     {
         // Getting a clean new query, because rebinding query properties does
         // not work.
@@ -228,6 +237,11 @@ class EzcDatabase extends Gateway
 
         $query->from(
             $this->handler->quoteTable( 'ezcontentobject' )
+        );
+        $query->innerJoin(
+            'ezcontentobject_version',
+            'ezcontentobject.id',
+            'ezcontentobject_version.contentobject_id'
         );
 
         if ( $sort !== null )
