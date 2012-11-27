@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ParentContentTypeLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 
 /**
@@ -24,6 +25,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
  * @see eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation
  * @see eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation
  * @see eZ\Publish\API\Repository\Values\User\Limitation\ParentContentTypeLimitation
+ * @see eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation
  * @see eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation
  * @group integration
  * @group limitation
@@ -679,6 +681,93 @@ class LimitationTest extends BaseTest
         $contentService->createContentDraft(
             $contentService->loadContentInfo( $contentId )
         );
+        /* END: Use Case */
+    }
+
+    /**
+     * Tests a combination of ParentDepthLimitation and ContentTypeLimitation.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
+     * @see \eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation
+     */
+    public function testParentDepthAndContentTypeLimitationAllow()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $roleService = $repository->getRoleService();
+
+        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+
+        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
+        $policyCreate->addLimitation(
+            new ParentDepthLimitation(
+                array( 'limitationValues' => array( 2 ) )
+            )
+        );
+        $policyCreate->addLimitation(
+            new ContentTypeLimitation(
+                array( 'limitationValues' => array( 22 ) )
+            )
+        );
+
+        $role = $roleService->addPolicy( $role, $policyCreate );
+
+        $roleService->assignRoleToUser( $role, $user );
+
+        $repository->setCurrentUser( $user );
+
+        $draft = $this->createWikiPageDraft();
+        /* END: Use Case */
+
+        $this->assertEquals(
+            'An awesome wiki page',
+            $draft->getFieldValue('title')->text
+        );
+    }
+
+    /**
+     * Tests a combination of ParentDepthLimitation and ContentTypeLimitation.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
+     * @see \eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testParentDepthAndContentTypeLimitationForbid()
+    {
+        $repository = $this->getRepository();
+
+        $contentTypeId = $this->generateId( 'contentType', 22 );
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $roleService = $repository->getRoleService();
+
+        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+
+        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
+        $policyCreate->addLimitation(
+            new ParentDepthLimitation(
+                array( 'limitationValues' => array( 1, 3, 4 ) )
+            )
+        );
+        $policyCreate->addLimitation(
+            new ContentTypeLimitation(
+                array( 'limitationValues' => array( $contentTypeId ) )
+            )
+        );
+
+        $role = $roleService->addPolicy( $role, $policyCreate );
+
+        $roleService->assignRoleToUser( $role, $user );
+
+        $repository->setCurrentUser( $user );
+
+        $this->createWikiPageDraft();
         /* END: Use Case */
     }
 
