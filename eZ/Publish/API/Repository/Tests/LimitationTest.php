@@ -25,6 +25,193 @@ use eZ\Publish\API\Repository\Values\User\Limitation\ParentContentTypeLimitation
 class LimitationTest extends BaseTest
 {
     /**
+     * Test for the ContentTypeLimitation.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
+     * @throws \ErrorException
+     */
+    public function testContentTypeLimitationAllow()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $roleService = $repository->getRoleService();
+
+        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+
+        $editPolicy = null;
+        foreach ( $role->getPolicies() as $policy )
+        {
+            if ( 'content' != $policy->module || 'edit' != $policy->function )
+            {
+                continue;
+            }
+            $editPolicy = $policy;
+            break;
+        }
+
+        if ( null === $editPolicy )
+        {
+            throw new \ErrorException( 'No content:edit policy found.' );
+        }
+
+        $policyUpdate = $roleService->newPolicyUpdateStruct();
+        $policyUpdate->addLimitation(
+            new ContentTypeLimitation(
+                array( 'limitationValues' => array( 22 ) )
+            )
+        );
+
+        $roleService->updatePolicy( $editPolicy, $policyUpdate );
+        $roleService->assignRoleToUser( $roleService->loadRole( $role->id ), $user );
+
+        $content = $this->createWikiPage();
+
+        $repository->setCurrentUser( $user );
+
+        $updateDraft = $contentService->createContentDraft( $content->contentInfo );
+
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        $contentUpdate->setField( 'title', 'Your wiki page' );
+
+        $updateContent = $contentService->updateContent(
+            $updateDraft->versionInfo,
+            $contentUpdate
+        );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            'Your wiki page',
+            $updateContent->getFieldValue('title')->text
+        );
+    }
+
+    /**
+     * Test for the ContentTypeLimitation.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
+     * @throws \ErrorException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     */
+    public function testContentTypeLimitationForbid()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $roleService = $repository->getRoleService();
+
+        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+
+        $editPolicy = null;
+        foreach ( $role->getPolicies() as $policy )
+        {
+            if ( 'content' != $policy->module || 'edit' != $policy->function )
+            {
+                continue;
+            }
+            $editPolicy = $policy;
+            break;
+        }
+
+        if ( null === $editPolicy )
+        {
+            throw new \ErrorException( 'No content:edit policy found.' );
+        }
+
+        $policyUpdate = $roleService->newPolicyUpdateStruct();
+        $policyUpdate->addLimitation(
+            new ContentTypeLimitation(
+                array( 'limitationValues' => array( 33 ) )
+            )
+        );
+
+        $roleService->updatePolicy( $editPolicy, $policyUpdate );
+        $roleService->assignRoleToUser( $roleService->loadRole( $role->id ), $user );
+
+        $content = $this->createWikiPage();
+
+        $repository->setCurrentUser( $user );
+
+        // This call fails with an UnauthorizedException
+        $contentService->createContentDraft( $content->contentInfo );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the ContentTypeLimitation.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
+     * @throws \ErrorException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     */
+    public function testContentTypeLimitationForbidVariant()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $roleService = $repository->getRoleService();
+
+        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+
+        $editPolicy = null;
+        foreach ( $role->getPolicies() as $policy )
+        {
+            if ( 'content' != $policy->module || 'edit' != $policy->function )
+            {
+                continue;
+            }
+            $editPolicy = $policy;
+            break;
+        }
+
+        if ( null === $editPolicy )
+        {
+            throw new \ErrorException( 'No content:edit policy found.' );
+        }
+
+        $policyUpdate = $roleService->newPolicyUpdateStruct();
+        $policyUpdate->addLimitation(
+            new ContentTypeLimitation(
+                array( 'limitationValues' => array( 33 ) )
+            )
+        );
+
+        $roleService->updatePolicy( $editPolicy, $policyUpdate );
+        $roleService->assignRoleToUser( $roleService->loadRole( $role->id ), $user );
+
+        $content = $this->createWikiPage();
+
+        $updateDraft = $contentService->createContentDraft( $content->contentInfo );
+
+        $repository->setCurrentUser( $user );
+
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        $contentUpdate->setField( 'title', 'Your wiki page' );
+
+        // This call fails with an UnauthorizedException
+        $contentService->updateContent(
+            $updateDraft->versionInfo,
+            $contentUpdate
+        );
+        /* END: Use Case */
+    }
+
+    /**
      * Test for ParentContentTypeLimitation and ContentTypeLimitation.
      *
      * @return void
@@ -110,6 +297,25 @@ class LimitationTest extends BaseTest
 
         $this->createWikiPageDraft();
         /* END: Use Case */
+    }
+
+    /**
+     * Creates a published wiki page.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected function createWikiPage()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+        /* BEGIN: Inline */
+        $draft = $this->createWikiPageDraft();
+
+        $content = $contentService->publishVersion($draft->versionInfo);
+        /* END: Inline */
+
+        return $content;
     }
 
     /**
