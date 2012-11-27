@@ -164,10 +164,12 @@ class EzcDbHandler
     }
 
     /**
-     * Custom quote identifier method
+     * Custom alias method
      *
      * Ignores some properties of identifier quoting, but since we use somehow
      * sane table and column names, ourselves, this is fine.
+     *
+     * This is an optimization and works around the ezcDB implementation.
      *
      * @param string $identifier
      * @return string
@@ -182,6 +184,8 @@ class EzcDbHandler
      *
      * Ignores some properties of identifier quoting, but since we use somehow
      * sane table and column names, ourselves, this is fine.
+     *
+     * This is an optimization and works around the ezcDB implementation.
      *
      * @param string $identifier
      * @return string
