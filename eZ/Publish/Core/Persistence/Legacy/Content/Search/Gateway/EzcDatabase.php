@@ -180,7 +180,7 @@ class EzcDatabase extends Gateway
      * @param mixed $translations
      * @return int
      */
-    protected function getResultCount( Criterion $criterion, array $sort, $translations )
+    protected function getResultCount( Criterion $criterion, $sort, $translations )
     {
         $query = $this->handler->createSelectQuery();
 
@@ -219,7 +219,7 @@ class EzcDatabase extends Gateway
      *
      * @return int[]
      */
-    protected function getContentIds( Criterion $criterion, array $sort, $offset, $limit, $translations )
+    protected function getContentIds( Criterion $criterion, $sort, $offset, $limit, $translations )
     {
         $query = $this->handler->createSelectQuery();
 
