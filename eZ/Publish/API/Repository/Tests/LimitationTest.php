@@ -10,6 +10,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserRoleAssignmentStub;
 use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation;
@@ -17,6 +18,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation\ParentContentTypeLimitation
 use eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ParentOwnerLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 
 /**
  * Test case for different content object limitations.
@@ -29,6 +31,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
  * @see eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation
  * @see eZ\Publish\API\Repository\Values\User\Limitation\ParentOwnerLimitation
  * @see eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation
+ * @see eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation
  * @group integration
  * @group limitation
  */
@@ -842,7 +845,6 @@ class LimitationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $parentContentId = $this->generateId( 'content', 58 );
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
@@ -865,6 +867,210 @@ class LimitationTest extends BaseTest
 
         $this->createWikiPageDraft();
         /* END: Use Case */
+    }
+
+    /**
+     * Tests a combination of SubtreeLimitation, SectionLimitation and
+     * the ContentTypeLimitation.
+     *
+     * @return  void
+     * @see eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
+     * @see eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation
+     * @see eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation
+     * @throws \ErrorException
+     */
+    public function testSubtreeAndSectionAndContentTypeLimitationAllow()
+    {
+        $repository = $this->getRepository();
+
+        $userGroupId = $this->generateId( 'content', 13 );
+
+        $userTypeId = $this->generateId( 'contentType', 4 );
+        $groupTypeId = $this->generateId( 'contentType', 3 );
+
+        $standardSectionId = $this->generateId( 'section', 1 );
+        $userSectionId = $this->generateId( 'section', 2 );
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $roleService = $repository->getRoleService();
+
+        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+
+        $editPolicy = null;
+        foreach ( $role->getPolicies() as $policy )
+        {
+            if ( 'content' != $policy->module || 'read' != $policy->function )
+            {
+                continue;
+            }
+            $editPolicy = $policy;
+            break;
+        }
+
+        if ( null === $editPolicy )
+        {
+            throw new \ErrorException( 'No content:read policy found.' );
+        }
+
+        // Give read access for the user section
+        $policyUpdate = $roleService->newPolicyUpdateStruct();
+        $policyUpdate->addLimitation(
+            new SectionLimitation(
+                array(
+                    'limitationValues' => array(
+                        $standardSectionId,
+                        $userSectionId
+                    )
+                )
+            )
+        );
+        $roleService->updatePolicy( $editPolicy, $policyUpdate );
+
+        // Allow subtree access and user+user-group edit
+        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'edit' );
+//        $policyCreate->addLimitation(
+//            new SubtreeLimitation(
+//                array( 'limitationValues' => array( '/1/5/' ) )
+//            )
+//        );
+        $policyCreate->addLimitation(
+            new ContentTypeLimitation(
+                array( 'limitationValues' => array( $userTypeId, $groupTypeId ) )
+            )
+        );
+        $roleService->addPolicy( $role, $policyCreate );
+
+        $roleService->assignRoleToUser( $role, $user );
+
+        $repository->setCurrentUser( $user );
+
+        $userService = $repository->getUserService();
+        $contentService = $repository->getContentService();
+
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        $contentUpdate->setField( 'name', 'eZ Editors' );
+
+        $userGroup = $userService->loadUserGroup( $userGroupId );
+
+        $groupUpdate = $userService->newUserGroupUpdateStruct();
+        $groupUpdate->contentUpdateStruct = $contentUpdate;
+
+        $userService->updateUserGroup( $userGroup, $groupUpdate );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            'eZ Editors',
+            $userService->loadUserGroup( $userGroupId )
+                ->getFieldValue( 'name' )
+                    ->text
+        );
+    }
+
+    /**
+     * Tests a combination of SubtreeLimitation, SectionLimitation and
+     * the ContentTypeLimitation.
+     *
+     * @return  void
+     * @see eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
+     * @see eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation
+     * @see eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation
+     * @throws \ErrorException
+     */
+    public function testSubtreeAndSectionAndContentTypeLimitationForbid()
+    {
+        $repository = $this->getRepository();
+
+        $userGroupId = $this->generateId( 'content', 13 );
+
+        $userTypeId = $this->generateId( 'contentType', 4 );
+        $groupTypeId = $this->generateId( 'contentType', 3 );
+
+        $standardSectionId = $this->generateId( 'section', 1 );
+        $userSectionId = $this->generateId( 'section', 2 );
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $roleService = $repository->getRoleService();
+
+        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+
+        $editPolicy = null;
+        foreach ( $role->getPolicies() as $policy )
+        {
+            if ( 'content' != $policy->module || 'read' != $policy->function )
+            {
+                continue;
+            }
+            $editPolicy = $policy;
+            break;
+        }
+
+        foreach ( $role->getPolicies() as $policy )
+        {
+            print_r(array_keys($policy->limitations));continue;
+            if ($policy->limitations[0] instanceof SubtreeLimitation) {
+                echo "YES\n";
+            }
+        }
+
+        if ( null === $editPolicy )
+        {
+            throw new \ErrorException( 'No content:read policy found.' );
+        }
+
+        // Give read access for the user section
+        $policyUpdate = $roleService->newPolicyUpdateStruct();
+        $policyUpdate->addLimitation(
+            new SectionLimitation(
+                array(
+                    'limitationValues' => array(
+                        $standardSectionId,
+                        $userSectionId
+                    )
+                )
+            )
+        );
+        $roleService->updatePolicy( $editPolicy, $policyUpdate );
+
+        // Allow subtree access and user+user-group edit
+        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'edit' );
+//        $policyCreate->addLimitation(
+//            new SubtreeLimitation(
+//                array( 'limitationValues' => array( '/1/5/14/' ) )
+//            )
+//        );
+        $policyCreate->addLimitation(
+            new ContentTypeLimitation(
+                array( 'limitationValues' => array( $userTypeId, $groupTypeId ) )
+            )
+        );
+        $roleService->addPolicy( $role, $policyCreate );
+
+        $roleService->assignRoleToUser( $role, $user );
+
+        $repository->setCurrentUser( $user );
+
+        $userService = $repository->getUserService();
+        $contentService = $repository->getContentService();
+
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        $contentUpdate->setField( 'name', 'eZ Editors' );
+echo "YES";
+        $userGroup = $userService->loadUserGroup( $userGroupId );
+echo "NO";
+        $groupUpdate = $userService->newUserGroupUpdateStruct();
+        $groupUpdate->contentUpdateStruct = $contentUpdate;
+
+        $userService->updateUserGroup( $userGroup, $groupUpdate );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            'eZ Editors',
+            $userService->loadUserGroup( $userGroupId )
+                ->getFieldValue( 'name' )
+                ->text
+        );
     }
 
     /**
