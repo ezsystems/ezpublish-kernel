@@ -23,6 +23,7 @@
             -->
             <file>SearchServiceTest.php</file>
             <file>SearchServiceAuthorizationTest.php</file>
+            <file>LimitationTest.php</file>
         </testsuite>
     </testsuites>
     <filter>
