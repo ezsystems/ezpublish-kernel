@@ -113,53 +113,13 @@ class EzcDatabase extends Gateway
     {
         $limit = $limit !== null ? $limit : self::MAX_LIMIT;
 
-        // Get full object count
-        $query = $this->handler->createSelectQuery();
-        $condition = $this->getQueryCondition( $criterion, $query, $translations );
-
-        $query
-            ->select( 'COUNT( * )' )
-            ->from( $this->handler->quoteTable( 'ezcontentobject' ) )
-            ->innerJoin(
-                'ezcontentobject_version',
-                'ezcontentobject.id',
-                'ezcontentobject_version.contentobject_id'
-            );
-
-        if ( $sort !== null )
-        {
-            $this->sortClauseConverter->applyJoin( $query, $sort );
-        }
-
-        $query->where(
-            $query->expr->eq(
-                'ezcontentobject_version.status',
-                VersionInfo::STATUS_PUBLISHED
-            ),
-            $condition
-        );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        $count = (int)$statement->fetchColumn();
-
+        $count = $this->getResultCount( $criterion, $sort, $translations );
         if ( $count === 0 || $limit === 0 )
         {
             return array( 'count' => $count, 'rows' => array() );
         }
 
-        // Get clean query, Not sure why we cannot reuse the existing query
-        // and conditions.
-        $query = $this->handler->createSelectQuery();
-        $condition = $this->getQueryCondition( $criterion, $query, $translations );
-
-        $query
-            ->select( 'COUNT( * )' )
-            ->from( $this->handler->quoteTable( 'ezcontentobject' ) )
-            ->where( $condition );
-
-        $contentIds = $this->getContentIds( $query, $condition, $sort, $offset, $limit );
+        $contentIds = $this->getContentIds( $criterion, $sort, $offset, $limit, $translations );
 
         return array(
             'count' => $count,
@@ -206,6 +166,40 @@ class EzcDatabase extends Gateway
         );
     }
 
+    protected function getResultCount( $criterion, $sort, $translations )
+    {
+        // Get full object count
+        $query = $this->handler->createSelectQuery();
+        $condition = $this->getQueryCondition( $criterion, $query, $translations );
+
+        $query
+            ->select( 'COUNT( * )' )
+            ->from( $this->handler->quoteTable( 'ezcontentobject' ) )
+            ->innerJoin(
+                'ezcontentobject_version',
+                'ezcontentobject.id',
+                'ezcontentobject_version.contentobject_id'
+            );
+
+        if ( $sort !== null )
+        {
+            $this->sortClauseConverter->applyJoin( $query, $sort );
+        }
+
+        $query->where(
+            $query->expr->eq(
+                'ezcontentobject_version.status',
+                VersionInfo::STATUS_PUBLISHED
+            ),
+            $condition
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return (int)$statement->fetchColumn();
+    }
+
     /**
      * Get sorted arrays of content IDs, which should be returned
      *
@@ -217,9 +211,12 @@ class EzcDatabase extends Gateway
      *
      * @return int[]
      */
-    protected function getContentIds( ezcQuerySelect $query, $condition, $sort, $offset, $limit )
+    protected function getContentIds( $criterion, $sort, $offset, $limit, $translations )
     {
-        $query->reset();
+        // Getting a clean new query, because rebinding query properties does
+        // not work.
+        $query = $this->handler->createSelectQuery();
+
         $query->select(
             $this->handler->quoteColumn( 'id', 'ezcontentobject' )
         );
@@ -238,7 +235,9 @@ class EzcDatabase extends Gateway
             $this->sortClauseConverter->applyJoin( $query, $sort );
         }
 
-        $query->where( $condition );
+        $query->where(
+            $this->getQueryCondition( $criterion, $query, $translations )
+        );
 
         if ( $sort !== null )
         {
