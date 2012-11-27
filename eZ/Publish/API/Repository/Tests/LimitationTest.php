@@ -45,6 +45,7 @@ class LimitationTest extends BaseTest
 
         $contentService = $repository->getContentService();
 
+        $contentTypeId = $this->generateId( 'contentType', 22 );
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
@@ -71,7 +72,7 @@ class LimitationTest extends BaseTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new ContentTypeLimitation(
-                array( 'limitationValues' => array( 22 ) )
+                array( 'limitationValues' => array( $contentTypeId ) )
             )
         );
 
@@ -113,6 +114,7 @@ class LimitationTest extends BaseTest
 
         $contentService = $repository->getContentService();
 
+        $contentTypeId = $this->generateId( 'contentType', 33 );
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
@@ -139,7 +141,7 @@ class LimitationTest extends BaseTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new ContentTypeLimitation(
-                array( 'limitationValues' => array( 33 ) )
+                array( 'limitationValues' => array( $contentTypeId ) )
             )
         );
 
@@ -169,6 +171,7 @@ class LimitationTest extends BaseTest
 
         $contentService = $repository->getContentService();
 
+        $contentTypeId = $this->generateId( 'contentType', 33 );
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
@@ -195,7 +198,7 @@ class LimitationTest extends BaseTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new ContentTypeLimitation(
-                array( 'limitationValues' => array( 33 ) )
+                array( 'limitationValues' => array( $contentTypeId ) )
             )
         );
 
@@ -475,6 +478,8 @@ class LimitationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $parentContentTypeId = $this->generateId( 'contentType', 20 );
+        $contentTypeId = $this->generateId( 'contentType', 22 );
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
@@ -485,12 +490,12 @@ class LimitationTest extends BaseTest
         $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
         $policyCreate->addLimitation(
             new ParentContentTypeLimitation(
-                array( 'limitationValues' => array( 20 ) )
+                array( 'limitationValues' => array( $parentContentTypeId ) )
             )
         );
         $policyCreate->addLimitation(
             new ContentTypeLimitation(
-                array( 'limitationValues' => array( 22 ) )
+                array( 'limitationValues' => array( $contentTypeId ) )
             )
         );
 
@@ -521,6 +526,8 @@ class LimitationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $parentContentTypeId = $this->generateId( 'contentType', 20 );
+        $contentTypeId = $this->generateId( 'contentType', 33 );
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
@@ -531,12 +538,12 @@ class LimitationTest extends BaseTest
         $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
         $policyCreate->addLimitation(
             new ParentContentTypeLimitation(
-                array( 'limitationValues' => array( 20 ) )
+                array( 'limitationValues' => array( $parentContentTypeId ) )
             )
         );
         $policyCreate->addLimitation(
             new ContentTypeLimitation(
-                array( 'limitationValues' => array( 33 ) )
+                array( 'limitationValues' => array( $contentTypeId ) )
             )
         );
 
@@ -695,6 +702,7 @@ class LimitationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $contentTypeId = $this->generateId( 'contentType', 22 );
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
@@ -710,7 +718,7 @@ class LimitationTest extends BaseTest
         );
         $policyCreate->addLimitation(
             new ContentTypeLimitation(
-                array( 'limitationValues' => array( 22 ) )
+                array( 'limitationValues' => array( $contentTypeId ) )
             )
         );
 
