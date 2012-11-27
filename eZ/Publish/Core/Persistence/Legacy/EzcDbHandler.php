@@ -123,7 +123,7 @@ class EzcDbHandler
      */
     public function aliasedColumn( ezcQuerySelect $query, $columnName, $tableName = null )
     {
-        return $query->alias(
+        return $this->alias(
             $this->quoteColumn( $columnName, $tableName ),
             $this->quoteIdentifier(
                 ( $tableName ? $tableName . '_' : '' ) .
@@ -161,6 +161,20 @@ class EzcDbHandler
         // @todo: For oracle we need a mapping of table and column names to
         // their shortened variants here.
         return $this->quoteIdentifier( $tableName );
+    }
+
+    /**
+     * Custom quote identifier method
+     *
+     * Ignores some properties of identifier quoting, but since we use somehow
+     * sane table and column names, ourselves, this is fine.
+     *
+     * @param string $identifier
+     * @return string
+     */
+    public function alias( $name, $alias )
+    {
+        return $name . ' ' . $alias;
     }
 
     /**
