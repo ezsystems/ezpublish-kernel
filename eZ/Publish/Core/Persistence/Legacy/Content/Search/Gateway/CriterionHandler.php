@@ -69,5 +69,16 @@ abstract class CriterionHandler
      * @return \ezcQueryExpression
      */
     abstract public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion );
+
+    /**
+     * Returns a unique table name for the given table
+     *
+     * @param string $table
+     * @return string
+     */
+    protected function getUniqueTableName( $table )
+    {
+        return $table . '_' . substr( md5( microtime() ), 0, 8 );
+    }
 }
 

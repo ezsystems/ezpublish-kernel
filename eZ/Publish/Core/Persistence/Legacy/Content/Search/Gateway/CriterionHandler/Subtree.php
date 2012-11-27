@@ -42,29 +42,31 @@ class Subtree extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
     {
-        $subSelect = $query->subSelect();
+        $table = $this->getUniqueTableName( 'ezcontentobject_tree' );
 
         $statements = array();
         foreach ( $criterion->value as $pattern )
         {
-            $statements[] = $subSelect->expr->like(
-                $this->dbHandler->quoteColumn( 'path_string', 'ezcontentobject_tree' ),
-                $subSelect->bindValue( $pattern . '%' )
+            $statements[] = $query->expr->like(
+                $this->dbHandler->quoteColumn( 'path_string', $table ),
+                $query->bindValue( $pattern . '%' )
             );
         }
 
-        $subSelect
-            ->select(
-                $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' )
-            )->from(
-                $this->dbHandler->quoteTable( 'ezcontentobject_tree' )
-            )->where(
-                $query->expr->lOr( $statements )
+        $query
+            ->leftJoin(
+                $query->alias(
+                    $this->dbHandler->quoteTable( 'ezcontentobject_tree' ),
+                    $this->dbHandler->quoteIdentifier( $table )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentobject_id', $table ),
+                    $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' )
+                )
             );
 
-        return $query->expr->in(
-            $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
-            $subSelect
+        return $query->expr->lOr(
+            $statements
         );
     }
 }
