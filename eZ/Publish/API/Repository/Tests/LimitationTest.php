@@ -366,19 +366,6 @@ class LimitationTest extends BaseTest
             throw new \ErrorException( 'No content:remove policy found.' );
         }
 
-        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
-        $policyCreate->addLimitation(
-            new ParentContentTypeLimitation(
-                array( 'limitationValues' => array( 20 ) )
-            )
-        );
-        $policyCreate->addLimitation(
-            new ContentTypeLimitation(
-                array( 'limitationValues' => array( 22 ) )
-            )
-        );
-        $roleService->addPolicy( $role, $policyCreate );
-
         // Only allow remove for the user's own content
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
@@ -449,19 +436,6 @@ class LimitationTest extends BaseTest
         {
             throw new \ErrorException( 'No content:remove policy found.' );
         }
-
-        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
-        $policyCreate->addLimitation(
-            new ParentContentTypeLimitation(
-                array( 'limitationValues' => array( 20 ) )
-            )
-        );
-        $policyCreate->addLimitation(
-            new ContentTypeLimitation(
-                array( 'limitationValues' => array( 22 ) )
-            )
-        );
-        $roleService->addPolicy( $role, $policyCreate );
 
         // Only allow remove for the user's own content
         $policyUpdate = $roleService->newPolicyUpdateStruct();
