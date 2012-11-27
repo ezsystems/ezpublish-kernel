@@ -66,7 +66,7 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function createGroup( GroupCreateStruct $createStruct )
     {
-        $this->groups = array();
+        $this->clearCache();
         return $this->innerHandler->createGroup( $createStruct );
     }
 
@@ -76,7 +76,7 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function updateGroup( GroupUpdateStruct $struct )
     {
-        $this->groups = array();
+        $this->clearCache();
         return $this->innerHandler->updateGroup( $struct );
     }
 
@@ -87,7 +87,7 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function deleteGroup( $groupId )
     {
-        $this->groups = array();
+        $this->clearCache();
         return $this->innerHandler->deleteGroup( $groupId );
     }
 
@@ -217,10 +217,7 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function create( CreateStruct $createStruct )
     {
-        $this->groups = array();
-        $this->contentTypes = array();
-        $this->fieldDefinitions = array();
-
+        $this->clearCache();
         return $this->innerHandler->create( $createStruct );
     }
 
@@ -232,10 +229,7 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function update( $typeId, $status, UpdateStruct $contentType )
     {
-        $this->groups = array();
-        $this->contentTypes = array();
-        $this->fieldDefinitions = array();
-
+        $this->clearCache();
         return $this->innerHandler->update( $typeId, $status, $contentType );
     }
 
@@ -252,10 +246,7 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function delete( $contentTypeId, $status )
     {
-        $this->groups = array();
-        $this->contentTypes = array();
-        $this->fieldDefinitions = array();
-
+        $this->clearCache();
         return $this->innerHandler->delete( $contentTypeId, $status );
     }
 
@@ -271,10 +262,7 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function createDraft( $modifierId, $contentTypeId )
     {
-        $this->groups = array();
-        $this->contentTypes = array();
-        $this->fieldDefinitions = array();
-
+        $this->clearCache();
         return $this->innerHandler->createDraft( $modifierId, $contentTypeId );
     }
 
@@ -286,10 +274,7 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function copy( $userId, $contentTypeId, $status )
     {
-        $this->groups = array();
-        $this->contentTypes = array();
-        $this->fieldDefinitions = array();
-
+        $this->clearCache();
         return $this->innerHandler->copy( $userId, $contentTypeId, $status );
     }
 
@@ -306,10 +291,7 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function unlink( $groupId, $contentTypeId, $status )
     {
-        $this->groups = array();
-        $this->contentTypes = array();
-        $this->fieldDefinitions = array();
-
+        $this->clearCache();
         return $this->innerHandler->unlink( $groupId, $contentTypeId, $status );
     }
 
@@ -324,10 +306,7 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function link( $groupId, $contentTypeId, $status )
     {
-        $this->groups = array();
-        $this->contentTypes = array();
-        $this->fieldDefinitions = array();
-
+        $this->clearCache();
         return $this->innerHandler->link( $groupId, $contentTypeId, $status );
     }
 
@@ -366,9 +345,7 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
     {
-        $this->contentTypes = array();
-        $this->fieldDefinitions = array();
-
+        $this->clearCache();
         return $this->innerHandler->addFieldDefinition( $contentTypeId, $status, $fieldDefinition );
     }
 
@@ -385,9 +362,7 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function removeFieldDefinition( $contentTypeId, $status, $fieldDefinitionId )
     {
-        $this->contentTypes = array();
-        $this->fieldDefinitions = array();
-
+        $this->clearCache();
         return $this->innerHandler->removeFieldDefinition( $contentTypeId, $status, $fieldDefinitionId );
     }
 
@@ -405,9 +380,7 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function updateFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
     {
-        $this->contentTypes = array();
-        $this->fieldDefinitions = array();
-
+        $this->clearCache();
         return $this->innerHandler->updateFieldDefinition( $contentTypeId, $status, $fieldDefinition );
     }
 
@@ -426,10 +399,17 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function publish( $contentTypeId )
     {
-        $this->groups = array();
-        $this->contentTypes = array();
-        $this->fieldDefinitions = array();
-
+        $this->clearCache();
         return $this->innerHandler->publish( $contentTypeId );
+    }
+
+    /**
+     * Clear internal caches
+     *
+     * @return void
+     */
+    public function clearCache()
+    {
+        $this->groups = $this->contentTypes = $this->fieldDefinitions = array();
     }
 }
