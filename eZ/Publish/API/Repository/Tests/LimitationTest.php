@@ -12,6 +12,7 @@ namespace eZ\Publish\API\Repository\Tests;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ParentContentTypeLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 
 /**
  * Test case for different content object limitations.
@@ -19,6 +20,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation\ParentContentTypeLimitation
  * @see eZ\Publish\API\Repository\Values\User\Limitation
  * @see eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
  * @see eZ\Publish\API\Repository\Values\User\Limitation\ParentContentTypeLimitation
+ * @see eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation
  * @group integration
  * @group limitation
  */
@@ -212,6 +214,126 @@ class LimitationTest extends BaseTest
     }
 
     /**
+     * Test for the SectionLimitation.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation
+     * @throws \ErrorException
+     */
+    public function testSectionLimitationAllow()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $roleService = $repository->getRoleService();
+
+        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+
+        $readPolicy = null;
+        foreach ( $role->getPolicies() as $policy )
+        {
+            if ( 'content' != $policy->module || 'read' != $policy->function )
+            {
+                continue;
+            }
+            $readPolicy = $policy;
+            break;
+        }
+
+        if ( null === $readPolicy )
+        {
+            throw new \ErrorException( 'No content:read policy found.' );
+        }
+
+        // Only allow access to the media section
+        $policyUpdate = $roleService->newPolicyUpdateStruct();
+        $policyUpdate->addLimitation(
+            new SectionLimitation(
+                array( 'limitationValues' => array( 3 ) )
+            )
+        );
+
+        $roleService->updatePolicy( $readPolicy, $policyUpdate );
+        $roleService->assignRoleToUser( $role, $user );
+
+        $repository->setCurrentUser( $user );
+
+        $contentService = $repository->getContentService();
+
+        // Load the images folder
+        $images = $contentService->loadContentByRemoteId( 'e7ff633c6b8e0fd3531e74c6e712bead' );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            'Images',
+            $images->getFieldValue( 'name' )->text
+        );
+    }
+
+    /**
+     * Test for the SectionLimitation.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation
+     * @throws \ErrorException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     */
+    public function testSectionLimitationForbid()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $roleService = $repository->getRoleService();
+
+        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+
+        $readPolicy = null;
+        foreach ( $role->getPolicies() as $policy )
+        {
+            if ( 'content' != $policy->module || 'read' != $policy->function )
+            {
+                continue;
+            }
+            $readPolicy = $policy;
+            break;
+        }
+
+        if ( null === $readPolicy )
+        {
+            throw new \ErrorException( 'No content:read policy found.' );
+        }
+
+        // Give access to "Standard" and "Restricted" section
+        $policyUpdate = $roleService->newPolicyUpdateStruct();
+        $policyUpdate->addLimitation(
+            new SectionLimitation(
+                array( 'limitationValues' => array( 1, 6 ) )
+            )
+        );
+
+        $roleService->updatePolicy( $readPolicy, $policyUpdate );
+        $roleService->assignRoleToUser( $role, $user );
+
+        $repository->setCurrentUser( $user );
+
+        $contentService = $repository->getContentService();
+
+        // This call fails with an UnauthorizedException because the current user
+        // cannot access the "Media" section
+        $contentService->loadContentByRemoteId( 'e7ff633c6b8e0fd3531e74c6e712bead' );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            'Images',
+            $images->getFieldValue( 'name' )->text
+        );
+    }
+
+    /**
      * Test for ParentContentTypeLimitation and ContentTypeLimitation.
      *
      * @return void
@@ -222,8 +344,6 @@ class LimitationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $parentLocationId = $this->generateId( 'location', 60 );
-        $sectionId = $this->generateId( 'section', 1 );
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
