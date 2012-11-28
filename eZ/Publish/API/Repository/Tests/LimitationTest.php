@@ -929,11 +929,6 @@ class LimitationTest extends BaseTest
 
         // Allow subtree access and user+user-group edit
         $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'edit' );
-//        $policyCreate->addLimitation(
-//            new SubtreeLimitation(
-//                array( 'limitationValues' => array( '/1/5/' ) )
-//            )
-//        );
         $policyCreate->addLimitation(
             new ContentTypeLimitation(
                 array( 'limitationValues' => array( $userTypeId, $groupTypeId ) )
@@ -941,7 +936,13 @@ class LimitationTest extends BaseTest
         );
         $roleService->addPolicy( $role, $policyCreate );
 
-        $roleService->assignRoleToUser( $role, $user );
+        $roleService->assignRoleToUser(
+            $role,
+            $user,
+            new SubtreeLimitation(
+                array( 'limitationValues' => array( '/1/5/' ) )
+            )
+        );
 
         $repository->setCurrentUser( $user );
 
@@ -976,6 +977,7 @@ class LimitationTest extends BaseTest
      * @see eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation
      * @see eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation
      * @throws \ErrorException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testSubtreeAndSectionAndContentTypeLimitationForbid()
     {
@@ -1006,14 +1008,6 @@ class LimitationTest extends BaseTest
             break;
         }
 
-        foreach ( $role->getPolicies() as $policy )
-        {
-            print_r(array_keys($policy->limitations));continue;
-            if ($policy->limitations[0] instanceof SubtreeLimitation) {
-                echo "YES\n";
-            }
-        }
-
         if ( null === $editPolicy )
         {
             throw new \ErrorException( 'No content:read policy found.' );
@@ -1035,11 +1029,6 @@ class LimitationTest extends BaseTest
 
         // Allow subtree access and user+user-group edit
         $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'edit' );
-//        $policyCreate->addLimitation(
-//            new SubtreeLimitation(
-//                array( 'limitationValues' => array( '/1/5/14/' ) )
-//            )
-//        );
         $policyCreate->addLimitation(
             new ContentTypeLimitation(
                 array( 'limitationValues' => array( $userTypeId, $groupTypeId ) )
@@ -1047,7 +1036,13 @@ class LimitationTest extends BaseTest
         );
         $roleService->addPolicy( $role, $policyCreate );
 
-        $roleService->assignRoleToUser( $role, $user );
+        $roleService->assignRoleToUser(
+            $role,
+            $user,
+            new SubtreeLimitation(
+                array( 'limitationValues' => array( '/1/5/14/' ) )
+            )
+        );
 
         $repository->setCurrentUser( $user );
 
@@ -1056,21 +1051,10 @@ class LimitationTest extends BaseTest
 
         $contentUpdate = $contentService->newContentUpdateStruct();
         $contentUpdate->setField( 'name', 'eZ Editors' );
-echo "YES";
-        $userGroup = $userService->loadUserGroup( $userGroupId );
-echo "NO";
-        $groupUpdate = $userService->newUserGroupUpdateStruct();
-        $groupUpdate->contentUpdateStruct = $contentUpdate;
 
-        $userService->updateUserGroup( $userGroup, $groupUpdate );
+        // This call will fail with an UnauthorizedException
+        $userService->loadUserGroup( $userGroupId );
         /* END: Use Case */
-
-        $this->assertEquals(
-            'eZ Editors',
-            $userService->loadUserGroup( $userGroupId )
-                ->getFieldValue( 'name' )
-                ->text
-        );
     }
 
     /**
