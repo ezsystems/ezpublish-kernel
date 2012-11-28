@@ -10,7 +10,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserRoleAssignmentStub;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation;
@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ParentOwnerLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\StateLimitation;
 
 /**
  * Test case for different content object limitations.
@@ -32,6 +33,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
  * @see eZ\Publish\API\Repository\Values\User\Limitation\ParentOwnerLimitation
  * @see eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation
  * @see eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation
+ * @see eZ\Publish\API\Repository\Values\User\Limitation\StateLimitation
  * @group integration
  * @group limitation
  */
@@ -1054,6 +1056,134 @@ class LimitationTest extends BaseTest
 
         // This call will fail with an UnauthorizedException
         $userService->loadUserGroup( $userGroupId );
+        /* END: Use Case */
+    }
+
+    /**
+     * Tests a StateLimitation
+     *
+     * @return void
+     * @see eZ\Publish\API\Repository\Values\User\Limitation\StateLimitation
+     * @throws \ErrorException
+     */
+    public function testStateLimitationAllow()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $roleService = $repository->getRoleService();
+
+        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+
+        $removePolicy = null;
+        foreach ( $role->getPolicies() as $policy )
+        {
+            if ( 'content' != $policy->module || 'versionremove' != $policy->function )
+            {
+                continue;
+            }
+            $removePolicy = $policy;
+            break;
+        }
+
+        if ( null === $removePolicy )
+        {
+            throw new \ErrorException( 'No content:versionremove policy found.' );
+        }
+
+        // Only allow Draft deletes
+        $policyUpdate = $roleService->newPolicyUpdateStruct();
+        $policyUpdate->addLimitation(
+            new StateLimitation(
+                array(
+                    'limitationValues' => array(
+                        VersionInfo::STATUS_DRAFT
+                    )
+                )
+            )
+        );
+        $roleService->updatePolicy( $removePolicy, $policyUpdate );
+
+        // Allow user to create everything
+        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
+        $roleService->addPolicy( $role, $policyCreate );
+
+        $roleService->assignRoleToUser( $role, $user );
+
+        $repository->setCurrentUser( $user );
+
+        $draft = $this->createWikiPageDraft();
+
+        $contentService->deleteVersion( $draft->versionInfo );
+        /* END: Use Case */
+
+        $this->setExpectedException( '\\eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException' );
+        $contentService->loadContent( $draft->id );
+    }
+
+    /**
+     * Tests a StateLimitation
+     *
+     * @return void
+     * @see eZ\Publish\API\Repository\Values\User\Limitation\StateLimitation
+     * @throws \ErrorException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testStateLimitationForbid()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $roleService = $repository->getRoleService();
+
+        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+
+        $removePolicy = null;
+        foreach ( $role->getPolicies() as $policy )
+        {
+            if ( 'content' != $policy->module || 'versionremove' != $policy->function )
+            {
+                continue;
+            }
+            $removePolicy = $policy;
+            break;
+        }
+
+        if ( null === $removePolicy )
+        {
+            throw new \ErrorException( 'No content:versionremove policy found.' );
+        }
+
+        // Only allow Draft deletes
+        $policyUpdate = $roleService->newPolicyUpdateStruct();
+        $policyUpdate->addLimitation(
+            new StateLimitation(
+                array(
+                    'limitationValues' => array(
+                        VersionInfo::STATUS_ARCHIVED
+                    )
+                )
+            )
+        );
+        $roleService->updatePolicy( $removePolicy, $policyUpdate );
+
+        // Allow user to create everything
+        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
+        $roleService->addPolicy( $role, $policyCreate );
+
+        $roleService->assignRoleToUser( $role, $user );
+
+        $repository->setCurrentUser( $user );
+
+        $draft = $this->createWikiPageDraft();
+
+        $contentService->deleteVersion( $draft->versionInfo );
         /* END: Use Case */
     }
 
